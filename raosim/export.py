@@ -60,12 +60,11 @@ def export_stl(x: np.ndarray, y: np.ndarray, path: str | Path,
     theta = np.linspace(0, 2 * np.pi, n_angular + 1)  # +1 to close the loop
     n_axial = len(x)
 
-    # Build the mesh:  for each axial segment and each angular segment
-    # we have 2 triangles (a quad split diagonally).
+
     triangles = []
     for i in range(n_axial - 1):
         for j in range(n_angular):
-            # 4 corners of the quad
+
             x0, r0 = x[i],     y[i]
             x1, r1 = x[i + 1], y[i + 1]
             t0 = theta[j]
@@ -76,21 +75,21 @@ def export_stl(x: np.ndarray, y: np.ndarray, path: str | Path,
             p01 = np.array([x0, r0 * np.cos(t1), r0 * np.sin(t1)])
             p11 = np.array([x1, r1 * np.cos(t1), r1 * np.sin(t1)])
 
-            # triangle 1:  p00, p10, p11
+
             n1 = np.cross(p10 - p00, p11 - p00)
             norm1 = np.linalg.norm(n1)
             if norm1 > 0:
                 n1 /= norm1
             triangles.append((n1, p00, p10, p11))
 
-            # triangle 2:  p00, p11, p01
+
             n2 = np.cross(p11 - p00, p01 - p00)
             norm2 = np.linalg.norm(n2)
             if norm2 > 0:
                 n2 /= norm2
             triangles.append((n2, p00, p11, p01))
 
-    # Write binary STL
+
     with open(path, "wb") as f:
         f.write(b"\x00" * 80)                           # 80-byte header
         f.write(struct.pack("<I", len(triangles)))       # triangle count

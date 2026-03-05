@@ -35,31 +35,17 @@ class Propellant:
     eta_Isp: float
     OF: float
 
-    # derived ─────────────────────────────────────────────
+
     R_gas: float = field(init=False)
     c_star: float = field(init=False)
 
     def __post_init__(self):
-        self.R_gas = R_UNIVERSAL / (self.Mw * 1000.0)  # Mw in kg/mol → g/mol for R
-        # Actually: R_gas = R_universal[J/(mol·K)] / Mw[kg/mol]
-        # But R_universal is 8314 J/(kmol·K) = 8.314 J/(mol·K)
-        # If Mw is in kg/mol (e.g. 0.022), then R_gas = 8.314/0.022 = 377.9
-        # Easier: R_gas = 8314.46 / (Mw * 1000) where Mw in kg/mol
-        # Let's be explicit:  Mw_kg_per_mol → Mw_g_per_mol = Mw*1000
-        # R_gas [J/(kg·K)] = 8314.46 / Mw_g_per_mol ... wait that's wrong too.
-        # R_universal = 8314.46 J/(kmol·K)
-        # Mw in kg/kmol (same numeric value as g/mol)
-        # So if user gives Mw = 0.022 kg/mol = 22 kg/kmol:
-        # R_gas = 8314.46 / 22 = 377.93 J/(kg·K)
-        # Let's redo:
-        Mw_kg_per_kmol = self.Mw * 1000.0   # 0.022 kg/mol → 22 kg/kmol
+        Mw_kg_per_kmol = self.Mw * 1000.0
         self.R_gas = R_UNIVERSAL / Mw_kg_per_kmol
         self.c_star = characteristic_velocity(self.gamma, self.R_gas, self.Tc)
 
 
-# ── Built-in propellant database ────────────────────────────────────
-# Sources: NASA CEA runs at representative conditions, textbook values.
-# Mw in kg/mol.
+
 
 PROPELLANT_DB: dict[str, Propellant] = {}
 
@@ -108,7 +94,7 @@ _register(Propellant(
 def get_propellant(name: str) -> Propellant:
     """Lookup by case-insensitive name.  Raises KeyError if not found."""
     key = name.lower().replace(" ", "").replace("_", "")
-    # Try exact, then fuzzy
+
     for k, v in PROPELLANT_DB.items():
         if k.replace(" ", "").replace("/", "").replace("-", "") == key.replace("/", "").replace("-", ""):
             return v

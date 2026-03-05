@@ -30,7 +30,7 @@ def lox_rp1():
     return get_propellant("LOX/RP-1")
 
 
-# ── Wall pressure ─────────────────────────────────────────────────
+
 
 class TestWallPressure:
 
@@ -52,7 +52,7 @@ class TestWallPressure:
         assert wp['M'][-1] > wp['M'][ti]
 
 
-# ── Separation ───────────────────────────────────────────────────
+
 
 class TestSeparation:
 
@@ -78,7 +78,7 @@ class TestSeparation:
         assert 'exit_pressure' in sep
 
 
-# ── Trade study ──────────────────────────────────────────────────
+
 
 class TestTradeStudy:
 
@@ -105,7 +105,7 @@ class TestTradeStudy:
         assert isps[-1] > isps[0]
 
 
-# ── Altitude performance ─────────────────────────────────────────
+
 
 class TestAltitudePerformance:
 
@@ -126,7 +126,7 @@ class TestAltitudePerformance:
         assert apm['thrust'][-1] > apm['thrust'][0]
 
 
-# ── Chamber geometry ─────────────────────────────────────────────
+
 
 class TestChamberGeometry:
 

@@ -9,9 +9,7 @@ formulation document (isentropic relations, area-Mach, Prandtl-Meyer).
 from __future__ import annotations
 import math
 
-# ──────────────────────────────────────────────────────────────────────
-# Isentropic static / stagnation ratios
-# ──────────────────────────────────────────────────────────────────────
+
 
 def isentropic_temperature_ratio(M: float, gamma: float) -> float:
     """T / T₀  =  (1 + (γ-1)/2 · M²)⁻¹"""
@@ -28,9 +26,7 @@ def isentropic_density_ratio(M: float, gamma: float) -> float:
     return isentropic_temperature_ratio(M, gamma) ** (1.0 / (gamma - 1.0))
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Area-Mach relation  A/A*
-# ──────────────────────────────────────────────────────────────────────
+
 
 def area_mach_relation(M: float, gamma: float) -> float:
     """
@@ -66,18 +62,16 @@ def mach_from_area_ratio(area_ratio: float, gamma: float,
     gm1 = gamma - 1.0
     exp = gp1 / (2.0 * gm1)
 
-    # --- residual  f(M) = A/A*(M) - target
+
     def _f(M):
         return area_mach_relation(M, gamma) - area_ratio
 
-    # --- derivative  d(A/A*)/dM  (analytical)
+
     def _df(M):
         bracket = 1.0 + 0.5 * gm1 * M * M
         A_over_Astar = area_mach_relation(M, gamma)
-        # d(A/A*)/dM  via logarithmic differentiation
         return A_over_Astar * (-1.0 / M + exp * gm1 * M / bracket)
 
-    # initial guess
     if supersonic:
         M = 1.0 + 0.5 * math.log(area_ratio)   # rough guess
         if M < 1.01:
@@ -100,9 +94,7 @@ def mach_from_area_ratio(area_ratio: float, gamma: float,
     return M
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Expansion ratio from pressure ratio
-# ──────────────────────────────────────────────────────────────────────
+
 
 def exit_mach_from_pressure_ratio(Pc: float, Pe: float,
                                   gamma: float) -> float:
@@ -133,9 +125,7 @@ def expansion_ratio_from_pressure(Pc: float, Pa: float,
     return eps, Me
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Thrust coefficient  Cf
-# ──────────────────────────────────────────────────────────────────────
+
 
 def thrust_coefficient(Me: float, gamma: float,
                        Pe_over_Pc: float, Pa_over_Pc: float,
@@ -157,9 +147,7 @@ def thrust_coefficient(Me: float, gamma: float,
     return momentum + pressure
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Prandtl-Meyer function
-# ──────────────────────────────────────────────────────────────────────
+
 
 def prandtl_meyer(M: float, gamma: float) -> float:
     """
@@ -177,9 +165,7 @@ def prandtl_meyer(M: float, gamma: float) -> float:
     return q * math.atan(math.sqrt(gm1 / gp1 * msq)) - math.atan(math.sqrt(msq))
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Characteristic velocity  c*
-# ──────────────────────────────────────────────────────────────────────
+
 
 def characteristic_velocity(gamma: float, R_gas: float, Tc: float) -> float:
     """

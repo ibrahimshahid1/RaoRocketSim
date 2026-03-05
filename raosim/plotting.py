@@ -40,26 +40,26 @@ def plot_nozzle_2d(contour: dict, *, show: bool = True,
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.set_aspect('equal')
 
-    # Upper and lower contours
+
     ax.plot(x, y, color='#1a73e8', lw=2.2, label='Nozzle contour')
     ax.plot(x, -y, color='#1a73e8', lw=2.2)
 
-    # Centerline
+
     ax.axhline(0, color='grey', lw=0.5, ls='--', alpha=0.6)
 
-    # Throat plane
+
     ax.axvline(0, color='grey', lw=0.5, ls='--', alpha=0.6)
 
-    # Key points
+
     ax.plot(0, Rt, 'ko', ms=5, zorder=5)
     ax.plot(Nx, Ny, 's', color='#e8710a', ms=6, zorder=5, label=f'N (θ_n={theta_n:.1f}°)')
     ax.plot(Ex, Ey, 'D', color='#d93025', ms=6, zorder=5, label=f'E (θ_e={theta_e:.1f}°)')
     ax.plot(P1x, P1y, '^', color='#0d652d', ms=6, zorder=5, label='P₁ (Bézier CP)')
 
-    # Bézier control polygon (dashed)
+
     ax.plot([Nx, P1x, Ex], [Ny, P1y, Ey], '--', color='#0d652d', lw=0.8, alpha=0.6)
 
-    # Annotations
+
     ax.annotate(f'R_t = {Rt*1000:.2f} mm', xy=(0, Rt),
                 xytext=(Ln * 0.15, Rt + Re * 0.12),
                 arrowprops=dict(arrowstyle='->', lw=0.7, color='#555'),
@@ -69,7 +69,7 @@ def plot_nozzle_2d(contour: dict, *, show: bool = True,
                 arrowprops=dict(arrowstyle='->', lw=0.7, color='#555'),
                 fontsize=8, color='#333')
 
-    # Title
+
     length_pct = contour['length_pct']
     ax.set_title(
         f"Rao {length_pct:.0f}% Bell Nozzle  —  "
@@ -100,7 +100,7 @@ def plot_nozzle_3d(contour: dict, n_angular: int = 64, *,
     x = contour['x']
     y = contour['y']
 
-    # Subsample for manageable rendering
+
     n_axial = min(len(x), 150)
     idx = np.linspace(0, len(x) - 1, n_axial).astype(int)
     x_sub = x[idx]
@@ -118,7 +118,7 @@ def plot_nozzle_3d(contour: dict, n_angular: int = 64, *,
                     color='lightsteelblue', alpha=0.85,
                     edgecolor='steelblue', linewidth=0.15)
 
-    # Equal aspect
+
     _set_axes_equal_3d(ax)
     ax.view_init(elev=20, azim=-130)
     ax.set_xlabel('x [m]')

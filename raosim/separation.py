@@ -98,11 +98,11 @@ def check_separation(
     At = np.pi * Rt**2
     epsilon = contour['epsilon']
 
-    # Exit conditions
+
     Me = mach_from_area_ratio(epsilon, gamma, supersonic=True)
     Pe = Pc * isentropic_pressure_ratio(Me, gamma)
 
-    # Compute separation pressure
+
     if method == 'summerfield':
         p_sep = summerfield_separation_pressure(Pa)
     elif method == 'kalt_badal':
@@ -120,7 +120,6 @@ def check_separation(
     y_sep = None
 
     if separated:
-        # Find where wall pressure drops below p_sep
         throat_idx = np.argmin(np.abs(y - Rt))
         for i in range(throat_idx, len(x)):
             A_local = np.pi * y[i]**2

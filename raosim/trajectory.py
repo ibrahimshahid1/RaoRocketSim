@@ -64,7 +64,7 @@ def simulate_stage(
     loss_d = 0.0
     t = 0.0
 
-    # ── powered phase ─────────────────────────────────────────────
+
     while t < t_burn:
         rho = density(max(h, 0.0))
         D = 0.5 * rho * v * abs(v) * Cd * A_ref
@@ -80,7 +80,7 @@ def simulate_stage(
     burnout_v = v
     burnout_h = h
 
-    # ── coast phase ───────────────────────────────────────────────
+
     if coast_to_apogee:
         while v > 0.0 and h > -100.0:
             rho = density(max(h, 0.0))

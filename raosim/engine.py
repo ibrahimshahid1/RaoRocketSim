@@ -22,27 +22,27 @@ g0 = 9.80665   # m/s²
 @dataclass
 class EnginePerformance:
     """Container for computed engine performance parameters."""
-    # inputs
+
     Pc: float           # chamber pressure  [Pa]
     Pa: float           # ambient pressure  [Pa]
     Rt: float           # throat radius  [m]
     epsilon: float      # expansion ratio  Ae/At
     propellant_name: str
 
-    # gas dynamics
+
     Me: float           # exit Mach number
     Pe: float           # exit pressure  [Pa]
     Pe_over_Pc: float
     Cf_ideal: float     # ideal thrust coefficient
     Cf_actual: float    # Cf with efficiency correction
 
-    # propellant thermo
+
     c_star: float       # characteristic velocity  [m/s]
     gamma: float
     R_gas: float        # J/(kg·K)
     Tc: float           # K
 
-    # performance
+
     At: float           # throat area  [m²]
     Ae: float           # exit area  [m²]
     thrust: float       # F  [N]
@@ -78,24 +78,22 @@ def compute_engine_performance(
     At = math.pi * Rt**2
     Ae = At * epsilon
 
-    # Exit Mach from area ratio
+
     Me = mach_from_area_ratio(epsilon, gamma, supersonic=True)
 
-    # Exit pressure (isentropic)
+
     Pe_over_Pc = isentropic_pressure_ratio(Me, gamma)
     Pe = Pe_over_Pc * Pc
     Pa_over_Pc = Pa / Pc
 
-    # Thrust coefficient (ideal 1-D)
+
     Cf_ideal = thrust_coefficient(Me, gamma, Pe_over_Pc, Pa_over_Pc, epsilon)
 
-    # Apply nozzle efficiency
+
     Cf_actual = Cf_ideal * prop.eta_Isp
+    c_star = prop.c_star
 
-    # Characteristic velocity
-    c_star = prop.c_star   # already computed in Propellant.__post_init__
 
-    # Performance outputs
     thrust = Cf_actual * Pc * At
     m_dot = Pc * At / c_star
     Isp = Cf_actual * c_star / g0

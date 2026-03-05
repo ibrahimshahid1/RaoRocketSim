@@ -74,11 +74,11 @@ def altitude_performance_map(
                                           method=separation_method)
             sep_arr[i] = sep_result['separated']
 
-    # Find altitude where separation ends (transition from separated to not)
+
     h_sep_onset = None
     for i in range(1, n_points):
         if sep_arr[i - 1] and not sep_arr[i]:
-            # Linearly interpolate
+
             h_sep_onset = float(altitudes[i])
             break
 
@@ -103,7 +103,7 @@ def plot_altitude_performance(apm: dict, *, show: bool = True,
 
     fig, axes = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
 
-    # Panel 1: Thrust
+
     ax = axes[0]
     ax.plot(h_km, apm['thrust'] / 1000, color='#1a73e8', lw=2)
     if np.any(sep):
@@ -117,7 +117,7 @@ def plot_altitude_performance(apm: dict, *, show: bool = True,
     ax.legend(fontsize=8)
     ax.grid(True, ls=':', alpha=0.4)
 
-    # Panel 2: Isp
+
     ax = axes[1]
     ax.plot(h_km, apm['Isp'], color='#0d652d', lw=2)
     if np.any(sep):
@@ -126,7 +126,7 @@ def plot_altitude_performance(apm: dict, *, show: bool = True,
     ax.set_ylabel('Isp [s]')
     ax.grid(True, ls=':', alpha=0.4)
 
-    # Panel 3: Cf
+
     ax = axes[2]
     ax.plot(h_km, apm['Cf'], color='#e8710a', lw=2)
     if np.any(sep):

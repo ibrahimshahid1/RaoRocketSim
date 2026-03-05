@@ -1,0 +1,10 @@
+# Versioned build outputs (machine-generated)
+builds/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv/

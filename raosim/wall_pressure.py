@@ -53,7 +53,7 @@ def wall_pressure_distribution(
     M_arr = np.zeros(n)
     p_arr = np.zeros(n)
 
-    # Find throat (minimum y, closest to Rt at x≈0)
+
     throat_idx = np.argmin(np.abs(y - Rt))
 
     for i in range(n):
@@ -61,21 +61,19 @@ def wall_pressure_distribution(
         ar = A_local / At
 
         if ar < 1.0:
-            ar = 1.0  # clamp at throat
+            ar = 1.0
 
         try:
             if i <= throat_idx:
-                # Upstream of throat → subsonic branch
                 M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=False)
             else:
-                # Downstream of throat → supersonic branch
                 M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=True)
         except (ValueError, ZeroDivisionError):
             M_arr[i] = 1.0
 
         p_arr[i] = Pc * isentropic_pressure_ratio(M_arr[i], gamma)
 
-    # Monotonicity check downstream of throat
+
     p_downstream = p_arr[throat_idx:]
     dp = np.diff(p_downstream)
     violations = np.where(dp > 0)[0] + throat_idx
@@ -102,12 +100,12 @@ def plot_wall_pressure(wp: dict, *, show: bool = True,
 
     fig, ax1 = plt.subplots(figsize=(12, 5))
 
-    # Pressure
+
     ax1.plot(x * 1000, p_Pc, color='#1a73e8', lw=2, label='p(x)/Pc')
     ax1.axvline(x[throat_idx] * 1000, color='grey', ls='--', lw=0.8,
                 label='Throat')
 
-    # Highlight violations
+
     if len(violations) > 0:
         for idx in violations:
             ax1.axvspan(x[idx] * 1000, x[min(idx + 1, len(x) - 1)] * 1000,
@@ -122,7 +120,7 @@ def plot_wall_pressure(wp: dict, *, show: bool = True,
     ax1.legend(loc='upper right', fontsize=9)
     ax1.grid(True, ls=':', alpha=0.4)
 
-    # Mach on secondary axis
+
     ax2 = ax1.twinx()
     ax2.plot(x * 1000, wp['M'], color='#e8710a', lw=1.2, ls='--',
              alpha=0.7, label='M(x)')

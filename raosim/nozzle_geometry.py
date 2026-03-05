@@ -17,11 +17,7 @@ import math
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
-# ══════════════════════════════════════════════════════════════════════
-#  Empirical angle tables  (θ_n, θ_e) vs (ε, L%)
-# ══════════════════════════════════════════════════════════════════════
-# Digitised from NASA SP-8120 / Rao (1961) / Seitzman lecture charts.
-# Rows = expansion ratios, Columns = bell length fractions.
+
 
 _EPSILON_VALS = np.array([4, 5, 6, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50],
                          dtype=float)
@@ -65,7 +61,7 @@ _THETA_E_TABLE = np.array([
     [28.5, 24.5, 20.0, 17.0, 14.0],  # 50
 ], dtype=float)
 
-# Build interpolators (bilinear on the (ε, L%) grid)
+
 _interp_theta_n = RegularGridInterpolator(
     (_EPSILON_VALS, _LPCT_VALS), _THETA_N_TABLE,
     method='linear', bounds_error=False, fill_value=None,
@@ -95,9 +91,7 @@ def lookup_angles(epsilon: float, length_pct: float) -> tuple[float, float]:
     return theta_n, theta_e
 
 
-# ══════════════════════════════════════════════════════════════════════
-#  Contour generation
-# ══════════════════════════════════════════════════════════════════════
+
 
 def _full_cone_length(Rt: float, epsilon: float) -> float:
     """Length of a 15° half-angle conical nozzle with the same ε."""
@@ -151,7 +145,7 @@ def bell_nozzle_contour(
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")
 
-    # ── Lookup angles if not provided ─────────────────────────────
+
     if theta_n_deg is None or theta_e_deg is None:
         tn_lookup, te_lookup = lookup_angles(epsilon, length_pct)
         if theta_n_deg is None:
@@ -167,13 +161,7 @@ def bell_nozzle_contour(
     Rd = Rd_factor * Rt          # downstream fillet radius
     Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
 
-    # ────────────────────────────────────────────────────────────────
-    # Section 1: Upstream circular arc (convergent side)
-    # ────────────────────────────────────────────────────────────────
-    # Arc center is on the y-axis at y_cu = Rt + Ru
-    # The arc sweeps from the convergent inlet angle to the throat.
-    # At the throat (bottom of arc), the tangent is horizontal → angle = -π/2.
-    # At the inlet side, angle = -(π/2 + convergent_half_angle).
+
     y_cu = Rt + Ru      # center y
     x_cu = 0.0          # center x  (throat at x=0)
 
@@ -184,12 +172,7 @@ def bell_nozzle_contour(
     x_conv = x_cu + Ru * np.cos(t_conv)
     y_conv = y_cu + Ru * np.sin(t_conv)
 
-    # ────────────────────────────────────────────────────────────────
-    # Section 2: Downstream circular arc (supersonic side)
-    # ────────────────────────────────────────────────────────────────
-    # Arc center at (0, Rt + Rd).  The arc starts at the throat (-π/2)
-    # and sweeps clockwise (angle increasing) up to θ_n relative to
-    # horizontal, i.e., ends at angle (θ_n - π/2).
+
     y_cd = Rt + Rd
     x_cd = 0.0
 
@@ -200,19 +183,15 @@ def bell_nozzle_contour(
     x_throat = x_cd + Rd * np.cos(t_thr)
     y_throat = y_cd + Rd * np.sin(t_thr)
 
-    # Inflection point N  (end of downstream arc)
+
     Nx = x_throat[-1]
     Ny = y_throat[-1]
 
-    # ────────────────────────────────────────────────────────────────
-    # Section 3: Quadratic Bézier bell  (canted parabola N → E)
-    # ────────────────────────────────────────────────────────────────
+
     Ex = Ln
     Ey = Re
 
-    # Control point P1 = intersection of the two tangent rays
-    #   Ray from N with slope tan(θ_n):   y - Ny = tan(θ_n)·(x - Nx)
-    #   Ray from E with slope tan(θ_e):   y - Ey = tan(θ_e)·(x - Ex)
+
     m1 = math.tan(theta_n)
     m2 = math.tan(theta_e)
 
@@ -220,21 +199,19 @@ def bell_nozzle_contour(
         raise ValueError("θ_n ≈ θ_e → tangent lines are parallel; "
                          "cannot form a Bézier bell section")
 
-    # y = m1·x + (Ny - m1·Nx) = m2·x + (Ey - m2·Ex)
+
     c1 = Ny - m1 * Nx
     c2 = Ey - m2 * Ex
     P1x = (c2 - c1) / (m1 - m2)
     P1y = m1 * P1x + c1
 
-    # Quadratic Bézier: B(t) = (1-t)²·P0 + 2(1-t)t·P1 + t²·P2
+
     t = np.linspace(0.0, 1.0, n_pts)
     omt = 1.0 - t
     x_bell = omt**2 * Nx + 2.0 * omt * t * P1x + t**2 * Ex
     y_bell = omt**2 * Ny + 2.0 * omt * t * P1y + t**2 * Ey
 
-    # ────────────────────────────────────────────────────────────────
-    # Concatenate all three sections
-    # ────────────────────────────────────────────────────────────────
+
     x_full = np.concatenate([x_conv, x_throat, x_bell])
     y_full = np.concatenate([y_conv, y_throat, y_bell])
 
