@@ -109,6 +109,7 @@ def bell_nozzle_contour(
     convergent_half_angle_deg: float = 45.0,
     Ru_factor: float = 1.5,
     Rd_factor: float = 0.382,
+    method: str = 'bezier',
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -124,6 +125,8 @@ def bell_nozzle_contour(
     convergent_half_angle_deg : upstream inlet half-angle  (default 45°)
     Ru_factor   : upstream curvature / Rt  (default 1.5)
     Rd_factor   : downstream curvature / Rt  (default 0.382)
+    method      : 'bezier' (default, Bézier approximation) or
+                  'moc' (MOC + Rao optimization)
 
     Returns
     -------
@@ -142,6 +145,14 @@ def bell_nozzle_contour(
         'x_throat', 'y_throat' : downstream arc arrays
         'x_bell', 'y_bell'    : bell Bézier arrays
     """
+    if method == 'moc':
+        from raosim.rao_optimizer import moc_bell_nozzle
+        return moc_bell_nozzle(
+            Rt, epsilon, gamma=1.4, length_pct=length_pct,
+            convergent_half_angle_deg=convergent_half_angle_deg,
+            Ru_factor=Ru_factor,
+        )
+
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")
 

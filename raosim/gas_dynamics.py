@@ -165,6 +165,69 @@ def prandtl_meyer(M: float, gamma: float) -> float:
     return q * math.atan(math.sqrt(gm1 / gp1 * msq)) - math.atan(math.sqrt(msq))
 
 
+def mach_angle(M: float) -> float:
+    """Mach angle μ = arcsin(1/M) in radians. Requires M ≥ 1."""
+    if M < 1.0:
+        raise ValueError("Mach angle undefined for M < 1")
+    return math.asin(1.0 / M)
+
+
+def mach_from_prandtl_meyer(nu: float, gamma: float,
+                             tol: float = 1e-10,
+                             max_iter: int = 50) -> float:
+    """
+    Invert the Prandtl-Meyer function: given ν [radians], find M.
+
+    Uses Newton-Raphson with the analytical derivative:
+
+        dν/dM = √(M²−1) / (M · (1 + (γ−1)/2 · M²))
+
+    Parameters
+    ----------
+    nu    : Prandtl-Meyer angle [radians], must be ≥ 0
+    gamma : ratio of specific heats
+
+    Returns
+    -------
+    Mach number M ≥ 1
+    """
+    if nu < 0.0:
+        raise ValueError("ν must be ≥ 0")
+    if nu == 0.0:
+        return 1.0
+
+    gm1 = gamma - 1.0
+    M = 1.0 + nu  # initial guess (linearization near M=1)
+    if M < 1.01:
+        M = 1.01
+
+    M_max = 100.0
+
+    for _ in range(max_iter):
+        if M > M_max:
+            M = M_max
+        nu_current = prandtl_meyer(M, gamma)
+        msq_m1 = M * M - 1.0
+        if msq_m1 < 1e-30:
+            M += 0.01
+            continue
+        denom = M * (1.0 + 0.5 * gm1 * M * M)
+        if denom < 1e-30 or not math.isfinite(denom):
+            break
+        dnu_dM = math.sqrt(msq_m1) / denom
+        if dnu_dM < 1e-30 or not math.isfinite(dnu_dM):
+            break
+        dM = (nu - nu_current) / dnu_dM
+        if not math.isfinite(dM):
+            break
+        M += dM
+        if M < 1.0:
+            M = 1.0 + 1e-6
+        if abs(dM) < tol:
+            break
+
+    return min(M, M_max)
+
 
 
 def characteristic_velocity(gamma: float, R_gas: float, Tc: float) -> float:
