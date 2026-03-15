@@ -90,6 +90,12 @@ Examples:
                    help='Expansion ratio Ae/At')
     p.add_argument('--length-pct', type=float, default=80.0,
                    help='Bell length %% of 15° cone (default 80)')
+    p.add_argument('--method', type=str, default='bezier',
+                    choices=['bezier', 'moc', 'rao'],
+                    help='Contour method: bezier (default), moc (direct wall optimization), '
+                         'or rao (calculus-of-variations control-surface optimization)')
+    p.add_argument('--compare', action='store_true',
+                    help='Compare conical, Bézier, and Rao contours side by side')
     p.add_argument('--theta-n', type=float, default=None,
                    help='Override initial wall angle θ_n [°]')
     p.add_argument('--theta-e', type=float, default=None,
@@ -166,16 +172,18 @@ def run_batch(args):
     epsilon = args.epsilon
     length_pct = args.length_pct
 
-
-    theta_n = args.theta_n
-    theta_e = args.theta_e
-    if theta_n is None or theta_e is None:
-        tn_l, te_l = lookup_angles(epsilon, length_pct)
-        theta_n = theta_n or tn_l
-        theta_e = theta_e or te_l
-
-
-    contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
+    if args.method == 'moc':
+        theta_n, theta_e = None, None
+        contour = bell_nozzle_contour(Rt, epsilon, method='moc',
+                                       length_pct=length_pct)
+    else:
+        theta_n = args.theta_n
+        theta_e = args.theta_e
+        if theta_n is None or theta_e is None:
+            tn_l, te_l = lookup_angles(epsilon, length_pct)
+            theta_n = theta_n or tn_l
+            theta_e = theta_e or te_l
+        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
     perf = compute_engine_performance(Pc, Pa, Rt, epsilon, prop)
 
     _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon)
@@ -265,6 +273,27 @@ def run_batch(args):
 
     print(f"\n  📁 Build v{version:03d}: {build_dir}")
 
+
+    # ── Contour comparison mode ──
+    if args.compare:
+        from raosim.conical import conical_nozzle_contour
+        from raosim.nozzle_comparison import (
+            compare_contours, print_comparison_table, plot_contour_comparison,
+        )
+        contours = {}
+        print("\n  Generating comparison contours...")
+        contours['Conical 15°'] = conical_nozzle_contour(Rt, epsilon)
+        contours['Bézier bell'] = bell_nozzle_contour(
+            Rt, epsilon, length_pct=length_pct)
+        try:
+            contours['Rao variational'] = bell_nozzle_contour(
+                Rt, epsilon, method='rao', length_pct=length_pct)
+        except Exception as e:
+            print(f"  ⚠ Rao variational failed: {e}")
+        results = compare_contours(contours, Pc, Pa, prop.gamma)
+        print(print_comparison_table(results))
+        if not args.no_plot:
+            plot_contour_comparison(contours, results)
 
     if not args.no_plot:
         plot_nozzle_2d(contour)
@@ -424,18 +453,27 @@ def run_interactive():
 
     print()
     length_pct = _ask("Bell length [% of 15° cone] (60–100)", default=80.0)
-    tn_default, te_default = lookup_angles(epsilon, length_pct)
-    print(f"\n  Rao/NASA table → θ_n = {tn_default:.1f}°, "
-          f"θ_e = {te_default:.1f}°")
-    override = _ask_str("Use these angles? [Y/n]", default="y").lower()
-    if override.startswith("n"):
-        theta_n = _ask("θ_n [°]", default=tn_default)
-        theta_e = _ask("θ_e [°]", default=te_default)
+
+    method_choice = _ask_str(
+        "Contour method? [bezier / moc]", default="bezier").lower().strip()
+    if method_choice not in ('bezier', 'moc'):
+        method_choice = 'bezier'
+
+    if method_choice == 'moc':
+        print("\n  MOC mode → θ_n will be optimized by the solver")
+        contour = bell_nozzle_contour(Rt, epsilon, method='moc',
+                                       length_pct=length_pct)
     else:
-        theta_n, theta_e = tn_default, te_default
-
-
-    contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
+        tn_default, te_default = lookup_angles(epsilon, length_pct)
+        print(f"\n  Rao/NASA table → θ_n = {tn_default:.1f}°, "
+              f"θ_e = {te_default:.1f}°")
+        override = _ask_str("Use these angles? [Y/n]", default="y").lower()
+        if override.startswith("n"):
+            theta_n = _ask("θ_n [°]", default=tn_default)
+            theta_e = _ask("θ_e [°]", default=te_default)
+        else:
+            theta_n, theta_e = tn_default, te_default
+        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
     perf = compute_engine_performance(Pc, Pa, Rt, epsilon, prop)
     _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon)
 
@@ -507,8 +545,8 @@ def run_interactive():
         "Rt [mm]": f"{Rt * 1000:.2f}",
         "Epsilon (Ae/At)": f"{epsilon:.2f}",
         "Bell length %": f"{length_pct:.1f}",
-        "Theta_n [deg]": f"{theta_n:.2f}",
-        "Theta_e [deg]": f"{theta_e:.2f}",
+        "Theta_n [deg]": f"{contour['theta_n']:.2f}",
+        "Theta_e [deg]": f"{contour['theta_e']:.2f}",
         "Gamma": f"{prop.gamma}",
         "Mw [kg/mol]": f"{prop.Mw}",
         "Tc [K]": f"{prop.Tc:.0f}",

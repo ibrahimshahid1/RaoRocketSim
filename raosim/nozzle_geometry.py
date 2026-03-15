@@ -153,6 +153,14 @@ def bell_nozzle_contour(
             Ru_factor=Ru_factor,
         )
 
+    if method == 'rao':
+        from raosim.rao_variational import rao_variational_contour
+        return rao_variational_contour(
+            Rt, epsilon, gamma=1.4, length_pct=length_pct,
+            convergent_half_angle_deg=convergent_half_angle_deg,
+            Ru_factor=Ru_factor,
+        )
+
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")
 

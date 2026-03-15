@@ -124,6 +124,7 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         theta_n = np.clip(params[0], math.radians(15), math.radians(45))
         control_r = params[1:]
         control_r = np.clip(control_r, Rt, Re)
+        control_r = np.sort(control_r)
 
         Ny = Rt + Rd * (1.0 - math.cos(theta_n))
         Nx = Rd * math.sin(theta_n)
@@ -142,6 +143,10 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
             ws, wr, _ = wall.sample(50)
             dr = np.diff(wr)
             cost += 100.0 * np.sum(np.minimum(dr, 0)**2)
+
+            slopes = np.diff(wr) / np.diff(ws)
+            curvature = np.diff(slopes)
+            cost += 0.5 * np.sum(curvature**2)
 
             return cost
         except Exception:

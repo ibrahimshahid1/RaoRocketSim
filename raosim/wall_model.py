@@ -28,22 +28,50 @@ class SplineWall:
         self.r_knots = np.asarray(r_knots, dtype=float)
         self.n = len(x_knots)
 
-        self.slopes = np.zeros(self.n)
-        self.slopes[0] = slope_start
-        self.slopes[-1] = slope_end
-
-        for i in range(1, self.n - 1):
-            dx_l = self.x_knots[i] - self.x_knots[i - 1]
-            dx_r = self.x_knots[i + 1] - self.x_knots[i]
-            if dx_l > 1e-15 and dx_r > 1e-15:
-                dr_l = (self.r_knots[i] - self.r_knots[i - 1]) / dx_l
-                dr_r = (self.r_knots[i + 1] - self.r_knots[i]) / dx_r
-                self.slopes[i] = 0.5 * (dr_l + dr_r)
-            else:
-                self.slopes[i] = 0.0
+        self.slopes = self._fritsch_carlson(
+            self.x_knots, self.r_knots, slope_start, slope_end
+        )
 
         self.x_start = float(x_knots[0])
         self.x_end = float(x_knots[-1])
+
+    @staticmethod
+    def _fritsch_carlson(x, y, m0, mn):
+        """
+        Fritsch-Carlson monotone cubic slopes.
+        Guarantees no overshoot between monotonic knots.
+        """
+        n = len(x)
+        m = np.zeros(n)
+        m[0] = m0
+        m[-1] = mn
+
+        delta = np.zeros(n - 1)
+        for i in range(n - 1):
+            h = x[i + 1] - x[i]
+            if h > 1e-15:
+                delta[i] = (y[i + 1] - y[i]) / h
+
+        for i in range(1, n - 1):
+            if delta[i - 1] * delta[i] <= 0:
+                m[i] = 0.0
+            else:
+                m[i] = 0.5 * (delta[i - 1] + delta[i])
+
+        for i in range(n - 1):
+            if abs(delta[i]) < 1e-15:
+                m[i] = 0.0
+                m[i + 1] = 0.0
+                continue
+            alpha = m[i] / delta[i]
+            beta = m[i + 1] / delta[i]
+            tau = alpha * alpha + beta * beta
+            if tau > 9.0:
+                s = 3.0 / math.sqrt(tau)
+                m[i] = s * alpha * delta[i]
+                m[i + 1] = s * beta * delta[i]
+
+        return m
 
     @classmethod
     def from_controls(cls, control_r: np.ndarray,
