@@ -23,6 +23,7 @@ from raosim.moc import (
     march_coupled_net,
     sample_exit_plane,
     compute_exit_thrust,
+    solve_flowfield,
 )
 from raosim.wall_model import SplineWall
 
