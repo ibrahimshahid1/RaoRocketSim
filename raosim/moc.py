@@ -26,6 +26,15 @@ References:
   - Anderson, Modern Compressible Flow, 3rd ed., Ch. 11
   - Zucrow & Hoffman, Gas Dynamics, Vol. 2, Ch. 16
   - NASA SP-8120, Liquid Rocket Engine Nozzles
+
+Starting-line approximation limits:
+  - method='area_ratio' uses a quasi-1D area-Mach estimate along the
+    throat arc and tends to under-represent curvature-driven transonic
+    effects near M≈1.
+  - method='hall' uses a compact Hall-inspired polynomial correction for
+    curved-throat transonic flow; this implementation is intentionally
+    simplified and should be treated as an engineering approximation
+    rather than a full Hall/Kliegel-Levine solution.
 """
 
 from __future__ import annotations
@@ -333,6 +342,8 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
     """
     At = math.pi * Rt * Rt
     y_center = Rt + Rd
+    if method not in {'area_ratio', 'hall'}:
+        raise ValueError("method must be 'area_ratio' or 'hall'")
 
     angles = np.linspace(1e-4, theta_n_max, n_points)
     points = []
@@ -570,7 +581,8 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
 
 
 def solve_flowfield(Rt: float, epsilon: float, gamma: float,
-                    wall, n_char: int = 40) -> dict:
+                    wall, n_char: int = 40,
+                    starting_line_method: str = 'area_ratio') -> dict:
     """
     Full MOC forward solve with coupled wall marching.
 
@@ -583,6 +595,8 @@ def solve_flowfield(Rt: float, epsilon: float, gamma: float,
     gamma   : ratio of specific heats
     wall    : SplineWall instance with r(x), theta(x), intersect_char()
     n_char  : points on initial characteristic line
+    starting_line_method : method passed to approximate_starting_line
+                           ('area_ratio' default, or 'hall')
 
     Returns
     -------
@@ -592,7 +606,9 @@ def solve_flowfield(Rt: float, epsilon: float, gamma: float,
     Re = math.sqrt(epsilon) * Rt
     theta_n = wall.theta(wall.x_start)
 
-    starting_line = approximate_starting_line(Rt, Rd, theta_n, gamma, n_char)
+    starting_line = approximate_starting_line(
+        Rt, Rd, theta_n, gamma, n_char, method=starting_line_method
+    )
     rows = march_coupled_net(starting_line, wall, gamma, axisymmetric=True)
 
     exit_samples = sample_exit_plane(rows, wall.x_end, gamma)
