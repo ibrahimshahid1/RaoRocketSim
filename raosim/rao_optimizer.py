@@ -16,6 +16,12 @@ References:
 from __future__ import annotations
 import math
 import numpy as np
+try:
+    from scipy.optimize import minimize
+    SCIPY_AVAILABLE = True
+except Exception:  # pragma: no cover - exercised in fallback test
+    minimize = None
+    SCIPY_AVAILABLE = False
 
 from raosim.gas_dynamics import isentropic_pressure_ratio, isentropic_density_ratio
 from raosim.moc import solve_flowfield
@@ -101,7 +107,8 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                   length_pct: float = 80.0,
                   n_control: int = 5,
                   n_char: int = 30,
-                  max_iter: int = 200) -> dict:
+                  max_iter: int = 200,
+                  enforce_pressure_monotonic: bool = False) -> dict:
     """
     Find thrust-optimal wall via constrained optimization.
 
@@ -120,19 +127,26 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
     r_init = np.linspace(Ny_seed, Re, n_control + 2)[1:-1]
     x0 = np.concatenate([[theta_n_seed], r_init])
 
-    def objective(params):
-        theta_n = np.clip(params[0], math.radians(15), math.radians(45))
+    def _unpack(params, project=False):
+        theta_n = params[0]
         control_r = params[1:]
-        control_r = np.clip(control_r, Rt, Re)
-        control_r = np.sort(control_r)
+        if project:
+            theta_n = np.clip(theta_n, math.radians(15), math.radians(45))
+            control_r = np.clip(control_r, Rt, Re)
+            control_r = np.sort(control_r)
+        return theta_n, control_r
 
+    def _build_wall(theta_n, control_r):
         Ny = Rt + Rd * (1.0 - math.cos(theta_n))
         Nx = Rd * math.sin(theta_n)
+        wall = SplineWall.from_controls(control_r, Nx, Ny, Ln, Re, theta_n)
+        return wall, Nx, Ny
+
+    def objective(params):
+        theta_n, control_r = _unpack(params, project=not SCIPY_AVAILABLE)
 
         try:
-            wall = SplineWall.from_controls(
-                control_r, Nx, Ny, Ln, Re, theta_n
-            )
+            wall, _, _ = _build_wall(theta_n, control_r)
             result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
             metrics = result['exit_metrics']
 
@@ -152,15 +166,87 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         except Exception:
             return 1e6
 
-    opt_x, opt_f, converged = _nelder_mead(objective, x0, max_iter=max_iter)
+    if SCIPY_AVAILABLE:
+        bounds = [(math.radians(15), math.radians(45))] + [(Rt, Re)] * n_control
+        ws_cons = np.linspace(0.0, 1.0, 80)
 
-    theta_n_opt = np.clip(opt_x[0], math.radians(15), math.radians(45))
-    control_r_opt = np.clip(opt_x[1:], Rt, Re)
+        def _radius_progression(params):
+            theta_n, control_r = _unpack(params)
+            wall, _, _ = _build_wall(theta_n, control_r)
+            x = wall.x_start + ws_cons * (wall.x_end - wall.x_start)
+            r = np.array([wall.r(xi) for xi in x])
+            return np.diff(r)
 
-    Ny = Rt + Rd * (1.0 - math.cos(theta_n_opt))
-    Nx = Rd * math.sin(theta_n_opt)
+        def _angle_progression(params):
+            theta_n, control_r = _unpack(params)
+            wall, _, _ = _build_wall(theta_n, control_r)
+            x = wall.x_knots
+            t = np.array([wall.theta(xi) for xi in x])
+            return -np.diff(t)  # non-increasing theta downstream
 
-    wall = SplineWall.from_controls(control_r_opt, Nx, Ny, Ln, Re, theta_n_opt)
+        def _fixed_exit_radius(params):
+            theta_n, control_r = _unpack(params)
+            wall, _, _ = _build_wall(theta_n, control_r)
+            return wall.r(wall.x_end) - Re
+
+        def _fixed_length(params):
+            theta_n, control_r = _unpack(params)
+            wall, _, _ = _build_wall(theta_n, control_r)
+            return wall.x_end - Ln
+
+        constraints = [
+            {'type': 'ineq', 'fun': lambda p: np.diff(p[1:])},
+            {'type': 'ineq', 'fun': _radius_progression},
+            {'type': 'ineq', 'fun': _angle_progression},
+            {'type': 'eq', 'fun': _fixed_exit_radius},
+            {'type': 'eq', 'fun': _fixed_length},
+        ]
+
+        if enforce_pressure_monotonic:
+            def _pressure_progression(params):
+                theta_n, control_r = _unpack(params)
+                wall, _, _ = _build_wall(theta_n, control_r)
+                result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
+                wall_rows = [row.wall for row in result['rows'] if row.wall is not None]
+                if len(wall_rows) < 3:
+                    return np.array([0.0])
+                wall_rows = sorted(wall_rows, key=lambda p: p.x)
+                p = np.array([isentropic_pressure_ratio(pt.M, gamma) for pt in wall_rows])
+                return p[:-1] - p[1:]
+
+            constraints.append({'type': 'ineq', 'fun': _pressure_progression})
+
+        def _max_constraint_violation(x):
+            worst = 0.0
+            for c in constraints:
+                v = np.atleast_1d(c['fun'](x))
+                if c['type'] == 'ineq':
+                    worst = max(worst, float(np.max(np.maximum(0.0, -v))))
+                else:
+                    worst = max(worst, float(np.max(np.abs(v))))
+            return worst
+
+        res = minimize(
+            objective,
+            x0,
+            method='SLSQP',
+            bounds=bounds,
+            constraints=constraints,
+            options={'maxiter': max_iter, 'ftol': 1e-8},
+        )
+        opt_x = res.x
+        converged = bool(res.success)
+        if not converged:
+            feasible = _max_constraint_violation(opt_x) < 1e-5
+            converged = feasible and np.isfinite(objective(opt_x))
+        optimizer = 'scipy-SLSQP'
+    else:
+        opt_x, _, converged = _nelder_mead(objective, x0, max_iter=max_iter)
+        optimizer = 'nelder-mead'
+
+    theta_n_opt, control_r_opt = _unpack(opt_x, project=True)
+
+    wall, Nx, Ny = _build_wall(theta_n_opt, control_r_opt)
     final = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
 
     return {
@@ -172,8 +258,9 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         'theta_e': math.degrees(wall.theta(wall.x_end)),
         'Nx': Nx, 'Ny': Ny,
         'Ex': Ln, 'Ey': Re,
-        'converged': converged,
+        'converged': bool(converged),
         'control_points': control_r_opt,
+        'optimizer': optimizer,
     }
 
 
