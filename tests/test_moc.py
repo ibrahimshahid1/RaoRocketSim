@@ -23,6 +23,7 @@ from raosim.moc import (
     march_coupled_net,
     sample_exit_plane,
     compute_exit_thrust,
+    solve_flowfield,
 )
 from raosim.wall_model import SplineWall
 
@@ -200,3 +201,60 @@ class TestFullPipeline:
         dev = np.max(np.abs(np.interp(x_c, x_b, y_b) - np.interp(x_c, x_m, y_m)))
         print(f"\n  [BENCHMARK] deviation: {dev*1000:.3f} mm "
               f"({100*dev/bezier['Re']:.1f}% Re)")
+
+
+class TestExitPlaneSampling:
+    @staticmethod
+    def _build_wall():
+        Rt, Rd = 0.02, 0.382 * 0.02
+        theta_n = math.radians(30)
+        Re = math.sqrt(10.0) * Rt
+        Ln = (Re - Rt) / math.tan(math.radians(15)) * 0.8
+        Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+        Nx = Rd * math.sin(theta_n)
+        wall = SplineWall.from_controls(
+            np.linspace(Ny, Re, 5)[1:-1],
+            Nx, Ny, Ln, Re, theta_n,
+        )
+        return wall, Rt, Re, theta_n
+
+    def test_exit_profile_monotonic_and_bounded(self):
+        wall, Rt, Re, theta_n = self._build_wall()
+        rows = march_coupled_net(
+            approximate_starting_line(Rt, 0.382 * Rt, theta_n, 1.4, 20),
+            wall,
+            1.4,
+            max_rows=120,
+        )
+        samples = sample_exit_plane(rows, wall.x_end, 1.4, n_samples=40)
+        re_profile = max(row.wall.r for row in rows[1:] if row.wall is not None)
+        theta_max = max(row.wall.theta for row in rows[1:] if row.wall is not None)
+
+        r = np.array([s['r'] for s in samples])
+        theta = np.array([s['theta'] for s in samples])
+
+        assert len(samples) >= 3
+        assert np.all(np.diff(r) >= -1e-10)
+        assert r[0] == pytest.approx(0.0, abs=1e-10)
+        assert r[-1] == pytest.approx(re_profile, rel=1e-6)
+        assert np.all(theta >= -1e-8)
+        assert np.all(theta <= theta_max + 1e-6)
+
+    def test_exit_profile_stability_with_nchar(self):
+        wall, Rt, _, _ = self._build_wall()
+        coarse = solve_flowfield(Rt, 10.0, 1.4, wall, n_char=14)['exit_samples']
+        fine = solve_flowfield(Rt, 10.0, 1.4, wall, n_char=28)['exit_samples']
+
+        r_max = min(coarse[-1]['r'], fine[-1]['r'])
+        r_grid = np.linspace(0.0, r_max, 30)
+
+        r_c = np.array([s['r'] for s in coarse])
+        r_f = np.array([s['r'] for s in fine])
+        th_c = np.array([s['theta'] for s in coarse])
+        th_f = np.array([s['theta'] for s in fine])
+
+        dth = np.abs(np.interp(r_grid, r_c, th_c) - np.interp(r_grid, r_f, th_f))
+
+        assert coarse[-1]['r'] == pytest.approx(fine[-1]['r'], rel=1e-6)
+        assert float(np.mean(dth)) < 0.35
+        assert float(np.max(dth)) < 0.9

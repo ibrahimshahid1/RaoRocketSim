@@ -441,45 +441,153 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
 def sample_exit_plane(rows: list[CharRow], x_exit: float,
                       gamma: float, n_samples: int = 30) -> list[dict]:
     """
-    Build exit-plane flow profile from the coupled characteristic net.
+    Build an exit-plane profile by intersecting late-row characteristic
+    segments with x = x_exit.
 
-    Strategy: the exit-plane profile is bounded by:
-      - Axis: θ=0, M from the last axis point
-      - Wall: θ=wall angle, M from the last wall point(s) near exit
-
-    Intermediate radial stations are populated by interpolating
-    between wall points sorted by proximity to x_exit.
-
-    This avoids interior-point contamination.
+    For each adjacent pair in the last few converged rows, points are
+    ordered with the same convention as solve_interior_point:
+      - p_minus: upper (larger radius)
+      - p_plus:  lower (smaller radius)
+    The geometric segment between each pair is intersected with the
+    exit station, and (theta, nu, M) are linearly interpolated.
     """
-    wall_pts = [row.wall for row in rows if row.wall is not None and row.wall.M < 20]
-    axis_pts = [row.axis for row in rows if row.axis is not None and row.axis.M < 20]
+    _ = gamma
+
+    valid_rows = [row for row in rows if row.axis is not None and row.wall is not None]
+    if not valid_rows:
+        return [{'r': 0.0, 'theta': 0.0, 'M': 1.0, 'nu': 0.0}]
+
+    tail_rows = valid_rows[-min(len(valid_rows), 8):]
+    wall_pts = [row.wall for row in valid_rows if row.wall is not None and math.isfinite(row.wall.M)]
+    axis_pts = [row.axis for row in valid_rows if row.axis is not None and math.isfinite(row.axis.M)]
 
     if not wall_pts:
         return [{'r': 0.0, 'theta': 0.0, 'M': 1.0, 'nu': 0.0}]
 
-    near_wall = sorted(wall_pts, key=lambda p: abs(p.x - x_exit))
-    best_wall = near_wall[0]
+    near_wall = min(wall_pts, key=lambda p: abs(p.x - x_exit))
+    Re = max(1e-10, max(p.r for p in wall_pts))
 
-    best_axis = axis_pts[-1] if axis_pts else CharPoint(
-        x=x_exit, r=0.0, theta=0.0, M=best_wall.M * 0.8,
-        nu=0.0, mu=math.pi/2, compat_plus=0.0, compat_minus=0.0
+    def _interp_at_x(points: list[CharPoint], fallback: CharPoint) -> CharPoint:
+        if not points:
+            return fallback
+        pts = sorted(points, key=lambda p: p.x)
+        if len(pts) == 1:
+            return pts[0]
+        for a, b in zip(pts[:-1], pts[1:]):
+            if (a.x <= x_exit <= b.x) or (b.x <= x_exit <= a.x):
+                dx = b.x - a.x
+                if abs(dx) < 1e-12:
+                    return a
+                t = (x_exit - a.x) / dx
+                return CharPoint(
+                    x=x_exit,
+                    r=a.r + t * (b.r - a.r),
+                    theta=a.theta + t * (b.theta - a.theta),
+                    M=max(1.0, a.M + t * (b.M - a.M)),
+                    nu=a.nu + t * (b.nu - a.nu),
+                    mu=a.mu + t * (b.mu - a.mu),
+                    compat_plus=0.0,
+                    compat_minus=0.0,
+                )
+        return min(pts, key=lambda p: abs(p.x - x_exit))
+
+    axis_ref = _interp_at_x(
+        axis_pts,
+        CharPoint(
+            x=x_exit, r=0.0, theta=0.0, M=max(1.0, near_wall.M * 0.8),
+            nu=0.0, mu=math.pi / 2.0, compat_plus=0.0, compat_minus=0.0,
+        ),
     )
+    wall_ref = _interp_at_x(wall_pts, near_wall)
+    wall_theta_ref = max(wall_pts, key=lambda p: p.r)
 
-    R_exit = best_wall.r
-    samples = []
+    intersections: list[dict] = []
+    tol = 1e-10
 
-    for i in range(n_samples):
-        frac = i / max(n_samples - 1, 1)
-        r = frac * R_exit
-        theta = frac * best_wall.theta
-        M = best_axis.M + frac * (best_wall.M - best_axis.M)
-        if M < 1.0:
-            M = 1.0
-        nu = best_axis.nu + frac * (best_wall.nu - best_axis.nu)
-        samples.append({'r': r, 'theta': theta, 'M': M, 'nu': nu})
+    for row in tail_rows:
+        pts = row.all_points()
+        if len(pts) < 2:
+            continue
+        for i in range(len(pts) - 1):
+            p_plus = pts[i]
+            p_minus = pts[i + 1]
+            x0, x1 = p_plus.x, p_minus.x
+            if not (min(x0, x1) - tol <= x_exit <= max(x0, x1) + tol):
+                continue
+            dx = x1 - x0
+            if abs(dx) < 1e-14:
+                continue
+            t = (x_exit - x0) / dx
+            if t < -tol or t > 1.0 + tol:
+                continue
+            r = p_plus.r + t * (p_minus.r - p_plus.r)
+            if r < -tol or r > Re + tol:
+                continue
+            intersections.append({
+                'r': min(max(r, 0.0), Re),
+                'theta': p_plus.theta + t * (p_minus.theta - p_plus.theta),
+                'M': max(1.0, p_plus.M + t * (p_minus.M - p_plus.M)),
+                'nu': p_plus.nu + t * (p_minus.nu - p_plus.nu),
+            })
 
-    return samples
+    intersections.append({
+        'r': 0.0,
+        'theta': 0.0,
+        'M': max(1.0, axis_ref.M),
+        'nu': axis_ref.nu,
+    })
+    intersections.append({
+        'r': Re,
+        'theta': wall_theta_ref.theta,
+        'M': max(1.0, wall_ref.M),
+        'nu': wall_ref.nu,
+    })
+
+    intersections.sort(key=lambda s: s['r'])
+    merged: list[dict] = []
+    for s in intersections:
+        if merged and abs(s['r'] - merged[-1]['r']) < 1e-8:
+            merged[-1] = s
+        else:
+            merged.append(s)
+
+    if len(merged) < 2:
+        return merged
+
+    if n_samples <= 0:
+        return merged
+
+    if len(merged) == 2 and n_samples >= 2:
+        r_new = np.linspace(0.0, Re, n_samples)
+        r_pair = [merged[0]['r'], merged[1]['r']]
+        theta_pair = [merged[0]['theta'], merged[1]['theta']]
+        M_pair = [merged[0]['M'], merged[1]['M']]
+        nu_pair = [merged[0]['nu'], merged[1]['nu']]
+        return [
+            {
+                'r': float(r),
+                'theta': float(np.interp(r, r_pair, theta_pair)),
+                'M': float(max(1.0, np.interp(r, r_pair, M_pair))),
+                'nu': float(np.interp(r, r_pair, nu_pair)),
+            }
+            for r in r_new
+        ]
+
+    r_src = np.array([p['r'] for p in merged])
+    theta_src = np.array([p['theta'] for p in merged])
+    M_src = np.array([p['M'] for p in merged])
+    nu_src = np.array([p['nu'] for p in merged])
+
+    r_new = np.linspace(0.0, Re, n_samples)
+    return [
+        {
+            'r': float(r),
+            'theta': float(np.interp(r, r_src, theta_src)),
+            'M': float(max(1.0, np.interp(r, r_src, M_src))),
+            'nu': float(np.interp(r, r_src, nu_src)),
+        }
+        for r in r_new
+    ]
 
 
 def compute_exit_thrust(samples: list[dict], gamma: float,
