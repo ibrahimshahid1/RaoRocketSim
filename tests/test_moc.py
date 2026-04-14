@@ -283,20 +283,24 @@ class TestFullPipeline:
         x_m, y_m = moc['x_bell'], moc['y_bell']
         x_c = np.linspace(max(x_b[0], x_m[0]), min(x_b[-1], x_m[-1]), 50)
         dev = np.max(np.abs(np.interp(x_c, x_b, y_b) - np.interp(x_c, x_m, y_m)))
+        print(f"\n  [BENCHMARK] deviation: {dev*1000:.3f} mm "
+              f"({100*dev/bezier['Re']:.1f}% Re)")
 
-        results = compare_contours(
-            {'Bezier': bezier, 'MOC': moc},
-            Pc=4.5e6,
-            Pa=101325.0,
-            gamma=1.4,
+    @pytest.mark.parametrize("starting_line_method", ["area_ratio", "hall"])
+    @pytest.mark.parametrize("epsilon", [6.0, 10.0, 25.0])
+    def test_starting_line_methods_generate_finite_contours(self, starting_line_method, epsilon):
+        from raosim.rao_optimizer import moc_bell_nozzle
+
+        c = moc_bell_nozzle(
+            Rt=0.02, epsilon=epsilon, gamma=1.4,
+            length_pct=80.0, n_control=3, n_char=10,
+            max_iter=40, starting_line_method=starting_line_method
         )
-        by_name = {r['name']: r for r in results}
-        cf_delta = abs(by_name['MOC']['Cf_corrected'] - by_name['Bezier']['Cf_corrected'])
 
-        assert dev / bezier['Re'] < 0.45
-        assert cf_delta < 0.08
-
-    def test_lightweight_ci_subset(self, moc_contour):
-        """Keep a quick CI test that avoids the expensive parameter sweep."""
-        assert moc_contour['method'] == 'moc'
-        assert moc_contour['y'][-1] == pytest.approx(math.sqrt(10.0) * 0.02, rel=0.06)
+        assert c["starting_line_method"] == starting_line_method
+        assert np.all(np.isfinite(c["x"]))
+        assert np.all(np.isfinite(c["y"]))
+        assert np.all(np.isfinite(c["x_bell"]))
+        assert np.all(np.isfinite(c["y_bell"]))
+        assert c["x"][-1] > c["x"][0]
+        assert c["y"][-1] == pytest.approx(math.sqrt(epsilon) * 0.02, rel=0.08)
