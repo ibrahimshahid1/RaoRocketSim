@@ -136,17 +136,21 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
             result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
             metrics = result['exit_metrics']
 
-            cost = -metrics['F']
-            cost += 10.0 * max(0, metrics['theta_max'] - 5.0)**2
-            cost += 5.0 * metrics['theta_rms']**2
+            thrust_term = -metrics['F_dimensional']
+
+            flow_quality_penalty = 0.0
+            flow_quality_penalty += 1.0 * max(0, metrics['theta_max'] - 5.0)**2
+            flow_quality_penalty += 0.5 * metrics['theta_rms']**2
 
             ws, wr, _ = wall.sample(50)
             dr = np.diff(wr)
-            cost += 100.0 * np.sum(np.minimum(dr, 0)**2)
+            geometry_penalty = 100.0 * np.sum(np.minimum(dr, 0)**2)
 
             slopes = np.diff(wr) / np.diff(ws)
             curvature = np.diff(slopes)
-            cost += 0.5 * np.sum(curvature**2)
+            geometry_penalty += 0.5 * np.sum(curvature**2)
+
+            cost = thrust_term + flow_quality_penalty + geometry_penalty
 
             return cost
         except Exception:

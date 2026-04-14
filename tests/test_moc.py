@@ -23,6 +23,7 @@ from raosim.moc import (
     march_coupled_net,
     sample_exit_plane,
     compute_exit_thrust,
+    solve_flowfield,
 )
 from raosim.wall_model import SplineWall
 
@@ -200,3 +201,49 @@ class TestFullPipeline:
         dev = np.max(np.abs(np.interp(x_c, x_b, y_b) - np.interp(x_c, x_m, y_m)))
         print(f"\n  [BENCHMARK] deviation: {dev*1000:.3f} mm "
               f"({100*dev/bezier['Re']:.1f}% Re)")
+
+
+class TestExitThrustConvergence:
+    @staticmethod
+    def _make_wall(Rt=0.02, epsilon=10.0, theta_n_deg=30.0, n_control=5):
+        Rd = 0.382 * Rt
+        theta_n = math.radians(theta_n_deg)
+        Re = math.sqrt(epsilon) * Rt
+        Ln = (Re - Rt) / math.tan(math.radians(15)) * 0.8
+        Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+        Nx = Rd * math.sin(theta_n)
+        control = np.linspace(Ny, Re, n_control + 2)[1:-1]
+        return SplineWall.from_controls(control, Nx, Ny, Ln, Re, theta_n)
+
+    def test_thrust_converges_with_n_char(self):
+        Rt, epsilon, gamma = 0.02, 10.0, 1.4
+        wall = self._make_wall(Rt=Rt, epsilon=epsilon)
+
+        n_char_levels = [10, 16, 24, 36]
+        thrusts = []
+        for n_char in n_char_levels:
+            result = solve_flowfield(Rt, epsilon, gamma, wall, n_char=n_char)
+            thrusts.append(result['exit_metrics']['F_dimensional'])
+
+        ref = thrusts[-1]
+        errors = [abs(f - ref) for f in thrusts[:-1]]
+
+        assert errors[-1] < errors[0]
+        assert errors[-1] <= 0.8 * errors[0]
+
+    def test_thrust_converges_with_exit_sample_density(self):
+        Rt, epsilon, gamma = 0.02, 10.0, 1.4
+        wall = self._make_wall(Rt=Rt, epsilon=epsilon)
+        result = solve_flowfield(Rt, epsilon, gamma, wall, n_char=28)
+
+        densities = [16, 32, 64, 128]
+        thrusts = []
+        for n_samples in densities:
+            samples = sample_exit_plane(result['rows'], wall.x_end, gamma, n_samples=n_samples)
+            thrusts.append(compute_exit_thrust(samples, gamma)['F_dimensional'])
+
+        ref = thrusts[-1]
+        errors = [abs(f - ref) for f in thrusts[:-1]]
+
+        assert errors[-1] < errors[0]
+        assert errors[-1] <= 0.6 * errors[0]
