@@ -11,6 +11,13 @@ No scipy dependency.
 References:
   - Rao, G.V.R., "Exhaust Nozzle Contour for Optimum Thrust," 1958
   - NASA SP-8120, "Liquid Rocket Engine Nozzles," 1976
+
+Approximation note:
+  The coupled optimizer inherits the starting-line approximation selected
+  in raosim.moc.solve_flowfield. The default is the historical
+  quasi-1D area-ratio initialization for backward compatibility; use
+  starting_line_method='hall' to enable the simplified Hall-style
+  transonic correction.
 """
 
 from __future__ import annotations
@@ -108,7 +115,7 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                   n_control: int = 5,
                   n_char: int = 30,
                   max_iter: int = 200,
-                  enforce_pressure_monotonic: bool = False) -> dict:
+                  starting_line_method: str = 'area_ratio') -> dict:
     """
     Find thrust-optimal wall via constrained optimization.
 
@@ -146,8 +153,13 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         theta_n, control_r = _unpack(params, project=not SCIPY_AVAILABLE)
 
         try:
-            wall, _, _ = _build_wall(theta_n, control_r)
-            result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
+            wall = SplineWall.from_controls(
+                control_r, Nx, Ny, Ln, Re, theta_n
+            )
+            result = solve_flowfield(
+                Rt, epsilon, gamma, wall, n_char,
+                starting_line_method=starting_line_method,
+            )
             metrics = result['exit_metrics']
 
             cost = -metrics['F']
@@ -246,8 +258,11 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
 
     theta_n_opt, control_r_opt = _unpack(opt_x, project=True)
 
-    wall, Nx, Ny = _build_wall(theta_n_opt, control_r_opt)
-    final = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
+    wall = SplineWall.from_controls(control_r_opt, Nx, Ny, Ln, Re, theta_n_opt)
+    final = solve_flowfield(
+        Rt, epsilon, gamma, wall, n_char,
+        starting_line_method=starting_line_method,
+    )
 
     return {
         'wall': wall,
@@ -269,7 +284,8 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
                     n_control: int = 5, n_char: int = 30,
                     convergent_half_angle_deg: float = 45.0,
                     Ru_factor: float = 1.5,
-                    max_iter: int = 200) -> dict:
+                    max_iter: int = 200,
+                    starting_line_method: str = 'area_ratio') -> dict:
     """
     Generate optimized bell nozzle contour via coupled MOC + optimization.
 
@@ -281,7 +297,8 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     Rd = 0.382 * Rt
 
     opt = optimize_wall(Rt, epsilon, gamma, length_pct,
-                        n_control, n_char, max_iter)
+                        n_control, n_char, max_iter,
+                        starting_line_method=starting_line_method)
 
     conv_angle = math.radians(convergent_half_angle_deg)
     n_conv = 100
@@ -328,4 +345,5 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'exit_M_uniformity': metrics['M_std'],
         'exit_M_mean': metrics['M_mean'],
         'optimization_converged': opt['converged'],
+        'starting_line_method': starting_line_method,
     }

@@ -110,6 +110,7 @@ def bell_nozzle_contour(
     Ru_factor: float = 1.5,
     Rd_factor: float = 0.382,
     method: str = 'bezier',
+    starting_line_method: str = 'area_ratio',
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -127,6 +128,8 @@ def bell_nozzle_contour(
     Rd_factor   : downstream curvature / Rt  (default 0.382)
     method      : 'bezier' (default, Bézier approximation) or
                   'moc' (MOC + Rao optimization)
+    starting_line_method : MOC-only starting-line approximation
+                           ('area_ratio' default, or 'hall')
 
     Returns
     -------
@@ -151,6 +154,7 @@ def bell_nozzle_contour(
             Rt, epsilon, gamma=1.4, length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
+            starting_line_method=starting_line_method,
         )
 
     if method == 'rao':
