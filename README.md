@@ -68,6 +68,19 @@ main.py                      # CLI (interactive / batch / sweep)
 
 Wall angles (θₙ, θₑ) interpolated from Rao/NASA charts as f(ε, L%).
 
+### MOC Starting-Line Approximation Limits
+
+When using the MOC optimizer path (`method='moc'`), the transonic
+starting line can be initialized with:
+
+- `starting_line_method='area_ratio'` (default): quasi-1D area/Mach
+  approximation for backward compatibility.
+- `starting_line_method='hall'`: simplified Hall-inspired correction for
+  curved-throat transonic effects.
+
+Both are engineering approximations; the Hall option in this project is
+not a full closed-form Hall/Kliegel-Levine transonic solution.
+
 ## References
 
 - G. V. R. Rao, "Exhaust Nozzle Contour for Optimum Thrust," 1958

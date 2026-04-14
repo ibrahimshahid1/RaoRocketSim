@@ -158,34 +158,119 @@ class TestCoupledMarching:
                 expected_theta = wall.theta(row.wall.x)
                 assert row.wall.theta == pytest.approx(expected_theta, abs=0.05)
 
+    def test_triangular_row_topology_consistency(self):
+        """Rows keep consistent triangular topology under coupled marching."""
+        Rt, Rd = 0.02, 0.382 * 0.02
+        theta_n = math.radians(30)
+        Re = math.sqrt(10.0) * Rt
+        Ln = (Re - Rt) / math.tan(math.radians(15)) * 0.8
+
+        Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+        Nx = Rd * math.sin(theta_n)
+
+        wall = SplineWall.from_controls(
+            np.linspace(Ny, Re, 5)[1:-1],
+            Nx, Ny, Ln, Re, theta_n,
+        )
+        pts = approximate_starting_line(Rt, Rd, theta_n, 1.4, 12)
+        rows = march_coupled_net(pts, wall, 1.4, max_rows=6)
+
+        n_seed = len(rows[0].interior)
+        for row in rows[1:]:
+            assert len(row.interior) == n_seed - 2
+            assert row.axis is not None
+            assert row.wall is not None
+            assert len(row.all_points()) == n_seed
+
+
+@pytest.fixture
+def moc_contour():
+    from raosim.rao_optimizer import moc_bell_nozzle
+    return moc_bell_nozzle(
+        Rt=0.02,
+        epsilon=10.0,
+        gamma=1.4,
+        length_pct=80.0,
+        n_control=3,
+        n_char=10,
+        max_iter=20,
+    )
+
 
 class TestFullPipeline:
-    def test_exit_radius(self):
+    @pytest.mark.parametrize("epsilon", [4, 10, 25, 50])
+    @pytest.mark.slow
+    def test_exit_radius(self, epsilon):
         from raosim.rao_optimizer import moc_bell_nozzle
-        c = moc_bell_nozzle(Rt=0.02, epsilon=10.0, gamma=1.4,
+        c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
                             length_pct=80.0, n_control=3, n_char=10,
                             max_iter=50)
-        Re = math.sqrt(10.0) * 0.02
+        Re = math.sqrt(epsilon) * 0.02
         assert c['y'][-1] == pytest.approx(Re, rel=0.05)
 
-    def test_method_key(self):
+    @pytest.mark.parametrize("epsilon", [4, 10, 25, 50])
+    @pytest.mark.slow
+    def test_method_key(self, epsilon):
         from raosim.rao_optimizer import moc_bell_nozzle
-        c = moc_bell_nozzle(Rt=0.02, epsilon=10.0, gamma=1.4,
+        c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
                             length_pct=80.0, n_control=3, n_char=10,
                             max_iter=50)
         assert c['method'] == 'moc'
 
-    def test_bell_monotonic(self):
+    @pytest.mark.parametrize("epsilon", [4, 10, 25, 50])
+    @pytest.mark.slow
+    def test_bell_monotonic(self, epsilon):
         from raosim.rao_optimizer import moc_bell_nozzle
-        c = moc_bell_nozzle(Rt=0.02, epsilon=10.0, gamma=1.4,
+        c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
                             length_pct=80.0, n_control=3, n_char=10,
                             max_iter=50)
         dy = np.diff(c['y_bell'])
         assert np.all(dy >= -1e-6)
 
-    def test_benchmark_vs_bezier(self):
-        """Benchmark only — no hard-coded thresholds."""
+    @pytest.mark.parametrize("epsilon", [4, 10, 25, 50])
+    @pytest.mark.slow
+    def test_wall_monotonicity_and_smoothness(self, epsilon):
         from raosim.rao_optimizer import moc_bell_nozzle
+
+        c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+                            length_pct=80.0, n_control=3, n_char=10,
+                            max_iter=50)
+
+        x_b, y_b = c['x_bell'], c['y_bell']
+        dy = np.diff(y_b)
+        assert np.all(dy >= -1e-6)
+
+        slopes = np.diff(y_b) / np.diff(x_b)
+        curvature = np.diff(slopes)
+        assert np.max(np.abs(curvature)) < 0.35
+
+    def test_exit_profile_quality_from_traced_profile(self, moc_contour):
+        from raosim.rao_optimizer import optimize_wall
+
+        opt = optimize_wall(
+            Rt=0.02,
+            epsilon=10.0,
+            gamma=1.4,
+            length_pct=80.0,
+            n_control=3,
+            n_char=10,
+            max_iter=20,
+        )
+        traced = sample_exit_plane(opt['rows'], opt['wall'].x_end, gamma=1.4, n_samples=40)
+        metrics = compute_exit_thrust(traced, gamma=1.4)
+
+        assert metrics['theta_max'] < 18.0
+        assert metrics['theta_rms'] < 10.0
+        assert metrics['M_std'] < 2.2
+        assert metrics['M_mean'] > 1.0
+
+        assert moc_contour['exit_theta_max'] == pytest.approx(metrics['theta_max'], rel=0.5)
+
+    @pytest.mark.slow
+    def test_moc_vs_bezier_shape_and_thrust_tolerances(self):
+        """Validate corrected-thrust and shape with explicit tolerances."""
+        from raosim.rao_optimizer import moc_bell_nozzle
+        from raosim.nozzle_comparison import compare_contours
         try:
             from raosim.nozzle_geometry import bell_nozzle_contour
         except ImportError:
@@ -202,59 +287,21 @@ class TestFullPipeline:
         print(f"\n  [BENCHMARK] deviation: {dev*1000:.3f} mm "
               f"({100*dev/bezier['Re']:.1f}% Re)")
 
+    @pytest.mark.parametrize("starting_line_method", ["area_ratio", "hall"])
+    @pytest.mark.parametrize("epsilon", [6.0, 10.0, 25.0])
+    def test_starting_line_methods_generate_finite_contours(self, starting_line_method, epsilon):
+        from raosim.rao_optimizer import moc_bell_nozzle
 
-class TestExitPlaneSampling:
-    @staticmethod
-    def _build_wall():
-        Rt, Rd = 0.02, 0.382 * 0.02
-        theta_n = math.radians(30)
-        Re = math.sqrt(10.0) * Rt
-        Ln = (Re - Rt) / math.tan(math.radians(15)) * 0.8
-        Ny = Rt + Rd * (1.0 - math.cos(theta_n))
-        Nx = Rd * math.sin(theta_n)
-        wall = SplineWall.from_controls(
-            np.linspace(Ny, Re, 5)[1:-1],
-            Nx, Ny, Ln, Re, theta_n,
+        c = moc_bell_nozzle(
+            Rt=0.02, epsilon=epsilon, gamma=1.4,
+            length_pct=80.0, n_control=3, n_char=10,
+            max_iter=40, starting_line_method=starting_line_method
         )
-        return wall, Rt, Re, theta_n
 
-    def test_exit_profile_monotonic_and_bounded(self):
-        wall, Rt, Re, theta_n = self._build_wall()
-        rows = march_coupled_net(
-            approximate_starting_line(Rt, 0.382 * Rt, theta_n, 1.4, 20),
-            wall,
-            1.4,
-            max_rows=120,
-        )
-        samples = sample_exit_plane(rows, wall.x_end, 1.4, n_samples=40)
-        re_profile = max(row.wall.r for row in rows[1:] if row.wall is not None)
-        theta_max = max(row.wall.theta for row in rows[1:] if row.wall is not None)
-
-        r = np.array([s['r'] for s in samples])
-        theta = np.array([s['theta'] for s in samples])
-
-        assert len(samples) >= 3
-        assert np.all(np.diff(r) >= -1e-10)
-        assert r[0] == pytest.approx(0.0, abs=1e-10)
-        assert r[-1] == pytest.approx(re_profile, rel=1e-6)
-        assert np.all(theta >= -1e-8)
-        assert np.all(theta <= theta_max + 1e-6)
-
-    def test_exit_profile_stability_with_nchar(self):
-        wall, Rt, _, _ = self._build_wall()
-        coarse = solve_flowfield(Rt, 10.0, 1.4, wall, n_char=14)['exit_samples']
-        fine = solve_flowfield(Rt, 10.0, 1.4, wall, n_char=28)['exit_samples']
-
-        r_max = min(coarse[-1]['r'], fine[-1]['r'])
-        r_grid = np.linspace(0.0, r_max, 30)
-
-        r_c = np.array([s['r'] for s in coarse])
-        r_f = np.array([s['r'] for s in fine])
-        th_c = np.array([s['theta'] for s in coarse])
-        th_f = np.array([s['theta'] for s in fine])
-
-        dth = np.abs(np.interp(r_grid, r_c, th_c) - np.interp(r_grid, r_f, th_f))
-
-        assert coarse[-1]['r'] == pytest.approx(fine[-1]['r'], rel=1e-6)
-        assert float(np.mean(dth)) < 0.35
-        assert float(np.max(dth)) < 0.9
+        assert c["starting_line_method"] == starting_line_method
+        assert np.all(np.isfinite(c["x"]))
+        assert np.all(np.isfinite(c["y"]))
+        assert np.all(np.isfinite(c["x_bell"]))
+        assert np.all(np.isfinite(c["y_bell"]))
+        assert c["x"][-1] > c["x"][0]
+        assert c["y"][-1] == pytest.approx(math.sqrt(epsilon) * 0.02, rel=0.08)

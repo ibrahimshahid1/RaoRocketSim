@@ -26,6 +26,15 @@ References:
   - Anderson, Modern Compressible Flow, 3rd ed., Ch. 11
   - Zucrow & Hoffman, Gas Dynamics, Vol. 2, Ch. 16
   - NASA SP-8120, Liquid Rocket Engine Nozzles
+
+Starting-line approximation limits:
+  - method='area_ratio' uses a quasi-1D area-Mach estimate along the
+    throat arc and tends to under-represent curvature-driven transonic
+    effects near M≈1.
+  - method='hall' uses a compact Hall-inspired polynomial correction for
+    curved-throat transonic flow; this implementation is intentionally
+    simplified and should be treated as an engineering approximation
+    rather than a full Hall/Kliegel-Levine solution.
 """
 
 from __future__ import annotations
@@ -333,6 +342,8 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
     """
     At = math.pi * Rt * Rt
     y_center = Rt + Rd
+    if method not in {'area_ratio', 'hall'}:
+        raise ValueError("method must be 'area_ratio' or 'hall'")
 
     angles = np.linspace(1e-4, theta_n_max, n_points)
     points = []
@@ -600,59 +611,86 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
 
         F = 2π ∫₀ᴿᵉ (ρ·ux² + (p - pa)) · r · dr
 
-    Uses isentropic relations: p/Pc = (1 + (γ-1)/2·M²)^(-γ/(γ-1))
+    Uses chamber/stagnation assumptions with local Mach and flow angle:
+      T = Tc / (1 + (γ-1)/2 M²)
+      p = Pc * (T/Tc)^(γ/(γ-1))
+      ρ = p / (R_gas * T)
+      Vx = M * sqrt(γ R_gas T) * cos(theta)
 
-    Returns dict with F_normalized, theta_max, theta_rms, M_std.
+    Returns dimensional and normalized thrust metrics.
     """
     if len(samples) < 2:
-        return {'F': 0.0, 'theta_max': 0.0, 'theta_rms': 0.0, 'M_std': 0.0, 'M_mean': 1.0}
+        return {
+            'F': 0.0,
+            'F_dimensional': 0.0,
+            'F_normalized': 0.0,
+            'Cf': 0.0,
+            'theta_max': 0.0,
+            'theta_rms': 0.0,
+            'M_std': 0.0,
+            'M_mean': 1.0,
+        }
+
+    ordered = sorted(samples, key=lambda s: s['r'])
+    r_vals = np.array([max(0.0, float(s['r'])) for s in ordered], dtype=float)
+    m_vals = np.array([max(1.0, float(s['M'])) for s in ordered], dtype=float)
+    th_vals = np.array([float(s['theta']) for s in ordered], dtype=float)
+
+    # Collapse duplicate radial stations (possible from trace/interpolation artifacts).
+    r_unique, inv = np.unique(r_vals, return_inverse=True)
+    if r_unique.size < 2:
+        return {
+            'F': 0.0,
+            'F_dimensional': 0.0,
+            'F_normalized': 0.0,
+            'Cf': 0.0,
+            'theta_max': float(np.max(np.abs(np.degrees(th_vals)))) if th_vals.size else 0.0,
+            'theta_rms': float(np.degrees(np.sqrt(np.mean(th_vals**2)))) if th_vals.size else 0.0,
+            'M_std': float(np.std(m_vals)) if m_vals.size else 0.0,
+            'M_mean': float(np.mean(m_vals)) if m_vals.size else 1.0,
+        }
+
+    m_accum = np.zeros_like(r_unique)
+    th_accum = np.zeros_like(r_unique)
+    counts = np.zeros_like(r_unique)
+    for idx, u_idx in enumerate(inv):
+        m_accum[u_idx] += m_vals[idx]
+        th_accum[u_idx] += th_vals[idx]
+        counts[u_idx] += 1.0
+    m_vals = m_accum / np.maximum(counts, 1.0)
+    th_vals = th_accum / np.maximum(counts, 1.0)
+    r_vals = r_unique
 
     gm1 = gamma - 1.0
-    F = 0.0
+    t_ratio = 1.0 / (1.0 + 0.5 * gm1 * m_vals**2)
+    T = Tc * t_ratio
+    p = Pc * np.power(t_ratio, gamma / gm1)
+    rho = p / np.maximum(R_gas * T, 1e-30)
+    V = m_vals * np.sqrt(np.maximum(gamma * R_gas * T, 0.0))
+    vx = V * np.cos(th_vals)
 
-    thetas = []
-    machs = []
+    integrand = rho * vx**2 + (p - p_ambient)
+    F_dim = float(2.0 * math.pi * np.trapezoid(integrand * r_vals, r_vals))
 
-    for i in range(len(samples) - 1):
-        s1, s2 = samples[i], samples[i + 1]
-        dr = s2['r'] - s1['r']
-        if dr <= 0:
-            continue
-
-        r_mid = 0.5 * (s1['r'] + s2['r'])
-        M_mid = 0.5 * (s1['M'] + s2['M'])
-        th_mid = 0.5 * (s1['theta'] + s2['theta'])
-
-        if M_mid < 1.0:
-            M_mid = 1.0
-
-        p_ratio = (1.0 + 0.5 * gm1 * M_mid**2) ** (-gamma / gm1)
-        rho_ratio = (1.0 + 0.5 * gm1 * M_mid**2) ** (-1.0 / gm1)
-        T_ratio = 1.0 / (1.0 + 0.5 * gm1 * M_mid**2)
-
-        V = M_mid * math.sqrt(gamma * T_ratio)
-        ux = V * math.cos(th_mid)
-
-        integrand = rho_ratio * ux**2 + (p_ratio - p_ambient)
-        F += integrand * 2.0 * math.pi * r_mid * dr
-
-        thetas.append(th_mid)
-        machs.append(M_mid)
-
-    thetas_arr = np.array(thetas) if thetas else np.array([0.0])
-    machs_arr = np.array(machs) if machs else np.array([1.0])
+    r_exit = float(np.max(r_vals))
+    At = math.pi * r_exit * r_exit if r_exit > 0.0 else 0.0
+    F_norm = F_dim / max(Pc * At, 1e-30) if At > 0.0 else 0.0
 
     return {
-        'F': F,
-        'theta_max': float(np.max(np.abs(np.degrees(thetas_arr)))),
-        'theta_rms': float(np.degrees(np.sqrt(np.mean(thetas_arr**2)))),
-        'M_std': float(np.std(machs_arr)),
-        'M_mean': float(np.mean(machs_arr)),
+        'F': F_dim,
+        'F_dimensional': F_dim,
+        'F_normalized': F_norm,
+        'Cf': F_norm,
+        'theta_max': float(np.max(np.abs(np.degrees(th_vals)))),
+        'theta_rms': float(np.degrees(np.sqrt(np.mean(th_vals**2)))),
+        'M_std': float(np.std(m_vals)),
+        'M_mean': float(np.mean(m_vals)),
     }
 
 
 def solve_flowfield(Rt: float, epsilon: float, gamma: float,
-                    wall, n_char: int = 40) -> dict:
+                    wall, n_char: int = 40,
+                    starting_line_method: str = 'area_ratio') -> dict:
     """
     Full MOC forward solve with coupled wall marching.
 
@@ -665,6 +703,8 @@ def solve_flowfield(Rt: float, epsilon: float, gamma: float,
     gamma   : ratio of specific heats
     wall    : SplineWall instance with r(x), theta(x), intersect_char()
     n_char  : points on initial characteristic line
+    starting_line_method : method passed to approximate_starting_line
+                           ('area_ratio' default, or 'hall')
 
     Returns
     -------
@@ -674,7 +714,9 @@ def solve_flowfield(Rt: float, epsilon: float, gamma: float,
     Re = math.sqrt(epsilon) * Rt
     theta_n = wall.theta(wall.x_start)
 
-    starting_line = approximate_starting_line(Rt, Rd, theta_n, gamma, n_char)
+    starting_line = approximate_starting_line(
+        Rt, Rd, theta_n, gamma, n_char, method=starting_line_method
+    )
     rows = march_coupled_net(starting_line, wall, gamma, axisymmetric=True)
 
     exit_samples = sample_exit_plane(rows, wall.x_end, gamma)
