@@ -115,7 +115,8 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                   n_control: int = 5,
                   n_char: int = 30,
                   max_iter: int = 200,
-                  starting_line_method: str = 'area_ratio') -> dict:
+                  starting_line_method: str = 'area_ratio',
+                  enforce_pressure_monotonic: bool = False) -> dict:
     """
     Find thrust-optimal wall via constrained optimization.
 
@@ -153,9 +154,7 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         theta_n, control_r = _unpack(params, project=not SCIPY_AVAILABLE)
 
         try:
-            wall = SplineWall.from_controls(
-                control_r, Nx, Ny, Ln, Re, theta_n
-            )
+            wall, _, _ = _build_wall(theta_n, control_r)
             result = solve_flowfield(
                 Rt, epsilon, gamma, wall, n_char,
                 starting_line_method=starting_line_method,
@@ -262,20 +261,20 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
 
     theta_n_opt, control_r_opt = _unpack(opt_x, project=True)
 
-    wall = SplineWall.from_controls(control_r_opt, Nx, Ny, Ln, Re, theta_n_opt)
+    wall_opt, Nx_opt, Ny_opt = _build_wall(theta_n_opt, control_r_opt)
     final = solve_flowfield(
-        Rt, epsilon, gamma, wall, n_char,
+        Rt, epsilon, gamma, wall_opt, n_char,
         starting_line_method=starting_line_method,
     )
 
     return {
-        'wall': wall,
+        'wall': wall_opt,
         'rows': final['rows'],
         'exit_samples': final['exit_samples'],
         'exit_metrics': final['exit_metrics'],
         'theta_n': math.degrees(theta_n_opt),
-        'theta_e': math.degrees(wall.theta(wall.x_end)),
-        'Nx': Nx, 'Ny': Ny,
+        'theta_e': math.degrees(wall_opt.theta(wall_opt.x_end)),
+        'Nx': Nx_opt, 'Ny': Ny_opt,
         'Ex': Ln, 'Ey': Re,
         'converged': bool(converged),
         'control_points': control_r_opt,

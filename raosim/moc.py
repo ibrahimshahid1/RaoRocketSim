@@ -126,7 +126,7 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
         slope_m = math.tan(0.5*(p_minus.theta + theta3) - 0.5*(p_minus.mu + mu3))
         slope_p = math.tan(0.5*(p_plus.theta + theta3) + 0.5*(p_plus.mu + mu3))
 
-        denom = slope_p - slope_m
+        denom = slope_m - slope_p
         if abs(denom) > 1e-15:
             x3 = ((p_plus.r - p_minus.r) - slope_p*p_plus.x + slope_m*p_minus.x) / denom
             r3 = p_minus.r + slope_m * (x3 - p_minus.x)
@@ -172,6 +172,12 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
         if abs(theta3 - theta3_old) < tol:
             break
 
+    # Ensure downstream progression (guard against degenerate configurations)
+    x_min_parent = min(p_minus.x, p_plus.x)
+    if x3 < x_min_parent:
+        x3 = x_min_parent + 1e-8 * max(abs(x_min_parent), 1e-6)
+        r3 = 0.5 * (p_minus.r + p_plus.r)
+
     return CharPoint(
         x=x3, r=r3, theta=theta3, M=M3,
         nu=nu3, mu=mu3,
@@ -184,11 +190,16 @@ def solve_axis_point(p_above: CharPoint, gamma: float,
                      axisymmetric: bool = True,
                      tol: float = 1e-8, max_iter: int = 10) -> CharPoint:
     """
-    Axis unit process: C⁺ from p_above reaches centerline.
+    Axis unit process: C⁻ from p_above reaches centerline.
     Symmetry BC: θ=0, r=0. Handles sin(θ)/r singularity.
+
+    Along the C⁻ characteristic from p_above to the axis:
+        (θ − ν)₃ = (θ − ν)_above + Q⁻·ds
+    At the axis θ₃ = 0, so ν₃ = −(θ − ν)_above = ν_above − θ_above.
     """
     theta3 = 0.0
-    nu3 = p_above.compat_plus
+    # C⁻ invariant: at axis θ=0 → ν₃ = −compat_minus_above
+    nu3 = -p_above.compat_minus
     if nu3 < 1e-8:
         nu3 = 1e-8
     M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -196,25 +207,27 @@ def solve_axis_point(p_above: CharPoint, gamma: float,
     x3 = p_above.x
 
     for _ in range(max_iter):
-        slope_p = math.tan(0.5*p_above.theta + 0.5*(p_above.mu + mu3))
-        if abs(slope_p) > 1e-15:
-            x3 = p_above.x - p_above.r / slope_p
+        # C⁻ slope: tan(θ_avg − μ_avg) < 0 → goes forward and downward
+        slope_m = math.tan(0.5*p_above.theta - 0.5*(p_above.mu + mu3))
+        if abs(slope_m) > 1e-15:
+            x3 = p_above.x - p_above.r / slope_m
         else:
             x3 = p_above.x + 2.0 * p_above.r
 
-        cp = p_above.compat_plus
+        cm = p_above.compat_minus
         if axisymmetric and p_above.r > 1e-10:
             ds = math.sqrt((x3-p_above.x)**2 + p_above.r**2)
             th_avg = 0.5 * p_above.theta
             mu_avg = 0.5 * (p_above.mu + mu3)
             r_avg = 0.5 * p_above.r
-            cos_tp = math.cos(th_avg + mu_avg)
-            if abs(cos_tp) > 1e-15 and r_avg > 1e-10:
+            cos_tm = math.cos(th_avg - mu_avg)
+            if abs(cos_tm) > 1e-15 and r_avg > 1e-10:
                 sin_th = th_avg if abs(th_avg) < 1e-10 else math.sin(th_avg)
-                Qp = sin_th * math.sin(mu_avg)*math.cos(mu_avg) / (r_avg*cos_tp)
-                cp = p_above.compat_plus + Qp * ds
+                Qm = -sin_th * math.sin(mu_avg)*math.cos(mu_avg) / (r_avg*cos_tm)
+                cm = p_above.compat_minus + Qm * ds
 
-        nu3 = cp
+        # At axis θ=0 → ν₃ = −cm
+        nu3 = -cm
         if nu3 < 1e-8:
             nu3 = 1e-8
         M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -429,7 +442,8 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
 
         interior = []
         for j in range(len(prev_pts) - 2):
-            pt = solve_interior_point(prev_pts[j], prev_pts[j + 1],
+            # p_minus = upper (j+1), p_plus = lower (j): correct C⁻/C⁺ pairing
+            pt = solve_interior_point(prev_pts[j + 1], prev_pts[j],
                                       gamma, axisymmetric)
             interior.append(pt)
             new_pts.append(pt)

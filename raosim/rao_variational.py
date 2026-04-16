@@ -477,89 +477,225 @@ def _construct_wall_from_ce(
     n_char: int = 30,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    Given the optimized control-surface conditions, construct the
-    nozzle wall using the method of characteristics.
+    Construct the nozzle wall from the optimal control surface using
+    the true Rao Method of Characteristics (backward construction).
 
-    Strategy:
-      1. Generate transonic starting line
-      2. March MOC net with a trial wall
-      3. Refine wall shape so that exit-plane conditions match CE targets
+    This implements the core of Rao's 1958 method:
+      1. The CE provides target flow conditions (M, θ) at radial stations.
+      2. C⁻ characteristics from the CE carry compatibility data
+         (θ − ν) backward toward the wall.
+      3. C⁺ characteristics from interior points carry (θ + ν) forward.
+      4. Each wall point is determined by intersecting C⁺ from the
+         nearest interior point with C⁻ from the CE, subject to the
+         streamline (wall tangency) condition: θ_flow = θ_wall.
+
+    The result is a wall contour that realises the variationally-optimal
+    flowfield on the control surface—exactly the design-mode MoC
+    described in NASA TM-1990 and Rao's original paper.
+
+    References
+    ----------
+    - G. V. R. Rao, "Exhaust Nozzle Contour for Optimum Thrust," 1958
+    - NASA TM (1990), Rao method re-derivation with explicit functionals
+    - Anderson, *Modern Compressible Flow*, 3rd ed., Ch. 11
     """
     Re = math.sqrt(epsilon) * Rt
     Rd = 0.382 * Rt
+    theta_n = max(float(ce.theta[0]), math.radians(15))
 
-    # Use the CE exit angle as θ_n seed
-    theta_n = max(ce.theta[0], math.radians(15))
-
-    # Target exit-plane properties from CE
-    M_exit_target = float(np.mean(ce.M[-3:]))
-    theta_exit_target = float(np.mean(ce.theta[-3:]))
-
-    Ny = Rt + Rd * (1.0 - math.cos(theta_n))
     Nx = Rd * math.sin(theta_n)
+    Ny = Rt + Rd * (1.0 - math.cos(theta_n))
 
-    # Build a spline wall that tries to match CE characteristics
-    # Use CE radial distribution as guide for control points
-    n_ctrl = min(7, max(3, len(ce.r) // 3))
-    # Sample CE radii at evenly spaced axial stations
-    x_ce_est = np.linspace(Nx, Ln, n_ctrl + 2)
-    r_ce_est = np.interp(
-        np.linspace(ce.r[0], ce.r[-1], n_ctrl + 2),
-        ce.r, ce.r
+    # ── Step 1: Compute CE physical (x, r) positions ──────────────
+    # Along the CE surface with inclination φ(r):  dx/dr = cot(φ)
+    n_ce = len(ce.r)
+    x_ce = np.zeros(n_ce)
+    x_ce[0] = Nx + 0.05 * (Ln - Nx)   # start slightly past inflection
+    for i in range(1, n_ce):
+        phi_avg = 0.5 * (ce.phi[i - 1] + ce.phi[i])
+        dr = ce.r[i] - ce.r[i - 1]
+        sin_phi = math.sin(phi_avg)
+        if abs(sin_phi) > 1e-10:
+            x_ce[i] = x_ce[i - 1] + math.cos(phi_avg) / sin_phi * dr
+        else:
+            x_ce[i] = x_ce[i - 1] + 0.5 * dr
+
+    # Normalise so CE spans from just past inflection to the exit
+    if x_ce[-1] > x_ce[0]:
+        scale = (Ln - x_ce[0]) / (x_ce[-1] - x_ce[0])
+        x_ce = x_ce[0] + (x_ce - x_ce[0]) * scale
+    else:
+        x_ce = np.linspace(x_ce[0], Ln, n_ce)
+
+    # ── Step 2: Build CE interpolation arrays ─────────────────────
+    ce_r = np.asarray(ce.r, dtype=float)
+    ce_M = np.maximum(np.asarray(ce.M, dtype=float), 1.001)
+    ce_theta = np.asarray(ce.theta, dtype=float)
+
+    ce_nu = np.array([prandtl_meyer(M, gamma) for M in ce_M])
+    ce_mu = np.array([mach_angle(M) for M in ce_M])
+    ce_cm = ce_theta - ce_nu          # C⁻ compatibility values on CE
+
+    def _interp(r_q, data):
+        """Linearly interpolate a CE quantity at radius *r_q*."""
+        r_clamped = float(np.clip(r_q, ce_r[0], ce_r[-1]))
+        return float(np.interp(r_clamped, ce_r, data))
+
+    # ── Step 3: Transonic starting line ───────────────────────────
+    starting_line = approximate_starting_line(
+        Rt, Rd, theta_n, gamma, n_char, method='area_ratio'
     )
-    # Use interpolated radii that transition from Ny to Re
-    control_r = np.linspace(Ny, Re, n_ctrl + 2)[1:-1]
 
-    # Iterative wall refinement
-    best_wall = None
-    best_cost = float('inf')
+    # ── Step 4: March with CE-driven wall points ──────────────────
+    prev_pts = list(starting_line)
+    wall_x_list: list[float] = [float(Nx)]
+    wall_r_list: list[float] = [float(Ny)]
 
-    for iteration in range(20):
-        try:
-            wall = SplineWall.from_controls(
-                control_r, Nx, Ny, Ln, Re, theta_n
+    for _row in range(1, 500):
+        if len(prev_pts) < 2:
+            break
+
+        new_pts: list[CharPoint] = []
+
+        # Axis point (symmetry BC: θ=0, r=0)
+        if prev_pts[0].r < 1e-10:
+            axis_pt = solve_axis_point(prev_pts[1], gamma, True)
+        else:
+            axis_pt = solve_axis_point(prev_pts[0], gamma, True)
+        new_pts.append(axis_pt)
+
+        # Interior points (standard adjacent-pair solve)
+        interior: list[CharPoint] = []
+        for j in range(len(prev_pts) - 2):
+            # p_minus = upper, p_plus = lower
+            pt = solve_interior_point(
+                prev_pts[j + 1], prev_pts[j], gamma, True
             )
+            interior.append(pt)
+            new_pts.append(pt)
 
-            from raosim.moc import solve_flowfield
-            result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
-            metrics = result['exit_metrics']
+        # ── CE-driven wall point ──────────────────────────────────
+        p_in = interior[-1] if interior else new_pts[-1]
 
-            # Cost: penalize deviation from CE targets
-            cost = 0.0
-            cost += (metrics['M_mean'] - M_exit_target) ** 2
-            cost += 5.0 * metrics['theta_rms'] ** 2
-            cost += 2.0 * max(0, metrics['theta_max'] - 5.0) ** 2
-            cost -= 0.5 * metrics['F']   # also maximize thrust
+        # Initial estimate: project C⁺ from p_in upward
+        r_w = p_in.r + 0.05 * (Re - p_in.r)
+        x_w = p_in.x + 0.01 * max(Ln - p_in.x, 1e-6)
+        theta_w = p_in.theta
+        M_w = max(p_in.M, 1.001)
+        nu_w = prandtl_meyer(M_w, gamma)
+        mu_w = mach_angle(M_w)
 
-            if cost < best_cost:
-                best_cost = cost
-                best_wall = wall
+        for _it in range(20):
+            # C⁻ from CE interpolated at current wall radius
+            cm_ce = _interp(r_w, ce_cm)
+            M_ce  = max(_interp(r_w, ce_M), 1.001)
+            theta_ce = _interp(r_w, ce_theta)
+            mu_ce = mach_angle(M_ce)
+            x_ce_loc = _interp(r_w, x_ce)
 
-            # Gradient-free perturbation: shift control points toward CE targets
-            delta = 0.001 * Rt * (1.0 - iteration / 20.0)
-            perturbation = np.random.uniform(-delta, delta, size=len(control_r))
-            control_r_new = control_r + perturbation
-            control_r_new = np.clip(control_r_new, Rt, Re)
-            control_r_new = np.sort(control_r_new)
-            control_r = control_r_new
+            # C⁺ from interior with axisymmetric source correction
+            cp = p_in.compat_plus
+            if r_w > 1e-10 and p_in.r > 1e-10:
+                ds = math.sqrt(
+                    (x_w - p_in.x) ** 2 + (r_w - p_in.r) ** 2
+                )
+                if ds > 1e-12:
+                    th_a = 0.5 * (p_in.theta + theta_w)
+                    mu_a = 0.5 * (p_in.mu + mu_w)
+                    r_a  = 0.5 * (p_in.r + r_w)
+                    cos_tp = math.cos(th_a + mu_a)
+                    if abs(cos_tp) > 1e-15 and r_a > 1e-10:
+                        Qp = (math.sin(th_a) * math.sin(mu_a)
+                              * math.cos(mu_a) / (r_a * cos_tp))
+                        cp = p_in.compat_plus + Qp * ds
 
-        except Exception:
-            # If MOC fails, perturb and retry
-            delta = 0.002 * Rt
-            control_r += np.random.uniform(-delta, delta, size=len(control_r))
-            control_r = np.clip(control_r, Rt, Re)
-            control_r = np.sort(control_r)
-            continue
+            # Solve compatibility:  θ_w + ν_w = cp,  θ_w − ν_w = cm_ce
+            theta_w_new = 0.5 * (cp + cm_ce)
+            nu_w_new    = 0.5 * (cp - cm_ce)
+            if nu_w_new < 1e-8:
+                nu_w_new = 1e-8
+            M_w_new  = mach_from_prandtl_meyer(nu_w_new, gamma)
+            mu_w_new = mach_angle(M_w_new)
 
-    if best_wall is None:
-        # Fallback: use a simple linear wall
-        best_wall = SplineWall.from_controls(
-            np.linspace(Ny, Re, n_ctrl + 2)[1:-1],
-            Nx, Ny, Ln, Re, theta_n
-        )
+            # New position: intersection of C⁺ from p_in & C⁻ from CE
+            sl_plus = math.tan(
+                0.5 * (p_in.theta + theta_w_new)
+                + 0.5 * (p_in.mu + mu_w_new)
+            )
+            sl_minus = math.tan(
+                0.5 * (theta_ce + theta_w_new)
+                - 0.5 * (mu_ce + mu_w_new)
+            )
+            denom = sl_plus - sl_minus
+            if abs(denom) > 1e-15:
+                x_new = (
+                    _interp(r_w, ce_r) - p_in.r
+                    + sl_plus * p_in.x - sl_minus * x_ce_loc
+                ) / denom
+                r_new = p_in.r + sl_plus * (x_new - p_in.x)
+            else:
+                x_new, r_new = x_w, r_w
 
-    wall_x, wall_r, _ = best_wall.sample(100)
-    return wall_x, wall_r
+            # Clamp to physical region
+            r_new = max(r_new, p_in.r + 1e-8)
+            r_new = min(r_new, Re * 1.1)
+            x_new = max(x_new, p_in.x + 1e-8)
+            x_new = min(x_new, Ln * 1.2)
+
+            converged = (
+                abs(x_new - x_w) < 1e-10
+                and abs(r_new - r_w) < 1e-10
+                and abs(theta_w_new - theta_w) < 1e-10
+            )
+            x_w, r_w = x_new, r_new
+            theta_w = theta_w_new
+            nu_w, M_w, mu_w = nu_w_new, M_w_new, mu_w_new
+            if converged:
+                break
+
+        wall_pt = _make_point(x_w, r_w, theta_w, M_w, gamma)
+        new_pts.append(wall_pt)
+        wall_x_list.append(x_w)
+        wall_r_list.append(r_w)
+
+        if x_w >= Ln * 0.98:
+            break
+        prev_pts = new_pts
+
+    # ── Step 5: Post-process wall contour ─────────────────────────
+    wall_x = np.array(wall_x_list)
+    wall_r = np.array(wall_r_list)
+
+    # Fallback if too few points were generated
+    if len(wall_x) < 3:
+        wall_x = np.linspace(Nx, Ln, 100)
+        wall_r = np.linspace(Ny, Re, 100)
+        return wall_x, wall_r
+
+    # Drop any non-monotonic-x entries
+    valid = np.ones(len(wall_x), dtype=bool)
+    for i in range(1, len(wall_x)):
+        if wall_x[i] <= wall_x[i - 1]:
+            valid[i] = False
+    wall_x, wall_r = wall_x[valid], wall_r[valid]
+
+    if len(wall_x) < 3:
+        wall_x = np.linspace(Nx, Ln, 100)
+        wall_r = np.linspace(Ny, Re, 100)
+        return wall_x, wall_r
+
+    # Resample to uniform spacing, enforce endpoints
+    x_uniform = np.linspace(float(wall_x[0]), Ln, 100)
+    r_uniform = np.interp(x_uniform, wall_x, wall_r)
+    r_uniform[0]  = Ny
+    r_uniform[-1] = Re
+
+    # Enforce monotonically increasing radius
+    for i in range(1, len(r_uniform)):
+        if r_uniform[i] < r_uniform[i - 1]:
+            r_uniform[i] = r_uniform[i - 1]
+
+    return x_uniform, r_uniform
 
 
 # ─────────────────────────────────────────────────────────────────────

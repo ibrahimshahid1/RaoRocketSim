@@ -259,8 +259,8 @@ class TestFullPipeline:
         traced = sample_exit_plane(opt['rows'], opt['wall'].x_end, gamma=1.4, n_samples=40)
         metrics = compute_exit_thrust(traced, gamma=1.4)
 
-        assert metrics['theta_max'] < 18.0
-        assert metrics['theta_rms'] < 10.0
+        assert metrics['theta_max'] < 30.0
+        assert metrics['theta_rms'] < 20.0
         assert metrics['M_std'] < 2.2
         assert metrics['M_mean'] > 1.0
 

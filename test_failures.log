@@ -1,0 +1,415 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/ibrahimshahid/Documents/Github/RaoRocketSim/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/ibrahimshahid/Documents/Github/RaoRocketSim
+configfile: pytest.ini
+collecting ... collected 124 items
+
+tests/test_comparison.py::TestDivergenceLoss::test_bell_has_smaller_exit_angle PASSED [  0%]
+tests/test_comparison.py::TestDivergenceLoss::test_conical_matches_formula PASSED [  1%]
+tests/test_comparison.py::TestDivergenceLoss::test_returns_valid_range PASSED [  2%]
+tests/test_comparison.py::TestNozzleEfficiency::test_perfect_nozzle PASSED [  3%]
+tests/test_comparison.py::TestNozzleEfficiency::test_imperfect_nozzle PASSED [  4%]
+tests/test_comparison.py::TestNozzleEfficiency::test_zero_ideal PASSED   [  4%]
+tests/test_comparison.py::TestCompareContours::test_comparison_runs PASSED [  5%]
+tests/test_comparison.py::TestCompareContours::test_table_format PASSED  [  6%]
+tests/test_conical.py::TestConicalDivergenceFactor::test_zero_angle PASSED [  7%]
+tests/test_conical.py::TestConicalDivergenceFactor::test_15_degrees PASSED [  8%]
+tests/test_conical.py::TestConicalDivergenceFactor::test_30_degrees PASSED [  8%]
+tests/test_conical.py::TestConicalDivergenceFactor::test_90_degrees PASSED [  9%]
+tests/test_conical.py::TestConicalDivergenceFactor::test_monotone_decreasing PASSED [ 10%]
+tests/test_conical.py::TestConicalNozzleLength::test_15deg_eps10 PASSED  [ 11%]
+tests/test_conical.py::TestConicalNozzleContour::test_exit_radius PASSED [ 12%]
+tests/test_conical.py::TestConicalNozzleContour::test_api_compatible PASSED [ 12%]
+tests/test_conical.py::TestConicalNozzleContour::test_eta_div_present PASSED [ 13%]
+tests/test_conical.py::TestConicalNozzleContour::test_divergent_section_straight PASSED [ 14%]
+tests/test_conical.py::TestConicalNozzleContour::test_various_angles PASSED [ 15%]
+tests/test_engine.py::TestEnginePerformance::test_exit_mach PASSED       [ 16%]
+tests/test_engine.py::TestEnginePerformance::test_cstar PASSED           [ 16%]
+tests/test_engine.py::TestEnginePerformance::test_cf_vacuum PASSED       [ 17%]
+tests/test_engine.py::TestEnginePerformance::test_thrust_positive PASSED [ 18%]
+tests/test_engine.py::TestEnginePerformance::test_isp_vacuum PASSED      [ 19%]
+tests/test_engine.py::TestEnginePerformance::test_mass_flow_rate PASSED  [ 20%]
+tests/test_engine.py::TestEngineWithRealPropellant::test_lox_rp1_runs PASSED [ 20%]
+tests/test_gas_dynamics.py::TestAreaMachRelation::test_sonic_throat PASSED [ 21%]
+tests/test_gas_dynamics.py::TestAreaMachRelation::test_known_area_ratio PASSED [ 22%]
+tests/test_gas_dynamics.py::TestMachFromAreaRatio::test_supersonic_root_eps10 PASSED [ 23%]
+tests/test_gas_dynamics.py::TestMachFromAreaRatio::test_roundtrip PASSED [ 24%]
+tests/test_gas_dynamics.py::TestIsentropicRatios::test_pressure_ratio PASSED [ 25%]
+tests/test_gas_dynamics.py::TestIsentropicRatios::test_temperature_ratio PASSED [ 25%]
+tests/test_gas_dynamics.py::TestPrandtlMeyer::test_nu_at_mach_1 PASSED   [ 26%]
+tests/test_gas_dynamics.py::TestPrandtlMeyer::test_nu_at_me PASSED       [ 27%]
+tests/test_gas_dynamics.py::TestThrustCoefficient::test_cf_vacuum PASSED [ 28%]
+tests/test_gas_dynamics.py::TestThrustCoefficient::test_cf_sea_level PASSED [ 29%]
+tests/test_gas_dynamics.py::TestCharacteristicVelocity::test_cstar_air PASSED [ 29%]
+tests/test_gas_dynamics.py::TestExpansionRatioFromPressure::test_roundtrip PASSED [ 30%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_mach_angle_m2 PASSED   [ 31%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_mach_angle_m1 PASSED   [ 32%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_roundtrip[1.5] PASSED [ 33%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_roundtrip[2.0] PASSED [ 33%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_roundtrip[3.0] PASSED [ 34%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_roundtrip[4.0] PASSED [ 35%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_roundtrip[5.0] PASSED [ 36%]
+tests/test_moc.py::TestGasDynamicsUtilities::test_pm_zero PASSED         [ 37%]
+tests/test_moc.py::TestInteriorPoint::test_planar_invariants PASSED      [ 37%]
+tests/test_moc.py::TestInteriorPoint::test_downstream FAILED             [ 38%]
+tests/test_moc.py::TestAxisPoint::test_symmetry_bc PASSED                [ 39%]
+tests/test_moc.py::TestSplineWall::test_endpoint_values PASSED           [ 40%]
+tests/test_moc.py::TestSplineWall::test_start_slope PASSED               [ 41%]
+tests/test_moc.py::TestSplineWall::test_intersection PASSED              [ 41%]
+tests/test_moc.py::TestStartingLine::test_all_supersonic PASSED          [ 42%]
+tests/test_moc.py::TestStartingLine::test_theta_progression PASSED       [ 43%]
+tests/test_moc.py::TestCoupledMarching::test_row_has_wall_and_axis PASSED [ 44%]
+tests/test_moc.py::TestCoupledMarching::test_wall_angle_matches PASSED   [ 45%]
+tests/test_moc.py::TestCoupledMarching::test_triangular_row_topology_consistency PASSED [ 45%]
+tests/test_moc.py::TestFullPipeline::test_exit_radius[4] FAILED          [ 46%]
+tests/test_moc.py::TestFullPipeline::test_exit_radius[10] FAILED         [ 47%]
+tests/test_moc.py::TestFullPipeline::test_exit_radius[25] FAILED         [ 48%]
+tests/test_moc.py::TestFullPipeline::test_exit_radius[50] FAILED         [ 49%]
+tests/test_moc.py::TestFullPipeline::test_method_key[4] FAILED           [ 50%]
+tests/test_moc.py::TestFullPipeline::test_method_key[10] FAILED          [ 50%]
+tests/test_moc.py::TestFullPipeline::test_method_key[25] FAILED          [ 51%]
+tests/test_moc.py::TestFullPipeline::test_method_key[50] FAILED          [ 52%]
+tests/test_moc.py::TestFullPipeline::test_bell_monotonic[4] FAILED       [ 53%]
+tests/test_moc.py::TestFullPipeline::test_bell_monotonic[10] FAILED      [ 54%]
+tests/test_moc.py::TestFullPipeline::test_bell_monotonic[25] FAILED      [ 54%]
+tests/test_moc.py::TestFullPipeline::test_bell_monotonic[50] FAILED      [ 55%]
+tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[4] FAILED [ 56%]
+tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[10] FAILED [ 57%]
+tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[25] FAILED [ 58%]
+tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[50] FAILED [ 58%]
+tests/test_moc.py::TestFullPipeline::test_exit_profile_quality_from_traced_profile ERROR [ 59%]
+tests/test_moc.py::TestFullPipeline::test_moc_vs_bezier_shape_and_thrust_tolerances FAILED [ 60%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[6.0-area_ratio] FAILED [ 61%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[6.0-hall] FAILED [ 62%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[10.0-area_ratio] FAILED [ 62%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[10.0-hall] FAILED [ 63%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[25.0-area_ratio] FAILED [ 64%]
+tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[25.0-hall] FAILED [ 65%]
+tests/test_nozzle_geometry.py::TestLookupAngles::test_known_point PASSED [ 66%]
+tests/test_nozzle_geometry.py::TestLookupAngles::test_interpolation_runs PASSED [ 66%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_exit_radius PASSED [ 67%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_bell_length PASSED [ 68%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_throat_radius PASSED [ 69%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_c0_continuity_arc_to_bell PASSED [ 70%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_g1_continuity_slope PASSED [ 70%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_bell_y_monotonically_increasing PASSED [ 71%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_various_expansion_ratios PASSED [ 72%]
+tests/test_nozzle_geometry.py::TestBellNozzleContour::test_various_length_fractions PASSED [ 73%]
+tests/test_rao_optimizer.py::test_optimization_converged_and_constraints FAILED [ 74%]
+tests/test_rao_optimizer.py::test_reproducibility FAILED                 [ 75%]
+tests/test_rao_optimizer.py::test_nelder_mead_fallback FAILED            [ 75%]
+tests/test_rao_variational.py::TestIntegrands::test_thrust_integrand_positive PASSED [ 76%]
+tests/test_rao_variational.py::TestIntegrands::test_massflow_integrand_positive PASSED [ 77%]
+tests/test_rao_variational.py::TestIntegrands::test_length_integrand_positive PASSED [ 78%]
+tests/test_rao_variational.py::TestIntegrands::test_length_integrand_zero_at_90 PASSED [ 79%]
+tests/test_rao_variational.py::TestStationarityConditions::test_residuals_finite PASSED [ 79%]
+tests/test_rao_variational.py::TestStationarityConditions::test_residuals_near_zero_at_optimum PASSED [ 80%]
+tests/test_rao_variational.py::TestTransversality::test_transversality_finite PASSED [ 81%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_api_compatible PASSED [ 82%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_method_key PASSED [ 83%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_exit_radius PASSED [ 83%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_wall_monotonic PASSED [ 84%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_control_surface_present PASSED [ 85%]
+tests/test_rao_variational.py::TestRaoVariationalContour::test_contour_length PASSED [ 86%]
+tests/test_rao_variational.py::TestRaoBenchmarkVsBezier::test_comparison_runs PASSED [ 87%]
+tests/test_v2_features.py::TestWallPressure::test_runs PASSED            [ 87%]
+tests/test_v2_features.py::TestWallPressure::test_pressure_decreases_downstream PASSED [ 88%]
+tests/test_v2_features.py::TestWallPressure::test_mach_increases_downstream PASSED [ 89%]
+tests/test_v2_features.py::TestSeparation::test_summerfield_simple PASSED [ 90%]
+tests/test_v2_features.py::TestSeparation::test_schmucker_returns_value PASSED [ 91%]
+tests/test_v2_features.py::TestSeparation::test_check_no_separation_high_Pc PASSED [ 91%]
+tests/test_v2_features.py::TestSeparation::test_check_at_sea_level PASSED [ 92%]
+tests/test_v2_features.py::TestTradeStudy::test_sweep_epsilon_count PASSED [ 93%]
+tests/test_v2_features.py::TestTradeStudy::test_sweep_epsilon_keys PASSED [ 94%]
+tests/test_v2_features.py::TestTradeStudy::test_sweep_Pc PASSED          [ 95%]
+tests/test_v2_features.py::TestTradeStudy::test_isp_increases_with_epsilon PASSED [ 95%]
+tests/test_v2_features.py::TestAltitudePerformance::test_runs PASSED     [ 96%]
+tests/test_v2_features.py::TestAltitudePerformance::test_thrust_increases_with_altitude PASSED [ 97%]
+tests/test_v2_features.py::TestChamberGeometry::test_volume_matches_lstar PASSED [ 98%]
+tests/test_v2_features.py::TestChamberGeometry::test_chamber_radius PASSED [ 99%]
+tests/test_v2_features.py::TestChamberGeometry::test_full_engine_contour PASSED [100%]
+
+==================================== ERRORS ====================================
+_ ERROR at setup of TestFullPipeline.test_exit_profile_quality_from_traced_profile _
+tests/test_moc.py:189: in moc_contour
+    return moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+=================================== FAILURES ===================================
+______________________ TestInteriorPoint.test_downstream _______________________
+tests/test_moc.py:61: in test_downstream
+    assert p3.x > min(p1.x, p2.x)
+E   assert -0.00751770323970318 > 0.005
+E    +  where -0.00751770323970318 = CharPoint(x=-0.00751770323970318, r=0.035575298394502214, theta=0.13641239513487005, M=1.3921579098064572, nu=0.15291572983464, mu=0.8013691567255024, compat_plus=0.28932812496951005, compat_minus=-0.016503334699769945).x
+E    +  and   0.005 = min(0.005, 0.005)
+E    +    where 0.005 = CharPoint(x=0.005, r=0.025, theta=0.13962634015954636, M=1.3, nu=0.1076918044968217, mu=0.8776364192181427, compat_plus=0.24731814465636806, compat_minus=0.03193453566272467).x
+E    +    and   0.005 = CharPoint(x=0.005, r=0.02, theta=0.03490658503988659, M=1.5, nu=0.20778509216409813, mu=0.7297276562269663, compat_plus=0.2426916772039847, compat_minus=-0.17287850712421154).x
+_____________________ TestFullPipeline.test_exit_radius[4] _____________________
+tests/test_moc.py:205: in test_exit_radius
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+____________________ TestFullPipeline.test_exit_radius[10] _____________________
+tests/test_moc.py:205: in test_exit_radius
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+____________________ TestFullPipeline.test_exit_radius[25] _____________________
+tests/test_moc.py:205: in test_exit_radius
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+____________________ TestFullPipeline.test_exit_radius[50] _____________________
+tests/test_moc.py:205: in test_exit_radius
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_____________________ TestFullPipeline.test_method_key[4] ______________________
+tests/test_moc.py:215: in test_method_key
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_____________________ TestFullPipeline.test_method_key[10] _____________________
+tests/test_moc.py:215: in test_method_key
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_____________________ TestFullPipeline.test_method_key[25] _____________________
+tests/test_moc.py:215: in test_method_key
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_____________________ TestFullPipeline.test_method_key[50] _____________________
+tests/test_moc.py:215: in test_method_key
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+___________________ TestFullPipeline.test_bell_monotonic[4] ____________________
+tests/test_moc.py:224: in test_bell_monotonic
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+___________________ TestFullPipeline.test_bell_monotonic[10] ___________________
+tests/test_moc.py:224: in test_bell_monotonic
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+___________________ TestFullPipeline.test_bell_monotonic[25] ___________________
+tests/test_moc.py:224: in test_bell_monotonic
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+___________________ TestFullPipeline.test_bell_monotonic[50] ___________________
+tests/test_moc.py:224: in test_bell_monotonic
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+__________ TestFullPipeline.test_wall_monotonicity_and_smoothness[4] ___________
+tests/test_moc.py:235: in test_wall_monotonicity_and_smoothness
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+__________ TestFullPipeline.test_wall_monotonicity_and_smoothness[10] __________
+tests/test_moc.py:235: in test_wall_monotonicity_and_smoothness
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+__________ TestFullPipeline.test_wall_monotonicity_and_smoothness[25] __________
+tests/test_moc.py:235: in test_wall_monotonicity_and_smoothness
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+__________ TestFullPipeline.test_wall_monotonicity_and_smoothness[50] __________
+tests/test_moc.py:235: in test_wall_monotonicity_and_smoothness
+    c = moc_bell_nozzle(Rt=0.02, epsilon=epsilon, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_______ TestFullPipeline.test_moc_vs_bezier_shape_and_thrust_tolerances ________
+tests/test_moc.py:280: in test_moc_vs_bezier_shape_and_thrust_tolerances
+    moc = moc_bell_nozzle(Rt=0.02, epsilon=10.0, gamma=1.4,
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[6.0-area_ratio] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[6.0-hall] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[10.0-area_ratio] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[10.0-hall] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[25.0-area_ratio] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_ TestFullPipeline.test_starting_line_methods_generate_finite_contours[25.0-hall] _
+tests/test_moc.py:295: in test_starting_line_methods_generate_finite_contours
+    c = moc_bell_nozzle(
+raosim/rao_optimizer.py:303: in moc_bell_nozzle
+    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_________________ test_optimization_converged_and_constraints __________________
+tests/test_rao_optimizer.py:23: in test_optimization_converged_and_constraints
+    opt = _run_opt()
+          ^^^^^^^^^^
+tests/test_rao_optimizer.py:10: in _run_opt
+    return ro.optimize_wall(
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+_____________________________ test_reproducibility _____________________________
+tests/test_rao_optimizer.py:45: in test_reproducibility
+    a = _run_opt()
+        ^^^^^^^^^^
+tests/test_rao_optimizer.py:10: in _run_opt
+    return ro.optimize_wall(
+raosim/rao_optimizer.py:221: in optimize_wall
+    if enforce_pressure_monotonic:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   NameError: name 'enforce_pressure_monotonic' is not defined
+__________________________ test_nelder_mead_fallback ___________________________
+tests/test_rao_optimizer.py:54: in test_nelder_mead_fallback
+    opt = ro.optimize_wall(
+raosim/rao_optimizer.py:265: in optimize_wall
+    wall = SplineWall.from_controls(control_r_opt, Nx, Ny, Ln, Re, theta_n_opt)
+                                                   ^^
+E   NameError: name 'Nx' is not defined
+=========================== short test summary info ============================
+FAILED tests/test_moc.py::TestInteriorPoint::test_downstream - assert -0.0075...
+FAILED tests/test_moc.py::TestFullPipeline::test_exit_radius[4] - NameError: ...
+FAILED tests/test_moc.py::TestFullPipeline::test_exit_radius[10] - NameError:...
+FAILED tests/test_moc.py::TestFullPipeline::test_exit_radius[25] - NameError:...
+FAILED tests/test_moc.py::TestFullPipeline::test_exit_radius[50] - NameError:...
+FAILED tests/test_moc.py::TestFullPipeline::test_method_key[4] - NameError: n...
+FAILED tests/test_moc.py::TestFullPipeline::test_method_key[10] - NameError: ...
+FAILED tests/test_moc.py::TestFullPipeline::test_method_key[25] - NameError: ...
+FAILED tests/test_moc.py::TestFullPipeline::test_method_key[50] - NameError: ...
+FAILED tests/test_moc.py::TestFullPipeline::test_bell_monotonic[4] - NameErro...
+FAILED tests/test_moc.py::TestFullPipeline::test_bell_monotonic[10] - NameErr...
+FAILED tests/test_moc.py::TestFullPipeline::test_bell_monotonic[25] - NameErr...
+FAILED tests/test_moc.py::TestFullPipeline::test_bell_monotonic[50] - NameErr...
+FAILED tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[4]
+FAILED tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[10]
+FAILED tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[25]
+FAILED tests/test_moc.py::TestFullPipeline::test_wall_monotonicity_and_smoothness[50]
+FAILED tests/test_moc.py::TestFullPipeline::test_moc_vs_bezier_shape_and_thrust_tolerances
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[6.0-area_ratio]
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[6.0-hall]
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[10.0-area_ratio]
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[10.0-hall]
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[25.0-area_ratio]
+FAILED tests/test_moc.py::TestFullPipeline::test_starting_line_methods_generate_finite_contours[25.0-hall]
+FAILED tests/test_rao_optimizer.py::test_optimization_converged_and_constraints
+FAILED tests/test_rao_optimizer.py::test_reproducibility - NameError: name 'e...
+FAILED tests/test_rao_optimizer.py::test_nelder_mead_fallback - NameError: na...
+ERROR tests/test_moc.py::TestFullPipeline::test_exit_profile_quality_from_traced_profile
+==================== 27 failed, 96 passed, 1 error in 9.95s ====================
