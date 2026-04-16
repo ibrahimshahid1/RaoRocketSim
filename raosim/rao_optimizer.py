@@ -169,11 +169,11 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
 
             ws, wr, _ = wall.sample(50)
             dr = np.diff(wr)
-            geometry_penalty = 100.0 * np.sum(np.minimum(dr, 0)**2)
+            geometry_penalty = 500.0 * np.sum(np.minimum(dr, 0)**2)
 
             slopes = np.diff(wr) / np.diff(ws)
             curvature = np.diff(slopes)
-            geometry_penalty += 0.5 * np.sum(curvature**2)
+            geometry_penalty += 5.0 * np.sum(curvature**2)
 
             cost = thrust_term + flow_quality_penalty + geometry_penalty
 
@@ -315,6 +315,29 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
 
     wall_x, wall_r, _ = opt['wall'].sample(100)
+
+    # ── Post-optimization bell smoothing ──────────────────────────
+    # The spline wall from sparse control points can have kinks.
+    # Apply a 5-point binomial filter (weights [1,4,6,4,1]/16)
+    # repeated to produce a visually smooth, physically plausible
+    # contour while preserving the optimized shape.
+    n_bell = len(wall_r)
+    if n_bell > 10:
+        Ny_val = wall_r[0]
+        for _pass in range(5):
+            r_smooth = wall_r.copy()
+            for i in range(2, n_bell - 2):
+                r_smooth[i] = (
+                    wall_r[i - 2] + 4.0 * wall_r[i - 1]
+                    + 6.0 * wall_r[i]
+                    + 4.0 * wall_r[i + 1] + wall_r[i + 2]
+                ) / 16.0
+            r_smooth[0] = Ny_val
+            r_smooth[-1] = Re
+            wall_r = r_smooth
+        # Enforce monotonically increasing radius
+        for i in range(1, n_bell):
+            wall_r[i] = max(wall_r[i], wall_r[i - 1])
 
     x_full = np.concatenate([x_conv, x_throat, wall_x])
     y_full = np.concatenate([y_conv, y_throat, wall_r])

@@ -175,7 +175,13 @@ def run_batch(args):
     if args.method == 'moc':
         theta_n, theta_e = None, None
         contour = bell_nozzle_contour(Rt, epsilon, method='moc',
-                                       length_pct=length_pct)
+                                       length_pct=length_pct,
+                                       gamma=prop.gamma)
+    elif args.method == 'rao':
+        theta_n, theta_e = None, None
+        contour = bell_nozzle_contour(Rt, epsilon, method='rao',
+                                       length_pct=length_pct,
+                                       gamma=prop.gamma)
     else:
         theta_n = args.theta_n
         theta_e = args.theta_e
@@ -183,7 +189,8 @@ def run_batch(args):
             tn_l, te_l = lookup_angles(epsilon, length_pct)
             theta_n = theta_n or tn_l
             theta_e = theta_e or te_l
-        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
+        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct,
+                                       gamma=prop.gamma)
     perf = compute_engine_performance(Pc, Pa, Rt, epsilon, prop)
 
     _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon)
@@ -462,7 +469,8 @@ def run_interactive():
     if method_choice == 'moc':
         print("\n  MOC mode → θ_n will be optimized by the solver")
         contour = bell_nozzle_contour(Rt, epsilon, method='moc',
-                                       length_pct=length_pct)
+                                       length_pct=length_pct,
+                                       gamma=prop.gamma)
     else:
         tn_default, te_default = lookup_angles(epsilon, length_pct)
         print(f"\n  Rao/NASA table → θ_n = {tn_default:.1f}°, "
@@ -473,7 +481,8 @@ def run_interactive():
             theta_e = _ask("θ_e [°]", default=te_default)
         else:
             theta_n, theta_e = tn_default, te_default
-        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct)
+        contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct,
+                                       gamma=prop.gamma)
     perf = compute_engine_performance(Pc, Pa, Rt, epsilon, prop)
     _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon)
 
