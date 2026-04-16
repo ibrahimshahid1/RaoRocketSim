@@ -314,30 +314,38 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     x_throat = Rd * np.cos(t_thr)
     y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
 
-    wall_x, wall_r, _ = opt['wall'].sample(100)
+    # ── Bell section: quadratic Bézier from optimised angles ─────
+    # The MoC optimizer determines the thrust-optimal θ_n and θ_e.
+    # Rather than sampling the sparse SplineWall (which is only C1
+    # at its knots and visually kinked), we construct the divergent
+    # bell as a quadratic Bézier — identical to the standard Rao
+    # near-optimum approximation, but with MoC-optimised angles.
+    # This is C∞ smooth, guaranteed monotonic, and G1-continuous
+    # with the upstream throat arc at the inflection point N.
+    Nx_opt = opt['Nx']
+    Ny_opt = opt['Ny']
+    theta_e_rad = math.radians(opt['theta_e'])
 
-    # ── Post-optimization bell smoothing ──────────────────────────
-    # The spline wall from sparse control points can have kinks.
-    # Apply a 5-point binomial filter (weights [1,4,6,4,1]/16)
-    # repeated to produce a visually smooth, physically plausible
-    # contour while preserving the optimized shape.
-    n_bell = len(wall_r)
-    if n_bell > 10:
-        Ny_val = wall_r[0]
-        for _pass in range(5):
-            r_smooth = wall_r.copy()
-            for i in range(2, n_bell - 2):
-                r_smooth[i] = (
-                    wall_r[i - 2] + 4.0 * wall_r[i - 1]
-                    + 6.0 * wall_r[i]
-                    + 4.0 * wall_r[i + 1] + wall_r[i + 2]
-                ) / 16.0
-            r_smooth[0] = Ny_val
-            r_smooth[-1] = Re
-            wall_r = r_smooth
-        # Enforce monotonically increasing radius
-        for i in range(1, n_bell):
-            wall_r[i] = max(wall_r[i], wall_r[i - 1])
+    # Bézier control point P1: intersection of the tangent lines
+    # from N (slope = tan θ_n) and E (slope = tan θ_e).
+    m1 = math.tan(theta_n_rad)
+    m2 = math.tan(theta_e_rad)
+    if abs(m1 - m2) > 1e-12:
+        x_p1 = (Re - Ny_opt - m2 * Ln + m1 * Nx_opt) / (m1 - m2)
+    else:
+        x_p1 = 0.5 * (Nx_opt + Ln)
+    y_p1 = Ny_opt + m1 * (x_p1 - Nx_opt)
+
+    N_pt = np.array([Nx_opt, Ny_opt])
+    E_pt = np.array([Ln, Re])
+    P1_pt = np.array([x_p1, y_p1])
+
+    t_bell = np.linspace(0.0, 1.0, n_conv)
+    bell = ((1 - t_bell) ** 2 * N_pt[:, None]
+            + 2 * (1 - t_bell) * t_bell * P1_pt[:, None]
+            + t_bell ** 2 * E_pt[:, None])
+    wall_x = bell[0]
+    wall_r = bell[1]
 
     x_full = np.concatenate([x_conv, x_throat, wall_x])
     y_full = np.concatenate([y_conv, y_throat, wall_r])
@@ -356,9 +364,9 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'Rd': Rd,
         'epsilon': epsilon,
         'length_pct': length_pct,
-        'N': (opt['Nx'], opt['Ny']),
-        'E': (opt['Ex'], opt['Ey']),
-        'P1': (0.5*(opt['Nx']+opt['Ex']), 0.5*(opt['Ny']+opt['Ey'])),
+        'N': (Nx_opt, Ny_opt),
+        'E': (Ln, Re),
+        'P1': (x_p1, y_p1),
         'x_conv': x_conv,
         'y_conv': y_conv,
         'x_throat': x_throat,
