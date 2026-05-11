@@ -1,0 +1,457 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{codeframe}{HTML}{CCCCCC}
+\definecolor{keywordcolor}{HTML}{0000FF}
+\definecolor{commentcolor}{HTML}{228B22}
+\definecolor{stringcolor}{HTML}{B22222}
+
+\lstset{
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{keywordcolor}\bfseries,
+  commentstyle=\color{commentcolor}\itshape,
+  stringstyle=\color{stringcolor},
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  tabsize=2
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small RaoRocketSim Technical Report}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\textbf{RaoRocketSim: Technical Report}\\[0.3em]
+\large Rao Bell Nozzle Design Toolbox --- Architecture, Mathematics, and Usage}
+\author{Auto-generated Repository Documentation}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+%----------------------------------------------------------------------
+\section{Executive Summary}
+%----------------------------------------------------------------------
+
+\textbf{RaoRocketSim} is a Python-based engineering toolbox for designing thrust-optimised parabolic (TOP) bell rocket nozzles using the method originally developed by G.~V.~R.\ Rao (1958). The software computes nozzle contours via three distinct methods---B\'ezier approximation, Method of Characteristics (MoC) with numerical optimisation, and a calculus-of-variations (Rao variational) solver---and provides quasi-1D engine performance analysis, flow separation prediction, altitude performance mapping, combustion chamber sizing, trade studies, and CAD-ready export (CSV and STL).
+
+The toolbox operates through a unified CLI (\texttt{main.py}) supporting interactive, batch, and parameter-sweep modes. It is implemented as a modular Python package (\texttt{raosim/}) containing 21 source modules, with 9 test files providing automated verification.
+
+%----------------------------------------------------------------------
+\section{Repository Structure}
+%----------------------------------------------------------------------
+
+\begin{table}[H]
+\centering\small
+\caption{Top-level repository layout}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Path} & \textbf{Description} \\
+\midrule
+\texttt{main.py} & CLI entry point (interactive/batch/sweep) \\
+\texttt{raosim/} & Core Python package (21 modules) \\
+\texttt{tests/} & Pytest test suite (9 files) \\
+\texttt{builds/} & Versioned output artefacts (v001--v010) \\
+\texttt{requirements.txt} & Dependencies: numpy, scipy, matplotlib \\
+\texttt{Rocket\_nozzle\_sim\_phase2.py} & Legacy Phase-2 prototype script \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Package Modules}
+
+\begin{table}[H]
+\centering\small
+\caption{\texttt{raosim/} module inventory}
+\begin{tabular}{@{}lp{9cm}@{}}
+\toprule
+\textbf{Module} & \textbf{Purpose} \\
+\midrule
+\texttt{gas\_dynamics.py} & Isentropic relations, area--Mach, Prandtl--Meyer, $c^*$, $C_f$ \\
+\texttt{propellants.py} & Propellant database (4 built-in + custom) \\
+\texttt{nozzle\_geometry.py} & B\'ezier bell contour with Rao/NASA angle lookup tables \\
+\texttt{moc.py} & Axisymmetric Method of Characteristics solver \\
+\texttt{rao\_optimizer.py} & MoC-coupled wall shape optimiser (Layer 2) \\
+\texttt{rao\_variational.py} & True Rao calculus-of-variations optimiser \\
+\texttt{wall\_model.py} & Cubic Hermite spline wall (Fritsch--Carlson monotone) \\
+\texttt{engine.py} & Engine performance calculator ($F$, $I_{sp}$, $\dot{m}$, $C_f$) \\
+\texttt{conical.py} & Conical (15\textdegree) nozzle baseline \\
+\texttt{export.py} & CSV and binary STL export (with solid-body mode) \\
+\texttt{plotting.py} & 2D/3D nozzle visualisation and curvature plots \\
+\texttt{wall\_pressure.py} & Wall pressure $p(x)$ distribution and monotonicity check \\
+\texttt{separation.py} & Flow separation (Summerfield, Kalt--Badal, Schmucker) \\
+\texttt{chamber\_geometry.py} & Combustion chamber + convergent section sizing \\
+\texttt{altitude\_performance.py} & Altitude sweep with separation tracking \\
+\texttt{trade\_study.py} & Parameter sweeps ($\varepsilon$, $P_c$, $R_t$) with plotting \\
+\texttt{atmosphere.py} & Simplified ISA model (0--86\,km) \\
+\texttt{trajectory.py} & 1D vertical-ascent trajectory integrator \\
+\texttt{nozzle\_comparison.py} & Multi-contour comparison with divergence loss \\
+\texttt{build\_log.py} & Versioned build directory and metadata logging \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%----------------------------------------------------------------------
+\section{Mathematical Foundations}
+%----------------------------------------------------------------------
+
+\subsection{Isentropic Gas Dynamics}
+
+All flow relations assume a calorically perfect ideal gas with constant ratio of specific heats~$\gamma$. The fundamental isentropic relations implemented in \texttt{gas\_dynamics.py} are:
+
+\paragraph{Temperature ratio:}
+\begin{equation}
+\frac{T}{T_0} = \left(1 + \frac{\gamma-1}{2}\,M^2\right)^{-1}
+\end{equation}
+
+\paragraph{Pressure ratio:}
+\begin{equation}
+\frac{p}{p_0} = \left(\frac{T}{T_0}\right)^{\gamma/(\gamma-1)}
+\end{equation}
+
+\paragraph{Density ratio:}
+\begin{equation}
+\frac{\rho}{\rho_0} = \left(\frac{T}{T_0}\right)^{1/(\gamma-1)}
+\end{equation}
+
+\paragraph{Area--Mach relation:}
+\begin{equation}
+\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1+\frac{\gamma-1}{2}\,M^2\right)\right]^{(\gamma+1)/[2(\gamma-1)]}
+\label{eq:area_mach}
+\end{equation}
+
+The supersonic root of~\eqref{eq:area_mach} is inverted via Newton--Raphson with analytical derivatives.
+
+\paragraph{Characteristic velocity:}
+\begin{equation}
+c^* = \frac{\sqrt{\gamma\,R\,T_c}}{\gamma\,\sqrt{\left(\frac{2}{\gamma+1}\right)^{(\gamma+1)/(\gamma-1)}}}
+\end{equation}
+
+\paragraph{Thrust coefficient:}
+\begin{equation}
+C_f = \sqrt{\frac{2\gamma^2}{\gamma-1}\left(\frac{2}{\gamma+1}\right)^{(\gamma+1)/(\gamma-1)}\left[1-\left(\frac{p_e}{p_c}\right)^{(\gamma-1)/\gamma}\right]} + \left(\frac{p_e}{p_c}-\frac{p_a}{p_c}\right)\varepsilon
+\end{equation}
+
+\paragraph{Prandtl--Meyer function:}
+\begin{equation}
+\nu(M) = \sqrt{\frac{\gamma+1}{\gamma-1}}\;\arctan\!\sqrt{\frac{\gamma-1}{\gamma+1}(M^2-1)} - \arctan\!\sqrt{M^2-1}
+\end{equation}
+
+Inversion $M(\nu)$ uses Newton--Raphson with the analytical derivative $d\nu/dM = \sqrt{M^2-1}/[M(1+\frac{\gamma-1}{2}M^2)]$.
+
+\subsection{Nozzle Contour Generation}
+
+The nozzle contour comprises three sections:
+
+\subsubsection{Upstream Convergent Arc}
+A circular arc of radius $R_u = 1.5\,R_t$, centred at $(0,\;R_t+R_u)$, swept from angle $-(\pi/2+\alpha_{\text{conv}})$ to $-\pi/2$, where $\alpha_{\text{conv}}=45^\circ$ is the convergent half-angle.
+
+\subsubsection{Downstream Throat Arc}
+A circular arc of radius $R_d = 0.382\,R_t$, centred at $(0,\;R_t+R_d)$, swept from $-\pi/2$ to $\theta_n - \pi/2$, producing the inflection point $N=(N_x, N_y)$.
+
+\subsubsection{Divergent Bell Section}
+Three methods are available:
+
+\paragraph{Method 1: Quadratic B\'ezier (default).}
+The bell from inflection $N$ to exit $E=(L_n, R_e)$ is a quadratic B\'ezier curve with control point $P_1$ at the intersection of the tangent lines:
+\begin{align}
+y &= \tan\theta_n\,(x - N_x) + N_y \quad\text{(from $N$)}\\
+y &= \tan\theta_e\,(x - E_x) + E_y \quad\text{(from $E$)}
+\end{align}
+The parametric curve is:
+\begin{equation}
+\mathbf{B}(t) = (1-t)^2\,\mathbf{N} + 2(1-t)\,t\,\mathbf{P}_1 + t^2\,\mathbf{E}, \quad t\in[0,1]
+\end{equation}
+
+The angles $\theta_n$ and $\theta_e$ are obtained from Rao/NASA SP-8120 lookup tables via bilinear interpolation over $(\varepsilon, L\%)$.
+
+The bell length is:
+\begin{equation}
+L_n = \frac{L\%}{100}\cdot L_{15^\circ} \quad\text{where}\quad L_{15^\circ} = \frac{R_e - R_t}{\tan 15^\circ}
+\end{equation}
+
+\paragraph{Method 2: MoC + Numerical Optimisation.}
+Uses coupled Method of Characteristics marching with SLSQP (or Nelder--Mead fallback) to find the wall shape maximising exit-plane thrust. Decision variables are $[\theta_n, c_1, \ldots, c_n]$ (initial angle + spline control radii).
+
+\paragraph{Method 3: Rao Variational.}
+Implements Rao's 1958 calculus-of-variations formulation: optimise the flow distribution $(M, \theta, \phi)$ on a control surface CE by enforcing Euler--Lagrange stationarity, then construct the wall via design-mode MoC.
+
+\subsection{Method of Characteristics}
+
+The axisymmetric MoC solver (\texttt{moc.py}) implements the compatibility equations along $C^+$ and $C^-$ characteristics (Anderson, Ch.~11):
+
+\begin{align}
+C^+: \quad d\theta + d\nu &= Q^+\,ds, &
+Q^+ &= \frac{\sin\theta\,\sin\mu\,\cos\mu}{r\,\cos(\theta+\mu)} \\
+C^-: \quad d\theta - d\nu &= Q^-\,ds, &
+Q^- &= -\frac{\sin\theta\,\sin\mu\,\cos\mu}{r\,\cos(\theta-\mu)}
+\end{align}
+
+Three unit processes are implemented:
+\begin{enumerate}[nosep]
+\item \textbf{Interior point}: $C^-$ from upper parent $\cap$ $C^+$ from lower parent, predictor-corrector with source terms.
+\item \textbf{Axis point}: symmetry BC ($\theta=0$, $r=0$), with $\sin\theta/r$ singularity handling.
+\item \textbf{Wall point}: tangency BC ($\theta_{\text{flow}} = \theta_{\text{wall}}$), iterative $C^+$ intersection.
+\end{enumerate}
+
+The starting line is approximated via either quasi-1D area--ratio mapping or a Hall-style transonic correction with coefficients $a_1 = \sqrt{2/[(\gamma+1)\rho_c]}$ and $a_2 = (\gamma+1)/(12\rho_c)$ where $\rho_c = R_d/R_t$.
+
+\subsection{Rao Variational Optimisation}
+
+The augmented functional over the control surface CE is:
+\begin{equation}
+I = \int_{CE} \left(f_1 + \lambda_2\,f_2 + \lambda_3\,f_3\right) dr
+\end{equation}
+where $f_1$ is the thrust integrand, $f_2$ the mass-flow integrand, and $f_3 = \cot\phi$ the length integrand. Stationarity requires:
+\begin{equation}
+\frac{\partial}{\partial M}(f_1+\lambda_2 f_2) = 0, \quad
+\frac{\partial}{\partial\theta}(f_1+\lambda_2 f_2) = 0, \quad
+\frac{\partial}{\partial\phi}(f_1+\lambda_2 f_2+\lambda_3 f_3) = 0
+\end{equation}
+
+These are solved via Newton iteration at each CE station with numerical Jacobians, embedded in an outer loop updating $\lambda_2$, $\lambda_3$ from constraint residuals. Transversality at the exit endpoint is also enforced.
+
+\subsection{Engine Performance}
+
+From \texttt{engine.py}, the key performance parameters are:
+\begin{align}
+M_e &= M\!\left(\frac{A_e}{A_t},\;\gamma\right) & \text{(from area--Mach)} \\
+C_{f,\text{actual}} &= C_{f,\text{ideal}}\cdot\eta_{I_{sp}} \\
+F &= C_{f,\text{actual}}\cdot P_c\cdot A_t \\
+\dot{m} &= \frac{P_c\,A_t}{c^*} \\
+I_{sp} &= \frac{C_{f,\text{actual}}\cdot c^*}{g_0}
+\end{align}
+
+\subsection{Flow Separation Criteria}
+
+Three empirical criteria are implemented:
+\begin{align}
+\text{Summerfield:} \quad p_{\text{sep}} &\approx 0.4\,p_a \\
+\text{Kalt--Badal:} \quad \frac{p_{\text{sep}}}{p_a} &\approx \frac{1}{1.88\,M_e - 1} \\
+\text{Schmucker:} \quad \frac{p_{\text{sep}}}{P_c} &\approx \frac{(p_a/P_c)^{0.8}}{M_e}
+\end{align}
+
+\subsection{Atmosphere Model}
+
+A simplified 3-segment ISA: troposphere (lapse $-6.5$~K/km to 11~km), tropopause (isothermal 216.65~K to 20~km), stratosphere (lapse $+1.0$~K/km to 47~km), and exponential tail above.
+
+%----------------------------------------------------------------------
+\section{CLI Interface Walkthrough}
+%----------------------------------------------------------------------
+
+\subsection{Three Operating Modes}
+
+The CLI (\texttt{main.py}) supports:
+
+\begin{enumerate}
+\item \textbf{Interactive mode}: \texttt{python main.py} --- guided prompts for all parameters.
+\item \textbf{Batch mode}: all parameters via flags, e.g.:
+\begin{lstlisting}[language=bash]
+python main.py --propellant LOX/RP-1 --Pc 45 --Rt 20 \
+    --epsilon 10 --method moc --stl nozzle.stl
+\end{lstlisting}
+\item \textbf{Sweep mode}: parametric trade studies:
+\begin{lstlisting}[language=bash]
+python main.py --propellant LOX/LCH4 --Pc 60 --Rt 25 \
+    --sweep epsilon 4 50 20
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Key CLI Flags}
+
+\begin{table}[H]
+\centering\small
+\caption{Principal CLI arguments}
+\begin{tabular}{@{}llp{6.5cm}@{}}
+\toprule
+\textbf{Flag} & \textbf{Default} & \textbf{Description} \\
+\midrule
+\texttt{--propellant} & --- & Propellant name (LOX/RP-1, LOX/LCH4, LOX/LH2, N2O/Ethanol) \\
+\texttt{--Pc} & --- & Chamber pressure [bar] \\
+\texttt{--Pa} & 101.325 & Ambient pressure [kPa] \\
+\texttt{--Rt} & --- & Throat radius [mm] \\
+\texttt{--epsilon} & --- & Expansion ratio $A_e/A_t$ \\
+\texttt{--method} & bezier & Contour method: \texttt{bezier}, \texttt{moc}, or \texttt{rao} \\
+\texttt{--length-pct} & 80 & Bell length \% of $15^\circ$ cone \\
+\texttt{--compare} & off & Side-by-side contour comparison \\
+\texttt{--wall-pressure} & off & Wall pressure distribution \\
+\texttt{--separation} & off & Flow separation check \\
+\texttt{--altitude-map} & off & Altitude performance sweep \\
+\texttt{--chamber} & off & Combustion chamber geometry \\
+\texttt{--output} & --- & CSV output path \\
+\texttt{--stl} & --- & STL output path \\
+\texttt{--sweep} & --- & Parameter sweep (VAR MIN MAX N) \\
+\texttt{--gamma/--Mw/--Tc} & --- & Custom propellant properties \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Interactive Mode Flow}
+
+\begin{enumerate}[nosep]
+\item Select propellant from database or enter custom $(\gamma, M_w, T_c)$.
+\item Enter chamber pressure $P_c$, ambient pressure $P_a$, throat radius $R_t$.
+\item Choose expansion ratio mode: compute from $P_c/P_a$, specify $\varepsilon$, or specify $R_e$.
+\item Select bell length percentage and contour method.
+\item View engine performance summary (thrust, $I_{sp}$, $\dot{m}$, $C_f$, $c^*$, $M_e$, $P_e$).
+\item Run separation check (automatic).
+\item Optional: wall pressure distribution, chamber geometry, altitude map.
+\item Export CSV and STL to versioned \texttt{builds/} directory.
+\item View 2D/3D plots.
+\end{enumerate}
+
+\subsection{Build System}
+
+Every run creates a versioned directory \texttt{builds/vNNN\_YYYYMMDD\_HHMMSS/} containing all output files and a \texttt{metadata.txt} log with full input parameters and performance results.
+
+%----------------------------------------------------------------------
+\section{Propellant Database}
+%----------------------------------------------------------------------
+
+\begin{table}[H]
+\centering
+\caption{Built-in propellant combinations}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Propellant} & $\gamma$ & $M_w$ [g/mol] & $T_c$ [K] & $\eta_{I_{sp}}$ & O/F \\
+\midrule
+N2O/Ethanol & 1.22 & 26.0 & 2800 & 0.92 & 5.5 \\
+LOX/RP-1 & 1.23 & 23.5 & 3400 & 0.96 & 2.6 \\
+LOX/LCH4 & 1.24 & 22.0 & 3500 & 0.96 & 3.5 \\
+LOX/LH2 & 1.20 & 10.0 & 3250 & 0.98 & 6.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Custom propellants can be specified via \texttt{--gamma}, \texttt{--Mw}, and \texttt{--Tc} flags.
+
+%----------------------------------------------------------------------
+\section{Export Capabilities}
+%----------------------------------------------------------------------
+
+\subsection{CSV Export}
+Outputs $(x, y)$ contour coordinates in metres with configurable point count (default 301). Format: two-column CSV with header \texttt{x\_m,y\_m}.
+
+\subsection{STL Export}
+Revolves the 2D contour around the axis to produce a 3D surface of revolution as a binary STL file. Two modes:
+\begin{itemize}[nosep]
+\item \textbf{Inner surface only}: reference geometry for CAD/CAM.
+\item \textbf{Solid body}: closed manifold with inner surface, offset outer wall, sealed annular end-caps, and optional inlet flange---directly 3D-printable or CNC-ready.
+\end{itemize}
+
+The offset contour is computed by displacing each point along its surface normal by the specified wall thickness. Monotone Fritsch--Carlson interpolation prevents self-intersection.
+
+%----------------------------------------------------------------------
+\section{Analysis Features}
+%----------------------------------------------------------------------
+
+\subsection{Wall Pressure Distribution}
+Uses local area ratio $A(x) = \pi y(x)^2$ to compute $M(x)$ via the area--Mach relation (subsonic upstream of throat, supersonic downstream), then $p(x) = P_c \cdot (p/p_0)(M)$. A monotonicity check flags regions where $dp/dx > 0$ downstream of the throat as separation risk.
+
+\subsection{Flow Separation Prediction}
+The separation pressure $p_{\text{sep}}$ is compared against the local wall pressure. If $p_e < p_{\text{sep}}$, separation is predicted and the axial location is identified by marching downstream until $p(x) \leq p_{\text{sep}}$.
+
+\subsection{Altitude Performance Map}
+Sweeps altitude 0--100~km, computing thrust, $I_{sp}$, and $C_f$ at each altitude using the ISA pressure profile. Separation status is tracked; the altitude at which separation clears is reported.
+
+\subsection{Combustion Chamber Sizing}
+Parameterised by characteristic length $L^*$ and contraction ratio $A_c/A_t$. The cylindrical length is computed from the required chamber volume minus the convergent frustum volume:
+\begin{equation}
+L_c = \frac{V_{\text{chamber}} - V_{\text{frustum}}}{A_c}, \quad V_{\text{chamber}} = L^*\cdot A_t
+\end{equation}
+
+\subsection{Nozzle Comparison}
+Generates conical, B\'ezier, and Rao contours side-by-side with quantitative metrics: divergence loss $\eta_{\text{div}}$, corrected $C_f$, nozzle efficiency $\eta_n$, and geometric parameters. The divergence loss is estimated by integrating axial momentum across the exit plane with a linear flow-angle profile assumption.
+
+\subsection{Trade Studies}
+Parametric sweeps over $\varepsilon$, $P_c$, or $R_t$ with multi-panel plots of $I_{sp}$, $C_f$, thrust, nozzle length, and mass flow rate. Results are exported as CSV in the build directory.
+
+%----------------------------------------------------------------------
+\section{Capabilities Summary}
+%----------------------------------------------------------------------
+
+\begin{itemize}[nosep]
+\item Three contour generation methods (B\'ezier, MoC-optimised, Rao variational)
+\item Four built-in bipropellant combinations + custom propellant support
+\item Complete quasi-1D engine performance ($F$, $I_{sp}$, $\dot{m}$, $C_f$, $c^*$)
+\item Three flow separation criteria (Summerfield, Kalt--Badal, Schmucker)
+\item Wall pressure distribution with monotonicity validation
+\item Altitude performance mapping (0--100~km) with separation tracking
+\item Combustion chamber geometry sizing ($L^*$, contraction ratio)
+\item Conical vs.\ bell nozzle comparison with divergence loss quantification
+\item Parametric trade studies ($\varepsilon$, $P_c$, $R_t$ sweeps)
+\item CSV and STL export (inner surface or solid body with optional flange)
+\item 2D/3D visualisation with curvature plotting
+\item Versioned build system with metadata logging
+\item 1D vertical-ascent trajectory integrator
+\item ISA atmosphere model (0--86~km)
+\item Interactive, batch, and sweep CLI modes
+\item Automated test suite (9 test files)
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Limitations}
+%----------------------------------------------------------------------
+
+\begin{enumerate}
+\item \textbf{Calorically perfect gas assumption}: constant $\gamma$ throughout. Real exhaust gases exhibit temperature-dependent $\gamma$ and dissociation/recombination; frozen-flow or equilibrium chemistry is not modelled.
+
+\item \textbf{Quasi-1D performance}: engine performance uses 1D isentropic relations. Boundary-layer losses, heat transfer, and viscous effects are captured only through the empirical $\eta_{I_{sp}}$ correction factor.
+
+\item \textbf{Starting-line approximation}: the transonic starting line for MoC uses either a quasi-1D area-ratio estimate or a simplified Hall polynomial---neither is a full transonic solution (Hall 1962 / Kliegel--Levine 1969).
+
+\item \textbf{No boundary-layer modelling}: wall friction, displacement thickness, and heat transfer are not computed. The contour represents the inviscid flowpath.
+
+\item \textbf{Simplified separation criteria}: the three empirical correlations (Summerfield, Kalt--Badal, Schmucker) are engineering approximations; no CFD-based or boundary-layer-integral separation model is included.
+
+\item \textbf{No two-phase flow}: condensation, particulate drag, and droplet breakup in the nozzle are not modelled (relevant for solid and some hybrid motors).
+
+\item \textbf{Steady-state only}: transient start-up, shutdown, and throttling dynamics are not considered.
+
+\item \textbf{Axisymmetric geometry only}: 3D effects (e.g., from non-axisymmetric inlets, film cooling ports, or scarfed exits) cannot be captured.
+
+\item \textbf{No thermal/structural analysis}: wall temperatures, thermal stresses, and structural margins are outside scope.
+
+\item \textbf{Linear exit-flow assumption in divergence loss}: the nozzle comparison module assumes a linear flow-angle distribution from axis to wall at the exit plane, which is approximate for shaped bells.
+
+\item \textbf{Propellant properties are tabulated, not computed}: the $\gamma$, $M_w$, $T_c$ values are representative averages, not computed from chemical equilibrium at the actual O/F and $P_c$.
+
+\item \textbf{Trajectory module is rudimentary}: the 1D vertical-ascent integrator uses constant thrust, constant $I_{sp}$, and a simple drag model---it is suitable for rough estimates, not mission design.
+\end{enumerate}
+
+%----------------------------------------------------------------------
+\section{References}
+%----------------------------------------------------------------------
+
+\begin{enumerate}[nosep]
+\item G.~V.~R.\ Rao, ``Exhaust Nozzle Contour for Optimum Thrust,'' \textit{Jet Propulsion}, 1958.
+\item G.~V.~R.\ Rao, ``Recent Developments in Rocket Nozzle Configurations,'' \textit{ARS Journal}, 1961.
+\item NASA SP-8120, ``Liquid Rocket Engine Nozzles,'' 1976.
+\item J.~D.\ Anderson, \textit{Modern Compressible Flow}, 3rd ed., McGraw-Hill, 2003.
+\item M.~J.\ Zucrow and J.~D.\ Hoffman, \textit{Gas Dynamics}, Vol.~2, Wiley, 1977.
+\item I.~M.\ Hall, ``Transonic Flow in Two-Dimensional and Axially-Symmetric Nozzles,'' \textit{QJMAM}, 15(4), 1962.
+\item J.~R.\ Kliegel and V.\ Levine, ``Transonic Flow in Small Throat Radius Nozzles,'' \textit{AIAA J.}, 7(7), 1969.
+\item R.\ Stark, ``Flow Separation in Rocket Nozzles --- An Overview,'' 2009.
+\end{enumerate}
+
+\end{document}

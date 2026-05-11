@@ -59,6 +59,8 @@ def write_metadata(
     mode: str,
     params: dict[str, Any],
     performance: dict[str, Any] | None = None,
+    warnings: list[str] | None = None,
+    gate_report: dict[str, Any] | None = None,
     files: list[str] | None = None,
 ) -> Path:
     """Write a human-readable ``metadata.txt`` into *build_dir*.
@@ -107,6 +109,24 @@ def write_metadata(
             lines.append(f"  {key:<{_max_key}} : {val}")
         lines.append("")
 
+    if warnings:
+        lines.append("── Warnings " + "─" * 48)
+        for warning in warnings:
+            lines.append(f"  • {warning}")
+        lines.append("")
+
+    if gate_report:
+        lines.append("── Design Gates " + "─" * 44)
+        lines.append(f"  Passed              : {gate_report.get('passed')}")
+        lines.append(f"  Hardware qualified  : {gate_report.get('hardware_qualified')}")
+        lines.append(f"  Qualification note  : {gate_report.get('qualification_note')}")
+        for check in gate_report.get("checks", []):
+            status = "PASS" if check.get("passed") else "FAIL"
+            lines.append(
+                f"  [{status}] {check.get('category')}/{check.get('name')} "
+                f"value={check.get('value')} limit={check.get('limit')}"
+            )
+        lines.append("")
 
     if files:
         lines.append("── Output Files " + "─" * 43)

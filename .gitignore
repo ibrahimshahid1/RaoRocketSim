@@ -5,6 +5,10 @@ builds/
 __pycache__/
 *.pyc
 .pytest_cache/
+test_failures.log
 
 # Virtual environments
 .venv/
+
+# macOS
+.DS_Store

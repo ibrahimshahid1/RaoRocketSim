@@ -46,6 +46,7 @@ from raosim.moc import (
     sample_exit_plane,
     compute_exit_thrust,
 )
+from raosim.validation import add_contour_reliability_metadata
 from raosim.wall_model import SplineWall
 
 
@@ -757,6 +758,9 @@ def rao_variational_contour(
     wall_x, wall_r = _construct_wall_from_ce(
         Rt, epsilon, gamma, ce, Ln, n_char
     )
+    if len(wall_x) > 0:
+        wall_x[-1] = Ln
+        wall_r[-1] = Re
 
     # Step 3: Build convergent + throat arcs
     conv_angle = math.radians(convergent_half_angle_deg)
@@ -783,7 +787,7 @@ def rao_variational_contour(
     Nx = x_throat[-1]
     Ny = y_throat[-1]
 
-    return {
+    contour = {
         'x': x_full,
         'y': y_full,
         'theta_n': theta_n_deg,
@@ -810,3 +814,4 @@ def rao_variational_contour(
         'lambda2': ce.lambda2,
         'lambda3': ce.lambda3,
     }
+    return add_contour_reliability_metadata(contour, 'rao', gamma)

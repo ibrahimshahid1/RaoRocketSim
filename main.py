@@ -13,11 +13,14 @@ Usage:
 
 from __future__ import annotations
 import argparse
+import json
 import math
 import sys
 import numpy as np
 from pathlib import Path
 
+from raosim.cea import propellant_from_request
+from raosim.design import throat_radius_for_target_thrust
 from raosim.propellants import (
     get_propellant, custom_propellant, list_propellants, Propellant,
 )
@@ -27,7 +30,7 @@ from raosim.gas_dynamics import (
 )
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.engine import compute_engine_performance, g0
-from raosim.export import export_csv, export_stl
+from raosim.export import export_csv, export_stl, export_step, package_ipt_request
 from raosim.plotting import plot_nozzle_2d, plot_nozzle_3d, plot_curvature
 from raosim.atmosphere import pressure as atm_pressure
 from raosim.wall_pressure import wall_pressure_distribution, plot_wall_pressure
@@ -40,6 +43,7 @@ from raosim.altitude_performance import (
 )
 from raosim.chamber_geometry import chamber_contour, full_engine_contour
 from raosim.build_log import create_build_dir, write_metadata
+from raosim.validation import evaluate_design_gates
 
 
 def _header():
@@ -80,12 +84,22 @@ Examples:
 
     p.add_argument('--propellant', type=str, default=None,
                    help='Propellant name (e.g. LOX/RP-1, LOX/LCH4)')
+    p.add_argument('--oxidizer', type=str, default=None,
+                   help='CEA oxidizer name (e.g. LOX)')
+    p.add_argument('--fuel', type=str, default=None,
+                   help='CEA fuel name (e.g. RP-1)')
+    p.add_argument('--of', type=float, default=None,
+                   help='Mixture ratio O/F for CEA-backed properties')
+    p.add_argument('--cea', action='store_true',
+                   help='Use RocketCEA/NASA CEA thermochemistry when available')
     p.add_argument('--Pc', type=float, default=None,
                    help='Chamber pressure [bar]')
     p.add_argument('--Pa', type=float, default=None,
                    help='Ambient pressure [kPa] (default 101.325)')
     p.add_argument('--Rt', type=float, default=None,
                    help='Throat radius [mm]')
+    p.add_argument('--target-thrust', type=float, default=None,
+                   help='Target thrust [N]; used to size Rt if --Rt is omitted')
     p.add_argument('--epsilon', type=float, default=None,
                    help='Expansion ratio Ae/At')
     p.add_argument('--length-pct', type=float, default=80.0,
@@ -116,6 +130,19 @@ Examples:
                    help='CSV output path')
     p.add_argument('--stl', type=str, default=None,
                    help='STL output path')
+    p.add_argument('--cad', type=str, default='none',
+                   choices=['none', 'step', 'ipt', 'both'],
+                   help='Solid CAD export: STEP, IPT manifest, or both')
+    p.add_argument('--wall-thickness', type=float, default=None,
+                   help='Solid nozzle wall thickness [mm] for STEP/STL CAD')
+    p.add_argument('--flange-od', type=float, default=None,
+                   help='Optional inlet flange outer diameter [mm]')
+    p.add_argument('--flange-length', type=float, default=None,
+                   help='Optional inlet flange axial length [mm]')
+    p.add_argument('--design-report', action='store_true',
+                   help='Write design-gate report JSON')
+    p.add_argument('--strict-gates', action='store_true',
+                   help='Exit nonzero if design gates fail')
     p.add_argument('--n-csv', type=int, default=301,
                    help='Number of CSV points (default 301)')
     p.add_argument('--n-angular', type=int, default=64,
@@ -149,9 +176,10 @@ Examples:
 
 def is_batch(args) -> bool:
     """Return True if enough args are given to skip interactive prompts."""
-    has_prop = args.propellant is not None or args.gamma is not None
+    has_prop = args.propellant is not None or args.gamma is not None or args.cea
+    has_size = args.Rt is not None or args.target_thrust is not None
     return (has_prop and args.Pc is not None and
-            args.Rt is not None and args.epsilon is not None)
+            has_size and args.epsilon is not None)
 
 
 def run_batch(args):
@@ -159,26 +187,60 @@ def run_batch(args):
     _header()
 
 
+    warnings: list[str] = []
+
     if args.gamma is not None:
         Mw = args.Mw or 0.022
         Tc = args.Tc or 3500
         prop = custom_propellant(args.gamma, Mw, Tc, args.eta)
+    elif args.cea:
+        prop, prop_warnings = propellant_from_request(
+            propellant_name=args.propellant,
+            use_cea=True,
+            Pc=args.Pc * 1e5,
+            mixture_ratio=args.of,
+            oxidizer=args.oxidizer,
+            fuel=args.fuel,
+            eta_Isp=args.eta,
+        )
+        warnings.extend(prop_warnings)
     else:
         prop = get_propellant(args.propellant)
 
     Pc = args.Pc * 1e5
     Pa = (args.Pa if args.Pa is not None else 101.325) * 1e3
-    Rt = args.Rt / 1000.0
     epsilon = args.epsilon
     length_pct = args.length_pct
 
+    if args.Rt is not None:
+        Rt = args.Rt / 1000.0
+    elif args.target_thrust is not None:
+        Rt = throat_radius_for_target_thrust(
+            args.target_thrust, Pc, Pa, epsilon, prop,
+        )
+        warnings.append(
+            f"Sized Rt from target thrust: Rt = {Rt * 1000:.3f} mm."
+        )
+    else:
+        raise ValueError("Either --Rt or --target-thrust is required.")
+
+    wall_thickness = (
+        args.wall_thickness / 1000.0 if args.wall_thickness is not None else None
+    )
+    flange_od = args.flange_od / 1000.0 if args.flange_od is not None else None
+    flange_length = (
+        args.flange_length / 1000.0 if args.flange_length is not None else None
+    )
+    if args.cad in {'step', 'ipt', 'both'} and wall_thickness is None:
+        raise ValueError("--cad STEP/IPT export requires --wall-thickness [mm].")
+    if (flange_od is None) != (flange_length is None):
+        raise ValueError("--flange-od and --flange-length must be supplied together.")
+
     if args.method == 'moc':
-        theta_n, theta_e = None, None
         contour = bell_nozzle_contour(Rt, epsilon, method='moc',
                                        length_pct=length_pct,
                                        gamma=prop.gamma)
     elif args.method == 'rao':
-        theta_n, theta_e = None, None
         contour = bell_nozzle_contour(Rt, epsilon, method='rao',
                                        length_pct=length_pct,
                                        gamma=prop.gamma)
@@ -192,8 +254,18 @@ def run_batch(args):
         contour = bell_nozzle_contour(Rt, epsilon, theta_n, theta_e, length_pct,
                                        gamma=prop.gamma)
     perf = compute_engine_performance(Pc, Pa, Rt, epsilon, prop)
+    gate_report = evaluate_design_gates(
+        contour, Pc, Pa, prop.gamma,
+        wall_thickness=wall_thickness,
+        flange_od=flange_od,
+        flange_length=flange_length,
+    )
+    warnings.extend(contour.get('warnings', []))
+    warnings.extend(gate_report.warnings)
+    warnings = _dedupe(warnings)
 
     _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon)
+    _print_warnings(warnings)
 
 
     if args.separation:
@@ -242,9 +314,50 @@ def run_batch(args):
 
     if args.stl:
         stl_path = export_stl(contour['x'], contour['y'],
-                              build_dir / Path(args.stl).name, args.n_angular)
+                              build_dir / Path(args.stl).name, args.n_angular,
+                              wall_thickness=wall_thickness,
+                              flange_od=flange_od,
+                              flange_length=flange_length)
         output_files.append(stl_path.name)
         print(f"  → STL: {stl_path}")
+
+    step_path = None
+    if args.cad in {'step', 'ipt', 'both'}:
+        step_name = "rao_nozzle.step"
+        step_path = export_step(
+            contour['x'], contour['y'], build_dir / step_name, args.n_angular,
+            wall_thickness=wall_thickness,
+            flange_od=flange_od,
+            flange_length=flange_length,
+            metadata={
+                "design_status": contour.get("design_status"),
+                "hardware_qualified": False,
+                "gate_passed": gate_report.passed,
+            },
+        )
+        output_files.append(step_path.name)
+        print(f"  → STEP: {step_path}")
+
+    if args.cad in {'ipt', 'both'} and step_path is not None:
+        ipt_manifest = package_ipt_request(
+            step_path, build_dir / "rao_nozzle_ipt_manifest.json",
+            metadata={
+                "design_status": contour.get("design_status"),
+                "hardware_qualified": False,
+                "gate_passed": gate_report.passed,
+            },
+        )
+        output_files.append(ipt_manifest.name)
+        print(f"  → IPT manifest: {ipt_manifest}")
+
+    if args.design_report:
+        report_path = build_dir / "design_report.json"
+        report_path.write_text(
+            json.dumps(gate_report.to_dict(), indent=2) + "\n",
+            encoding="utf-8",
+        )
+        output_files.append(report_path.name)
+        print(f"  → Design report: {report_path}")
 
 
     params = {
@@ -252,10 +365,16 @@ def run_batch(args):
         "Pc [bar]": f"{Pc / 1e5:.2f}",
         "Pa [kPa]": f"{Pa / 1e3:.3f}",
         "Rt [mm]": f"{Rt * 1000:.2f}",
+        "Target thrust [N]": (
+            f"{args.target_thrust:.2f}" if args.target_thrust is not None else "N/A"
+        ),
         "Epsilon (Ae/At)": f"{epsilon:.2f}",
         "Bell length %": f"{length_pct:.1f}",
-        "Theta_n [deg]": f"{theta_n:.2f}",
-        "Theta_e [deg]": f"{theta_e:.2f}",
+        "Theta_n [deg]": f"{contour['theta_n']:.2f}",
+        "Theta_e [deg]": f"{contour['theta_e']:.2f}",
+        "Design status": contour.get("design_status", "unknown"),
+        "Hardware qualified": "False",
+        "Qualification note": contour.get("qualification_note", ""),
         "Gamma": f"{prop.gamma}",
         "Mw [kg/mol]": f"{prop.Mw}",
         "Tc [K]": f"{prop.Tc:.0f}",
@@ -275,10 +394,15 @@ def run_batch(args):
     }
     meta_path = write_metadata(build_dir, version=version, mode="batch",
                                params=params, performance=perf_dict,
+                               warnings=warnings,
+                               gate_report=gate_report.to_dict(),
                                files=output_files)
     output_files.append(meta_path.name)
 
     print(f"\n  📁 Build v{version:03d}: {build_dir}")
+    if args.strict_gates and not gate_report.passed:
+        print("  ✗ Strict gates enabled and one or more design gates failed.")
+        sys.exit(2)
 
 
     # ── Contour comparison mode ──
@@ -596,6 +720,8 @@ def _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon):
     print(f"  ✓ Contour: {len(contour['x'])} pts, "
           f"Ln={contour['Ln']*1000:.1f} mm, "
           f"θ_n={contour['theta_n']:.1f}°, θ_e={contour['theta_e']:.1f}°")
+    print(f"    Design status: {contour.get('design_status', 'unknown')}")
+    print(f"    Hardware qualified: {contour.get('hardware_qualified', False)}")
     print()
     print("  ── Engine Performance ──────────────────────────────────")
     print(f"    Thrust (F)        = {perf.thrust:.2f} N  "
@@ -617,6 +743,24 @@ def _print_summary(prop, contour, perf, Pc, Pa, Rt, epsilon):
         print(f"    ⚠  Underexpanded (Pe > Pa by {(perf.Pe-Pa)/1000:.2f} kPa)")
     else:
         print(f"    ✓  Near-matched expansion")
+
+
+def _print_warnings(warnings: list[str]):
+    if not warnings:
+        return
+    print("\n  ── Design Warnings ─────────────────────────────────────")
+    for warning in warnings:
+        print(f"    • {warning}")
+
+
+def _dedupe(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value and value not in seen:
+            result.append(value)
+            seen.add(value)
+    return result
 
 
 def main():

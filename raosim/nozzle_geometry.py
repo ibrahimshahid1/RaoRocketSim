@@ -17,6 +17,8 @@ import math
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
+from raosim.validation import add_contour_reliability_metadata
+
 
 
 _EPSILON_VALS = np.array([4, 5, 6, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50],
@@ -151,20 +153,22 @@ def bell_nozzle_contour(
     """
     if method == 'moc':
         from raosim.rao_optimizer import moc_bell_nozzle
-        return moc_bell_nozzle(
+        contour = moc_bell_nozzle(
             Rt, epsilon, gamma=gamma, length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
             starting_line_method=starting_line_method,
         )
+        return add_contour_reliability_metadata(contour, 'moc', gamma)
 
     if method == 'rao':
         from raosim.rao_variational import rao_variational_contour
-        return rao_variational_contour(
+        contour = rao_variational_contour(
             Rt, epsilon, gamma=gamma, length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
         )
+        return add_contour_reliability_metadata(contour, 'rao', gamma)
 
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")
@@ -239,7 +243,7 @@ def bell_nozzle_contour(
     x_full = np.concatenate([x_conv, x_throat, x_bell])
     y_full = np.concatenate([y_conv, y_throat, y_bell])
 
-    return {
+    contour = {
         'x': x_full,
         'y': y_full,
         'theta_n': theta_n_deg,
@@ -260,7 +264,9 @@ def bell_nozzle_contour(
         'y_throat': y_throat,
         'x_bell': x_bell,
         'y_bell': y_bell,
+        'method': 'bezier',
     }
+    return add_contour_reliability_metadata(contour, 'bezier', gamma)
 
 
 def compute_curvature(x: np.ndarray, y: np.ndarray) -> np.ndarray:

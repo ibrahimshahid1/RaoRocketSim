@@ -32,6 +32,7 @@ except Exception:  # pragma: no cover - exercised in fallback test
 
 from raosim.gas_dynamics import isentropic_pressure_ratio, isentropic_density_ratio
 from raosim.moc import solve_flowfield
+from raosim.validation import add_contour_reliability_metadata
 from raosim.wall_model import SplineWall
 
 
@@ -352,7 +353,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
 
     metrics = opt['exit_metrics']
 
-    return {
+    contour = {
         'x': x_full,
         'y': y_full,
         'theta_n': opt['theta_n'],
@@ -381,3 +382,4 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'optimization_converged': opt['converged'],
         'starting_line_method': starting_line_method,
     }
+    return add_contour_reliability_metadata(contour, 'moc', gamma)
