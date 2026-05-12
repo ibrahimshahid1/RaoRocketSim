@@ -1,0 +1,111 @@
+{
+  "case_id": "vulcain_s1_separation_similarity",
+  "title": "Vulcain/Volvo S1 separation-similarity benchmark",
+  "description": "Ostlund Vulcain/S1/S3 similarity case for wall Mach, wall pressure, pressure-gradient, and separation/side-load relevance. This case is report-only for pressure and separation physics until boundary-layer and side-load models are available.",
+  "source": {
+    "pdf": "fulltext01.pdf",
+    "citation": "Ostlund, J. Supersonic Flow Separation with Application to Rocket Engine Nozzles.",
+    "references": [
+      "Section 10.3: S1 and S3 scaling of Vulcain nozzle flow",
+      "Table 7: main characteristics of Vulcain, S1, and S3",
+      "Figures 94-99: wall and internal flow comparisons",
+      "Discussion of wall-pressure gradient and side-load sensitivity"
+    ],
+    "notes": "The S1 air model is used here because its table provides complete dimensions and gamma=1.4-compatible gas assumptions."
+  },
+  "status_policy": {
+    "bezier": "report",
+    "moc": "xfail",
+    "rao": "xfail"
+  },
+  "inputs": {
+    "Rt": 0.03354,
+    "epsilon": 20.0,
+    "length_pct": 80.53055950560315,
+    "gamma": 1.4,
+    "Pc": 5000000.0,
+    "Pa": 101325.0,
+    "theta_n": 35.025,
+    "theta_e": 4.0
+  },
+  "solver_options": {
+    "moc": {
+      "n_control": 3,
+      "n_char": 10,
+      "max_iter": 50
+    },
+    "rao": {
+      "n_ce_pts": 13,
+      "n_char": 10,
+      "max_iter": 35
+    }
+  },
+  "reference": {
+    "geometry": {
+      "exit_radius_over_rt": {
+        "value": 4.472271914132379,
+        "tolerance": 0.01,
+        "mode": "strict",
+        "source_ref": "Table 7 S1 De/Dt"
+      },
+      "length_over_rt": {
+        "value": 10.435301132975551,
+        "tolerance": 0.02,
+        "mode": "strict",
+        "source_ref": "Table 7 S1 L/Dt"
+      },
+      "theta_n_deg": {
+        "value": 35.025,
+        "tolerance": 0.05,
+        "mode": "strict",
+        "source_ref": "Table 7 S1 thetaN"
+      },
+      "theta_e_deg": {
+        "value": 4.0,
+        "tolerance": 0.05,
+        "mode": "strict",
+        "source_ref": "Table 7 S1 thetaE"
+      }
+    },
+    "solver": {
+      "ideal_exit_mach": {
+        "value": 5.0,
+        "tolerance": 0.4,
+        "mode": "report",
+        "source_ref": "Section 10.3: air Mach 5 reached near area ratio 25"
+      }
+    },
+    "wall_pressure_trend": {
+      "expected": "wall_pressure_gradient_similarity_required",
+      "mode": "report",
+      "source_ref": "Section 10.3/Figure 94"
+    },
+    "curves": [
+      {
+        "kind": "wall_pressure",
+        "path": "curves/vulcain_s1_wall_pressure.csv",
+        "x_column": "x_over_rt",
+        "y_column": "p_over_p0",
+        "uncertainty": 0.08,
+        "mode": "report",
+        "source_ref": "Figure 94",
+        "axis_calibration": "normalized S1 wall-pressure trace, hand-digitized trend"
+      },
+      {
+        "kind": "wall_mach",
+        "path": "curves/vulcain_s1_wall_mach.csv",
+        "x_column": "x_over_rt",
+        "y_column": "mach",
+        "uncertainty": 0.25,
+        "mode": "report",
+        "source_ref": "Figure 94",
+        "axis_calibration": "normalized S1 wall-Mach trace, hand-digitized trend"
+      }
+    ]
+  },
+  "expected_physics_gaps": [
+    "Wall-pressure gradient and separation/side-load behavior require boundary-layer and shock/separation models beyond the current quasi-1D wall-pressure estimate.",
+    "Similarity of internal Mach contours cannot be validated until the MOC field is benchmarked against published flowfield contours.",
+    "The benchmark is evidence for downstream CFD/thermal/structural review, not hardware qualification."
+  ]
+}

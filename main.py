@@ -110,6 +110,15 @@ Examples:
                          'or rao (calculus-of-variations control-surface optimization)')
     p.add_argument('--compare', action='store_true',
                     help='Compare conical, Bézier, and Rao contours side by side')
+    p.add_argument('--benchmark-case', type=str, default=None,
+                   help='Run a literature benchmark case by id')
+    p.add_argument('--benchmark-method', type=str, default='bezier',
+                   choices=['bezier', 'moc', 'rao', 'all'],
+                   help='Benchmark solver method (default bezier)')
+    p.add_argument('--benchmark-report', type=str, default=None,
+                   help='Benchmark report file or directory')
+    p.add_argument('--benchmark-strict', action='store_true',
+                   help='Exit nonzero for diagnostic xfail or strict benchmark failure')
     p.add_argument('--theta-n', type=float, default=None,
                    help='Override initial wall angle θ_n [°]')
     p.add_argument('--theta-e', type=float, default=None,
@@ -520,6 +529,68 @@ def run_sweep(args):
     print("\n  Done.\n")
 
 
+def run_benchmark_cli(args):
+    """Run literature benchmark mode."""
+    _header()
+    from raosim.benchmarks import list_benchmark_cases, run_benchmark
+
+    methods = (
+        ['bezier', 'moc', 'rao']
+        if args.benchmark_method == 'all'
+        else [args.benchmark_method]
+    )
+    report_base = Path(args.benchmark_report) if args.benchmark_report else None
+    results = []
+
+    print(f"  Benchmark case: {args.benchmark_case}")
+    print(f"  Available cases: {', '.join(list_benchmark_cases())}")
+    print()
+
+    for method in methods:
+        report_path = _benchmark_report_path(report_base, method, len(methods) > 1)
+        result = run_benchmark(
+            args.benchmark_case,
+            method,
+            report_path=report_path,
+        )
+        results.append(result)
+        counts = _status_counts(result['metrics'])
+        print(f"  [{result['overall_status'].upper():>6}] {method}")
+        print(f"    JSON: {result['report_paths']['json']}")
+        print(f"    MD:   {result['report_paths']['markdown']}")
+        print(
+            "    Metrics: "
+            + ", ".join(f"{key}={value}" for key, value in sorted(counts.items()))
+        )
+        if result.get('warnings'):
+            print(f"    Solver warnings: {len(result['warnings'])}")
+        print()
+
+    if args.benchmark_strict:
+        failed = [r for r in results if r['overall_status'] != 'pass']
+        if failed:
+            print("  ✗ Benchmark strict mode failed:")
+            for result in failed:
+                print(f"    • {result['method']}: {result['overall_status']}")
+            sys.exit(2)
+
+    print("  Done.\n")
+
+
+def _benchmark_report_path(base: Path | None, method: str, multi: bool) -> Path | None:
+    if base is None or not multi or not base.suffix:
+        return base
+    return base.with_name(f"{base.stem}_{method}{base.suffix}")
+
+
+def _status_counts(metrics: list[dict]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for metric in metrics:
+        status = metric.get('status', 'unknown')
+        counts[status] = counts.get(status, 0) + 1
+    return counts
+
+
 def run_interactive():
     """Full interactive prompting flow."""
     _header()
@@ -767,7 +838,9 @@ def main():
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.sweep:
+    if args.benchmark_case:
+        run_benchmark_cli(args)
+    elif args.sweep:
         run_sweep(args)
     elif is_batch(args):
         run_batch(args)

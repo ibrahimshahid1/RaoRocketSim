@@ -1,0 +1,133 @@
+{
+  "case_id": "lea_top_schomberg_2014",
+  "title": "LEA thrust-optimized parabola benchmark",
+  "description": "Rao-replicated LEA TOP nozzle geometry, thrust coefficients, and low-altitude wall-pressure data from Schomberg et al. The explicit geometry table is strict for the TOP/Bézier path; CFD/experimental pressure and thrust data are report-only until viscous corrections exist.",
+  "source": {
+    "pdf": "FP_EUCASS-043.pdf",
+    "citation": "Schomberg, K., Olsen, J., Neely, A., Doig, G. Design of an Arc-Based Thrust-Optimised Nozzle Contour.",
+    "references": [
+      "Table 1: grid-density thrust coefficients at PR=80, PR=700, and vacuum",
+      "Figure 4: static pressure distribution at low-altitude flow conditions",
+      "Table 2: inviscid/SA/SST thrust coefficients",
+      "Table 3: LEA TOP geometric parameters",
+      "Table 4: thrust coefficients for LEA TOP and arc variants"
+    ],
+    "notes": "The paper reports yt=13.62 mm, LEA_TOP y_mn=5.51 rt, x_mn=15.0 rt, theta_m=34 deg, and theta_n=4 deg. This manifest maps theta_m to Rao theta_n and theta_n to Rao theta_e."
+  },
+  "status_policy": {
+    "bezier": "strict",
+    "moc": "xfail",
+    "rao": "xfail"
+  },
+  "inputs": {
+    "Rt": 0.01362,
+    "epsilon": 30.3601,
+    "length_pct": 89.11835668440888,
+    "gamma": 1.4,
+    "Pc": 1.0,
+    "Pa": 0.0,
+    "theta_n": 34.0,
+    "theta_e": 4.0
+  },
+  "solver_options": {
+    "moc": {
+      "n_control": 3,
+      "n_char": 12,
+      "max_iter": 60
+    },
+    "rao": {
+      "n_ce_pts": 15,
+      "n_char": 12,
+      "max_iter": 40
+    }
+  },
+  "reference": {
+    "geometry": {
+      "exit_radius_over_rt": {
+        "value": 5.51,
+        "tolerance": 0.005,
+        "mode": "strict",
+        "source_ref": "Table 3"
+      },
+      "length_over_rt": {
+        "value": 15.0,
+        "tolerance": 0.02,
+        "mode": "strict",
+        "source_ref": "Table 3"
+      },
+      "theta_n_deg": {
+        "value": 34.0,
+        "tolerance": 0.05,
+        "mode": "strict",
+        "source_ref": "Table 3 theta_m"
+      },
+      "theta_e_deg": {
+        "value": 4.0,
+        "tolerance": 0.05,
+        "mode": "strict",
+        "source_ref": "Table 3 theta_n"
+      }
+    },
+    "performance": {
+      "thrust_coefficients": [
+        {
+          "name": "CF_low_altitude_PR80_SA",
+          "pa_over_pc": 0.0125,
+          "value": 1.269,
+          "tolerance": 0.02,
+          "mode": "report",
+          "source_ref": "Table 1/Table 4"
+        },
+        {
+          "name": "CF0_PR700_inviscid",
+          "pa_over_pc": 0.0014285714285714286,
+          "value": 1.614,
+          "tolerance": 0.03,
+          "mode": "report",
+          "source_ref": "Table 2"
+        },
+        {
+          "name": "CF_vacuum_inviscid",
+          "pa_over_pc": 0.0,
+          "value": 1.657,
+          "tolerance": 0.03,
+          "mode": "report",
+          "source_ref": "Table 2"
+        }
+      ]
+    },
+    "wall_pressure_trend": {
+      "expected": "monotonic_decreasing_attached",
+      "mode": "report",
+      "source_ref": "Figure 4"
+    },
+    "curves": [
+      {
+        "kind": "contour",
+        "path": "curves/lea_top_contour.csv",
+        "x_column": "x_over_rt",
+        "y_column": "y_over_rt",
+        "uncertainty": 0.08,
+        "mode": "report",
+        "source_ref": "Figure 5/Table 3",
+        "axis_calibration": "x/Rt from 0 to 15, y/Rt from 1 to 5.51"
+      },
+      {
+        "kind": "wall_pressure",
+        "path": "curves/lea_top_wall_pressure_pr80.csv",
+        "x_column": "x_over_rt",
+        "y_column": "p_over_pa",
+        "pa_over_pc": 0.0125,
+        "uncertainty": 0.08,
+        "mode": "report",
+        "source_ref": "Figure 4",
+        "axis_calibration": "x/yt axis 0 to 15, p/Pa axis 0 to 2"
+      }
+    ]
+  },
+  "expected_physics_gaps": [
+    "Viscous thrust loss and boundary-layer displacement are not modeled by the current inviscid solver.",
+    "Wall-pressure comparison is trend/report-only until the code has CFD-grade or boundary-layer-corrected pressure prediction.",
+    "MOC/Rao paths are diagnostic xfail until they reproduce published exit-flow and wall-pressure behavior."
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "case_id": "rao_scarfed_moc_1990",
+  "title": "Modified Rao scarfed-nozzle MOC reference",
+  "description": "NASA modified-Rao/scarfed-nozzle case with design Mach, area ratio, thrust coefficient, and Seagull MOC comparisons. This is a diagnostic MOC physics benchmark rather than a strict axisymmetric geometry case because the paper geometry is scarfed/truncated.",
+  "source": {
+    "pdf": "19900015790.pdf",
+    "citation": "NASA report on modified Rao scarfed nozzle design and Seagull analysis.",
+    "references": [
+      "Analysis section: Rao method with control surface and MOC",
+      "Results: design Mach 6, gamma 1.4, area ratio 90, ramp length 300 in, cowl length 15 in",
+      "Figure 10: nozzle cowl length versus thrust coefficient",
+      "Figures 11-15: nontruncated geometry, pressure, velocity, wall Mach, and Mach contours"
+    ],
+    "notes": "The Rao program assumes a curved sonic line at the throat while Seagull assumes a straight sonic line. This makes the case useful for transonic starting-line diagnostics."
+  },
+  "status_policy": {
+    "bezier": "report",
+    "moc": "xfail",
+    "rao": "xfail"
+  },
+  "inputs": {
+    "Rt": 0.0254,
+    "epsilon": 90.0,
+    "length_pct": 80.0,
+    "gamma": 1.4,
+    "Pc": 100.0,
+    "Pa": 0.0,
+    "theta_n": 32.0,
+    "theta_e": 6.0
+  },
+  "solver_options": {
+    "moc": {
+      "n_control": 3,
+      "n_char": 10,
+      "max_iter": 50
+    },
+    "rao": {
+      "n_ce_pts": 13,
+      "n_char": 10,
+      "max_iter": 35
+    }
+  },
+  "reference": {
+    "geometry": {
+      "area_ratio": {
+        "value": 90.0,
+        "tolerance": 0.0,
+        "mode": "strict",
+        "source_ref": "Results and Discussion"
+      }
+    },
+    "solver": {
+      "design_exit_mach": {
+        "value": 6.0,
+        "tolerance": 0.5,
+        "mode": "strict",
+        "source_ref": "Results and Discussion"
+      },
+      "throat_mach": {
+        "value": 1.24,
+        "tolerance": 0.05,
+        "mode": "report",
+        "source_ref": "Results and Discussion"
+      },
+      "curved_sonic_line_required": {
+        "value": true,
+        "mode": "report",
+        "source_ref": "Wall axial Mach discussion"
+      }
+    },
+    "performance": {
+      "thrust_coefficients": [
+        {
+          "name": "vacuum_thrust_coefficient_nontruncated",
+          "pa_over_pc": 0.0,
+          "value": 1.666,
+          "tolerance": 0.05,
+          "mode": "strict",
+          "source_ref": "Figure 10 discussion"
+        }
+      ]
+    },
+    "curves": [
+      {
+        "kind": "wall_mach",
+        "path": "curves/rao_scarfed_wall_mach.csv",
+        "x_column": "station",
+        "y_column": "mach",
+        "uncertainty": 0.25,
+        "mode": "report",
+        "source_ref": "Figure 14",
+        "axis_calibration": "station axis 0 to 300, wall Mach approximate from OCR-visible figure"
+      }
+    ]
+  },
+  "expected_physics_gaps": [
+    "The current MOC starting-line model does not reproduce the published curved-sonic-line assumptions.",
+    "The current axisymmetric benchmark runner cannot reproduce scarfed/truncated external-flow effects.",
+    "Frozen/equilibrium chemistry and throat Mach > 1 starting data are not implemented in the current contour API."
+  ]
+}
