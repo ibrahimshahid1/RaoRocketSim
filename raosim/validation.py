@@ -20,6 +20,7 @@ DESIGN_STATUS_BY_METHOD = {
     "bezier": "preliminary_top_geometry",
     "moc": "experimental_moc_geometry",
     "rao": "experimental_variational_geometry",
+    "rao_variational_moc": "experimental_rao_variational_moc_bvp",
 }
 
 HARDWARE_QUALIFICATION_NOTE = (

@@ -30,6 +30,18 @@ class TestIntegrands:
         f1 = thrust_integrand(M=2.0, theta=0.1, phi=1.0, r=0.05, gamma=1.4)
         assert f1 > 0
 
+    def test_thrust_integrand_uses_ambient_pressure_subtraction(self):
+        """Rao pressure term should subtract ambient without oblique projection."""
+        f_vac = thrust_integrand(
+            M=2.0, theta=0.1, phi=1.0, r=0.05, gamma=1.4,
+            pa_over_p0=0.0,
+        )
+        f_amb = thrust_integrand(
+            M=2.0, theta=0.1, phi=1.0, r=0.05, gamma=1.4,
+            pa_over_p0=0.2,
+        )
+        assert f_vac - f_amb == pytest.approx(2.0 * math.pi * 0.05 * 0.2)
+
     def test_massflow_integrand_positive(self):
         """Mass flow integrand should be positive."""
         f2 = massflow_integrand(M=2.0, theta=0.1, phi=1.0, r=0.05, gamma=1.4)
@@ -130,6 +142,12 @@ class TestRaoVariationalContour:
         assert isinstance(ce, ControlSurface)
         assert len(ce.M) > 0
         assert np.all(ce.M >= 1.0)
+
+    def test_experimental_diagnostics_present(self, contour):
+        """The variational path should not claim a validated full Rao solve."""
+        assert contour['rao_full_optimum_claimed'] is False
+        assert contour['variational_status'] == 'experimental_not_full_rao_bvp'
+        assert 'construction_diagnostics' in contour
 
     def test_contour_length(self, contour):
         """Contour arrays should have reasonable length."""

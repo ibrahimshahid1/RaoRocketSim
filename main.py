@@ -20,7 +20,17 @@ import numpy as np
 from pathlib import Path
 
 from raosim.cea import propellant_from_request
-from raosim.design import throat_radius_for_target_thrust
+from raosim.design import (
+    CoolingSpec,
+    DesignInput,
+    InterfaceSpec,
+    ManufacturingSpec,
+    MaterialSpec,
+    MissionAmbientSpec,
+    ThermoSpec,
+    design_nozzle_v2,
+    throat_radius_for_target_thrust,
+)
 from raosim.propellants import (
     get_propellant, custom_propellant, list_propellants, Propellant,
 )
@@ -92,6 +102,12 @@ Examples:
                    help='Mixture ratio O/F for CEA-backed properties')
     p.add_argument('--cea', action='store_true',
                    help='Use RocketCEA/NASA CEA thermochemistry when available')
+    p.add_argument('--mode', type=str, default='preliminary',
+                   choices=['preliminary', 'validated'],
+                   help='Design workflow mode for the v2 schema')
+    p.add_argument('--thermo', type=str, default='constant_gamma',
+                   choices=['constant_gamma', 'cea_frozen', 'cea_equilibrium'],
+                   help='Thermochemistry model for the v2 schema')
     p.add_argument('--Pc', type=float, default=None,
                    help='Chamber pressure [bar]')
     p.add_argument('--Pa', type=float, default=None,
@@ -105,9 +121,10 @@ Examples:
     p.add_argument('--length-pct', type=float, default=80.0,
                    help='Bell length %% of 15° cone (default 80)')
     p.add_argument('--method', type=str, default='bezier',
-                    choices=['bezier', 'moc', 'rao'],
+                    choices=['bezier', 'moc', 'rao', 'rao_variational_moc'],
                     help='Contour method: bezier (default), moc (direct wall optimization), '
-                         'or rao (calculus-of-variations control-surface optimization)')
+                         'rao (legacy experimental variational path), or '
+                         'rao_variational_moc (auditable residual/MOC path)')
     p.add_argument('--compare', action='store_true',
                     help='Compare conical, Bézier, and Rao contours side by side')
     p.add_argument('--benchmark-case', type=str, default=None,
@@ -123,6 +140,16 @@ Examples:
                    help='Override initial wall angle θ_n [°]')
     p.add_argument('--theta-e', type=float, default=None,
                    help='Override exit wall angle θ_e [°]')
+    p.add_argument('--pa-over-p0', type=float, default=0.0,
+                   help='Rao variational design ambient/stagnation pressure ratio Pa/P0')
+    p.add_argument('--rao-moc-n-control', type=int, default=12,
+                   help='Rao variational/MOC control-surface station count')
+    p.add_argument('--rao-moc-n-kernel', type=int, default=12,
+                   help='Rao variational/MOC kernel/MOC point count')
+    p.add_argument('--rao-moc-max-nfev', type=int, default=25,
+                   help='Rao variational/MOC least-squares function-evaluation limit')
+    p.add_argument('--rao-moc-skip-moc', action='store_true',
+                   help='Skip raw MOC closure diagnostics for a fast residual-only Rao run')
 
 
     p.add_argument('--gamma', type=float, default=None,
@@ -141,13 +168,62 @@ Examples:
                    help='STL output path')
     p.add_argument('--cad', type=str, default='none',
                    choices=['none', 'step', 'ipt', 'both'],
-                   help='Solid CAD export: STEP, IPT manifest, or both')
+                   help='Solid CAD export: STEP, legacy IPT manifest, or both')
     p.add_argument('--wall-thickness', type=float, default=None,
                    help='Solid nozzle wall thickness [mm] for STEP/STL CAD')
     p.add_argument('--flange-od', type=float, default=None,
                    help='Optional inlet flange outer diameter [mm]')
     p.add_argument('--flange-length', type=float, default=None,
                    help='Optional inlet flange axial length [mm]')
+    p.add_argument('--cooling', type=str, default='none',
+                   choices=['none', 'regenerative'],
+                   help='Cooling screen model for v2 physics gates')
+    p.add_argument('--coolant', type=str, default=None,
+                   help='Coolant name for regenerative screening')
+    p.add_argument('--channel-count', type=int, default=None,
+                   help='Number of regenerative cooling channels')
+    p.add_argument('--channel-width', type=float, default=None,
+                   help='Cooling channel width [mm]')
+    p.add_argument('--channel-height', type=float, default=None,
+                   help='Cooling channel height [mm]')
+    p.add_argument('--coolant-mdot', type=float, default=None,
+                   help='Coolant mass flow [kg/s]')
+    p.add_argument('--coolant-cp', type=float, default=3500.0,
+                   help='Coolant heat capacity [J/kg/K]')
+    p.add_argument('--coolant-inlet-temp', type=float, default=293.0,
+                   help='Coolant inlet temperature [K]')
+    p.add_argument('--max-wall-temp', type=float, default=950.0,
+                   help='Cooling wall temperature limit [K]')
+    p.add_argument('--material', type=str, default='Inconel 718',
+                   help='Material name for v2 screening')
+    p.add_argument('--yield-strength', type=float, default=900.0,
+                   help='Material yield strength [MPa]')
+    p.add_argument('--material-k', type=float, default=16.0,
+                   help='Material thermal conductivity [W/m/K]')
+    p.add_argument('--material-max-temp', type=float, default=1250.0,
+                   help='Material max screening temperature [K]')
+    p.add_argument('--max-heat-flux', type=float, default=25.0,
+                   help='Material heat flux screening limit [MW/m^2]')
+    p.add_argument('--bolt-count', type=int, default=None,
+                   help='Optional flange bolt count')
+    p.add_argument('--bolt-circle', type=float, default=None,
+                   help='Optional bolt circle diameter [mm]')
+    p.add_argument('--bolt-hole', type=float, default=None,
+                   help='Optional bolt hole diameter [mm]')
+    p.add_argument('--injector-face-od', type=float, default=None,
+                   help='Optional injector face outer diameter [mm]')
+    p.add_argument('--interface-length', type=float, default=None,
+                   help='Optional chamber/nozzle interface length [mm]')
+    p.add_argument('--throat-insert', action='store_true',
+                   help='Record a throat-insert CAD placeholder in v2 metadata')
+    p.add_argument('--throat-insert-material', type=str, default=None,
+                   help='Optional throat insert material name')
+    p.add_argument('--tolerance', type=float, default=None,
+                   help='Manufacturing tolerance [mm]')
+    p.add_argument('--weld-allowance', type=float, default=None,
+                   help='Weld allowance [mm]')
+    p.add_argument('--braze-allowance', type=float, default=None,
+                   help='Braze allowance [mm]')
     p.add_argument('--design-report', action='store_true',
                    help='Write design-gate report JSON')
     p.add_argument('--strict-gates', action='store_true',
@@ -191,8 +267,160 @@ def is_batch(args) -> bool:
             has_size and args.epsilon is not None)
 
 
+def _should_use_v2(args) -> bool:
+    return any([
+        args.mode != 'preliminary',
+        args.thermo != 'constant_gamma',
+        args.cooling != 'none',
+        args.channel_count is not None,
+        args.channel_width is not None,
+        args.channel_height is not None,
+        args.coolant_mdot is not None,
+        args.bolt_count is not None,
+        args.bolt_circle is not None,
+        args.bolt_hole is not None,
+        args.injector_face_od is not None,
+        args.interface_length is not None,
+        args.throat_insert,
+        args.throat_insert_material is not None,
+        args.tolerance is not None,
+        args.weld_allowance is not None,
+        args.braze_allowance is not None,
+        args.material != 'Inconel 718',
+        args.yield_strength != 900.0,
+        args.material_k != 16.0,
+        args.material_max_temp != 1250.0,
+        args.max_heat_flux != 25.0,
+    ])
+
+
+def _mm_to_m(value):
+    return value / 1000.0 if value is not None else None
+
+
+def run_batch_v2(args):
+    """Non-interactive v2 design workflow."""
+    _header()
+    Pc = args.Pc * 1e5
+    Pa = (args.Pa if args.Pa is not None else 101.325) * 1e3
+    build_dir, version = create_build_dir()
+    cad = args.cad
+    if cad == 'none' and args.stl:
+        cad = 'stl'
+
+    design_input = DesignInput(
+        thermo=ThermoSpec(
+            mode=args.thermo,
+            propellant_name=args.propellant,
+            oxidizer=args.oxidizer,
+            fuel=args.fuel,
+            mixture_ratio=args.of,
+            eta_Isp=args.eta,
+        ),
+        Pc=Pc,
+        Rt=args.Rt / 1000.0 if args.Rt is not None else None,
+        target_thrust=args.target_thrust,
+        epsilon=args.epsilon,
+        method=args.method,
+        mode=args.mode,
+        length_pct=args.length_pct,
+        theta_n=args.theta_n,
+        theta_e=args.theta_e,
+        contraction_ratio=args.contraction_ratio,
+        L_star=args.L_star,
+        ambient=MissionAmbientSpec(Pa=Pa),
+        cooling=CoolingSpec(
+            method=args.cooling,
+            coolant=args.coolant,
+            channel_count=args.channel_count,
+            channel_width=_mm_to_m(args.channel_width),
+            channel_height=_mm_to_m(args.channel_height),
+            coolant_mass_flow=args.coolant_mdot,
+            coolant_cp=args.coolant_cp,
+            coolant_inlet_temperature=args.coolant_inlet_temp,
+            max_wall_temperature=args.max_wall_temp,
+        ),
+        material=MaterialSpec(
+            name=args.material,
+            yield_strength=args.yield_strength * 1e6,
+            conductivity=args.material_k,
+            max_temperature=args.material_max_temp,
+            max_heat_flux=args.max_heat_flux * 1e6,
+        ),
+        interface=InterfaceSpec(
+            flange_od=_mm_to_m(args.flange_od),
+            flange_length=_mm_to_m(args.flange_length),
+            bolt_count=args.bolt_count,
+            bolt_circle_diameter=_mm_to_m(args.bolt_circle),
+            bolt_hole_diameter=_mm_to_m(args.bolt_hole),
+            injector_face_od=_mm_to_m(args.injector_face_od),
+            chamber_interface_length=_mm_to_m(args.interface_length),
+        ),
+        manufacturing=ManufacturingSpec(
+            wall_thickness=_mm_to_m(args.wall_thickness),
+            cad=cad,
+            output_dir=build_dir,
+            csv_points=args.n_csv,
+            angular_points=args.n_angular,
+            throat_insert=args.throat_insert,
+            throat_insert_material=args.throat_insert_material,
+            tolerance=_mm_to_m(args.tolerance),
+            weld_allowance=_mm_to_m(args.weld_allowance),
+            braze_allowance=_mm_to_m(args.braze_allowance),
+        ),
+        strict_gates=args.strict_gates,
+    )
+
+    result = design_nozzle_v2(design_input)
+    _print_summary(
+        result.propellant, result.contour, result.performance,
+        Pc, Pa, result.input.Rt, result.input.epsilon,
+    )
+    _print_warnings(result.warnings)
+    print("\n  ── V2 Physics Screening ───────────────────────────────")
+    print(f"    Thermochemistry : {result.report_sections['thermochemistry']['source']}")
+    print(f"    Heat flux max   : {result.report_sections['thermal']['q_max']/1e6:.2f} MW/m²")
+    print(f"    Wall temp       : {result.report_sections['structural']['wall_temperature']:.1f} K")
+    print(f"    Stress margin   : {result.report_sections['structural']['stress_margin']:.2f}")
+    print(f"    Gate passed     : {result.gate_report.passed}")
+    for name, path in result.files.items():
+        print(f"  → {name}: {path}")
+
+    params = {
+        "Mode": result.input.mode,
+        "Thermo": result.input.thermo.mode,
+        "Propellant": result.propellant.name,
+        "Pc [bar]": f"{Pc / 1e5:.2f}",
+        "Pa [kPa]": f"{Pa / 1e3:.3f}",
+        "Rt [mm]": f"{result.input.Rt * 1000:.2f}",
+        "Epsilon (Ae/At)": f"{result.input.epsilon:.2f}",
+        "Method": result.input.method,
+        "Cooling": result.input.cooling.method,
+        "Material": result.input.material.name,
+    }
+    perf_dict = {
+        "Thrust [N]": f"{result.performance.thrust:.2f}",
+        "Isp [s]": f"{result.performance.Isp:.1f}",
+        "Mass flow [kg/s]": f"{result.performance.m_dot:.4f}",
+        "Cf actual": f"{result.performance.Cf_actual:.4f}",
+    }
+    meta_path = write_metadata(
+        build_dir, version=version, mode="batch-v2", params=params,
+        performance=perf_dict, warnings=result.warnings,
+        gate_report=result.gate_report.to_dict(),
+        files=[path.name for path in result.files.values()],
+    )
+    print(f"  → metadata: {meta_path}")
+    print(f"\n  📁 Build v{version:03d}: {build_dir}")
+    print("\n  Done.\n")
+
+
 def run_batch(args):
     """Non-interactive mode: all params from argparse."""
+    if _should_use_v2(args):
+        run_batch_v2(args)
+        return
+
     _header()
 
 
@@ -253,6 +481,15 @@ def run_batch(args):
         contour = bell_nozzle_contour(Rt, epsilon, method='rao',
                                        length_pct=length_pct,
                                        gamma=prop.gamma)
+    elif args.method == 'rao_variational_moc':
+        contour = bell_nozzle_contour(Rt, epsilon, method='rao_variational_moc',
+                                       length_pct=length_pct,
+                                       gamma=prop.gamma,
+                                       pa_over_p0=args.pa_over_p0,
+                                       rao_moc_n_control=args.rao_moc_n_control,
+                                       rao_moc_n_kernel=args.rao_moc_n_kernel,
+                                       rao_moc_max_nfev=args.rao_moc_max_nfev,
+                                       rao_moc_evaluate_moc=not args.rao_moc_skip_moc)
     else:
         theta_n = args.theta_n
         theta_e = args.theta_e

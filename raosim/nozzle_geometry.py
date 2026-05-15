@@ -114,6 +114,11 @@ def bell_nozzle_contour(
     method: str = 'bezier',
     starting_line_method: str = 'area_ratio',
     gamma: float = 1.4,
+    pa_over_p0: float = 0.0,
+    rao_moc_n_control: int = 12,
+    rao_moc_n_kernel: int = 12,
+    rao_moc_max_nfev: int = 25,
+    rao_moc_evaluate_moc: bool = True,
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -129,10 +134,16 @@ def bell_nozzle_contour(
     convergent_half_angle_deg : upstream inlet half-angle  (default 45°)
     Ru_factor   : upstream curvature / Rt  (default 1.5)
     Rd_factor   : downstream curvature / Rt  (default 0.382)
-    method      : 'bezier' (default, Bézier approximation) or
-                  'moc' (MOC + Rao optimization)
+    method      : 'bezier' (default, Bézier approximation),
+                  'moc' (MOC + Rao optimization),
+                  'rao' (legacy experimental variational path), or
+                  'rao_variational_moc' (auditable residual/MOC path)
     starting_line_method : MOC-only starting-line approximation
                            ('area_ratio' default, or 'hall')
+    pa_over_p0 : Rao-variational-only design ambient/stagnation pressure ratio
+    rao_moc_n_control, rao_moc_n_kernel, rao_moc_max_nfev,
+    rao_moc_evaluate_moc :
+        Rao-variational-MOC-only residual solve controls
 
     Returns
     -------
@@ -164,11 +175,26 @@ def bell_nozzle_contour(
     if method == 'rao':
         from raosim.rao_variational import rao_variational_contour
         contour = rao_variational_contour(
-            Rt, epsilon, gamma=gamma, length_pct=length_pct,
+            Rt, epsilon, gamma=gamma, pa_over_p0=pa_over_p0,
+            length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
         )
         return add_contour_reliability_metadata(contour, 'rao', gamma)
+
+    if method == 'rao_variational_moc':
+        from raosim.rao_variational import rao_variational_moc_contour
+        contour = rao_variational_moc_contour(
+            Rt, epsilon, gamma=gamma, pa_over_p0=pa_over_p0,
+            length_pct=length_pct,
+            convergent_half_angle_deg=convergent_half_angle_deg,
+            Ru_factor=Ru_factor,
+            n_control=rao_moc_n_control,
+            n_kernel=rao_moc_n_kernel,
+            max_nfev=rao_moc_max_nfev,
+            evaluate_moc=rao_moc_evaluate_moc,
+        )
+        return add_contour_reliability_metadata(contour, 'rao_variational_moc', gamma)
 
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")

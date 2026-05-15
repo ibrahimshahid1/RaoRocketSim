@@ -52,6 +52,20 @@ from raosim.gas_dynamics import (
 
 
 @dataclass
+class FlowNode:
+    """Lightweight flow-state adapter for residual checks."""
+
+    x: float
+    r: float
+    M: float
+    theta: float
+
+    @property
+    def mu(self) -> float:
+        return mach_angle(self.M)
+
+
+@dataclass
 class CharPoint:
     """A point in the characteristic net.
 
@@ -66,6 +80,10 @@ class CharPoint:
     mu: float
     compat_plus: float
     compat_minus: float
+
+    def to_flow_node(self) -> FlowNode:
+        """Return the minimal flow-state view used by Rao residual helpers."""
+        return FlowNode(x=self.x, r=self.r, M=self.M, theta=self.theta)
 
 
 @dataclass

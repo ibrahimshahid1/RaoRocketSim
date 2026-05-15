@@ -8,7 +8,30 @@ that the values are demo-grade constants rather than CEA-derived properties.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import Any
+
 from raosim.propellants import Propellant, get_propellant
+
+
+THERMO_CONSTANT_GAMMA = "constant_gamma"
+THERMO_CEA_FROZEN = "cea_frozen"
+THERMO_CEA_EQUILIBRIUM = "cea_equilibrium"
+CEA_THERMO_MODES = {THERMO_CEA_FROZEN, THERMO_CEA_EQUILIBRIUM}
+THERMO_MODES = {THERMO_CONSTANT_GAMMA, *CEA_THERMO_MODES}
+
+
+@dataclass
+class ThermochemistryResult:
+    """Resolved combustion-product properties and provenance."""
+
+    propellant: Propellant
+    mode: str
+    source: str
+    cea_available: bool
+    chamber_state: dict[str, Any] = field(default_factory=dict)
+    exit_state: dict[str, Any] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
 
 
 def rocketcea_available() -> bool:
@@ -26,6 +49,8 @@ def cea_propellant(
     Pc: float,
     mixture_ratio: float,
     eta_Isp: float = 0.95,
+    thermo_mode: str = THERMO_CEA_FROZEN,
+    epsilon: float | None = None,
 ) -> Propellant:
     """
     Build a Propellant from RocketCEA chamber properties.
@@ -38,6 +63,9 @@ def cea_propellant(
         raise RuntimeError(
             "RocketCEA is not installed; install rocketcea or run without --cea."
         ) from exc
+
+    if thermo_mode not in CEA_THERMO_MODES:
+        raise ValueError("thermo_mode must be 'cea_frozen' or 'cea_equilibrium'")
 
     cea = CEA_Obj(
         oxName=oxidizer,
@@ -55,7 +83,7 @@ def cea_propellant(
     Tc = float(cea.get_Tcomb(Pc=Pc, MR=mixture_ratio))
     c_star = float(cea.get_Cstar(Pc=Pc, MR=mixture_ratio))
     prop = Propellant(
-        name=f"CEA {oxidizer}/{fuel}",
+        name=f"CEA {oxidizer}/{fuel} ({thermo_mode})",
         gamma=gamma,
         Mw=mw / 1000.0,
         Tc=Tc,
@@ -64,6 +92,117 @@ def cea_propellant(
     )
     prop.c_star = c_star
     return prop
+
+
+def resolve_thermochemistry(
+    *,
+    thermo_mode: str,
+    propellant_name: str | None,
+    Pc: float,
+    mixture_ratio: float | None = None,
+    oxidizer: str | None = None,
+    fuel: str | None = None,
+    eta_Isp: float = 0.95,
+    epsilon: float | None = None,
+    require_cea: bool = False,
+) -> ThermochemistryResult:
+    """Resolve thermochemistry for preliminary or validated design workflows."""
+    if thermo_mode not in THERMO_MODES:
+        raise ValueError(
+            "thermo_mode must be one of: " + ", ".join(sorted(THERMO_MODES))
+        )
+
+    warnings: list[str] = []
+    if thermo_mode == THERMO_CONSTANT_GAMMA:
+        if require_cea:
+            raise RuntimeError("validated mode requires CEA thermochemistry")
+        if not propellant_name:
+            raise ValueError("propellant_name is required for constant-gamma mode")
+        prop = get_propellant(propellant_name)
+        warnings.append(
+            "Using built-in constant-gamma propellant properties; "
+            "results are preliminary only."
+        )
+        return ThermochemistryResult(
+            propellant=prop,
+            mode=thermo_mode,
+            source="built_in_constant_gamma",
+            cea_available=rocketcea_available(),
+            chamber_state={
+                "gamma": prop.gamma,
+                "Mw": prop.Mw,
+                "Tc": prop.Tc,
+                "c_star": prop.c_star,
+            },
+            warnings=warnings,
+        )
+
+    ox = oxidizer
+    fu = fuel
+    if (ox is None or fu is None) and propellant_name and "/" in propellant_name:
+        ox, fu = propellant_name.split("/", 1)
+    if not ox or not fu or mixture_ratio is None:
+        raise ValueError(
+            "CEA thermochemistry requires oxidizer, fuel, and mixture_ratio/O-F."
+        )
+
+    try:
+        prop = cea_propellant(
+            oxidizer=ox,
+            fuel=fu,
+            Pc=Pc,
+            mixture_ratio=mixture_ratio,
+            eta_Isp=eta_Isp,
+            thermo_mode=thermo_mode,
+            epsilon=epsilon,
+        )
+    except Exception as exc:
+        if require_cea:
+            raise RuntimeError(f"CEA thermochemistry required but unavailable/failed: {exc}") from exc
+        if not propellant_name:
+            raise RuntimeError(
+                "CEA failed and no built-in propellant fallback was provided."
+            ) from exc
+        fallback = get_propellant(propellant_name)
+        warnings.append(f"CEA requested but unavailable/failed: {exc}")
+        warnings.append(
+            f"Using built-in {fallback.name} constants instead; "
+            "results are preliminary only."
+        )
+        return ThermochemistryResult(
+            propellant=fallback,
+            mode=thermo_mode,
+            source="built_in_fallback_after_cea_failure",
+            cea_available=False,
+            chamber_state={
+                "gamma": fallback.gamma,
+                "Mw": fallback.Mw,
+                "Tc": fallback.Tc,
+                "c_star": fallback.c_star,
+            },
+            warnings=warnings,
+        )
+
+    return ThermochemistryResult(
+        propellant=prop,
+        mode=thermo_mode,
+        source="rocketcea",
+        cea_available=True,
+        chamber_state={
+            "gamma": prop.gamma,
+            "Mw": prop.Mw,
+            "Tc": prop.Tc,
+            "c_star": prop.c_star,
+            "mixture_ratio": mixture_ratio,
+            "oxidizer": ox,
+            "fuel": fu,
+        },
+        exit_state={
+            "epsilon": epsilon,
+            "thermo_mode": thermo_mode,
+        },
+        warnings=warnings,
+    )
 
 
 def propellant_from_request(
@@ -77,34 +216,15 @@ def propellant_from_request(
     eta_Isp: float = 0.95,
 ) -> tuple[Propellant, list[str]]:
     """Resolve propellant data and return warnings from any fallback path."""
-    warnings: list[str] = []
-
-    if use_cea:
-        ox = oxidizer
-        fu = fuel
-        if (ox is None or fu is None) and propellant_name and "/" in propellant_name:
-            ox, fu = propellant_name.split("/", 1)
-        if ox and fu and mixture_ratio is not None:
-            try:
-                return cea_propellant(
-                    oxidizer=ox,
-                    fuel=fu,
-                    Pc=Pc,
-                    mixture_ratio=mixture_ratio,
-                    eta_Isp=eta_Isp,
-                ), warnings
-            except Exception as exc:
-                warnings.append(f"CEA requested but unavailable/failed: {exc}")
-        else:
-            warnings.append(
-                "CEA requested but oxidizer, fuel, or mixture ratio is missing."
-            )
-
-    if not propellant_name:
-        raise ValueError("propellant_name is required when CEA is unavailable.")
-    prop = get_propellant(propellant_name)
-    if use_cea:
-        warnings.append(
-            f"Using built-in {prop.name} constants instead of CEA-derived properties."
-        )
-    return prop, warnings
+    mode = THERMO_CEA_FROZEN if use_cea else THERMO_CONSTANT_GAMMA
+    result = resolve_thermochemistry(
+        thermo_mode=mode,
+        propellant_name=propellant_name,
+        Pc=Pc,
+        mixture_ratio=mixture_ratio,
+        oxidizer=oxidizer,
+        fuel=fuel,
+        eta_Isp=eta_Isp,
+        require_cea=False,
+    )
+    return result.propellant, result.warnings
