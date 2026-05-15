@@ -11,8 +11,12 @@ from raosim.rao_variational import (
     RaoEndpointMismatchError,
     RaoResidualReport,
     RaoSolverConfig,
+    _ce_interp_node,
     characteristic_net_compatibility_residuals,
+    characteristic_net_links,
+    characteristic_net_segments,
     check_characteristic_crossing,
+    moc_net_compatibility_report,
     rao_residual_ablation_matrix,
     rao_variational_moc_contour,
     resample_wall_for_export,
@@ -20,7 +24,8 @@ from raosim.rao_variational import (
     solve_rao_bvp,
     summarize_characteristic_net_compatibility,
 )
-from raosim.moc import approximate_starting_line, march_coupled_net
+from raosim.moc import _make_point, approximate_starting_line, march_coupled_net, FlowNode
+from raosim.rao_residuals import residual_Cminus_axisym, residual_Cplus_axisym
 from raosim.wall_model import SplineWall
 
 
@@ -302,3 +307,148 @@ def test_characteristic_net_compatibility_diagnostics_are_finite():
     assert residuals["cminus"].size > 0
     assert all(np.isfinite(residuals[key]).all() for key in residuals)
     assert {item["name"] for item in summaries} == {"net_moc_cplus", "net_moc_cminus"}
+
+    wall_x = np.linspace(wall.x_start, wall.x_end, 32)
+    report = moc_net_compatibility_report(
+        rows,
+        np.column_stack([
+            wall_x,
+            np.array([wall.r(float(x)) for x in wall_x]),
+        ]),
+        wall,
+        1.4,
+        x_scale=Ln,
+        r_scale=Re,
+        tol=1e-2,
+    )
+    assert isinstance(report.bad_rows, list)
+    assert math.isfinite(report.cplus_rms)
+    assert math.isfinite(report.cminus_rms)
+    assert math.isfinite(report.wall_boundary_dr_rms)
+
+
+def test_moc_net_report_passes_on_self_generated_net():
+    gamma = 1.4
+    r0 = 0.010
+    r1 = 0.040
+    n_start = 6
+    starting = [
+        _make_point(
+            x=0.002 * t,
+            r=r0 + (r1 - r0) * t,
+            theta=math.radians(10.0 * t),
+            M=3.0 + 0.5 * t,
+            gamma=gamma,
+        )
+        for t in np.linspace(0.0, 1.0, n_start)
+    ]
+    wall_x0 = 0.005
+    wall_x1 = 0.080
+    wall_r0 = r1 + 0.005
+    wall_r1 = wall_r0 + math.tan(math.radians(5.0)) * (wall_x1 - wall_x0)
+    wall = SplineWall(
+        np.array([wall_x0, wall_x1]),
+        np.array([wall_r0, wall_r1]),
+        slope_start=math.tan(math.radians(5.0)),
+        slope_end=math.tan(math.radians(5.0)),
+    )
+
+    rows = march_coupled_net(starting, wall, gamma, max_rows=3)
+    wall_x = np.linspace(wall.x_start, wall.x_end, 32)
+    solved_wall = np.column_stack([
+        wall_x,
+        np.array([wall.r(float(x)) for x in wall_x]),
+    ])
+
+    links = characteristic_net_links(rows)
+    report = moc_net_compatibility_report(
+        rows,
+        solved_wall,
+        wall,
+        gamma,
+        x_scale=wall_x1 - wall_x0,
+        r_scale=wall_r1,
+        tol=2e-2,
+    )
+
+    assert len(links["cplus"]) > 0
+    assert len(links["cminus"]) > 0
+    assert len(characteristic_net_segments(rows)) == len(links["cplus"]) + len(links["cminus"])
+    assert report.passes is True
+    assert report.cplus_rms < 1e-5
+    assert report.cminus_rms < 2e-2
+    assert report.intersection_rms < 1e-5
+    assert report.crossings == 0
+    assert report.bad_rows == []
+
+
+def test_coupled_wall_strip_uses_cminus_family():
+    cfg = RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=400,
+        residual_tol=5e-3,
+        evaluate_moc=False,
+    )
+    solution = solve_rao_bvp(cfg)
+    wall, diagnostics = solve_wall_from_ce_coupled(
+        solution.control_surface,
+        cfg,
+        n_wall=16,
+    )
+
+    idx = len(wall) // 2
+    tau = float(diagnostics["ce_source_tau"][idx])
+    p_ce = _ce_interp_node(solution.control_surface, tau)
+    p_w = FlowNode(
+        x=float(wall[idx, 0]),
+        r=float(wall[idx, 1]),
+        M=max(float(diagnostics["wall_mach"][idx]), 1.001),
+        theta=float(diagnostics["wall_theta"][idx]),
+    )
+    r_plus = abs(residual_Cplus_axisym(p_ce, p_w, cfg.gamma))
+    r_minus = abs(residual_Cminus_axisym(p_ce, p_w, cfg.gamma))
+
+    assert diagnostics["wall_strip_success"] is True
+    assert r_minus / math.radians(1.0) < 1e-2
+    assert r_minus < r_plus
+
+
+def test_phase_27_reference_reports_forward_net_failure_precisely():
+    cfg = RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=1000,
+        residual_tol=5e-3,
+        evaluate_moc=True,
+        wall_method="coupled",
+    )
+
+    solution = solve_rao_bvp(cfg)
+    diagnostics = solution.construction_diagnostics
+    report = diagnostics["net_report"]
+
+    assert solution.residuals.max_scaled < 1e-8
+    assert diagnostics["wall_strip_success"] is True
+    assert diagnostics["endpoint_dx"] == pytest.approx(0.0, abs=1e-12)
+    assert diagnostics["endpoint_dr"] == pytest.approx(0.0, abs=1e-12)
+    assert diagnostics["wall_tangency_rms"] < math.radians(0.25)
+    assert diagnostics["clamp_hits"] == 0
+    assert diagnostics["nonmonotonic_x_drops"] == 0
+    assert diagnostics["moc_compatibility_preserved"] is False
+    assert report["passes"] is False
+    assert report["cplus_rms"] >= 0.0
+    assert report["cminus_rms"] >= 0.0
+    assert report["intersection_rms"] >= 0.0
+    assert report["wall_boundary_dr_rms"] >= 0.0
+    assert isinstance(report["bad_rows"], list)

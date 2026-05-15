@@ -61,7 +61,11 @@ from raosim.moc import (
     sample_exit_plane,
     compute_exit_thrust,
 )
-from raosim.rao_residuals import residual_Cminus_axisym, residual_Cplus_axisym
+from raosim.rao_residuals import (
+    residual_Cminus_axisym,
+    residual_Cplus_axisym,
+    residual_intersection,
+)
 from raosim.validation import add_contour_reliability_metadata
 from raosim.wall_model import SplineWall
 
@@ -251,6 +255,19 @@ class MOCNetCompatibilityReport:
             "bad_rows": list(self.bad_rows),
             "passes": self.passes,
         }
+
+
+@dataclass(frozen=True)
+class MOCNetLink:
+    """One explicit parent-child edge in a marched MOC net."""
+
+    row: int
+    family: str
+    role: str
+    parent: CharPoint
+    child: CharPoint
+    parent_index: int
+    child_index: int
 
 
 @dataclass
@@ -1758,6 +1775,9 @@ def solve_wall_from_ce_coupled(
         "tau_monotonic_violations": int(np.sum(np.diff(tau) < -1e-10)),
         "clamp_hits": 0,
         "nonmonotonic_x_drops": 0,
+        "ce_source_tau": tau.tolist(),
+        "wall_mach": M_wall.tolist(),
+        "wall_theta": theta_wall.tolist(),
         "warnings": [],
     }
     diagnostics["wall_strip_success"] = bool(strip_success)
@@ -1843,6 +1863,88 @@ def _wall_tangency_rms(raw_wall: np.ndarray, ce: ControlSurface) -> float | None
     return float(np.sqrt(np.mean((wall_theta - ce_theta) ** 2)))
 
 
+def characteristic_net_links(rows: list[CharRow]) -> dict[str, list[MOCNetLink]]:
+    """
+    Return explicit characteristic-family links from a marched MOC net.
+
+    ``CharRow.all_points()`` is only a row ordering convenience.  The true
+    topology is the parent-child construction used by ``march_coupled_net``:
+    interior points are C+ from the lower parent and C- from the upper parent,
+    axis points are C- symmetry hits, and wall points are C+ wall hits.
+    """
+    links: dict[str, list[MOCNetLink]] = {
+        "cplus": [],
+        "cminus": [],
+        "axis": [],
+        "wall": [],
+    }
+    if len(rows) < 2:
+        return links
+
+    prev_pts = rows[0].all_points()
+    for row_idx, row in enumerate(rows[1:], start=1):
+        curr_pts = row.all_points()
+        if not prev_pts or not curr_pts:
+            prev_pts = curr_pts
+            continue
+
+        child_offset = 1 if row.axis is not None else 0
+
+        if row.axis is not None:
+            parent_idx = 1 if len(prev_pts) > 1 and prev_pts[0].r < 1e-10 else 0
+            if parent_idx < len(prev_pts):
+                link = MOCNetLink(
+                    row=row_idx,
+                    family="cminus",
+                    role="axis",
+                    parent=prev_pts[parent_idx],
+                    child=row.axis,
+                    parent_index=parent_idx,
+                    child_index=0,
+                )
+                links["cminus"].append(link)
+                links["axis"].append(link)
+
+        for j, child in enumerate(row.interior):
+            if j + 1 >= len(prev_pts):
+                break
+            links["cplus"].append(MOCNetLink(
+                row=row_idx,
+                family="cplus",
+                role="interior",
+                parent=prev_pts[j],
+                child=child,
+                parent_index=j,
+                child_index=child_offset + j,
+            ))
+            links["cminus"].append(MOCNetLink(
+                row=row_idx,
+                family="cminus",
+                role="interior",
+                parent=prev_pts[j + 1],
+                child=child,
+                parent_index=j + 1,
+                child_index=child_offset + j,
+            ))
+
+        if row.wall is not None and len(prev_pts) >= 2:
+            link = MOCNetLink(
+                row=row_idx,
+                family="cplus",
+                role="wall",
+                parent=prev_pts[-2],
+                child=row.wall,
+                parent_index=len(prev_pts) - 2,
+                child_index=len(curr_pts) - 1,
+            )
+            links["cplus"].append(link)
+            links["wall"].append(link)
+
+        prev_pts = curr_pts
+
+    return links
+
+
 def characteristic_net_compatibility_residuals(
     rows: list[CharRow],
     gamma: float,
@@ -1855,51 +1957,32 @@ def characteristic_net_compatibility_residuals(
       - interior children are C+ from lower parent and C- from upper parent,
       - wall child is reached by C+ from the near-wall parent.
     """
-    cplus: list[float] = []
-    cminus: list[float] = []
-    if len(rows) < 2:
-        return {"cplus": np.zeros(0), "cminus": np.zeros(0)}
-
-    prev_pts = rows[0].all_points()
-    for row in rows[1:]:
-        curr_pts = row.all_points()
-        if not prev_pts or not curr_pts:
-            prev_pts = curr_pts
-            continue
-
-        if row.axis is not None:
-            parent_idx = 1 if len(prev_pts) > 1 and prev_pts[0].r < 1e-10 else 0
-            if parent_idx < len(prev_pts):
-                cminus.append(residual_Cminus_axisym(
-                    prev_pts[parent_idx].to_flow_node(),
-                    row.axis.to_flow_node(),
-                    gamma,
-                ))
-
-        for j, child in enumerate(row.interior):
-            if j + 1 >= len(prev_pts):
-                break
-            p_plus = prev_pts[j]
-            p_minus = prev_pts[j + 1]
-            cplus.append(residual_Cplus_axisym(
-                p_plus.to_flow_node(), child.to_flow_node(), gamma
-            ))
-            cminus.append(residual_Cminus_axisym(
-                p_minus.to_flow_node(), child.to_flow_node(), gamma
-            ))
-
-        if row.wall is not None and len(prev_pts) >= 2:
-            cplus.append(residual_Cplus_axisym(
-                prev_pts[-2].to_flow_node(), row.wall.to_flow_node(), gamma
-            ))
-
-        prev_pts = curr_pts
-
+    links = characteristic_net_links(rows)
     scale = math.radians(1.0)
     return {
-        "cplus": np.asarray(cplus, dtype=float) / scale,
-        "cminus": np.asarray(cminus, dtype=float) / scale,
+        "cplus": np.asarray([
+            residual_Cplus_axisym(
+                link.parent.to_flow_node(), link.child.to_flow_node(), gamma
+            )
+            for link in links["cplus"]
+        ], dtype=float) / scale,
+        "cminus": np.asarray([
+            residual_Cminus_axisym(
+                link.parent.to_flow_node(), link.child.to_flow_node(), gamma
+            )
+            for link in links["cminus"]
+        ], dtype=float) / scale,
     }
+
+
+def _rms(values: np.ndarray) -> float:
+    arr = np.asarray(values, dtype=float)
+    return float(np.sqrt(np.mean(arr**2))) if arr.size else 0.0
+
+
+def _maxabs(values: np.ndarray) -> float:
+    arr = np.asarray(values, dtype=float)
+    return float(np.max(np.abs(arr))) if arr.size else 0.0
 
 
 def summarize_characteristic_net_compatibility(
@@ -1914,6 +1997,125 @@ def summarize_characteristic_net_compatibility(
     ]
 
 
+def moc_net_compatibility_report(
+    rows: list[CharRow],
+    solved_wall: np.ndarray,
+    wall: SplineWall,
+    gamma: float,
+    *,
+    x_scale: float,
+    r_scale: float,
+    tol: float,
+) -> MOCNetCompatibilityReport:
+    """Build a detailed compatibility report for a forward MOC net."""
+    links = characteristic_net_links(rows)
+    compat = characteristic_net_compatibility_residuals(rows, gamma)
+    cplus = compat["cplus"]
+    cminus = compat["cminus"]
+
+    intersection: list[float] = []
+    wall_tangency: list[float] = []
+    wall_dx: list[float] = []
+    wall_dr: list[float] = []
+    bad_rows: set[int] = set()
+
+    for link, value in zip(links["cplus"], cplus):
+        if abs(float(value)) > tol:
+            bad_rows.add(link.row)
+    for link, value in zip(links["cminus"], cminus):
+        if abs(float(value)) > tol:
+            bad_rows.add(link.row)
+
+    prev_pts = rows[0].all_points() if rows else []
+    for row_idx, row in enumerate(rows[1:], start=1):
+        curr_pts = row.all_points()
+        row_residuals: list[float] = []
+
+        for j, child in enumerate(row.interior):
+            if j + 1 >= len(prev_pts):
+                continue
+            geom = residual_intersection(
+                prev_pts[j].to_flow_node(),
+                prev_pts[j + 1].to_flow_node(),
+                child.to_flow_node(),
+                x_scale,
+                r_scale,
+            )
+            intersection.extend(geom.tolist())
+            row_residuals.extend(np.abs(geom).tolist())
+
+        if row.wall is not None:
+            boundary_dr = (row.wall.r - wall.r(row.wall.x)) / max(r_scale, 1e-12)
+            wall_dr.append(boundary_dr)
+            wall_t = (row.wall.theta - wall.theta(row.wall.x)) / math.radians(1.0)
+            wall_tangency.append(wall_t)
+            row_residuals.extend([abs(boundary_dr), abs(wall_t)])
+
+        if row_residuals and max(row_residuals) > tol:
+            bad_rows.add(row_idx)
+        prev_pts = curr_pts
+
+    valid_rows = [
+        row for row in rows[1:]
+        if row.wall is not None and math.isfinite(row.wall.x) and math.isfinite(row.wall.r)
+    ]
+    if valid_rows and solved_wall.size:
+        solved_x = np.asarray(solved_wall[:, 0], dtype=float)
+        solved_r = np.asarray(solved_wall[:, 1], dtype=float)
+        solved_order = np.argsort(solved_x)
+        solved_x = solved_x[solved_order]
+        solved_r = solved_r[solved_order]
+        for row in valid_rows:
+            wx = float(row.wall.x)
+            if wx < solved_x[0] or wx > solved_x[-1]:
+                boundary_dx = min(abs(wx - solved_x[0]), abs(wx - solved_x[-1])) / max(x_scale, 1e-12)
+                boundary_dr = abs(float(row.wall.r) - float(np.interp(
+                    np.clip(wx, solved_x[0], solved_x[-1]), solved_x, solved_r
+                ))) / max(r_scale, 1e-12)
+            else:
+                boundary_dx = 0.0
+                boundary_dr = (float(row.wall.r) - float(np.interp(wx, solved_x, solved_r))) / max(r_scale, 1e-12)
+            wall_dx.append(boundary_dx)
+            wall_dr.append(boundary_dr)
+
+    crossing_count = check_characteristic_crossing(rows)
+    cplus_max = _maxabs(cplus)
+    cminus_max = _maxabs(cminus)
+    intersection_arr = np.asarray(intersection, dtype=float)
+    wall_dx_arr = np.asarray(wall_dx, dtype=float)
+    wall_dr_arr = np.asarray(wall_dr, dtype=float)
+    wall_boundary = np.concatenate([wall_dx_arr, wall_dr_arr]) if (wall_dx_arr.size or wall_dr_arr.size) else np.zeros(0)
+    wall_t_arr = np.asarray(wall_tangency, dtype=float)
+
+    passes = (
+        cplus_max <= tol
+        and cminus_max <= tol
+        and _maxabs(intersection_arr) <= tol
+        and _maxabs(wall_boundary) <= tol
+        and _maxabs(wall_t_arr) <= tol
+        and crossing_count == 0
+        and not bad_rows
+    )
+    return MOCNetCompatibilityReport(
+        cplus_rms=_rms(cplus),
+        cminus_rms=_rms(cminus),
+        cplus_max=cplus_max,
+        cminus_max=cminus_max,
+        intersection_rms=_rms(intersection_arr),
+        intersection_max=_maxabs(intersection_arr),
+        wall_boundary_rms=_rms(wall_boundary),
+        wall_boundary_dx_rms=_rms(wall_dx_arr),
+        wall_boundary_dr_rms=_rms(wall_dr_arr),
+        wall_boundary_dx_max=_maxabs(wall_dx_arr),
+        wall_boundary_dr_max=_maxabs(wall_dr_arr),
+        wall_tangency_rms=_rms(wall_t_arr),
+        wall_tangency_max=_maxabs(wall_t_arr),
+        crossings=crossing_count,
+        bad_rows=sorted(bad_rows),
+        passes=bool(passes),
+    )
+
+
 def _segments_intersect(a: np.ndarray, b: np.ndarray,
                         c: np.ndarray, d: np.ndarray) -> bool:
     def orient(p, q, r):
@@ -1926,19 +2128,51 @@ def _segments_intersect(a: np.ndarray, b: np.ndarray,
     return (o1 * o2 < 0.0) and (o3 * o4 < 0.0)
 
 
+def characteristic_net_segments(
+    rows: list[CharRow],
+    *,
+    families: tuple[str, ...] = ("cplus", "cminus"),
+) -> list[MOCNetLink]:
+    """Return true characteristic segments, grouped by explicit topology."""
+    links = characteristic_net_links(rows)
+    segments: list[MOCNetLink] = []
+    for family in families:
+        segments.extend(links.get(family, []))
+    return segments
+
+
+def _same_net_point(a: CharPoint, b: CharPoint, tol: float = 1e-12) -> bool:
+    return a is b or math.hypot(a.x - b.x, a.r - b.r) <= tol
+
+
+def _links_share_endpoint(a: MOCNetLink, b: MOCNetLink) -> bool:
+    return (
+        _same_net_point(a.parent, b.parent)
+        or _same_net_point(a.parent, b.child)
+        or _same_net_point(a.child, b.parent)
+        or _same_net_point(a.child, b.child)
+    )
+
+
 def check_characteristic_crossing(rows: list[CharRow]) -> int:
-    """Count geometric crossings between characteristic-net segments."""
-    segments: list[tuple[np.ndarray, np.ndarray]] = []
-    for row in rows:
-        pts = row.all_points()
-        for a, b in zip(pts[:-1], pts[1:]):
-            segments.append((np.array([a.x, a.r]), np.array([b.x, b.r])))
+    """Count crossings between true C+/C- characteristic segments."""
+    segments = characteristic_net_segments(rows)
     crossings = 0
-    for i, (a, b) in enumerate(segments):
-        for j in range(i + 1, len(segments)):
-            if abs(i - j) <= 1:
+    points: list[tuple[np.ndarray, np.ndarray]] = []
+    kept_segments: list[MOCNetLink] = []
+    for segment in segments:
+        a = np.array([segment.parent.x, segment.parent.r], dtype=float)
+        b = np.array([segment.child.x, segment.child.r], dtype=float)
+        if np.linalg.norm(b - a) <= 1e-14:
+            continue
+        points.append((a, b))
+        kept_segments.append(segment)
+
+    for i, (a, b) in enumerate(points):
+        for j in range(i + 1, len(points)):
+            if _links_share_endpoint(kept_segments[i], kept_segments[j]):
                 continue
-            c, d = segments[j]
+            c, d = points[j]
             if _segments_intersect(a, b, c, d):
                 crossings += 1
     return crossings
@@ -2090,7 +2324,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     char_net, config.gamma
                 )
                 construction_diagnostics["net_compatibility"] = net_compatibility
-                if any(item["max"] > config.residual_tol for item in net_compatibility):
+                net_report = moc_net_compatibility_report(
+                    char_net,
+                    raw_wall,
+                    wall,
+                    config.gamma,
+                    x_scale=max(L_target - Nx, 1e-12),
+                    r_scale=max(Re, 1e-12),
+                    tol=config.residual_tol,
+                )
+                construction_diagnostics["net_report"] = net_report.to_dict()
+                if not net_report.passes:
                     construction_diagnostics["moc_compatibility_preserved"] = False
                     construction_diagnostics.setdefault("warnings", []).append(
                         "Forward MOC net compatibility residuals exceeded tolerance."

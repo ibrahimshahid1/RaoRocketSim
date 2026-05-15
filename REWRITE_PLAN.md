@@ -447,6 +447,40 @@ the other model citing it. The repo's own `moc.py:18-23` already encodes
 the Anderson axisymmetric Q± formulas correctly — those are the
 ground truth for §2.A.
 
+**NASA reference code — `Three-Dimensional-Nozzle-Design-Code-master/`
+is now in this repo.** It is the JHU/APL "MOC_Grid_BDE" toolset
+(Rice, T., *2D and 3D Method of Characteristic Tools for Complex
+Nozzle Development*, JHU/APL Report RTDC-TPS-481, 2003 — that is your
+`propulsion_texts/20030067852.pdf`, by the way). The MOC core is in
+plain C++ (3754 lines in `MOC_GridCalc_BDE.cpp`); MFC dependencies are
+limited to GUI wrappers (`StdAfx.h`, `Chart.h`, `dummyStruct.h`).
+The class exposes exactly the topology we are missing:
+
+| NASA function | What it computes |
+|---|---|
+| `CalcInitialThroatLine` (line 2805) | Initial data line TT' on the throat arc |
+| `KLThroat` (line 3103) | **Full Kliegel-Levine 1969 in toroidal coords through 3rd order** — explicit polynomial coefficients for both AXI and TWOD |
+| `Sauer` (line 3054) | Modified Sauer transonic (axi + planar) — what your current `'hall'` actually is |
+| `CalcMdotBD(j, xD)` (line 1436) | Mass flow integrated from wall down to point D on RRC `j` — exactly the integral §2.D needs |
+| `CalcLRCDE` (line 1472) | The LRC DE construction (i.e. the Rao control surface), secant-iterated on `xD` so mass(BD)=mass(DE) |
+| `FindPointE` (line 1764) | Given D and the BD mass flow, integrate forward along the LRC until mass matches |
+| `CalcDE` (line 3638) | Outer DE construction driver |
+| `CalcBDERegion` (line 3258) | The BDE strip (region inside the kernel triangle) |
+| `CalcWallContour` (line 1167) | Final wall extraction from BDE / streamline trace |
+| `SetThetaB` (line 3718) | Secant iteration on initial expansion angle θ_B |
+| `RungeKuttaFehlberg` (line 3458) | RK4(5) integration along characteristics |
+| `OutputTDKRAODataFile` | Writes `rao.dat` in TDK-compatible format |
+
+Sample outputs in `MOC_Grid_BDE/outputs_M3.5Perf/` (Mach 3.5 perfect
+nozzle, axi, γ=1.4, R*=1, P0=500 psia) include `wall.out`,
+`center.out`, `summary.out`, `MOC_Grid.plt`, `MOC_SL.plt`,
+`TT'BF_Kernel.out`, `BFE_Kernel.out`, `ThetaB.out`, `rao.dat`,
+`axis_i.out`, `wall_i.out`, `UncroppedKernel.out`, `LastKernel.out` —
+these become **immediate, free, bit-comparable regression targets**.
+
+This NASA code is the single biggest piece of leverage available to
+this project. Phase 12 (§13 below) lays out how to use it.
+
 ---
 
 ## 4. Phased implementation plan
@@ -646,6 +680,11 @@ Goal: earn the right to call any of this `BENCHMARK_VALIDATED`.
 | 6 | `test_no_postprocessing_on_chart_sweep` | `tests/test_rao_variational_moc.py` |
 | 7 | `test_rao_chart_benchmark_full_grid` | `tests/test_rao_chart_benchmark.py` (new, `@slow`) |
 | 8 | `test_deprecation_warning_rao_variational_contour`, `test_deprecation_warning_optimize_wall` | `tests/test_deprecations.py` (new) |
+| 9 | `test_kl_throat_matches_nasa_axis_mach`, `test_kl_reduces_to_1d_in_large_Rc_limit`, `test_kl_vs_cuffel_back_massier_1969` | `tests/test_transonic_kernel.py` (new) |
+| 10 | `test_constant_gamma_matches_existing_prandtl_meyer`, `test_frozen_cea_recovers_constant_gamma_in_limit`, `test_shifting_equilibrium_bartz_higher_than_chamber_frozen` | `tests/test_thermo.py` (new) |
+| 11 | `test_su2_axisymmetric_cf_within_half_percent` | `tests/test_cfd_su2.py` (new, `@cfd`) |
+| 12 | `test_legacy_io_parses_M3.5Perf_outputs`, `test_python_port_matches_nasa_wall_out_rms_1e3`, `test_topology_objects_present_after_solve` | `tests/test_legacy_io.py`, `tests/test_nasa_port.py` (new) |
+| 13 | `test_plot_characteristic_net_smoke`, `test_plot_geometry_raw_vs_export_differs`, `test_plot_nasa_overlay_runs` | `tests/test_plotting.py` (new) |
 
 Run `pytest -m "not slow"` in CI; the chart benchmark runs nightly /
 on release.
@@ -674,14 +713,22 @@ hope.
 
 ## 7. Order of work — what to do first
 
+**Pre-Phase 1 (one evening):** do the NASA legacy audit (§13.1) and
+the topology map (§13.2). These cost almost nothing and they unblock
+everything: you stop guessing what "B, BF, D, BD, DE, E" mean and
+start matching every later phase against a known reference.
+
 If you only have a weekend, do Phase 1 (honest naming + reliability gates +
 no-silent-postprocess) and Phase 2 (axisymmetric compatibility residuals).
 Those two together neutralize the most dangerous failure mode (silent
 emission of a non-Rao contour) without requiring the algebraic Rao math
-to land yet.
+to land yet. Also land §14.1 (the characteristic-net plot) — without
+visual diagnostics, every later phase ships blind.
 
-If you have a week, add Phase 3 (algebraic stationarity + left-Mach-line).
-That is where the contour actually starts to match published Rao results.
+If you have a week, add Phase 3 (algebraic stationarity + left-Mach-line),
+Phase 4 (mass closure — port `CalcMdotBD` / `FindPointE` from the NASA
+C++ as the reference implementation, see §13.7), and §14.2 (Mach-colored
+flowfield plot).
 
 If you have a month, do everything through Phase 7 and ship the chart
 benchmark. At that point — and only at that point — the
@@ -690,6 +737,10 @@ generator. Until then, the contour is a "Rao-flavored variational guess"
 and should be labeled as such (which the current `design_status =
 "experimental_rao_variational_moc_bvp"` already does, but most users
 will not read).
+
+The NASA repo (§13) cuts most of these timelines in half. The
+`outputs_M3.5Perf/` reference case is a free oracle — every port can
+be compared to it without writing a benchmark from scratch.
 
 ---
 
@@ -724,28 +775,70 @@ used `1/R`; the KL reformulation extends convergence down to small R
 and removes a sign error in Hall's third-order term):
 
 ```
-u/a* = 1 +  A1(r,z;γ) / (R+1)   +  A2(r,z;γ) / (R+1)²  +  A3(r,z;γ) / (R+1)³
-v/a* =      B1(r,z;γ) / (R+1)   +  B2(r,z;γ) / (R+1)²  +  B3(r,z;γ) / (R+1)³
+u/a* = 1 +  u1/(R+1) + (u1 + u2)/(R+1)²  + (u1 + 2u2 + u3)/(R+1)³
+v/a* = √((γ+1)/(2(R+1))) · [ v1/(R+1) + (1.5 v1 + v2)/(R+1)² + ((15/8) v1 + 2.5 v2 + v3)/(R+1)³ ]
 ```
 
-The explicit polynomial coefficients `A1..A3, B1..B3` are tabulated in:
+where `u1, u2, u3, v1, v2, v3` are polynomial in `(y, z; γ)` with
+`y = r/Rt` and `z = x · √(2 Rc/(γ+1))` (toroidal coordinate, Hall Eq. 12).
 
-- **Zucrow & Hoffman, *Gas Dynamics Vol. 2*, Ch. 16** — coefficient-by-
-  coefficient through third order. Primary source.
-- **Östlund, KTH thesis 2002** (this is your `fulltext01.pdf`) —
-  reproduces the Kliegel-Levine coefficients. **Use as primary source
-  because it is in the repo's literature folder.**
-- **Kliegel & Levine, *AIAA Journal* 7(7) 1375-1378, 1969**, DOI
-  10.2514/3.5355 — the original paper. Open-access PDF:
-  <https://arc.aiaa.org/doi/pdf/10.2514/3.5355>
-- **Kliegel NTRS report AED-R-71-10** —
+**Use the NASA `KLThroat` source directly.** The full coefficient
+expansion is in `Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/MOC_GridCalc_BDE.cpp:3103-3178`.
+For axisymmetric flow, the coefficients literally are:
+
+```cpp
+// From NASA MOC_GridCalc_BDE.cpp, KLThroat, AXI branch, lines 3122-3135
+u[1] = y*y/2 - 0.25 + z;
+v[1] = y*y*y/4 - y/4 + y*z;
+u[2] = (2*G + 9)*y*y*y*y/24 - (4*G + 15)*y*y/24 + (10*G + 57)/288
+     + z*(y*y - 5/8) - (2*G - 3)*z*z/6;
+v[2] = (G + 3)*y*y*y*y*y/9 - (20*G + 63)*y*y*y/96 + (28*G + 93)*y/288
+     + z*((2*G + 9)*y*y*y/6 - (4*G + 15)*y/12) + y*z*z;
+u[3] = (556*G*G + 1737*G + 3069)*y*y*y*y*y*y/10368
+     - (388*G*G + 1161*G + 1881)*y*y*y*y/2304
+     + (304*G*G + 831*G + 1242)*y*y/1728
+     - (2708*G*G + 7839*G + 14211)/82944
+     + z*((52*G*G + 51*G + 327)*y*y*y*y/34
+          - (52*G*G + 75*G + 279)*y*y/192
+          + (92*G*G + 180*G + 639)/1152)
+     + z*z*(-(7*G - 3)*y*y/8 + (13*G - 27)/48)
+     + (4*G*G - 57*G + 27)*z*z*z/144;
+v[3] = ...  // see lines 3131-3135 — note: line 3133 contains a typo
+            // in the NASA source (`*` where `+` is intended); cross-
+            // check against Hall 1962 Eq. 5.7 or Kliegel-Levine 1969
+            // Table 1 when porting.
+```
+
+**Critical: the NASA file at line 3133 contains a typo** — the
+expression for `v[3]` has `*(388*G*G + 1161*G + 1181)*y*y` where it
+should be `+ (388*G*G + 1161*G + 1881)*y*y/576`. Cross-check the
+TWOD branch on line 3157 for the same typo (it appears there too).
+Use Kliegel-Levine 1969 Table 1 or Östlund §3 as the disambiguator.
+**Document the typo correction in the docstring of the Python port.**
+
+Secondary references for cross-validation:
+
+- **Zucrow & Hoffman, *Gas Dynamics Vol. 2*, Ch. 16** — full coefficient
+  table, primary textbook source.
+- **Östlund, KTH thesis 2002** (your `fulltext01.pdf`) — reproduces the
+  Kliegel-Levine coefficients in §3.
+- **Kliegel & Levine 1969, AIAA J. 7(7) 1375-1378**, DOI 10.2514/3.5355.
+  Open access: <https://arc.aiaa.org/doi/pdf/10.2514/3.5355>
+- **Kliegel NTRS AED-R-71-10**:
   <https://ntrs.nasa.gov/api/citations/19710024785/downloads/19710024785.pdf>
-- **Sivells AEDC nozzle design code documentation** (DTIC ADA062944) —
-  the FORTRAN parent of most modern MOC nozzle codes; contains an
-  explicit Hall/KL kernel.
+- **Sivells AEDC nozzle code (DTIC ADA062944)** — FORTRAN parent of
+  most modern MOC codes.
 
-A Python reference port worth diffing against:
-<https://github.com/noahess/conturpy> (port of Sivells' Contur).
+A reference Python port to diff against:
+<https://github.com/noahess/conturpy>.
+
+The NASA `Sauer` (lines 3054-3098) is **also worth porting** as a
+fast subsonic fallback for the throat plane. It is what NASA uses
+when KLThroat fails (subsonic initial line, see line 3173). Keep the
+current `'hall'` method renamed to `'sauer_modified'` since that is
+what it actually implements (look at `moc.py:371-374` — the formulas
+match NASA's `Sauer` lines 3073-3076, AXI branch, with simplified
+coefficients).
 
 ### 8.2 Implementation plan
 
@@ -1146,35 +1239,580 @@ Otherwise reliability stays at `BENCHMARK_VALIDATED` or lower.
 
 ---
 
-## 11. Updated reliability ladder
+## 11. Phase 12 — NASA MOC_Grid_BDE integration (the canonical reference)
 
-After phases 1-11, the `ContourReliability` enum at
+The NASA Three-Dimensional-Nozzle-Design-Code from JHU/APL gives us
+something rare: a **published, end-to-end Rao optimum-thrust MOC
+implementation in source form, with sample outputs**. Every later
+phase of this rewrite (algebraic stationarity, mass closure, valid
+region, coupled wall) becomes much cheaper to validate when we can
+compare directly against this reference. This whole section is the
+prior model's "Phase 1-12 legacy audit" plan, folded into the
+overall RaoRocketSim rewrite plan and adjusted to match what is
+actually in the NASA repo.
+
+### 11.1 Pre-work: file inventory and topology map (do this first)
+
+Deliverables:
+
+- `docs/nasa_jhu_file_list.txt` — output of
+  `find Three-Dimensional-Nozzle-Design-Code-master -type f`.
+- `docs/legacy_code_audit.md` — for each of the three NASA programs
+  (`MOC_Grid_BDE`, `STT2001`, `3D_MOC`), record:
+  - One-paragraph purpose statement (`MOC_Grid_BDE` is the only one
+    relevant to our 2D-axisymmetric path right now).
+  - File list grouped into: numerical core, MFC GUI wrappers, sample
+    outputs, project files (`.dsw`, `.rc`, `.odl`).
+  - Build dependencies (Visual Studio 6/2003 era MFC).
+  - Output file list and meaning of each file (`wall.out`, `center.out`,
+    `MOC_Grid.plt`, `TT'BF_Kernel.out`, `BFE_Kernel.out`, `rao.dat`,
+    `ThetaB.out`, `Summary.plt`, `axis_i.out`, `wall_i.out`,
+    `UncroppedKernel.out`, `LastKernel.out`).
+
+- `docs/rice_jhu_moc_topology_map.md` — the most important deliverable
+  in this section. A table mapping JHU/APL terminology to RaoRocketSim
+  objects. Initial fill-in (refine after reading Rice 2003 / your
+  `20030067852.pdf`):
+
+  | Rice/JHU term | Meaning | NASA function | RaoRocketSim status |
+  |---|---|---|---|
+  | TT' | Initial data line on throat arc | `CalcInitialThroatLine`, `KLThroat`, `Sauer` | `moc.approximate_starting_line` (weak; replace per Phase 9) |
+  | TB | Initial expansion arc, throat → B | `CalcRRCsAlongArc`, `CalcArcWallPoint` | partial; kernel seed only |
+  | B | End of expansion region (last LRC origin on wall arc) | `iBD, jBD` members | not explicitly represented |
+  | BF | Final RRC of the kernel triangle | array slice in `CalcLRCDE` | implicit in CE start |
+  | D | Selected point on BF for Rao construction | secant variable in `CalcLRCDE` | **missing**; currently `x_ce[0] = Nx + 0.05·(Ln−Nx)` heuristic |
+  | BD | Wall-to-D curve, used for mass-flow target | `CalcMdotBD(j, xD)` | **missing**; currently `_target_mdot = ρV*·A_t` quasi-1D |
+  | DE | Left-running characteristic D→E, the control surface | `CalcLRCDE`, `FindPointE` | our `ControlSurface`, but topology not verified |
+  | E | Nozzle exit point | endpoint of `FindPointE` integration | fixed at `(Ln, Re)` |
+  | B→E streamline | Final wall contour | `CalcWallContour` | `_construct_wall_from_ce` (sequential; replace per §2.F) |
+  | θ_B iteration | Outer secant on initial expansion angle | `SetThetaB` | none — fixed input |
+
+The Rice 2003 report (= your `propulsion_texts/20030067852.pdf`)
+explicitly states that **only one combination of initial expansion
+angle θ_B and point D satisfies all the constraints** for a Rao
+optimum-thrust nozzle solution. That is the topological reason your
+current CE-then-wall sequential construction can close *locally*
+while the forward characteristic net fails *globally* — your D is
+heuristic and your θ_B is not iterated.
+
+### 11.2 Phase 12.1 — Legacy I/O parsers (before any C++ binding)
+
+Build Python parsers for the NASA output formats **before** trying
+to compile or wrap the C++. This buys 80% of the reference value at
+20% of the cost.
+
+New module `raosim/legacy_io.py` with:
+
+```python
+def parse_wall_out(path: str) -> WallTable:
+    """
+    Parse NASA wall.out:
+        header: i  j  X/R*  R/R*  mach  theta(deg)  Pressure, psia
+        rows:   tab-separated floats
+    Returns a structured object with arrays.
+    """
+
+def parse_center_out(path: str) -> CenterlineTable:
+    """
+    Parse NASA center.out:
+        header line, then comment header, then tab-separated:
+        J  X/R*  R/R*  Mach  Pres  Temp  Rho  Theta  Gamma  MassFlow
+    """
+
+def parse_rao_dat(path: str) -> RaoDat:
+    """
+    Parse NASA rao.dat:
+        3 columns, space-or-tab separated.  Likely (X/R*, R/R*, theta_deg)
+        — verify against MOC_GridCalc_BDE_IO.cpp::OutputTDKRAODataFile
+        before relying.
+    """
+
+def parse_moc_grid_plt(path: str) -> MOCGridPlot:
+    """
+    Parse NASA MOC_Grid.plt — Tecplot ASCII format with
+    VARIABLES, ZONE I=, J=, headers.  Returns a 2D mesh.
+    """
+
+def parse_kernel_out(path: str) -> KernelTable:
+    """
+    Parse NASA TT'BF_Kernel.out / BFE_Kernel.out / UncroppedKernel.out
+    / LastKernel.out.  These give the kernel triangle topology
+    explicitly.
+    """
+
+def parse_thetaB_out(path: str) -> ThetaBHistory:
+    """
+    Parse ThetaB.out — the secant-method iteration history for
+    the outer initial-expansion-angle solve.  Each row is one
+    iteration: theta_B [deg], error.
+    """
+
+def parse_summary_out(path: str) -> SummaryReport:
+    """
+    Parse summary.out — solver summary including nozzle type,
+    geometry, design parameter, gamma, all derived constants,
+    and the final thrust coefficients (Cf, Cfg, CD, C*).
+    """
+```
+
+Each parser returns a small dataclass with numpy arrays and the
+provenance dict (file path, NASA version stamp from `summary.out`
+header).
+
+Test gate: `tests/test_legacy_io.py` parses every file in
+`MOC_Grid_BDE/outputs_M3.5Perf/`, validates row counts, and
+asserts that the first few rows match hand-typed truth values.
+
+### 11.3 Phase 12.2 — Comparison harness
+
+Deliverable: `scripts/compare_nasa_reference.py`
+
+```python
+def main():
+    # 1. Load NASA outputs_M3.5Perf via raosim.legacy_io
+    nasa_wall = parse_wall_out("...outputs_M3.5Perf/wall.out")
+    nasa_center = parse_center_out("...outputs_M3.5Perf/center.out")
+    nasa_summary = parse_summary_out("...outputs_M3.5Perf/summary.out")
+
+    # 2. Build an equivalent RaoSolverConfig from NASA's inputs.
+    #    Mach 3.5 perfect axi nozzle, γ=1.4, P0=500 psia, T0=530 R, MW=28.96,
+    #    R* = 1 in, Rup/R* = Rdown/R* = 1.
+    config = RaoSolverConfig(
+        Rt = 0.0254,            # 1 inch in meters
+        epsilon = mach_to_epsilon(3.5, 1.4),
+        gamma = 1.4,
+        # ... and configure the BVP to mimic NASA's "PERFECT" nozzleType
+    )
+    sol = solve_rao_bvp(config)
+
+    # 3. Diff
+    rms_x = rms(nasa_wall.x_over_Rstar - sol.wall_export[:, 0] / Rt)
+    rms_r = rms(nasa_wall.r_over_Rstar - sol.wall_export[:, 1] / Rt)
+    rms_M = rms(nasa_wall.mach - interp(sol.wall_x, sol.wall_M, nasa_wall.x))
+    rms_theta = rms(nasa_wall.theta - interp(sol.wall_x, sol.wall_theta, nasa_wall.x))
+    rms_p = rms(nasa_wall.pressure - interp(...))
+
+    # 4. Emit a diff report + plots into debug_outputs/nasa_comparison/
+    print(f"Wall x RMS: {rms_x:.4g}")
+    print(f"Wall r RMS: {rms_r:.4g}")
+    print(f"Wall M RMS: {rms_M:.4g}")
+    print(f"Wall theta RMS: {rms_theta:.4g}")
+    print(f"Wall pressure RMS: {rms_p:.4g}")
+```
+
+Add `debug_outputs/nasa_comparison/.gitkeep` so the directory persists
+in the repo without committing actual diff artifacts.
+
+The **first goal is to expose differences, not to make them small**.
+Do not gate any reliability flag on this comparison until Phases 1-6
+have landed.
+
+### 11.4 Phase 12.3 — Port-or-bind decision
+
+Three options. Choose one, document it in `docs/legacy_strategy.md`:
+
+**Option A: Reference-only, no binding (recommended starting point).**
+Treat the NASA outputs as ground-truth oracle. Use the comparison
+harness from §11.3 as the regression test. Re-implement the algorithm
+phase-by-phase in Python with the NASA source code visible as you
+write each piece. This is what the prior model called "Option A —
+No binding, just reference outputs." Risk: low. Time: bounded.
+
+**Option B: Subprocess runner.** If the NASA executable can be
+built on a Windows VM, wrap it in `raosim/legacy_runner.py`:
+
+```python
+def run_legacy_moc_case(case_dict, work_dir) -> dict:
+    """
+    Write NASA-format input file, invoke MOC_Grid_BDE.exe, parse outputs.
+    Requires Windows or wine. Returns parsed outputs.
+    """
+```
+
+Use case: generating new reference cases beyond the shipped
+`outputs_M3.5Perf/`. Risk: medium (MFC build, GitHub issue thread
+on the NASA repo mentions difficulty locating `main`; the project
+is MFC dialog-driven). Time: a few days of build-system pain.
+
+**Option C: pybind11 binding of the numerical core.** Extract the
+plain-C++ subset from `MOC_GridCalc_BDE.{h,cpp}`, `engineering_constants.hpp`,
+`Vector.hpp`, `Matrix.hpp` into a freestanding library. Stub or replace
+`StdAfx.h`, `dummyStruct.h`, `Chart.h`. Write a CMakeLists.txt.
+Wrap `MOC_GridCalc` with pybind11. Distribute as a Python extension.
+
+The NASA class is actually amenable to this: `MOC_GridCalc` itself
+has no MFC inside the math — calls to `AfxMessageBox` are limited
+to error reporting (e.g. line 3173, "Initial Data Line is subsonic")
+and can be replaced with C++ exceptions. The `dummyStruct.h` header
+defines a plain POD-with-array-members result type — replace with a
+proper `struct`. Risk: high (real C++ work, ~80-200 hours). Time:
+a few weeks. Payoff: the C++ code itself becomes a Python-importable
+module, the way the user originally asked.
+
+**Recommended path:** A first, then C if/when the Python port is fully
+validated and you want production-grade Rao without re-deriving every
+piece. B is not worth the effort; C dominates B as soon as A is in
+hand.
+
+### 11.5 Phase 12.4 — Algorithm port (Option A in detail)
+
+For each NASA function, write a Python equivalent in
+`raosim/nasa_moc.py`. Keep the same function name (with `snake_case`).
+Add an inline comment at the top of each function:
+
+```python
+def calc_mdot_bd(grid: MOCGrid, j: int, xD: float) -> float:
+    """
+    Mass flow from wall down to point D on RRC j.
+
+    Port of MOC_GridCalc::CalcMdotBD
+    (MOC_GridCalc_BDE.cpp:1436-1467, NASA/JHU 2003).
+    """
+```
+
+Priority order:
+
+1. **Sauer + KLThroat** — port lines 3054-3178. Verify against the
+   axis-Mach number in `outputs_M3.5Perf/wall.out` first column.
+   Test gate: `abs(M_python_at_axis - 1.17779) < 1e-4`.
+2. **CalcMu, CalcA, CalcB, Calcb, CalcR, CalcRStar, lDyDx, rDyDx,
+   TanAvg, MM, CalcPMFunction** — small math helpers (lines
+   2957-3052). Trivial ports; do as a batch.
+3. **CalcIsentropicP_T_RHO** — already exists in `gas_dynamics.py`
+   but the NASA version takes different units (psia + Rankine).
+   Add a units-adapter, not a re-port.
+4. **CalcRRCsAlongArc + CalcArcWallPoint** — the TB initial-
+   expansion arc construction (lines 1030, 835). This is the kernel
+   build. Port carefully.
+5. **CalcMdotBD** (line 1436) — small (32 lines). The integral
+   itself is just a piecewise-linear interpolation of pre-computed
+   `massflow[i][j]` values. The work is the mass-flow accumulation
+   loop in `CalcMassFlowAndThrustAlongMesh` (line 3183).
+6. **CalcLRCDE + FindPointE + RungeKutta + RungeKuttaFehlberg +
+   Deriv** (lines 1472, 1764, 3414, 3458, 3514) — the heart of the
+   Rao mass-closure inner loop. This is what replaces the
+   `_target_mdot` quasi-1D placeholder per §2.D.
+7. **CalcDE + CalcBDERegion + CalcRemainingMesh + CalcWallContour
+   + CropNozzleToLength** (lines 3638, 3258, 1122, 1167, 1341) —
+   the outer Rao construction.
+8. **SetThetaB** (line 3718) — outer secant on θ_B. This is what
+   replaces the fixed `thetaN_guess_deg` in `RaoSolverConfig`.
+9. **CalcContouredNozzle** (line 241) — the top-level driver.
+
+After this port, `raosim/nasa_moc.py` contains a Python class
+`MOCGridCalc` with the same public API as the C++ version. The
+existing `solve_rao_bvp` becomes a thin wrapper that builds an
+`MOCGridCalc`, calls `create_moc_grid()`, and shapes the result
+into a `RaoSolution`. The variational-residual block from earlier
+phases becomes an optional refinement layer on top of this.
+
+### 11.6 Phase 12.5 — Tests against NASA ground truth
+
+For each port, add a regression test in `tests/test_nasa_port.py`:
+
+```python
+@pytest.mark.parametrize("case", ["M3.5Perf"])
+def test_nasa_wall_match(case):
+    nasa_dir = REPO_ROOT / "Three-Dimensional-Nozzle-Design-Code-master" \
+                          / "MOC_Grid_BDE" / f"outputs_{case}"
+    nasa_wall = parse_wall_out(nasa_dir / "wall.out")
+    py_solution = run_python_port_for_case(case)
+    assert rms(py_solution.wall_x_over_Rstar - nasa_wall.x_over_Rstar) < 1e-3
+    assert rms(py_solution.wall_M - nasa_wall.M) < 1e-3
+```
+
+Initial tolerances should be loose (e.g. `1e-2`). Tighten phase by
+phase. The eventual target is `1e-4` relative on every wall quantity,
+which is bit-comparable given that NASA uses single-precision in
+some places.
+
+### 11.7 Phase 12.6 — Topology objects in the Python codebase
+
+After porting, formalize the topology in `raosim/moc_topology.py`:
+
+```python
+@dataclass
+class RaoTopology:
+    TT_prime: list[CharPoint]    # initial data line
+    B: CharPoint                  # end-of-expansion wall point
+    BF: list[CharPoint]           # final RRC of the kernel
+    D: CharPoint                  # selected point on BF
+    BD: list[CharPoint]           # mass-flow curve (wall to D on j_B)
+    DE: list[CharPoint]           # control surface (LRC from D to E)
+    E: CharPoint                  # nozzle exit point
+    streamline_BE: list[CharPoint]  # wall contour from B to E
+    theta_B: float                # outer-loop converged value
+    mass_BD: float
+    mass_DE: float                # must equal mass_BD at convergence
+```
+
+This is the "explicit objects" deliverable from the prior model's
+Phase 9. After this lands, `_construct_wall_from_ce` is deleted
+and the wall is the `streamline_BE` field of the topology object.
+
+### 11.8 Phase 12 test gate
+
+- All NASA output files in `outputs_M3.5Perf/` parse without error.
+- `compare_nasa_reference.py` runs and emits a difference report
+  (no tolerance yet).
+- After §11.5 ports land, RMS wall x/r/M/θ/p agreement with NASA
+  is within `1e-3` relative.
+- The `RaoTopology` object is the new internal representation; no
+  consumer of `solve_rao_bvp` reads `control_surface`, `wall_raw`,
+  etc. directly any more.
+
+---
+
+## 12. Phase 13 — Visualization and flowfield diagnostics
+
+The existing `raosim/plotting.py` (166 lines) has nozzle-2D / nozzle-3D /
+curvature plots. It does **not** have the diagnostic flowfield plots
+needed to debug the BVP / MOC / Rao construction. Add them.
+
+Without visual diagnostics, every phase of this rewrite ships blind —
+numeric residuals and "converged: True/False" are abstract. A plot
+turns "row 12 has cplus_rms = 3e-2" into "I can see row 12 folding
+into row 11 right at the throat exit." That is the difference between
+a half-day debug session and a week.
+
+### 12.1 Required plots
+
+Add to `raosim/plotting.py`:
+
+1. **`plot_nozzle_geometry(solution)`** — wall contour, axis, throat,
+   inflection N, exit E, with the convergent + throat arcs visible
+   separately so the seam at N is inspectable.
+
+2. **`plot_characteristic_net(solution)`** — wall + CE + kernel start
+   line + every characteristic in `solution.characteristic_net`. Use
+   separate line styles for C+ and C− families (solid vs dashed).
+   This is the **first plot to land** — single-handedly catches:
+   crossing characteristics, fold-over rows, CE/wall mismatch,
+   blown-up rows, weird kernel topology.
+
+3. **`plot_flowfield_mach(solution)`** — scatter every node in the
+   characteristic net colored by Mach number. Same axes overlay as
+   `plot_characteristic_net`.
+
+4. **`plot_flowfield_pressure(solution, gamma)`** — same, colored
+   by `p/p0` from `isentropic_pressure_ratio(M, gamma)`. Verifies
+   monotonic decrease downstream.
+
+5. **`plot_flowfield_theta(solution)`** — flow angle field. Verifies
+   exit alignment.
+
+6. **`plot_wall_distributions(solution)`** — three subplots stacked:
+   x vs wall Mach, x vs wall θ, x vs wall p/p0. This is what
+   propulsion engineers actually read.
+
+7. **`plot_exit_plane(solution)`** — r vs M(r), r vs θ(r), r vs p(r)
+   at the exit plane. Catches non-uniform exit profile, residual
+   turning, over/under-expansion.
+
+8. **`plot_net_diagnostics(solution)`** — characteristic net with
+   problematic links highlighted. Inputs:
+   - link RMS residuals from `RaoResidualReport`
+   - characteristic crossings from `check_characteristic_crossing`
+   - bad rows (where wall-tangency RMS or compatibility RMS exceeds
+     row-local tolerance)
+   Color the worst 5% of links in red; print the offending link
+   indices to stdout.
+
+9. **`plot_topology(rao_topology)`** — annotated overlay of TT', B,
+   BF, D, BD, DE, E onto the wall + characteristic net. Only valid
+   after Phase 12.7 lands.
+
+10. **NASA reference overlay plots** (`plot_nasa_overlay(solution,
+    nasa_outputs_dir)`). Loads NASA's `wall.out` / `center.out` via
+    `legacy_io` and overlays them as scatter markers on
+    `plot_wall_distributions` / `plot_flowfield_mach`. Direct visual
+    diff against the JHU/APL reference.
+
+### 12.2 Implementation outline
+
+```python
+# raosim/plotting.py
+
+def plot_characteristic_net(solution, ax=None, show_families=True):
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(10, 4))
+
+    # Wall (raw, NOT export — see §12.3 below)
+    wall = solution.wall_raw
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2, label="wall (raw)")
+
+    # CE
+    ce = solution.control_surface
+    ax.plot(getattr(ce, "x", []), ce.r, "--", label="control surface CE")
+
+    # Kernel starting line
+    if solution.kernel_points:
+        xk = [p.x for p in solution.kernel_points]
+        rk = [p.r for p in solution.kernel_points]
+        ax.plot(xk, rk, "o-", markersize=3, label="kernel / starting line")
+
+    # Characteristic rows
+    for row in solution.characteristic_net:
+        pts = row.all_points()
+        ax.plot([p.x for p in pts], [p.r for p in pts],
+                linewidth=0.5, color="C0", alpha=0.5)
+
+    ax.axhline(0.0, color="grey", linewidth=0.5)
+    ax.set_xlabel("x")
+    ax.set_ylabel("r")
+    ax.set_title("Characteristic net (raw)")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    return ax
+
+
+def plot_flowfield_mach(solution, ax=None, cmap="viridis"):
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(10, 4))
+
+    xs, rs, Ms = [], [], []
+    for row in solution.characteristic_net:
+        for p in row.all_points():
+            xs.append(p.x); rs.append(p.r); Ms.append(p.M)
+
+    sc = ax.scatter(xs, rs, c=Ms, s=12, cmap=cmap)
+    wall = solution.wall_raw
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2)
+    ax.axhline(0.0, color="grey", linewidth=0.5)
+    ax.set_aspect("equal", "box")
+    ax.set_xlabel("x")
+    ax.set_ylabel("r")
+    ax.set_title("Mach number field")
+    plt.colorbar(sc, ax=ax, label="Mach")
+    return ax
+```
+
+Once `RaoNetLink` topology lands (Phase 6 / 12.7), the
+`plot_characteristic_net` body should iterate over explicit
+`(parent, child, family)` links instead of `row.all_points()`,
+because naive row-adjacency lies once the net deforms.
+
+### 12.3 The raw-vs-export trap
+
+**Plots must default to raw, not exported, geometry.** The whole
+point of §2.F / §6 is to remove silent endpoint forcing and
+monotonic cleanup from the wall before plotting. If
+`plot_nozzle_geometry` falls through to `solution.wall_export`,
+it will hide exactly the kind of mismatch you need to see during
+debugging.
+
+Convention:
+
+```python
+def plot_nozzle_geometry(solution, *, geometry="raw", ax=None):
+    if geometry == "raw":
+        wall = solution.wall_raw
+        label = "wall (raw, BVP output)"
+    elif geometry == "export":
+        wall = solution.wall_export
+        label = "wall (export, post-processed)"
+    else:
+        raise ValueError(...)
+    # ... plot
+    ax.set_title(f"Nozzle geometry — {geometry}")
+```
+
+Default to `geometry="raw"`. Plotting export geometry without explicit
+opt-in repeats the exact silent-failure mode this rewrite is
+eliminating.
+
+### 12.4 Tests
+
+`tests/test_plotting.py`:
+
+1. Smoke tests — every plotting function runs to `Figure.savefig`
+   without raising on the (ε=10, length_pct=80) reference case.
+2. Geometry switch test — `plot_nozzle_geometry(sol, geometry="raw")`
+   draws different content from `plot_nozzle_geometry(sol, geometry="export")`
+   when the wall has been post-processed.
+3. NASA overlay test — `plot_nasa_overlay` runs without raising on
+   `outputs_M3.5Perf/` paths.
+
+Use `matplotlib.testing.compare.compare_images` against a small set
+of baseline PNGs for visual regression, but mark them
+`@pytest.mark.image` and skip in CI unless explicitly requested
+(image comparisons are flaky in headless CI).
+
+### 12.5 Phase 13 test gate
+
+- All ten plot functions render without error on the reference case.
+- `plot_net_diagnostics` correctly highlights at least one bad
+  link in a deliberately mis-converged solver run
+  (`max_nfev=0` initial-residual-only solution).
+- A `make plots` shortcut (or `python -m raosim.plotting <case>`)
+  regenerates the standard plot set into `debug_outputs/plots/`.
+
+---
+
+## 13. Updated reliability ladder
+
+After phases 1-13, the `ContourReliability` enum at
 `rao_variational.py:98` should mean:
 
 | Level | Required gates passed |
 |---|---|
 | `GEOMETRIC_APPROXIMATION` | Anything that doesn't satisfy `MOC_COMPATIBLE`. |
 | `MOC_COMPATIBLE` | Phase 1-2: no post-processing, no endpoint forcing, axisymmetric C±/Q± residuals < tol. |
-| `RAO_VARIATIONAL_RESIDUAL_SOLVED` | Phase 3-6: Rao algebraic stationarity + left-Mach-line + mass closure + valid-region + coupled wall. |
-| `BENCHMARK_VALIDATED` | Phase 7: chart sweep agrees with NASA RP-1104 within ±1.5° RMS. |
+| `RAO_VARIATIONAL_RESIDUAL_SOLVED` | Phase 3-6: Rao algebraic stationarity + left-Mach-line + mass closure + valid-region + coupled wall, AND topology objects (`B, BF, D, BD, DE, E`) present. |
+| `NASA_REFERENCE_MATCHED` *(new)* | Phase 12: RMS wall x/r/M/θ/p agreement with NASA `outputs_M3.5Perf/` better than 1e-3 relative. **This is the new gold standard for "matches the published Rao algorithm."** Use NASA outputs, not RP-1104 chart angles — the chart is interpolated, the NASA outputs are direct. |
+| `BENCHMARK_VALIDATED` | Phase 7: chart sweep over (ε, length_pct) agrees with NASA RP-1104 (your `19830016278.pdf`) within ±1.5° RMS on θ_N and θ_E. |
 | `CFD_CHECKED` | Phase 11: SU2 CFD comparison within 0.5% Cf, 3% wall p, 1% exit M. |
 | `EXPERIMENTALLY_VALIDATED` | Future work; requires hot-fire data. Not addressed in this plan. |
+
+Add `NASA_REFERENCE_MATCHED` to the enum at `rao_variational.py:98`
+between `RAO_VARIATIONAL_RESIDUAL_SOLVED` and `BENCHMARK_VALIDATED`.
+This codifies that the NASA repo is now treated as the canonical
+reference implementation — a contour matching it bit-comparably is
+trustworthy in a way that "agrees with a chart to ±2°" is not.
 
 `hardware_qualified = True` requires `EXPERIMENTALLY_VALIDATED` and
 explicit sign-off in materials, manufacturing, and inspection
 metadata, which is out of scope for the solver/contour code itself.
 
+### 13.1 Methodological note: don't contaminate the chart benchmark
+
+The current code seeds the BVP with `thetaN_guess_deg=30.0`
+(`rao_variational.py:127`) and `_lookup_theta_n` from
+`rao_optimizer.py:44` reads the NASA SP-8120 chart. Once Phase 3
+lands and the BVP solves for θ_N from the Rao stationarity equations
+themselves, **the chart values must remain initial guesses only, not
+residuals**.
+
+Add a `RaoSolverConfig.angle_boundary_mode` field:
+
+- `"free"` (default) — chart angles seed `_initial_ce_from_kernel`
+  but never appear in the residual stack.
+- `"chart_soft"` (debug only) — a tiny extra residual
+  `(theta_N_solver - theta_N_chart)` with weight 1e-3 to help
+  diagnose pathological convergence.
+- `"chart_hard"` (deprecated) — the current implicit behavior when
+  `thetaN_guess_deg` is used as an upper bound; emit a deprecation
+  warning when this is selected.
+
+The Phase 7 chart benchmark **must** use `angle_boundary_mode="free"`
+or it is circular.
+
 ---
 
-## 12. Real-gas considerations no longer "out of scope"
+## 14. Real-gas, CFD, and KL considerations no longer "out of scope"
 
-The original §8 marked the following as out of scope. They are now in
-scope as Phase 9-11:
+The original §8 of the first plan marked the following as out of scope.
+They are all now in scope:
 
-- Kliegel-Levine transonic kernel → Phase 9.
+- Kliegel-Levine transonic kernel → **Phase 9** (with NASA's `KLThroat`
+  as a direct port target — see §8.1).
 - Real-gas / variable-γ / CEA-frozen and shifting-equilibrium MOC →
-  Phase 10.
-- Supersonic CFD cross-check → Phase 11.
+  **Phase 10**.
+- Supersonic CFD cross-check → **Phase 11** (SU2 axisymmetric Euler
+  against NASA RP-1104 = your `19830016278.pdf`).
+- NASA Three-Dimensional-Nozzle-Design-Code integration → **Phase 12**
+  (port + reference outputs as canonical regression targets).
+- Visualization / debugging plots → **Phase 13**.
 
 What remains genuinely out of scope:
 
@@ -1185,9 +1823,20 @@ What remains genuinely out of scope:
   test stands, and instrumented runs. Out of scope for any software
   effort.
 - **Side-load / separation transient analysis** under altitude excursions.
-  Östlund's thesis (`fulltext01.pdf`) treats this; a future Phase 12
+  Östlund's thesis (`fulltext01.pdf`) treats this; a future Phase 14
   could add a separation-onset predictor wired to the validated
   contour, but it is design-margin work, not solver math.
+- **3D / scramjet asymmetric nozzles.** The NASA `3D_MOC` and `STT2001`
+  programs in `Three-Dimensional-Nozzle-Design-Code-master/` handle
+  3D non-axisymmetric flow and streamline tracing for scramjet inlets.
+  These are out of scope for RaoRocketSim's axisymmetric rocket bell
+  pipeline, but the `STT2001` streamline tracer might be useful
+  long-term if you ever extend to dual-bell or aerospike geometries.
+  Note for the future, not for this rewrite.
+- **Wrapping the NASA MFC GUI itself.** Option C (pybind11 binding of
+  the C++ core, §11.4) is in scope but explicitly limited to the
+  numerical class `MOC_GridCalc`. The MFC dialogs, plotting widgets,
+  and Visual Studio project files are not.
 
 ---
 
