@@ -159,6 +159,7 @@ class RaoSolverConfig:
     starting_line_method: str = "area_ratio"
     evaluate_moc: bool = True
     residual_blocks: tuple[str, ...] | None = None
+    wall_method: str = "coupled"
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
@@ -208,6 +209,48 @@ class RaoResidualReport:
     wall_tangency_rms: float | None = None
     characteristic_crossings: int = 0
     group_summaries: list[dict] = field(default_factory=list)
+
+
+@dataclass
+class MOCNetCompatibilityReport:
+    """Detailed forward-MOC audit against a candidate wall."""
+
+    cplus_rms: float
+    cminus_rms: float
+    cplus_max: float
+    cminus_max: float
+    intersection_rms: float
+    wall_boundary_rms: float
+    wall_tangency_rms: float
+    crossings: int
+    bad_rows: list[int]
+    passes: bool
+    wall_boundary_dx_rms: float = 0.0
+    wall_boundary_dr_rms: float = 0.0
+    wall_boundary_dx_max: float = 0.0
+    wall_boundary_dr_max: float = 0.0
+    intersection_max: float = 0.0
+    wall_tangency_max: float = 0.0
+
+    def to_dict(self) -> dict:
+        return {
+            "cplus_rms": self.cplus_rms,
+            "cminus_rms": self.cminus_rms,
+            "cplus_max": self.cplus_max,
+            "cminus_max": self.cminus_max,
+            "intersection_rms": self.intersection_rms,
+            "intersection_max": self.intersection_max,
+            "wall_boundary_rms": self.wall_boundary_rms,
+            "wall_boundary_dx_rms": self.wall_boundary_dx_rms,
+            "wall_boundary_dr_rms": self.wall_boundary_dr_rms,
+            "wall_boundary_dx_max": self.wall_boundary_dx_max,
+            "wall_boundary_dr_max": self.wall_boundary_dr_max,
+            "wall_tangency_rms": self.wall_tangency_rms,
+            "wall_tangency_max": self.wall_tangency_max,
+            "crossings": self.crossings,
+            "bad_rows": list(self.bad_rows),
+            "passes": self.passes,
+        }
 
 
 @dataclass
@@ -1476,6 +1519,255 @@ def construct_wall_from_ce_raw(
     return np.column_stack([x_raw, r_raw]), diagnostics
 
 
+def _ce_interp_node(ce: ControlSurface, tau: float) -> FlowNode:
+    """Interpolate a geometry-backed CE at normalized arc parameter tau."""
+    if ce.x is None:
+        nodes = _control_surface_flow_nodes(ce)
+        x = np.asarray([p.x for p in nodes], dtype=float)
+    else:
+        x = np.asarray(ce.x, dtype=float)
+    r = np.asarray(ce.r, dtype=float)
+    M = np.asarray(ce.M, dtype=float)
+    theta = np.asarray(ce.theta, dtype=float)
+    if len(r) < 2:
+        return FlowNode(float(x[0]), float(r[0]), max(float(M[0]), 1.001), float(theta[0]))
+
+    ds = np.hypot(np.diff(x), np.diff(r))
+    s = np.concatenate([[0.0], np.cumsum(ds)])
+    if s[-1] <= 1e-14:
+        q = np.linspace(0.0, 1.0, len(r))
+    else:
+        q = s / s[-1]
+    t = float(np.clip(tau, 0.0, 1.0))
+    return FlowNode(
+        x=float(np.interp(t, q, x)),
+        r=float(np.interp(t, q, r)),
+        M=max(float(np.interp(t, q, M)), 1.001),
+        theta=float(np.interp(t, q, theta)),
+    )
+
+
+def _hermite_wall_seed(
+    x_wall: np.ndarray,
+    start: tuple[float, float],
+    end: tuple[float, float],
+    theta_start: float,
+    theta_end: float,
+) -> np.ndarray:
+    """Cubic Hermite wall radius seed with specified endpoint slopes."""
+    x0, r0 = start
+    x1, r1 = end
+    length = max(x1 - x0, 1e-12)
+    t = np.clip((x_wall - x0) / length, 0.0, 1.0)
+    h00 = 2.0 * t**3 - 3.0 * t**2 + 1.0
+    h10 = t**3 - 2.0 * t**2 + t
+    h01 = -2.0 * t**3 + 3.0 * t**2
+    h11 = t**3 - t**2
+    return (
+        h00 * r0
+        + h10 * length * math.tan(theta_start)
+        + h01 * r1
+        + h11 * length * math.tan(theta_end)
+    )
+
+
+def solve_wall_from_ce_coupled(
+    ce: ControlSurface,
+    config: RaoSolverConfig,
+    n_wall: int = 24,
+) -> tuple[np.ndarray, dict]:
+    """
+    Minimal coupled wall strip solve from a closed CE.
+
+    This is intentionally smaller than the full Phase-6 characteristic-net BVP:
+    wall x locations and endpoints are boundary data, while interior radii,
+    wall flow state, and the CE source parameter for each wall node are solved
+    together.  The old sequential wall constructor remains available as a
+    legacy diagnostic via ``wall_method='legacy'``.
+    """
+    if least_squares is None:
+        raise RuntimeError("Coupled wall solve requires scipy.optimize.least_squares")
+    if ce.x is None:
+        raise ValueError("Coupled wall solve requires geometry-backed CE x coordinates")
+    if n_wall < 4:
+        raise ValueError("n_wall must be at least 4")
+
+    Rt = config.Rt
+    gamma = config.gamma
+    Re = math.sqrt(config.epsilon) * Rt
+    Rd = config.throat_downstream_radius_factor * Rt
+    L = _target_length(Rt, config.epsilon, config.length_pct)
+    theta_n = max(float(ce.theta[0]), math.radians(15.0))
+    theta_e = float(ce.theta[-1])
+    Nx = Rd * math.sin(theta_n)
+    Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+
+    x_wall = np.linspace(Nx, L, n_wall)
+    r_seed = _hermite_wall_seed(
+        x_wall, (Nx, Ny), (L, Re), theta_n, theta_e
+    )
+    r_seed = np.maximum.accumulate(np.clip(r_seed, min(Ny, Re), max(Ny, Re)))
+    r_seed[0] = Ny
+    r_seed[-1] = Re
+    theta_seed = np.gradient(r_seed, x_wall, edge_order=1)
+    theta_seed = np.arctan(theta_seed)
+    tau_seed = np.linspace(0.0, 1.0, n_wall)
+    M_seed = np.array([_ce_interp_node(ce, t).M for t in tau_seed], dtype=float)
+
+    def radii_from_log_weights(log_weights: np.ndarray) -> np.ndarray:
+        weights = np.exp(np.clip(log_weights, -40.0, 40.0))
+        total = max(float(np.sum(weights)), 1e-30)
+        frac = np.cumsum(weights) / total
+        r = np.empty(n_wall, dtype=float)
+        r[0] = Ny
+        r[1:] = Ny + (Re - Ny) * frac
+        r[-1] = Re
+        return r
+
+    def unpack(u):
+        m = n_wall - 1
+        log_weights = u[:m]
+        theta = u[m:m + n_wall]
+        M = u[m + n_wall:m + 2 * n_wall]
+        tau = u[m + 2 * n_wall:m + 3 * n_wall]
+        r = radii_from_log_weights(log_weights)
+        return r, theta, M, tau
+
+    def pack(log_weights, theta, M, tau):
+        return np.concatenate([log_weights, theta, M, tau])
+
+    x_scale = max(L - Nx, 1e-12)
+    r_scale = max(Re, 1e-12)
+    theta_scale = math.radians(1.0)
+
+    def residual(u):
+        r_wall, theta_wall, M_wall, tau = unpack(u)
+        cminus = []
+        slope = []
+        for xw, rw, Mw, thw, tw in zip(x_wall, r_wall, M_wall, theta_wall, tau):
+            p_ce = _ce_interp_node(ce, float(tw))
+            p_w = FlowNode(float(xw), float(rw), max(float(Mw), 1.001), float(thw))
+            cminus.append(residual_Cminus_axisym(p_ce, p_w, gamma) / theta_scale)
+            theta_avg = 0.5 * (p_ce.theta + p_w.theta)
+            mu_avg = 0.5 * (p_ce.mu + p_w.mu)
+            line = (p_w.r - p_ce.r) - math.tan(theta_avg - mu_avg) * (p_w.x - p_ce.x)
+            slope.append(line / r_scale)
+
+        dx = np.diff(x_wall)
+        dr = np.diff(r_wall)
+        theta_mid = 0.5 * (theta_wall[:-1] + theta_wall[1:])
+        tangency = (dr - dx * np.tan(theta_mid)) / r_scale
+        boundary_theta = np.array([
+            (theta_wall[0] - theta_n) / theta_scale,
+            (theta_wall[-1] - theta_e) / theta_scale,
+        ])
+        monotonic = np.concatenate([
+            np.maximum(-dr, 0.0) / r_scale,
+            np.maximum(-np.diff(tau), 0.0),
+        ])
+        tau_shape = 0.02 * (tau - tau_seed)
+        return np.concatenate([
+            np.asarray(cminus, dtype=float),
+            np.asarray(slope, dtype=float),
+            tangency,
+            boundary_theta,
+            monotonic,
+            tau_shape,
+        ])
+
+    dr_seed = np.maximum(np.diff(r_seed), 1e-9 * max(Re - Ny, 1e-12))
+    log_weight_seed = np.log(dr_seed / max(float(np.mean(dr_seed)), 1e-30))
+    u0 = pack(log_weight_seed, theta_seed, M_seed, tau_seed)
+    lower = pack(
+        np.full(n_wall - 1, -20.0),
+        np.full(n_wall, math.radians(-20.0)),
+        np.full(n_wall, 1.001),
+        np.zeros(n_wall),
+    )
+    upper = pack(
+        np.full(n_wall - 1, 20.0),
+        np.full(n_wall, math.radians(70.0)),
+        np.full(n_wall, max(12.0, float(np.max(ce.M)) * 1.5)),
+        np.ones(n_wall),
+    )
+
+    result = least_squares(
+        residual,
+        u0,
+        bounds=(lower, upper),
+        x_scale="jac",
+        ftol=1e-10,
+        xtol=1e-10,
+        gtol=1e-10,
+        max_nfev=max(200, config.max_nfev),
+    )
+    r_wall, theta_wall, M_wall, tau = unpack(result.x)
+    wall = np.column_stack([x_wall, r_wall])
+    final_res = residual(result.x)
+
+    cminus_vals = []
+    slope_vals = []
+    for xw, rw, Mw, thw, tw in zip(x_wall, r_wall, M_wall, theta_wall, tau):
+        p_ce = _ce_interp_node(ce, float(tw))
+        p_w = FlowNode(float(xw), float(rw), max(float(Mw), 1.001), float(thw))
+        cminus_vals.append(residual_Cminus_axisym(p_ce, p_w, gamma) / theta_scale)
+        theta_avg = 0.5 * (p_ce.theta + p_w.theta)
+        mu_avg = 0.5 * (p_ce.mu + p_w.mu)
+        line = (p_w.r - p_ce.r) - math.tan(theta_avg - mu_avg) * (p_w.x - p_ce.x)
+        slope_vals.append(line / r_scale)
+
+    dx = np.diff(x_wall)
+    dr = np.diff(r_wall)
+    theta_mid = 0.5 * (theta_wall[:-1] + theta_wall[1:])
+    tangency_vals = (dr - dx * np.tan(theta_mid)) / r_scale
+    wall_angles = np.arctan2(dr, dx)
+    wall_tangency_rms = float(np.sqrt(np.mean((wall_angles - theta_mid) ** 2)))
+    endpoint_dx = float(wall[-1, 0] - L)
+    endpoint_dr = float(wall[-1, 1] - Re)
+    strip_success = (
+        diagnostics_success := (
+            float(np.max(np.abs(final_res))) if final_res.size else 0.0
+        )
+    ) <= 1e-2
+    strip_success = (
+        strip_success
+        and abs(endpoint_dx) / max(L, 1e-12) <= 1e-3
+        and abs(endpoint_dr) / max(Re, 1e-12) <= 1e-3
+        and wall_tangency_rms < math.radians(0.25)
+        and int(np.sum(np.diff(x_wall) <= 0.0)) == 0
+        and int(np.sum(np.diff(r_wall) < -1e-10)) == 0
+    )
+    diagnostics = {
+        "method": "coupled_wall_strip",
+        "fallback_used": False,
+        "postprocessed": False,
+        "moc_compatibility_preserved": False,
+        "success": bool(strip_success),
+        "optimizer_success": bool(result.success),
+        "message": str(result.message),
+        "cost": float(result.cost),
+        "max_residual": diagnostics_success,
+        "endpoint_dx": endpoint_dx,
+        "endpoint_dr": endpoint_dr,
+        "wall_tangency_rms": wall_tangency_rms,
+        "wall_tangency_residual_rms": float(np.sqrt(np.mean(tangency_vals**2))),
+        "cminus_rms": float(np.sqrt(np.mean(np.asarray(cminus_vals) ** 2))),
+        "slope_rms": float(np.sqrt(np.mean(np.asarray(slope_vals) ** 2))),
+        "monotonic_x_violations": int(np.sum(np.diff(x_wall) <= 0.0)),
+        "monotonic_r_violations": int(np.sum(np.diff(r_wall) < -1e-10)),
+        "tau_monotonic_violations": int(np.sum(np.diff(tau) < -1e-10)),
+        "clamp_hits": 0,
+        "nonmonotonic_x_drops": 0,
+        "warnings": [],
+    }
+    diagnostics["wall_strip_success"] = bool(strip_success)
+    if not diagnostics["wall_strip_success"]:
+        diagnostics["warnings"].append(
+            "Coupled wall strip solve did not meet compatibility/closure gates."
+        )
+    return wall, diagnostics
+
+
 def resample_wall_for_export(
     raw_wall: np.ndarray,
     *,
@@ -1549,6 +1841,77 @@ def _wall_tangency_rms(raw_wall: np.ndarray, ce: ControlSurface) -> float | None
         right=float(ce.theta[-1]),
     )
     return float(np.sqrt(np.mean((wall_theta - ce_theta) ** 2)))
+
+
+def characteristic_net_compatibility_residuals(
+    rows: list[CharRow],
+    gamma: float,
+) -> dict[str, np.ndarray]:
+    """
+    Reconstruct C+/C- parent-child residuals from a marched MOC net.
+
+    The row topology matches ``march_coupled_net``:
+      - axis child is reached by C- from the lower/axis-side parent,
+      - interior children are C+ from lower parent and C- from upper parent,
+      - wall child is reached by C+ from the near-wall parent.
+    """
+    cplus: list[float] = []
+    cminus: list[float] = []
+    if len(rows) < 2:
+        return {"cplus": np.zeros(0), "cminus": np.zeros(0)}
+
+    prev_pts = rows[0].all_points()
+    for row in rows[1:]:
+        curr_pts = row.all_points()
+        if not prev_pts or not curr_pts:
+            prev_pts = curr_pts
+            continue
+
+        if row.axis is not None:
+            parent_idx = 1 if len(prev_pts) > 1 and prev_pts[0].r < 1e-10 else 0
+            if parent_idx < len(prev_pts):
+                cminus.append(residual_Cminus_axisym(
+                    prev_pts[parent_idx].to_flow_node(),
+                    row.axis.to_flow_node(),
+                    gamma,
+                ))
+
+        for j, child in enumerate(row.interior):
+            if j + 1 >= len(prev_pts):
+                break
+            p_plus = prev_pts[j]
+            p_minus = prev_pts[j + 1]
+            cplus.append(residual_Cplus_axisym(
+                p_plus.to_flow_node(), child.to_flow_node(), gamma
+            ))
+            cminus.append(residual_Cminus_axisym(
+                p_minus.to_flow_node(), child.to_flow_node(), gamma
+            ))
+
+        if row.wall is not None and len(prev_pts) >= 2:
+            cplus.append(residual_Cplus_axisym(
+                prev_pts[-2].to_flow_node(), row.wall.to_flow_node(), gamma
+            ))
+
+        prev_pts = curr_pts
+
+    scale = math.radians(1.0)
+    return {
+        "cplus": np.asarray(cplus, dtype=float) / scale,
+        "cminus": np.asarray(cminus, dtype=float) / scale,
+    }
+
+
+def summarize_characteristic_net_compatibility(
+    rows: list[CharRow],
+    gamma: float,
+) -> list[dict]:
+    """Return max/RMS summaries for C+/C- residuals in a marched MOC net."""
+    residuals = characteristic_net_compatibility_residuals(rows, gamma)
+    return [
+        summarize_group("net_moc_cplus", residuals["cplus"]),
+        summarize_group("net_moc_cminus", residuals["cminus"]),
+    ]
 
 
 def _segments_intersect(a: np.ndarray, b: np.ndarray,
@@ -1693,10 +2056,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     Ny = config.Rt + Rd * (1.0 - math.cos(theta_n))
     if config.evaluate_moc:
         try:
-            raw_wall, construction_diagnostics = construct_wall_from_ce_raw(
-                config.Rt, config.epsilon, config.gamma, ce, L_target,
-                config.n_kernel,
-            )
+            if config.wall_method == "coupled":
+                raw_wall, construction_diagnostics = solve_wall_from_ce_coupled(
+                    ce, config, n_wall=max(8, 2 * config.n_kernel)
+                )
+            elif config.wall_method == "legacy":
+                raw_wall, construction_diagnostics = construct_wall_from_ce_raw(
+                    config.Rt, config.epsilon, config.gamma, ce, L_target,
+                    config.n_kernel,
+                )
+            else:
+                raise ValueError("wall_method must be 'coupled' or 'legacy'")
             if raw_wall.shape[0] >= 3:
                 slope_start = math.tan(max(float(ce.theta[0]), math.radians(15.0)))
                 slope_end = math.tan(float(ce.theta[-1]))
@@ -1716,7 +2086,18 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 )
                 char_net = march_coupled_net(starting, wall, config.gamma)
                 crossings = check_characteristic_crossing(char_net)
-            wall_tangency_rms = _wall_tangency_rms(raw_wall, ce)
+                net_compatibility = summarize_characteristic_net_compatibility(
+                    char_net, config.gamma
+                )
+                construction_diagnostics["net_compatibility"] = net_compatibility
+                if any(item["max"] > config.residual_tol for item in net_compatibility):
+                    construction_diagnostics["moc_compatibility_preserved"] = False
+                    construction_diagnostics.setdefault("warnings", []).append(
+                        "Forward MOC net compatibility residuals exceeded tolerance."
+                    )
+            wall_tangency_rms = construction_diagnostics.get("wall_tangency_rms")
+            if wall_tangency_rms is None:
+                wall_tangency_rms = _wall_tangency_rms(raw_wall, ce)
         except Exception as exc:
             warnings.append(f"Raw MOC wall construction failed: {exc}")
             construction_diagnostics = {

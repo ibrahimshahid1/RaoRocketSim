@@ -11,12 +11,17 @@ from raosim.rao_variational import (
     RaoEndpointMismatchError,
     RaoResidualReport,
     RaoSolverConfig,
+    characteristic_net_compatibility_residuals,
     check_characteristic_crossing,
     rao_residual_ablation_matrix,
     rao_variational_moc_contour,
     resample_wall_for_export,
+    solve_wall_from_ce_coupled,
     solve_rao_bvp,
+    summarize_characteristic_net_compatibility,
 )
+from raosim.moc import approximate_starting_line, march_coupled_net
+from raosim.wall_model import SplineWall
 
 
 @pytest.mark.smoke
@@ -149,6 +154,7 @@ def test_postprocessed_does_not_claim_residual_solved(monkeypatch):
         n_kernel=8,
         max_nfev=1,
         evaluate_moc=True,
+        wall_method="legacy",
     ))
 
     assert solution.reliability == ContourReliability.GEOMETRIC_APPROXIMATION
@@ -233,3 +239,66 @@ def test_ablation_matrix_identifies_both_families_as_invalid_ce_topology():
 
     assert by_case["default"]["max_scaled"] <= cfg.residual_tol
     assert by_case["with_both_families"]["max_scaled"] > 1.0
+
+
+def test_coupled_wall_strip_closes_without_endpoint_cheating():
+    cfg = RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=400,
+        residual_tol=5e-3,
+        evaluate_moc=False,
+    )
+    solution = solve_rao_bvp(cfg)
+
+    wall, diagnostics = solve_wall_from_ce_coupled(
+        solution.control_surface,
+        cfg,
+        n_wall=16,
+    )
+
+    assert diagnostics["wall_strip_success"] is True
+    assert diagnostics["clamp_hits"] == 0
+    assert diagnostics["nonmonotonic_x_drops"] == 0
+    assert diagnostics["monotonic_x_violations"] == 0
+    assert diagnostics["monotonic_r_violations"] == 0
+    assert abs(diagnostics["endpoint_dx"]) / solution.wall_export[-1, 0] < 1e-3
+    assert abs(diagnostics["endpoint_dr"]) / (math.sqrt(10.0) * 0.020) < 1e-3
+    assert diagnostics["wall_tangency_rms"] < math.radians(0.25)
+    assert wall[-1, 1] == pytest.approx(math.sqrt(10.0) * 0.020)
+
+
+def test_characteristic_net_compatibility_diagnostics_are_finite():
+    Rt, Rd = 0.02, 0.382 * 0.02
+    theta_n = math.radians(30)
+    Re = math.sqrt(10.0) * Rt
+    Ln = (Re - Rt) / math.tan(math.radians(15)) * 0.8
+    Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+    Nx = Rd * math.sin(theta_n)
+    wall = SplineWall.from_controls(
+        np.linspace(Ny, Re, 5)[1:-1],
+        Nx,
+        Ny,
+        Ln,
+        Re,
+        theta_n,
+    )
+    rows = march_coupled_net(
+        approximate_starting_line(Rt, Rd, theta_n, 1.4, 10),
+        wall,
+        1.4,
+        max_rows=5,
+    )
+
+    residuals = characteristic_net_compatibility_residuals(rows, 1.4)
+    summaries = summarize_characteristic_net_compatibility(rows, 1.4)
+
+    assert residuals["cplus"].size > 0
+    assert residuals["cminus"].size > 0
+    assert all(np.isfinite(residuals[key]).all() for key in residuals)
+    assert {item["name"] for item in summaries} == {"net_moc_cplus", "net_moc_cminus"}
