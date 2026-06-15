@@ -18,7 +18,7 @@ import pytest
 from raosim.moc import CharPoint, FlowNode
 from raosim.gas_dynamics import mach_angle, prandtl_meyer
 from raosim.plotting import (plot_characteristic_net, plot_flowfield_mach,
-                             plot_topology)
+                             plot_net_diagnostics, plot_topology)
 
 
 def _cp(x, r, theta, M, gamma=1.4):
@@ -165,3 +165,52 @@ def test_plot_nasa_overlay_smoke():
         pytest.skip("NASA M3.5Perf reference outputs not present")
     fig = plot_nasa_overlay(_FakeSolution(), nasa_dir, Rt=0.02)
     assert fig is not None
+
+
+# ---------------------------------------------------------------------
+#  Spec plot #8 — plot_net_diagnostics (REWRITE_PLAN §12.1 / §12.5).
+# ---------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def misconverged_solution():
+    """The §12.5 gate fixture: a deliberately mis-converged run
+    (max_nfev=0 initial-residual-only) with a real forward-audit net
+    (evaluate_moc=True + the BDE seed wall).  NumPy-only path."""
+    from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
+
+    cfg = RaoSolverConfig(
+        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+        length_pct=80.0, n_control=8, n_kernel=24,
+        max_nfev=0, evaluate_moc=True, wall_method="bde",
+    )
+    return solve_rao_bvp(cfg)
+
+
+def test_plot_net_diagnostics_flags_bad_links(misconverged_solution,
+                                              capsys):
+    """§12.5 gate: at least one bad link is highlighted on the
+    mis-converged run, and the offending indices go to stdout."""
+    fig = plot_net_diagnostics(misconverged_solution)
+    assert fig is not None
+    diag = fig.net_diagnostics
+    assert diag["n_links"] > 0
+    assert len(diag["flagged"]) >= 1
+    out = capsys.readouterr().out
+    assert "flagged links" in out
+
+
+def test_plot_net_diagnostics_ce_fallback():
+    """Without a forward-audit net (evaluate_moc=False) the CE's own
+    C+ chain provides the link set."""
+    from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
+
+    cfg = RaoSolverConfig(
+        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+        length_pct=80.0, n_control=8, n_kernel=24,
+        max_nfev=0, evaluate_moc=False,
+    )
+    sol = solve_rao_bvp(cfg)
+    fig = plot_net_diagnostics(sol)
+    assert fig is not None
+    assert fig.net_diagnostics["n_links"] >= sol.control_surface.r.size - 1

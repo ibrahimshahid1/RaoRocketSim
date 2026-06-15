@@ -346,6 +346,130 @@ def plot_topology(topology, *, ax=None, show: bool = False,
     return fig
 
 
+def plot_net_diagnostics(solution, *, geometry: str = "raw",
+                         worst_fraction: float = 0.05,
+                         gamma: float = 1.4,
+                         ax=None, show: bool = False,
+                         save_path: str | None = None):
+    """Spec plot #8 (REWRITE_PLAN §12.1): the characteristic net with
+    problematic links highlighted.
+
+    Per-link residuals come from the net link plumbing
+    (``characteristic_net_links`` /
+    ``characteristic_net_compatibility_residuals`` — the corrected C±
+    invariant forms), crossings from ``check_characteristic_crossing``,
+    and the aggregate context line from the solution's
+    ``RaoResidualReport``.  The worst ``worst_fraction`` of links (and
+    every link beyond 3× its family RMS) are drawn red; offending link
+    indices are printed to stdout and attached to the returned figure
+    as ``fig.net_diagnostics``.
+
+    Solutions without a forward-audit net (``evaluate_moc=False``)
+    fall back to the CE's own C+ chain as the link set, so the plot is
+    always meaningful for the characteristic formulation.
+    """
+    from raosim.rao_residuals import residual_Cplus_axisym
+    from raosim.rao_variational import (
+        _control_surface_flow_nodes,
+        characteristic_net_compatibility_residuals,
+        characteristic_net_links,
+        check_characteristic_crossing,
+    )
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+            label=wall_label, zorder=4)
+
+    # ---- gather links: (family, index, p0, p1, |residual|) ----------
+    segments: list[tuple[str, int, tuple, tuple, float]] = []
+    rows = getattr(solution, "characteristic_net", None) or []
+    crossings = 0
+    if rows:
+        links = characteristic_net_links(rows)
+        compat = characteristic_net_compatibility_residuals(rows, gamma)
+        for fam in ("cplus", "cminus"):
+            for idx, (link, res) in enumerate(
+                    zip(links[fam], compat[fam])):
+                segments.append((
+                    fam, idx,
+                    (link.parent.x, link.parent.r),
+                    (link.child.x, link.child.r),
+                    abs(float(res)),
+                ))
+        crossings = check_characteristic_crossing(rows)
+
+    ce = getattr(solution, "control_surface", None)
+    if ce is not None and getattr(ce, "x", None) is not None:
+        # The CE is a C+ characteristic by construction — its segment
+        # residuals are first-class links (and the only ones available
+        # when the forward audit was skipped).
+        nodes = _control_surface_flow_nodes(ce)
+        for i in range(len(nodes) - 1):
+            res = residual_Cplus_axisym(nodes[i], nodes[i + 1], gamma)
+            segments.append((
+                "ce_cplus", i,
+                (nodes[i].x, nodes[i].r),
+                (nodes[i + 1].x, nodes[i + 1].r),
+                abs(float(res)),
+            ))
+
+    flagged: list[tuple[str, int, float]] = []
+    if segments:
+        vals = np.asarray([s[4] for s in segments], dtype=float)
+        # Worst-fraction threshold plus a 3×RMS outlier rule.
+        q = np.quantile(vals, 1.0 - worst_fraction) if vals.size > 1 else np.inf
+        rms = float(np.sqrt(np.mean(vals ** 2))) if vals.size else 0.0
+        cut = min(q, 3.0 * rms) if rms > 0 else q
+        for fam, idx, p0, p1, v in segments:
+            bad = bool(v >= cut and v > 0.0)
+            ax.plot([p0[0], p1[0]], [p0[1], p1[1]],
+                    color=("red" if bad else "#1a73e8"),
+                    linewidth=(1.6 if bad else 0.5),
+                    alpha=(0.95 if bad else 0.45),
+                    zorder=(3 if bad else 2))
+            if bad:
+                flagged.append((fam, idx, v))
+
+    if flagged:
+        print("plot_net_diagnostics: flagged links "
+              "(family, index, |residual|):")
+        for fam, idx, v in sorted(flagged, key=lambda t: -t[2]):
+            print(f"  {fam}[{idx}] |res|={v:.3e}")
+
+    report = getattr(solution, "residuals", None)
+    ctx = ""
+    if report is not None:
+        ctx = (f"   max_scaled={getattr(report, 'max_scaled', float('nan')):.2e}"
+               f"  wall_tangency_rms="
+               f"{getattr(report, 'wall_tangency_rms', None)}")
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(
+        f"Net diagnostics — {len(flagged)}/{len(segments)} links flagged, "
+        f"{crossings} crossings{ctx}", fontsize=9)
+    ax.set_aspect("equal", "box")
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+
+    fig.net_diagnostics = {
+        "n_links": len(segments),
+        "flagged": flagged,
+        "crossings": int(crossings),
+    }
+
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
 def _net_points(solution):
     """All characteristic-net points of a solution as a flat list."""
     pts = []

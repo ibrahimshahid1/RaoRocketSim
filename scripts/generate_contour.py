@@ -37,16 +37,17 @@ from raosim.rao_variational import RaoSolverConfig
 
 def solve(args):
     rv.PHYSICS_WEIGHT = 1.0
+    # Package defaults ARE the J4-gate configuration (characteristic
+    # formulation, JAX backend, weight ladder, full D-state pins) —
+    # only the deliberate non-defaults are spelled out here.
     cfg = RaoSolverConfig(
         Rt=args.rt, epsilon=args.epsilon, gamma=args.gamma,
         pa_over_p0=args.pa_over_p0, length_pct=args.length_pct,
         n_control=args.n_control, n_kernel=args.n_kernel,
-        max_nfev=4000, residual_tol=2e-3,
-        evaluate_moc=True, wall_method="bde", couple_wall=False,
+        max_nfev=4000,
+        wall_method="bde",
         kernel_d_fraction_max=0.7,
-        solver_backend="jax", thetaN_guess_deg=args.theta_b_guess,
-        formulation="characteristic", pin_d_theta=True, pin_d_mach=True,
-        jax_constraint_weight_ladder=(1.0, 10.0, 30.0, 100.0),
+        thetaN_guess_deg=args.theta_b_guess,
     )
     return rv.solve_rao_bvp(cfg)
 
@@ -92,8 +93,9 @@ def main():
                     help="bell length as %% of 15-deg cone")
     ap.add_argument("--gamma", type=float, default=1.4)
     ap.add_argument("--pa-over-p0", type=float, default=0.01)
-    ap.add_argument("--theta-b-guess", type=float, default=22.0,
-                    help="initial expansion angle seed [deg]")
+    ap.add_argument("--theta-b-guess", type=float, default=30.0,
+                    help="initial expansion angle seed [deg] (the seed "
+                         "secant owns the final theta_B)")
     ap.add_argument("--n-control", type=int, default=24)
     ap.add_argument("--n-kernel", type=int, default=24)
     ap.add_argument("--out", type=Path, default=Path("builds/contour_run"))
@@ -110,6 +112,13 @@ def main():
           f"mass = {r.mass_residual_rel:+.1e}  length = {r.length_residual_rel:+.1e}")
     print(f"kdf = {sol.control_surface.kernel_d_fraction:.3f}  "
           f"reliability = {sol.reliability.value}")
+    da = sol.construction_diagnostics.get("design_angles", {})
+    print(f"theta_N = {math.degrees(sol.theta_N):.3f} deg "
+          f"[{da.get('theta_N_source', '?')}]  "
+          f"theta_E = {math.degrees(sol.theta_E):.3f} deg "
+          f"[{da.get('theta_E_source', '?')}]  "
+          f"(chart parabola fit: {da.get('theta_N_chart_deg', float('nan')):.1f}"
+          f" / {da.get('theta_E_chart_deg', float('nan')):.1f} deg)")
     if not gate and not args.allow_unconverged:
         print("NOT CONVERGED to the residual gate; rerun with "
               "--allow-unconverged to export anyway.", file=sys.stderr)

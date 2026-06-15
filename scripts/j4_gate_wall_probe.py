@@ -6,15 +6,23 @@ full D-state continuity) with ``wall_method="bde"`` so the same solve
 also yields the BDE wall.  Prints the gate verdict and the wall-slope
 profile, and writes a JSON checkpoint + the wall polyline.
 
-Purpose (Phase 12.4 follow-through): the kernel-march mass-integral fix
-changed the seed — ``set_theta_b`` now converges the fixed-(L, ε)
-topology exactly (θ_B ≈ 25.5° for the ε=10/L80 reference) instead of
-fail-bracketing at the old ~24.2° cap — so both the gate value and the
-solved-CE wall shape need re-measuring.  The bell criterion is the TOP
-shape: slope peaks near θ_N just after the throat arc and decreases
-monotonically (chart θ_N(ε=10, L80) ≈ 21.9°, θ_E ≈ 8.3°); the historic
-defect was a 35.6° flare at 60% length driven by the stale characteristic
-pairing and the relaxed D-state diagnostic branch.
+Purpose (Phase 12.4 follow-through, re-grounded post-correction): the
+kernel-march mass-integral fix changed the seed — ``set_theta_b`` now
+converges the fixed-(L, ε) topology exactly (θ_B ≈ 25.57° for the
+ε=10/L80 reference) instead of fail-bracketing at the old ~24.2° cap —
+so both the gate value and the solved-CE wall shape need re-measuring.
+The bell criterion is the smooth stationary-DE existence root
+(test_smooth_existence_root_regression): slope peaks ≈ θ_B = 25.57°
+(+ ~0.7° arc/BFE discretisation overshoot) just after the throat arc
+and decreases monotonically to ≈ 11.12° at the exit.  (The chart's
+30° / 15.5° are Rao-1960 *parabola-fit* values — expected deltas, not
+targets; see the J5 de-circularization.)  The historic defect was a
+35.6° flare at 60% length driven by the stale characteristic pairing
+and the relaxed D-state diagnostic branch.
+
+The config relies on package defaults, which since 2026-06-11 ARE the
+J4-gate configuration (characteristic formulation, JAX backend, weight
+ladder, full D-state pins); only deliberate non-defaults are explicit.
 
 Run:  PYTHONPATH=. python scripts/j4_gate_wall_probe.py
 """
@@ -38,16 +46,14 @@ def main() -> int:
     rv.PHYSICS_WEIGHT = 1.0
     cfg = RaoSolverConfig(
         Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
-        length_pct=80.0, n_control=24, n_kernel=24, n_wall=12,
-        # evaluate_moc=True is REQUIRED for the wall: solve_rao_bvp only
-        # constructs wall_raw inside the evaluate_moc branch (the BDE
-        # region march runs there; the forward-MOC audit it also triggers
-        # is known-misaligned for BDE walls and only affects diagnostics).
-        max_nfev=4000, residual_tol=2e-3, evaluate_moc=True,
-        couple_wall=False, kernel_d_fraction_max=0.7,
-        thetaN_guess_deg=21.87, solver_backend="jax",
-        formulation="characteristic", pin_d_theta=True, pin_d_mach=True,
-        jax_constraint_weight_ladder=(1.0, 10.0, 30.0, 100.0),
+        length_pct=80.0, n_control=24, n_kernel=24,
+        # evaluate_moc=True (the default) is REQUIRED for the wall:
+        # solve_rao_bvp only constructs wall_raw inside the
+        # evaluate_moc branch (the BDE region march runs there; the
+        # forward-MOC audit it also triggers is known-misaligned for
+        # BDE walls and only affects diagnostics).
+        max_nfev=4000,
+        kernel_d_fraction_max=0.7,
         wall_method="bde",
     )
     print("solving (J4 gate config + BDE wall)...", flush=True)
@@ -59,6 +65,11 @@ def main() -> int:
           f"converged={cs.converged}")
     print(f"  mass={r.mass_residual_rel:.2e} len={r.length_residual_rel:.2e} "
           f"kdf={cs.kernel_d_fraction:.4f}")
+    da = sol.construction_diagnostics.get("design_angles", {})
+    print(f"  theta_N={math.degrees(sol.theta_N):.3f} deg "
+          f"[{da.get('theta_N_source', '?')}]  "
+          f"theta_E={math.degrees(sol.theta_E):.3f} deg "
+          f"[{da.get('theta_E_source', '?')}]")
     for g in sorted(r.group_summaries, key=lambda g: -abs(g["max"]))[:4]:
         print(f"  {g['name']:28s} max={g['max']:.3e} n={g['count']}")
 
@@ -69,6 +80,9 @@ def main() -> int:
         "kdf": float(cs.kernel_d_fraction),
         "mass": float(r.mass_residual_rel),
         "len": float(r.length_residual_rel),
+        "theta_N_deg": float(math.degrees(sol.theta_N)),
+        "theta_E_deg": float(math.degrees(sol.theta_E)),
+        "theta_N_source": da.get("theta_N_source"),
     }
 
     w = sol.wall_raw

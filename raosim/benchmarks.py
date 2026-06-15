@@ -719,17 +719,33 @@ def _json_ready(value: Any) -> Any:
 # =====================================================================
 #
 # Sweep the published (eps, length_pct) Rao/NASA SP-8120 chart grid and
-# compare ``solve_rao_bvp``'s converged (theta_N, theta_E) against the
-# tabulated values.  RMS / max-error gates from REWRITE_PLAN.md Phase 7:
+# compare ``solve_rao_bvp``'s reported (theta_N, theta_E) against the
+# tabulated values.
 #
-#   * RMS error in theta_N AND theta_E < 1.5 deg  (the plan target)
-#   * Max error in theta_N OR theta_E < 3.0 deg   (the plan target)
+# READ THIS BEFORE TREATING err_* AS SOLVER ERROR (J5
+# de-circularization, 2026-06-12):
 #
-# The current default PHYSICS_WEIGHT=0.05 reliably hits ~3 / ~6 deg
-# (the looser "release" gate); tightening to the plan targets is gated
-# on the weight=1.0 xfail closing.  See
-# ``tests/test_rao_chart_benchmark.py`` for the full-sweep test gate
-# and ``tests/test_phase6_coupled_wall.py`` for the weight=1.0 xfail.
+#   * The solver columns are now genuine solver outputs under the
+#     characteristic formulation: theta_N = the kernel arc-end angle
+#     theta_B the BVP closed on; theta_E = the solved CE exit flow
+#     angle.  (Pre-J5 they were a chart echo and the chart-N → exit
+#     straight chord respectively — both contentless; see the
+#     design-angle reporting block in solve_rao_bvp.)
+#   * The chart tables are Rao's 1960 ARS J. *parabola-fit* charts
+#     (gamma=1.23; contours gamma-insensitive per Rao 1961 p. 1490).
+#     The exact variational solution is NOT expected to match them to
+#     plan-target precision: at the eps=10/L80 reference the smooth
+#     stationary-DE root sits at theta_B = 25.57 deg / theta_E =
+#     11.12 deg vs chart 30 / 15.5 deg.  The err_* columns therefore
+#     measure the *exact-vs-parabola-fit delta* — a documented finding
+#     of the benchmark, not its failure mode (plan STATUS 2026-06-11h).
+#
+# Historical gates (REWRITE_PLAN.md Phase 7): RMS < 1.5 deg / max <
+# 3.0 deg "plan target", 3 / 6 deg "release" — both defined when the
+# columns were chart-circular.  ``test_rao_chart_benchmark_plan_targets``
+# keeps the plan-target gate as an xfail record; the live full-grid
+# test asserts completion + physical-band sanity and *records* the
+# deltas.  See tests/test_rao_chart_benchmark.py.
 
 
 @dataclass
@@ -742,8 +758,16 @@ class ChartBenchmarkRow:
     chart_theta_e_deg: float
     solver_theta_n_deg: float | None = None
     solver_theta_e_deg: float | None = None
+    # err_* = |solver − chart| — the exact-vs-parabola-fit delta, a
+    # recorded finding (see the module comment above), not a defect.
     err_theta_n_deg: float | None = None
     err_theta_e_deg: float | None = None
+    # Provenance of the reported theta_N, from
+    # construction_diagnostics["design_angles"]["theta_N_source"]:
+    # "kernel_theta_B:fixed_end_secant" is the solved angle;
+    # "kernel_theta_B:seed_guess" means the secant failed and the row's
+    # theta_N is chart-flavoured (treat its delta as low-quality).
+    theta_n_source: str | None = None
     max_scaled: float | None = None
     mass_residual_rel: float | None = None
     length_residual_rel: float | None = None
@@ -839,10 +863,12 @@ def rao_variational_chart_benchmark(
 
     All keyword arguments default to the Phase 7 release-gate
     configuration: ``PHYSICS_WEIGHT=0.05`` (the robust default),
-    ``angle_boundary_mode='free'`` (the chart is the ground truth, the
-    BVP must reproduce it without being told the answer), and a
-    sub-grid that excludes the chart corners where the Phase 5
-    valid-region check fires or the chart itself extrapolates.
+    ``angle_boundary_mode='free'`` (the chart never enters the residual
+    stack — the solved angles are uncontaminated, and since the J5
+    de-circularization the *reported* angles are those solver outputs;
+    the err columns are exact-vs-parabola-fit deltas, see the module
+    comment), and a sub-grid that excludes the chart corners where the
+    Phase 5 valid-region check fires or the chart itself extrapolates.
 
     Parameters
     ----------
@@ -930,6 +956,11 @@ def rao_variational_chart_benchmark(
         row.solver_theta_e_deg = float(math.degrees(sol.theta_E))
         row.err_theta_n_deg = abs(row.solver_theta_n_deg - row.chart_theta_n_deg)
         row.err_theta_e_deg = abs(row.solver_theta_e_deg - row.chart_theta_e_deg)
+        row.theta_n_source = (
+            sol.construction_diagnostics
+            .get("design_angles", {})
+            .get("theta_N_source")
+        )
         row.max_scaled = float(sol.residuals.max_scaled)
         row.mass_residual_rel = float(sol.residuals.mass_residual_rel)
         row.length_residual_rel = float(sol.residuals.length_residual_rel)
@@ -978,9 +1009,11 @@ def format_chart_benchmark_report(result: ChartBenchmarkResult) -> str:
         f"  n_kernel        = {result.n_kernel}",
         f"  max_nfev        = {result.max_nfev}",
         "",
-        f"  RMS theta_N error: {result.rms_theta_n_deg:5.2f} deg  "
+        "  (err = exact-variational vs Rao-1960 parabola-fit chart "
+        "delta — a recorded finding, not a solver error)",
+        f"  RMS theta_N delta: {result.rms_theta_n_deg:5.2f} deg  "
         f"(max {result.max_theta_n_deg:5.2f} deg)",
-        f"  RMS theta_E error: {result.rms_theta_e_deg:5.2f} deg  "
+        f"  RMS theta_E delta: {result.rms_theta_e_deg:5.2f} deg  "
         f"(max {result.max_theta_e_deg:5.2f} deg)",
         "",
         "  per-case rows:",

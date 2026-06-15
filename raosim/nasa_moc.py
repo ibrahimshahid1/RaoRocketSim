@@ -123,6 +123,19 @@ class MOCKernel:
     massflow: list[np.ndarray] = field(default_factory=list)
     fallback_used: bool = False
     reached_wall: bool = False
+    # How ``theta_B`` was chosen, for honest downstream reporting
+    # (J5 de-circularization: ``RaoSolution.theta_N`` echoes this angle
+    # under the characteristic formulation).  ``"fixed_end_secant"`` =
+    # set_theta_b converged it against the fixed-(L, eps) closure;
+    # ``"bvp_solved"`` = theta_B was a live unknown of the JAX BVP
+    # (RaoSolverConfig.solve_theta_b, J3b-2) and the kernel was
+    # re-frozen at the LM-solved angle; ``"frozen_override"`` =
+    # RaoSolverConfig.theta_b_freeze_deg; ``"seed_guess"`` = the secant
+    # failed/was skipped and the kernel was built at the raw guess
+    # angle (chart-flavoured — treat the reported theta_N as
+    # low-quality); ``"kernel_build_angle"`` = constructed directly via
+    # build_kernel outside the seeding path.
+    theta_b_provenance: str = "kernel_build_angle"
 
     @property
     def bd(self) -> list[MOCNode]:
@@ -2932,6 +2945,7 @@ def set_theta_b(
             f"[{math.degrees(theta_low):.1f}, {math.degrees(theta_high):.1f}] deg "
             "produced a valid topology"
         )
+    best[1].theta_b_provenance = "fixed_end_secant"
     return best[0], best[1]
 
 

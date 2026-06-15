@@ -98,3 +98,36 @@ def test_bd_is_prefix_of_bf_plus_interpolated_d(reference_topology):
     assert topo.BD[-1].r == pytest.approx(topo.D.r, abs=1e-12)
     # D interior on BF (not collapsed onto B or the axis end).
     assert 0.0 < topo.d_fraction < 1.0
+
+
+def test_solve_rao_bvp_exports_solved_topology():
+    """§11.7→12.7 wiring: the BDE wall path lifts the SOLVED state into
+    the full-form RaoTopology and attaches it to the solution
+    (sol.topology_solved + the closure floats in diagnostics)."""
+    import math
+
+    from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
+
+    cfg = RaoSolverConfig(
+        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+        length_pct=80.0, n_control=8, n_kernel=24,
+        max_nfev=0, evaluate_moc=True, wall_method="bde",
+    )
+    sol = solve_rao_bvp(cfg)
+    topo = sol.topology_solved
+    assert topo is not None
+    # Geometric seams close exactly (mass mismatch reflects the
+    # deliberately unsolved max_nfev=0 state and is NOT asserted here).
+    rep = topo.closure_report()
+    for seam in ("BD_starts_at_B", "DE_starts_at_D", "DE_ends_at_E",
+                 "wall_starts_at_B", "wall_ends_at_E"):
+        assert abs(rep[seam]) < 1e-12, seam
+    # The solved topology's corner angle is the kernel's theta_B (the
+    # J5-reported sol.theta_N).
+    assert topo.theta_B == sol.theta_N
+    # Wall ends on the commanded exit station.
+    w = topo.full_wall()
+    Re = math.sqrt(cfg.epsilon) * cfg.Rt
+    assert w[-1, 1] == abs(w[-1, 1])
+    assert abs(w[-1, 1] - Re) < 5e-4
+    assert "topology_closure" in sol.construction_diagnostics

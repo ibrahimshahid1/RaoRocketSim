@@ -1,5 +1,152 @@
 # RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool
 
+> **J3b COMPLETE — BIT-PARITY MARCH + θ_B IN THE BVP; Phase 13 10/10;
+> §12.7 topology export wired (2026-06-12, continuation of the J3b-1
+> session below).**  The "consistency defect" was structural and is
+> FIXED: the all-special prescribed-grid assumption was wrong — NASA's
+> march mixes ~95% special insertions with ~5% RAW rows (at the
+> reference: marched-row indices 2/9/21/39/65, wall θ 0.56°–16.7°)
+> where prev[1]'s C+ **terminates on the arc** and becomes the wall
+> point, shifting the interior pairing by one.  Termination is
+> physics (every C+ ends on the wall); skipping it starves the
+> wall-adjacent strip — measured ν_w−θ_w → −0.67° at B vs the
+> oracle's +0.68° (axisymmetric wall expansion must run AHEAD of
+> planar PM), and an 8% converged-to-wrong s15.  **Landed march
+> (`raosim/jax/moc_kernel.py`):** NASA dθ-form unit-process ports
+> (`interior_point_nasa` with the on-axis coefficient substitution,
+> `axis_point_nasa` one-sided source, `special_wall_point_nasa`,
+> `arc_wall_point_raw_nasa` — all parity ≤1e-12 on oracle rows; note
+> the C++'s SIGNED `B1 <= R1` selection in the raw point, ported
+> as-is) + the exact raw/special row policy under static padded
+> shapes with TRACED valid width and pairing offset.  **Result: BD
+> bit-parity with `build_kernel` — max|ΔM| 4.8e-10 over all 120
+> nodes; d(BD)/dθ_B exact (jacfwd vs FD ≤1.1e-8, sensitivity flows
+> only through the final clamped row; smooth within a 0.25° grid
+> window, re-centred per rung like kernel_bd re-seeding).**
+> `tests/test_jax_moc_kernel.py`: 9 passed (xfail acceptance FLIPPED
+> to a hard 1e-8 parity gate).  **J3b-2 LANDED:**
+> `raosim/jax/theta_b_solve.py` — θ_B as a live BVP unknown: the
+> residual recomputes BD in-graph per evaluation; wiring exploits
+> `StaticParams._replace` with traced BD arrays through the untouched
+> J2-parity assembly (padded tails are ds=0 segments the flux rules
+> already mask; the arc-length cumsum plateaus so kdf parametrises
+> the valid arc).  Gates: live-vs-static residual parity at the seed
+> ≤1e-6 (automatic via BD bit-parity), d(residual)/dθ_B FD-exact,
+> end-to-end LM smoke (29 s coarse).  Production opt-in
+> `RaoSolverConfig.solve_theta_b=True` (JAX backend): θ_B joins the
+> unknown vector with ±dθ_limit/4 bounds, the kernel is re-frozen at
+> the LM-solved angle with provenance `"bvp_solved"` (flows into the
+> J5 θ_N reporting automatically); verified end-to-end in-sandbox
+> (7:08, @slow: solved θ_N 25.57° ± window at the reference).
+> **The decisive physics experiment is now runnable on host:** full
+> D-state pins + `solve_theta_b=True` at the reference — does the
+> stationarity floor collapse with θ_B live, or does the Guderley
+> branch stand?  **Phase 13 #8 LANDED:** `plot_net_diagnostics`
+> (spec plot 10/10) — per-link C± residuals via the existing
+> `characteristic_net_links`/`characteristic_net_compatibility_
+> residuals` plumbing + CE-chain fallback for `evaluate_moc=False`;
+> worst-5% + 3×RMS links red, indices to stdout,
+> `fig.net_diagnostics` dict; §12.5 gate test passes (flags bad links
+> on the max_nfev=0 mis-converged run).  **§11.7→12.7 LANDED:** the
+> BDE wall path lifts the SOLVED state into the full-form
+> `moc_topology.RaoTopology` — `sol.topology_solved` (+
+> `construction_diagnostics["topology_closure"]` floats); seams exact
+> at the reference, full_wall ends on the commanded exit;
+> `sol.topology` remains the nasa-flavour SEED object.  Sandbox
+> suite: pairing 5/5, jax kernel 9, theta_b fast 2, plotting 13,
+> topology 5(+slow) — all green.
+> J5 de-circularization): the differentiable kernel-march SKELETON
+> exists with exact smooth d/dθ_B; BD state accuracy vs the oracle is
+> the open gate.**  `raosim/jax/moc_kernel.py` (stub → real):
+> Anderson-form unit processes ported from the corrected `raosim.moc`
+> (fixed-iteration `fori_loop`s; parity with the NumPy processes at
+> ``tol=0.0`` measured ≤ 2e-15 — float64 round-off), plus the march:
+> θ_B-scaled prescribed wall grid (θ_w,k = θ_B·k/n_rows; the last scan
+> carry IS BD at exactly θ_B), NASA's grow-by-one fan in static PADDED
+> arrays (width n0+n_rows; per-row valid prefix is a function of the
+> static row index; padded slots filled with the row's axis state as
+> benign finite sentinels — no where-NaN-grad), prescribed wall point =
+> NASA `CalcSpecialWallPoint` semantics in bounded angle form (C− 
+> tangent-line foot through the prev wall point + x-ratio state
+> interpolation + corrected C+ compatibility).  **Design history, all
+> measured in `.venv-jax` (py3.12 + pinned jax — note: the sandbox CAN
+> run small jax marches/solves; only the long LM ladders stay
+> host-only):** (1) static-width forward march — wall steps explode
+> 0.56°→2.3°→5.4°→NaN (nothing limits the step once the row is
+> coarse); (2) static-width inverse march + per-row re-gridding —
+> weakly unstable, axis Mach 1.63→6.75 vs oracle ~3.3, NaN by row ~98
+> (fan starved); (3) padded fan + chord-foot wall point — stable/finite
+> but wall chain over-accumulates ν (+0.034°/row, B Mach +4.4%);
+> (4) LANDED: padded fan + NASA-faithful tangent-line foot — wall chain
+> tracks the oracle within |ΔM| ≤ 0.033 across the arc.  **Proven (
+> `tests/test_jax_moc_kernel.py`, 7 passed / 1 xfailed, 5s):** unit
+> parity 1e-12 gates; march finite; wall trace exactly on the grid and
+> on the arc; BD satisfies the corrected C− invariant (RMS 2.8e-5;
+> oracle's own BD 4.1e-6); `jacfwd` d(BD)/dθ_B finite and matching
+> central FD to <1e-4 rel (measured ~1e-6).  **Open (xfail
+> `test_bd_matches_oracle_acceptance`):** BD interior/axis states —
+> B Mach −1.7%, M(15% arc ≈ D region) +7.7%, axis +8.7%, and the
+> deltas GROW when resolution doubles (nasa converged 3.384→3.382 at
+> s15 while jax moves 3.64→3.75): a chain consistency defect, not
+> discretization.  Root-cause candidates, in suspicion order: (a) the
+> near-axis C+ source in the last interior cell (NASA substitutes the
+> off-axis node's coefficients; the midpoint-r regularisation may
+> differ at O(1) along the marched limit); (b) foot-state
+> interpolation space in the wall process (NASA interpolates
+> tan-slopes linearly in x — materially different from angle-space on
+> near-vertical TT' segments); (c) the special-vs-regular row mix at
+> finer resolution (grow-by-one verified only at n_kernel=24, where
+> NASA's special point fires every row: lens 24→120 over 102 rows,
+> α-steps of dθ_limit/2 = 0.25°).  Next session: chase (a)-(c) against
+> MOC_GridCalc_BDE.cpp + Zucrow & Hoffman Ch. 17 (project rule: ground
+> in the texts first), THEN wire θ_B as a BVP unknown (assembly
+> args-lift; n_rows re-frozen per ladder rung like kernel_bd today).
+> `build_start_line` (differentiable Kliegel–Levine, needed for
+> d/d(Rt, γ) totals) stays a documented stub.
+
+> **J5 DE-CIRCULARIZED (2026-06-12, sandbox-verified; host record run
+> queued).**  Under the characteristic formulation `sol.theta_N` is now
+> the SOLVED kernel arc-end angle θ_B (with provenance —
+> `MOCKernel.theta_b_provenance`: `fixed_end_secant` / `frozen_override`
+> / `seed_guess` — surfaced as
+> `construction_diagnostics["design_angles"]["theta_N_source"]` and as
+> a per-row benchmark column) and `sol.theta_E` is the solved CE exit
+> flow angle `ce.theta[-1]`; the Rao-1960 parabola-fit chart pair is
+> demoted to comparison data in the same diagnostics block.  Legacy
+> formulation reporting is unchanged.  **Discovery that sharpens the
+> old J5 record's reading: the pre-J5 "solved θ_E" column was the
+> chart-N→exit straight CHORD** — with `evaluate_moc=False` the export
+> wall degenerates to two points, and pure geometry reproduces the
+> entire recorded signature (~21.1° @L70 / ~18.6° @L80 / ~16.6° @L90,
+> ε-independent) to ~0.1° — so the "low-ε θ_E gap" was chart-vs-chord,
+> not solver physics (and not only the shallow-θ_B shadow as previously
+> hypothesised).  err_* columns are now exact-variational vs
+> parabola-fit DELTAS — the benchmark's documented finding (expected at
+> the reference: θ_B 25.57 vs chart 30, θ_E 11.12 vs 15.5).  Tests:
+> three new fast reporting gates on the `max_nfev=0` path
+> (sandbox-green, no JAX needed); the corner test additionally guards
+> secant provenance; the full-grid slow test now asserts completion +
+> physical bands + ≥80% secant-sourced rows and RECORDS deltas (the
+> half-vacuous 3/6° chart gate is retired); the plan-target xfail
+> reason is now *definitional*.  `to_contour_dict` draws the throat arc
+> to the exported wall's actual start (was: reported θ_N — would gap
+> post-J5).  Scripts: `j5_chart_sweep.py` re-documented + JSON gains
+> `theta_n_source_counts`; `generate_contour.py` / `j4_gate_wall_probe.py`
+> now rely on package defaults (= the gate config), print the solved
+> angles, stale 21.87°/22° guess echoes removed;
+> `plot_reference_topology.py` re-run in-sandbox (θ_B 25.5619°,
+> kdf 0.1522, seams 0.0, peak 26.26°, exit 11.20°).  Sandbox suite:
+> pairing 5/5, nasa_moc_topology, moc fast, rao_residuals, smoke +
+> 3 new gates all green (jax-import tests are host-only as ever).
+> **HOST QUEUE (in order): (1) fast suite + slow chart sweep regression
+> (`pytest -q -m "not slow"` then `pytest tests/test_rao_chart_benchmark.py -q`),
+> (2) `PYTHONPATH=. python scripts/j5_chart_sweep.py` — expect
+> systematic θ_N deltas ~4-5° (solved θ_B below the parabola chart) and
+> θ_E deltas ~3-4.5°, sources all `fixed_end_secant`; then pin
+> per-corner delta baselines into the full-grid test (its TODO),
+> (3) `scripts/j4_gate_wall_probe.py` + `scripts/generate_contour.py`
+> for fresh deliverable figures, (4) full-suite re-record (was 790/5).**
+
 > **FORMULATION DEFECT FOUND AND FIXED (2026-06-11h, identified by
 > ibrahim; supersedes the Guderley reading of the freeze sweep).**
 > The residual stack enforced the WRONG characteristic invariant: along

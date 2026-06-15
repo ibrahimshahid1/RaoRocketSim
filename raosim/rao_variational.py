@@ -371,6 +371,20 @@ class RaoSolverConfig:
     # "fixed_end") on the frozen kernel (r_E pinned; length left to the
     # solve).  None = legacy behaviour (inner secant owns theta_B).
     theta_b_freeze_deg: float | None = None
+    # J3b-2 (2026-06-12): solve theta_B as a BVP unknown.  JAX backend
+    # only.  The unknown vector gains one trailing component and the
+    # residual recomputes the kernel BD *in-graph* per evaluation via
+    # the differentiable march (raosim.jax.moc_kernel.march_kernel —
+    # bit-parity with the NumPy kernel at the seed angle); the
+    # mass-closure target and D-state pins read the live BD(theta_B).
+    # After the solve the kernel is re-frozen at the solved angle
+    # (provenance "bvp_solved") so every downstream consumer — mass
+    # diagnostics, BDE wall, theta_N reporting — sees the solved
+    # kernel.  theta_B bounds: ± a quarter dtheta-limit around the
+    # seed (the march's smooth window); re-centre by re-solving if it
+    # walks to a bound.  Default False: the seed secant owns theta_B
+    # exactly as before.
+    solve_theta_b: bool = False
 
 
 # Converged-topology ("characteristic") block set.  After the
@@ -696,6 +710,13 @@ class RaoSolution:
     control_surface: ControlSurface
     characteristic_net: list[CharRow]
     kernel_points: list[CharPoint]
+    # Reported design angles [rad].  Characteristic formulation (J5
+    # de-circularization): theta_N is the kernel arc-end angle theta_B
+    # the BVP closed on (a solver output), theta_E the solved CE exit
+    # flow angle.  Legacy formulation: theta_N is the Rao-1960
+    # parabola-fit chart lookup and theta_E the export-wall end slope.
+    # construction_diagnostics["design_angles"] carries both flavours
+    # plus provenance strings.
     theta_N: float
     theta_E: float
     thrust_coefficient: float
@@ -708,6 +729,11 @@ class RaoSolution:
     construction_diagnostics: dict = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
     topology: object | None = None  # nasa_moc.RaoTopology when available
+    # §12.7: the full-form SOLVED topology (moc_topology.RaoTopology —
+    # CharPoint curves, full_wall(), closure_report()), built by the
+    # BDE wall path from the solved CE/kdf.  None for other wall
+    # methods.  ``topology`` above stays the nasa_moc SEED topology.
+    topology_solved: object | None = None
 
     def to_contour_dict(self, *, Rt: float, epsilon: float, length_pct: float,
                         pa_over_p0: float, Ru_factor: float = 1.5,
@@ -726,7 +752,18 @@ class RaoSolution:
         y_conv = (Rt + Ru) + Ru * np.sin(t_conv)
 
         theta_n = self.theta_N
-        t_thr = np.linspace(-math.pi / 2, theta_n - math.pi / 2, n_conv)
+        # Draw the throat arc to the angle that meets the exported
+        # wall's first point, NOT to the reported theta_N: the export
+        # wall starts at the chart-N station, while post-J5 the
+        # characteristic formulation reports the solved kernel theta_B
+        # (~4 deg short of chart-N at the reference) — using the
+        # reported angle here would leave a gap in the concatenated
+        # polyline.
+        if len(wall_x) and Rd > 0.0:
+            arc_end = math.asin(min(max(float(wall_x[0]) / Rd, 0.0), 1.0))
+        else:
+            arc_end = theta_n
+        t_thr = np.linspace(-math.pi / 2, arc_end - math.pi / 2, n_conv)
         x_throat = Rd * np.cos(t_thr)
         y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
 
@@ -1855,6 +1892,13 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
             Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
             starting_line_method=config.starting_line_method,
             Ru=config.throat_upstream_radius_factor * Rt,
+        )
+        # Honest theta_B provenance for downstream reporting: a frozen
+        # override is a *commanded* angle; a guess-angle kernel (secant
+        # skipped or failed) is chart-flavoured and must not masquerade
+        # as a solved theta_N in the J5 benchmark.
+        kernel.theta_b_provenance = (
+            "frozen_override" if theta_b_freeze is not None else "seed_guess"
         )
         if topology is None:
             try:
@@ -3068,9 +3112,12 @@ def _wall_from_bde_region(
     the kernel's own throat-arc wall, and each BFE row's wall point is
     located by mass conservation.
 
-    Returns ``(raw_wall, diagnostics)`` in the same shape the
-    ``coupled``/``legacy`` wall builders use.  ``moc_compatibility_preserved``
-    is set by the *caller's* forward-MOC audit, not assumed here.
+    Returns ``(raw_wall, diagnostics, topology_full)`` — the first two
+    in the same shape the ``coupled``/``legacy`` wall builders use
+    (``moc_compatibility_preserved`` is set by the *caller's*
+    forward-MOC audit, not assumed here); ``topology_full`` is the
+    §11.7 full-form :class:`raosim.moc_topology.RaoTopology` of the
+    solved state (None if the lift failed — wall still returned).
     """
     from raosim.nasa_moc import RaoTopology as _RaoTopology
     from raosim.nasa_moc import calc_bde_region as _calc_bde_region
@@ -3113,6 +3160,23 @@ def _wall_from_bde_region(
     wall_pts += [(float(p.x), float(p.r)) for p in bfe.wall_contour]
     raw_wall = np.asarray(wall_pts, dtype=float)
 
+    # §11.7→12.7 wiring: lift the construction into the full-form
+    # RaoTopology (Phase 12.6 object — CharPoint curves, full_wall(),
+    # closure_report()) so the export path carries the explicit
+    # topology of the SOLVED state, not just the wall polyline.
+    topo_full = None
+    try:
+        from raosim.moc_topology import build_topology as _build_topology
+
+        topo_full = _build_topology(kernel, topology, bfe)
+        diagnostics["topology_closure"] = {
+            k: float(v) for k, v in topo_full.closure_report().items()
+        }
+    except Exception as exc:  # topology lift is reporting, not the wall
+        diagnostics["warnings"].append(
+            f"Full-form topology lift failed: {exc}"
+        )
+
     diagnostics.update({
         "bfe_iD": int(bfe.iD),
         "bfe_rows": len(bfe.grid_rows),
@@ -3127,7 +3191,7 @@ def _wall_from_bde_region(
         diagnostics["warnings"].append(
             "BDE region march incomplete; wall is partial."
         )
-    return raw_wall, diagnostics
+    return raw_wall, diagnostics, topo_full
 
 
 def construct_wall_from_ce_raw(
@@ -3921,9 +3985,50 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         # Differentiable backend: identical residual (J2 parity gate),
         # exact autodiff Jacobian inside Optimistix LM.  Import is local
         # so the NumPy path never requires jax to be installed.
-        from raosim.jax.api import least_squares_jax
+        if getattr(config, "solve_theta_b", False):
+            # J3b-2: theta_B joins the unknown vector; the kernel BD is
+            # recomputed in-graph per residual evaluation.  result.x
+            # excludes theta_B so the unpacking below is unchanged.
+            from raosim.jax.theta_b_solve import least_squares_jax_theta_b
 
-        result = least_squares_jax(solve_config, u0, lower, upper)
+            result = least_squares_jax_theta_b(
+                solve_config, kernel_obj, u0, lower, upper,
+            )
+            theta_b_star = float(result.theta_b)
+            if kernel_obj is not None:
+                # The angle was solved even if it landed on the seed.
+                kernel_obj.theta_b_provenance = "bvp_solved"
+            if (kernel_obj is not None
+                    and abs(theta_b_star - float(kernel_obj.theta_B))
+                    > 1e-12):
+                # Re-freeze the kernel at the LM-solved angle: the
+                # differentiable march is bit-parity with build_kernel,
+                # so the rebuilt BD equals the live BD the solver saw.
+                from raosim.nasa_moc import build_kernel as _build_kernel_j3b
+
+                kernel_obj = _build_kernel_j3b(
+                    config.Rt,
+                    config.throat_downstream_radius_factor * config.Rt,
+                    theta_b_star, config.gamma, config.n_kernel,
+                    starting_line_method=config.starting_line_method,
+                    Ru=config.throat_upstream_radius_factor * config.Rt,
+                )
+                kernel_obj.theta_b_provenance = "bvp_solved"
+                kernel_bd_seed = [
+                    node.to_flow_node() for node in kernel_obj.bd
+                ]
+                solve_config = replace(
+                    solve_config, kernel_bd=tuple(kernel_bd_seed),
+                )
+                kernel_points = [
+                    _make_point(float(p.x), float(p.r), float(p.theta),
+                                max(float(p.M), 1.000001), config.gamma)
+                    for p in kernel_bd_seed
+                ]
+        else:
+            from raosim.jax.api import least_squares_jax
+
+            result = least_squares_jax(solve_config, u0, lower, upper)
     elif config.solver_backend == "numpy":
         if least_squares is None:
             raise RuntimeError(
@@ -3979,6 +4084,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
 
     raw_wall = np.empty((0, 2))
     char_net: list[CharRow] = []
+    # §12.7: the full-form solved topology (moc_topology.RaoTopology),
+    # populated by the BDE wall path; None on the other wall methods.
+    topology_solved = None
     construction_diagnostics: dict = {
         "warnings": [],
         "postprocessed": False,
@@ -3990,11 +4098,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
 
     Re = math.sqrt(config.epsilon) * config.Rt
     Rd = config.throat_downstream_radius_factor * config.Rt
-    theta_n, _theta_e_design = _design_angles_rad(
+    # Rao-1960 parabola-fit chart angles.  Since the J5
+    # de-circularization these are comparison data and geometry seeds
+    # only (chart-N point for export endpoints, spline end slopes,
+    # forward-audit starting line); the *reported* solution angles
+    # under the characteristic formulation are solver outputs — see
+    # the design-angle reporting block before the RaoSolution return.
+    theta_n_chart, theta_e_chart = _design_angles_rad(
         config.epsilon, config.length_pct, config.thetaN_guess_deg
     )
-    Nx = Rd * math.sin(theta_n)
-    Ny = config.Rt + Rd * (1.0 - math.cos(theta_n))
+    Nx = Rd * math.sin(theta_n_chart)
+    Ny = config.Rt + Rd * (1.0 - math.cos(theta_n_chart))
     if config.evaluate_moc:
         try:
             if config.wall_method == "coupled":
@@ -4007,16 +4121,16 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     config.n_kernel,
                 )
             elif config.wall_method == "bde":
-                raw_wall, construction_diagnostics = _wall_from_bde_region(
-                    ce, kernel_obj, solve_config,
+                raw_wall, construction_diagnostics, topology_solved = (
+                    _wall_from_bde_region(ce, kernel_obj, solve_config)
                 )
             else:
                 raise ValueError(
                     "wall_method must be 'coupled', 'legacy', or 'bde'"
                 )
             if raw_wall.shape[0] >= 3:
-                slope_start = math.tan(theta_n)
-                slope_end = math.tan(_theta_e_design)
+                slope_start = math.tan(theta_n_chart)
+                slope_end = math.tan(theta_e_chart)
                 wall = SplineWall(
                     raw_wall[:, 0],
                     raw_wall[:, 1],
@@ -4026,7 +4140,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 starting = approximate_starting_line(
                     config.Rt,
                     config.throat_downstream_radius_factor * config.Rt,
-                    max(theta_n, 1e-4),
+                    max(theta_n_chart, 1e-4),
                     config.gamma,
                     config.n_kernel,
                     method=config.starting_line_method,
@@ -4260,16 +4374,66 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     )
     ce.warnings.extend(warnings)
 
-    theta_e = math.atan2(export_wall[-1, 1] - export_wall[-2, 1],
-                         export_wall[-1, 0] - export_wall[-2, 0])
+    theta_e_wall_export = math.atan2(
+        export_wall[-1, 1] - export_wall[-2, 1],
+        export_wall[-1, 0] - export_wall[-2, 0],
+    )
+    # J5 de-circularization (2026-06-12): under the characteristic
+    # formulation the reported (theta_N, theta_E) are SOLVER outputs:
+    #
+    #   theta_N := the kernel arc-end angle theta_B the converged BVP
+    #              actually used (the seed secant's fixed-end closure,
+    #              or the theta_b_freeze_deg override).  B *is* Rao's
+    #              wall corner N — the throat arc ends and the bell
+    #              begins at the kernel's last RRC.
+    #   theta_E := the solved CE exit flow angle theta(E).  E sits on
+    #              the wall lip with wall-tangent flow, so theta(E) is
+    #              the wall exit angle by construction.  The export-wall
+    #              chord is NOT a solver output: with evaluate_moc=False
+    #              the raw wall degenerates to the straight chart-N →
+    #              exit segment, and the pre-J5 benchmark's "solved
+    #              theta_E" column was exactly that chord (pure geometry
+    #              reproduces the recorded grid signature to ~0.1 deg:
+    #              ~21.1° @L70 / ~18.6° @L80 / ~16.6° @L90, nearly
+    #              epsilon-independent).
+    #
+    # The chart pair stays available as comparison data below;
+    # exact-variational vs parabola-chart deltas are expected,
+    # documented findings (plan STATUS 2026-06-11h), not solver errors.
+    if (getattr(config, "formulation", "legacy") == "characteristic"
+            and kernel_obj is not None):
+        theta_n_report = float(kernel_obj.theta_B)
+        theta_n_source = "kernel_theta_B:" + str(
+            getattr(kernel_obj, "theta_b_provenance", "unknown")
+        )
+        theta_e_report = float(ce.theta[-1])
+        theta_e_source = "ce_exit_flow_angle"
+    else:
+        theta_n_report = float(theta_n_chart)
+        theta_n_source = "chart_lookup"
+        theta_e_report = float(theta_e_wall_export)
+        theta_e_source = "wall_export_slope"
+    construction_diagnostics["design_angles"] = {
+        "theta_N_reported_deg": math.degrees(theta_n_report),
+        "theta_E_reported_deg": math.degrees(theta_e_report),
+        "theta_N_source": theta_n_source,
+        "theta_E_source": theta_e_source,
+        "theta_N_chart_deg": math.degrees(theta_n_chart),
+        "theta_E_chart_deg": math.degrees(theta_e_chart),
+        "theta_E_wall_export_deg": math.degrees(theta_e_wall_export),
+        "chart_provenance": (
+            "Rao 1960 ARS J. parabola-fit charts (computed at gamma=1.23; "
+            "contours gamma-insensitive per Rao 1961 ARS J. 31(11) p.1490)"
+        ),
+    }
     return RaoSolution(
         wall_raw=raw_wall,
         wall_export=export_wall,
         control_surface=ce,
         characteristic_net=char_net,
         kernel_points=kernel_points,
-        theta_N=theta_n,
-        theta_E=theta_e,
+        theta_N=theta_n_report,
+        theta_E=theta_e_report,
         thrust_coefficient=float(cf),
         residuals=residuals,
         reliability=reliability,
@@ -4300,6 +4464,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         },
         warnings=_dedupe_strings(warnings),
         topology=topology_seed,
+        topology_solved=topology_solved,
     )
 
 
