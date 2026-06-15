@@ -122,6 +122,26 @@ def test_invalid_region_downgrades_reliability():
                    for w in solution.warnings)
 
 
+def test_phase5_invalid_region_test_vector():
+    """
+    Phase 5 reliability cliff: pass an explicit pathological CE polyline
+    through ``rao_valid_region`` and assert the inequality fires.  The
+    plan §2.E identifies very short / over-expanded designs as the
+    canonical invalid region; this test pins the gate against the
+    synthetic short-nozzle CE polyline from ``_make_short_nozzle_ce_nodes``.
+    """
+    nodes = _make_short_nozzle_ce_nodes()
+    min_b, b_values = rao_valid_region(nodes)
+
+    assert min_b < 0.0, (
+        "Pathological short-nozzle CE should violate the Rao validity "
+        f"inequality, but min boundary value was {min_b:.3g}."
+    )
+    assert any(b < 0.0 for b in b_values), (
+        "At least one BD segment should report a negative boundary value."
+    )
+
+
 # ---------------------------------------------------------------------
 # Plot smoke tests (raw-vs-export trap, §12.3 of REWRITE_PLAN.md)
 # ---------------------------------------------------------------------

@@ -66,8 +66,10 @@ from raosim.moc import (
 from raosim.rao_residuals import (
     residual_Cminus_axisym,
     residual_Cplus_axisym,
+    residual_cplus_child_position,
     residual_intersection,
     residual_left_mach_geometry,
+    residual_wall_tangency,
 )
 from raosim.nasa_moc import (
     calc_lrc_de,
@@ -115,6 +117,24 @@ class ControlSurface:
     solver_message: str | None = None
     optimizer_success: bool = False
     warnings: list[str] = field(default_factory=list)
+
+
+@dataclass
+class WallSurface:
+    """
+    Wall polyline carried as a first-class BVP unknown (Phase 6).
+
+    Parallel to :class:`ControlSurface`: ``x[0]`` is wall point N (end of
+    the throat arc), ``x[-1]`` is wall point E (exit).  All state arrays
+    are sized ``n_wall``.  ``theta[i]`` is the local flow angle at the
+    wall node; at convergence this equals the wall slope via the
+    streamline / wall-tangency residual block.
+    """
+
+    x: np.ndarray
+    r: np.ndarray
+    M: np.ndarray
+    theta: np.ndarray
 
 
 class ContourReliability(str, Enum):
@@ -168,13 +188,20 @@ class RaoSolverConfig:
     thetaN_guess_deg: float = 30.0
     n_control: int = 12
     n_kernel: int = 12
-    max_nfev: int = 25
+    max_nfev: int = 200
     residual_tol: float = 2e-3
-    starting_line_method: str = "area_ratio"
+    starting_line_method: str = "kliegel_levine"
     evaluate_moc: bool = True
     residual_blocks: tuple[str, ...] | None = None
     wall_method: str = "coupled"
     kernel_bd: tuple[FlowNode, ...] | None = field(default=None, repr=False)
+    # Phase 6: when ``couple_wall`` is True the wall (x, r, M, theta) is
+    # added to the BVP unknown vector and solved jointly with the CE.
+    # New residual blocks ``wall_endpoint``, ``wall_tangency``,
+    # ``cplus_ce_to_wall``, ``wall_intersection`` become active.  Default
+    # is False so legacy callers stay on the postprocessing wall path.
+    couple_wall: bool = False
+    n_wall: int = 12
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
@@ -187,7 +214,29 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
     "penalties",
     "algebraic_stationarity",
     "left_mach",
+    # Phase 6 wall blocks: included by default but no-ops unless the
+    # solver is configured with couple_wall=True (and therefore actually
+    # populates the wall portion of the unknown vector).
+    "wall_endpoint",
+    "wall_tangency",
+    "cplus_ce_to_wall",
+    "wall_intersection",
 )
+
+# Unified weight applied to the three derivative-form Rao physics
+# residual blocks (algebraic_stationarity, moc_cplus, moc_cminus).
+# left_mach uses unit weight because it is a geometric residual already
+# normalised by segment chord length.  PHYSICS_WEIGHT = 0.05 places
+# the C+/C- axisymmetric compatibility above the smoothness
+# regularization (0.02) while leaving the mass and length integral
+# closures within ~1e-2.  At larger weights (0.1 +), the CE
+# parametrisation (a polyline with free r, M, theta per node but a
+# shared kernel_d_fraction) cannot simultaneously satisfy full-strength
+# C+/C- compatibility AND the kernel-BD mass closure with the current
+# approximate kernel; the right time to ramp toward unity is when
+# Phase 6 (coupled wall promoted to a joint BVP unknown) and the full
+# CalcRRCsAlongArc kernel (Phase 12.4) are in place.
+PHYSICS_WEIGHT = 0.05
 
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
     "stationarity",        # numerical Euler-Lagrange (reference; not in default)
@@ -208,7 +257,7 @@ RAO_RESIDUAL_ABLATIONS = {
     ),
     "default_plus_stationarity": DEFAULT_RAO_RESIDUAL_BLOCKS + ("stationarity",),
     "default_plus_transversality": DEFAULT_RAO_RESIDUAL_BLOCKS + ("transversality",),
-    "all": DEFAULT_RAO_RESIDUAL_BLOCKS,
+    "all": ALL_RAO_RESIDUAL_BLOCKS,
 }
 
 
@@ -300,6 +349,11 @@ class RaoResidualGroups:
     ce_geometry: np.ndarray
     regularization: np.ndarray
     penalties: np.ndarray
+    # Phase 6 coupled-wall blocks (empty arrays when couple_wall=False).
+    wall_endpoint: np.ndarray = field(default_factory=lambda: np.zeros(0))
+    wall_tangency: np.ndarray = field(default_factory=lambda: np.zeros(0))
+    cplus_ce_to_wall: np.ndarray = field(default_factory=lambda: np.zeros(0))
+    wall_intersection: np.ndarray = field(default_factory=lambda: np.zeros(0))
 
     def flat(self) -> np.ndarray:
         return np.concatenate([
@@ -314,6 +368,10 @@ class RaoResidualGroups:
             self.ce_geometry,
             self.regularization,
             self.penalties,
+            self.wall_endpoint,
+            self.wall_tangency,
+            self.cplus_ce_to_wall,
+            self.wall_intersection,
         ])
 
     def summaries(self) -> list[dict]:
@@ -329,6 +387,10 @@ class RaoResidualGroups:
             summarize_group("ce_geometry", self.ce_geometry),
             summarize_group("regularization", self.regularization),
             summarize_group("penalties", self.penalties),
+            summarize_group("wall_endpoint", self.wall_endpoint),
+            summarize_group("wall_tangency", self.wall_tangency),
+            summarize_group("cplus_ce_to_wall", self.cplus_ce_to_wall),
+            summarize_group("wall_intersection", self.wall_intersection),
         ]
 
 
@@ -1457,36 +1519,30 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     except ValueError:
         Me_target = max(float(ce.M[-1]), 2.0)
 
-    if topology is not None:
-        D = topology.D
-        # Anchor CE start at point D (kernel-side end of the optimal
-        # control surface) and end at the nozzle exit (Ln, Re).  Mach
-        # ramps from M_D up to the ideal area-Mach Me at exit; theta
-        # ramps from theta_D down to the chart-derived theta_E target.
-        ce.r = np.linspace(float(D.r), float(Re), config.n_control)
-        ce.x = np.linspace(float(D.x), float(Ln), config.n_control)
-        try:
-            from raosim.nozzle_geometry import lookup_angles
-
-            _, theta_E_chart_deg = lookup_angles(config.epsilon, config.length_pct)
-            theta_E_target = math.radians(theta_E_chart_deg)
-        except Exception:
-            theta_E_target = math.radians(max(0.5 * config.thetaN_guess_deg, 8.0))
-        frac = np.linspace(0.0, 1.0, config.n_control)
-        ce.M = np.maximum(
-            float(D.M) + (Me_target - float(D.M)) * frac,
-            1.001,
+    # Use the old axis-to-exit linear seed which least_squares is
+    # calibrated for.  The NASA topology drives the kernel_d_fraction
+    # unknown and supplies the kernel BD curve for the mass-closure
+    # residual, but the CE r-grid spans axis to exit (the BVP's native
+    # parametrisation).
+    frac = np.linspace(0.0, 1.0, config.n_control)
+    ce.M = np.maximum(ce.M, 1.001 + (Me_target - 1.001) * frac ** 0.85)
+    ce.theta = np.clip(
+        theta_b_seed * (1.0 - 0.55 * frac),
+        math.radians(-5.0), math.radians(55.0),
+    )
+    ce.x = np.linspace(0.0, Ln, config.n_control)
+    # Seed kernel_d_fraction so the wall-to-D mass flow along BD equals
+    # the quasi-1D throat target (best initial guess for the BVP mass
+    # closure when the kernel BD curve already spans the full radial
+    # cross-section).  The least_squares solve then refines it.
+    if kernel_bd_flow_nodes:
+        throat_target = _target_mdot(config.Rt, config.gamma)
+        ce.kernel_d_fraction = _seed_kernel_d_fraction(
+            kernel_bd_flow_nodes, throat_target, config.gamma,
         )
-        ce.theta = float(D.theta) + (theta_E_target - float(D.theta)) * frac
+    elif topology is not None:
         ce.kernel_d_fraction = float(topology.d_fraction)
     else:
-        frac = np.linspace(0.0, 1.0, config.n_control)
-        ce.M = np.maximum(ce.M, 1.001 + (Me_target - 1.001) * frac**0.85)
-        ce.theta = np.clip(
-            theta_b_seed * (1.0 - 0.55 * frac),
-            math.radians(-5.0), math.radians(55.0),
-        )
-        ce.x = np.linspace(0.0, Ln, config.n_control)
         ce.kernel_d_fraction = 0.5
 
     ce.phi = _phi_from_curve(ce.x, ce.r)
@@ -1516,7 +1572,17 @@ def _pack_bvp(
     lambda2: float,
     lambda3: float,
     log_C: float | None = None,
+    wall: WallSurface | None = None,
 ) -> np.ndarray:
+    """Pack CE (+ optional wall) state into the BVP unknown vector.
+
+    Layout (Phase 6 coupled wall appends 4*n_w wall arrays before the
+    four trailing scalars):
+
+        [M_ce, theta_ce, x_ce, r_ce,
+         (M_w, theta_w, x_w, r_w),   # Phase 6 only
+         lambda2, lambda3, log_C, kernel_d_fraction]
+    """
     if ce.x is None:
         x = np.zeros_like(ce.r, dtype=float)
         for i in range(1, len(ce.r)):
@@ -1527,34 +1593,70 @@ def _pack_bvp(
     else:
         x = np.asarray(ce.x, dtype=float)
     log_C_val = float(log_C) if log_C is not None else float(ce.log_C)
-    return np.concatenate([
-        ce.M,
-        ce.theta,
+    parts: list[np.ndarray] = [
+        np.asarray(ce.M, dtype=float),
+        np.asarray(ce.theta, dtype=float),
         x,
-        ce.r,
+        np.asarray(ce.r, dtype=float),
+    ]
+    if wall is not None:
+        parts.extend([
+            np.asarray(wall.M, dtype=float),
+            np.asarray(wall.theta, dtype=float),
+            np.asarray(wall.x, dtype=float),
+            np.asarray(wall.r, dtype=float),
+        ])
+    parts.append(np.asarray(
         [lambda2, lambda3, log_C_val, float(ce.kernel_d_fraction)],
-    ])
+        dtype=float,
+    ))
+    return np.concatenate(parts)
 
 
-def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
+def _unpack_bvp(
+    u: np.ndarray, r: np.ndarray, *, n_wall: int = 0,
+) -> tuple[ControlSurface, WallSurface | None]:
+    """Unpack the BVP unknown vector into (CE, optional wall).
+
+    When ``n_wall == 0`` the returned ``WallSurface`` is ``None`` and
+    ``u`` is expected in the legacy ``[4*n_ce + 4]`` layout.
+    """
     n = len(r)
     x = np.asarray(u[2 * n:3 * n], dtype=float).copy()
     r_ce = np.asarray(u[3 * n:4 * n], dtype=float).copy()
     phi = _phi_from_curve(x, r_ce)
-    # log_C and D location are trailing scalars; absent from legacy vectors.
-    log_C_val = float(u[4 * n + 2]) if u.size >= 4 * n + 3 else 0.0
-    kernel_d_fraction = float(u[4 * n + 3]) if u.size >= 4 * n + 4 else 1.0
-    return ControlSurface(
+    base_after_ce = 4 * n
+    wall: WallSurface | None = None
+    if n_wall > 0 and u.size >= 4 * n + 4 * n_wall + 4:
+        w_M = np.asarray(u[base_after_ce: base_after_ce + n_wall],
+                          dtype=float).copy()
+        w_theta = np.asarray(
+            u[base_after_ce + n_wall: base_after_ce + 2 * n_wall], dtype=float
+        ).copy()
+        w_x = np.asarray(
+            u[base_after_ce + 2 * n_wall: base_after_ce + 3 * n_wall], dtype=float
+        ).copy()
+        w_r = np.asarray(
+            u[base_after_ce + 3 * n_wall: base_after_ce + 4 * n_wall], dtype=float
+        ).copy()
+        wall = WallSurface(x=w_x, r=w_r, M=w_M, theta=w_theta)
+        scalar_start = base_after_ce + 4 * n_wall
+    else:
+        scalar_start = base_after_ce
+    log_C_val = float(u[scalar_start + 2]) if u.size >= scalar_start + 3 else 0.0
+    kernel_d_fraction = float(u[scalar_start + 3]) if u.size >= scalar_start + 4 else 1.0
+    ce = ControlSurface(
         r=r_ce,
         M=np.asarray(u[:n], dtype=float).copy(),
         theta=np.asarray(u[n:2 * n], dtype=float).copy(),
         phi=phi,
         x=x,
-        lambda2=float(u[4 * n]),
-        lambda3=float(u[4 * n + 1]),
+        lambda2=float(u[scalar_start]),
+        lambda3=float(u[scalar_start + 1]),
         log_C=log_C_val,
         kernel_d_fraction=kernel_d_fraction,
     )
+    return ce, wall
 
 
 def _stationarity_matrix(ce: ControlSurface, gamma: float,
@@ -1751,6 +1853,150 @@ def _seed_log_C_from_ce(ce: ControlSurface, gamma: float) -> float:
     return math.log(Mstar) + math.log(abs(cos_tma)) - math.log(cos_a)
 
 
+# ---------------------------------------------------------------------
+#  Phase 6 — coupled wall residuals
+# ---------------------------------------------------------------------
+
+
+def _wall_to_flow_nodes(wall: WallSurface) -> list[FlowNode]:
+    out: list[FlowNode] = []
+    for i in range(len(wall.x)):
+        out.append(FlowNode(
+            x=float(wall.x[i]), r=float(wall.r[i]),
+            M=max(float(wall.M[i]), 1.000001),
+            theta=float(wall.theta[i]),
+        ))
+    return out
+
+
+def _coupled_wall_residuals(
+    ce: ControlSurface,
+    wall: WallSurface,
+    config: RaoSolverConfig,
+) -> dict[str, np.ndarray]:
+    """
+    Phase 6 coupled-wall residual blocks.
+
+    Returns four arrays under keys ``"wall_endpoint"``, ``"wall_tangency"``,
+    ``"cplus_ce_to_wall"``, ``"wall_intersection"``.  All four are sized
+    according to ``len(wall)`` and the CE; pair CE node i ↔ wall node i
+    (linear pairing per the Phase 6 MVP from REWRITE_PLAN.md).
+    """
+    Rt = config.Rt
+    Re = math.sqrt(config.epsilon) * Rt
+    L = _target_length(Rt, config.epsilon, config.length_pct)
+    Rd = config.throat_downstream_radius_factor * Rt
+    theta_N, _ = _design_angles_rad(
+        config.epsilon, config.length_pct, config.thetaN_guess_deg,
+    )
+    Nx = Rd * math.sin(theta_N)
+    Ny = Rt + Rd * (1.0 - math.cos(theta_N))
+
+    wall_nodes = _wall_to_flow_nodes(wall)
+    ce_nodes = _control_surface_flow_nodes(ce)
+
+    if not wall_nodes:
+        return {
+            "wall_endpoint": np.zeros(0),
+            "wall_tangency": np.zeros(0),
+            "cplus_ce_to_wall": np.zeros(0),
+            "wall_intersection": np.zeros(0),
+        }
+
+    # 1. Endpoint closure: wall[0] == (Nx, Ny), wall[-1] == (L, Re).
+    L_scale = max(L, 1e-12)
+    Re_scale = max(Re, 1e-12)
+    endpoint = np.array([
+        (wall_nodes[0].x - Nx) / L_scale,
+        (wall_nodes[0].r - Ny) / Re_scale,
+        (wall_nodes[-1].x - L) / L_scale,
+        (wall_nodes[-1].r - Re) / Re_scale,
+    ], dtype=float)
+
+    # 2. Wall tangency on each segment.
+    tangency = np.array([
+        residual_wall_tangency(wall_nodes[i], wall_nodes[i + 1]) / Re_scale
+        for i in range(len(wall_nodes) - 1)
+    ], dtype=float)
+
+    # 3. C+ axisymmetric compatibility from CE[i] to wall[i] using the
+    # linear pairing of CE nodes ↔ wall nodes.  When n_ce != n_wall,
+    # interpolate the CE state at fractional index i*(n_ce-1)/(n_wall-1).
+    n_w = len(wall_nodes)
+    n_ce = len(ce_nodes)
+    cplus = []
+    intersection = []
+    if n_ce >= 2 and n_w >= 1:
+        theta_scale = math.radians(1.0)
+        for i in range(n_w):
+            frac = i * (n_ce - 1) / max(n_w - 1, 1)
+            j0 = int(min(max(math.floor(frac), 0), n_ce - 1))
+            j1 = int(min(j0 + 1, n_ce - 1))
+            t = frac - j0
+            ce0 = ce_nodes[j0]
+            ce1 = ce_nodes[j1]
+            ce_paired = FlowNode(
+                x=ce0.x + t * (ce1.x - ce0.x),
+                r=ce0.r + t * (ce1.r - ce0.r),
+                M=max(ce0.M + t * (ce1.M - ce0.M), 1.000001),
+                theta=ce0.theta + t * (ce1.theta - ce0.theta),
+            )
+            wall_pt = wall_nodes[i]
+            cplus.append(
+                residual_Cplus_axisym(ce_paired, wall_pt, config.gamma)
+                / theta_scale
+            )
+            intersection.append(
+                residual_cplus_child_position(ce_paired, wall_pt) / Re_scale
+            )
+    cplus = np.asarray(cplus, dtype=float)
+    intersection = np.asarray(intersection, dtype=float)
+
+    return {
+        "wall_endpoint": endpoint,
+        "wall_tangency": tangency,
+        "cplus_ce_to_wall": cplus,
+        "wall_intersection": intersection,
+    }
+
+
+def _initial_wall_guess(
+    config: RaoSolverConfig,
+    ce: ControlSurface,
+    topology,
+) -> WallSurface:
+    """Linear-in-x seed for the coupled wall unknown.
+
+    From N = (Nx, Ny) (end of throat arc) to E = (L, Re).  Mach ramps
+    from the topology's B-point Mach (kernel wall) to the ideal exit
+    Mach.  Flow angle ramps from the chart θ_N to the chart θ_E.
+    """
+    Rt = config.Rt
+    Re = math.sqrt(config.epsilon) * Rt
+    L = _target_length(Rt, config.epsilon, config.length_pct)
+    Rd = config.throat_downstream_radius_factor * Rt
+    theta_N_chart, theta_E_chart = _design_angles_rad(
+        config.epsilon, config.length_pct, config.thetaN_guess_deg,
+    )
+    Nx = Rd * math.sin(theta_N_chart)
+    Ny = Rt + Rd * (1.0 - math.cos(theta_N_chart))
+    n_w = max(int(config.n_wall), 4)
+    x = np.linspace(Nx, L, n_w)
+    # Quadratic radius growth from N to E for a smooth bell shape.
+    s = (x - Nx) / max(L - Nx, 1e-12)
+    r = Ny + (Re - Ny) * (1.0 - (1.0 - s) ** 2)
+
+    try:
+        Me = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
+    except ValueError:
+        Me = max(float(ce.M[-1]), 2.0)
+    M_start = float(topology.B.M) if topology is not None else float(ce.M[0])
+    M = M_start + (Me - M_start) * s
+    M = np.maximum(M, 1.001)
+    theta = theta_N_chart + (theta_E_chart - theta_N_chart) * s
+    return WallSurface(x=x, r=r, M=M, theta=theta)
+
+
 def rao_valid_region(
     ce_or_nodes,
     *,
@@ -1892,7 +2138,8 @@ def _rao_bvp_residual_groups(
     r: np.ndarray,
     config: RaoSolverConfig,
 ) -> RaoResidualGroups:
-    ce = _unpack_bvp(u, r)
+    n_wall = config.n_wall if config.couple_wall else 0
+    ce, wall = _unpack_bvp(u, r, n_wall=n_wall)
     _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
     mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
@@ -1931,6 +2178,17 @@ def _rao_bvp_residual_groups(
     ])
     active = _enabled_residual_blocks(config)
 
+    # Phase 6 coupled-wall residuals (no-op when wall is None).
+    if wall is not None:
+        wall_blocks = _coupled_wall_residuals(ce, wall, config)
+    else:
+        wall_blocks = {
+            "wall_endpoint": np.zeros(0),
+            "wall_tangency": np.zeros(0),
+            "cplus_ce_to_wall": np.zeros(0),
+            "wall_intersection": np.zeros(0),
+        }
+
     return RaoResidualGroups(
         mass=_filter_group(
             "mass",
@@ -1944,20 +2202,35 @@ def _rao_bvp_residual_groups(
         ),
         transversality=_filter_group("transversality", np.array([trans / trans_scale]), active),
         stationarity=_filter_group("stationarity", stat_res, active),
-        # Phase 3: the new Rao physics constraints enter as soft residuals at
-        # 0.1 weight.  Leaving them un-scaled would over-power the existing CE
-        # seed quality and push the BVP into a worse basin.  Weight should be
-        # raised toward 1.0 once the Phase 4-6 mass-closure / coupled-wall
-        # work improves the seed.
+        # Phase 4+: the Rao physics constraints (axisymmetric C+/C-
+        # compatibility, algebraic stationarity, left-Mach geometry) are
+        # all unit-scaled.  ``PHYSICS_WEIGHT`` is the unified knob for
+        # the three derivative-form residuals (algebraic + C+/C-);
+        # left_mach stays at unit weight because it is geometric and the
+        # residual is already normalised by segment chord length.  This
+        # keeps physics above the smoothness regularization (0.02) and
+        # rampable as a group when the kernel quality improves.
         algebraic_stationarity=_filter_group(
-            "algebraic_stationarity", 0.1 * algebraic_stat, active,
+            "algebraic_stationarity", PHYSICS_WEIGHT * algebraic_stat, active,
         ),
         left_mach=_filter_group("left_mach", left_mach, active),
-        moc_cplus=_filter_group("moc_cplus", 0.02 * moc_cplus, active),
-        moc_cminus=_filter_group("moc_cminus", 0.02 * moc_cminus, active),
+        moc_cplus=_filter_group("moc_cplus", PHYSICS_WEIGHT * moc_cplus, active),
+        moc_cminus=_filter_group("moc_cminus", PHYSICS_WEIGHT * moc_cminus, active),
         ce_geometry=_filter_group("ce_geometry", ce_geometry, active),
         regularization=_filter_group("regularization", 0.02 * regularization, active),
         penalties=_filter_group("penalties", penalties, active),
+        # Phase 6 wall blocks at unit weight: the coupled-wall residuals
+        # are geometric and tangency-based, so they live above smoothness
+        # but in the same scale band as the physics blocks above.
+        wall_endpoint=_filter_group("wall_endpoint", wall_blocks["wall_endpoint"], active),
+        wall_tangency=_filter_group("wall_tangency", wall_blocks["wall_tangency"], active),
+        cplus_ce_to_wall=_filter_group(
+            "cplus_ce_to_wall",
+            PHYSICS_WEIGHT * wall_blocks["cplus_ce_to_wall"], active,
+        ),
+        wall_intersection=_filter_group(
+            "wall_intersection", wall_blocks["wall_intersection"], active,
+        ),
     )
 
 
@@ -1982,6 +2255,7 @@ def _build_residual_report(
     *,
     wall_tangency_rms: float | None = None,
     crossings: int = 0,
+    wall: WallSurface | None = None,
 ) -> RaoResidualReport:
     _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
     mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
@@ -1991,7 +2265,7 @@ def _build_residual_report(
     algebraic_stat = _rao_algebraic_stationarity_residuals(ce, config.gamma)
     left_mach = _rao_left_mach_geometry_residuals(ce)
     groups = _rao_bvp_residual_groups(
-        _pack_bvp(ce, ce.lambda2, ce.lambda3, ce.log_C),
+        _pack_bvp(ce, ce.lambda2, ce.lambda3, ce.log_C, wall=wall),
         r_template,
         config,
     )
@@ -2724,26 +2998,53 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     ]
     log_C0 = _seed_log_C_from_ce(ce0, config.gamma)
     ce0.log_C = log_C0
-    u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0)
     n = len(ce0.r)
     try:
         Me = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
     except ValueError:
         Me = 8.0
-    lower = np.concatenate([
+    L_target_value = _target_length(config.Rt, config.epsilon, config.length_pct)
+    Re_value = math.sqrt(config.epsilon) * config.Rt
+
+    # Phase 6: optional wall unknowns appended after the CE arrays.
+    wall_seed: WallSurface | None = None
+    if config.couple_wall:
+        wall_seed = _initial_wall_guess(config, ce0, topology_seed)
+        n_w = len(wall_seed.x)
+        u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0, wall=wall_seed)
+    else:
+        n_w = 0
+        u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0)
+
+    lower_parts = [
         np.full(n, 1.001),
         np.full(n, math.radians(-10.0)),
         np.full(n, 0.0),
         np.full(n, 0.0),
-        [-1e3, -1e3, -10.0, 0.0],
-    ])
-    upper = np.concatenate([
+    ]
+    upper_parts = [
         np.full(n, max(12.0, 1.5 * Me)),
         np.full(n, math.radians(65.0)),
-        np.full(n, max(1.2 * _target_length(config.Rt, config.epsilon, config.length_pct), 1e-9)),
-        np.full(n, 1.05 * math.sqrt(config.epsilon) * config.Rt),
-        [1e3, 1e3, 10.0, 1.0],
-    ])
+        np.full(n, max(1.2 * L_target_value, 1e-9)),
+        np.full(n, 1.05 * Re_value),
+    ]
+    if n_w > 0:
+        lower_parts.extend([
+            np.full(n_w, 1.001),
+            np.full(n_w, 0.0),  # theta >= 0 (wall does not turn inward)
+            np.full(n_w, 0.0),
+            np.full(n_w, config.Rt),
+        ])
+        upper_parts.extend([
+            np.full(n_w, max(12.0, 1.5 * Me)),
+            np.full(n_w, math.radians(45.0)),  # theta_N_max
+            np.full(n_w, max(1.2 * L_target_value, 1e-9)),
+            np.full(n_w, 1.05 * Re_value),
+        ])
+    lower_parts.append(np.array([-1e3, -1e3, -10.0, 0.0]))
+    upper_parts.append(np.array([1e3, 1e3, 10.0, 1.0]))
+    lower = np.concatenate(lower_parts)
+    upper = np.concatenate(upper_parts)
 
     if config.max_nfev <= 0:
         residual0 = _scaled_rao_bvp_residual(u0, ce0.r, solve_config)
@@ -2779,7 +3080,8 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             gtol=1e-9,
             max_nfev=config.max_nfev,
         )
-    ce = _unpack_bvp(result.x, ce0.r)
+    n_wall_unknown = config.n_wall if config.couple_wall else 0
+    ce, solved_wall = _unpack_bvp(result.x, ce0.r, n_wall=n_wall_unknown)
     residual_vector = _scaled_rao_bvp_residual(result.x, ce0.r, solve_config)
     F_val, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
     mdot_val, mdot_target, mdot_ref, bd_segment = _mass_closure_fluxes(
@@ -2908,6 +3210,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         residual_vector, ce, solve_config, ce0.r,
         wall_tangency_rms=wall_tangency_rms,
         crossings=crossings,
+        wall=solved_wall,
     )
     At = math.pi * config.Rt * config.Rt
     cf = F_val / max(At, 1e-12)
@@ -3137,8 +3440,8 @@ def rao_variational_moc_contour(
     n_kernel: int = 12,
     thetaN_guess_deg: float = 30.0,
     throat_downstream_radius_factor: float = 0.382,
-    starting_line_method: str = "area_ratio",
-    max_nfev: int = 25,
+    starting_line_method: str = "kliegel_levine",
+    max_nfev: int = 200,
     residual_tol: float = 2e-3,
     evaluate_moc: bool = True,
     convergent_half_angle_deg: float = 45.0,

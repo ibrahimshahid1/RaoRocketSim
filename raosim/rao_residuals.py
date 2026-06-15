@@ -93,6 +93,26 @@ def residual_wall_tangency(w0: FlowNode, w1: FlowNode) -> float:
     return dr - dx * math.tan(theta)
 
 
+def residual_cplus_child_position(
+    parent: FlowNode,
+    child: FlowNode,
+) -> float:
+    """
+    Geometric residual: does ``child`` lie on the C+ line through ``parent``?
+
+    Lightweight alternative to :func:`residual_intersection` for the
+    Phase 6 coupled wall — wall points are streamlines fed by a single C+
+    from the CE, so we only need the one geometric equation
+    ``dr = tan(theta_avg + mu_avg) * dx`` rather than the two-equation
+    C+/C- intersection check.
+    """
+    dx = child.x - parent.x
+    dr = child.r - parent.r
+    theta_avg = 0.5 * (parent.theta + child.theta)
+    mu_avg = 0.5 * (parent.mu + child.mu)
+    return dr - math.tan(theta_avg + mu_avg) * dx
+
+
 def residual_intersection(
     p_plus: FlowNode,
     p_minus: FlowNode,

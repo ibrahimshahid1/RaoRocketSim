@@ -112,12 +112,12 @@ def bell_nozzle_contour(
     Ru_factor: float = 1.5,
     Rd_factor: float = 0.382,
     method: str = 'bezier',
-    starting_line_method: str = 'area_ratio',
+    starting_line_method: str = 'kliegel_levine',
     gamma: float = 1.4,
     pa_over_p0: float = 0.0,
     rao_moc_n_control: int = 12,
     rao_moc_n_kernel: int = 12,
-    rao_moc_max_nfev: int = 25,
+    rao_moc_max_nfev: int = 200,
     rao_moc_evaluate_moc: bool = True,
 ) -> dict:
     """

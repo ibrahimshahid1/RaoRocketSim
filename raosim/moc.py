@@ -337,9 +337,17 @@ def solve_wall_point(p_inside: CharPoint, wall, gamma: float,
     )
 
 
+_VALID_STARTING_LINE_METHODS = (
+    'kliegel_levine',
+    'sauer_modified',
+    'area_ratio',
+    'hall',  # deprecated alias for 'sauer_modified'
+)
+
+
 def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
                                gamma: float, n_points: int = 40,
-                               method: str = 'area_ratio') -> list[CharPoint]:
+                               method: str = 'kliegel_levine') -> list[CharPoint]:
     """
     Approximate transonic starting line on the downstream throat arc.
 
@@ -350,69 +358,98 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
     theta_n_max : maximum angle [rad]
     gamma       : ratio of specific heats
     n_points    : number of starting-line points
-    method      : 'area_ratio' (original quasi-1D) or 'hall' (Hall transonic
-                  correction accounting for 2D throat curvature effects)
+    method      : one of ``'kliegel_levine'`` (default), ``'sauer_modified'``,
+                  ``'area_ratio'``, or ``'hall'`` (deprecated alias for
+                  ``'sauer_modified'``).
 
-    Points ordered from axis-side (small θ) to wall-side (θ ≈ θ_n).
+    Methods
+    -------
+    ``'kliegel_levine'`` *(default)*
+        Third-order Kliegel-Levine 1969 toroidal-coordinate expansion via
+        :func:`raosim.transonic_kernel.kliegel_levine`.  Valid down to
+        Rc/Rt ~ 0.5 (well below this codebase's Rd/Rt = 0.382).
+    ``'sauer_modified'``
+        The leading-order Hall/Sauer formula ``M = 1 + a1·ξ + a2·ξ²``
+        with the original two-term coefficient set.  Quick and dirty;
+        only accurate for large throat curvature (Rc/Rt > 2).
+    ``'hall'``
+        Deprecated alias for ``'sauer_modified'`` — the previous name was
+        misleading (this is leading-order Sauer, not the Hall series).
+        Emits a :class:`DeprecationWarning`.
+    ``'area_ratio'``
+        Pure quasi-1D area-Mach inversion at each arc point.  Ignores 2D
+        throat curvature entirely.
 
-    The Hall correction (method='hall') applies a radial velocity
-    perturbation based on the throat curvature ratio Rd/Rt.  For a
-    circular-arc throat, the transonic Mach distribution is:
+    Points are ordered from axis-side (small θ) to wall-side (θ ≈ θ_n).
 
-        M(r) ≈ 1 + a₁·ξ² + a₂·ξ⁴
-
-    where ξ = (r - Rt)/Rt is a normalized radial coordinate and
-    a₁, a₂ depend on Rd/Rt and γ.  This produces a more physically
-    accurate starting line than the pure area-ratio approach.
-
-    References:
-      - Hall, I. M., "Transonic Flow in Two-Dimensional and
-        Axially-Symmetric Nozzles," QJMAM 15(4), 1962
-      - Kliegel & Levine, "Transonic Flow in Small Throat Radius
-        Nozzles," AIAA J. 7(7), 1969
+    References
+    ----------
+    * Hall, I. M., *Transonic Flow in Two-Dimensional and Axially-
+      Symmetric Nozzles*, QJMAM 15(4), 1962.
+    * Kliegel, J. R. and Levine, J. N., *Transonic Flow in Small Throat
+      Radius of Curvature Nozzles*, AIAA J. 7(7), 1969.
     """
+    if method not in _VALID_STARTING_LINE_METHODS:
+        raise ValueError(
+            f"method must be one of {_VALID_STARTING_LINE_METHODS!r}, got {method!r}"
+        )
+    if method == 'hall':
+        import warnings as _warnings
+        _warnings.warn(
+            "approximate_starting_line(method='hall') is a deprecated alias "
+            "for 'sauer_modified' (the previous 'hall' implementation was the "
+            "leading-order Sauer reduction, not the Hall series).  Use "
+            "'kliegel_levine' for full third-order accuracy or "
+            "'sauer_modified' for the previous numerical behaviour.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        method = 'sauer_modified'
+
     At = math.pi * Rt * Rt
     y_center = Rt + Rd
-    if method not in {'area_ratio', 'hall'}:
-        raise ValueError("method must be 'area_ratio' or 'hall'")
 
     angles = np.linspace(1e-4, theta_n_max, n_points)
     points = []
 
-    # Hall correction coefficients
-    if method == 'hall':
-        # Curvature ratio
-        rho_c = Rd / Rt   # normalized throat radius of curvature
+    if method == 'sauer_modified':
+        rho_c = Rd / Rt
         gp1 = gamma + 1.0
-        # Hall's leading-order coefficients for axisymmetric nozzle
-        # a₁ ≈ sqrt(2/(γ+1) · 1/ρ_c)  (from Hall 1962, Eq. 3.7)
         a1 = math.sqrt(2.0 / (gp1 * rho_c))
-        # Second-order correction
-        # a₂ ≈ (γ+1)/(12·ρ_c) · (1 + ...) (simplified)
         a2 = gp1 / (12.0 * rho_c)
+    elif method == 'kliegel_levine':
+        from raosim.transonic_kernel import kliegel_levine, GEOM_AXI
 
     for ang in angles:
         arc_angle = ang - math.pi / 2.0
         x = Rd * math.cos(arc_angle)
         r = y_center + Rd * math.sin(arc_angle)
 
-        if method == 'hall':
-            # Normalized radial coordinate from throat
+        if method == 'kliegel_levine':
+            state = kliegel_levine(
+                r_over_Rt=r / Rt,
+                x_over_Rt=x / Rt,
+                gamma=gamma,
+                Rc_over_Rt=Rd / Rt,
+                geom=GEOM_AXI,
+            )
+            M = max(state.M, 1.0 + 1e-6)
+            theta_local = state.theta if abs(state.theta) > 1e-9 else ang
+        elif method == 'sauer_modified':
             xi = (r - Rt) / Rt
-            # Hall transonic Mach perturbation
             M = 1.0 + a1 * xi + a2 * xi * xi
-            # Ensure supersonic
             if M < 1.0 + 1e-6:
                 M = 1.0 + 1e-6
-        else:
-            # Original area-ratio method
+            theta_local = ang
+        else:  # area_ratio
             A_local = math.pi * r * r
             ar = A_local / At
             if ar < 1.0:
                 ar = 1.0 + 1e-6
             M = mach_from_area_ratio(ar, gamma, supersonic=True)
+            theta_local = ang
 
-        pt = _make_point(x, r, ang, M, gamma)
+        pt = _make_point(x, r, theta_local, M, gamma)
         points.append(pt)
 
     return points
@@ -722,7 +759,7 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
 
 def solve_flowfield(Rt: float, epsilon: float, gamma: float,
                     wall, n_char: int = 40,
-                    starting_line_method: str = 'area_ratio') -> dict:
+                    starting_line_method: str = 'kliegel_levine') -> dict:
     """
     Full MOC forward solve with coupled wall marching.
 
