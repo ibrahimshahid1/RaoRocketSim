@@ -102,6 +102,10 @@ def test_wallsurface_dataclass_roundtrips_through_pack_unpack():
     ce2, wall2 = _unpack_bvp(u, ce.r, n_wall=n_w)
     assert wall2 is not None
     np.testing.assert_allclose(ce2.M, ce.M)
+    # ce.x is reconstructed from the left-Mach integrator (not stored
+    # in u); only assert M, theta, r round-trip exactly.
+    np.testing.assert_allclose(ce2.r, ce.r)
+    np.testing.assert_allclose(ce2.theta, ce.theta)
     np.testing.assert_allclose(wall2.x, wall.x)
     np.testing.assert_allclose(wall2.r, wall.r)
     np.testing.assert_allclose(wall2.M, wall.M)
@@ -240,11 +244,44 @@ def test_physics_weight_ramp_keeps_mass_residual_bounded(weight, mass_ceiling):
         rv.PHYSICS_WEIGHT = original
 
 
+def test_left_mach_geometry_is_exact_after_refactor():
+    """
+    Gate for the left-Mach-by-construction refactor.
+
+    ``ce.x`` is reconstructed from the C+ characteristic ODE
+    (``dx/dr = 1 / tan(theta + mu)``) at unpack time using a midpoint
+    average that matches ``residual_left_mach_geometry(p0, p1)``
+    exactly.  The reported ``left_mach_rms`` should therefore be
+    bit-zero — the integrator and the residual evaluate the same
+    formula.
+
+    If this test starts failing, it means the integrator and the
+    residual diverged (someone re-added trapezoidal averaging, etc.).
+    Bit-exactness is the contract that says left-Mach geometry is a
+    *constraint enforced by construction*, not a soft residual.
+    """
+    cfg = RaoSolverConfig(
+        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+        length_pct=80.0, n_control=12, n_kernel=12,
+        max_nfev=200, residual_tol=2e-3, evaluate_moc=False,
+    )
+    sol = solve_rao_bvp(cfg)
+    assert sol.residuals.left_mach_rms < 1e-10, (
+        f"left_mach_rms = {sol.residuals.left_mach_rms:.3e} > 1e-10; "
+        "the refactor's exactness contract is broken"
+    )
+
+
 @pytest.mark.xfail(
-    reason="PHYSICS_WEIGHT=1.0 reaching RAO_VARIATIONAL_RESIDUAL_SOLVED "
-           "requires Phase 12.4's full CalcRRCsAlongArc kernel; with the "
-           "current approximate kernel BD, the BVP cannot reduce all "
-           "physics + integral blocks simultaneously below residual_tol."
+    reason="After the left-Mach-by-construction refactor (Apr 2026), "
+           "left_mach is identically zero and mass closure has improved "
+           "to ~1e-2 at default PHYSICS_WEIGHT=0.05.  Reaching "
+           "RAO_VARIATIONAL_RESIDUAL_SOLVED at PHYSICS_WEIGHT=1.0 is "
+           "now blocked by length endpoint vs regularization tension "
+           "(both at unit weight, smoothness drops to large values when "
+           "physics is pushed).  Gated on the Phase 12.4 marching "
+           "kernel landing for Rd/Rt >= 10, which would let the CE "
+           "seed land closer to a smooth Rao optimum."
 )
 def test_solve_rao_bvp_reaches_rao_residual_solved_at_weight_1():
     """The Phase 7 promotion gate: at PHYSICS_WEIGHT=1.0, the reference

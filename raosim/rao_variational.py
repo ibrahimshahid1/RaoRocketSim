@@ -226,7 +226,15 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
     "regularization",
     "penalties",
     "algebraic_stationarity",
-    "left_mach",
+    # NOTE: ``left_mach`` is intentionally omitted from the default
+    # block set as of the "left-Mach-by-construction" refactor.  CE
+    # ``x_ce`` is reconstructed from ``dr/dx = tan(theta+mu)`` inside
+    # ``_unpack_bvp`` (see :func:`_integrate_ce_x_from_left_mach`),
+    # making the left-Mach geometry residual identically zero by
+    # construction.  The block is kept as an ALL_ option so
+    # diagnostics can still report ``left_mach_rms`` (which should be
+    # ~1e-12 on a converged solve — this is the exactness gate
+    # enforced by ``test_left_mach_geometry_is_exact_after_refactor``).
     # Phase 6 wall blocks: included by default but no-ops unless the
     # solver is configured with couple_wall=True (and therefore actually
     # populates the wall portion of the unknown vector).
@@ -257,6 +265,7 @@ PHYSICS_WEIGHT = 0.05
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
     "stationarity",        # numerical Euler-Lagrange (reference; not in default)
     "transversality",      # natural at free endpoint only; off for fixed L, eps
+    "left_mach",           # diagnostic: should be ~1e-12 after the refactor
 )
 
 
@@ -1583,6 +1592,64 @@ def _phi_from_curve(x: np.ndarray, r: np.ndarray) -> np.ndarray:
     return phi
 
 
+def _integrate_ce_x_from_left_mach(
+    r: np.ndarray,
+    theta: np.ndarray,
+    M: np.ndarray,
+    x_start: float,
+) -> np.ndarray:
+    """
+    Reconstruct CE axial positions from the left-Mach-line ODE.
+
+    DE is a left-running C+ characteristic, so
+    ``dr/dx = tan(theta + mu)`` and equivalently
+    ``dx/dr = cot(theta + mu) = 1/tan(theta + mu)``.  Trapezoidal
+    integration in ``r`` from ``x_start`` (= ``D.x`` on the kernel BD)
+    gives ``x[i]`` exactly consistent with the left-Mach-line geometry,
+    making ``left_mach`` residuals identically zero by construction.
+
+    Parameters
+    ----------
+    r : (n,) array
+        CE radii, axis-first.  Must be monotone non-decreasing.
+    theta, M : (n,) arrays
+        CE flow angles (rad) and Mach numbers at the corresponding radii.
+    x_start : float
+        Axial coordinate of CE node 0 (point D on the kernel BD).
+
+    Returns
+    -------
+    x : (n,) array
+        Axial coordinates of every CE node, satisfying
+        ``dx/dr = 1 / tan(theta_avg + mu_avg)`` segment by segment.
+    """
+    r_arr = np.asarray(r, dtype=float)
+    theta_arr = np.asarray(theta, dtype=float)
+    M_arr = np.asarray(M, dtype=float)
+    n = len(r_arr)
+    x = np.empty(n, dtype=float)
+    x[0] = float(x_start)
+    # Use midpoint averaging — this is exactly the form
+    # ``residual_left_mach_geometry(p0, p1)`` checks:
+    #   dr - dx * tan(theta_avg + mu_avg) = 0
+    # so the integrated x makes that residual identically zero
+    # (bit-comparable to machine precision).
+    for i in range(1, n):
+        m_lo = max(float(M_arr[i - 1]), 1.000001)
+        m_hi = max(float(M_arr[i]), 1.000001)
+        mu_avg = 0.5 * (math.asin(1.0 / m_lo) + math.asin(1.0 / m_hi))
+        theta_avg = 0.5 * (float(theta_arr[i - 1]) + float(theta_arr[i]))
+        denom = math.tan(theta_avg + mu_avg)
+        dr_step = float(r_arr[i]) - float(r_arr[i - 1])
+        if abs(denom) < 1e-12:
+            # Near-vertical C+ slope (e.g. M → 1 at a corner).  Fall back
+            # to a small forward step so the integration doesn't NaN.
+            x[i] = x[i - 1] + 1e-9
+        else:
+            x[i] = x[i - 1] + dr_step / denom
+    return x
+
+
 def _pack_bvp(
     ce: ControlSurface,
     lambda2: float,
@@ -1592,27 +1659,24 @@ def _pack_bvp(
 ) -> np.ndarray:
     """Pack CE (+ optional wall) state into the BVP unknown vector.
 
-    Layout (Phase 6 coupled wall appends 4*n_w wall arrays before the
-    four trailing scalars):
+    Layout after the left-Mach-by-construction refactor.  ``x_ce`` is
+    NOT carried — it is reconstructed at unpack time via
+    :func:`_integrate_ce_x_from_left_mach` from
+    ``(r_ce, theta_ce, M_ce)`` and the kernel BD point D
+    (selected by ``kernel_d_fraction``).  Eliminating ``x_ce`` from the
+    unknowns removes a degenerate basin where the optimiser could
+    satisfy left-Mach geometry by moving ``x`` at the expense of mass:
 
-        [M_ce, theta_ce, x_ce, r_ce,
-         (M_w, theta_w, x_w, r_w),   # Phase 6 only
+        [M_ce, theta_ce, r_ce,
+         (M_w, theta_w, x_w, r_w),   # Phase 6 only, full 4-tuple kept
          lambda2, lambda3, log_C, kernel_d_fraction]
+
+    Size: ``3*n_ce + 4*n_wall + 4``  (was ``4*n_ce + 4*n_wall + 4``).
     """
-    if ce.x is None:
-        x = np.zeros_like(ce.r, dtype=float)
-        for i in range(1, len(ce.r)):
-            phi_avg = 0.5 * (ce.phi[i - 1] + ce.phi[i])
-            dr = ce.r[i] - ce.r[i - 1]
-            sin_phi = math.sin(phi_avg)
-            x[i] = x[i - 1] + (math.cos(phi_avg) / sin_phi * dr if abs(sin_phi) > 1e-10 else 0.5 * dr)
-    else:
-        x = np.asarray(ce.x, dtype=float)
     log_C_val = float(log_C) if log_C is not None else float(ce.log_C)
     parts: list[np.ndarray] = [
         np.asarray(ce.M, dtype=float),
         np.asarray(ce.theta, dtype=float),
-        x,
         np.asarray(ce.r, dtype=float),
     ]
     if wall is not None:
@@ -1630,20 +1694,48 @@ def _pack_bvp(
 
 
 def _unpack_bvp(
-    u: np.ndarray, r: np.ndarray, *, n_wall: int = 0,
+    u: np.ndarray, r: np.ndarray, *,
+    n_wall: int = 0,
+    kernel_bd: tuple | None = None,
+    gamma: float = 1.4,
 ) -> tuple[ControlSurface, WallSurface | None]:
-    """Unpack the BVP unknown vector into (CE, optional wall).
+    """Unpack the BVP unknown vector into ``(CE, optional wall)``.
 
-    When ``n_wall == 0`` the returned ``WallSurface`` is ``None`` and
-    ``u`` is expected in the legacy ``[4*n_ce + 4]`` layout.
+    ``ce.x`` is reconstructed from the left-Mach-line ODE: at the kernel
+    BD point D (selected by ``kernel_d_fraction``) we have
+    ``x_start = D.x``; downstream CE nodes integrate
+    ``dx/dr = 1/tan(theta + mu)`` along the C+ characteristic.  This
+    makes the left-Mach-line geometry exact by construction and
+    removes the old ``left_mach`` residual block as an independent
+    constraint.
+
+    Parameters
+    ----------
+    u : ndarray
+        Packed BVP unknown vector (layout per :func:`_pack_bvp`).
+    r : ndarray
+        Template CE radii (used only to recover ``n_ce``; the actual
+        radii come from ``u``).
+    n_wall : int
+        Number of wall unknowns to expect.  Pass 0 for legacy
+        no-coupled-wall callers.
+    kernel_bd : tuple of FlowNode | None
+        Kernel BD curve.  When provided, the CE start ``x[0]`` is the
+        ``x``-coordinate of point D interpolated at
+        ``kernel_d_fraction``.  When ``None`` (legacy / unit tests),
+        ``x[0] = 0`` is used as a stub.
+    gamma : float
+        Used only by ``calc_mdot_bd`` to locate D on the kernel BD;
+        any positive value works for the geometric lookup.
     """
     n = len(r)
-    x = np.asarray(u[2 * n:3 * n], dtype=float).copy()
-    r_ce = np.asarray(u[3 * n:4 * n], dtype=float).copy()
-    phi = _phi_from_curve(x, r_ce)
-    base_after_ce = 4 * n
+    M_ce = np.asarray(u[:n], dtype=float).copy()
+    theta_ce = np.asarray(u[n:2 * n], dtype=float).copy()
+    r_ce = np.asarray(u[2 * n:3 * n], dtype=float).copy()
+
+    base_after_ce = 3 * n
     wall: WallSurface | None = None
-    if n_wall > 0 and u.size >= 4 * n + 4 * n_wall + 4:
+    if n_wall > 0 and u.size >= base_after_ce + 4 * n_wall + 4:
         w_M = np.asarray(u[base_after_ce: base_after_ce + n_wall],
                           dtype=float).copy()
         w_theta = np.asarray(
@@ -1659,14 +1751,31 @@ def _unpack_bvp(
         scalar_start = base_after_ce + 4 * n_wall
     else:
         scalar_start = base_after_ce
+
     log_C_val = float(u[scalar_start + 2]) if u.size >= scalar_start + 3 else 0.0
-    kernel_d_fraction = float(u[scalar_start + 3]) if u.size >= scalar_start + 4 else 1.0
+    kernel_d_fraction = (
+        float(u[scalar_start + 3]) if u.size >= scalar_start + 4 else 1.0
+    )
+
+    # Reconstruct ``x_ce`` from the left-Mach-line ODE.  ``x_start`` is
+    # the x-coordinate of point D on the kernel BD curve.
+    if kernel_bd:
+        try:
+            _, bd_segment = calc_mdot_bd(kernel_bd, kernel_d_fraction, gamma)
+            x_start = float(bd_segment[-1].x) if bd_segment else 0.0
+        except Exception:
+            x_start = 0.0
+    else:
+        x_start = 0.0
+    x_ce = _integrate_ce_x_from_left_mach(r_ce, theta_ce, M_ce, x_start)
+    phi = _phi_from_curve(x_ce, r_ce)
+
     ce = ControlSurface(
         r=r_ce,
-        M=np.asarray(u[:n], dtype=float).copy(),
-        theta=np.asarray(u[n:2 * n], dtype=float).copy(),
+        M=M_ce,
+        theta=theta_ce,
         phi=phi,
-        x=x,
+        x=x_ce,
         lambda2=float(u[scalar_start]),
         lambda3=float(u[scalar_start + 1]),
         log_C=log_C_val,
@@ -2188,13 +2297,16 @@ def _ce_geometry_residuals(
             config.kernel_bd, ce.kernel_d_fraction, config.gamma
         )
         d_node = bd_segment[-1]
+        # ``ce.x[0]`` is structurally pinned to ``d_node.x`` by the
+        # left-Mach-line integrator in ``_unpack_bvp`` (``x_start = D.x``),
+        # so the ``(ce.x[0] - d_node.x)`` residual is identically zero and
+        # is omitted to keep the residual stack non-degenerate.
         start = np.array([
-            (float(ce.x[0]) - d_node.x) / x_scale,
             (float(ce.r[0]) - d_node.r) / r_scale,
             (float(ce.theta[0]) - d_node.theta) / theta_scale,
         ], dtype=float)
     else:
-        start = np.array([(float(ce.x[0]) - 0.0) / x_scale], dtype=float)
+        start = np.zeros(0, dtype=float)
 
     endpoint = np.concatenate([
         start,
@@ -2263,7 +2375,10 @@ def _rao_bvp_residual_groups(
     config: RaoSolverConfig,
 ) -> RaoResidualGroups:
     n_wall = config.n_wall if config.couple_wall else 0
-    ce, wall = _unpack_bvp(u, r, n_wall=n_wall)
+    ce, wall = _unpack_bvp(
+        u, r, n_wall=n_wall,
+        kernel_bd=config.kernel_bd, gamma=config.gamma,
+    )
     _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
     mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
@@ -3140,16 +3255,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         n_w = 0
         u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0)
 
+    # CE unknowns (after the left-Mach-by-construction refactor): only
+    # ``M, theta, r`` per node — ``x`` is reconstructed at unpack time
+    # by integrating ``dx/dr = 1/tan(theta+mu)``.
     lower_parts = [
-        np.full(n, 1.001),
-        np.full(n, math.radians(-10.0)),
-        np.full(n, 0.0),
-        np.full(n, 0.0),
+        np.full(n, 1.001),                  # M
+        np.full(n, math.radians(-10.0)),    # theta
+        np.full(n, 0.0),                    # r
     ]
     upper_parts = [
         np.full(n, max(12.0, 1.5 * Me)),
         np.full(n, math.radians(65.0)),
-        np.full(n, max(1.2 * L_target_value, 1e-9)),
         np.full(n, 1.05 * Re_value),
     ]
     if n_w > 0:
@@ -3205,7 +3321,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             max_nfev=config.max_nfev,
         )
     n_wall_unknown = config.n_wall if config.couple_wall else 0
-    ce, solved_wall = _unpack_bvp(result.x, ce0.r, n_wall=n_wall_unknown)
+    ce, solved_wall = _unpack_bvp(
+        result.x, ce0.r, n_wall=n_wall_unknown,
+        kernel_bd=solve_config.kernel_bd, gamma=config.gamma,
+    )
     residual_vector = _scaled_rao_bvp_residual(result.x, ce0.r, solve_config)
     F_val, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
     mdot_val, mdot_target, mdot_ref, bd_segment = _mass_closure_fluxes(
