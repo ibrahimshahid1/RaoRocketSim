@@ -295,53 +295,367 @@ class RaoKernelError(RuntimeError):
     """Raised when the NASA-style RRC march cannot build a valid kernel."""
 
 
+def _push_throat_point_to_supersonic(
+    r_target: float,
+    x_initial: float,
+    Rt: float,
+    Rd: float,
+    gamma: float,
+    M_min: float = 1.05,
+    max_bracket_doublings: int = 50,
+    max_bisect_iter: int = 40,
+):
+    """Walk a TT' point downstream in x at fixed r until M ≥ M_min.
+
+    Implements the per-point downstream-step iteration NASA uses in
+    ``CalcInitialThroatLine`` (C++ lines 2853-2864) — adapted for the
+    tight-throat (``Rc/Rt < 1.5``) case where the throat plane has a
+    substantial subsonic region near the axis.  NASA's original loop
+    handles the *overshoot* case (``mach > 1.5``) by halving the
+    x-step; this implementation also handles the *subsonic* case
+    (``mach < M_min``) by extending the x-step.
+
+    Algorithm:
+
+    1. Evaluate KL at ``(x_initial, r_target)``.  If supersonic enough
+       (``M >= M_min``), return immediately.
+    2. Otherwise bracket the ``M = M_min`` crossing by walking x
+       forward with a doubling step size.
+    3. Bisect within the bracket to land on ``M_min`` within tolerance.
+
+    Returns ``(x_final, kl_state_final)``.
+    """
+    from raosim.transonic_kernel import GEOM_AXI, kliegel_levine
+
+    y = float(r_target / Rt)
+    Rc_ratio = float(Rd / Rt)
+    state0 = kliegel_levine(y, float(x_initial / Rt), gamma, Rc_ratio, GEOM_AXI)
+    if state0.M >= M_min:
+        return float(x_initial), state0
+
+    # Bracket the M_min crossing.
+    x_lo = float(x_initial)
+    x_hi = x_lo + 0.005 * Rt
+    state_hi = kliegel_levine(y, x_hi / Rt, gamma, Rc_ratio, GEOM_AXI)
+    doublings = 0
+    while state_hi.M < M_min and doublings < max_bracket_doublings:
+        x_lo = x_hi
+        dx = x_hi - x_lo if x_hi != x_lo else 0.005 * Rt
+        x_hi = x_hi + max(dx, 0.005 * Rt) * 2.0
+        state_hi = kliegel_levine(y, x_hi / Rt, gamma, Rc_ratio, GEOM_AXI)
+        doublings += 1
+
+    if state_hi.M < M_min:
+        # Couldn't bracket; return the furthest-forward state we have.
+        return float(x_hi), state_hi
+
+    # Bisect the (x_lo, x_hi) bracket.
+    for _ in range(max_bisect_iter):
+        x_mid = 0.5 * (x_lo + x_hi)
+        state_mid = kliegel_levine(y, x_mid / Rt, gamma, Rc_ratio, GEOM_AXI)
+        if state_mid.M < M_min:
+            x_lo = x_mid
+        else:
+            x_hi = x_mid
+        if (x_hi - x_lo) < 1e-7 * Rt:
+            break
+    state_final = kliegel_levine(y, x_hi / Rt, gamma, Rc_ratio, GEOM_AXI)
+    return float(x_hi), state_final
+
+
 def _make_throat_initial_line(
     Rt: float, Rd: float, theta_B: float, gamma: float, n_points: int,
     starting_line_method: str,
+    M_min: float = 1.05,
 ) -> list[CharPoint]:
-    """TT' starting line: vertical at the throat plane (x = 0).
+    """TT' starting line with NASA per-point downstream-step iteration.
 
     Port of :func:`MOC_GridCalc::CalcInitialThroatLine`
-    (NASA C++ lines 2805-2900).  NASA distributes points as
-    ``r/Rt = sin(pi/2 * (n-i)/n) ** 1.5`` (wall-first), with Mach and
-    flow angle from :func:`raosim.transonic_kernel.kliegel_levine`.
+    (NASA C++ lines 2805-2900) including the per-point Mach-control
+    loop at lines 2853-2864.  NASA distributes radii by
+    ``r/Rt = sin(pi/2 * (n-i)/n) ** 1.5`` (wall-first) and seeds each
+    successive ``x[i]`` from the previous point's RRC slope
+    (``dr/dx = tan(theta - mu)``).  For tight-throat geometries the
+    naive ``x[i]`` puts the point in the throat's subsonic region; in
+    that case :func:`_push_throat_point_to_supersonic` walks the point
+    downstream at fixed ``r`` until KL gives ``M >= M_min``.  This
+    guarantees the resulting TT' is everywhere-supersonic so the
+    downstream MOC row march (``solve_interior_point`` /
+    ``solve_wall_point``) can advance — closing the gap NASA's
+    original algorithm leaves at very tight ``Rc/Rt``.
 
-    The Python port lays the same distribution but in axis-first order
-    to match the rest of the codebase's MOC unit processes (whose
-    ``solve_axis_point``/``solve_interior_point`` callers expect
-    axis-first input).
+    Points are returned axis-first (index 0 = axis, index ``n_points-1``
+    = wall) to match the rest of the codebase's MOC unit-process
+    conventions.
     """
-    from raosim.transonic_kernel import kliegel_levine, GEOM_AXI
+    from raosim.transonic_kernel import GEOM_AXI, kliegel_levine
 
-    pts: list[CharPoint] = []
+    # Build wall-first, then reverse to axis-first at the end.
     n = max(n_points - 1, 1)
-    for i in range(n_points - 1, -1, -1):  # axis-first
+    wall_first: list[tuple[float, float, float, float]] = []  # (x, r, M, theta)
+
+    for i in range(0, n_points):
+        # NASA's sinusoidal radial distribution: r=Rt at i=0 (wall),
+        # r→0 at i=n_points-1 (axis), bunched toward the wall.
         r_over_Rt = math.sin(0.5 * math.pi * (n - i) / n) ** 1.5
         r = float(r_over_Rt * Rt)
+
+        # Initial x-guess from the previous point's RRC slope
+        # (drdx = tan(theta - mu)).  i=0 is the throat-plane wall point
+        # (x=0 by definition).
+        if i == 0:
+            x_init = 0.0
+        else:
+            x_prev, r_prev, M_prev, theta_prev = wall_first[i - 1]
+            mu_prev = math.asin(1.0 / max(M_prev, 1.000001))
+            slope_drdx = math.tan(theta_prev - mu_prev)
+            if abs(slope_drdx) > 1e-12:
+                x_init = x_prev + (r - r_prev) / slope_drdx
+            else:
+                x_init = x_prev
+            x_init = max(x_init, x_prev)  # never step backward
+
         if starting_line_method == "kliegel_levine":
-            state = kliegel_levine(r_over_Rt, 0.0, gamma, Rd / Rt, GEOM_AXI)
+            # Apply per-point downstream-step iteration so every TT'
+            # point lands at M >= M_min.
+            x_final, state = _push_throat_point_to_supersonic(
+                r_target=r, x_initial=x_init, Rt=Rt, Rd=Rd,
+                gamma=gamma, M_min=M_min,
+            )
             M = max(state.M, 1.0 + 1e-4)
             theta = state.theta
         elif starting_line_method == "sauer_modified":
+            # Legacy Sauer leading-order: subsonic-axis is not pushed.
             rho_c = Rd / Rt
             xi = r_over_Rt - 1.0
             a1 = math.sqrt(2.0 / ((gamma + 1.0) * rho_c))
             a2 = (gamma + 1.0) / (12.0 * rho_c)
             M = max(1.0 + a1 * xi + a2 * xi * xi, 1.0 + 1e-4)
             theta = 0.0
+            x_final = x_init
         else:
-            # area_ratio fallback at throat: M ≈ 1 + small Hall term
             M = 1.0 + 1e-3
             theta = 0.0
-        nu = prandtl_meyer(M, gamma)
-        mu = mach_angle(M)
+            x_final = x_init
+        wall_first.append((x_final, r, M, theta))
+
+    # Reverse to axis-first ordering for downstream solve_* unit processes.
+    pts: list[CharPoint] = []
+    for x_val, r_val, M_val, theta_val in reversed(wall_first):
+        nu = prandtl_meyer(M_val, gamma)
+        mu = mach_angle(M_val)
         pts.append(CharPoint(
-            x=0.0, r=r, theta=theta, M=M,
+            x=x_val, r=r_val, theta=theta_val, M=M_val,
             nu=nu, mu=mu,
-            compat_plus=theta + nu,
-            compat_minus=theta - nu,
+            compat_plus=theta_val + nu,
+            compat_minus=theta_val - nu,
         ))
     return pts
+
+
+# ---------------------------------------------------------------------
+#  NASA dθ-form helpers (C++ lines 2957-3050)
+#  Used by calc_arc_wall_point and the unit-process row march.
+# ---------------------------------------------------------------------
+
+
+def _nasa_mm(mach: float) -> float:
+    """``MM(mach) = sqrt(mach² − 1)`` (NASA C++ line 3046)."""
+    return math.sqrt(max(mach * mach - 1.0, 0.0))
+
+
+def _nasa_calc_A(mach: float, g: float) -> float:
+    """First term of the dθ equation, Rao Eq. 15 (NASA C++ line 2966).
+
+    ``A = MM(mach) / (mach * (1 + (γ−1)/2 · mach²))``
+    """
+    return _nasa_mm(mach) / (mach * (1.0 + (g - 1.0) / 2.0 * mach * mach))
+
+
+def _nasa_calc_B(mach: float, theta: float, r: float) -> float:
+    """Second term of the dθ LRC equation (z-form) — NASA C++ line 2975.
+
+    ``B = 1 / (r · (MM(mach) / tan(theta) − 1))`` when r != 0; 0 otherwise.
+    """
+    if r == 0.0:
+        return 0.0
+    if abs(theta) < 1e-9:
+        return 0.0
+    denom = r * (_nasa_mm(mach) / math.tan(theta) - 1.0)
+    if abs(denom) < 1e-12:
+        return 0.0
+    return 1.0 / denom
+
+
+def _nasa_calc_R(mach: float, theta: float, r: float) -> float:
+    """Second term of the dθ LRC equation (r-form) — NASA C++ line 2997.
+
+    ``R = 1 / (r · (MM(mach) + 1/tan(theta)))`` when r != 0; 0 otherwise.
+    """
+    if r == 0.0:
+        return 0.0
+    if abs(theta) < 1e-9:
+        return 0.0
+    denom = r * (_nasa_mm(mach) + 1.0 / math.tan(theta))
+    if abs(denom) < 1e-12:
+        return 0.0
+    return 1.0 / denom
+
+
+def _nasa_l_dy_dx(theta: float, mu: float) -> float:
+    """LRC slope ``tan(theta + mu)`` — NASA C++ line 3019."""
+    return math.tan(theta + mu)
+
+
+def _nasa_tan_avg(x: float, y: float) -> float:
+    """Tangent averaging — NASA C++ line 3037.
+
+    ``TanAvg(x, y) = tan(0.5 · (atan(x) + atan(y)))``
+    """
+    return math.tan(0.5 * (math.atan(x) + math.atan(y)))
+
+
+def calc_arc_wall_point(
+    prev_axis_first: list[CharPoint],
+    arc: ArcWall,
+    gamma: float,
+    *,
+    conv_tol: float = 1e-8,
+    max_iter: int = 50,
+) -> tuple[float, float, float, float] | None:
+    """
+    NASA ``CalcArcWallPoint`` port (C++ lines 835-948).
+
+    Finds the next wall point on the downstream throat arc given the
+    previous RRC (axis-first).  Returns ``(x, r, theta, mach)`` for the
+    new wall point or ``None`` if the iteration fails / overruns.
+
+    NASA's approach differs from :func:`moc.solve_wall_point`:
+
+    * **Geometry is arc-locked**: ``r = Rt + Rd·(1 − cos(arctan(x/Rd_radius)))``
+      and ``theta = arcsin(x/Rd_radius)`` are computed from arc geometry.
+      The free variable is x.
+    * **Mach is updated via the dθ-form compatibility** (Anderson
+      Eq. 11, Rao Eq. 15) rather than the PM ``θ + ν`` invariant.  At
+      a sharp arc turn the PM form can produce ``ν < 0`` (clipping
+      M → 1); the dθ form computes the M increment directly via
+      ``M = M_parent + (θ_new − θ_parent + 0.5·T) / (0.5·(A_parent + A_new))``,
+      which stays well-conditioned for tight arcs.
+
+    The "point of influence" for the new wall point is the previous
+    RRC's *next-to-wall* node (``prev_axis_first[-2]`` — NASA's
+    ``[1][j-1]``).  The previous wall point (``prev_axis_first[-1]``,
+    NASA's ``[0][j-1]``) is used only as the starting (x, r) for the
+    iteration.
+
+    Notes
+    -----
+    The arc's centre is at ``(0, Rt + Rd_radius)`` and the wall radius
+    measured from that centre is ``Rd_radius`` (= ``arc.Rd``).  NASA
+    uses ``rad`` for that radius and ``1`` for ``Rt`` in their
+    normalised-to-throat-radius units; this port keeps the actual
+    metres values.
+    """
+    if len(prev_axis_first) < 2:
+        return None
+    Rt = arc.Rt
+    Rd = arc.Rd
+    # Point 1 — next-to-wall on previous RRC (NASA's [1][j-1]).
+    p1 = prev_axis_first[-2]
+    # Previous wall point (NASA's [0][j-1]) is the iteration starting (x, r).
+    p_prev_wall = prev_axis_first[-1]
+
+    M1 = max(float(p1.M), 1.000001)
+    theta1 = float(p1.theta)
+    r1 = float(p1.r)
+    x1 = float(p1.x)
+    mu1 = math.asin(1.0 / M1)
+
+    slrc1 = _nasa_l_dy_dx(theta1, mu1)
+    A1 = _nasa_calc_A(M1, gamma)
+    B1 = _nasa_calc_B(M1, theta1, r1)
+    R1 = _nasa_calc_R(M1, theta1, r1)
+
+    # Start point 3 (new wall point) at the previous wall position, with
+    # influence-point flow values as the iteration seed.
+    x3 = float(p_prev_wall.x)
+    r3 = float(p_prev_wall.r)
+    M3 = M1
+    theta3 = theta1
+    slrc3 = slrc1
+    A3 = A1
+    B3 = B1
+    R3 = R1
+
+    x3_old = r3_old = M3_old = theta3_old = 9.9
+
+    for _ in range(max_iter):
+        # Tan-average the LRC slope between points 1 and 3.
+        slrc13 = _nasa_tan_avg(slrc1, slrc3)
+        if abs(slrc13) < 1e-12:
+            return None
+        x3 = (r3 - r1) / slrc13 + x1
+
+        # Arc geometry: new r and theta are functions of x3.
+        # r3 = Rt + Rd - sqrt(Rd² - x3²)    (NASA: rad replaces both
+        # Rt and Rd because their R* = 1).
+        inside = Rd * Rd - x3 * x3
+        if inside < 0.0:
+            # x3 has overshot the arc — clamp and report overrun.
+            if x3 > arc.x_end + 1e-9:
+                return None
+            inside = 0.0
+        r3 = Rt + Rd - math.sqrt(inside)
+        # theta3 = arcsin(x3 / Rd)
+        sin_arg = max(min(x3 / Rd, 1.0), -1.0)
+        theta3 = math.asin(sin_arg)
+
+        # dθ-form Mach update.  Choose z-form vs r-form per NASA:
+        # if B1 <= R1, use the z-form (more accurate near vertical).
+        if B1 <= R1:
+            T1 = (x3 - x1) * (B3 + B1)
+        else:
+            T1 = (r3 - r1) * (R3 + R1)
+        A_avg = 0.5 * (A1 + A3)
+        if abs(A_avg) < 1e-12:
+            return None
+        M3_new = M1 + (theta3 - theta1 + 0.5 * T1) / A_avg
+        if M3_new < 1.000001 or not math.isfinite(M3_new):
+            return None
+        M3 = M3_new
+
+        # Refresh point-3 helpers for the next iteration.
+        mu3 = math.asin(1.0 / M3)
+        slrc3 = _nasa_l_dy_dx(theta3, mu3)
+        A3 = _nasa_calc_A(M3, gamma)
+        B3 = _nasa_calc_B(M3, theta3, r3)
+        R3 = _nasa_calc_R(M3, theta3, r3)
+
+        # Convergence: relative change in x, r, M, theta.
+        r_err = (r3 - r3_old) / r3_old if r3_old != 0.0 else 9.9
+        x_err = (x3 - x3_old) / x3_old if x3_old != 0.0 else 9.9
+        M_err = (M3 - M3_old) / M3_old if M3_old != 0.0 else 9.9
+        T_err = (
+            (theta3 - theta3_old) / theta3_old if theta3_old != 0.0 else 9.9
+        )
+
+        x3_old = x3
+        r3_old = r3
+        M3_old = M3
+        theta3_old = theta3
+
+        if (
+            abs(x_err) < conv_tol
+            and abs(r_err) < conv_tol
+            and abs(M_err) < conv_tol
+            and abs(T_err) < conv_tol
+        ):
+            return (x3, r3, theta3, M3)
+
+    # Did not converge within max_iter — return last state if reasonable.
+    if M3 >= 1.000001 and 0.0 <= x3 <= arc.x_end + 1e-9:
+        return (x3, r3, theta3, M3)
+    return None
 
 
 def _rrc_march_step(
@@ -373,11 +687,36 @@ def _rrc_march_step(
         return None
     n = len(prev_axis_first)
     try:
-        # Wall point: C+ from next-to-wall parent.
-        wall_parent = prev_axis_first[-2]
-        wall_pt = solve_wall_point(wall_parent, arc, gamma, True)
-        if wall_pt.x > arc.x_end + 1e-9 or wall_pt.r < 0.0 or wall_pt.M < 1.0001:
+        # Wall point: NASA-port CalcArcWallPoint (dθ-form compatibility,
+        # arc-locked geometry).  This replaces the PM-form
+        # ``solve_wall_point`` which decayed Mach for tight arcs
+        # (cf. session log: M dropped 1.29 → 1.23 → 1.14 in 3 steps
+        # under PM form; dθ-form preserves the expansion through
+        # the arc as physically required).
+        wall_pt_tuple = calc_arc_wall_point(prev_axis_first, arc, gamma)
+        if wall_pt_tuple is None:
             return None
+        x_w, r_w, theta_w, M_w = wall_pt_tuple
+        if r_w < 0.0 or M_w < 1.0001:
+            return None
+        # If the iteration overshoots the arc end, clamp x to arc.x_end
+        # and recompute (r, theta) on the arc.  Keep the Mach from the
+        # converged iteration — overshooting by ~5% is fine for the
+        # final wall point (theta_B is reached and the kernel halts
+        # downstream of this step).
+        if x_w > arc.x_end + 1e-9:
+            x_w = arc.x_end
+            inside = arc.Rd * arc.Rd - x_w * x_w
+            r_w = arc.Rt + arc.Rd - math.sqrt(max(inside, 0.0))
+            theta_w = math.asin(max(min(x_w / arc.Rd, 1.0), -1.0))
+        nu_w = prandtl_meyer(M_w, gamma)
+        mu_w = mach_angle(M_w)
+        wall_pt = CharPoint(
+            x=float(x_w), r=float(r_w), theta=float(theta_w), M=float(M_w),
+            nu=float(nu_w), mu=float(mu_w),
+            compat_plus=float(theta_w + nu_w),
+            compat_minus=float(theta_w - nu_w),
+        )
         # March from wall inward.  axis-first means we have to assemble
         # the new RRC top-down then reverse.
         new_wall_first: list[CharPoint] = [wall_pt]

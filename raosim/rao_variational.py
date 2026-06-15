@@ -105,6 +105,10 @@ class ControlSurface:
     lambda3: float = 0.0    # Lagrange multiplier for length constraint
     log_C: float = 0.0      # log of the Rao algebraic stationarity constant
     kernel_d_fraction: float = 1.0  # solved point D location along kernel BD
+    # Phase 6 free CE↔wall pairing: pair_fractions[i] ∈ [0, 1] is the
+    # wall arc-length position that CE node i pairs with.  None when
+    # the coupled-wall path is not in use (legacy behaviour).
+    pair_fractions: np.ndarray | None = None
     converged: bool = False
     residual_norm: float | None = None
     mdot_target: float | None = None
@@ -215,6 +219,16 @@ class RaoSolverConfig:
     #                   emits a ``DeprecationWarning``.  The legacy
     #                   behaviour before Phase 4.
     angle_boundary_mode: str = "free"
+    # Upper bound on ``kernel_d_fraction`` (point D's arc-length
+    # position along the kernel BD curve).  See the
+    # :data:`KERNEL_D_FRACTION_MAX` module-level docstring for the
+    # physical justification.  Default ``None`` uses
+    # :data:`KERNEL_D_FRACTION_MAX` (currently 1.0 — no cap, preserves
+    # Phase 4 mass closure on the default-weight reference case).
+    # Studies of the high-weight regime should pass ``0.7`` to keep D
+    # away from the kernel axis and avoid the Phase 5 valid-region
+    # check firing on the kernel-to-CE bridge.
+    kernel_d_fraction_max: float | None = None
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
@@ -261,6 +275,74 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
 # pair_fraction unknowns), under-resolved wall (bump n_wall to 20),
 # or the Bezier wall seed not yet wired in for couple_wall=True.
 PHYSICS_WEIGHT = 0.05
+
+# =====================================================================
+#  Phase 7 -- BENCHMARK_VALIDATED reliability promotion
+# =====================================================================
+#
+# The plan (REWRITE_PLAN.md Phase 7) gates ``BENCHMARK_VALIDATED`` on:
+#
+#   (1) the chart benchmark plan-target test has passed in this
+#       release, AND
+#   (2) the per-run residuals are < ``BENCHMARK_VALIDATED_RESIDUAL_TOL``,
+#       AND
+#   (3) the input (epsilon, length_pct) sits inside the validated
+#       sub-grid (or is interpolable within it).
+#
+# ``BENCHMARK_VALIDATED_AT_RELEASE`` is the persistent flag controlling
+# (1).  It is currently ``False`` because
+# ``tests/test_rao_chart_benchmark.py::test_rao_chart_benchmark_plan_targets``
+# is xfailed -- the BVP at default PHYSICS_WEIGHT=0.05 hits the looser
+# 3 / 6 deg gate but not the 1.5 / 3 deg plan target.  The flag should
+# be flipped to ``True`` once the plan-target test passes on a release.
+# Until then no ``solve_rao_bvp`` call can be promoted to
+# ``BENCHMARK_VALIDATED`` even if (2) and (3) hold.
+BENCHMARK_VALIDATED_AT_RELEASE: bool = False
+BENCHMARK_VALIDATED_RESIDUAL_TOL: float = 1e-4
+BENCHMARK_VALIDATED_EPSILON_RANGE: tuple[float, float] = (6.0, 50.0)
+BENCHMARK_VALIDATED_LENGTH_PCT_RANGE: tuple[float, float] = (70.0, 90.0)
+
+
+def is_within_benchmarked_chart_grid(epsilon: float, length_pct: float) -> bool:
+    """True iff (epsilon, length_pct) lies inside the benchmarked sub-grid.
+
+    The sub-grid bounds (:data:`BENCHMARK_VALIDATED_EPSILON_RANGE`,
+    :data:`BENCHMARK_VALIDATED_LENGTH_PCT_RANGE`) are also documented
+    on :func:`raosim.benchmarks.rao_variational_chart_benchmark`.
+    """
+    eps_lo, eps_hi = BENCHMARK_VALIDATED_EPSILON_RANGE
+    lpct_lo, lpct_hi = BENCHMARK_VALIDATED_LENGTH_PCT_RANGE
+    return (
+        eps_lo <= float(epsilon) <= eps_hi
+        and lpct_lo <= float(length_pct) <= lpct_hi
+    )
+
+
+# Default upper bound on ``kernel_d_fraction`` (D's arc-length position
+# along the kernel BD curve, with 0 at the wall-side end B and 1 at the
+# deepest kernel point near the axis).  Classical Rao has D well inside
+# the kernel — at fraction ~0.3-0.6 in the published cases — never at
+# the axis.  When the kernel BD only just carries the quasi-1D throat
+# mass flow (the typical case at the moment), the BVP must push
+# ``kernel_d_fraction`` very close to 1.0 to close mass; tightening the
+# cap below ~0.9 then breaks mass closure on the default-weight path
+# (see ``tests/test_rao_variational_moc.py::
+# test_phase4_mass_closure_uses_kernel_bd_segment``).
+#
+# At ``PHYSICS_WEIGHT=1.0`` the BVP also drifts toward 1.0 but the
+# resulting CE starts from the kernel axis (D at M≈1.001), the Phase 5
+# valid-region check then fires on the kernel-to-CE bridge, and the
+# (ε=10, length_pct=80) weight=1.0 case lands in
+# ``GEOMETRIC_APPROXIMATION``.  Setting a tighter cap (e.g. 0.7) keeps
+# D away from the axis and restores ``valid_shock_free_region`` for
+# that case — at the cost of mass closure on the n=8 default-weight
+# reference case.  The two needs are in tension until Phase 12.4's
+# ``CalcRRCsAlongArc`` lands and the kernel can be extended along the
+# throat arc on demand (the NASA path), so the cap is exposed as a
+# per-solve knob: callers studying the high-weight regime pass
+# ``kernel_d_fraction_max=0.7``; the default of ``1.0`` preserves the
+# pre-cap behaviour for everything else.
+KERNEL_D_FRACTION_MAX = 1.0
 
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
     "stationarity",        # numerical Euler-Lagrange (reference; not in default)
@@ -1450,13 +1532,21 @@ def _seed_kernel_d_fraction(
     kernel_bd,
     target_flux: float,
     gamma: float,
+    *,
+    fraction_max: float | None = None,
 ) -> float:
-    """Seed D by matching the initial CE flux on the kernel BD curve."""
+    """Seed D by matching the initial CE flux on the kernel BD curve.
+
+    ``fraction_max`` clips the seed to match the BVP bounds box.  When
+    ``None`` the module-level :data:`KERNEL_D_FRACTION_MAX` is used.
+    """
+    cap = float(fraction_max if fraction_max is not None else KERNEL_D_FRACTION_MAX)
+    cap = float(np.clip(cap, 0.0, 1.0))
     full_flux = curve_mass_flux(kernel_bd, gamma)
     if full_flux <= 1e-14 or target_flux <= 0.0:
-        return 1.0
+        return cap
     if target_flux >= full_flux:
-        return 1.0
+        return cap
     lo, hi = 0.0, 1.0
     for _ in range(50):
         mid = 0.5 * (lo + hi)
@@ -1465,7 +1555,7 @@ def _seed_kernel_d_fraction(
             lo = mid
         else:
             hi = mid
-    return 0.5 * (lo + hi)
+    return min(0.5 * (lo + hi), cap)
 
 
 def _mass_closure_fluxes(
@@ -1560,15 +1650,21 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     # the quasi-1D throat target (best initial guess for the BVP mass
     # closure when the kernel BD curve already spans the full radial
     # cross-section).  The least_squares solve then refines it.
+    cap_eff = (
+        float(config.kernel_d_fraction_max)
+        if config.kernel_d_fraction_max is not None
+        else KERNEL_D_FRACTION_MAX
+    )
     if kernel_bd_flow_nodes:
         throat_target = _target_mdot(config.Rt, config.gamma)
         ce.kernel_d_fraction = _seed_kernel_d_fraction(
             kernel_bd_flow_nodes, throat_target, config.gamma,
+            fraction_max=cap_eff,
         )
     elif topology is not None:
-        ce.kernel_d_fraction = float(topology.d_fraction)
+        ce.kernel_d_fraction = min(float(topology.d_fraction), cap_eff)
     else:
-        ce.kernel_d_fraction = 0.5
+        ce.kernel_d_fraction = min(0.5, cap_eff)
 
     ce.phi = _phi_from_curve(ce.x, ce.r)
     ce.phi = np.clip(ce.phi, math.radians(5.0), math.radians(88.0))
@@ -1663,15 +1759,21 @@ def _pack_bvp(
     NOT carried — it is reconstructed at unpack time via
     :func:`_integrate_ce_x_from_left_mach` from
     ``(r_ce, theta_ce, M_ce)`` and the kernel BD point D
-    (selected by ``kernel_d_fraction``).  Eliminating ``x_ce`` from the
-    unknowns removes a degenerate basin where the optimiser could
-    satisfy left-Mach geometry by moving ``x`` at the expense of mass:
+    (selected by ``kernel_d_fraction``).
+
+    Phase 6 coupled-wall path additionally appends
+    ``n_ce`` free CE↔wall pair fractions (one per CE node, each
+    in ``[0, 1]`` indicating the wall arc-length position the CE node
+    pairs with for C+ compatibility):
 
         [M_ce, theta_ce, r_ce,
-         (M_w, theta_w, x_w, r_w),   # Phase 6 only, full 4-tuple kept
-         lambda2, lambda3, log_C, kernel_d_fraction]
+         (M_w, theta_w, x_w, r_w),   # Phase 6 only
+         lambda2, lambda3, log_C, kernel_d_fraction,
+         (pair_fraction[0..n_ce-1])  # Phase 6 only
+        ]
 
-    Size: ``3*n_ce + 4*n_wall + 4``  (was ``4*n_ce + 4*n_wall + 4``).
+    Size (uncoupled): ``3*n_ce + 4``.
+    Size (coupled):   ``3*n_ce + 4*n_wall + 4 + n_ce`` = ``4*n_ce + 4*n_wall + 4``.
     """
     log_C_val = float(log_C) if log_C is not None else float(ce.log_C)
     parts: list[np.ndarray] = [
@@ -1690,6 +1792,14 @@ def _pack_bvp(
         [lambda2, lambda3, log_C_val, float(ce.kernel_d_fraction)],
         dtype=float,
     ))
+    if wall is not None:
+        # Append pair_fractions (Phase 6 free pairing); fall back to a
+        # linear schedule if the CE doesn't already carry them.
+        n_ce = len(ce.r)
+        if ce.pair_fractions is not None and len(ce.pair_fractions) == n_ce:
+            parts.append(np.asarray(ce.pair_fractions, dtype=float))
+        else:
+            parts.append(np.linspace(0.0, 1.0, n_ce))
     return np.concatenate(parts)
 
 
@@ -1757,6 +1867,15 @@ def _unpack_bvp(
         float(u[scalar_start + 3]) if u.size >= scalar_start + 4 else 1.0
     )
 
+    # Phase 6 free pairing: when the coupled-wall path is active, the
+    # last ``n_ce`` scalars in ``u`` are the per-CE-node wall
+    # pair_fractions.  Layout: ``[..., scalars(4), pair_fractions(n_ce)]``.
+    pair_fractions: np.ndarray | None = None
+    if wall is not None and u.size >= scalar_start + 4 + n:
+        pair_fractions = np.asarray(
+            u[scalar_start + 4: scalar_start + 4 + n], dtype=float
+        ).copy()
+
     # Reconstruct ``x_ce`` from the left-Mach-line ODE.  ``x_start`` is
     # the x-coordinate of point D on the kernel BD curve.
     if kernel_bd:
@@ -1780,6 +1899,7 @@ def _unpack_bvp(
         lambda3=float(u[scalar_start + 1]),
         log_C=log_C_val,
         kernel_d_fraction=kernel_d_fraction,
+        pair_fractions=pair_fractions,
     )
     return ce, wall
 
@@ -1994,6 +2114,34 @@ def _wall_to_flow_nodes(wall: WallSurface) -> list[FlowNode]:
     return out
 
 
+def _wall_arc_lengths_normalized(wall: WallSurface) -> np.ndarray:
+    """Cumulative arc length along the wall, normalised to ``[0, 1]``."""
+    seg = np.hypot(np.diff(wall.x), np.diff(wall.r))
+    arc = np.concatenate([[0.0], np.cumsum(seg)])
+    total = float(arc[-1])
+    if total <= 1e-12:
+        return np.linspace(0.0, 1.0, len(wall.x))
+    return arc / total
+
+
+def _interp_wall_at_fraction(
+    wall: WallSurface,
+    arc_norm: np.ndarray,
+    frac: float,
+) -> FlowNode:
+    """Interpolate the wall's ``(x, r, M, theta)`` at arc fraction ``frac``.
+
+    ``arc_norm`` is the normalised arc-length array (precompute once per
+    residual evaluation).  ``frac`` is clamped to ``[0, 1]``.
+    """
+    f = float(max(0.0, min(frac, 1.0)))
+    x = float(np.interp(f, arc_norm, wall.x))
+    r = float(np.interp(f, arc_norm, wall.r))
+    M = float(np.interp(f, arc_norm, wall.M))
+    theta = float(np.interp(f, arc_norm, wall.theta))
+    return FlowNode(x=x, r=r, M=max(M, 1.000001), theta=theta)
+
+
 def _coupled_wall_residuals(
     ce: ControlSurface,
     wall: WallSurface,
@@ -2003,9 +2151,12 @@ def _coupled_wall_residuals(
     Phase 6 coupled-wall residual blocks.
 
     Returns four arrays under keys ``"wall_endpoint"``, ``"wall_tangency"``,
-    ``"cplus_ce_to_wall"``, ``"wall_intersection"``.  All four are sized
-    according to ``len(wall)`` and the CE; pair CE node i ↔ wall node i
-    (linear pairing per the Phase 6 MVP from REWRITE_PLAN.md).
+    ``"cplus_ce_to_wall"``, ``"wall_intersection"``.  Pairing of CE
+    nodes to wall positions is determined by ``ce.pair_fractions[i]``
+    (a free BVP unknown in ``[0, 1]`` interpreted as a fractional
+    arc-length on the wall).  When ``ce.pair_fractions`` is None the
+    pairing falls back to the linear ``i / (n_ce - 1)`` schedule
+    (legacy behaviour).
     """
     Rt = config.Rt
     Re = math.sqrt(config.epsilon) * Rt
@@ -2044,35 +2195,31 @@ def _coupled_wall_residuals(
         for i in range(len(wall_nodes) - 1)
     ], dtype=float)
 
-    # 3. C+ axisymmetric compatibility from CE[i] to wall[i] using the
-    # linear pairing of CE nodes ↔ wall nodes.  When n_ce != n_wall,
-    # interpolate the CE state at fractional index i*(n_ce-1)/(n_wall-1).
-    n_w = len(wall_nodes)
+    # 3. Free CE↔wall pairing.  For each CE node i, look up the wall
+    # position at arc-length fraction ``ce.pair_fractions[i]``.  This is
+    # the C+ characteristic from CE[i] landing on the wall — the wall
+    # point doesn't have to be one of the discrete wall nodes.
     n_ce = len(ce_nodes)
-    cplus = []
-    intersection = []
-    if n_ce >= 2 and n_w >= 1:
+    cplus: list[float] = []
+    intersection: list[float] = []
+    if n_ce >= 1 and len(wall_nodes) >= 2:
         theta_scale = math.radians(1.0)
-        for i in range(n_w):
-            frac = i * (n_ce - 1) / max(n_w - 1, 1)
-            j0 = int(min(max(math.floor(frac), 0), n_ce - 1))
-            j1 = int(min(j0 + 1, n_ce - 1))
-            t = frac - j0
-            ce0 = ce_nodes[j0]
-            ce1 = ce_nodes[j1]
-            ce_paired = FlowNode(
-                x=ce0.x + t * (ce1.x - ce0.x),
-                r=ce0.r + t * (ce1.r - ce0.r),
-                M=max(ce0.M + t * (ce1.M - ce0.M), 1.000001),
-                theta=ce0.theta + t * (ce1.theta - ce0.theta),
-            )
-            wall_pt = wall_nodes[i]
+        arc_norm = _wall_arc_lengths_normalized(wall)
+        pair_fracs = getattr(ce, "pair_fractions", None)
+        if pair_fracs is None or len(pair_fracs) != n_ce:
+            # Legacy linear-schedule fallback.
+            pair_fracs = np.linspace(0.0, 1.0, n_ce)
+        else:
+            pair_fracs = np.asarray(pair_fracs, dtype=float)
+        for i in range(n_ce):
+            ce_pt = ce_nodes[i]
+            wall_pt = _interp_wall_at_fraction(wall, arc_norm, float(pair_fracs[i]))
             cplus.append(
-                residual_Cplus_axisym(ce_paired, wall_pt, config.gamma)
+                residual_Cplus_axisym(ce_pt, wall_pt, config.gamma)
                 / theta_scale
             )
             intersection.append(
-                residual_cplus_child_position(ce_paired, wall_pt) / Re_scale
+                residual_cplus_child_position(ce_pt, wall_pt) / Re_scale
             )
     cplus = np.asarray(cplus, dtype=float)
     intersection = np.asarray(intersection, dtype=float)
@@ -2278,8 +2425,28 @@ def _ce_geometry_residuals(
     ce: ControlSurface,
     r_template: np.ndarray,
     config: RaoSolverConfig,
+    wall: WallSurface | None = None,
 ) -> np.ndarray:
-    """Endpoint, monotonicity, and boundary-state residuals for CE geometry."""
+    """Endpoint, monotonicity, and boundary-state residuals for CE geometry.
+
+    Endpoint at E
+    -------------
+    With the left-Mach-by-construction refactor, ``ce.x[-1]`` is the
+    output of the integrator — pinning *both* CE and wall to ``(L, Re)``
+    over-constrains the system (the CE has 3 DOFs per node and the wall
+    has 4; the length endpoint cannot be carried by both).  When the
+    coupled wall is active we therefore replace the absolute
+    ``(ce.x[-1] - L) / L`` pin with a *coincidence residual*
+    ``(ce.x[-1] - wall.x[-1]) / L``, asserting that the two surfaces
+    meet at E without pinning the CE to L directly.  The wall side
+    keeps its own absolute ``(wall.x[-1] - L) / L`` via the
+    ``wall_endpoint`` block.  NASA's ``CalcLRCDE`` uses the same
+    structural separation (the wall is the length-spanning curve; CE
+    is the optimal-thrust supersonic control surface).
+
+    Legacy callers (``couple_wall=False``) keep the direct ``(ce.x[-1] - L)``
+    pin to preserve backward compatibility.
+    """
     if ce.x is None or len(ce.x) < 2:
         return np.zeros(0, dtype=float)
 
@@ -2308,13 +2475,24 @@ def _ce_geometry_residuals(
     else:
         start = np.zeros(0, dtype=float)
 
-    endpoint = np.concatenate([
-        start,
-        np.array([
-            (float(ce.x[-1]) - L) / x_scale,
-            (float(ce.r[-1]) - Re) / r_scale,
-        ], dtype=float),
-    ])
+    if wall is not None and len(wall.x) >= 1:
+        # Coincidence at E: CE end meets wall end (wall carries L pin).
+        endpoint = np.concatenate([
+            start,
+            np.array([
+                (float(ce.x[-1]) - float(wall.x[-1])) / x_scale,
+                (float(ce.r[-1]) - float(wall.r[-1])) / r_scale,
+            ], dtype=float),
+        ])
+    else:
+        # Legacy: CE absolute pin to (L, Re).
+        endpoint = np.concatenate([
+            start,
+            np.array([
+                (float(ce.x[-1]) - L) / x_scale,
+                (float(ce.r[-1]) - Re) / r_scale,
+            ], dtype=float),
+        ])
     theta_scale = math.radians(1.0)
 
     # Phase 7: angle_boundary_mode controls how θ_N / θ_E enter the
@@ -2407,13 +2585,25 @@ def _rao_bvp_residual_groups(
     mach_monotonic_penalty = np.maximum(-np.diff(ce.M), 0.0) / 0.05
     regularization = _ce_smoothness_regularization(ce, config.gamma)
     moc_cplus, moc_cminus = _ce_axisymmetric_compatibility_residual_groups(ce, config.gamma)
-    ce_geometry = _ce_geometry_residuals(ce, r, config)
+    ce_geometry = _ce_geometry_residuals(ce, r, config, wall=wall)
     algebraic_stat = _rao_algebraic_stationarity_residuals(ce, config.gamma)
     left_mach = _rao_left_mach_geometry_residuals(ce)
+    # Phase 6 free-pairing monotonicity: pair_fractions should be
+    # weakly monotone non-decreasing.  Adjacent CE nodes pair with
+    # adjacent wall arc-length positions; a non-monotonic pairing
+    # would imply CE node i+1's C+ characteristic lands upstream of
+    # CE node i's, which is unphysical.
+    if ce.pair_fractions is not None and len(ce.pair_fractions) >= 2:
+        pair_monotonic_penalty = (
+            np.maximum(-np.diff(ce.pair_fractions), 0.0) / 0.01
+        )
+    else:
+        pair_monotonic_penalty = np.zeros(0, dtype=float)
     penalties = np.concatenate([
         incidence_penalty,
         mach_monotonic_penalty,
         0.1 * phi_smooth,
+        pair_monotonic_penalty,
     ])
     active = _enabled_residual_blocks(config)
 
@@ -3250,6 +3440,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     if config.couple_wall:
         wall_seed = _initial_wall_guess(config, ce0, topology_seed)
         n_w = len(wall_seed.x)
+        # Seed free CE↔wall pair_fractions as a uniform linear schedule
+        # (matches the legacy linear pairing as the initial guess; the
+        # solver is free to drift them away as physics demands).
+        ce0.pair_fractions = np.linspace(0.0, 1.0, n)
         u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0, wall=wall_seed)
     else:
         n_w = 0
@@ -3281,8 +3475,23 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             np.full(n_w, max(1.2 * L_target_value, 1e-9)),
             np.full(n_w, 1.05 * Re_value),
         ])
+    # scalars: [lambda2, lambda3, log_C, kernel_d_fraction]
+    # The kernel_d_fraction upper bound caps D's arc-length position
+    # along BD.  See ``KERNEL_D_FRACTION_MAX`` and
+    # ``RaoSolverConfig.kernel_d_fraction_max`` for the physical
+    # justification and per-call override.
+    kdf_cap = (
+        float(config.kernel_d_fraction_max)
+        if config.kernel_d_fraction_max is not None
+        else KERNEL_D_FRACTION_MAX
+    )
+    kdf_cap = float(np.clip(kdf_cap, 1e-3, 1.0))
     lower_parts.append(np.array([-1e3, -1e3, -10.0, 0.0]))
-    upper_parts.append(np.array([1e3, 1e3, 10.0, 1.0]))
+    upper_parts.append(np.array([1e3, 1e3, 10.0, kdf_cap]))
+    if n_w > 0:
+        # pair_fractions ∈ [0, 1] per CE node.
+        lower_parts.append(np.zeros(n))
+        upper_parts.append(np.ones(n))
     lower = np.concatenate(lower_parts)
     upper = np.concatenate(upper_parts)
 
@@ -3537,7 +3746,38 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
 
     ce.converged = bool(bvp_ok)
     shock_free = crossings == 0
-    if bvp_ok and moc_ok and valid_region_ok and thrust_sanity_ok:
+
+    # Phase 7 BENCHMARK_VALIDATED promotion: only fires once the chart
+    # benchmark plan-target test has flipped
+    # BENCHMARK_VALIDATED_AT_RELEASE to True, the input sits inside the
+    # benchmarked sub-grid, and the per-run residuals are tighter than
+    # BENCHMARK_VALIDATED_RESIDUAL_TOL.  See the docstrings on those
+    # module-level names.
+    benchmark_eligible_input = is_within_benchmarked_chart_grid(
+        config.epsilon, config.length_pct
+    )
+    benchmark_eligible_residuals = (
+        residuals.max_scaled <= BENCHMARK_VALIDATED_RESIDUAL_TOL
+        and abs(residuals.mass_residual_rel) <= BENCHMARK_VALIDATED_RESIDUAL_TOL
+        and abs(residuals.length_residual_rel) <= BENCHMARK_VALIDATED_RESIDUAL_TOL
+    )
+    benchmark_validated_ok = (
+        BENCHMARK_VALIDATED_AT_RELEASE
+        and benchmark_eligible_input
+        and benchmark_eligible_residuals
+        and bvp_ok and moc_ok and valid_region_ok and thrust_sanity_ok
+    )
+    construction_diagnostics["benchmark_validation"] = {
+        "at_release": bool(BENCHMARK_VALIDATED_AT_RELEASE),
+        "input_within_grid": bool(benchmark_eligible_input),
+        "residuals_within_tol": bool(benchmark_eligible_residuals),
+        "residual_tol": BENCHMARK_VALIDATED_RESIDUAL_TOL,
+        "eligible": bool(benchmark_validated_ok),
+    }
+
+    if benchmark_validated_ok:
+        reliability = ContourReliability.BENCHMARK_VALIDATED
+    elif bvp_ok and moc_ok and valid_region_ok and thrust_sanity_ok:
         reliability = ContourReliability.RAO_VARIATIONAL_RESIDUAL_SOLVED
     elif moc_ok and valid_region_ok and thrust_sanity_ok:
         reliability = ContourReliability.MOC_COMPATIBLE

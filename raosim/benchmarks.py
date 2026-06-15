@@ -11,6 +11,8 @@ from __future__ import annotations
 import csv
 import json
 import math
+from collections.abc import Sequence
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +23,12 @@ from raosim.gas_dynamics import (
     mach_from_area_ratio,
     thrust_coefficient,
 )
-from raosim.nozzle_geometry import bell_nozzle_contour
+from raosim.nozzle_geometry import (
+    _EPSILON_VALS,
+    _LPCT_VALS,
+    bell_nozzle_contour,
+    lookup_angles,
+)
 
 
 DATA_ROOT = Path(__file__).with_name("benchmark_data")
@@ -705,3 +712,294 @@ def _json_ready(value: Any) -> Any:
     if isinstance(value, np.ndarray):
         return value.tolist()
     return value
+
+
+# =====================================================================
+#  Phase 7 — Rao TOP chart benchmark sweep
+# =====================================================================
+#
+# Sweep the published (eps, length_pct) Rao/NASA SP-8120 chart grid and
+# compare ``solve_rao_bvp``'s converged (theta_N, theta_E) against the
+# tabulated values.  RMS / max-error gates from REWRITE_PLAN.md Phase 7:
+#
+#   * RMS error in theta_N AND theta_E < 1.5 deg  (the plan target)
+#   * Max error in theta_N OR theta_E < 3.0 deg   (the plan target)
+#
+# The current default PHYSICS_WEIGHT=0.05 reliably hits ~3 / ~6 deg
+# (the looser "release" gate); tightening to the plan targets is gated
+# on the weight=1.0 xfail closing.  See
+# ``tests/test_rao_chart_benchmark.py`` for the full-sweep test gate
+# and ``tests/test_phase6_coupled_wall.py`` for the weight=1.0 xfail.
+
+
+@dataclass
+class ChartBenchmarkRow:
+    """One (epsilon, length_pct) chart sample with the solver's response."""
+
+    epsilon: float
+    length_pct: float
+    chart_theta_n_deg: float
+    chart_theta_e_deg: float
+    solver_theta_n_deg: float | None = None
+    solver_theta_e_deg: float | None = None
+    err_theta_n_deg: float | None = None
+    err_theta_e_deg: float | None = None
+    max_scaled: float | None = None
+    mass_residual_rel: float | None = None
+    length_residual_rel: float | None = None
+    reliability: str | None = None
+    rao_region: str | None = None
+    kernel_d_fraction: float | None = None
+    runtime_s: float | None = None
+    exception: str | None = None
+
+
+@dataclass
+class ChartBenchmarkResult:
+    """Aggregate across the chart sweep with the per-case rows."""
+
+    rows: list[ChartBenchmarkRow] = field(default_factory=list)
+    rms_theta_n_deg: float = float("nan")
+    rms_theta_e_deg: float = float("nan")
+    max_theta_n_deg: float = float("nan")
+    max_theta_e_deg: float = float("nan")
+    n_total: int = 0
+    n_completed: int = 0
+    n_failed: int = 0
+    Rt: float = 0.020
+    gamma: float = 1.4
+    pa_over_p0: float = 0.0
+    physics_weight: float = 0.05
+    n_control: int = 10
+    n_kernel: int = 10
+    max_nfev: int = 300
+
+    def passes(
+        self,
+        rms_tol_deg: float = 1.5,
+        max_tol_deg: float = 3.0,
+    ) -> bool:
+        """True iff RMS and max errors meet the supplied gate."""
+        if self.n_completed == 0:
+            return False
+        return (
+            self.rms_theta_n_deg <= rms_tol_deg
+            and self.rms_theta_e_deg <= rms_tol_deg
+            and self.max_theta_n_deg <= max_tol_deg
+            and self.max_theta_e_deg <= max_tol_deg
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        d = asdict(self)
+        return _json_ready(d)
+
+
+# The default chart sub-grid lives inside the smooth-flow Rao region.
+# Excluded chart corners:
+#
+#   * length_pct = 60          -- too short; Phase 5 valid-region check
+#                                 fires (test_rao_valid_region.py).
+#   * length_pct = 100         -- degenerates into a 15-deg full conical
+#                                 nozzle; chart values are extrapolated
+#                                 outside the published Rao TOP region.
+#   * epsilon < 6              -- low-area-ratio cases sit at the edge
+#                                 of the valid Rao region; the BVP
+#                                 finds reduced-quality optima there.
+#
+DEFAULT_CHART_EPSILON_GRID: tuple[float, ...] = tuple(
+    float(eps) for eps in _EPSILON_VALS if eps >= 6.0
+)
+DEFAULT_CHART_LENGTH_PCT_GRID: tuple[float, ...] = tuple(
+    float(lpct) for lpct in _LPCT_VALS if 70.0 <= lpct <= 90.0
+)
+
+
+def rao_variational_chart_benchmark(
+    *,
+    Rt: float = 0.020,
+    gamma: float = 1.4,
+    pa_over_p0: float = 0.0,
+    epsilon_grid: Sequence[float] | None = None,
+    length_pct_grid: Sequence[float] | None = None,
+    n_control: int = 10,
+    n_kernel: int = 10,
+    max_nfev: int = 300,
+    residual_tol: float = 5e-3,
+    angle_boundary_mode: str = "free",
+    starting_line_method: str = "kliegel_levine",
+    kernel_d_fraction_max: float | None = None,
+    progress: bool = False,
+) -> ChartBenchmarkResult:
+    """Sweep ``solve_rao_bvp`` over the published Rao/NASA SP-8120 chart.
+
+    Returns a :class:`ChartBenchmarkResult` carrying per-case rows and
+    aggregate RMS / max errors against
+    :data:`raosim.nozzle_geometry._THETA_N_TABLE` /
+    :data:`raosim.nozzle_geometry._THETA_E_TABLE`.
+
+    All keyword arguments default to the Phase 7 release-gate
+    configuration: ``PHYSICS_WEIGHT=0.05`` (the robust default),
+    ``angle_boundary_mode='free'`` (the chart is the ground truth, the
+    BVP must reproduce it without being told the answer), and a
+    sub-grid that excludes the chart corners where the Phase 5
+    valid-region check fires or the chart itself extrapolates.
+
+    Parameters
+    ----------
+    Rt, gamma, pa_over_p0
+        Throat radius, specific-heat ratio, ambient pressure ratio.
+    epsilon_grid, length_pct_grid
+        Optional overrides for the sweep grid.  Default to the
+        :data:`DEFAULT_CHART_EPSILON_GRID` /
+        :data:`DEFAULT_CHART_LENGTH_PCT_GRID` defined above.
+    n_control, n_kernel, max_nfev, residual_tol
+        Solver configuration passed to :class:`RaoSolverConfig`.
+    angle_boundary_mode
+        ``"free"`` (default) for an uncontaminated benchmark.  See
+        :class:`RaoSolverConfig.angle_boundary_mode` for the other
+        modes.
+    starting_line_method
+        Default ``"kliegel_levine"`` per REWRITE_PLAN.md Section 2.H.
+    kernel_d_fraction_max
+        Per-call cap on ``kernel_d_fraction``.  ``None`` (default)
+        leaves the module-level :data:`KERNEL_D_FRACTION_MAX` in
+        effect.  Pass a smaller value (e.g. ``0.7``) to study the
+        high-PHYSICS_WEIGHT regime; see the docstring on the constant
+        in :mod:`raosim.rao_variational` for the trade-off.
+    progress
+        If ``True`` and the optional ``tqdm`` library is available, a
+        tqdm progress bar is printed.  Otherwise silent.
+    """
+    from raosim.rao_variational import (
+        PHYSICS_WEIGHT,
+        RaoSolverConfig,
+        solve_rao_bvp,
+    )
+
+    epsilons = (
+        DEFAULT_CHART_EPSILON_GRID if epsilon_grid is None
+        else tuple(float(x) for x in epsilon_grid)
+    )
+    lpcts = (
+        DEFAULT_CHART_LENGTH_PCT_GRID if length_pct_grid is None
+        else tuple(float(x) for x in length_pct_grid)
+    )
+    cases = [(eps, lpct) for eps in epsilons for lpct in lpcts]
+
+    iterator: Any = cases
+    if progress:
+        try:
+            from tqdm import tqdm  # type: ignore[import-not-found]
+            iterator = tqdm(cases, desc="rao_variational_chart_benchmark",
+                            unit="case")
+        except ImportError:
+            iterator = cases
+
+    rows: list[ChartBenchmarkRow] = []
+    for epsilon, length_pct in iterator:
+        chart_n, chart_e = lookup_angles(float(epsilon), float(length_pct))
+        row = ChartBenchmarkRow(
+            epsilon=float(epsilon),
+            length_pct=float(length_pct),
+            chart_theta_n_deg=float(chart_n),
+            chart_theta_e_deg=float(chart_e),
+        )
+
+        cfg = RaoSolverConfig(
+            Rt=Rt, epsilon=float(epsilon), gamma=gamma,
+            pa_over_p0=pa_over_p0, length_pct=float(length_pct),
+            n_control=n_control, n_kernel=n_kernel,
+            max_nfev=max_nfev, residual_tol=residual_tol,
+            evaluate_moc=False,
+            starting_line_method=starting_line_method,
+            angle_boundary_mode=angle_boundary_mode,
+            kernel_d_fraction_max=kernel_d_fraction_max,
+        )
+
+        import time as _time
+        t0 = _time.time()
+        try:
+            sol = solve_rao_bvp(cfg)
+        except Exception as exc:
+            row.exception = repr(exc)
+            row.runtime_s = float(_time.time() - t0)
+            rows.append(row)
+            continue
+        row.runtime_s = float(_time.time() - t0)
+        row.solver_theta_n_deg = float(math.degrees(sol.theta_N))
+        row.solver_theta_e_deg = float(math.degrees(sol.theta_E))
+        row.err_theta_n_deg = abs(row.solver_theta_n_deg - row.chart_theta_n_deg)
+        row.err_theta_e_deg = abs(row.solver_theta_e_deg - row.chart_theta_e_deg)
+        row.max_scaled = float(sol.residuals.max_scaled)
+        row.mass_residual_rel = float(sol.residuals.mass_residual_rel)
+        row.length_residual_rel = float(sol.residuals.length_residual_rel)
+        row.reliability = sol.reliability.value
+        row.rao_region = sol.construction_diagnostics.get("rao_region")
+        row.kernel_d_fraction = float(sol.control_surface.kernel_d_fraction)
+        rows.append(row)
+
+    errs_n = np.asarray(
+        [r.err_theta_n_deg for r in rows if r.err_theta_n_deg is not None],
+        dtype=float,
+    )
+    errs_e = np.asarray(
+        [r.err_theta_e_deg for r in rows if r.err_theta_e_deg is not None],
+        dtype=float,
+    )
+
+    def _rms(arr: np.ndarray) -> float:
+        return float(np.sqrt(np.mean(arr ** 2))) if arr.size else float("nan")
+
+    def _max(arr: np.ndarray) -> float:
+        return float(np.max(arr)) if arr.size else float("nan")
+
+    return ChartBenchmarkResult(
+        rows=rows,
+        rms_theta_n_deg=_rms(errs_n),
+        rms_theta_e_deg=_rms(errs_e),
+        max_theta_n_deg=_max(errs_n),
+        max_theta_e_deg=_max(errs_e),
+        n_total=len(rows),
+        n_completed=int(errs_n.size),
+        n_failed=int(len(rows) - errs_n.size),
+        Rt=Rt, gamma=gamma, pa_over_p0=pa_over_p0,
+        physics_weight=float(PHYSICS_WEIGHT),
+        n_control=n_control, n_kernel=n_kernel, max_nfev=max_nfev,
+    )
+
+
+def format_chart_benchmark_report(result: ChartBenchmarkResult) -> str:
+    """Return a compact human-readable summary of the chart sweep."""
+    lines: list[str] = [
+        f"Rao chart benchmark: {result.n_completed}/{result.n_total} cases "
+        f"completed ({result.n_failed} raised)",
+        f"  PHYSICS_WEIGHT  = {result.physics_weight}",
+        f"  n_control       = {result.n_control}",
+        f"  n_kernel        = {result.n_kernel}",
+        f"  max_nfev        = {result.max_nfev}",
+        "",
+        f"  RMS theta_N error: {result.rms_theta_n_deg:5.2f} deg  "
+        f"(max {result.max_theta_n_deg:5.2f} deg)",
+        f"  RMS theta_E error: {result.rms_theta_e_deg:5.2f} deg  "
+        f"(max {result.max_theta_e_deg:5.2f} deg)",
+        "",
+        "  per-case rows:",
+        "    eps  L%    chart_n  chart_e  solv_n  solv_e   err_n  err_e   "
+        "max_scl  region",
+    ]
+    for r in result.rows:
+        if r.exception is not None:
+            lines.append(
+                f"   {r.epsilon:4.1f}  {r.length_pct:4.1f}  "
+                f"{r.chart_theta_n_deg:6.2f}   {r.chart_theta_e_deg:6.2f}  "
+                f"     -       -        -      -        -    EXC: {r.exception[:30]}"
+            )
+            continue
+        lines.append(
+            f"   {r.epsilon:4.1f}  {r.length_pct:4.1f}  "
+            f"{r.chart_theta_n_deg:6.2f}   {r.chart_theta_e_deg:6.2f}  "
+            f"{(r.solver_theta_n_deg or 0):6.2f}  {(r.solver_theta_e_deg or 0):6.2f}  "
+            f"{(r.err_theta_n_deg or 0):5.2f}  {(r.err_theta_e_deg or 0):5.2f}  "
+            f"{(r.max_scaled or 0):7.2e}  {r.rao_region or '-'}"
+        )
+    return "\n".join(lines)
