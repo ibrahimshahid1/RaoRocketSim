@@ -48,6 +48,7 @@ from raosim.gas_dynamics import (
     prandtl_meyer,
     mach_from_prandtl_meyer,
     area_mach_relation,
+    thrust_coefficient as ideal_thrust_coefficient,
 )
 from raosim.moc import (
     _make_point,
@@ -67,6 +68,11 @@ from raosim.rao_residuals import (
     residual_Cplus_axisym,
     residual_intersection,
     residual_left_mach_geometry,
+)
+from raosim.nasa_moc import (
+    calc_lrc_de,
+    calc_mdot_bd,
+    surface_thrust_coefficient,
 )
 from raosim.validation import add_contour_reliability_metadata
 from raosim.wall_model import SplineWall
@@ -96,6 +102,7 @@ class ControlSurface:
     lambda2: float = 0.0    # Lagrange multiplier for mass-flow constraint
     lambda3: float = 0.0    # Lagrange multiplier for length constraint
     log_C: float = 0.0      # log of the Rao algebraic stationarity constant
+    kernel_d_fraction: float = 1.0  # solved point D location along kernel BD
     converged: bool = False
     residual_norm: float | None = None
     mdot_target: float | None = None
@@ -167,11 +174,13 @@ class RaoSolverConfig:
     evaluate_moc: bool = True
     residual_blocks: tuple[str, ...] | None = None
     wall_method: str = "coupled"
+    kernel_bd: tuple[FlowNode, ...] | None = field(default=None, repr=False)
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
     "mass",
     "length",
+    "moc_cplus",
     "moc_cminus",
     "ce_geometry",
     "regularization",
@@ -181,7 +190,6 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
 )
 
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
-    "moc_cplus",
     "stationarity",        # numerical Euler-Lagrange (reference; not in default)
     "transversality",      # natural at free endpoint only; off for fixed L, eps
 )
@@ -355,6 +363,7 @@ class RaoSolution:
     assumptions: tuple[str, ...]
     construction_diagnostics: dict = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
+    topology: object | None = None  # nasa_moc.RaoTopology when available
 
     def to_contour_dict(self, *, Rt: float, epsilon: float, length_pct: float,
                         pa_over_p0: float, Ru_factor: float = 1.5,
@@ -428,6 +437,19 @@ class RaoSolution:
             "warnings": list(self.warnings),
         }
         return contour
+
+
+def _design_angles_rad(epsilon: float, length_pct: float,
+                       fallback_theta_n_deg: float = 30.0) -> tuple[float, float]:
+    """Return wall design throat/exit angles independently of CE state."""
+    try:
+        from raosim.nozzle_geometry import lookup_angles
+
+        theta_n_deg, theta_e_deg = lookup_angles(epsilon, length_pct)
+    except Exception:
+        theta_n_deg = fallback_theta_n_deg
+        theta_e_deg = max(0.0, 0.5 * fallback_theta_n_deg)
+    return math.radians(theta_n_deg), math.radians(theta_e_deg)
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -943,7 +965,7 @@ def _construct_wall_from_ce(
     """
     Re = math.sqrt(epsilon) * Rt
     Rd = 0.382 * Rt
-    theta_n = max(float(ce.theta[0]), math.radians(15))
+    theta_n = max(float(ce.theta[0]), math.radians(1.0))
     diagnostics = {
         "fallback_used": False,
         "postprocessed": False,
@@ -1196,50 +1218,280 @@ def _target_mdot(Rt: float, gamma: float) -> float:
     return rhoV_star * math.pi * Rt * Rt
 
 
-def _initial_ce_from_kernel(config: RaoSolverConfig) -> tuple[ControlSurface, list[CharPoint]]:
-    """Build a kernel-seeded control-surface initial guess."""
+def _flow_nodes_from_curve(curve_or_nodes) -> list[FlowNode]:
+    """Return a curve as minimal flow-state nodes."""
+    if isinstance(curve_or_nodes, ControlSurface):
+        return _control_surface_flow_nodes(curve_or_nodes)
+
+    nodes: list[FlowNode] = []
+    for item in curve_or_nodes:
+        if isinstance(item, FlowNode):
+            nodes.append(item)
+        elif hasattr(item, "to_flow_node"):
+            nodes.append(item.to_flow_node())
+        else:
+            nodes.append(FlowNode(
+                x=float(item.x),
+                r=float(item.r),
+                M=max(float(item.M), 1.001),
+                theta=float(item.theta),
+            ))
+    return nodes
+
+
+def curve_mass_flux(curve_or_nodes, gamma: float) -> float:
+    """
+    Axisymmetric mass flux through a discrete flow-state curve.
+
+    Rao's mass closure is between the mass flux crossing the optimized
+    control surface DE and the kernel cross-section BD.  For a polyline
+    segment with tangent angle beta, the nondimensional surface flux is
+
+        dmdot = 2*pi*r*rho*V*|sin(beta - theta)|*ds
+
+    where rho and V are stagnation-normalized isentropic quantities.  The
+    same integral is used for both DE and BD so the residual compares like
+    with like rather than comparing against the quasi-1D throat value.
+    """
+    nodes = _flow_nodes_from_curve(curve_or_nodes)
+    total = 0.0
+    for p0, p1 in zip(nodes[:-1], nodes[1:]):
+        dx = float(p1.x - p0.x)
+        dr = float(p1.r - p0.r)
+        ds = math.hypot(dx, dr)
+        if ds < 1e-12:
+            continue
+        beta = math.atan2(dr, dx)
+        M = max(0.5 * (float(p0.M) + float(p1.M)), 1.001)
+        theta = 0.5 * (float(p0.theta) + float(p1.theta))
+        r = max(0.5 * (float(p0.r) + float(p1.r)), 1e-12)
+        rho = isentropic_density_ratio(M, gamma)
+        T = isentropic_temperature_ratio(M, gamma)
+        V = M * math.sqrt(gamma * T)
+        total += (
+            2.0 * math.pi * r * rho * V
+            * abs(math.sin(beta - theta)) * ds
+        )
+    return float(total)
+
+
+def _interp_flow_node(p0: FlowNode, p1: FlowNode, t: float) -> FlowNode:
+    """Linear state interpolation on one characteristic segment."""
+    q = float(np.clip(t, 0.0, 1.0))
+    return FlowNode(
+        x=float(p0.x + q * (p1.x - p0.x)),
+        r=float(p0.r + q * (p1.r - p0.r)),
+        M=max(float(p0.M + q * (p1.M - p0.M)), 1.001),
+        theta=float(p0.theta + q * (p1.theta - p0.theta)),
+    )
+
+
+def kernel_bd_segment(kernel_bd, d_fraction: float) -> list[FlowNode]:
+    """
+    Return the B-to-D subset of the kernel BD left-running Mach line.
+
+    ``d_fraction`` is the solved point-D location by arc length, with 0 at B
+    (the wall-side end of BD) and 1 at the deepest available kernel point.
+    """
+    nodes = _flow_nodes_from_curve(kernel_bd)
+    if len(nodes) < 2:
+        return nodes
+
+    seg_lengths = [
+        math.hypot(p1.x - p0.x, p1.r - p0.r)
+        for p0, p1 in zip(nodes[:-1], nodes[1:])
+    ]
+    total = float(sum(seg_lengths))
+    if total <= 1e-14:
+        return [nodes[0]]
+
+    target = float(np.clip(d_fraction, 0.0, 1.0)) * total
+    if target <= 0.0:
+        return [nodes[0]]
+
+    out = [nodes[0]]
+    accum = 0.0
+    for p0, p1, ds in zip(nodes[:-1], nodes[1:], seg_lengths):
+        if ds <= 1e-14:
+            continue
+        if accum + ds < target:
+            out.append(p1)
+            accum += ds
+            continue
+        out.append(_interp_flow_node(p0, p1, (target - accum) / ds))
+        break
+    return out
+
+
+def _kernel_left_mach_line_from_starting_line(
+    starting_line: list[CharPoint],
+    gamma: float,
+) -> list[CharPoint]:
+    """
+    Build the wall-originating left-running Mach line BD inside the kernel.
+
+    The simplified Python kernel starts from TT' and repeatedly applies the
+    interior/axis MOC unit processes without a wall boundary.  The wall-side
+    point of each shrinking row lies on the last C- family line, the BD
+    cross-section used by Rao's mass closure.
+    """
+    if not starting_line:
+        return []
+    prev_pts = list(starting_line)
+    bd = [prev_pts[-1]]
+    while len(prev_pts) >= 2:
+        new_pts: list[CharPoint] = []
+        if prev_pts[0].r < 1e-10 and len(prev_pts) > 1:
+            axis_pt = solve_axis_point(prev_pts[1], gamma, True)
+        else:
+            axis_pt = solve_axis_point(prev_pts[0], gamma, True)
+        new_pts.append(axis_pt)
+
+        for j in range(len(prev_pts) - 2):
+            new_pts.append(solve_interior_point(
+                prev_pts[j + 1], prev_pts[j], gamma, True
+            ))
+
+        bd.append(new_pts[-1])
+        if new_pts[-1].r <= 1e-10 or len(new_pts) < 2:
+            break
+        prev_pts = new_pts
+    return bd
+
+
+def _seed_kernel_d_fraction(
+    kernel_bd,
+    target_flux: float,
+    gamma: float,
+) -> float:
+    """Seed D by matching the initial CE flux on the kernel BD curve."""
+    full_flux = curve_mass_flux(kernel_bd, gamma)
+    if full_flux <= 1e-14 or target_flux <= 0.0:
+        return 1.0
+    if target_flux >= full_flux:
+        return 1.0
+    lo, hi = 0.0, 1.0
+    for _ in range(50):
+        mid = 0.5 * (lo + hi)
+        mid_flux = curve_mass_flux(kernel_bd_segment(kernel_bd, mid), gamma)
+        if mid_flux < target_flux:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+def _mass_closure_fluxes(
+    ce: ControlSurface,
+    config: RaoSolverConfig,
+) -> tuple[float, float, float, list[FlowNode]]:
+    """
+    Return CE mass, kernel BD mass target, reference scale, and BD segment.
+
+    If the caller did not supply a kernel BD curve, fall back to the legacy
+    throat reference so older helper-level calls remain evaluable.  The public
+    ``solve_rao_bvp`` path always supplies ``config.kernel_bd``.
+    """
+    ce_flux = curve_mass_flux(ce, config.gamma)
+    if config.kernel_bd:
+        bd_flux, bd_segment = calc_mdot_bd(
+            config.kernel_bd, ce.kernel_d_fraction, config.gamma
+        )
+        bd_full_flux = curve_mass_flux(config.kernel_bd, config.gamma)
+        mdot_ref = max(
+            abs(bd_full_flux),
+            abs(bd_flux),
+            _target_mdot(config.Rt, config.gamma),
+            1e-12,
+        )
+        return ce_flux, bd_flux, mdot_ref, bd_segment
+
+    throat_target = _target_mdot(config.Rt, config.gamma)
+    return ce_flux, throat_target, max(abs(throat_target), 1e-12), []
+
+
+def _initial_ce_from_kernel(config: RaoSolverConfig):
+    """
+    Build a kernel-seeded control-surface initial guess and kernel BD.
+
+    The kernel is built by the NASA-style routines in :mod:`raosim.nasa_moc`:
+    :func:`nasa_moc.build_kernel` lays BD along the throat arc with PM-
+    expanded Mach values, and :func:`nasa_moc.calc_lrc_de` runs the
+    Rao secant on the D location with NASA's C+ derivative system for DE.
+    The resulting topology is stored on the returned ControlSurface and
+    on the kernel_bd flow-node tuple for downstream residual evaluation.
+
+    Returns ``(ce, kernel_bd_flow_nodes, topology)`` where ``topology`` is
+    a :class:`nasa_moc.RaoTopology` capturing point B, BD, point D, DE,
+    point E, mass closures, and the Rao stationarity constant.
+    """
+    from raosim.nasa_moc import build_kernel as _build_kernel
+    from raosim.nasa_moc import RaoTopology as _RaoTopology
     Rt = config.Rt
     Re = math.sqrt(config.epsilon) * Rt
     Ln = _target_length(Rt, config.epsilon, config.length_pct)
     Rd = config.throat_downstream_radius_factor * Rt
-    theta_n = math.radians(config.thetaN_guess_deg)
-    kernel_points = approximate_starting_line(
-        Rt, Rd, theta_n, config.gamma, config.n_kernel,
-        method=config.starting_line_method,
+    theta_b_seed = math.radians(config.thetaN_guess_deg)
+
+    kernel = _build_kernel(
+        Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
+        starting_line_method=config.starting_line_method,
     )
+    kernel_bd_flow_nodes = [node.to_flow_node() for node in kernel.bd]
+
+    topology: _RaoTopology | None = None
+    try:
+        topology = calc_lrc_de(
+            kernel,
+            x_E=Ln, r_E=Re,
+            gamma=config.gamma, Rt=Rt, epsilon=config.epsilon,
+            pa_over_p0=config.pa_over_p0,
+            n_points=config.n_control,
+        )
+    except Exception:
+        topology = None
 
     ce = _initial_ce_guess(Rt, Re, Ln, config.gamma, config.n_control)
-    if kernel_points:
-        k_r = np.asarray([p.r for p in kernel_points], dtype=float)
-        k_M = np.asarray([p.M for p in kernel_points], dtype=float)
-        k_theta = np.asarray([p.theta for p in kernel_points], dtype=float)
-        order = np.argsort(k_r)
-        k_r = k_r[order]
-        k_M = k_M[order]
-        k_theta = k_theta[order]
-        overlap = ce.r <= float(k_r[-1])
-        if np.any(overlap):
-            ce.M[overlap] = np.interp(ce.r[overlap], k_r, k_M)
-            ce.theta[overlap] = np.interp(ce.r[overlap], k_r, k_theta)
-
     try:
-        Me = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
+        Me_target = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
     except ValueError:
-        Me = max(float(ce.M[-1]), 2.0)
-    frac = np.linspace(0.0, 1.0, config.n_control)
-    ce.M = np.maximum(ce.M, 1.001 + (Me - 1.001) * frac**0.85)
-    ce.theta = np.clip(
-        math.radians(config.thetaN_guess_deg) * (1.0 - 0.55 * frac),
-        math.radians(-5.0),
-        math.radians(55.0),
-    )
-    phi_len = math.atan2(max(Re - ce.r[0], 1e-9), max(Ln, 1e-9))
-    phi_base = np.full(config.n_control, max(phi_len, math.radians(8.0)))
-    ce.phi = np.maximum(phi_base, ce.theta + math.radians(2.0))
-    ce.phi = np.clip(ce.phi, math.radians(5.0), math.radians(88.0))
-    ce.x = np.linspace(0.0, Ln, config.n_control)
+        Me_target = max(float(ce.M[-1]), 2.0)
+
+    if topology is not None:
+        D = topology.D
+        # Anchor CE start at point D (kernel-side end of the optimal
+        # control surface) and end at the nozzle exit (Ln, Re).  Mach
+        # ramps from M_D up to the ideal area-Mach Me at exit; theta
+        # ramps from theta_D down to the chart-derived theta_E target.
+        ce.r = np.linspace(float(D.r), float(Re), config.n_control)
+        ce.x = np.linspace(float(D.x), float(Ln), config.n_control)
+        try:
+            from raosim.nozzle_geometry import lookup_angles
+
+            _, theta_E_chart_deg = lookup_angles(config.epsilon, config.length_pct)
+            theta_E_target = math.radians(theta_E_chart_deg)
+        except Exception:
+            theta_E_target = math.radians(max(0.5 * config.thetaN_guess_deg, 8.0))
+        frac = np.linspace(0.0, 1.0, config.n_control)
+        ce.M = np.maximum(
+            float(D.M) + (Me_target - float(D.M)) * frac,
+            1.001,
+        )
+        ce.theta = float(D.theta) + (theta_E_target - float(D.theta)) * frac
+        ce.kernel_d_fraction = float(topology.d_fraction)
+    else:
+        frac = np.linspace(0.0, 1.0, config.n_control)
+        ce.M = np.maximum(ce.M, 1.001 + (Me_target - 1.001) * frac**0.85)
+        ce.theta = np.clip(
+            theta_b_seed * (1.0 - 0.55 * frac),
+            math.radians(-5.0), math.radians(55.0),
+        )
+        ce.x = np.linspace(0.0, Ln, config.n_control)
+        ce.kernel_d_fraction = 0.5
+
     ce.phi = _phi_from_curve(ce.x, ce.r)
-    return ce, kernel_points
+    ce.phi = np.clip(ce.phi, math.radians(5.0), math.radians(88.0))
+    return ce, kernel_bd_flow_nodes, topology
 
 
 def _phi_from_curve(x: np.ndarray, r: np.ndarray) -> np.ndarray:
@@ -1275,7 +1527,13 @@ def _pack_bvp(
     else:
         x = np.asarray(ce.x, dtype=float)
     log_C_val = float(log_C) if log_C is not None else float(ce.log_C)
-    return np.concatenate([ce.M, ce.theta, x, ce.r, [lambda2, lambda3, log_C_val]])
+    return np.concatenate([
+        ce.M,
+        ce.theta,
+        x,
+        ce.r,
+        [lambda2, lambda3, log_C_val, float(ce.kernel_d_fraction)],
+    ])
 
 
 def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
@@ -1283,8 +1541,9 @@ def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
     x = np.asarray(u[2 * n:3 * n], dtype=float).copy()
     r_ce = np.asarray(u[3 * n:4 * n], dtype=float).copy()
     phi = _phi_from_curve(x, r_ce)
-    # log_C is the third trailing scalar; absent from legacy packed vectors.
+    # log_C and D location are trailing scalars; absent from legacy vectors.
     log_C_val = float(u[4 * n + 2]) if u.size >= 4 * n + 3 else 0.0
+    kernel_d_fraction = float(u[4 * n + 3]) if u.size >= 4 * n + 4 else 1.0
     return ControlSurface(
         r=r_ce,
         M=np.asarray(u[:n], dtype=float).copy(),
@@ -1294,6 +1553,7 @@ def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
         lambda2=float(u[4 * n]),
         lambda3=float(u[4 * n + 1]),
         log_C=log_C_val,
+        kernel_d_fraction=kernel_d_fraction,
     )
 
 
@@ -1583,23 +1843,29 @@ def _ce_geometry_residuals(
 
     dx = np.diff(ce.x)
     dr = np.diff(ce.r)
-    endpoint = np.array([
-        (float(ce.x[0]) - 0.0) / x_scale,
-        (float(ce.x[-1]) - L) / x_scale,
-        (float(ce.r[-1]) - Re) / r_scale,
-    ], dtype=float)
-    try:
-        from raosim.nozzle_geometry import lookup_angles
-
-        theta_n_deg, theta_e_deg = lookup_angles(config.epsilon, config.length_pct)
-    except Exception:
-        theta_n_deg = config.thetaN_guess_deg
-        theta_e_deg = max(0.0, 0.5 * config.thetaN_guess_deg)
     theta_scale = math.radians(1.0)
-    flow_boundary = np.array([
-        (float(ce.theta[0]) - math.radians(theta_n_deg)) / theta_scale,
-        (float(ce.theta[-1]) - math.radians(theta_e_deg)) / theta_scale,
-    ], dtype=float)
+    if config.kernel_bd:
+        _, bd_segment = calc_mdot_bd(
+            config.kernel_bd, ce.kernel_d_fraction, config.gamma
+        )
+        d_node = bd_segment[-1]
+        start = np.array([
+            (float(ce.x[0]) - d_node.x) / x_scale,
+            (float(ce.r[0]) - d_node.r) / r_scale,
+            (float(ce.theta[0]) - d_node.theta) / theta_scale,
+        ], dtype=float)
+    else:
+        start = np.array([(float(ce.x[0]) - 0.0) / x_scale], dtype=float)
+
+    endpoint = np.concatenate([
+        start,
+        np.array([
+            (float(ce.x[-1]) - L) / x_scale,
+            (float(ce.r[-1]) - Re) / r_scale,
+        ], dtype=float),
+    ])
+    theta_scale = math.radians(1.0)
+    flow_boundary = np.zeros(0, dtype=float)
     monotonic = np.concatenate([
         np.maximum(-dx, 0.0) / x_scale,
         np.maximum(-dr, 0.0) / r_scale,
@@ -1627,8 +1893,8 @@ def _rao_bvp_residual_groups(
     config: RaoSolverConfig,
 ) -> RaoResidualGroups:
     ce = _unpack_bvp(u, r)
-    _, mdot_val, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
-    mdot_target = _target_mdot(config.Rt, config.gamma)
+    _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
 
     stat = _stationarity_matrix(ce, config.gamma, config.pa_over_p0)
@@ -1668,7 +1934,7 @@ def _rao_bvp_residual_groups(
     return RaoResidualGroups(
         mass=_filter_group(
             "mass",
-            np.array([(mdot_val - mdot_target) / max(mdot_target, 1e-12)]),
+            np.array([(mdot_val - mdot_target) / max(mdot_ref, 1e-12)]),
             active,
         ),
         length=_filter_group(
@@ -1686,9 +1952,9 @@ def _rao_bvp_residual_groups(
         algebraic_stationarity=_filter_group(
             "algebraic_stationarity", 0.1 * algebraic_stat, active,
         ),
-        left_mach=_filter_group("left_mach", 0.1 * left_mach, active),
-        moc_cplus=_filter_group("moc_cplus", moc_cplus, active),
-        moc_cminus=_filter_group("moc_cminus", moc_cminus, active),
+        left_mach=_filter_group("left_mach", left_mach, active),
+        moc_cplus=_filter_group("moc_cplus", 0.02 * moc_cplus, active),
+        moc_cminus=_filter_group("moc_cminus", 0.02 * moc_cminus, active),
         ce_geometry=_filter_group("ce_geometry", ce_geometry, active),
         regularization=_filter_group("regularization", 0.02 * regularization, active),
         penalties=_filter_group("penalties", penalties, active),
@@ -1717,8 +1983,8 @@ def _build_residual_report(
     wall_tangency_rms: float | None = None,
     crossings: int = 0,
 ) -> RaoResidualReport:
-    _, mdot_val, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
-    mdot_target = _target_mdot(config.Rt, config.gamma)
+    _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
     stat = _stationarity_matrix(ce, config.gamma, config.pa_over_p0)
     regularization = _ce_smoothness_regularization(ce, config.gamma)
@@ -1741,7 +2007,7 @@ def _build_residual_report(
     return RaoResidualReport(
         max_scaled=float(np.max(np.abs(residual_vector))) if residual_vector.size else 0.0,
         rms_scaled=float(np.sqrt(np.mean(residual_vector**2))) if residual_vector.size else 0.0,
-        mass_residual_rel=float((mdot_val - mdot_target) / max(mdot_target, 1e-12)),
+        mass_residual_rel=float((mdot_val - mdot_target) / max(mdot_ref, 1e-12)),
         length_residual_rel=float((L_val - L_target) / max(L_target, 1e-12)),
         stationarity_rms=float(np.sqrt(np.mean(stat**2))) if stat.size else 0.0,
         algebraic_stationarity_rms=(
@@ -1860,8 +2126,9 @@ def solve_wall_from_ce_coupled(
     Re = math.sqrt(config.epsilon) * Rt
     Rd = config.throat_downstream_radius_factor * Rt
     L = _target_length(Rt, config.epsilon, config.length_pct)
-    theta_n = max(float(ce.theta[0]), math.radians(15.0))
-    theta_e = float(ce.theta[-1])
+    theta_n, theta_e = _design_angles_rad(
+        config.epsilon, config.length_pct, config.thetaN_guess_deg
+    )
     Nx = Rd * math.sin(theta_n)
     Ny = Rt + Rd * (1.0 - math.cos(theta_n))
 
@@ -2429,9 +2696,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     Solve the finite-dimensional Rao variational/MOC residual system.
 
     This is the new auditable path: least-squares solves the global
-    mass-flow, length, stationarity, transversality, and CE compatibility
-    residuals together.  MOC wall construction is evaluated on the raw
-    solution and can downgrade reliability if it does not close cleanly.
+    kernel-BD mass closure, length, stationarity, left-Mach geometry, and
+    CE compatibility residuals together.  MOC wall construction is evaluated
+    on the raw solution and can downgrade reliability if it does not close
+    cleanly.
     """
     if config.Rt <= 0.0:
         raise ValueError("Rt must be positive")
@@ -2442,7 +2710,18 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     if config.n_control < 8:
         raise ValueError("n_control must be at least 8")
 
-    ce0, kernel_points = _initial_ce_from_kernel(config)
+    ce0, kernel_bd_seed, topology_seed = _initial_ce_from_kernel(config)
+    solve_config = replace(
+        config,
+        kernel_bd=tuple(kernel_bd_seed) if kernel_bd_seed else None,
+    )
+    # kernel_points is the legacy CharPoint list used downstream by the
+    # construct_wall_from_ce_raw / wall MOC march; convert from the new
+    # FlowNode kernel BD via the existing _make_point helper.
+    kernel_points = [
+        _make_point(float(p.x), float(p.r), float(p.theta), max(float(p.M), 1.000001), config.gamma)
+        for p in kernel_bd_seed
+    ]
     log_C0 = _seed_log_C_from_ce(ce0, config.gamma)
     ce0.log_C = log_C0
     u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0)
@@ -2455,19 +2734,19 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         np.full(n, 1.001),
         np.full(n, math.radians(-10.0)),
         np.full(n, 0.0),
-        np.full(n, 1e-9),
-        [-1e3, -1e3, -10.0],
+        np.full(n, 0.0),
+        [-1e3, -1e3, -10.0, 0.0],
     ])
     upper = np.concatenate([
         np.full(n, max(12.0, 1.5 * Me)),
         np.full(n, math.radians(65.0)),
         np.full(n, max(1.2 * _target_length(config.Rt, config.epsilon, config.length_pct), 1e-9)),
         np.full(n, 1.05 * math.sqrt(config.epsilon) * config.Rt),
-        [1e3, 1e3, 10.0],
+        [1e3, 1e3, 10.0, 1.0],
     ])
 
     if config.max_nfev <= 0:
-        residual0 = _scaled_rao_bvp_residual(u0, ce0.r, config)
+        residual0 = _scaled_rao_bvp_residual(u0, ce0.r, solve_config)
 
         @dataclass
         class _InitialResidualOnly:
@@ -2493,7 +2772,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             _scaled_rao_bvp_residual,
             u0,
             bounds=(lower, upper),
-            args=(ce0.r, config),
+            args=(ce0.r, solve_config),
             x_scale="jac",
             ftol=1e-9,
             xtol=1e-9,
@@ -2501,16 +2780,18 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             max_nfev=config.max_nfev,
         )
     ce = _unpack_bvp(result.x, ce0.r)
-    residual_vector = _scaled_rao_bvp_residual(result.x, ce0.r, config)
-    F_val, mdot_val, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
-    mdot_target = _target_mdot(config.Rt, config.gamma)
+    residual_vector = _scaled_rao_bvp_residual(result.x, ce0.r, solve_config)
+    F_val, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    mdot_val, mdot_target, mdot_ref, bd_segment = _mass_closure_fluxes(
+        ce, solve_config
+    )
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
     ce.thrust = float(F_val)
     ce.objective = float(result.cost)
     ce.optimizer_success = bool(result.success)
     ce.solver_message = str(result.message)
     ce.mdot_target = float(mdot_target)
-    ce.mdot_residual = float(mdot_val - mdot_target)
+    ce.mdot_residual = float((mdot_val - mdot_target) / max(mdot_ref, 1e-12))
     ce.length_target = float(L_target)
     ce.length_residual = float(L_val - L_target)
     ce.transversality = float(transversality_residual(
@@ -2533,7 +2814,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
 
     Re = math.sqrt(config.epsilon) * config.Rt
     Rd = config.throat_downstream_radius_factor * config.Rt
-    theta_n = max(float(ce.theta[0]), math.radians(15.0))
+    theta_n, _theta_e_design = _design_angles_rad(
+        config.epsilon, config.length_pct, config.thetaN_guess_deg
+    )
     Nx = Rd * math.sin(theta_n)
     Ny = config.Rt + Rd * (1.0 - math.cos(theta_n))
     if config.evaluate_moc:
@@ -2550,8 +2833,8 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             else:
                 raise ValueError("wall_method must be 'coupled' or 'legacy'")
             if raw_wall.shape[0] >= 3:
-                slope_start = math.tan(max(float(ce.theta[0]), math.radians(15.0)))
-                slope_end = math.tan(float(ce.theta[-1]))
+                slope_start = math.tan(theta_n)
+                slope_end = math.tan(_theta_e_design)
                 wall = SplineWall(
                     raw_wall[:, 0],
                     raw_wall[:, 1],
@@ -2561,7 +2844,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 starting = approximate_starting_line(
                     config.Rt,
                     config.throat_downstream_radius_factor * config.Rt,
-                    max(float(ce.theta[0]), math.radians(15.0)),
+                    max(theta_n, 1e-4),
                     config.gamma,
                     config.n_kernel,
                     method=config.starting_line_method,
@@ -2622,9 +2905,30 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         warnings.append("Export geometry required monotonic cleanup; raw solution is unchanged.")
 
     residuals = _build_residual_report(
-        residual_vector, ce, config, ce0.r,
+        residual_vector, ce, solve_config, ce0.r,
         wall_tangency_rms=wall_tangency_rms,
         crossings=crossings,
+    )
+    At = math.pi * config.Rt * config.Rt
+    cf = F_val / max(At, 1e-12)
+    try:
+        Me_ideal = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
+        Pe_over_p0 = isentropic_pressure_ratio(Me_ideal, config.gamma)
+        cf_ideal = ideal_thrust_coefficient(
+            Me_ideal, config.gamma, Pe_over_p0, config.pa_over_p0,
+            config.epsilon,
+        )
+    except Exception:
+        cf_ideal = float("nan")
+    cf_rel_error = (
+        (cf - cf_ideal) / cf_ideal
+        if math.isfinite(cf_ideal) and abs(cf_ideal) > 1e-12
+        else float("nan")
+    )
+    thrust_sanity_ok = (
+        cf > 0.0
+        and math.isfinite(cf_rel_error)
+        and abs(cf_rel_error) <= 5e-3
     )
     bvp_ok = (
         bool(result.success)
@@ -2655,12 +2959,41 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     construction_diagnostics["requires_discontinuous_exit_flow_model"] = (
         not valid_region_ok
     )
+    construction_diagnostics["mass_closure"] = {
+        "method": "kernel_bd_curve_flux",
+        "ce_mass_flux": float(mdot_val),
+        "kernel_bd_mass_flux": float(mdot_target),
+        "kernel_bd_full_mass_flux": float(
+            curve_mass_flux(solve_config.kernel_bd or (), config.gamma)
+        ),
+        "kernel_d_fraction": float(ce.kernel_d_fraction),
+        "kernel_D": (
+            {
+                "x": float(bd_segment[-1].x),
+                "r": float(bd_segment[-1].r),
+                "M": float(bd_segment[-1].M),
+                "theta": float(bd_segment[-1].theta),
+            }
+            if bd_segment else None
+        ),
+        "kernel_bd_nodes": len(solve_config.kernel_bd or ()),
+        "kernel_bd_segment_nodes": len(bd_segment),
+        "residual_scaled": float(
+            (mdot_val - mdot_target) / max(mdot_ref, 1e-12)
+        ),
+    }
+    construction_diagnostics["thrust_sanity"] = {
+        "cf_surface": float(cf),
+        "cf_ideal": float(cf_ideal),
+        "cf_rel_error": float(cf_rel_error),
+        "passes": bool(thrust_sanity_ok),
+    }
 
     ce.converged = bool(bvp_ok)
     shock_free = crossings == 0
-    if bvp_ok and moc_ok and valid_region_ok:
+    if bvp_ok and moc_ok and valid_region_ok and thrust_sanity_ok:
         reliability = ContourReliability.RAO_VARIATIONAL_RESIDUAL_SOLVED
-    elif moc_ok and valid_region_ok:
+    elif moc_ok and valid_region_ok and thrust_sanity_ok:
         reliability = ContourReliability.MOC_COMPATIBLE
     else:
         reliability = ContourReliability.GEOMETRIC_APPROXIMATION
@@ -2682,14 +3015,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             "optimum-thrust contour is discontinuous and the variational "
             "construction is not applicable."
         )
+    if not thrust_sanity_ok:
+        warnings.append(
+            "CE surface thrust coefficient failed the Phase 4 sanity gate; "
+            "solution is not variational-residual-solved."
+        )
     warnings.append(
         "Not hardware-qualified; requires published benchmark comparison, CFD, "
         "thermal/structural review, manufacturing review, inspection, and hot-fire data."
     )
     ce.warnings.extend(warnings)
 
-    At = math.pi * config.Rt * config.Rt
-    cf = F_val / max(At, 1e-12)
     theta_e = math.atan2(export_wall[-1, 1] - export_wall[-2, 1],
                          export_wall[-1, 0] - export_wall[-2, 0])
     return RaoSolution(
@@ -2710,8 +3046,26 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         construction_diagnostics={
             **construction_diagnostics,
             "export": export_diag,
+            "rao_topology": (
+                {
+                    "B": {"x": topology_seed.B.x, "r": topology_seed.B.r,
+                          "M": topology_seed.B.M, "theta": topology_seed.B.theta},
+                    "D": {"x": topology_seed.D.x, "r": topology_seed.D.r,
+                          "M": topology_seed.D.M, "theta": topology_seed.D.theta},
+                    "E": {"x": topology_seed.E.x, "r": topology_seed.E.r,
+                          "M": topology_seed.E.M, "theta": topology_seed.E.theta},
+                    "d_fraction": topology_seed.d_fraction,
+                    "mass_BD": topology_seed.mass_BD,
+                    "mass_DE": topology_seed.mass_DE,
+                    "theta_B": topology_seed.theta_B,
+                    "rao_stationarity_residual": topology_seed.rao_stationarity_residual,
+                    "n_DE": len(topology_seed.DE),
+                }
+                if topology_seed is not None else None
+            ),
         },
         warnings=_dedupe_strings(warnings),
+        topology=topology_seed,
     )
 
 

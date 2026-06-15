@@ -211,12 +211,14 @@ def test_log_C_roundtrips_through_pack_unpack():
         lambda2=-0.3,
         lambda3=0.05,
         log_C=0.7654,
+        kernel_d_fraction=0.4321,
     )
     u = _pack_bvp(ce, ce.lambda2, ce.lambda3)
     ce2 = _unpack_bvp(u, ce.r)
     assert ce2.log_C == pytest.approx(0.7654, abs=1e-12)
     assert ce2.lambda2 == pytest.approx(-0.3, abs=1e-12)
     assert ce2.lambda3 == pytest.approx(0.05, abs=1e-12)
+    assert ce2.kernel_d_fraction == pytest.approx(0.4321, abs=1e-12)
 
 
 def test_pack_unpack_log_C_override():

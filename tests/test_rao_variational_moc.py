@@ -12,10 +12,13 @@ from raosim.rao_variational import (
     RaoResidualReport,
     RaoSolverConfig,
     _ce_interp_node,
+    _control_surface_flow_nodes,
     characteristic_net_compatibility_residuals,
     characteristic_net_links,
     characteristic_net_segments,
     check_characteristic_crossing,
+    curve_mass_flux,
+    kernel_bd_segment,
     moc_net_compatibility_report,
     rao_residual_ablation_matrix,
     rao_variational_moc_contour,
@@ -132,7 +135,9 @@ def test_postprocessed_does_not_claim_residual_solved(monkeypatch):
         )
 
     def fake_raw_wall(Rt, epsilon, _gamma, ce, Ln, _n_char):
-        theta_n = max(float(ce.theta[0]), math.radians(15.0))
+        from raosim.rao_variational import _design_angles_rad
+
+        theta_n, _theta_e = _design_angles_rad(epsilon, 80.0)
         Rd = 0.382 * Rt
         nx = Rd * math.sin(theta_n)
         ny = Rt + Rd * (1.0 - math.cos(theta_n))
@@ -191,6 +196,50 @@ def test_residual_groups_expose_dominant_blocks():
         "regularization",
         "penalties",
     }.issubset(names)
+
+
+def test_curve_mass_flux_is_positive_for_oblique_surface():
+    nodes = [
+        FlowNode(x=0.0, r=0.020, M=2.0, theta=math.radians(5.0)),
+        FlowNode(x=0.020, r=0.030, M=2.2, theta=math.radians(7.0)),
+        FlowNode(x=0.050, r=0.040, M=2.6, theta=math.radians(9.0)),
+    ]
+
+    assert curve_mass_flux(nodes, gamma=1.4) > 0.0
+
+
+def test_phase4_mass_closure_uses_kernel_bd_segment():
+    cfg = RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=800,
+        residual_tol=5e-3,
+        evaluate_moc=False,
+    )
+
+    solution = solve_rao_bvp(cfg)
+    mass_diag = solution.construction_diagnostics["mass_closure"]
+    ce_flux = curve_mass_flux(
+        _control_surface_flow_nodes(solution.control_surface),
+        cfg.gamma,
+    )
+    bd_segment = kernel_bd_segment(
+        solution.kernel_points,
+        solution.control_surface.kernel_d_fraction,
+    )
+    bd_flux = curve_mass_flux(bd_segment, cfg.gamma)
+
+    assert mass_diag["method"] == "kernel_bd_curve_flux"
+    assert mass_diag["kernel_bd_nodes"] == len(solution.kernel_points)
+    assert 0.0 <= mass_diag["kernel_d_fraction"] <= 1.0
+    assert ce_flux == pytest.approx(mass_diag["ce_mass_flux"], rel=1e-12)
+    assert bd_flux == pytest.approx(mass_diag["kernel_bd_mass_flux"], rel=1e-12)
+    assert abs(solution.residuals.mass_residual_rel) < 1e-4
 
 
 def test_moc_disabled_ce_residual_gate_keeps_constraints_tight():
