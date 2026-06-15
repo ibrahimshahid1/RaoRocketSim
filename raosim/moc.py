@@ -15,12 +15,11 @@ Three primitive solvers:
   2. solve_axis_point:     symmetry BC (θ=0, r=0)
   3. solve_wall_point:     wall tangency BC (θ = wall angle)
 
-Axisymmetric compatibility equations (Anderson Ch. 11):
-  Along C⁺: dθ + dν = Q⁺·ds
-  Along C⁻: dθ − dν = Q⁻·ds
-  Q⁺ =  sin(θ)·sin(μ)·cos(μ) / (r·cos(θ + μ))
-  Q⁻ = −sin(θ)·sin(μ)·cos(μ) / (r·cos(θ − μ))
-  (δ=1 axisymmetric, δ=0 planar)
+Axisymmetric compatibility equations, with nodes ordered downstream:
+  Along C+ (slope θ+μ): d(θ − ν) = −S ds
+  Along C- (slope θ−μ): d(θ + ν) = +S ds
+  S = sin(θ) sin(μ) / r
+  (S=0 for planar flow)
 
 References:
   - Anderson, Modern Compressible Flow, 3rd ed., Ch. 11
@@ -31,10 +30,9 @@ Starting-line approximation limits:
   - method='area_ratio' uses a quasi-1D area-Mach estimate along the
     throat arc and tends to under-represent curvature-driven transonic
     effects near M≈1.
-  - method='hall' uses a compact Hall-inspired polynomial correction for
-    curved-throat transonic flow; this implementation is intentionally
-    simplified and should be treated as an engineering approximation
-    rather than a full Hall/Kliegel-Levine solution.
+  - method='sauer_modified' uses the compact modified-Sauer polynomial
+    correction for curved-throat transonic flow.  The historical name
+    'hall' remains a deprecated alias.
 """
 
 from __future__ import annotations
@@ -128,8 +126,16 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
 
     Predictor-corrector with axisymmetric source terms.
     """
-    theta3 = 0.5 * (p_minus.compat_minus + p_plus.compat_plus)
-    nu3 = 0.5 * (p_plus.compat_plus - p_minus.compat_minus)
+    # CORRECTED 2026-06-11 invariant pairing (Anderson MCF §11.4; Z&H
+    # Vol. 2 Ch. 17; oracle-validated — see rao_residuals._source_axisym):
+    #   along C− (slope θ−μ, from p_minus above):  d(θ+ν) = +S ds
+    #   along C+ (slope θ+μ, from p_plus below):   d(θ−ν) = −S ds
+    # with S = sinθ sinμ / r.  Planar predictor:
+    #   K− = (θ+ν)_pminus,  K+ = (θ−ν)_pplus,
+    #   θ3 = (K− + K+)/2,   ν3 = (K− − K+)/2.
+    # (The pre-correction code carried θ−ν along C− and θ+ν along C+.)
+    theta3 = 0.5 * (p_minus.compat_plus + p_plus.compat_minus)
+    nu3 = 0.5 * (p_minus.compat_plus - p_plus.compat_minus)
     if nu3 < 1e-8:
         nu3 = 1e-8
     M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -151,8 +157,8 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
         if r3 < 0:
             r3 = 0.0
 
-        cm = p_minus.compat_minus
-        cp = p_plus.compat_plus
+        k_minus = p_minus.compat_plus    # θ+ν carried along C−
+        k_plus = p_plus.compat_minus     # θ−ν carried along C+
 
         if axisymmetric and r3 > 1e-10:
             ds_m = math.sqrt((x3-p_minus.x)**2 + (r3-p_minus.r)**2)
@@ -160,28 +166,20 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
 
             th_m = 0.5*(p_minus.theta + theta3)
             mu_m = 0.5*(p_minus.mu + mu3)
-            r_m = 0.5*(p_minus.r + r3)
+            r_m = max(0.5*(p_minus.r + r3), 1e-12)
 
             th_p = 0.5*(p_plus.theta + theta3)
             mu_p = 0.5*(p_plus.mu + mu3)
-            r_p = 0.5*(p_plus.r + r3)
+            r_p = max(0.5*(p_plus.r + r3), 1e-12)
 
-            cos_tm = math.cos(th_m - mu_m)
-            cos_tp = math.cos(th_p + mu_p)
+            S_m = math.sin(th_m) * math.sin(mu_m) / r_m
+            S_p = math.sin(th_p) * math.sin(mu_p) / r_p
 
-            Qm = 0.0
-            if abs(cos_tm) > 1e-15 and r_m > 1e-10:
-                Qm = -math.sin(th_m) * math.sin(mu_m)*math.cos(mu_m) / (r_m*cos_tm)
+            k_minus = p_minus.compat_plus + S_m * ds_m
+            k_plus = p_plus.compat_minus - S_p * ds_p
 
-            Qp = 0.0
-            if abs(cos_tp) > 1e-15 and r_p > 1e-10:
-                Qp = math.sin(th_p) * math.sin(mu_p)*math.cos(mu_p) / (r_p*cos_tp)
-
-            cm = p_minus.compat_minus + Qm * ds_m
-            cp = p_plus.compat_plus + Qp * ds_p
-
-        theta3 = 0.5 * (cm + cp)
-        nu3 = 0.5 * (cp - cm)
+        theta3 = 0.5 * (k_minus + k_plus)
+        nu3 = 0.5 * (k_minus - k_plus)
         if nu3 < 1e-8:
             nu3 = 1e-8
         M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -211,13 +209,14 @@ def solve_axis_point(p_above: CharPoint, gamma: float,
     Axis unit process: C⁻ from p_above reaches centerline.
     Symmetry BC: θ=0, r=0. Handles sin(θ)/r singularity.
 
-    Along the C⁻ characteristic from p_above to the axis:
-        (θ − ν)₃ = (θ − ν)_above + Q⁻·ds
-    At the axis θ₃ = 0, so ν₃ = −(θ − ν)_above = ν_above − θ_above.
+    CORRECTED 2026-06-11 (invariant pairing): along the C⁻ from
+    p_above to the axis, (θ + ν)₃ = (θ + ν)_above + S·ds with
+    S = sinθ sinμ / r.  At the axis θ₃ = 0, so
+    ν₃ = (θ + ν)_above + S·ds.
     """
     theta3 = 0.0
-    # C⁻ invariant: at axis θ=0 → ν₃ = −compat_minus_above
-    nu3 = -p_above.compat_minus
+    # C⁻ invariant: at axis θ=0 → ν₃ = K− = compat_plus_above (planar)
+    nu3 = p_above.compat_plus
     if nu3 < 1e-8:
         nu3 = 1e-8
     M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -232,20 +231,18 @@ def solve_axis_point(p_above: CharPoint, gamma: float,
         else:
             x3 = p_above.x + 2.0 * p_above.r
 
-        cm = p_above.compat_minus
+        k_minus = p_above.compat_plus
         if axisymmetric and p_above.r > 1e-10:
             ds = math.sqrt((x3-p_above.x)**2 + p_above.r**2)
             th_avg = 0.5 * p_above.theta
             mu_avg = 0.5 * (p_above.mu + mu3)
-            r_avg = 0.5 * p_above.r
-            cos_tm = math.cos(th_avg - mu_avg)
-            if abs(cos_tm) > 1e-15 and r_avg > 1e-10:
-                sin_th = th_avg if abs(th_avg) < 1e-10 else math.sin(th_avg)
-                Qm = -sin_th * math.sin(mu_avg)*math.cos(mu_avg) / (r_avg*cos_tm)
-                cm = p_above.compat_minus + Qm * ds
+            r_avg = max(0.5 * p_above.r, 1e-12)
+            sin_th = th_avg if abs(th_avg) < 1e-10 else math.sin(th_avg)
+            S = sin_th * math.sin(mu_avg) / r_avg
+            k_minus = p_above.compat_plus + S * ds
 
-        # At axis θ=0 → ν₃ = −cm
-        nu3 = -cm
+        # At axis θ=0 → ν₃ = K−
+        nu3 = k_minus
         if nu3 < 1e-8:
             nu3 = 1e-8
         M3 = mach_from_prandtl_meyer(nu3, gamma)
@@ -266,6 +263,10 @@ def solve_wall_point(p_inside: CharPoint, wall, gamma: float,
     Wall unit process: C⁺ from p_inside reaches the wall.
     BC: θ_flow = wall.theta(x_hit).
 
+    CORRECTED 2026-06-11 (invariant pairing): along the C⁺ from
+    p_inside to the wall, K⁺ = (θ − ν)_inside − S·ds with
+    S = sinθ sinμ / r; at the wall θ = θ_w, so ν_w = θ_w − K⁺.
+
     Uses wall.intersect_char() to find the geometric intersection,
     then reads wall.theta(x) for the boundary condition.
     """
@@ -277,19 +278,17 @@ def solve_wall_point(p_inside: CharPoint, wall, gamma: float,
 
     theta_w = wall.theta(x_hit)
 
-    cp = p_inside.compat_plus
+    k_plus = p_inside.compat_minus
 
     if axisymmetric and r_hit > 1e-10 and p_inside.r > 1e-10:
         ds = math.sqrt((x_hit-p_inside.x)**2 + (r_hit-p_inside.r)**2)
         th_avg = 0.5 * (p_inside.theta + theta_w)
         mu_est = p_inside.mu
-        r_avg = 0.5 * (p_inside.r + r_hit)
-        cos_tp = math.cos(th_avg + mu_est)
-        if abs(cos_tp) > 1e-15 and r_avg > 1e-10:
-            Qp = math.sin(th_avg)*math.sin(mu_est)*math.cos(mu_est)/(r_avg*cos_tp)
-            cp = p_inside.compat_plus + Qp * ds
+        r_avg = max(0.5 * (p_inside.r + r_hit), 1e-12)
+        S = math.sin(th_avg) * math.sin(mu_est) / r_avg
+        k_plus = p_inside.compat_minus - S * ds
 
-    nu_w = cp - theta_w
+    nu_w = theta_w - k_plus
     if nu_w < 1e-8:
         nu_w = 1e-8
     M_w = mach_from_prandtl_meyer(nu_w, gamma)
@@ -303,18 +302,16 @@ def solve_wall_point(p_inside: CharPoint, wall, gamma: float,
         x_hit, r_hit = wall.intersect_char(p_inside.x, p_inside.r, char_slope)
         theta_w = wall.theta(x_hit)
 
-        cp = p_inside.compat_plus
+        k_plus = p_inside.compat_minus
         if axisymmetric and r_hit > 1e-10 and p_inside.r > 1e-10:
             ds = math.sqrt((x_hit-p_inside.x)**2 + (r_hit-p_inside.r)**2)
             th_avg = 0.5 * (p_inside.theta + theta_w)
             mu_avg = 0.5 * (p_inside.mu + mu_w)
-            r_avg = 0.5 * (p_inside.r + r_hit)
-            cos_tp = math.cos(th_avg + mu_avg)
-            if abs(cos_tp) > 1e-15 and r_avg > 1e-10:
-                Qp = math.sin(th_avg)*math.sin(mu_avg)*math.cos(mu_avg)/(r_avg*cos_tp)
-                cp = p_inside.compat_plus + Qp * ds
+            r_avg = max(0.5 * (p_inside.r + r_hit), 1e-12)
+            S = math.sin(th_avg) * math.sin(mu_avg) / r_avg
+            k_plus = p_inside.compat_minus - S * ds
 
-        nu_w_new = cp - theta_w
+        nu_w_new = theta_w - k_plus
         if nu_w_new < 1e-8:
             nu_w_new = 1e-8
         M_w_new = mach_from_prandtl_meyer(nu_w_new, gamma)
@@ -496,7 +493,13 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
         new_pts.append(axis_pt)
 
         interior = []
-        for j in range(len(prev_pts) - 2):
+        # After the first march, prev_pts[0] is an axis boundary point.
+        # It cannot also seed an interior unit process: doing so reuses
+        # prev_pts[1]'s C- for both the new axis and an interior child,
+        # prevents the triangular net from shrinking, and can introduce
+        # a characteristic crossing.
+        parent_start = 1 if prev_pts[0].r < 1e-10 else 0
+        for j in range(parent_start, len(prev_pts) - 2):
             # p_minus = upper (j+1), p_plus = lower (j): correct C⁻/C⁺ pairing
             pt = solve_interior_point(prev_pts[j + 1], prev_pts[j],
                                       gamma, axisymmetric)

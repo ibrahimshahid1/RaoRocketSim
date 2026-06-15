@@ -46,12 +46,17 @@ class TestGasDynamicsUtilities:
 
 class TestInteriorPoint:
     def test_planar_invariants(self):
+        """CORRECTED 2026-06-11 (invariant pairing): in planar flow,
+        K− = θ+ν is carried along the C− from p1 (above) and
+        K+ = θ−ν along the C+ from p2 (below) — Anderson MCF §11.4.
+        (This test previously pinned the mirrored convention; see
+        tests/test_characteristic_pairing.py for the oracle proof.)"""
         gamma = 1.4
         p1 = _make_point(0.01, 0.02, math.radians(5), 1.5, gamma)
         p2 = _make_point(0.01, 0.015, math.radians(3), 1.8, gamma)
         p3 = solve_interior_point(p1, p2, gamma, axisymmetric=False)
-        assert p3.compat_minus == pytest.approx(p1.compat_minus, abs=1e-4)
-        assert p3.compat_plus == pytest.approx(p2.compat_plus, abs=1e-4)
+        assert p3.compat_plus == pytest.approx(p1.compat_plus, abs=1e-4)
+        assert p3.compat_minus == pytest.approx(p2.compat_minus, abs=1e-4)
 
     def test_downstream(self):
         gamma = 1.4
@@ -176,11 +181,13 @@ class TestCoupledMarching:
         rows = march_coupled_net(pts, wall, 1.4, max_rows=6)
 
         n_seed = len(rows[0].interior)
+        expected_interior = n_seed - 2
         for row in rows[1:]:
-            assert len(row.interior) == n_seed - 2
+            assert len(row.interior) == expected_interior
             assert row.axis is not None
             assert row.wall is not None
-            assert len(row.all_points()) == n_seed
+            assert len(row.all_points()) == expected_interior + 2
+            expected_interior -= 1
 
 
 @pytest.fixture
@@ -287,7 +294,9 @@ class TestFullPipeline:
         print(f"\n  [BENCHMARK] deviation: {dev*1000:.3f} mm "
               f"({100*dev/bezier['Re']:.1f}% Re)")
 
-    @pytest.mark.parametrize("starting_line_method", ["area_ratio", "hall"])
+    @pytest.mark.parametrize(
+        "starting_line_method", ["area_ratio", "sauer_modified"]
+    )
     @pytest.mark.parametrize("epsilon", [6.0, 10.0, 25.0])
     def test_starting_line_methods_generate_finite_contours(self, starting_line_method, epsilon):
         from raosim.rao_optimizer import moc_bell_nozzle

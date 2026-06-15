@@ -1,31 +1,23 @@
-"""THE decisive experiment for the flare/optimum question (2026-06-11f).
+"""Full-continuity sweep around the smooth stationary-DE root.
 
 Sweeps ``theta_b_freeze_deg`` with FULL D-state continuity
 (pin_d_theta + pin_d_mach) at the reference point (eps=10, L80, gamma
-1.4).  The theta_N reconciliation (plan STATUS; Rao ARS J. 1961
-pp. 1490-1491 + the in-repo chart) predicts:
+1.4).  The corrected characteristic formulation and independent RK
+existence scan predict:
 
-  * the full-pin stationarity floor (5.7e-2 when the kernel was frozen
-    at the fixed-end angle ~25.5 deg) collapses near theta_B ~ 30 deg
-    (chart theta_N at eps=10/L80);
+  * the full-pin residual closes near theta_B = 25.5659 deg and
+    kdf = 0.15216;
   * at the best theta_B the gate (2e-3) closes WITH full continuity;
   * the BDE wall peaks ~theta_B right after the throat arc (mid-bell
-    flare gone) and the exit angle drops toward the chart theta_E
-    (15.5 deg).
-
-If the floor does NOT collapse anywhere in the band, the
-Guderley-discontinuity hypothesis (optimum genuinely discontinuous at
-D for fixed-L nozzles) becomes the live branch.
+    flare gone) and exits near 11.1 deg.
 
 Run:  PYTHONPATH=. python scripts/theta_b_freeze_sweep.py
-      (optionally: --band 26 31 --step 1.0)
+      (optionally: --band 24.5 26.5 --step 0.5)
 """
 from __future__ import annotations
 
 import argparse
 import json
-import math
-from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -55,8 +47,8 @@ def config_at(theta_b_deg: float, *, wall: bool = False) -> RaoSolverConfig:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--band", nargs=2, type=float, default=(26.0, 31.0))
-    ap.add_argument("--step", type=float, default=1.0)
+    ap.add_argument("--band", nargs=2, type=float, default=(24.5, 26.5))
+    ap.add_argument("--step", type=float, default=0.5)
     args = ap.parse_args()
 
     grid = np.arange(args.band[0], args.band[1] + 1e-9, args.step)

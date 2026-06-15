@@ -2,8 +2,9 @@ numpy>=1.24
 scipy>=1.10
 matplotlib>=3.7
 
-# JAX differentiable backend (raosim/jax). Opt-in via solver_backend="jax";
-# the NumPy/scipy path never imports these.
+# JAX differentiable backend (raosim/jax). This is the default
+# solve_rao_bvp backend; pass solver_backend="numpy" for the legacy
+# SciPy path.
 # Pinned exactly per JAX_DIFFERENTIABLE_PLAN.md §9 (JAX/jaxlib APIs move).
 # Tested combination (J0-J4 gates green, June 2026):
 jax==0.6.2

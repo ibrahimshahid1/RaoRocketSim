@@ -13,19 +13,10 @@ from raosim.rao_residuals import (
 
 
 def test_residual_Cplus_planar_invariant():
-    gamma = 1.4
-    m0 = 2.0
-    m1 = 2.5
-    theta0 = 0.10
-    theta1 = theta0 + prandtl_meyer(m0, gamma) - prandtl_meyer(m1, gamma)
-
-    p0 = FlowNode(x=0.0, r=1.0, M=m0, theta=theta0)
-    p1 = FlowNode(x=1.0, r=1.4, M=m1, theta=theta1)
-
-    assert residual_Cplus_axisym(p0, p1, gamma, axisymmetric=False) == pytest.approx(0.0, abs=1e-10)
-
-
-def test_residual_Cminus_planar_invariant():
+    """CORRECTED 2026-06-11: K+ = θ − ν is the planar C+ invariant
+    (Anderson MCF §11.4; oracle proof in test_characteristic_pairing).
+    Accelerating along C+ (ν up) turns the flow UP by the same amount.
+    (This test previously pinned the mirrored θ+ν convention.)"""
     gamma = 1.4
     m0 = 2.0
     m1 = 2.5
@@ -33,9 +24,26 @@ def test_residual_Cminus_planar_invariant():
     theta1 = theta0 - prandtl_meyer(m0, gamma) + prandtl_meyer(m1, gamma)
 
     p0 = FlowNode(x=0.0, r=1.0, M=m0, theta=theta0)
+    p1 = FlowNode(x=1.0, r=1.4, M=m1, theta=theta1)
+
+    assert residual_Cplus_axisym(p0, p1, gamma, axisymmetric=False) == pytest.approx(0.0, abs=1e-10)
+    # ... and the wrong-family relation must NOT vanish on this segment.
+    assert abs(residual_Cminus_axisym(p0, p1, gamma, axisymmetric=False)) > 1e-3
+
+
+def test_residual_Cminus_planar_invariant():
+    """CORRECTED 2026-06-11: K− = θ + ν is the planar C− invariant."""
+    gamma = 1.4
+    m0 = 2.0
+    m1 = 2.5
+    theta0 = 0.10
+    theta1 = theta0 + prandtl_meyer(m0, gamma) - prandtl_meyer(m1, gamma)
+
+    p0 = FlowNode(x=0.0, r=1.0, M=m0, theta=theta0)
     p1 = FlowNode(x=1.0, r=0.6, M=m1, theta=theta1)
 
     assert residual_Cminus_axisym(p0, p1, gamma, axisymmetric=False) == pytest.approx(0.0, abs=1e-10)
+    assert abs(residual_Cplus_axisym(p0, p1, gamma, axisymmetric=False)) > 1e-3
 
 
 def test_residual_axisym_matches_interior_march():

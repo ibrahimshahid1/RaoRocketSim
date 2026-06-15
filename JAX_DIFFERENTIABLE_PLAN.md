@@ -1,5 +1,58 @@
 # RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool
 
+> **FORMULATION DEFECT FOUND AND FIXED (2026-06-11h, identified by
+> ibrahim; supersedes the Guderley reading of the freeze sweep).**
+> The residual stack enforced the WRONG characteristic invariant: along
+> the C+ (θ+μ) CE/DE it imposed d(θ+ν) — the C− family's relation —
+> and the axisymmetric source carried a spurious cosμ/cos(θ±μ) factor.
+> The mirrored pairing ran through `rao_residuals.py`, `moc.py`'s three
+> unit processes, `jax/residuals.py`, and `jax/assembly.py`.  Correct
+> relations (Anderson MCF §11.4; Zucrow & Hoffman Vol. 2 Ch. 17), nodes
+> downstream, S = sinθ sinμ/r:  **C−: d(θ+ν) = +S ds;  C+: d(θ−ν) =
+> −S ds.**  Empirical proof against the NASA oracle: on kernel-RRC
+> (true C−) segments the corrected C− form holds at RMS 2.3e-6 (old
+> forms 2.7e-4/4.9e-4); on a verbatim-NASA-``Deriv`` LRC the corrected
+> C+ form holds at RMS 8.8e-8 (old pairing 3.4e-3).  ``nasa_deriv`` is
+> the independent reference: its closed-form (dM/dr, dθ/dr) already
+> encodes the stationary-DE system, which is why the fixed-end closure
+> IS the smooth stationary solution.  **Consequences, re-read:** the
+> freeze sweep measured the defective residual (its rising floor and
+> kdf→B collapse = LM fleeing an incorrectly paired equation, and its
+> "wall" never closed the endpoint — unlike the J4 gate wall, which
+> did); the position-only 7.5e-4 is two released variables compensating
+> for the wrong relation, NOT evidence of a jump (a physical jump obeys
+> PM-realizability, not two free dofs); ibrahim's solver-independent RK
+> existence scan closes all three targets smoothly at **θ_B =
+> 25.5659°, kdf = 0.15216, D(M 3.40145, θ 18.5182°), E(M 3.47655,
+> θ 11.1193°)** — pinned as `test_smooth_existence_root_regression`.
+> The Guderley-jump hypothesis is SHELVED unless the corrected
+> full-pin BVP refuses to close.  **Also fixed:** the CE
+> Mach-monotonicity penalty (1.0 per 0.05 Mach) is zeroed under the
+> characteristic formulation (CE crosses streamlines; the smooth DE
+> decelerates slightly near D — the penalty displaced the correct
+> branch).  **Landed + sandbox-verified:** corrected
+> rao_residuals/moc/jax-residuals/assembly (J2 parity 10/10 holds —
+> both sides changed identically), penalty gates (sizes preserved),
+> `tests/test_characteristic_pairing.py` (5 oracle-grounded tests:
+> RRC, LRC, planar invariants both directions, oracle-node
+> reconstruction by the corrected unit process, existence root), two
+> legacy tests re-baselined to the correct invariants
+> (test_moc.test_planar_invariants, test_rao_residuals planar pair);
+> oracle suites untouched and green. Current full-suite record after the
+> correction and topology cleanup: **790 passed / 5 xfailed**.
+> **Verified after re-baseline:** full D-state continuity is now the
+> default (`pin_d_theta=True`, `pin_d_mach=True`).  The reference
+> full-pin solve passes the 2e-3 gate, the BDE region closes exactly at
+> the commanded exit, and the bell-shape regression is grounded in the
+> smooth stationary-DE root (θ_B=25.5659°, θ_E=11.1193°), not the
+> parabola-fit chart angles.  The relaxed position-only branch remains
+> an explicit diagnostic and drives D toward B under the corrected
+> equations.
+
+
+
+> **SUPERSEDED HISTORICAL STATUS (pre-characteristic correction).**
+>
 > **STATUS-HEAD (2026-06-11): Phase 12.4 LANDED — the ~24.2° "march cap"
 > was never the unit process.**  Root cause: at Rao's sharp radius
 > (Rd = 0.382·Rt) the RRC slope tan(θ−μ) changes sign mid-row once the
@@ -164,6 +217,36 @@
 > collapse, the Guderley-discontinuity branch becomes the live
 > hypothesis (then check propulsion_texts for Guderley/Hantsch 1955 +
 > the ~1968 short-nozzle results before any further smoothing effort).
+>
+> **RESULT (2026-06-11g, host): PREDICTION FALSIFIED — the Guderley
+> branch is live.**  Sweep (full pins, n=24, ladder): floor RISES
+> monotonically with θ_B — 5.92e-2 @26° / 6.53e-2 @27° / 7.21e-2 @28° /
+> 7.93e-2 @29° / 8.65e-2 @30° / 6.30e-2 @31° (different basin) — while
+> kdf collapses monotonically toward B (0.076 → 0.010): the solver
+> flees the kernel state at every θ_B, hardest at the chart angle.
+> Wall at "best" (26°) is degenerate (slope = θ_B all the way to a
+> 100%-length "peak"; DE never turned the flow).  Full D-state
+> continuity is unsatisfiable across the whole band — θ_B was NOT the
+> missing degree of freedom.  Counting argument now favours a genuine
+> **state discontinuity at D**: freeing (θ₀, M₀) at fixed D-position
+> (the position-only attachment) adds exactly the two dofs of a jump,
+> and the system then closes to 7.5e-4 — i.e. the gate-passing solution
+> may BE the optimum-with-corner (Guderley-type), with the 30.6° "flare"
+> being the BDE back-march *rendering the jump as a resolved wave fan*
+> rather than treating D as a centred-wave origin.  Caveat against
+> over-reading: the repo's §2.E valid-region check calls ε=10/L80
+> "valid_shock_free_region", so either that check is too coarse
+> (quasi-1D) or the non-closure is a formulation defect — discriminate
+> BEFORE building discontinuity machinery.  Next discriminating
+> experiment (sandbox-feasible, numpy-only, no LM in the loop): direct
+> **stationary-DE shooting/existence scan** — integrate the
+> (C⁺ compatibility + d(stationarity)=0) ODE pair from D(kdf, θ_B)
+> by RK and map which (kdf, θ_B) hit (mass, r_E, L); if the smooth
+> 3-target intersection is empty over the physical rectangle, the
+> jump is established independent of the solver.  Ground the ODE pair
+> in Rao 1958 / the propulsion_texts variational PDFs first; then the
+> Guderley & Hantsch 1955 / Guderley ~1968 literature check decides
+> corner-modelling vs fixed-length transversality.
 
 > **DIRECTION (2026-06-11, set by ibrahim).**
 > 1. **End state: `raosim/jax` becomes the only core package.**  The

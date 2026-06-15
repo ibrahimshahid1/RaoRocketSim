@@ -58,20 +58,32 @@ def _nu(M, gamma):
     return prandtl_meyer(_clamp_M(M), gamma)
 
 
-def _q_source(theta, mu, r, sign):
-    """Anderson axisymmetric source: sign=+1 -> Q+ (cos(θ+μ)); -1 -> Q- (cos(θ-μ))."""
-    cos_t = jnp.cos(theta + sign * mu)
-    val = jnp.sin(theta) * jnp.sin(mu) * jnp.cos(mu) / (r * cos_t)
-    val = sign * val
-    ok = (jnp.abs(cos_t) > 1e-12) & (r > 1e-12)
-    return jnp.where(ok, val, 0.0)
+def _source_axisym(theta, mu, r):
+    """Axisymmetric source S = sinθ sinμ / r (ds-form).
+
+    CORRECTED 2026-06-11 (mirror of rao_residuals._source_axisym): the
+    old Q± carried a spurious cosμ/cos(θ±μ) factor.  Oracle-validated;
+    see the NumPy twin's docstring for the evidence.
+    """
+    ok = r > 1e-12
+    r_safe = jnp.where(ok, r, 1.0)
+    return jnp.where(ok, jnp.sin(theta) * jnp.sin(mu) / r_safe, 0.0)
 
 
 # --------------------------------------------------------------------------- #
 # node-pair leaves (vectorized over consecutive segments)                     #
 # --------------------------------------------------------------------------- #
 def _c_axisym(x, r, M, theta, gamma, sign):
-    """C+ (sign=+1) or C- (sign=-1) axisymmetric compatibility, per segment."""
+    """C+ (sign=+1) or C− (sign=-1) axisymmetric compatibility per segment.
+
+    CORRECTED 2026-06-11 invariant pairing (Anderson MCF §11.4; Z&H
+    Vol. 2 Ch. 17), nodes ordered downstream:
+      C+ (slope θ+μ): d(θ − ν) = −S ds
+      C− (slope θ−μ): d(θ + ν) = +S ds
+    i.e. invariant k = θ − sign·ν, residual = dk + sign·S·ds.
+    (Previously k = θ + sign·ν with the cos-factored Q — the families'
+    relations were mirrored.)
+    """
     x = jnp.asarray(x, dtype=jnp.float64)
     r = jnp.asarray(r, dtype=jnp.float64)
     Mc = _clamp_M(M)
@@ -79,14 +91,14 @@ def _c_axisym(x, r, M, theta, gamma, sign):
     nu = _nu(Mc, gamma)
     mu = _mu(Mc)
 
-    k = theta + sign * nu                     # θ ± ν
+    k = theta - sign * nu                     # θ ∓ ν (C+: θ−ν; C−: θ+ν)
     lhs = k[1:] - k[:-1]
     ds = jnp.hypot(x[1:] - x[:-1], r[1:] - r[:-1])
     th_avg = 0.5 * (theta[:-1] + theta[1:])
     mu_avg = 0.5 * (mu[:-1] + mu[1:])
     r_avg = jnp.maximum(0.5 * (r[:-1] + r[1:]), 1e-12)
-    Q = _q_source(th_avg, mu_avg, r_avg, sign)
-    return lhs - Q * ds
+    S = _source_axisym(th_avg, mu_avg, r_avg)
+    return lhs + sign * S * ds
 
 
 def residual_Cplus_axisym(x, r, M, theta, gamma):

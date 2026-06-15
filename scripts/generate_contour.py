@@ -1,7 +1,7 @@
 """Parametric Rao nozzle contour generator (converged BVP + BDE wall).
 
-Runs the J4-gate solver configuration (characteristic formulation, JAX
-backend, constraint-weight ladder, position-only D attachment) for the
+Runs the current solver configuration (characteristic formulation, JAX
+backend, constraint-weight ladder, full D-state continuity) for the
 design point you specify, builds the wall via NASA's BDE-region march,
 and writes:
 
@@ -45,7 +45,7 @@ def solve(args):
         evaluate_moc=True, wall_method="bde", couple_wall=False,
         kernel_d_fraction_max=0.7,
         solver_backend="jax", thetaN_guess_deg=args.theta_b_guess,
-        formulation="characteristic", pin_d_theta=False,
+        formulation="characteristic", pin_d_theta=True, pin_d_mach=True,
         jax_constraint_weight_ladder=(1.0, 10.0, 30.0, 100.0),
     )
     return rv.solve_rao_bvp(cfg)

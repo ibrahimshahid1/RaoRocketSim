@@ -150,8 +150,9 @@ class ContourReliability(str, Enum):
     pipeline (kernel march + PERFECT-branch D/E + BDE wall) currently
     measures wall r(x) RMS = 1.8e-4 against ``wall.out``
     (tests/test_nasa_port.py); promotion wiring into ``solve_rao_bvp``
-    awaits the Phase-12.4 march extension that makes full D-state
-    continuity solvable for Rao (non-perfect) cases.
+    is wired through the NASA/JHU reference path; Rao (non-perfect)
+    cases now use full D-state continuity by default under the corrected
+    characteristic formulation.
     """
 
     GEOMETRIC_APPROXIMATION = "geometric_approximation"
@@ -348,18 +349,13 @@ class RaoSolverConfig:
         1.0, 10.0, 30.0, 100.0,
     )
     # Pin M_ce[0] to D's kernel Mach (full flow-state continuity at D).
-    # OFF by default: unsatisfiable on a frozen kernel BD — see the
-    # comment in _ce_geometry_residuals.  Enable only together with a
-    # BD-refresh outer iteration (future) or the J3b differentiable march.
-    pin_d_mach: bool = False
-    # Pin theta_ce[0] to D's interpolated kernel angle.  OFF by default
-    # (since 2026-06-11): the position-only D attachment closes the J4
-    # gate (7.5e-4 < 2e-3 on the post-12.4 seed) under the
-    # characteristic formulation — pinning theta to the *interpolated
-    # approximate* kernel value imports kernel discretisation error
-    # into the stationarity chain at full weight.  See
-    # _ce_geometry_residuals; True restores the legacy behaviour.
-    pin_d_theta: bool = False
+    # Default True under the corrected characteristic formulation: the
+    # smooth fixed-end existence root satisfies the complete D state.
+    # Set False only for the explicit position-only diagnostic branch.
+    pin_d_mach: bool = True
+    # Pin theta_ce[0] to D's interpolated kernel angle.  Default True for
+    # the same full-continuity reason as pin_d_mach.
+    pin_d_theta: bool = True
     # Freeze the kernel arc-end angle theta_B at this value [deg],
     # bypassing the seed's inner set_theta_b secant (which otherwise
     # re-converges theta_B to the *fixed-end* closure — ~25.5 deg at the
@@ -1296,8 +1292,8 @@ def _construct_wall_from_ce(
     This implements the core of Rao's 1958 method:
       1. The CE provides target flow conditions (M, θ) at radial stations.
       2. C⁻ characteristics from the CE carry compatibility data
-         (θ − ν) backward toward the wall.
-      3. C⁺ characteristics from interior points carry (θ + ν) forward.
+         (θ + ν) backward toward the wall.
+      3. C⁺ characteristics from interior points carry (θ − ν) forward.
       4. Each wall point is determined by intersecting C⁺ from the
          nearest interior point with C⁻ from the CE, subject to the
          streamline (wall tangency) condition: θ_flow = θ_wall.
@@ -1361,7 +1357,7 @@ def _construct_wall_from_ce(
 
     ce_nu = np.array([prandtl_meyer(M, gamma) for M in ce_M])
     ce_mu = np.array([mach_angle(M) for M in ce_M])
-    ce_cm = ce_theta - ce_nu          # C⁻ compatibility values on CE
+    ce_kminus = ce_theta + ce_nu      # C- compatibility values on CE
 
     def _interp(r_q, data):
         """Linearly interpolate a CE quantity at radius *r_q*."""
@@ -1413,15 +1409,17 @@ def _construct_wall_from_ce(
         mu_w = mach_angle(M_w)
 
         for _it in range(20):
-            # C⁻ from CE interpolated at current wall radius
-            cm_ce = _interp(r_w, ce_cm)
+            # C- from CE interpolated at current wall radius
+            k_minus = _interp(r_w, ce_kminus)
             M_ce  = max(_interp(r_w, ce_M), 1.001)
             theta_ce = _interp(r_w, ce_theta)
             mu_ce = mach_angle(M_ce)
             x_ce_loc = _interp(r_w, x_ce)
+            r_ce_loc = _interp(r_w, ce_r)
 
-            # C⁺ from interior with axisymmetric source correction
-            cp = p_in.compat_plus
+            # C+ from interior with axisymmetric source correction:
+            # d(theta - nu) = -S ds, S = sin(theta) sin(mu) / r.
+            k_plus = p_in.compat_minus
             if r_w > 1e-10 and p_in.r > 1e-10:
                 ds = math.sqrt(
                     (x_w - p_in.x) ** 2 + (r_w - p_in.r) ** 2
@@ -1429,22 +1427,33 @@ def _construct_wall_from_ce(
                 if ds > 1e-12:
                     th_a = 0.5 * (p_in.theta + theta_w)
                     mu_a = 0.5 * (p_in.mu + mu_w)
-                    r_a  = 0.5 * (p_in.r + r_w)
-                    cos_tp = math.cos(th_a + mu_a)
-                    if abs(cos_tp) > 1e-15 and r_a > 1e-10:
-                        Qp = (math.sin(th_a) * math.sin(mu_a)
-                              * math.cos(mu_a) / (r_a * cos_tp))
-                        cp = p_in.compat_plus + Qp * ds
+                    r_a = max(0.5 * (p_in.r + r_w), 1e-12)
+                    S = math.sin(th_a) * math.sin(mu_a) / r_a
+                    k_plus = p_in.compat_minus - S * ds
 
-            # Solve compatibility:  θ_w + ν_w = cp,  θ_w − ν_w = cm_ce
-            theta_w_new = 0.5 * (cp + cm_ce)
-            nu_w_new    = 0.5 * (cp - cm_ce)
+            # C- from CE: d(theta + nu) = +S ds.
+            if r_w > 1e-10 and r_ce_loc > 1e-10:
+                ds_ce = math.sqrt(
+                    (x_w - x_ce_loc) ** 2 + (r_w - r_ce_loc) ** 2
+                )
+                if ds_ce > 1e-12:
+                    th_a = 0.5 * (theta_ce + theta_w)
+                    mu_a = 0.5 * (mu_ce + mu_w)
+                    r_a = max(0.5 * (r_ce_loc + r_w), 1e-12)
+                    S = math.sin(th_a) * math.sin(mu_a) / r_a
+                    k_minus = k_minus + S * ds_ce
+
+            # Solve compatibility:
+            #   theta_w + nu_w = K- (C-)
+            #   theta_w - nu_w = K+ (C+)
+            theta_w_new = 0.5 * (k_minus + k_plus)
+            nu_w_new    = 0.5 * (k_minus - k_plus)
             if nu_w_new < 1e-8:
                 nu_w_new = 1e-8
             M_w_new  = mach_from_prandtl_meyer(nu_w_new, gamma)
             mu_w_new = mach_angle(M_w_new)
 
-            # New position: intersection of C⁺ from p_in & C⁻ from CE
+            # New position: intersection of C+ from p_in & C- from CE
             sl_plus = math.tan(
                 0.5 * (p_in.theta + theta_w_new)
                 + 0.5 * (p_in.mu + mu_w_new)
@@ -2727,29 +2736,18 @@ def _ce_geometry_residuals(
             (float(ce.r[0]) - d_node.r) / r_scale,
         ]
         if getattr(config, "pin_d_theta", True):
-            # Pin the CE start angle to the interpolated kernel angle at
-            # D.  Disabling this (position-only attachment) removes the
-            # import of kernel-discretization error into the stationarity
-            # chain: with it off, the J4 reference closes to ~1.2e-3
-            # (< the 2e-3 gate) with D interior at kdf ~0.30, mass/length
-            # ~1e-9 (characteristic formulation, n_control=24, ladder to
-            # 100).  The residual start-state offset vs the approximate
-            # kernel shrinks as the kernel march resolution improves.
+            # Full D-state continuity: the CE starts from the kernel
+            # point D in position and flow angle.  The corrected
+            # characteristic pairing makes this the default smooth Rao
+            # attachment; disabling it is a diagnostic for the old
+            # position-only branch.
             start_vals.append(
                 (float(ce.theta[0]) - d_node.theta) / theta_scale
             )
-        if getattr(config, "pin_d_mach", False):
+        if getattr(config, "pin_d_mach", True):
             # Full flow-state continuity at D (Rao 1958: the control
             # surface emanates from a point of the kernel characteristic,
-            # so (r, theta, M) at D are all kernel values).  OFF by
-            # default: with the kernel BD *frozen* during the solve
-            # (config.kernel_bd from the seed's theta_B-capped kernel),
-            # D's state is a 1-parameter curve that generally cannot
-            # satisfy the fixed-(L, eps) optimum — enabling this pin on a
-            # frozen BD trades C+ compatibility for kernel continuity
-            # (observed: cp 8e-3 -> 0.78 on the reference case).  It
-            # becomes satisfiable once theta_B/BD join the outer
-            # iteration (BD refresh, or the J3b differentiable march).
+            # so r, theta, and M at D are all kernel values).
             start_vals.append(float(ce.M[0]) - d_node.M)
         start = np.array(start_vals, dtype=float)
     else:
@@ -2887,7 +2885,17 @@ def _rao_bvp_residual_groups(
     else:
         incidence_penalty = np.zeros(0, dtype=float)
         phi_smooth = np.zeros(0, dtype=float)
-    mach_monotonic_penalty = np.maximum(-np.diff(ce.M), 0.0) / 0.05
+    # CE Mach monotonicity penalty — LEGACY ONLY (2026-06-11): the CE
+    # crosses streamlines, so M need not be monotone along it; the
+    # exact smooth stationary DE decelerates slightly near D before
+    # accelerating, and at 1.0/0.05-Mach weight this penalty is strong
+    # enough to displace the correct branch (identified by ibrahim).
+    # Zeroed (size preserved for JAX parity) under the characteristic
+    # formulation.
+    if getattr(config, "formulation", "legacy") == "characteristic":
+        mach_monotonic_penalty = np.zeros(max(len(ce.M) - 1, 0), dtype=float)
+    else:
+        mach_monotonic_penalty = np.maximum(-np.diff(ce.M), 0.0) / 0.05
     regularization = _ce_smoothness_regularization(ce, config.gamma)
     moc_cplus, moc_cminus = _ce_axisymmetric_compatibility_residual_groups(ce, config.gamma)
     ce_geometry = _ce_geometry_residuals(ce, r, config, wall=wall)
@@ -3512,25 +3520,27 @@ def characteristic_net_links(rows: list[CharRow]) -> dict[str, list[MOCNetLink]]
                 links["cminus"].append(link)
                 links["axis"].append(link)
 
+        parent_start = 1 if prev_pts[0].r < 1e-10 else 0
         for j, child in enumerate(row.interior):
-            if j + 1 >= len(prev_pts):
+            parent_j = parent_start + j
+            if parent_j + 1 >= len(prev_pts):
                 break
             links["cplus"].append(MOCNetLink(
                 row=row_idx,
                 family="cplus",
                 role="interior",
-                parent=prev_pts[j],
+                parent=prev_pts[parent_j],
                 child=child,
-                parent_index=j,
+                parent_index=parent_j,
                 child_index=child_offset + j,
             ))
             links["cminus"].append(MOCNetLink(
                 row=row_idx,
                 family="cminus",
                 role="interior",
-                parent=prev_pts[j + 1],
+                parent=prev_pts[parent_j + 1],
                 child=child,
-                parent_index=j + 1,
+                parent_index=parent_j + 1,
                 child_index=child_offset + j,
             ))
 
@@ -3638,12 +3648,14 @@ def moc_net_compatibility_report(
         curr_pts = row.all_points()
         row_residuals: list[float] = []
 
+        parent_start = 1 if prev_pts and prev_pts[0].r < 1e-10 else 0
         for j, child in enumerate(row.interior):
-            if j + 1 >= len(prev_pts):
+            parent_j = parent_start + j
+            if parent_j + 1 >= len(prev_pts):
                 continue
             geom = residual_intersection(
-                prev_pts[j].to_flow_node(),
-                prev_pts[j + 1].to_flow_node(),
+                prev_pts[parent_j].to_flow_node(),
+                prev_pts[parent_j + 1].to_flow_node(),
                 child.to_flow_node(),
                 x_scale,
                 r_scale,

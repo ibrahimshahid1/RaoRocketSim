@@ -16,8 +16,8 @@ Approximation note:
   The coupled optimizer inherits the starting-line approximation selected
   in raosim.moc.solve_flowfield. The default is the historical
   quasi-1D area-ratio initialization for backward compatibility; use
-  starting_line_method='hall' to enable the simplified Hall-style
-  transonic correction.
+  starting_line_method='sauer_modified' for the compact transonic
+  correction or 'kliegel_levine' for the full third-order series.
 """
 
 from __future__ import annotations

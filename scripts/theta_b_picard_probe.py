@@ -1,4 +1,4 @@
-"""Phase 12.4 step 2: full-continuity solve with a theta_B Picard refresh.
+"""Historical theta_B Picard diagnostic, retained for reproducibility.
 
 Full D-state continuity (``pin_d_theta=True`` + ``pin_d_mach=True``) with
 the kernel march now clearing the historic ~24.2 deg cap.  Outer loop:
@@ -9,20 +9,19 @@ the kernel march now clearing the historic ~24.2 deg cap.  Outer loop:
       -> reseed at the refreshed theta_B and re-solve
     until |d theta_B| < 0.05 deg.
 
-Measured in the 2026-06-11 session (sandbox, n_control=24, ladder
+The values below were measured before the characteristic-pairing fix
+and must not be interpreted as evidence against smooth D continuity:
+
+Measured in the 2026-06-11 session (n_control=24, ladder
 (1, 10, 30, 100)):
 
     iter0  theta_B=21.87  ->  max_scaled 5.67e-2, kdf 0.0882, refresh -> 28.10
     iter1  theta_B=28.10  ->  max_scaled 5.70e-2, kdf 0.0865, refresh -> 28.17
 
-i.e. the Picard *converges* in theta_B (the march cap no longer binds) but
-the inner floor is theta_B-insensitive at ~5.7e-2 with an all-node
-stationarity ramp and kdf collapsing toward B.  Interpretation (see the
-STATUS block): with the kernel/theta_B frozen per solve, fixed-(L, eps) +
-full D continuity stays overdetermined — DE is fully determined by D and
-the stationarity+C+ ODE pair, so hitting (r_E, L) needs kdf *and* theta_B
-live inside the iteration (J3b), or fixed-length transversality blocks,
-or a Guderley-style discontinuous optimum at D.
+The corrected formulation instead has a smooth full-continuity root near
+theta_B=25.5659 deg and kdf=0.15216.  This script remains useful only for
+comparing the old stationarity-refresh strategy with direct theta_B
+freezing; use ``theta_b_freeze_sweep.py`` for the current experiment.
 
 Note: ``solve_rao_bvp``'s seed path runs ``set_theta_b`` (its own inner
 secant on *length*), so ``thetaN_guess_deg`` only initialises that secant;
@@ -37,7 +36,6 @@ from __future__ import annotations
 import json
 import math
 import sys
-from dataclasses import replace
 from pathlib import Path
 
 import numpy as np

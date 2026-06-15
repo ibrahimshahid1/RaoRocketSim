@@ -3,10 +3,9 @@ raosim.jax — differentiable (JAX) Rao nozzle core.
 
 This subpackage is a *separate solver backend* living inside the same repo.
 It re-expresses the throat-to-contour numerics of ``raosim.rao_variational``
-in JAX so the BVP residual is end-to-end autodifferentiable.  The NumPy/SciPy
-path in ``raosim.rao_variational`` remains the default and the regression
-oracle; this backend is opt-in via ``solver_backend="jax"`` and does not earn
-the default until the J5 gate passes (see ``JAX_DIFFERENTIABLE_PLAN.md``).
+in JAX so the BVP residual is end-to-end autodifferentiable.  This backend is
+the default for ``solve_rao_bvp``; the NumPy/SciPy path remains available via
+``solver_backend="numpy"`` as the finite-difference regression oracle.
 
 Run tag for outputs/builds produced by this backend: ``"jax"``.
 

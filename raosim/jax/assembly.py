@@ -91,12 +91,11 @@ class StaticParams(NamedTuple):
     active: frozenset
     #: pin M_ce[0] to D's kernel Mach in the ce_geometry start block
     #: (full flow-state continuity at D — Rao 1958).  Mirrors
-    #: RaoSolverConfig.pin_d_mach; off by default because it is
-    #: unsatisfiable on a frozen kernel BD (see _ce_geometry_residuals).
-    pin_start_mach: bool = False
+    #: RaoSolverConfig.pin_d_mach.
+    pin_start_mach: bool = True
     #: pin theta_ce[0] to D's interpolated kernel angle (mirrors
-    #: RaoSolverConfig.pin_d_theta; True = legacy).  False gives the
-    #: position-only D attachment that closes the J4 gate.
+    #: RaoSolverConfig.pin_d_theta).  False gives the explicit
+    #: position-only diagnostic branch.
     pin_start_theta: bool = True
     #: characteristic formulation: the length constraint is the exit
     #: station x_E (= z_C + ∫cot φ dr, Rao's functional) instead of the
@@ -166,7 +165,7 @@ def params_from_config(config, physics_weight: float | None = None) -> StaticPar
         bd_full_flux=float(rv.curve_mass_flux(nodes, config.gamma)),
         bd_x=bd_x, bd_r=bd_r, bd_M=bd_M, bd_theta=bd_th,
         active=frozenset(active),
-        pin_start_mach=bool(getattr(config, "pin_d_mach", False)),
+        pin_start_mach=bool(getattr(config, "pin_d_mach", True)),
         pin_start_theta=bool(getattr(config, "pin_d_theta", True)),
         length_from_exit_station=(
             getattr(config, "formulation", "legacy") == "characteristic"
@@ -309,30 +308,35 @@ def _polyline_mass_flux(x, r, M_node, theta, gamma, m_floor):
     return jnp.sum(jnp.where(ok, flux, 0.0))
 
 
-def _q_source(theta, mu, r, sign):
-    """Anderson Q± with the rao_residuals guards (|cos|<=1e-12, r<=1e-12)."""
-    cos_t = jnp.cos(theta + sign * mu)
-    ok = (jnp.abs(cos_t) > 1e-12) & (r > 1e-12)
-    cos_safe = jnp.where(ok, cos_t, 1.0)
-    val = sign * jnp.sin(theta) * jnp.sin(mu) * jnp.cos(mu) / (r * cos_safe)
-    return jnp.where(ok, val, 0.0)
+def _source_axisym(theta, mu, r):
+    """Axisymmetric source S = sinθ sinμ / r (ds-form), r-guarded.
+
+    CORRECTED 2026-06-11 (mirror of rao_residuals._source_axisym):
+    the old Q± carried a spurious cosμ/cos(θ±μ) factor.  See the
+    NumPy twin for the oracle evidence (RRC RMS 2.3e-6, LRC 8.8e-8).
+    """
+    ok = r > 1e-12
+    r_safe = jnp.where(ok, r, 1.0)
+    return jnp.where(ok, jnp.sin(theta) * jnp.sin(mu) / r_safe, 0.0)
 
 
 def _cplus_pair(x0, r0, M0, th0, mu0, x1, r1, M1, th1, mu1, gamma):
     """rao_residuals.residual_Cplus_axisym on an explicit (p0, p1) pair.
 
-    ``M*`` enter only through ν = PM(max(M, 1.001)); ``mu*`` are the
-    *node-stored* Mach angles (CE: asin(1/max(M,1.001)); wall-interp:
-    asin(1/max(M,1.000001))) — exactly the FlowNode.mu semantics.
+    CORRECTED 2026-06-11 pairing: along C+ (slope θ+μ, downstream
+    order) d(θ − ν) = −S ds.  ``M*`` enter only through
+    ν = PM(max(M, 1.001)); ``mu*`` are the *node-stored* Mach angles
+    (CE: asin(1/max(M,1.001)); wall-interp: asin(1/max(M,1.000001)))
+    — exactly the FlowNode.mu semantics.
     """
     nu0 = prandtl_meyer(jnp.maximum(M0, _CE_M_FLOOR), gamma)
     nu1 = prandtl_meyer(jnp.maximum(M1, _CE_M_FLOOR), gamma)
-    lhs = (th1 + nu1) - (th0 + nu0)
+    lhs = (th1 - nu1) - (th0 - nu0)
     ds = jnp.hypot(x1 - x0, r1 - r0)
     th = 0.5 * (th0 + th1)
     mu = 0.5 * (mu0 + mu1)
     r = jnp.maximum(0.5 * (r0 + r1), 1e-12)
-    return lhs - _q_source(th, mu, r, +1.0) * ds
+    return lhs + _source_axisym(th, mu, r) * ds
 
 
 def _rao_stationarity(M, theta, log_C, gamma):
@@ -428,16 +432,19 @@ def make_residual(sp: StaticParams):
             lm = empty
 
         # -- C+/C- compatibility on CE segments (weight W, /1°) ---------------
+        # CORRECTED 2026-06-11 pairing (Anderson MCF §11.4):
+        #   C+ (slope θ+μ): d(θ−ν) = −S ds;  C− (θ−μ): d(θ+ν) = +S ds.
         if "moc_cplus" in active or "moc_cminus" in active:
             nu = prandtl_meyer(Mn, g)
             ds = jnp.hypot(x_ce[1:] - x_ce[:-1], r_ce[1:] - r_ce[:-1])
             th_avg = 0.5 * (th_ce[:-1] + th_ce[1:])
             mu_avg = 0.5 * (mun[:-1] + mun[1:])
             r_avg = jnp.maximum(0.5 * (r_ce[:-1] + r_ce[1:]), 1e-12)
-            kp = th_ce + nu
-            km = th_ce - nu
-            cp = ((kp[1:] - kp[:-1]) - _q_source(th_avg, mu_avg, r_avg, +1.0) * ds) / _ONE_DEG
-            cm = ((km[1:] - km[:-1]) - _q_source(th_avg, mu_avg, r_avg, -1.0) * ds) / _ONE_DEG
+            S = _source_axisym(th_avg, mu_avg, r_avg)
+            kp = th_ce - nu                    # C+ invariant θ−ν
+            km = th_ce + nu                    # C− invariant θ+ν
+            cp = ((kp[1:] - kp[:-1]) + S * ds) / _ONE_DEG
+            cm = ((km[1:] - km[:-1]) - S * ds) / _ONE_DEG
             cp = W * cp if "moc_cplus" in active else empty
             cm = W * cm if "moc_cminus" in active else empty
         else:
@@ -489,7 +496,14 @@ def make_residual(sp: StaticParams):
 
         # -- penalties (raw-M monotonicity; raw pair-fraction monotonicity) -----
         if "penalties" in active:
-            mach_pen = jnp.maximum(-(M_ce[1:] - M_ce[:-1]), 0.0) / 0.05
+            # CE Mach monotonicity is LEGACY ONLY (2026-06-11): the CE
+            # crosses streamlines so M need not be monotone; zeroed
+            # (size preserved) under the characteristic formulation —
+            # mirrors the gate in _rao_bvp_residual_groups.
+            if sp.length_from_exit_station:
+                mach_pen = jnp.zeros(sp.n_ce - 1, dtype=jnp.float64)
+            else:
+                mach_pen = jnp.maximum(-(M_ce[1:] - M_ce[:-1]), 0.0) / 0.05
             if coupled:
                 pair_pen = jnp.maximum(-(pf[1:] - pf[:-1]), 0.0) / 0.01
                 pen = jnp.concatenate([mach_pen, pair_pen])

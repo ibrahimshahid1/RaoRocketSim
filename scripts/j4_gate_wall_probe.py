@@ -1,8 +1,8 @@
 """J4 gate replication + solved-CE BDE wall shape, in a single solve.
 
-Replicates ``test_j4_gate_passes_with_position_only_attachment``'s config
+Replicates the corrected J4 reference config
 (characteristic formulation, JAX backend, constraint-weight ladder,
-position-only D attachment) with ``wall_method="bde"`` so the same solve
+full D-state continuity) with ``wall_method="bde"`` so the same solve
 also yields the BDE wall.  Prints the gate verdict and the wall-slope
 profile, and writes a JSON checkpoint + the wall polyline.
 
@@ -13,8 +13,8 @@ fail-bracketing at the old ~24.2° cap — so both the gate value and the
 solved-CE wall shape need re-measuring.  The bell criterion is the TOP
 shape: slope peaks near θ_N just after the throat arc and decreases
 monotonically (chart θ_N(ε=10, L80) ≈ 21.9°, θ_E ≈ 8.3°); the historic
-defect was a 35.6° flare at 60% length driven by the ΔM ≈ 0.66 state
-jump that position-only attachment leaves at D.
+defect was a 35.6° flare at 60% length driven by the stale characteristic
+pairing and the relaxed D-state diagnostic branch.
 
 Run:  PYTHONPATH=. python scripts/j4_gate_wall_probe.py
 """
@@ -46,7 +46,7 @@ def main() -> int:
         max_nfev=4000, residual_tol=2e-3, evaluate_moc=True,
         couple_wall=False, kernel_d_fraction_max=0.7,
         thetaN_guess_deg=21.87, solver_backend="jax",
-        formulation="characteristic", pin_d_theta=False,
+        formulation="characteristic", pin_d_theta=True, pin_d_mach=True,
         jax_constraint_weight_ladder=(1.0, 10.0, 30.0, 100.0),
         wall_method="bde",
     )
