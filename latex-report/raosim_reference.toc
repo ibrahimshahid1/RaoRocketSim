@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}Repository functionality overview}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}What the tool does}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Module map}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Governing gas dynamics}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Isentropic relations}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Prandtl--Meyer function and Mach angle}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Critical Mach number}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Area--Mach relation}{3}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Method of characteristics (axisymmetric)}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Transonic start line (Kliegel--Levine)}{4}{subsection.3.1}%
+\contentsline {section}{\numberline {4}Rao's variational problem}{4}{section.4}%
+\contentsline {paragraph}{Length bookkeeping (a load-bearing correction).}{4}{section*.2}%
+\contentsline {section}{\numberline {5}NASA topology constructions}{5}{section.5}%
+\contentsline {section}{\numberline {6}The BVP formulation}{5}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Unknowns}{5}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Residual blocks (characteristic formulation)}{5}{subsection.6.2}%
+\contentsline {section}{\numberline {7}The differentiable (JAX) backend}{6}{section.7}%
+\contentsline {section}{\numberline {8}Convergence campaign (the J4 record)}{6}{section.8}%
+\contentsline {section}{\numberline {9}Parametric contour generation}{6}{section.9}%
+\contentsline {section}{\numberline {10}Verification and reliability}{6}{section.10}%
+\contentsline {section}{\numberline {11}Remaining roadmap (formalised final steps)}{8}{section.11}%
