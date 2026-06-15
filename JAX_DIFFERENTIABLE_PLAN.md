@@ -47,6 +47,27 @@
 > run on host: `pytest tests/test_jax_convergence.py -q -m "not slow"`
 > and `PYTHONPATH=. python scripts/j4_gate_wall_probe.py`, then
 > `scripts/generate_contour.py` for fresh latex-report figures.
+>
+> **Phase 12.6 LANDED (2026-06-11b, same session as the DIRECTION
+> block):** `raosim/moc_topology.py` formalises the §11.7 object —
+> `RaoTopology(TT_prime, B, BF, D, BD, DE, E, streamline_BE, theta_B,
+> mass_BD, mass_DE)` on CharPoints, plus provenance (`d_fraction`,
+> `arc_wall`, diagnostics), `full_wall()` (throat arc + streamline_BE,
+> monotone-x enforced), `closure_report()`, and the one-call
+> `build_reference_topology(...)`.  Reference-case closure metrics:
+> every seam (B/D/E attachments, wall start/end) at 0.0 exactly, mass
+> pair 1.7e-10, exit on the commanded station, bell peak 26.26° /
+> exit 11.20° (`tests/test_moc_topology.py`, 4 tests).
+> `_construct_wall_from_ce` deletion stays staged with the flip
+> (DIRECTION 2d) — the legacy default path still uses it.  **Phase 13
+> increment:** `plot_characteristic_net` / `plot_flowfield_mach`
+> already existed and match the §12.2 outline; added `plot_topology`
+> (spec plot #9, works on the 12.6 object) and the missing
+> `tests/test_plotting.py` (5 smoke tests, Agg).  Reference artifacts:
+> `scripts/plot_reference_topology.py` →
+> `builds/reference_topology.png` + `builds/reference_wall.csv`.
+> In-sandbox verification: 21-test lite sweep + 2 slow topology tests
+> green; JAX-solve work (gate re-confirm → flip) still host-gated.
 
 > **DIRECTION (2026-06-11, set by ibrahim).**
 > 1. **End state: `raosim/jax` becomes the only core package.**  The

@@ -273,6 +273,78 @@ def plot_flowfield_mach(solution, *, geometry: str = "raw",
     return fig
 
 
+def plot_topology(topology, *, ax=None, show: bool = False,
+                  save_path: str | None = None):
+    """
+    Annotated overlay of the explicit Rao construction objects
+    (REWRITE_PLAN §12.1 plot #9): TT', throat-arc wall, BF, B, BD, D,
+    DE, E, and the ``streamline_BE`` bell wall.
+
+    Accepts a :class:`raosim.moc_topology.RaoTopology` (Phase 12.6) or
+    any duck-typed object carrying those fields.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    def _xy(seq):
+        return ([p.x for p in seq], [p.r for p in seq])
+
+    tt = getattr(topology, "TT_prime", ())
+    if tt:
+        ax.plot(*_xy(tt), color="C2", linewidth=1.0, label="TT' start line",
+                zorder=2)
+    arc = getattr(topology, "arc_wall", ())
+    if arc:
+        ax.plot(*_xy(arc), color="black", linewidth=2.0,
+                label="throat-arc wall", zorder=4)
+    bf = getattr(topology, "BF", ())
+    if bf:
+        ax.plot(*_xy(bf), color="C0", linewidth=1.0, linestyle="--",
+                label="BF (final RRC)", zorder=2)
+    bd = getattr(topology, "BD", ())
+    if bd:
+        ax.plot(*_xy(bd), color="C0", linewidth=2.0,
+                label="BD (mass-flow curve)", zorder=3)
+    de = getattr(topology, "DE", ())
+    if de:
+        ax.plot(*_xy(de), color="C3", linewidth=1.6, linestyle="--",
+                label="DE (control surface)", zorder=3)
+    s_be = getattr(topology, "streamline_BE", ())
+    if s_be:
+        ax.plot(*_xy(s_be), color="C1", linewidth=2.0,
+                label="streamline BE (bell wall)", zorder=4)
+
+    for name, marker in (("B", "o"), ("D", "s"), ("E", "^")):
+        p = getattr(topology, name, None)
+        if p is not None:
+            ax.plot([p.x], [p.r], marker, color="k", markersize=6, zorder=5)
+            ax.annotate(name, (p.x, p.r), textcoords="offset points",
+                        xytext=(6, 6), fontsize=10, fontweight="bold")
+
+    theta_b = getattr(topology, "theta_B", None)
+    title = "Rao construction topology"
+    if theta_b is not None and math.isfinite(theta_b):
+        title += f"  (theta_B = {math.degrees(theta_b):.2f} deg)"
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(title)
+    ax.set_aspect("equal", "box")
+    handles, _labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(loc="best", fontsize=8)
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
 def _set_axes_equal_3d(ax):
     """Force equal aspect ratio on a 3-D axes."""
     limits = np.array([ax.get_xlim3d(), ax.get_ylim3d(), ax.get_zlim3d()])
