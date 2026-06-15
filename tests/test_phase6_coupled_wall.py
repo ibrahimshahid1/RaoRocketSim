@@ -375,6 +375,7 @@ def test_left_mach_geometry_is_exact_after_refactor():
     )
 
 
+@pytest.mark.slow
 @pytest.mark.xfail(
     reason="With ``kernel_d_fraction_max=0.7`` (the Option-2 workaround "
            "in RaoSolverConfig) the Phase 5 valid-region check now "
@@ -413,10 +414,16 @@ def test_solve_rao_bvp_reaches_rao_residual_solved_at_weight_1():
         rv.PHYSICS_WEIGHT = original
 
 
+@pytest.mark.slow
 def test_kernel_d_fraction_cap_enforced_on_marched_kernel_at_weight_1():
     """
     The ``kernel_d_fraction_max`` cap is enforced, and D sits on a *real*
     marched kernel BD.
+
+    Marked ``slow``: a weight-1.0 scipy solve (800 nfev) on the
+    topology-seeded state.  The same guarantees run fast on the JAX
+    backend in tests/test_jax_convergence.py
+    (``test_mass_closure_uses_real_kernel_bd`` + the bounds-enforced cap).
 
     History: this test originally documented the "Option-2 workaround" for
     the weight=1.0 valid-region trip in the degenerate-kernel era, when

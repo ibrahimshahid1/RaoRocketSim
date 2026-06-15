@@ -142,7 +142,17 @@ class WallSurface:
 
 
 class ContourReliability(str, Enum):
-    """Explicit maturity levels for generated contour data."""
+    """Explicit maturity levels for generated contour data.
+
+    ``NASA_REFERENCE_MATCHED`` (REWRITE_PLAN §13) means RMS wall agreement
+    with the NASA/JHU ``outputs_M3.5Perf`` grids better than 1e-3
+    relative — the canonical-reference gold standard.  The perfect-nozzle
+    pipeline (kernel march + PERFECT-branch D/E + BDE wall) currently
+    measures wall r(x) RMS = 1.8e-4 against ``wall.out``
+    (tests/test_nasa_port.py); promotion wiring into ``solve_rao_bvp``
+    awaits the Phase-12.4 march extension that makes full D-state
+    continuity solvable for Rao (non-perfect) cases.
+    """
 
     GEOMETRIC_APPROXIMATION = "geometric_approximation"
     MOC_COMPATIBLE = "moc_compatible"
@@ -273,6 +283,15 @@ class RaoSolverConfig:
     # away from the kernel axis and avoid the Phase 5 valid-region
     # check firing on the kernel-to-CE bridge.
     kernel_d_fraction_max: float | None = None
+    # Lower bound on ``kernel_d_fraction``.  Classical Rao optima sit at
+    # D fractions ~0.3-0.6 (see KERNEL_D_FRACTION_MAX docstring); with
+    # the characteristic formulation on a *frozen* kernel BD the
+    # unconstrained solve can drift D toward B (kdf -> ~0.02), where the
+    # mass closure becomes trivially satisfiable by a near-streamline DE
+    # and the BDE-region wall march degenerates (zero-mass BD segment).
+    # A floor (e.g. 0.15-0.3) keeps the topology physical until theta_B/
+    # BD join the iteration.  Default 0.0 preserves legacy behaviour.
+    kernel_d_fraction_min: float = 0.0
     # JAX differentiable backend (JAX_DIFFERENTIABLE_PLAN.md).
     #
     #   "numpy" — scipy.optimize.least_squares with finite-difference
@@ -287,7 +306,82 @@ class RaoSolverConfig:
     # Only the inner least-squares step changes; seeding, kernel build,
     # reliability gating, and diagnostics are identical for both backends.
     solver_backend: str = "numpy"
+    # CE seed strategy for the BVP unknown vector:
+    #
+    #   "auto"     — (default) seed the CE from the NASA fixed-end Rao
+    #                topology (set_theta_b/calc_lrc_de with
+    #                end_condition="fixed_end": D placed on the marched
+    #                kernel BD so DE's endpoint pins r_E, theta_B secanted
+    #                toward the target length).  Falls back to "linear"
+    #                if the topology solve fails.
+    #   "topology" — require the topology seed; raise on failure.
+    #   "linear"   — the legacy axis-to-exit linear ramp seed (the only
+    #                option before the kernel march fixes; kept for
+    #                regression comparisons).
+    ce_seed: str = "auto"
+    # Residual-stack formulation (when ``residual_blocks`` is None):
+    #
+    #   "legacy"         — DEFAULT_RAO_RESIDUAL_BLOCKS (pre-refactor
+    #                      scaffold blocks included).  Default until the
+    #                      Phase 6/7 gates re-baseline.
+    #   "characteristic" — CHARACTERISTIC_RAO_RESIDUAL_BLOCKS: the
+    #                      converged-topology set (no C− along the C+
+    #                      CE; no CE→wall pairing blocks).  See the
+    #                      constant's docstring for the physics + the
+    #                      empirical evidence.
+    formulation: str = "legacy"
+    # Constraint-weight continuation for the JAX backend: the integral
+    # constraints (mass, length) and endpoint pins are single residual
+    # elements drowned by ~O(n) physics elements in plain least squares
+    # (observed: LM sacrifices length at ~0.5 while physics closes).
+    # A ladder like (1.0, 10.0, 30.0) re-solves with those elements
+    # progressively up-weighted, reusing each solution as the next seed;
+    # the *reported* residual is always the unweighted one.  None = off.
+    jax_constraint_weight_ladder: tuple[float, ...] | None = None
+    # Pin M_ce[0] to D's kernel Mach (full flow-state continuity at D).
+    # OFF by default: unsatisfiable on a frozen kernel BD — see the
+    # comment in _ce_geometry_residuals.  Enable only together with a
+    # BD-refresh outer iteration (future) or the J3b differentiable march.
+    pin_d_mach: bool = False
+    # Pin theta_ce[0] to D's interpolated kernel angle.  ON by default
+    # (legacy behaviour).  Setting False gives the position-only D
+    # attachment that closes the J4 gate (~1.2e-3 < 2e-3) under the
+    # characteristic formulation — see _ce_geometry_residuals.
+    pin_d_theta: bool = True
 
+
+# Converged-topology ("characteristic") block set.  After the
+# left-Mach-by-construction refactor the CE segments are C+ characteristics
+# *by construction*, so two scaffold blocks from the generic-curve era are
+# structurally unsatisfiable at the Rao topology and are dropped here:
+#
+#   * ``moc_cminus`` — applied the C− compatibility relation along the
+#     CE's C+ segments.  Rao's DE closure uses C+ relations +
+#     stationarity + mass/length only (Rao 1958; Rao-Beck-Booth AIAA
+#     99-2584 Eqs. 12-14; NASA FindPointE integrates only the LRC/C+
+#     derivative system along DE).
+#   * ``cplus_ce_to_wall`` / ``wall_intersection`` — paired CE nodes to
+#     wall points along C+ slopes, but the C+ line through a DE point is
+#     DE itself and meets the wall only at E.  The wall belongs to the
+#     BDE-region march (nasa_moc.calc_bde_region), not to CE→wall chords.
+#
+# Empirical: on the ε=10/L80/w=1.0 reference the legacy stack stalls at
+# max_scaled ≈ 0.3-0.5 with resolution-independent floors in exactly
+# these blocks; the characteristic set reaches ~6e-2 with C+ compat at
+# ~1e-3 and mass at ~3e-3 (see tests/test_jax_convergence.py).
+# Opt-in via RaoSolverConfig.formulation="characteristic" until the
+# Phase 6/7 gates re-baseline on it.
+CHARACTERISTIC_RAO_RESIDUAL_BLOCKS = (
+    "mass",
+    "length",
+    "moc_cplus",
+    "ce_geometry",
+    "regularization",
+    "penalties",
+    "algebraic_stationarity",
+    "wall_endpoint",
+    "wall_tangency",
+)
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
     "mass",
@@ -1657,36 +1751,79 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     The resulting topology is stored on the returned ControlSurface and
     on the kernel_bd flow-node tuple for downstream residual evaluation.
 
-    Returns ``(ce, kernel_bd_flow_nodes, topology)`` where ``topology`` is
-    a :class:`nasa_moc.RaoTopology` capturing point B, BD, point D, DE,
-    point E, mass closures, and the Rao stationarity constant.
+    Returns ``(ce, kernel_bd_flow_nodes, topology, kernel)`` where
+    ``topology`` is a :class:`nasa_moc.RaoTopology` capturing point B, BD,
+    point D, DE, point E, mass closures, and the Rao stationarity
+    constant, and ``kernel`` is the :class:`nasa_moc.MOCKernel` the BD
+    came from (needed by the ``wall_method="bde"`` region march).
     """
     from raosim.nasa_moc import build_kernel as _build_kernel
     from raosim.nasa_moc import RaoTopology as _RaoTopology
+    from raosim.nasa_moc import set_theta_b as _set_theta_b
     Rt = config.Rt
     Re = math.sqrt(config.epsilon) * Rt
     Ln = _target_length(Rt, config.epsilon, config.length_pct)
     Rd = config.throat_downstream_radius_factor * Rt
     theta_b_seed = math.radians(config.thetaN_guess_deg)
 
-    kernel = _build_kernel(
-        Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
-        starting_line_method=config.starting_line_method,
-        Ru=config.throat_upstream_radius_factor * Rt,
-    )
-    kernel_bd_flow_nodes = [node.to_flow_node() for node in kernel.bd]
-
-    topology: _RaoTopology | None = None
-    try:
-        topology = calc_lrc_de(
-            kernel,
-            x_E=Ln, r_E=Re,
-            gamma=config.gamma, Rt=Rt, epsilon=config.epsilon,
-            pa_over_p0=config.pa_over_p0,
-            n_points=config.n_control,
+    seed_mode = getattr(config, "ce_seed", "auto")
+    if seed_mode not in ("auto", "topology", "linear"):
+        raise ValueError(
+            f"ce_seed must be 'auto', 'topology', or 'linear', got {seed_mode!r}"
         )
-    except Exception:
-        topology = None
+
+    # ── Preferred: NASA fixed-end topology seed ────────────────────────
+    # set_theta_b/calc_lrc_de(end_condition="fixed_end") place D on the
+    # *marched* kernel BD so that DE (a true left-running characteristic
+    # carrying exactly the B→D mass) ends at the target exit radius, and
+    # secant theta_B toward the target length.  DE *is* the Rao control
+    # surface, so seeding the CE from it starts the BVP inside the right
+    # basin — unlike the legacy linear ramp, which predates the working
+    # kernel march.
+    topology: _RaoTopology | None = None
+    kernel = None
+    if seed_mode in ("auto", "topology"):
+        try:
+            topology, kernel = _set_theta_b(
+                Rt, config.epsilon, config.length_pct,
+                config.gamma, config.pa_over_p0,
+                theta_b_init_deg=config.thetaN_guess_deg,
+                n_kernel=config.n_kernel,
+                n_de_points=max(config.n_control, 12),
+                starting_line_method=config.starting_line_method,
+                L_target=Ln,
+                Ru=config.throat_upstream_radius_factor * Rt,
+                end_condition="fixed_end",
+                # Seed-quality bracket only: each outer iteration costs a
+                # kernel march; ~8 bisections localise theta_B to ~0.2 deg,
+                # which is plenty for a BVP seed (the solve owns the
+                # length residual).
+                max_iter=8,
+            )
+        except Exception:
+            topology, kernel = None, None
+            if seed_mode == "topology":
+                raise
+
+    if kernel is None:
+        kernel = _build_kernel(
+            Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
+            starting_line_method=config.starting_line_method,
+            Ru=config.throat_upstream_radius_factor * Rt,
+        )
+        if topology is None:
+            try:
+                topology = calc_lrc_de(
+                    kernel,
+                    x_E=Ln, r_E=Re,
+                    gamma=config.gamma, Rt=Rt, epsilon=config.epsilon,
+                    pa_over_p0=config.pa_over_p0,
+                    n_points=config.n_control,
+                    end_condition="fixed_end",
+                )
+            except Exception:
+                topology = None
+    kernel_bd_flow_nodes = [node.to_flow_node() for node in kernel.bd]
 
     ce = _initial_ce_guess(Rt, Re, Ln, config.gamma, config.n_control)
     try:
@@ -1694,28 +1831,50 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     except ValueError:
         Me_target = max(float(ce.M[-1]), 2.0)
 
-    # Use the old axis-to-exit linear seed which least_squares is
-    # calibrated for.  The NASA topology drives the kernel_d_fraction
-    # unknown and supplies the kernel BD curve for the mass-closure
-    # residual, but the CE r-grid spans axis to exit (the BVP's native
-    # parametrisation).
-    frac = np.linspace(0.0, 1.0, config.n_control)
-    ce.M = np.maximum(ce.M, 1.001 + (Me_target - 1.001) * frac ** 0.85)
-    ce.theta = np.clip(
-        theta_b_seed * (1.0 - 0.55 * frac),
-        math.radians(-5.0), math.radians(55.0),
+    use_topology_ce = (
+        seed_mode in ("auto", "topology")
+        and topology is not None
+        and len(topology.DE) >= 3
+        and topology.mass_BD > 1e-9
     )
-    ce.x = np.linspace(0.0, Ln, config.n_control)
-    # Seed kernel_d_fraction so the wall-to-D mass flow along BD equals
-    # the quasi-1D throat target (best initial guess for the BVP mass
-    # closure when the kernel BD curve already spans the full radial
-    # cross-section).  The least_squares solve then refines it.
+    if use_topology_ce:
+        # Resample DE (D -> E along the C+ characteristic) onto n_control
+        # nodes by arc length; this seeds (x, r, M, theta) consistently
+        # with the left-Mach-line reconstruction in _unpack_bvp.
+        de_x = np.asarray([p.x for p in topology.DE], dtype=float)
+        de_r = np.asarray([p.r for p in topology.DE], dtype=float)
+        de_M = np.asarray([p.M for p in topology.DE], dtype=float)
+        de_th = np.asarray([p.theta for p in topology.DE], dtype=float)
+        seg = np.hypot(np.diff(de_x), np.diff(de_r))
+        arc = np.concatenate([[0.0], np.cumsum(seg)])
+        total = max(float(arc[-1]), 1e-12)
+        s = np.linspace(0.0, total, config.n_control)
+        ce.x = np.interp(s, arc, de_x)
+        ce.r = np.interp(s, arc, de_r)
+        ce.M = np.maximum(np.interp(s, arc, de_M), 1.001)
+        ce.theta = np.interp(s, arc, de_th)
+    else:
+        # Legacy axis-to-exit linear ramp (pre-topology behaviour).
+        frac = np.linspace(0.0, 1.0, config.n_control)
+        ce.M = np.maximum(ce.M, 1.001 + (Me_target - 1.001) * frac ** 0.85)
+        ce.theta = np.clip(
+            theta_b_seed * (1.0 - 0.55 * frac),
+            math.radians(-5.0), math.radians(55.0),
+        )
+        ce.x = np.linspace(0.0, Ln, config.n_control)
+    # Seed kernel_d_fraction.  With the topology CE seed the consistent
+    # choice is the topology's own D (ce.r[0] == D.r by construction, so
+    # the ce_geometry start residual begins at ~0).  Otherwise fall back
+    # to matching the wall-to-D mass flow along BD against the quasi-1D
+    # throat target.  The least_squares solve then refines it.
     cap_eff = (
         float(config.kernel_d_fraction_max)
         if config.kernel_d_fraction_max is not None
         else KERNEL_D_FRACTION_MAX
     )
-    if kernel_bd_flow_nodes:
+    if use_topology_ce:
+        ce.kernel_d_fraction = min(float(topology.d_fraction), cap_eff)
+    elif kernel_bd_flow_nodes:
         throat_target = _target_mdot(config.Rt, config.gamma)
         ce.kernel_d_fraction = _seed_kernel_d_fraction(
             kernel_bd_flow_nodes, throat_target, config.gamma,
@@ -1728,7 +1887,7 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
 
     ce.phi = _phi_from_curve(ce.x, ce.r)
     ce.phi = np.clip(ce.phi, math.radians(5.0), math.radians(88.0))
-    return ce, kernel_bd_flow_nodes, topology
+    return ce, kernel_bd_flow_nodes, topology, kernel
 
 
 def _phi_from_curve(x: np.ndarray, r: np.ndarray) -> np.ndarray:
@@ -2528,10 +2687,35 @@ def _ce_geometry_residuals(
         # left-Mach-line integrator in ``_unpack_bvp`` (``x_start = D.x``),
         # so the ``(ce.x[0] - d_node.x)`` residual is identically zero and
         # is omitted to keep the residual stack non-degenerate.
-        start = np.array([
+        start_vals = [
             (float(ce.r[0]) - d_node.r) / r_scale,
-            (float(ce.theta[0]) - d_node.theta) / theta_scale,
-        ], dtype=float)
+        ]
+        if getattr(config, "pin_d_theta", True):
+            # Pin the CE start angle to the interpolated kernel angle at
+            # D.  Disabling this (position-only attachment) removes the
+            # import of kernel-discretization error into the stationarity
+            # chain: with it off, the J4 reference closes to ~1.2e-3
+            # (< the 2e-3 gate) with D interior at kdf ~0.30, mass/length
+            # ~1e-9 (characteristic formulation, n_control=24, ladder to
+            # 100).  The residual start-state offset vs the approximate
+            # kernel shrinks as the kernel march resolution improves.
+            start_vals.append(
+                (float(ce.theta[0]) - d_node.theta) / theta_scale
+            )
+        if getattr(config, "pin_d_mach", False):
+            # Full flow-state continuity at D (Rao 1958: the control
+            # surface emanates from a point of the kernel characteristic,
+            # so (r, theta, M) at D are all kernel values).  OFF by
+            # default: with the kernel BD *frozen* during the solve
+            # (config.kernel_bd from the seed's theta_B-capped kernel),
+            # D's state is a 1-parameter curve that generally cannot
+            # satisfy the fixed-(L, eps) optimum — enabling this pin on a
+            # frozen BD trades C+ compatibility for kernel continuity
+            # (observed: cp 8e-3 -> 0.78 on the reference case).  It
+            # becomes satisfiable once theta_B/BD join the outer
+            # iteration (BD refresh, or the J3b differentiable march).
+            start_vals.append(float(ce.M[0]) - d_node.M)
+        start = np.array(start_vals, dtype=float)
     else:
         start = np.zeros(0, dtype=float)
 
@@ -2594,7 +2778,19 @@ def _ce_geometry_residuals(
 
 
 def _enabled_residual_blocks(config: RaoSolverConfig) -> set[str]:
-    blocks = DEFAULT_RAO_RESIDUAL_BLOCKS if config.residual_blocks is None else config.residual_blocks
+    if config.residual_blocks is not None:
+        blocks = config.residual_blocks
+    else:
+        formulation = getattr(config, "formulation", "legacy")
+        if formulation == "characteristic":
+            blocks = CHARACTERISTIC_RAO_RESIDUAL_BLOCKS
+        elif formulation == "legacy":
+            blocks = DEFAULT_RAO_RESIDUAL_BLOCKS
+        else:
+            raise ValueError(
+                f"formulation must be 'legacy' or 'characteristic', "
+                f"got {formulation!r}"
+            )
     unknown = set(blocks).difference(ALL_RAO_RESIDUAL_BLOCKS)
     if unknown:
         raise ValueError(f"Unknown Rao residual block(s): {sorted(unknown)}")
@@ -2618,6 +2814,19 @@ def _rao_bvp_residual_groups(
         kernel_bd=config.kernel_bd, gamma=config.gamma,
     )
     _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    if (getattr(config, "formulation", "legacy") == "characteristic"
+            and ce.x is not None and len(ce.x) >= 2):
+        # Rao's length constraint is the *exit station*: L = z_C + ∫cot(φ)dr
+        # (see length_integrand's docstring; Rao 1958 functional).  The
+        # legacy value Σdx = x_E − x_D omits the start station z_C = x_D,
+        # which double-counts x_D against the ce_geometry x_E pin — the two
+        # become contradictory unless x_D → 0, and the solver resolves the
+        # contradiction by driving kernel_d_fraction to the throat plane
+        # (the observed kdf → 0.02 drift; length residual ≈ −x_D/L).
+        # Invisible pre-kernel-fix because the degenerate BD held D at
+        # x ≈ 0.  Gated to the characteristic formulation to avoid
+        # re-baselining legacy tests.
+        L_val = float(ce.x[-1])
     mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
 
@@ -2747,6 +2956,13 @@ def _build_residual_report(
     wall: WallSurface | None = None,
 ) -> RaoResidualReport:
     _, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    if (getattr(config, "formulation", "legacy") == "characteristic"
+            and ce.x is not None and len(ce.x) >= 2):
+        # Same exit-station length value the residual stack uses (Rao's
+        # L = z_C + ∫cot(φ)dr); keeps the bvp_ok gate consistent with
+        # the solved residual instead of re-introducing the legacy
+        # Σdx = x_E − x_D bookkeeping that double-counts x_D.
+        L_val = float(ce.x[-1])
     mdot_val, mdot_target, mdot_ref, _ = _mass_closure_fluxes(ce, config)
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
     stat = _stationarity_matrix(ce, config.gamma, config.pa_over_p0)
@@ -2789,6 +3005,85 @@ def _build_residual_report(
         characteristic_crossings=int(crossings),
         group_summaries=groups.summaries(),
     )
+
+
+def _wall_from_bde_region(
+    ce: ControlSurface,
+    kernel,
+    config: RaoSolverConfig,
+) -> tuple[np.ndarray, dict]:
+    """Build the wall from the *solved* CE via NASA's BDE-region march.
+
+    This is the physically consistent wall for the characteristic
+    formulation: the C+ line through a DE point is DE itself, so the wall
+    cannot be coupled to the CE by direct C+ chords (the deleted Phase-6
+    pairing blocks).  Instead, NASA's construction (Rice 2003 §3.4;
+    ``CalcBDERegion``/``CalcWallContour``) marches the region bounded by
+    BD, DE, and the wall: D comes from the solved ``kernel_d_fraction``,
+    DE is the solved CE polyline, the wall upstream of the BFE rows is
+    the kernel's own throat-arc wall, and each BFE row's wall point is
+    located by mass conservation.
+
+    Returns ``(raw_wall, diagnostics)`` in the same shape the
+    ``coupled``/``legacy`` wall builders use.  ``moc_compatibility_preserved``
+    is set by the *caller's* forward-MOC audit, not assumed here.
+    """
+    from raosim.nasa_moc import RaoTopology as _RaoTopology
+    from raosim.nasa_moc import calc_bde_region as _calc_bde_region
+
+    diagnostics: dict = {
+        "wall_method": "bde",
+        "warnings": [],
+        "postprocessed": False,
+        "moc_compatibility_preserved": False,
+    }
+    if kernel is None or not config.kernel_bd:
+        raise RuntimeError("wall_method='bde' requires a marched kernel")
+
+    # Solved topology: D at the solved arc fraction; DE = solved CE.
+    mass_bd, bd_segment = calc_mdot_bd(
+        config.kernel_bd, ce.kernel_d_fraction, config.gamma
+    )
+    d_node = bd_segment[-1]
+    de_nodes = _control_surface_flow_nodes(ce)
+    if len(de_nodes) < 3:
+        raise RuntimeError("solved CE has fewer than 3 nodes")
+    mass_de = curve_mass_flux(de_nodes, config.gamma)
+    topology = _RaoTopology(
+        B=config.kernel_bd[0],
+        BD=tuple(config.kernel_bd),
+        D=d_node,
+        DE=tuple(de_nodes),
+        E=de_nodes[-1],
+        d_fraction=float(ce.kernel_d_fraction),
+        mass_BD=float(mass_bd),
+        mass_DE=float(mass_de),
+        thrust_coefficient=float("nan"),
+        theta_control=float(np.mean(ce.theta)),
+        theta_B=float(getattr(kernel, "theta_B", 0.0)),
+        rao_stationarity_residual=float("nan"),
+    )
+    bfe = _calc_bde_region(kernel, topology)
+    kernel_wall = [rrc[0] for rrc in kernel.rrcs if rrc]
+    wall_pts = [(float(p.x), float(p.r)) for p in kernel_wall]
+    wall_pts += [(float(p.x), float(p.r)) for p in bfe.wall_contour]
+    raw_wall = np.asarray(wall_pts, dtype=float)
+
+    diagnostics.update({
+        "bfe_iD": int(bfe.iD),
+        "bfe_rows": len(bfe.grid_rows),
+        "bfe_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
+        "bfe_wall_contour_complete": bool(bfe.wall_contour_complete),
+        "kernel_wall_points": len(kernel_wall),
+        "bfe_wall_points": len(bfe.wall_contour),
+        "solved_mass_BD": float(mass_bd),
+        "solved_mass_DE": float(mass_de),
+    })
+    if not (bfe.complete_remaining_mesh and bfe.wall_contour_complete):
+        diagnostics["warnings"].append(
+            "BDE region march incomplete; wall is partial."
+        )
+    return raw_wall, diagnostics
 
 
 def construct_wall_from_ce_raw(
@@ -3473,7 +3768,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     if config.n_control < 8:
         raise ValueError("n_control must be at least 8")
 
-    ce0, kernel_bd_seed, topology_seed = _initial_ce_from_kernel(config)
+    ce0, kernel_bd_seed, topology_seed, kernel_obj = _initial_ce_from_kernel(config)
     solve_config = replace(
         config,
         kernel_bd=tuple(kernel_bd_seed) if kernel_bd_seed else None,
@@ -3546,7 +3841,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         else KERNEL_D_FRACTION_MAX
     )
     kdf_cap = float(np.clip(kdf_cap, 1e-3, 1.0))
-    lower_parts.append(np.array([-1e3, -1e3, -10.0, 0.0]))
+    kdf_floor = float(np.clip(
+        getattr(config, "kernel_d_fraction_min", 0.0), 0.0, kdf_cap - 1e-6,
+    ))
+    lower_parts.append(np.array([-1e3, -1e3, -10.0, kdf_floor]))
     upper_parts.append(np.array([1e3, 1e3, 10.0, kdf_cap]))
     if n_w > 0:
         # pair_fractions ∈ [0, 1] per CE node.
@@ -3608,6 +3906,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     )
     residual_vector = _scaled_rao_bvp_residual(result.x, ce0.r, solve_config)
     F_val, _, L_val = _integrate_ce(ce, config.gamma, config.pa_over_p0)
+    if (getattr(config, "formulation", "legacy") == "characteristic"
+            and ce.x is not None and len(ce.x) >= 2):
+        # Exit-station length (matches the characteristic residual stack).
+        L_val = float(ce.x[-1])
     mdot_val, mdot_target, mdot_ref, bd_segment = _mass_closure_fluxes(
         ce, solve_config
     )
@@ -3656,8 +3958,14 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     config.Rt, config.epsilon, config.gamma, ce, L_target,
                     config.n_kernel,
                 )
+            elif config.wall_method == "bde":
+                raw_wall, construction_diagnostics = _wall_from_bde_region(
+                    ce, kernel_obj, solve_config,
+                )
             else:
-                raise ValueError("wall_method must be 'coupled' or 'legacy'")
+                raise ValueError(
+                    "wall_method must be 'coupled', 'legacy', or 'bde'"
+                )
             if raw_wall.shape[0] >= 3:
                 slope_start = math.tan(theta_n)
                 slope_end = math.tan(_theta_e_design)
@@ -3716,12 +4024,29 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         }
         raw_wall = np.array([[Nx, Ny], [L_target, Re]], dtype=float)
 
-    export_wall, export_diag = resample_wall_for_export(
-        raw_wall,
-        start=(Nx, Ny),
-        end=(L_target, Re),
-        residual_tol=config.residual_tol,
-    )
+    try:
+        export_wall, export_diag = resample_wall_for_export(
+            raw_wall,
+            start=(Nx, Ny),
+            end=(L_target, Re),
+            residual_tol=config.residual_tol,
+        )
+    except RaoEndpointMismatchError as exc:
+        # Raw wall misses the target endpoints beyond the export limit.
+        # For the no-postprocessing wall paths (bde) this is a *reported*
+        # construction shortfall, not a crash: keep the raw wall visible,
+        # export the unmodified polyline, and let the reliability ladder
+        # downgrade via moc_ok=False.  (The legacy/coupled paths rarely
+        # hit this because their builders enforce endpoints upstream.)
+        warnings.append(f"Wall export endpoint mismatch: {exc}")
+        construction_diagnostics["moc_compatibility_preserved"] = False
+        construction_diagnostics["endpoint_mismatch"] = str(exc)
+        export_wall = raw_wall.copy()
+        export_diag = {
+            "endpoint_enforced_for_export": False,
+            "monotonic_cleanup_for_export": False,
+            "endpoint_mismatch_beyond_limit": True,
+        }
     warnings.extend(construction_diagnostics.get("warnings", []))
     if export_diag.get("endpoint_enforced_for_export"):
         warnings.append("Wall endpoints were enforced only on export geometry.")

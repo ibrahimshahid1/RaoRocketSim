@@ -89,6 +89,21 @@ class StaticParams(NamedTuple):
     bd_M: np.ndarray
     bd_theta: np.ndarray
     active: frozenset
+    #: pin M_ce[0] to D's kernel Mach in the ce_geometry start block
+    #: (full flow-state continuity at D — Rao 1958).  Mirrors
+    #: RaoSolverConfig.pin_d_mach; off by default because it is
+    #: unsatisfiable on a frozen kernel BD (see _ce_geometry_residuals).
+    pin_start_mach: bool = False
+    #: pin theta_ce[0] to D's interpolated kernel angle (mirrors
+    #: RaoSolverConfig.pin_d_theta; True = legacy).  False gives the
+    #: position-only D attachment that closes the J4 gate.
+    pin_start_theta: bool = True
+    #: characteristic formulation: the length constraint is the exit
+    #: station x_E (= z_C + ∫cot φ dr, Rao's functional) instead of the
+    #: legacy Σdx = x_E − x_D, which double-counts x_D against the x_E
+    #: endpoint pin.  Mirrors the formulation gate in
+    #: _rao_bvp_residual_groups.
+    length_from_exit_station: bool = False
 
 
 def params_from_config(config, physics_weight: float | None = None) -> StaticParams:
@@ -151,6 +166,11 @@ def params_from_config(config, physics_weight: float | None = None) -> StaticPar
         bd_full_flux=float(rv.curve_mass_flux(nodes, config.gamma)),
         bd_x=bd_x, bd_r=bd_r, bd_M=bd_M, bd_theta=bd_th,
         active=frozenset(active),
+        pin_start_mach=bool(getattr(config, "pin_d_mach", False)),
+        pin_start_theta=bool(getattr(config, "pin_d_theta", True)),
+        length_from_exit_station=(
+            getattr(config, "formulation", "legacy") == "characteristic"
+        ),
     )
 
 
@@ -191,18 +211,20 @@ def _bd_geometry(sp: StaticParams):
 
 
 def bd_point_at_fraction(sp: StaticParams, kdf):
-    """(x, r, theta) of point D at arc fraction ``kdf`` along BD.
+    """(x, r, theta, M) of point D at arc fraction ``kdf`` along BD.
 
     Equals ``bd_segment_at_fraction(kernel_bd, kdf)[-1]`` (linear state
-    interpolation along the polyline arc).
+    interpolation along the polyline arc; M floored at 1.000001 exactly
+    as the NumPy interp node is).
     """
-    bx, br, _, bth, _, cum = _bd_geometry(sp)
+    bx, br, bM, bth, _, cum = _bd_geometry(sp)
     total = cum[-1]
     target = jnp.clip(kdf, 0.0, 1.0) * total
     xD = jnp.interp(target, cum, bx)
     rD = jnp.interp(target, cum, br)
     thD = jnp.interp(target, cum, bth)
-    return xD, rD, thD
+    MD = jnp.maximum(jnp.interp(target, cum, bM), _NASA_M_FLOOR)
+    return xD, rD, thD, MD
 
 
 def bd_flux_to_fraction(sp: StaticParams, kdf):
@@ -358,7 +380,7 @@ def make_residual(sp: StaticParams):
         _, _, log_C, kdf = scalars
 
         # -- geometry-backed CE (x from left-Mach ODE, start at D) ----------
-        xD, rD, thD = bd_point_at_fraction(sp, kdf)
+        xD, rD, thD, MD = bd_point_at_fraction(sp, kdf)
         x_ce = integrate_x_from_left_mach(r_ce, th_ce, M_ce, xD)
         Mn = jnp.maximum(M_ce, _CE_M_FLOOR)      # CE flow-node M (1.001)
         mun = jnp.arcsin(1.0 / Mn)               # FlowNode.mu on CE nodes
@@ -375,11 +397,16 @@ def make_residual(sp: StaticParams):
         else:
             mass = empty
 
-        # -- length (Σ dx over CE segments with ds>1e-12) ---------------------
+        # -- length ------------------------------------------------------------
         if "length" in active:
-            dxs = x_ce[1:] - x_ce[:-1]
-            dss = jnp.hypot(dxs, r_ce[1:] - r_ce[:-1])
-            L_val = jnp.sum(jnp.where(dss >= 1e-12, dxs, 0.0))
+            if sp.length_from_exit_station:
+                # Rao's constraint: exit station x_E = z_C + ∫cot(φ)dr.
+                L_val = x_ce[-1]
+            else:
+                # legacy: Σdx over CE segments with ds > 1e-12
+                dxs = x_ce[1:] - x_ce[:-1]
+                dss = jnp.hypot(dxs, r_ce[1:] - r_ce[:-1])
+                L_val = jnp.sum(jnp.where(dss >= 1e-12, dxs, 0.0))
             length = ((L_val - L_t) / max(L_t, 1e-12))[None]
         else:
             length = empty
@@ -418,10 +445,17 @@ def make_residual(sp: StaticParams):
 
         # -- ce_geometry -------------------------------------------------------
         if "ce_geometry" in active:
-            start = jnp.stack([
+            start_vals = [
                 (r_ce[0] - rD) / r_scale,
-                (th_ce[0] - thD) / _ONE_DEG,
-            ])
+            ]
+            if sp.pin_start_theta:
+                start_vals.append((th_ce[0] - thD) / _ONE_DEG)
+            if sp.pin_start_mach:
+                # Flow-state continuity at D (characteristic formulation):
+                # the raw unknown M_ce[0] pins to D's kernel Mach, exactly
+                # mirroring _ce_geometry_residuals.  Unit Mach scale.
+                start_vals.append(M_ce[0] - MD)
+            start = jnp.stack(start_vals)
             if coupled:
                 endpoint = jnp.stack([
                     (x_ce[-1] - w_x[-1]) / x_scale,
@@ -527,8 +561,63 @@ def make_residual(sp: StaticParams):
     return residual
 
 
+def block_slices(sp: StaticParams) -> dict[str, slice]:
+    """Name -> slice into :func:`make_residual`'s output, honouring the
+    active block set.  Must mirror the concatenation order in
+    ``make_residual`` exactly (inactive blocks have zero length)."""
+    n, n_w = sp.n_ce, sp.n_wall
+    coupled = n_w > 0
+    a = sp.active
+    sizes = [
+        ("mass", 1 if "mass" in a else 0),
+        ("length", 1 if "length" in a else 0),
+        ("algebraic_stationarity", n if "algebraic_stationarity" in a else 0),
+        ("left_mach", (n - 1) if "left_mach" in a else 0),
+        ("moc_cplus", (n - 1) if "moc_cplus" in a else 0),
+        ("moc_cminus", (n - 1) if "moc_cminus" in a else 0),
+        ("ce_geometry",
+         ((1 + (1 if sp.pin_start_theta else 0)
+           + (1 if sp.pin_start_mach else 0)) + 2 + 2 * (n - 1))
+         if "ce_geometry" in a else 0),
+        ("regularization", 2 * (n - 2) if ("regularization" in a and n >= 3) else 0),
+        ("penalties",
+         ((n - 1) * (2 if coupled else 1)) if "penalties" in a else 0),
+        ("wall_endpoint", 4 if (coupled and "wall_endpoint" in a) else 0),
+        ("wall_tangency", (n_w - 1) if (coupled and "wall_tangency" in a) else 0),
+        ("cplus_ce_to_wall", n if (coupled and "cplus_ce_to_wall" in a) else 0),
+        ("wall_intersection", n if (coupled and "wall_intersection" in a) else 0),
+    ]
+    out: dict[str, slice] = {}
+    i = 0
+    for name, s in sizes:
+        out[name] = slice(i, i + s)
+        i += s
+    return out
+
+
+def constraint_indices(sp: StaticParams) -> list[int]:
+    """Indices of the *constraint-type* residual elements: the integral
+    constraints (mass, length), the CE start/end pins (first 4 entries of
+    ce_geometry), and the wall endpoint pins.  These are the elements the
+    JAX backend's constraint-weight ladder up-weights — they are single
+    entries drowned by O(n) physics elements in plain least squares."""
+    sl = block_slices(sp)
+    ids: list[int] = []
+    ids.extend(range(sl["mass"].start, sl["mass"].stop))
+    ids.extend(range(sl["length"].start, sl["length"].stop))
+    g = sl["ce_geometry"]
+    if g.stop > g.start:
+        n_pins = (1 + (1 if sp.pin_start_theta else 0)
+                  + (1 if sp.pin_start_mach else 0)) + 2  # start + endpoint
+        ids.extend(range(g.start, min(g.start + n_pins, g.stop)))
+    w = sl["wall_endpoint"]
+    ids.extend(range(w.start, w.stop))
+    return ids
+
+
 __all__ = [
     "StaticParams", "params_from_config", "make_residual", "unpack",
     "bd_point_at_fraction", "bd_flux_to_fraction",
     "integrate_x_from_left_mach", "SUPPORTED_BLOCKS",
+    "block_slices", "constraint_indices",
 ]

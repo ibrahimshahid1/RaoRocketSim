@@ -28,7 +28,7 @@ def build_problem():
         n_control=12, n_kernel=12, n_wall=12, max_nfev=800, residual_tol=2e-3,
         evaluate_moc=False, couple_wall=True, kernel_d_fraction_max=0.7,
     )
-    ce0, kbd, topo = rv._initial_ce_from_kernel(cfg)
+    ce0, kbd, topo, _kern = rv._initial_ce_from_kernel(cfg)
     sc = replace(cfg, kernel_bd=tuple(kbd))
     ce0.log_C = rv._seed_log_C_from_ce(ce0, cfg.gamma)
     wall = rv._initial_wall_guess(sc, ce0, topo)

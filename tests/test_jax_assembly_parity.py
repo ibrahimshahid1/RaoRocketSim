@@ -48,7 +48,7 @@ def _phase6_seed(couple_wall: bool = True):
         evaluate_moc=False, couple_wall=couple_wall,
         kernel_d_fraction_max=0.7,
     )
-    ce0, kernel_bd_seed, topology_seed = rv._initial_ce_from_kernel(config)
+    ce0, kernel_bd_seed, topology_seed, _kernel = rv._initial_ce_from_kernel(config)
     solve_config = replace(
         config, kernel_bd=tuple(kernel_bd_seed) if kernel_bd_seed else None,
     )

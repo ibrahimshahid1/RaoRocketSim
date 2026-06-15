@@ -17,7 +17,7 @@ from raosim.rao_variational import (
 
 def test_calc_mdot_bd_matches_curve_segment_flux():
     cfg = RaoSolverConfig(Rt=0.020, epsilon=10.0, n_control=8, n_kernel=8)
-    _ce, kernel_bd, _topology = _initial_ce_from_kernel(cfg)
+    _ce, kernel_bd, _topology, _kernel = _initial_ce_from_kernel(cfg)
 
     mdot, segment = calc_mdot_bd(kernel_bd, 0.5, cfg.gamma)
 
@@ -35,7 +35,7 @@ def test_calc_lrc_de_closes_d_to_e_and_left_mach_segments():
         n_control=8,
         n_kernel=8,
     )
-    _ce, kernel_bd, _topology = _initial_ce_from_kernel(cfg)
+    _ce, kernel_bd, _topology, _kernel = _initial_ce_from_kernel(cfg)
 
     topology = calc_lrc_de(
         kernel_bd,

@@ -80,20 +80,42 @@ def least_squares_jax(
     frac0 = jnp.clip(frac0, SEED_NUDGE, 1.0 - SEED_NUDGE)
     z0 = _logit(frac0)
 
-    def fn(z, args):
-        u = lo + span * jax.nn.sigmoid(z)
-        return residual(u)
+    # Constraint-weight continuation (RaoSolverConfig.jax_constraint_weight_
+    # ladder): mass/length and the endpoint pins are single residual
+    # elements vs O(n) physics elements; plain LM sacrifices them at a
+    # stall.  Re-solve with those elements up-weighted along the ladder,
+    # reusing each solution as the next seed.  The returned/reported
+    # residual is always the UNWEIGHTED one, so max_scaled and the
+    # reliability gates stay directly comparable across backends.
+    ladder = getattr(config, "jax_constraint_weight_ladder", None) or (1.0,)
+    n_res = int(np.asarray(residual(jnp.asarray(np.asarray(u0, dtype=float)))).size)
+    cids = assembly.constraint_indices(sp)
 
     steps = int(max_steps if max_steps is not None else max(config.max_nfev, 256))
     solver = optx.LevenbergMarquardt(rtol=LM_RTOL, atol=LM_ATOL)
-    sol = optx.least_squares(
-        fn, solver, z0, args=None, max_steps=steps, throw=False,
-    )
 
-    u_star = np.asarray(lo + span * jax.nn.sigmoid(sol.value), dtype=float)
+    z = z0
+    converged = False
+    n_steps = 0
+    for W in ladder:
+        wvec = np.ones(n_res)
+        if cids:
+            wvec[cids] = float(W)
+        wj = jnp.asarray(wvec)
+
+        def fn(zz, args, _wj=wj):
+            u = lo + span * jax.nn.sigmoid(zz)
+            return _wj * residual(u)
+
+        sol = optx.least_squares(
+            fn, solver, z, args=None, max_steps=steps, throw=False,
+        )
+        z = sol.value
+        converged = bool(sol.result == optx.RESULTS.successful)
+        n_steps += int(sol.stats.get("num_steps", 0))
+
+    u_star = np.asarray(lo + span * jax.nn.sigmoid(z), dtype=float)
     r_star = np.asarray(residual(jnp.asarray(u_star)), dtype=float)
-    converged = bool(sol.result == optx.RESULTS.successful)
-    n_steps = int(sol.stats.get("num_steps", -1))
     return SimpleNamespace(
         x=u_star,
         success=converged,

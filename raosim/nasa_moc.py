@@ -334,6 +334,17 @@ class RaoKernelError(RuntimeError):
     """Raised when the NASA-style RRC march cannot build a valid kernel."""
 
 
+class ThetaBTooLow(RaoKernelError):
+    """NASA ``SEC_FAIL_LOW``: the theta_B kernel cannot satisfy the inner
+    D/E condition from below — the outer SetThetaB loop should raise
+    theta_B (C++ MOC_GridCalc_BDE.cpp lines 359-420)."""
+
+
+class ThetaBTooHigh(RaoKernelError):
+    """NASA ``SEC_FAIL_HIGH``: the inner D/E condition overshoots even at
+    the wall end of BD — the outer SetThetaB loop should lower theta_B."""
+
+
 def _push_throat_point_to_supersonic(
     r_target: float,
     x_initial: float,
@@ -1801,6 +1812,14 @@ def find_point_e(
     p0 = nodes[0]
     target_step = base_step_factor
 
+    # NASA's (commented) intent in FindPointE: accumulate DE in roughly
+    # ``nRRCPlus`` equal mass increments (``dMdot = mdotMatch/nRRCPlus``,
+    # C++ line ~1900).  Capping each accepted step's annular mass at
+    # mdot_match/n_steps guarantees DE carries >= n_steps nodes, which the
+    # downstream consumers (CE seeding, length estimate) need; the
+    # uncapped path could jump D->E in one RK step on short nozzles.
+    dmdot_cap = mdot_match / max(int(n_steps), 1)
+
     steps_taken = 0
     stalls = 0
     while mass_total < mdot_match:
@@ -1817,6 +1836,16 @@ def find_point_e(
         while attempts < 12:
             rk = nasa_runge_kutta(h, p0.r, p0.x, p0.M, p0.theta, gamma)
             if rk is not None and rk[0] > 1.000001 and rk[3] > p0.r and math.isfinite(rk[0]):
+                # Mass-increment cap: shrink the step until this segment
+                # carries at most dmdot_cap.
+                p_try = MOCNode(float(rk[1]), float(rk[3]),
+                                float(max(rk[0], 1.000001)),
+                                float(rk[2]), gamma)
+                if _annular_mdot(p0, p_try) > dmdot_cap and attempts < 11:
+                    h *= sub_step_factor
+                    attempts += 1
+                    rk = None
+                    continue
                 break
             h *= sub_step_factor
             attempts += 1
@@ -1892,6 +1921,111 @@ def find_point_e(
 # ----------------------------------------------------------------------
 
 
+def _calc_lrc_de_fixed_end(
+    evaluate,
+    bd_rrc: list[MOCNode],
+    bd_flow_nodes: tuple,
+    mass_along_bd: np.ndarray,
+    theta_B_value: float,
+    r_E: float,
+    Rt: float,
+    gamma: float,
+    pa_over_p0: float,
+) -> RaoTopology:
+    """NASA ``CalcLRCDE`` FIXEDEND branch (C++ lines 1560-1610).
+
+    Walk D inward along the actual BD grid nodes until the inner residual
+    ``(r_E_found - r_E)/r_E`` changes sign from negative to positive, then
+    secant between the bracketing nodes (C++ tolerance 1e-7, 50 iters).
+
+    Fail semantics: if even D = B (zero BD mass, E = B) overshoots the
+    target radius the kernel is over-expanded -> :class:`ThetaBTooHigh`
+    (C++ ``SEC_FAIL_HIGH``).  If the walk exhausts BD without reaching the
+    target, the kernel carries too little expansion ->
+    :class:`ThetaBTooLow`.  (The C++ reuses ``SEC_FAIL_HIGH`` for the
+    exhausted case via a code path shared with the RAO branch; for the
+    FIXEDEND walk the physical monotonicity is the other way — r_E grows
+    with D depth, so exhaustion means theta_B must *rise*.  The outer
+    ``set_theta_b`` relies on these directions to bracket.)
+    """
+    arcs = _bd_arc_lengths(bd_rrc)
+    total = float(arcs[-1])
+    if total <= 1e-15:
+        raise RaoKernelError("BD has zero arc length")
+    node_fracs = [float(a / total) for a in arcs]
+
+    # Pre-check at D = B (C++: param_err[0] = r[0][j] - rMatch).
+    err_b = (bd_rrc[0].r - r_E) / max(abs(r_E), 1e-12)
+    if err_b > 0.0:
+        raise ThetaBTooHigh(
+            f"wall point B (r={bd_rrc[0].r:.6g}) already exceeds the target "
+            f"exit radius {r_E:.6g}; lower theta_B"
+        )
+
+    # Walk D inward along grid nodes while the residual stays negative.
+    prev_frac = node_fracs[0]
+    prev_err = err_b
+    bracket = None
+    for i in range(1, len(bd_rrc)):
+        frac_i = node_fracs[i]
+        err_i, *_ = evaluate(frac_i)
+        if math.isnan(err_i):
+            prev_frac, prev_err = frac_i, err_i
+            continue
+        if not math.isnan(prev_err) and prev_err < 0.0 <= err_i:
+            bracket = (prev_frac, prev_err, frac_i, err_i)
+            break
+        prev_frac, prev_err = frac_i, err_i
+    if bracket is None:
+        raise ThetaBTooLow(
+            f"no D along BD reaches the target exit radius {r_E:.6g} "
+            f"(deepest r_E error {prev_err:.3g}); raise theta_B"
+        )
+
+    x0, err0, x1, err1 = bracket
+    packed = evaluate(x1)
+    last_packed = packed
+    err1 = packed[0]
+    for _ in range(50):
+        if abs(err1) <= 1e-7:
+            break
+        if math.isnan(err0) or math.isnan(err1) or err0 == err1:
+            break
+        x2 = x1 - err1 * (x1 - x0) / (err1 - err0)
+        x2 = max(0.0, min(x2, 1.0))
+        packed = evaluate(x2)
+        err2 = packed[0]
+        if math.isnan(err2):
+            x2 = 0.5 * (x0 + x1)
+            packed = evaluate(x2)
+            err2 = packed[0]
+        last_packed = packed
+        x0, err0 = x1, err1
+        x1, err1 = x2, err2
+
+    residual_final, mass_BD_final, D_final, de_nodes, mass_DE_final, _ = last_packed
+    de_flow_nodes = tuple(node.to_flow_node() for node in de_nodes)
+    cf = surface_thrust_coefficient(de_nodes, gamma, Rt, pa_over_p0)
+    d_arc = _arc_position_of_D(bd_rrc, D_final.x)
+    theta_control = float(np.mean([node.theta for node in de_nodes]))
+    return RaoTopology(
+        B=bd_rrc[0].to_flow_node(),
+        BD=bd_flow_nodes,
+        D=D_final.to_flow_node(),
+        DE=de_flow_nodes,
+        E=de_nodes[-1].to_flow_node(),
+        d_fraction=float(d_arc),
+        mass_BD=float(mass_BD_final),
+        mass_DE=float(mass_DE_final),
+        thrust_coefficient=float(cf),
+        theta_control=float(theta_control),
+        theta_B=float(theta_B_value),
+        rao_stationarity_residual=float(
+            residual_final if math.isfinite(residual_final) else math.nan
+        ),
+    )
+
+
 def _rao_theta_calc(state: MOCNode, gamma: float, pa_over_p0: float) -> float:
     """Compute the Rao theta_E condition (NASA CalcLRCDE).
 
@@ -1922,16 +2056,31 @@ def calc_lrc_de(
     epsilon: float,
     pa_over_p0: float = 0.0,
     n_points: int = 24,
+    end_condition: str = "rao_free",
 ) -> RaoTopology:
     """
     NASA ``CalcLRCDE`` analogue (C++ line 1472).
 
-    Secant-iterate on the axial location of D along the last RRC of the
-    kernel so the Rao stationarity residual
-    ``(theta_E_integrated - theta_calc(p_E, rho_E, M_E)) / |theta_calc|``
-    converges to zero.  The Mach-line geometry of DE is enforced by NASA's
-    derivative system (``nasa_deriv``), and the mass closure
-    ``mass_BD = mass_DE`` is enforced by ``find_point_e``.
+    Secant-iterate on the location of D along the last RRC of the kernel.
+    The inner residual depends on ``end_condition`` (NASA's ``nType``):
+
+    ``"rao_free"`` (C++ ``nType == RAO``)
+        Rao's free-exit stationarity: ``(theta_E - theta_calc)/theta_calc``
+        with ``theta_calc`` from Rao eq. 14 evaluated at E.  Nozzle length
+        is an *output*; ``x_E``/``r_E`` do not constrain the topology.
+    ``"fixed_end"`` (C++ ``nType == FIXEDEND``)
+        The DE endpoint must land on the prescribed exit radius:
+        ``param_err = r_E_found - r_E``.  This is the branch a fixed
+        (L, epsilon) design point needs; the *length* mismatch is then the
+        outer ``set_theta_b`` parameter, mirroring NASA's SetThetaB /
+        CalcLRCDE division of labour (C++ lines 294-470 and 1560-1610).
+        Raises :class:`ThetaBTooHigh` when even D=B overshoots ``r_E``
+        (C++ ``SEC_FAIL_HIGH``) and :class:`ThetaBTooLow` when no D along
+        BD reaches it (the kernel carries too little expansion).
+
+    The Mach-line geometry of DE is enforced by NASA's derivative system
+    (``nasa_deriv``), and the mass closure ``mass_BD = mass_DE`` is
+    enforced by ``find_point_e``.
 
     ``kernel`` may be a :class:`MOCKernel`, a wall-first list of
     :class:`MOCNode`, or a wall-first tuple/list of :class:`FlowNode`
@@ -1939,6 +2088,11 @@ def calc_lrc_de(
     function falls back to a single-shot solve using the supplied curve
     as BD and skips the outer secant.
     """
+    if end_condition not in ("rao_free", "fixed_end"):
+        raise ValueError(
+            f"end_condition must be 'rao_free' or 'fixed_end', "
+            f"got {end_condition!r}"
+        )
     bd_rrc, mass_along_bd, theta_B_value = _resolve_bd_and_massflow(
         kernel, gamma, x_E, r_E,
     )
@@ -1956,12 +2110,24 @@ def calc_lrc_de(
         mass_BD, D, _, _ = calc_mdot_bd_grid(bd_rrc, mass_along_bd, f_clamped)
         de_nodes, mass_DE = find_point_e(D, mass_BD, gamma, n_steps=n_points)
         E = de_nodes[-1]
-        theta_calc = _rao_theta_calc(E, gamma, pa_over_p0)
-        if math.isnan(theta_calc) or theta_calc <= 0.0:
-            residual = float("nan")
+        if end_condition == "fixed_end":
+            # NASA FIXEDEND: absolute exit-radius mismatch, normalised by
+            # r_E so the 1e-7 tolerance below is scale-free.
+            residual = (E.r - r_E) / max(abs(r_E), 1e-12)
+            theta_calc = float("nan")
         else:
-            residual = (E.theta - theta_calc) / theta_calc
+            theta_calc = _rao_theta_calc(E, gamma, pa_over_p0)
+            if math.isnan(theta_calc) or theta_calc <= 0.0:
+                residual = float("nan")
+            else:
+                residual = (E.theta - theta_calc) / theta_calc
         return residual, mass_BD, D, de_nodes, mass_DE, theta_calc
+
+    if end_condition == "fixed_end":
+        return _calc_lrc_de_fixed_end(
+            evaluate, bd_rrc, bd_flow_nodes, mass_along_bd,
+            theta_B_value, r_E, Rt, gamma, pa_over_p0,
+        )
 
     # NASA-style bracket: scan from next-to-wall to next-to-axis along
     # BD by arc-length fraction.  Skip points where DE integration
@@ -2630,18 +2796,27 @@ def set_theta_b(
     abs_tol: float = 1e-6,
     starting_line_method: str = "hall",
     L_target: float | None = None,
+    Ru: float | None = None,
+    end_condition: str = "fixed_end",
 ) -> tuple[RaoTopology, MOCKernel]:
     """
-    NASA ``SetThetaB`` outer secant on the initial wall expansion angle.
+    NASA ``SetThetaB`` outer loop on the initial wall expansion angle.
 
-    The outer loop adjusts ``theta_B`` so the converged DE endpoint lands
-    at the desired (x_E, r_E) = (L_target, r_exit).  The inner loop is
-    :func:`calc_lrc_de`, which iterates on the axial D-location until the
-    Rao stationarity residual vanishes.
+    Division of labour mirrors the C++ (MOC_GridCalc_BDE.cpp lines
+    294-470): the *inner* loop (:func:`calc_lrc_de`) places D along BD so
+    the DE endpoint satisfies the end condition; the *outer* loop here
+    adjusts ``theta_B`` so the remaining exit parameter matches.
 
-    Returns ``(topology, kernel)``.  The ``kernel`` is the final
-    converged kernel; callers needing the kernel BD for downstream
-    residual evaluation can read ``kernel.bd``.
+    With ``end_condition="fixed_end"`` (default — the fixed (L, epsilon)
+    design point): inner residual is ``r_E - Re``; outer residual is
+    ``(x_E - L_target)/L_target``.  :class:`ThetaBTooLow` /
+    :class:`ThetaBTooHigh` from the inner loop move the bisection bracket
+    directly (the C++ SEC_FAIL_LOW/HIGH handling at lines 359-430).
+
+    With ``end_condition="rao_free"`` the legacy behaviour is kept:
+    inner = Rao free-exit stationarity, outer = exit-radius mismatch.
+
+    Returns ``(topology, kernel)``.  ``kernel.bd`` is the converged BD.
     """
     if not 0.0 < length_pct <= 100.0:
         raise ValueError("length_pct must be in (0, 100]")
@@ -2657,6 +2832,7 @@ def set_theta_b(
         kernel = build_kernel(
             Rt, Rd, theta_B_rad, gamma, n_kernel,
             starting_line_method=starting_line_method,
+            Ru=Ru,
         )
         topology = calc_lrc_de(
             kernel,
@@ -2667,49 +2843,67 @@ def set_theta_b(
             epsilon=epsilon,
             pa_over_p0=pa_over_p0,
             n_points=n_de_points,
+            end_condition=end_condition,
         )
         return topology, kernel
 
-    theta_low = math.radians(8.0)
-    theta_high = math.radians(45.0)
-    theta_b = math.radians(theta_b_init_deg)
-    try:
-        topo, kernel = run(theta_b)
-    except Exception:
-        topo, kernel = run(math.radians(20.0))
-        theta_b = math.radians(20.0)
-
     def endpoint_error(t: RaoTopology) -> float:
-        # NASA SetThetaB uses theta_E residual relative to theta_calc;
-        # when the BVP is run with fixed (L, Re) we additionally require
-        # the integrated radius to land at Re.  Combine both as a single
-        # secant target with the Re mismatch dominating when it is large.
-        dr = t.E.r - Re
-        return float(dr / max(Re, 1e-12))
+        if end_condition == "fixed_end":
+            # Outer parameter: nozzle length (inner already pinned r_E).
+            return float((t.E.x - L_target) / max(L_target, 1e-12))
+        return float((t.E.r - Re) / max(Re, 1e-12))
 
-    err = endpoint_error(topo)
-    best = (topo, kernel, abs(err))
+    theta_low = math.radians(5.0)
+    theta_high = math.radians(44.0)
+    theta_b = math.radians(theta_b_init_deg)
+
+    best: tuple[RaoTopology, MOCKernel, float] | None = None
+    err = None
+    topo = kernel = None
     for _ in range(max_iter):
-        if abs(err) <= abs_tol:
-            break
-        if err > 0.0:
-            theta_high = theta_b
-            theta_b_new = 0.5 * (theta_low + theta_b)
-        else:
-            theta_low = theta_b
-            theta_b_new = 0.5 * (theta_b + theta_high)
-        if abs(theta_b_new - theta_b) < 1e-7:
-            break
-        theta_b = theta_b_new
         try:
             topo, kernel = run(theta_b)
-        except Exception:
-            theta_low = theta_b
+            err = endpoint_error(topo)
+        except ThetaBTooLow:
+            theta_low = max(theta_low, theta_b)
+            theta_b = 0.5 * (theta_b + theta_high)
             continue
-        err = endpoint_error(topo)
-        if abs(err) < best[2]:
-            best = (topo, kernel, abs(err))
+        except ThetaBTooHigh:
+            theta_high = min(theta_high, theta_b)
+            theta_b = 0.5 * (theta_low + theta_b)
+            continue
+        except RaoKernelError:
+            # Kernel build/march failure — treat like "too low" (weak
+            # kernels fail earliest) but keep the bracket shrinking.
+            theta_low = max(theta_low, theta_b)
+            theta_b = 0.5 * (theta_b + theta_high)
+            continue
 
+        if best is None or abs(err) < best[2]:
+            best = (topo, kernel, abs(err))
+        if abs(err) <= abs_tol:
+            break
+        # err > 0: DE ends beyond the target length.  A gentler initial
+        # expansion (lower theta_B) makes the nozzle *longer* for the same
+        # exit radius, so overlength means theta_B must RISE; underlength
+        # means it must fall.  (Same monotonicity NASA's SetThetaB trace
+        # shows in outputs_M3.5Perf/ThetaB.out: paramErr falls as ThetaB
+        # falls toward the converged value from above.)
+        if err > 0.0:
+            theta_low = max(theta_low, theta_b)
+            theta_b = 0.5 * (theta_b + theta_high)
+        else:
+            theta_high = min(theta_high, theta_b)
+            theta_b = 0.5 * (theta_low + theta_b)
+        if theta_high - theta_low < 1e-7:
+            break
+
+    if best is None:
+        raise RaoKernelError(
+            "set_theta_b: no theta_B in "
+            f"[{math.degrees(theta_low):.1f}, {math.degrees(theta_high):.1f}] deg "
+            "produced a valid topology"
+        )
     return best[0], best[1]
 
 

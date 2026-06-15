@@ -17,15 +17,114 @@
 > BD matches `LastKernel.out`); (2) the KL start line was fed the
 > *downstream* throat radius where the C++ passes `rUp` — fixed via
 > `build_kernel(Ru=...)` + `RaoSolverConfig.throat_upstream_radius_factor`
-> (Rao convention 1.5).  With a real kernel: max_scaled ≈ **0.5** on the
-> ε=10/L80/w=1.0 reference (from 8).  Remaining gap to the 2e-3 gate is
-> **seed topology** — `calc_lrc_de`/`set_theta_b` collapse to a degenerate
-> D≈E on marched kernels, so the CE seed stays the legacy linear ramp
-> (REWRITE_PLAN Phase 12 work; tracked by the xfail in
-> `tests/test_jax_convergence.py`).  J3b (lax.scan march port) and J5/J6
-> remain open; J3b is *not* required for J4 (the kernel BD is static
-> during the solve) but becomes the natural follow-on once the topology
-> seed closes.
+> (Rao convention 1.5).  With a real kernel: max_scaled ≈ **0.5** on
+> the ε=10/L80/w=1.0 reference (from 8).
+>
+> **Topology seed landed (same session).**  The degenerate `calc_lrc_de`/
+> `set_theta_b` D≈E collapse was structural: the Python port only
+> implemented NASA's free-exit RAO inner branch, so the fixed-(L, ε)
+> composite was overdetermined.  Fixed by porting the **FIXEDEND** branch
+> (C++ lines 1560-1610): `calc_lrc_de(end_condition="fixed_end")` walks D
+> along the marched BD until DE's endpoint pins r_E (secant to 1e-7;
+> mass_BD == mass_DE exactly), and `set_theta_b` secants θ_B on the
+> *length* mismatch with `ThetaBTooLow/High` fail-bracketing (C++
+> SEC_FAIL semantics).  `find_point_e` honours `n_steps` via a per-step
+> mass cap (C++ `dMdot = mdotMatch/nRRCPlus` intent).  The BVP seeds its
+> CE from the resampled DE (`RaoSolverConfig.ce_seed="auto"`).  Result:
+> max_scaled ≈ **0.49** with the Rao physics blocks (stationarity, C±,
+> CE↔wall C+) at ~**3e-2** — misfit now concentrates in
+> length/wall-endpoint.  The remaining J4 gap is genuine variational
+> tension, not infrastructure: the march's unit-process edge caps
+> θ_B ≈ 24° for Rd = 0.382·Rt, the fixed-end topology there runs ~9%
+> long, and at weight 1.0 LM trades length against stationarity.  Next
+> levers: length continuation from the topology's natural length, march
+> robustness past the θ-cap (Phase 12.4 CalcRRCsAlongArc completion), or
+> multiplier/transversality blocks pinning the fixed-length optimum.
+> J3b (lax.scan march port) and J5/J6 remain open; J3b is *not* required
+> for J4 (the kernel BD is static during the solve).
+>
+> **Formulation fix (opt-in) — max_scaled 0.5 → 0.062.**  Root cause of
+> the residual-shuffling stalls: two scaffold blocks are structurally
+> unsatisfiable at the converged Rao topology, because the refactored CE
+> is a C+ characteristic *by construction* — ``moc_cminus`` applied the
+> C− relation along those C+ segments, and ``cplus_ce_to_wall`` /
+> ``wall_intersection`` paired CE nodes to the wall along C+ slopes (the
+> C+ through a DE point *is* DE; it meets the wall only at E).  Rao's DE
+> closure carries C+ relations + stationarity + mass/length only (Rao
+> 1958; AIAA 99-2584; NASA FindPointE integrates only the LRC system);
+> the wall belongs to the BDE-region march (``calc_bde_region``).
+> Landed as ``RaoSolverConfig.formulation="characteristic"``
+> (``CHARACTERISTIC_RAO_RESIDUAL_BLOCKS``) plus a constraint-weight
+> ladder in the JAX solver (``jax_constraint_weight_ladder``; mass/
+> length/endpoint pins are single elements drowned by O(n) physics
+> elements in plain least squares).  Reference case, weight 1.0:
+> **max_scaled = 0.062** — mass 5e-3, C+ compat 8e-3, remaining floor in
+> stationarity-at-D (~6e-2) / regularizer / length (3e-2).  Legacy stack
+> stays the default until Phase 6/7 re-baseline.
+>
+> **D-closure probe (frozen-BD floor identified).**  Pinning M_ce[0] to
+> D's kernel Mach (full state continuity at D — classically how D is
+> *selected*) made things worse on the frozen BD (cp 8e-3 → 0.78): with
+> ``config.kernel_bd`` fixed by the seed's θ_B-capped kernel, D's
+> (r, θ, M) is a 1-parameter curve that cannot satisfy the fixed-(L, ε)
+> optimum.  Landed as ``RaoSolverConfig.pin_d_mach`` (default False)
+> with the failure mode documented.  Per-node diagnostic at the 0.062
+> solution: stationarity is a smooth monotone ramp (−0.062 at D →
+> +0.015 at E) — the frozen-BD inconsistency spread along the CE — and
+> kdf drifts to ~0.02 (near-streamline DE closing mass trivially).
+> Conclusion: the remaining closure requires **θ_B/BD inside the
+> iteration** — either an outer BD-refresh loop around the BVP, or the
+> J3b differentiable march making θ_B a solved unknown.  That promotes
+> J3b from "nice for J6 gradients" to the J4 critical path.
+>
+> **BDE wall path wired.**  ``wall_method="bde"`` builds the wall from
+> the *solved* CE via NASA's region march (``_wall_from_bde_region``:
+> solved kdf → D, solved CE → DE, ``calc_bde_region``; wall = kernel
+> throat-arc wall + BFE wall contour).  Supporting knobs:
+> ``kernel_d_fraction_min`` (guards the degenerate kdf→0.02 topology)
+> and a graceful export guard (endpoint mismatch downgrades reliability
+> instead of raising).  Status: the BFE mesh completes and the wall
+> lands exactly on r_E, but x overshoots (~+20% at L87) — the same
+> frozen-BD length tension; and the forward-MOC audit needs alignment
+> (it marches a SplineWall + chart-θ_N starting line, inconsistent with
+> a BDE-built wall).  Meanwhile the *seed-topology* contour
+> (``set_theta_b`` fixed_end → ``calc_bde_region``) is complete and
+> closed at the kernel's natural length (≈L87 for ε=10): wall ends
+> exactly at E.  Bottom line: every remaining gap — J4's 2e-3, exact
+> length at arbitrary (ε, L%), and a closed BDE wall — reduces to
+> **BD-in-the-loop** (outer kernel refresh or the J3b differentiable
+> march).
+>
+> **Length-bookkeeping fix — max_scaled 0.062 → 0.0030 (gate 2e-3).**
+> The dominant "frozen-BD" symptom was a consistency bug: the length
+> residual used Σdx = x_E − x_D while ce_geometry pinned x_E = L —
+> contradictory unless x_D → 0 (hence kdf → 0.02; len ≈ −x_D/L).  Rao's
+> constraint is the *exit station* L = z_C + ∫cot(φ)dr (length_integrand
+> docstring).  Fixed characteristic-gated in both backends + report
+> layer.  Result: mass 5e-9, length 3e-9, kdf interior at 0.273 unaided,
+> only stationarity left at ~3.0e-3 — resolution-independent AND
+> θ_B-insensitive: the cheap θ_B-refresh extraction (secant on
+> kernel-state stationarity at the solved kdf/log_C) recovers
+> θ_B = 21.87° ≈ the chart θ_N (21.9°!) yet re-solving there doesn't
+> move the floor.  The frozen-BD hypothesis is resolved.
+>
+> **J4 GATE PASSED (2026-06-10): max_scaled = 1.157e-3 ≤ 2e-3.**
+> The last 1.5× was the θ_D start pin: the node dump showed an M
+> discontinuity at the attachment (kernel M_D = 3.78 vs CE M₀ = 3.12,
+> uniform-M start region) — pinning the CE start angle to the
+> *interpolated approximate* kernel value imports kernel discretization
+> error into the stationarity chain at full weight.  Position-only D
+> attachment (``pin_d_theta=False``; r pinned, θ/M free; D's position
+> and the B→D mass budget stay enforced) closes the gate:
+> mass 2e-9, length 6e-10, kdf interior at 0.304, converged=True
+> (``test_j4_gate_passes_with_position_only_attachment``).  Full state
+> continuity (pin_d_mach) remains blocked by the ~24.2° march cap
+> (Picard-θ_B drives into it) — Phase 12.4 territory, no longer
+> gate-blocking.  Next: flip the characteristic/pin defaults and
+> re-baseline Phase 6/7, J5 chart sweep under JAX, BDE wall closure at
+> the converged solution (kdf now interior + length consistent), J6
+> ``rao_sensitivities``.
+
 
 **Architecture & implementation plan.** This document is the build plan for
 re-expressing the Rao optimum-thrust contour solver as an end-to-end
