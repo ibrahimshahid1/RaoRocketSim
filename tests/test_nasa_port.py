@@ -102,3 +102,97 @@ def test_nasa_kernel_mass_consistency(case):
     m0 = float(calc_massflow_along_rrc(kernel.rrcs[0], GAMMA)[0])
     mN = float(calc_massflow_along_rrc(kernel.bd, GAMMA)[0])
     assert mN == pytest.approx(m0, rel=5e-2)
+
+
+# --------------------------------------------------------------------------- #
+# Phase 12.4 follow-through: the fixed-end topology closes at the Rao          #
+# reference design point once the kernel march clears the old ~24.2 deg cap.   #
+# --------------------------------------------------------------------------- #
+@pytest.mark.slow
+def test_fixed_end_topology_closes_at_rao_reference():
+    """set_theta_b must close (L, r_E) exactly for epsilon=10 / L80.
+
+    Pre-12.4 the theta_B secant ran into the march's false mass-check
+    halt at ~24.2 deg and the fixed-(L, epsilon) topology came out ~9%
+    long.  With folded-RRC mass integration fixed, the secant converges
+    at theta_B ~ 25.5 deg with the DE endpoint exactly on the commanded
+    exit (observed: |dL/L| ~ 1e-6, |dr_E/r_E| ~ 1e-7, mass_BD == mass_DE).
+
+    The wall built from this topology (kernel arc wall + BDE-region
+    march) is a true bell: slope peaks ~ theta_B just after the throat
+    arc and decreases monotonically to the exit (observed 26.3 deg peak
+    at ~5% length, 11.2 deg exit at n_kernel=48).
+    """
+    from raosim.nasa_moc import set_theta_b
+
+    Rt = 0.020
+    epsilon = 10.0
+    length_pct = 80.0
+    # Same exit-station convention as solve_rao_bvp (_target_length).
+    from raosim.rao_variational import _target_length
+    Ln = _target_length(Rt, epsilon, length_pct)
+    Re = math.sqrt(epsilon) * Rt
+
+    topo, kern = set_theta_b(
+        Rt, epsilon, length_pct, GAMMA, 0.01,
+        theta_b_init_deg=21.87, n_kernel=24, n_de_points=24,
+        starting_line_method="kliegel_levine", L_target=Ln,
+        Ru=1.5 * Rt, end_condition="fixed_end", max_iter=30,
+    )
+    assert kern.reached_wall
+    # theta_B converged above the historic cap, in the expected band.
+    assert 24.0 < math.degrees(topo.theta_B) < 27.0
+    # Exact closure at the commanded exit station.
+    assert abs(topo.E.x - Ln) / Ln < 1e-3
+    assert abs(topo.E.r - Re) / Re < 1e-3
+    # Mass budget: DE carries exactly the wall-to-D mass.
+    assert topo.mass_DE == pytest.approx(topo.mass_BD, rel=1e-6)
+    # D interior on BD (not collapsed onto B or the axis).
+    assert 0.02 < topo.d_fraction < 0.95
+
+
+@pytest.mark.slow
+def test_fixed_end_topology_wall_is_bell_shaped():
+    """Kernel arc wall + BDE wall from the fixed-end topology = TOP bell.
+
+    This is the geometry-level counterpart of the (still-xfail) solved-CE
+    shape test in test_jax_convergence.py: slope must peak near theta_B
+    right after the throat arc and decrease monotonically — no mid-bell
+    flare (the old Rao-case contour peaked 35.6 deg at 60% length).
+    """
+    from raosim.nasa_moc import set_theta_b
+    from raosim.rao_variational import _target_length
+
+    Rt = 0.020
+    Ln = _target_length(Rt, 10.0, 80.0)
+    Re = math.sqrt(10.0) * Rt
+    topo, kern = set_theta_b(
+        Rt, 10.0, 80.0, GAMMA, 0.01,
+        theta_b_init_deg=21.87, n_kernel=48, n_de_points=40,
+        starting_line_method="kliegel_levine", L_target=Ln,
+        Ru=1.5 * Rt, end_condition="fixed_end", max_iter=30,
+    )
+    bfe = calc_bde_region(kern, topo)
+    assert bfe.complete_remaining_mesh
+    assert bfe.wall_contour_complete
+
+    kernel_wall = [(row[0].x, row[0].r) for row in kern.rrcs if row]
+    bfe_wall = [(p.x, p.r) for p in bfe.wall_contour]
+    wall = np.asarray(kernel_wall + bfe_wall)
+
+    # Exit lands on the commanded station.
+    assert wall[-1, 0] == pytest.approx(Ln, rel=1e-3)
+    assert wall[-1, 1] == pytest.approx(Re, rel=1e-3)
+
+    ang = np.degrees(np.arctan2(np.diff(wall[:, 1]), np.diff(wall[:, 0])))
+    s = np.concatenate([[0.0], np.cumsum(np.hypot(np.diff(wall[:, 0]),
+                                                  np.diff(wall[:, 1])))])
+    i_pk = int(np.argmax(ang))
+    theta_b_deg = math.degrees(topo.theta_B)
+    # Peak sits just after the throat arc, near theta_B (small overshoot
+    # from arc/BFE attachment discretisation is tolerated).
+    assert s[i_pk] / s[-1] < 0.10
+    assert ang.max() == pytest.approx(theta_b_deg, abs=1.5)
+    # Monotone decreasing after the peak; physical exit angle.
+    assert np.all(np.diff(ang[i_pk:]) <= 0.25)
+    assert 6.0 <= ang[-1] <= 14.0

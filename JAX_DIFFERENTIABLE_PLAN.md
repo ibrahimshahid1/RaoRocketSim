@@ -1,5 +1,83 @@
 # RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool
 
+> **STATUS-HEAD (2026-06-11): Phase 12.4 LANDED — the ~24.2° "march cap"
+> was never the unit process.**  Root cause: at Rao's sharp radius
+> (Rd = 0.382·Rt) the RRC slope tan(θ−μ) changes sign mid-row once the
+> wall passes ~24.3° (θ crosses μ; the characteristic climbs in r before
+> descending — a *benign fold*, verified non-crossing with neighbouring
+> RRCs, so not a limit line).  `calc_massflow_along_rrc`'s
+> `dr <= 1e-15` guard zeroed those segments — the C++ integrates
+> `fabs(mdot_a)·fabs(da)` straight through them
+> (MOC_GridCalc_BDE.cpp:3217-3228) — so the first folded row read −13.6%
+> mass and `build_kernel`'s 5% sanity check halted the march at
+> θ_w ≈ 24.2°, masquerading as a unit-process cap.  Fixed with the
+> algebraically identical regularised product form
+> `0.5·π·(r₁+r₂)·|ρu_sum·dr + ρv_sum·dx|` (finite at dr = 0; monotone
+> rows bit-identical to the oracle-validated path).  Consequences, all
+> test-pinned (march-parity +3, nasa_port +2 slow):
+> the march reaches θ_B = 30.000° at n_kernel 24/60/101 (M_B
+> 2.165 ± 0.001, mass drift −0.11%); **`set_theta_b` now closes the
+> fixed-(L, ε) topology exactly** at the Rao reference — θ_B = 25.54°,
+> |ΔL/L| ≈ 1e-6, |Δr_E/r_E| ≈ 1e-7, kdf = 0.152 (the "~9% long" item is
+> resolved); and the **seed-topology wall is a true bell at the
+> commanded (ε=10, L80)**: slope peaks 26.3° at 5.4% length (θ_B + ~0.7°
+> arc/BFE discretisation overshoot), decreases monotonically to 11.2° at
+> the exit, endpoint exactly on (L, Re) — the 35.6° mid-bell flare is
+> absent on this path.  (Caveat: fixed-end ≠ Rao-stationary TOP; the
+> chart values θ_N ≈ 21.9° / θ_E ≈ 8.3° describe the *optimal* family,
+> so the fixed-end bell turns harder.  Treat it as the first
+> geometrically-sane Rao-case contour, not yet the optimum.)
+> **Full-continuity probe** (pin_d_theta + pin_d_mach + ladder + θ_B
+> Picard refresh on kernel-stationarity at the solved (kdf, log_C)):
+> the Picard converges θ_B 21.87 → 28.10 → 28.17° in two refreshes —
+> the cap no longer binds — but the inner floor stays at ~5.7e-2
+> (all-node stationarity ramp, kdf drifting to 0.088, i.e. D crawling
+> toward B), *θ_B-insensitive* (identical floor at 21.87° and 28.10°).
+> Reading: with the kernel/θ_B frozen per solve, fixed-(L, ε) + full
+> D-continuity stays overdetermined — DE is fully determined by D and
+> the stationarity+C⁺ ODE pair, so hitting (r_E, L) needs kdf *and*
+> θ_B live inside the iteration.  Next levers: J3b differentiable march
+> (θ_B as a solved unknown), an outer secant on the *inner floor* (the
+> kernel-stationarity invariant refresh measured ineffective), or the
+> fixed-length transversality/multiplier blocks — and check Guderley
+> (~1968) before forcing smoothness at D: for short nozzles the optimum
+> is genuinely discontinuous, so the position-only solution's ΔM jump
+> at D may be physics, not artifact.  Sandbox could not run the J4 gate
+> test / solved-CE wall probe (JAX solves exceed the per-call budget);
+> run on host: `pytest tests/test_jax_convergence.py -q -m "not slow"`
+> and `PYTHONPATH=. python scripts/j4_gate_wall_probe.py`, then
+> `scripts/generate_contour.py` for fresh latex-report figures.
+
+> **DIRECTION (2026-06-11, set by ibrahim).**
+> 1. **End state: `raosim/jax` becomes the only core package.**  The
+>    NumPy mirror modules get absorbed/deleted once the JAX core is in
+>    its fullest form (all residual blocks, march, topology, wall).
+>    Deferred until then — the §3 port boundary stays as-is meanwhile;
+>    the imperative shell (I/O, CEA, plotting, export) is unaffected.
+> 2. **Flip the default backend to JAX once J4 passes** — meaning: once
+>    the gate is *re-confirmed on the post-12.4 seed* (the march fix
+>    changed `set_theta_b`'s convergence, so the 2026-06-10 pass needs
+>    re-measuring; sandbox cannot run JAX solves).  Flip checklist:
+>      a. Host: `PYTHONPATH=. python scripts/j4_gate_wall_probe.py`
+>         → gate must hold (max_scaled ≤ 2e-3).
+>      b. Host: full suite green (`pytest -q`, slow included).
+>      c. Apply the bundle in `RaoSolverConfig`:
+>         `solver_backend="numpy"→"jax"`, `formulation="legacy"→
+>         "characteristic"`, `pin_d_theta=True→False`,
+>         `jax_constraint_weight_ladder=None→(1.0, 10.0, 30.0, 100.0)`.
+>      d. Re-baseline Phase 6/7 + chart-benchmark expectations; keep
+>         the legacy stack importable behind explicit opt-in until the
+>         §3 absorption (directive 1) lands.
+> 3. **Every fix validates against the M3.5Perf reference** —
+>    `outputs_M3.5Perf` stays the binding oracle
+>    (`tests/test_nasa_kernel_march_parity.py`, `tests/test_nasa_port.py`
+>    must stay green through any numerics change, as in Phase 12.4).
+> 4. **Tool first until J6 ships.**  No §11 novelty work (Guderley
+>    boundary mapping, real-gas hooks) until the tool exports a
+>    mathematically accurate contour and `rao_sensitivities` (J6) is
+>    done.  The Guderley *literature check* stays in scope as it bears
+>    directly on D-attachment correctness (tool accuracy, not novelty).
+
 > **STATUS (2026-06-09, J0–J4 spike landed).**
 > J0 ✅ (skeleton, pinned deps, `solver_backend="jax"` wired into
 > `solve_rao_bvp`); J1 ✅; J2 ✅ **assembled**-residual parity at ~1e-15 vs

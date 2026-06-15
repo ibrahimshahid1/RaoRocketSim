@@ -175,16 +175,76 @@ def test_rao_geometry_kernel_marches_with_upstream_radius(mode):
         f"kernel march regressed: only {len(k.rrcs)} rows "
         "(the pre-fix failure mode was rrcs == 1)"
     )
-    # NASA's 5% RRC mass-flow sanity check (build_kernel mdot_tol) halts
-    # this tight-throat march at theta ~ 24.1 deg (resolution-independent:
-    # same value at n_kernel = 24/60/101/151), leaving an honest partial
-    # kernel.  That still covers the chart theta_N (~22 deg) for the
-    # epsilon=10 / length_pct=80 reference nozzle.  Assert the march gets
-    # well past 20 deg rather than pinning the requested 30 deg.
-    assert math.degrees(k.bd[0].theta) > 20.0
+    # Phase 12.4: the march must now reach the commanded wall angle.
+    # (Historic behaviour: the mass-integral's dr <= 1e-15 guard zeroed
+    # folded-RRC segments and tripped the 5% sanity check at theta_w ~
+    # 24.1-24.4 deg, masquerading as a unit-process cap.)
+    assert k.reached_wall, "kernel march no longer reaches theta_B"
+    assert math.degrees(k.bd[0].theta) == pytest.approx(30.0, abs=1e-3)
     # ... and the BD descends from the throat-arc region to the axis
     # through supersonic states.
     assert k.bd[-1].r == pytest.approx(0.0, abs=1e-9)
     Ms = [n.M for n in k.bd]
     assert min(Ms) > 1.0
     assert max(Ms) > 2.0
+
+
+# --------------------------------------------------------------------------- #
+# 4. Phase 12.4 — folded RRCs and the mass integral                            #
+# --------------------------------------------------------------------------- #
+def test_folded_rrc_mass_integral_keeps_march_alive():
+    """The ~24.2 deg "march cap" was the mass check, not the unit process.
+
+    At Rao's sharp downstream radius (Rd = 0.382 Rt) the RRC slope
+    tan(theta - mu) changes sign mid-row once the wall angle passes
+    ~24.3 deg: theta crosses mu along the characteristic, so the row
+    climbs in r before descending to the axis (a benign fold — verified
+    non-crossing against neighbouring RRCs, hence not a limit line).
+    The C++ integrates straight through such segments
+    (fabs(mdot_a)*fabs(da), MOC_GridCalc_BDE.cpp:3217-3228); an earlier
+    port revision zeroed them (dr <= 1e-15 guard), dropped ~13% of the
+    row mass on the first folded RRC, and tripped build_kernel's 5%
+    sanity check.  This pins the fixed behaviour.
+    """
+    from raosim.nasa_moc import calc_massflow_along_rrc
+
+    Rt = 0.020
+    k = build_kernel(Rt, 0.382 * Rt, math.radians(30.0), GAMMA, 60,
+                     starting_line_method="kliegel_levine", Ru=1.5 * Rt)
+    assert k.reached_wall
+
+    # (a) the geometric feature is present: BD (wall-first) is
+    #     non-monotone in r — it climbs somewhere mid-row.
+    r = np.asarray([n.r for n in k.bd])
+    climbs = np.diff(r) > 0.0
+    assert climbs.any(), (
+        "expected a folded BD at theta_B=30 deg / Rd=0.382Rt — if the "
+        "fold is gone the flow solution changed, not just the integral"
+    )
+    # ... but it still spans wall to axis.
+    assert r[0] > Rt
+    assert r[-1] == pytest.approx(0.0, abs=1e-9)
+
+    # (b) the cumulative grid is monotone: massflow is stored
+    #     axis-zero / wall-max, so the wall-first array must be
+    #     non-increasing (every segment contributes |flux| >= 0).
+    mf = calc_massflow_along_rrc(k.bd, GAMMA)
+    assert (np.diff(mf) <= 1e-15).all()
+
+    # (c) total BD mass matches the start-line mass to well inside the
+    #     5% sanity tolerance (observed: ~0.13% at this resolution).
+    mdot_tt = float(k.massflow[0][0])
+    mdot_bd = float(mf[0])
+    assert abs(mdot_bd - mdot_tt) / mdot_tt < 5e-3
+
+
+def test_march_past_cap_is_resolution_consistent():
+    """Wall Mach at theta_B=30 deg agrees across march resolutions."""
+    Rt = 0.020
+    MB = []
+    for nk in (24, 60):
+        k = build_kernel(Rt, 0.382 * Rt, math.radians(30.0), GAMMA, nk,
+                         starting_line_method="kliegel_levine", Ru=1.5 * Rt)
+        assert k.reached_wall
+        MB.append(k.bd[0].M)
+    assert MB[0] == pytest.approx(MB[1], rel=2e-3)

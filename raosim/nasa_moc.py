@@ -1581,6 +1581,24 @@ def calc_massflow_along_rrc(rrc: list[MOCNode], gamma: float) -> np.ndarray:
     Returns an array of shape ``(len(rrc),)`` with the cumulative mass flow
     starting from the wall (index 0) and ending at the axis (index ``-1``).
     The wall-side value equals the total RRC mass flow.
+
+    Folded RRCs (Phase 12.4)
+    ------------------------
+    At sharp downstream radii (e.g. Rao's Rd = 0.382·Rt) the RRC slope
+    ``tan(theta − mu)`` changes sign mid-row once the wall angle passes
+    ~24°: ``theta`` crosses ``mu`` along the characteristic and the curve
+    climbs in r before descending to the axis (verified non-crossing with
+    its neighbours — a benign fold, not a limit line).  The C++ integrates
+    straight through such segments — ``fabs(mdot_a) * fabs(da)`` with **no**
+    monotonicity guard (MOC_GridCalc_BDE.cpp:3217-3228) — so the port must
+    not zero them.  An earlier revision of this function skipped segments
+    with ``dr <= 1e-15``, silently dropping ~13% of the row mass on the
+    first folded RRC and tripping :func:`build_kernel`'s mass sanity check;
+    that was the true cause of the apparent ~24.2° "march cap".  The folded
+    branch below uses the algebraically identical product form
+    ``0.5·pi·(r1+r2)·|rho_u_sum·dr + rho_v_sum·dx|`` (= ``fabs(mdot_a)·
+    fabs(da)`` for any ``dr != 0``), which stays finite at ``dr == 0``
+    where the raw C++ expression would produce ``inf · 0``.
     """
     if len(rrc) < 2:
         return np.zeros(len(rrc), dtype=float)
@@ -1590,24 +1608,34 @@ def calc_massflow_along_rrc(rrc: list[MOCNode], gamma: float) -> np.ndarray:
         p_lower = rrc[i + 1]  # closer to axis
         p_upper = rrc[i]      # closer to wall
         dr = p_upper.r - p_lower.r
-        if dr <= 1e-15:
-            massflow[i] = massflow[i + 1]
-            continue
-        # NASA C++ line 3213:
-        # dxdr = (x[i+1][j] - x[i][j]) / (r[i][j] - r[i+1][j])
-        # with i wall-side and i+1 axis-side.
-        dxdr = (p_lower.x - p_upper.x) / dr
         u1 = p_upper.u
         u2 = p_lower.u
         v1 = p_upper.v
         v2 = p_lower.v
         rho1 = p_upper.rho
         rho2 = p_lower.rho
-        # NASA Eq. 3218: rhoUAvg = 0.5(rho1 u1 + rho2 u2 + dxdr (rho1 v1 + rho2 v2))
-        rho_u_avg = 0.5 * (rho1 * u1 + rho2 * u2
-                           + dxdr * (rho1 * v1 + rho2 * v2))
-        da = math.pi * (p_upper.r * p_upper.r - p_lower.r * p_lower.r)
-        massflow[i] = massflow[i + 1] + abs(rho_u_avg) * da
+        if dr > 1e-15:
+            # NASA C++ line 3213:
+            # dxdr = (x[i+1][j] - x[i][j]) / (r[i][j] - r[i+1][j])
+            # with i wall-side and i+1 axis-side.  Kept verbatim so
+            # monotone rows remain bit-identical to the oracle-validated
+            # behaviour.
+            dxdr = (p_lower.x - p_upper.x) / dr
+            # NASA Eq. 3218: rhoUAvg = 0.5(rho1 u1 + rho2 u2 + dxdr (rho1 v1 + rho2 v2))
+            rho_u_avg = 0.5 * (rho1 * u1 + rho2 * u2
+                               + dxdr * (rho1 * v1 + rho2 * v2))
+            da = math.pi * (p_upper.r * p_upper.r - p_lower.r * p_lower.r)
+            massflow[i] = massflow[i + 1] + abs(rho_u_avg) * da
+        else:
+            # Folded or level segment: C++ fabs(mdot_a)*fabs(da) in the
+            # regularised product form (see docstring).
+            ru_sum = rho1 * u1 + rho2 * u2
+            rv_sum = rho1 * v1 + rho2 * v2
+            dx = p_lower.x - p_upper.x
+            massflow[i] = massflow[i + 1] + (
+                0.5 * math.pi * (p_upper.r + p_lower.r)
+                * abs(ru_sum * dr + rv_sum * dx)
+            )
     return massflow
 
 
