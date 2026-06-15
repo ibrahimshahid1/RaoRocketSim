@@ -165,6 +165,29 @@ def prandtl_meyer(M: float, gamma: float) -> float:
     return q * math.atan(math.sqrt(gm1 / gp1 * msq)) - math.atan(math.sqrt(msq))
 
 
+def mstar_from_M(M: float, gamma: float) -> float:
+    """
+    Critical Mach number M* = V/a* (velocity divided by the sonic critical speed).
+
+        M* = sqrt[ (γ+1) M² / (2 + (γ−1) M²) ]
+
+    Required by the Rao algebraic optimum-thrust stationarity condition
+    (Rao-Beck-Booth, AIAA 99-2584, 1999):
+
+        M* · cos(θ − α) / cos(α) = C   along the control surface DE
+
+    Reference
+    ---------
+    propulsion_texts/rao1999.pdf  --  AIAA 99-2584, Eq. 3
+    propulsion_texts/RaoRecentDevinRockNozConfig.pdf -- Rao 1961
+    """
+    if M <= 0.0:
+        raise ValueError("Mach must be positive")
+    gp1 = gamma + 1.0
+    gm1 = gamma - 1.0
+    return math.sqrt(gp1 * M * M / (2.0 + gm1 * M * M))
+
+
 def mach_angle(M: float) -> float:
     """Mach angle μ = arcsin(1/M) in radians. Requires M ≥ 1."""
     if M < 1.0:

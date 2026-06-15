@@ -156,6 +156,123 @@ def plot_curvature(contour: dict, *, show: bool = True) -> plt.Figure:
     return fig
 
 
+def _solution_wall(solution, geometry: str):
+    """Resolve the wall polyline for a Rao/MOC solution by mode."""
+    if geometry == "raw":
+        wall = getattr(solution, "wall_raw", None)
+        if wall is None:
+            raise ValueError("solution has no wall_raw; pass geometry='export'")
+        return np.asarray(wall, dtype=float), "wall (raw, BVP output)"
+    if geometry == "export":
+        wall = getattr(solution, "wall_export", None)
+        if wall is None:
+            raise ValueError("solution has no wall_export")
+        return np.asarray(wall, dtype=float), "wall (export, post-processed)"
+    raise ValueError(f"geometry must be 'raw' or 'export', got {geometry!r}")
+
+
+def plot_characteristic_net(solution, *, geometry: str = "raw",
+                            ax=None, show: bool = False,
+                            save_path: str | None = None):
+    """
+    Plot the wall, control surface, kernel starting line, and full
+    characteristic net.  Defaults to ``geometry='raw'`` so silent
+    post-processing is visible.
+
+    See REWRITE_PLAN.md §12 (Phase 13) for the diagnostic motivation.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+            label=wall_label, zorder=4)
+
+    ce = getattr(solution, "control_surface", None)
+    if ce is not None:
+        ce_x = np.asarray(getattr(ce, "x", []), dtype=float)
+        ce_r = np.asarray(getattr(ce, "r", []), dtype=float)
+        if ce_x.size and ce_r.size:
+            ax.plot(ce_x, ce_r, "--", color="C3", linewidth=1.4,
+                    label="control surface CE", zorder=3)
+
+    kernel = getattr(solution, "kernel_points", None)
+    if kernel:
+        ax.plot([p.x for p in kernel], [p.r for p in kernel],
+                "o-", color="C2", markersize=3, linewidth=0.9,
+                label="kernel / starting line", zorder=3)
+
+    char_net = getattr(solution, "characteristic_net", None) or []
+    for row in char_net:
+        pts = row.all_points() if hasattr(row, "all_points") else list(row)
+        if len(pts) < 2:
+            continue
+        xs = [p.x for p in pts]
+        rs = [p.r for p in pts]
+        ax.plot(xs, rs, color="#1a73e8", linewidth=0.5, alpha=0.55, zorder=2)
+
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(f"Characteristic net  —  {geometry}")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_flowfield_mach(solution, *, geometry: str = "raw",
+                        ax=None, cmap: str = "viridis",
+                        show: bool = False,
+                        save_path: str | None = None):
+    """
+    Scatter every node in the characteristic net coloured by Mach number,
+    overlaid on the wall.  Defaults to raw wall geometry.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+            label=wall_label, zorder=4)
+
+    char_net = getattr(solution, "characteristic_net", None) or []
+    xs, rs, Ms = [], [], []
+    for row in char_net:
+        pts = row.all_points() if hasattr(row, "all_points") else list(row)
+        for p in pts:
+            xs.append(p.x)
+            rs.append(p.r)
+            Ms.append(p.M)
+    if xs:
+        sc = ax.scatter(xs, rs, c=Ms, s=14, cmap=cmap, zorder=3)
+        plt.colorbar(sc, ax=ax, label="Mach")
+
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(f"Mach number field  —  {geometry}")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    fig.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
 def _set_axes_equal_3d(ax):
     """Force equal aspect ratio on a 3-D axes."""
     limits = np.array([ax.get_xlim3d(), ax.get_ylim3d(), ax.get_zlim3d()])
