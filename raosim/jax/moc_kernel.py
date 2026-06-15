@@ -11,61 +11,67 @@ with the CORRECTED characteristic pairing (2026-06-11; Anderson MCF
     along C− (slope θ−μ):  d(θ+ν) = +S ds
     along C+ (slope θ+μ):  d(θ−ν) = −S ds,      S = sinθ sinμ / r
 
-The NASA ``Deriv``-shaped march in ``raosim.nasa_moc`` stays the NumPy
-oracle (M3.5Perf parity suites); this module is a *new differentiable
-implementation of the same physics*, validated empirically against that
-oracle at the BD level rather than line-for-line.
+This module reaches BIT-PARITY with the NumPy oracle ``build_kernel``
+(M3.5Perf-validated) at the BD level — it ports NASA's *exact* row
+policy and dθ-form unit processes (below), not merely the same physics.
+The Anderson-form processes (``interior_point`` / ``axis_point`` /
+``wall_point_arc``) are kept as tested reference ports of the corrected
+``raosim.moc`` unit processes, but the MARCH uses the dθ-form ports
+(``*_nasa``) because BD-oracle agreement requires NASA's near-axis
+coefficient treatment (the Anderson midpoint-source chain converges to
+a *different* continuum near the axis: axis Mach +9%, resolution-
+divergent).
 
 March structure (the J3b θ_B-differentiability design)
 ------------------------------------------------------
 The throat expansion fan keeps emitting new C+ characteristics at the
-wall corner, so the kernel mesh genuinely GROWS toward BD — NASA's
-march inserts a "special" (prescribed-angle) wall point essentially
-every row at the reference config (rows 24 → 120 points over 102 rows;
-``_calc_special_wall_point`` fires at α = θ_prev + dθ_limit/2 = 0.25°
-steps) and pairs interior cells same-index against the previous row
-(``ii = i`` under ``special_flag``).  Two static-shape designs that do
-NOT respect this growth were measured to fail before this one landed:
+wall corner, so the kernel mesh genuinely GROWS toward BD.  NASA limits
+the wall step to ``dtheta_limit`` by MIXING two row types
+(``_calc_arc_wall_point_with_special``):
 
-* a static-width forward march (wall point from prev[1]'s C+ ∩ arc)
-  blows up geometrically — wall steps 0.56° → 2.3° → 5.4° → … → NaN —
-  because nothing limits the wall step once the row is coarse;
-* a static-width inverse march with per-row re-gridding to the start
-  line's r-distribution is weakly UNSTABLE: interpolation each row
-  feeds back through the same-index cells and the axis Mach runs away
-  exponentially (axis M 1.63 → 6.75 vs oracle ~3.3 by 22.5°, NaN by
-  row ~98).
+* RAW rows (~5%: marched-row indices 2/9/21/39/65 at the reference) —
+  the C+ leaving prev[1] TERMINATES on the throat arc and becomes the
+  new wall point (every C+ in the fan ends on the wall; this is
+  physics, not bookkeeping).  Width is unchanged; the interior C+
+  pairing shifts by one (``ii = i + 1``).
+* SPECIAL rows (~95%) — when the raw step would exceed ``dtheta_limit``
+  (or overshoot θ_B) a prescribed-angle wall point is inserted at
+  ``min(θ_B, θ_prev + dtheta_limit/2)``; the row GROWS by one and the
+  pairing is same-index (``ii = i``).
 
-The landed design therefore mirrors NASA's own structure with static
-PADDED shapes::
+Skipping the raw rows (an all-special march) starves the wall-adjacent
+strip — measured ν_w − θ_w → −0.67° at B where the oracle's is +0.68°
+(axisymmetric wall expansion must run AHEAD of planar PM).  Two other
+static-shape designs failed earlier: a static-width forward march
+blows up (no step limit; wall steps 0.56°→2.3°→5.4°→NaN); a regridded
+inverse march is weakly unstable (axis Mach runaway).
 
-    width  W = n0 + n_rows          (static; row k uses n0 + k nodes)
-    wall grid  θ_w,k = theta_B·k/n_rows   (prescribed; the last row IS
-                                           the BD at exactly theta_B)
+The landed march carries NASA's policy in static PADDED shapes
+(``W = n0 + n_rows``): the raw/special decision, valid row width
+(``axis_idx``), and pairing offset are TRACED; padded slots hold the
+row's axis state (benign finite sentinels so masked lanes never
+produce NaNs — the §5 where-grad trap).  Marching freezes once the
+wall reaches θ_B; the scan carry at the end IS the BD row.
 
-Per row: the wall point is the NASA-special prescribed-angle process
-in Anderson form (C+ foot interpolated on the previous row's
-wall-adjacent segment by line intersection — see
-``wall_point_arc_prescribed``); interior cells pair same-index
-(new[i] from new[i−1] C− ∩ prev[i] C+ — each previous-row node hands
-its C+ line one slot down, preserving the fan); the symmetry-axis
-closure lands at index n0+k−1; padded slots are filled with the row's
-axis state (benign finite sentinels so masked lanes never produce
-NaNs — the §5 where-grad trap).  Because the wall grid scales WITH
-theta_B, ``d(march)/d(theta_B)`` is smooth (no row-count
-discreteness): this mirrors how the NumPy ``set_theta_b`` outer loop
-sees the kernel — rebuilt whole at each candidate θ_B.
+θ_B-differentiability: the pre-clamp wall grid (raw landings + fixed
+``dtheta_limit`` special steps) is θ_B-INDEPENDENT, so
+``d(BD)/d(theta_B)`` flows only through the final clamped row — exact
+and smooth within a row-count window; the window boundary (θ_B
+crossing a grid step) is handled by per-rung re-assembly exactly like
+``kernel_bd`` re-seeding today.  ``n_rows`` is a static upper bound on
+the row count (frozen rows no-op).
 
 The transonic start line is taken as INPUT ARRAYS (wall-first), e.g.
 from the NumPy seed kernel's TT' row: the start line is
-θ_B-independent, so ``d/d(theta_B)`` through this module is exact with
-a frozen start line.  (Differentiable Kliegel–Levine for d/d(Rt, γ)
-totals is the J3b-2 / args-lifting increment, tracked in the plan.)
+θ_B-independent, so ``d/d(theta_B)`` is exact with a frozen start line.
+(Differentiable Kliegel–Levine for d/d(Rt, γ) totals is the J3b-2 /
+args-lifting increment, tracked in the plan.)
 
-Unit-process parity contract: with ``n_corr=10`` and the NumPy
-processes run at ``tol=0.0, max_iter=10`` (disable early break) the
-fixed-iteration ports reproduce the NumPy fixed point to float64
-round-off — pinned in ``tests/test_jax_moc_kernel.py``.
+Unit-process parity contract: the Anderson-form ports at ``n_corr=10``
+reproduce the NumPy ``raosim.moc`` fixed point (early break off) to
+float64 round-off; the dθ-form ``*_nasa`` ports match the NumPy NASA
+processes at their 1e-10 fixed points — both pinned in
+``tests/test_jax_moc_kernel.py``.
 """
 
 from __future__ import annotations
@@ -308,95 +314,6 @@ def wall_point_arc(pi: dict, Rt, Rd, gamma, n_corr: int = 10) -> dict:
         0, n_corr, body, (x_hit, r_hit, theta_w, nu_w, mu_w, M_w)
     )
     return dict(x=x_hit, r=r_hit, theta=theta_w, nu=nu_w, mu=mu_w, M=M_w)
-
-
-def wall_point_arc_prescribed(
-    prev: KernelRow, theta_w, Rt, Rd, gamma, n_corr: int = 10,
-) -> dict:
-    """Prescribed-angle arc wall point — NASA ``CalcSpecialWallPoint``
-    semantics in Anderson form.
-
-    The wall point W sits at the *commanded* arc angle ``theta_w``
-    (position known; flow angle = arc angle by tangency); the unknown
-    is ν_w.  NASA's foot construction, ported in bounded angle form:
-    the C+ connector's foot F is the intersection of
-
-    * line A through the previous WALL point along the averaged local
-      C− direction ½[(θ−μ)_prev[1] + (θ−μ)_prev[0]]  (NASA ``s4rrc``
-      — the prev row's tangent at the wall, NOT the chord; using the
-      chord systematically over-accumulates ν along the wall chain:
-      measured +0.034°/row, ν_w−θ_w growing 1.9°→3.1° where the
-      oracle's shrinks 1.3°→0.7°), and
-    * line B through W along the averaged C+ direction
-      ½[(θ+μ)_F + (θ+μ)_W]  (NASA ``slope34``),
-
-    with F's state x-ratio-interpolated between prev[1] and prev[0]
-    (NASA ``ratio``; on TT' where both x ≈ 0 the guarded ratio → 0,
-    i.e. the foot takes prev[1]'s state).  The corrected C+
-    compatibility (θ−ν)_W = (θ−ν)_F − S̄·ds then closes ν_w.  Fixed
-    ``n_corr`` passes; fully smooth in ``theta_w``.
-    """
-    xW = Rd * jnp.sin(theta_w)
-    rW = (Rt + Rd) - Rd * jnp.cos(theta_w)
-
-    x0, x1 = prev.x[0], prev.x[1]
-    r0, r1 = prev.r[0], prev.r[1]
-    th0, th1 = prev.theta[0], prev.theta[1]
-    nu0, nu1 = prev.nu[0], prev.nu[1]
-    mu0, mu1 = prev.mu[0], prev.mu[1]
-
-    # Line A: prev row's local C− direction at the wall (fixed across
-    # the corrector passes, as in NASA — s4rrc is not updated).
-    ang_a = 0.5 * ((th1 - mu1) + (th0 - mu0))
-    ca_a, sa_a = jnp.cos(ang_a), jnp.sin(ang_a)
-
-    nu_w = nu0
-    mu_w = mu0
-    ratio = jnp.zeros_like(xW)
-
-    def body(_, carry):
-        nu_w, mu_w, ratio = carry
-        thF = th1 + ratio * (th0 - th1)
-        muF = mu1 + ratio * (mu0 - mu1)
-        # Line B: averaged C+ direction between the foot and W.
-        ang_b = 0.5 * (thF + muF) + 0.5 * (theta_w + mu_w)
-        ca_b, sa_b = jnp.cos(ang_b), jnp.sin(ang_b)
-        # A ∩ B: p0 + u·(ca_a, sa_a) = W + v·(ca_b, sa_b).
-        cross = ca_a * sa_b - sa_a * ca_b
-        ok = jnp.abs(cross) > 1e-15
-        u = ((xW - x0) * sa_b - (rW - r0) * ca_b) / jnp.where(ok, cross, 1.0)
-        xF = jnp.where(ok, x0 + u * ca_a, x1)
-        rF = jnp.where(ok, r0 + u * sa_a, r1)
-        # NASA ratio: foot position in x between prev[1] and prev[0];
-        # guarded → 0 (foot = prev[1]) when the segment is x-degenerate.
-        denom = x0 - x1
-        ratio = jnp.where(jnp.abs(denom) > 1e-14,
-                          (xF - x1) / jnp.where(jnp.abs(denom) > 1e-14,
-                                                denom, 1.0),
-                          0.0)
-
-        thF = th1 + ratio * (th0 - th1)
-        nuF = nu1 + ratio * (nu0 - nu1)
-        muF = mu1 + ratio * (mu0 - mu1)
-        rF_s = r1 + ratio * (r0 - r1)
-        xF_s = x1 + ratio * (x0 - x1)
-
-        ds = jnp.sqrt((xW - xF_s) ** 2 + (rW - rF_s) ** 2)
-        th_avg = 0.5 * (thF + theta_w)
-        mu_avg = 0.5 * (muF + mu_w)
-        r_avg = jnp.maximum(0.5 * (rF_s + rW), 1e-12)
-        S = jnp.sin(th_avg) * jnp.sin(mu_avg) / r_avg
-        src = (rW > 1e-10) & (rF_s > 1e-10)
-        k_plus = jnp.where(src, (thF - nuF) - S * ds, thF - nuF)
-        nu_w = jnp.maximum(theta_w - k_plus, _NU_FLOOR)
-        M_w = mach_from_prandtl_meyer(nu_w, gamma)
-        mu_w = mach_angle(M_w)
-        return (nu_w, mu_w, ratio)
-
-    nu_w, mu_w, _ = lax.fori_loop(0, n_corr, body, (nu_w, mu_w, ratio))
-    M_w = mach_from_prandtl_meyer(nu_w, gamma)
-    return dict(x=xW, r=rW, theta=theta_w, nu=nu_w,
-                mu=mach_angle(M_w), M=M_w)
 
 
 # --------------------------------------------------------------------------- #

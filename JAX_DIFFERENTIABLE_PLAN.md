@@ -1,5 +1,34 @@
 # RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool
 
+> **PHYSICS-COUPLED DESIGN LANDED (2026-06-15): the screening physics
+> now SHAPES the contour, including a differentiable constrained design
+> loop.**  Closes the "physics is post-hoc screening, not coupled to
+> geometry" gap, in the user's ordered three steps.  (1) **Real Bartz**
+> (prior turn): `physics.bartz_heat_flux` is the full Bartz 1957
+> correlation (`model="bartz_1957"`), replacing a fake screening that
+> under-predicted throat flux ~1000×; ~50 MW/m² at 7 MPa, exact P_c^0.8.
+> (2) **Real Sieder-Tate cooling**: `physics.regenerative_cooling_analysis`
+> — coolant film Nu=0.027 Re^0.8 Pr^1/3 (μ_b/μ_w)^0.14 + 1-D wall
+> conduction + coupled gas/wall/coolant circuit + coolant march +
+> coolant property table/Andrade μ(T); the old `1000+2e8·area` film is
+> gone.  (3) **Cooling-before-contour**: `raosim/thermal_design.py`
+> `cooling_coupled_contour` computes cooling DURING contour selection
+> and shapes throat curvature (Rd, ~9% lever) + channels (strong) —
+> NumPy feedback.  (4) **Constrained differentiable loop**:
+> `raosim/jax/thermal.py` (jnp Bartz/Sieder-Tate/Schmucker/Cf, parity +
+> FD-exact grads) + `raosim/jax/design_opt.py`
+> `constrained_nozzle_design` (Optimistix BFGS + penalty): maximize
+> Cf(ε) s.t. separation_margin ≥ min, T_wg,throat ≤ limit, q ≤ q_limit
+> — the constraints SHAPE the design (ε capped at the separation limit;
+> throat opened by cooling, and correctly reported infeasible when
+> geometry alone can't cool, reproducing step-3's finding rigorously).
+> Design vars (ε, Rd_factor) at closed-form stations; the rich
+> extension is full wall-shape vars via the J6 BVP gradients.  Tests
+> (all `.venv-jax` green): `test_bartz_heat_flux` 12, `test_regen_cooling`
+> 13, `test_thermal_design` 5, `test_jax_thermal_design_opt` 8; design
+> suite re-tuned to real-survivable engines and green (the old fixtures
+> only passed on the fake magnitudes).  See [[physics-model-maturity]].
+
 > **J3b COMPLETE — BIT-PARITY MARCH + θ_B IN THE BVP; Phase 13 10/10;
 > §12.7 topology export wired (2026-06-12, continuation of the J3b-1
 > session below).**  The "consistency defect" was structural and is

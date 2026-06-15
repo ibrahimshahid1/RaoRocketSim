@@ -126,6 +126,16 @@ def test_mocked_rocketcea_feeds_validated_thermochemistry(monkeypatch):
     monkeypatch.setitem(sys.modules, "rocketcea", rocketcea_mod)
     monkeypatch.setitem(sys.modules, "rocketcea.cea_obj_w_units", cea_units_mod)
 
+    # A physically survivable regen-cooled copper engine.  Both the
+    # throat heat flux (full Bartz, ~58 MW/m² at 70 bar) and the cooling
+    # (coupled Sieder-Tate / 1-D conduction) are now real, so the
+    # fixture must be a real high-performance regen wall: thin copper,
+    # small fast channels (high coolant velocity -> high h_c).  Probed
+    # margins: peak gas-side wall ~1020 K, cooling margin ~1.1.  The
+    # pre-2026-06 fixture (20 MPa through a 4 mm k=20 wall) only passed
+    # because the old screening under-predicted flux ~1000× and the old
+    # cooling film model was ad-hoc.  This test checks CEA
+    # thermochemistry feed-through, not the thermal margins themselves.
     request = _prelim_input(
         mode="validated",
         thermo=ThermoSpec(
@@ -135,22 +145,24 @@ def test_mocked_rocketcea_feeds_validated_thermochemistry(monkeypatch):
             fuel="RP-1",
             mixture_ratio=2.6,
         ),
-        Pc=200e5,
+        Pc=70e5,
         epsilon=4.0,
-        manufacturing=ManufacturingSpec(wall_thickness=0.004, cad="none"),
+        manufacturing=ManufacturingSpec(wall_thickness=0.001, cad="none"),
         cooling=CoolingSpec(
             method="regenerative",
-            channel_count=120,
-            channel_width=0.0015,
-            channel_height=0.003,
-            coolant_mass_flow=2.0,
-            max_wall_temperature=2500.0,
+            coolant="rp1",
+            channel_count=100,           # fits the 20 mm throat (60 of 126 mm)
+            channel_width=0.0006,
+            channel_height=0.0030,
+            coolant_mass_flow=12.0,
+            coolant_inlet_temperature=300.0,
+            max_wall_temperature=1200.0,
         ),
         material=MaterialSpec(
             yield_strength=2.0e9,
-            max_temperature=3000.0,
-            max_heat_flux=100e6,
-            conductivity=20.0,
+            max_temperature=1300.0,
+            max_heat_flux=120e6,
+            conductivity=350.0,
         ),
         ambient=MissionAmbientSpec(Pa=5_000.0),
     )
@@ -174,21 +186,30 @@ def test_physics_trends_are_sensible():
     bl = boundary_layer_displacement(contour, 80e5, prop)
     assert bl["effective_epsilon"] < contour["epsilon"]
 
-    material = MaterialSpec()
-    low_area = regenerative_cooling_screen(
-        heat, contour,
-        CoolingSpec(method="regenerative", channel_count=20, channel_width=0.0005,
-                    channel_height=0.001, coolant_mass_flow=0.5),
-        material, 0.002,
-    )
-    high_area = regenerative_cooling_screen(
-        heat, contour,
-        CoolingSpec(method="regenerative", channel_count=120, channel_width=0.0015,
-                    channel_height=0.003, coolant_mass_flow=0.5),
-        material, 0.002,
-    )
-    assert high_area["estimated_wall_temperature"] < low_area["estimated_wall_temperature"]
+    # Real coupled Sieder-Tate solve (gas side = full Bartz): more
+    # coolant flow MUST lower the wall temperature (more cooling
+    # capacity + faster coolant -> higher h_c).  A thin copper wall and
+    # adequate flow keep the temperatures physical.
+    material = MaterialSpec(conductivity=350.0, max_temperature=1300.0)
 
-    low_pressure = structural_screen(contour, 40e5, 101325, prop, material, 0.002, heat, high_area)
-    high_pressure = structural_screen(contour, 120e5, 101325, prop, material, 0.002, heat, high_area)
+    def _cool(mdot):
+        return regenerative_cooling_screen(
+            heat, contour,
+            CoolingSpec(method="regenerative", coolant="rp1",
+                        channel_count=100, channel_width=0.0008,
+                        channel_height=0.0025, coolant_mass_flow=mdot,
+                        max_wall_temperature=1100.0),
+            material, 0.001, prop, 80e5,
+        )
+
+    low_flow = _cool(8.0)
+    high_flow = _cool(20.0)
+    assert high_flow["model"] == "sieder_tate_1d_regen"
+    assert (high_flow["estimated_wall_temperature"]
+            < low_flow["estimated_wall_temperature"])
+    # Coolant heats up along the channel (energy balance).
+    assert high_flow["coolant_outlet_temperature"] > 293.0
+
+    low_pressure = structural_screen(contour, 40e5, 101325, prop, material, 0.002, heat, high_flow)
+    high_pressure = structural_screen(contour, 120e5, 101325, prop, material, 0.002, heat, high_flow)
     assert high_pressure["stress_margin"] < low_pressure["stress_margin"]

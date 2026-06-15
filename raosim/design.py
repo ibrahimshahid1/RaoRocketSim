@@ -112,6 +112,12 @@ class CoolingSpec:
     coolant_cp: float = 3500.0
     coolant_inlet_temperature: float = 293.0
     max_wall_temperature: float = 950.0
+    # Optional coolant transport properties (override the built-in
+    # COOLANT_PROPERTIES table keyed by ``coolant`` name).  Supply
+    # CEA/measured values for accuracy; used by the Sieder-Tate solve.
+    coolant_density: float | None = None        # kg/m^3
+    coolant_viscosity: float | None = None      # Pa.s (disables Andrade T-model)
+    coolant_conductivity: float | None = None   # W/(m.K)
 
 
 @dataclass
@@ -300,9 +306,11 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
 
     boundary_layer = boundary_layer_displacement(contour, input.Pc, prop)
     thermal = bartz_heat_flux(contour, input.Pc, prop)
+    # Pass prop + Pc so the cooling screen runs the real coupled
+    # Sieder-Tate / 1-D wall-conduction solve (gas side = full Bartz).
     cooling = regenerative_cooling_screen(
         thermal, contour, input.cooling, input.material,
-        input.manufacturing.wall_thickness,
+        input.manufacturing.wall_thickness, prop, input.Pc,
     )
     structural = structural_screen(
         contour, input.Pc, input.ambient.Pa, prop, input.material,
