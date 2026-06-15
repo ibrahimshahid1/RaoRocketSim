@@ -189,3 +189,73 @@ def test_phase12_4_end_to_end_no_regression():
     assert sol.residuals.max_scaled < 0.5, (
         f"max_scaled regressed to {sol.residuals.max_scaled:.3e}"
     )
+
+
+# ---------------------------------------------------------------------
+#  NASA wall.out bit-comparison
+# ---------------------------------------------------------------------
+
+
+def test_kl_throat_wall_mach_bit_comparable_to_nasa_wall_out():
+    """
+    NASA-port reliability gate (REWRITE_PLAN.md §13:
+    ``NASA_REFERENCE_MATCHED``): the KL throat-plane wall Mach must
+    match ``MOC_Grid_BDE/outputs_M3.5Perf/wall.out`` row 0 to 4
+    decimals.  NASA M3.5Perf inputs: Rt = Rd = 1 in (Rc/Rt = 1.0),
+    γ = 1.4, axisymmetric.  Row 0 (i=0, j=0): the wall point at the
+    throat plane.
+    """
+    from raosim.legacy_io import parse_wall_out
+    from raosim.transonic_kernel import GEOM_AXI, kliegel_levine
+
+    nasa_wall = parse_wall_out(NASA_OUT / "wall.out")
+    # Row 0 = wall at throat plane (i=0, j=0).
+    M_nasa_wall = float(nasa_wall.column("mach")[0])
+
+    state = kliegel_levine(
+        r_over_Rt=1.0, x_over_Rt=0.0,
+        gamma=1.4, Rc_over_Rt=1.0, geom=GEOM_AXI,
+    )
+    assert state.M == pytest.approx(M_nasa_wall, abs=1e-4), (
+        f"KL wall Mach {state.M:.5f} != NASA wall.out {M_nasa_wall:.5f} "
+        "(4-decimal NASA_REFERENCE_MATCHED gate)"
+    )
+
+
+@pytest.mark.xfail(
+    reason="Full wall.out RMS bit-comparison requires the Phase 12.4 row "
+           "march to actually produce the NASA kernel BD (currently the "
+           "fallback arc-following BD is used for Rd/Rt = 0.382).  See "
+           "test_marching_kernel_produces_multiple_rrcs_for_typical_geometry.",
+)
+def test_python_port_wall_matches_nasa_wall_out_rms_1e3():
+    """End-to-end NASA wall.out RMS check.  Targets:
+    RMS(x/R* - NASA) < 1e-3, RMS(r/R* - NASA) < 1e-3, RMS(M - NASA) < 1e-3.
+    """
+    from raosim.legacy_io import parse_wall_out
+    from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
+
+    nasa_wall = parse_wall_out(NASA_OUT / "wall.out")
+    Rt = 0.0254  # 1 inch in metres (NASA R* = 1 in)
+    # M_exit = 3.5 with γ=1.4 → epsilon ≈ 6.79
+    cfg = RaoSolverConfig(
+        Rt=Rt, epsilon=6.79, gamma=1.4, pa_over_p0=0.0,
+        length_pct=100.0,  # NASA "perfect" maps loosely to 100% length
+        n_control=20, n_kernel=20,
+        max_nfev=500, residual_tol=2e-3,
+        evaluate_moc=True,
+    )
+    sol = solve_rao_bvp(cfg)
+    # Map NASA wall (i=0 row across j) to our exported wall.
+    nasa_x = nasa_wall.column("X_over_Rstar")
+    nasa_r = nasa_wall.column("R_over_Rstar")
+    nasa_M = nasa_wall.column("mach")
+    py_x = sol.wall_export[:, 0] / Rt
+    py_r = sol.wall_export[:, 1] / Rt
+    # Resample at common x_over_Rstar
+    x_common = np.linspace(max(nasa_x.min(), py_x.min()),
+                           min(nasa_x.max(), py_x.max()), 50)
+    py_r_resampled = np.interp(x_common, py_x, py_r)
+    nasa_r_resampled = np.interp(x_common, nasa_x, nasa_r)
+    rms_r = float(np.sqrt(np.mean((py_r_resampled - nasa_r_resampled) ** 2)))
+    assert rms_r < 1e-3, f"wall r RMS {rms_r:.3e} > 1e-3"

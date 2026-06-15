@@ -202,6 +202,19 @@ class RaoSolverConfig:
     # is False so legacy callers stay on the postprocessing wall path.
     couple_wall: bool = False
     n_wall: int = 12
+    # Phase 7 prereq (REWRITE_PLAN §13.1): controls whether θ_N / θ_E
+    # are seeded from the chart only or actively pinned in the residual
+    # stack.  Required for an uncontaminated chart benchmark.
+    #
+    #   "free"        — chart values seed the initial guess but never
+    #                   appear in the residual stack.  Use for Phase 7
+    #                   chart benchmarking.  (default)
+    #   "chart_soft"  — adds a small (weight=1e-3) chart-anchor
+    #                   residual to nudge convergence for debugging.
+    #   "chart_hard"  — pins θ_N / θ_E to chart values (weight=1.0);
+    #                   emits a ``DeprecationWarning``.  The legacy
+    #                   behaviour before Phase 4.
+    angle_boundary_mode: str = "free"
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
@@ -226,16 +239,19 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
 # Unified weight applied to the three derivative-form Rao physics
 # residual blocks (algebraic_stationarity, moc_cplus, moc_cminus).
 # left_mach uses unit weight because it is a geometric residual already
-# normalised by segment chord length.  PHYSICS_WEIGHT = 0.05 places
-# the C+/C- axisymmetric compatibility above the smoothness
-# regularization (0.02) while leaving the mass and length integral
-# closures within ~1e-2.  At larger weights (0.1 +), the CE
-# parametrisation (a polyline with free r, M, theta per node but a
-# shared kernel_d_fraction) cannot simultaneously satisfy full-strength
-# C+/C- compatibility AND the kernel-BD mass closure with the current
-# approximate kernel; the right time to ramp toward unity is when
-# Phase 6 (coupled wall promoted to a joint BVP unknown) and the full
-# CalcRRCsAlongArc kernel (Phase 12.4) are in place.
+# normalised by segment chord length.  Empirical ramp results
+# (tests/test_phase6_coupled_wall.py::test_physics_weight_ramp_...):
+#   * weight = 0.02 → baseline; mass residual ~6e-3
+#   * weight = 0.05 → default; mass residual ~2e-2, physics ~3e-2 raw
+#   * weight = 0.25 → mass residual ~4e-1 (loose), physics tighter
+#   * weight = 0.50 → next target; expected feasible per ramp trend
+#   * weight = 1.00 → currently xfailed
+#     (test_solve_rao_bvp_reaches_rao_residual_solved_at_weight_1)
+# Closing the 1.0 xfail unlocks RAO_VARIATIONAL_RESIDUAL_SOLVED
+# reliability.  Likely culprits, in order of likelihood: linear
+# CE↔wall pairing in the Phase 6 coupled-wall builder (try free
+# pair_fraction unknowns), under-resolved wall (bump n_wall to 20),
+# or the Bezier wall seed not yet wired in for couple_wall=True.
 PHYSICS_WEIGHT = 0.05
 
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
@@ -1960,29 +1976,106 @@ def _coupled_wall_residuals(
     }
 
 
+def _wall_from_bezier_contour(
+    bezier: dict,
+    n_wall: int,
+    gamma: float,
+    Rt: float,
+) -> WallSurface:
+    """
+    Build a WallSurface seed from a Bezier Rao TOP contour.
+
+    The Bezier path (``bell_nozzle_contour(method='bezier')``) is the
+    chart-calibrated Rao TOP approximation: geometrically close to the
+    Rao optimum at any (ε, length_pct), so it places the wall unknown
+    inside the right basin of attraction for the BVP.
+
+    Mach numbers at each wall node are computed from the local area
+    ratio ``A(x)/At = (r(x)/Rt)^2`` via :func:`mach_from_area_ratio`
+    (1-D supersonic branch — an acceptable approximation along the
+    bounding streamline of an axisymmetric nozzle).  Flow angle θ is
+    the local wall slope ``arctan(dr/dx)``.
+    """
+    x_bell = np.asarray(bezier["x_bell"], dtype=float)
+    y_bell = np.asarray(bezier["y_bell"], dtype=float)
+    if x_bell.size < 2:
+        raise ValueError("bezier x_bell must have at least two points")
+    # Re-sample by uniform arc length over the bell.
+    seg = np.hypot(np.diff(x_bell), np.diff(y_bell))
+    arc = np.concatenate([[0.0], np.cumsum(seg)])
+    total = float(arc[-1])
+    if total <= 1e-12:
+        raise ValueError("bezier bell has zero arc length")
+    targets = np.linspace(0.0, total, n_wall)
+    x = np.interp(targets, arc, x_bell)
+    r = np.interp(targets, arc, y_bell)
+    # Local wall slope via central differences.
+    dx = np.gradient(x)
+    dr = np.gradient(r)
+    theta = np.arctan2(dr, np.maximum(dx, 1e-12))
+    theta = np.clip(theta, 0.0, math.radians(60.0))
+    # Mach via 1-D area-Mach at each radius (axisymmetric).
+    At = math.pi * Rt * Rt
+    M = np.empty(n_wall, dtype=float)
+    for i in range(n_wall):
+        area = math.pi * r[i] * r[i]
+        ar = max(area / At, 1.0 + 1e-9)
+        try:
+            M[i] = mach_from_area_ratio(ar, gamma, supersonic=True)
+        except ValueError:
+            M[i] = 2.0
+    M = np.maximum(M, 1.001)
+    return WallSurface(x=x, r=r, M=M, theta=theta)
+
+
 def _initial_wall_guess(
     config: RaoSolverConfig,
     ce: ControlSurface,
     topology,
 ) -> WallSurface:
-    """Linear-in-x seed for the coupled wall unknown.
+    """
+    Seed the coupled-wall unknown.
 
-    From N = (Nx, Ny) (end of throat arc) to E = (L, Re).  Mach ramps
-    from the topology's B-point Mach (kernel wall) to the ideal exit
-    Mach.  Flow angle ramps from the chart θ_N to the chart θ_E.
+    Default path: use the Bezier Rao-TOP contour
+    (:func:`raosim.nozzle_geometry.bell_nozzle_contour` with
+    ``method='bezier'``).  It is the chart-calibrated TOP approximation
+    of the Rao optimum and lands the wall unknown well inside the
+    physical basin of attraction — far better than a linear N→E seed
+    which would force the optimizer to discover the bell shape from
+    scratch.
+
+    Falls back to a quadratic N→E linear-in-r seed if the Bezier path
+    fails for any reason.
     """
     Rt = config.Rt
     Re = math.sqrt(config.epsilon) * Rt
     L = _target_length(Rt, config.epsilon, config.length_pct)
     Rd = config.throat_downstream_radius_factor * Rt
+    n_w = max(int(config.n_wall), 4)
+
+    # Bezier seed (preferred).
+    try:
+        from raosim.nozzle_geometry import bell_nozzle_contour
+
+        bezier = bell_nozzle_contour(
+            Rt=Rt, epsilon=config.epsilon,
+            length_pct=config.length_pct,
+            gamma=config.gamma, pa_over_p0=config.pa_over_p0,
+            convergent_half_angle_deg=45.0,
+            Ru_factor=1.5, Rd_factor=config.throat_downstream_radius_factor,
+            method="bezier",
+        )
+        return _wall_from_bezier_contour(bezier, n_w, config.gamma, Rt)
+    except Exception:
+        pass
+
+    # Fallback: linear-quadratic seed from N to E.
     theta_N_chart, theta_E_chart = _design_angles_rad(
         config.epsilon, config.length_pct, config.thetaN_guess_deg,
     )
     Nx = Rd * math.sin(theta_N_chart)
     Ny = Rt + Rd * (1.0 - math.cos(theta_N_chart))
-    n_w = max(int(config.n_wall), 4)
     x = np.linspace(Nx, L, n_w)
-    # Quadratic radius growth from N to E for a smooth bell shape.
     s = (x - Nx) / max(L - Nx, 1e-12)
     r = Ny + (Re - Ny) * (1.0 - (1.0 - s) ** 2)
 
@@ -2111,7 +2204,38 @@ def _ce_geometry_residuals(
         ], dtype=float),
     ])
     theta_scale = math.radians(1.0)
-    flow_boundary = np.zeros(0, dtype=float)
+
+    # Phase 7: angle_boundary_mode controls how θ_N / θ_E enter the
+    # residual stack.  "free" leaves them alone (chart values are only
+    # seeds); "chart_soft" adds a small (1e-3 weight) nudge for
+    # debugging; "chart_hard" pins to chart at unit weight + deprecation
+    # warning (legacy pre-Phase-4 behaviour).
+    mode = getattr(config, "angle_boundary_mode", "free")
+    if mode in ("chart_soft", "chart_hard"):
+        try:
+            from raosim.nozzle_geometry import lookup_angles
+            theta_n_deg, theta_e_deg = lookup_angles(config.epsilon, config.length_pct)
+        except Exception:
+            theta_n_deg = config.thetaN_guess_deg
+            theta_e_deg = max(0.0, 0.5 * config.thetaN_guess_deg)
+        if mode == "chart_hard":
+            import warnings as _warnings
+            _warnings.warn(
+                "angle_boundary_mode='chart_hard' pins θ_N/θ_E to chart "
+                "values, contaminating the chart benchmark.  Use 'free' "
+                "for benchmarking.",
+                DeprecationWarning, stacklevel=4,
+            )
+            anchor_weight = 1.0
+        else:  # "chart_soft"
+            anchor_weight = 1e-3
+        flow_boundary = anchor_weight * np.array([
+            (float(ce.theta[0]) - math.radians(theta_n_deg)) / theta_scale,
+            (float(ce.theta[-1]) - math.radians(theta_e_deg)) / theta_scale,
+        ], dtype=float)
+    else:  # "free" (default)
+        flow_boundary = np.zeros(0, dtype=float)
+
     monotonic = np.concatenate([
         np.maximum(-dx, 0.0) / x_scale,
         np.maximum(-dr, 0.0) / r_scale,

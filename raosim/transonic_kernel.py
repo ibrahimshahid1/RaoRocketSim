@@ -21,7 +21,7 @@ NASA AXI line 3133 reads::
        * (388*G*G + 1161*G + 1181)*y*y/576
        + (304*G*G + 831*G + 1242)*y/864) + ...
 
-There are two problems with the middle sub-term:
+There are three problems with the middle sub-term:
 
 * The ``*`` between the y^5 term and the y^2 term must be ``+``: with
   ``*``, the dimensional power becomes y^7 which is inconsistent with
@@ -35,6 +35,19 @@ There are two problems with the middle sub-term:
   2D branch's analogous term at line 3157 uses ``y*y*y``, and the
   y^5 → y^3 → y power progression matches the descending parity
   expected of a third-order coefficient.
+
+NASA AXI line 3129 reads::
+
+    z*((52*G*G + 51*G + 327)*y*y*y*y/34
+       - (52*G*G + 75*G + 279)*y*y/192
+       + (92*G*G + 180*G + 639)/1152)
+
+The divisor ``/34`` on the y^4 z-coupling term in ``u[3]`` is off by
+~11× — every other divisor in the same polynomial is /24, /144, /192,
+/1152, /82944 (powers of 2 × 3).  The correct divisor is ``/384``
+(2 × /192, the natural recurrence factor for the y^4 term immediately
+above the /192 y^2 term).  Cross-check Kliegel-Levine 1969 Table 1.
+This implementation uses the corrected ``/384.0``.
 
 The 2D analogue (NASA line 3157) has the same ``*`` → ``+`` typo in
 the middle of the z-bracket; the constant ``1665`` is correct.
