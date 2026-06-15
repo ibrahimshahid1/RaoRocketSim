@@ -38,6 +38,9 @@ from raosim.nasa_moc import (
     MOCKernel,
     RaoKernelError,
     build_kernel,
+    build_source_contour_from_kernel,
+    calc_bde_region,
+    calc_lrc_de,
     calc_massflow_along_rrc,
 )
 
@@ -156,38 +159,143 @@ def test_rao_kernel_error_class_exists():
 
 def test_marching_kernel_produces_multiple_rrcs_for_typical_geometry():
     """
-    Phase 12.4 marching kernel: after the per-point downstream-step
-    iteration in ``_make_throat_initial_line`` (NASA C++ lines 2853-2864),
-    the row march advances past TT' for the codebase's default tight
-    throat (``Rd/Rt = 0.382``).  The TT' is now everywhere-supersonic
-    (``M >= 1.05`` after pushing axis-side points downstream), which
-    lets ``solve_interior_point`` / ``solve_wall_point`` run.
-
-    With the default ``mdot_tol = 0.05`` the row march still falls
-    back to the arc-following BD for tight throats (the curved TT'
-    geometry overstates mass through the surface, triggering NASA's
-    sanity check).  At a relaxed ``mdot_tol = 0.5`` — physically
-    appropriate for the curved-TT' regime — the march produces
-    multiple RRCs and a proper kernel BD.
-
-    This test verifies both: ``mdot_tol=0.5`` yields multi-RRC; the
-    default ``mdot_tol=0.05`` still falls back (documenting the gate
-    for the eventual proper mass-integration fix on curved TT').
+    The source-shaped dtheta row march can advance past TT' when the
+    starting line is compatible with the visible NASA unit-process equations.
+    The codebase's tight default remains a harder curved-TT' problem; this
+    smoke test only requires a well-formed kernel there.
     """
     Rt = 0.020
     Rd = 0.382 * Rt
-    kernel_loose = build_kernel(Rt, Rd, math.radians(30.0),
-                                gamma=1.4, n_kernel=24, mdot_tol=0.5)
-    assert len(kernel_loose.rrcs) > 1, (
-        f"row-march with mdot_tol=0.5 produced only "
-        f"{len(kernel_loose.rrcs)} RRC; downstream-step iteration "
-        "isn't unblocking the march"
-    )
-    # Default mdot_tol still falls back — pinned for documentation.
     kernel_default = build_kernel(Rt, Rd, math.radians(30.0),
                                   gamma=1.4, n_kernel=24)
-    # Either path is acceptable as long as the kernel is well-formed.
     assert len(kernel_default.bd) >= 4
+
+
+def test_source_dtheta_row_march_reaches_wall_without_mass_relaxation():
+    """Visible-source row march reaches theta_B with the default mass gate.
+
+    This exercises ``CalcArcWallPoint`` special-wall insertion,
+    ``CalcInteriorMeshPoints``, ``CalcAxialMeshPoint``, and NASA's
+    mass-flow sanity check without relaxing ``mdot_tol``.
+    """
+    kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+        starting_line_method="sauer_modified",
+        mdot_tol=0.05,
+    )
+
+    assert kernel.fallback_used is False
+    assert kernel.reached_wall is True
+    assert len(kernel.rrcs) > 50
+    assert len(kernel.bd) > len(kernel.rrcs[0])
+    assert kernel.B.x == pytest.approx(kernel.Rd * math.sin(kernel.theta_B), abs=1e-9)
+    assert kernel.B.r == pytest.approx(
+        kernel.Rt + kernel.Rd * (1.0 - math.cos(kernel.theta_B)),
+        abs=1e-9,
+    )
+    mdot0 = float(kernel.massflow[0][0])
+    for mass in kernel.massflow:
+        assert abs(float(mass[0]) - mdot0) / mdot0 <= 0.05
+
+
+def test_corrected_kl_row_march_incompatibility_stays_visible():
+    """Do not hide the corrected-KL starting-line mismatch with a fallback claim."""
+    kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+        starting_line_method="kliegel_levine",
+        mdot_tol=0.05,
+    )
+
+    assert kernel.fallback_used is True
+    assert kernel.reached_wall is False
+
+
+def test_calc_bde_region_builds_wall_to_de_seed_rows():
+    """BFE slice: port CalcBDERegion, CalcRemainingMesh, and CalcWallContour."""
+    kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+        starting_line_method="sauer_modified",
+        mdot_tol=0.05,
+    )
+    topology = calc_lrc_de(
+        kernel,
+        x_E=12.5363,
+        r_E=math.sqrt(6.73651),
+        gamma=1.4,
+        Rt=1.0,
+        epsilon=6.73651,
+        pa_over_p0=0.0,
+        n_points=24,
+    )
+
+    region = calc_bde_region(kernel, topology)
+
+    assert region.complete_remaining_mesh is True
+    assert region.wall_contour_complete is True
+    assert region.iD >= 1
+    assert len(region.rows) == max(len(topology.DE) - 1, 0)
+    assert len(region.grid_rows) == len(region.rows)
+    assert len(region.wall_contour) == len(region.grid_rows)
+    assert region.rows
+    for row in region.rows:
+        assert len(row) == region.iD + 1
+        assert row[0].r > row[-1].r
+        assert row[-1].r >= topology.D.r
+        assert all(point.M > 1.0 for point in row)
+    for row in region.grid_rows:
+        assert len(row) > region.iD
+        assert row[0].r > row[-1].r
+        assert row[-1].r == pytest.approx(0.0, abs=1e-10)
+        assert all(point.M > 1.0 for point in row)
+
+
+def test_build_source_contour_from_kernel_reports_uncropped_status():
+    """Current source-port contour is complete through wall extraction.
+
+    Length closure/cropping is deliberately not claimed yet; that belongs to
+    the next ``SetThetaB``/``CropNozzleToLength`` port slice.
+    """
+    kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+        starting_line_method="sauer_modified",
+        mdot_tol=0.05,
+    )
+    contour = build_source_contour_from_kernel(
+        kernel,
+        x_E=12.5363,
+        r_E=math.sqrt(6.73651),
+        epsilon=6.73651,
+        pa_over_p0=0.0,
+        n_de_points=24,
+    )
+
+    diag = contour.diagnostics
+    assert diag["canonical_reference_track"] == "visible_source_port"
+    assert diag["source_contour_complete"] is True
+    assert diag["length_closed"] is False
+    assert diag["crop_nozzle_to_length"] == "not_ported"
+    assert diag["outer_theta_b_driver"] == "not_canonical"
+    assert diag["nasa_reference_matched_eligible"] is False
+    assert contour.bfe.complete_remaining_mesh is True
+    assert contour.bfe.wall_contour_complete is True
+    assert contour.wall_export.shape == (len(contour.wall), 2)
+    assert len(contour.wall) == len(kernel.rrcs) + len(contour.bfe.wall_contour)
 
 
 def test_phase12_4_end_to_end_no_regression():
@@ -237,6 +345,41 @@ def test_kl_throat_wall_mach_bit_comparable_to_nasa_wall_out():
         f"KL wall Mach {state.M:.5f} != NASA wall.out {M_nasa_wall:.5f} "
         "(4-decimal NASA_REFERENCE_MATCHED gate)"
     )
+
+
+@pytest.mark.xfail(
+    reason="Historical TT' fixture parity is blocked by unresolved generator "
+           "provenance. Keep xfailed unless a matching source/executable is "
+           "recovered or a documented fixture-reconstruction mode is added.",
+)
+def test_python_tt_prime_matches_nasa_tt_prime_rms_1e3():
+    """Historical fixture overlay gate for ``TT'.out``.
+
+    This is not the source-faithful port gate while the M3.5Perf TT'
+    generator remains unresolved.
+    """
+    import numpy as np
+
+    from raosim.legacy_io import parse_tt_prime_out
+
+    nasa_tt = parse_tt_prime_out(NASA_OUT / "TT'.out")
+    kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+    )
+    py_tt = kernel.rrcs[0]
+
+    def rms(name: str, values):
+        ref = nasa_tt.column(name)
+        return float(np.sqrt(np.mean((np.asarray(values, dtype=float) - ref) ** 2)))
+
+    assert rms("X", [node.x for node in py_tt]) < 1e-3
+    assert rms("R", [node.r for node in py_tt]) < 1e-3
+    assert rms("MACH", [node.M for node in py_tt]) < 1e-3
+    assert rms("THETA", [math.degrees(node.theta) for node in py_tt]) < 1e-3
 
 
 @pytest.mark.xfail(

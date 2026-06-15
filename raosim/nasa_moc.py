@@ -121,6 +121,8 @@ class MOCKernel:
     Rd: float
     gamma: float
     massflow: list[np.ndarray] = field(default_factory=list)
+    fallback_used: bool = False
+    reached_wall: bool = False
 
     @property
     def bd(self) -> list[MOCNode]:
@@ -147,6 +149,43 @@ class RaoTopology:
     theta_control: float
     theta_B: float
     rao_stationarity_residual: float
+
+
+@dataclass(frozen=True)
+class BDERegion:
+    """Rows produced by the post-kernel BFE port slice.
+
+    ``rows`` keeps the raw wall-to-DE ``CalcBDERegion`` seed strip for
+    diagnostics.  ``grid_rows`` is the post-``CalcRemainingMesh`` and
+    post-``CalcWallContour`` BFE grid in the same wall-first order NASA
+    writes to ``BFE_Kernel.out``.
+    """
+
+    rows: tuple[tuple[FlowNode, ...], ...]
+    iD: int
+    grid_rows: tuple[tuple[FlowNode, ...], ...] = ()
+    wall_contour: tuple[FlowNode, ...] = ()
+    complete_remaining_mesh: bool = False
+    wall_contour_complete: bool = False
+
+
+@dataclass(frozen=True)
+class RaoSourceContour:
+    """Visible-source NASA/JHU contour construction artifact.
+
+    This is the source-port path through the stages currently available in
+    this module: kernel march, D/DE construction, BDE remaining mesh, and wall
+    contour extraction.  It intentionally reports length/exit closure as a
+    diagnostic because ``SetThetaB``/``CropNozzleToLength`` are not yet
+    canonical in Python.
+    """
+
+    kernel: MOCKernel
+    topology: RaoTopology
+    bfe: BDERegion
+    wall: tuple[FlowNode, ...]
+    wall_export: np.ndarray
+    diagnostics: dict = field(default_factory=dict)
 
 
 # ----------------------------------------------------------------------
@@ -363,6 +402,87 @@ def _push_throat_point_to_supersonic(
     return float(x_hi), state_final
 
 
+def _visible_source_kl_throat(
+    r_over_Rt: float,
+    x_over_Rt: float,
+    gamma: float,
+    Rc_over_Rt: float,
+) -> tuple[float, float]:
+    """Literal visible-source ``KLThroat`` AXI branch.
+
+    This intentionally preserves the checked-in C++ coefficients and typos in
+    ``MOC_GridCalc_BDE.cpp`` instead of using
+    :mod:`raosim.transonic_kernel`'s mathematically corrected KL evaluator.
+    It is used only by the explicit ``nasa_visible_kliegel_levine`` starting
+    line mode so source-faithful row-march work can be separated from the
+    corrected KL kernel.
+    """
+    y = float(r_over_Rt)
+    x = float(x_over_Rt)
+    G = float(gamma)
+    RS = float(Rc_over_Rt)
+    z = x * math.sqrt(2.0 * RS / (G + 1.0))
+    RSP = RS + 1.0
+    u1 = y * y / 2.0 - 0.25 + z
+    v1 = y * y * y / 4.0 - y / 4.0 + y * z
+    u2 = (
+        (2 * G + 9) * y ** 4 / 24.0
+        - (4 * G + 15) * y * y / 24.0
+        + (10 * G + 57) / 288.0
+        + z * (y * y - 5.0 / 8.0)
+        - (2 * G - 3) * z * z / 6.0
+    )
+    v2 = (
+        (G + 3) * y ** 5 / 9.0
+        - (20 * G + 63) * y ** 3 / 96.0
+        + (28 * G + 93) * y / 288.0
+        + z * ((2 * G + 9) * y ** 3 / 6.0 - (4 * G + 15) * y / 12.0)
+        + y * z * z
+    )
+    u3 = (
+        (556 * G * G + 1737 * G + 3069) * y ** 6 / 10368.0
+        - (388 * G * G + 1161 * G + 1881) * y ** 4 / 2304.0
+        + (304 * G * G + 831 * G + 1242) * y * y / 1728.0
+        - (2708 * G * G + 7839 * G + 14211) / 82944.0
+        + z * (
+            (52 * G * G + 51 * G + 327) * y ** 4 / 34.0
+            - (52 * G * G + 75 * G + 279) * y * y / 192.0
+            + (92 * G * G + 180 * G + 639) / 1152.0
+        )
+        + z * z * (-(7 * G - 3) * y * y / 8.0 + (13 * G - 27) / 48.0)
+        + (4 * G * G - 57 * G + 27) * z ** 3 / 144.0
+    )
+    v3 = (
+        (6836 * G * G + 23031 * G + 30627) * y ** 7 / 82944.0
+        - (3380 * G * G + 11391 * G + 15291) * y ** 5 / 13824.0
+        + (3424 * G * G + 11271 * G + 15228) * y ** 3 / 13824.0
+        - (7100 * G * G + 22311 * G + 30249) * y / 82944.0
+        + z
+        * (
+            (556 * G * G + 1737 * G + 3069) * y ** 5 / 1728.0
+            * (388 * G * G + 1161 * G + 1181) * y * y / 576.0
+            + (304 * G * G + 831 * G + 1242) * y / 864.0
+        )
+        + z * z * (
+            (52 * G * G + 51 * G + 327) * y ** 3 / 192.0
+            - (52 * G * G + 75 * G + 279) * y / 192.0
+        )
+        - z ** 3 * (7 * G - 3) * y / 12.0
+    )
+    U = 1.0 + u1 / RSP + (u1 + u2) / (RSP * RSP) + (u1 + 2.0 * u2 + u3) / (RSP ** 3)
+    V = math.sqrt((G + 1.0) / (2.0 * RSP)) * (
+        v1 / RSP
+        + (1.5 * v1 + v2) / (RSP * RSP)
+        + (15.0 / 8.0 * v1 + 2.5 * v2 + v3) / (RSP ** 3)
+    )
+    if abs(V) < 1e-5:
+        V = 0.0
+    theta = math.atan2(V, U)
+    if abs(theta) < 1e-5:
+        theta = 0.0
+    return math.hypot(U, V), theta
+
+
 def _make_throat_initial_line(
     Rt: float, Rd: float, theta_B: float, gamma: float, n_points: int,
     starting_line_method: str,
@@ -415,7 +535,33 @@ def _make_throat_initial_line(
                 x_init = x_prev
             x_init = max(x_init, x_prev)  # never step backward
 
-        if starting_line_method == "kliegel_levine":
+        if starting_line_method in {
+            "nasa_visible_kliegel_levine",
+            "source_visible_kliegel_levine",
+        }:
+            mach_trial = 2.0
+            x_final = x_init
+            if i == 0:
+                M, theta = _visible_source_kl_throat(
+                    r_over_Rt, 0.0, gamma, Rd / Rt,
+                )
+            else:
+                # Literal NASA loop: enter with mach=2 and double drdx until
+                # the KL point is no longer above the arbitrary M=1.5 cap.
+                x_prev, r_prev, M_prev, theta_prev = wall_first[i - 1]
+                mu_prev = math.asin(1.0 / max(M_prev, 1.000001))
+                drdx = math.tan(theta_prev - mu_prev)
+                if abs(drdx) < 1e-14:
+                    drdx = -1e-14
+                M = mach_trial
+                theta = 0.0
+                while M > 1.5:
+                    x_final = x_prev + (r - r_prev) / drdx
+                    M, theta = _visible_source_kl_throat(
+                        r_over_Rt, x_final / Rt, gamma, Rd / Rt,
+                    )
+                    drdx *= 2.0
+        elif starting_line_method == "kliegel_levine":
             # Apply per-point downstream-step iteration so every TT'
             # point lands at M >= M_min.
             x_final, state = _push_throat_point_to_supersonic(
@@ -502,9 +648,38 @@ def _nasa_calc_R(mach: float, theta: float, r: float) -> float:
     return 1.0 / denom
 
 
+def _nasa_calc_b(mach: float, theta: float, r: float) -> float:
+    """Second term of the dθ RRC equation (z-form) — NASA C++ line 2986."""
+    if r == 0.0:
+        return 0.0
+    if abs(theta) < 1e-9:
+        return 0.0
+    denom = r * (_nasa_mm(mach) / math.tan(theta) + 1.0)
+    if abs(denom) < 1e-12:
+        return 0.0
+    return 1.0 / denom
+
+
+def _nasa_calc_R_star(mach: float, theta: float, r: float) -> float:
+    """Second term of the dθ RRC equation (r-form) — NASA C++ line 3008."""
+    if r == 0.0:
+        return 0.0
+    if abs(theta) < 1e-9:
+        return 0.0
+    denom = r * (_nasa_mm(mach) - 1.0 / math.tan(theta))
+    if abs(denom) < 1e-12:
+        return 0.0
+    return 1.0 / denom
+
+
 def _nasa_l_dy_dx(theta: float, mu: float) -> float:
     """LRC slope ``tan(theta + mu)`` — NASA C++ line 3019."""
     return math.tan(theta + mu)
+
+
+def _nasa_r_dy_dx(theta: float, mu: float) -> float:
+    """RRC slope ``tan(theta - mu)`` — NASA C++ line 3028."""
+    return math.tan(theta - mu)
 
 
 def _nasa_tan_avg(x: float, y: float) -> float:
@@ -513,6 +688,29 @@ def _nasa_tan_avg(x: float, y: float) -> float:
     ``TanAvg(x, y) = tan(0.5 · (atan(x) + atan(y)))``
     """
     return math.tan(0.5 * (math.atan(x) + math.atan(y)))
+
+
+def _char_point_from_values(
+    x: float,
+    r: float,
+    theta: float,
+    mach: float,
+    gamma: float,
+) -> CharPoint:
+    mach = float(max(mach, 1.000001))
+    theta = float(theta)
+    nu = prandtl_meyer(mach, gamma)
+    mu = mach_angle(mach)
+    return CharPoint(
+        x=float(x),
+        r=float(r),
+        theta=theta,
+        M=mach,
+        nu=float(nu),
+        mu=float(mu),
+        compat_plus=float(theta + nu),
+        compat_minus=float(theta - nu),
+    )
 
 
 def calc_arc_wall_point(
@@ -658,10 +856,433 @@ def calc_arc_wall_point(
     return None
 
 
+def _safe_rel_err(new: float, old: float) -> float:
+    if old == 0.0:
+        return 9.9
+    return (new - old) / old
+
+
+def _calc_arc_wall_point_raw(
+    prev_wall_first: list[CharPoint],
+    arc: ArcWall,
+    gamma: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 50,
+) -> CharPoint | None:
+    """Visible-source port of NASA ``CalcArcWallPoint`` before special clamp."""
+    if len(prev_wall_first) < 2:
+        return None
+    p1 = prev_wall_first[1]
+    p_prev_wall = prev_wall_first[0]
+
+    M1 = max(float(p1.M), 1.000001)
+    theta1 = float(p1.theta)
+    r1 = float(p1.r)
+    x1 = float(p1.x)
+    mu1 = math.asin(1.0 / M1)
+
+    slrc1 = _nasa_l_dy_dx(theta1, mu1)
+    A1 = _nasa_calc_A(M1, gamma)
+    B1 = _nasa_calc_B(M1, theta1, r1)
+    R1 = _nasa_calc_R(M1, theta1, r1)
+
+    x3 = float(x1)
+    r3 = float(p_prev_wall.r)
+    M3 = M1
+    theta3 = theta1
+    slrc3 = slrc1
+    A3 = A1
+    B3 = B1
+    R3 = R1
+
+    x3_old = r3_old = M3_old = theta3_old = 9.9
+    for _ in range(max_iter):
+        slrc13 = _nasa_tan_avg(slrc1, slrc3)
+        if abs(slrc13) < 1e-14:
+            return None
+        x3 = (r3 - r1) / slrc13 + x1
+        inside = arc.Rd * arc.Rd - x3 * x3
+        if inside < 0.0:
+            return None
+        r3 = arc.Rt + arc.Rd - math.sqrt(inside)
+        theta3 = math.asin(max(min(x3 / arc.Rd, 1.0), -1.0))
+
+        if B1 <= R1:
+            T1 = (x3 - x1) * (B3 + B1)
+        else:
+            T1 = (r3 - r1) * (R3 + R1)
+        denom = 0.5 * (A1 + A3)
+        if abs(denom) < 1e-14:
+            return None
+        M3 = M1 + (theta3 - theta1 + 0.5 * T1) / denom
+        if not math.isfinite(M3) or M3 < 1.0:
+            return None
+
+        slrc3 = _nasa_l_dy_dx(theta3, math.asin(1.0 / max(M3, 1.000001)))
+        A3 = _nasa_calc_A(M3, gamma)
+        B3 = _nasa_calc_B(M3, theta3, r3)
+        R3 = _nasa_calc_R(M3, theta3, r3)
+
+        x_err = _safe_rel_err(x3, x3_old)
+        r_err = _safe_rel_err(r3, r3_old)
+        M_err = _safe_rel_err(M3, M3_old)
+        T_err = _safe_rel_err(theta3, theta3_old)
+        x3_old = x3
+        r3_old = r3
+        M3_old = M3
+        theta3_old = theta3
+        if (
+            abs(x_err) <= conv_tol
+            and abs(r_err) <= conv_tol
+            and abs(M_err) <= conv_tol
+            and abs(T_err) <= conv_tol
+        ):
+            return _char_point_from_values(x3, r3, theta3, M3, gamma)
+    return _char_point_from_values(x3, r3, theta3, M3, gamma)
+
+
+def _calc_special_wall_point(
+    prev_wall_first: list[CharPoint],
+    arc: ArcWall,
+    gamma: float,
+    alpha: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 50,
+) -> CharPoint | None:
+    """Port NASA ``CalcSpecialWallPoint`` for small arc-angle increments."""
+    if len(prev_wall_first) < 2:
+        return None
+    p1 = prev_wall_first[1]
+    p2 = prev_wall_first[0]
+    theta3 = float(alpha)
+    x3 = arc.Rd * math.sin(theta3)
+    r3 = arc.Rt + arc.Rd * (1.0 - math.cos(theta3))
+
+    M1 = max(float(p1.M), 1.000001)
+    M2 = max(float(p2.M), 1.000001)
+    theta1 = float(p1.theta)
+    theta2 = float(p2.theta)
+    mu1 = math.asin(1.0 / M1)
+    mu2 = math.asin(1.0 / M2)
+
+    slrc1 = _nasa_l_dy_dx(theta1, mu1)
+    slrc2 = _nasa_l_dy_dx(theta2, mu2)
+    srrc1 = _nasa_r_dy_dx(theta1, mu1)
+    srrc2 = _nasa_r_dy_dx(theta2, mu2)
+    A1 = _nasa_calc_A(M1, gamma)
+    A2 = _nasa_calc_A(M2, gamma)
+    B1 = _nasa_calc_B(M1, theta1, p1.r)
+    B2 = _nasa_calc_B(M2, theta2, p2.r)
+    R1 = _nasa_calc_R(M1, theta1, p1.r)
+    R2 = _nasa_calc_R(M2, theta2, p2.r)
+
+    slrc3 = slrc1
+    slrc4 = slrc2
+    A3 = A1
+    B3 = B1
+    R3 = R1
+    s4rrc = _nasa_tan_avg(srrc1, srrc2)
+    A_err = B_err = R_err = K_err = 9.9
+    M3 = M1
+
+    for _ in range(max_iter):
+        slope34 = _nasa_tan_avg(slrc3, slrc4)
+        if abs(s4rrc - slope34) < 1e-14:
+            x4 = x3
+        elif abs(slope34) < 10000.0:
+            x4 = (
+                r3 - p2.r + s4rrc * p2.x - slope34 * x3
+            ) / (s4rrc - slope34)
+        else:
+            x4 = x3
+        denom = p2.x - p1.x
+        if abs(denom) < 1e-14:
+            ratio = 0.0
+        else:
+            ratio = (x4 - p1.x) / denom
+
+        A4 = A1 + ratio * (A2 - A1)
+        theta4 = theta1 + ratio * (theta2 - theta1)
+        slrc4 = slrc1 + ratio * (slrc2 - slrc1)
+        M4 = M1 + ratio * (M2 - M1)
+
+        if abs(B2) <= abs(R2):
+            B4 = B1 + ratio * (B2 - B1)
+            T4 = (x3 - x4) * (B3 + B4)
+        else:
+            R4 = R1 + ratio * (R2 - R1)
+            r4 = p1.r + ratio * (p2.r - p1.r)
+            T4 = (r3 - r4) * (R3 + R4)
+
+        denom_m = 0.5 * (A4 + A3)
+        if abs(denom_m) < 1e-14:
+            return None
+        M3 = M4 + (theta3 - theta4 + 0.5 * T4) / denom_m
+        if not math.isfinite(M3) or M3 < 1.0:
+            return None
+
+        K3_new = _nasa_l_dy_dx(theta3, math.asin(1.0 / max(M3, 1.000001)))
+        A3_new = _nasa_calc_A(M3, gamma)
+        B3_new = _nasa_calc_B(M3, theta3, r3)
+        R3_new = _nasa_calc_R(M3, theta3, r3)
+
+        K_err = _safe_rel_err(K3_new, slrc3)
+        A_err = _safe_rel_err(A3_new, A3)
+        B_err = _safe_rel_err(B3_new, B3)
+        R_err = _safe_rel_err(R3_new, R3)
+        slrc3 = K3_new
+        A3 = A3_new
+        B3 = B3_new
+        R3 = R3_new
+
+        if (
+            abs(A_err) <= conv_tol
+            and abs(B_err) <= conv_tol
+            and abs(R_err) <= conv_tol
+            and abs(K_err) <= conv_tol
+        ):
+            return _char_point_from_values(x3, r3, theta3, M3, gamma)
+    return _char_point_from_values(x3, r3, theta3, M3, gamma)
+
+
+def _calc_arc_wall_point_with_special(
+    prev_wall_first: list[CharPoint],
+    arc: ArcWall,
+    gamma: float,
+    dtheta_limit: float,
+) -> tuple[CharPoint, bool] | None:
+    raw = _calc_arc_wall_point_raw(prev_wall_first, arc, gamma)
+    if raw is None:
+        return None
+    prev_wall = prev_wall_first[0]
+    if (
+        raw.theta - prev_wall.theta > dtheta_limit
+        or raw.theta > arc.theta_max
+    ):
+        alpha = min(arc.theta_max, prev_wall.theta + 0.5 * dtheta_limit)
+        special = _calc_special_wall_point(prev_wall_first, arc, gamma, alpha)
+        if special is None:
+            return None
+        return special, True
+    return raw, False
+
+
+def _calc_interior_mesh_point(
+    prev_wall_first: list[CharPoint],
+    new_wall_first: list[CharPoint],
+    i: int,
+    special_flag: bool,
+    gamma: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 1000,
+) -> tuple[CharPoint | None, bool]:
+    """Port one NASA ``CalcInteriorMeshPoints`` point.
+
+    Returns ``(point, negative_r)``.  ``negative_r`` mirrors NASA's
+    ``r[i][j] < 0`` branch: the caller should discard the point and close
+    the row with an axial mesh point.
+    """
+    i_last_prev = len(prev_wall_first) - 1
+    ii = i if special_flag else i + 1
+    if ii > i_last_prev:
+        ii = i_last_prev
+    p1 = prev_wall_first[ii]
+    p2 = new_wall_first[i - 1]
+
+    M1 = max(float(p1.M), 1.000001)
+    M2 = max(float(p2.M), 1.000001)
+    TH1 = float(p1.theta)
+    TH2 = float(p2.theta)
+    s1 = _nasa_l_dy_dx(TH1, math.asin(1.0 / M1))
+    s2 = _nasa_r_dy_dx(TH2, math.asin(1.0 / M2))
+    A1 = _nasa_calc_A(M1, gamma)
+    A2 = _nasa_calc_A(M2, gamma)
+
+    if p1.r != 0.0:
+        B1 = _nasa_calc_B(M1, TH1, p1.r)
+        R1 = _nasa_calc_R(M1, TH1, p1.r)
+    else:
+        if ii > 0:
+            p1_off_axis = prev_wall_first[ii - 1]
+            M1o = max(float(p1_off_axis.M), 1.000001)
+            TH1o = float(p1_off_axis.theta)
+            B1 = _nasa_calc_B(M1o, TH1o, p1_off_axis.r)
+            R1 = _nasa_calc_R(M1o, TH1o, p1_off_axis.r)
+        else:
+            B1 = 0.0
+            R1 = 0.0
+
+    B2 = _nasa_calc_B(M2, TH2, p2.r)
+    b2 = _nasa_calc_b(M2, TH2, p2.r)
+    R2 = _nasa_calc_R(M2, TH2, p2.r)
+    RS2 = _nasa_calc_R_star(M2, TH2, p2.r)
+
+    s3lrc = s1
+    s3rrc = s2
+    b3 = b2
+    B3 = B1
+    R3 = R1
+    RS3 = RS2
+    A3 = 0.5 * (A1 + A2)
+    M3 = 9.9
+    TH3 = TH1
+    x3 = r3 = 9.9
+    x3_old = r3_old = m3_old = 9.9
+    x_err = r_err = M_err = 9.9
+
+    min_m_err = float("inf")
+    min_state: tuple[float, float, float, float] | None = None
+    for _ in range(max_iter):
+        if not (abs(x_err) > conv_tol or abs(r_err) > conv_tol or abs(M_err) > conv_tol):
+            break
+        if M3 < 1.0:
+            break
+
+        slope13 = _nasa_tan_avg(s1, s3lrc)
+        slope23 = _nasa_tan_avg(s2, s3rrc)
+        if slope13 > 10000.0:
+            x3 = p2.x
+        elif slope23 > 10000.0:
+            x3 = p1.x
+        else:
+            denom = slope23 - slope13
+            if abs(denom) < 1e-14:
+                return None, False
+            x3 = (
+                p1.r - p2.r - slope13 * p1.x + slope23 * p2.x
+            ) / denom
+
+        if abs(s2) <= abs(s1):
+            r3 = p2.r + slope23 * (x3 - p2.x)
+        else:
+            r3 = p1.r + slope13 * (x3 - p1.x)
+
+        if abs(b2) <= abs(RS2):
+            T2 = (x3 - p2.x) * (b2 + b3)
+        else:
+            T2 = (r3 - p2.r) * (RS3 + RS2)
+        if abs(B1) <= abs(R1):
+            T1 = (x3 - p1.x) * (B1 + B3)
+        else:
+            T1 = (r3 - p1.r) * (R3 + R1)
+
+        denom_m = A1 + A2 + 2.0 * A3
+        if abs(denom_m) < 1e-14:
+            return None, False
+        M3 = (
+            2.0 * (TH2 - TH1)
+            + M2 * (A2 + A3)
+            + M1 * (A1 + A3)
+            + T1
+            + T2
+        ) / denom_m
+        if not math.isfinite(M3):
+            return None, False
+        if M3 <= 1.0:
+            break
+
+        A3 = _nasa_calc_A(M3, gamma)
+        TH3 = 0.5 * (TH1 + TH2) + 0.25 * (
+            M2 * (A3 + A2)
+            - M1 * (A1 + A3)
+            - M3 * (A2 - A1)
+            + T2
+            - T1
+        )
+        if TH3 < 0.0:
+            TH3 = 0.0
+
+        mu3 = math.asin(1.0 / max(M3, 1.000001))
+        s3lrc = _nasa_l_dy_dx(TH3, mu3)
+        s3rrc = _nasa_r_dy_dx(TH3, mu3)
+        B3 = _nasa_calc_B(M3, TH3, r3)
+        b3 = _nasa_calc_b(M3, TH3, r3)
+        R3 = _nasa_calc_R(M3, TH3, r3)
+        RS3 = _nasa_calc_R_star(M3, TH3, r3)
+
+        x_err = _safe_rel_err(x3, x3_old)
+        r_dif = r3 - r3_old
+        if abs(r_dif) < 1e-5 and abs(r3) < 1e-4:
+            r_err = 1e-3 * r_dif
+        else:
+            r_err = _safe_rel_err(r3, r3_old)
+        M_err = _safe_rel_err(M3, m3_old)
+        if abs(M_err) < min_m_err:
+            min_m_err = abs(M_err)
+            min_state = (x3, r3, M3, TH3)
+        x3_old = x3
+        r3_old = r3
+        m3_old = M3
+    else:
+        if min_m_err <= 5e-4 and min_state is not None:
+            x3, r3, M3, TH3 = min_state
+        else:
+            return None, False
+
+    if M3 < 1.0:
+        if min_m_err <= 5e-4 and min_state is not None:
+            x3, r3, M3, TH3 = min_state
+        else:
+            return None, False
+    if r3 < 0.0:
+        return None, True
+    if p2.theta != 0.0 and TH3 < 0.0:
+        TH3 = 0.0
+    return _char_point_from_values(x3, r3, TH3, M3, gamma), False
+
+
+def _calc_axial_mesh_point(
+    new_wall_first: list[CharPoint],
+    gamma: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 500,
+) -> CharPoint | None:
+    """Port NASA ``CalcAxialMeshPoint`` for the row-closing axis point."""
+    if not new_wall_first:
+        return None
+    p2 = new_wall_first[-1]
+    M2 = max(float(p2.M), 1.000001)
+    TH2 = float(p2.theta)
+    s2 = _nasa_r_dy_dx(TH2, math.asin(1.0 / M2))
+    A2 = _nasa_calc_A(M2, gamma)
+    b2 = _nasa_calc_b(M2, TH2, p2.r)
+    s3 = s2
+    A3 = A2
+    x3_old = m3_old = 9.9
+    M_err = x_err = 9.9
+    x3 = p2.x
+    M3 = M2
+    for _ in range(max_iter):
+        if not (abs(M_err) > conv_tol or abs(x_err) > conv_tol):
+            break
+        slope23 = _nasa_tan_avg(s2, s3)
+        if abs(slope23) < 1e-14:
+            return None
+        x3 = p2.x - p2.r / slope23
+        denom = A2 + A3
+        if abs(denom) < 1e-14:
+            return None
+        M3 = M2 + 2.0 * (TH2 + b2 * (x3 - p2.x)) / denom
+        if not math.isfinite(M3) or M3 < 1.0:
+            return None
+        s3 = _nasa_r_dy_dx(0.0, math.asin(1.0 / max(M3, 1.000001)))
+        A3 = _nasa_calc_A(M3, gamma)
+        M_err = _safe_rel_err(M3, m3_old)
+        x_err = _safe_rel_err(x3, x3_old)
+        x3_old = x3
+        m3_old = M3
+    return _char_point_from_values(x3, 0.0, 0.0, M3, gamma)
+
+
 def _rrc_march_step(
     prev_axis_first: list[CharPoint],
     arc: ArcWall,
     gamma: float,
+    dtheta_limit: float,
 ) -> list[CharPoint] | None:
     """Build a new RRC by NASA-style wall-then-inward unit-process march.
 
@@ -685,64 +1306,38 @@ def _rrc_march_step(
     """
     if len(prev_axis_first) < 3:
         return None
-    n = len(prev_axis_first)
+    prev_wall_first = list(reversed(prev_axis_first))
     try:
-        # Wall point: NASA-port CalcArcWallPoint (dθ-form compatibility,
-        # arc-locked geometry).  This replaces the PM-form
-        # ``solve_wall_point`` which decayed Mach for tight arcs
-        # (cf. session log: M dropped 1.29 → 1.23 → 1.14 in 3 steps
-        # under PM form; dθ-form preserves the expansion through
-        # the arc as physically required).
-        wall_pt_tuple = calc_arc_wall_point(prev_axis_first, arc, gamma)
-        if wall_pt_tuple is None:
-            return None
-        x_w, r_w, theta_w, M_w = wall_pt_tuple
-        if r_w < 0.0 or M_w < 1.0001:
-            return None
-        # If the iteration overshoots the arc end, clamp x to arc.x_end
-        # and recompute (r, theta) on the arc.  Keep the Mach from the
-        # converged iteration — overshooting by ~5% is fine for the
-        # final wall point (theta_B is reached and the kernel halts
-        # downstream of this step).
-        if x_w > arc.x_end + 1e-9:
-            x_w = arc.x_end
-            inside = arc.Rd * arc.Rd - x_w * x_w
-            r_w = arc.Rt + arc.Rd - math.sqrt(max(inside, 0.0))
-            theta_w = math.asin(max(min(x_w / arc.Rd, 1.0), -1.0))
-        nu_w = prandtl_meyer(M_w, gamma)
-        mu_w = mach_angle(M_w)
-        wall_pt = CharPoint(
-            x=float(x_w), r=float(r_w), theta=float(theta_w), M=float(M_w),
-            nu=float(nu_w), mu=float(mu_w),
-            compat_plus=float(theta_w + nu_w),
-            compat_minus=float(theta_w - nu_w),
+        wall_result = _calc_arc_wall_point_with_special(
+            prev_wall_first, arc, gamma, dtheta_limit,
         )
-        # March from wall inward.  axis-first means we have to assemble
-        # the new RRC top-down then reverse.
+        if wall_result is None:
+            return None
+        wall_pt, special_flag = wall_result
+        if wall_pt.r < 0.0 or wall_pt.M < 1.0001:
+            return None
+
+        # NASA wall-first row assembly.  When a special wall point is
+        # inserted, iLast[j] = iLast[j-1] + 1 and point-1 indexing shifts
+        # from i+1 to i.
         new_wall_first: list[CharPoint] = [wall_pt]
-        for i_from_wall in range(1, n - 1):
-            # parent_minus = the just-built point (above on new RRC)
-            p_minus = new_wall_first[-1]
-            # parent_plus = the next-lower point on the previous RRC
-            # (with axis-first indexing, "next-lower" means smaller index)
-            prev_idx_plus = (n - 1) - i_from_wall - 1
-            prev_idx_plus = max(prev_idx_plus, 0)
-            p_plus = prev_axis_first[prev_idx_plus]
-            try:
-                interior = solve_interior_point(p_minus, p_plus, gamma, True)
-            except Exception:
+        i_end = len(prev_wall_first) - 1 + (1 if special_flag else 0)
+        for i in range(1, i_end):
+            interior, negative_r = _calc_interior_mesh_point(
+                prev_wall_first, new_wall_first, i, special_flag, gamma,
+            )
+            if negative_r:
+                break
+            if interior is None:
                 return None
-            if interior.M < 1.0001 or interior.r < 0.0:
+            if interior.M < 1.0001:
                 return None
             new_wall_first.append(interior)
-        # Axis point.
-        axis_parent = new_wall_first[-1]
-        try:
-            axis_pt = solve_axis_point(axis_parent, gamma, True)
-        except Exception:
+
+        axis_pt = _calc_axial_mesh_point(new_wall_first, gamma)
+        if axis_pt is None:
             return None
         new_wall_first.append(axis_pt)
-        # Reverse to axis-first ordering for storage.
         return list(reversed(new_wall_first))
     except Exception:
         return None
@@ -757,6 +1352,7 @@ def build_kernel(
     starting_line_method: str = "kliegel_levine",
     max_rrcs: int = 500,
     mdot_tol: float = 0.05,
+    dtheta_limit: float = 0.5 * math.pi / 180.0,
 ) -> MOCKernel:
     """
     Build the Rao kernel by NASA-style RRC marching through the throat arc.
@@ -764,27 +1360,29 @@ def build_kernel(
     Port summary
     ============
     Direct port of ``CalcInitialThroatLine`` (NASA C++ line 2805) +
-    ``CalcRRCsAlongArc`` (line 1030) with the unit-process internals
-    delegated to the existing :mod:`raosim.moc` Anderson-style C+/C-
-    solvers (mathematically equivalent to NASA's dθ-form with the same
-    axisymmetric source terms):
+    ``CalcRRCsAlongArc`` (line 1030).  The row march uses the visible
+    source-shaped dθ unit processes: special arc-wall insertion
+    (``CalcArcWallPoint`` / ``CalcSpecialWallPoint``), wall-to-axis
+    interior points (``CalcInteriorMeshPoints``), and the symmetry-axis
+    closure (``CalcAxialMeshPoint``):
 
     1. ``_make_throat_initial_line`` lays TT' at the throat plane
-       (x = 0) with Mach distribution from
-       :func:`raosim.transonic_kernel.kliegel_levine` (Phase 9).
+       (x = 0).  ``kliegel_levine`` uses the corrected KL evaluator;
+       ``nasa_visible_kliegel_levine`` / ``source_visible_kliegel_levine``
+       preserve the visible C++ expression, and ``sauer_modified`` uses
+       the source-compatible Sauer starting line.
     2. ``_rrc_march_step`` builds each new RRC by computing the wall
-       point on the throat arc (``ArcWall`` + :func:`moc.solve_wall_point`),
-       then marching interior points from wall to axis with
-       :func:`moc.solve_interior_point`, terminating at the axis with
-       :func:`moc.solve_axis_point`.
+       point on the throat arc, then marching interior points from wall
+       to axis with NASA's dθ source terms, terminating at the axis by
+       symmetry.
     3. The marching loop stops when the new wall point reaches
        ``theta_B`` (``wall.x >= xArcMax``) or when a unit process fails
        (kernel boundary reached).
     4. NASA's mass-flow sanity check (line 1085): each new RRC's
        wall-side mass flow must match TT''s wall-side mass flow to
-       within ``mdot_tol`` (default 5 % — looser than NASA's 2 % to
-       absorb interpolation noise from the simplified throat
-       distribution).  Violations raise :class:`RaoKernelError`.
+       within ``mdot_tol`` (default 5 %).  Violations stop the march and
+       leave the kernel visibly partial instead of manufacturing a full
+       NASA-reference claim.
 
     The last RRC in ``rrcs`` is the kernel's *final* characteristic.
     NASA's Rao construction (Rice 2003 §3.4) calls this curve BD when
@@ -819,7 +1417,9 @@ def build_kernel(
     prev_axis_first: list[CharPoint] = list(tt_prime)
     reached_wall = False
     for _ in range(max_rrcs):
-        new_axis_first = _rrc_march_step(prev_axis_first, arc, gamma)
+        new_axis_first = _rrc_march_step(
+            prev_axis_first, arc, gamma, dtheta_limit,
+        )
         if new_axis_first is None:
             break
 
@@ -861,9 +1461,11 @@ def build_kernel(
             # extension that would mask the wall-not-reached condition.
             _ = (x_B, r_B, M_B)
 
+    fallback_used = False
     if len(rrcs) < 2:
         # Marching could not advance past TT'; fall back to the
         # arc-following polyline so calc_lrc_de can still run.
+        fallback_used = True
         arc_nodes: list[MOCNode] = []
         x_B = Rd * math.sin(theta_B)
         r_B = Rt + Rd * (1.0 - math.cos(theta_B))
@@ -913,7 +1515,9 @@ def build_kernel(
 
     bd_rrc = rrcs[-1]
     kernel = MOCKernel(rrcs=rrcs, theta_B=float(theta_B),
-                       Rt=float(Rt), Rd=float(Rd), gamma=float(gamma))
+                       Rt=float(Rt), Rd=float(Rd), gamma=float(gamma),
+                       fallback_used=bool(fallback_used),
+                       reached_wall=bool(reached_wall))
     kernel.massflow = massflow
     return kernel
 
@@ -946,7 +1550,10 @@ def calc_massflow_along_rrc(rrc: list[MOCNode], gamma: float) -> np.ndarray:
         if dr <= 1e-15:
             massflow[i] = massflow[i + 1]
             continue
-        dxdr = (p_upper.x - p_lower.x) / dr
+        # NASA C++ line 3213:
+        # dxdr = (x[i+1][j] - x[i][j]) / (r[i][j] - r[i+1][j])
+        # with i wall-side and i+1 axis-side.
+        dxdr = (p_lower.x - p_upper.x) / dr
         u1 = p_upper.u
         u2 = p_lower.u
         v1 = p_upper.v
@@ -1422,6 +2029,554 @@ def _arc_position_of_D(bd_rrc: list[MOCNode], xD: float) -> float:
             return float(min(max((accum + ratio * ds) / total, 0.0), 1.0))
         accum += ds
     return 1.0
+
+
+# ----------------------------------------------------------------------
+#  CalcBDERegion: first post-kernel BFE slice
+# ----------------------------------------------------------------------
+
+
+def _insert_node_on_bd(
+    bd_rrc: list[MOCNode],
+    D: FlowNode,
+) -> tuple[list[MOCNode], int]:
+    """Return the full BD row containing D exactly, plus D's index."""
+    if len(bd_rrc) < 2:
+        raise ValueError("BD row must contain at least two nodes")
+    best_i = 1
+    best_dist = float("inf")
+    d_xy = np.array([D.x, D.r], dtype=float)
+    for i, (p0, p1) in enumerate(zip(bd_rrc[:-1], bd_rrc[1:]), start=1):
+        a = np.array([p0.x, p0.r], dtype=float)
+        b = np.array([p1.x, p1.r], dtype=float)
+        ab = b - a
+        denom = float(np.dot(ab, ab))
+        if denom <= 1e-24:
+            t = 0.0
+        else:
+            t = float(np.clip(np.dot(d_xy - a, ab) / denom, 0.0, 1.0))
+        proj = a + t * ab
+        dist = float(np.linalg.norm(d_xy - proj))
+        if dist < best_dist:
+            best_dist = dist
+            best_i = i
+    tol = 1e-10
+    if math.hypot(D.x - bd_rrc[best_i].x, D.r - bd_rrc[best_i].r) <= tol:
+        return list(bd_rrc), best_i
+    if math.hypot(D.x - bd_rrc[best_i - 1].x, D.r - bd_rrc[best_i - 1].r) <= tol:
+        return list(bd_rrc), best_i - 1
+    d_node = MOCNode(
+        x=float(D.x), r=float(D.r), M=float(max(D.M, 1.000001)),
+        theta=float(D.theta), gamma=float(bd_rrc[0].gamma),
+    )
+    row = list(bd_rrc[:best_i]) + [d_node] + list(bd_rrc[best_i:])
+    return row, best_i
+
+
+def _moc_to_char_point(node: MOCNode, gamma: float) -> CharPoint:
+    """Convert a NASA-port node to the characteristic helper representation."""
+    return _char_point_from_values(
+        float(node.x), float(node.r), float(node.theta),
+        float(max(node.M, 1.000001)), float(gamma),
+    )
+
+
+def _flow_to_moc_node(node: FlowNode, gamma: float) -> MOCNode:
+    return MOCNode(
+        float(node.x), float(node.r), float(max(node.M, 1.000001)),
+        float(node.theta), float(gamma),
+    )
+
+
+def _calc_bde_back_point(
+    previous_row: list[MOCNode],
+    current_row: list[MOCNode | None],
+    i: int,
+    gamma: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 50,
+) -> MOCNode | None:
+    """Port one point from NASA ``CalcBDERegion`` (C++ line 3258)."""
+    p1 = previous_row[i]
+    p2 = current_row[i + 1]
+    if p2 is None:
+        return None
+
+    M1 = max(float(p1.M), 1.000001)
+    M2 = max(float(p2.M), 1.000001)
+    TH1 = float(p1.theta)
+    TH2 = float(p2.theta)
+    s1 = _nasa_l_dy_dx(TH1, math.asin(1.0 / M1))
+    s2 = _nasa_r_dy_dx(TH2, math.asin(1.0 / M2))
+    A1 = _nasa_calc_A(M1, gamma)
+    A2 = _nasa_calc_A(M2, gamma)
+    B1 = _nasa_calc_B(M1, TH1, p1.r)
+    R1 = _nasa_calc_R(M1, TH1, p1.r)
+    B2 = _nasa_calc_B(M2, TH2, p2.r)
+    b2 = _nasa_calc_b(M2, TH2, p2.r)
+    R2 = _nasa_calc_R(M2, TH2, p2.r)
+    RS2 = _nasa_calc_R_star(M2, TH2, p2.r)
+
+    s3lrc = s1
+    s3rrc = s2
+    b3 = b2
+    B3 = B1
+    R3 = R1
+    RS3 = _nasa_calc_R_star(M1, TH1, p1.r)
+    A3 = 0.5 * (A1 + A2)
+    x3_old = r3_old = m3_old = theta3_old = 9.9
+    x_err = r_err = M_err = T_err = 9.9
+    x3 = r3 = M3 = TH3 = 9.9
+
+    for _ in range(max_iter):
+        if not (
+            abs(x_err) > conv_tol
+            or abs(r_err) > conv_tol
+            or abs(M_err) > conv_tol
+            or abs(T_err) > conv_tol
+        ):
+            break
+        slope13 = _nasa_tan_avg(s1, s3lrc)
+        slope23 = _nasa_tan_avg(s2, s3rrc)
+        denom = slope23 - slope13
+        if abs(denom) < 1e-14:
+            return None
+        x3 = (
+            p1.r - p2.r - slope13 * p1.x + slope23 * p2.x
+        ) / denom
+        if abs(s2) <= abs(s1):
+            r3 = p2.r + slope23 * (x3 - p2.x)
+        else:
+            r3 = p1.r + slope13 * (x3 - p1.x)
+
+        if abs(b2) <= abs(RS2):
+            T2 = (x3 - p2.x) * (b2 + b3)
+        else:
+            T2 = (r3 - p2.r) * (RS3 + RS2)
+        if abs(B1) <= abs(R1):
+            T1 = (x3 - p1.x) * (B1 + B3)
+        else:
+            T1 = (r3 - p1.r) * (R3 + R1)
+
+        denom_m = A1 + A2 + 2.0 * A3
+        if abs(denom_m) < 1e-14:
+            return None
+        M3 = (
+            2.0 * (TH2 - TH1)
+            + M2 * (A2 + A3)
+            + M1 * (A1 + A3)
+            + T1
+            + T2
+        ) / denom_m
+        if not math.isfinite(M3) or M3 < 1.0:
+            return None
+        A3 = _nasa_calc_A(M3, gamma)
+        TH3 = 0.5 * (TH1 + TH2) + 0.25 * (
+            M2 * (A3 + A2)
+            - M1 * (A1 + A3)
+            - M3 * (A2 - A1)
+            + T2
+            - T1
+        )
+        if TH3 != 0.0:
+            TH3 = max(TH3, 0.0)
+
+        mu3 = math.asin(1.0 / max(M3, 1.000001))
+        s3lrc = _nasa_l_dy_dx(TH3, mu3)
+        s3rrc = _nasa_r_dy_dx(TH3, mu3)
+        B3 = _nasa_calc_B(M3, TH3, r3)
+        b3 = _nasa_calc_b(M3, TH3, r3)
+        R3 = _nasa_calc_R(M3, TH3, r3)
+        RS3 = _nasa_calc_R_star(M3, TH3, r3)
+
+        x_err = _safe_rel_err(x3, x3_old)
+        r_err = _safe_rel_err(r3, r3_old)
+        M_err = _safe_rel_err(M3, m3_old)
+        T_err = _safe_rel_err(TH3, theta3_old)
+        x3_old = x3
+        r3_old = r3
+        m3_old = M3
+        theta3_old = TH3
+
+    return MOCNode(float(x3), float(r3), float(M3), float(TH3), float(gamma))
+
+
+def _calc_remaining_mesh_row(
+    previous_full_row: list[MOCNode],
+    current_seed_row: list[MOCNode],
+    iD: int,
+    gamma: float,
+) -> list[MOCNode] | None:
+    """Port one ``CalcRemainingMesh`` row below the known DE point."""
+    if len(current_seed_row) != iD + 1:
+        raise ValueError("current_seed_row must contain wall through DE")
+    if len(previous_full_row) <= iD:
+        return None
+
+    current = list(current_seed_row)
+    prev_chars = [_moc_to_char_point(node, gamma) for node in previous_full_row]
+
+    # NASA sets iLast[j] = iLast[j-1] + 1 and computes interior points for
+    # iD+1 <= i < iLast[j].  The final index is closed by CalcAxialMeshPoint.
+    while len(current) < len(previous_full_row):
+        curr_chars = [_moc_to_char_point(node, gamma) for node in current]
+        point, negative_r = _calc_interior_mesh_point(
+            prev_chars, curr_chars, len(current), True, gamma,
+        )
+        if negative_r:
+            break
+        if point is None:
+            return None
+        current.append(MOCNode.from_char_point(point, gamma))
+
+    curr_chars = [_moc_to_char_point(node, gamma) for node in current]
+    axis = _calc_axial_mesh_point(curr_chars, gamma)
+    if axis is None:
+        return None
+    current.append(MOCNode.from_char_point(axis, gamma))
+    return current
+
+
+def _de_cumulative_mass(de_nodes: list[MOCNode]) -> list[float]:
+    """Mass accumulated along DE, matching ``FindPointE`` conventions."""
+    masses = [0.0]
+    for p0, p1 in zip(de_nodes[:-1], de_nodes[1:]):
+        dmdot = _annular_mdot(p0, p1)
+        masses.append(masses[-1] + max(0.0, float(dmdot)))
+    return masses
+
+
+def _wall_contour_segment_mdot(p0: MOCNode, p1: MOCNode) -> float:
+    """Signed segment mass used by NASA ``CalcWallContour``.
+
+    ``p0`` is the lower/axis-side point and ``p1`` is the upper/wall-side
+    point.  This intentionally differs from ``calc_massflow_along_rrc``:
+    the C++ wall crop uses a minus sign on the transverse flux term and
+    does not wrap the segment integral in ``fabs``.
+    """
+    dr = p1.r - p0.r
+    if abs(dr) <= 1e-15:
+        return 0.0
+    dxdr = (p1.x - p0.x) / dr
+    rho_u_avg = 0.5 * (
+        p0.rho * p0.u + p1.rho * p1.u
+        - dxdr * (p0.rho * p0.v + p1.rho * p1.v)
+    )
+    da = math.pi * (p1.r * p1.r - p0.r * p0.r)
+    return float(rho_u_avg * da)
+
+
+def _interp_moc_node(p0: MOCNode, p1: MOCNode, ratio: float) -> MOCNode:
+    """Linear interpolation from ``p0`` to ``p1`` in physical/state space."""
+    t = float(max(0.0, min(1.0, ratio)))
+    gamma = p0.gamma + t * (p1.gamma - p0.gamma)
+    return MOCNode(
+        x=float(p0.x + t * (p1.x - p0.x)),
+        r=float(p0.r + t * (p1.r - p0.r)),
+        M=float(max(p0.M + t * (p1.M - p0.M), 1.000001)),
+        theta=float(p0.theta + t * (p1.theta - p0.theta)),
+        gamma=float(gamma),
+    )
+
+
+def _wall_point_on_segment(
+    lower: MOCNode,
+    upper: MOCNode,
+    mdot0: float,
+    mdot_match: float,
+) -> MOCNode | None:
+    """Secant/bisection wall point between lower and upper row nodes."""
+    scale = max(abs(float(mdot_match)), 1e-12)
+
+    def err_for_ratio(ratio: float) -> float:
+        candidate = _interp_moc_node(lower, upper, ratio)
+        return (
+            mdot0 + _wall_contour_segment_mdot(lower, candidate)
+            - mdot_match
+        ) / scale
+
+    err_lo = err_for_ratio(0.0)
+    err_hi = err_for_ratio(1.0)
+    if not (math.isfinite(err_lo) and math.isfinite(err_hi)):
+        return None
+    if abs(err_lo) <= 1e-10:
+        return lower
+    if abs(err_hi) <= 1e-10:
+        return upper
+    if err_lo * err_hi > 0.0:
+        seg = _wall_contour_segment_mdot(lower, upper)
+        if abs(seg) <= 1e-15:
+            return None
+        return _interp_moc_node(lower, upper, (mdot_match - mdot0) / seg)
+
+    lo = 0.0
+    hi = 1.0
+    r0 = lo
+    r1 = hi
+    e0 = err_lo
+    e1 = err_hi
+    best = 0.5
+    for _ in range(50):
+        if e0 != e1:
+            r2 = r1 - e1 * (r1 - r0) / (e1 - e0)
+        else:
+            r2 = 0.5 * (lo + hi)
+        if not math.isfinite(r2) or r2 <= lo or r2 >= hi:
+            r2 = 0.5 * (lo + hi)
+        e2 = err_for_ratio(r2)
+        if not math.isfinite(e2):
+            return None
+        best = r2
+        if abs(e2) <= 1e-10 or hi - lo <= 1e-10:
+            break
+        if err_lo * e2 <= 0.0:
+            hi = r2
+            err_hi = e2
+        else:
+            lo = r2
+            err_lo = e2
+        r0, e0 = r1, e1
+        r1, e1 = r2, e2
+    return _interp_moc_node(lower, upper, best)
+
+
+def _calc_wall_contour_rows(
+    bd_full_row: list[MOCNode],
+    bfe_full_rows: list[list[MOCNode]],
+    de_masses: list[float],
+    iD: int,
+    gamma: float,
+) -> tuple[list[list[MOCNode]], list[MOCNode], bool]:
+    """Port NASA ``CalcWallContour`` over the post-BD rows."""
+    if not bfe_full_rows:
+        return [], [], False
+    if len(de_masses) < len(bfe_full_rows) + 1:
+        return bfe_full_rows, [row[0] for row in bfe_full_rows], False
+
+    bd_massflow = calc_massflow_along_rrc(bd_full_row, gamma)
+    if iD >= len(bd_massflow):
+        return bfe_full_rows, [row[0] for row in bfe_full_rows], False
+    mass_bd_grid = float(bd_massflow[0] - bd_massflow[iD])
+
+    cropped_rows: list[list[MOCNode]] = []
+    wall_nodes: list[MOCNode] = []
+    complete = True
+    last_post = len(bfe_full_rows) - 1
+
+    for j, row in enumerate(bfe_full_rows):
+        if len(row) <= iD:
+            complete = False
+            cropped_rows.append(row)
+            wall_nodes.append(row[0])
+            continue
+        if j == last_post:
+            cropped = list(row[iD:])
+            cropped_rows.append(cropped)
+            wall_nodes.append(cropped[0])
+            continue
+
+        mdot_match = mass_bd_grid - float(de_masses[j + 1])
+        if mdot_match <= 1e-12:
+            cropped = list(row[iD:])
+            cropped_rows.append(cropped)
+            wall_nodes.append(cropped[0])
+            continue
+
+        mdot = 0.0
+        mdot0 = 0.0
+        lower_idx = iD
+        lower = row[lower_idx]
+        found: tuple[int, MOCNode] | None = None
+        for upper_idx in range(iD - 1, -1, -1):
+            upper = row[upper_idx]
+            segment_mdot = _wall_contour_segment_mdot(lower, upper)
+            mdot += segment_mdot
+            if mdot < mdot_match:
+                lower = upper
+                lower_idx = upper_idx
+                mdot0 = mdot
+                continue
+            wall = _wall_point_on_segment(
+                lower, upper, mdot0, mdot_match,
+            )
+            if wall is None:
+                complete = False
+                break
+            found = (upper_idx, wall)
+            break
+
+        if found is None:
+            complete = False
+            cropped_rows.append(row)
+            wall_nodes.append(row[0])
+            continue
+        upper_idx, wall = found
+        cropped = [wall] + list(row[upper_idx + 1:])
+        cropped_rows.append(cropped)
+        wall_nodes.append(wall)
+
+    return cropped_rows, wall_nodes, complete
+
+
+def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
+    """Port NASA ``CalcBDERegion`` for the wall-to-DE post-kernel rows.
+
+    This back-calculates the region bounded by wall-B, BD, and DE, then
+    runs the first source-shaped ports of ``CalcRemainingMesh`` and
+    ``CalcWallContour`` so callers can compare a BFE-family artifact
+    without claiming NASA-reference parity.
+    """
+    bd_full_row, iD = _insert_node_on_bd(kernel.bd, topology.D)
+    bd_seed_row = bd_full_row[:iD + 1]
+    de_nodes = [
+        MOCNode(float(node.x), float(node.r), float(max(node.M, 1.000001)),
+                float(node.theta), float(kernel.gamma))
+        for node in topology.DE
+    ]
+    if not de_nodes:
+        return BDERegion(rows=(), iD=iD, complete_remaining_mesh=False)
+    if math.hypot(de_nodes[0].x - topology.D.x, de_nodes[0].r - topology.D.r) > 1e-9:
+        de_nodes.insert(0, MOCNode(
+            float(topology.D.x), float(topology.D.r),
+            float(max(topology.D.M, 1.000001)), float(topology.D.theta),
+            float(kernel.gamma),
+        ))
+
+    rows: list[tuple[FlowNode, ...]] = []
+    bfe_full_rows: list[list[MOCNode]] = []
+    previous_seed = bd_seed_row
+    previous_full = bd_full_row
+    for de_node in de_nodes[1:]:
+        current: list[MOCNode | None] = [None] * (iD + 1)
+        current[iD] = de_node
+        for i in range(iD - 1, -1, -1):
+            point = _calc_bde_back_point(previous_seed, current, i, kernel.gamma)
+            if point is None:
+                return BDERegion(
+                    rows=tuple(rows), iD=iD, complete_remaining_mesh=False,
+                )
+            current[i] = point
+        completed = [node for node in current if node is not None]
+        rows.append(tuple(node.to_flow_node() for node in completed))
+        remaining = _calc_remaining_mesh_row(
+            previous_full, completed, iD, kernel.gamma,
+        )
+        if remaining is None:
+            return BDERegion(
+                rows=tuple(rows), iD=iD,
+                grid_rows=tuple(
+                    tuple(node.to_flow_node() for node in row)
+                    for row in bfe_full_rows
+                ),
+                complete_remaining_mesh=False,
+            )
+        bfe_full_rows.append(remaining)
+        previous_seed = completed
+        previous_full = remaining
+
+    de_masses = _de_cumulative_mass(de_nodes)
+    cropped_rows, wall_nodes, wall_complete = _calc_wall_contour_rows(
+        bd_full_row, bfe_full_rows, de_masses, iD, kernel.gamma,
+    )
+
+    return BDERegion(
+        rows=tuple(rows),
+        iD=iD,
+        grid_rows=tuple(
+            tuple(node.to_flow_node() for node in row)
+            for row in cropped_rows
+        ),
+        wall_contour=tuple(node.to_flow_node() for node in wall_nodes),
+        complete_remaining_mesh=True,
+        wall_contour_complete=bool(wall_complete),
+    )
+
+
+def build_source_contour_from_kernel(
+    kernel: MOCKernel,
+    *,
+    x_E: float,
+    r_E: float,
+    epsilon: float,
+    pa_over_p0: float = 0.0,
+    n_de_points: int = 24,
+    exit_rel_tol: float = 1e-3,
+) -> RaoSourceContour:
+    """Build the current visible-source NASA contour artifact from a kernel.
+
+    This is the explicit source-port orchestration for the stages currently
+    available in Python:
+
+    ``build_kernel`` -> ``calc_lrc_de`` -> ``calc_bde_region`` (including
+    remaining mesh and wall contour extraction).
+
+    The returned diagnostics deliberately distinguish source-stage completion
+    from final nozzle length closure.  ``CropNozzleToLength`` and the canonical
+    outer ``CalcContouredNozzle``/``SetThetaB`` loop are not claimed here.
+    """
+    target_x = float(x_E)
+    target_r = float(r_E)
+    topology = calc_lrc_de(
+        kernel,
+        x_E=target_x,
+        r_E=target_r,
+        gamma=kernel.gamma,
+        Rt=kernel.Rt,
+        epsilon=float(epsilon),
+        pa_over_p0=float(pa_over_p0),
+        n_points=int(n_de_points),
+    )
+    bfe = calc_bde_region(kernel, topology)
+    kernel_wall = tuple(
+        rrc[0].to_flow_node() for rrc in kernel.rrcs if rrc
+    )
+    wall = kernel_wall + tuple(bfe.wall_contour)
+    wall_export = np.asarray([[node.x, node.r] for node in wall], dtype=float)
+
+    exit_dx = float(topology.E.x - target_x)
+    exit_dr = float(topology.E.r - target_r)
+    x_scale = max(abs(target_x), kernel.Rt, 1e-12)
+    r_scale = max(abs(target_r), kernel.Rt, 1e-12)
+    exit_rel_error = max(abs(exit_dx) / x_scale, abs(exit_dr) / r_scale)
+    length_closed = bool(exit_rel_error <= float(exit_rel_tol))
+    source_contour_complete = bool(
+        not kernel.fallback_used
+        and kernel.reached_wall
+        and bfe.complete_remaining_mesh
+        and bfe.wall_contour_complete
+        and len(wall) > 0
+    )
+    diagnostics = {
+        "canonical_reference_track": "visible_source_port",
+        "stage": "kernel_lrc_de_bde_remaining_wall",
+        "source_contour_complete": source_contour_complete,
+        "kernel_fallback_used": bool(kernel.fallback_used),
+        "kernel_reached_wall": bool(kernel.reached_wall),
+        "kernel_rrcs": len(kernel.rrcs),
+        "bfe_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
+        "bfe_wall_contour_complete": bool(bfe.wall_contour_complete),
+        "bfe_grid_rows": len(bfe.grid_rows),
+        "wall_points": len(wall),
+        "target_exit": {"x": target_x, "r": target_r},
+        "source_exit": {"x": float(topology.E.x), "r": float(topology.E.r)},
+        "exit_dx": exit_dx,
+        "exit_dr": exit_dr,
+        "exit_rel_error": float(exit_rel_error),
+        "length_closed": length_closed,
+        "exit_rel_tol": float(exit_rel_tol),
+        "crop_nozzle_to_length": "not_ported",
+        "outer_theta_b_driver": "not_canonical",
+        "nasa_reference_matched_eligible": False,
+    }
+    return RaoSourceContour(
+        kernel=kernel,
+        topology=topology,
+        bfe=bfe,
+        wall=wall,
+        wall_export=wall_export,
+        diagnostics=diagnostics,
+    )
 
 
 # ----------------------------------------------------------------------

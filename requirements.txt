@@ -1,3 +1,10 @@
 numpy>=1.24
 scipy>=1.10
 matplotlib>=3.7
+
+# JAX differentiable backend (raosim/jax). Opt-in via solver_backend="jax".
+# Pin exact versions in CI; JAX/jaxlib APIs move. See JAX_DIFFERENTIABLE_PLAN.md §9.
+jax>=0.4.30
+jaxlib>=0.4.30
+optimistix>=0.0.7
+equinox>=0.11

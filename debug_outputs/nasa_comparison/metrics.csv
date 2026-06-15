@@ -1,0 +1,21 @@
+name,status,value,n,units,reason
+wall.out.comparison,unavailable,,0,dimensionless,skipped by --skip-solve
+center.out.comparison,unavailable,,0,dimensionless,skipped by --skip-solve
+rao.dat.comparison,unavailable,,0,dimensionless,skipped by --skip-solve
+TT'.out.x.station_rms,ok,0.4766030997953853,200,dimensionless,
+TT'.out.r.station_rms,ok,0.3973172690911225,200,dimensionless,
+TT'.out.mach.station_rms,ok,0.34812998673666207,200,dimensionless,
+TT'.out.theta_deg.station_rms,ok,5.732085062723845,200,dimensionless,
+LastKernel.out.x.station_rms,ok,1.8572625460692198,200,dimensionless,
+LastKernel.out.r.station_rms,ok,0.3112225751643751,200,dimensionless,
+LastKernel.out.mach.station_rms,ok,1.246387209367339,200,dimensionless,
+LastKernel.out.theta_deg.station_rms,ok,5.914870954148142,200,dimensionless,
+TT'BF_Kernel.out.x.station_rms,ok,1.0886529821991622,200,dimensionless,
+TT'BF_Kernel.out.r.station_rms,ok,0.5456427166223469,200,dimensionless,
+TT'BF_Kernel.out.mach.station_rms,ok,0.7441816801967276,200,dimensionless,
+TT'BF_Kernel.out.theta_deg.station_rms,ok,8.661795279920252,200,dimensionless,
+UncroppedKernel.out.x.station_rms,ok,7.990665487359263,200,dimensionless,
+UncroppedKernel.out.r.station_rms,ok,0.7237854467086737,200,dimensionless,
+UncroppedKernel.out.mach.station_rms,ok,1.7202111609441737,200,dimensionless,
+UncroppedKernel.out.theta_deg.station_rms,ok,6.253285599071708,200,dimensionless,
+BFE_Kernel.out.comparison,unavailable,,7336,dimensionless,kernel used fallback BD construction

@@ -1,0 +1,307 @@
+{
+  "diagnostics": {
+    "canonical_reference_track": "visible_source_port",
+    "comparison_track": "historical_fixture_overlay",
+    "fixture_generator_provenance": "unresolved",
+    "fixture_generator_provenance_doc": "docs/nasa_tt_prime_provenance.md",
+    "fixture_overlay_available": true,
+    "fixture_overlay_is_promotion_authority": false,
+    "fixture_overlay_missing_files": [],
+    "historical_fixture_overlay_notes": [
+      "M3.5Perf fixture deltas are diagnostics only",
+      "unresolved TT' provenance does not define canonical source-port parity"
+    ],
+    "nasa_reference_matched_blockers": [
+      "visible-source port parity is not certified by this fixture-overlay harness"
+    ],
+    "nasa_reference_matched_eligible": false,
+    "note": "This report overlays current Python results on historical NASA/JHU sample outputs. NASA_REFERENCE_MATCHED promotion is governed by the visible-source port track, not by orphaned TT' fixture parity.",
+    "python_bfe_overlay_available": true,
+    "python_bfe_overlay_complete": true,
+    "python_kernel_complete": true,
+    "python_source_contour": {
+      "bfe_complete_remaining_mesh": true,
+      "bfe_grid_rows": 3,
+      "bfe_wall_contour_complete": true,
+      "canonical_reference_track": "visible_source_port",
+      "crop_nozzle_to_length": "not_ported",
+      "exit_dr": -1.4789824128763214,
+      "exit_dx": -11.968176371488877,
+      "exit_rel_error": 0.9546817140215914,
+      "exit_rel_tol": 0.001,
+      "kernel_fallback_used": false,
+      "kernel_reached_wall": true,
+      "kernel_rrcs": 115,
+      "length_closed": false,
+      "nasa_reference_matched_eligible": false,
+      "outer_theta_b_driver": "not_canonical",
+      "source_contour_complete": true,
+      "source_exit": {
+        "r": 1.1164975871236784,
+        "x": 0.5681236285111242
+      },
+      "stage": "kernel_lrc_de_bde_remaining_wall",
+      "target_exit": {
+        "r": 2.59548,
+        "x": 12.5363
+      },
+      "wall_points": 118
+    },
+    "python_source_contour_available": true,
+    "python_source_contour_complete": true,
+    "source_port_candidate": "sauer_modified",
+    "source_port_match_status": "not_evaluated_by_historical_fixture_overlay",
+    "source_port_matched": null,
+    "source_port_workflow_complete": true,
+    "source_port_workflow_status": "complete_not_certified"
+  },
+  "metrics": [
+    {
+      "n": 0,
+      "name": "wall.out.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 0,
+      "name": "center.out.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 0,
+      "name": "rao.dat.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.4812786584431823
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 2.337477455241003e-07
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.41295173015119474
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 4.720437951101569
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.5431613798266666
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.12325694836728017
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.3171493889367609
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 2.4479291772754417
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.8217303364440727
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.4680535926133771
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.4483229991125647
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 4.203233947325995
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 7.0060998592862695
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.7843856324692694
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.1938930757534292
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 7.281337559663508
+    },
+    {
+      "n": 200,
+      "name": "BFE_Kernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 5.308850509459617
+    },
+    {
+      "n": 200,
+      "name": "BFE_Kernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.9457811468599125
+    },
+    {
+      "n": 200,
+      "name": "BFE_Kernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.8503698720275559
+    },
+    {
+      "n": 200,
+      "name": "BFE_Kernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 7.223013930959913
+    },
+    {
+      "n": 200,
+      "name": "BFE_wall_contour.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 5.039293417378603
+    },
+    {
+      "n": 200,
+      "name": "BFE_wall_contour.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.8946280748666084
+    },
+    {
+      "n": 200,
+      "name": "BFE_wall_contour.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.153609140778185
+    },
+    {
+      "n": 200,
+      "name": "BFE_wall_contour.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 9.030111750136086
+    }
+  ],
+  "nasa_dir": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/outputs_M3.5Perf",
+  "python": {
+    "bfe_complete_remaining_mesh": true,
+    "bfe_error": null,
+    "bfe_grid_rows": 3,
+    "bfe_seed_rows": 3,
+    "bfe_status": "ok",
+    "bfe_wall_contour_complete": true,
+    "bfe_wall_points": 3,
+    "kernel_complete": true,
+    "kernel_error": null,
+    "kernel_fallback_used": false,
+    "kernel_final_row_points": 115,
+    "kernel_initial_row_points": 101,
+    "kernel_mass_max_rel_error": 7.930052562514142e-05,
+    "kernel_reached_wall": true,
+    "kernel_rrcs": 115,
+    "kernel_status": "ok",
+    "solve_error": "skipped by --skip-solve",
+    "solve_status": "skipped",
+    "source_contour_exit_rel_error": 0.9546817140215914,
+    "source_contour_length_closed": false,
+    "source_contour_status": "ok",
+    "source_contour_wall_points": 118
+  },
+  "summary": {
+    "gamma": "1.4",
+    "nozzle_type": "Perfect Nozzle",
+    "rd_over_rt": 1.0,
+    "theta_b_deg": 15.2196
+  }
+}

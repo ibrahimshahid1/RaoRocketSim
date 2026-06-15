@@ -1,0 +1,100 @@
+NASA/JHU MOC_Grid_BDE reference file inventory
+================================================
+
+Reference directory
+-------------------
+Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/outputs_M3.5Perf
+
+Source writer
+-------------
+Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/MOC_GridCalc_BDE_IO.cpp
+Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/MOC_GridCalc_BDE.cpp
+
+Provenance note
+---------------
+The checked-in M3.5Perf outputs are public NASA sample outputs, but the exact
+executable/source variant that generated `TT'.out` is not preserved in the
+local tree or upstream history. See `docs/nasa_tt_prime_provenance.md`.
+These files are historical fixture overlays. They are not promotion authority
+for `NASA_REFERENCE_MATCHED`; the canonical track is the visible
+`MOC_GridCalc_BDE.cpp` source-port workflow.
+
+Run summary
+-----------
+Case: M3.5Perf
+Nozzle type: Perfect Nozzle
+Geometry: axisymmetric
+R*: 1 inch
+RWTD/R*: 1.0
+gamma: 1.4
+ambient pressure: 0 psia
+exit Mach: 3.5
+ThetaB: 15.2196 deg
+Nozzle length: 12.5363 R*
+Expansion ratio: 6.73651
+Throat characteristic points: 101
+
+Files and parser entry points
+-----------------------------
+wall.out
+  Final cropped wall contour. Columns: i, j, X/R*, R/R*, mach, theta(deg),
+  pressure(psia). Parser: raosim.legacy_io.parse_wall_out.
+
+center.out
+  Final centerline trace. Columns: J, X/R*, R/R*, Mach, Pres, Temp, Rho,
+  Theta, Gamma, MassFlow. Parser: parse_center_out.
+
+rao.dat
+  TDK/Rao wall table from ThetaB to exit. Columns: R/R*, X/R*, theta(deg).
+  Parser: parse_rao_dat.
+
+summary.out
+  Human summary report with scalar fields, initial throat table, DE report,
+  wall contour table, nozzle summary, and exit-plane data. Parser:
+  parse_summary_out for scalar fields plus the initial throat table.
+
+MOC_Grid.plt
+  Tecplot multi-zone RRC contour grid. Variables: X/R, R/R, Mach, Theta,
+  Massflow, I. One zone per J index. Parser: parse_moc_grid_plt.
+
+MOC_SL.plt
+  Tecplot multi-zone streamline output. Variables: X/R, Y/R, Z/R, R/R,
+  Mach, Pres, Temp, Rho, Theta, Gamma, Massflow, J. Parser:
+  parse_moc_sl_plt.
+
+Summary.plt
+  Tecplot primary contours. Zones: Wall contour, RRC BD, LRC DE. Variables:
+  X/R, R/R, Mach, Pres, Temp, Rho, Theta, Gamma. Parser: parse_summary_plt.
+
+ThetaB.out
+  ThetaB secant iteration trace. Columns: I, ThetaB, xArcMax, LastKernelJ,
+  paramErr. Parser: parse_theta_b_out.
+
+axis_i.out
+  Initial-kernel axis trace before final contour crop. Parser:
+  parse_axis_i_out.
+
+wall_i.out
+  Initial-kernel wall trace before final contour crop. Parser:
+  parse_wall_i_out.
+
+TT'.out
+  Initial throat line TT'. Columns: i, X, R, MACH, THETA, massflow. Parser:
+  parse_tt_prime_out.
+
+TT'BF_Kernel.out
+  Kernel region from TT' through D-side split. Columns: i, j, x, r, mach,
+  theta, press, temp. Parser: parse_kernel_out.
+
+BFE_Kernel.out
+  Remaining BFE region after point D. Columns: i, j, x, r, mach, theta,
+  press, temp. Parser: parse_kernel_out.
+
+LastKernel.out
+  Final kernel RRC at the converged ThetaB. Columns: i, j, x, r, mach, theta,
+  press, temp, Massflow. Parser: parse_last_kernel_out.
+
+UncroppedKernel.out
+  Full kernel before final crop. Columns: i, j, x(in), r(in), mach, theta,
+  pressure(psi), temperature(R), density(slug/ft3), massflow. Parser:
+  parse_uncropped_kernel_out.

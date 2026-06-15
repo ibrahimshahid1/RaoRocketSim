@@ -147,6 +147,7 @@ class ContourReliability(str, Enum):
     GEOMETRIC_APPROXIMATION = "geometric_approximation"
     MOC_COMPATIBLE = "moc_compatible"
     RAO_VARIATIONAL_RESIDUAL_SOLVED = "rao_variational_residual_solved"
+    NASA_REFERENCE_MATCHED = "nasa_reference_matched"
     BENCHMARK_VALIDATED = "benchmark_validated"
     CFD_CHECKED = "cfd_checked"
     EXPERIMENTALLY_VALIDATED = "experimentally_validated"
@@ -166,6 +167,42 @@ RAO_MOC_ASSUMPTIONS = (
     "isentropic",
     "constant_gamma",
 )
+
+NASA_REFERENCE_FIXTURE_GENERATOR_PROVENANCE = "unresolved"
+NASA_REFERENCE_PROVENANCE_DOC = "docs/nasa_tt_prime_provenance.md"
+NASA_REFERENCE_CANONICAL_TRACK = "visible_source_port"
+NASA_REFERENCE_HISTORICAL_OVERLAY_TRACK = "historical_fixture_overlay"
+
+
+def _nasa_reference_validation_diagnostics() -> dict:
+    """Return the current policy gate for NASA_REFERENCE_MATCHED.
+
+    The canonical NASA reference track is the visible ``MOC_GridCalc_BDE.cpp``
+    source-port workflow.  The checked-in M3.5Perf outputs remain useful
+    historical overlays, but their TT' generator provenance is unresolved, so
+    fixture overlay agreement is not promotion authority for this enum.
+    """
+    return {
+        "canonical_reference_track": NASA_REFERENCE_CANONICAL_TRACK,
+        "historical_overlay_track": NASA_REFERENCE_HISTORICAL_OVERLAY_TRACK,
+        "source_port_matched": None,
+        "source_port_match_status": "not_evaluated",
+        "source_reference_workflow_complete": False,
+        "source_reference_metrics_available": False,
+        "fixture_overlay_available": False,
+        "fixture_overlay_is_promotion_authority": False,
+        "fixture_generator_provenance": NASA_REFERENCE_FIXTURE_GENERATOR_PROVENANCE,
+        "fixture_generator_provenance_doc": NASA_REFERENCE_PROVENANCE_DOC,
+        "eligible": False,
+        "blockers": [
+            "visible-source port parity has not been certified",
+            "source-reference workflow metrics are not integrated into solve_rao_bvp",
+        ],
+        "historical_overlay_notes": [
+            "M3.5Perf fixture deltas are diagnostics only",
+            "historical M3.5Perf TT' fixture generator provenance is unresolved",
+        ],
+    }
 
 
 def summarize_group(name: str, arr: np.ndarray) -> dict:
@@ -589,6 +626,7 @@ class RaoSolution:
             "assumptions": list(self.assumptions),
             "hardware_qualified": self.hardware_qualified,
             "rao_full_optimum_claimed": self.reliability in {
+                ContourReliability.NASA_REFERENCE_MATCHED,
                 ContourReliability.BENCHMARK_VALIDATED,
                 ContourReliability.CFD_CHECKED,
                 ContourReliability.EXPERIMENTALLY_VALIDATED,
@@ -3774,6 +3812,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         "residual_tol": BENCHMARK_VALIDATED_RESIDUAL_TOL,
         "eligible": bool(benchmark_validated_ok),
     }
+    construction_diagnostics["nasa_reference_validation"] = (
+        _nasa_reference_validation_diagnostics()
+    )
 
     if benchmark_validated_ok:
         reliability = ContourReliability.BENCHMARK_VALIDATED

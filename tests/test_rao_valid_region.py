@@ -61,6 +61,46 @@ def test_valid_region_returns_inf_for_too_few_nodes():
     assert vals == []
 
 
+def test_nasa_reference_matched_reliability_level_exists():
+    assert (
+        ContourReliability.NASA_REFERENCE_MATCHED.value
+        == "nasa_reference_matched"
+    )
+
+
+def test_nasa_reference_gate_reports_unresolved_fixture_provenance():
+    cfg = RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=0,
+        evaluate_moc=False,
+    )
+    solution = solve_rao_bvp(cfg)
+    diag = solution.construction_diagnostics["nasa_reference_validation"]
+
+    assert diag["canonical_reference_track"] == "visible_source_port"
+    assert diag["historical_overlay_track"] == "historical_fixture_overlay"
+    assert diag["source_port_matched"] is None
+    assert diag["source_port_match_status"] == "not_evaluated"
+    assert diag["source_reference_workflow_complete"] is False
+    assert diag["source_reference_metrics_available"] is False
+    assert diag["fixture_overlay_available"] is False
+    assert diag["fixture_overlay_is_promotion_authority"] is False
+    assert diag["fixture_generator_provenance"] == "unresolved"
+    assert diag["eligible"] is False
+    assert "visible-source port parity has not been certified" in diag["blockers"]
+    assert not any(
+        "fixture generator provenance" in blocker
+        for blocker in diag["blockers"]
+    )
+    assert solution.reliability != ContourReliability.NASA_REFERENCE_MATCHED
+
+
 def test_valid_region_quiet_on_smooth_expansion():
     nodes = _make_smooth_ce_nodes()
     min_b, vals = rao_valid_region(nodes)

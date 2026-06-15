@@ -1,0 +1,226 @@
+{
+  "diagnostics": {
+    "canonical_reference_track": "visible_source_port",
+    "comparison_track": "historical_fixture_overlay",
+    "fixture_generator_provenance": "unresolved",
+    "fixture_generator_provenance_doc": "docs/nasa_tt_prime_provenance.md",
+    "fixture_overlay_available": true,
+    "fixture_overlay_is_promotion_authority": false,
+    "fixture_overlay_missing_files": [],
+    "historical_fixture_overlay_notes": [
+      "M3.5Perf fixture deltas are diagnostics only",
+      "unresolved TT' provenance does not define canonical source-port parity"
+    ],
+    "nasa_reference_matched_blockers": [
+      "visible-source port parity is not certified by this fixture-overlay harness",
+      "current Python kernel used fallback BD construction",
+      "current Python kernel did not reach the throat-arc wall"
+    ],
+    "nasa_reference_matched_eligible": false,
+    "note": "This report overlays current Python results on historical NASA/JHU sample outputs. NASA_REFERENCE_MATCHED promotion is governed by the visible-source port track, not by orphaned TT' fixture parity.",
+    "python_bfe_overlay_available": false,
+    "python_bfe_overlay_complete": false,
+    "python_bfe_overlay_reason": "kernel used fallback BD construction",
+    "python_kernel_complete": false,
+    "python_source_contour_available": false,
+    "python_source_contour_complete": false,
+    "source_port_candidate": "kliegel_levine",
+    "source_port_match_status": "not_evaluated_by_historical_fixture_overlay",
+    "source_port_matched": null,
+    "source_port_workflow_complete": false,
+    "source_port_workflow_status": "incomplete"
+  },
+  "metrics": [
+    {
+      "n": 0,
+      "name": "wall.out.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 0,
+      "name": "center.out.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 0,
+      "name": "rao.dat.comparison",
+      "reason": "skipped by --skip-solve",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.4766030997953853
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.3973172690911225
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.34812998673666207
+    },
+    {
+      "n": 200,
+      "name": "TT'.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 5.732085062723845
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.8572625460692198
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.3112225751643751
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.246387209367339
+    },
+    {
+      "n": 200,
+      "name": "LastKernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 5.914870954148142
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.0886529821991622
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.5456427166223469
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.7441816801967276
+    },
+    {
+      "n": 200,
+      "name": "TT'BF_Kernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 8.661795279920252
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.x.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 7.990665487359263
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.r.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 0.7237854467086737
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.mach.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 1.7202111609441737
+    },
+    {
+      "n": 200,
+      "name": "UncroppedKernel.out.theta_deg.station_rms",
+      "reason": null,
+      "status": "ok",
+      "units": "dimensionless",
+      "value": 6.253285599071708
+    },
+    {
+      "n": 7336,
+      "name": "BFE_Kernel.out.comparison",
+      "reason": "kernel used fallback BD construction",
+      "status": "unavailable",
+      "units": "dimensionless",
+      "value": null
+    }
+  ],
+  "nasa_dir": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/outputs_M3.5Perf",
+  "python": {
+    "bfe_complete_remaining_mesh": null,
+    "bfe_error": "kernel used fallback BD construction",
+    "bfe_grid_rows": null,
+    "bfe_seed_rows": null,
+    "bfe_status": "unavailable",
+    "bfe_wall_contour_complete": null,
+    "bfe_wall_points": null,
+    "kernel_complete": false,
+    "kernel_error": null,
+    "kernel_fallback_used": true,
+    "kernel_final_row_points": 135,
+    "kernel_initial_row_points": 135,
+    "kernel_mass_max_rel_error": 0.0,
+    "kernel_reached_wall": false,
+    "kernel_rrcs": 1,
+    "kernel_status": "partial",
+    "solve_error": "skipped by --skip-solve",
+    "solve_status": "skipped",
+    "source_contour_exit_rel_error": null,
+    "source_contour_length_closed": null,
+    "source_contour_status": "unavailable",
+    "source_contour_wall_points": null
+  },
+  "summary": {
+    "gamma": "1.4",
+    "nozzle_type": "Perfect Nozzle",
+    "rd_over_rt": 1.0,
+    "theta_b_deg": 15.2196
+  }
+}
