@@ -429,7 +429,18 @@ def _visible_source_kl_throat(
         (2 * G + 9) * y ** 4 / 24.0
         - (4 * G + 15) * y * y / 24.0
         + (10 * G + 57) / 288.0
-        + z * (y * y - 5.0 / 8.0)
+        + z * (y * y - 0.0)  # C++ ``z*(y*y - 5/8)``: INTEGER division, 5/8 == 0.
+        #                      The binary that generated outputs_M3.5Perf ran
+        #                      with the term dropped; transcribing it as 0.625
+        #                      made this "visible source" port diverge from the
+        #                      fixtures (TT' axis M 1.293 vs the binary's 1.500)
+        #                      and broke the RRC march that consumes the line.
+        #                      Hall/Kliegel-Levine theory *does* carry y^2-5/8
+        #                      (Hall 1962 u2; Zucrow & Hoffman V2 Ch.16) — the
+        #                      mathematically corrected term lives in
+        #                      raosim.transonic_kernel.kliegel_levine.  This
+        #                      function's contract is binary fidelity, not
+        #                      theory fidelity.
         - (2 * G - 3) * z * z / 6.0
     )
     v2 = (
@@ -489,6 +500,17 @@ def _make_throat_initial_line(
     M_min: float = 1.05,
 ) -> list[CharPoint]:
     """TT' starting line with NASA per-point downstream-step iteration.
+
+    .. important:: ``Rd`` here is the radius of curvature the transonic
+       (Kliegel-Levine / Sauer) series is evaluated with.  Physically this
+       is the **upstream** wall radius of curvature: the C++ original
+       passes ``rUp`` ("rUp: upstream throat radius",
+       ``CalcInitialThroatLine`` line 2805) into ``KLThroat``, and the
+       Hall/Kliegel-Levine expansions are derived for the convergent-side
+       curvature (Hall 1962; Kliegel & Levine 1969; Zucrow & Hoffman V2
+       Ch.16).  Callers that march a *downstream* arc afterwards (e.g.
+       :func:`build_kernel`) must pass the upstream radius here and keep
+       the downstream radius for the arc — see ``build_kernel(Ru=...)``.
 
     Port of :func:`MOC_GridCalc::CalcInitialThroatLine`
     (NASA C++ lines 2805-2900) including the per-point Mach-control
@@ -1353,6 +1375,7 @@ def build_kernel(
     max_rrcs: int = 500,
     mdot_tol: float = 0.05,
     dtheta_limit: float = 0.5 * math.pi / 180.0,
+    Ru: float | None = None,
 ) -> MOCKernel:
     """
     Build the Rao kernel by NASA-style RRC marching through the throat arc.
@@ -1401,8 +1424,17 @@ def build_kernel(
 
     arc = ArcWall(Rt, Rd, theta_B)
 
+    # The transonic start line is governed by the *upstream* wall radius
+    # of curvature (C++ ``CalcInitialThroatLine(rUp, ...)`` -> ``KLThroat``);
+    # the downstream radius only shapes the arc the kernel marches along.
+    # ``Ru=None`` preserves the legacy behaviour (Ru == Rd), which is exact
+    # for the NASA M3.5Perf reference (Upstream/R* = Downstream/R* = 1).
+    R_start_line = float(Ru) if Ru is not None else Rd
+    if R_start_line <= 0.0:
+        raise ValueError("Ru must be positive")
+
     tt_prime = _make_throat_initial_line(
-        Rt, Rd, theta_B, gamma, n_kernel, starting_line_method,
+        Rt, R_start_line, theta_B, gamma, n_kernel, starting_line_method,
     )
     # tt_prime is axis-first; store as wall-first (NASA convention).
     tt_wall_first = list(reversed(tt_prime))

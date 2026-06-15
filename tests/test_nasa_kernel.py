@@ -382,11 +382,16 @@ def test_python_tt_prime_matches_nasa_tt_prime_rms_1e3():
     assert rms("THETA", [math.degrees(node.theta) for node in py_tt]) < 1e-3
 
 
+@pytest.mark.slow
 @pytest.mark.xfail(
-    reason="Full wall.out RMS bit-comparison requires the Phase 12.4 row "
-           "march to actually produce the NASA kernel BD (currently the "
-           "fallback arc-following BD is used for Rd/Rt = 0.382).  See "
-           "test_marching_kernel_produces_multiple_rrcs_for_typical_geometry.",
+    reason="Full wall.out RMS bit-comparison.  The kernel march itself now "
+           "runs and matches the NASA grid (KLThroat int-division + "
+           "upstream-radius fixes — tests/test_nasa_kernel_march_parity.py), "
+           "so the remaining gap is the BVP seed-topology item "
+           "(calc_lrc_de/set_theta_b degeneracy, REWRITE_PLAN Phase 12; "
+           "tracked by tests/test_jax_convergence.py).  Marked slow: with a "
+           "real ~100-node BD this full evaluate_moc solve is no longer a "
+           "fast degenerate-kernel bail-out.",
 )
 def test_python_port_wall_matches_nasa_wall_out_rms_1e3():
     """End-to-end NASA wall.out RMS check.  Targets:

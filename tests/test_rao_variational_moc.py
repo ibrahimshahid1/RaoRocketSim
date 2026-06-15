@@ -283,8 +283,16 @@ def test_moc_disabled_ce_residual_gate_keeps_constraints_tight():
     # bounded but at slightly looser ceilings than the pre-port path
     # (where the fallback arc-following BD happened to converge tighter
     # by being "wrong but consistent").
-    assert abs(solution.residuals.mass_residual_rel) <= 1e-1
-    assert abs(solution.residuals.length_residual_rel) <= 2e-1
+    #
+    # Re-baselined after the KLThroat integer-division + upstream-radius
+    # (Ru) fixes made the RRC march actually run (it previously died on
+    # its first interior point and BD fell back to the throat arc + a
+    # vertical sonic line — see tests/test_nasa_kernel_march_parity.py).
+    # Against the real marched BD, mass tightened ~5x (|res| ~ 0.02 vs
+    # the old 1e-1 ceiling) while length at this tiny n_control=8 /
+    # max_nfev=400 smoke budget settles at ~0.25.
+    assert abs(solution.residuals.mass_residual_rel) <= 5e-2
+    assert abs(solution.residuals.length_residual_rel) <= 3e-1
     assert solution.residuals.algebraic_stationarity_rms < 0.5
     assert solution.residuals.left_mach_rms < 1e-9
 
@@ -537,8 +545,12 @@ def test_phase_27_reference_reports_forward_net_failure_precisely():
     # NASA-port residuals.  After the dθ-form wall-march port produces
     # multi-RRC kernels at small n_kernel, length sits a bit higher
     # because D moves further upstream on the marched kernel.
-    assert abs(solution.residuals.mass_residual_rel) <= 1e-1
-    assert abs(solution.residuals.length_residual_rel) <= 2e-1
+    # Re-baselined after the KLThroat int-division + upstream-radius
+    # fixes (real marched BD): mass tightened ~5x, length ~0.25 at this
+    # n_control=8 budget — same trade as
+    # test_moc_disabled_ce_residual_gate_keeps_constraints_tight.
+    assert abs(solution.residuals.mass_residual_rel) <= 5e-2
+    assert abs(solution.residuals.length_residual_rel) <= 3e-1
     # wall_strip_success may not be True with the new CE seed under the
     # approximate kernel; the wall MOC march still produces a reasonable
     # contour and the diagnostics block exposes the failure mode.

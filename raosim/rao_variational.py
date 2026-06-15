@@ -226,6 +226,13 @@ class RaoSolverConfig:
     pa_over_p0: float = 0.0
     length_pct: float = 80.0
     throat_downstream_radius_factor: float = 0.382
+    # Upstream (convergent-side) throat wall radius / Rt.  Governs the
+    # Kliegel-Levine transonic start line TT' (the KL/Hall series are
+    # derived for the upstream curvature; NASA's CalcInitialThroatLine
+    # passes rUp into KLThroat).  Rao's published TOP convention is
+    # R_u = 1.5 Rt with R_d = 0.382 Rt (Rao 1958; NASA SP-8120; same
+    # convention as nozzle_geometry.bell_nozzle_contour's Ru_factor).
+    throat_upstream_radius_factor: float = 1.5
     thetaN_guess_deg: float = 30.0
     n_control: int = 12
     n_kernel: int = 12
@@ -266,6 +273,20 @@ class RaoSolverConfig:
     # away from the kernel axis and avoid the Phase 5 valid-region
     # check firing on the kernel-to-CE bridge.
     kernel_d_fraction_max: float | None = None
+    # JAX differentiable backend (JAX_DIFFERENTIABLE_PLAN.md).
+    #
+    #   "numpy" — scipy.optimize.least_squares with finite-difference
+    #             Jacobians (default; the regression oracle).
+    #   "jax"   — Optimistix Levenberg–Marquardt on the
+    #             raosim.jax.assembly residual with *exact* autodiff
+    #             Jacobians.  Requires jax/optimistix installed.  Residual
+    #             parity with the NumPy path is guaranteed by the J2 gate
+    #             (tests/test_jax_assembly_parity.py).  Stays opt-in until
+    #             the J5 chart-benchmark gate passes.
+    #
+    # Only the inner least-squares step changes; seeding, kernel build,
+    # reliability gating, and diagnostics are identical for both backends.
+    solver_backend: str = "numpy"
 
 
 DEFAULT_RAO_RESIDUAL_BLOCKS = (
@@ -1651,6 +1672,7 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     kernel = _build_kernel(
         Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
         starting_line_method=config.starting_line_method,
+        Ru=config.throat_upstream_radius_factor * Rt,
     )
     kernel_bd_flow_nodes = [node.to_flow_node() for node in kernel.bd]
 
@@ -3549,7 +3571,14 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             message="initial residual evaluation only; least_squares was skipped",
             cost=float(0.5 * np.dot(residual0, residual0)),
         )
-    else:
+    elif config.solver_backend == "jax":
+        # Differentiable backend: identical residual (J2 parity gate),
+        # exact autodiff Jacobian inside Optimistix LM.  Import is local
+        # so the NumPy path never requires jax to be installed.
+        from raosim.jax.api import least_squares_jax
+
+        result = least_squares_jax(solve_config, u0, lower, upper)
+    elif config.solver_backend == "numpy":
         if least_squares is None:
             raise RuntimeError(
                 "solve_rao_bvp requires scipy.optimize.least_squares when "
@@ -3566,6 +3595,11 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             xtol=1e-9,
             gtol=1e-9,
             max_nfev=config.max_nfev,
+        )
+    else:
+        raise ValueError(
+            f"Unknown solver_backend {config.solver_backend!r}; "
+            "expected 'numpy' or 'jax'."
         )
     n_wall_unknown = config.n_wall if config.couple_wall else 0
     ce, solved_wall = _unpack_bvp(

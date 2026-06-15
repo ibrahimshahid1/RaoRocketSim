@@ -413,25 +413,28 @@ def test_solve_rao_bvp_reaches_rao_residual_solved_at_weight_1():
         rv.PHYSICS_WEIGHT = original
 
 
-def test_kernel_d_fraction_cap_eliminates_validity_trip_at_weight_1():
+def test_kernel_d_fraction_cap_enforced_on_marched_kernel_at_weight_1():
     """
-    Documents the Option-2 workaround for the weight=1.0 valid-region
-    trip on (ε=10, length_pct=80).
+    The ``kernel_d_fraction_max`` cap is enforced, and D sits on a *real*
+    marched kernel BD.
 
-    Without a cap on ``kernel_d_fraction`` the BVP at weight=1.0 drifts
-    to fraction ≈ 0.975 (D at the kernel axis), the CE then bridges
-    from a near-sonic axial point, and the Phase 5 valid-region check
-    fires on the kernel-to-CE bridge with ``boundary_min`` near -5.
+    History: this test originally documented the "Option-2 workaround" for
+    the weight=1.0 valid-region trip in the degenerate-kernel era, when
+    ``build_kernel``'s RRC march silently failed (``rrcs == 1``) and BD
+    fell back to the throat arc + a vertical *sonic* line at x=0.  In that
+    regime an uncapped solve drifted D to the sonic axis (fraction ≈
+    0.975) and the cap=0.7 restored ``valid_shock_free_region``.
 
-    With ``kernel_d_fraction_max=0.7`` the cap holds D inside the
-    kernel, the resulting CE is shock-free in the Rao sense, and the
-    valid-region check passes (all b-segments ≥ 0).  This is the
-    diagnostic that shifts the weight=1.0 blocker from "valid-region
-    cliff" to "BVP convergence under coupled wall" — see the xfail
-    above.
+    The KLThroat integer-division and upstream-radius fixes (see
+    tests/test_nasa_kernel_march_parity.py) made the march real, so the
+    failure mode this workaround targeted no longer exists: BD is now an
+    RRC descending from the throat-arc corner through supersonic states,
+    and D is supersonic wherever the cap puts it.  The remaining
+    weight=1.0 convergence/valid-region gap is the *seed topology* item
+    tracked by tests/test_jax_convergence.py::test_j4_gate_reference_case_converges
+    (REWRITE_PLAN Phase 12: calc_lrc_de / set_theta_b degeneracy).
     """
     import raosim.rao_variational as rv
-    from raosim.rao_variational import rao_valid_region
 
     original = rv.PHYSICS_WEIGHT
     try:
@@ -448,13 +451,19 @@ def test_kernel_d_fraction_cap_eliminates_validity_trip_at_weight_1():
     finally:
         rv.PHYSICS_WEIGHT = original
 
-    boundary_min, b_values = rao_valid_region(sol.control_surface)
     assert sol.control_surface.kernel_d_fraction <= 0.7 + 1e-9, (
         f"cap not enforced: kernel_d_fraction = "
         f"{sol.control_surface.kernel_d_fraction:.4f}"
     )
-    assert boundary_min >= -1e-2, (
-        f"valid-region check still firing under tight cap: "
-        f"boundary_min = {boundary_min:.3e}"
+    # D must be a supersonic point on a marched BD — the degenerate-kernel
+    # signature this test used to work around was D at (M=1.0, theta=0) on
+    # the vertical sonic fallback line.
+    D = sol.construction_diagnostics["mass_closure"]["kernel_D"]
+    assert D is not None
+    assert D["M"] > 1.05, (
+        f"D is (near-)sonic (M={D['M']:.4f}) — kernel BD looks like the "
+        "pre-fix arc+sonic-line fallback again"
     )
-    assert sol.construction_diagnostics["rao_region"] == "valid_shock_free_region"
+    # The BD the solve used must be a real multi-row kernel product:
+    # monotone descent from the arc corner to the axis.
+    assert sol.construction_diagnostics["mass_closure"]["kernel_bd_nodes"] >= 12

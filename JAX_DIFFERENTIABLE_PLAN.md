@@ -1,5 +1,32 @@
 # RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool
 
+> **STATUS (2026-06-09, J0–J4 spike landed).**
+> J0 ✅ (skeleton, pinned deps, `solver_backend="jax"` wired into
+> `solve_rao_bvp`); J1 ✅; J2 ✅ **assembled**-residual parity at ~1e-15 vs
+> `_scaled_rao_bvp_residual` on real Phase-6 states
+> (`raosim/jax/assembly.py`, `tests/test_jax_assembly_parity.py`);
+> J3 ✅ (Optimistix LM + exact jacfwd/jacrev, FD-verified on the real
+> system).  **J4: the §10 diagnosis branch fired, productively.**  Exact
+> Jacobians cut the stall 8 → ~2.8 and exposed the true blocker: the
+> NASA kernel march never advanced past TT' (`rrcs == 1`, silent
+> arc+sonic-line BD fallback).  Root causes found & fixed, oracle-validated
+> against `outputs_M3.5Perf` (`tests/test_nasa_kernel_march_parity.py`):
+> (1) the "visible source" KLThroat port transcribed C++ **integer
+> division** `5/8` as `0.625` (binary ran with the term dropped — TT'
+> now matches `TT'.out` to 5e-7, march reproduces the full 58-row grid,
+> BD matches `LastKernel.out`); (2) the KL start line was fed the
+> *downstream* throat radius where the C++ passes `rUp` — fixed via
+> `build_kernel(Ru=...)` + `RaoSolverConfig.throat_upstream_radius_factor`
+> (Rao convention 1.5).  With a real kernel: max_scaled ≈ **0.5** on the
+> ε=10/L80/w=1.0 reference (from 8).  Remaining gap to the 2e-3 gate is
+> **seed topology** — `calc_lrc_de`/`set_theta_b` collapse to a degenerate
+> D≈E on marched kernels, so the CE seed stays the legacy linear ramp
+> (REWRITE_PLAN Phase 12 work; tracked by the xfail in
+> `tests/test_jax_convergence.py`).  J3b (lax.scan march port) and J5/J6
+> remain open; J3b is *not* required for J4 (the kernel BD is static
+> during the solve) but becomes the natural follow-on once the topology
+> seed closes.
+
 **Architecture & implementation plan.** This document is the build plan for
 re-expressing the Rao optimum-thrust contour solver as an end-to-end
 differentiable program in JAX, with two goals, in priority order:
