@@ -44,6 +44,7 @@ from raosim.gas_dynamics import (
     isentropic_temperature_ratio,
     mach_from_area_ratio,
     mach_angle,
+    mstar_from_M,
     prandtl_meyer,
     mach_from_prandtl_meyer,
     area_mach_relation,
@@ -65,6 +66,7 @@ from raosim.rao_residuals import (
     residual_Cminus_axisym,
     residual_Cplus_axisym,
     residual_intersection,
+    residual_left_mach_geometry,
 )
 from raosim.validation import add_contour_reliability_metadata
 from raosim.wall_model import SplineWall
@@ -93,6 +95,7 @@ class ControlSurface:
     x: np.ndarray | None = None
     lambda2: float = 0.0    # Lagrange multiplier for mass-flow constraint
     lambda3: float = 0.0    # Lagrange multiplier for length constraint
+    log_C: float = 0.0      # log of the Rao algebraic stationarity constant
     converged: bool = False
     residual_norm: float | None = None
     mdot_target: float | None = None
@@ -173,12 +176,14 @@ DEFAULT_RAO_RESIDUAL_BLOCKS = (
     "ce_geometry",
     "regularization",
     "penalties",
+    "algebraic_stationarity",
+    "left_mach",
 )
 
 ALL_RAO_RESIDUAL_BLOCKS = DEFAULT_RAO_RESIDUAL_BLOCKS + (
     "moc_cplus",
-    "stationarity",
-    "transversality",
+    "stationarity",        # numerical Euler-Lagrange (reference; not in default)
+    "transversality",      # natural at free endpoint only; off for fixed L, eps
 )
 
 
@@ -208,6 +213,8 @@ class RaoResidualReport:
     mass_residual_rel: float
     length_residual_rel: float
     stationarity_rms: float
+    algebraic_stationarity_rms: float
+    left_mach_rms: float
     regularization_rms: float
     transversality_scaled: float
     wall_tangency_rms: float | None = None
@@ -278,6 +285,8 @@ class RaoResidualGroups:
     length: np.ndarray
     transversality: np.ndarray
     stationarity: np.ndarray
+    algebraic_stationarity: np.ndarray
+    left_mach: np.ndarray
     moc_cplus: np.ndarray
     moc_cminus: np.ndarray
     ce_geometry: np.ndarray
@@ -290,6 +299,8 @@ class RaoResidualGroups:
             self.length,
             self.transversality,
             self.stationarity,
+            self.algebraic_stationarity,
+            self.left_mach,
             self.moc_cplus,
             self.moc_cminus,
             self.ce_geometry,
@@ -303,6 +314,8 @@ class RaoResidualGroups:
             summarize_group("length", self.length),
             summarize_group("transversality", self.transversality),
             summarize_group("stationarity", self.stationarity),
+            summarize_group("algebraic_stationarity", self.algebraic_stationarity),
+            summarize_group("left_mach", self.left_mach),
             summarize_group("moc_cplus", self.moc_cplus),
             summarize_group("moc_cminus", self.moc_cminus),
             summarize_group("ce_geometry", self.ce_geometry),
@@ -551,13 +564,22 @@ def stationarity_residuals(M: float, theta: float, phi: float,
                            lambda2: float, lambda3: float,
                            pa_over_p0: float = 0.0) -> np.ndarray:
     """
-    Compute the 3 Euler-Lagrange residuals at a single CE station:
+    Numerical Euler-Lagrange residuals at a single CE station.
 
-        R₁ = ∂f₁/∂M + λ₂·∂f₂/∂M = 0
-        R₂ = ∂f₁/∂θ + λ₂·∂f₂/∂θ = 0
-        R₃ = ∂f₁/∂φ + λ₂·∂f₂/∂φ + λ₃·∂f₃/∂φ = 0
+    .. note::
+       Reference implementation -- not in the default residual stack.
+       Phase 3 of the Rao rewrite replaced this finite-difference Euler-Lagrange
+       form with the closed-form Rao algebraic stationarity
+       (``rao_stationarity_residual``).  Kept here for ablation studies and
+       as a cross-check.
 
-    Note: f₃ = cot(φ) depends only on φ, so ∂f₃/∂M = ∂f₃/∂θ = 0.
+    Computes:
+
+        R1 = df1/dM  + lambda2 df2/dM
+        R2 = df1/dt  + lambda2 df2/dt
+        R3 = df1/dp  + lambda2 df2/dp  + lambda3 df3/dp
+
+    Note: f3 = cot(phi) depends only on phi, so df3/dM = df3/dtheta = 0.
     """
     df1 = _numerical_partials(
         thrust_integrand, M, theta, phi, r, gamma, pa_over_p0
@@ -1237,7 +1259,12 @@ def _phi_from_curve(x: np.ndarray, r: np.ndarray) -> np.ndarray:
     return phi
 
 
-def _pack_bvp(ce: ControlSurface, lambda2: float, lambda3: float) -> np.ndarray:
+def _pack_bvp(
+    ce: ControlSurface,
+    lambda2: float,
+    lambda3: float,
+    log_C: float | None = None,
+) -> np.ndarray:
     if ce.x is None:
         x = np.zeros_like(ce.r, dtype=float)
         for i in range(1, len(ce.r)):
@@ -1247,7 +1274,8 @@ def _pack_bvp(ce: ControlSurface, lambda2: float, lambda3: float) -> np.ndarray:
             x[i] = x[i - 1] + (math.cos(phi_avg) / sin_phi * dr if abs(sin_phi) > 1e-10 else 0.5 * dr)
     else:
         x = np.asarray(ce.x, dtype=float)
-    return np.concatenate([ce.M, ce.theta, x, ce.r, [lambda2, lambda3]])
+    log_C_val = float(log_C) if log_C is not None else float(ce.log_C)
+    return np.concatenate([ce.M, ce.theta, x, ce.r, [lambda2, lambda3, log_C_val]])
 
 
 def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
@@ -1255,6 +1283,8 @@ def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
     x = np.asarray(u[2 * n:3 * n], dtype=float).copy()
     r_ce = np.asarray(u[3 * n:4 * n], dtype=float).copy()
     phi = _phi_from_curve(x, r_ce)
+    # log_C is the third trailing scalar; absent from legacy packed vectors.
+    log_C_val = float(u[4 * n + 2]) if u.size >= 4 * n + 3 else 0.0
     return ControlSurface(
         r=r_ce,
         M=np.asarray(u[:n], dtype=float).copy(),
@@ -1263,6 +1293,7 @@ def _unpack_bvp(u: np.ndarray, r: np.ndarray) -> ControlSurface:
         x=x,
         lambda2=float(u[4 * n]),
         lambda3=float(u[4 * n + 1]),
+        log_C=log_C_val,
     )
 
 
@@ -1342,6 +1373,197 @@ def _ce_axisymmetric_compatibility_residual_groups(
         np.asarray(cplus, dtype=float) / scale,
         np.asarray(cminus, dtype=float) / scale,
     )
+
+
+def rao_stationarity_residual(
+    node: FlowNode,
+    log_C: float,
+    gamma: float,
+) -> float:
+    """
+    Algebraic Rao optimum-thrust stationarity at a single CE node.
+
+    Rao-Beck-Booth (AIAA 99-2584, 1999) integrate Rao's 1958 stationarity
+    along the supersonic control surface DE in closed form:
+
+        M* · cos(θ − α) / cos(α) = C        (constant along DE)
+
+    where M* = V/a* is the critical Mach (``mstar_from_M``), α = arcsin(1/M)
+    is the Mach angle, and θ is the local flow angle.  We work with
+    log(M* cos(θ−α)/cos(α)) − log_C so that log_C can be carried as the
+    solver unknown -- this is well-conditioned for M* and cos(α) of order
+    unity, and maps directly onto Rao's "constant of integration" C.
+
+    Reference
+    ---------
+    propulsion_texts/rao1999.pdf -- AIAA 99-2584 Eq. 3
+    propulsion_texts/RaoRecentDevinRockNozConfig.pdf -- Rao 1961
+    """
+    M = max(float(node.M), 1.0 + 1e-9)
+    alpha = math.asin(1.0 / M)
+    cos_a = math.cos(alpha)
+    cos_tma = math.cos(float(node.theta) - alpha)
+    Mstar = mstar_from_M(M, gamma)
+    if cos_a <= 1e-12 or abs(cos_tma) <= 1e-12 or Mstar <= 1e-12:
+        # Singular branch: fall back to the unscaled algebraic form.
+        C = math.exp(log_C)
+        return Mstar * cos_tma / max(cos_a, 1e-12) - C
+    return math.log(Mstar) + math.log(abs(cos_tma)) - math.log(cos_a) - float(log_C)
+
+
+def rao_stationarity_fd_residual(
+    p0: FlowNode,
+    p1: FlowNode,
+    gamma: float,
+) -> float:
+    """
+    Differential Rao stationarity between adjacent CE nodes (secondary check).
+
+    Differentiating the algebraic form gives:
+
+        d(ln M*) − (dθ − dα) tan(θ − α) + dα tan(α) = 0
+
+    Used as a secondary residual during development; once the algebraic form
+    converges robustly the differential check should hold automatically.
+
+    Reference: rao1999.pdf, Eq. 4 (segment-to-segment consistency).
+    """
+    M0 = max(float(p0.M), 1.0 + 1e-9)
+    M1 = max(float(p1.M), 1.0 + 1e-9)
+    a0 = math.asin(1.0 / M0)
+    a1 = math.asin(1.0 / M1)
+    Ms0 = mstar_from_M(M0, gamma)
+    Ms1 = mstar_from_M(M1, gamma)
+    d_ln_Ms = math.log(Ms1) - math.log(Ms0)
+    dth = float(p1.theta) - float(p0.theta)
+    da = a1 - a0
+    th = 0.5 * (float(p0.theta) + float(p1.theta))
+    a = 0.5 * (a0 + a1)
+    return d_ln_Ms - (dth - da) * math.tan(th - a) + da * math.tan(a)
+
+
+def _rao_algebraic_stationarity_residuals(
+    ce: ControlSurface,
+    gamma: float,
+) -> np.ndarray:
+    """Per-node algebraic Rao stationarity residuals (vectorised over CE)."""
+    nodes = _control_surface_flow_nodes(ce)
+    if not nodes:
+        return np.zeros(0, dtype=float)
+    return np.array(
+        [rao_stationarity_residual(p, ce.log_C, gamma) for p in nodes],
+        dtype=float,
+    )
+
+
+def _rao_left_mach_geometry_residuals(ce: ControlSurface) -> np.ndarray:
+    """
+    Per-segment residuals enforcing dr/dx = tan(θ + α) along the CE.
+
+    Rao DE is defined as a left-running Mach line; the segment tangent must
+    therefore equal tan(θ + μ) at every interior CE step (§2.C).  Scaled by
+    the local CE chord length so the residual is dimensionless.
+    """
+    nodes = _control_surface_flow_nodes(ce)
+    if len(nodes) < 2:
+        return np.zeros(0, dtype=float)
+    out: list[float] = []
+    for p0, p1 in zip(nodes[:-1], nodes[1:]):
+        ds = math.hypot(p1.x - p0.x, p1.r - p0.r)
+        scale = max(ds, 1e-12)
+        out.append(residual_left_mach_geometry(p0, p1) / scale)
+    return np.asarray(out, dtype=float)
+
+
+def _seed_log_C_from_ce(ce: ControlSurface, gamma: float) -> float:
+    """Seed log_C from the median CE node (initial-guess best estimate)."""
+    nodes = _control_surface_flow_nodes(ce)
+    if not nodes:
+        return 0.0
+    p = nodes[len(nodes) // 2]
+    M = max(float(p.M), 1.0 + 1e-9)
+    alpha = math.asin(1.0 / M)
+    cos_a = math.cos(alpha)
+    cos_tma = math.cos(float(p.theta) - alpha)
+    Mstar = mstar_from_M(M, gamma)
+    if cos_a <= 1e-12 or abs(cos_tma) <= 1e-12 or Mstar <= 1e-12:
+        return 0.0
+    return math.log(Mstar) + math.log(abs(cos_tma)) - math.log(cos_a)
+
+
+def rao_valid_region(
+    ce_or_nodes,
+    *,
+    tol: float = 0.0,
+) -> tuple[float, list[float]]:
+    """
+    Evaluate the Rao smooth-flow validity inequality along the control surface.
+
+    Rao's optimum-thrust nozzle assumes a continuous, monotonic supersonic
+    expansion across the control surface DE.  The classical condition for the
+    optimum to exist as a smooth (shock-free) flow is
+
+        b(s) = 1 - (dα/dθ) · [tan(θ - α) + tan(α)] / [tan(θ - α) - tan(α)]  ≥ 0
+
+    where α = μ = arcsin(1/M) is the Mach angle and θ is the local flow
+    angle along DE.  When ``b`` becomes negative the smooth-flow Rao
+    construction is inapplicable and the optimum contour degenerates into
+    a discontinuous (over-expanded) exit.
+
+    References
+    ----------
+    - Rao, "Exhaust Nozzle Contour for Optimum Thrust", Jet Propulsion 1958
+    - Rao, Beck, Booth, "Rao Variational Optimum Bell Nozzle: A Design
+      Compendium", AIAA 99-2584 (1999)  -- propulsion_texts/rao1999.pdf
+    - Östlund, *Flow processes in rocket engine nozzles ...*, KTH 2002
+      (propulsion_texts/fulltext01.pdf, §3)
+
+    Parameters
+    ----------
+    ce_or_nodes : ControlSurface | Sequence[FlowNode]
+        Discrete control-surface nodes from D toward E.
+    tol : float
+        Slack on the inequality.  Pass ``residual_tol`` to allow numerical
+        noise; values of ``b`` below ``-tol`` flag the input as outside the
+        valid region.
+
+    Returns
+    -------
+    (min_b, list_b) : tuple[float, list[float]]
+        The minimum ``b`` value and the per-segment list.  If the input has
+        fewer than two nodes ``min_b`` is ``+inf`` (vacuously valid) and
+        ``list_b`` is empty.
+    """
+    if hasattr(ce_or_nodes, "M") and hasattr(ce_or_nodes, "theta"):
+        nodes = _control_surface_flow_nodes(ce_or_nodes)
+    else:
+        nodes = list(ce_or_nodes)
+    if len(nodes) < 2:
+        return float("inf"), []
+
+    bvalues: list[float] = []
+    for p0, p1 in zip(nodes[:-1], nodes[1:]):
+        dth = float(p1.theta - p0.theta)
+        if abs(dth) < 1e-10:
+            continue
+        M0 = max(float(p0.M), 1.0 + 1e-9)
+        M1 = max(float(p1.M), 1.0 + 1e-9)
+        a0 = math.asin(1.0 / M0)
+        a1 = math.asin(1.0 / M1)
+        a = 0.5 * (a0 + a1)
+        th = 0.5 * (float(p0.theta) + float(p1.theta))
+        num = math.tan(th - a) + math.tan(a)
+        den = math.tan(th - a) - math.tan(a)
+        if abs(den) < 1e-12:
+            bvalues.append(-math.inf)
+        else:
+            bvalues.append(1.0 - (a1 - a0) / dth * (num / den))
+
+    if not bvalues:
+        return float("inf"), []
+    min_b = min(bvalues)
+    _ = tol  # informational; caller compares min_b against -tol
+    return min_b, bvalues
 
 
 def _ce_geometry_residuals(
@@ -1434,6 +1656,8 @@ def _rao_bvp_residual_groups(
     regularization = _ce_smoothness_regularization(ce, config.gamma)
     moc_cplus, moc_cminus = _ce_axisymmetric_compatibility_residual_groups(ce, config.gamma)
     ce_geometry = _ce_geometry_residuals(ce, r, config)
+    algebraic_stat = _rao_algebraic_stationarity_residuals(ce, config.gamma)
+    left_mach = _rao_left_mach_geometry_residuals(ce)
     penalties = np.concatenate([
         incidence_penalty,
         mach_monotonic_penalty,
@@ -1454,6 +1678,15 @@ def _rao_bvp_residual_groups(
         ),
         transversality=_filter_group("transversality", np.array([trans / trans_scale]), active),
         stationarity=_filter_group("stationarity", stat_res, active),
+        # Phase 3: the new Rao physics constraints enter as soft residuals at
+        # 0.1 weight.  Leaving them un-scaled would over-power the existing CE
+        # seed quality and push the BVP into a worse basin.  Weight should be
+        # raised toward 1.0 once the Phase 4-6 mass-closure / coupled-wall
+        # work improves the seed.
+        algebraic_stationarity=_filter_group(
+            "algebraic_stationarity", 0.1 * algebraic_stat, active,
+        ),
+        left_mach=_filter_group("left_mach", 0.1 * left_mach, active),
         moc_cplus=_filter_group("moc_cplus", moc_cplus, active),
         moc_cminus=_filter_group("moc_cminus", moc_cminus, active),
         ce_geometry=_filter_group("ce_geometry", ce_geometry, active),
@@ -1489,7 +1722,13 @@ def _build_residual_report(
     L_target = _target_length(config.Rt, config.epsilon, config.length_pct)
     stat = _stationarity_matrix(ce, config.gamma, config.pa_over_p0)
     regularization = _ce_smoothness_regularization(ce, config.gamma)
-    groups = _rao_bvp_residual_groups(_pack_bvp(ce, ce.lambda2, ce.lambda3), r_template, config)
+    algebraic_stat = _rao_algebraic_stationarity_residuals(ce, config.gamma)
+    left_mach = _rao_left_mach_geometry_residuals(ce)
+    groups = _rao_bvp_residual_groups(
+        _pack_bvp(ce, ce.lambda2, ce.lambda3, ce.log_C),
+        r_template,
+        config,
+    )
     trans = transversality_residual(
         float(ce.M[-1]), float(ce.theta[-1]), float(ce.phi[-1]),
         float(ce.r[-1]), config.gamma, ce.lambda2, ce.lambda3,
@@ -1505,6 +1744,13 @@ def _build_residual_report(
         mass_residual_rel=float((mdot_val - mdot_target) / max(mdot_target, 1e-12)),
         length_residual_rel=float((L_val - L_target) / max(L_target, 1e-12)),
         stationarity_rms=float(np.sqrt(np.mean(stat**2))) if stat.size else 0.0,
+        algebraic_stationarity_rms=(
+            float(np.sqrt(np.mean(algebraic_stat**2)))
+            if algebraic_stat.size else 0.0
+        ),
+        left_mach_rms=(
+            float(np.sqrt(np.mean(left_mach**2))) if left_mach.size else 0.0
+        ),
         regularization_rms=(
             float(np.sqrt(np.mean(regularization**2)))
             if regularization.size else 0.0
@@ -2197,7 +2443,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         raise ValueError("n_control must be at least 8")
 
     ce0, kernel_points = _initial_ce_from_kernel(config)
-    u0 = _pack_bvp(ce0, -0.5, 0.01)
+    log_C0 = _seed_log_C_from_ce(ce0, config.gamma)
+    ce0.log_C = log_C0
+    u0 = _pack_bvp(ce0, -0.5, 0.01, log_C0)
     n = len(ce0.r)
     try:
         Me = mach_from_area_ratio(config.epsilon, config.gamma, supersonic=True)
@@ -2208,14 +2456,14 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         np.full(n, math.radians(-10.0)),
         np.full(n, 0.0),
         np.full(n, 1e-9),
-        [-1e3, -1e3],
+        [-1e3, -1e3, -10.0],
     ])
     upper = np.concatenate([
         np.full(n, max(12.0, 1.5 * Me)),
         np.full(n, math.radians(65.0)),
         np.full(n, max(1.2 * _target_length(config.Rt, config.epsilon, config.length_pct), 1e-9)),
         np.full(n, 1.05 * math.sqrt(config.epsilon) * config.Rt),
-        [1e3, 1e3],
+        [1e3, 1e3, 10.0],
     ])
 
     if config.max_nfev <= 0:
@@ -2396,11 +2644,23 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         and wall_tangency_rms < math.radians(0.25)
         and crossings == 0
     )
+
+    boundary_min, _b_values = rao_valid_region(ce)
+    valid_region_ok = boundary_min >= -config.residual_tol
+    construction_diagnostics["boundary_min"] = float(boundary_min)
+    construction_diagnostics["rao_region"] = (
+        "valid_shock_free_region" if valid_region_ok
+        else "invalid_short_nozzle_region"
+    )
+    construction_diagnostics["requires_discontinuous_exit_flow_model"] = (
+        not valid_region_ok
+    )
+
     ce.converged = bool(bvp_ok)
     shock_free = crossings == 0
-    if bvp_ok and moc_ok:
+    if bvp_ok and moc_ok and valid_region_ok:
         reliability = ContourReliability.RAO_VARIATIONAL_RESIDUAL_SOLVED
-    elif moc_ok:
+    elif moc_ok and valid_region_ok:
         reliability = ContourReliability.MOC_COMPATIBLE
     else:
         reliability = ContourReliability.GEOMETRIC_APPROXIMATION
@@ -2414,6 +2674,13 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         warnings.append(
             "MOC closure/tangency/crossing diagnostics did not pass; do not "
             "treat this as a benchmarked Rao contour."
+        )
+    if not valid_region_ok:
+        warnings.append(
+            "Requested (epsilon, length_pct) lies outside the smooth-flow "
+            f"Rao region (min boundary value {boundary_min:.3g}); the "
+            "optimum-thrust contour is discontinuous and the variational "
+            "construction is not applicable."
         )
     warnings.append(
         "Not hardware-qualified; requires published benchmark comparison, CFD, "
