@@ -28,6 +28,20 @@ _LPCT_VALS = np.array([60, 70, 80, 90, 100], dtype=float)
 
 #  θ_n  (initial wall angle at inflection, degrees)
 #  Shape: (len(_EPSILON_VALS), len(_LPCT_VALS))
+#
+#  Provenance (verified against propulsion_texts, 2026-06-11): these are
+#  the classic Rao TOP design charts — Rao, "Approximation of Optimum
+#  Thrust Nozzle Contour," ARS J. 30(6), 1960, p. 561 (the θ_m/θ_e
+#  parabola-fit charts), as reproduced in Sutton/RPE and NASA SP-8120.
+#  Rao's optimum-nozzle parameter study behind them was computed for
+#  γ = 1.23 (Rao, "Recent Developments in Rocket Nozzle Configurations,"
+#  ARS J. 31(11), 1961, p. 1490); per the same paper, at fixed (ε, L)
+#  the optimal CONTOUR is nearly γ-insensitive ("the differences in
+#  nozzle contours are negligible"), so the angle tables remain valid
+#  comparison targets at γ = 1.4 — only Cf depends strongly on γ.
+#  Magnitude cross-check from that paper (pp. 1490-1491): optimal wall
+#  angles "about 28° to 30°" downstream of the throat, exit inclination
+#  "about 10° to 14°" — consistent with these tables' mid-grid values.
 _THETA_N_TABLE = np.array([
     # L%:  60     70     80     90    100           ε
     [33.0, 28.5, 25.0, 22.5, 20.5],  #  4

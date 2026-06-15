@@ -39,7 +39,11 @@ def main() -> int:
     cfg = RaoSolverConfig(
         Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
         length_pct=80.0, n_control=24, n_kernel=24, n_wall=12,
-        max_nfev=4000, residual_tol=2e-3, evaluate_moc=False,
+        # evaluate_moc=True is REQUIRED for the wall: solve_rao_bvp only
+        # constructs wall_raw inside the evaluate_moc branch (the BDE
+        # region march runs there; the forward-MOC audit it also triggers
+        # is known-misaligned for BDE walls and only affects diagnostics).
+        max_nfev=4000, residual_tol=2e-3, evaluate_moc=True,
         couple_wall=False, kernel_d_fraction_max=0.7,
         thetaN_guess_deg=21.87, solver_backend="jax",
         formulation="characteristic", pin_d_theta=False,

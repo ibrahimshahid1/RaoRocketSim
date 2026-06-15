@@ -115,8 +115,15 @@ def test_backend_validation_rejects_unknown():
         rv.solve_rao_bvp(_reference_config(solver_backend="tensorflow"))
 
 
-def test_numpy_backend_unchanged_default():
-    assert RaoSolverConfig(Rt=0.02, epsilon=10.0).solver_backend == "numpy"
+def test_jax_backend_is_default():
+    """DIRECTION item 2 (2026-06-11): flipped after the J4 gate
+    re-confirmed at 7.50e-4 on the post-12.4 seed."""
+    assert RaoSolverConfig(Rt=0.02, epsilon=10.0).solver_backend == "jax"
+
+
+def test_numpy_backend_still_available_opt_in():
+    cfg = RaoSolverConfig(Rt=0.02, epsilon=10.0, solver_backend="numpy")
+    assert cfg.solver_backend == "numpy"
 
 
 # --------------------------------------------------------------------------- #
@@ -150,8 +157,11 @@ def test_characteristic_formulation_reaches_3e3_floor(jax_characteristic_weight1
     kernel_d_fraction to the throat plane).  Observed: max_scaled
     ~3.0e-3 (stationarity-only), mass ~5e-9, length ~3e-9, D interior
     at kdf ~0.27, resolution-independent (n=16/24, n_kernel=24/48), and
-    theta_B-insensitive (refresh to the chart angle 21.87 deg changes
-    nothing) — floors at ~3x observed."""
+    theta_B-insensitive (refresh to the kernel-stationarity angle
+    21.87 deg changes nothing — NOTE: that value is the stationarity
+    diagnostic, NOT the chart theta_N, which is 30.0 deg at eps=10/L80;
+    see the 2026-06-11 theta_N reconciliation in the plan STATUS) —
+    floors at ~3x observed."""
     sol = jax_characteristic_weight1
     r = sol.residuals
     assert r.max_scaled < 0.01, f"max_scaled={r.max_scaled:.3g}"
@@ -170,12 +180,27 @@ def test_characteristic_formulation_reaches_3e3_floor(jax_characteristic_weight1
     assert groups["wall_intersection"]["count"] == 0
 
 
-def test_legacy_formulation_is_unchanged_default():
+def test_characteristic_formulation_is_default():
+    """DIRECTION item 2c bundle (2026-06-11): characteristic formulation,
+    J4 ladder, and position-only D attachment are the defaults."""
     cfg = RaoSolverConfig(Rt=0.02, epsilon=10.0)
-    assert cfg.formulation == "legacy"
-    assert cfg.jax_constraint_weight_ladder is None
+    assert cfg.formulation == "characteristic"
+    assert cfg.jax_constraint_weight_ladder == (1.0, 10.0, 30.0, 100.0)
+    assert cfg.pin_d_theta is False
+    assert cfg.pin_d_mach is False
     blocks = rv._enabled_residual_blocks(cfg)
-    assert "moc_cminus" in blocks  # legacy stack untouched by default
+    # The structurally-unsatisfiable scaffold blocks are gone by default.
+    assert "moc_cminus" not in blocks
+    assert "cplus_ce_to_wall" not in blocks
+
+
+def test_legacy_formulation_still_available_opt_in():
+    cfg = RaoSolverConfig(Rt=0.02, epsilon=10.0, formulation="legacy",
+                          pin_d_theta=True,
+                          jax_constraint_weight_ladder=None)
+    assert cfg.formulation == "legacy"
+    blocks = rv._enabled_residual_blocks(cfg)
+    assert "moc_cminus" in blocks  # legacy stack reachable opt-in
 
 
 def test_converged_solution_yields_closed_bde_wall():
@@ -212,19 +237,33 @@ def test_converged_solution_yields_closed_bde_wall():
     reason=(
         "BDE wall SHAPE defect: the converged solve's wall ends exactly on "
         "the commanded exit and is monotone in (x, r), but the wall angle "
-        "RISES along the BFE section (23 -> 35.6 deg) and kinks down to "
-        "4.6 deg on the final segment — a flare, not a bell (a Rao bell "
-        "peaks at theta_N ~ 22 deg after the throat arc and decreases "
-        "monotonically to theta_E ~ 8-10 deg).  The converged DE itself is "
-        "bell-consistent (theta 13.6 -> 7.3 deg), so the defect is in "
-        "calc_bde_region/_calc_wall_contour_rows wall-point placement — "
-        "consistent with the forward-MOC audit's crossings.  Next work item."
+        "peaks MID-BELL (30.6 deg at 64% length post-12.4; was 35.6 deg "
+        "at 60%) and kinks down to ~3.6 deg on the final segment — a "
+        "flare, not a bell.  A Rao TOP at eps=10/L80 peaks ~theta_N = "
+        "30 deg (chart; Rao ARS J. 1961 pp. 1490-1491: optimal wall "
+        "angles 'about 28 to 30 deg' downstream of the throat) *right "
+        "after the throat arc*, then decreases monotonically to "
+        "theta_E ~ 15.5 deg (chart).  Root cause: the position-only D "
+        "attachment leaves a state jump at D that the (correct) BDE "
+        "back-march renders as a fictitious wave system; AND the seed's "
+        "inner set_theta_b secant freezes the kernel at the sub-optimal "
+        "fixed-end angle (~25.5 deg).  Candidate fix under test: outer "
+        "theta_B iteration with theta_b_freeze_deg + full D-state pins."
     ),
 )
 def test_bde_wall_is_bell_shaped():
-    """Wall angle must peak near theta_N right after the throat arc and
-    decrease monotonically to theta_E ~ 8-10 deg (Rao TOP shape)."""
+    """Wall slope must peak ~chart theta_N just after the throat arc and
+    decrease monotonically to ~chart theta_E (Rao TOP shape).
+
+    Expectations are taken from the in-repo Rao/SP-8120 chart
+    (``lookup_angles``) so the gate is the *optimum's* geometry, not the
+    fixed-end closure's.
+    """
     import math
+
+    from raosim.nozzle_geometry import lookup_angles
+
+    theta_n_chart, theta_e_chart = lookup_angles(10.0, 80.0)
     original = rv.PHYSICS_WEIGHT
     try:
         rv.PHYSICS_WEIGHT = 1.0
@@ -238,13 +277,23 @@ def test_bde_wall_is_bell_shaped():
         rv.PHYSICS_WEIGHT = original
     w = sol.wall_raw
     ang = np.degrees(np.arctan2(np.diff(w[:, 1]), np.diff(w[:, 0])))
-    # After the throat arc (angle first reaches ~theta_N), the wall angle
-    # must never exceed theta_N + 2 deg and must end at 6-12 deg.
+    s = np.concatenate([[0.0], np.cumsum(np.hypot(np.diff(w[:, 0]),
+                                                  np.diff(w[:, 1])))])
     i_peak = int(np.argmax(ang))
-    assert ang.max() < 24.0, f"wall flares to {ang.max():.1f} deg"
+    # Peak magnitude ~ chart theta_N, located just after the throat arc.
+    assert ang.max() == pytest.approx(theta_n_chart, abs=2.5), (
+        f"wall peak {ang.max():.1f} deg vs chart theta_N "
+        f"{theta_n_chart:.1f} deg"
+    )
+    assert s[i_peak] / s[-1] < 0.10, (
+        f"peak at {s[i_peak] / s[-1]:.0%} of length — mid-bell flare"
+    )
     post = ang[i_peak:]
     assert np.all(np.diff(post) <= 0.25), "wall angle not monotone decreasing"
-    assert 6.0 <= ang[-1] <= 12.0, f"exit angle {ang[-1]:.1f} deg"
+    assert ang[-1] == pytest.approx(theta_e_chart, abs=2.5), (
+        f"exit angle {ang[-1]:.1f} deg vs chart theta_E "
+        f"{theta_e_chart:.1f} deg"
+    )
 
 
 def test_j4_gate_passes_with_position_only_attachment():

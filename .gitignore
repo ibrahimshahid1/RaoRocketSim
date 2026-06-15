@@ -12,3 +12,4 @@ test_failures.log
 
 # macOS
 .DS_Store
+.venv-jax/

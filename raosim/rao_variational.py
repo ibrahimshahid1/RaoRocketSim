@@ -294,18 +294,22 @@ class RaoSolverConfig:
     kernel_d_fraction_min: float = 0.0
     # JAX differentiable backend (JAX_DIFFERENTIABLE_PLAN.md).
     #
+    #   "jax"   — (DEFAULT since 2026-06-11, DIRECTION item 2: the J4
+    #             gate re-confirmed at max_scaled = 7.50e-4 on the
+    #             post-12.4 seed.)  Optimistix Levenberg–Marquardt on
+    #             the raosim.jax.assembly residual with *exact* autodiff
+    #             Jacobians.  Requires jax/optimistix installed (pinned
+    #             in requirements.txt).  Residual parity with the NumPy
+    #             path is guaranteed by the J2 gate
+    #             (tests/test_jax_assembly_parity.py).
     #   "numpy" — scipy.optimize.least_squares with finite-difference
-    #             Jacobians (default; the regression oracle).
-    #   "jax"   — Optimistix Levenberg–Marquardt on the
-    #             raosim.jax.assembly residual with *exact* autodiff
-    #             Jacobians.  Requires jax/optimistix installed.  Residual
-    #             parity with the NumPy path is guaranteed by the J2 gate
-    #             (tests/test_jax_assembly_parity.py).  Stays opt-in until
-    #             the J5 chart-benchmark gate passes.
+    #             Jacobians (the legacy regression oracle; kept for
+    #             comparisons until the raosim/jax absorption,
+    #             DIRECTION item 1).
     #
     # Only the inner least-squares step changes; seeding, kernel build,
     # reliability gating, and diagnostics are identical for both backends.
-    solver_backend: str = "numpy"
+    solver_backend: str = "jax"
     # CE seed strategy for the BVP unknown vector:
     #
     #   "auto"     — (default) seed the CE from the NASA fixed-end Rao
@@ -321,15 +325,17 @@ class RaoSolverConfig:
     ce_seed: str = "auto"
     # Residual-stack formulation (when ``residual_blocks`` is None):
     #
+    #   "characteristic" — (DEFAULT since 2026-06-11, the J4-gate
+    #                      configuration.)  CHARACTERISTIC_RAO_RESIDUAL_
+    #                      BLOCKS: the converged-topology set (no C−
+    #                      along the C+ CE; no CE→wall pairing blocks).
+    #                      See the constant's docstring for the physics
+    #                      + the empirical evidence.
     #   "legacy"         — DEFAULT_RAO_RESIDUAL_BLOCKS (pre-refactor
-    #                      scaffold blocks included).  Default until the
-    #                      Phase 6/7 gates re-baseline.
-    #   "characteristic" — CHARACTERISTIC_RAO_RESIDUAL_BLOCKS: the
-    #                      converged-topology set (no C− along the C+
-    #                      CE; no CE→wall pairing blocks).  See the
-    #                      constant's docstring for the physics + the
-    #                      empirical evidence.
-    formulation: str = "legacy"
+    #                      scaffold blocks included).  Opt-in for
+    #                      regression comparisons until the raosim/jax
+    #                      absorption.
+    formulation: str = "characteristic"
     # Constraint-weight continuation for the JAX backend: the integral
     # constraints (mass, length) and endpoint pins are single residual
     # elements drowned by ~O(n) physics elements in plain least squares
@@ -337,17 +343,38 @@ class RaoSolverConfig:
     # A ladder like (1.0, 10.0, 30.0) re-solves with those elements
     # progressively up-weighted, reusing each solution as the next seed;
     # the *reported* residual is always the unweighted one.  None = off.
-    jax_constraint_weight_ladder: tuple[float, ...] | None = None
+    # Default (1, 10, 30, 100) is the J4-gate ladder.
+    jax_constraint_weight_ladder: tuple[float, ...] | None = (
+        1.0, 10.0, 30.0, 100.0,
+    )
     # Pin M_ce[0] to D's kernel Mach (full flow-state continuity at D).
     # OFF by default: unsatisfiable on a frozen kernel BD — see the
     # comment in _ce_geometry_residuals.  Enable only together with a
     # BD-refresh outer iteration (future) or the J3b differentiable march.
     pin_d_mach: bool = False
-    # Pin theta_ce[0] to D's interpolated kernel angle.  ON by default
-    # (legacy behaviour).  Setting False gives the position-only D
-    # attachment that closes the J4 gate (~1.2e-3 < 2e-3) under the
-    # characteristic formulation — see _ce_geometry_residuals.
-    pin_d_theta: bool = True
+    # Pin theta_ce[0] to D's interpolated kernel angle.  OFF by default
+    # (since 2026-06-11): the position-only D attachment closes the J4
+    # gate (7.5e-4 < 2e-3 on the post-12.4 seed) under the
+    # characteristic formulation — pinning theta to the *interpolated
+    # approximate* kernel value imports kernel discretisation error
+    # into the stationarity chain at full weight.  See
+    # _ce_geometry_residuals; True restores the legacy behaviour.
+    pin_d_theta: bool = False
+    # Freeze the kernel arc-end angle theta_B at this value [deg],
+    # bypassing the seed's inner set_theta_b secant (which otherwise
+    # re-converges theta_B to the *fixed-end* closure — ~25.5 deg at the
+    # eps=10/L80 reference — regardless of thetaN_guess_deg).  Purpose:
+    # an OUTER theta_B iteration (Picard/secant) around the BVP needs to
+    # actually control the frozen kernel; without this knob the inner
+    # secant overrides it and the full-continuity stationarity floor is
+    # theta_B-insensitive by construction.  The Rao-1961-grounded
+    # expectation is that the fixed-(L, eps) optimum sits near the chart
+    # theta_N (~28-30 deg downstream wall angle; Rao, ARS J. 31(11),
+    # 1961, pp. 1490-1491), NOT at the fixed-end closure value.  D and
+    # the DE seed are still placed by calc_lrc_de(end_condition=
+    # "fixed_end") on the frozen kernel (r_E pinned; length left to the
+    # solve).  None = legacy behaviour (inner secant owns theta_B).
+    theta_b_freeze_deg: float | None = None
 
 
 # Converged-topology ("characteristic") block set.  After the
@@ -1764,7 +1791,11 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     Re = math.sqrt(config.epsilon) * Rt
     Ln = _target_length(Rt, config.epsilon, config.length_pct)
     Rd = config.throat_downstream_radius_factor * Rt
-    theta_b_seed = math.radians(config.thetaN_guess_deg)
+    theta_b_freeze = getattr(config, "theta_b_freeze_deg", None)
+    theta_b_seed = math.radians(
+        theta_b_freeze if theta_b_freeze is not None
+        else config.thetaN_guess_deg
+    )
 
     seed_mode = getattr(config, "ce_seed", "auto")
     if seed_mode not in ("auto", "topology", "linear"):
@@ -1782,7 +1813,12 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
     # kernel march.
     topology: _RaoTopology | None = None
     kernel = None
-    if seed_mode in ("auto", "topology"):
+    # theta_b_freeze_deg bypasses the inner secant entirely: the kernel
+    # is built at exactly the frozen angle and D/DE come from the
+    # fixed-end walk on that kernel (the `if kernel is None` branch
+    # below).  This is what lets an outer theta_B loop actually move
+    # the frozen kernel — see the config field's comment.
+    if seed_mode in ("auto", "topology") and theta_b_freeze is None:
         try:
             topology, kernel = _set_theta_b(
                 Rt, config.epsilon, config.length_pct,
@@ -4277,11 +4313,20 @@ def rao_residual_ablation_matrix(
     This is a diagnostic tool for identifying which residual family first
     makes the current CE parameterization infeasible.  By default MOC wall
     construction is skipped so the matrix isolates the CE solve.
+
+    The matrix always runs on the **NumPy/scipy backend**: ablations sweep
+    arbitrary block subsets, including the finite-difference reference
+    blocks that are deliberately NumPy-only — the JAX assembly rejects
+    them with ``NotImplementedError`` (``raosim/jax/assembly.py``,
+    ``SUPPORTED_BLOCKS``).  Before the 2026-06-11 default flip this was
+    implicit (the default backend *was* numpy); now it is pinned
+    explicitly so the diagnostic keeps working under the JAX defaults.
     """
     selected = RAO_RESIDUAL_ABLATIONS if cases is None else cases
     rows: list[dict] = []
     for name, blocks in selected.items():
-        cfg = replace(config, residual_blocks=blocks, evaluate_moc=evaluate_moc)
+        cfg = replace(config, residual_blocks=blocks,
+                      evaluate_moc=evaluate_moc, solver_backend="numpy")
         try:
             solution = solve_rao_bvp(cfg)
             rows.append({

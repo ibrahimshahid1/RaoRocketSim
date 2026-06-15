@@ -7,6 +7,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401  (needed for projection)
+from raosim.gas_dynamics import isentropic_pressure_ratio
 from raosim.nozzle_geometry import compute_curvature
 
 
@@ -331,6 +332,303 @@ def plot_topology(topology, *, ax=None, show: bool = False,
     ax.set_xlabel("axial position  x [m]")
     ax.set_ylabel("radial position  r [m]")
     ax.set_title(title)
+    ax.set_aspect("equal", "box")
+    handles, _labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(loc="best", fontsize=8)
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def _net_points(solution):
+    """All characteristic-net points of a solution as a flat list."""
+    pts = []
+    for row in getattr(solution, "characteristic_net", None) or []:
+        pts.extend(row.all_points() if hasattr(row, "all_points")
+                   else list(row))
+    return pts
+
+
+def _plot_flowfield(solution, value_fn, label, *, geometry="raw",
+                    ax=None, cmap="viridis", show=False, save_path=None):
+    """Shared scatter-overlay machinery for the flowfield plots."""
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+            label=wall_label, zorder=4)
+
+    pts = _net_points(solution)
+    if pts:
+        xs = [p.x for p in pts]
+        rs = [p.r for p in pts]
+        vs = [value_fn(p) for p in pts]
+        sc = ax.scatter(xs, rs, c=vs, s=14, cmap=cmap, zorder=3)
+        plt.colorbar(sc, ax=ax, label=label)
+
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(f"{label} field  —  {geometry}")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_flowfield_pressure(solution, gamma: float, *, geometry="raw",
+                            ax=None, cmap="plasma", show=False,
+                            save_path=None):
+    """p/p0 at every net node (REWRITE_PLAN §12.1 plot #4).
+
+    Verifies monotonic decrease downstream — pockets of recompression
+    inside a clean expansion flag crossed characteristics.
+    """
+    return _plot_flowfield(
+        solution,
+        lambda p: isentropic_pressure_ratio(max(p.M, 1.000001), gamma),
+        "p/p0", geometry=geometry, ax=ax, cmap=cmap, show=show,
+        save_path=save_path,
+    )
+
+
+def plot_flowfield_theta(solution, *, geometry="raw", ax=None,
+                         cmap="coolwarm", show=False, save_path=None):
+    """Flow angle [deg] at every net node (§12.1 plot #5)."""
+    return _plot_flowfield(
+        solution, lambda p: math.degrees(p.theta), "flow angle  [deg]",
+        geometry=geometry, ax=ax, cmap=cmap, show=show,
+        save_path=save_path,
+    )
+
+
+def plot_nozzle_geometry(solution, *, geometry="raw", ax=None,
+                         show=False, save_path=None):
+    """Wall contour + axis + throat/exit annotations (§12.1 plot #1)."""
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+            label=wall_label, zorder=4)
+    i_throat = int(np.argmin(wall[:, 1]))
+    ax.plot([wall[i_throat, 0]], [wall[i_throat, 1]], "o", color="C3",
+            zorder=5)
+    ax.annotate("throat", wall[i_throat], textcoords="offset points",
+                xytext=(6, -12), fontsize=9)
+    ax.plot([wall[-1, 0]], [wall[-1, 1]], "^", color="C3", zorder=5)
+    ax.annotate("E", wall[-1], textcoords="offset points", xytext=(6, 6),
+                fontsize=10, fontweight="bold")
+
+    ax.axhline(0.0, color="grey", linewidth=0.6, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(f"Nozzle geometry  —  {geometry}")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def _row_wall_node(row):
+    pts = row.all_points() if hasattr(row, "all_points") else list(row)
+    return max(pts, key=lambda p: p.r) if pts else None
+
+
+def plot_wall_distributions(solution, gamma: float, *, geometry="raw",
+                            show=False, save_path=None):
+    """x vs wall Mach / theta / p_p0, stacked (§12.1 plot #6).
+
+    Wall states are taken from each net row's outermost (max-r) node —
+    the marched wall points.  Requires ``solution.characteristic_net``.
+    """
+    rows = getattr(solution, "characteristic_net", None) or []
+    nodes = [n for n in (_row_wall_node(r) for r in rows) if n is not None]
+    if not nodes:
+        raise ValueError(
+            "plot_wall_distributions needs a populated characteristic_net "
+            "(run the solve with evaluate_moc=True)"
+        )
+    nodes.sort(key=lambda p: p.x)
+    xs = np.asarray([p.x for p in nodes])
+    Ms = np.asarray([max(p.M, 1.000001) for p in nodes])
+    ths = np.asarray([math.degrees(p.theta) for p in nodes])
+    ps = np.asarray([isentropic_pressure_ratio(M, gamma) for M in Ms])
+
+    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+    for ax, ys, lbl in zip(
+        axes, (Ms, ths, ps),
+        ("wall Mach", "wall angle  [deg]", "wall p/p0"),
+    ):
+        ax.plot(xs, ys, "o-", markersize=3, linewidth=1.0)
+        ax.set_ylabel(lbl)
+        ax.grid(True, ls=":", alpha=0.4)
+    axes[-1].set_xlabel("axial position  x [m]")
+    axes[0].set_title("Wall distributions (net wall nodes)")
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_exit_plane(solution, gamma: float, *, x_band: float = 0.02,
+                    show=False, save_path=None):
+    """r vs M / theta / p_p0 near the exit station (§12.1 plot #7).
+
+    Collects net nodes with ``x >= (1 - x_band) * x_max``.  Catches
+    non-uniform exit profiles, residual turning, over/under-expansion.
+    """
+    pts = _net_points(solution)
+    if not pts:
+        raise ValueError(
+            "plot_exit_plane needs a populated characteristic_net "
+            "(run the solve with evaluate_moc=True)"
+        )
+    x_max = max(p.x for p in pts)
+    sel = [p for p in pts if p.x >= (1.0 - x_band) * x_max]
+    sel.sort(key=lambda p: p.r)
+    rs = np.asarray([p.r for p in sel])
+    Ms = np.asarray([max(p.M, 1.000001) for p in sel])
+    ths = np.asarray([math.degrees(p.theta) for p in sel])
+    ps = np.asarray([isentropic_pressure_ratio(M, gamma) for M in Ms])
+
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4), sharey=True)
+    for ax, vals, lbl in zip(
+        axes, (Ms, ths, ps),
+        ("Mach", "flow angle  [deg]", "p/p0"),
+    ):
+        ax.plot(vals, rs, "o-", markersize=3, linewidth=1.0)
+        ax.set_xlabel(lbl)
+        ax.grid(True, ls=":", alpha=0.4)
+    axes[0].set_ylabel("radial position  r [m]")
+    fig.suptitle(f"Exit-plane profiles (x within {x_band:.0%} of x_max)")
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_nasa_overlay(solution, nasa_outputs_dir, *, Rt: float | None = None,
+                      geometry="raw", ax=None, show=False, save_path=None):
+    """Overlay NASA wall.out onto the solution wall (§12.1 plot #10).
+
+    The NASA reference is in R*-normalised units; the solution wall is
+    in metres.  ``Rt`` sets the normalisation (defaults to the wall's
+    minimum radius, which is the throat for a full contour).
+    """
+    from pathlib import Path
+
+    from raosim.legacy_io import parse_wall_out
+
+    wall, wall_label = _solution_wall(solution, geometry)
+    rt = float(Rt) if Rt is not None else float(np.min(wall[:, 1]))
+    if rt <= 0:
+        raise ValueError("Rt must be positive for R* normalisation")
+
+    nasa = parse_wall_out(Path(nasa_outputs_dir) / "wall.out")
+    nx = nasa.column([c for c in nasa.columns if "x" in c.lower()][0])
+    nr = nasa.column([c for c in nasa.columns if "r" in c.lower()][0])
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    ax.plot(wall[:, 0] / rt, wall[:, 1] / rt, color="black",
+            linewidth=2.0, label=f"{wall_label} (/R*)", zorder=3)
+    ax.scatter(nx, nr, s=16, color="C3", marker="x",
+               label="NASA wall.out", zorder=4)
+    ax.set_xlabel("x / R*")
+    ax.set_ylabel("r / R*")
+    ax.set_title("NASA reference overlay")
+    ax.set_aspect("equal", "box")
+    ax.legend(loc="best", fontsize=8)
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_sensitivity_field(x, r, values, *, label="|dCf/dr|  [1/m]",
+                           signed: bool = False, wall=None, ax=None,
+                           cmap: str = "magma", show: bool = False,
+                           save_path: str | None = None):
+    """
+    Manufacturing-tolerance map (JAX plan §6 / J6): paint a per-node
+    sensitivity field onto a polyline — typically ``|dCf/dr_i|`` from
+    :func:`raosim.jax.sensitivities.rao_sensitivities` on the solved
+    control surface, optionally over the wall contour for context.
+
+    Parameters
+    ----------
+    x, r
+        Node coordinates of the polyline carrying the field.
+    values
+        Per-node sensitivity values (same length as ``x``).
+    signed
+        If True plot the signed field on a diverging colormap centred
+        at 0; otherwise plot ``|values|``.
+    wall
+        Optional (n, 2) wall polyline drawn in black for context.
+    """
+    x = np.asarray(x, dtype=float)
+    r = np.asarray(r, dtype=float)
+    v = np.asarray(values, dtype=float)
+    if x.shape != r.shape or x.shape != v.shape:
+        raise ValueError("x, r, values must have identical shapes")
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(11, 4.5))
+    else:
+        fig = ax.figure
+
+    if wall is not None:
+        wall = np.asarray(wall, dtype=float)
+        ax.plot(wall[:, 0], wall[:, 1], color="black", linewidth=2.0,
+                label="wall", zorder=2)
+
+    if signed:
+        vmax = float(np.max(np.abs(v))) or 1.0
+        sc = ax.scatter(x, r, c=v, s=42, cmap="coolwarm",
+                        vmin=-vmax, vmax=vmax, zorder=3,
+                        edgecolors="k", linewidths=0.3)
+    else:
+        sc = ax.scatter(x, r, c=np.abs(v), s=42, cmap=cmap, zorder=3,
+                        edgecolors="k", linewidths=0.3)
+    ax.plot(x, r, color="grey", linewidth=0.7, alpha=0.6, zorder=2)
+    plt.colorbar(sc, ax=ax, label=label)
+
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title("Sensitivity field" + ("  (signed)" if signed else ""))
     ax.set_aspect("equal", "box")
     handles, _labels = ax.get_legend_handles_labels()
     if handles:

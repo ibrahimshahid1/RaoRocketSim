@@ -146,12 +146,18 @@ def solve_rao_bvp_jax(config):
 # --------------------------------------------------------------------------- #
 # J6 — gradient API                                                            #
 # --------------------------------------------------------------------------- #
-def rao_sensitivities(config):
-    """Exact gradients of Cf/Isp/etc. w.r.t. design params and nodes. (J6)"""
-    raise NotImplementedError(
-        "J6: gradient API — lands once the J4/J5 gates pass; see "
-        "JAX_DIFFERENTIABLE_PLAN.md §6."
-    )
+def rao_sensitivities(config, *, solution=None):
+    """Exact gradients of Cf w.r.t. the solved unknowns (J6 v1).
+
+    Thin re-export of :func:`raosim.jax.sensitivities.rao_sensitivities`
+    — see that module's docstring for the v1 scope (node tolerance
+    fields, explicit design partials at fixed u*, Jacobian
+    conditioning) and the v2 deferrals (IFT design totals, wall-node
+    map, Hessian).
+    """
+    from raosim.jax.sensitivities import rao_sensitivities as _impl
+
+    return _impl(config, solution=solution)
 
 
 __all__ = ["least_squares_jax", "solve_rao_bvp_jax", "rao_sensitivities",

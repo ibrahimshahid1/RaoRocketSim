@@ -567,3 +567,43 @@ def test_phase_27_reference_reports_forward_net_failure_precisely():
     assert report["intersection_rms"] >= 0.0
     assert report["wall_boundary_dr_rms"] >= 0.0
     assert isinstance(report["bad_rows"], list)
+
+
+def test_theta_b_freeze_bypasses_inner_secant():
+    """theta_b_freeze_deg must own the frozen kernel (Phase 12.4b).
+
+    Without the knob, the seed's inner ``set_theta_b`` secant
+    re-converges theta_B to the fixed-end closure (~25.5 deg at the
+    eps=10/L80 reference) regardless of ``thetaN_guess_deg`` — which is
+    why the full-continuity stationarity floor measured theta_B-
+    insensitive (5.7e-2 at guesses 21.87 and 28.10 alike).  An outer
+    theta_B iteration needs the freeze to actually move the kernel.
+    Grounded expectation for the optimum: chart theta_N ~ 30 deg at
+    eps=10/L80 (Rao, ARS J. 1961, pp. 1490-1491: optimal wall angles
+    "about 28 to 30 deg" downstream of the throat).
+    """
+    import math as _math
+    from dataclasses import replace as _replace
+
+    import raosim.rao_variational as _rv
+
+    cfg_free = RaoSolverConfig(
+        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+        length_pct=80.0, n_control=12, n_kernel=24,
+        max_nfev=0, evaluate_moc=False,
+    )
+    _, _, _topo_f, kern_f = _rv._initial_ce_from_kernel(cfg_free)
+    # Inner secant owns theta_B: lands at the fixed-end value, not the
+    # 24-deg guess default.
+    assert 24.0 < _math.degrees(kern_f.theta_B) < 27.0
+
+    cfg_frozen = _replace(cfg_free, theta_b_freeze_deg=29.0)
+    _, _, topo_z, kern_z = _rv._initial_ce_from_kernel(cfg_frozen)
+    assert _math.degrees(kern_z.theta_B) == pytest.approx(29.0, abs=1e-9)
+    assert kern_z.reached_wall
+    # D/DE still seeded by the fixed-end walk on the frozen kernel:
+    # r_E pinned (length intentionally left to the solve).
+    assert topo_z is not None
+    assert len(topo_z.DE) >= 3
+    Re = _math.sqrt(10.0) * 0.020
+    assert abs(topo_z.E.r - Re) / Re < 1e-3

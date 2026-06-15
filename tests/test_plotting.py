@@ -106,3 +106,62 @@ def test_plot_topology_duck_typed_minimal():
 
     fig = plot_topology(_Mini())
     assert fig is not None
+
+
+# ---------------------------------------------------------------------
+#  Phase 13 batch (§12.1 plots #1, #4, #5, #6, #7, #10)
+# ---------------------------------------------------------------------
+
+
+def test_plot_nozzle_geometry_smoke():
+    from raosim.plotting import plot_nozzle_geometry
+
+    fig = plot_nozzle_geometry(_FakeSolution())
+    assert fig is not None
+
+
+def test_plot_flowfield_pressure_and_theta_smoke():
+    from raosim.plotting import plot_flowfield_pressure, plot_flowfield_theta
+
+    sol = _FakeSolution()
+    assert plot_flowfield_pressure(sol, 1.4) is not None
+    assert plot_flowfield_theta(sol) is not None
+
+
+def test_plot_wall_distributions_smoke():
+    from raosim.plotting import plot_wall_distributions
+
+    fig = plot_wall_distributions(_FakeSolution(), 1.4)
+    assert fig is not None
+    assert len(fig.axes) == 3
+
+
+def test_plot_wall_distributions_requires_net():
+    from raosim.plotting import plot_wall_distributions
+
+    sol = _FakeSolution()
+    sol.characteristic_net = []
+    with pytest.raises(ValueError, match="characteristic_net"):
+        plot_wall_distributions(sol, 1.4)
+
+
+def test_plot_exit_plane_smoke():
+    from raosim.plotting import plot_exit_plane
+
+    fig = plot_exit_plane(_FakeSolution(), 1.4, x_band=0.5)
+    assert fig is not None
+    assert len(fig.axes) == 3
+
+
+def test_plot_nasa_overlay_smoke():
+    from pathlib import Path
+
+    from raosim.plotting import plot_nasa_overlay
+
+    nasa_dir = (Path(__file__).resolve().parent.parent
+                / "Three-Dimensional-Nozzle-Design-Code-master"
+                / "MOC_Grid_BDE" / "outputs_M3.5Perf")
+    if not nasa_dir.exists():
+        pytest.skip("NASA M3.5Perf reference outputs not present")
+    fig = plot_nasa_overlay(_FakeSolution(), nasa_dir, Rt=0.02)
+    assert fig is not None

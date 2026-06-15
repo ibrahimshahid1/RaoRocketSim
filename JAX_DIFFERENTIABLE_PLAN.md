@@ -69,6 +69,102 @@
 > In-sandbox verification: 21-test lite sweep + 2 slow topology tests
 > green; JAX-solve work (gate re-confirm → flip) still host-gated.
 
+> **J5 / J6 / Phase-13 batch (2026-06-11c, post-flip session).**
+> **J5:** the chart sweep runs and passes the loose gate (3°/6°) under
+> the JAX defaults — confirmed by the post-flip host suite
+> (`test_rao_chart_benchmark_full_grid` in the 769-pass run).  Record
+> script `scripts/j5_chart_sweep.py` (weight 1.0 + JSON dump, host-run)
+> landed.  **Record run (2026-06-11, host, weight 1.0, n=10/nk=10/
+> nfev=300): 33/33 completed, 0 raised; θ_E RMS 2.67° / max 5.72°
+> (loose gate PASSES; plan gate 1.5°/3° fails on θ_E).**  Diagnostic
+> signature worth chasing before tightening: the solved θ_E is nearly
+> a function of length_pct alone (~21.0° @L70, ~18.5° @L80, ~16.6°
+> @L90 across ALL ε) while the chart's θ_E rises with ε — so the error
+> concentrates at the grid edges (5.2-5.7° at ε=6; ≤0.6° in the ε=25-50
+> mid-band; ~3° again at ε≥40/L70).  Candidates: the tiny sweep budget
+> (n_control=10, max_nfev=300 — re-run a low-ε case at n=24 to
+> separate resolution from physics), the pa_over_p0=0 vacuum
+> convention, or the θ_E extraction itself.  Many high-ε/L70 corners
+> flag `invalid_short_nozzle_region` (§2.E) — consistent with the
+> chart extrapolating where Guderley says the smooth optimum thins.  The plan-target gate (1.5°/3°) stays xfail and is now
+> *definitionally* blocked, not solver-blocked: reported θ_N is still
+> the chart lookup (`_design_angles_rad`) — circular — and the repo
+> carries TWO disagreeing θ_N sources (`nozzle_geometry._THETA_N_TABLE`
+> ~21.9° vs `benchmarks` tables 30° at ε=10/L80).  Reconcile both
+> against Rao 1958 / NASA SP-8120 before wiring a solved θ_N (candidate:
+> the converged fixed-end topology θ_B) into the report path.
+> **J6 v1 LANDED:** `raosim/jax/sensitivities.py` —
+> `rao_sensitivities(config)` (api stub now delegates): exact
+> reverse-mode node tolerance fields (dCf/dM, dCf/dθ, dCf/dr per CE/DE
+> node + dCf/dkdf through the D-slide chain), explicit design partials
+> at fixed u* (dCf/dpa, dCf/dγ), and `jacfwd` Jacobian conditioning
+> (σ_max/σ_min).  Cf functional is a line-for-line jnp port of
+> `surface_thrust_coefficient` (parity 1e-10 on a real fixed-end DE);
+> the J6 known-sign gate is the analytic identity
+> **dCf/dpa = −(r_E²−r_D²)/Rt²** (telescoped trapezoid), pinned to
+> 1e-10 in `tests/test_jax_sensitivities.py` along with an FD
+> cross-check of the node gradient.  v2 deferrals documented in the
+> module docstring: IFT design totals (needs assembly arg-lifting +
+> J3b for kernel-reaching params), bell-wall-node map (differentiable
+> BDE march), Hessian.  End-to-end smoke is @slow (host).
+> `plot_sensitivity_field` (§6 tolerance map) added to plotting.py.
+> **Phase 13: 9 of 10 spec plots now exist** — added #1 geometry,
+> #4 pressure, #5 theta, #6 wall distributions, #7 exit plane,
+> #10 NASA overlay (+ the J6 sensitivity map); pre-existing #2 net /
+> #3 mach; #9 topology from 12.6.  Remaining: #8 `plot_net_diagnostics`
+> (needs RaoResidualReport link plumbing).  `tests/test_plotting.py`
+> now 11 smokes.  In-sandbox verification: 29-test sweep + flip-default
+> tests green.  **Host record (2026-06-11): full suite 781 passed /
+> 9 xfailed in 12:53 — zero failures; the J6 end-to-end @slow smoke
+> passed (15s including its solve).**  Open next, in order: θ_N-table
+> reconciliation (gates the J5 plan target AND informs the flare fork),
+> the low-ε θ_E gap (see the J5 record paragraph), then J3b (unlocks
+> full D-continuity and the J6 v2 design totals).
+> `scripts/theta_b_picard_probe.py` remains optional (full-continuity
+> record).
+
+> **θ_N RECONCILIATION (2026-06-11f) — literature-grounded, and it
+> unifies every open accuracy item.**  Primary source check
+> (propulsion_texts/RaoRecentDevinRockNozConfig.pdf — Rao, ARS J.
+> 31(11), 1961): the classic TOP angle charts are Rao's 1960 ARS J.
+> parabola-fit charts (his ref 22), computed for **γ = 1.23**, and at
+> fixed (ε, L) the optimal *contour* is nearly **γ-insensitive** (Rao,
+> p. 1490: "differences in nozzle contours are negligible"; only Cf
+> depends strongly on γ) — so the in-repo tables (provenance comment
+> added in nozzle_geometry.py) are valid γ=1.4 geometry targets.
+> Optimal wall angles per Rao pp. 1490-1491: ~28-30° after the throat,
+> ~10-14° at the exit.  Findings: (1) there is ONE in-repo chart family
+> — `nozzle_geometry` tables, consumed by `benchmarks` — giving
+> **θ_N = 30.0° / θ_E = 15.5° at ε=10/L80** (my earlier "two
+> disagreeing tables" note was wrong); (2) the "chart θ_N ≈ 21.9°"
+> claims in test docstrings were MISLABELS — 21.87° is the
+> kernel-stationarity refresh diagnostic, not a chart value (comments
+> fixed); (3) the three angles now form a coherent picture:
+> chart 30° = the optimum; Picard full-continuity 28.17° = the solver
+> driving TOWARD the optimum; fixed-end 25.56° = the sub-optimal
+> utility closure — and the 5.7e-2 full-pin floor was θ_B-insensitive
+> *by construction*, because the seed's inner `set_theta_b` secant
+> rebuilds the kernel at the fixed-end angle on every solve, overriding
+> the outer Picard.  (4) The θ_E sweep signature (solved θ_E ≈ f(L%)
+> only, worst at low ε) is the same root cause's shadow: a too-shallow
+> frozen θ_B forces a steeper exit angle at fixed (L, ε); at high ε the
+> chart θ_E rises to meet it — exactly the observed error pattern.
+> **Landed:** `RaoSolverConfig.theta_b_freeze_deg` (bypasses the inner
+> secant; kernel built at exactly the frozen angle, D/DE still seeded
+> by the fixed-end walk with r_E pinned; unit-tested), the bell xfail
+> test re-grounded to chart values via `lookup_angles` (peak ≈ θ_N ±
+> 2.5° near the throat, exit ≈ θ_E ± 2.5°), mislabeled comments fixed.
+> **Host experiment queued (the decisive one):** outer θ_B
+> Picard/secant over `theta_b_freeze_deg` ∈ [26°, 31°] with FULL
+> D-state pins (pin_d_theta + pin_d_mach) at the reference point —
+> prediction: the stationarity floor collapses near θ_B ≈ 30° (chart),
+> the gate closes with full continuity, the BDE wall peaks ≈ 30° at
+> the throat (flare gone), and θ_E drops toward 15.5° — closing the
+> J5 plan-target gap at low ε as a corollary.  If the floor does NOT
+> collapse, the Guderley-discontinuity branch becomes the live
+> hypothesis (then check propulsion_texts for Guderley/Hantsch 1955 +
+> the ~1968 short-nozzle results before any further smoothing effort).
+
 > **DIRECTION (2026-06-11, set by ibrahim).**
 > 1. **End state: `raosim/jax` becomes the only core package.**  The
 >    NumPy mirror modules get absorbed/deleted once the JAX core is in
@@ -79,16 +175,48 @@
 >    the gate is *re-confirmed on the post-12.4 seed* (the march fix
 >    changed `set_theta_b`'s convergence, so the 2026-06-10 pass needs
 >    re-measuring; sandbox cannot run JAX solves).  Flip checklist:
->      a. Host: `PYTHONPATH=. python scripts/j4_gate_wall_probe.py`
->         → gate must hold (max_scaled ≤ 2e-3).
->      b. Host: full suite green (`pytest -q`, slow included).
->      c. Apply the bundle in `RaoSolverConfig`:
->         `solver_backend="numpy"→"jax"`, `formulation="legacy"→
->         "characteristic"`, `pin_d_theta=True→False`,
->         `jax_constraint_weight_ladder=None→(1.0, 10.0, 30.0, 100.0)`.
->      d. Re-baseline Phase 6/7 + chart-benchmark expectations; keep
->         the legacy stack importable behind explicit opt-in until the
->         §3 absorption (directive 1) lands.
+>      a. ✅ (2026-06-11, host) `scripts/j4_gate_wall_probe.py`:
+>         **max_scaled = 7.5039e-4** ≤ 2e-3, converged, mass −9.4e-10,
+>         len −1.5e-10, kdf 0.2271 — *better* than the pre-12.4 pass
+>         (1.157e-3).  **Wall verdict (fixed probe, same run): the
+>         solved-CE BDE flare PERSISTS** — slope rises through the arc
+>         to ~25.5° (= the seed θ_B, correct), eases to 24.7° at 31%
+>         length, then climbs to a **30.57° peak at 64.4%** and crashes
+>         to 3.62° at the exit (was 35.6° @ 60% / 4.6° exit pre-12.4 —
+>         shrunk by the healthier kdf/seed, not removed).  Exit lands
+>         exactly on (L, Re).  Confirms the diagnosis: the flare is
+>         intrinsic to the position-only ΔM jump at D being rendered as
+>         a fictitious wave system by the (correct) BDE back-march —
+>         the geometric bell still comes only from the topology path.
+>         `test_bde_wall_is_bell_shaped` stays xfail; the decision
+>         between full-continuity (needs θ_B in-solve, J3b), fixed-L
+>         transversality blocks, or a genuinely discontinuous Guderley
+>         optimum at D is now THE open shape question.
+>      b. ✅ (2026-06-11, host) Full suite post-flip: **769 passed /
+>         1 failed / 9 xfailed in 13:13** — even the pre-existing
+>         `test_wall_monotonic` failure cleared (12.4 seed and/or the
+>         new defaults; mechanism not isolated).  The single failure was
+>         `test_ablation_matrix...`: `rao_residual_ablation_matrix`
+>         sweeps FD-reference block subsets that the JAX assembly
+>         rejects by design (`SUPPORTED_BLOCKS`), so the runner now
+>         pins `solver_backend="numpy"` explicitly (was implicit
+>         pre-flip).  Fixed + verified; expected suite state:
+>         770 passed / 9 xfailed.
+>      c. ✅ (2026-06-11b) Bundle applied in `RaoSolverConfig`:
+>         `solver_backend="jax"`, `formulation="characteristic"`,
+>         `pin_d_theta=False`, `jax_constraint_weight_ladder=
+>         (1.0, 10.0, 30.0, 100.0)`.  Default-pinning tests rewritten
+>         (`test_jax_backend_is_default`,
+>         `test_characteristic_formulation_is_default`, + opt-in
+>         legacy/numpy coverage).  Note: the
+>         `jax_characteristic_weight1` fixture now inherits
+>         `pin_d_theta=False` from the default (was True) — its floor
+>         should improve from ~3e-3 toward the gate value.
+>      d. Re-baseline per (b); keep the legacy stack importable behind
+>         explicit opt-in until the §3 absorption (directive 1) lands.
+>         `_construct_wall_from_ce` deletion happens with the
+>         absorption, not the flip (the opt-in legacy path still calls
+>         it).
 > 3. **Every fix validates against the M3.5Perf reference** —
 >    `outputs_M3.5Perf` stays the binding oracle
 >    (`tests/test_nasa_kernel_march_parity.py`, `tests/test_nasa_port.py`
