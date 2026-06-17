@@ -1,0 +1,1 @@
+For fixed exit radius and fixed nozzle length, theta_E - theta_Rao(E) is a free-endpoint transversality diagnostic, not automatically the hard stationarity condition.  Geometry mode closes radius/length; stationarity mode adds absolute sigma_E in radians to test whether the fixed endpoint root also satisfies the free-exit condition.

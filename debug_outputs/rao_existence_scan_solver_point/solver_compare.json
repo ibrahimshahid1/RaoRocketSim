@@ -1,0 +1,17 @@
+{
+  "D_M": 3.4021227426625673,
+  "D_theta_deg": 18.512170015224868,
+  "backend": "jax",
+  "kernel_d_fraction": 0.15226879600450144,
+  "length_residual_rel": -8.551462442084462e-11,
+  "mass_residual_rel": -9.273594583732217e-11,
+  "max_nfev": 10,
+  "optimizer_success": true,
+  "residual_max_scaled": 0.00010732260679092165,
+  "residual_rms_scaled": 1.625796438340093e-05,
+  "solver_message": "optimistix LevenbergMarquardt converged in 93 steps",
+  "theta_E_reported_deg": 10.80736987514545,
+  "theta_E_source": "ce_exit_flow_angle",
+  "theta_N_reported_deg": 25.5078125,
+  "theta_N_source": "kernel_theta_B:fixed_end_secant"
+}

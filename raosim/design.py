@@ -109,7 +109,11 @@ class CoolingSpec:
     channel_width: float | None = None
     channel_height: float | None = None
     coolant_mass_flow: float | None = None
-    coolant_cp: float = 3500.0
+    # None → the COOLANT_PROPERTIES table value for the named coolant
+    # is authoritative (e.g. RP-1 ≈ 2010 J/kg·K).  Set explicitly only
+    # to override the table with a CEA/measured cp.  (Was 3500, which
+    # silently overrode every named coolant's table cp — a latent bug.)
+    coolant_cp: float | None = None
     coolant_inlet_temperature: float = 293.0
     max_wall_temperature: float = 950.0
     # Optional coolant transport properties (override the built-in

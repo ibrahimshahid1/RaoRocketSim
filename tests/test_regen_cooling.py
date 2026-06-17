@@ -291,3 +291,154 @@ def test_infeasible_channel_geometry_warns(contour, prop, heat):
     res = regenerative_cooling_analysis(heat, contour, TooMany(), _Mat(),
                                         0.001, prop, 7.0e6)
     assert any("do not fit" in w for w in res["warnings"])
+
+
+# ---------------------------------------------------------------------
+#  Level 2: quasi-2-D wall cross-section (the land hot spot).
+# ---------------------------------------------------------------------
+
+
+def _wide_land_cooling(N=20, w=0.0020):
+    # Few wide channels -> wide lands -> a real circumferential hot spot.
+    return type("C", (), dict(
+        method="regenerative", coolant="rp1", channel_count=N,
+        channel_width=w, channel_height=0.0025, coolant_mass_flow=8.0,
+        coolant_cp=2010.0, coolant_inlet_temperature=300.0,
+        max_wall_temperature=1200.0, coolant_density=None,
+        coolant_viscosity=None, coolant_conductivity=None))()
+
+
+def test_2d_resolves_land_hot_spot(contour, prop, heat):
+    from raosim.physics import regenerative_cooling_2d
+
+    class Inc:
+        conductivity = 16.0           # Inconel: low k -> visible gradient
+    res = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), Inc(),
+                                  0.0015, prop, 7.0e6, n_s=20, n_xi=20)
+    assert res["model"] == "regen_2d_cross_section"
+    ti = int(np.argmin(np.abs(np.asarray(contour["y"]) - 0.02)))
+    # The land midpoint runs hotter than the channel centre.
+    assert res["T_wg_land"][ti] > res["T_wg_channel"][ti]
+    assert res["throat_circumferential_spread"] > 50.0     # measured ~236 K
+
+
+def test_2d_peak_exceeds_1d_average(contour, prop, heat):
+    """The 1-D series circuit averages the circumferential direction;
+    the 2-D land hot spot is the real (higher) peak wall temperature."""
+    from raosim.physics import regenerative_cooling_2d
+
+    class Inc:
+        conductivity = 16.0
+    d1 = regenerative_cooling_analysis(heat, contour, _wide_land_cooling(),
+                                       Inc(), 0.0015, prop, 7.0e6)
+    d2 = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), Inc(),
+                                 0.0015, prop, 7.0e6, n_s=20, n_xi=20)
+    assert (d2["peak_gas_side_wall_temperature"]
+            > d1["peak_gas_side_wall_temperature"])
+
+
+def test_2d_low_k_has_larger_spread_than_high_k(contour, prop, heat):
+    """Copper (high k) evens the wall out; Inconel (low k) does not —
+    which is why engines use copper at the throat."""
+    from raosim.physics import regenerative_cooling_2d
+
+    class Cu:
+        conductivity = 350.0
+
+    class Inc:
+        conductivity = 16.0
+    cu = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), Cu(),
+                                 0.0015, prop, 7.0e6, n_s=20, n_xi=20)
+    inc = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), Inc(),
+                                  0.0015, prop, 7.0e6, n_s=20, n_xi=20)
+    assert (inc["throat_circumferential_spread"]
+            > cu["throat_circumferential_spread"])
+
+
+def test_2d_narrow_channels_nearly_isothermal(contour, prop, heat):
+    """Closely-spaced narrow channels (sub-mm lands) -> small spread."""
+    from raosim.physics import regenerative_cooling_2d
+
+    class Inc:
+        conductivity = 16.0
+    res = regenerative_cooling_2d(heat, contour, _Cool(), Inc(),
+                                  0.0015, prop, 7.0e6, n_s=16, n_xi=18)
+    ti = int(np.argmin(np.abs(np.asarray(contour["y"]) - 0.02)))
+    assert abs(res["circumferential_spread"][ti]) < 30.0
+
+
+# ---------------------------------------------------------------------
+#  Level 3: 3-D conjugate conduction (axial-conduction relief).
+# ---------------------------------------------------------------------
+
+
+def test_3d_solve_runs_and_is_finite(contour, prop, heat):
+    from raosim.physics import regenerative_cooling_3d
+
+    class Cu:
+        conductivity = 350.0
+    res = regenerative_cooling_3d(heat, contour, _wide_land_cooling(), Cu(),
+                                  0.0015, prop, 7.0e6, n_x=30, n_s=8, n_xi=10)
+    assert res["model"] == "regen_3d_conjugate"
+    assert res["grid"]["cells"] > 0
+    assert np.isfinite(res["T_wg_land_3d"]).all()
+    assert res["coolant_outlet_temperature"] > _wide_land_cooling().coolant_inlet_temperature
+
+
+def test_3d_axial_conduction_relieves_peak_vs_2d(contour, prop, heat):
+    """Axial conduction (the Level-3 physics) spreads the throat hot
+    spot to cooler neighbours, so the 3-D peak is below the per-station
+    2-D peak."""
+    from raosim.physics import regenerative_cooling_2d, regenerative_cooling_3d
+
+    class Cu:
+        conductivity = 350.0
+    d2 = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), Cu(),
+                                 0.0015, prop, 7.0e6, n_s=10, n_xi=12)
+    d3 = regenerative_cooling_3d(heat, contour, _wide_land_cooling(), Cu(),
+                                 0.0015, prop, 7.0e6, n_x=30, n_s=10, n_xi=12)
+    assert (d3["peak_gas_side_wall_temperature"]
+            < d2["peak_gas_side_wall_temperature"])
+
+
+def test_3d_axial_relief_larger_for_high_conductivity(contour, prop, heat):
+    """High-k walls conduct axially more, so the axial relief (2-D peak −
+    3-D peak) is larger for copper than for Inconel."""
+    from raosim.physics import regenerative_cooling_2d, regenerative_cooling_3d
+
+    class Cu:
+        conductivity = 350.0
+
+    class Inc:
+        conductivity = 16.0
+
+    def relief(mat):
+        d2 = regenerative_cooling_2d(heat, contour, _wide_land_cooling(), mat,
+                                     0.0015, prop, 7.0e6, n_s=10, n_xi=12)
+        d3 = regenerative_cooling_3d(heat, contour, _wide_land_cooling(), mat,
+                                     0.0015, prop, 7.0e6, n_x=30, n_s=10, n_xi=12)
+        return (d2["peak_gas_side_wall_temperature"]
+                - d3["peak_gas_side_wall_temperature"])
+
+    assert relief(Cu()) > relief(Inc())
+
+
+def test_fidelity_dispatcher(contour, prop, heat):
+    from raosim.physics import regenerative_cooling
+
+    class Cu:
+        conductivity = 350.0
+    one = regenerative_cooling(heat, contour, _Cool(), Cu(), 0.001, prop,
+                               7.0e6, fidelity="1d")
+    two = regenerative_cooling(heat, contour, _wide_land_cooling(), Cu(),
+                               0.0015, prop, 7.0e6, fidelity="2d",
+                               n_s=10, n_xi=12)
+    three = regenerative_cooling(heat, contour, _wide_land_cooling(), Cu(),
+                                 0.0015, prop, 7.0e6, fidelity="3d",
+                                 n_x=24, n_s=8, n_xi=10)
+    assert one["fidelity"] == "1d_finned"
+    assert two["fidelity"] == "2d_cross_section"
+    assert three["fidelity"] == "3d_conjugate_conduction"
+    with pytest.raises(ValueError, match="fidelity"):
+        regenerative_cooling(heat, contour, _Cool(), Cu(), 0.001, prop,
+                             7.0e6, fidelity="4d")

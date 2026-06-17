@@ -803,8 +803,14 @@ def regenerative_cooling_2d(
     T_c = np.asarray(base["coolant_temperature"], dtype=float)
 
     n = len(x)
-    sel = (np.arange(n) if stations is None
-           else np.unique(np.linspace(0, n - 1, min(stations, n)).astype(int)))
+    peak_idx_1d = int(np.argmax(np.asarray(base["gas_side_wall_temperature"])))
+    if stations is None:
+        sel = np.arange(n)
+    else:
+        sel = np.unique(np.concatenate([
+            np.linspace(0, n - 1, min(stations, n)).astype(int),
+            [throat_idx, peak_idx_1d],
+        ]))
     T_land = np.full(n, np.nan)
     T_chan = np.full(n, np.nan)
     for i in sel:
@@ -836,6 +842,229 @@ def regenerative_cooling_2d(
         "stations_solved": int(len(sel)),
         "model": "regen_2d_cross_section",
         "fidelity": "2d_cross_section",
+    })
+    return out
+
+
+def regenerative_cooling(
+    heat_flux: dict,
+    contour: dict,
+    cooling: Any,
+    material: Any,
+    wall_thickness: float | None,
+    prop: Any,
+    Pc: float,
+    *,
+    fidelity: str = "1d",
+    **kwargs,
+) -> dict:
+    """Unified regenerative-cooling entry point with a fidelity ladder:
+
+    * ``"1d"``  — :func:`regenerative_cooling_analysis`: coupled
+      Sieder-Tate / 1-D wall conduction with the Level-1 fin (land)
+      area, Dean curvature, and Darcy-Weisbach pressure-drop
+      corrections.  Cheap; the engineering preliminary-design model.
+    * ``"2d"``  — :func:`regenerative_cooling_2d`: adds a per-station
+      2-D (r-θ) cross-section conduction solve resolving the
+      circumferential land hot spot (the burnthrough-relevant peak the
+      1-D circuit averages away).
+    * ``"3d"``  — :func:`regenerative_cooling_3d`: a single 3-D
+      conjugate conduction solve of the channel sector with **axial**
+      conduction, which relieves the throat hot spot the per-station
+      2-D model cannot share.  (3-D conduction with convective
+      gas/coolant BCs; full coolant CFD is out of scope.)
+
+    Extra ``kwargs`` pass through to the selected solver (grid sizes,
+    correction toggles).
+    """
+    if fidelity == "1d":
+        return regenerative_cooling_analysis(
+            heat_flux, contour, cooling, material, wall_thickness, prop, Pc,
+            **kwargs)
+    if fidelity == "2d":
+        return regenerative_cooling_2d(
+            heat_flux, contour, cooling, material, wall_thickness, prop, Pc,
+            **kwargs)
+    if fidelity == "3d":
+        return regenerative_cooling_3d(
+            heat_flux, contour, cooling, material, wall_thickness, prop, Pc,
+            **kwargs)
+    raise ValueError(f"fidelity must be '1d', '2d', or '3d', got {fidelity!r}")
+
+
+def regenerative_cooling_3d(
+    heat_flux: dict,
+    contour: dict,
+    cooling: Any,
+    material: Any,
+    wall_thickness: float | None,
+    prop: Any,
+    Pc: float,
+    *,
+    n_x: int = 40,
+    n_s: int = 10,
+    n_xi: int = 12,
+    n_outer: int = 6,
+    flow_from: str = "exit",
+    **kwargs,
+) -> dict:
+    """Level-3 **3-D conjugate** regen analysis: a single finite-volume
+    conduction solve over the whole channel sector (axial x, circumferential
+    s half-pitch, radial ξ), so the wall conducts in all three directions
+    at once — including **axially**, which relieves the throat hot spot
+    that the per-station Level-2 model cannot share between stations.
+
+    Honest scope: this is 3-D conjugate *conduction* of the solid wall
+    with convective gas (full Bartz) and coolant (Sieder-Tate) boundary
+    conditions and a 1-D coolant energy march (outer-iterated to a fixed
+    point).  Resolving the turbulent coolant *flow field* itself is
+    CFD-tool territory; here the coolant enters through the validated
+    convective BC.
+
+    Returns the 1-D keys plus the 3-D field summary; the governing
+    ``peak_gas_side_wall_temperature`` is the 3-D gas-side land hot spot
+    (typically below the Level-2 value by the axial-conduction relief).
+    """
+    import scipy.sparse as _sp
+    import scipy.sparse.linalg as _spla
+
+    base = regenerative_cooling_analysis(
+        heat_flux, contour, cooling, material, wall_thickness, prop, Pc,
+        **kwargs)
+
+    x_full = np.asarray(base["x"]); y_full = np.asarray(contour["y"], dtype=float)
+    Rt = float(contour["Rt"])
+    k_wall = max(float(getattr(material, "conductivity", 15.0) or 15.0), 1e-9)
+    t_w = max(float(wall_thickness or 0.0), 1e-9)
+    H = float(getattr(cooling, "channel_height", 0.0) or 0.0)
+    w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
+    N = int(getattr(cooling, "channel_count", 0) or 0)
+    mdot = float(getattr(cooling, "coolant_mass_flow", 0.0) or 0.0)
+    inlet_T = float(getattr(cooling, "coolant_inlet_temperature", 293.0))
+    cprops = resolve_coolant_properties(cooling)
+    cp_cool = float(cprops["cp"])
+
+    # Downsample the axial grid (always keep the throat).
+    nf = len(x_full)
+    throat_full = int(np.argmin(np.abs(y_full - Rt)))
+    xs_idx = np.unique(np.concatenate([
+        np.linspace(0, nf - 1, min(n_x, nf)).astype(int), [throat_full]]))
+    nx = len(xs_idx)
+    xg = x_full[xs_idx]; yg = y_full[xs_idx]
+    Taw_g = np.asarray(heat_flux["recovery_temperature"], dtype=float)[xs_idx]
+    # Gas-side h_g at the base wall temperature, on the coarse grid.
+    hf_g = bartz_heat_flux(contour, Pc, prop,
+                           wall_temperature=np.asarray(base["gas_side_wall_temperature"]))
+    h_g_g = np.asarray(hf_g["h_g"], dtype=float)[xs_idx]
+    h_c_g = np.asarray(base["h_c_film"], dtype=float)[xs_idx]
+    dx = np.gradient(xg)
+    dxi = (t_w + H) / n_xi
+    throat_g = int(np.argmin(np.abs(yg - Rt)))
+
+    # Per-station cross-section geometry.
+    pitch = 2.0 * math.pi * np.maximum(yg, 1e-9) / max(N, 1)
+    half_pitch = 0.5 * pitch
+    w_half = 0.5 * w
+    ds = half_pitch / n_s
+    xi_c = (np.arange(n_xi) + 0.5) * dxi
+    # Solid + channel-void masks per (k, i, j).
+    solid = np.zeros((nx, n_s, n_xi), dtype=bool)
+    for k in range(nx):
+        s_c = (np.arange(n_s) + 0.5) * ds[k]
+        S, X = np.meshgrid(s_c, xi_c, indexing="ij")
+        solid[k] = (X <= t_w) | (S >= w_half)
+    gid = -np.ones((nx, n_s, n_xi), dtype=int)
+    cells = np.argwhere(solid)
+    for n, (k, i, j) in enumerate(cells):
+        gid[k, i, j] = n
+    M = len(cells)
+
+    def robin(h, area, dist):
+        return area / (1.0 / max(h, 1e-30) + dist / (2.0 * k_wall))
+
+    T_c = np.full(nx, inlet_T)
+    order = np.arange(nx) if flow_from == "throat" else np.arange(nx)[::-1]
+    inv = np.argsort(order)
+    T = np.full(M, inlet_T)
+
+    for _outer in range(max(n_outer, 1)):
+        rows: list[int] = []; cols: list[int] = []; vals: list[float] = []
+        b = np.zeros(M)
+        for n, (k, i, j) in enumerate(cells):
+            diag = 0.0
+            A_s = dxi * dx[k]            # s-face area
+            A_xi = ds[k] * dx[k]         # ξ-face area
+            A_x = ds[k] * dxi            # axial-face area
+            # s neighbours (circumferential)
+            for di in (-1, 1):
+                ii = i + di
+                if 0 <= ii < n_s and solid[k, ii, j]:
+                    g = k_wall * A_s / ds[k]
+                    rows.append(n); cols.append(gid[k, ii, j]); vals.append(g); diag += g
+                elif 0 <= ii < n_s and not solid[k, ii, j]:
+                    g = robin(h_c_g[k], A_s, ds[k]); diag += g; b[n] -= g * T_c[k]
+                # domain edge in s -> adiabatic symmetry
+            # ξ neighbours (radial)
+            for dj in (-1, 1):
+                jj = j + dj
+                if 0 <= jj < n_xi and solid[k, i, jj]:
+                    g = k_wall * A_xi / dxi
+                    rows.append(n); cols.append(gid[k, i, jj]); vals.append(g); diag += g
+                elif jj < 0:
+                    g = robin(h_g_g[k], A_xi, dxi); diag += g; b[n] -= g * Taw_g[k]
+                elif 0 <= jj < n_xi and not solid[k, i, jj]:
+                    g = robin(h_c_g[k], A_xi, dxi); diag += g; b[n] -= g * T_c[k]
+                # jj == n_xi (outer/fin tip) -> adiabatic
+            # x neighbours (AXIAL conduction — the Level-3 physics)
+            for dk in (-1, 1):
+                kk = k + dk
+                if 0 <= kk < nx and solid[kk, i, j]:
+                    dist = abs(xg[kk] - xg[k]) + 1e-12
+                    g = k_wall * A_x / dist
+                    rows.append(n); cols.append(gid[kk, i, j]); vals.append(g); diag += g
+            rows.append(n); cols.append(n); vals.append(-diag)
+        A = _sp.csr_matrix((vals, (rows, cols)), shape=(M, M))
+        T = _spla.spsolve(A, b)
+
+        # Coolant energy march from the coolant-face heat pickup per station.
+        Qk = np.zeros(nx)
+        for n, (k, i, j) in enumerate(cells):
+            A_s = dxi * dx[k]; A_xi = ds[k] * dx[k]
+            for di in (-1, 1):
+                ii = i + di
+                if 0 <= ii < n_s and not solid[k, ii, j]:
+                    g = robin(h_c_g[k], A_s, ds[k]); Qk[k] += g * (T[n] - T_c[k])
+            jj = j + 1
+            if jj < n_xi and not solid[k, i, jj]:
+                g = robin(h_c_g[k], A_xi, dxi); Qk[k] += g * (T[n] - T_c[k])
+        Qk_per_channel = np.maximum(Qk, 0.0)
+        dT = Qk_per_channel / max(mdot / max(N, 1) * cp_cool, 1e-12)
+        T_c = inlet_T + np.cumsum(dT[order])[inv]
+
+    # Extract the gas-side (ξ=0) land hot spot and channel-centre per station.
+    T_land = np.full(nx, np.nan); T_chan = np.full(nx, np.nan)
+    for n, (k, i, j) in enumerate(cells):
+        if j == 0:
+            T_land[k] = np.nanmax([T_land[k], T[n]]) if not np.isnan(T_land[k]) else T[n]
+            T_chan[k] = np.nanmin([T_chan[k], T[n]]) if not np.isnan(T_chan[k]) else T[n]
+
+    peak_land = float(np.nanmax(T_land))
+    max_wall = float(getattr(cooling, "max_wall_temperature", 950.0) or 950.0)
+    out = dict(base)
+    out.update({
+        "x_3d": xg,
+        "T_wg_land_3d": T_land,
+        "T_wg_channel_3d": T_chan,
+        "coolant_temperature_3d": T_c,
+        "peak_gas_side_wall_temperature": peak_land,
+        "estimated_wall_temperature": peak_land,
+        "peak_land_wall_temperature": peak_land,
+        "throat_wall_temperature": float(T_land[throat_g]),
+        "coolant_outlet_temperature": float(T_c[order[-1]]),
+        "cooling_margin": float(max_wall / max(peak_land, 1e-9)),
+        "grid": {"n_x": nx, "n_s": n_s, "n_xi": n_xi, "cells": int(M)},
+        "model": "regen_3d_conjugate",
+        "fidelity": "3d_conjugate_conduction",
     })
     return out
 

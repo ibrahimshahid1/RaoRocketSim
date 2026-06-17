@@ -29,11 +29,155 @@ geometry), heuristic search instead of exact gradients.
 
 from __future__ import annotations
 
+import math
 from dataclasses import replace
+from types import SimpleNamespace
 from typing import Any
+
+import numpy as np
 
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.physics import bartz_heat_flux, regenerative_cooling_analysis
+
+
+# --------------------------------------------------------------------------- #
+# Channel auto-sizing — solve channel count/width FROM the requirement         #
+# --------------------------------------------------------------------------- #
+def coolant_flow_from_cycle(
+    Pc: float, Rt: float, c_star: float, mixture_ratio: float,
+    *, cooling_fraction: float = 1.0,
+) -> tuple[float, float]:
+    """Coolant mass flow [kg/s] derived from the engine cycle, not chosen.
+
+    The regenerative coolant is the fuel before injection, so it is set
+    by the propellant flow, not a free knob:
+
+        mdot_total = Pc · A_t / c*          (c* = Pc·A_t/mdot)
+        mdot_fuel  = mdot_total / (1 + MR)  (MR = oxidiser/fuel ratio)
+        mdot_cool  = mdot_fuel · cooling_fraction
+
+    Returns ``(mdot_cool, mdot_total)``.
+    """
+    At = math.pi * Rt * Rt
+    mdot_total = Pc * At / max(c_star, 1e-9)
+    mdot_fuel = mdot_total / (1.0 + max(mixture_ratio, 0.0))
+    return mdot_fuel * cooling_fraction, mdot_total
+
+
+def size_cooling_channels(
+    contour: dict,
+    prop: Any,
+    Pc: float,
+    *,
+    margin_target: float = 1.2,
+    dp_budget_bar: float = 150.0,
+    wall_temp_limit: float = 1100.0,
+    mixture_ratio: float = 2.6,
+    cooling_fraction: float = 1.0,
+    channel_height: float = 0.0025,
+    wall_thickness: float = 0.001,
+    wall_k: float = 350.0,
+    coolant: str = "rp1",
+    w_min: float = 0.0005,
+    w_max: float = 0.0020,
+    land_min: float = 0.0005,
+    n_w: int = 6,
+    n_count: int = 12,
+    objective: str = "min_dp",
+    n_iter: int = 15,
+) -> dict:
+    """Solve for the channel count ``N`` and width ``w`` that meet the
+    cooling requirement, instead of taking them as inputs.
+
+    The coolant flow is derived from the cycle (:func:`coolant_flow_from
+    _cycle`).  Over a grid of (``N``, ``w``) — bounded by the
+    manufacturing floors ``w_min`` / ``land_min`` and the throat
+    circumference (channels must fit) — the coupled Sieder-Tate cooling
+    is evaluated and a design is chosen that satisfies
+
+        cooling margin ≥ ``margin_target``   (peak wall T ≤ limit/target)
+        pressure drop  ≤ ``dp_budget_bar``
+        channels fit + w ≥ w_min
+
+    optimising ``objective`` among the feasible set: ``"min_dp"`` (least
+    pump penalty, default), ``"max_margin"`` (coolest), or
+    ``"min_channels"`` (simplest).  If nothing is feasible, returns the
+    best-margin attempt with ``feasible=False`` and a diagnosis.
+    """
+    Rt = float(contour["Rt"])
+    circ = 2.0 * math.pi * Rt
+    mdot_cool, mdot_total = coolant_flow_from_cycle(
+        Pc, Rt, float(prop.c_star), mixture_ratio,
+        cooling_fraction=cooling_fraction)
+    hf = bartz_heat_flux(contour, Pc, prop, wall_temperature=900.0)
+    material = SimpleNamespace(conductivity=wall_k)
+
+    candidates: list[dict] = []
+    for w in np.linspace(w_min, min(w_max, circ / 8.0), n_w):
+        n_fit = int(math.floor(circ / (w + land_min)))   # channels that fit
+        if n_fit < 8:
+            continue
+        for N in np.unique(np.linspace(8, n_fit, n_count).astype(int)):
+            spec = SimpleNamespace(
+                method="regenerative", coolant=coolant, channel_count=int(N),
+                channel_width=float(w), channel_height=channel_height,
+                coolant_mass_flow=mdot_cool, coolant_cp=None,
+                coolant_inlet_temperature=300.0,
+                max_wall_temperature=wall_temp_limit,
+                coolant_density=None, coolant_viscosity=None,
+                coolant_conductivity=None)
+            res = regenerative_cooling_analysis(
+                hf, contour, spec, material, wall_thickness, prop, Pc,
+                n_iter=n_iter)
+            dp_bar = res["coolant_pressure_drop"] / 1e5
+            fits = not any("do not fit" in m for m in res["warnings"])
+            feasible = (res["cooling_margin"] >= margin_target
+                        and dp_bar <= dp_budget_bar and fits)
+            candidates.append({
+                "N": int(N), "w": float(w),
+                "margin": float(res["cooling_margin"]),
+                "dp_bar": float(dp_bar),
+                "peak_wall_T": float(res["peak_gas_side_wall_temperature"]),
+                "fits": bool(fits), "feasible": bool(feasible),
+            })
+
+    feas = [c for c in candidates if c["feasible"]]
+    if feas:
+        key = {"min_dp": lambda c: c["dp_bar"],
+               "max_margin": lambda c: -c["margin"],
+               "min_channels": lambda c: c["N"]}[objective]
+        best = min(feas, key=key)
+        diagnosis = "feasible"
+    else:
+        best = max(candidates, key=lambda c: c["margin"]) if candidates else None
+        # Why did it fail? — the closest-margin design tells us.
+        if best is None:
+            diagnosis = "no candidate channels fit the throat"
+        elif best["margin"] < margin_target:
+            diagnosis = ("cooling requirement unmet at any geometry: coolant "
+                         "flow too low or heat flux too high — raise mixture "
+                         "ratio / cooling fraction, lower Pc, or use a higher-k "
+                         "wall / film cooling")
+        else:
+            diagnosis = "margin reachable but only above the pressure-drop budget"
+
+    return {
+        "mdot_cool": mdot_cool, "mdot_total": mdot_total,
+        "channel_count": best["N"] if best else None,
+        "channel_width": best["w"] if best else None,
+        "channel_height": channel_height,
+        "margin": best["margin"] if best else float("nan"),
+        "pressure_drop_bar": best["dp_bar"] if best else float("nan"),
+        "peak_wall_T": best["peak_wall_T"] if best else float("nan"),
+        "feasible": bool(feas),
+        "objective": objective,
+        "diagnosis": diagnosis,
+        "requirement": {"margin_target": margin_target,
+                        "dp_budget_bar": dp_budget_bar,
+                        "wall_temp_limit": wall_temp_limit},
+        "candidates": candidates,
+        "model": "channel_auto_size",
+    }
 
 
 def _evaluate(Rt, epsilon, Pc, prop, cooling, material, *,

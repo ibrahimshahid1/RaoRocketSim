@@ -1,0 +1,25 @@
+{
+  "smooth": {
+    "D_M_post": 3.402521694954161,
+    "D_M_pre": 3.402521694954161,
+    "D_theta_post_deg": 18.522303204110624,
+    "D_theta_pre_deg": 18.522303204110624,
+    "exit_angle_deg": 11.119066640876564,
+    "exit_mach": 3.4774606719989714,
+    "fan_turn_deg": 0.0,
+    "kdf": 0.1519830365584152,
+    "length_residual": 6.990718007274605e-13,
+    "mass_residual": 1.479624368346876e-09,
+    "message": "The solution converged.",
+    "model": "smooth",
+    "n_kernel": 8,
+    "performance_residual": -0.20820805070971443,
+    "radius_residual": 7.831352905843902e-13,
+    "rao_exit_residual": 2.7679627688913104,
+    "residual_norm_geometry": 7.422945055471687e-13,
+    "residual_norm_stationarity": 0.08230736810340687,
+    "sigma_E_rad": 0.14256054339237473,
+    "success": true,
+    "theta_B_deg": 25.516664563047605
+  }
+}

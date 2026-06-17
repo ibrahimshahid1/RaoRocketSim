@@ -1,0 +1,2 @@
+theta_B_deg,kdf,residual_norm,radius_residual,length_residual,mass_residual,performance_residual,rao_exit_residual,D_M_pre,D_M_post,D_M_jump,D_theta_pre_deg,D_theta_post_deg,D_theta_jump_deg,fan_turn_deg,exit_angle_deg,exit_mach,success,failure_code,failure_reason
+25.5078125,0.15235113408002024,0.0005595260512579901,0.0002615252688415204,0.0009331734779053397,7.070095135441015e-10,-0.20785800755777986,2.7758284860507696,3.4028951764723936,3.4028951764723936,0.0,18.5068411362511,18.5068411362511,0.0,0.0,11.107644889670206,3.478182999522143,True,0,ok
