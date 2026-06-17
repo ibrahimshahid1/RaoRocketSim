@@ -1,0 +1,10 @@
+# RaoRocketSim — development / test dependencies
+#
+#   pip install -r requirements-dev.txt
+#
+# Pulls in the runtime requirements plus the test toolchain.
+
+-r requirements.txt
+
+pytest>=7            # the test suite (tests/); markers: slow, smoke, image
+# tqdm>=4            # uncomment to exercise the chart-benchmark progress bar

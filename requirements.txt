@@ -1,13 +1,25 @@
-numpy>=1.24
-scipy>=1.10
-matplotlib>=3.7
+# RaoRocketSim — runtime dependencies
+#
+#   pip install -r requirements.txt
+#
+# Python 3.10–3.12.  jaxlib 0.6.2 has no cp313/cp314 wheel, so use 3.12
+# (the differentiable backend will not import on 3.13/3.14).
 
-# JAX differentiable backend (raosim/jax). This is the default
-# solve_rao_bvp backend; pass solver_backend="numpy" for the legacy
-# SciPy path.
+# --- Core (required) ---------------------------------------------------------
+numpy>=1.24
+scipy>=1.10          # sparse 3-D conjugate cooling solve; numpy-backend least_squares
+matplotlib>=3.7      # contour / flowfield / 3-D nozzle + regen-coil renders
+
+# --- Differentiable backend (raosim/jax; the default solve_rao_bvp path) -----
 # Pinned exactly per JAX_DIFFERENTIABLE_PLAN.md §9 (JAX/jaxlib APIs move).
-# Tested combination (J0-J4 gates green, June 2026):
+# Tested combination (J0–J4 gates green, June 2026).  If you do not need the
+# differentiable path, pass solver_backend="numpy" (SciPy finite-difference
+# oracle) and these become unnecessary.
 jax==0.6.2
 jaxlib==0.6.2
 optimistix==0.0.11
-equinox==0.13.8
+equinox==0.13.8      # transitive via optimistix; pinned for reproducibility
+
+# --- Optional (soft imports; the code degrades gracefully without them) -------
+# tqdm>=4            # progress bar in the chart-benchmark sweep (raosim/benchmarks.py)
+# rocketcea>=1.2     # CEA thermochemistry for validated-mode design (raosim/cea.py)

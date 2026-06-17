@@ -141,8 +141,14 @@ def print_tags() -> None:
             ("--pc", "chamber pressure [Pa]"),
             ("--wall-k", "wall conductivity [W/mK]"),
         ]),
+        ("Visualisation", [
+            ("--flowfield", "render the steady MOC Mach/temperature field"),
+            ("--animate {march,particles,both}", "save a flow animation GIF"),
+            ("--chamber-temp", "chamber T [K] for the temperature panel"),
+        ]),
         ("Modes / output", [
             ("-i / --interactive", "prompt for everything (default when run bare)"),
+            ("--show", "pop up the plots in a live window (auto for interactive)"),
             ("--tags", "show this list and exit"),
             ("--no-banner", "suppress the logo"),
             ("--out", "output directory"),
@@ -159,7 +165,17 @@ def print_tags() -> None:
 import numpy as np
 
 import matplotlib
-matplotlib.use("Agg")
+# Pop up live windows for interactive / --show runs, but ONLY when
+# attached to a real terminal — otherwise (piped, headless, CI) render
+# to files (Agg) so plt.show() never hangs waiting for a display.
+# Decided before pyplot is imported.
+_INTERACTIVE_RUN = (
+    len(sys.argv) == 1 or "-i" in sys.argv or "--interactive" in sys.argv
+)
+_WANT_WINDOWS = (("--show" in sys.argv or _INTERACTIVE_RUN)
+                 and sys.stdout.isatty())
+if not _WANT_WINDOWS:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 import raosim.rao_variational as rv
@@ -204,6 +220,13 @@ def _interactive(args) -> None:
     args.backend = _prompt("Backend (jax = differentiable / numpy)", args.backend, str)
     args.max_nfev = _prompt("LM budget max_nfev (0 = instant seed contour)",
                             args.max_nfev, int)
+    args.flowfield = _prompt_bool(
+        "Render the steady flow field (Mach + temperature)?",
+        bool(args.flowfield))
+    if _prompt_bool("Animate the flow (MOC march + particle advection)?",
+                    args.animate is not None):
+        args.animate = _prompt(
+            "  which? (march / particles / both)", args.animate or "both", str)
     _section("Regenerative cooling")
     args.regen = _prompt_bool("Add regen cooling channels (the coils)?",
                               bool(args.regen))
@@ -307,13 +330,26 @@ def main() -> int:
                     help="fraction of the fuel flow routed through the jacket")
     ap.add_argument("--size-objective", choices=("min_dp", "max_margin", "min_channels"),
                     default="min_dp", help="what to optimise among feasible channel designs")
+    ap.add_argument("--flowfield", action="store_true",
+                    help="render the steady MOC Mach/temperature flow field")
+    ap.add_argument("--animate", choices=("march", "particles", "both"),
+                    default=None,
+                    help="save an animation GIF: 'march' (MOC net building), "
+                         "'particles' (tracer advection), or 'both'")
+    ap.add_argument("--chamber-temp", type=float, default=3500.0,
+                    help="chamber temperature [K] for the flow-field temperature panel")
     ap.add_argument("--out", type=Path, default=Path("builds/nozzle_run"))
     ap.add_argument("-i", "--interactive", action="store_true",
                     help="prompt for the dimensions/options instead of using flags")
     ap.add_argument("--tags", action="store_true",
                     help="print every run tag (flag) and exit")
     ap.add_argument("--no-banner", action="store_true", help="suppress the logo")
+    ap.add_argument("--show", action="store_true",
+                    help="pop up the flow-field / animation in a live window "
+                         "(on by default for interactive runs)")
     args = ap.parse_args()
+    # Live windows for interactive/--show; saved files otherwise.
+    show = bool(_WANT_WINDOWS)
 
     bare = len(sys.argv) == 1
     if not args.no_banner:
@@ -404,6 +440,49 @@ def main() -> int:
     wall_verts = nozzle_wall_surface(x, y, n_theta=96)
     write_stl(args.out / "wall.stl", [_surface_triangles(wall_verts)], "rao_wall")
     artifacts = ["contour.csv", "profile.png", "wall.stl"]
+
+    # ---- optional steady flow-field render ---------------------------
+    if args.flowfield:
+        print("\n" + cyan("▸ " + bold("Flow field")) +
+              dim("  (MOC Mach + temperature, characteristics, streamlines)"))
+        try:
+            from raosim.flow_viz import plot_flowfield
+            fig = plot_flowfield(sol, gamma=args.gamma, Tc=args.chamber_temp,
+                                 save_path=args.out / "flowfield.png", show=show)
+            if not show:
+                fig.clf()
+            artifacts.append("flowfield.png")
+            print(green("    wrote flowfield.png")
+                  + (dim("  (window)") if show else ""))
+        except Exception as exc:
+            print(yellow(f"    flow field skipped: {exc}"))
+
+    # ---- optional animations (saved as GIF; show=True pops a window) --
+    if args.animate:
+        print("\n" + cyan("▸ " + bold("Animation")) +
+              dim("  (GIF; use show=True in Python for a live window)"))
+        if args.animate in ("march", "both"):
+            try:
+                from raosim.flow_viz import animate_moc_march
+                animate_moc_march(sol, gamma=args.gamma,
+                                  save_path=args.out / "anim_moc_march.gif",
+                                  fps=8, show=show)
+                artifacts.append("anim_moc_march.gif")
+                print(green("    wrote anim_moc_march.gif")
+                      + (dim("  (window)") if show else ""))
+            except Exception as exc:
+                print(yellow(f"    MOC march skipped: {exc}"))
+        if args.animate in ("particles", "both"):
+            try:
+                from raosim.flow_viz import animate_particles
+                animate_particles(sol, gamma=args.gamma, Tc=args.chamber_temp,
+                                  save_path=args.out / "anim_particles.gif",
+                                  fps=25, show=show)
+                artifacts.append("anim_particles.gif")
+                print(green("    wrote anim_particles.gif")
+                      + (dim("  (window)") if show else ""))
+            except Exception as exc:
+                print(yellow(f"    particles skipped: {exc}"))
 
     # ---- 2.5 optional channel auto-sizing (solve N/w from requirement) ---
     if args.regen and args.auto_size:
