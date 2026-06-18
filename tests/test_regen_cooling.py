@@ -284,6 +284,28 @@ def test_pressure_drop_is_reported_and_scales(contour, prop, heat):
     assert res2["coolant_pressure_drop"] > res["coolant_pressure_drop"]
 
 
+def test_absolute_coolant_pressure_march_sets_local_liner_load(contour, prop, heat):
+    outlet = 8.5e6
+    res = regenerative_cooling_analysis(
+        heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6,
+        coolant_outlet_pressure=outlet,
+    )
+    order = np.asarray(res["coolant_flow_order"], dtype=int)
+    p_flow = np.asarray(res["coolant_pressure"])[order]
+    # Pressure decreases monotonically from jacket inlet to outlet.
+    assert np.all(np.diff(p_flow) <= 1e-6)
+    assert res["coolant_inlet_pressure"] == pytest.approx(
+        outlet + res["coolant_pressure_drop"], rel=1e-12)
+    assert res["coolant_outlet_pressure"] == pytest.approx(outlet)
+    np.testing.assert_allclose(
+        res["liner_pressure_differential"],
+        np.asarray(res["coolant_pressure"]) - np.asarray(res["gas_pressure"]),
+    )
+    assert res["coolant_pressure_boundary_source"] == (
+        "user_supplied_coolant_outlet_pressure"
+    )
+
+
 def test_infeasible_channel_geometry_warns(contour, prop, heat):
     """Channels that exceed the throat circumference are flagged."""
     class TooMany(_Cool):

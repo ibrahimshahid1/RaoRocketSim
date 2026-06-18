@@ -62,8 +62,8 @@ inline and collected at the end.
 | Rao variational / MOC BVP | NASA-topology seed, Rao stationarity, characteristic compatibility, mass + length closure, $D$-state continuity, validity and topology diagnostics | Experimental research path |
 | Differentiable solver | JAX/Optimistix Levenberg–Marquardt residual solve, differentiable NASA-style kernel march, optional solved $\theta_B$, exact $C_F$ sensitivities | Implemented, research-grade |
 | Wall pressure & separation | Quasi-1D wall-pressure estimate; Summerfield, Kalt–Badal, Schmucker separation screens | Screening only |
-| Thermal / cooling / structure | Boundary-layer displacement, Bartz-style heat flux, rectangular regen-channel, thin-wall hoop-stress screens | Screening only |
-| Geometry export | CSV, revolved STL, STEP (CadQuery B-rep or faceted AP214 fallback), Inventor IPT manifest | CAD-review input, not production definition |
+| Thermal / cooling / structure | Bartz-style gas heating, Sieder-Tate rectangular channels, fin/curvature corrections, helical Darcy loss, station-wise SP-125 liner stress | Screening / preliminary sizing |
+| Geometry export | CSV, closed normal-offset STL, STEP (CadQuery B-rep or explicit faceted AP214 fallback), Inventor IPT manifest; regen STL remains visualization geometry | CAD-review input, not production definition |
 | Validation | Unit/regression tests, literature manifests, NASA/JHU parsers, kernel/topology parity, diagnostic reports | Strong software verification; incomplete physical validation |
 
 The maturity column is enforced in code. Each contour carries a
@@ -621,8 +621,17 @@ The heat-flux model preserves Bartz-like sensitivity to chamber pressure,
 characteristic velocity, throat diameter, gas temperature, and wall
 temperature, then applies empirical axial and area scaling. It is labeled
 `bartz_style_screening` — **not** a full Bartz implementation with resolved
-transport properties. For regenerative cooling, total absorbed heat and
-coolant rise are estimated by
+transport properties. Regenerative cooling is marched station by station in
+the coolant-flow direction. The coolant-side coefficient uses Sieder–Tate
+with local rectangular hydraulic diameter, bulk/wall viscosity, fin area,
+and a curved-channel correction. The wall is the series resistance
+
+$$
+\frac{1}{H(x)}=\frac{1}{h_g(x)}+\frac{t_\mathrm{hot}(x)}{k_w}
+               +\frac{1}{h_c(x)} .
+$$
+
+Total absorbed heat and coolant rise satisfy
 
 $$
 \dot Q=\int q''(x)\,2\pi r(x)\,\mathrm{d}x,
@@ -630,22 +639,67 @@ $$
 \Delta T_c=\frac{\dot Q}{\dot m_c\,c_{p,c}},
 $$
 
-followed by a one-resistance wall/convection temperature estimate. Channel
-pressure drop, boiling, coking, critical heat flux, rib conduction, coolant
-property variation, and manifold maldistribution are not solved.
+while friction pressure loss is integrated with local Darcy factor,
+hydraulic diameter, velocity, and the actual helical passage length. An
+absolute coolant outlet pressure (or the explicit default
+$p_{c,\mathrm{out}}=P_c+\Delta p_\mathrm{injector}$) anchors the jacket
+pressure march. Boiling, coking, critical heat flux, two-phase flow,
+manifold maldistribution, and fully temperature-dependent properties remain
+outside the model.
 
 ### Structural screen
 
-The pressure-stress estimate is the thin-wall hoop relation
+For a coaxial-shell regen liner, the station-wise combined stress follows
+NASA SP-125 equation 4-31:
 
 $$
-\sigma_h\approx\frac{p_c\,r_{\max}}{t_w} .
+\sigma_c(x)=
+\frac{\left[p_\mathrm{cool}(x)-p_g(x)\right]r(x)}{t_\mathrm{hot}(x)}
++
+\frac{E\alpha q''(x)t_\mathrm{hot}(x)}
+     {2(1-\nu)k_w}.
 $$
 
-Reported margins compare this stress, the estimated wall temperature, and the
-peak heat flux against user-supplied material limits. Temperature-dependent
-allowables, fatigue, creep, weld efficiency, stress concentration, buckling,
-and combined loads are outside the model.
+This exposes the real thickness squeeze: pressure stress wants a thicker
+liner, while wall temperature and thermal-gradient stress usually want a
+thinner one. `--size-wall` searches hot-wall thickness, channel count, and
+channel width together against thermal margin, yield margin, channel fit,
+manufacturing minimum, and pressure-drop budget. Catalog materials do not
+invent fatigue life: Coffin–Manson life is evaluated only when a complete
+sourced coefficient set is supplied, and gates feasibility only when marked
+design-qualified.
+
+The joint optimizer first selects channels and a feasible uniform
+$t_\mathrm{hot}$ candidate, then `size_wall_profile` refines the liner and
+outer-jacket thickness station by station. The CAD path can export the liner
+and closeout jacket as separate closed normal-offset solids. Channel widths
+and heights are still uniform in that refinement, and the lands/helical
+passages/manifolds are not yet Boolean-cut into one manufacturing B-rep.
+Jacket buckling, plasticity, creep, weld/braze allowables, stress
+concentrations, and nonlinear FEA are not yet solved.
+
+### How user inputs affect wall sizing
+
+- `Rt`, `epsilon`, and `length-pct` set local radius, heated area, passage
+  length, channel pitch, and the radius multiplying pressure stress.
+- `gamma` and `Pc` change the gas state and Bartz heat loading; `Pc` also sets
+  propellant flow and the coolant/gas pressure load.
+- `pa/p0` primarily changes nozzle performance/separation. It does not directly
+  prescribe thickness.
+- `O/F` sets the fuel share used as coolant in the simplified cycle:
+  $\dot m_c=\dot m_\mathrm{total}/(1+O/F)$. Lower `O/F` therefore increases
+  available fuel coolant in this model; a real change also requires updated
+  thermochemistry.
+- `margin` and `max wall T` impose the allowable peak wall temperature.
+- `pressure-drop budget`, channel width/height/count, coolant properties, and
+  helix turns control velocity, heat transfer, and hydraulic loss. Helical
+  channels use their longer 3-D path, not merely a visual coil.
+- `auto-size` selects channel geometry at a fixed wall thickness.
+  `size-wall` co-sizes channels, then refines variable liner and jacket
+  thickness profiles.
+
+The equation provenance, local-PDF inventory, parameter map, and exact CAD
+scope are collected in [`docs/regen_wall_model.md`](docs/regen_wall_model.md).
 
 ### Atmosphere and trajectory
 
@@ -688,6 +742,19 @@ python -m pip install rocketcea
 # Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
 python -m pip install cadquery
 ```
+
+To ensure a triangle-based STEP fallback is never mistaken for editable
+B-rep CAD:
+
+```bash
+PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 0 --regen \
+  --material grcop-84 --size-wall --cad step --require-brep \
+  --out builds/regen_brep
+```
+
+Without `--require-brep`, the summary records either `brep` or
+`faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
+STEP as a solid body; it will not contain native Inventor feature history.
 
 Run commands from the repository root; the project does not yet ship as an
 installable Python package.
@@ -840,10 +907,13 @@ Pass `solver_backend="numpy"` to fall back to the legacy SciPy path.
 Normal CLI runs create `builds/vNNN_YYYYMMDD_HHMMSS/` and may contain:
 
 - contour CSV in meters;
-- a binary STL inner surface or closed solid;
+- a binary STL closed wall solid;
 - a STEP solid (CadQuery revolved B-rep when available, else a faceted AP214
   fallback);
+- with variable wall sizing, separate liner and closeout-jacket solids;
 - an Inventor conversion manifest pointing to the authoritative STEP file;
+- optional regen STL/PNG visualization surfaces for liner, channels, and
+  jacket (not yet Boolean-cut manufacturing channel solids);
 - design-gate JSON and v2 physics-screening sections;
 - sweep CSV or benchmark JSON / Markdown reports;
 - human-readable `metadata.txt` with inputs, performance, warnings, gate

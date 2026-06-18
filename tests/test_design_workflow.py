@@ -2,10 +2,16 @@ import os
 import subprocess
 import sys
 
+import numpy as np
 import pytest
 
 from raosim.design import NozzleDesignRequest, design_nozzle
-from raosim.export import export_step, export_stl
+from raosim.export import (
+    _offset_contour,
+    export_step,
+    export_stl,
+    step_representation,
+)
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.validation import evaluate_design_gates
 
@@ -57,6 +63,35 @@ def test_step_and_solid_stl_exports(tmp_path):
     assert "ISO-10303-21" in step_path.read_text(encoding="utf-8", errors="ignore")
     assert stl_path.exists()
     assert stl_path.stat().st_size > 84
+
+
+def test_station_wise_normal_wall_offset_and_step_export(tmp_path):
+    contour = bell_nozzle_contour(Rt=0.020, epsilon=6.0, length_pct=80.0)
+    x, y = contour["x"], contour["y"]
+    thickness = np.linspace(0.0007, 0.0015, len(x))
+    xo, yo = _offset_contour(x, y, thickness)
+    # The displacement is normal to the polyline and has the requested
+    # magnitude at every station (not a constant radial shift).
+    assert np.hypot(xo - x, yo - y) == pytest.approx(thickness, rel=1e-10)
+    path = export_step(
+        x, y, tmp_path / "variable_wall.step",
+        n_angular=12, wall_thickness=thickness,
+    )
+    assert path.exists()
+    assert step_representation(path) in {"brep", "faceted_brep"}
+
+
+def test_require_brep_rejects_faceted_fallback(tmp_path, monkeypatch):
+    import raosim.export as export_module
+    contour = bell_nozzle_contour(Rt=0.020, epsilon=4.0, length_pct=80.0)
+    monkeypatch.setattr(export_module, "_export_step_with_cadquery",
+                        lambda profile, path: False)
+    with pytest.raises(RuntimeError, match="CadQuery/OpenCascade"):
+        export_module.export_step(
+            contour["x"], contour["y"], tmp_path / "must_be_brep.step",
+            wall_thickness=0.001, require_brep=True,
+        )
+    assert not (tmp_path / "must_be_brep.step").exists()
 
 
 def test_design_nozzle_api_writes_report_and_step(tmp_path):

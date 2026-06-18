@@ -115,6 +115,12 @@ class CoolingSpec:
     # silently overrode every named coolant's table cp — a latent bug.)
     coolant_cp: float | None = None
     coolant_inlet_temperature: float = 293.0
+    # Absolute jacket pressure immediately before the coolant leaves the
+    # cooling passages for the injector/manifold.  When omitted, the regen
+    # solver uses Pc + injector_pressure_drop as the minimum physically
+    # meaningful boundary for station-wise liner pressure stress.
+    coolant_outlet_pressure: float | None = None
+    injector_pressure_drop: float = 0.0
     max_wall_temperature: float = 950.0
     # Optional coolant transport properties (override the built-in
     # COOLANT_PROPERTIES table keyed by ``coolant`` name).  Supply
@@ -131,6 +137,46 @@ class MaterialSpec:
     conductivity: float = 16.0
     max_temperature: float = 1250.0
     max_heat_flux: float = 25e6
+    # Extra elastic/thermal properties needed by the SP-125 coaxial-shell
+    # combined-stress check (eq. 4-31: pressure differential + thermal
+    # stress).  Default None keeps every existing caller back-compatible;
+    # populated by :meth:`from_catalog`.
+    elastic_modulus: float | None = None     # E   [Pa]
+    thermal_expansion: float | None = None   # a   [1/K]
+    poisson_ratio: float | None = None       # v   [-]
+    density: float | None = None             # rho [kg/m^3]
+    category: str | None = None
+    # Coffin-Manson strain-life coefficients (low-cycle fatigue screen).
+    fatigue_strength_coeff: float | None = None    # sigma_f' [Pa]
+    fatigue_strength_exp: float | None = None      # b
+    fatigue_ductility_coeff: float | None = None   # eps_f'
+    fatigue_ductility_exp: float | None = None     # c
+    fatigue_source: str | None = None
+    fatigue_data_temperature: float | None = None
+    fatigue_design_qualified: bool = False
+
+    @classmethod
+    def from_catalog(cls, name: str) -> "MaterialSpec":
+        """Build a fully-populated spec from the :mod:`raosim.materials`
+        catalog (literature-grounded k, S_y, T_max, E, a, v, rho, and the
+        Coffin-Manson fatigue coefficients)."""
+        from raosim.materials import get_material
+        m = get_material(name)
+        return cls(
+            name=m.name, yield_strength=m.yield_strength,
+            conductivity=m.conductivity, max_temperature=m.max_temperature,
+            max_heat_flux=m.max_heat_flux, elastic_modulus=m.elastic_modulus,
+            thermal_expansion=m.thermal_expansion,
+            poisson_ratio=m.poisson_ratio, density=m.density,
+            category=m.category,
+            fatigue_strength_coeff=m.fatigue_strength_coeff,
+            fatigue_strength_exp=m.fatigue_strength_exp,
+            fatigue_ductility_coeff=m.fatigue_ductility_coeff,
+            fatigue_ductility_exp=m.fatigue_ductility_exp,
+            fatigue_source=m.fatigue_source,
+            fatigue_data_temperature=m.fatigue_data_temperature,
+            fatigue_design_qualified=m.fatigue_design_qualified,
+        )
 
 
 @dataclass

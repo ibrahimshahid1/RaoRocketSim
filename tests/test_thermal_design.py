@@ -134,6 +134,9 @@ def test_coolant_flow_from_cycle(prop):
     # half-cooling fraction halves the coolant flow
     mc2, _ = coolant_flow_from_cycle(Pc, Rt, prop.c_star, MR, cooling_fraction=0.5)
     assert mc2 == pytest.approx(0.5 * mc, rel=1e-9)
+    richer_fuel_flow, _ = coolant_flow_from_cycle(Pc, Rt, prop.c_star, 2.0)
+    leaner_fuel_flow, _ = coolant_flow_from_cycle(Pc, Rt, prop.c_star, 3.0)
+    assert richer_fuel_flow > leaner_fuel_flow
 
 
 def test_sizing_finds_feasible_design_for_large_engine(prop):

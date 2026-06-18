@@ -23,6 +23,8 @@ from raosim.jax import thermal as T  # noqa: E402
 from raosim.jax.design_opt import (  # noqa: E402
     constrained_nozzle_design,
     design_gradients,
+    normalize_objective_weights,
+    thrust_targeted_design,
 )
 from raosim.physics import (  # noqa: E402
     bartz_sigma as np_bartz_sigma,
@@ -154,3 +156,50 @@ def test_explicit_heat_flux_limit_constraint(args):
                                   q_limit=q_target)
     assert r.Rd_factor > loose.Rd_factor
     assert r.throat_heat_flux < loose.throat_heat_flux
+
+
+# ---------------------------------------------------------------------
+#  Fixed-thrust, multi-objective design.
+# ---------------------------------------------------------------------
+
+
+def _target_args(args):
+    return dict(
+        target_thrust=10_000.0,
+        Pc=args["Pc"], Pa=args["Pa"], gamma=GAMMA,
+        c_star=args["c_star"], Tc=args["Tc"],
+        cp_gas=args["cp_gas"], Pr_gas=args["Pr_gas"], mu_gas=args["mu_gas"],
+        h_c=args["h_c"], coolant_temperature=args["coolant_temperature"],
+        t_wall=args["t_wall"], k_wall=args["k_wall"], T_wall_limit=1100.0,
+    )
+
+
+def test_thrust_targeted_design_meets_target_by_construction(args):
+    r = thrust_targeted_design(**_target_args(args), objectives={"cf": 1.0})
+    assert r.feasible
+    assert r.positive_thrust_coefficient
+    assert r.thrust == pytest.approx(r.target_thrust, rel=1e-12)
+    assert r.At == pytest.approx(np.pi * r.Rt ** 2, rel=1e-12)
+    assert r.exit_radius == pytest.approx(np.sqrt(r.epsilon) * r.Rt, rel=1e-12)
+    assert set(r.objective_values) == {"cf", "isp", "length", "mass"}
+    assert r.scalar_objective == pytest.approx(sum(r.objective_terms.values()))
+
+
+def test_thrust_targeted_objective_changes_geometry(args):
+    cf = thrust_targeted_design(**_target_args(args), objectives={"cf": 1.0})
+    compact = thrust_targeted_design(
+        **_target_args(args), objectives={"length": 1.0})
+    assert cf.epsilon > compact.epsilon
+    assert cf.Cf > compact.Cf
+    assert compact.nozzle_length < cf.nozzle_length
+    assert compact.thrust == pytest.approx(10_000.0, rel=1e-12)
+
+
+def test_thrust_targeted_input_and_objective_validation(args):
+    assert normalize_objective_weights({"CF": 2, "length": 0}) == {"cf": 2.0}
+    with pytest.raises(ValueError, match="unknown objective"):
+        normalize_objective_weights({"banana": 1})
+    with pytest.raises(ValueError, match="target_thrust"):
+        thrust_targeted_design(**dict(_target_args(args), target_thrust=0.0))
+    with pytest.raises(ValueError, match="eps_bounds"):
+        thrust_targeted_design(**_target_args(args), eps_bounds=(0.9, 20.0))

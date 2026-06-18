@@ -14,6 +14,8 @@ import struct
 import numpy as np
 from pathlib import Path
 
+from raosim.regen_profile import normal_offset_contour
+
 
 def export_csv(x: np.ndarray, y: np.ndarray, path: str | Path,
                n_points: int | None = None) -> Path:
@@ -48,34 +50,28 @@ def export_csv(x: np.ndarray, y: np.ndarray, path: str | Path,
 # STL helpers
 # ─────────────────────────────────────────────────────────────────────
 
+def _thickness_array(thickness, n: int) -> np.ndarray:
+    """Validate/broadcast a scalar or station-wise wall thickness."""
+    arr = np.asarray(thickness, dtype=float)
+    if arr.ndim == 0:
+        arr = np.full(n, float(arr))
+    elif arr.shape != (n,):
+        raise ValueError(f"wall_thickness array must have shape ({n},)")
+    if not np.all(np.isfinite(arr)) or np.any(arr <= 0.0):
+        raise ValueError("wall_thickness must be finite and positive at every station")
+    return arr
+
+
 def _offset_contour(x: np.ndarray, y: np.ndarray,
-                    thickness: float) -> tuple[np.ndarray, np.ndarray]:
-    """Offset a 2-D contour outward by *thickness* along surface normals."""
-    n = len(x)
-    x_out = np.zeros(n)
-    y_out = np.zeros(n)
+                    thickness) -> tuple[np.ndarray, np.ndarray]:
+    """Offset a 2-D contour outward along surface normals.
 
-    for i in range(n):
-        # Central-difference tangent (forward/backward at ends)
-        if i == 0:
-            tx, ty = x[1] - x[0], y[1] - y[0]
-        elif i == n - 1:
-            tx, ty = x[-1] - x[-2], y[-1] - y[-2]
-        else:
-            tx, ty = x[i + 1] - x[i - 1], y[i + 1] - y[i - 1]
-
-        length = math.sqrt(tx * tx + ty * ty)
-        if length > 1e-15:
-            # Outward normal: perpendicular to tangent, away from axis
-            nx = -ty / length
-            ny =  tx / length
-        else:
-            nx, ny = 0.0, 1.0
-
-        x_out[i] = x[i] + thickness * nx
-        y_out[i] = y[i] + thickness * ny
-
-    return x_out, y_out
+    ``thickness`` may be one scalar or one value per contour station.  A
+    station-wise array is the geometry bridge from the thermal/structural
+    wall profile to the revolved solid.
+    """
+    t = _thickness_array(thickness, len(x))
+    return normal_offset_contour(x, y, t)
 
 
 def _revolve_surface(x, y, theta, n_angular, inward=False):
@@ -166,7 +162,7 @@ def _write_stl(path: Path, triangles: list):
 
 
 def _solid_triangles(x: np.ndarray, y: np.ndarray, theta: np.ndarray,
-                     n_angular: int, wall_thickness: float,
+                     n_angular: int, wall_thickness,
                      flange_od: float | None = None,
                      flange_length: float | None = None) -> list:
     """Build a closed faceted solid from an inner contour."""
@@ -207,7 +203,7 @@ def _solid_triangles(x: np.ndarray, y: np.ndarray, theta: np.ndarray,
     return triangles
 
 
-def _closed_profile(x: np.ndarray, y: np.ndarray, wall_thickness: float,
+def _closed_profile(x: np.ndarray, y: np.ndarray, wall_thickness,
                     flange_od: float | None = None,
                     flange_length: float | None = None) -> list[tuple[float, float]]:
     """Return a closed x-radius profile for CAD revolve operations."""
@@ -239,9 +235,12 @@ def _export_step_with_cadquery(profile: list[tuple[float, float]], path: Path) -
         return False
 
     try:
+        # Public geometry is SI metres; CadQuery/OpenCascade STEP geometry is
+        # conventionally millimetres.  Keep the kernel boundary explicit.
+        profile_mm = [(1000.0 * x, 1000.0 * r) for x, r in profile]
         solid = (
             cq.Workplane("XY")
-            .polyline(profile)
+            .polyline(profile_mm)
             .close()
             .revolve(360.0, (0, 0, 0), (1, 0, 0))
         )
@@ -316,7 +315,7 @@ def _write_faceted_step(path: Path, triangles: list,
 
 def export_stl(x: np.ndarray, y: np.ndarray, path: str | Path,
                n_angular: int = 64,
-               wall_thickness: float | None = None,
+               wall_thickness=None,
                flange_od: float | None = None,
                flange_length: float | None = None) -> Path:
     """
@@ -327,7 +326,8 @@ def export_stl(x: np.ndarray, y: np.ndarray, path: str | Path,
     x, y           : contour arrays [m]  (y = radial distance from axis)
     path           : output file path
     n_angular      : angular divisions around the axis (default 64)
-    wall_thickness : nozzle wall thickness [m].  If provided, the STL
+    wall_thickness : nozzle wall thickness [m], scalar or one value per
+                     contour station.  If provided, the STL
                      is a closed solid body with inner flow surface,
                      outer surface, and sealed end-caps — ready for
                      3-D printing or CNC machining.
@@ -357,32 +357,67 @@ def export_stl(x: np.ndarray, y: np.ndarray, path: str | Path,
     return path
 
 
+def _clean_meridian_for_brep(x, y, thickness, max_pts: int = 200):
+    """Sort, de-seam and downsample a meridional contour for the B-rep wire.
+
+    The raw solver contour concatenates the convergent / throat / bell
+    segments, whose ``x`` can DOUBLE BACK at the seams (non-monotone, with
+    duplicates).  Fed straight to CadQuery the closed revolve wire then
+    self-intersects and the true-B-rep export silently fails to the faceted
+    fallback.  Sorting by ``x``, dropping near-duplicate stations and
+    capping the point count yields a clean simple wire (the per-station
+    ``thickness`` is carried along so a variable ``t_hot(x)`` survives)."""
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    t = _thickness_array(thickness, len(x))
+    order = np.argsort(x, kind="stable")
+    xs, ys, ts = x[order], y[order], t[order]
+    span = max(float(xs.max() - xs.min()), 1e-12)
+    keep = np.concatenate([[True], np.abs(np.diff(xs)) > 1e-9 * span])
+    xs, ys, ts = xs[keep], ys[keep], ts[keep]
+    if len(xs) > max_pts:
+        idx = np.unique(np.linspace(0, len(xs) - 1, max_pts).astype(int))
+        xs, ys, ts = xs[idx], ys[idx], ts[idx]
+    return xs, ys, ts
+
+
 def export_step(x: np.ndarray, y: np.ndarray, path: str | Path,
                 n_angular: int = 64,
-                wall_thickness: float | None = None,
+                wall_thickness=None,
                 flange_od: float | None = None,
                 flange_length: float | None = None,
-                metadata: dict | None = None) -> Path:
+                metadata: dict | None = None,
+                require_brep: bool = False) -> Path:
     """
     Export a solid nozzle body as STEP.
 
-    STEP export requires a positive wall thickness. CadQuery is used when
-    available to create a true revolved B-rep; otherwise a faceted AP214 STEP
-    fallback is written so CAD review can still proceed.
+    STEP export requires a positive scalar or station-wise wall thickness.
+    CadQuery is used when available to create a true revolved B-rep; otherwise
+    a faceted AP214 STEP fallback is written so CAD review can still proceed.
+    Set ``require_brep=True`` to reject that triangle-based fallback.
     """
-    if wall_thickness is None or wall_thickness <= 0.0:
+    if wall_thickness is None:
         raise ValueError("STEP export requires wall_thickness > 0")
 
     path = Path(path).expanduser().resolve()
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
+    _thickness_array(wall_thickness, len(x))
     theta = np.linspace(0, 2 * np.pi, n_angular + 1)
+    # The B-rep revolve needs a clean simple wire; the faceted fallback uses
+    # the full-resolution contour as-is.
+    xb, yb, tb = _clean_meridian_for_brep(x, y, wall_thickness)
     profile = _closed_profile(
-        x, y, wall_thickness,
+        xb, yb, tb,
         flange_od=flange_od, flange_length=flange_length,
     )
 
     if not _export_step_with_cadquery(profile, path):
+        if require_brep:
+            raise RuntimeError(
+                "true B-rep STEP export requires CadQuery/OpenCascade; "
+                "install the optional 'cadquery' dependency or omit require_brep"
+            )
         triangles = _solid_triangles(
             x, y, theta, n_angular, wall_thickness,
             flange_od=flange_od, flange_length=flange_length,
@@ -390,6 +425,12 @@ def export_step(x: np.ndarray, y: np.ndarray, path: str | Path,
         _write_faceted_step(path, triangles, metadata=metadata)
 
     return path
+
+
+def step_representation(path: str | Path) -> str:
+    """Classify a generated STEP artifact as ``brep`` or ``faceted_brep``."""
+    text = Path(path).read_text(encoding="utf-8", errors="ignore")
+    return "faceted_brep" if "FACETED_BREP" in text else "brep"
 
 
 def package_ipt_request(step_path: str | Path, path: str | Path,

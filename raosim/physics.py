@@ -17,6 +17,7 @@ from raosim.gas_dynamics import (
     isentropic_temperature_ratio,
     mach_from_area_ratio,
 )
+from raosim.regen_profile import helix_passage_lengths
 from raosim.separation import check_separation
 
 
@@ -400,7 +401,7 @@ def sieder_tate_coefficient(
     Nu = (0.027 * np.power(np.maximum(Re, 1.0), 0.8)
           * np.power(np.maximum(Pr, 1e-6), 1.0 / 3.0)
           * np.power(mu_b / np.maximum(mu_w, 1e-12), 0.14))
-    return Nu * k / max(D_h, 1e-12)
+    return Nu * k / np.maximum(D_h, 1e-12)
 
 
 def fin_efficiency(h_c, k_wall: float, land_width, channel_height) -> Any:
@@ -455,6 +456,38 @@ def darcy_friction_factor(Re) -> Any:
     return _np.where(Re < 2300.0, 64.0 / Re, turb)
 
 
+def coolant_pressure_profile(
+    pressure_loss_per_station,
+    flow_order,
+    *,
+    outlet_pressure: float,
+) -> np.ndarray:
+    """Recover the absolute coolant pressure at each wall station.
+
+    ``pressure_loss_per_station`` contains the Darcy-Weisbach loss assigned
+    to each station and ``flow_order`` lists station indices from coolant
+    inlet to coolant outlet.  Pressure decreases along that order.  The
+    supplied ``outlet_pressure`` is the jacket pressure immediately before
+    the coolant enters the injector/manifold downstream of the cooling
+    passages.
+
+    Station values are cell-centred: half of the local loss lies upstream
+    and half downstream.  This gives the pressure required by the SP-125
+    liner load ``p_coolant(x) - p_gas(x)`` without inventing a fixed
+    fraction of chamber pressure.
+    """
+    losses = np.maximum(np.asarray(pressure_loss_per_station, dtype=float), 0.0)
+    order = np.asarray(flow_order, dtype=int)
+    if losses.ndim != 1 or order.ndim != 1 or len(losses) != len(order):
+        raise ValueError("loss and flow-order arrays must be one-dimensional and equal length")
+    loss_flow = losses[order]
+    remaining = np.cumsum(loss_flow[::-1])[::-1]
+    pressure_flow = float(outlet_pressure) + remaining - 0.5 * loss_flow
+    pressure = np.empty_like(pressure_flow)
+    pressure[order] = pressure_flow
+    return pressure
+
+
 def _wall_radius_of_curvature_signed(x, y):
     """Signed meridional radius of curvature R_c of the wall polyline.
 
@@ -472,8 +505,9 @@ def _wall_radius_of_curvature_signed(x, y):
     ypp = _np.gradient(yp)
     denom = _np.maximum((xp * xp + yp * yp) ** 1.5, 1e-30)
     kappa = (xp * ypp - yp * xpp) / denom
-    return _np.where(_np.abs(kappa) > 1e-9,
-                     1.0 / kappa, _np.sign(kappa + 1e-30) * 1e9)
+    radius = _np.sign(kappa + 1e-30) * 1e9
+    _np.divide(1.0, kappa, out=radius, where=_np.abs(kappa) > 1e-9)
+    return radius
 
 
 def regenerative_cooling_analysis(
@@ -491,6 +525,10 @@ def regenerative_cooling_analysis(
     fin_correction: bool = True,
     curvature_correction: bool = True,
     pressure_drop: bool = True,
+    helix_turns: float = 0.0,
+    wall_profile: Any = None,
+    coolant_outlet_pressure: float | None = None,
+    injector_pressure_drop: float = 0.0,
 ) -> dict:
     """Coupled 1-D regenerative-cooling solve along the contour.
 
@@ -517,24 +555,40 @@ def regenerative_cooling_analysis(
     Rt = float(contour["Rt"])
     throat_idx = int(np.argmin(np.abs(y - Rt)))
 
-    N = int(getattr(cooling, "channel_count", 0) or 0)
-    w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
-    h = float(getattr(cooling, "channel_height", 0.0) or 0.0)
+    n_st = len(x)
     mdot = float(getattr(cooling, "coolant_mass_flow", 0.0) or 0.0)
     inlet_T = float(getattr(cooling, "coolant_inlet_temperature", 293.0))
     k_wall = max(float(getattr(material, "conductivity", 15.0) or 15.0), 1e-9)
-    t_wall = max(float(wall_thickness or 0.0), 1e-9)
     cprops = resolve_coolant_properties(cooling)
     cp_cool = float(cprops["cp"])
 
+    # Channel geometry as per-station arrays.  A RegenWallProfile can vary
+    # t_hot/w/h along the contour (SP-125 passage-area tapering); scalars
+    # broadcast to a constant array, so the uniform case is unchanged.
+    land_override = None
+    if wall_profile is not None:
+        w_arr = np.asarray(wall_profile.channel_width, dtype=float)
+        h_arr = np.asarray(wall_profile.channel_height, dtype=float)
+        t_arr = np.maximum(np.asarray(wall_profile.t_hot, dtype=float), 1e-9)
+        N = int(wall_profile.channel_count)
+        helix_turns = float(wall_profile.helix_turns)
+        land_override = np.asarray(wall_profile.land_width, dtype=float)
+    else:
+        N = int(getattr(cooling, "channel_count", 0) or 0)
+        w_arr = np.full(n_st, float(getattr(cooling, "channel_width", 0.0) or 0.0))
+        h_arr = np.full(n_st, float(getattr(cooling, "channel_height", 0.0) or 0.0))
+        t_arr = np.full(n_st, max(float(wall_thickness or 0.0), 1e-9))
+    w = float(np.mean(w_arr)); h = float(np.mean(h_arr))   # representative (msgs)
+    t_wall = float(np.mean(t_arr))
+
     warnings: list[str] = []
-    if N <= 0 or w <= 0.0 or h <= 0.0:
+    if N <= 0 or np.any(w_arr <= 0.0) or np.any(h_arr <= 0.0):
         warnings.append("Regenerative cooling requires positive channel geometry.")
     if mdot <= 0.0:
         warnings.append("Regenerative cooling requires positive coolant mass flow.")
 
-    A_ch = max(w * h, 1e-12)
-    D_h = hydraulic_diameter(w, h)
+    A_ch = np.maximum(w_arr * h_arr, 1e-12)             # per-channel area [m²]
+    D_h = 2.0 * w_arr * h_arr / np.maximum(w_arr + h_arr, 1e-12)
     mdot_per_channel = mdot / max(N, 1)
     G = mdot_per_channel / A_ch                 # channel mass flux [kg/m²s]
     rho_cool = float(cprops["rho"])
@@ -545,15 +599,15 @@ def regenerative_cooling_analysis(
     # the fin enhancement vary along the nozzle; the wall curvature sets
     # the Dean correction.
     pitch = 2.0 * math.pi * np.maximum(y, 1e-9) / max(N, 1)
-    land_width_raw = pitch - w
+    land_width_raw = land_override if land_override is not None else (pitch - w_arr)
     land_width = np.maximum(land_width_raw, 1e-5 * Rt)
-    # Channels must physically fit the circumference: N·w ≤ 2πr_min.
-    min_pitch_idx = int(np.argmin(pitch))
+    # Channels must physically fit the circumference: N·(w+land) ≤ 2πr.
+    tight = int(np.argmin(land_width_raw))
     if float(np.min(land_width_raw)) <= 0.0:
         warnings_geom = (
-            f"Channels do not fit: {N} × {w*1e3:.2f} mm exceeds the "
-            f"circumference at r={float(y[min_pitch_idx])*1e3:.1f} mm "
-            f"(pitch {float(pitch[min_pitch_idx])*1e3:.2f} mm); reduce "
+            f"Channels do not fit: {N} × {w_arr[tight]*1e3:.2f} mm exceeds the "
+            f"circumference at r={float(y[tight])*1e3:.1f} mm "
+            f"(pitch {float(pitch[tight])*1e3:.2f} mm); reduce "
             "channel count or width.  Fin model degraded there."
         )
     else:
@@ -561,7 +615,11 @@ def regenerative_cooling_analysis(
     if warnings_geom:
         warnings.append(warnings_geom)
     R_c_signed = _wall_radius_of_curvature_signed(x, y)
-    ds_arc = np.hypot(np.gradient(x), np.gradient(y))   # channel arc length
+    # Per-station coolant path length: meridional (ds_arc) and, when the
+    # channels are wound helically (helix_turns > 0), the longer helical
+    # path (ds_path) that sets the Darcy-Weisbach Δp (SP-125 eq. 4-32).
+    ds_path, ds_arc = helix_passage_lengths(
+        x, y, helix_turns=helix_turns, t_wall=t_arr, channel_height=h_arr)
 
     # Gas-side heated area per station (the heat the coolant removes).
     area_weight = 2.0 * math.pi * np.maximum(y, 1e-9)
@@ -596,8 +654,8 @@ def regenerative_cooling_analysis(
                   if curvature_correction else np.ones_like(x))
         h_c_film = h_c_straight * c_curv
         if fin_correction:
-            eta_f = fin_efficiency(h_c_film, k_wall, land_width, h)
-            fin_factor = (w + 2.0 * eta_f * h) / np.maximum(pitch, 1e-12)
+            eta_f = fin_efficiency(h_c_film, k_wall, land_width, h_arr)
+            fin_factor = (w_arr + 2.0 * eta_f * h_arr) / np.maximum(pitch, 1e-12)
         else:
             eta_f = np.ones_like(x)
             fin_factor = np.ones_like(x)
@@ -606,7 +664,7 @@ def regenerative_cooling_analysis(
         h_c = h_c_film * fin_factor
 
         # Series thermal circuit.
-        R_tot = 1.0 / np.maximum(h_g, 1e-9) + t_wall / k_wall + 1.0 / np.maximum(h_c, 1e-9)
+        R_tot = 1.0 / np.maximum(h_g, 1e-9) + t_arr / k_wall + 1.0 / np.maximum(h_c, 1e-9)
         q = np.maximum((Taw - T_c) / R_tot, 0.0)
         T_wg_new = Taw - q / np.maximum(h_g, 1e-9)
         T_wc = T_c + q / np.maximum(h_c, 1e-9)
@@ -630,13 +688,52 @@ def regenerative_cooling_analysis(
     # Coolant pressure drop (Darcy-Weisbach, friction only) along the
     # channel: Δp = Σ f (ds/D_h) (ρ V²/2).
     if pressure_drop:
-        Re_dp = G * D_h / max(float(np.mean(mu_b)), 1e-12)
-        f_darcy = float(darcy_friction_factor(Re_dp))
-        dP = f_darcy * (ds_arc / max(D_h, 1e-12)) * (0.5 * rho_cool * V_cool ** 2)
+        Re_dp = G * D_h / np.maximum(mu_b, 1e-12)
+        f_profile = np.asarray(darcy_friction_factor(Re_dp), dtype=float)
+        dynamic_head = 0.5 * rho_cool * V_cool ** 2
+        # Δp = Σ f (ds_path / D_h) (ρ V²/2): ds_path is the HELICAL length
+        # when the channels are wound, so more turns ⇒ proportionally more Δp.
+        dP = f_profile * (ds_path / np.maximum(D_h, 1e-12)) * dynamic_head
+        dP_meridional_reference = (
+            f_profile * (ds_arc / np.maximum(D_h, 1e-12)) * dynamic_head
+        )
         total_dP = float(np.sum(dP))
+        f_darcy = float(np.mean(f_profile))
     else:
         f_darcy = 0.0
+        dP = np.zeros_like(x)
+        dP_meridional_reference = np.zeros_like(x)
         total_dP = 0.0
+
+    # Absolute coolant pressure needs one boundary condition.  If the user
+    # has not supplied the jacket outlet pressure, use Pc + injector Δp:
+    # this is the minimum pressure that lets the coolant subsequently enter
+    # the chamber.  It is an explicit conservative-boundary assumption, not
+    # the former hard-coded ``0.5 Pc`` liner differential.
+    explicit_outlet = coolant_outlet_pressure
+    if explicit_outlet is None:
+        explicit_outlet = getattr(cooling, "coolant_outlet_pressure", None)
+    if explicit_outlet is None:
+        spec_injector_drop = getattr(cooling, "injector_pressure_drop", None)
+        used_injector_drop = (
+            float(spec_injector_drop)
+            if spec_injector_drop is not None
+            else float(injector_pressure_drop)
+        )
+        outlet_pressure = float(Pc) + max(used_injector_drop, 0.0)
+        pressure_boundary_source = "minimum_injector_entry_pressure_Pc_plus_injector_drop"
+    else:
+        outlet_pressure = float(explicit_outlet)
+        pressure_boundary_source = "user_supplied_coolant_outlet_pressure"
+    p_coolant = coolant_pressure_profile(
+        dP, order, outlet_pressure=outlet_pressure
+    )
+    p_gas = float(Pc) * np.asarray(
+        [isentropic_pressure_ratio(float(M), float(prop.gamma))
+         for M in np.asarray(hf["mach"], dtype=float)],
+        dtype=float,
+    )
+    p_diff = p_coolant - p_gas
 
     return {
         "method": getattr(cooling, "method", "regenerative"),
@@ -657,12 +754,32 @@ def regenerative_cooling_analysis(
         "throat_wall_temperature": float(T_wg[throat_idx]),
         "coolant_outlet_temperature": coolant_out,
         "coolant_temperature_rise": float(coolant_out - inlet_T),
-        "channel_flow_area": float(N * A_ch),
-        "channel_hydraulic_diameter": float(D_h),
-        "channel_mass_flux": float(G),
-        "channel_velocity": float(V_cool),
+        "channel_flow_area": float(N * A_ch[throat_idx]),
+        "channel_hydraulic_diameter": float(D_h[throat_idx]),
+        "channel_mass_flux": float(G[throat_idx]),
+        "channel_velocity": float(V_cool[throat_idx]),
+        "channel_velocity_profile": V_cool,
+        "hydraulic_diameter_profile": D_h,
         "coolant_pressure_drop": total_dP,
         "darcy_friction_factor": f_darcy,
+        "pressure_loss_profile": dP,
+        "coolant_pressure": p_coolant,
+        "coolant_flow_order": order,
+        "coolant_outlet_pressure": float(outlet_pressure),
+        "coolant_inlet_pressure": float(p_coolant[order[0]] + 0.5 * dP[order[0]]),
+        "coolant_pressure_boundary_source": pressure_boundary_source,
+        "gas_pressure": p_gas,
+        "liner_pressure_differential": p_diff,
+        "helix_turns": float(helix_turns),
+        "passage_length": float(np.sum(ds_path)),
+        "passage_length_axial": float(np.sum(ds_arc)),
+        "passage_length_factor": float(np.sum(ds_path) / max(np.sum(ds_arc), 1e-12)),
+        # This is the exact multiplier for this solver's friction integral.
+        # It differs slightly from the purely geometric length factor when
+        # D_h, velocity, viscosity, or friction factor vary by station.
+        "pressure_drop_path_factor": float(
+            np.sum(dP) / max(np.sum(dP_meridional_reference), 1e-12)
+        ) if pressure_drop else 1.0,
         "throat_h_c": float(h_c[throat_idx]),
         "throat_fin_efficiency": float(eta_f[throat_idx]) if fin_correction else 1.0,
         "total_heat_load": total_heat,
@@ -1165,6 +1282,253 @@ def regenerative_cooling_screen(
     }
 
 
+def coaxial_shell_wall_stress(
+    *,
+    pressure_differential: float,
+    inner_radius: float,
+    wall_thickness: float,
+    heat_flux: float,
+    elastic_modulus: float,
+    thermal_expansion: float,
+    poisson_ratio: float,
+    conductivity: float,
+    yield_strength: float | None = None,
+) -> dict:
+    """Combined inner-liner wall stress — NASA SP-125 eq. 4-31.
+
+    For a coaxial-shell (liner + jacket) regen wall, the maximum stress is
+    at the inner-wall surface of the inner shell and combines the
+    pressure-differential stress with the thermal stress from the
+    through-wall temperature gradient (Huzel & Huang, SP-125 printed
+    p. 109, ``propulsion_texts/19710019929.pdf``):
+
+        S_c = (p_co - p_g) R / t  +  E a q t / (2 (1 - v) k)
+              \\_____pressure_____/    \\________thermal________/
+
+    where ``p_co - p_g`` is the coolant/gas pressure differential, ``R``
+    the liner radius, ``t`` the liner thickness, ``q`` the local heat
+    flux, ``E`` the modulus, ``a`` the thermal-expansion coefficient,
+    ``v`` Poisson's ratio and ``k`` the conductivity.  The thermal term
+    grows with both ``q`` and ``t`` (a thicker wall runs a steeper
+    gradient), while the conduction limit on wall temperature wants ``t``
+    small — the two-sided squeeze on liner thickness SP-125 describes.
+
+    All inputs SI; returns the two stress components, their sum and (if
+    ``yield_strength`` is given) the yield margin ``S_y / S_c``.
+    """
+    t = max(float(wall_thickness), 1e-12)
+    k = max(float(conductivity), 1e-12)
+    pressure_stress = float(pressure_differential) * float(inner_radius) / t
+    thermal_stress = (
+        float(elastic_modulus) * float(thermal_expansion) * float(heat_flux) * t
+        / (2.0 * (1.0 - float(poisson_ratio)) * k)
+    )
+    combined = abs(pressure_stress) + thermal_stress
+    out = {
+        "pressure_stress": pressure_stress,
+        "thermal_stress": thermal_stress,
+        "combined_stress": combined,
+        "model": "sp125_coaxial_shell_eq_4_31",
+    }
+    if yield_strength:
+        out["stress_margin"] = float(yield_strength) / max(combined, 1e-9)
+    return out
+
+
+def coaxial_shell_wall_stress_profile(
+    *,
+    pressure_differential,
+    inner_radius,
+    wall_thickness,
+    heat_flux,
+    elastic_modulus: float,
+    thermal_expansion: float,
+    poisson_ratio: float,
+    conductivity: float,
+    yield_strength: float | None = None,
+) -> dict:
+    """Station-wise NASA SP-125 eq. 4-31 liner stress.
+
+    Unlike :func:`coaxial_shell_wall_stress`, every load/geometry field may
+    be an array.  The returned governing stress is the maximum combined
+    pressure-plus-thermal stress at a common station, with the full profiles
+    retained for audit and CAD sizing.
+    """
+    dp = np.asarray(pressure_differential, dtype=float)
+    radius = np.asarray(inner_radius, dtype=float)
+    thickness = np.maximum(np.asarray(wall_thickness, dtype=float), 1e-12)
+    q = np.asarray(heat_flux, dtype=float)
+    dp, radius, thickness, q = np.broadcast_arrays(dp, radius, thickness, q)
+    k = max(float(conductivity), 1e-12)
+    pressure = dp * radius / thickness
+    thermal = (
+        float(elastic_modulus) * float(thermal_expansion) * q * thickness
+        / (2.0 * (1.0 - float(poisson_ratio)) * k)
+    )
+    combined = np.abs(pressure) + thermal
+    idx = int(np.nanargmax(combined))
+    out = {
+        "pressure_stress_profile": pressure,
+        "thermal_stress_profile": thermal,
+        "combined_stress_profile": combined,
+        "pressure_stress": float(pressure[idx]),
+        "thermal_stress": float(thermal[idx]),
+        "combined_stress": float(combined[idx]),
+        "governing_index": idx,
+        "model": "sp125_coaxial_shell_eq_4_31_stationwise",
+    }
+    if yield_strength:
+        out["stress_margin_profile"] = float(yield_strength) / np.maximum(combined, 1e-9)
+        out["stress_margin"] = float(yield_strength) / max(float(combined[idx]), 1e-9)
+    return out
+
+
+def sp125_inelastic_buckling_critical_stress(
+    *,
+    wall_thickness,
+    local_radius,
+    tangent_modulus_tension,
+    tangent_modulus_compression,
+    poisson_ratio: float,
+) -> np.ndarray:
+    """SP-125 equation 4-29 longitudinal inelastic-buckling stress.
+
+    SP-125 printed p. 108 defines
+
+    ``S_c = [4 E_t E_c / (sqrt(E_t)+sqrt(E_c))²] *
+             t / [sqrt(3(1-v²)) r]``.
+
+    ``E_t`` and ``E_c`` are tangent moduli at wall temperature from the
+    tensile and compressive stress-strain curves.  They are *not* the elastic
+    modulus.  The caller must therefore either supply qualified values or
+    explicitly identify a screening knockdown used to derive them.
+    """
+    t = np.maximum(np.asarray(wall_thickness, dtype=float), 1e-12)
+    radius = np.maximum(np.asarray(local_radius, dtype=float), 1e-12)
+    Et = np.maximum(np.asarray(tangent_modulus_tension, dtype=float), 1e-9)
+    Ec = np.maximum(np.asarray(tangent_modulus_compression, dtype=float), 1e-9)
+    equivalent_modulus = (
+        4.0 * Et * Ec / np.maximum((np.sqrt(Et) + np.sqrt(Ec)) ** 2, 1e-18)
+    )
+    return equivalent_modulus * t / (
+        math.sqrt(max(3.0 * (1.0 - float(poisson_ratio) ** 2), 1e-12))
+        * radius
+    )
+
+
+def rib_supported_liner_buckling_profile(
+    *,
+    pressure_differential,
+    inner_radius,
+    wall_thickness,
+    unsupported_span,
+    elastic_modulus: float,
+    poisson_ratio: float,
+    plate_coefficient: float = 4.0,
+    knockdown: float = 0.65,
+) -> dict:
+    """External-pressure compression screen for a liner between ribs.
+
+    This is deliberately separate from SP-125 equation 4-29.  The local
+    coolant-over-gas pressure creates circumferential compression
+    ``|Δp|R/t`` in the inner shell.  The rib-supported strip is screened as a
+    simply supported plate under in-plane compression:
+
+    ``sigma_cr = knockdown * k*pi²*E/[12(1-v²)] * (t/b)²``.
+
+    ``b`` is the unsupported channel span between adjacent ribs.  The model
+    is a preliminary local-collapse gate, not a substitute for nonlinear
+    shell buckling FEA with imperfections.
+    """
+    dp = np.abs(np.asarray(pressure_differential, dtype=float))
+    radius = np.maximum(np.asarray(inner_radius, dtype=float), 1e-12)
+    t = np.maximum(np.asarray(wall_thickness, dtype=float), 1e-12)
+    span = np.maximum(np.asarray(unsupported_span, dtype=float), 1e-12)
+    compressive = dp * radius / t
+    coefficient = (
+        max(float(knockdown), 0.0) * float(plate_coefficient) * math.pi ** 2
+        * float(elastic_modulus)
+        / max(12.0 * (1.0 - float(poisson_ratio) ** 2), 1e-12)
+    )
+    critical = coefficient * (t / span) ** 2
+    margin = critical / np.maximum(compressive, 1e-9)
+    idx = int(np.nanargmin(margin))
+    return {
+        "compressive_stress_profile": compressive,
+        "critical_stress_profile": critical,
+        "margin_profile": margin,
+        "margin": float(margin[idx]),
+        "governing_index": idx,
+        "model": "rib_supported_liner_plate_buckling_screen",
+        "plate_coefficient": float(plate_coefficient),
+        "knockdown": float(knockdown),
+    }
+
+
+def thermal_fatigue_strain(
+    delta_T_wall: float, *, thermal_expansion: float, poisson_ratio: float,
+    mechanical_strain: float = 0.0,
+) -> float:
+    """Strain-controlled total strain range Δε for one regen-liner cycle.
+
+    The dominant driver is the CONSTRAINED thermal expansion of the hot
+    face over a start→steady→shutdown cycle: the hot face wants to grow
+    ``α·ΔT`` relative to the cooler backing structure but is restrained,
+    so a biaxially constrained strain ``α·ΔT/(1−ν)`` is imposed each cycle
+    — the strain counterpart of SP-125 eq. 4-28's thermal stress
+    ``E·α·ΔT`` (``propulsion_texts/19710019929.pdf`` printed p. 108).
+    ``ΔT`` is the through-wall drop ``T_wg − T_wc = q·t_w/k_w``.  Any
+    mechanical (pressure) strain adds.  Being strain-CONTROLLED is why it
+    is *low*-cycle: the metal yields each cycle to accommodate ``ΔT``.
+    """
+    return (float(thermal_expansion) * float(delta_T_wall)
+            / max(1.0 - float(poisson_ratio), 1e-6) + float(mechanical_strain))
+
+
+def coffin_manson_cycles(
+    strain_range: float, *, elastic_modulus: float,
+    fatigue_strength_coeff: float, fatigue_strength_exp: float,
+    fatigue_ductility_coeff: float, fatigue_ductility_exp: float,
+    max_cycles: float = 1e9,
+) -> float:
+    """Cycles to failure ``N_f`` from the strain-life relation::
+
+        Δε/2 = (σ_f'/E)(2N_f)^b + ε_f'(2N_f)^c
+
+    the elastic (Basquin, ``σ_f'``/``b``) plus plastic (Coffin-Manson,
+    ``ε_f'``/``c``) terms, ``b, c < 0``.  The right side decreases
+    monotonically in ``N_f``, so it is inverted by bisection in
+    ``log(2N_f)``.  Standard strain-life fatigue (Coffin 1954; Manson
+    1953) — used here as an order-of-magnitude screen with handbook
+    coefficients, NOT a certified life prediction.
+
+    A strain range too large for even half a cycle returns ~0.5; one
+    below the strain at ``max_cycles`` returns ``max_cycles`` (run-out).
+    """
+    half = 0.5 * float(strain_range)
+    if half <= 0.0:
+        return float(max_cycles)
+    E = max(float(elastic_modulus), 1e-9)
+    sf, b = float(fatigue_strength_coeff), float(fatigue_strength_exp)
+    ef, c = float(fatigue_ductility_coeff), float(fatigue_ductility_exp)
+
+    def rhs(two_Nf: float) -> float:        # predicted Δε/2 at this life
+        return (sf / E) * two_Nf ** b + ef * two_Nf ** c
+
+    lo, hi = 1.0, 2.0 * float(max_cycles)   # bounds on 2N_f
+    if half >= rhs(lo):                     # over-strained: < half a cycle
+        return 0.5
+    if half <= rhs(hi):                     # under the run-out strain
+        return float(max_cycles)
+    for _ in range(200):                    # bisect (rhs is decreasing)
+        mid = math.sqrt(lo * hi)
+        if rhs(mid) > half:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * math.sqrt(lo * hi)
+
+
 def structural_screen(
     contour: dict,
     Pc: float,
@@ -1175,7 +1539,16 @@ def structural_screen(
     thermal: dict,
     cooling: dict,
 ) -> dict:
-    """Evaluate simple thermal and hoop-stress screening margins."""
+    """Evaluate thermal and hoop-stress screening margins.
+
+    The hoop check is the thin-wall membrane stress ``Pc R / t``.  When
+    the material carries the elastic/thermal properties (``elastic_
+    modulus``, ``thermal_expansion``, ``poisson_ratio``) the screen also
+    reports the SP-125 eq. 4-31 combined stress (pressure differential +
+    through-wall thermal stress); the pressure differential is taken as
+    the chamber-pressure hoop ``Pc`` as a conservative stand-in when the
+    coolant pressure is not supplied.  ``stress_margin`` then uses the
+    combined stress (the tighter, more physical bound)."""
     y = np.asarray(contour["y"], dtype=float)
     radius = float(np.max(y))
     thickness = float(wall_thickness or 0.0)
@@ -1194,11 +1567,44 @@ def structural_screen(
     except Exception:
         sep_margin = 0.0
 
-    stress_margin = yield_strength / max(hoop_stress, 1e-9) if yield_strength > 0 else 0.0
+    # Combined SP-125 eq. 4-31 stress when the material has E, a, v.
+    E = getattr(material, "elastic_modulus", None)
+    alpha = getattr(material, "thermal_expansion", None)
+    nu = getattr(material, "poisson_ratio", None)
+    combined = None
+    if thickness > 0 and E and alpha and nu is not None:
+        # eq. 4-31 governs at the throat (peak flux), so co-locate the
+        # radius with q_max there — the narrowest contour station.
+        throat_radius = float(np.min(y))
+        p_diff = cooling.get("liner_pressure_differential")
+        q_profile = cooling.get("q")
+        if p_diff is not None and q_profile is not None:
+            combined = coaxial_shell_wall_stress_profile(
+                pressure_differential=p_diff, inner_radius=y,
+                wall_thickness=thickness, heat_flux=q_profile,
+                elastic_modulus=float(E), thermal_expansion=float(alpha),
+                poisson_ratio=float(nu),
+                conductivity=float(getattr(material, "conductivity", 15.0) or 15.0),
+                yield_strength=yield_strength or None,
+            )
+        else:
+            combined = coaxial_shell_wall_stress(
+                pressure_differential=Pc, inner_radius=throat_radius,
+                wall_thickness=thickness, heat_flux=float(thermal["q_max"]),
+                elastic_modulus=float(E), thermal_expansion=float(alpha),
+                poisson_ratio=float(nu),
+                conductivity=float(getattr(material, "conductivity", 15.0) or 15.0),
+                yield_strength=yield_strength or None,
+            )
+
+    # Use the combined (pressure + thermal) stress for the margin when we
+    # have it; otherwise fall back to the bare hoop stress.
+    governing_stress = combined["combined_stress"] if combined else hoop_stress
+    stress_margin = yield_strength / max(governing_stress, 1e-9) if yield_strength > 0 else 0.0
     temperature_margin = max_material_temp / max(wall_temp, 1e-9) if max_material_temp > 0 else 0.0
     heat_flux_margin = max_heat_flux / max(float(thermal["q_max"]), 1e-9) if max_heat_flux > 0 else 0.0
 
-    return {
+    result = {
         "hoop_stress": float(hoop_stress),
         "stress_margin": float(stress_margin),
         "temperature_margin": float(temperature_margin),
@@ -1214,6 +1620,14 @@ def structural_screen(
         ),
         "model": "thin_wall_thermal_structural_screening",
     }
+    if combined:
+        result["thermal_stress"] = float(combined["thermal_stress"])
+        result["pressure_stress"] = float(combined["pressure_stress"])
+        result["combined_stress"] = float(combined["combined_stress"])
+        result["stress_model"] = combined["model"]
+        if "governing_index" in combined:
+            result["stress_governing_index"] = int(combined["governing_index"])
+    return result
 
 
 def _gas_viscosity(T: float) -> float:

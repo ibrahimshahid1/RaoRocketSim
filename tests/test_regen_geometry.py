@@ -22,6 +22,7 @@ from raosim.regen_geometry import (
     nozzle_wall_surface,
     regen_channel_rails,
 )
+from raosim.regen_profile import RegenWallProfile, normal_offset_contour
 
 
 @pytest.fixture(scope="module")
@@ -54,14 +55,36 @@ def test_axial_channels_fit_and_count(contour):
 
 
 def test_channels_seated_above_inner_wall(contour):
-    """Channel floor sits at r_inner + t_wall (outside the gas wall)."""
+    """Channel floor is one wall thickness along the local wall normal."""
     t_w = 0.0012
+    x = np.asarray(contour["x"])
+    r = np.asarray(contour["y"])
     rails = regen_channel_rails(
-        np.asarray(contour["x"]), np.asarray(contour["y"]),
+        x, r,
         n_channels=80, channel_width=0.0008, channel_height=0.0025,
         wall_thickness=t_w, helix_turns=0.0)
+    x_floor = rails[0][:, 0, 0]
     r_floor = np.hypot(rails[0][:, 0, 1], rails[0][:, 0, 2])
-    assert np.all(r_floor >= np.asarray(contour["y"]) + t_w - 1e-9)
+    x_expected, r_expected = normal_offset_contour(x, r, t_w)
+    np.testing.assert_allclose(x_floor, x_expected, atol=1e-12)
+    np.testing.assert_allclose(r_floor, r_expected, atol=1e-12)
+
+
+def test_variable_profile_drives_channel_and_jacket_geometry(contour):
+    profile = RegenWallProfile.tapered(
+        contour, channel_count=60,
+        throat={"t_hot": 0.0008, "channel_width": 0.0008,
+                "channel_height": 0.0020, "t_jacket": 0.0010},
+        exit={"t_hot": 0.0014, "channel_width": 0.0014,
+              "channel_height": 0.0030, "t_jacket": 0.0016},
+        helix_turns=1.0,
+    )
+    res = generate_regen_nozzle(
+        contour, _cool(60), 0.001, wall_profile=profile)
+    assert res["summary"]["variable_profile"] is True
+    assert res["summary"]["offset"] == "surface_normal"
+    assert res["jacket_verts"] is not None
+    assert res["summary"]["t_hot_range_mm"][1] > res["summary"]["t_hot_range_mm"][0]
 
 
 def test_helix_turns_advance_angle(contour):

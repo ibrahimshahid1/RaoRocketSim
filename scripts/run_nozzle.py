@@ -17,8 +17,9 @@ Pipeline
 3. ``--thermal`` runs the coupled Bartz + Sieder-Tate cooling analysis
    and paints the channels with the gas-side wall temperature.
 
-Exports (under ``--out``): ``contour.csv`` (wall polyline),
-``profile.png`` (2-D), ``wall.stl``, and with ``--regen`` also
+Exports (under ``--out``): ``contour.csv`` (hot-gas wall polyline),
+``profile.png`` (2-D), a closed ``wall.stl``, and optionally ``wall.step``
+(``--cad step``).  With ``--regen`` it also writes the channel-visualization
 ``regen.stl`` + ``regen_3d.png``, plus ``summary.json``.
 
 Run examples
@@ -135,11 +136,20 @@ def print_tags() -> None:
             ("--wall-thickness", "hot-wall thickness [m]"),
             ("--helix-turns", "0 = axial, >0 = helical coils"),
             ("--coolant / --coolant-mdot", "rp1/methane/lh2/water/ethanol; flow [kg/s]"),
+            ("--coolant-outlet-pressure / --injector-pressure-drop",
+             "absolute jacket outlet pressure / injector loss [Pa]"),
         ]),
         ("Thermal", [
             ("--thermal", "run cooling analysis + colour coils by wall T"),
             ("--pc", "chamber pressure [Pa]"),
-            ("--wall-k", "wall conductivity [W/mK]"),
+            ("--material / --list-materials", "wall metal from the catalog "
+             "(k, temp limit, structural E/a/v)"),
+            ("--jacket-material", "optional stronger outer closeout alloy"),
+            ("--wall-k / --wall-temp-limit", "override the material's k / T limit"),
+            ("--auto-size / --size-wall", "size channels (cooling) / wall+channels "
+             "(thermal + SP-125 structural)"),
+            ("--margin-target / --structural-fos / --required-cycles / --dp-budget",
+             "sizing requirements (thermal / stress / fatigue N_f / Δp)"),
         ]),
         ("Visualisation", [
             ("--flowfield", "render the steady MOC Mach/temperature field"),
@@ -152,6 +162,8 @@ def print_tags() -> None:
             ("--tags", "show this list and exit"),
             ("--no-banner", "suppress the logo"),
             ("--out", "output directory"),
+            ("--cad {none,step,ipt,both}", "export a STEP solid / IPT conversion manifest"),
+            ("--require-brep", "fail instead of using a triangle-faceted STEP fallback"),
             ("-h / --help", "full argparse help"),
         ]),
     ]
@@ -179,9 +191,15 @@ if not _WANT_WINDOWS:
 import matplotlib.pyplot as plt
 
 import raosim.rao_variational as rv
+from raosim.export import (
+    export_step,
+    export_stl,
+    package_ipt_request,
+    step_representation,
+)
+from raosim.materials import get_material, material_names, material_table
 from raosim.rao_variational import RaoSolverConfig
-from raosim.regen_geometry import (generate_regen_nozzle, nozzle_wall_surface,
-                                   write_stl, _surface_triangles)
+from raosim.regen_geometry import generate_regen_nozzle
 
 
 def _prompt(label, default, cast=float):
@@ -231,6 +249,10 @@ def _interactive(args) -> None:
     args.regen = _prompt_bool("Add regen cooling channels (the coils)?",
                               bool(args.regen))
     if args.regen:
+        print(dim("    Wall materials: " + ", ".join(material_names())))
+        args.material = _prompt(
+            "Wall material (sets k + temp limit + structural; Enter for none)",
+            args.material or "", str) or None
         args.channel_height = _prompt("Channel height/depth [m]", args.channel_height)
         args.helix_turns = _prompt("Helix turns (0 = axial, >0 = helical coils)",
                                    args.helix_turns)
@@ -304,16 +326,37 @@ def main() -> int:
     ap.add_argument("--channels", type=int, default=80)
     ap.add_argument("--channel-width", type=float, default=0.0008, help="[m]")
     ap.add_argument("--channel-height", type=float, default=0.0025, help="[m]")
+    ap.add_argument("--channel-height-min", type=float, default=None,
+                    help="minimum channel depth searched by --size-wall [m]")
+    ap.add_argument("--channel-height-max", type=float, default=None,
+                    help="maximum channel depth searched by --size-wall [m]")
+    ap.add_argument("--channel-height-steps", type=int, default=3,
+                    help="number of channel-depth candidates for --size-wall")
     ap.add_argument("--wall-thickness", type=float, default=0.001, help="[m]")
     ap.add_argument("--helix-turns", type=float, default=0.0,
                     help="0 = axial channels; >0 = helical coils")
     ap.add_argument("--coolant", default="rp1")
     ap.add_argument("--coolant-mdot", type=float, default=10.0, help="[kg/s]")
+    ap.add_argument("--coolant-outlet-pressure", type=float, default=None,
+                    help="absolute coolant pressure at jacket outlet [Pa]; "
+                         "default Pc + injector pressure drop")
+    ap.add_argument("--injector-pressure-drop", type=float, default=0.0,
+                    help="injector pressure drop after the jacket outlet [Pa]")
     # thermal
     ap.add_argument("--thermal", action="store_true",
                     help="run the coupled cooling analysis and colour the coils by wall T")
     ap.add_argument("--pc", type=float, default=7.0e6, help="chamber pressure [Pa]")
-    ap.add_argument("--wall-k", type=float, default=350.0, help="wall conductivity [W/mK]")
+    ap.add_argument("--material", default=None,
+                    help="wall material from the catalog (e.g. grcop-84, "
+                         "narloy-z, inconel718, 316l); sets k + temp limit + "
+                         "structural props.  --list-materials to see all.")
+    ap.add_argument("--list-materials", action="store_true",
+                    help="print the materials catalog and exit")
+    # --wall-k / --wall-temp-limit default to None: when a --material is
+    # given they come from the catalog; either flag still overrides it.
+    ap.add_argument("--wall-k", type=float, default=None,
+                    help="wall conductivity [W/mK] (overrides the material; "
+                         "default 350 when no --material)")
     # auto-size: SOLVE channel count/width from the cooling requirement
     ap.add_argument("--auto-size", action="store_true",
                     help="size --channels/--channel-width FROM the cooling "
@@ -322,14 +365,35 @@ def main() -> int:
                     help="required cooling margin (wall-temp limit / peak ≥ this)")
     ap.add_argument("--dp-budget", type=float, default=200.0,
                     help="coolant pressure-drop budget [bar]")
-    ap.add_argument("--wall-temp-limit", type=float, default=1100.0,
-                    help="max allowable gas-side wall temperature [K]")
+    ap.add_argument("--wall-temp-limit", type=float, default=None,
+                    help="max allowable gas-side wall temperature [K] "
+                         "(overrides the material; default 1100 when no "
+                         "--material)")
     ap.add_argument("--mixture-ratio", type=float, default=2.6,
                     help="oxidiser/fuel ratio (sets the cycle coolant flow)")
     ap.add_argument("--cooling-fraction", type=float, default=1.0,
                     help="fraction of the fuel flow routed through the jacket")
     ap.add_argument("--size-objective", choices=("min_dp", "max_margin", "min_channels"),
                     default="min_dp", help="what to optimise among feasible channel designs")
+    # joint wall+channel sizing: co-size t_hot AND the channels against the
+    # thermal AND SP-125 eq.4-31 structural limits (needs --material).
+    ap.add_argument("--size-wall", action="store_true",
+                    help="co-size hot-wall thickness + channels vs thermal AND "
+                         "structural limits (needs --material)")
+    ap.add_argument("--structural-fos", type=float, default=1.0,
+                    help="structural factor of safety yield/combined-stress "
+                         "(copper liners run near yield / LCF; default 1.0)")
+    ap.add_argument("--required-cycles", type=float, default=100.0,
+                    help="required thermal-cycle life (Coffin-Manson N_f screen)")
+    ap.add_argument("--life-fos", type=float, default=4.0,
+                    help="factor of safety on cyclic life (N_f ≥ required × this)")
+    ap.add_argument("--t-hot-max", type=float, default=0.003,
+                    help="max hot-wall thickness to search [m]")
+    ap.add_argument("--buckling-fos", type=float, default=1.0,
+                    help="factor of safety for SP-125 4-29 and external-pressure buckling")
+    ap.add_argument("--buckling-tangent-modulus-fraction", type=float, default=0.10,
+                    help="screening Et/E and Ec/E used by SP-125 eq.4-29 "
+                         "until sourced hot-wall tangent-modulus data are supplied")
     ap.add_argument("--flowfield", action="store_true",
                     help="render the steady MOC Mach/temperature flow field")
     ap.add_argument("--animate", choices=("march", "particles", "both"),
@@ -339,6 +403,15 @@ def main() -> int:
     ap.add_argument("--chamber-temp", type=float, default=3500.0,
                     help="chamber temperature [K] for the flow-field temperature panel")
     ap.add_argument("--out", type=Path, default=Path("builds/nozzle_run"))
+    ap.add_argument("--cad", choices=("none", "step", "ipt", "both"), default="none",
+                    help="optional solid CAD export; IPT writes an Inventor "
+                         "conversion manifest around the authoritative STEP")
+    ap.add_argument("--require-brep", action="store_true",
+                    help="require CadQuery/OpenCascade true B-rep STEP output; "
+                         "do not accept the faceted AP214 fallback")
+    ap.add_argument("--jacket-material", default=None,
+                    help="outer-jacket material from the catalog for --size-wall "
+                         "(defaults to the liner); e.g. inconel718 over a copper liner")
     ap.add_argument("-i", "--interactive", action="store_true",
                     help="prompt for the dimensions/options instead of using flags")
     ap.add_argument("--tags", action="store_true",
@@ -357,11 +430,33 @@ def main() -> int:
     if args.tags:
         print_tags()
         return 0
+    if args.list_materials:
+        print(cyan("▸ " + bold("Materials catalog")) +
+              dim("  (select with --material <name>)"))
+        print(material_table())
+        return 0
 
     # Ask for the inputs when run bare (no flags) or with -i/--interactive.
     if args.interactive or bare:
         print_tags()
         _interactive(args)
+
+    # ---- resolve the wall material -------------------------------------
+    # A --material populates conductivity + the gas-side temperature limit
+    # (and the structural E/a/v); --wall-k / --wall-temp-limit still win
+    # when given explicitly.  Without either, keep the prior defaults.
+    mat = None
+    if args.material:
+        try:
+            mat = get_material(args.material)
+        except KeyError as exc:
+            print(red(f"    {exc}"))
+            return 2
+    if args.wall_k is None:
+        args.wall_k = mat.conductivity if mat else 350.0
+    if args.wall_temp_limit is None:
+        args.wall_temp_limit = mat.max_temperature if mat else 1100.0
+    args._material = mat
 
     args.out.mkdir(parents=True, exist_ok=True)
 
@@ -386,6 +481,11 @@ def main() -> int:
                         if args.auto_size else f"{args.coolant_mdot:g} kg/s") + ")"
                      if (args.thermal or args.auto_size) and args.regen
                      else dim("off"))),
+        ("material", (f"{mat.name}  (k={args.wall_k:g} W/mK, "
+                      f"T≤{args.wall_temp_limit:g} K, "
+                      f"{mat.category.replace('_', ' ')})" if mat else
+                      dim(f"unspecified  (k={args.wall_k:g} W/mK, "
+                          f"T≤{args.wall_temp_limit:g} K)"))),
         ("output", str(args.out)),
     ]:
         print(f"    {green(k+':'):<14}{v}")
@@ -425,8 +525,15 @@ def main() -> int:
         "Cf": float(sol.thrust_coefficient),
         "exit_radius": float(y[-1]),
     }
+    summary["material"] = {
+        "name": mat.name if mat else None,
+        "category": mat.category if mat else None,
+        "conductivity_W_mK": args.wall_k,
+        "max_wall_temperature_K": args.wall_temp_limit,
+        "source": mat.source if mat else None,
+    }
 
-    # ---- 2. always export the wall (CSV, 2-D, STL) -------------------
+    # ---- 2. export the contour reference (solid wall follows sizing) --
     np.savetxt(args.out / "contour.csv",
                np.column_stack([x, y]), delimiter=",",
                header="x_m,r_m", comments="")
@@ -437,9 +544,7 @@ def main() -> int:
     axp.set_title(f"Rao MOC contour  eps={args.epsilon:g} L{args.length_pct:g}%  "
                   f"Cf={sol.thrust_coefficient:.3f}")
     fig.tight_layout(); fig.savefig(args.out / "profile.png", dpi=150); fig.clf()
-    wall_verts = nozzle_wall_surface(x, y, n_theta=96)
-    write_stl(args.out / "wall.stl", [_surface_triangles(wall_verts)], "rao_wall")
-    artifacts = ["contour.csv", "profile.png", "wall.stl"]
+    artifacts = ["contour.csv", "profile.png"]
 
     # ---- optional steady flow-field render ---------------------------
     if args.flowfield:
@@ -484,8 +589,176 @@ def main() -> int:
             except Exception as exc:
                 print(yellow(f"    particles skipped: {exc}"))
 
+    # ---- 2.45 optional JOINT wall+channel sizing (t_hot + N + w) ---------
+    if args.regen and args.size_wall:
+        if args._material is None:
+            print(red("\n    --size-wall needs --material for the structural "
+                      "properties (E/α/ν/yield); see --list-materials."))
+            return 2
+        print("\n" + cyan("▸ " + bold("Sizing wall + channels")) +
+              dim("  (thermal + SP-125 eq.4-31 structural; coolant from the cycle)"))
+        from raosim.design import MaterialSpec
+        from raosim.propellants import custom_propellant
+        from raosim.thermal_design import joint_wall_channel_design
+        prop = custom_propellant(gamma=args.gamma, Mw=0.022, Tc=3500.0)
+        obj = args.size_objective if args.size_objective == "min_dp" else "min_mass"
+        sizing_material = MaterialSpec.from_catalog(args._material.name)
+        sizing_material.conductivity = float(args.wall_k)
+        sizing_material.max_temperature = float(args.wall_temp_limit)
+        jd = joint_wall_channel_design(
+            contour, prop, args.pc, material=sizing_material,
+            mixture_ratio=args.mixture_ratio, cooling_fraction=args.cooling_fraction,
+            coolant=args.coolant, thermal_margin=args.margin_target,
+            structural_fos=args.structural_fos, required_cycles=args.required_cycles,
+            life_fos=args.life_fos, dp_budget_bar=args.dp_budget,
+            helix_turns=args.helix_turns, channel_height=args.channel_height,
+            channel_height_min=(
+                args.channel_height_min
+                if args.channel_height_min is not None
+                else 0.60 * args.channel_height
+            ),
+            channel_height_max=(
+                args.channel_height_max
+                if args.channel_height_max is not None
+                else 1.80 * args.channel_height
+            ),
+            n_height=args.channel_height_steps,
+            t_hot_max=args.t_hot_max, objective=obj,
+            coolant_outlet_pressure=args.coolant_outlet_pressure,
+            injector_pressure_drop=args.injector_pressure_drop)
+        print(f"    coolant flow (cycle): {jd['mdot_total']:.2f} kg/s total → "
+              f"{bold('%.2f kg/s' % jd['mdot_cool'])} coolant "
+              f"{dim('(fuel, MR=%g)' % args.mixture_ratio)}")
+        if jd["channel_count"] is None:
+            print(red("    no channel geometry fits the throat; reduce the count."))
+            return 2
+        b = jd["band"]
+        if jd["feasible"]:
+            if jd["fatigue_status"] == "design_qualified_gate":
+                fatigue_text = green("N_f %.0f ✓" % jd["fatigue_cycles"])
+            elif jd["fatigue_status"] == "screening_only_not_gating":
+                fatigue_text = yellow("N_f %.0f (screen only)" % jd["fatigue_cycles"])
+            else:
+                fatigue_text = dim("N_f not evaluated")
+            print(f"    sized: {bold('t_hot %.2f mm' % (jd['t_hot']*1e3))}, "
+                  f"{bold('%d channels' % jd['channel_count'])} × "
+                  f"{jd['channel_width']*1e3:.2f} mm   "
+                  f"{green('thermal %.2f ✓' % jd['thermal_margin'])} "
+                  f"{green('σ %.2f ✓' % jd['structural_margin'])} "
+                  f"{fatigue_text}   "
+                  f"peak {jd['peak_wall_T']:.0f} K   Δp {jd['pressure_drop_bar']:.0f} bar   "
+                  f"mass {jd['mass_kg']:.1f} kg")
+            if b:
+                fat = (f", fatigue ∈ [{b.get('t_fatigue_lo', float('nan'))*1e3:.2f}, "
+                       f"{b.get('t_fatigue_hi', float('nan'))*1e3:.2f}]"
+                       if "t_fatigue_lo" in b else "")
+                print(dim(f"    feasible hot-wall band: t_hot ∈ "
+                          f"[{b['feasible_lo']*1e3:.2f}, {b['feasible_hi']*1e3:.2f}] mm "
+                          f"(mfg ≥ {b['t_manufacturing']*1e3:.2f}, structural ≥ "
+                          f"{b['t_structural_lo']*1e3:.2f}{fat}, thermal ≤ "
+                          f"{b['t_thermal_max']*1e3:.2f})"))
+            if jd["fatigue_cycles"] is not None:
+                print(dim(
+                    f"    fatigue: N_f ≈ {jd['fatigue_cycles']:.0f} cycles at "
+                    f"Δε {jd['strain_range']*100:.2f}% "
+                    f"[{jd['fatigue_status']}; source: {jd['fatigue_source']}]"
+                ))
+            else:
+                print(dim(
+                    "    fatigue: not evaluated; SP-125 identifies thermal LCF "
+                    "as governing, but this material has no sourced strain-life coefficients"
+                ))
+        else:
+            fatigue_report = (
+                f", N_f {jd['fatigue_cycles']:.0f}"
+                if jd["fatigue_cycles"] is not None else ", N_f not evaluated"
+            )
+            print(red(f"    requirement infeasible — best thermal {jd['thermal_margin']:.2f}, "
+                      f"σ {jd['structural_margin']:.2f}{fatigue_report} "
+                      f"at t_hot {jd['t_hot']*1e3:.2f} mm."))
+            print(yellow("    " + jd["diagnosis"]))
+            print(dim("    (proceeding with the best-effort design)"))
+        args.channels = int(jd["channel_count"])
+        args.channel_width = float(jd["channel_width"])
+        args.channel_height = float(jd["channel_height"])
+        args.wall_thickness = float(jd["t_hot"])
+        args.coolant_mdot = float(jd["mdot_cool"])
+        args.thermal = True
+        summary["wall_sizing"] = {
+            "material": jd["material"], "t_hot_m": jd["t_hot"],
+            "channel_count": jd["channel_count"], "channel_width_m": jd["channel_width"],
+            "channel_height_m": jd["channel_height"],
+            "thermal_margin": jd["thermal_margin"], "structural_margin": jd["structural_margin"],
+            "combined_stress_MPa": jd["combined_stress_MPa"],
+            "fatigue_cycles": jd["fatigue_cycles"], "strain_range": jd["strain_range"],
+            "fatigue_status": jd["fatigue_status"],
+            "fatigue_source": jd["fatigue_source"],
+            "fatigue_gates_feasibility": jd["fatigue_gates_feasibility"],
+            "required_cycles": args.required_cycles, "life_fos": args.life_fos,
+            "pressure_drop_bar": jd["pressure_drop_bar"], "peak_wall_T_K": jd["peak_wall_T"],
+            "mass_kg": jd["mass_kg"], "feasible": jd["feasible"],
+            "max_liner_pressure_differential_bar":
+                jd["max_liner_pressure_differential_bar"],
+            "coolant_pressure_boundary_source":
+                jd["coolant_pressure_boundary_source"],
+            "band": jd["band"], "diagnosis": jd["diagnosis"],
+        }
+
+        # Refine the chosen channels into a VARIABLE throat→exit wall: size
+        # t_hot(x) (thinnest that holds the SP-125 eq.4-31 stress) + the
+        # jacket t_jacket(x) (outer-shell coolant hoop) station by station,
+        # so the exported geometry is the manufacturable wall, not one
+        # uniform thickness.
+        from raosim.thermal_design import size_wall_profile
+        prof = size_wall_profile(
+            contour, prop, args.pc, material=sizing_material,
+            jacket_material=args.jacket_material,
+            channel_count=args.channels, channel_width=args.channel_width,
+            channel_height=args.channel_height, mixture_ratio=args.mixture_ratio,
+            cooling_fraction=args.cooling_fraction, coolant=args.coolant,
+            thermal_margin=args.margin_target, structural_fos=args.structural_fos,
+            helix_turns=args.helix_turns, t_hot_max=args.t_hot_max,
+            channel_height_min=args.channel_height_min,
+            channel_height_max=args.channel_height_max,
+            n_channel_height=args.channel_height_steps,
+            dp_budget_bar=args.dp_budget,
+            buckling_fos=args.buckling_fos,
+            buckling_tangent_modulus_fraction=
+                args.buckling_tangent_modulus_fraction,
+            coolant_outlet_pressure=args.coolant_outlet_pressure,
+            injector_pressure_drop=args.injector_pressure_drop)
+        args._wall_profile = prof["profile"]
+        jck = (f" + {prof['jacket_material']} jacket" if args.jacket_material
+               else " + jacket")
+        vbadge = green("✓") if prof["feasible"] else yellow("partial (see per-station)")
+        print(f"    variable wall: t_hot {bold('%.2f–%.2f mm' % (prof['t_hot_min_mm'], prof['t_hot_max_mm']))} "
+              f"(throat {prof['t_hot_throat_mm']:.2f}){jck} "
+              f"h {prof['channel_height_min_mm']:.2f}–{prof['channel_height_max_mm']:.2f} mm "
+              f"{prof['t_jacket_min_mm']:.2f}–{prof['t_jacket_max_mm']:.2f} mm   "
+              f"{vbadge}   {dim('min σ %.2f · mass %.1f kg' % (prof['min_structural_margin'], prof['mass_kg']))}")
+        summary["wall_profile"] = {
+            "t_hot_throat_mm": prof["t_hot_throat_mm"],
+            "t_hot_range_mm": [prof["t_hot_min_mm"], prof["t_hot_max_mm"]],
+            "t_jacket_range_mm": [prof["t_jacket_min_mm"], prof["t_jacket_max_mm"]],
+            "channel_height_range_mm": [
+                prof["channel_height_min_mm"],
+                prof["channel_height_max_mm"],
+            ],
+            "jacket_material": prof["jacket_material"],
+            "min_structural_margin": prof["min_structural_margin"],
+            "min_jacket_margin": prof["min_jacket_margin"],
+            "min_sp125_429_margin": prof["min_sp125_429_margin"],
+            "min_external_buckling_margin":
+                prof["min_external_buckling_margin"],
+            "buckling_data_status": prof["buckling_data_status"],
+            "thermal_feasible": prof["thermal_feasible"],
+            "liner_mass_kg": prof["liner_mass_kg"],
+            "jacket_mass_kg": prof["jacket_mass_kg"],
+            "feasible": prof["feasible"],
+        }
+
     # ---- 2.5 optional channel auto-sizing (solve N/w from requirement) ---
-    if args.regen and args.auto_size:
+    if args.regen and args.auto_size and not args.size_wall:
         print("\n" + cyan("▸ " + bold("Sizing channels")) +
               dim("  (from the cooling requirement; coolant flow from the cycle)"))
         from raosim.propellants import custom_propellant
@@ -499,7 +772,7 @@ def main() -> int:
             cooling_fraction=args.cooling_fraction,
             channel_height=args.channel_height, wall_thickness=args.wall_thickness,
             wall_k=args.wall_k, coolant=args.coolant,
-            objective=args.size_objective)
+            helix_turns=args.helix_turns, objective=args.size_objective)
         print(f"    coolant flow (cycle): {sized['mdot_total']:.2f} kg/s total → "
               f"{bold('%.2f kg/s' % sized['mdot_cool'])} coolant "
               f"{dim('(fuel, MR=%g)' % args.mixture_ratio)}")
@@ -533,7 +806,11 @@ def main() -> int:
         print("\n" + cyan("▸ " + bold("Cooling analysis")) +
               dim("  (Bartz + Sieder-Tate)"))
         from raosim.design import CoolingSpec, MaterialSpec
-        from raosim.physics import bartz_heat_flux, regenerative_cooling_analysis
+        from raosim.physics import (
+            bartz_heat_flux,
+            coaxial_shell_wall_stress_profile,
+            regenerative_cooling_analysis,
+        )
         from raosim.propellants import custom_propellant
         prop = custom_propellant(gamma=args.gamma, Mw=0.022, Tc=3500.0)
         spec = CoolingSpec(method="regenerative", coolant=args.coolant,
@@ -542,22 +819,194 @@ def main() -> int:
                            channel_height=args.channel_height,
                            coolant_mass_flow=args.coolant_mdot,
                            coolant_inlet_temperature=300.0,
+                           coolant_outlet_pressure=args.coolant_outlet_pressure,
+                           injector_pressure_drop=args.injector_pressure_drop,
                            max_wall_temperature=args.wall_temp_limit)
+        # Material from the catalog (k, S_y, T_max, E, a, v) so the cooling
+        # and structural screens see one coherent metal; --wall-k still wins.
+        material = (MaterialSpec.from_catalog(args._material.name)
+                    if args._material else MaterialSpec(conductivity=args.wall_k))
+        material.conductivity = args.wall_k
         hf = bartz_heat_flux(contour, args.pc, prop, wall_temperature=900.0)
+        analysis_wall_profile = getattr(args, "_wall_profile", None)
         cooling_result = regenerative_cooling_analysis(
-            hf, contour, spec, MaterialSpec(conductivity=args.wall_k),
-            args.wall_thickness, prop, args.pc)
+            hf, contour, spec, material, args.wall_thickness, prop, args.pc,
+            helix_turns=args.helix_turns,
+            wall_profile=analysis_wall_profile,
+            coolant_outlet_pressure=args.coolant_outlet_pressure,
+            injector_pressure_drop=args.injector_pressure_drop)
+        pf = cooling_result.get("passage_length_factor", 1.0)
         summary["cooling"] = {
             "peak_wall_T_K": cooling_result["peak_gas_side_wall_temperature"],
             "cooling_margin": cooling_result["cooling_margin"],
             "coolant_outlet_T_K": cooling_result["coolant_outlet_temperature"],
             "pressure_drop_bar": cooling_result["coolant_pressure_drop"] / 1e5,
+            "helix_turns": cooling_result.get("helix_turns", 0.0),
+            "passage_length_factor": pf,
+            "coolant_inlet_pressure_Pa": cooling_result["coolant_inlet_pressure"],
+            "coolant_outlet_pressure_Pa": cooling_result["coolant_outlet_pressure"],
+            "coolant_pressure_boundary_source":
+                cooling_result["coolant_pressure_boundary_source"],
         }
         margin = cooling_result["cooling_margin"]
         mbadge = green(f"margin {margin:.2f} ✓") if margin >= 1.0 else red(f"margin {margin:.2f} ✗")
+        dp_note = dim(f"  (helix ×{pf:.2f} path)") if args.helix_turns else ""
         print(f"    peak wall {bold('%.0f K' % cooling_result['peak_gas_side_wall_temperature'])}   "
-              f"{mbadge}   Δp {cooling_result['coolant_pressure_drop']/1e5:.1f} bar   "
+              f"{mbadge}   Δp {cooling_result['coolant_pressure_drop']/1e5:.1f} bar{dp_note}   "
               f"coolant out {cooling_result['coolant_outlet_temperature']:.0f} K")
+
+        # ---- structural screen: SP-125 eq. 4-31 combined wall stress -----
+        # Needs the elastic/thermal properties, which only a catalog
+        # --material supplies.  The thin liner carries the station-wise
+        # COOLANT-GAS differential from the hydraulic and gas-pressure
+        # marches, not a fixed fraction of chamber pressure.
+        if material.elastic_modulus:
+            stress = coaxial_shell_wall_stress_profile(
+                pressure_differential=cooling_result["liner_pressure_differential"],
+                inner_radius=contour["y"],
+                wall_thickness=(
+                    analysis_wall_profile.t_hot
+                    if analysis_wall_profile is not None
+                    else args.wall_thickness
+                ),
+                heat_flux=cooling_result["q"],
+                elastic_modulus=material.elastic_modulus,
+                thermal_expansion=material.thermal_expansion,
+                poisson_ratio=material.poisson_ratio, conductivity=args.wall_k,
+                yield_strength=material.yield_strength)
+            sm = stress["stress_margin"]
+            txt = f"σ-margin {sm:.2f}"
+            # Copper liners run near yield (LCF), so ≥1.0 is acceptable.
+            sbadge = green(txt + " ✓") if sm >= 1.0 else (
+                yellow(txt + " (near yield/LCF)") if sm >= 0.8 else red(txt + " ✗"))
+            print(f"    wall stress {bold('%.0f MPa' % (stress['combined_stress']/1e6))} "
+                  f"{dim('(thermal %.0f + pressure %.0f)' % (stress['thermal_stress']/1e6, stress['pressure_stress']/1e6))}   "
+                  f"{sbadge}   {dim('[SP-125 eq.4-31 station-wise, S_y=%.0f MPa]' % (material.yield_strength/1e6))}")
+            summary["structural"] = {
+                "combined_stress_MPa": stress["combined_stress"] / 1e6,
+                "thermal_stress_MPa": stress["thermal_stress"] / 1e6,
+                "pressure_stress_MPa": stress["pressure_stress"] / 1e6,
+                "yield_strength_MPa": material.yield_strength / 1e6,
+                "stress_margin": sm, "model": stress["model"],
+                "governing_index": stress["governing_index"],
+                "max_liner_pressure_differential_bar":
+                    float(max(cooling_result["liner_pressure_differential"]) / 1e5),
+            }
+
+    # ---- 3.8 solid wall CAD, using the final sized thickness ----------
+    # Unlike the regen visualization below, this is a closed material body:
+    # inner hot-gas surface + normal-offset outer surface + annular end caps.
+    wall_profile = None
+    wall_thickness_geometry = args.wall_thickness
+    sized_wall_profile = getattr(args, "_wall_profile", None)
+    if args.regen:
+        from raosim.regen_profile import RegenWallProfile
+        # Prefer the VARIABLE profile from --size-wall (t_hot(x) + jacket);
+        # otherwise build a uniform one from the scalar thickness.
+        wall_profile = sized_wall_profile
+        if wall_profile is None:
+            wall_profile = RegenWallProfile.uniform(
+                contour,
+                channel_count=args.channels,
+                channel_width=args.channel_width,
+                channel_height=args.channel_height,
+                t_hot=args.wall_thickness,
+                helix_turns=args.helix_turns,
+            )
+        wall_thickness_geometry = wall_profile.t_hot
+    wall_path = export_stl(
+        x, y, args.out / "wall.stl", n_angular=96,
+        wall_thickness=wall_thickness_geometry,
+    )
+    artifacts.append(wall_path.name)
+    summary["wall_geometry"] = {
+        "uniform_seed_thickness_m": float(args.wall_thickness),
+        "t_hot_range_m": [
+            float(np.min(np.asarray(wall_thickness_geometry))),
+            float(np.max(np.asarray(wall_thickness_geometry))),
+        ],
+        "offset": "surface_normal",
+        "stl": "closed_solid_triangle_mesh",
+        "wall_scope": "liner_base_only_no_channel_ribs_or_jacket",
+    }
+
+    # A station-wise --size-wall result also defines a separately sized
+    # closeout jacket.  Export it as its own closed shell; the ribs/channel
+    # Boolean geometry between liner and jacket is still visualization-only.
+    jacket_inner_x = jacket_inner_r = None
+    if sized_wall_profile is not None:
+        from raosim.regen_profile import normal_offset_contour
+        jacket_inner_x, jacket_inner_r = normal_offset_contour(
+            x, y,
+            sized_wall_profile.t_hot + sized_wall_profile.channel_height,
+        )
+        jacket_stl = export_stl(
+            jacket_inner_x, jacket_inner_r, args.out / "jacket.stl",
+            n_angular=96, wall_thickness=sized_wall_profile.t_jacket,
+        )
+        artifacts.append(jacket_stl.name)
+        summary["wall_geometry"]["jacket_stl"] = "closed_solid_triangle_mesh"
+        summary["wall_geometry"]["t_jacket_range_m"] = [
+            float(np.min(sized_wall_profile.t_jacket)),
+            float(np.max(sized_wall_profile.t_jacket)),
+        ]
+
+    step_path = None
+    if args.cad in ("step", "ipt", "both"):
+        try:
+            step_path = export_step(
+                x, y, args.out / "wall.step", n_angular=96,
+                wall_thickness=wall_thickness_geometry,
+                require_brep=args.require_brep,
+                metadata={
+                    "wall_thickness_m": args.wall_thickness,
+                    "material": mat.name if mat else None,
+                    "hardware_qualified": False,
+                },
+            )
+        except RuntimeError as exc:
+            print(red(f"\n    CAD export failed: {exc}"))
+            return 2
+        representation = step_representation(step_path)
+        summary["wall_geometry"]["step"] = representation
+        artifacts.append(step_path.name)
+        badge = green("true B-rep") if representation == "brep" else yellow("faceted fallback")
+        print(f"\n    STEP solid: {badge}  →  {step_path.name}")
+
+        if sized_wall_profile is not None:
+            try:
+                jacket_step = export_step(
+                    jacket_inner_x, jacket_inner_r, args.out / "jacket.step",
+                    n_angular=96,
+                    wall_thickness=sized_wall_profile.t_jacket,
+                    require_brep=args.require_brep,
+                    metadata={
+                        "role": "regen_closeout_jacket",
+                        "material": args.jacket_material or (mat.name if mat else None),
+                        "hardware_qualified": False,
+                    },
+                )
+            except RuntimeError as exc:
+                print(red(f"\n    Jacket CAD export failed: {exc}"))
+                return 2
+            jacket_representation = step_representation(jacket_step)
+            summary["wall_geometry"]["jacket_step"] = jacket_representation
+            artifacts.append(jacket_step.name)
+
+    if args.cad in ("ipt", "both") and step_path is not None:
+        manifest = package_ipt_request(
+            step_path, args.out / "wall_ipt_manifest.json",
+            metadata={
+                "wall_thickness_m": args.wall_thickness,
+                "material": mat.name if mat else None,
+                "companion_jacket_step": (
+                    str(args.out / "jacket.step")
+                    if sized_wall_profile is not None else None
+                ),
+            },
+        )
+        artifacts.append(manifest.name)
+        summary["wall_geometry"]["ipt"] = "inventor_import_manifest"
 
     # ---- 4. optional regen geometry (the coils) ----------------------
     if args.regen:
@@ -570,6 +1019,7 @@ def main() -> int:
         reg = generate_regen_nozzle(
             contour, spec, args.wall_thickness,
             helix_turns=args.helix_turns,
+            wall_profile=wall_profile,
             stl_path=args.out / "regen.stl",
             png_path=args.out / "regen_3d.png",
             cooling_result=cooling_result)

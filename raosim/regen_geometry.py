@@ -24,6 +24,8 @@ from typing import Any
 
 import numpy as np
 
+from raosim.regen_profile import normal_offset_contour
+
 
 # --------------------------------------------------------------------------- #
 # Wall + channel geometry                                                      #
@@ -58,9 +60,9 @@ def regen_channel_rails(
     r_inner: np.ndarray,
     *,
     n_channels: int,
-    channel_width: float,
-    channel_height: float,
-    wall_thickness: float,
+    channel_width,
+    channel_height,
+    wall_thickness,
     helix_turns: float = 0.0,
     region_fraction: tuple[float, float] = (0.0, 1.0),
 ) -> list[np.ndarray]:
@@ -79,11 +81,22 @@ def regen_channel_rails(
     lo, hi = region_fraction
     in_region = (frac >= lo) & (frac <= hi)
 
-    r_floor = r_inner + wall_thickness
-    r_ceil = r_floor + channel_height
-    r_mid = r_floor + 0.5 * channel_height
+    def station_array(value):
+        arr = np.asarray(value, dtype=float)
+        if arr.ndim == 0:
+            return np.full(n, float(arr))
+        if arr.shape != (n,):
+            raise ValueError(f"channel geometry array must have shape ({n},)")
+        return arr
+
+    w = station_array(channel_width)
+    h = station_array(channel_height)
+    t = station_array(wall_thickness)
+    x_floor, r_floor = normal_offset_contour(x, r_inner, t)
+    x_ceil, r_ceil = normal_offset_contour(x, r_inner, t + h)
+    _x_mid, r_mid = normal_offset_contour(x, r_inner, t + 0.5 * h)
     pitch_angle = 2.0 * math.pi / max(n_channels, 1)
-    half_arc = np.minimum(channel_width / (2.0 * np.maximum(r_mid, 1e-9)),
+    half_arc = np.minimum(w / (2.0 * np.maximum(r_mid, 1e-9)),
                           0.45 * pitch_angle)
 
     channels: list[np.ndarray] = []
@@ -91,16 +104,18 @@ def regen_channel_rails(
         theta0 = 2.0 * math.pi * j / n_channels
         theta = theta0 + 2.0 * math.pi * helix_turns * frac
         rails = np.zeros((n, 4, 3))
-        for c, (rr, sgn) in enumerate([(r_floor, -1.0), (r_floor, +1.0),
-                                       (r_ceil, +1.0), (r_ceil, -1.0)]):
+        for c, (xx, rr, sgn) in enumerate([
+            (x_floor, r_floor, -1.0), (x_floor, r_floor, +1.0),
+            (x_ceil, r_ceil, +1.0), (x_ceil, r_ceil, -1.0),
+        ]):
             th = theta + sgn * half_arc
-            rails[:, c, 0] = x
+            rails[:, c, 0] = xx
             rails[:, c, 1] = rr * np.cos(th)
             rails[:, c, 2] = rr * np.sin(th)
         # Collapse the channel onto the wall outside its active region so
         # it neither renders nor exports there.
         rails[~in_region] = np.stack([
-            x[~in_region],
+            x_floor[~in_region],
             (r_floor[~in_region]) * np.cos(2.0 * math.pi * j / n_channels
                                            + 2.0 * math.pi * helix_turns * frac[~in_region]),
             (r_floor[~in_region]) * np.sin(2.0 * math.pi * j / n_channels
@@ -235,45 +250,97 @@ def generate_regen_nozzle(
     stl_path: str | Path | None = None,
     png_path: str | Path | None = None,
     cooling_result: dict | None = None,
+    wall_profile: Any = None,
 ) -> dict:
     """One-call 3-D regen-nozzle generator.
 
     Builds the wall surface + the ``N`` channels (annular-segment tubes,
     ``helix_turns`` controls axial-vs-coil), optionally writes a binary
     STL and a 3-D PNG, and returns the geometry handles + a summary.
+
+    When a :class:`~raosim.regen_profile.RegenWallProfile` is passed as
+    ``wall_profile`` the geometry uses its STATION-WISE arrays — variable
+    hot-wall thickness ``t_hot(x)``, channel ``w(x)``/``h(x)``, channel
+    count and helix turns — and adds the outer jacket surface at
+    the corresponding surface-normal offset.  The regen STL remains a
+    visualization mesh of liner/channel/jacket surfaces; the closed wall
+    STEP/STL in :mod:`raosim.export` is the solid-body artifact.  Without
+    a profile, the scalar ``wall_thickness`` + ``cooling`` spec are used
+    (back-compatible).
     """
-    x, r_inner = _wall_profile(contour, region=region)
-    N = int(getattr(cooling, "channel_count", 0) or 0)
-    w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
-    h = float(getattr(cooling, "channel_height", 0.0) or 0.0)
-    if N <= 0 or w <= 0.0 or h <= 0.0:
+    if wall_profile is not None:
+        order = np.argsort(np.asarray(wall_profile.x, dtype=float))
+        x = np.asarray(wall_profile.x, dtype=float)[order]
+        r_inner = np.asarray(wall_profile.r_inner, dtype=float)[order]
+        t_w = np.asarray(wall_profile.t_hot, dtype=float)[order]
+        w = np.asarray(wall_profile.channel_width, dtype=float)[order]
+        h = np.asarray(wall_profile.channel_height, dtype=float)[order]
+        t_jacket = np.asarray(wall_profile.t_jacket, dtype=float)[order]
+        N = int(wall_profile.channel_count)
+        helix_turns = float(wall_profile.helix_turns)
+    else:
+        x, r_inner = _wall_profile(contour, region=region)
+        N = int(getattr(cooling, "channel_count", 0) or 0)
+        w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
+        h = float(getattr(cooling, "channel_height", 0.0) or 0.0)
+        t_w = float(wall_thickness)
+        t_jacket = None
+    if (N <= 0 or np.any(np.asarray(w) <= 0.0)
+            or np.any(np.asarray(h) <= 0.0)
+            or np.any(np.asarray(t_w) <= 0.0)):
         raise ValueError("regen geometry needs positive channel_count/width/height")
 
-    # Channel-fit check at the tightest (smallest-radius) station.
-    r_mid_min = float(np.min(r_inner)) + wall_thickness + 0.5 * h
-    pitch_min = 2.0 * math.pi * r_mid_min / N
-    fits = (N * w) <= 2.0 * math.pi * (float(np.min(r_inner)) + wall_thickness)
+    # Channel-fit check: N channels of arc-width w must fit the local
+    # liner-OD circumference at every station.  The liner OD is a true
+    # surface-normal offset, not r_inner + t_hot on the sloped bell.
+    _x_liner, liner_od = normal_offset_contour(x, r_inner, t_w)
+    _x_mid, channel_mid_radius = normal_offset_contour(
+        x, r_inner, np.asarray(t_w) + 0.5 * np.asarray(h)
+    )
+    fits = bool(np.all(N * np.asarray(w) <= 2.0 * math.pi * liner_od))
+    pitch_min = float(np.min(2.0 * math.pi * channel_mid_radius / N))
 
     wall_verts = nozzle_wall_surface(x, r_inner, n_theta=n_theta)
     rails = regen_channel_rails(
         x, r_inner, n_channels=N, channel_width=w, channel_height=h,
-        wall_thickness=wall_thickness, helix_turns=helix_turns,
+        wall_thickness=t_w, helix_turns=helix_turns,
         region_fraction=region_fraction)
 
+    def _rep(v):  # representative scalar for the summary
+        return float(np.mean(v)) if np.ndim(v) else float(v)
+
     summary = {
-        "n_channels": N, "channel_width": w, "channel_height": h,
-        "wall_thickness": float(wall_thickness), "helix_turns": float(helix_turns),
+        "n_channels": N, "channel_width": _rep(w), "channel_height": _rep(h),
+        "wall_thickness": _rep(t_w), "helix_turns": float(helix_turns),
         "channels_fit": bool(fits), "min_pitch": float(pitch_min),
         "x_range": (float(x[0]), float(x[-1])),
         "exit_radius": float(r_inner[-1]),
+        "variable_profile": bool(wall_profile is not None),
+        "offset": "surface_normal",
+        "representation": "visualization_surfaces_not_manufacturing_solid",
     }
+    if wall_profile is not None:
+        summary["t_hot_range_mm"] = [float(np.min(t_w) * 1e3), float(np.max(t_w) * 1e3)]
+        summary["t_jacket_range_mm"] = [float(np.min(t_jacket) * 1e3),
+                                        float(np.max(t_jacket) * 1e3)]
+
+    # Outer jacket (closeout) surface of revolution, when a profile gives it.
+    jacket_verts = None
+    if t_jacket is not None:
+        x_outer, r_outer = normal_offset_contour(
+            x, r_inner, t_w + np.asarray(h) + t_jacket
+        )
+        jacket_verts = nozzle_wall_surface(x_outer, r_outer, n_theta=n_theta)
 
     out: dict = {"x": x, "r_inner": r_inner, "wall_verts": wall_verts,
-                 "channel_rails": rails, "summary": summary}
+                 "channel_rails": rails, "jacket_verts": jacket_verts,
+                 "summary": summary}
 
     if stl_path is not None:
         groups = [_surface_triangles(wall_verts)]
         groups += [_channel_triangles(rr) for rr in rails]
+        if jacket_verts is not None:
+            groups.append(_surface_triangles(jacket_verts))
         n_tri = write_stl(Path(stl_path), groups)
         out["stl_path"] = str(stl_path)
         out["n_triangles"] = n_tri
