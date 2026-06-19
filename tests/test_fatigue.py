@@ -1,8 +1,8 @@
 """Low-cycle fatigue: Coffin-Manson N_f model + its gating policy.
 
-The strain driver is the constrained thermal strain α·ΔT/(1−ν) (the strain
-counterpart of SP-125 eq. 4-28's thermal stress E·α·ΔT); N_f inverts the
-standard strain-life relation.  The local literature (``propulsion_texts``)
+The nominal strain driver is α·ΔT, obtained directly from SP-125 equation
+4-28's thermal stress E·α·ΔT; N_f inverts the standard strain-life relation.
+The local literature (``propulsion_texts``)
 carries no sourced alloy LCF coefficients, so the catalog supplies none:
 fatigue is only *evaluated* with explicit sourced coefficients, and only
 *gates* feasibility when those data are marked design-qualified.
@@ -69,7 +69,9 @@ def test_thermal_fatigue_strain_driver():
     s1 = thermal_fatigue_strain(100.0, thermal_expansion=16.5e-6, poisson_ratio=0.33)
     s2 = thermal_fatigue_strain(200.0, thermal_expansion=16.5e-6, poisson_ratio=0.33)
     assert s2 == pytest.approx(2.0 * s1, rel=1e-9)         # linear in ΔT
-    assert s1 == pytest.approx(16.5e-6 * 100.0 / (1.0 - 0.33), rel=1e-9)  # α·ΔT/(1−ν)
+    # SP-125 eq. 4-28 gives S_l=EαΔT, so its nominal elastic strain scale
+    # is αΔT.  A biaxial 1/(1-v) multiplier must be an explicit assumption.
+    assert s1 == pytest.approx(16.5e-6 * 100.0, rel=1e-9)
     s3 = thermal_fatigue_strain(100.0, thermal_expansion=16.5e-6,
                                 poisson_ratio=0.33, mechanical_strain=1e-3)
     assert s3 == pytest.approx(s1 + 1e-3, rel=1e-9)        # mechanical adds

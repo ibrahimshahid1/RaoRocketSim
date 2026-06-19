@@ -129,6 +129,7 @@ def test_helix_passage_length_closed_form_on_a_cylinder():
     dl, ds = helix_passage_lengths(x, r, helix_turns=turns)  # t_wall=h=0 -> r_mid=R
     factor = float(np.sum(dl) / np.sum(ds))
     expected = math.sqrt(1.0 + (2.0 * math.pi * turns * R / L) ** 2)
+    assert float(np.sum(ds)) == pytest.approx(L, rel=1e-12)
     assert factor == pytest.approx(expected, rel=1e-6)
 
 
@@ -164,18 +165,29 @@ def test_helix_raises_pressure_drop_proportionally(contour, heat, prop):
     assert ratio == pytest.approx(helix["pressure_drop_path_factor"], rel=1e-12)
 
 
-def test_helix_does_not_change_wall_or_coolant_temperature(contour, heat, prop):
-    """Energy conservation: routing the coolant helically lengthens the
-    path (more Δp) but the total wall heat — and so the coolant ΔT and the
-    gas-side wall temperature — is unchanged."""
+def test_helix_preserves_energy_balance_while_changing_transverse_pitch(
+    contour, heat, prop
+):
+    """A helical passage has a smaller pitch normal to flow at fixed N.
+
+    That changes land/fin geometry as well as pressure-drop length, so the
+    thermal solution need not equal the axial case. Each case must still
+    satisfy its own coolant energy balance.
+    """
     axial = regenerative_cooling_analysis(heat, contour, _spec(), _mat(),
                                           0.001, prop, 7.0e6, helix_turns=0.0)
     helix = regenerative_cooling_analysis(heat, contour, _spec(), _mat(),
                                           0.001, prop, 7.0e6, helix_turns=2.0)
-    assert helix["peak_gas_side_wall_temperature"] == pytest.approx(
-        axial["peak_gas_side_wall_temperature"], rel=1e-9)
-    assert helix["coolant_outlet_temperature"] == pytest.approx(
-        axial["coolant_outlet_temperature"], rel=1e-9)
+    assert helix["peak_gas_side_wall_temperature"] != pytest.approx(
+        axial["peak_gas_side_wall_temperature"], rel=1e-6
+    )
+    for result in (axial, helix):
+        expected = result["total_heat_load"] / (
+            _spec().coolant_mass_flow * _spec().coolant_cp
+        )
+        assert result["coolant_temperature_rise"] == pytest.approx(
+            expected, rel=0.1
+        )
 
 
 def test_profile_cooling_matches_equivalent_scalar_call(contour, heat, prop):

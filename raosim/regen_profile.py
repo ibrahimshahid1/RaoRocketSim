@@ -77,6 +77,27 @@ def normal_offset_contour(x, r, distance) -> tuple[np.ndarray, np.ndarray]:
     return x + d * nx, r + d * nr
 
 
+def _nodal_weights_from_segments(segment_lengths) -> np.ndarray:
+    """Convert edge lengths into trapezoidal control lengths at the nodes.
+
+    The end nodes receive half of their adjacent segment and every interior
+    node receives half of each neighbouring segment.  Consequently
+    ``sum(weights) == sum(segment_lengths)`` and ``sum(f * weights)`` is the
+    trapezoidal line integral of a nodal field ``f``.  Using
+    ``hypot(gradient(x), gradient(r))`` directly gives each end point a full
+    segment and over-counts the path by one grid interval.
+    """
+    seg = np.asarray(segment_lengths, dtype=float)
+    if seg.ndim != 1 or len(seg) < 1:
+        raise ValueError("segment lengths must be a non-empty one-dimensional array")
+    weights = np.empty(len(seg) + 1, dtype=float)
+    weights[0] = 0.5 * seg[0]
+    weights[-1] = 0.5 * seg[-1]
+    if len(seg) > 1:
+        weights[1:-1] = 0.5 * (seg[:-1] + seg[1:])
+    return weights
+
+
 def helix_passage_lengths(
     x, r_inner, *, helix_turns: float = 0.0,
     t_wall=0.0, channel_height=0.0,
@@ -96,13 +117,46 @@ def helix_passage_lengths(
         channel_height, dtype=float
     )
     x_mid, r_mid = normal_offset_contour(x, ri, mid_offset)
-    ds_merid = np.hypot(np.gradient(x_mid), np.gradient(r_mid))
+    if len(x_mid) < 2:
+        raise ValueError("helix path needs at least two stations")
+    ds_segments = np.hypot(np.diff(x_mid), np.diff(r_mid))
+    ds_merid = _nodal_weights_from_segments(ds_segments)
     if not helix_turns:
-        return ds_merid, ds_merid
+        return ds_merid.copy(), ds_merid
     L_axial = max(float(np.max(x) - np.min(x)), 1e-12)
-    dtheta = (2.0 * np.pi * float(helix_turns) / L_axial) * np.abs(np.gradient(x))
-    dl = np.hypot(ds_merid, r_mid * dtheta)
+    theta = (
+        2.0 * np.pi * float(helix_turns)
+        * (x - float(x[0])) / L_axial
+    )
+    dtheta_segments = np.diff(theta)
+    r_segment = 0.5 * (r_mid[:-1] + r_mid[1:])
+    # Differential helix metric.  Using 3-D endpoint chords would
+    # systematically shorten a curved passage at coarse resolution.
+    dl_segments = np.hypot(
+        ds_segments,
+        r_segment * dtheta_segments,
+    )
+    dl = _nodal_weights_from_segments(dl_segments)
     return dl, ds_merid
+
+
+def helix_stretch_factors(
+    x, r_inner, *, helix_turns: float = 0.0,
+    t_wall=0.0, channel_height=0.0,
+) -> np.ndarray:
+    """Local helical path stretch ``dl/ds`` at the profile stations.
+
+    A width specified normal to the coolant path occupies
+    ``width * dl/ds`` in a constant-axial circumferential section.
+    """
+    dl, ds = helix_passage_lengths(
+        x,
+        r_inner,
+        helix_turns=helix_turns,
+        t_wall=t_wall,
+        channel_height=channel_height,
+    )
+    return dl / np.maximum(ds, 1e-15)
 
 
 def _as_array(value, n: int) -> np.ndarray:
@@ -148,14 +202,30 @@ class RegenWallProfile:
         r = np.asarray(contour["y"], dtype=float)
         n = len(x)
         w = _as_array(channel_width, n)
+        t_hot_arr = _as_array(t_hot, n)
+        h_arr = _as_array(channel_height, n)
         if land_width is None:
-            pitch = 2.0 * np.pi * np.maximum(r, 1e-9) / max(int(channel_count), 1)
+            stretch = helix_stretch_factors(
+                x,
+                r,
+                helix_turns=helix_turns,
+                t_wall=t_hot_arr,
+                channel_height=h_arr,
+            )
+            _, r_mid = normal_offset_contour(
+                x, r, t_hot_arr + 0.5 * h_arr
+            )
+            pitch = (
+                2.0 * np.pi * np.maximum(r_mid, 1e-9)
+                / max(int(channel_count), 1)
+                / stretch
+            )
             land = np.maximum(pitch - w, 0.0)
         else:
             land = _as_array(land_width, n)
         return cls(
-            x=x, r_inner=r, t_hot=_as_array(t_hot, n), channel_width=w,
-            channel_height=_as_array(channel_height, n), land_width=land,
+            x=x, r_inner=r, t_hot=t_hot_arr, channel_width=w,
+            channel_height=h_arr, land_width=land,
             t_jacket=_as_array(t_jacket if t_jacket is not None else t_hot, n),
             channel_count=int(channel_count), helix_turns=float(helix_turns),
             Rt=float(contour.get("Rt", np.min(r))),
@@ -220,7 +290,21 @@ class RegenWallProfile:
             land = piecewise("land_width", default_t=land_t,
                              default_e=exit.get("land_width", land_t))
         else:
-            pitch = 2.0 * np.pi * np.maximum(r, 1e-9) / max(int(channel_count), 1)
+            stretch = helix_stretch_factors(
+                x,
+                r,
+                helix_turns=helix_turns,
+                t_wall=t_hot,
+                channel_height=h,
+            )
+            _, r_mid = normal_offset_contour(
+                x, r, t_hot + 0.5 * h
+            )
+            pitch = (
+                2.0 * np.pi * np.maximum(r_mid, 1e-9)
+                / max(int(channel_count), 1)
+                / stretch
+            )
             land = np.maximum(pitch - w, 0.0)
         if ("t_jacket" in throat or "t_jacket" in exit
                 or (chamber is not None and "t_jacket" in chamber)):
@@ -301,8 +385,24 @@ class RegenWallProfile:
     def channels_fit(self) -> dict:
         """Do the N channels + lands fit the liner outer circumference at
         every station?  Channels sit on the liner OD (r_inner + t_hot)."""
-        circ = 2.0 * np.pi * (self.r_inner + self.t_hot)
-        needed = self.channel_count * (self.channel_width + np.maximum(self.land_width, 0.0))
+        _, r_mid = normal_offset_contour(
+            self.x,
+            self.r_inner,
+            self.t_hot + 0.5 * self.channel_height,
+        )
+        circ = 2.0 * np.pi * r_mid
+        stretch = helix_stretch_factors(
+            self.x,
+            self.r_inner,
+            helix_turns=self.helix_turns,
+            t_wall=self.t_hot,
+            channel_height=self.channel_height,
+        )
+        needed = (
+            self.channel_count
+            * (self.channel_width + np.maximum(self.land_width, 0.0))
+            * stretch
+        )
         clearance = circ - needed
         i = int(np.argmin(clearance))
         return {

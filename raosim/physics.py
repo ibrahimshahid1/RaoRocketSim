@@ -17,7 +17,7 @@ from raosim.gas_dynamics import (
     isentropic_temperature_ratio,
     mach_from_area_ratio,
 )
-from raosim.regen_profile import helix_passage_lengths
+from raosim.regen_profile import helix_passage_lengths, normal_offset_contour
 from raosim.separation import check_separation
 
 
@@ -594,20 +594,36 @@ def regenerative_cooling_analysis(
     rho_cool = float(cprops["rho"])
     V_cool = G / max(rho_cool, 1e-9)            # channel velocity [m/s]
 
-    # Level-1 channel-cross-section geometry (per station): the channel
-    # pitch wraps the local circumference, so the land (rib) width and
-    # the fin enhancement vary along the nozzle; the wall curvature sets
-    # the Dean correction.
-    pitch = 2.0 * math.pi * np.maximum(y, 1e-9) / max(N, 1)
+    # Per-station coolant path length: meridional (ds_arc) and, when the
+    # channels are wound helically, the longer path (ds_path).  Their ratio
+    # also converts the circumference pitch into the pitch normal to the
+    # helical flow direction, consistent with channel_width = hydraulic
+    # cross-section width.
+    ds_path, ds_arc = helix_passage_lengths(
+        x, y, helix_turns=helix_turns, t_wall=t_arr, channel_height=h_arr)
+    helix_stretch = ds_path / np.maximum(ds_arc, 1e-15)
+    _, r_channel_mid = normal_offset_contour(
+        x, y, t_arr + 0.5 * h_arr
+    )
+
+    # Level-1 channel-cross-section geometry (per station): the land (rib)
+    # width and fin enhancement use the pitch transverse to coolant flow.
+    pitch = (
+        2.0 * math.pi * np.maximum(r_channel_mid, 1e-9)
+        / max(N, 1)
+        / helix_stretch
+    )
     land_width_raw = land_override if land_override is not None else (pitch - w_arr)
     land_width = np.maximum(land_width_raw, 1e-5 * Rt)
     # Channels must physically fit the circumference: N·(w+land) ≤ 2πr.
     tight = int(np.argmin(land_width_raw))
     if float(np.min(land_width_raw)) <= 0.0:
         warnings_geom = (
-            f"Channels do not fit: {N} × {w_arr[tight]*1e3:.2f} mm exceeds the "
-            f"circumference at r={float(y[tight])*1e3:.1f} mm "
-            f"(pitch {float(pitch[tight])*1e3:.2f} mm); reduce "
+            f"Channels do not fit transverse to flow: {N} × "
+            f"{w_arr[tight]*1e3:.2f} mm exceeds the local normal pitch at "
+            f"r={float(r_channel_mid[tight])*1e3:.1f} mm "
+            f"(pitch {float(pitch[tight])*1e3:.2f} mm, helix stretch "
+            f"{float(helix_stretch[tight]):.3f}); reduce "
             "channel count or width.  Fin model degraded there."
         )
     else:
@@ -615,14 +631,14 @@ def regenerative_cooling_analysis(
     if warnings_geom:
         warnings.append(warnings_geom)
     R_c_signed = _wall_radius_of_curvature_signed(x, y)
-    # Per-station coolant path length: meridional (ds_arc) and, when the
-    # channels are wound helically (helix_turns > 0), the longer helical
-    # path (ds_path) that sets the Darcy-Weisbach Δp (SP-125 eq. 4-32).
-    ds_path, ds_arc = helix_passage_lengths(
-        x, y, helix_turns=helix_turns, t_wall=t_arr, channel_height=h_arr)
-
-    # Gas-side heated area per station (the heat the coolant removes).
+    # Gas-side heated area per station (the heat the coolant removes).  The
+    # area follows the WALL ARC LENGTH ds_wall = hypot(dx, dr), NOT the axial
+    # spacing dx: in the sloped convergent and curved throat the wall is
+    # longer than its axial projection, so axial spacing under-counts the
+    # heated area (and thus the coolant ΔT, wall T and margins).
     area_weight = 2.0 * math.pi * np.maximum(y, 1e-9)
+    _, ds_wall = helix_passage_lengths(x, y)
+    dA_wall = area_weight * ds_wall          # heated area per station [m²]
 
     # Coolant march order: index sequence in the direction of coolant flow.
     if flow_from == "throat":
@@ -669,10 +685,9 @@ def regenerative_cooling_analysis(
         T_wg_new = Taw - q / np.maximum(h_g, 1e-9)
         T_wc = T_c + q / np.maximum(h_c, 1e-9)
 
-        # March the coolant bulk temperature along the flow path.
-        dQ = q * area_weight                    # per-unit-length heat pickup
-        ds = np.abs(np.gradient(x))
-        dT = (dQ * ds) / max(mdot * cp_cool, 1e-9)
+        # March the coolant bulk temperature along the flow path.  Heat
+        # picked up per station = q · (wall arc-length area dA_wall).
+        dT = (q * dA_wall) / max(mdot * cp_cool, 1e-9)
         T_c_marched = inlet_T + np.cumsum(dT[order])[inv]
 
         # Relax for stability.
@@ -683,7 +698,7 @@ def regenerative_cooling_analysis(
     peak_T_wg = float(np.max(T_wg))
     max_wall = float(getattr(cooling, "max_wall_temperature", 950.0) or 950.0)
     margin = max_wall / max(peak_T_wg, 1e-9)
-    total_heat = float(np.trapezoid(q * area_weight, x))
+    total_heat = float(np.sum(q * dA_wall))   # integrate over the wall area
 
     # Coolant pressure drop (Darcy-Weisbach, friction only) along the
     # channel: Δp = Σ f (ds/D_h) (ρ V²/2).
@@ -745,6 +760,8 @@ def regenerative_cooling_analysis(
         "fin_area_factor": fin_factor,
         "curvature_factor": c_curv,
         "land_width": land_width,
+        "transverse_pitch": pitch,
+        "helix_stretch_factor_profile": helix_stretch,
         "gas_side_wall_temperature": T_wg,
         "coolant_side_wall_temperature": T_wc,
         "coolant_temperature": T_c,
@@ -1245,8 +1262,10 @@ def regenerative_cooling_screen(
     y = np.asarray(contour["y"], dtype=float)
     q = np.asarray(heat_flux["q"], dtype=float)
     h_g_arr = np.asarray(heat_flux.get("h_g", np.zeros_like(q)), dtype=float)
+    # Heat area follows the wall arc length, not the axial spacing.
+    _, ds_wall = helix_passage_lengths(x, y)
     area_weight = 2.0 * math.pi * y
-    total_heat = float(np.trapezoid(q * area_weight, x))
+    total_heat = float(np.sum(q * area_weight * ds_wall))
     coolant_rise = total_heat / max(mdot * coolant_cp, 1e-9) if mdot > 0 else float("inf")
     coolant_out = coolant_inlet + coolant_rise
 
@@ -1466,23 +1485,35 @@ def rib_supported_liner_buckling_profile(
 
 
 def thermal_fatigue_strain(
-    delta_T_wall: float, *, thermal_expansion: float, poisson_ratio: float,
+    delta_T_wall: float, *, thermal_expansion: float,
+    poisson_ratio: float | None = None,
     mechanical_strain: float = 0.0,
+    constraint_factor: float = 1.0,
 ) -> float:
-    """Strain-controlled total strain range Δε for one regen-liner cycle.
+    """Nominal strain-range proxy for one regen-liner thermal cycle.
 
-    The dominant driver is the CONSTRAINED thermal expansion of the hot
-    face over a start→steady→shutdown cycle: the hot face wants to grow
-    ``α·ΔT`` relative to the cooler backing structure but is restrained,
-    so a biaxially constrained strain ``α·ΔT/(1−ν)`` is imposed each cycle
-    — the strain counterpart of SP-125 eq. 4-28's thermal stress
-    ``E·α·ΔT`` (``propulsion_texts/19710019929.pdf`` printed p. 108).
-    ``ΔT`` is the through-wall drop ``T_wg − T_wc = q·t_w/k_w``.  Any
-    mechanical (pressure) strain adds.  Being strain-CONTROLLED is why it
-    is *low*-cycle: the metal yields each cycle to accommodate ``ΔT``.
+    SP-125 equation 4-28 estimates the restrained longitudinal thermal
+    stress as ``S_l = E α ΔT``.  Dividing that relation by ``E`` gives the
+    corresponding nominal strain scale ``α ΔT`` — *not*
+    ``α ΔT/(1-v)``.  A different biaxial restraint factor may be supplied
+    explicitly through ``constraint_factor`` only when the assumed stress
+    state justifies it.  ``poisson_ratio`` remains accepted for API
+    compatibility but does not silently impose a plane-stress correction.
+
+    ``ΔT`` is the hot-to-cold wall temperature difference at the fired
+    state and ``mechanical_strain`` is an optional nominal pressure-strain
+    contribution.  This is only an elastic strain-range proxy.  A
+    qualification life calculation needs the stabilized local
+    elastic-plastic hysteresis range from a thermomechanical cycle analysis.
     """
-    return (float(thermal_expansion) * float(delta_T_wall)
-            / max(1.0 - float(poisson_ratio), 1e-6) + float(mechanical_strain))
+    if constraint_factor <= 0.0:
+        raise ValueError("constraint_factor must be positive")
+    return (
+        float(constraint_factor)
+        * float(thermal_expansion)
+        * float(delta_T_wall)
+        + float(mechanical_strain)
+    )
 
 
 def coffin_manson_cycles(

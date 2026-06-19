@@ -63,7 +63,7 @@ inline and collected at the end.
 | Differentiable solver | JAX/Optimistix Levenberg–Marquardt residual solve, differentiable NASA-style kernel march, optional solved $\theta_B$, exact $C_F$ sensitivities | Implemented, research-grade |
 | Wall pressure & separation | Quasi-1D wall-pressure estimate; Summerfield, Kalt–Badal, Schmucker separation screens | Screening only |
 | Thermal / cooling / structure | Bartz-style gas heating, Sieder-Tate rectangular channels, fin/curvature corrections, helical Darcy loss, station-wise SP-125 liner stress | Screening / preliminary sizing |
-| Geometry export | CSV, closed normal-offset STL, STEP (CadQuery B-rep or explicit faceted AP214 fallback), Inventor IPT manifest; regen STL remains visualization geometry | CAD-review input, not production definition |
+| Geometry export | CSV/STL, neutral STEP, Inventor manifest, and optional full-N one-solid regen B-rep with patterned ribs plus plenum/port voids | Preliminary manufacturing geometry, not production definition |
 | Validation | Unit/regression tests, literature manifests, NASA/JHU parsers, kernel/topology parity, diagnostic reports | Strong software verification; incomplete physical validation |
 
 The maturity column is enforced in code. Each contour carries a
@@ -634,7 +634,7 @@ $$
 Total absorbed heat and coolant rise satisfy
 
 $$
-\dot Q=\int q''(x)\,2\pi r(x)\,\mathrm{d}x,
+\dot Q=\int q''(s)\,2\pi r(s)\,\mathrm{d}s,
 \qquad
 \Delta T_c=\frac{\dot Q}{\dot m_c\,c_{p,c}},
 $$
@@ -671,12 +671,19 @@ design-qualified.
 
 The joint optimizer first selects channels and a feasible uniform
 $t_\mathrm{hot}$ candidate, then `size_wall_profile` refines the liner and
-outer-jacket thickness station by station. The CAD path can export the liner
-and closeout jacket as separate closed normal-offset solids. Channel widths
-and heights are still uniform in that refinement, and the lands/helical
-passages/manifolds are not yet Boolean-cut into one manufacturing B-rep.
-Jacket buckling, plasticity, creep, weld/braze allowables, stress
-concentrations, and nonlinear FEA are not yet solved.
+outer-jacket thickness and channel depth station by station. SP-125 equation
+4-29 is reported as an equivalent-tube longitudinal-buckling screen for
+milled channels and does not gate by default; the separate rib-supported
+coolant-over-gas liner screen does gate. Coffin-Manson life uses only complete
+sourced coefficient sets and a nominal $\alpha\Delta T$ strain range.
+
+With `--regen-brep`, the CAD path exports one OpenCascade STEP solid
+containing liner, full-count patterned ribs, end seals, jacket, and real
+channel gaps. `--regen-manifolds` additionally cuts connected annular
+plenums and area-sized radial ports. This is a neutral final B-rep, not native
+Inventor feature history. Manifold maldistribution, jacket buckling,
+plasticity, creep, weld/braze allowables, stress concentrations, and
+nonlinear FEA are not yet solved.
 
 ### How user inputs affect wall sizing
 
@@ -693,7 +700,8 @@ concentrations, and nonlinear FEA are not yet solved.
 - `margin` and `max wall T` impose the allowable peak wall temperature.
 - `pressure-drop budget`, channel width/height/count, coolant properties, and
   helix turns control velocity, heat transfer, and hydraulic loss. Helical
-  channels use their longer 3-D path, not merely a visual coil.
+  channels use their longer 3-D path and the reduced pitch transverse to
+  coolant flow, not merely a visual coil.
 - `auto-size` selects channel geometry at a fixed wall thickness.
   `size-wall` co-sizes channels, then refines variable liner and jacket
   thickness profiles.
@@ -748,9 +756,13 @@ B-rep CAD:
 
 ```bash
 PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 0 --regen \
-  --material grcop-84 --size-wall --cad step --require-brep \
+  --material grcop-84 --size-wall --cad step --require-brep --regen-brep \
   --out builds/regen_brep
 ```
+
+Add `--regen-manifolds` to include two connected plenums and radial ports.
+Port area defaults to total channel flow area and can be distributed with
+`--regen-ports-per-manifold`.
 
 Without `--require-brep`, the summary records either `brep` or
 `faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
@@ -911,9 +923,11 @@ Normal CLI runs create `builds/vNNN_YYYYMMDD_HHMMSS/` and may contain:
 - a STEP solid (CadQuery revolved B-rep when available, else a faceted AP214
   fallback);
 - with variable wall sizing, separate liner and closeout-jacket solids;
+- optionally, `regen.step`: one full-channel-count cooling-aware material
+  solid, with connected plenum/port voids when requested;
 - an Inventor conversion manifest pointing to the authoritative STEP file;
 - optional regen STL/PNG visualization surfaces for liner, channels, and
-  jacket (not yet Boolean-cut manufacturing channel solids);
+  jacket;
 - design-gate JSON and v2 physics-screening sections;
 - sweep CSV or benchmark JSON / Markdown reports;
 - human-readable `metadata.txt` with inputs, performance, warnings, gate
@@ -1047,9 +1061,11 @@ Rocket_nozzle_sim_phase2.py     Legacy monolithic prototype; not the primary API
    path are differentiable, but the complete start-line-to-final-wall design
    map and total design derivatives are unfinished.
 8. **Low-order thermal/structural models.** Current gates are screens, not
-   CHT, coolant-network, fatigue, creep, or FEA solutions.
-9. **Simplified CAD.** Cooling channels, bolt holes, injector faces, inserts,
-   welds, and detailed manufacturability are not solid-modeled.
+   qualification CHT, manifold-distribution, cyclic-plasticity, creep, or FEA
+   solutions.
+9. **Preliminary manufacturing CAD.** The full-N channels, ribs, optional
+   plenums, and ports are solid-modeled, but bolt holes, injector faces,
+   fillets, inserts, welds, tolerances, and process-specific rules are not.
 10. **No package metadata or stable API guarantee.** The project runs from its
     source tree and research interfaces may change.
 

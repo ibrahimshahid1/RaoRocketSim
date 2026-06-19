@@ -44,8 +44,14 @@ from raosim.physics import (
     regenerative_cooling_analysis,
     rib_supported_liner_buckling_profile,
     sp125_inelastic_buckling_critical_stress,
+    thermal_fatigue_strain,
 )
-from raosim.regen_profile import RegenWallProfile, normal_offset_contour
+from raosim.regen_profile import (
+    RegenWallProfile,
+    helix_passage_lengths,
+    helix_stretch_factors,
+    normal_offset_contour,
+)
 
 
 # --------------------------------------------------------------------------- #
@@ -539,10 +545,18 @@ def joint_wall_channel_design(
                     Twc = np.asarray(res["coolant_side_wall_temperature"], dtype=float)
                     dT_wall_profile = Twg - Twc
                     if has_fatigue:
-                        eps_profile = (
-                            alpha * dT_wall_profile / max(1.0 - nu, 1e-6)
-                            + np.abs(stress["pressure_stress_profile"]) / E
-                        )
+                        eps_profile = np.asarray([
+                            thermal_fatigue_strain(
+                                dT,
+                                thermal_expansion=alpha,
+                                poisson_ratio=nu,
+                                mechanical_strain=float(sigma_p) / E,
+                            )
+                            for dT, sigma_p in zip(
+                                dT_wall_profile,
+                                np.abs(stress["pressure_stress_profile"]),
+                            )
+                        ])
                         eps = float(np.max(eps_profile))
                         Nf = coffin_manson_cycles(
                             eps, elastic_modulus=E, fatigue_strength_coeff=f_sf,
@@ -738,14 +752,15 @@ def size_wall_profile(
     t_jacket_min: float = 0.0005,
     channel_height_min: float | None = None,
     channel_height_max: float | None = None,
-    n_channel_height: int = 4,
+    n_channel_height: int = 3,
     height_relief_min: float = 1.25,
     height_relief_max: float = 2.0,
-    n_height_relief: int = 3,
+    n_height_relief: int = 2,
     dp_budget_bar: float = 200.0,
     buckling_fos: float = 1.0,
     buckling_tangent_modulus_fraction: float = 0.10,
     buckling_plate_knockdown: float = 0.65,
+    gate_sp125_429: bool = False,
     coolant_outlet_pressure: float | None = None,
     injector_pressure_drop: float = 0.0,
     n_outer: int = 4,
@@ -771,9 +786,12 @@ def size_wall_profile(
       region to raise coolant velocity/film coefficient, and relieved away
       from it to recover pressure drop.  The throat depth and relief ratio
       are searched against the thermal and global ``dp_budget_bar`` gates.
-    * **Buckling** includes the actual SP-125 equation 4-29 longitudinal
-      inelastic-buckling criterion and a separately labeled rib-supported
-      external-pressure plate screen.
+    * **Buckling** includes SP-125 equation 4-29 as an explicitly
+      equivalent-tube longitudinal screen and a separately labeled
+      rib-supported liner-wrinkling gate under coolant-over-gas pressure.
+      Equation 4-29 was derived for tubular walls and needs hot-wall tangent
+      moduli; it therefore reports but does not gate a milled-channel design
+      unless ``gate_sp125_429=True`` is requested.
     * **Jacket ``t_jacket(x)``** carries the coolant-pressure hoop on the
       OUTER shell (SP-125: "the outer shell is subjected only to the hoop
       stress induced by the coolant pressure"), so
@@ -828,8 +846,6 @@ def size_wall_profile(
     hf = bartz_heat_flux(contour, Pc, prop, wall_temperature=900.0)
     heat_shape = np.asarray(hf["q"], dtype=float)
     heat_shape = heat_shape / max(float(np.max(heat_shape)), 1e-12)
-    pitch = 2.0 * math.pi * np.maximum(r_inner, 1e-9) / max(N, 1)
-    land = np.maximum(pitch - w, 0.0)
     cool_material = SimpleNamespace(conductivity=k)
     Et = E * float(buckling_tangent_modulus_fraction)
     Ec = E * float(buckling_tangent_modulus_fraction)
@@ -847,6 +863,22 @@ def size_wall_profile(
         )
 
     def _profile(t_hot, h_arr, t_jacket):
+        stretch = helix_stretch_factors(
+            x,
+            r_inner,
+            helix_turns=helix_turns,
+            t_wall=t_hot,
+            channel_height=h_arr,
+        )
+        _, r_mid = normal_offset_contour(
+            x, r_inner, t_hot + 0.5 * h_arr
+        )
+        pitch_normal = (
+            2.0 * math.pi * np.maximum(r_mid, 1e-9)
+            / max(N, 1)
+            / stretch
+        )
+        land = np.maximum(pitch_normal - w, 0.0)
         return RegenWallProfile(
             x=x, r_inner=r_inner, t_hot=t_hot,
             channel_width=np.full(n, w), channel_height=h_arr,
@@ -888,6 +920,9 @@ def size_wall_profile(
             Twg = np.asarray(res["gas_side_wall_temperature"], dtype=float)
             Twc = np.asarray(res["coolant_side_wall_temperature"], dtype=float)
             longitudinal_thermal = E * alpha * np.maximum(Twg - Twc, 0.0)
+            # SP-125 4-29 defines r as the tube radius.  A milled rectangular
+            # channel has no unique tube radius, so h/2 is an explicit
+            # equivalent-tube approximation, not the nozzle-shell radius.
             buckling_radius = np.maximum(0.5 * h_arr, t_hot_min)
             sc_per_t = sp125_inelastic_buckling_critical_stress(
                 wall_thickness=np.ones(n),
@@ -909,13 +944,15 @@ def size_wall_profile(
                 p_diff * r_inner * w ** 2 * buckling_fos
                 / max(plate_constant, 1e-12)
             )
+            lower_bounds = [
+                t_yield,
+                t_pressure_buckle,
+                np.full(n, t_hot_min),
+            ]
+            if gate_sp125_429:
+                lower_bounds.append(t_sp125)
             t_new = np.clip(
-                np.maximum.reduce([
-                    t_yield,
-                    t_sp125,
-                    t_pressure_buckle,
-                    np.full(n, t_hot_min),
-                ]),
+                np.maximum.reduce(lower_bounds),
                 t_hot_min,
                 t_hot_max,
             )
@@ -980,15 +1017,11 @@ def size_wall_profile(
         x_liner_mid, r_liner_mid = normal_offset_contour(
             x, r_inner, 0.5 * t_hot
         )
-        ds_liner = np.hypot(
-            np.gradient(x_liner_mid), np.gradient(r_liner_mid)
-        )
+        _, ds_liner = helix_passage_lengths(x_liner_mid, r_liner_mid)
         x_jacket_mid, r_jacket_mid = normal_offset_contour(
             x_jacket_inner, R_jacket, 0.5 * t_jacket
         )
-        ds_jacket = np.hypot(
-            np.gradient(x_jacket_mid), np.gradient(r_jacket_mid)
-        )
+        _, ds_jacket = helix_passage_lengths(x_jacket_mid, r_jacket_mid)
         liner_mass = float(
             rho * np.sum(2.0 * math.pi * r_liner_mid * t_hot * ds_liner)
         )
@@ -1003,7 +1036,10 @@ def size_wall_profile(
             np.all(thermal_ok)
             and np.all(struct_margin >= structural_fos - 1e-3)
             and np.all(jacket_margin >= jacket_fos - 1e-3)
-            and np.all(margin_429 >= 1.0 - 1e-3)
+            and (
+                not gate_sp125_429
+                or np.all(margin_429 >= 1.0 - 1e-3)
+            )
             and np.all(external_margin >= 1.0 - 1e-3)
             and dp_bar <= dp_budget_bar
             and fits
@@ -1058,11 +1094,12 @@ def size_wall_profile(
             margins = [
                 float(np.min(c["structural_margin_profile"])) / structural_fos,
                 float(np.min(c["jacket_margin_profile"])) / jacket_fos,
-                float(np.min(c["sp125_429_margin_profile"])),
                 float(np.min(c["external_buckling_margin_profile"])),
                 T_limit / max(c["peak_wall_T"], 1e-9),
                 dp_budget_bar / max(c["pressure_drop_bar"], 1e-9),
             ]
+            if gate_sp125_429:
+                margins.append(float(np.min(c["sp125_429_margin_profile"])))
             return min(margins) - (10.0 if not c["fits"] else 0.0)
         best = max(height_candidates, key=_score)
 
@@ -1107,6 +1144,10 @@ def size_wall_profile(
             float(buckling_tangent_modulus_fraction),
         "buckling_data_status":
             "screening_assumption_fraction_of_elastic_modulus",
+        "sp125_429_geometry_status":
+            "equivalent_tube_radius_half_channel_height",
+        "sp125_429_gates_feasibility": bool(gate_sp125_429),
+        "external_buckling_gates_feasibility": True,
         "peak_wall_T": best["peak_wall_T"],
         "cooling_margin": float(res["cooling_margin"]),
         "pressure_drop_bar": best["pressure_drop_bar"],
@@ -1120,6 +1161,7 @@ def size_wall_profile(
             "structural_fos": structural_fos,
             "jacket_fos": jacket_fos,
             "buckling_fos": buckling_fos,
+            "gate_sp125_429": bool(gate_sp125_429),
             "dp_budget_bar": dp_budget_bar,
             "t_hot_min": t_hot_min,
             "t_hot_max": t_hot_max,

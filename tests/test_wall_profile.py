@@ -57,6 +57,12 @@ def test_wall_profile_meets_structural_and_thermal(prop, contour):
     assert r["thermal_feasible"] is True
     assert r["peak_wall_T"] <= 1000.0               # GRCop-84 service limit
     assert r["feasible"] is True
+    assert r["channel_height_max_mm"] > r["channel_height_min_mm"]
+    # SP-125 4-29 is a tubular-wall relation; h/2 is only an equivalent-tube
+    # approximation for this milled rectangular wall, so it reports by default
+    # while the separate rib-supported pressure-buckling screen gates.
+    assert r["sp125_429_gates_feasibility"] is False
+    assert r["external_buckling_gates_feasibility"] is True
 
 
 def test_jacket_sized_from_coolant_hoop_scales_with_yield(prop, contour):

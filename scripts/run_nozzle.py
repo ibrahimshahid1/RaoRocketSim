@@ -164,6 +164,8 @@ def print_tags() -> None:
             ("--out", "output directory"),
             ("--cad {none,step,ipt,both}", "export a STEP solid / IPT conversion manifest"),
             ("--require-brep", "fail instead of using a triangle-faceted STEP fallback"),
+            ("--regen-brep", "export one full-N liner+ribs+jacket STEP solid"),
+            ("--regen-manifolds", "also cut plenums and area-sized radial ports"),
             ("-h / --help", "full argparse help"),
         ]),
     ]
@@ -394,6 +396,9 @@ def main() -> int:
     ap.add_argument("--buckling-tangent-modulus-fraction", type=float, default=0.10,
                     help="screening Et/E and Ec/E used by SP-125 eq.4-29 "
                          "until sourced hot-wall tangent-modulus data are supplied")
+    ap.add_argument("--gate-sp125-tube-buckling", action="store_true",
+                    help="let the equivalent-tube SP-125 eq.4-29 screen gate "
+                         "a milled-channel wall (off by default)")
     ap.add_argument("--flowfield", action="store_true",
                     help="render the steady MOC Mach/temperature flow field")
     ap.add_argument("--animate", choices=("march", "particles", "both"),
@@ -409,6 +414,20 @@ def main() -> int:
     ap.add_argument("--require-brep", action="store_true",
                     help="require CadQuery/OpenCascade true B-rep STEP output; "
                          "do not accept the faceted AP214 fallback")
+    ap.add_argument("--regen-brep", action="store_true",
+                    help="export a full-N one-solid regenerative wall STEP "
+                         "(patterned positive ribs; requires CadQuery)")
+    ap.add_argument("--regen-manifolds", action="store_true",
+                    help="with --regen-brep, cut annular plenums and radial "
+                         "ports into the one-solid wall")
+    ap.add_argument("--regen-cad-sections", type=int, default=24,
+                    help="axial loft sections used by --regen-brep")
+    ap.add_argument("--regen-ports-per-manifold", type=int, default=4,
+                    help="radial ports on each plenum for --regen-manifolds")
+    ap.add_argument("--regen-port-area-ratio", type=float, default=1.0,
+                    help="total port area / total channel area")
+    ap.add_argument("--regen-port-diameter", type=float, default=None,
+                    help="override each manifold port diameter [m]")
     ap.add_argument("--jacket-material", default=None,
                     help="outer-jacket material from the catalog for --size-wall "
                          "(defaults to the liner); e.g. inconel718 over a copper liner")
@@ -421,6 +440,12 @@ def main() -> int:
                     help="pop up the flow-field / animation in a live window "
                          "(on by default for interactive runs)")
     args = ap.parse_args()
+    if args.regen_manifolds:
+        args.regen_brep = True
+    if args.regen_brep and not args.regen:
+        ap.error("--regen-brep requires --regen")
+    if args.regen_brep and args.cad == "none":
+        ap.error("--regen-brep requires --cad step, ipt, or both")
     # Live windows for interactive/--show; saved files otherwise.
     show = bool(_WANT_WINDOWS)
 
@@ -725,6 +750,7 @@ def main() -> int:
             buckling_fos=args.buckling_fos,
             buckling_tangent_modulus_fraction=
                 args.buckling_tangent_modulus_fraction,
+            gate_sp125_429=args.gate_sp125_tube_buckling,
             coolant_outlet_pressure=args.coolant_outlet_pressure,
             injector_pressure_drop=args.injector_pressure_drop)
         args._wall_profile = prof["profile"]
@@ -751,6 +777,9 @@ def main() -> int:
             "min_external_buckling_margin":
                 prof["min_external_buckling_margin"],
             "buckling_data_status": prof["buckling_data_status"],
+            "sp125_429_geometry_status": prof["sp125_429_geometry_status"],
+            "sp125_429_gates_feasibility":
+                prof["sp125_429_gates_feasibility"],
             "thermal_feasible": prof["thermal_feasible"],
             "liner_mass_kg": prof["liner_mass_kg"],
             "jacket_mass_kg": prof["jacket_mass_kg"],
@@ -952,6 +981,7 @@ def main() -> int:
         ]
 
     step_path = None
+    regen_step_path = None
     if args.cad in ("step", "ipt", "both"):
         try:
             step_path = export_step(
@@ -993,12 +1023,60 @@ def main() -> int:
             summary["wall_geometry"]["jacket_step"] = jacket_representation
             artifacts.append(jacket_step.name)
 
+        if args.regen_brep:
+            try:
+                from raosim.regen_cad import (
+                    cadquery_available,
+                    export_channel_wall_step,
+                )
+                if not cadquery_available():
+                    raise RuntimeError(
+                        "CadQuery/OpenCascade is required by --regen-brep"
+                    )
+                _ncad = int(wall_profile.channel_count)
+                network = " + plenums/ports" if args.regen_manifolds else ""
+                print(dim(
+                    f"    full-N channel-wall B-rep ({_ncad} patterned ribs"
+                    f"{network}; one fused solid)…"
+                ))
+                regen_step_path = args.out / "regen.step"
+                rb = export_channel_wall_step(
+                    wall_profile,
+                    regen_step_path,
+                    max_sections=args.regen_cad_sections,
+                    include_manifolds=args.regen_manifolds,
+                    ports_per_manifold=args.regen_ports_per_manifold,
+                    port_area_ratio=args.regen_port_area_ratio,
+                    port_diameter=args.regen_port_diameter,
+                )
+                artifacts.append(regen_step_path.name)
+                summary["wall_geometry"]["regen_step"] = {
+                    "representation": rb["representation"],
+                    "single_solid": rb["single_solid"],
+                    "solid_count": rb["solid_count"],
+                    "channel_count": rb["channel_count"],
+                    "void_fraction": rb["void_fraction"],
+                    "include_manifolds": rb["include_manifolds"],
+                    "manifold_metrics": rb["manifold_metrics"],
+                    "model": rb["model"],
+                }
+                print(green(
+                    f"    manufacturing solid: {rb['channel_count']} full-N "
+                    f"channel gaps, one body, void {rb['void_fraction']*100:.1f}%"
+                    f"  →  {regen_step_path.name}"
+                ))
+            except Exception as exc:
+                print(red(f"\n    Cooling-aware CAD export failed: {exc}"))
+                return 2
+
     if args.cad in ("ipt", "both") and step_path is not None:
+        authoritative_step = regen_step_path or step_path
         manifest = package_ipt_request(
-            step_path, args.out / "wall_ipt_manifest.json",
+            authoritative_step, args.out / "wall_ipt_manifest.json",
             metadata={
                 "wall_thickness_m": args.wall_thickness,
                 "material": mat.name if mat else None,
+                "authoritative_step": str(authoritative_step),
                 "companion_jacket_step": (
                     str(args.out / "jacket.step")
                     if sized_wall_profile is not None else None
