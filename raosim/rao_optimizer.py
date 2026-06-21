@@ -288,6 +288,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
                     n_control: int = 5, n_char: int = 30,
                     convergent_half_angle_deg: float = 45.0,
                     Ru_factor: float = 1.5,
+                    Rd_factor: float = 0.382,
                     max_iter: int = 200,
                     starting_line_method: str = 'area_ratio') -> dict:
     """
@@ -298,7 +299,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     Re = math.sqrt(epsilon) * Rt
     Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
     Ru = Ru_factor * Rt
-    Rd = 0.382 * Rt
+    Rd = Rd_factor * Rt
 
     opt = optimize_wall(Rt, epsilon, gamma, length_pct,
                         n_control, n_char, max_iter,
@@ -348,8 +349,8 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     wall_x = bell[0]
     wall_r = bell[1]
 
-    x_full = np.concatenate([x_conv, x_throat, wall_x])
-    y_full = np.concatenate([y_conv, y_throat, wall_r])
+    x_full = np.concatenate([x_conv, x_throat[1:], wall_x[1:]])
+    y_full = np.concatenate([y_conv, y_throat[1:], wall_r[1:]])
 
     metrics = opt['exit_metrics']
 

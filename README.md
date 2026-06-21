@@ -62,7 +62,7 @@ inline and collected at the end.
 | Rao variational / MOC BVP | NASA-topology seed, Rao stationarity, characteristic compatibility, mass + length closure, $D$-state continuity, validity and topology diagnostics | Experimental research path |
 | Differentiable solver | JAX/Optimistix Levenberg–Marquardt residual solve, differentiable NASA-style kernel march, optional solved $\theta_B$, exact $C_F$ sensitivities | Implemented, research-grade |
 | Wall pressure & separation | Quasi-1D wall-pressure estimate; Summerfield, Kalt–Badal, Schmucker separation screens | Screening only |
-| Thermal / cooling / structure | Bartz-style gas heating, Sieder-Tate rectangular channels, fin/curvature corrections, helical Darcy loss, station-wise SP-125 liner stress | Screening / preliminary sizing |
+| Thermal / cooling / structure | Bartz convection, Sieder-Tate rectangular channels with a circular-duct laminar proxy, fin correction, rough/helical Darcy loss, coolant-chemistry screens, station-wise SP-125 liner stress | Screening / preliminary sizing |
 | Geometry export | CSV/STL, neutral STEP, Inventor manifest, and optional full-N one-solid regen B-rep with patterned ribs plus plenum/port voids | Preliminary manufacturing geometry, not production definition |
 | Validation | Unit/regression tests, literature manifests, NASA/JHU parsers, kernel/topology parity, diagnostic reports | Strong software verification; incomplete physical validation |
 
@@ -121,8 +121,8 @@ expansion ratio, propellant model, and contour method, RaoRocketSim can:
 - estimate wall pressure, overexpansion separation, altitude performance,
   boundary-layer displacement, heat flux, regenerative-cooling capacity, and
   thin-wall pressure stress;
-- generate simplified chamber and convergent geometry from $L^*$ and
-  contraction ratio;
+- generate one injector-to-exit thrust-chamber contour from $L^*$,
+  contraction ratio, shoulder geometry, and a shared throat specification;
 - sweep $\varepsilon$, $P_c$, or $R_t$; compare contour families; and run
   literature-backed benchmark cases with explicit pass / report / xfail
   policies;
@@ -326,8 +326,10 @@ not depend on the convergence of an experimental flow solver.
 
 ### Chamber and convergent geometry
 
-Optional upstream geometry is sized from contraction ratio $CR=A_c/A_t$ and
-characteristic length $L^*=V_c/A_t$:
+The authoritative contour includes the injector face, cylindrical chamber,
+rounded chamber shoulder, straight convergent, shared upstream throat arc,
+downstream throat arc, and bell. Chamber sizing uses contraction ratio
+$CR=A_c/A_t$ and characteristic length $L^*=V_c/A_t$:
 
 $$
 R_c=R_t\sqrt{CR},
@@ -335,10 +337,20 @@ R_c=R_t\sqrt{CR},
 V_c=L^* A_t .
 $$
 
-The code subtracts the convergent conical-frustum volume and assigns the
-remainder to a cylindrical chamber. This is a **geometric volume model
-only**: it does not size an injector, set residence time, or analyze
-combustion stability, cooling, or structure.
+The cylindrical length is root-solved against the exact volume of the
+piecewise-linear revolved contour. Each meridional segment is integrated as a
+conical frustum, including the shoulder and upstream throat arc. Infeasible
+combinations are rejected rather than assigned an arbitrary short cylinder.
+
+`ThroatGeometrySpec` is shared by chamber and nozzle and owns $R_u/R_t$,
+$R_d/R_t$, convergent angle, and throat location. The minimum cylindrical
+length and chamber-shoulder radius factor are explicit design inputs; their
+fallback values are geometric placeholders, not injector- or
+combustion-qualified limits.
+
+This remains a **geometric volume model only**: $L^*$ is a residence-time
+proxy, and its minimum useful value depends on propellants, injector/mixing,
+pressure, mixture ratio, packaging, stability, cooling, and hot-fire evidence.
 
 ### 2. Direct MOC wall optimization — `method="moc"`
 
@@ -617,14 +629,21 @@ viscosity uses a Sutherland-type estimate.
 
 ### Heat flux and cooling
 
-The heat-flux model preserves Bartz-like sensitivity to chamber pressure,
-characteristic velocity, throat diameter, gas temperature, and wall
-temperature, then applies empirical axial and area scaling. It is labeled
-`bartz_style_screening` — **not** a full Bartz implementation with resolved
-transport properties. Regenerative cooling is marched station by station in
+The gas-side model implements the Bartz correlation, including the pressure,
+area-ratio, throat-curvature, and wall-temperature property factor. Gas
+transport properties remain estimated unless supplied from CEA or measured
+data, so it is still preliminary design physics rather than a validated CHT
+boundary condition. Regenerative cooling is marched station by station in
 the coolant-flow direction. The coolant-side coefficient uses Sieder–Tate
-with local rectangular hydraulic diameter, bulk/wall viscosity, fin area,
-and a curved-channel correction. The wall is the series resistance
+with local rectangular hydraulic diameter, bulk/wall viscosity, a `Nu=4.36`
+circular-duct laminar proxy, and fin area. Rectangular laminar aspect-ratio,
+heated-wall, and developing-flow effects remain unresolved. The optional
+curved-channel multiplier is the Niino-Kumakawa/Taylor relation reproduced by
+Pizzarelli et al. (2011) and Torres et al. (2009). It remains disabled in
+automatic liquid-coolant sizing because NASA SP-8087 recommends experimental
+calibration before crediting curvature enhancement;
+`--curvature-correction` opts into it. The wall is the series
+resistance
 
 $$
 \frac{1}{H(x)}=\frac{1}{h_g(x)}+\frac{t_\mathrm{hot}(x)}{k_w}
@@ -640,12 +659,21 @@ $$
 $$
 
 while friction pressure loss is integrated with local Darcy factor,
-hydraulic diameter, velocity, and the actual helical passage length. An
+hydraulic diameter, velocity, channel roughness, and the actual helical
+passage length. Smooth passages use Blasius and rough passages use
+Swamee-Jain. An
 absolute coolant outlet pressure (or the explicit default
 $p_{c,\mathrm{out}}=P_c+\Delta p_\mathrm{injector}$) anchors the jacket
-pressure march. Boiling, coking, critical heat flux, two-phase flow,
-manifold maldistribution, and fully temperature-dependent properties remain
-outside the model.
+pressure march. RP-1/kerosene reports a coolant-side wall-temperature margin
+against a conservative 700 K coking screen and can gate sizing with
+`--gate-coolant-chemistry`. `--hydraulic-network` adds every channel branch,
+annular inlet/outlet headers, ports, and entry/exit losses to the pressure
+budget. Methane and LH2 use station-wise CoolProp properties with
+`--coolant-property-backend auto|coolprop`. `--radiation-model spectral`
+accepts explicit band data, while `leccese_gray` provides a documented
+LOX/CH4 or LOX/H2 screen. `--boiling-chf` reports phase state and a
+conservative Zuber CHF reference; supercritical heat-transfer deterioration
+and qualified forced-flow cryogenic CHF remain outside the model.
 
 ### Structural screen
 
@@ -664,26 +692,37 @@ This exposes the real thickness squeeze: pressure stress wants a thicker
 liner, while wall temperature and thermal-gradient stress usually want a
 thinner one. `--size-wall` searches hot-wall thickness, channel count, and
 channel width together against thermal margin, yield margin, channel fit,
-manufacturing minimum, and pressure-drop budget. Catalog materials do not
-invent fatigue life: Coffin–Manson life is evaluated only when a complete
-sourced coefficient set is supplied, and gates feasibility only when marked
-design-qualified.
+manufacturing minimum, and pressure-drop budget. NARloy-Z uses NASA
+CR-134627 Coffin–Manson/Basquin data; GRCop-84 uses NASA direct
+total-strain/life regressions. Both are active sourced screening gates, not
+chamber-life qualification.
 
 The joint optimizer first selects channels and a feasible uniform
 $t_\mathrm{hot}$ candidate, then `size_wall_profile` refines the liner and
 outer-jacket thickness and channel depth station by station. SP-125 equation
 4-29 is reported as an equivalent-tube longitudinal-buckling screen for
 milled channels and does not gate by default; the separate rib-supported
-coolant-over-gas liner screen does gate. Coffin-Manson life uses only complete
-sourced coefficient sets and a nominal $\alpha\Delta T$ strain range.
+coolant-over-gas liner screen does gate. NARloy-Z and GRCop-84 use sourced
+stress- and temperature-dependent cyclic tangent-modulus curves instead of
+the former fixed `Et/E` assumption. Fatigue still uses a nominal
+$\alpha\Delta T$ strain range rather than a local cyclic-plasticity solution.
+
+Without `--size-wall`, the scalar `--wall-thickness` is only a uniform
+geometry/reference input and is labeled as unsized in the report. The
+station-wise solver does not force the throat to be thicker: SP-8087 also
+recommends thin walls where heat load is highest and nozzle tapering for
+heat-flux-limited coolants. Local thermal, pressure, buckling, manufacturing,
+and degradation constraints determine the profile; `--t-hot-min` supplies
+the process-specific liner floor.
 
 With `--regen-brep`, the CAD path exports one OpenCascade STEP solid
 containing liner, full-count patterned ribs, end seals, jacket, and real
 channel gaps. `--regen-manifolds` additionally cuts connected annular
 plenums and area-sized radial ports. This is a neutral final B-rep, not native
-Inventor feature history. Manifold maldistribution, jacket buckling,
-plasticity, creep, weld/braze allowables, stress concentrations, and
-nonlinear FEA are not yet solved.
+Inventor feature history. The optional one-dimensional manifold graph now
+reports maldistribution and local/network losses; 3-D manifold CFD, jacket
+buckling, plasticity, creep, weld/braze allowables, stress concentrations,
+and nonlinear FEA are not yet solved.
 
 ### How user inputs affect wall sizing
 
@@ -740,8 +779,9 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt pytest
 ```
 
-Core dependencies are NumPy, SciPy, Matplotlib, JAX, JAXlib, Optimistix, and
-Equinox. Optional integrations are not installed by `requirements.txt`:
+Core dependencies are NumPy, SciPy, Matplotlib, CoolProp, JAX, JAXlib,
+Optimistix, and Equinox. Optional integrations are not installed by
+`requirements.txt`:
 
 ```bash
 # Optional thermochemistry (variable chamber properties)
@@ -755,14 +795,25 @@ To ensure a triangle-based STEP fallback is never mistaken for editable
 B-rep CAD:
 
 ```bash
-PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 0 --regen \
+PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 4000 --regen \
+  --l-star 1.0 --contraction-ratio 2.5 \
   --material grcop-84 --size-wall --cad step --require-brep --regen-brep \
   --out builds/regen_brep
 ```
 
 Add `--regen-manifolds` to include two connected plenums and radial ports.
 Port area defaults to total channel flow area and can be distributed with
-`--regen-ports-per-manifold`.
+`--regen-ports-per-manifold`. That flag also enables the matching
+full-channel hydraulic graph. The fluid/radiation/phase screens can be run
+without CAD, for example:
+
+```bash
+PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 4000 --regen --thermal \
+  --coolant methane --coolant-inlet-temperature 120 \
+  --coolant-property-backend coolprop \
+  --hydraulic-network --radiation-model leccese_gray \
+  --radiation-family methane --boiling-chf
+```
 
 Without `--require-brep`, the summary records either `brep` or
 `faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
@@ -1060,9 +1111,10 @@ Rocket_nozzle_sim_phase2.py     Legacy monolithic prototype; not the primary API
 7. **Partial differentiability.** The NASA kernel march and live $\theta_B$
    path are differentiable, but the complete start-line-to-final-wall design
    map and total design derivatives are unfinished.
-8. **Low-order thermal/structural models.** Current gates are screens, not
-   qualification CHT, manifold-distribution, cyclic-plasticity, creep, or FEA
-   solutions.
+8. **Low-order thermal/structural models.** Radiation bands, the hydraulic
+   graph, CoolProp properties, fatigue, buckling, and CHF remain preliminary
+   screens—not qualification CHT, 3-D manifold CFD, cyclic plasticity, creep,
+   or FEA.
 9. **Preliminary manufacturing CAD.** The full-N channels, ribs, optional
    plenums, and ports are solid-modeled, but bolt holes, injector faces,
    fillets, inserts, welds, tolerances, and process-specific rules are not.

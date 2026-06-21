@@ -53,10 +53,8 @@ def test_coupling_meets_reachable_target(prop):
 def test_channel_lever_is_binding_and_at_least_as_strong(prop):
     """The channel mass-flux lever is the dominant (binding) one: it
     engages after the throat sweep and delivers at least as much cooling
-    margin as opening the throat.  (With the Level-1 fin + Dean model
-    the throat lever also moves the Dean enhancement, so it is less
-    dramatically weak than the bare (D*/r_c)^0.1 term alone — but the
-    channels still carry the design and bind.)"""
+    margin as opening the throat. The channels still carry the design and
+    bind; the unvalidated curvature multiplier is disabled."""
     res = cooling_coupled_contour(
         0.020, 10.0, 7.0e6, prop, _marginal_cooling(), _copper(),
         cooling_margin_target=1.2,
@@ -74,9 +72,8 @@ def test_channel_lever_is_binding_and_at_least_as_strong(prop):
 
 
 def test_opening_throat_lowers_peak_wall_temperature(prop):
-    """The Bartz (D*/r_c)^0.1 term dominates the throat sweep: a gentler
-    throat lowers the peak flux and the peak wall temperature (the Dean
-    enhancement weakens too, but net cooling)."""
+    """The Bartz (D*/r_c)^0.1 term drives the throat sweep: a gentler
+    throat lowers the peak flux and peak wall temperature."""
     res = cooling_coupled_contour(
         0.020, 10.0, 7.0e6, prop, _marginal_cooling(), _copper(),
         cooling_margin_target=5.0,        # unreachable -> full sweep

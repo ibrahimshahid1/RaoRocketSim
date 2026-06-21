@@ -12,6 +12,7 @@ from typing import Any
 
 import numpy as np
 
+from raosim.coolants import canonical_coolant_name
 from raosim.gas_dynamics import (
     isentropic_pressure_ratio,
     isentropic_temperature_ratio,
@@ -19,6 +20,13 @@ from raosim.gas_dynamics import (
 )
 from raosim.regen_profile import helix_passage_lengths, normal_offset_contour
 from raosim.separation import check_separation
+from raosim.thermofluids import (
+    boiling_chf_screen,
+    leccese_participating_gas_radiation,
+    real_fluid_coolant_state,
+    solve_annular_manifold_network,
+    spectral_band_radiative_heat_flux,
+)
 
 
 def boundary_layer_displacement(
@@ -281,15 +289,19 @@ def bartz_heat_flux(
     r_factor = Pr_v ** (1.0 / 3.0)
     f = 1.0 + 0.5 * (gamma - 1.0) * mach * mach
     Taw = Tc * (1.0 + r_factor * 0.5 * (gamma - 1.0) * mach * mach) / f
+    T_static = Tc / f
     q = h_g * np.maximum(Taw - wall_temperature, 0.0)
 
     peak_idx = int(np.argmax(q))
     return {
         "x": x,
         "q": q,
+        "convective_heat_flux": q,
+        "radiative_heat_flux": np.zeros_like(q),
         "h_g": h_g,
         "mach": mach,
         "recovery_temperature": Taw,
+        "static_temperature": T_static,
         "q_max": float(q[peak_idx]),
         "x_q_max": float(x[peak_idx]),
         "throat_q": float(q[throat_idx]),
@@ -304,6 +316,8 @@ def bartz_heat_flux(
         ),
         "units": {"q": "W/m^2", "h_g": "W/(m^2.K)", "T": "K"},
         "model": "bartz_1957",
+        "radiation_model":
+            "not_included_requires_spectral_model_or_user_supplied_heat_load",
         "reference": ("Bartz, Jet Propulsion 27(1) 1957; "
                       "Huzel & Huang NASA SP-125 sec. 4"),
     }
@@ -320,8 +334,8 @@ def bartz_heat_flux(
 # and wall temperature).  Cryogens use a milder dependence.
 COOLANT_PROPERTIES: dict[str, dict[str, float]] = {
     # name:       rho[kg/m3] mu_ref[Pa.s] T_ref[K]  andrade_B[K]  k[W/mK] cp[J/kgK]
-    "rp1":      {"rho": 810.0, "mu_ref": 1.6e-3, "T_ref": 300.0, "andrade_B": 1200.0, "k": 0.12, "cp": 2010.0},
-    "kerosene": {"rho": 810.0, "mu_ref": 1.6e-3, "T_ref": 300.0, "andrade_B": 1200.0, "k": 0.12, "cp": 2010.0},
+    "rp1":      {"rho": 810.0, "mu_ref": 1.6e-3, "T_ref": 300.0, "andrade_B": 1200.0, "k": 0.12, "cp": 2010.0, "coolant_wall_temperature_limit": 700.0},
+    "kerosene": {"rho": 810.0, "mu_ref": 1.6e-3, "T_ref": 300.0, "andrade_B": 1200.0, "k": 0.12, "cp": 2010.0, "coolant_wall_temperature_limit": 700.0},
     "ethanol":  {"rho": 789.0, "mu_ref": 1.1e-3, "T_ref": 300.0, "andrade_B": 1600.0, "k": 0.17, "cp": 2440.0},
     "methane":  {"rho": 423.0, "mu_ref": 1.1e-4, "T_ref": 110.0, "andrade_B": 400.0,  "k": 0.19, "cp": 3450.0},
     "water":    {"rho": 1000.0, "mu_ref": 8.9e-4, "T_ref": 300.0, "andrade_B": 1900.0, "k": 0.61, "cp": 4186.0},
@@ -329,6 +343,29 @@ COOLANT_PROPERTIES: dict[str, dict[str, float]] = {
     "hydrogen": {"rho": 71.0,  "mu_ref": 1.3e-5, "T_ref": 25.0,  "andrade_B": 60.0,   "k": 0.10, "cp": 9800.0},
 }
 _DEFAULT_COOLANT = "rp1"
+
+
+def default_coolant_inlet_temperature(coolant: str | None) -> float:
+    """Return the central preliminary inlet-temperature default [K]."""
+    name = canonical_coolant_name(coolant)
+    if name == "methane":
+        return 120.0
+    if name == "hydrogen":
+        return 25.0
+    return 300.0
+
+
+def resolve_coolant_inlet_temperature(cooling: Any) -> float:
+    """Resolve an explicit inlet temperature or a coolant-specific default."""
+    value = getattr(cooling, "coolant_inlet_temperature", None)
+    if value is None:
+        value = default_coolant_inlet_temperature(
+            getattr(cooling, "coolant", None)
+        )
+    value = float(value)
+    if value <= 0.0:
+        raise ValueError("coolant_inlet_temperature must be positive")
+    return value
 
 
 def resolve_coolant_properties(cooling: Any) -> dict[str, float]:
@@ -340,12 +377,13 @@ def resolve_coolant_properties(cooling: Any) -> dict[str, float]:
     / ``coolant_cp`` fields the spec carries.  Supply CEA/measured
     values via those fields for accuracy.
     """
-    name = str(getattr(cooling, "coolant", None) or _DEFAULT_COOLANT).lower()
+    name = canonical_coolant_name(getattr(cooling, "coolant", None))
     props = dict(COOLANT_PROPERTIES.get(name, COOLANT_PROPERTIES[_DEFAULT_COOLANT]))
     rho = getattr(cooling, "coolant_density", None)
     mu = getattr(cooling, "coolant_viscosity", None)
     k = getattr(cooling, "coolant_conductivity", None)
     cp = getattr(cooling, "coolant_cp", None)
+    wall_limit = getattr(cooling, "coolant_wall_temperature_limit", None)
     if rho:
         props["rho"] = float(rho)
     if mu:                       # an explicit μ disables the Andrade T-model
@@ -355,6 +393,11 @@ def resolve_coolant_properties(cooling: Any) -> dict[str, float]:
         props["k"] = float(k)
     if cp:
         props["cp"] = float(cp)
+    if wall_limit is not None:
+        if float(wall_limit) > 0.0:
+            props["coolant_wall_temperature_limit"] = float(wall_limit)
+        else:
+            props.pop("coolant_wall_temperature_limit", None)
     return props
 
 
@@ -380,8 +423,8 @@ def sieder_tate_coefficient(
     mass_flux, D_h: float, props: dict[str, float],
     *, mu_bulk, mu_wall,
 ):
-    """Coolant-side film coefficient h_c [W/(m²·K)] from the Sieder-Tate
-    turbulent forced-convection correlation::
+    """Coolant-side film coefficient h_c [W/(m²·K)] from Sieder-Tate
+    turbulent forced convection, with a circular-duct laminar proxy::
 
         Nu = h_c D_h / k = 0.027 · Re^0.8 · Pr^(1/3) · (μ_b/μ_w)^0.14
 
@@ -392,15 +435,21 @@ def sieder_tate_coefficient(
     practice, Huzel & Huang NASA SP-125 §4).  Accepts arrays.
     """
     G = np.asarray(mass_flux, dtype=float)
-    k = float(props["k"])
-    cp = float(props["cp"])
+    k = np.asarray(props["k"], dtype=float)
+    cp = np.asarray(props["cp"], dtype=float)
     mu_b = np.asarray(mu_bulk, dtype=float)
     mu_w = np.asarray(mu_wall, dtype=float)
     Re = G * D_h / np.maximum(mu_b, 1e-12)
-    Pr = mu_b * cp / max(k, 1e-12)
-    Nu = (0.027 * np.power(np.maximum(Re, 1.0), 0.8)
-          * np.power(np.maximum(Pr, 1e-6), 1.0 / 3.0)
-          * np.power(mu_b / np.maximum(mu_w, 1e-12), 0.14))
+    Pr = mu_b * cp / np.maximum(k, 1e-12)
+    Nu_turbulent = (
+        0.027 * np.power(np.maximum(Re, 1.0), 0.8)
+        * np.power(np.maximum(Pr, 1e-6), 1.0 / 3.0)
+        * np.power(mu_b / np.maximum(mu_w, 1e-12), 0.14)
+    )
+    # Fully developed circular duct under uniform heat flux. Rectangular-duct
+    # Nu depends on aspect ratio and which walls are heated, so this is only a
+    # bounded fallback; do not extrapolate turbulent Sieder-Tate to Re=1.
+    Nu = np.where(Re < 2300.0, 4.36, Nu_turbulent)
     return Nu * k / np.maximum(D_h, 1e-12)
 
 
@@ -424,8 +473,7 @@ def fin_efficiency(h_c, k_wall: float, land_width, channel_height) -> Any:
 
 
 def curvature_correction_factor(Re, D_h: float, R_c_signed) -> Any:
-    """Dean-number coolant-side curvature correction ``C`` on the
-    Nusselt number / h_c::
+    """Niino-Kumakawa/Taylor coolant-side curvature multiplier ``C``::
 
         C = (Re · (D_h / (2 |R_c|))²)^(±0.05)
 
@@ -433,9 +481,12 @@ def curvature_correction_factor(Re, D_h: float, R_c_signed) -> Any:
     (the throat region — secondary/Dean vortices enhance the
     coolant-side transfer on the heated wall), ``−`` where **convex**.
     The sign is taken from ``R_c_signed`` (signed meridional radius of
-    curvature: positive = concave on the gas side).  Mild correction
-    (exponent ±0.05).  Curved-channel regen heat-transfer practice
-    (Niino et al.; see the EUCASS / curved-passage literature).
+    curvature: positive = concave on the gas side). This is the
+    ``Nu_curved/Nu_straight = [Re (D_h/(2R_c))²]^(+/-0.05)`` relation
+    reproduced by Pizzarelli et al. (2011) and Torres, Stefanini & Suslov
+    (EUCASS, 2009). It remains opt-in screening physics: the cited work
+    reports geometry/fluid sensitivity, and NASA SP-8087 cautions against
+    applying liquid-coolant enhancement without experimental calibration.
     """
     import numpy as _np
     Re = _np.maximum(_np.asarray(Re, dtype=float), 1.0)
@@ -446,13 +497,24 @@ def curvature_correction_factor(Re, D_h: float, R_c_signed) -> Any:
     return arg ** (0.05 * sign)
 
 
-def darcy_friction_factor(Re) -> Any:
+def darcy_friction_factor(Re, relative_roughness=0.0) -> Any:
     """Blasius turbulent Darcy friction factor f = 0.316 Re^(−0.25)
-    (smooth channel; the partner of the Sieder-Tate/Colburn family).
-    Laminar fallback 64/Re below Re = 2300."""
+    for a smooth channel, Swamee-Jain for a rough turbulent channel, and
+    ``64/Re`` below Re = 2300.
+
+    Swamee-Jain is the explicit rough-passage relation used in Atefi &
+    Naraghi's regenerative-channel optimization (AIAA 2019-3938). The
+    transition interval is still a screening discontinuity.
+    """
     import numpy as _np
     Re = _np.maximum(_np.asarray(Re, dtype=float), 1.0)
-    turb = 0.316 * Re ** (-0.25)
+    eps_rel = _np.maximum(_np.asarray(relative_roughness, dtype=float), 0.0)
+    smooth = 0.316 * Re ** (-0.25)
+    rough = 0.25 / _np.maximum(
+        _np.log10(eps_rel / 3.7 + 5.74 / Re ** 0.9) ** 2,
+        1e-12,
+    )
+    turb = _np.where(eps_rel > 0.0, rough, smooth)
     return _np.where(Re < 2300.0, 64.0 / Re, turb)
 
 
@@ -557,10 +619,41 @@ def regenerative_cooling_analysis(
 
     n_st = len(x)
     mdot = float(getattr(cooling, "coolant_mass_flow", 0.0) or 0.0)
-    inlet_T = float(getattr(cooling, "coolant_inlet_temperature", 293.0))
+    inlet_T = resolve_coolant_inlet_temperature(cooling)
     k_wall = max(float(getattr(material, "conductivity", 15.0) or 15.0), 1e-9)
     cprops = resolve_coolant_properties(cooling)
-    cp_cool = float(cprops["cp"])
+    coolant_name = canonical_coolant_name(getattr(cooling, "coolant", None))
+    property_backend = str(
+        getattr(cooling, "coolant_property_backend", "auto") or "auto"
+    ).lower()
+    real_fluid_requested = (
+        property_backend == "coolprop"
+        or (
+            property_backend == "auto"
+            and coolant_name in {"methane", "hydrogen"}
+        )
+    )
+    real_fluid_status = "constant_property_screen"
+    # Establish the absolute outlet boundary before the coupled property
+    # iteration so a real-fluid backend has a pressure state to evaluate.
+    explicit_outlet = coolant_outlet_pressure
+    if explicit_outlet is None:
+        explicit_outlet = getattr(cooling, "coolant_outlet_pressure", None)
+    if explicit_outlet is None:
+        spec_injector_drop = getattr(cooling, "injector_pressure_drop", None)
+        used_injector_drop = (
+            float(spec_injector_drop)
+            if spec_injector_drop is not None
+            else float(injector_pressure_drop)
+        )
+        outlet_pressure = float(Pc) + max(used_injector_drop, 0.0)
+        pressure_boundary_source = "minimum_injector_entry_pressure_Pc_plus_injector_drop"
+    else:
+        outlet_pressure = float(explicit_outlet)
+        pressure_boundary_source = "user_supplied_coolant_outlet_pressure"
+    channel_roughness = max(
+        float(getattr(cooling, "channel_roughness", 0.0) or 0.0), 0.0
+    )
 
     # Channel geometry as per-station arrays.  A RegenWallProfile can vary
     # t_hot/w/h along the contour (SP-125 passage-area tapering); scalars
@@ -591,8 +684,10 @@ def regenerative_cooling_analysis(
     D_h = 2.0 * w_arr * h_arr / np.maximum(w_arr + h_arr, 1e-12)
     mdot_per_channel = mdot / max(N, 1)
     G = mdot_per_channel / A_ch                 # channel mass flux [kg/m²s]
-    rho_cool = float(cprops["rho"])
-    V_cool = G / max(rho_cool, 1e-9)            # channel velocity [m/s]
+    rho_profile = np.full(n_st, float(cprops["rho"]))
+    cp_profile = np.full(n_st, float(cprops["cp"]))
+    k_cool_profile = np.full(n_st, float(cprops["k"]))
+    V_cool = G / np.maximum(rho_profile, 1e-9)   # channel velocity [m/s]
 
     # Per-station coolant path length: meridional (ds_arc) and, when the
     # channels are wound helically, the longer path (ds_path).  Their ratio
@@ -615,6 +710,12 @@ def regenerative_cooling_analysis(
     )
     land_width_raw = land_override if land_override is not None else (pitch - w_arr)
     land_width = np.maximum(land_width_raw, 1e-5 * Rt)
+    aspect_ratio = h_arr / np.maximum(w_arr, 1e-12)
+    if np.any(aspect_ratio > 12.0):
+        warnings.append(
+            "Channel height/width exceeds 12 at some stations; high-aspect-"
+            "ratio thermal stratification can limit the fin-area benefit."
+        )
     # Channels must physically fit the circumference: N·(w+land) ≤ 2πr.
     tight = int(np.argmin(land_width_raw))
     if float(np.min(land_width_raw)) <= 0.0:
@@ -650,6 +751,10 @@ def regenerative_cooling_analysis(
     Taw = np.asarray(heat_flux["recovery_temperature"], dtype=float)
     T_wg = 0.6 * Taw                            # initial guess
     T_c = np.full_like(x, inlet_T)
+    p_property = np.full_like(x, outlet_pressure)
+    q_rad = np.zeros_like(x)
+    radiation_status = "not_included"
+    radiation_detail: dict[str, Any] | None = None
 
     for _ in range(max(n_iter, 1)):
         # Gas side, self-consistent σ at the current wall temperature.
@@ -660,12 +765,68 @@ def regenerative_cooling_analysis(
 
         # Coolant side (Sieder-Tate); wall-side coolant temp for μ_w.
         T_wc = T_c + (Taw - T_c) * 0.3          # provisional, refined below
-        mu_b = np.array([coolant_viscosity(cprops, float(t)) for t in T_c])
-        mu_w = np.array([coolant_viscosity(cprops, float(t)) for t in T_wc])
-        h_c_straight = sieder_tate_coefficient(G, D_h, cprops,
+        real_state = (
+            real_fluid_coolant_state(
+                coolant_name, T_c, p_property, backend=property_backend
+            )
+            if real_fluid_requested else {"available": False}
+        )
+        if property_backend == "coolprop" and not real_state.get("available"):
+            raise RuntimeError(
+                "CoolProp real-fluid properties were required but could not "
+                f"be evaluated: {real_state.get('status', 'unknown failure')}"
+            )
+        if real_state.get("available"):
+            rho_profile = np.asarray(real_state["rho"], dtype=float)
+            cp_profile = np.asarray(real_state["cp"], dtype=float)
+            k_cool_profile = np.asarray(real_state["k"], dtype=float)
+            mu_b = np.asarray(real_state["mu"], dtype=float)
+            wall_state = real_fluid_coolant_state(
+                coolant_name,
+                np.maximum(T_wc, 1.0),
+                p_property,
+                backend=property_backend,
+            )
+            mu_w = (
+                np.asarray(wall_state["mu"], dtype=float)
+                if wall_state.get("available") else mu_b
+            )
+            real_fluid_status = real_state["status"]
+        else:
+            mu_b = np.array([
+                coolant_viscosity(cprops, float(t)) for t in T_c
+            ])
+            mu_w = np.array([
+                coolant_viscosity(cprops, float(t)) for t in T_wc
+            ])
+            real_fluid_status = (
+                real_state.get("status", "constant_property_screen")
+                if real_fluid_requested else "constant_property_screen"
+            )
+        V_cool = G / np.maximum(rho_profile, 1e-9)
+        film_props = dict(cprops)
+        film_props["cp"] = cp_profile
+        film_props["k"] = k_cool_profile
+        h_c_straight = sieder_tate_coefficient(G, D_h, film_props,
                                                mu_bulk=mu_b, mu_wall=mu_w)
-        # Level-1 corrections: Dean curvature, then fin (land) area.
+        # Level-1 geometry: optional exploratory curvature multiplier, then
+        # the literature-standard fin (land) area correction.
         Re_cool = G * D_h / np.maximum(mu_b, 1e-12)
+        if np.any(Re_cool < 2300.0):
+            msg = (
+                "Laminar coolant stations use the Nu=4.36 circular-duct "
+                "uniform-heat-flux proxy; rectangular aspect ratio, heated-"
+                "wall configuration, and entrance effects are unresolved."
+            )
+            if msg not in warnings:
+                warnings.append(msg)
+        elif np.any(Re_cool < 1.0e4):
+            msg = (
+                "Some coolant stations are below the usual turbulent "
+                "Sieder-Tate range (Re < 10,000)."
+            )
+            if msg not in warnings:
+                warnings.append(msg)
         c_curv = (curvature_correction_factor(Re_cool, D_h, R_c_signed)
                   if curvature_correction else np.ones_like(x))
         h_c_film = h_c_straight * c_curv
@@ -679,16 +840,94 @@ def regenerative_cooling_analysis(
         # area (channel base + fin-efficient side walls).
         h_c = h_c_film * fin_factor
 
-        # Series thermal circuit.
-        R_tot = 1.0 / np.maximum(h_g, 1e-9) + t_arr / k_wall + 1.0 / np.maximum(h_c, 1e-9)
-        q = np.maximum((Taw - T_c) / R_tot, 0.0)
-        T_wg_new = Taw - q / np.maximum(h_g, 1e-9)
+        # Participating-gas radiation is an additive wall heat source.  The
+        # multiband path is used when explicit band data are supplied;
+        # otherwise the Leccese CH4/H2 gray preset is available by request.
+        radiation_model = str(
+            getattr(cooling, "radiation_model", "none") or "none"
+        ).lower()
+        path_length = getattr(cooling, "radiation_path_length", None)
+        L_rad = (
+            np.full_like(x, float(path_length))
+            if path_length is not None
+            else np.maximum(y, 1e-9)
+        )
+        emissivity = float(
+            getattr(cooling, "radiation_wall_emissivity", 1.0) or 1.0
+        )
+        if radiation_model in {"spectral", "multiband"}:
+            bands = getattr(cooling, "radiation_bands", ()) or ()
+            if bands:
+                radiation_detail = spectral_band_radiative_heat_flux(
+                    hf["static_temperature"], T_wg, L_rad, bands,
+                    wall_emissivity=emissivity,
+                )
+                q_rad = np.maximum(
+                    np.asarray(radiation_detail["q"], dtype=float), 0.0
+                )
+                radiation_status = "spectral_multiband_enabled"
+            else:
+                q_rad = np.zeros_like(x)
+                radiation_status = "spectral_requested_but_no_bands_supplied"
+        elif radiation_model in {"leccese", "leccese_gray", "gray"}:
+            family = getattr(cooling, "radiation_propellant_family", None)
+            if family:
+                radiation_detail = leccese_participating_gas_radiation(
+                    hf["static_temperature"], T_wg, L_rad,
+                    float(Pc) * np.asarray([
+                        isentropic_pressure_ratio(float(M), float(prop.gamma))
+                        for M in np.asarray(hf["mach"], dtype=float)
+                    ]),
+                    propellant_family=family,
+                    wall_emissivity=emissivity,
+                )
+                q_rad = np.maximum(
+                    np.asarray(radiation_detail["q"], dtype=float), 0.0
+                )
+                radiation_status = "leccese_gray_enabled"
+            else:
+                q_rad = np.zeros_like(x)
+                radiation_status = "leccese_gray_requested_but_family_missing"
+        else:
+            q_rad = np.zeros_like(x)
+            radiation_status = "not_included"
+
+        # Series thermal circuit with radiation evaluated at the previous
+        # wall-temperature iterate:
+        # q_total = h_g(T_aw-T_wg) + q_rad,
+        # T_wg = T_c + q_total(t/k + 1/h_c).
+        R_cool_wall = t_arr / k_wall + 1.0 / np.maximum(h_c, 1e-9)
+        q = np.maximum(
+            (h_g * (Taw - T_c) + q_rad)
+            / np.maximum(1.0 + h_g * R_cool_wall, 1e-12),
+            0.0,
+        )
+        T_wg_new = T_c + q * R_cool_wall
+        q_conv = np.maximum(h_g * (Taw - T_wg_new), 0.0)
         T_wc = T_c + q / np.maximum(h_c, 1e-9)
 
         # March the coolant bulk temperature along the flow path.  Heat
         # picked up per station = q · (wall arc-length area dA_wall).
-        dT = (q * dA_wall) / max(mdot * cp_cool, 1e-9)
+        dT = (q * dA_wall) / np.maximum(mdot * cp_profile, 1e-9)
         T_c_marched = inlet_T + np.cumsum(dT[order])[inv]
+
+        # Couple the next real-fluid property evaluation to the current
+        # distributed pressure estimate.  The final manifold offset is added
+        # after the network solve; channel friction is pressure-coupled here.
+        if real_state.get("available") and pressure_drop:
+            f_iter = darcy_friction_factor(
+                Re_cool,
+                channel_roughness / np.maximum(D_h, 1e-12),
+            )
+            dP_iter = (
+                f_iter
+                * ds_path / np.maximum(D_h, 1e-12)
+                * 0.5 * rho_profile * V_cool ** 2
+            )
+            p_target = coolant_pressure_profile(
+                dP_iter, order, outlet_pressure=outlet_pressure
+            )
+            p_property = 0.5 * p_property + 0.5 * p_target
 
         # Relax for stability.
         T_wg = 0.5 * T_wg + 0.5 * T_wg_new
@@ -704,8 +943,28 @@ def regenerative_cooling_analysis(
     # channel: Δp = Σ f (ds/D_h) (ρ V²/2).
     if pressure_drop:
         Re_dp = G * D_h / np.maximum(mu_b, 1e-12)
-        f_profile = np.asarray(darcy_friction_factor(Re_dp), dtype=float)
-        dynamic_head = 0.5 * rho_cool * V_cool ** 2
+        if np.any((Re_dp >= 2300.0) & (Re_dp < 4000.0)):
+            msg = (
+                "Coolant pressure-drop stations in 2,300 <= Re < 4,000 use "
+                "the turbulent branch; transition detail is unresolved."
+            )
+            if msg not in warnings:
+                warnings.append(msg)
+        if channel_roughness == 0.0 and np.any(Re_dp > 1.0e5):
+            msg = (
+                "Smooth-wall Blasius friction is extrapolated above "
+                "Re=100,000; roughness and a broader correlation are not "
+                "included."
+            )
+            if msg not in warnings:
+                warnings.append(msg)
+        relative_roughness = (
+            channel_roughness / np.maximum(D_h, 1e-12)
+        )
+        f_profile = np.asarray(
+            darcy_friction_factor(Re_dp, relative_roughness), dtype=float
+        )
+        dynamic_head = 0.5 * rho_profile * V_cool ** 2
         # Δp = Σ f (ds_path / D_h) (ρ V²/2): ds_path is the HELICAL length
         # when the channels are wound, so more turns ⇒ proportionally more Δp.
         dP = f_profile * (ds_path / np.maximum(D_h, 1e-12)) * dynamic_head
@@ -720,28 +979,133 @@ def regenerative_cooling_analysis(
         dP_meridional_reference = np.zeros_like(x)
         total_dP = 0.0
 
-    # Absolute coolant pressure needs one boundary condition.  If the user
-    # has not supplied the jacket outlet pressure, use Pc + injector Δp:
-    # this is the minimum pressure that lets the coolant subsequently enter
-    # the chamber.  It is an explicit conservative-boundary assumption, not
-    # the former hard-coded ``0.5 Pc`` liner differential.
-    explicit_outlet = coolant_outlet_pressure
-    if explicit_outlet is None:
-        explicit_outlet = getattr(cooling, "coolant_outlet_pressure", None)
-    if explicit_outlet is None:
-        spec_injector_drop = getattr(cooling, "injector_pressure_drop", None)
-        used_injector_drop = (
-            float(spec_injector_drop)
-            if spec_injector_drop is not None
-            else float(injector_pressure_drop)
+    peak_velocity = float(np.max(V_cool))
+    if peak_velocity > 61.0:
+        warnings.append(
+            "Peak liquid-coolant velocity exceeds the NASA SP-8087 "
+            "preliminary-design recommendation of 61 m/s."
         )
-        outlet_pressure = float(Pc) + max(used_injector_drop, 0.0)
-        pressure_boundary_source = "minimum_injector_entry_pressure_Pc_plus_injector_drop"
+
+    coolant_wall_limit = cprops.get("coolant_wall_temperature_limit")
+    if coolant_wall_limit is not None:
+        coolant_wall_peak = float(np.max(T_wc))
+        coolant_chemistry_margin = (
+            float(coolant_wall_limit) / max(coolant_wall_peak, 1e-9)
+        )
+        coolant_chemistry_feasible = coolant_chemistry_margin >= 1.0
+        if not coolant_chemistry_feasible:
+            warnings.append(
+                "Coolant-side wall temperature exceeds the RP-1/kerosene "
+                "700 K conservative coking screen from NASA SP-8087."
+            )
+        coolant_chemistry_status = "coolant_specific_limit_applied"
     else:
-        outlet_pressure = float(explicit_outlet)
-        pressure_boundary_source = "user_supplied_coolant_outlet_pressure"
+        coolant_chemistry_margin = float("inf")
+        coolant_chemistry_feasible = True
+        coolant_chemistry_status = "not_evaluated_no_coolant_specific_limit"
+
+    channel_friction_dP = float(total_dP)
+    hydraulic_network = None
+    representative_outlet_manifold_loss = 0.0
+    if bool(getattr(cooling, "hydraulic_network", False)) and pressure_drop:
+        try:
+            network_kwargs = dict(
+                channel_count=N,
+                ports_per_manifold=int(
+                    getattr(cooling, "ports_per_manifold", 4) or 4
+                ),
+                total_mass_flow=mdot,
+                channel_pressure_drop=channel_friction_dP,
+                channel_total_area=float(N * A_ch[throat_idx]),
+                manifold_radius=float(
+                    0.5 * (r_channel_mid[order[0]] + r_channel_mid[order[-1]])
+                ),
+                port_area_ratio=float(
+                    getattr(cooling, "port_area_ratio", 1.0) or 1.0
+                ),
+                port_diameter=getattr(cooling, "port_diameter", None),
+                plenum_area_ratio=float(
+                    getattr(cooling, "plenum_area_ratio", 2.0) or 2.0
+                ),
+                plenum_hydraulic_diameter=getattr(
+                    cooling, "plenum_hydraulic_diameter", None
+                ),
+                roughness=channel_roughness,
+                port_loss_coefficient=float(
+                    getattr(cooling, "port_loss_coefficient", 1.5) or 1.5
+                ),
+                channel_entry_loss_coefficient=float(
+                    getattr(cooling, "channel_entry_loss_coefficient", 0.5)
+                ),
+                channel_exit_loss_coefficient=float(
+                    getattr(cooling, "channel_exit_loss_coefficient", 1.0)
+                ),
+            )
+            network_density = float(np.mean(rho_profile))
+            for _ in range(4):
+                hydraulic_network = solve_annular_manifold_network(
+                    density=network_density,
+                    **network_kwargs,
+                )
+                if (
+                    not hydraulic_network["converged"]
+                    or not real_fluid_requested
+                ):
+                    break
+                network_state = real_fluid_coolant_state(
+                    coolant_name,
+                    float(np.mean(T_c)),
+                    outlet_pressure
+                    + 0.5 * float(hydraulic_network["total_pressure_drop"]),
+                    backend=property_backend,
+                )
+                if not network_state.get("available"):
+                    break
+                target_density = float(np.asarray(network_state["rho"]))
+                if abs(target_density - network_density) <= 1e-3 * network_density:
+                    network_density = target_density
+                    break
+                network_density = 0.5 * network_density + 0.5 * target_density
+            hydraulic_network["density_used"] = float(network_density)
+            hydraulic_network["density_coupling"] = (
+                "real_fluid_mean_network_pressure_iterated"
+                if real_fluid_requested
+                else "constant_or_channel_mean_density"
+            )
+            if hydraulic_network["converged"]:
+                total_dP = float(hydraulic_network["total_pressure_drop"])
+                representative_outlet_manifold_loss = float(np.mean(
+                    hydraulic_network["outlet_ring_pressures"]
+                ))
+                if hydraulic_network["maldistribution_fraction"] > 0.10:
+                    warnings.append(
+                        "The plenum network predicts more than 10% channel-"
+                        "flow maldistribution; the axisymmetric thermal solve "
+                        "still uses the mean branch flow."
+                    )
+            else:
+                warnings.append(
+                    "The plenum/channel hydraulic graph did not converge; "
+                    "the pressure budget falls back to channel friction only."
+                )
+        except Exception as exc:
+            warnings.append(
+                "Plenum/channel hydraulic graph unavailable "
+                f"({type(exc).__name__}); channel friction only."
+            )
+            hydraulic_network = {
+                "converged": False,
+                "status": f"{type(exc).__name__}: {exc}",
+            }
+
+    # The external boundary is downstream of the outlet ports.  The wall
+    # channel therefore sees that pressure plus the solved outlet-manifold
+    # loss before its distributed pressure rise is marched upstream.
+    channel_outlet_pressure = (
+        outlet_pressure + representative_outlet_manifold_loss
+    )
     p_coolant = coolant_pressure_profile(
-        dP, order, outlet_pressure=outlet_pressure
+        dP, order, outlet_pressure=channel_outlet_pressure
     )
     p_gas = float(Pc) * np.asarray(
         [isentropic_pressure_ratio(float(M), float(prop.gamma))
@@ -750,10 +1114,32 @@ def regenerative_cooling_analysis(
     )
     p_diff = p_coolant - p_gas
 
+    boiling = (
+        boiling_chf_screen(
+            coolant_name,
+            T_c,
+            T_wc,
+            p_coolant,
+            q,
+            backend=property_backend,
+        )
+        if bool(getattr(cooling, "boiling_chf", False))
+        else {
+            "evaluated": False,
+            "status": "disabled",
+            "gates_feasibility": False,
+            "feasible": True,
+        }
+    )
+    chf_gate = bool(getattr(cooling, "gate_chf", False))
+    chf_feasible = bool(boiling.get("feasible", True))
+
     return {
         "method": getattr(cooling, "method", "regenerative"),
         "x": x,
         "q": q,
+        "convective_heat_flux": q_conv,
+        "radiative_heat_flux": q_rad,
         "h_c": h_c,
         "h_c_film": h_c_film,
         "fin_efficiency": eta_f,
@@ -770,20 +1156,51 @@ def regenerative_cooling_analysis(
         "x_peak_wall_temperature": float(x[int(np.argmax(T_wg))]),
         "throat_wall_temperature": float(T_wg[throat_idx]),
         "coolant_outlet_temperature": coolant_out,
+        "coolant_inlet_temperature": inlet_T,
+        "coolant_inlet_temperature_source": (
+            "user_supplied"
+            if getattr(cooling, "coolant_inlet_temperature", None) is not None
+            else "central_coolant_default"
+        ),
         "coolant_temperature_rise": float(coolant_out - inlet_T),
         "channel_flow_area": float(N * A_ch[throat_idx]),
         "channel_hydraulic_diameter": float(D_h[throat_idx]),
         "channel_mass_flux": float(G[throat_idx]),
         "channel_velocity": float(V_cool[throat_idx]),
         "channel_velocity_profile": V_cool,
+        "peak_channel_velocity": peak_velocity,
+        "liquid_velocity_recommendation": 61.0,
+        "liquid_velocity_margin": 61.0 / max(peak_velocity, 1e-9),
+        "coolant_reynolds_profile": Re_cool,
+        "channel_aspect_ratio_profile": aspect_ratio,
+        "channel_roughness": channel_roughness,
+        "relative_roughness_profile":
+            channel_roughness / np.maximum(D_h, 1e-12),
         "hydraulic_diameter_profile": D_h,
         "coolant_pressure_drop": total_dP,
+        "channel_friction_pressure_drop": channel_friction_dP,
+        "hydraulic_network": hydraulic_network,
+        "hydraulic_network_status": (
+            "full_channel_graph_converged"
+            if hydraulic_network and hydraulic_network.get("converged")
+            else (
+                "requested_but_unavailable"
+                if bool(getattr(cooling, "hydraulic_network", False))
+                else "disabled"
+            )
+        ),
         "darcy_friction_factor": f_darcy,
+        "pressure_drop_correlation": (
+            "darcy_64_over_Re_laminar_and_swamee_jain_rough_turbulent"
+            if channel_roughness > 0.0
+            else "darcy_64_over_Re_laminar_and_smooth_blasius_turbulent"
+        ),
         "pressure_loss_profile": dP,
         "coolant_pressure": p_coolant,
         "coolant_flow_order": order,
         "coolant_outlet_pressure": float(outlet_pressure),
-        "coolant_inlet_pressure": float(p_coolant[order[0]] + 0.5 * dP[order[0]]),
+        "coolant_channel_outlet_pressure": float(channel_outlet_pressure),
+        "coolant_inlet_pressure": float(outlet_pressure + total_dP),
         "coolant_pressure_boundary_source": pressure_boundary_source,
         "gas_pressure": p_gas,
         "liner_pressure_differential": p_diff,
@@ -801,12 +1218,42 @@ def regenerative_cooling_analysis(
         "throat_fin_efficiency": float(eta_f[throat_idx]) if fin_correction else 1.0,
         "total_heat_load": total_heat,
         "cooling_margin": float(margin),
+        "coolant_wall_temperature_limit": coolant_wall_limit,
+        "coolant_chemistry_margin": coolant_chemistry_margin,
+        "coolant_chemistry_feasible": coolant_chemistry_feasible,
+        "coolant_chemistry_status": coolant_chemistry_status,
         "coolant_properties": cprops,
+        "coolant_density_profile": rho_profile,
+        "coolant_cp_profile": cp_profile,
+        "coolant_conductivity_profile": k_cool_profile,
+        "coolant_property_backend": (
+            "CoolProp_HEOS"
+            if real_fluid_status == "real_fluid_properties_evaluated"
+            else "constant_property_screen"
+        ),
+        "coolant_property_status": real_fluid_status,
+        "coolant_property_pressure_coupling":
+            "distributed_channel_pressure_iterated_then_manifold_offset_added",
+        "boiling_chf": boiling,
+        "boiling_chf_status": boiling.get("status"),
+        "boiling_chf_gates_feasibility": chf_gate,
+        "boiling_chf_feasible": (chf_feasible if chf_gate else True),
         "model": "sieder_tate_1d_regen",
         "fidelity": "1d_finned",
         "corrections": {"fin": fin_correction,
                         "curvature": curvature_correction,
                         "pressure_drop": pressure_drop},
+        "curvature_correlation_status": (
+            "niino_kumakawa_screening_enabled"
+            if curvature_correction else "disabled_by_default_for_liquid_sizing"
+        ),
+        "gas_radiation_status": radiation_status,
+        "gas_radiation_model": (
+            radiation_detail.get("model") if radiation_detail else None
+        ),
+        "gas_radiation_detail": radiation_detail,
+        "coolant_heat_transfer_correlation":
+            "sieder_tate_turbulent_with_Nu_4p36_circular_duct_laminar_proxy",
         "warnings": warnings,
     }
 
@@ -980,6 +1427,72 @@ def regenerative_cooling_2d(
     return out
 
 
+def wall_cross_section_field(
+    cooling_result: dict, heat_flux: dict, contour: dict, cooling: Any,
+    material: Any, wall_thickness, prop: Any, Pc: float,
+    *, station="peak", n_s: int = 24, n_xi: int = 24,
+) -> dict:
+    """One station's full 2-D channel-land wall temperature field.
+
+    Wraps :func:`_solve_wall_cross_section` for a single axial station
+    (``station="peak"`` = the 1-D gas-side hot spot, ``"throat"``, or an
+    int index), reusing the geometry and the gas/coolant film coefficients
+    behind an already-computed 1-D ``cooling_result``.  Returns the
+    ``(n_s, n_xi)`` ``field`` (NaN in the coolant void), the ``s``/``xi``
+    cell centres, the half-pitch geometry, and the land/channel gas-side
+    temperatures — the burn-through-relevant land hot spot the 1-D series
+    circuit averages away (Pizzarelli 2011/2013; fin model Atefi &
+    Naraghi 2019).  ``wall_thickness`` may be a scalar or a per-station
+    array (e.g. a sized ``t_hot(x)``).
+    """
+    y = np.asarray(contour["y"], dtype=float)
+    Rt = float(contour["Rt"])
+    T_wg = np.asarray(cooling_result["gas_side_wall_temperature"], dtype=float)
+    if station == "peak":
+        i = int(np.argmax(T_wg))
+    elif station == "throat":
+        i = int(np.argmin(np.abs(y - Rt)))
+    else:
+        i = int(station)
+
+    k_wall = max(float(getattr(material, "conductivity", 15.0) or 15.0), 1e-9)
+    tw_arr = np.asarray(wall_thickness, dtype=float)
+    t_w = max(float(tw_arr[i] if tw_arr.ndim else tw_arr), 1e-9)
+    H = float(getattr(cooling, "channel_height", 0.0) or 0.0)
+    w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
+    N = int(getattr(cooling, "channel_count", 0) or 0)
+    if H <= 0.0 or w <= 0.0 or N <= 0:
+        raise ValueError(
+            "wall_cross_section_field needs channel_height/width/count > 0")
+
+    Taw = np.asarray(heat_flux["recovery_temperature"], dtype=float)
+    hf = bartz_heat_flux(contour, Pc, prop, wall_temperature=T_wg)
+    h_g = np.asarray(hf["h_g"], dtype=float)
+    h_c_film = np.asarray(cooling_result["h_c_film"], dtype=float)
+    T_c = np.asarray(cooling_result["coolant_temperature"], dtype=float)
+
+    pitch = 2.0 * math.pi * max(float(y[i]), 1e-9) / max(N, 1)
+    w_half = 0.5 * w
+    land_half = max(0.5 * (pitch - w), 1e-6)
+    field, s_c, xi_c = _solve_wall_cross_section(
+        t_w=t_w, H=H, w_half=w_half, land_half=land_half, k_wall=k_wall,
+        h_g=float(h_g[i]), T_aw=float(Taw[i]),
+        h_c=float(h_c_film[i]), T_c=float(T_c[i]), n_s=n_s, n_xi=n_xi)
+    gas_row = field[:, 0]
+    return {
+        "field": field, "s": s_c, "xi": xi_c,
+        "t_w": t_w, "channel_height": H, "w_half": w_half,
+        "land_half": land_half, "station_index": i,
+        "station_x": float(np.asarray(cooling_result["x"])[i]),
+        "T_land": float(np.nanmax(gas_row)),
+        "T_channel": float(np.nanmin(gas_row)),
+        "circumferential_spread":
+            float(np.nanmax(gas_row) - np.nanmin(gas_row)),
+        "T_aw": float(Taw[i]), "T_coolant": float(T_c[i]),
+        "model": "regen_2d_cross_section_single_station",
+    }
+
+
 def regenerative_cooling(
     heat_flux: dict,
     contour: dict,
@@ -996,7 +1509,8 @@ def regenerative_cooling(
 
     * ``"1d"``  — :func:`regenerative_cooling_analysis`: coupled
       Sieder-Tate / 1-D wall conduction with the Level-1 fin (land)
-      area, Dean curvature, and Darcy-Weisbach pressure-drop
+      area, optional exploratory curvature multiplier, and Darcy-Weisbach
+      pressure-drop
       corrections.  Cheap; the engineering preliminary-design model.
     * ``"2d"``  — :func:`regenerative_cooling_2d`: adds a per-station
       2-D (r-θ) cross-section conduction solve resolving the
@@ -1074,7 +1588,7 @@ def regenerative_cooling_3d(
     w = float(getattr(cooling, "channel_width", 0.0) or 0.0)
     N = int(getattr(cooling, "channel_count", 0) or 0)
     mdot = float(getattr(cooling, "coolant_mass_flow", 0.0) or 0.0)
-    inlet_T = float(getattr(cooling, "coolant_inlet_temperature", 293.0))
+    inlet_T = resolve_coolant_inlet_temperature(cooling)
     cprops = resolve_coolant_properties(cooling)
     cp_cool = float(cprops["cp"])
 
@@ -1223,7 +1737,7 @@ def regenerative_cooling_screen(
     h_g rather than the old ad-hoc ``1000 + 2e8·area`` film model.
     """
     method = getattr(cooling, "method", "none")
-    coolant_inlet = float(getattr(cooling, "coolant_inlet_temperature", 293.0))
+    coolant_inlet = resolve_coolant_inlet_temperature(cooling)
     if method != "regenerative":
         Taw = float(heat_flux["adiabatic_wall_temperature"])
         return {
@@ -1288,6 +1802,12 @@ def regenerative_cooling_screen(
     return {
         "method": method,
         "estimated_wall_temperature": float(wall_temp),
+        "coolant_inlet_temperature": coolant_inlet,
+        "coolant_inlet_temperature_source": (
+            "user_supplied"
+            if getattr(cooling, "coolant_inlet_temperature", None) is not None
+            else "central_coolant_default"
+        ),
         "coolant_outlet_temperature": float(coolant_out) if math.isfinite(coolant_out) else None,
         "coolant_temperature_rise": float(coolant_rise) if math.isfinite(coolant_rise) else None,
         "channel_flow_area": float(N * A_ch),
@@ -1352,6 +1872,24 @@ def coaxial_shell_wall_stress(
     if yield_strength:
         out["stress_margin"] = float(yield_strength) / max(combined, 1e-9)
     return out
+
+
+def channel_pressure_hoop_radius(channel_width, wall_thickness=None):
+    """Equivalent tube radius for the SP-125 eq. 4-27/4-31 liner hoop term.
+
+    NASA SP-125 (printed p.108) eq. 4-27 ``S_t = (P_co - P_g) r / t`` defines
+    ``r`` as the **tube radius** — the coolant-passage scale, NOT the nozzle
+    shell radius.  For a milled rectangular channel the hot liner spans the
+    channel WIDTH between adjacent lands, so the equivalent-tube radius is the
+    half-width ``w/2``.  A narrower channel genuinely carries *less* hoop, so
+    (unlike the eq. 4-29 buckling radius) this is NOT floored at the wall
+    thickness — only at a tiny epsilon for numerical safety.  ``wall_thickness``
+    is accepted for call-signature symmetry but unused.  Passing the nozzle
+    shell radius (``contour['y']`` ~ 0.1-0.35 m) here instead of the
+    sub-millimetre channel scale overstates the pressure stress by O(1000x).
+    """
+    w = np.maximum(np.asarray(channel_width, dtype=float), 0.0)
+    return np.maximum(0.5 * w, 1e-9)
 
 
 def coaxial_shell_wall_stress_profile(
@@ -1481,6 +2019,10 @@ def rib_supported_liner_buckling_profile(
         "model": "rib_supported_liner_plate_buckling_screen",
         "plate_coefficient": float(plate_coefficient),
         "knockdown": float(knockdown),
+        "provenance_status":
+            "classical_long_plate_relation_with_rib_bay_mapping_assumption",
+        "qualification_status":
+            "screening_only_requires_shell_panel_fea_with_imperfections",
     }
 
 
@@ -1560,6 +2102,68 @@ def coffin_manson_cycles(
     return 0.5 * math.sqrt(lo * hi)
 
 
+def total_strain_life_cycles(
+    strain_range: float,
+    curves,
+    *,
+    temperature: float | None = None,
+    max_cycles: float = 1e9,
+) -> dict:
+    """Invert sourced direct regressions ``Δε_t = A N_f**b``.
+
+    ``curves`` contains ``(T_min, T_max, A, b, label)`` rows.  Curves that
+    contain ``temperature`` are preferred; outside the tested range the
+    conservative minimum life over all supplied curves is returned and the
+    extrapolation is flagged.
+    """
+    de = max(float(strain_range), 1e-30)
+    rows = tuple(curves or ())
+    if not rows:
+        return {
+            "cycles": None,
+            "status": "missing_total_strain_life_curve",
+            "curve": None,
+        }
+    applicable = rows
+    extrapolated = False
+    if temperature is not None:
+        inside = [
+            row for row in rows
+            if float(row[0]) <= float(temperature) <= float(row[1])
+        ]
+        if inside:
+            applicable = inside
+        else:
+            extrapolated = True
+    predictions = []
+    for t_lo, t_hi, A, b, label in applicable:
+        if A <= 0.0 or b >= 0.0:
+            continue
+        Nf = (de / float(A)) ** (1.0 / float(b))
+        predictions.append((
+            min(max(float(Nf), 0.5), float(max_cycles)),
+            str(label),
+            (float(t_lo), float(t_hi)),
+        ))
+    if not predictions:
+        return {
+            "cycles": None,
+            "status": "invalid_total_strain_life_curve",
+            "curve": None,
+        }
+    cycles, label, valid_T = min(predictions, key=lambda item: item[0])
+    return {
+        "cycles": cycles,
+        "status": (
+            "sourced_total_strain_life_extrapolated"
+            if extrapolated else "sourced_total_strain_life"
+        ),
+        "curve": label,
+        "valid_temperature_range": valid_T,
+        "temperature": temperature,
+    }
+
+
 def structural_screen(
     contour: dict,
     Pc: float,
@@ -1569,6 +2173,7 @@ def structural_screen(
     wall_thickness: float | None,
     thermal: dict,
     cooling: dict,
+    channel_width: float | None = None,
 ) -> dict:
     """Evaluate thermal and hoop-stress screening margins.
 
@@ -1607,11 +2212,17 @@ def structural_screen(
         # eq. 4-31 governs at the throat (peak flux), so co-locate the
         # radius with q_max there — the narrowest contour station.
         throat_radius = float(np.min(y))
+        # SP-125 eq. 4-27 hoop radius is the TUBE (channel) radius, not the
+        # nozzle shell radius `y`.  Use the channel half-width when known;
+        # else fall back to the throat radius (smallest shell station), never
+        # the full shell array which overstates the pressure stress O(1000x).
+        cw = channel_width if channel_width is not None else cooling.get("channel_width")
+        hoop_radius = channel_pressure_hoop_radius(cw, thickness) if cw else throat_radius
         p_diff = cooling.get("liner_pressure_differential")
         q_profile = cooling.get("q")
         if p_diff is not None and q_profile is not None:
             combined = coaxial_shell_wall_stress_profile(
-                pressure_differential=p_diff, inner_radius=y,
+                pressure_differential=p_diff, inner_radius=hoop_radius,
                 wall_thickness=thickness, heat_flux=q_profile,
                 elastic_modulus=float(E), thermal_expansion=float(alpha),
                 poisson_ratio=float(nu),

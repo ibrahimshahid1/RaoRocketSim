@@ -30,6 +30,8 @@ from raosim.rao_variational import (
 from raosim.moc import _make_point, approximate_starting_line, march_coupled_net, FlowNode
 from raosim.rao_residuals import residual_Cminus_axisym, residual_Cplus_axisym
 from raosim.wall_model import SplineWall
+from raosim.chamber_geometry import chamber_contour, full_engine_contour
+from raosim.throat_geometry import ThroatGeometrySpec
 
 
 @pytest.mark.smoke
@@ -76,6 +78,80 @@ def test_rao_variational_moc_contour_exposes_raw_and_export_layers():
     assert contour["wall_export_resampled"] is True
     assert "raw_wall_points" in contour
     assert contour["y"][-1] == math.sqrt(10.0) * 0.020
+
+
+def test_zero_length_throat_arc_collapses_to_one_station():
+    solution = solve_rao_bvp(RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=0,
+        evaluate_moc=False,
+    ))
+    solution.wall_export = np.array([
+        [0.0, 0.020],
+        [0.010, 0.021],
+        [0.129, math.sqrt(10.0) * 0.020],
+    ])
+
+    contour = solution.to_contour_dict(
+        Rt=0.020, epsilon=10.0, length_pct=80.0, pa_over_p0=0.0
+    )
+
+    assert len(contour["x_throat"]) == 1
+    assert contour["x_throat"][0] == pytest.approx(0.0)
+    assert contour["y_throat"][0] == pytest.approx(0.020)
+    assert np.all(np.diff(contour["x"]) > 0.0)
+
+
+def test_moc_wall_throat_bridge_is_tangent_and_exit_preserving():
+    """Regression: an MOC/BDE wall that begins downstream of the throat (the
+    kernel theta_B runs ~3-4 deg short of the chart-N station it sits on) must
+    still assemble into a position- and slope-continuous thrust-chamber contour
+    WITHOUT moving the solved exit.  The previous plain-R_d-arc stitch left a
+    radial gap + ~3 deg slope kink that tripped both continuity gates."""
+    solution = solve_rao_bvp(RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=0,
+        evaluate_moc=False,
+    ))
+    Re = math.sqrt(10.0) * 0.020
+    # First station sits on the R_d=0.382 R_t arc near the chart-N angle
+    # (~33 deg) but the wall departs ~3 deg shallower (~30 deg): exactly the
+    # kink the old stitch could not absorb.
+    solution.wall_export = np.array([
+        [0.004161, 0.021232],   # ~33 deg R_d-arc station
+        [0.010000, 0.024600],   # departs at ~30 deg (3 deg kink)
+        [0.050000, 0.050000],
+        [0.120000, Re],
+    ])
+
+    spec = ThroatGeometrySpec()
+    nozzle = solution.to_contour_dict(
+        Rt=0.020, epsilon=10.0, length_pct=80.0, pa_over_p0=0.0
+    )
+    nozzle["throat_geometry"] = spec.to_dict()
+    nozzle["throat_location"] = spec.throat_location
+    chamber = chamber_contour(0.020, throat_geometry=spec)
+    full = full_engine_contour(chamber, nozzle)
+    checks = full["geometry_checks"]
+
+    # The junction is now C0 (gap = 0) and C1 (slope matched at N).
+    assert checks["position_continuity"]
+    assert checks["slope_continuity"]
+    assert checks["throat_bell_position_gap"] < 1e-12
+    assert np.all(np.diff(full["x"]) > 0.0)
+    # The solved wall (hence the exit radius / epsilon) is left untouched.
+    assert full["y"][-1] == pytest.approx(Re)
+    assert nozzle["throat_bell_reconciliation"]["throat_bridge"] == "cubic_tangent"
 
 
 @pytest.mark.smoke

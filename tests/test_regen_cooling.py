@@ -225,7 +225,7 @@ def test_non_regenerative_returns_adiabatic(contour, heat):
 
 
 # ---------------------------------------------------------------------
-#  Level 1: fin efficiency + Dean curvature + Darcy-Weisbach.
+#  Level 1: fin efficiency + opt-in curvature screen + Darcy-Weisbach.
 # ---------------------------------------------------------------------
 
 
@@ -235,6 +235,23 @@ def test_fin_efficiency_limits():
     assert float(fin_efficiency(20e3, 350.0, 0.001, 0.0003)) > 0.95
     # Tall, thin fin -> η_f well below 1 (tip runs hot).
     assert float(fin_efficiency(80e3, 350.0, 0.0002, 0.004)) < 0.5
+
+
+def test_sieder_tate_uses_laminar_fallback_below_re_2300():
+    from raosim.physics import sieder_tate_coefficient
+
+    props = {"k": 0.12, "cp": 2010.0}
+    mu = 1.0e-3
+    diameter = 1.0e-3
+    mass_flux = 1000.0 * mu / diameter  # Re = G Dh / mu = 1000
+    h = float(sieder_tate_coefficient(
+        mass_flux,
+        diameter,
+        props,
+        mu_bulk=mu,
+        mu_wall=mu,
+    ))
+    assert h == pytest.approx(4.36 * props["k"] / diameter)
 
 
 def test_curvature_factor_sign_convention():
@@ -255,14 +272,28 @@ def test_darcy_friction_factor_blasius():
     assert float(darcy_friction_factor(1000.0)) == pytest.approx(64.0 / 1000.0)
 
 
+def test_swamee_jain_roughness_increases_turbulent_friction():
+    from raosim.physics import darcy_friction_factor
+
+    Re = 1.0e5
+    smooth = float(darcy_friction_factor(Re))
+    rough = float(darcy_friction_factor(Re, relative_roughness=0.01))
+    expected = 0.25 / math.log10(0.01 / 3.7 + 5.74 / Re ** 0.9) ** 2
+    assert rough == pytest.approx(expected)
+    assert rough > smooth
+
+
 def test_level1_corrections_improve_cooling(contour, prop, heat):
-    """Fin (land) area + Dean curvature lower the wall temperature vs the
-    bare 1-D model (the conservatism the bare model carried)."""
+    """Fin (land) area lowers wall temperature versus the bare 1-D model.
+
+    The exploratory curvature multiplier is explicitly disabled here.
+    """
     bare = regenerative_cooling_analysis(
         heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6,
         fin_correction=False, curvature_correction=False)
     finned = regenerative_cooling_analysis(
-        heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6)
+        heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6,
+        curvature_correction=False)
     assert finned["fidelity"] == "1d_finned"
     assert (finned["peak_gas_side_wall_temperature"]
             < bare["peak_gas_side_wall_temperature"])
@@ -282,6 +313,33 @@ def test_pressure_drop_is_reported_and_scales(contour, prop, heat):
     res2 = regenerative_cooling_analysis(heat, contour, C2(), _Mat(),
                                          0.001, prop, 7.0e6)
     assert res2["coolant_pressure_drop"] > res["coolant_pressure_drop"]
+
+
+def test_channel_roughness_propagates_to_pressure_drop(contour, prop, heat):
+    class Rough(_Cool):
+        channel_roughness = 20e-6
+
+    smooth = regenerative_cooling_analysis(
+        heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6
+    )
+    rough = regenerative_cooling_analysis(
+        heat, contour, Rough(), _Mat(), 0.001, prop, 7.0e6
+    )
+    assert rough["coolant_pressure_drop"] > smooth["coolant_pressure_drop"]
+    assert "swamee_jain" in rough["pressure_drop_correlation"]
+
+
+def test_rp1_coking_screen_and_radiation_omission_are_explicit(
+    contour, prop, heat
+):
+    res = regenerative_cooling_analysis(
+        heat, contour, _Cool(), _Mat(), 0.001, prop, 7.0e6
+    )
+    assert res["coolant_wall_temperature_limit"] == pytest.approx(700.0)
+    assert res["coolant_chemistry_feasible"] == (
+        res["coolant_chemistry_margin"] >= 1.0
+    )
+    assert "not_included" in res["gas_radiation_status"]
 
 
 def test_absolute_coolant_pressure_march_sets_local_liner_load(contour, prop, heat):

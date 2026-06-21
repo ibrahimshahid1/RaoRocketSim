@@ -39,13 +39,17 @@ import numpy as np
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.physics import (
     bartz_heat_flux,
+    channel_pressure_hoop_radius,
     coaxial_shell_wall_stress_profile,
     coffin_manson_cycles,
     regenerative_cooling_analysis,
+    resolve_coolant_inlet_temperature,
     rib_supported_liner_buckling_profile,
     sp125_inelastic_buckling_critical_stress,
     thermal_fatigue_strain,
+    total_strain_life_cycles,
 )
+from raosim.materials import cyclic_tangent_modulus
 from raosim.regen_profile import (
     RegenWallProfile,
     helix_passage_lengths,
@@ -89,10 +93,14 @@ def size_cooling_channels(
     mixture_ratio: float = 2.6,
     cooling_fraction: float = 1.0,
     channel_height: float = 0.0025,
+    channel_roughness: float = 0.0,
+    gate_coolant_chemistry: bool = False,
+    curvature_correction: bool = False,
     wall_thickness: float = 0.001,
     wall_k: float = 350.0,
     coolant: str = "rp1",
     helix_turns: float = 0.0,
+    cooling_options: dict[str, Any] | None = None,
     w_min: float = 0.0005,
     w_max: float = 0.0020,
     land_min: float = 0.0005,
@@ -133,26 +141,39 @@ def size_cooling_channels(
         if n_fit < 8:
             continue
         for N in np.unique(np.linspace(8, n_fit, n_count).astype(int)):
-            spec = SimpleNamespace(
+            spec_fields = dict(
                 method="regenerative", coolant=coolant, channel_count=int(N),
                 channel_width=float(w), channel_height=channel_height,
+                channel_roughness=channel_roughness,
                 coolant_mass_flow=mdot_cool, coolant_cp=None,
-                coolant_inlet_temperature=300.0,
+                coolant_inlet_temperature=None,
                 max_wall_temperature=wall_temp_limit,
                 coolant_density=None, coolant_viscosity=None,
                 coolant_conductivity=None)
+            spec_fields.update(cooling_options or {})
+            spec = SimpleNamespace(**spec_fields)
             res = regenerative_cooling_analysis(
                 hf, contour, spec, material, wall_thickness, prop, Pc,
-                n_iter=n_iter, helix_turns=helix_turns)
+                n_iter=n_iter, helix_turns=helix_turns,
+                curvature_correction=curvature_correction)
             dp_bar = res["coolant_pressure_drop"] / 1e5
             fits = not any("do not fit" in m for m in res["warnings"])
-            feasible = (res["cooling_margin"] >= margin_target
-                        and dp_bar <= dp_budget_bar and fits)
+            feasible = (
+                res["cooling_margin"] >= margin_target
+                and (
+                    not gate_coolant_chemistry
+                    or res["coolant_chemistry_feasible"]
+                )
+                and dp_bar <= dp_budget_bar
+                and fits
+            )
             candidates.append({
                 "N": int(N), "w": float(w),
                 "margin": float(res["cooling_margin"]),
                 "dp_bar": float(dp_bar),
                 "peak_wall_T": float(res["peak_gas_side_wall_temperature"]),
+                "coolant_chemistry_margin":
+                    float(res["coolant_chemistry_margin"]),
                 "fits": bool(fits), "feasible": bool(feasible),
             })
 
@@ -168,6 +189,14 @@ def size_cooling_channels(
         # Why did it fail? — the closest-margin design tells us.
         if best is None:
             diagnosis = "no candidate channels fit the throat"
+        elif (
+            gate_coolant_chemistry
+            and best["coolant_chemistry_margin"] < 1.0
+        ):
+            diagnosis = (
+                "coolant-chemistry-limited: the RP-1/kerosene coolant-side "
+                "wall exceeds the conservative coking screen"
+            )
         elif best["margin"] < margin_target:
             diagnosis = ("cooling requirement unmet at any geometry: coolant "
                          "flow too low or heat flux too high — lower O/F "
@@ -186,12 +215,29 @@ def size_cooling_channels(
         "margin": best["margin"] if best else float("nan"),
         "pressure_drop_bar": best["dp_bar"] if best else float("nan"),
         "peak_wall_T": best["peak_wall_T"] if best else float("nan"),
+        "coolant_chemistry_margin": (
+            best["coolant_chemistry_margin"] if best else float("nan")
+        ),
         "feasible": bool(feas),
         "objective": objective,
         "diagnosis": diagnosis,
         "requirement": {"margin_target": margin_target,
                         "dp_budget_bar": dp_budget_bar,
-                        "wall_temp_limit": wall_temp_limit},
+                        "wall_temp_limit": wall_temp_limit,
+                        "channel_roughness": channel_roughness,
+                        "gate_coolant_chemistry":
+                            bool(gate_coolant_chemistry),
+                        "curvature_correction":
+                            bool(curvature_correction),
+                        "coolant_inlet_temperature":
+                            resolve_coolant_inlet_temperature(
+                                SimpleNamespace(
+                                    coolant=coolant,
+                                    coolant_inlet_temperature=(
+                                        cooling_options or {}
+                                    ).get("coolant_inlet_temperature"),
+                                )
+                            )},
         "candidates": candidates,
         "helix_turns": float(helix_turns),
         "model": "channel_auto_size",
@@ -215,6 +261,7 @@ def _evaluate(Rt, epsilon, Pc, prop, cooling, material, *,
     thermal = bartz_heat_flux(contour, Pc, prop)
     cool = regenerative_cooling_analysis(
         thermal, contour, scaled_cooling, material, wall_thickness, prop, Pc,
+        curvature_correction=False,
     )
     return contour, thermal, cool, scaled_cooling
 
@@ -423,6 +470,9 @@ def joint_wall_channel_design(
     dp_budget_bar: float = 200.0,
     helix_turns: float = 0.0,
     channel_height: float = 0.0030,
+    channel_roughness: float = 0.0,
+    gate_coolant_chemistry: bool = False,
+    curvature_correction: bool = False,
     channel_height_min: float | None = None,
     channel_height_max: float | None = None,
     n_height: int = 1,
@@ -436,6 +486,7 @@ def joint_wall_channel_design(
     n_count: int = 6,
     coolant_outlet_pressure: float | None = None,
     injector_pressure_drop: float = 0.0,
+    cooling_options: dict[str, Any] | None = None,
     objective: str = "min_mass",
     n_iter: int = 12,
 ) -> dict:
@@ -502,9 +553,22 @@ def joint_wall_channel_design(
     f_b = getattr(mat, "fatigue_strength_exp", None)
     f_ef = getattr(mat, "fatigue_ductility_coeff", None)
     f_c = getattr(mat, "fatigue_ductility_exp", None)
+    total_strain_curves = tuple(
+        getattr(mat, "fatigue_total_strain_curves", ()) or ()
+    )
     fatigue_source = getattr(mat, "fatigue_source", None)
-    has_fatigue = None not in (f_sf, f_b, f_ef, f_c) and bool(fatigue_source)
-    fatigue_gates = bool(has_fatigue and getattr(mat, "fatigue_design_qualified", False))
+    has_cm_fatigue = (
+        None not in (f_sf, f_b, f_ef, f_c) and bool(fatigue_source)
+    )
+    has_direct_fatigue = bool(total_strain_curves and fatigue_source)
+    has_fatigue = has_cm_fatigue or has_direct_fatigue
+    fatigue_gates = bool(
+        has_fatigue
+        and (
+            getattr(mat, "fatigue_design_qualified", False)
+            or getattr(mat, "fatigue_screening_gate", False)
+        )
+    )
     cyc_target = float(required_cycles) * float(life_fos)
 
     t_grid = np.linspace(t_hot_min, t_hot_max, max(n_t, 2))
@@ -516,16 +580,21 @@ def joint_wall_channel_design(
                 continue
             for N in np.unique(np.linspace(8, n_fit, n_count).astype(int)):
                 for t_hot in t_grid:
-                    spec = SimpleNamespace(
+                    spec_fields = dict(
                         method="regenerative", coolant=coolant, channel_count=int(N),
                         channel_width=float(w), channel_height=float(h),
+                        channel_roughness=channel_roughness,
                         coolant_mass_flow=mdot_cool, coolant_cp=None,
-                        coolant_inlet_temperature=300.0, max_wall_temperature=T_max,
+                        coolant_inlet_temperature=None,
+                        max_wall_temperature=T_max,
                         coolant_density=None, coolant_viscosity=None,
                         coolant_conductivity=None)
+                    spec_fields.update(cooling_options or {})
+                    spec = SimpleNamespace(**spec_fields)
                     res = regenerative_cooling_analysis(
                         hf, contour, spec, cool_material, float(t_hot), prop, Pc,
                         n_iter=n_iter, helix_turns=helix_turns,
+                        curvature_correction=curvature_correction,
                         coolant_outlet_pressure=coolant_outlet_pressure,
                         injector_pressure_drop=injector_pressure_drop)
                     th_margin = float(res["cooling_margin"])
@@ -533,7 +602,9 @@ def joint_wall_channel_design(
                     fits = not any("do not fit" in m for m in res["warnings"])
                     stress = coaxial_shell_wall_stress_profile(
                         pressure_differential=res["liner_pressure_differential"],
-                        inner_radius=np.asarray(contour["y"], dtype=float),
+                        # SP-125 eq. 4-27 hoop radius = channel tube radius,
+                        # NOT the nozzle shell radius contour["y"].
+                        inner_radius=channel_pressure_hoop_radius(w, t_hot),
                         wall_thickness=float(t_hot), heat_flux=res["q"],
                         elastic_modulus=E, thermal_expansion=alpha, poisson_ratio=nu,
                         conductivity=k, yield_strength=Sy)
@@ -544,6 +615,9 @@ def joint_wall_channel_design(
                     Twg = np.asarray(res["gas_side_wall_temperature"], dtype=float)
                     Twc = np.asarray(res["coolant_side_wall_temperature"], dtype=float)
                     dT_wall_profile = Twg - Twc
+                    fatigue_model = None
+                    fatigue_curve = None
+                    fatigue_model_status = None
                     if has_fatigue:
                         eps_profile = np.asarray([
                             thermal_fatigue_strain(
@@ -557,11 +631,27 @@ def joint_wall_channel_design(
                                 np.abs(stress["pressure_stress_profile"]),
                             )
                         ])
-                        eps = float(np.max(eps_profile))
-                        Nf = coffin_manson_cycles(
-                            eps, elastic_modulus=E, fatigue_strength_coeff=f_sf,
-                            fatigue_strength_exp=f_b, fatigue_ductility_coeff=f_ef,
-                            fatigue_ductility_exp=f_c)
+                        fatigue_idx = int(np.argmax(eps_profile))
+                        eps = float(eps_profile[fatigue_idx])
+                        if has_cm_fatigue:
+                            Nf = coffin_manson_cycles(
+                                eps, elastic_modulus=E,
+                                fatigue_strength_coeff=f_sf,
+                                fatigue_strength_exp=f_b,
+                                fatigue_ductility_coeff=f_ef,
+                                fatigue_ductility_exp=f_c)
+                            fatigue_model = "coffin_manson_basquin"
+                            fatigue_model_status = "sourced_strain_life_coefficients"
+                        else:
+                            direct = total_strain_life_cycles(
+                                eps,
+                                total_strain_curves,
+                                temperature=float(Twg[fatigue_idx]),
+                            )
+                            Nf = direct["cycles"]
+                            fatigue_model = "direct_total_strain_life"
+                            fatigue_curve = direct.get("curve")
+                            fatigue_model_status = direct.get("status")
                     else:
                         eps, Nf = None, None
                     fatigue_ok = (
@@ -569,6 +659,11 @@ def joint_wall_channel_design(
                     ) if fatigue_gates else True
                     feasible = (
                         th_margin >= thermal_margin
+                        and (
+                            not gate_coolant_chemistry
+                            or res["coolant_chemistry_feasible"]
+                        )
+                        and res.get("boiling_chf_feasible", True)
                         and st_margin >= structural_fos
                         and fatigue_ok
                         and dp_bar <= dp_budget_bar
@@ -582,8 +677,14 @@ def joint_wall_channel_design(
                         "N_f": float(Nf) if Nf is not None else None,
                         "strain_range": float(eps) if eps is not None else None,
                         "fatigue_ok": bool(fatigue_ok), "dp_bar": dp_bar,
+                        "fatigue_model": fatigue_model,
+                        "fatigue_curve": fatigue_curve,
+                        "fatigue_model_status": fatigue_model_status,
                         "peak_wall_T": float(
                             res["peak_gas_side_wall_temperature"]
+                        ),
+                        "coolant_chemistry_margin": float(
+                            res["coolant_chemistry_margin"]
                         ),
                         "combined_stress_MPa": float(
                             stress["combined_stress"] / 1e6
@@ -623,6 +724,8 @@ def joint_wall_channel_design(
                  c["structural_margin"] / structural_fos]
             if fatigue_gates and cyc_target > 0:
                 n.append(c["N_f"] / cyc_target)
+            if gate_coolant_chemistry:
+                n.append(c["coolant_chemistry_margin"])
             return n
         def score(c):
             s = min(_norm(c))
@@ -635,6 +738,8 @@ def joint_wall_channel_design(
                 "structural": best["structural_margin"] / structural_fos}
         if fatigue_gates and cyc_target > 0:
             viol["fatigue"] = best["N_f"] / cyc_target
+        if gate_coolant_chemistry:
+            viol["coolant chemistry"] = best["coolant_chemistry_margin"]
         if not best["fits"]:
             diagnosis = "no channel geometry fits the throat at the required count"
         elif best["dp_bar"] > dp_budget_bar:
@@ -648,6 +753,11 @@ def joint_wall_channel_design(
                 diagnosis = ("fatigue-limited: low-cycle (thermal-strain) life is below the "
                              "required cycles — thin the liner, cut ΔT / heat flux, or use "
                              "a tougher (superalloy) liner")
+            elif binder == "coolant chemistry":
+                diagnosis = (
+                    "coolant-chemistry-limited: the RP-1/kerosene coolant-"
+                    "side wall exceeds the conservative coking screen"
+                )
             else:
                 diagnosis = ("structurally-limited: the combined pressure + thermal stress "
                              "exceeds yield/FoS — a stronger alloy, lower Pc / coolant-gas "
@@ -670,8 +780,10 @@ def joint_wall_channel_design(
             cycles=[c["N_f"] for c in sl] if fatigue_gates else None,
             cycles_required=cyc_target if fatigue_gates else None)
 
-    if fatigue_gates:
+    if fatigue_gates and getattr(mat, "fatigue_design_qualified", False):
         fatigue_status = "design_qualified_gate"
+    elif fatigue_gates:
+        fatigue_status = "sourced_screening_gate"
     elif has_fatigue:
         fatigue_status = "screening_only_not_gating"
     else:
@@ -688,11 +800,19 @@ def joint_wall_channel_design(
         "structural_margin": best["structural_margin"] if best else float("nan"),
         "pressure_drop_bar": best["dp_bar"] if best else float("nan"),
         "peak_wall_T": best["peak_wall_T"] if best else float("nan"),
+        "coolant_chemistry_margin": (
+            best["coolant_chemistry_margin"] if best else float("nan")
+        ),
         "combined_stress_MPa": best["combined_stress_MPa"] if best else float("nan"),
         "fatigue_cycles": best["N_f"] if best else None,
         "strain_range": best["strain_range"] if best else None,
         "fatigue_status": fatigue_status,
         "fatigue_source": fatigue_source,
+        "fatigue_model": best["fatigue_model"] if best else None,
+        "fatigue_curve": best["fatigue_curve"] if best else None,
+        "fatigue_model_status": (
+            best["fatigue_model_status"] if best else None
+        ),
         "fatigue_gates_feasibility": fatigue_gates,
         "mass_kg": best["mass_kg"] if best else float("nan"),
         "stress_governing_index": best["stress_governing_index"] if best else None,
@@ -719,6 +839,11 @@ def joint_wall_channel_design(
                         "required_cycles": required_cycles,
                         "life_fos": life_fos,
                         "dp_budget_bar": dp_budget_bar,
+                        "channel_roughness": channel_roughness,
+                        "gate_coolant_chemistry":
+                            bool(gate_coolant_chemistry),
+                        "curvature_correction":
+                            bool(curvature_correction),
                         "t_hot_min": t_hot_min},
         "candidates": candidates,
         "model": "joint_wall_channel_design",
@@ -739,6 +864,9 @@ def size_wall_profile(
     channel_count: int,
     channel_width: float,
     channel_height: float,
+    channel_roughness: float = 0.0,
+    gate_coolant_chemistry: bool = False,
+    curvature_correction: bool = False,
     mixture_ratio: float = 2.6,
     cooling_fraction: float = 1.0,
     coolant: str = "rp1",
@@ -763,6 +891,7 @@ def size_wall_profile(
     gate_sp125_429: bool = False,
     coolant_outlet_pressure: float | None = None,
     injector_pressure_drop: float = 0.0,
+    cooling_options: dict[str, Any] | None = None,
     n_outer: int = 4,
     n_iter: int = 20,
 ) -> dict:
@@ -847,20 +976,23 @@ def size_wall_profile(
     heat_shape = np.asarray(hf["q"], dtype=float)
     heat_shape = heat_shape / max(float(np.max(heat_shape)), 1e-12)
     cool_material = SimpleNamespace(conductivity=k)
-    Et = E * float(buckling_tangent_modulus_fraction)
-    Ec = E * float(buckling_tangent_modulus_fraction)
+    Et_fallback = E * float(buckling_tangent_modulus_fraction)
+    Ec_fallback = E * float(buckling_tangent_modulus_fraction)
 
     def _spec(h_arr):
-        return SimpleNamespace(
+        fields = dict(
             method="regenerative", coolant=coolant, channel_count=N,
             channel_width=w, channel_height=float(np.mean(h_arr)),
+            channel_roughness=channel_roughness,
             coolant_mass_flow=mdot_cool, coolant_cp=None,
-            coolant_inlet_temperature=300.0,
+            coolant_inlet_temperature=None,
             max_wall_temperature=T_max, coolant_density=None,
             coolant_viscosity=None, coolant_conductivity=None,
             coolant_outlet_pressure=coolant_outlet_pressure,
             injector_pressure_drop=injector_pressure_drop,
         )
+        fields.update(cooling_options or {})
+        return SimpleNamespace(**fields)
 
     def _profile(t_hot, h_arr, t_jacket):
         stretch = helix_stretch_factors(
@@ -890,6 +1022,7 @@ def size_wall_profile(
         return regenerative_cooling_analysis(
             hf, contour, _spec(h_arr), cool_material, None, prop, Pc,
             n_iter=n_iter, helix_turns=helix_turns,
+            curvature_correction=curvature_correction,
             wall_profile=_profile(t_hot, h_arr, t_hot),
             coolant_outlet_pressure=coolant_outlet_pressure,
             injector_pressure_drop=injector_pressure_drop,
@@ -920,6 +1053,17 @@ def size_wall_profile(
             Twg = np.asarray(res["gas_side_wall_temperature"], dtype=float)
             Twc = np.asarray(res["coolant_side_wall_temperature"], dtype=float)
             longitudinal_thermal = E * alpha * np.maximum(Twg - Twc, 0.0)
+            tangent = cyclic_tangent_modulus(
+                mat,
+                longitudinal_thermal,
+                0.5 * (Twg + Twc),
+            )
+            if tangent["available"]:
+                Et = np.asarray(tangent["tangent_modulus"], dtype=float)
+                Ec = Et
+            else:
+                Et = np.full(n, Et_fallback)
+                Ec = np.full(n, Ec_fallback)
             # SP-125 4-29 defines r as the tube radius.  A milled rectangular
             # channel has no unique tube radius, so h/2 is an explicit
             # equivalent-tube approximation, not the nozzle-shell radius.
@@ -976,6 +1120,17 @@ def size_wall_profile(
         struct_margin = Sy / np.maximum(combined, 1e-9)
 
         longitudinal_thermal = E * alpha * np.maximum(Twg - Twc, 0.0)
+        tangent = cyclic_tangent_modulus(
+            mat,
+            longitudinal_thermal,
+            0.5 * (Twg + Twc),
+        )
+        if tangent["available"]:
+            Et = np.asarray(tangent["tangent_modulus"], dtype=float)
+            Ec = Et
+        else:
+            Et = np.full(n, Et_fallback)
+            Ec = np.full(n, Ec_fallback)
         buckling_radius = np.maximum(0.5 * h_arr, t_hot_min)
         critical_429 = sp125_inelastic_buckling_critical_stress(
             wall_thickness=t_hot,
@@ -1034,6 +1189,11 @@ def size_wall_profile(
         fits = bool(profile.channels_fit()["fits"])
         feasible = bool(
             np.all(thermal_ok)
+            and (
+                not gate_coolant_chemistry
+                or res["coolant_chemistry_feasible"]
+            )
+            and res.get("boiling_chf_feasible", True)
             and np.all(struct_margin >= structural_fos - 1e-3)
             and np.all(jacket_margin >= jacket_fos - 1e-3)
             and (
@@ -1056,6 +1216,8 @@ def size_wall_profile(
             "sp125_429_critical_stress_profile": critical_429,
             "sp125_429_longitudinal_stress_profile": longitudinal_thermal,
             "sp125_429_margin_profile": margin_429,
+            "sp125_429_tangent_modulus_profile": Et,
+            "buckling_tangent_data": tangent,
             "external_buckling": external_buckling,
             "external_buckling_margin_profile": external_margin,
             "liner_mass_kg": liner_mass,
@@ -1063,6 +1225,9 @@ def size_wall_profile(
             "mass_kg": liner_mass + jacket_mass,
             "pressure_drop_bar": dp_bar,
             "peak_wall_T": float(np.max(Twg)),
+            "coolant_chemistry_margin": float(
+                res["coolant_chemistry_margin"]
+            ),
             "cooling": res,
             "feasible": feasible,
             "fits": fits,
@@ -1098,6 +1263,8 @@ def size_wall_profile(
                 T_limit / max(c["peak_wall_T"], 1e-9),
                 dp_budget_bar / max(c["pressure_drop_bar"], 1e-9),
             ]
+            if gate_coolant_chemistry:
+                margins.append(c["coolant_chemistry_margin"])
             if gate_sp125_429:
                 margins.append(float(np.min(c["sp125_429_margin_profile"])))
             return min(margins) - (10.0 if not c["fits"] else 0.0)
@@ -1142,14 +1309,22 @@ def size_wall_profile(
         ),
         "buckling_tangent_modulus_fraction":
             float(buckling_tangent_modulus_fraction),
-        "buckling_data_status":
-            "screening_assumption_fraction_of_elastic_modulus",
+        "buckling_data_status": best["buckling_tangent_data"]["status"],
+        "buckling_tangent_modulus_profile":
+            best["sp125_429_tangent_modulus_profile"],
+        "buckling_tangent_modulus_source":
+            best["buckling_tangent_data"].get("source"),
         "sp125_429_geometry_status":
             "equivalent_tube_radius_half_channel_height",
+        "sp125_429_temperature_status":
+            "surface_temperature_drop_used_as_zone_mean_proxy",
         "sp125_429_gates_feasibility": bool(gate_sp125_429),
         "external_buckling_gates_feasibility": True,
         "peak_wall_T": best["peak_wall_T"],
         "cooling_margin": float(res["cooling_margin"]),
+        "coolant_chemistry_margin": best["coolant_chemistry_margin"],
+        "coolant_chemistry_gates_feasibility":
+            bool(gate_coolant_chemistry),
         "pressure_drop_bar": best["pressure_drop_bar"],
         "liner_mass_kg": best["liner_mass_kg"],
         "jacket_mass_kg": best["jacket_mass_kg"],
@@ -1167,6 +1342,9 @@ def size_wall_profile(
             "t_hot_max": t_hot_max,
             "channel_height_min": h_min,
             "channel_height_max": h_max,
+            "channel_roughness": channel_roughness,
+            "gate_coolant_chemistry": bool(gate_coolant_chemistry),
+            "curvature_correction": bool(curvature_correction),
         },
         "height_candidates": height_candidates,
         "cooling": res,

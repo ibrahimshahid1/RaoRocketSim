@@ -767,6 +767,538 @@ def plot_sensitivity_field(x, r, values, *, label="|dCf/dr|  [1/m]",
     return fig
 
 
+# Hot-to-cool palette shared by the thermal plots.
+_T_WG_COLOR = "#d93025"      # gas-side wall (hottest)
+_T_WC_COLOR = "#e8710a"      # coolant-side wall
+_T_COOL_COLOR = "#1a73e8"    # coolant bulk (coolest)
+
+
+def _cooling_array(cooling, *keys):
+    """First present, finite, 1-D per-station array among ``keys`` (else None)."""
+    for k in keys:
+        v = cooling.get(k)
+        if v is None:
+            continue
+        arr = np.asarray(v, dtype=float)
+        if arr.ndim == 1 and arr.size and np.any(np.isfinite(arr)):
+            return arr
+    return None
+
+
+def plot_cooling_profile(cooling, *, contour=None, max_wall_temperature=None,
+                         show=False, save_path=None):
+    """Heat flux + wall/coolant temperatures vs axial station.
+
+    The defining image of a regeneratively cooled wall.  Stacks, sharing
+    the axial axis:
+
+    1. convective (and any radiative) heat flux ``q(x)`` — Bartz (1957);
+    2. the SP-125 series-circuit wall solution (Huzel & Huang): gas-side
+       wall ``T_wg``, coolant-side wall ``T_wc`` and the coolant bulk
+       ``T_c`` from the Naraghi (2004) 1-D march, with the material
+       gas-side limit and the RP-1/kerosene coking limit (SP-8087) drawn
+       where available;
+    3. the nozzle contour ``r(x)`` for spatial reference (when ``contour``
+       — a ``bell_nozzle_contour`` dict — is supplied).
+
+    ``cooling`` is the dict from
+    :func:`raosim.physics.regenerative_cooling_analysis`.
+    """
+    x = np.asarray(cooling["x"], dtype=float)
+    q_conv = _cooling_array(cooling, "convective_heat_flux", "q")
+    q_rad = _cooling_array(cooling, "radiative_heat_flux")
+    T_wg = _cooling_array(cooling, "gas_side_wall_temperature")
+    T_wc = _cooling_array(cooling, "coolant_side_wall_temperature")
+    T_c = _cooling_array(cooling, "coolant_temperature")
+
+    have_contour = contour is not None
+    height_ratios = [1.0, 1.2] + ([0.6] if have_contour else [])
+    n_panels = len(height_ratios)
+    fig, axes = plt.subplots(
+        n_panels, 1, figsize=(11, 3.0 * n_panels), sharex=True,
+        gridspec_kw={"height_ratios": height_ratios},
+    )
+    ax_q, ax_T = axes[0], axes[1]
+
+    # Throat (min-radius station) for a shared vertical reference line.
+    x_throat = None
+    if have_contour:
+        xc = np.asarray(contour["x"], dtype=float)
+        yc = np.asarray(contour["y"], dtype=float)
+        x_throat = float(xc[int(np.argmin(yc))])
+
+    # ---- panel 1: heat flux ------------------------------------------- #
+    if q_conv is not None:
+        ax_q.plot(x, q_conv / 1e6, color=_T_WG_COLOR, lw=1.8,
+                  label="convective (Bartz 1957)")
+        i_pk = int(np.argmax(q_conv))
+        ax_q.plot(x[i_pk], q_conv[i_pk] / 1e6, "o", color=_T_WG_COLOR, ms=5)
+        ax_q.annotate(f"$q_{{max}}$ = {q_conv[i_pk] / 1e6:.1f} MW/m²",
+                      (x[i_pk], q_conv[i_pk] / 1e6),
+                      textcoords="offset points", xytext=(6, 6), fontsize=8)
+        if q_rad is not None and np.any(q_rad > 0.0):
+            ax_q.plot(x, q_rad / 1e6, color=_T_WC_COLOR, lw=1.3, ls="--",
+                      label="radiative")
+            ax_q.plot(x, (q_conv + q_rad) / 1e6, color="black", lw=1.0,
+                      alpha=0.5, label="total")
+    ax_q.set_ylabel("heat flux  [MW/m²]")
+    ax_q.set_title("Regenerative wall: heat flux and wall/coolant temperatures")
+    ax_q.grid(True, ls=":", alpha=0.4)
+    ax_q.legend(loc="best", fontsize=8)
+
+    # ---- panel 2: wall + coolant temperatures ------------------------- #
+    for arr, color, lbl in (
+        (T_wg, _T_WG_COLOR, "gas-side wall  $T_{wg}$"),
+        (T_wc, _T_WC_COLOR, "coolant-side wall  $T_{wc}$"),
+        (T_c, _T_COOL_COLOR, "coolant bulk  $T_c$"),
+    ):
+        if arr is not None:
+            ax_T.plot(x, arr, color=color, lw=1.8, label=lbl)
+    if max_wall_temperature:
+        ax_T.axhline(float(max_wall_temperature), color=_T_WG_COLOR, ls=":",
+                     lw=1.2, alpha=0.8,
+                     label=f"gas-side limit  {float(max_wall_temperature):.0f} K")
+    coking = cooling.get("coolant_wall_temperature_limit")
+    if coking:
+        ax_T.axhline(float(coking), color=_T_WC_COLOR, ls=":", lw=1.2,
+                     alpha=0.8,
+                     label=f"coking limit  {float(coking):.0f} K (SP-8087)")
+    ax_T.set_ylabel("temperature  [K]")
+    ax_T.grid(True, ls=":", alpha=0.4)
+    ax_T.legend(loc="best", fontsize=8)
+
+    # ---- panel 3: contour for spatial reference ----------------------- #
+    if have_contour:
+        ax_c = axes[2]
+        ax_c.plot(xc, yc, color=_T_COOL_COLOR, lw=1.6)
+        ax_c.plot(xc, -yc, color=_T_COOL_COLOR, lw=1.6)
+        ax_c.fill_between(xc, yc, -yc, color=_T_COOL_COLOR, alpha=0.07)
+        ax_c.axhline(0.0, color="grey", lw=0.5, ls="--", alpha=0.6)
+        ax_c.set_ylabel("r [m]")
+        ax_c.grid(True, ls=":", alpha=0.3)
+
+    if x_throat is not None:
+        for ax in axes:
+            ax.axvline(x_throat, color="grey", lw=0.8, ls="--", alpha=0.5)
+
+    axes[-1].set_xlabel("axial position  x [m]")
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_wall_field_on_contour(cooling, contour, *, field="gas_side_wall_temperature",
+                               label=None, cmap="inferno", show=False,
+                               save_path=None):
+    """Paint a per-station wall field (``T_wg`` by default, or ``q``) onto
+    the nozzle contour — the wall coloured by how hard it is working.
+
+    Reuses the scatter-on-polyline idiom of :func:`plot_sensitivity_field`,
+    but with the wall solution from
+    :func:`raosim.physics.regenerative_cooling_analysis` rather than the
+    JAX thrust sensitivity.  ``field`` is any 1-D per-station key in the
+    cooling dict (e.g. ``"convective_heat_flux"``).
+    """
+    x = np.asarray(contour["x"], dtype=float)
+    r = np.asarray(contour["y"], dtype=float)
+    v = _cooling_array(cooling, field)
+    if v is None:
+        raise ValueError(f"cooling['{field}'] is not a finite per-station array")
+    if v.shape != x.shape:
+        raise ValueError(
+            f"field length {v.shape} != contour length {x.shape}; the cooling "
+            "analysis and contour must be on the same stations"
+        )
+    scale = 1e6 if "heat_flux" in field or field == "q" else 1.0
+    if label is None:
+        label = ("heat flux  [MW/m²]" if scale != 1.0
+                 else field.replace("_", " ") + "  [K]")
+
+    fig, ax = plt.subplots(figsize=(11, 4.5))
+    ax.plot(x, r, color="grey", linewidth=0.7, alpha=0.6, zorder=2)
+    ax.plot(x, -r, color="grey", linewidth=0.7, alpha=0.6, zorder=2)
+    sc = ax.scatter(x, r, c=v / scale, s=42, cmap=cmap, zorder=3,
+                    edgecolors="k", linewidths=0.3)
+    ax.scatter(x, -r, c=v / scale, s=42, cmap=cmap, zorder=3,
+               edgecolors="k", linewidths=0.3)
+    plt.colorbar(sc, ax=ax, label=label)
+    ax.axhline(0.0, color="grey", linewidth=0.5, linestyle=":")
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title("Wall field: " + label.split("  [")[0])
+    ax.set_aspect("equal", "box")
+    ax.grid(True, ls=":", alpha=0.4)
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_coolant_channel_march(cooling, *, show=False, save_path=None):
+    """Coolant-side march along the channel: bulk temperature rise,
+    pressure, and velocity vs axial station — the coolant's own story
+    (cf. :func:`plot_cooling_profile`, which is the wall's).
+
+    Three stacked panels:
+
+    1. coolant bulk ``T_c`` and coolant-side wall ``T_wc`` (Naraghi 2004
+       1-D march), with the RP-1/kerosene coking limit (SP-8087);
+    2. coolant static pressure along the passage — the Darcy-Weisbach drop
+       (SP-125 eq. 4-32 / Swamee-Jain), annotated with the total Δp;
+    3. channel velocity, with the 61 m/s liquid-coolant recommendation
+       (SP-8087).
+
+    The coolant physically flows in ``cooling['coolant_flow_order']`` (regen
+    circuits are usually counterflow); fields are shown on the axial station
+    axis for registration with the contour and heat flux.
+    """
+    x = np.asarray(cooling["x"], dtype=float)
+    T_c = _cooling_array(cooling, "coolant_temperature")
+    T_wc = _cooling_array(cooling, "coolant_side_wall_temperature")
+    p_cool = _cooling_array(cooling, "coolant_pressure")
+    V_cool = _cooling_array(cooling, "channel_velocity_profile")
+
+    fig, (ax_T, ax_p, ax_v) = plt.subplots(3, 1, figsize=(11, 9), sharex=True)
+
+    if T_c is not None:
+        ax_T.plot(x, T_c, color=_T_COOL_COLOR, lw=1.8,
+                  label="coolant bulk  $T_c$")
+    if T_wc is not None:
+        ax_T.plot(x, T_wc, color=_T_WC_COLOR, lw=1.8,
+                  label="coolant-side wall  $T_{wc}$")
+    coking = cooling.get("coolant_wall_temperature_limit")
+    if coking:
+        ax_T.axhline(float(coking), color=_T_WC_COLOR, ls=":", lw=1.2,
+                     alpha=0.8,
+                     label=f"coking limit  {float(coking):.0f} K (SP-8087)")
+    rise = cooling.get("coolant_temperature_rise")
+    title = "Coolant channel march"
+    if rise is not None:
+        title += f"  (ΔT = {float(rise):.0f} K)"
+    ax_T.set_ylabel("temperature  [K]")
+    ax_T.set_title(title)
+    ax_T.grid(True, ls=":", alpha=0.4)
+    ax_T.legend(loc="best", fontsize=8)
+
+    if p_cool is not None:
+        ax_p.plot(x, p_cool / 1e5, color="#0d652d", lw=1.8,
+                  label="coolant pressure")
+        dP = cooling.get("coolant_pressure_drop")
+        if dP:
+            ax_p.annotate(f"Δp = {float(dP) / 1e5:.1f} bar",
+                          (x[int(np.argmax(p_cool))], np.max(p_cool) / 1e5),
+                          textcoords="offset points", xytext=(6, -10),
+                          fontsize=8)
+    ax_p.set_ylabel("coolant pressure  [bar]")
+    ax_p.grid(True, ls=":", alpha=0.4)
+    ax_p.legend(loc="best", fontsize=8)
+
+    if V_cool is not None:
+        ax_v.plot(x, V_cool, color="#6a1b9a", lw=1.8, label="channel velocity")
+        i_pk = int(np.argmax(V_cool))
+        ax_v.plot(x[i_pk], V_cool[i_pk], "o", color="#6a1b9a", ms=5)
+    v_rec = cooling.get("liquid_velocity_recommendation")
+    if v_rec:
+        ax_v.axhline(float(v_rec), color="grey", ls=":", lw=1.2,
+                     label=f"{float(v_rec):.0f} m/s recommendation (SP-8087)")
+    ax_v.set_ylabel("velocity  [m/s]")
+    ax_v.grid(True, ls=":", alpha=0.4)
+    ax_v.legend(loc="best", fontsize=8)
+
+    ax_v.set_xlabel("axial position  x [m]")
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def _opt_array(v):
+    """A 1-D float array, or None for missing/empty/non-vector values."""
+    if v is None:
+        return None
+    a = np.asarray(v, dtype=float)
+    return a if a.ndim == 1 and a.size else None
+
+
+def _per_station_fatigue_cycles(material, T_wg, T_wc):
+    """``N_f(x)`` from the sourced fatigue model, driven by the through-liner
+    swing ``ΔT = T_wg − T_wc`` (SP-125 eq. 4-28's thermal-stress driver).
+
+    Returns ``(cycles_or_None, label)``.  Prefers the material's direct
+    total-strain-life curves (GRCop-84, Lerch-Ellis) and falls back to its
+    Coffin-Manson coefficients (NARloy-Z, CR-134627); neither present → None.
+    """
+    from raosim.physics import (coffin_manson_cycles, thermal_fatigue_strain,
+                                 total_strain_life_cycles)
+    alpha = getattr(material, "thermal_expansion", None)
+    T_wg = _opt_array(T_wg)
+    T_wc = _opt_array(T_wc)
+    if not alpha or T_wg is None or T_wc is None:
+        return None, "no thermal-expansion / wall-temperature data"
+    dT = np.maximum(T_wg - T_wc, 0.0)
+    strain = np.array([thermal_fatigue_strain(float(d), thermal_expansion=alpha)
+                       for d in dT])
+    curves = getattr(material, "fatigue_total_strain_curves", ()) or ()
+    if curves:
+        cyc = np.array([
+            (total_strain_life_cycles(float(s), curves, temperature=float(t))
+             ["cycles"] or np.nan)
+            for s, t in zip(strain, T_wg)
+        ], dtype=float)
+        return cyc, "$N_f$  (sourced total-strain-life)"
+    sc = getattr(material, "fatigue_strength_coeff", None)
+    E = getattr(material, "elastic_modulus", None)
+    if sc and E:
+        cyc = np.array([
+            coffin_manson_cycles(
+                float(s), elastic_modulus=E, fatigue_strength_coeff=sc,
+                fatigue_strength_exp=material.fatigue_strength_exp,
+                fatigue_ductility_coeff=material.fatigue_ductility_coeff,
+                fatigue_ductility_exp=material.fatigue_ductility_exp)
+            for s in strain
+        ], dtype=float)
+        return cyc, "$N_f$  (sourced Coffin-Manson)"
+    return None, "no sourced fatigue coefficients for this material"
+
+
+def plot_structural_life_dashboard(cooling, stress_profile, *, material=None,
+                                   buckling_profile=None, required_cycles=None,
+                                   show=False, save_path=None):
+    """Liner structural + life dashboard along the wall (the previously
+    invisible SP-125 structural stack).  Three stacked panels vs station:
+
+    1. SP-125 eq. 4-31 coaxial-shell inner-liner stress — the pressure
+       term ``Δp·r/t``, the thermal term ``Eαqt/2(1-ν)k`` and their sum,
+       against the material yield strength;
+    2. SP-125 eq. 4-29 longitudinal inelastic buckling (compressive vs
+       critical stress) when ``buckling_profile`` is supplied, else the
+       eq. 4-31 stress margin ``S_y/σ`` with the margin = 1 line;
+    3. low-cycle thermal-fatigue life ``N_f(x)`` from the sourced
+       Coffin-Manson / total-strain-life fit (NARloy-Z CR-134627,
+       GRCop-84 Lerch-Ellis), driven by the per-station hot-to-cold wall
+       swing ``ΔT = T_wg − T_wc``, with any required-cycles line.
+
+    ``stress_profile`` is the dict from
+    :func:`raosim.physics.coaxial_shell_wall_stress_profile`.
+    """
+    x = np.asarray(cooling["x"], dtype=float)
+    pressure = _opt_array(stress_profile.get("pressure_stress_profile"))
+    thermal = _opt_array(stress_profile.get("thermal_stress_profile"))
+    combined = _opt_array(stress_profile.get("combined_stress_profile"))
+    yield_strength = getattr(material, "yield_strength", None) if material else None
+
+    fig, (ax_s, ax_m, ax_n) = plt.subplots(3, 1, figsize=(11, 9.5), sharex=True)
+
+    # ---- panel 1: eq. 4-31 stress vs yield ---------------------------- #
+    if pressure is not None:
+        ax_s.plot(x, pressure / 1e6, color=_T_COOL_COLOR, lw=1.5,
+                  label="pressure  Δp·r/t")
+    if thermal is not None:
+        ax_s.plot(x, thermal / 1e6, color=_T_WC_COLOR, lw=1.5,
+                  label="thermal  Eαqt/2(1-ν)k")
+    if combined is not None:
+        ax_s.plot(x, combined / 1e6, color=_T_WG_COLOR, lw=1.9,
+                  label="combined (eq. 4-31)")
+    if yield_strength:
+        ax_s.axhline(float(yield_strength) / 1e6, color="black", ls=":", lw=1.2,
+                     label=f"yield  {float(yield_strength) / 1e6:.0f} MPa")
+    ax_s.set_ylabel("stress  [MPa]")
+    ax_s.set_title("Liner structural + life  (SP-125 eq. 4-28 / 4-29 / 4-31)")
+    ax_s.grid(True, ls=":", alpha=0.4)
+    ax_s.legend(loc="best", fontsize=8)
+
+    # ---- panel 2: buckling (if supplied) else stress margin ----------- #
+    if buckling_profile is not None:
+        comp = _opt_array(buckling_profile.get("compressive_stress_profile"))
+        crit = _opt_array(buckling_profile.get("critical_stress_profile"))
+        if comp is not None:
+            ax_m.plot(x, comp / 1e6, color=_T_WG_COLOR, lw=1.6,
+                      label="compressive")
+        if crit is not None:
+            ax_m.plot(x, crit / 1e6, color="#0d652d", lw=1.6,
+                      label="critical (eq. 4-29)")
+        ax_m.set_ylabel("buckling stress  [MPa]")
+    else:
+        margin = _opt_array(stress_profile.get("stress_margin_profile"))
+        if margin is not None:
+            ax_m.plot(x, margin, color="#0d652d", lw=1.8, label="$S_y/\\sigma$")
+        ax_m.axhline(1.0, color="black", ls=":", lw=1.2, label="margin = 1")
+        ax_m.set_ylabel("stress margin")
+    ax_m.grid(True, ls=":", alpha=0.4)
+    ax_m.legend(loc="best", fontsize=8)
+
+    # ---- panel 3: low-cycle fatigue life N_f(x) ----------------------- #
+    cyc, life_label = (None, "no material supplied")
+    if material is not None:
+        cyc, life_label = _per_station_fatigue_cycles(
+            material, cooling.get("gas_side_wall_temperature"),
+            cooling.get("coolant_side_wall_temperature"))
+    if cyc is not None and np.any(np.isfinite(cyc)):
+        ax_n.semilogy(x, cyc, color="#6a1b9a", lw=1.8, label=life_label)
+        i_min = int(np.nanargmin(cyc))
+        ax_n.semilogy(x[i_min], cyc[i_min], "o", color="#6a1b9a", ms=5)
+        ax_n.annotate(f"min $N_f$ ≈ {cyc[i_min]:.0f}", (x[i_min], cyc[i_min]),
+                      textcoords="offset points", xytext=(6, 8), fontsize=8)
+        if required_cycles:
+            ax_n.axhline(float(required_cycles), color="black", ls=":", lw=1.2,
+                         label=f"required  {float(required_cycles):.0f}")
+        ax_n.legend(loc="best", fontsize=8)
+    else:
+        ax_n.text(0.5, 0.5, f"fatigue life not shown — {life_label}",
+                  transform=ax_n.transAxes, ha="center", va="center",
+                  fontsize=9, color="grey")
+    ax_n.set_ylabel("cycles to failure  $N_f$")
+    ax_n.grid(True, which="both", ls=":", alpha=0.4)
+    ax_n.set_xlabel("axial position  x [m]")
+
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_channel_cross_section(cross_section, *, mirror=True, cmap="inferno",
+                               show=False, save_path=None):
+    """Through-wall temperature map of one channel-land cell.
+
+    Visualises the 2-D field from
+    :func:`raosim.physics.wall_cross_section_field`: the gas-side hot face
+    at ξ = 0, the inner liner slab, the coolant channel void and the
+    rib/land that conducts heat to the coolant — the circumferential land
+    hot spot that the 1-D series circuit averages away (Pizzarelli
+    2011/2013; fin model Atefi & Naraghi 2019).  ``mirror`` reflects the
+    solved half-pitch about the channel centreline for the familiar
+    full-cell picture.
+    """
+    from matplotlib.patches import Rectangle
+
+    field = np.asarray(cross_section["field"], dtype=float)
+    s = np.asarray(cross_section["s"], dtype=float)
+    xi = np.asarray(cross_section["xi"], dtype=float)
+    t_w = float(cross_section["t_w"])
+    H = float(cross_section["channel_height"])
+    w_half = float(cross_section["w_half"])
+
+    if mirror:
+        s_plot = np.concatenate([-s[::-1], s])
+        C = np.vstack([field[::-1, :], field])      # (2 n_s, n_xi)
+    else:
+        s_plot, C = s, field
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    cmap_obj = plt.get_cmap(cmap).copy()
+    cmap_obj.set_bad("white", 0.0)
+    mesh = ax.pcolormesh(s_plot * 1e3, xi * 1e3,
+                         np.ma.masked_invalid(C.T), cmap=cmap_obj,
+                         shading="nearest")
+    plt.colorbar(mesh, ax=ax, label="temperature  [K]")
+
+    # The coolant void: s ∈ ±w_half, ξ ∈ (t_w, t_w+H).
+    ax.add_patch(Rectangle((-w_half * 1e3, t_w * 1e3), 2 * w_half * 1e3,
+                           H * 1e3, fill=False, edgecolor=_T_COOL_COLOR,
+                           lw=1.5, ls="--"))
+    ax.text(0.0, (t_w + 0.5 * H) * 1e3, "coolant", color=_T_COOL_COLOR,
+            ha="center", va="center", fontsize=9, fontweight="bold")
+
+    T_land = cross_section.get("T_land")
+    if T_land is not None:
+        ax.annotate(f"land hot spot  {T_land:.0f} K",
+                    (s_plot.max() * 1e3, 0.0), textcoords="offset points",
+                    xytext=(-4, 6), ha="right", fontsize=8, color=_T_WG_COLOR)
+
+    ax.set_xlabel("circumferential  s  [mm]   (gas-side hot face at ξ = 0)")
+    ax.set_ylabel("radial  ξ  [mm]")
+    spread = cross_section.get("circumferential_spread")
+    sx = cross_section.get("station_x")
+    title = "Channel-land cross-section"
+    if sx is not None:
+        title += f"  (x = {sx * 1e3:.0f} mm)"
+    if spread is not None:
+        title += f"  ·  land–channel ΔT = {spread:.0f} K"
+    ax.set_title(title)
+    ax.set_aspect("equal", "box")
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
+def plot_separation_on_contour(contour, Pc, prop, *, ambient_pressures=None,
+                               method="schmucker", show=False, save_path=None):
+    """Where the over-expanded flow detaches from the wall, on the contour.
+
+    For each ambient pressure the wall separation point (Summerfield /
+    Kalt-Badal / Schmucker, via
+    :func:`raosim.separation.check_separation`) is marked on the nozzle and
+    the sea-level separated region is shaded.  As ambient pressure falls
+    (altitude rises) the separation point marches toward the exit and the
+    nozzle starts flowing full — the classic over-expansion story that the
+    thrust/Isp-vs-altitude curves summarise only as a number.
+    """
+    from raosim.separation import check_separation
+
+    x = np.asarray(contour["x"], dtype=float)
+    y = np.asarray(contour["y"], dtype=float)
+    if ambient_pressures is None:
+        ambient_pressures = [101325.0, 50000.0, 20000.0, 5000.0]
+    Pas = np.asarray(sorted(ambient_pressures, reverse=True), dtype=float)
+    gamma = float(getattr(prop, "gamma", 1.2))
+
+    fig, ax = plt.subplots(figsize=(11, 5))
+    ax.plot(x, y, color="black", lw=1.8, zorder=4)
+    ax.plot(x, -y, color="black", lw=1.8, zorder=4)
+    ax.axhline(0.0, color="grey", lw=0.5, ls="--", alpha=0.6)
+
+    cmap = plt.get_cmap("viridis")
+    for k, Pa in enumerate(Pas):
+        res = check_separation(contour, Pc, float(Pa), gamma, method=method)
+        color = cmap(k / max(len(Pas) - 1, 1))
+        if res["separated"] and res["x_sep"] is not None:
+            xs, ys = float(res["x_sep"]), float(res["y_sep"])
+            ax.plot([xs, xs], [-ys, ys], color=color, lw=1.3, ls="--", zorder=5)
+            ax.plot([xs, xs], [ys, -ys], "o", color=color, ms=7, zorder=6,
+                    label=f"Pa={Pa / 1e3:.0f} kPa → separates @ x={xs * 1e3:.0f} mm")
+        else:
+            ax.plot([], [], "o", color=color,
+                    label=f"Pa={Pa / 1e3:.0f} kPa → flowing full")
+
+    # Shade the sea-level (highest-Pa) separated region red, attached blue.
+    res0 = check_separation(contour, Pc, float(Pas[0]), gamma, method=method)
+    if res0["separated"] and res0["x_sep"] is not None:
+        mask = x >= float(res0["x_sep"])
+        ax.fill_between(x, -y, y, where=mask, color="#d93025", alpha=0.12,
+                        zorder=1, label="separated @ sea level")
+        ax.fill_between(x, -y, y, where=~mask, color="#1a73e8", alpha=0.08,
+                        zorder=1)
+    else:
+        ax.fill_between(x, -y, y, color="#1a73e8", alpha=0.08, zorder=1)
+
+    ax.set_xlabel("axial position  x [m]")
+    ax.set_ylabel("radial position  r [m]")
+    ax.set_title(f"Flow separation on the contour  "
+                 f"({method}, Pc = {Pc / 1e6:.1f} MPa)")
+    ax.set_aspect("equal", "box")
+    ax.grid(True, ls=":", alpha=0.3)
+    ax.legend(loc="best", fontsize=8)
+    fig.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+    if show:
+        plt.show()
+    return fig
+
+
 def _set_axes_equal_3d(ax):
     """Force equal aspect ratio on a 3-D axes."""
     limits = np.array([ax.get_xlim3d(), ax.get_ylim3d(), ax.get_zlim3d()])

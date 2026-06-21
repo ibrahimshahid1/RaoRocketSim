@@ -17,7 +17,11 @@ from raosim.separation import (
 )
 from raosim.trade_study import sweep_epsilon, sweep_Pc
 from raosim.altitude_performance import altitude_performance_map
-from raosim.chamber_geometry import chamber_contour, full_engine_contour
+from raosim.chamber_geometry import (
+    chamber_contour,
+    enclosed_volume,
+    full_engine_contour,
+)
 
 
 @pytest.fixture
@@ -131,12 +135,14 @@ class TestAltitudePerformance:
 class TestChamberGeometry:
 
     def test_volume_matches_lstar(self):
-        """V_chamber ≈ L* · At."""
+        """The generated contour, not only stored metadata, encloses L* · At."""
         Rt = 0.020
         L_star = 1.0
         ch = chamber_contour(Rt, L_star=L_star)
         At = math.pi * Rt**2
-        assert ch['V_chamber'] == pytest.approx(L_star * At, rel=1e-6)
+        assert enclosed_volume(ch["x"], ch["y"]) == pytest.approx(
+            L_star * At, rel=1e-10
+        )
 
     def test_chamber_radius(self):
         """Rc = Rt · sqrt(CR)."""
@@ -148,5 +154,6 @@ class TestChamberGeometry:
     def test_full_engine_contour(self, standard_contour):
         ch = chamber_contour(0.020, L_star=1.0)
         engine = full_engine_contour(ch, standard_contour)
-        assert len(engine['x']) == len(ch['x']) + len(standard_contour['x'])
+        assert engine["full_thrust_chamber"]
+        assert np.all(np.diff(engine["x"]) > 0.0)
         assert len(engine['y']) == len(engine['x'])

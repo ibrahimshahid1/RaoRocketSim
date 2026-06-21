@@ -15,6 +15,11 @@ from raosim.design import (
 )
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.physics import bartz_heat_flux, boundary_layer_displacement, regenerative_cooling_screen, structural_screen
+from raosim.coolants import canonical_coolant_name
+from raosim.physics import (
+    resolve_coolant_inlet_temperature,
+    resolve_coolant_properties,
+)
 from raosim.propellants import get_propellant
 
 
@@ -42,6 +47,58 @@ def test_preliminary_v2_constant_gamma_runs():
     assert result.report_sections["thermochemistry"]["source"] == "built_in_constant_gamma"
     assert result.report_sections["boundary_layer"]["effective_epsilon"] < result.input.epsilon
     assert result.contour["hardware_qualified"] is False
+
+
+def test_cooling_temperature_is_optional_and_resolved_centrally():
+    methane = CoolingSpec(coolant="methane")
+    hydrogen = CoolingSpec(coolant="lh2")
+    explicit = CoolingSpec(coolant="methane", coolant_inlet_temperature=135.0)
+
+    assert methane.coolant_inlet_temperature is None
+    assert resolve_coolant_inlet_temperature(methane) == 120.0
+    assert resolve_coolant_inlet_temperature(hydrogen) == 25.0
+    assert resolve_coolant_inlet_temperature(explicit) == 135.0
+
+
+@pytest.mark.parametrize("alias", ["methane", "ch4", "lch4"])
+def test_methane_aliases_share_temperature_and_properties(alias):
+    cooling = CoolingSpec(coolant=alias)
+    properties = resolve_coolant_properties(cooling)
+    assert canonical_coolant_name(alias) == "methane"
+    assert resolve_coolant_inlet_temperature(cooling) == 120.0
+    assert properties["rho"] == pytest.approx(423.0)
+    assert properties["cp"] == pytest.approx(3450.0)
+
+
+@pytest.mark.parametrize("alias", ["lh2", "hydrogen", "h2"])
+def test_hydrogen_aliases_share_temperature_and_properties(alias):
+    cooling = CoolingSpec(coolant=alias)
+    properties = resolve_coolant_properties(cooling)
+    assert canonical_coolant_name(alias) == "hydrogen"
+    assert resolve_coolant_inlet_temperature(cooling) == 25.0
+    assert properties["rho"] == pytest.approx(71.0)
+    assert properties["cp"] == pytest.approx(9800.0)
+
+
+def test_v2_backend_uses_central_methane_temperature_default():
+    result = design_nozzle_v2(_prelim_input(
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="methane",
+            channel_count=40,
+            channel_width=0.0008,
+            channel_height=0.0025,
+            coolant_mass_flow=10.0,
+            coolant_property_backend="constant",
+        ),
+        manufacturing=ManufacturingSpec(wall_thickness=0.001),
+    ))
+
+    cooling = result.report_sections["cooling"]
+    assert cooling["coolant_inlet_temperature"] == 120.0
+    assert cooling["coolant_inlet_temperature_source"] == (
+        "central_coolant_default"
+    )
 
 
 def test_validated_requires_cea():
@@ -98,6 +155,8 @@ def test_v2_step_writes_metadata_and_ipt_is_deferred(tmp_path):
     report = result.files["design_report"].read_text(encoding="utf-8")
     assert '"authoritative_cad": "STEP"' in report
     assert '"native_ipt": "deferred"' in report
+    assert '"cad_body_scope": "single_revolved_uniform_wall_body"' in report
+    assert result.files["step"].name == "thrust_chamber_wall.step"
 
     ipt_request = _prelim_input(
         manufacturing=ManufacturingSpec(wall_thickness=0.002, cad="ipt")

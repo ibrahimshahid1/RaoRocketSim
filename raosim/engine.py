@@ -49,7 +49,10 @@ class EnginePerformance:
     Isp: float          # specific impulse  [s]
     Ve: float           # effective exhaust velocity  [m/s]
     m_dot: float        # mass flow rate  [kg/s]
-    eta_Isp: float      # efficiency factor used
+    eta_Isp: float      # overall Isp efficiency used  (= eta_cstar·eta_CF)
+    eta_cstar: float    # combustion (c*) efficiency
+    eta_CF: float       # nozzle (thrust-coefficient) efficiency
+    c_star_effective: float  # delivered c*  (= c_star·eta_cstar)  [m/s]
 
 
 def compute_engine_performance(
@@ -90,13 +93,19 @@ def compute_engine_performance(
     Cf_ideal = thrust_coefficient(Me, gamma, Pe_over_Pc, Pa_over_Pc, epsilon)
 
 
-    Cf_actual = Cf_ideal * prop.eta_Isp
+    # Nozzle efficiency acts on the thrust coefficient; combustion
+    # efficiency acts on c* (and therefore on the mass flow needed to hold
+    # Pc).  Isp = Cf_actual·c*_eff/g0 = eta_CF·eta_cstar·Isp_ideal, so the
+    # net Isp multiplier is unchanged from a lumped eta_Isp while thrust and
+    # mass flow are now attributed to the correct physics.
+    Cf_actual = Cf_ideal * prop.eta_CF
     c_star = prop.c_star
+    c_star_eff = c_star * prop.eta_cstar
 
 
     thrust = Cf_actual * Pc * At
-    m_dot = Pc * At / c_star
-    Isp = Cf_actual * c_star / g0
+    m_dot = Pc * At / c_star_eff
+    Isp = Cf_actual * c_star_eff / g0
     Ve = Isp * g0
 
     return EnginePerformance(
@@ -107,5 +116,6 @@ def compute_engine_performance(
         c_star=c_star, gamma=gamma, R_gas=prop.R_gas, Tc=prop.Tc,
         At=At, Ae=Ae,
         thrust=thrust, Isp=Isp, Ve=Ve, m_dot=m_dot,
-        eta_Isp=prop.eta_Isp,
+        eta_Isp=prop.eta_Isp, eta_cstar=prop.eta_cstar, eta_CF=prop.eta_CF,
+        c_star_effective=c_star_eff,
     )

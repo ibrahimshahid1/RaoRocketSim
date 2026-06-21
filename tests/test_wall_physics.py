@@ -19,12 +19,41 @@ import pytest
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.physics import (
     bartz_heat_flux,
+    channel_pressure_hoop_radius,
+    coaxial_shell_wall_stress_profile,
     regenerative_cooling_analysis,
     rib_supported_liner_buckling_profile,
     sp125_inelastic_buckling_critical_stress,
 )
 from raosim.propellants import custom_propellant
 from raosim.regen_profile import helix_passage_lengths
+
+
+def test_channel_hoop_radius_is_channel_scale_not_shell_radius():
+    """SP-125 eq. 4-27 hoop radius is the channel tube radius (w/2), not the
+    nozzle shell radius.  Regression for the ~1000x liner pressure-stress
+    overestimate when contour['y'] was passed as inner_radius."""
+    w, t = 0.0005, 0.001
+    # half-width, and NOT floored at the (larger) wall thickness
+    assert channel_pressure_hoop_radius(w, t) == pytest.approx(0.5 * w)
+
+    dp = np.full(4, 1.0e8)       # 1000 bar liner differential
+    q = np.full(4, 20.0e6)
+    shell_r = np.linspace(0.07, 0.35, 4)
+    common = dict(
+        pressure_differential=dp, wall_thickness=t, heat_flux=q,
+        elastic_modulus=193e9, thermal_expansion=16e-6, poisson_ratio=0.3,
+        conductivity=16.3, yield_strength=290e6,
+    )
+    shell = coaxial_shell_wall_stress_profile(inner_radius=shell_r, **common)
+    chan = coaxial_shell_wall_stress_profile(
+        inner_radius=channel_pressure_hoop_radius(w, t), **common)
+
+    # Channel-scale pressure stress = Δp·(w/2)/t, three orders below the
+    # spurious shell-radius value, and the fix only changes the pressure term.
+    assert chan["pressure_stress"] == pytest.approx(1.0e8 * (0.5 * w) / t, rel=1e-6)
+    assert chan["pressure_stress"] < shell["pressure_stress"] / 100.0
+    assert chan["thermal_stress"] == pytest.approx(shell["thermal_stress"], rel=1e-9)
 
 
 # --------------------------------------------------------------------- #

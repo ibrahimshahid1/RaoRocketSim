@@ -21,6 +21,8 @@ from __future__ import annotations
 import math
 import numpy as np
 
+from raosim.throat_geometry import ThroatGeometrySpec, resolve_throat_geometry
+
 
 def conical_divergence_factor(alpha: float) -> float:
     """
@@ -68,6 +70,7 @@ def conical_nozzle_contour(
     convergent_half_angle_deg: float = 45.0,
     Ru_factor: float = 1.5,
     Rd_factor: float = 0.382,
+    throat_geometry: ThroatGeometrySpec | None = None,
 ) -> dict:
     """
     Generate a conical nozzle contour (convergent arc + throat arc + cone).
@@ -103,14 +106,22 @@ def conical_nozzle_contour(
     if epsilon <= 1.0:
         raise ValueError("epsilon must be > 1")
 
+    spec = resolve_throat_geometry(
+        throat_geometry,
+        upstream_radius_ratio=Ru_factor,
+        downstream_radius_ratio=Rd_factor,
+        convergent_half_angle_deg=convergent_half_angle_deg,
+    )
+    convergent_half_angle_deg = spec.convergent_half_angle_deg
+    throat_x = float(spec.throat_location)
     alpha = math.radians(half_angle_deg)
     Re = math.sqrt(epsilon) * Rt
-    Ru = Ru_factor * Rt
-    Rd = Rd_factor * Rt
+    Ru = spec.upstream_radius(Rt)
+    Rd = spec.downstream_radius(Rt)
 
     # --- Section 1: Convergent circular arc (same as bell) ---
     y_cu = Rt + Ru
-    x_cu = 0.0
+    x_cu = throat_x
     angle_start_conv = -(math.pi / 2.0 + math.radians(convergent_half_angle_deg))
     angle_end_conv = -math.pi / 2.0
     t_conv = np.linspace(angle_start_conv, angle_end_conv, n_pts)
@@ -120,7 +131,7 @@ def conical_nozzle_contour(
     # --- Section 2: Downstream throat arc ---
     # Arc from -π/2 to (α - π/2), where α is the cone half-angle
     y_cd = Rt + Rd
-    x_cd = 0.0
+    x_cd = throat_x
     angle_start_throat = -math.pi / 2.0
     angle_end_throat = alpha - math.pi / 2.0
     t_thr = np.linspace(angle_start_throat, angle_end_throat, n_pts)
@@ -134,15 +145,15 @@ def conical_nozzle_contour(
 
     # Length of the cone from the inflection point to exit
     Ln_full = conical_nozzle_length(Rt, epsilon, half_angle_deg)
-    x_end = Ln_full
+    x_end = throat_x + Ln_full
     y_end = Re
 
     x_div = np.linspace(x_start, x_end, n_pts)
     y_div = y_start + (x_div - x_start) * math.tan(alpha)
 
     # --- Assemble full contour ---
-    x_full = np.concatenate([x_conv, x_throat, x_div])
-    y_full = np.concatenate([y_conv, y_throat, y_div])
+    x_full = np.concatenate([x_conv, x_throat[1:], x_div[1:]])
+    y_full = np.concatenate([y_conv, y_throat[1:], y_div[1:]])
 
     eta_div = conical_divergence_factor(alpha)
 
@@ -156,6 +167,8 @@ def conical_nozzle_contour(
         'Rt': Rt,
         'Ru': Ru,
         'Rd': Rd,
+        'throat_geometry': spec.to_dict(),
+        'throat_location': throat_x,
         'epsilon': epsilon,
         'length_pct': 100.0,   # conical is the 100% length reference
         'eta_div': eta_div,

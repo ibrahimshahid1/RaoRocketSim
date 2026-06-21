@@ -2,10 +2,9 @@
 
 The nominal strain driver is α·ΔT, obtained directly from SP-125 equation
 4-28's thermal stress E·α·ΔT; N_f inverts the standard strain-life relation.
-The local literature (``propulsion_texts``)
-carries no sourced alloy LCF coefficients, so the catalog supplies none:
-fatigue is only *evaluated* with explicit sourced coefficients, and only
-*gates* feasibility when those data are marked design-qualified.
+The local NASA material reports now supply a Coffin-Manson fit for NARloy-Z
+and direct total-strain/life regressions for GRCop-84.  These are sourced
+screening gates, not a claim of hardware qualification.
 """
 from __future__ import annotations
 
@@ -101,6 +100,8 @@ def _grcop_with_fatigue(*, qualified: bool) -> MaterialSpec:
     m.fatigue_ductility_exp = -0.6
     m.fatigue_source = "test LCF handbook (synthetic)"
     m.fatigue_design_qualified = qualified
+    m.fatigue_screening_gate = False
+    m.fatigue_total_strain_curves = ()
     return m
 
 
@@ -109,14 +110,14 @@ _GRID = dict(mixture_ratio=2.0, thermal_margin=1.05, structural_fos=1.0,
              n_t=5, n_w=3, n_count=4, n_iter=10)
 
 
-def test_catalog_material_does_not_evaluate_fatigue(prop, big_contour):
-    """A plain catalog material has no sourced LCF data, so N_f is not
-    evaluated and cannot gate — generic numbers never decide feasibility."""
+def test_catalog_grcop_uses_sourced_direct_strain_life_gate(prop, big_contour):
+    """The NASA GRCop total-strain regression is active and identified."""
     r = joint_wall_channel_design(big_contour, prop, 1.0e6,
                                   material="grcop-84", **_GRID)
-    assert r["fatigue_status"] == "not_evaluated_missing_sourced_coefficients"
-    assert r["fatigue_cycles"] is None
-    assert r["fatigue_gates_feasibility"] is False
+    assert r["fatigue_status"] == "sourced_screening_gate"
+    assert r["fatigue_model"] == "direct_total_strain_life"
+    assert r["fatigue_cycles"] is not None
+    assert r["fatigue_gates_feasibility"] is True
 
 
 def test_sourced_but_unqualified_fatigue_is_screening_only(prop, big_contour):
@@ -135,10 +136,15 @@ def test_sourced_but_unqualified_fatigue_is_screening_only(prop, big_contour):
 def test_design_qualified_fatigue_gates_feasibility(prop, big_contour):
     """Design-qualified data DO gate: an unreachable cycle requirement makes
     the design infeasible and names the fatigue binder, while a lenient one
-    passes."""
+    passes.
+
+    The strain-life model runs out at ``coffin_manson_cycles`` ``max_cycles``
+    (1e9), and at this low Pc the (nominal αΔT) copper strain is small enough
+    to reach run-out, so the requirement must exceed the run-out cap to be
+    genuinely unreachable."""
     m = _grcop_with_fatigue(qualified=True)
     strict = joint_wall_channel_design(big_contour, prop, 1.0e6, material=m,
-                                       required_cycles=1e9, life_fos=1.0, **_GRID)
+                                       required_cycles=1e10, life_fos=1.0, **_GRID)
     assert strict["fatigue_status"] == "design_qualified_gate"
     assert strict["fatigue_gates_feasibility"] is True
     assert strict["feasible"] is False

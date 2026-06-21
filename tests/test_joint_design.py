@@ -118,8 +118,8 @@ def test_thicker_wall_runs_hotter(prop, big_contour):
 def test_high_pc_copper_throat_is_stress_limited(prop, big_contour):
     """At high Pc the eq. 4-31 thermal + pressure stress exceeds copper's
     yield — the optimizer reports infeasible and names a stress/thermal
-    binder.  (Fatigue is NOT a binder here: the catalog carries no sourced
-    Coffin-Manson data, so it is not evaluated — see the fatigue tests.)"""
+    binder.  GRCop fatigue is also evaluated from the sourced NASA direct
+    total-strain/life regression."""
     r = joint_wall_channel_design(
         big_contour, prop, 12.0e6, material="grcop-84", mixture_ratio=2.6,
         thermal_margin=1.1, structural_fos=1.2, dp_budget_bar=400.0,
@@ -128,9 +128,8 @@ def test_high_pc_copper_throat_is_stress_limited(prop, big_contour):
     assert "structural" in r["diagnosis"] or "thermal" in r["diagnosis"]
     # Best-effort design is still returned.
     assert r["t_hot"] is not None and r["channel_count"] is not None
-    # Catalog GRCop has no sourced fatigue data, so N_f is not evaluated.
-    assert r["fatigue_cycles"] is None
-    assert r["fatigue_status"] == "not_evaluated_missing_sourced_coefficients"
+    assert r["fatigue_cycles"] is not None
+    assert r["fatigue_status"] == "sourced_screening_gate"
 
 
 def test_objective_must_be_known(prop, big_contour):

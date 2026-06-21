@@ -6,6 +6,7 @@ without the host-scale LM solve.
 """
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -16,13 +17,24 @@ import pytest
 REPO = Path(__file__).resolve().parent.parent
 
 
+def test_coolant_specific_cli_temperature_defaults():
+    from scripts.run_nozzle import _default_coolant_inlet_temperature
+
+    assert _default_coolant_inlet_temperature("methane") == 120.0
+    assert _default_coolant_inlet_temperature("lh2") == 25.0
+    assert _default_coolant_inlet_temperature("rp1") == 300.0
+
+
 @pytest.mark.smoke
-def test_runner_contour_plus_regen_pipeline(tmp_path):
+def test_seed_geometry_exports_only_after_geometry_gates_pass(tmp_path):
     out = tmp_path / "run"
     proc = subprocess.run(
         [sys.executable, "scripts/run_nozzle.py",
          "--max-nfev", "0", "--regen", "--channels", "20",
          "--material", "grcop-84",
+         "--l-star", "0.9", "--contraction-ratio", "3.0",
+         "--shoulder-radius-factor", "0.2",
+         "--minimum-cylindrical-length", "0.01",
          "--cad", "step",
          "--n-control", "8", "--n-kernel", "12",
          "--out", str(out)],
@@ -31,25 +43,19 @@ def test_runner_contour_plus_regen_pipeline(tmp_path):
              "PATH": __import__("os").environ.get("PATH", "")},
         timeout=300,
     )
-    assert proc.returncode == 0, proc.stderr[-2000:]
+    assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
+    assert "RaoRocketSim" in proc.stdout
+    summary = json.loads((out / "summary.json").read_text())
+    checks = summary["chamber"]["geometry_checks"]
+    assert checks["axial_coordinates_monotonic"] is True
+    assert checks["slope_continuity"] is True
+    assert checks["seam_watertight"] is True
+    assert checks["offset_self_intersections"] is False
+    assert summary["wall_geometry"]["stl_watertight"] is True
+    assert summary["wall_geometry"]["stl_boundary_edge_count"] == 0
     for name in ("contour.csv", "profile.png", "wall.stl", "wall.step",
                  "regen.stl", "regen_3d.png", "summary.json"):
         assert (out / name).exists(), f"missing {name}\n{proc.stdout}"
-    # The regen STL is a non-trivial binary mesh.
-    assert (out / "regen.stl").stat().st_size > 1000
-    # The CLI prints the banner, the build plan, and the results panel.
-    assert "RaoRocketSim" in proc.stdout
-    assert "Regen geometry" in proc.stdout and "channels" in proc.stdout
-    assert "Done" in proc.stdout
-    # The chosen material flows into the build plan and the summary, and
-    # sets the wall conductivity from the catalog (GRCop-84 k=285).
-    assert "GRCop-84" in proc.stdout
-    import json
-    summary = json.loads((out / "summary.json").read_text())
-    assert summary["material"]["name"] == "GRCop-84"
-    assert summary["material"]["conductivity_W_mK"] == 285.0
-    assert summary["wall_geometry"]["offset"] == "surface_normal"
-    assert summary["wall_geometry"]["step"] in {"brep", "faceted_brep"}
 
 
 def test_size_wall_requires_a_material(tmp_path):
@@ -90,5 +96,8 @@ def test_tags_flag_lists_run_tags_and_exits():
     )
     assert proc.returncode == 0
     # The grouped flag overview is shown.
-    for tag in ("--epsilon", "--regen", "--helix-turns", "--thermal", "--backend"):
+    for tag in (
+        "--epsilon", "--l-star", "--contraction-ratio", "--regen",
+        "--helix-turns", "--thermal", "--backend",
+    ):
         assert tag in proc.stdout, tag

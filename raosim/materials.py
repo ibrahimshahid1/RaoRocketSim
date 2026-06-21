@@ -110,6 +110,21 @@ class MaterialProperties:
     fatigue_source: str | None = None
     fatigue_data_temperature: float | None = None  # [K]
     fatigue_design_qualified: bool = False
+    # A sourced preliminary-design gate may be enabled without claiming that
+    # an isothermal coupon fit is a hardware qualification life model.
+    fatigue_screening_gate: bool = False
+    # Direct total-strain-range regressions, each
+    # (T_min[K], T_max[K], A, b, label) for Δε_t = A N_f**b.
+    fatigue_total_strain_curves: tuple[
+        tuple[float, float, float, float, str], ...
+    ] = ()
+    # Cyclic range-form Ramberg-Osgood curves, each (T[K], K'[Pa], n'):
+    # Δσ = K' (Δε_p)**n'.  These provide a sourced tangent-modulus screen
+    # for SP-125 equation 4-29.
+    cyclic_stress_strain_curves: tuple[
+        tuple[float, float, float], ...
+    ] = ()
+    cyclic_stress_strain_source: str | None = None
     aliases: tuple[str, ...] = ()
 
     @property
@@ -144,6 +159,23 @@ _CATALOG: tuple[MaterialProperties, ...] = (
         poisson_ratio=0.34, max_heat_flux=160e6, melting_point=1340.0,
         source="Cu-3Ag-0.5Zr; SSME main combustion chamber liner "
                "(NASA literature; not in SP-125)",
+        fatigue_strength_coeff=244.5e6,
+        fatigue_strength_exp=-0.09,
+        fatigue_ductility_coeff=0.448,
+        fatigue_ductility_exp=-0.60,
+        fatigue_source=(
+            "NASA CR-134627 (1974), Table 2 and Fig. 10; fully reversed "
+            "NARloy-Z in argon at 538 C, strain rate 0.002/s. Intercepts "
+            "least-squares reconstructed from the tabulated elastic/plastic "
+            "strain ranges using the report's fitted slopes."
+        ),
+        fatigue_data_temperature=811.15,
+        fatigue_screening_gate=True,
+        cyclic_stress_strain_curves=((811.15, 496.54e6, 0.14969),),
+        cyclic_stress_strain_source=(
+            "NASA CR-134627 Table 2 half-life stress and plastic-strain "
+            "ranges; range-form power-law regression at 538 C."
+        ),
         aliases=("narloy", "narloyz", "narloy_z", "cu-ag-zr"),
     ),
     MaterialProperties(
@@ -154,6 +186,26 @@ _CATALOG: tuple[MaterialProperties, ...] = (
         poisson_ratio=0.33, max_heat_flux=150e6, melting_point=1370.0,
         source="Cu-8Cr-4Nb (at.%); NASA Glenn (Ellis) AM chamber alloy; "
                "higher service T than NARloy-Z (not in SP-125)",
+        fatigue_total_strain_curves=(
+            (293.15, 673.15, 0.21, -0.35, "extruded_bar_20_to_400C"),
+            (873.15, 873.15, 0.57, -0.47, "extruded_bar_600C"),
+        ),
+        fatigue_source=(
+            "NASA/TM presentation 20060005216 (Lerch and Ellis), "
+            "extruded GRCop-84 total-strain-range fits: "
+            "Delta-epsilon_t=0.21 N_f^-0.35 at 20/400 C and "
+            "0.57 N_f^-0.47 at 600 C."
+        ),
+        fatigue_screening_gate=True,
+        cyclic_stress_strain_curves=(
+            (293.15, 1271e6, 0.19),
+            (673.15, 580e6, 0.10),
+            (873.15, 277e6, 0.01),
+        ),
+        cyclic_stress_strain_source=(
+            "NASA 20060005216, cyclic stress-range/plastic-strain-range "
+            "fits for extruded GRCop-84 at 20, 400, and 600 C."
+        ),
         aliases=("grcop", "grcop84", "grcop_84", "cu-cr-nb"),
     ),
     MaterialProperties(
@@ -244,6 +296,60 @@ def get_material(name: str) -> MaterialProperties:
     raise KeyError(
         f"unknown material {name!r}; available: {', '.join(material_names())}"
     )
+
+
+def cyclic_tangent_modulus(
+    material: MaterialProperties | object,
+    stress,
+    temperature,
+) -> dict:
+    """Sourced cyclic tangent modulus from range-form Ramberg-Osgood data.
+
+    The catalog curves use ``Δσ = K' (Δε_p)^n'``.  For a fully reversed
+    local stress amplitude ``|σ|`` we take ``Δσ=2|σ|`` and evaluate
+
+    ``dΔε/dΔσ = 1/E + (1/n') (Δσ/K')**(1/n'-1) / K'``.
+
+    This is a cyclic screening tangent, not a monotonic compression-curve
+    qualification value.  It is nevertheless physically sourced and much
+    less arbitrary than a fixed fraction of Young's modulus.
+    """
+    import numpy as np
+
+    curves = tuple(getattr(material, "cyclic_stress_strain_curves", ()) or ())
+    E = float(getattr(material, "elastic_modulus"))
+    sigma, temp = np.broadcast_arrays(
+        np.asarray(stress, dtype=float),
+        np.asarray(temperature, dtype=float),
+    )
+    if not curves:
+        return {
+            "available": False,
+            "tangent_modulus": np.full(sigma.shape, np.nan),
+            "status": "missing_sourced_cyclic_stress_strain_curve",
+        }
+    curves = tuple(sorted(curves, key=lambda row: row[0]))
+    T_data = np.asarray([row[0] for row in curves], dtype=float)
+    logK_data = np.log(np.asarray([row[1] for row in curves], dtype=float))
+    n_data = np.asarray([row[2] for row in curves], dtype=float)
+    K = np.exp(np.interp(temp, T_data, logK_data))
+    n = np.interp(temp, T_data, n_data)
+    delta_sigma = np.maximum(2.0 * np.abs(sigma), 1.0)
+    plastic_compliance = (
+        (1.0 / np.maximum(n, 1e-6))
+        * np.power(delta_sigma / K, 1.0 / np.maximum(n, 1e-6) - 1.0)
+        / K
+    )
+    Et = 1.0 / (1.0 / E + plastic_compliance)
+    return {
+        "available": True,
+        "tangent_modulus": np.minimum(Et, E),
+        "cyclic_strength_coefficient": K,
+        "cyclic_strain_hardening_exponent": n,
+        "status": "sourced_cyclic_ramberg_osgood_tangent",
+        "source": getattr(material, "cyclic_stress_strain_source", None),
+        "temperature_clipped": (temp < T_data[0]) | (temp > T_data[-1]),
+    }
 
 
 def material_table() -> str:

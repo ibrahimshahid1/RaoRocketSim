@@ -162,7 +162,10 @@ def test_helix_raises_pressure_drop_proportionally(contour, heat, prop):
     # it tracks the factor closely rather than matching it exactly.
     ratio = helix["coolant_pressure_drop"] / axial["coolant_pressure_drop"]
     assert ratio > 1.0
-    assert ratio == pytest.approx(helix["pressure_drop_path_factor"], rel=1e-12)
+    # The helix also changes transverse pitch/fin cooling, hence viscosity and
+    # friction. It should remain close to the same-run path-factor diagnostic,
+    # but no longer equal an axial run bit-for-bit.
+    assert ratio == pytest.approx(helix["pressure_drop_path_factor"], rel=0.02)
 
 
 def test_helix_preserves_energy_balance_while_changing_transverse_pitch(
@@ -183,7 +186,7 @@ def test_helix_preserves_energy_balance_while_changing_transverse_pitch(
     )
     for result in (axial, helix):
         expected = result["total_heat_load"] / (
-            _spec().coolant_mass_flow * _spec().coolant_cp
+            _spec().coolant_mass_flow * result["coolant_properties"]["cp"]
         )
         assert result["coolant_temperature_rise"] == pytest.approx(
             expected, rel=0.1

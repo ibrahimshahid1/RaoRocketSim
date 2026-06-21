@@ -13,3 +13,8 @@ test_failures.log
 # macOS
 .DS_Store
 .venv-jax/
+
+# Local reference material and temporary files
+/propulsion_texts/
+/tmp/
+pdfs/

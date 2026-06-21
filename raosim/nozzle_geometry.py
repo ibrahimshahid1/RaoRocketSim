@@ -17,6 +17,7 @@ import math
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
+from raosim.throat_geometry import ThroatGeometrySpec, resolve_throat_geometry
 from raosim.validation import add_contour_reliability_metadata
 
 
@@ -115,6 +116,20 @@ def _full_cone_length(Rt: float, epsilon: float) -> float:
     return (Re - Rt) / math.tan(math.radians(15.0))
 
 
+def _shift_contour_x(contour: dict, offset: float) -> dict:
+    """Translate public contour coordinates to an absolute throat station."""
+    if offset == 0.0:
+        return contour
+    for key in ("x", "x_conv", "x_throat", "x_bell"):
+        if key in contour:
+            contour[key] = np.asarray(contour[key], dtype=float) + offset
+    for key in ("N", "E", "P1"):
+        if key in contour:
+            point = contour[key]
+            contour[key] = (float(point[0]) + offset, float(point[1]))
+    return contour
+
+
 def bell_nozzle_contour(
     Rt: float,
     epsilon: float,
@@ -133,6 +148,7 @@ def bell_nozzle_contour(
     rao_moc_n_kernel: int = 12,
     rao_moc_max_nfev: int = 200,
     rao_moc_evaluate_moc: bool = True,
+    throat_geometry: ThroatGeometrySpec | None = None,
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -176,14 +192,28 @@ def bell_nozzle_contour(
         'x_throat', 'y_throat' : downstream arc arrays
         'x_bell', 'y_bell'    : bell Bézier arrays
     """
+    spec = resolve_throat_geometry(
+        throat_geometry,
+        upstream_radius_ratio=Ru_factor,
+        downstream_radius_ratio=Rd_factor,
+        convergent_half_angle_deg=convergent_half_angle_deg,
+    )
+    convergent_half_angle_deg = spec.convergent_half_angle_deg
+    Ru_factor = spec.upstream_radius_ratio
+    Rd_factor = spec.downstream_radius_ratio
+    throat_x = float(spec.throat_location)
+
     if method == 'moc':
         from raosim.rao_optimizer import moc_bell_nozzle
         contour = moc_bell_nozzle(
             Rt, epsilon, gamma=gamma, length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
-            Ru_factor=Ru_factor,
+            Ru_factor=Ru_factor, Rd_factor=Rd_factor,
             starting_line_method=starting_line_method,
         )
+        _shift_contour_x(contour, throat_x)
+        contour["throat_geometry"] = spec.to_dict()
+        contour["throat_location"] = throat_x
         return add_contour_reliability_metadata(contour, 'moc', gamma)
 
     if method == 'rao':
@@ -192,8 +222,11 @@ def bell_nozzle_contour(
             Rt, epsilon, gamma=gamma, pa_over_p0=pa_over_p0,
             length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
-            Ru_factor=Ru_factor,
+            Ru_factor=Ru_factor, Rd_factor=Rd_factor,
         )
+        _shift_contour_x(contour, throat_x)
+        contour["throat_geometry"] = spec.to_dict()
+        contour["throat_location"] = throat_x
         return add_contour_reliability_metadata(contour, 'rao', gamma)
 
     if method == 'rao_variational_moc':
@@ -203,11 +236,15 @@ def bell_nozzle_contour(
             length_pct=length_pct,
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
+            throat_downstream_radius_factor=Rd_factor,
             n_control=rao_moc_n_control,
             n_kernel=rao_moc_n_kernel,
             max_nfev=rao_moc_max_nfev,
             evaluate_moc=rao_moc_evaluate_moc,
         )
+        _shift_contour_x(contour, throat_x)
+        contour["throat_geometry"] = spec.to_dict()
+        contour["throat_location"] = throat_x
         return add_contour_reliability_metadata(contour, 'rao_variational_moc', gamma)
 
     if epsilon <= 1.0:
@@ -225,13 +262,13 @@ def bell_nozzle_contour(
     theta_e = math.radians(theta_e_deg)
 
     Re = math.sqrt(epsilon) * Rt
-    Ru = Ru_factor * Rt          # upstream fillet radius
-    Rd = Rd_factor * Rt          # downstream fillet radius
+    Ru = spec.upstream_radius(Rt)
+    Rd = spec.downstream_radius(Rt)
     Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
 
 
     y_cu = Rt + Ru      # center y
-    x_cu = 0.0          # center x  (throat at x=0)
+    x_cu = throat_x
 
     angle_start_conv = -(math.pi / 2.0 + math.radians(convergent_half_angle_deg))
     angle_end_conv = -math.pi / 2.0
@@ -242,7 +279,7 @@ def bell_nozzle_contour(
 
 
     y_cd = Rt + Rd
-    x_cd = 0.0
+    x_cd = throat_x
 
     angle_start_throat = -math.pi / 2.0
     angle_end_throat = theta_n - math.pi / 2.0
@@ -256,7 +293,7 @@ def bell_nozzle_contour(
     Ny = y_throat[-1]
 
 
-    Ex = Ln
+    Ex = throat_x + Ln
     Ey = Re
 
 
@@ -280,8 +317,8 @@ def bell_nozzle_contour(
     y_bell = omt**2 * Ny + 2.0 * omt * t * P1y + t**2 * Ey
 
 
-    x_full = np.concatenate([x_conv, x_throat, x_bell])
-    y_full = np.concatenate([y_conv, y_throat, y_bell])
+    x_full = np.concatenate([x_conv, x_throat[1:], x_bell[1:]])
+    y_full = np.concatenate([y_conv, y_throat[1:], y_bell[1:]])
 
     contour = {
         'x': x_full,
@@ -293,6 +330,8 @@ def bell_nozzle_contour(
         'Rt': Rt,
         'Ru': Ru,
         'Rd': Rd,
+        'throat_geometry': spec.to_dict(),
+        'throat_location': throat_x,
         'epsilon': epsilon,
         'length_pct': length_pct,
         'N': (Nx, Ny),

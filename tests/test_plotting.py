@@ -21,6 +21,15 @@ from raosim.plotting import (plot_characteristic_net, plot_flowfield_mach,
                              plot_net_diagnostics, plot_topology)
 
 
+@pytest.fixture(autouse=True)
+def _close_figures():
+    """Close every figure a test opens so the headless run never trips the
+    matplotlib 'more than 20 figures' retention warning."""
+    yield
+    import matplotlib.pyplot as plt
+    plt.close("all")
+
+
 def _cp(x, r, theta, M, gamma=1.4):
     nu = prandtl_meyer(max(M, 1.000001), gamma)
     return CharPoint(x=x, r=r, theta=theta, M=max(M, 1.000001), nu=nu,
@@ -214,3 +223,152 @@ def test_plot_net_diagnostics_ce_fallback():
     fig = plot_net_diagnostics(sol)
     assert fig is not None
     assert fig.net_diagnostics["n_links"] >= sol.control_surface.r.size - 1
+
+
+# --------------------------------------------------------------------- #
+#  Thermal visualisation: the regen wall solution (heat flux + wall and
+#  coolant temperatures) that the analysis computes but nothing plotted.
+# --------------------------------------------------------------------- #
+@pytest.fixture(scope="module")
+def cooling_case():
+    """A real regen cooling solution on a small contour (no MOC solve)."""
+    from raosim.design import CoolingSpec, MaterialSpec
+    from raosim.nozzle_geometry import bell_nozzle_contour
+    from raosim.physics import bartz_heat_flux, regenerative_cooling_analysis
+    from raosim.propellants import custom_propellant
+
+    contour = bell_nozzle_contour(Rt=0.040, epsilon=10.0, gamma=1.24,
+                                  length_pct=80.0)
+    prop = custom_propellant(gamma=1.24, Mw=0.022, Tc=3500.0)
+    hf = bartz_heat_flux(contour, 5.0e6, prop, wall_temperature=900.0)
+    spec = CoolingSpec(method="regenerative", coolant="rp1",
+                       channel_count=120, channel_width=0.0015,
+                       channel_height=0.003, coolant_mass_flow=6.0,
+                       coolant_inlet_temperature=300.0)
+    mat = MaterialSpec.from_catalog("grcop-84")
+    cooling = regenerative_cooling_analysis(hf, contour, spec, mat,
+                                            0.001, prop, 5.0e6)
+    return contour, cooling, mat
+
+
+def test_plot_cooling_profile_stacks_flux_and_temperatures(cooling_case):
+    """Three stacked panels (flux / temperatures / contour) come straight
+    off the real cooling return dict, and the RP-1 coking limit is drawn."""
+    from raosim.plotting import plot_cooling_profile
+    contour, cooling, mat = cooling_case
+    fig = plot_cooling_profile(cooling, contour=contour,
+                               max_wall_temperature=mat.max_temperature)
+    assert fig is not None
+    assert len(fig.axes) == 3
+    assert "MW/m" in fig.axes[0].get_ylabel()
+    assert "[K]" in fig.axes[1].get_ylabel()
+    legend = fig.axes[1].get_legend()
+    assert any("coking" in t.get_text() for t in legend.get_texts())
+
+
+def test_plot_cooling_profile_without_contour_drops_a_panel(cooling_case):
+    from raosim.plotting import plot_cooling_profile
+    _contour, cooling, _mat = cooling_case
+    fig = plot_cooling_profile(cooling)        # no contour → two panels
+    assert len(fig.axes) == 2
+
+
+def test_plot_wall_field_on_contour_paints_the_wall(cooling_case):
+    """The field-on-contour hero image colours the wall by T_wg (and by q),
+    and rejects a non-existent field key."""
+    from raosim.plotting import plot_wall_field_on_contour
+    contour, cooling, _mat = cooling_case
+    assert plot_wall_field_on_contour(cooling, contour).axes
+    assert plot_wall_field_on_contour(
+        cooling, contour, field="convective_heat_flux").axes
+    with pytest.raises(ValueError):
+        plot_wall_field_on_contour(cooling, contour, field="not_a_key")
+
+
+def test_plot_coolant_channel_march_temp_pressure_velocity(cooling_case):
+    """Three coolant-side panels (temperature / pressure / velocity) with
+    the 61 m/s recommendation drawn on the velocity axis."""
+    from raosim.plotting import plot_coolant_channel_march
+    _contour, cooling, _mat = cooling_case
+    fig = plot_coolant_channel_march(cooling)
+    assert len(fig.axes) == 3
+    assert "bar" in fig.axes[1].get_ylabel()
+    assert "m/s" in fig.axes[2].get_ylabel()
+    vlegend = fig.axes[2].get_legend()
+    assert any("61" in t.get_text() for t in vlegend.get_texts())
+
+
+def _stress_profile_for(cooling, contour, mat):
+    from raosim.physics import coaxial_shell_wall_stress_profile
+    return coaxial_shell_wall_stress_profile(
+        pressure_differential=cooling["liner_pressure_differential"],
+        inner_radius=contour["y"], wall_thickness=0.001,
+        heat_flux=cooling["q"], elastic_modulus=mat.elastic_modulus,
+        thermal_expansion=mat.thermal_expansion, poisson_ratio=mat.poisson_ratio,
+        conductivity=mat.conductivity, yield_strength=mat.yield_strength)
+
+
+def test_structural_life_dashboard_gives_sourced_Nf(cooling_case):
+    """The dashboard shows eq. 4-31 stress vs yield and a real sourced
+    N_f(x) for GRCop-84 (the Lerch-Ellis total-strain-life fit)."""
+    from raosim.plotting import plot_structural_life_dashboard
+    contour, cooling, mat = cooling_case
+    stress = _stress_profile_for(cooling, contour, mat)
+    fig = plot_structural_life_dashboard(cooling, stress, material=mat,
+                                         required_cycles=100)
+    assert len(fig.axes) == 3
+    assert "MPa" in fig.axes[0].get_ylabel()
+    # Panel 3 carries a real N_f(x) line (GRCop-84 has sourced curves), so a
+    # finite-valued log curve was plotted.
+    nlines = fig.axes[2].get_lines()
+    assert any(np.all(np.isfinite(ln.get_ydata())) and ln.get_ydata().size > 2
+               for ln in nlines)
+
+
+def test_structural_life_dashboard_without_fatigue_data_is_graceful(cooling_case):
+    """A material with no sourced fatigue coefficients still renders the
+    stress panels and just annotates the missing life."""
+    from raosim.design import MaterialSpec
+    from raosim.plotting import plot_structural_life_dashboard
+    contour, cooling, _mat = cooling_case
+    bare = MaterialSpec.from_catalog("ofhc")        # no fatigue curves
+    stress = _stress_profile_for(cooling, contour, bare)
+    fig = plot_structural_life_dashboard(cooling, stress, material=bare)
+    assert len(fig.axes) == 3                        # renders, no exception
+
+
+def test_plot_channel_cross_section_shows_land_hot_spot(cooling_case):
+    """The 2-D cell map solves and renders, and the land hot spot is hotter
+    than the channel centre (the spread the 1-D circuit averages away)."""
+    from raosim.design import CoolingSpec
+    from raosim.physics import bartz_heat_flux, wall_cross_section_field
+    from raosim.plotting import plot_channel_cross_section
+    from raosim.propellants import custom_propellant
+    contour, cooling, mat = cooling_case
+
+    prop = custom_propellant(gamma=1.24, Mw=0.022, Tc=3500.0)
+    hf = bartz_heat_flux(contour, 5.0e6, prop, wall_temperature=900.0)
+    spec = CoolingSpec(method="regenerative", coolant="rp1", channel_count=120,
+                       channel_width=0.0015, channel_height=0.003,
+                       coolant_mass_flow=6.0, coolant_inlet_temperature=300.0)
+    xs = wall_cross_section_field(cooling, hf, contour, spec, mat,
+                                  0.001, prop, 5.0e6, station="peak")
+    assert xs["T_land"] >= xs["T_channel"] - 1e-6      # land is the hot spot
+    fig = plot_channel_cross_section(xs)
+    assert fig.axes and "[K]" in fig.axes[-1].get_ylabel()  # colourbar in K
+
+
+def test_plot_separation_on_contour_marks_detachment():
+    """A high-ε nozzle is over-expanded at sea level, so the wall detachment
+    point is marked and the legend names the separation."""
+    from raosim.nozzle_geometry import bell_nozzle_contour
+    from raosim.plotting import plot_separation_on_contour
+    from raosim.propellants import custom_propellant
+    contour = bell_nozzle_contour(Rt=0.05, epsilon=40.0, gamma=1.2,
+                                  length_pct=80.0)
+    prop = custom_propellant(gamma=1.2, Mw=0.022, Tc=3500.0)
+    fig = plot_separation_on_contour(contour, 5.0e6, prop,
+                                     ambient_pressures=[101325.0, 20000.0])
+    assert fig.axes
+    leg = fig.axes[0].get_legend()
+    assert any("separat" in t.get_text() for t in leg.get_texts())

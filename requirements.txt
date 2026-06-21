@@ -9,6 +9,7 @@
 numpy>=1.24
 scipy>=1.10          # sparse 3-D conjugate cooling solve; numpy-backend least_squares
 matplotlib>=3.7      # contour / flowfield / 3-D nozzle + regen-coil renders
+CoolProp>=7.0        # real-fluid methane/LH2 transport, phase, saturation, CHF
 
 # --- Differentiable backend (raosim/jax; the default solve_rao_bvp path) -----
 # Pinned exactly per JAX_DIFFERENTIABLE_PLAN.md §9 (JAX/jaxlib APIs move).

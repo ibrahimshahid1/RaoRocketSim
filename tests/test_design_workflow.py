@@ -7,9 +7,12 @@ import pytest
 
 from raosim.design import NozzleDesignRequest, design_nozzle
 from raosim.export import (
+    _closed_profile,
     _offset_contour,
+    _revolved_profile_volume,
     export_step,
     export_stl,
+    inspect_stl,
     step_representation,
 )
 from raosim.nozzle_geometry import bell_nozzle_contour
@@ -63,6 +66,53 @@ def test_step_and_solid_stl_exports(tmp_path):
     assert "ISO-10303-21" in step_path.read_text(encoding="utf-8", errors="ignore")
     assert stl_path.exists()
     assert stl_path.stat().st_size > 84
+    diagnostics = inspect_stl(stl_path)
+    expected = (
+        _revolved_profile_volume(
+            _closed_profile(
+                contour["x"], contour["y"], wall_thickness=0.002
+            )
+        )
+        * np.sin(2.0 * np.pi / 16)
+        / (2.0 * np.pi / 16)
+    )
+    assert diagnostics["watertight"] is True
+    assert diagnostics["boundary_edge_count"] == 0
+    assert diagnostics["volume_m3"] == pytest.approx(expected, rel=1e-6)
+
+
+def test_solid_stl_flange_closes_bore_and_wall_offset(tmp_path):
+    """The upstream flange must include the inner bore sleeve, and a normal
+    offset's axial endpoint shift must be joined rather than left open."""
+    x = np.array([0.0, 0.04, 0.10])
+    y = np.array([0.03, 0.035, 0.05])
+    path = export_stl(
+        x,
+        y,
+        tmp_path / "flanged_wall.stl",
+        n_angular=24,
+        wall_thickness=0.001,
+        flange_od=0.12,
+        flange_length=0.015,
+    )
+
+    diagnostics = inspect_stl(path)
+    expected = (
+        _revolved_profile_volume(
+            _closed_profile(
+                x,
+                y,
+                wall_thickness=0.001,
+                flange_od=0.12,
+                flange_length=0.015,
+            )
+        )
+        * np.sin(2.0 * np.pi / 24)
+        / (2.0 * np.pi / 24)
+    )
+    assert diagnostics["watertight"] is True
+    assert diagnostics["inconsistent_winding_edge_count"] == 0
+    assert diagnostics["volume_m3"] == pytest.approx(expected, rel=1e-6)
 
 
 def test_station_wise_normal_wall_offset_and_step_export(tmp_path):

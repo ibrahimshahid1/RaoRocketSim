@@ -248,6 +248,24 @@ def _dominant_solid(cq, shape, *, max_sliver_fraction: float = 1e-5):
     }
 
 
+def _shape_fix(cq, shape, *, precision_mm: float):
+    """Run OpenCascade's general shape healer before STEP serialization."""
+    from OCP.ShapeFix import ShapeFix_Shape
+
+    fixer = ShapeFix_Shape(shape.wrapped)
+    fixer.SetPrecision(float(precision_mm))
+    fixer.SetMinTolerance(0.1 * float(precision_mm))
+    fixer.SetMaxTolerance(10.0 * float(precision_mm))
+    fixer.Perform()
+    fixed = cq.Shape.cast(fixer.Shape())
+    return fixed, {
+        "performed": True,
+        "precision_mm": float(precision_mm),
+        "minimum_tolerance_mm": 0.1 * float(precision_mm),
+        "maximum_tolerance_mm": 10.0 * float(precision_mm),
+    }
+
+
 def _revolve_between(cq, x, r_inner, r_outer_x, r_outer):
     points = list(zip(x * _MM, r_inner * _MM))
     points += list(zip(r_outer_x[::-1] * _MM, r_outer[::-1] * _MM))
@@ -631,10 +649,10 @@ def export_channel_wall_step(
             raise ValueError("no axial room remains between the two plenums")
 
         inlet_plenum = _annular_plenum(
-            cq, x, r, t_hot, h, inlet_lo, inlet_hi, 0.5 * bond_overlap
+            cq, x, r, t_hot, h, inlet_lo, inlet_hi, -bond_overlap
         )
         outlet_plenum = _annular_plenum(
-            cq, x, r, t_hot, h, outlet_lo, outlet_hi, 0.5 * bond_overlap
+            cq, x, r, t_hot, h, outlet_lo, outlet_hi, -bond_overlap
         )
 
         def build_ports(x_port, angular_offset):
@@ -688,6 +706,19 @@ def export_channel_wall_step(
 
         inlet_x = 0.5 * (inlet_lo + inlet_hi)
         outlet_x = 0.5 * (outlet_lo + outlet_hi)
+        representative_channel = _channel_loft(
+            cq,
+            x=x,
+            r=r,
+            t_hot=t_hot,
+            width=w,
+            height=h,
+            helix_turns=float(profile.helix_turns),
+            n_channels=int(profile.channel_count),
+            x_lo=inlet_lo,
+            x_hi=outlet_hi,
+            clearance_m=0.5 * bond_overlap,
+        )
         inlet_ports, inlet_diameter, inlet_channel_area = build_ports(
             inlet_x, 0.0
         )
@@ -710,7 +741,9 @@ def export_channel_wall_step(
             fuzzy_tolerance_mm=fuzzy_tolerance_mm,
             glue="off",
         )
-        body, cut_healing = _dominant_solid(cq, body)
+        body, cut_healing = _dominant_solid(
+            cq, body, max_sliver_fraction=2e-4
+        )
 
         inlet_port_overlap = min(
             float(port.intersect(inlet_plenum).Volume())
@@ -721,6 +754,12 @@ def export_channel_wall_step(
             for port in outlet_ports
         )
         network_overlaps = {
+            "channel_to_inlet_plenum_mm3": float(
+                representative_channel.intersect(inlet_plenum).Volume()
+            ),
+            "channel_to_outlet_plenum_mm3": float(
+                representative_channel.intersect(outlet_plenum).Volume()
+            ),
             "minimum_inlet_port_to_plenum_mm3": inlet_port_overlap,
             "minimum_outlet_port_to_plenum_mm3": outlet_port_overlap,
         }
@@ -754,14 +793,38 @@ def export_channel_wall_step(
     else:
         cut_healing = None
 
-    cq.exporters.export(body, str(path), exportType="STEP")
+    body = body.clean()
+    body, shape_fix = _shape_fix(
+        cq, body, precision_mm=max(float(fuzzy_tolerance_mm), 1e-4)
+    )
+    body = body.clean()
+    body, final_healing = _dominant_solid(cq, body)
+    if not body.isValid():
+        raise RuntimeError("final cleaned regenerative wall is not valid")
+
+    inspection = None
+    step_precision_mode = None
+    for precision_mode in (0, 1, -1):
+        body.exportStep(
+            str(path),
+            write_pcurves=True,
+            precision_mode=precision_mode,
+        )
+        candidate = inspect_regen_step(path)
+        if candidate["valid"] and candidate["single_solid"]:
+            inspection = candidate
+            step_precision_mode = precision_mode
+            break
     if stl_path is not None:
         stl_path = Path(stl_path).expanduser().resolve()
         cq.exporters.export(body, str(stl_path), exportType="STL")
 
-    inspection = inspect_regen_step(path)
-    if not inspection["valid"] or not inspection["single_solid"]:
-        raise RuntimeError(f"STEP round-trip validation failed: {inspection}")
+    if inspection is None:
+        inspection = inspect_regen_step(path)
+        raise RuntimeError(
+            "STEP round-trip validation failed for precision modes "
+            f"0, 1, and -1: {inspection}"
+        )
     material_volume = float(body.Volume())
     envelope_volume = float(info["envelope_volume_mm3"])
     info.update({
@@ -784,7 +847,10 @@ def export_channel_wall_step(
         "fuse_healing": fuse_healing,
         "cut_kernel": cut_kernel,
         "cut_healing": cut_healing,
+        "final_healing": final_healing,
+        "shape_fix": shape_fix,
         "inspection": inspection,
+        "step_precision_mode": step_precision_mode,
         "model": (
             "full_n_patterned_ribs_single_solid_with_plenums_and_ports"
             if include_manifolds

@@ -194,6 +194,54 @@ def evaluate_design_gates(
         message="Contour coordinates must be finite.",
     )
 
+    geometry_checks = contour.get("geometry_checks")
+    if geometry_checks is not None:
+        report.add(
+            "geometry", "axial_coordinates_monotonic",
+            bool(geometry_checks["axial_coordinates_monotonic"]),
+            value=geometry_checks["axial_coordinates_monotonic"],
+            limit=True,
+            message="Full thrust-chamber axial coordinates must increase monotonically.",
+        )
+        report.add(
+            "geometry", "chamber_nozzle_seam",
+            bool(geometry_checks["seam_watertight"]),
+            value=float(geometry_checks["seam_position_gap"]),
+            limit="<= 1e-10 m",
+            message="Chamber and nozzle must share one watertight throat station.",
+        )
+        report.add(
+            "geometry", "position_and_slope_continuity",
+            bool(
+                geometry_checks["position_continuity"]
+                and geometry_checks["slope_continuity"]
+            ),
+            value=float(geometry_checks["maximum_join_angle_deg"]),
+            limit="<= 1 deg",
+            message="Thrust-chamber section joins must be position- and slope-continuous.",
+        )
+        report.add(
+            "geometry", "chamber_volume",
+            bool(geometry_checks["measured_volume_within_tolerance"]),
+            value=float(geometry_checks["measured_volume_rel_error"]),
+            limit="<= 1e-8 relative",
+            message="Integrated chamber volume must match L* times throat area.",
+        )
+        report.add(
+            "geometry", "minimum_cylindrical_length",
+            bool(geometry_checks["positive_minimum_cylindrical_length"]),
+            value=float(geometry_checks["cylindrical_length"]),
+            limit=">= configured positive minimum",
+            message="Chamber must retain a positive minimum cylindrical length.",
+        )
+        report.add(
+            "geometry", "offset_self_intersections",
+            bool(geometry_checks["offset_self_intersection_free"]),
+            value=bool(geometry_checks["offset_self_intersections"]),
+            limit=False,
+            message="The manufacturing wall offset must not self-intersect.",
+        )
+
     curvature_ok, curvature_max = _curvature_check(x, y, Rt)
     report.add(
         "geometry", "curvature_finite",
@@ -298,10 +346,14 @@ def evaluate_design_gates(
 def _curvature_check(x: np.ndarray, y: np.ndarray, Rt: float) -> tuple[bool, float | None]:
     if len(x) < 5:
         return False, None
-    dx = np.gradient(x)
-    dy = np.gradient(y)
-    ddx = np.gradient(dx)
-    ddy = np.gradient(dy)
+    ds = np.hypot(np.diff(x), np.diff(y))
+    if np.any(ds <= 1e-15):
+        return False, None
+    s = np.concatenate(([0.0], np.cumsum(ds)))
+    dx = np.gradient(x, s)
+    dy = np.gradient(y, s)
+    ddx = np.gradient(dx, s)
+    ddy = np.gradient(dy, s)
     denom = np.power(dx * dx + dy * dy, 1.5)
     valid = denom > 1e-15
     if not np.any(valid):

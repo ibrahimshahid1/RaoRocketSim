@@ -19,6 +19,11 @@ from raosim.cea import (
     propellant_from_request,
     resolve_thermochemistry,
 )
+from raosim.chamber_geometry import (
+    chamber_contour,
+    full_engine_contour,
+    thrust_chamber_geometry_checks,
+)
 from raosim.engine import EnginePerformance, compute_engine_performance
 from raosim.export import export_csv, export_step, export_stl, package_ipt_request
 from raosim.gas_dynamics import (
@@ -27,6 +32,7 @@ from raosim.gas_dynamics import (
     mach_from_area_ratio,
     thrust_coefficient,
 )
+from raosim.injector import InjectorSpec
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.physics import (
     bartz_heat_flux,
@@ -35,6 +41,7 @@ from raosim.physics import (
     structural_screen,
 )
 from raosim.propellants import Propellant
+from raosim.throat_geometry import ThroatGeometrySpec
 from raosim.validation import DesignGateReport, evaluate_design_gates
 
 
@@ -108,13 +115,19 @@ class CoolingSpec:
     channel_count: int | None = None
     channel_width: float | None = None
     channel_height: float | None = None
+    # Arithmetic mean internal roughness [m]. Zero retains the ideal
+    # smooth-wall screening branch; positive values use Swamee-Jain for
+    # turbulent Darcy loss.
+    channel_roughness: float = 0.0
     coolant_mass_flow: float | None = None
     # None → the COOLANT_PROPERTIES table value for the named coolant
     # is authoritative (e.g. RP-1 ≈ 2010 J/kg·K).  Set explicitly only
     # to override the table with a CEA/measured cp.  (Was 3500, which
     # silently overrode every named coolant's table cp — a latent bug.)
     coolant_cp: float | None = None
-    coolant_inlet_temperature: float = 293.0
+    # None is resolved centrally by coolant identity: methane 120 K, LH2
+    # 25 K, and 300 K for the current non-cryogenic preliminary defaults.
+    coolant_inlet_temperature: float | None = None
     # Absolute jacket pressure immediately before the coolant leaves the
     # cooling passages for the injector/manifold.  When omitted, the regen
     # solver uses Pc + injector_pressure_drop as the minimum physically
@@ -128,6 +141,34 @@ class CoolingSpec:
     coolant_density: float | None = None        # kg/m^3
     coolant_viscosity: float | None = None      # Pa.s (disables Andrade T-model)
     coolant_conductivity: float | None = None   # W/(m.K)
+    # Optional chemistry/phase stability limit at the coolant-side wall.
+    # None uses a documented coolant-specific limit where available
+    # (currently RP-1/kerosene coking); nonpositive disables that check.
+    coolant_wall_temperature_limit: float | None = None
+    # Thermophysical backend. ``auto`` uses CoolProp for methane/LH2 when
+    # installed and otherwise retains the explicit constant-property screen.
+    coolant_property_backend: str = "auto"
+    # Optional full inlet-plenum / channel / outlet-plenum hydraulic graph.
+    hydraulic_network: bool = False
+    ports_per_manifold: int = 4
+    port_area_ratio: float = 1.0
+    port_diameter: float | None = None
+    plenum_area_ratio: float = 2.0
+    plenum_hydraulic_diameter: float | None = None
+    port_loss_coefficient: float = 1.5
+    channel_entry_loss_coefficient: float = 0.5
+    channel_exit_loss_coefficient: float = 1.0
+    # Participating-gas radiation. ``none`` preserves Bartz convection only;
+    # ``leccese_gray`` uses the documented CH4/H2 screening preset.
+    radiation_model: str = "none"
+    radiation_propellant_family: str | None = None
+    radiation_path_length: float | None = None
+    radiation_wall_emissivity: float = 1.0
+    radiation_bands: tuple[dict, ...] = ()
+    # Real-fluid boiling / CHF diagnostics. The gate is separate because the
+    # implemented Zuber CHF is a conservative screening reference.
+    boiling_chf: bool = False
+    gate_chf: bool = False
 
 
 @dataclass
@@ -154,6 +195,14 @@ class MaterialSpec:
     fatigue_source: str | None = None
     fatigue_data_temperature: float | None = None
     fatigue_design_qualified: bool = False
+    fatigue_screening_gate: bool = False
+    fatigue_total_strain_curves: tuple[
+        tuple[float, float, float, float, str], ...
+    ] = ()
+    cyclic_stress_strain_curves: tuple[
+        tuple[float, float, float], ...
+    ] = ()
+    cyclic_stress_strain_source: str | None = None
 
     @classmethod
     def from_catalog(cls, name: str) -> "MaterialSpec":
@@ -176,6 +225,10 @@ class MaterialSpec:
             fatigue_source=m.fatigue_source,
             fatigue_data_temperature=m.fatigue_data_temperature,
             fatigue_design_qualified=m.fatigue_design_qualified,
+            fatigue_screening_gate=m.fatigue_screening_gate,
+            fatigue_total_strain_curves=m.fatigue_total_strain_curves,
+            cyclic_stress_strain_curves=m.cyclic_stress_strain_curves,
+            cyclic_stress_strain_source=m.cyclic_stress_strain_source,
         )
 
 
@@ -218,11 +271,15 @@ class DesignInput:
     theta_e: float | None = None
     contraction_ratio: float | None = None
     L_star: float | None = None
+    shoulder_radius_factor: float | None = None
+    minimum_cylindrical_length: float | None = None
+    throat_geometry: ThroatGeometrySpec = field(default_factory=ThroatGeometrySpec)
     ambient: MissionAmbientSpec = field(default_factory=MissionAmbientSpec)
     cooling: CoolingSpec = field(default_factory=CoolingSpec)
     material: MaterialSpec = field(default_factory=MaterialSpec)
     interface: InterfaceSpec = field(default_factory=InterfaceSpec)
     manufacturing: ManufacturingSpec = field(default_factory=ManufacturingSpec)
+    injector: "InjectorSpec" = field(default_factory=lambda: InjectorSpec())
     strict_gates: bool = False
 
 
@@ -340,6 +397,18 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         warnings.append(f"Sized Rt from target thrust: Rt = {Rt * 1000:.3f} mm.")
 
     contour = _build_v2_contour(input, Rt, float(epsilon), prop)
+    if (
+        input.L_star is None
+        or input.contraction_ratio is None
+        or input.shoulder_radius_factor is None
+        or input.minimum_cylindrical_length is None
+    ):
+        warnings.append(
+            "Chamber sizing used one or more geometric placeholders "
+            "(L*=1.0 m, contraction ratio=2.5, shoulder radius=0.25 Rt, "
+            "minimum cylinder=1e-6 m). Select injector-, mixing-, packaging-, "
+            "pressure-, mixture-ratio-, and duty-informed values."
+        )
     performance = compute_engine_performance(
         input.Pc, input.ambient.Pa, Rt, float(epsilon), prop
     )
@@ -365,6 +434,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     structural = structural_screen(
         contour, input.Pc, input.ambient.Pa, prop, input.material,
         input.manufacturing.wall_thickness, thermal, cooling,
+        channel_width=getattr(input.cooling, "channel_width", None),
     )
     cad_readiness = _cad_readiness(input, contour, gate_report)
     benchmark_status = _benchmark_status(input.method)
@@ -386,6 +456,17 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "exit_state": thermo.exit_state,
         },
         "boundary_layer": boundary_layer,
+        "chamber_geometry": {
+            "L_star": contour["L_star"],
+            "contraction_ratio": contour["contraction_ratio"],
+            "shoulder_radius_factor": contour["shoulder_radius_factor"],
+            "minimum_cylindrical_length": contour[
+                "minimum_cylindrical_length"
+            ],
+            "target_volume": contour["V_target"],
+            "measured_volume": contour["V_chamber"],
+            "geometry_checks": contour["geometry_checks"],
+        },
         "thermal": thermal,
         "cooling": cooling,
         "structural": structural,
@@ -497,7 +578,10 @@ def throat_radius_for_target_thrust(
     Me = mach_from_area_ratio(epsilon, prop.gamma, supersonic=True)
     pe_pc = isentropic_pressure_ratio(Me, prop.gamma)
     cf_ideal = thrust_coefficient(Me, prop.gamma, pe_pc, Pa / Pc, epsilon)
-    cf_actual = cf_ideal * prop.eta_Isp
+    # Thrust = Cf_actual·Pc·At depends on the NOZZLE efficiency only;
+    # combustion (c*) efficiency affects mass flow, not the thrust at fixed
+    # Pc/At.  (For legacy single-eta_Isp propellants eta_CF == eta_Isp.)
+    cf_actual = cf_ideal * prop.eta_CF
     if cf_actual <= 0.0:
         raise ValueError("target thrust cannot be met with non-positive Cf")
     At = target_thrust / (cf_actual * Pc)
@@ -517,6 +601,28 @@ def _validate_design_input(input: DesignInput) -> None:
         raise ValueError("target_thrust must be positive when supplied")
     if input.epsilon is not None and input.epsilon <= 1.0:
         raise ValueError("epsilon must be > 1 when supplied")
+    if input.L_star is not None and input.L_star <= 0.0:
+        raise ValueError("L_star must be positive when supplied")
+    if input.contraction_ratio is not None and input.contraction_ratio <= 1.0:
+        raise ValueError("contraction_ratio must be > 1 when supplied")
+    if (
+        input.shoulder_radius_factor is not None
+        and input.shoulder_radius_factor <= 0.0
+    ):
+        raise ValueError("shoulder_radius_factor must be positive when supplied")
+    if (
+        input.minimum_cylindrical_length is not None
+        and input.minimum_cylindrical_length <= 0.0
+    ):
+        raise ValueError(
+            "minimum_cylindrical_length must be positive when supplied"
+        )
+    if (
+        input.cooling.coolant_inlet_temperature is not None
+        and input.cooling.coolant_inlet_temperature <= 0.0
+    ):
+        raise ValueError("coolant_inlet_temperature must be positive when supplied")
+    input.throat_geometry.validate()
     if input.mode == DESIGN_MODE_VALIDATED:
         if input.method != "bezier":
             raise ValueError("validated mode only supports the benchmarked bezier path")
@@ -560,13 +666,40 @@ def _build_v2_contour(
             tn_l, te_l = lookup_angles(epsilon, input.length_pct)
             theta_n = theta_n if theta_n is not None else tn_l
             theta_e = theta_e if theta_e is not None else te_l
-        return bell_nozzle_contour(
-            Rt, epsilon, theta_n, theta_e, input.length_pct, gamma=prop.gamma
+        nozzle = bell_nozzle_contour(
+            Rt, epsilon, theta_n, theta_e, input.length_pct, gamma=prop.gamma,
+            throat_geometry=input.throat_geometry,
         )
-    return bell_nozzle_contour(
-        Rt, epsilon, method=input.method,
-        length_pct=input.length_pct, gamma=prop.gamma,
+    else:
+        nozzle = bell_nozzle_contour(
+            Rt, epsilon, method=input.method,
+            length_pct=input.length_pct, gamma=prop.gamma,
+            throat_geometry=input.throat_geometry,
+        )
+
+    chamber = chamber_contour(
+        Rt,
+        L_star=float(input.L_star if input.L_star is not None else 1.0),
+        contraction_ratio=float(
+            input.contraction_ratio
+            if input.contraction_ratio is not None else 2.5
+        ),
+        shoulder_radius_factor=float(
+            input.shoulder_radius_factor
+            if input.shoulder_radius_factor is not None else 0.25
+        ),
+        minimum_cylindrical_length=float(
+            input.minimum_cylindrical_length
+            if input.minimum_cylindrical_length is not None else 1e-6
+        ),
+        throat_geometry=input.throat_geometry,
     )
+    contour = full_engine_contour(chamber, nozzle)
+    contour["geometry_checks"] = thrust_chamber_geometry_checks(
+        contour,
+        offset_distance=input.manufacturing.wall_thickness,
+    )
+    return contour
 
 
 def _add_v2_gate_checks(
@@ -776,7 +909,7 @@ def _write_v2_artifacts(
     out.mkdir(parents=True, exist_ok=True)
     files: dict[str, Path] = {}
     files["csv"] = export_csv(
-        contour["x"], contour["y"], out / "nozzle_profile.csv",
+        contour["x"], contour["y"], out / "thrust_chamber_profile.csv",
         input.manufacturing.csv_points,
     )
 
@@ -784,17 +917,18 @@ def _write_v2_artifacts(
     cad = input.manufacturing.cad.lower()
     if cad in {CAD_STEP, CAD_BOTH}:
         files["step"] = export_step(
-            contour["x"], contour["y"], out / "nozzle.step",
+            contour["x"], contour["y"], out / "thrust_chamber_wall.step",
             input.manufacturing.angular_points,
             wall_thickness=input.manufacturing.wall_thickness,
             flange_od=input.interface.flange_od,
             flange_length=input.interface.flange_length,
             metadata=metadata,
+            throat_location=contour["throat_location"],
         )
 
     if cad in {CAD_STL, CAD_BOTH}:
         files["stl"] = export_stl(
-            contour["x"], contour["y"], out / "nozzle.stl",
+            contour["x"], contour["y"], out / "thrust_chamber_wall.stl",
             input.manufacturing.angular_points,
             wall_thickness=input.manufacturing.wall_thickness,
             flange_od=input.interface.flange_od,
@@ -847,6 +981,9 @@ def _v2_metadata(
         "tolerance": manufacturing.tolerance,
         "weld_allowance": manufacturing.weld_allowance,
         "braze_allowance": manufacturing.braze_allowance,
+        "authoritative_contour": "injector_face_to_chamber_to_throat_to_bell_exit",
+        "cad_body_scope": "single_revolved_uniform_wall_body",
+        "multi_body_cad_status": "deferred_until_liner_channel_jacket_interfaces_are_defined",
     })
 
 

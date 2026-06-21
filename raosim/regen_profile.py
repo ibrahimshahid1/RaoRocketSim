@@ -32,6 +32,8 @@ to the path length ``L``.  The helix here matches
 
 — exactly the arc the STL coils trace, so the modeled Δp is consistent
 with the exported geometry (previously the helix changed only the STL).
+Channel width and land width are defined transverse to this path; their
+constant-axial circumferential footprint is multiplied by ``dl/ds``.
 
 All lengths SI [m].
 """
@@ -404,12 +406,14 @@ class RegenWallProfile:
             * stretch
         )
         clearance = circ - needed
+        tolerance = 1e-10 * max(float(np.max(circ)), 1.0)
         i = int(np.argmin(clearance))
         return {
-            "fits": bool(np.min(clearance) >= 0.0),
+            "fits": bool(np.min(clearance) >= -tolerance),
             "tightest_station": i,
             "tightest_radius": float(self.r_inner[i]),
             "min_clearance_mm": float(np.min(clearance) * 1e3),
+            "fit_tolerance_mm": float(tolerance * 1e3),
         }
 
     # ---- bridge to the cooling solver ----------------------------------

@@ -737,13 +737,19 @@ class RaoSolution:
 
     def to_contour_dict(self, *, Rt: float, epsilon: float, length_pct: float,
                         pa_over_p0: float, Ru_factor: float = 1.5,
+                        Rd_factor: float = 0.382,
                         convergent_half_angle_deg: float = 45.0) -> dict:
         """Return compatibility dict shaped like ``bell_nozzle_contour``."""
         Re = math.sqrt(epsilon) * Rt
         Ru = Ru_factor * Rt
-        Rd = 0.382 * Rt
+        Rd = Rd_factor * Rt
         wall_x = self.wall_export[:, 0]
         wall_r = self.wall_export[:, 1]
+        if len(wall_x) > 1:
+            distance = np.hypot(np.diff(wall_x), np.diff(wall_r))
+            keep = np.concatenate(([True], distance > 1e-14 * max(Rt, 1.0)))
+            wall_x = wall_x[keep]
+            wall_r = wall_r[keep]
 
         conv_angle = math.radians(convergent_half_angle_deg)
         n_conv = 100
@@ -752,25 +758,59 @@ class RaoSolution:
         y_conv = (Rt + Ru) + Ru * np.sin(t_conv)
 
         theta_n = self.theta_N
-        # Draw the throat arc to the angle that meets the exported
-        # wall's first point, NOT to the reported theta_N: the export
-        # wall starts at the chart-N station, while post-J5 the
-        # characteristic formulation reports the solved kernel theta_B
-        # (~4 deg short of chart-N at the reference) — using the
-        # reported angle here would leave a gap in the concatenated
-        # polyline.
-        if len(wall_x) and Rd > 0.0:
-            arc_end = math.asin(min(max(float(wall_x[0]) / Rd, 0.0), 1.0))
+        # Throat downstream region: bridge the throat to the exported
+        # characteristic wall's first station N so the junction is C0 + C1
+        # ("slope matched at N", Seitzman AE6450; SP-8120 §2.1.1 throat
+        # tangency).  The MOC/BDE wall is solved independently, so its first
+        # station does NOT lie on the R_d = 0.382 R_t arc at the wall's own
+        # initial slope: the wall sits near the chart-N station yet departs at
+        # the kernel theta_B (~3-4 deg shallower).  The previous code drew a
+        # plain R_d arc to the wall's axial station only, leaving a radial gap
+        # AND a 3-4 deg slope kink that tripped position_continuity and
+        # slope_continuity.  Fix: keep the solved wall (hence exit radius /
+        # epsilon) UNCHANGED and fill throat -> N with a Hermite cubic that is
+        # tangent to the throat plane at the throat (horizontal, throat radius
+        # R_t) and tangent to the wall at N.  Closing the residual at the
+        # source — so the wall leaves at the same angle the arc reaches it — is
+        # the open kernel-theta_B (J5/J6) work.
+        x0 = float(wall_x[0])
+        r0 = float(wall_r[0])
+        if len(wall_x) >= 2:
+            theta0 = math.atan2(
+                float(wall_r[1] - wall_r[0]), float(wall_x[1] - wall_x[0])
+            )
         else:
-            arc_end = theta_n
-        t_thr = np.linspace(-math.pi / 2, arc_end - math.pi / 2, n_conv)
-        x_throat = Rd * np.cos(t_thr)
-        y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
-
-        x_full = np.concatenate([x_conv, x_throat, wall_x])
-        y_full = np.concatenate([y_conv, y_throat, wall_r])
+            theta0 = float(theta_n)
+        throat_bridge = "cubic_tangent"
+        if x0 <= 1e-12 or abs(r0 - Rt) <= 1e-12:
+            # Export wall already begins at the throat: no bridge station.
+            x_throat = np.array([0.0])
+            y_throat = np.array([Rt])
+            throat_bridge = "collapsed"
+        else:
+            # r(x) = a x^3 + b x^2 + R_t with r(0)=R_t, r'(0)=0,
+            #        r(x0)=r0, r'(x0)=tan(theta0).
+            s1 = math.tan(min(max(theta0, 0.0), math.radians(89.0)))
+            dr = r0 - Rt
+            a = (s1 - 2.0 * dr / x0) / (x0 * x0)
+            b = dr / (x0 * x0) - a * x0
+            xb = np.linspace(0.0, x0, n_conv)
+            x_throat = xb
+            y_throat = a * xb**3 + b * xb**2 + Rt
+            dydx = 3.0 * a * xb**2 + 2.0 * b * xb
+            if np.any(dydx < -1e-9) or np.any(y_throat < Rt - 1e-12):
+                # Non-monotonic bridge (pathological wall start): fall back to a
+                # plain R_d throat arc to the wall's axial station.
+                arc_end = math.asin(min(max(x0 / Rd, 0.0), 1.0)) if Rd > 0 else 0.0
+                t_thr = np.linspace(-math.pi / 2, arc_end - math.pi / 2, n_conv)
+                x_throat = Rd * np.cos(t_thr)
+                y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
+                throat_bridge = "rd_arc_fallback"
         Nx = float(x_throat[-1])
         Ny = float(y_throat[-1])
+
+        x_full = np.concatenate([x_conv, x_throat[1:], wall_x[1:]])
+        y_full = np.concatenate([y_conv, y_throat[1:], wall_r[1:]])
 
         contour = {
             "x": x_full,
@@ -817,6 +857,13 @@ class RaoSolution:
             "wall_export_resampled": True,
             "thrust_coefficient": self.thrust_coefficient,
             "warnings": list(self.warnings),
+        }
+        contour["throat_bell_reconciliation"] = {
+            "throat_bridge": throat_bridge,
+            "wall_theta0_deg": math.degrees(theta0),
+            "N": (Nx, Ny),
+            "exit_radius_design": float(Re),
+            "exit_radius_built": float(wall_r[-1]),
         }
         return contour
 
@@ -4584,6 +4631,7 @@ def rao_variational_moc_contour(
         length_pct=length_pct,
         pa_over_p0=pa_over_p0,
         Ru_factor=Ru_factor,
+        Rd_factor=throat_downstream_radius_factor,
         convergent_half_angle_deg=convergent_half_angle_deg,
     )
     return add_contour_reliability_metadata(contour, "rao_variational_moc", gamma)
@@ -4599,6 +4647,7 @@ def rao_variational_contour(
     n_char: int = 30,
     convergent_half_angle_deg: float = 45.0,
     Ru_factor: float = 1.5,
+    Rd_factor: float = 0.382,
     max_iter: int = 80,
 ) -> dict:
     """
@@ -4629,7 +4678,7 @@ def rao_variational_contour(
     Re = math.sqrt(epsilon) * Rt
     Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
     Ru = Ru_factor * Rt
-    Rd = 0.382 * Rt
+    Rd = Rd_factor * Rt
 
     # Step 1: Solve the variational problem on the control surface
     ce = solve_optimal_control_surface(
@@ -4658,8 +4707,8 @@ def rao_variational_contour(
     y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
 
     # Full contour
-    x_full = np.concatenate([x_conv, x_throat, wall_x])
-    y_full = np.concatenate([y_conv, y_throat, wall_r])
+    x_full = np.concatenate([x_conv, x_throat[1:], wall_x[1:]])
+    y_full = np.concatenate([y_conv, y_throat[1:], wall_r[1:]])
 
     # Compute exit metrics
     theta_n_deg = math.degrees(theta_n)

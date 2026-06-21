@@ -19,6 +19,23 @@ The governing local source is:
   buckling (equations 4-28/4-29), coaxial-shell liner stress (equation 4-31),
   and Darcy pressure loss (equation 4-32).
 
+The expanded local corpus also supplies:
+
+- `19730022965.pdf` — NASA SP-8087, *Liquid Rocket Engine Fluid-Cooled
+  Combustion Chambers*: variable passage/wall tailoring, thermal margin,
+  coolant velocity, RP-1 coking, manifolds, and design cautions.
+- `pizzarelli2011.pdf` and `eucass1p171.pdf` — roughness, entrance, and
+  Niino-Kumakawa/Taylor curvature corrections for rocket cooling channels.
+- `atefi2019.pdf` — variable channel-height/width optimization, fin
+  resistance, and Swamee-Jain rough-channel pressure loss.
+- `carlile1992.pdf`, `wadel1997.pdf`, `pizzarelli2013.pdf`, and
+  `pizzarelli2014.pdf` — experimental/numerical high-aspect-ratio channel
+  behavior and the onset of diminishing benefit from thermal stratification.
+- `leccese2018.pdf` — the non-negligible gas-radiation contribution omitted
+  by a convective-only Bartz screen.
+- `pizzarelli2015.pdf` — near-critical methane heat-transfer deterioration
+  and the competing effects of pressure and roughness.
+
 Adjacent local sources were checked but are not used as regenerative-wall
 allowables:
 
@@ -37,6 +54,12 @@ Primary online record for the local SP-125 scan:
   high-heat-flux copper alloy. The catalog still uses representative
   single-point properties rather than a qualified temperature-dependent
   material card.
+- The scalable B-rep implementation follows the official OpenCascade
+  [`BRepBuilderAPI_Transform`](https://dev.opencascade.org/doc/refman/html/class_b_rep_builder_a_p_i___transform.html)
+  and [`BRepAlgoAPI_Cut`](https://dev.opencascade.org/doc/refman/html/class_b_rep_algo_a_p_i___cut.html)
+  APIs: patterned ribs share transformed source geometry, Boolean operations
+  run as kernel-level multi-shape operations, and the STEP is re-imported to
+  verify one valid solid.
 
 ## Implemented equations
 
@@ -49,9 +72,16 @@ $$
 \frac{1}{h_c(x)}.
 $$
 
-`h_g` uses the repository's Bartz implementation. `h_c` uses Sieder–Tate
-with local rectangular hydraulic diameter, coolant viscosity, fin area, and
-curvature correction.
+`h_g` uses the repository's Bartz implementation. `h_c` uses turbulent
+Sieder-Tate with local rectangular hydraulic diameter and coolant viscosity,
+plus a `Nu=4.36` circular-duct, uniform-heat-flux laminar proxy and fin area.
+The laminar rectangular-duct aspect ratio, heated-wall configuration, and
+entrance region are not yet resolved. The optional curvature multiplier is the
+Niino-Kumakawa/Taylor relation
+`Nu_curved/Nu_straight = [Re (D_h/(2R_c))^2]^(+/-0.05)`. Automatic
+liquid-coolant sizing leaves it disabled because SP-8087 recommends that
+liquid curvature enhancement not be credited without experimental
+calibration. `--curvature-correction` opts into the screen.
 
 Heat is integrated over the actual meridional wall area,
 
@@ -62,12 +92,29 @@ $$
 using trapezoidal control lengths. Axial spacing `dx` is not used as a
 substitute for wall arc length at the convergent section or throat.
 
+The CLI exposes `--coolant-inlet-temperature`. Fluid-specific defaults are
+120 K for methane, 25 K for LH2, and 300 K for the remaining screening
+coolants; an explicit value overrides the default. The same inlet temperature
+is propagated through direct analysis, channel auto-sizing, and variable-wall
+sizing.
+
 The coolant pressure loss is integrated locally:
 
 $$
 \Delta p = \sum_i f_i \frac{\Delta L_i}{D_{h,i}}
                  \frac{\rho_i V_i^2}{2}.
 $$
+
+`f` uses `64/Re` in laminar flow, smooth-wall Blasius when roughness is zero,
+and Swamee-Jain when `channel_roughness > 0`. Transition detail and local
+fitting/manifold losses are reported as unresolved rather than hidden inside
+the distributed friction term.
+
+For RP-1/kerosene, the solver reports a conservative coolant-side wall
+temperature margin against the 700 K lower edge of the coking range in
+SP-8087. This is warning-only unless `--gate-coolant-chemistry` is selected.
+The Bartz output is convective heat flux; gas radiation is explicitly
+reported as not included rather than silently folded into a safety factor.
 
 For helical channels, `ΔL` is the 3-D centerline length. SP-125 supplies the
 Darcy relation; the particular helix parameterization
@@ -158,6 +205,23 @@ stabilized local elastic-plastic hysteresis range.
 | `auto-size` | Selects channel count/width while holding wall thickness fixed. |
 | `size-wall` | Co-sizes channel count/width/depth and a uniform seed liner, then refines `t_hot(x)`, `h(x)`, and `t_jacket(x)`. |
 
+Without `--size-wall`, `--wall-thickness` is only a uniform reference input.
+It is useful for geometry previews and fixed-thickness sensitivity studies,
+but it is not reported as an analyzed wall design. The CLI summary labels the
+distinction as `uniform_reference_input_not_sized` versus
+`station_wise_thermostructural_sizing`.
+
+The variable profile does not impose a generic “thick chamber and throat,
+thin bell” rule. SP-8087 section 3.1.1.3 recommends thin walls where heat
+loads are highest, tapering through the expansion nozzle for
+heat-flux-limited coolants, and increasing thickness where a larger
+subcritical-coolant safety margin is required. Those are competing local
+requirements. Accordingly, `size_wall_profile` solves pressure, thermal
+gradient, wall-temperature, buckling, manufacturing/degradation floor, and
+coolant-pressure jacket bounds at each station. `--t-hot-min` exposes the
+process-specific liner floor; its default is a preliminary placeholder, not
+a universal literature limit.
+
 ## Geometry and CAD status
 
 Wall offsets are measured along the local contour normal, not by adding a
@@ -189,25 +253,37 @@ With CadQuery/OpenCascade installed, STEP is a revolved B-rep that CAD
 systems can import as a solid body. Without it, the AP214 file is explicitly
 reported as `faceted_brep`. `--require-brep` rejects that fallback.
 
+Binary solid STL export is independently gated before writing: angular-seam
+vertices are shared exactly, both normal-offset end rings are closed, the
+optional flange continues the inner bore to its upstream cap, every mesh edge
+must have two oppositely wound incident triangles, and the signed triangle
+volume must match the exact revolved piecewise-linear profile volume after
+the regular-polygon faceting correction. The CLI records boundary-edge count,
+nonmanifold-edge count, and enclosed volume in `summary.json`.
+
 `regen.step` is a neutral B-rep, not an Inventor feature tree. A STEP file can
 contain the final patterned topology but cannot preserve a native Inventor
 pattern feature. Inventor can import it as a real solid body and save it as
 IPT. Native editable feature history would require a separate Inventor,
 FreeCAD, or other parametric-CAD document generator.
 
-The plenum/port geometry is now connected and single-solid, but its hydraulic
-report is a continuity-area screen only. Header maldistribution, turning and
-entrance losses, local rib termination stress, fillets, flanges, injector
-interfaces, joints, tolerances, and machining/additive-process constraints
-are not yet solved.
+With `--hydraulic-network` (automatically enabled by
+`--regen-manifolds`), the analytical model now solves a nonlinear graph with
+every channel branch, two annular header rings, each discrete port, ring
+friction, and entry/exit minor losses. It reports source-to-sink pressure
+drop and branch-flow maldistribution. The graph is one-dimensional: 3-D
+turning, separation, port jets, and calibrated local K values still require
+manifold CFD or test data.
 
 ## Qualification limits
 
-- Material properties are representative single-point screening values, not
-  heat-certified temperature-dependent allowables.
-- Catalog materials have no invented Coffin–Manson coefficients. Fatigue is
-  evaluated only with a complete sourced set and gates feasibility only when
-  marked design-qualified.
+- Material strengths/conductivity remain representative screening values,
+  not heat-certified temperature-dependent allowables.
+- NARloy-Z fatigue and cyclic tangent data are derived from NASA CR-134627;
+  GRCop-84 uses the direct strain-life and cyclic stress-strain regressions
+  in NASA 20060005216. These are active preliminary screens, not
+  thermomechanical hardware qualification.
 - Jacket buckling, creep, plasticity, weld/braze efficiency, stress
-  concentration, manifold maldistribution/loss, boiling, coking, critical
-  heat flux, and conjugate CFD/FEA qualification remain outside this model.
+  concentration, calibrated 3-D manifold flow, forced-flow cryogenic CHF,
+  supercritical heat-transfer deterioration, soot radiation, and conjugate
+  CFD/FEA qualification remain outside this model.
