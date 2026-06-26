@@ -392,6 +392,30 @@ def _print_injector_panel(inj) -> None:
     print(f"    {green('spray:'):<16}TMR={inj.total_momentum_ratio:.2f}   "
           f"half-angle={inj.spray_half_angle_deg:.0f}°   "
           f"wall@{wall}   slot/gap={inj.slot_to_annulus_width_ratio:.2f}")
+    at = getattr(inj, "atomization", None)
+    if at is not None:
+        lim = at.streams[at.limiting_role]
+        print(f"    {green('atomization:'):<16}"
+              f"SMD {lim.sauter_mean_diameter*1e6:.0f} µm ({at.limiting_role})   "
+              f"L_comb {at.combustion_length*1e3:.0f} mm   "
+              f"margin {at.development_margin:.2f}   "
+              f"η_c*≈{at.predicted_cstar_efficiency:.2f} "
+              + dim("(vaporization-limited surrogate)"))
+    th = getattr(inj, "thermal", None)
+    if th is not None:
+        twg = (th.tip_wall_temperature if th.limiting == "tip"
+               else th.face_wall_temperature)
+        print(f"    {green('face/tip:'):<16}"
+              f"{th.limiting} T_wg≈{twg:.0f} K vs {th.wall_temperature_limit:.0f} K   "
+              f"margin {th.governing_margin:.2f} "
+              + dim("(recirculation screen)"))
+    st = getattr(inj, "stability", None)
+    if st is not None:
+        print(f"    {green('stability:'):<16}"
+              f"chug {st.chug_status}   "
+              f"L1 {st.f_L1:.0f} Hz  T1 {st.f_T1:.0f} Hz   "
+              f"τ·f_L1={st.reduced_frequency_L1:.2f} "
+              + dim("(n-τ screen)"))
     n_pass = sum(g.status == "pass" for g in inj.gates)
     n_warn = sum(g.status == "warn" for g in inj.gates)
     n_fail = sum(g.status == "fail" for g in inj.gates)
@@ -540,6 +564,9 @@ def main() -> int:
                     help="slot height/width for auto-sizing")
     ap.add_argument("--pintle-deflector-angle", type=float, default=0.0,
                     help="radial-stream deflector angle [deg]")
+    ap.add_argument("--pintle-target-momentum-ratio", type=float, default=None,
+                    help="optional target radial/axial momentum ratio; "
+                         "currently gates the achieved design")
     ap.add_argument("--pintle-impingement-distance", type=float, default=None,
                     help="distance from openings to stream interaction [m]")
     ap.add_argument("--injector-min-feature", type=float, default=3.0e-4,
@@ -547,6 +574,20 @@ def main() -> int:
     ap.add_argument("--allow-infeasible-injector", action="store_true",
                     help="export the chamber even when injector gates fail "
                          "(default: failing gates block export, exit nonzero)")
+    ap.add_argument("--throttle-map", default=None,
+                    help="movable-sleeve throttle study: comma-separated "
+                         "throttle levels in (0,1], e.g. '0.2,0.4,0.6,0.8,1.0'")
+    ap.add_argument("--throttle-pc-exponent", type=float, default=1.0,
+                    help="Pc(f)=Pc·f^exp for the throttle map (1=Pc∝ṁ, "
+                         "0=constant Pc)")
+    ap.add_argument("--injector-cad", choices=("none", "auto", "step"),
+                    default="auto",
+                    help="export the named-body pintle assembly (STEP "
+                         "authoritative + per-body STL) with --injector pintle: "
+                         "'auto' (default) exports when CadQuery is installed and "
+                         "skips otherwise, 'step' requires it, 'none' disables")
+    ap.add_argument("--pintle-sleeve", action="store_true",
+                    help="include the movable sleeve body in the pintle CAD")
     # fixed-geometry overrides (only used with --injector-sizing fixed)
     ap.add_argument("--pintle-annulus-gap", type=float, default=None)
     ap.add_argument("--pintle-slot-width", type=float, default=None)
@@ -1633,32 +1674,15 @@ def main() -> int:
         from raosim.injector import (
             InjectorSpec, PropellantFeedSpec, PintleGeometrySpec,
             InjectorManufacturingSpec, InjectorUnsupportedState,
-            InjectorSpecError, InjectorGate, size_pintle_injector,
+            InjectorSpecError, evaluate_pintle_injector,
         )
-        from raosim.coolants import canonical_coolant_name
+        from raosim.design import CoolingSpec
         print("\n" + cyan("▸ " + bold("Injector")) +
               dim("  (pintle, liquid/liquid, sized from the ṁ split)"))
         if not args._ox_name or not args._fuel_name:
             print(red("    --injector pintle needs real propellant identities; "
                       "pass --oxidizer/--fuel or --propellant 'OX/FUEL'."))
             return 2
-        # Regen → injector feed coupling for the fuel stream.
-        fuel_is_coolant = bool(
-            args.regen and args._fuel_name
-            and canonical_coolant_name(args._fuel_name)
-            == canonical_coolant_name(args.coolant))
-        fuel_T, fuel_P = args.fuel_inlet_temperature, args.fuel_inlet_pressure
-        coupling = "fuel feed at supplied/inlet conditions (no regen jacket)"
-        if fuel_is_coolant and cooling_result is not None:
-            if fuel_T is None:
-                fuel_T = float(cooling_result["coolant_outlet_temperature"])
-            if fuel_P is None:
-                fuel_P = float(cooling_result["coolant_outlet_pressure"])
-            coupling = (f"fuel feed from regen jacket outlet "
-                        f"{fuel_T:.0f} K / {fuel_P/1e5:.1f} bar (cooling→feed)")
-        elif fuel_is_coolant:
-            coupling = ("fuel is the regen coolant; add --thermal to feed the "
-                        "heated jacket-outlet state (used inlet conditions)")
         inj_spec = InjectorSpec(
             type="pintle", sizing=args.injector_sizing,
             fuel_dp_fraction=args.fuel_injector_dp_fraction,
@@ -1666,11 +1690,13 @@ def main() -> int:
             fuel_cd=args.fuel_discharge_coefficient,
             oxidizer_cd=args.oxidizer_discharge_coefficient,
             faceplate_material=args.material, pintle_material=args.material,
-            target_momentum_ratio=None,
+            target_momentum_ratio=args.pintle_target_momentum_ratio,
+            allow_infeasible=args.allow_infeasible_injector,
             fuel=PropellantFeedSpec(
                 role="fuel", name=args._fuel_name,
-                inlet_temperature=fuel_T,
-                inlet_pressure=fuel_P, phase=args.fuel_phase),
+                inlet_temperature=args.fuel_inlet_temperature,
+                inlet_pressure=args.fuel_inlet_pressure,
+                phase=args.fuel_phase),
             oxidizer=PropellantFeedSpec(
                 role="oxidizer", name=args._ox_name,
                 inlet_temperature=args.oxidizer_inlet_temperature,
@@ -1695,25 +1721,40 @@ def main() -> int:
                 min_feature=args.injector_min_feature),
         )
         try:
-            inj = size_pintle_injector(
-                inj_spec, mdot_fuel=args._mdot_f, mdot_oxidizer=args._mdot_o,
+            coupling_cooling = CoolingSpec(
+                method="regenerative" if args.regen else "none",
+                coolant=args.coolant,
+                coolant_mass_flow=args.coolant_mdot,
+            )
+            inj = evaluate_pintle_injector(
+                inj_spec,
+                mdot_fuel=args._mdot_f,
+                mdot_oxidizer=args._mdot_o,
                 Pc=args.pc, mixture_ratio=args.mixture_ratio,
                 chamber_radius=chamber["Rc"], chamber_length=chamber["Lc"],
-                gamma=prop.gamma, Tc=prop.Tc, R_gas=prop.R_gas)
+                gamma=prop.gamma, Tc=prop.Tc, R_gas=prop.R_gas,
+                fuel_name=args._fuel_name, oxidizer_name=args._ox_name,
+                cooling=coupling_cooling, cooling_result=cooling_result,
+            )
         except (InjectorUnsupportedState, InjectorSpecError) as exc:
             print(red(f"    injector rejected: {exc}"))
             summary["injector"] = {"type": "pintle", "feasible": False,
                                    "rejected": str(exc)}
             (args.out / "summary.json").write_text(json.dumps(summary, indent=2))
             return 2
-        inj.gates.append(InjectorGate(
-            "regen_feed_coupling",
-            "pass" if (fuel_is_coolant and cooling_result is not None) else "info",
-            coupling))
-        inj.notes.append(coupling)
         _print_injector_panel(inj)
-        print(dim(f"    coupling: {coupling}"))
-        summary["injector"] = inj.to_dict()
+        coupling_gate = next(
+            gate for gate in inj.gates
+            if gate.name == "regen_fuel_flow_closure"
+        )
+        print(dim(f"    coupling: {coupling_gate.detail}"))
+        inj_dict = inj.to_dict()
+        summary["injector"] = inj_dict
+        # Standalone pintle build artifact (sizing + streams + atomization +
+        # gates), written alongside summary.json regardless of feasibility.
+        (args.out / "pintle.json").write_text(json.dumps(inj_dict, indent=2))
+        artifacts.append("pintle.json")
+        print(green("    wrote pintle.json"))
         if not inj.feasible and not args.allow_infeasible_injector:
             print(red("    injector gates FAILED — blocking chamber export; "
                       "re-run with --allow-infeasible-injector to override."))
@@ -1722,6 +1763,74 @@ def main() -> int:
         print(green("    injector sized ✓") if inj.feasible else
               yellow("    injector sized with FAILING gates "
                      "(--allow-infeasible-injector)"))
+
+        # ---- optional movable-sleeve throttle map (computed before the
+        #      figures so it can be plotted alongside them) --------------
+        tm = None
+        if args.throttle_map:
+            from raosim.injector import throttle_map
+            try:
+                levels = tuple(sorted(float(x) for x in
+                                      args.throttle_map.split(",") if x.strip()))
+                tm = throttle_map(
+                    inj_spec, mdot_fuel_full=args._mdot_f,
+                    mdot_oxidizer_full=args._mdot_o, Pc_full=args.pc,
+                    mixture_ratio=args.mixture_ratio,
+                    chamber_radius=chamber["Rc"], chamber_length=chamber["Lc"],
+                    gamma=prop.gamma, Tc=prop.Tc, R_gas=prop.R_gas,
+                    levels=levels, pc_exponent=args.throttle_pc_exponent)
+                summary["injector_throttle_map"] = tm.to_dict()
+                print("\n    " + bold("Throttle map")
+                      + dim(f"  (Pc∝f^{args.throttle_pc_exponent:g}; "
+                            "O/F+TMR held by the sleeve)"))
+                print(f"      {'f':>5} {'Pc[bar]':>8} {'stroke':>7} "
+                      f"{'v_a':>6} {'TMR':>6} {'SMD[µm]':>8} {'η_c*':>6} "
+                      f"{'feas':>5}")
+                for p in tm.points:
+                    badge = green("yes") if p.feasible else red("no")
+                    print(f"      {p.throttle:>5.2f} {p.Pc/1e5:>8.1f} "
+                          f"{p.sleeve_stroke_fraction:>7.3f} {p.v_annulus:>6.0f} "
+                          f"{p.total_momentum_ratio:>6.3f} "
+                          f"{p.smd_limiting*1e6:>8.0f} "
+                          f"{p.predicted_cstar_efficiency:>6.2f} {badge:>5}")
+            except Exception as exc:
+                print(yellow(f"    throttle map skipped: {exc}"))
+
+        # ---- injector diagnostic figures (full set) ------------------
+        try:
+            from raosim.injector_plots import export_all_injector_figures
+            figs = export_all_injector_figures(
+                inj, args.out, show=show, throttle=tm)
+            artifacts += figs
+            print(green(f"    wrote {len(figs)} injector diagnostic PNGs "
+                        + dim("(" + ", ".join(
+                            f.replace("injector_", "").replace(".png", "")
+                            for f in figs) + ")")))
+        except Exception as exc:
+            print(yellow(f"    injector figures skipped: {exc}"))
+
+        # ---- named-body pintle STEP/STL CAD --------------------------
+        if args.injector_cad != "none":
+            try:
+                from raosim.injector_cad import (
+                    export_pintle_step, cadquery_available)
+                if not cadquery_available():
+                    _msg = ("    pintle STEP skipped: CadQuery not installed "
+                            "(pip install cadquery)")
+                    print(yellow(_msg) if args.injector_cad == "auto"
+                          else red(_msg + "  — required by --injector-cad step"))
+                else:
+                    cad = export_pintle_step(
+                        inj, args.out / "pintle.step",
+                        movable_sleeve=args.pintle_sleeve,
+                        stl_dir=args.out / "pintle_stl")
+                    summary["injector_cad"] = cad
+                    artifacts.append("pintle.step")
+                    print(green(f"    wrote pintle.step  "
+                                f"({len(cad['named_bodies'])} named bodies) "
+                                f"+ pintle_stl/"))
+            except Exception as exc:
+                print(yellow(f"    pintle STEP skipped: {exc}"))
 
     # ---- 3.8 solid wall CAD, using the final sized thickness ----------
     # Unlike the regen visualization below, this is a closed material body:

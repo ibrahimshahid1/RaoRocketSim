@@ -40,6 +40,12 @@ from raosim.gas_dynamics import (
 )
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.engine import compute_engine_performance, g0
+from raosim.injector import (
+    InjectorManufacturingSpec,
+    InjectorSpec,
+    PintleGeometrySpec,
+    PropellantFeedSpec,
+)
 from raosim.export import export_csv, export_stl, export_step, package_ipt_request
 from raosim.plotting import plot_nozzle_2d, plot_nozzle_3d, plot_curvature
 from raosim.atmosphere import pressure as atm_pressure
@@ -190,8 +196,8 @@ Examples:
                    help='Coolant mass flow [kg/s]')
     p.add_argument('--coolant-cp', type=float, default=3500.0,
                    help='Coolant heat capacity [J/kg/K]')
-    p.add_argument('--coolant-inlet-temp', type=float, default=293.0,
-                   help='Coolant inlet temperature [K]')
+    p.add_argument('--coolant-inlet-temp', type=float, default=None,
+                   help='Coolant inlet temperature [K] (fluid default if omitted)')
     p.add_argument('--max-wall-temp', type=float, default=950.0,
                    help='Cooling wall temperature limit [K]')
     p.add_argument('--material', type=str, default='Inconel 718',
@@ -212,6 +218,36 @@ Examples:
                    help='Optional bolt hole diameter [mm]')
     p.add_argument('--injector-face-od', type=float, default=None,
                    help='Optional injector face outer diameter [mm]')
+    p.add_argument('--injector', choices=['none', 'pintle'], default='none',
+                   help='Integrated injector model for the v2 workflow')
+    p.add_argument('--fuel-injector-dp-fraction', type=float, default=0.2,
+                   help='Fuel injector pressure drop divided by Pc')
+    p.add_argument('--oxidizer-injector-dp-fraction', type=float, default=0.2,
+                   help='Oxidizer injector pressure drop divided by Pc')
+    p.add_argument('--fuel-inlet-temperature', type=float, default=None,
+                   help='Fuel injector inlet temperature [K]')
+    p.add_argument('--oxidizer-inlet-temperature', type=float, default=None,
+                   help='Oxidizer injector inlet temperature [K]')
+    p.add_argument('--fuel-inlet-pressure', type=float, default=None,
+                   help='Fuel injector inlet pressure [bar]')
+    p.add_argument('--oxidizer-inlet-pressure', type=float, default=None,
+                   help='Oxidizer injector inlet pressure [bar]')
+    p.add_argument('--pintle-radial-stream', choices=['fuel', 'oxidizer'],
+                   default='fuel', help='Pintle radial/slotted stream')
+    p.add_argument('--pintle-diameter', type=float, default=None,
+                   help='Pintle diameter [mm]; defaults from chamber diameter')
+    p.add_argument('--pintle-slot-count', type=int, default=24,
+                   help='Number of radial pintle slots')
+    p.add_argument('--pintle-slot-aspect-ratio', type=float, default=1.0,
+                   help='Auto-sized slot height/width')
+    p.add_argument('--pintle-deflector-angle', type=float, default=0.0,
+                   help='Pintle deflector angle [deg]')
+    p.add_argument('--pintle-target-momentum-ratio', type=float, default=None,
+                   help='Optional target radial/axial momentum ratio')
+    p.add_argument('--injector-min-feature', type=float, default=0.3,
+                   help='Minimum injector slot/gap/web feature [mm]')
+    p.add_argument('--allow-infeasible-injector', action='store_true',
+                   help='Return preliminary output despite failed injector gates')
     p.add_argument('--interface-length', type=float, default=None,
                    help='Optional chamber/nozzle interface length [mm]')
     p.add_argument('--throat-insert', action='store_true',
@@ -280,6 +316,7 @@ def _should_use_v2(args) -> bool:
         args.bolt_circle is not None,
         args.bolt_hole is not None,
         args.injector_face_od is not None,
+        args.injector != 'none',
         args.interface_length is not None,
         args.throat_insert,
         args.throat_insert_material is not None,
@@ -367,6 +404,42 @@ def run_batch_v2(args):
             tolerance=_mm_to_m(args.tolerance),
             weld_allowance=_mm_to_m(args.weld_allowance),
             braze_allowance=_mm_to_m(args.braze_allowance),
+        ),
+        injector=InjectorSpec(
+            type=args.injector,
+            fuel_dp_fraction=args.fuel_injector_dp_fraction,
+            oxidizer_dp_fraction=args.oxidizer_injector_dp_fraction,
+            target_momentum_ratio=args.pintle_target_momentum_ratio,
+            allow_infeasible=args.allow_infeasible_injector,
+            fuel=PropellantFeedSpec(
+                role='fuel',
+                name=args.fuel,
+                inlet_temperature=args.fuel_inlet_temperature,
+                inlet_pressure=(
+                    args.fuel_inlet_pressure * 1e5
+                    if args.fuel_inlet_pressure is not None else None
+                ),
+            ),
+            oxidizer=PropellantFeedSpec(
+                role='oxidizer',
+                name=args.oxidizer,
+                inlet_temperature=args.oxidizer_inlet_temperature,
+                inlet_pressure=(
+                    args.oxidizer_inlet_pressure * 1e5
+                    if args.oxidizer_inlet_pressure is not None else None
+                ),
+            ),
+            geometry=PintleGeometrySpec(
+                pintle_diameter=_mm_to_m(args.pintle_diameter),
+                slot_count=args.pintle_slot_count,
+                slot_aspect_ratio=args.pintle_slot_aspect_ratio,
+                deflector_angle=args.pintle_deflector_angle,
+                radial_stream=args.pintle_radial_stream,
+                face_od=_mm_to_m(args.injector_face_od),
+            ),
+            manufacturing=InjectorManufacturingSpec(
+                min_feature=_mm_to_m(args.injector_min_feature),
+            ),
         ),
         strict_gates=args.strict_gates,
     )

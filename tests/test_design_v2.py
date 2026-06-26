@@ -14,6 +14,7 @@ from raosim.design import (
     design_nozzle_v2,
 )
 from raosim.nozzle_geometry import bell_nozzle_contour
+from raosim.injector import InjectorSpec, PintleGeometrySpec
 from raosim.physics import bartz_heat_flux, boundary_layer_displacement, regenerative_cooling_screen, structural_screen
 from raosim.coolants import canonical_coolant_name
 from raosim.physics import (
@@ -47,6 +48,45 @@ def test_preliminary_v2_constant_gamma_runs():
     assert result.report_sections["thermochemistry"]["source"] == "built_in_constant_gamma"
     assert result.report_sections["boundary_layer"]["effective_epsilon"] < result.input.epsilon
     assert result.contour["hardware_qualified"] is False
+
+
+def test_v2_backend_evaluates_requested_pintle():
+    result = design_nozzle_v2(_prelim_input(
+        injector=InjectorSpec(type="pintle"),
+    ))
+
+    injector = result.report_sections["injector"]
+    assert injector["feasible"] is True
+    assert injector["feed"]["fuel"]["name"] == "RP-1"
+    assert injector["feed"]["oxidizer"]["name"] == "LOX"
+    assert any(
+        check.category == "injector"
+        for check in result.gate_report.checks
+    )
+
+
+def test_v2_backend_blocks_infeasible_pintle():
+    request = _prelim_input(
+        injector=InjectorSpec(
+            type="pintle",
+            geometry=PintleGeometrySpec(slot_count=400),
+        ),
+    )
+    with pytest.raises(RuntimeError, match="Pintle injector gates failed"):
+        design_nozzle_v2(request)
+
+
+def test_v2_backend_can_report_explicitly_overridden_infeasible_pintle():
+    request = _prelim_input(
+        injector=InjectorSpec(
+            type="pintle",
+            allow_infeasible=True,
+            geometry=PintleGeometrySpec(slot_count=400),
+        ),
+    )
+    result = design_nozzle_v2(request)
+    assert result.report_sections["injector"]["feasible"] is False
+    assert result.gate_report.passed is False
 
 
 def test_cooling_temperature_is_optional_and_resolved_centrally():

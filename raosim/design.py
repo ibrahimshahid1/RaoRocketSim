@@ -32,7 +32,7 @@ from raosim.gas_dynamics import (
     mach_from_area_ratio,
     thrust_coefficient,
 )
-from raosim.injector import InjectorSpec
+from raosim.injector import InjectorSpec, evaluate_pintle_injector
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.physics import (
     bartz_heat_flux,
@@ -431,6 +431,44 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         thermal, contour, input.cooling, input.material,
         input.manufacturing.wall_thickness, prop, input.Pc,
     )
+    injector_result = None
+    if input.injector.type == "pintle":
+        mixture_ratio = input.thermo.mixture_ratio
+        if mixture_ratio is None:
+            mixture_ratio = float(getattr(prop, "OF", 0.0) or 0.0)
+        if mixture_ratio <= 0.0:
+            raise ValueError(
+                "Pintle injector sizing requires a positive mixture ratio; "
+                "set thermo.mixture_ratio or select a propellant with nominal O/F."
+            )
+        oxidizer_name, fuel_name = _thermo_feed_names(input.thermo)
+        mdot_fuel = performance.m_dot / (1.0 + mixture_ratio)
+        mdot_oxidizer = mixture_ratio * mdot_fuel
+        injector_result = evaluate_pintle_injector(
+            input.injector,
+            mdot_fuel=mdot_fuel,
+            mdot_oxidizer=mdot_oxidizer,
+            Pc=input.Pc,
+            mixture_ratio=mixture_ratio,
+            chamber_radius=float(contour["chamber"]["Rc"]),
+            chamber_length=float(contour["chamber"]["Lc"]),
+            gamma=prop.gamma,
+            Tc=prop.Tc,
+            R_gas=prop.R_gas,
+            fuel_name=fuel_name,
+            oxidizer_name=oxidizer_name,
+            cooling=input.cooling,
+            cooling_result=cooling,
+        )
+        for gate in injector_result.gates:
+            gate_report.add(
+                "injector",
+                gate.name,
+                gate.status != "fail",
+                value=gate.status,
+                limit="status != fail",
+                message=gate.detail,
+            )
     structural = structural_screen(
         contour, input.Pc, input.ambient.Pa, prop, input.material,
         input.manufacturing.wall_thickness, thermal, cooling,
@@ -447,6 +485,12 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     warnings.extend(contour.get("warnings", []))
     warnings.extend(gate_report.warnings)
     warnings.extend(cooling.get("warnings", []))
+    if injector_result is not None:
+        warnings.extend(
+            f"Injector {gate.name}: {gate.detail}"
+            for gate in injector_result.gates
+            if gate.status in {"warn", "fail"}
+        )
     report_sections = {
         "thermochemistry": {
             "mode": thermo.mode,
@@ -469,6 +513,11 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         },
         "thermal": thermal,
         "cooling": cooling,
+        "injector": (
+            injector_result.to_dict()
+            if injector_result is not None
+            else {"type": "none", "status": "disabled", "feasible": True}
+        ),
         "structural": structural,
         "cad_readiness": cad_readiness,
         "benchmark_status": benchmark_status,
@@ -477,6 +526,21 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     if input.mode == DESIGN_MODE_VALIDATED and not gate_report.passed:
         raise RuntimeError(
             "Validated design gates failed: " + "; ".join(gate_report.warnings)
+        )
+    if (
+        injector_result is not None
+        and not injector_result.feasible
+        and not input.injector.allow_infeasible
+    ):
+        failures = "; ".join(
+            f"{gate.name}: {gate.detail}"
+            for gate in injector_result.gates
+            if gate.status == "fail"
+        )
+        raise RuntimeError(
+            "Pintle injector gates failed; no design/CAD artifacts were "
+            f"written. Set injector.allow_infeasible=True only for explicit "
+            f"preliminary diagnostics. {failures}"
         )
     if input.strict_gates and not gate_report.passed:
         raise RuntimeError(
@@ -642,6 +706,8 @@ def _validate_design_input(input: DesignInput) -> None:
         raise ValueError("flange_od and flange_length must be supplied together")
     if input.cooling.method not in {"none", "regenerative"}:
         raise ValueError("cooling.method must be 'none' or 'regenerative'")
+    if input.injector.type not in {"none", "pintle"}:
+        raise ValueError("injector.type must be 'none' or 'pintle'")
     if input.cooling.method == "regenerative":
         if not input.cooling.channel_count or input.cooling.channel_count <= 0:
             raise ValueError("regenerative cooling requires channel_count > 0")
@@ -651,6 +717,22 @@ def _validate_design_input(input: DesignInput) -> None:
             raise ValueError("regenerative cooling requires channel_height > 0")
         if not input.cooling.coolant_mass_flow or input.cooling.coolant_mass_flow <= 0.0:
             raise ValueError("regenerative cooling requires coolant_mass_flow > 0")
+
+
+def _thermo_feed_names(thermo: ThermoSpec) -> tuple[str | None, str | None]:
+    """Return ``(oxidizer, fuel)`` for injector feed-property resolution."""
+    oxidizer, fuel = thermo.oxidizer, thermo.fuel
+    if (
+        (not oxidizer or not fuel)
+        and thermo.propellant_name
+        and "/" in thermo.propellant_name
+    ):
+        pair_oxidizer, pair_fuel = (
+            part.strip() for part in thermo.propellant_name.split("/", 1)
+        )
+        oxidizer = oxidizer or pair_oxidizer
+        fuel = fuel or pair_fuel
+    return oxidizer, fuel
 
 
 def _build_v2_contour(
@@ -969,6 +1051,8 @@ def _v2_metadata(
         "thermo_mode": input.thermo.mode,
         "thermo_source": report_sections["thermochemistry"]["source"],
         "cooling_method": input.cooling.method,
+        "injector_type": input.injector.type,
+        "injector_feasible": report_sections["injector"].get("feasible", True),
         "material": input.material.name,
         "wall_thickness": manufacturing.wall_thickness,
         "flange_od": interface.flange_od,

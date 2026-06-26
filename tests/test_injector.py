@@ -10,6 +10,7 @@ from raosim.injector import (
     InjectorUnsupportedState,
     PintleGeometrySpec,
     PropellantFeedSpec,
+    evaluate_pintle_injector,
     resolve_feed_state,
     size_pintle_injector,
 )
@@ -198,21 +199,33 @@ class TestGates:
         r = _size()
         assert _gate(r, "validation_status").status == "warn"
 
-    def test_acoustic_screen_reports(self):
+    def test_stability_gates_report(self):
         r = _size()
-        assert _gate(r, "acoustic_screen").status == "info"
+        assert _gate(r, "chamber_acoustic_modes").status == "info"
+        assert _gate(r, "feed_system_chug").status in ("pass", "warn", "fail")
+        assert _gate(r, "ntau_coupling").status in ("info", "warn")
+
+    def test_insufficient_supplied_feed_pressure_fails(self):
+        spec = _spec()
+        spec.fuel.inlet_pressure = 7.1e6
+        spec.oxidizer.inlet_pressure = 7.1e6
+        r = _size(spec)
+        assert _gate(r, "upstream_pressure_fuel").status == "fail"
+        assert _gate(r, "upstream_pressure_oxidizer").status == "fail"
+        assert not r.feasible
 
 
-# ---- liquid-only guard --------------------------------------------------
-class TestLiquidOnlyGuard:
-    def test_rejects_gas_feed(self):
+# ---- phase guard + compressible (gas) branch ----------------------------
+class TestPhaseGuard:
+    def test_rejects_gas_without_gamma_R(self):
+        # RP-1 forced to gas: the literature table has no gas gamma/R.
         spec = _spec()
         spec.fuel.phase = "gas"
         with pytest.raises(InjectorUnsupportedState):
             _size(spec)
 
     def test_rejects_subcritical_low_pressure_flashing(self):
-        # N2O4 is volatile; a near-vapor-pressure feed must be rejected.
+        # N2O4 near its vapor pressure is two-phase: neither branch applies.
         spec = InjectorSpec(
             type="pintle",
             fuel=PropellantFeedSpec(role="fuel", name="MMH"),
@@ -225,6 +238,31 @@ class TestLiquidOnlyGuard:
                 spec, mdot_fuel=0.5, mdot_oxidizer=1.0, Pc=7e6,
                 mixture_ratio=2.0, chamber_radius=0.03, chamber_length=0.1,
                 gamma=1.23, Tc=3122.0, R_gas=386.0)
+
+    def test_accepts_gaseous_oxygen_compressible(self):
+        # GOX through the annulus: compressible branch, larger area, subsonic.
+        spec = _spec(geometry=PintleGeometrySpec(
+            pintle_diameter=0.02, slot_count=24, radial_stream="fuel"))
+        spec.oxidizer = PropellantFeedSpec(
+            role="oxidizer", name="oxygen", inlet_temperature=280.0,
+            phase="gas")
+        r = _size(spec)
+        assert r.annulus.detail["injection"]["branch"].startswith("compressible")
+        # gas is far less dense -> needs much more area than liquid LOX (~33 mm^2)
+        assert r.annulus.area > 5e-5
+        assert any(g.name == "injection_state_oxidizer" for g in r.gates)
+
+    def test_choked_gas_reports_choke(self):
+        # A large oxidizer dp-fraction (P0 >> 2 Pc) chokes the gas stream.
+        spec = _spec(ox_dp=1.5, geometry=PintleGeometrySpec(
+            pintle_diameter=0.02, slot_count=24, radial_stream="fuel"))
+        spec.oxidizer = PropellantFeedSpec(
+            role="oxidizer", name="oxygen", inlet_temperature=280.0,
+            phase="gas")
+        r = _size(spec)
+        assert r.annulus.detail["injection"]["choked"] is True
+        g = _gate(r, "injection_state_oxidizer")
+        assert "CHOKED" in g.detail
 
 
 # ---- fixed mode ---------------------------------------------------------
@@ -286,6 +324,26 @@ class TestValidation:
         with pytest.raises(InjectorSpecError):
             _size(mdot_fuel=0.0)
 
+    @pytest.mark.parametrize(
+        "geometry",
+        [
+            PintleGeometrySpec(
+                pintle_diameter=0.02, slot_count=24, tip_radius=-1e-3
+            ),
+            PintleGeometrySpec(
+                pintle_diameter=0.02, slot_count=24,
+                impingement_distance=-1e-3,
+            ),
+            PintleGeometrySpec(
+                pintle_diameter=0.02, slot_count=24, deflector_angle=180.0
+            ),
+        ],
+    )
+    def test_invalid_geometry_raises(self, geometry):
+        from raosim.injector import InjectorSpecError
+        with pytest.raises(InjectorSpecError):
+            _size(_spec(geometry=geometry))
+
 
 # ---- activated geometry parameters --------------------------------------
 class TestActiveParameters:
@@ -318,6 +376,267 @@ class TestActiveParameters:
         assert _gate(r, "pintle_tip_radius").status == "fail"
 
 
+class TestIntegratedCoupling:
+    class _Cooling:
+        method = "regenerative"
+        coolant = "rp1"
+
+        def __init__(self, mdot):
+            self.coolant_mass_flow = mdot
+
+    def test_regen_flow_mismatch_fails_and_does_not_use_outlet_state(self):
+        r = evaluate_pintle_injector(
+            _spec(),
+            mdot_fuel=MDOT_F,
+            mdot_oxidizer=MDOT_O,
+            Pc=PC,
+            mixture_ratio=MR,
+            chamber_radius=0.0339,
+            chamber_length=0.10,
+            gamma=1.24,
+            Tc=3571.0,
+            R_gas=379.6,
+            cooling=self._Cooling(10.0),
+            cooling_result={
+                "coolant_outlet_temperature": 500.0,
+                "coolant_outlet_pressure": 8.4e6,
+            },
+        )
+        assert _gate(r, "regen_fuel_flow_closure").status == "fail"
+        assert r.feed["fuel"].temperature == pytest.approx(298.0)
+        assert not r.feasible
+
+    def test_closed_regen_flow_hands_outlet_state_to_injector(self):
+        spec = _spec()
+        spec.fuel.inlet_temperature = None
+        r = evaluate_pintle_injector(
+            spec,
+            mdot_fuel=MDOT_F,
+            mdot_oxidizer=MDOT_O,
+            Pc=PC,
+            mixture_ratio=MR,
+            chamber_radius=0.0339,
+            chamber_length=0.10,
+            gamma=1.24,
+            Tc=3571.0,
+            R_gas=379.6,
+            cooling=self._Cooling(MDOT_F),
+            cooling_result={
+                "coolant_outlet_temperature": 410.0,
+                "coolant_outlet_pressure": 8.4e6,
+            },
+        )
+        assert _gate(r, "regen_fuel_flow_closure").status == "pass"
+        assert r.feed["fuel"].temperature == pytest.approx(410.0)
+        assert r.feed["fuel"].pressure == pytest.approx(8.4e6)
+
+
+# ---- spray atomization / vaporization screen ----------------------------
+class TestAtomization:
+    def test_smd_in_micron_range(self):
+        r = _size()
+        at = r.atomization
+        assert at is not None
+        for s in at.streams.values():
+            # rocket SMD is tens of microns; never larger than the jet
+            assert 1e-6 < s.sauter_mean_diameter < 5e-4
+            assert s.aerodynamic_weber > 0
+
+    def test_chamber_gas_density(self):
+        r = _size()
+        # rho_g = Pc/(R Tc) = 7e6/(379.6*3571)
+        assert r.atomization.chamber_gas_density == pytest.approx(
+            7e6 / (379.6 * 3571.0), rel=1e-6)
+
+    def test_short_chamber_warns_and_drops_efficiency(self):
+        """A too-short chamber cannot develop combustion: warn + η_c* < 1."""
+        short = _size(chamber_length=0.01)
+        long = _size(chamber_length=0.5)
+        assert (short.atomization.predicted_cstar_efficiency
+                <= long.atomization.predicted_cstar_efficiency)
+        assert short.atomization.development_margin < long.atomization.development_margin
+        g = _gate(short, "combustion_development_length")
+        assert g.status in ("warn", "pass")  # surrogate never hard-fails
+        # the surrogate must not by itself make the design infeasible
+        assert g.status != "fail"
+
+    def test_efficiency_bounded(self):
+        r = _size()
+        assert 0.0 <= r.atomization.predicted_cstar_efficiency <= 1.0
+
+    def test_atomization_in_to_dict(self):
+        d = _size().to_dict()
+        assert d["atomization"]["model"].startswith("hinze")
+        assert "fuel" in d["atomization"]["streams"]
+
+
+# ---- manifold distribution ----------------------------------------------
+class TestManifold:
+    def test_both_manifolds_present(self):
+        r = _size()
+        assert r.manifold is not None
+        assert set(r.manifold.streams) == {"fuel", "oxidizer"}
+        # the slotted stream feeds slots; the other feeds the annulus
+        assert r.manifold.streams[r.radial_stream].feeds == "slots"
+
+    def test_manifold_gates_per_stream(self):
+        r = _size()
+        names = {g.name for g in r.gates}
+        assert {"manifold_maldistribution_fuel",
+                "manifold_maldistribution_oxidizer"} <= names
+
+    def test_port_count_flows_through(self):
+        s = _spec()
+        s.fuel_manifold_ports = 5
+        r = _size(s)
+        assert r.manifold.streams["fuel"].port_count == 5
+
+    def test_manifold_in_to_dict(self):
+        d = _size().to_dict()
+        assert d["manifold"] is not None
+        assert "fuel" in d["manifold"]["streams"]
+
+
+# ---- face / pintle-tip thermal coupling ---------------------------------
+class TestFaceTipThermal:
+    def test_thermal_present_and_bounded(self):
+        s = _spec()
+        s.pintle_material = "GRCop-84"
+        r = _size(s)
+        t = r.thermal
+        assert t is not None
+        assert t.recovery_temperature == pytest.approx(0.8 * 3571.0)
+        # propellant-cooled wall stays well below the recovery temperature
+        assert t.tip_wall_temperature < t.recovery_temperature
+        assert t.governing_margin > 0
+
+    def test_thermal_gate_is_real_margin(self):
+        s = _spec()
+        s.pintle_material = "GRCop-84"
+        r = _size(s)
+        g = _gate(r, "face_tip_thermal_margin")
+        assert g.status in ("pass", "warn")     # no longer info-only
+        assert "margin" in g.detail
+
+    def test_thermal_in_to_dict(self):
+        d = _size().to_dict()
+        assert d["thermal"] is not None
+        assert "tip" in d["thermal"] and "face" in d["thermal"]
+
+
+# ---- stability screen ---------------------------------------------------
+class TestStability:
+    def test_chug_fails_at_low_dp_fraction(self):
+        s = _spec(fuel_dp=0.05, ox_dp=0.05)
+        r = _size(s)
+        assert _gate(r, "feed_system_chug").status == "fail"
+        assert r.stability.injector_decoupling_fraction == pytest.approx(0.05)
+
+    def test_chug_passes_at_high_dp_fraction(self):
+        s = _spec(fuel_dp=0.25, ox_dp=0.25)
+        r = _size(s)
+        assert _gate(r, "feed_system_chug").status == "pass"
+
+    def test_acoustic_modes_ordered(self):
+        st = _size().stability
+        # tangential/radial transverse modes are higher than the first long.
+        assert st.f_R1 > st.f_T1
+        assert st.f_L2 == pytest.approx(2 * st.f_L1)
+
+    def test_stability_in_to_dict(self):
+        assert _size().to_dict()["stability"]["chug_status"] is not None
+
+
+# ---- movable-sleeve throttle map ----------------------------------------
+class TestThrottleMap:
+    def _map(self, **kw):
+        from raosim.injector import throttle_map
+        return throttle_map(
+            _spec(), mdot_fuel_full=MDOT_F, mdot_oxidizer_full=MDOT_O,
+            Pc_full=PC, mixture_ratio=MR, chamber_radius=0.0339,
+            chamber_length=0.10, gamma=1.24, Tc=3571.0, R_gas=379.6, **kw)
+
+    def test_preserves_of_and_tmr(self):
+        tm = self._map(levels=(0.4, 0.7, 1.0))
+        assert tm.preserved["mixture_ratio"]
+        assert tm.preserved["dp_fraction"]
+        assert tm.preserved["total_momentum_ratio"]
+
+    def test_velocity_and_atomization_fall_at_low_throttle(self):
+        tm = self._map(levels=(0.3, 1.0), pc_exponent=1.0)
+        low, high = tm.points[0], tm.points[-1]
+        assert low.throttle < high.throttle
+        # deep throttle: lower injection velocity and coarser atomization
+        assert low.v_annulus < high.v_annulus
+        assert low.smd_limiting > high.smd_limiting
+        assert low.sleeve_stroke_fraction < high.sleeve_stroke_fraction
+
+    def test_constant_pc_holds_velocity(self):
+        # pc_exponent=0 -> constant Pc, so injection velocity is held
+        tm = self._map(levels=(0.4, 1.0), pc_exponent=0.0)
+        assert tm.points[0].v_annulus == pytest.approx(
+            tm.points[-1].v_annulus, rel=1e-2)
+
+    def test_to_dict_serializable(self):
+        import json
+        json.dumps(self._map(levels=(0.5, 1.0)).to_dict())
+
+
+# ---- figures ------------------------------------------------------------
+class TestPlots:
+    def test_full_diagnostic_set_renders(self, tmp_path):
+        import matplotlib
+        matplotlib.use("Agg")
+        from raosim.injector_plots import export_all_injector_figures
+        r = _size()
+        written = export_all_injector_figures(r, tmp_path)
+        # the eight core diagnostics (no throttle map passed)
+        for name in ("cross_section", "spray", "hydraulics", "atomization",
+                     "thermal", "stability", "manifold", "gates"):
+            f = f"injector_{name}.png"
+            assert f in written
+            assert (tmp_path / f).exists() and (tmp_path / f).stat().st_size > 0
+
+    def test_throttle_map_figure_added(self, tmp_path):
+        import matplotlib
+        matplotlib.use("Agg")
+        from raosim.injector import throttle_map
+        from raosim.injector_plots import export_all_injector_figures
+        tm = throttle_map(
+            _spec(), mdot_fuel_full=MDOT_F, mdot_oxidizer_full=MDOT_O,
+            Pc_full=PC, mixture_ratio=MR, chamber_radius=0.0339,
+            chamber_length=0.10, gamma=1.24, Tc=3571.0, R_gas=379.6,
+            levels=(0.5, 1.0))
+        written = export_all_injector_figures(_size(), tmp_path, throttle=tm)
+        assert "injector_throttle_map.png" in written
+
+
+# ---- named-body STEP CAD (CadQuery-gated) -------------------------------
+class TestPintleCad:
+    def test_named_step_round_trips(self, tmp_path):
+        from raosim.injector_cad import (
+            export_pintle_step, cadquery_available)
+        if not cadquery_available():
+            pytest.skip("CadQuery not installed")
+        r = _size()
+        path = tmp_path / "pintle.step"
+        res = export_pintle_step(r, path, movable_sleeve=True,
+                                 stl_dir=tmp_path / "stl")
+        assert path.exists() and path.stat().st_size > 1000
+        # the required named bodies are present
+        for body in ("injector_faceplate", "hollow_pintle_body", "pintle_tip",
+                     "axial_annulus", "radial_slot_network", "fuel_manifold",
+                     "oxidizer_manifold", "igniter_interface",
+                     "regen_coolant_outlet", "movable_sleeve"):
+            assert body in res["named_bodies"]
+        # re-import and confirm valid B-rep solids
+        import cadquery as cq
+        imp = cq.importers.importStep(str(path))
+        solids = imp.objects[0].Solids()
+        assert len(solids) >= 9
+        assert all(s.isValid() for s in solids)
+
+
 # ---- serialization ------------------------------------------------------
 def test_to_dict_round_trips_json():
     import json
@@ -327,3 +646,4 @@ def test_to_dict_round_trips_json():
     assert d["feasible"] is True
     assert d["slots"]["role"] == "fuel"
     assert len(d["gates"]) > 10
+    assert d["atomization"] is not None

@@ -33,11 +33,14 @@ number below is a clearly-labeled screening surrogate, not a validated result.
 
 from __future__ import annotations
 
+import copy
 import math
 from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
+
+from raosim.coolants import canonical_coolant_name
 
 
 # ---------------------------------------------------------------------------
@@ -105,6 +108,16 @@ class InjectorSpec:
     faceplate_material: str | None = None
     pintle_material: str | None = None
     target_momentum_ratio: float | None = None
+    # Discrete feed-port count for each propellant manifold (annular header
+    # ring → annulus/slots). Drives the maldistribution network.
+    fuel_manifold_ports: int = 4
+    oxidizer_manifold_ports: int = 4
+    # d^2-law droplet burning-rate constant [m^2/s] used by the vaporization /
+    # combustion-development screen (hydrocarbon class ~1e-6; screening-grade).
+    evaporation_constant: float = 1.0e-6
+    # Failed injector gates block integrated design/CAD workflows unless this
+    # explicit preliminary-analysis override is selected.
+    allow_infeasible: bool = False
     fuel: PropellantFeedSpec = field(
         default_factory=lambda: PropellantFeedSpec(role="fuel")
     )
@@ -138,6 +151,15 @@ class FeedState:
     source: str
     liquid_ok: bool
     reason: str = ""
+    # Compressible (gas / supercritical) branch.  ``gas_ok`` marks a state the
+    # compressible orifice equations can size; gamma + specific gas constant
+    # are required to do so.
+    gas_ok: bool = False
+    gamma: float | None = None          # cp/cv of the injected gas
+    gas_constant: float | None = None   # R_specific = R_u/Mw  [J/(kg·K)]
+    # Thermal properties used by the face/tip cooling screen.
+    cp: float | None = None             # specific heat  [J/(kg·K)]
+    conductivity: float | None = None   # thermal conductivity  [W/(m·K)]
 
 
 @dataclass
@@ -155,6 +177,183 @@ class StreamResult:
     ohnesorge: float
     # geometry-specific (filled where relevant)
     detail: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class StreamAtomization:
+    """Per-stream primary-atomization + vaporization screening estimate."""
+
+    role: str
+    sauter_mean_diameter: float     # m, d_32 (aerodynamic / Hinze limit)
+    aerodynamic_weber: float        # We_g = rho_g v^2 d_jet / sigma
+    breakup_length: float           # m, primary breakup length L_b≈15·d_jet (Reitz & Bracco)
+    vaporization_length: float      # m, d^2-law length to ~99% vaporized
+    combustion_length: float        # m, breakup + vaporization
+    vaporized_fraction: float       # [-], fraction vaporized in the chamber
+    regime: str                     # atomization-regime validity flag
+
+
+@dataclass
+class SprayAtomization:
+    """Spray atomization / vaporization screen for the whole injector.
+
+    All numbers are clearly-labeled order-of-magnitude SURROGATES (SP-8089:
+    pintle spray distributions require cold-flow testing); they exist to flag
+    when combustion development cannot fit the available chamber length and to
+    drive the L*/injector-quality coupling, not to predict performance.
+    """
+
+    chamber_gas_density: float          # kg/m^3, Pc/(R_gas Tc)
+    evaporation_constant: float         # m^2/s, d^2-law burning-rate constant
+    streams: dict[str, StreamAtomization]
+    limiting_role: str                  # stream with the worst (longest) dev.
+    combustion_length: float            # m, limiting stream
+    available_chamber_length: float     # m
+    development_margin: float           # available / required (>=1 good)
+    predicted_cstar_efficiency: float   # mass-weighted vaporized fraction
+    model: str
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "chamber_gas_density_kg_m3": self.chamber_gas_density,
+            "evaporation_constant_m2_s": self.evaporation_constant,
+            "limiting_role": self.limiting_role,
+            "combustion_length_m": self.combustion_length,
+            "available_chamber_length_m": self.available_chamber_length,
+            "development_margin": self.development_margin,
+            "predicted_cstar_efficiency": self.predicted_cstar_efficiency,
+            "model": self.model,
+            "streams": {
+                role: {
+                    "sauter_mean_diameter_m": s.sauter_mean_diameter,
+                    "aerodynamic_weber": s.aerodynamic_weber,
+                    "breakup_length_m": s.breakup_length,
+                    "vaporization_length_m": s.vaporization_length,
+                    "combustion_length_m": s.combustion_length,
+                    "vaporized_fraction": s.vaporized_fraction,
+                    "regime": s.regime,
+                }
+                for role, s in self.streams.items()
+            },
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class ManifoldResult:
+    """Distribution of one propellant manifold into its injection elements."""
+
+    role: str
+    feeds: str                       # "annulus" | "slots"
+    element_count: int               # slots, or annulus discretization segments
+    port_count: int                  # discrete manifold feed ports
+    maldistribution_fraction: float  # (max-min)/mean element flow
+    min_flow_ratio: float
+    max_flow_ratio: float
+    manifold_pressure_drop: float    # Pa, header + port losses
+    port_diameter: float             # m
+    plenum_area: float               # m^2
+    status: str
+
+
+@dataclass
+class ManifoldDistribution:
+    streams: dict[str, ManifoldResult]
+    worst_maldistribution: float
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "worst_maldistribution": self.worst_maldistribution,
+            "streams": {
+                role: {
+                    "feeds": m.feeds, "element_count": m.element_count,
+                    "port_count": m.port_count,
+                    "maldistribution_fraction": m.maldistribution_fraction,
+                    "min_flow_ratio": m.min_flow_ratio,
+                    "max_flow_ratio": m.max_flow_ratio,
+                    "manifold_pressure_drop_pa": m.manifold_pressure_drop,
+                    "port_diameter_m": m.port_diameter,
+                    "plenum_area_m2": m.plenum_area, "status": m.status,
+                }
+                for role, m in self.streams.items()
+            },
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class FaceTipThermal:
+    """Screening face / pintle-tip heat balance."""
+
+    recovery_temperature: float        # K, recirculation recovery temperature
+    tip_gas_coefficient: float         # W/(m^2 K)
+    tip_coolant_coefficient: float     # W/(m^2 K)
+    tip_heat_flux: float               # W/m^2
+    tip_wall_temperature: float        # K, gas-side
+    tip_margin: float                  # T_limit / T_wg
+    face_heat_flux: float              # W/m^2
+    face_wall_temperature: float       # K, gas-side
+    face_margin: float
+    limiting: str                      # "tip" | "face"
+    wall_temperature_limit: float      # K
+    governing_margin: float
+    model: str
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "recovery_temperature_K": self.recovery_temperature,
+            "wall_temperature_limit_K": self.wall_temperature_limit,
+            "tip": {
+                "gas_coefficient_W_m2K": self.tip_gas_coefficient,
+                "coolant_coefficient_W_m2K": self.tip_coolant_coefficient,
+                "heat_flux_W_m2": self.tip_heat_flux,
+                "wall_temperature_K": self.tip_wall_temperature,
+                "margin": self.tip_margin,
+            },
+            "face": {
+                "heat_flux_W_m2": self.face_heat_flux,
+                "wall_temperature_K": self.face_wall_temperature,
+                "margin": self.face_margin,
+            },
+            "limiting": self.limiting,
+            "governing_margin": self.governing_margin,
+            "model": self.model,
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class StabilityScreen:
+    """Feed-system + chamber-acoustic + n-τ combustion stability screen."""
+
+    sound_speed: float                  # m/s, chamber gas
+    f_L1: float                         # Hz, first longitudinal
+    f_L2: float
+    f_T1: float                         # Hz, first tangential
+    f_R1: float                         # Hz, first radial
+    injector_decoupling_fraction: float # min(χ_f, χ_o)
+    chug_status: str
+    combustion_time_lag: float          # s
+    reduced_frequency_L1: float         # τ·f_L1
+    sensitive_band: bool                # in the n-τ instability band
+    model: str
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "sound_speed_m_s": self.sound_speed,
+            "f_L1_Hz": self.f_L1, "f_L2_Hz": self.f_L2,
+            "f_T1_Hz": self.f_T1, "f_R1_Hz": self.f_R1,
+            "injector_decoupling_fraction": self.injector_decoupling_fraction,
+            "chug_status": self.chug_status,
+            "combustion_time_lag_s": self.combustion_time_lag,
+            "reduced_frequency_L1": self.reduced_frequency_L1,
+            "sensitive_band": self.sensitive_band,
+            "model": self.model, "notes": self.notes,
+        }
 
 
 @dataclass
@@ -188,6 +387,10 @@ class InjectorDesignResult:
     minimum_web: float                    # m, ligament between slots
     gates: list[InjectorGate]
     feed: dict[str, FeedState]
+    atomization: SprayAtomization | None = None
+    manifold: ManifoldDistribution | None = None
+    thermal: FaceTipThermal | None = None
+    stability: StabilityScreen | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -225,6 +428,18 @@ class InjectorDesignResult:
             "slot_to_annulus_width_ratio": self.slot_to_annulus_width_ratio,
             "blockage_factor": self.blockage_factor,
             "minimum_web_m": self.minimum_web,
+            "atomization": (
+                self.atomization.to_dict() if self.atomization else None
+            ),
+            "manifold": (
+                self.manifold.to_dict() if self.manifold else None
+            ),
+            "thermal": (
+                self.thermal.to_dict() if self.thermal else None
+            ),
+            "stability": (
+                self.stability.to_dict() if self.stability else None
+            ),
             "feed": {k: _feed(v) for k, v in self.feed.items()},
             "gates": [
                 {"name": g.name, "status": g.status, "detail": g.detail}
@@ -248,9 +463,22 @@ class InjectorSpecError(ValueError):
 # infeasibility, not a warning.
 _CLOSURE_PASS_TOL = 1.0e-3   # < 0.1% delivered-vs-required flow error
 _CLOSURE_FAIL_TOL = 0.05     # >= 5% flow error fails; between -> warn
+_REGEN_FLOW_PASS_TOL = 0.01  # direct jacket->injector handoff within 1%
+_REGEN_FLOW_FAIL_TOL = 0.05  # >=5% needs a bypass/mixing model
 
 
-def _validate_injector_spec(spec, mdot_fuel, mdot_oxidizer, Pc, mixture_ratio):
+def _validate_injector_spec(
+    spec,
+    mdot_fuel,
+    mdot_oxidizer,
+    Pc,
+    mixture_ratio,
+    chamber_radius,
+    chamber_length,
+    gamma,
+    Tc,
+    R_gas,
+):
     """Front gate: reject a malformed spec before resolving feed properties.
 
     Catches the cases that would otherwise raise ZeroDivisionError /
@@ -280,24 +508,82 @@ def _validate_injector_spec(spec, mdot_fuel, mdot_oxidizer, Pc, mixture_ratio):
         errs.append(f"pintle_diameter must be > 0, got {geo.pintle_diameter}")
     if geo.radial_stream not in ("fuel", "oxidizer"):
         errs.append("radial_stream must be 'fuel' or 'oxidizer'")
+    if not (0.0 <= geo.deflector_angle <= 90.0):
+        errs.append(
+            f"deflector_angle must be in [0, 90] deg, got {geo.deflector_angle}"
+        )
+    if (
+        geo.impingement_distance is not None
+        and geo.impingement_distance < 0.0
+    ):
+        errs.append("impingement_distance must be >= 0")
+    for name, value in (
+        ("annulus_gap", geo.annulus_gap),
+        ("slot_width", geo.slot_width),
+        ("slot_height", geo.slot_height),
+        ("slot_depth", geo.slot_depth),
+        ("tip_radius", geo.tip_radius),
+        ("body_length", geo.body_length),
+        ("face_thickness", geo.face_thickness),
+        ("face_od", geo.face_od),
+    ):
+        if value is not None and value <= 0.0:
+            errs.append(f"{name} must be > 0")
+    if geo.slot_length_over_dh <= 0.0:
+        errs.append("slot_length_over_dh must be > 0")
+    if spec.target_momentum_ratio is not None and spec.target_momentum_ratio <= 0:
+        errs.append("target_momentum_ratio must be > 0")
+    if spec.evaporation_constant <= 0.0:
+        errs.append("evaporation_constant must be > 0")
+    if int(spec.fuel_manifold_ports) < 1:
+        errs.append("fuel_manifold_ports must be >= 1")
+    if int(spec.oxidizer_manifold_ports) < 1:
+        errs.append("oxidizer_manifold_ports must be >= 1")
     if spec.manufacturing.min_feature <= 0.0:
         errs.append(
             f"min_feature must be > 0, got {spec.manufacturing.min_feature}")
+    for name, value in (
+        ("web_min", spec.manufacturing.web_min),
+        ("edge_distance_min", spec.manufacturing.edge_distance_min),
+    ):
+        if value is not None and value <= 0.0:
+            errs.append(f"{name} must be > 0")
+    if spec.manufacturing.concentricity_tolerance < 0.0:
+        errs.append("concentricity_tolerance must be >= 0")
     if spec.sizing == "fixed":
         if geo.annulus_gap is None or geo.slot_width is None:
             errs.append(
                 "fixed sizing requires both annulus_gap and slot_width "
                 "(otherwise it would silently auto-size the geometry)")
-        if geo.annulus_gap is not None and geo.annulus_gap <= 0.0:
-            errs.append("annulus_gap must be > 0")
-        if geo.slot_width is not None and geo.slot_width <= 0.0:
-            errs.append("slot_width must be > 0")
+    for feed in (spec.fuel, spec.oxidizer):
+        if feed.phase not in ("auto", "liquid", "gas"):
+            errs.append(f"{feed.role} phase must be auto, liquid, or gas")
+        if feed.inlet_temperature is not None and feed.inlet_temperature <= 0.0:
+            errs.append(f"{feed.role} inlet_temperature must be > 0")
+        if feed.inlet_pressure is not None and feed.inlet_pressure <= 0.0:
+            errs.append(f"{feed.role} inlet_pressure must be > 0")
+        for name, value in (
+            ("density", feed.density),
+            ("viscosity", feed.viscosity),
+            ("surface_tension", feed.surface_tension),
+            ("vapor_pressure", feed.vapor_pressure),
+        ):
+            if value is not None and value <= 0.0:
+                errs.append(f"{feed.role} {name} must be > 0")
     if mdot_fuel <= 0.0 or mdot_oxidizer <= 0.0:
         errs.append("fuel and oxidizer mass flows must be positive")
     if Pc <= 0.0:
         errs.append("chamber pressure must be positive")
     if mixture_ratio <= 0.0:
         errs.append("mixture_ratio must be positive")
+    if chamber_radius <= 0.0:
+        errs.append("chamber_radius must be positive")
+    if chamber_length <= 0.0:
+        errs.append("chamber_length must be positive")
+    if gamma <= 1.0:
+        errs.append("gamma must be greater than one")
+    if Tc <= 0.0 or R_gas <= 0.0:
+        errs.append("Tc and R_gas must be positive")
     if errs:
         raise InjectorSpecError("invalid injector spec: " + "; ".join(errs))
 
@@ -333,27 +619,27 @@ _DEFAULT_INLET_T = {
 _LITERATURE_FEED_PROPERTIES = {
     "rp1": dict(
         rho=810.0, mu=1.6e-3, sigma=0.023, Pvap=2.0e3, T_ref=298.0,
-        Tcrit=678.0, Pcrit=2.2e6,
+        Tcrit=678.0, Pcrit=2.2e6, cp=2010.0, k=0.13,
         source="RP-1/Jet-A class (Sutton & Biblarz RPE; NASA SP-8087): "
         "rho~810 kg/m^3, mu~1.6e-3 Pa.s, sigma~0.023 N/m, Pvap~2 kPa @298 K "
         "(constant-property screening)",
     ),
     "mmh": dict(
         rho=874.0, mu=0.775e-3, sigma=0.0341, Pvap=6.6e3, T_ref=298.0,
-        Tcrit=585.0, Pcrit=8.2e6,
+        Tcrit=585.0, Pcrit=8.2e6, cp=2930.0, k=0.25,
         source="MMH (Sutton & Biblarz RPE; CRC): rho 874, mu 0.78e-3, "
         "sigma 0.034, Pvap 6.6 kPa @298 K (constant-property screening)",
     ),
     "n2o4": dict(
         rho=1443.0, mu=0.42e-3, sigma=0.0267, Pvap=96.0e3, T_ref=293.0,
-        Tcrit=431.0, Pcrit=10.1e6,
+        Tcrit=431.0, Pcrit=10.1e6, cp=1550.0, k=0.13,
         source="N2O4/NTO (Sutton & Biblarz RPE): rho 1443, mu 0.42e-3, "
         "sigma 0.0267, Pvap 96 kPa @293 K (volatile; low ambient cavitation "
         "margin; constant-property screening)",
     ),
     "udmh": dict(
         rho=791.0, mu=0.492e-3, sigma=0.0289, Pvap=16.3e3, T_ref=298.0,
-        Tcrit=523.0, Pcrit=5.4e6,
+        Tcrit=523.0, Pcrit=5.4e6, cp=2730.0, k=0.16,
         source="UDMH (Sutton & Biblarz RPE; CRC): rho 791, mu 0.49e-3, "
         "sigma 0.029, Pvap 16 kPa @298 K (constant-property screening)",
     ),
@@ -428,9 +714,15 @@ def resolve_feed_state(
         Pvap = float(spec.vapor_pressure if spec.vapor_pressure is not None
                      else d["Pvap"])
         Tcrit = d.get("Tcrit")
-        liquid_ok, phase, reason = _classify_phase(
+        liquid_ok, gas_ok, phase, reason = _classify_phase(
             T, P, Pvap, Tcrit, spec.phase, subcool_margin
         )
+        if gas_ok:
+            # The literature table carries only liquid constants; it cannot
+            # supply gas gamma/R, so a gas state here is not sizeable.
+            gas_ok = False
+            reason = (reason + "; literature table has no gas gamma/R "
+                      "(use a CoolProp fluid or explicit overrides for gas)")
         return FeedState(
             role=role, name=raw, temperature=T, pressure=P,
             density=float(spec.density if spec.density is not None else d["rho"]),
@@ -442,7 +734,8 @@ def resolve_feed_state(
             vapor_pressure=Pvap, phase=phase,
             critical_temperature=Tcrit, critical_pressure=d.get("Pcrit"),
             source=spec.property_source or d["source"], liquid_ok=liquid_ok,
-            reason=reason,
+            reason=reason, gas_ok=gas_ok,
+            cp=d.get("cp"), conductivity=d.get("k"),
         )
 
     raise InjectorUnsupportedState(
@@ -471,6 +764,11 @@ def _coolprop_feed_state(spec, fluid, P, subcool_margin) -> FeedState | None:
             f"CoolProp could not evaluate {fluid} at T={T:.1f} K, "
             f"P={P/1e5:.1f} bar: {exc}"
         ) from exc
+    try:
+        cp = float(PropsSI("Cpmass", "T", T, "P", P, fluid))
+        k_th = float(PropsSI("CONDUCTIVITY", "T", T, "P", P, fluid))
+    except Exception:
+        cp = k_th = None
     # Saturation properties (only meaningful below the critical point).
     if T < Tcrit:
         try:
@@ -480,12 +778,27 @@ def _coolprop_feed_state(spec, fluid, P, subcool_margin) -> FeedState | None:
             Pvap, sigma = float("nan"), float("nan")
     else:
         Pvap, sigma = float("nan"), float("nan")
-    liquid_ok, phase, reason = _classify_phase(
+    liquid_ok, gas_ok, phase, reason = _classify_phase(
         T, P, Pvap, Tcrit, spec.phase, subcool_margin
     )
     # Override surface tension if supplied (needed when supercritical etc.).
     if spec.surface_tension is not None:
         sigma = float(spec.surface_tension)
+    # Real-gas gamma + specific gas constant for the compressible branch.
+    gamma = gas_constant = None
+    if gas_ok:
+        try:
+            cp = float(PropsSI("Cpmass", "T", T, "P", P, fluid))
+            cv = float(PropsSI("Cvmass", "T", T, "P", P, fluid))
+            mw = float(PropsSI("M", fluid))   # kg/mol
+            gamma = cp / cv if cv > 0 else None
+            gas_constant = 8.31446 / mw if mw > 0 else None
+        except Exception:
+            gamma = gas_constant = None
+        if gamma is None or gas_constant is None:
+            gas_ok = False
+            reason = (reason + "; could not evaluate gas gamma/R for the "
+                      "compressible branch")
     return FeedState(
         role=spec.role, name=spec.name or fluid, temperature=T, pressure=P,
         density=float(spec.density) if spec.density is not None else rho,
@@ -496,44 +809,46 @@ def _coolprop_feed_state(spec, fluid, P, subcool_margin) -> FeedState | None:
         phase=phase, critical_temperature=Tcrit, critical_pressure=Pcrit,
         source=spec.property_source
         or f"CoolProp HEOS ({fluid}); Bell et al. IECR 53 (2014)",
-        liquid_ok=liquid_ok, reason=reason,
+        liquid_ok=liquid_ok, reason=reason, gas_ok=gas_ok,
+        gamma=gamma, gas_constant=gas_constant, cp=cp, conductivity=k_th,
     )
 
 
 def _classify_phase(T, P, Pvap, Tcrit, requested, subcool_margin):
-    """Return (liquid_ok, phase, reason) for the liquid/liquid MVP."""
+    """Classify a feed state -> (liquid_ok, gas_ok, phase, reason).
+
+    * liquid_ok  -> incompressible orifice branch.
+    * gas_ok     -> compressible/choked orifice branch (gas or supercritical
+      dense gas; real-fluid screening).
+    * neither    -> a two-phase / flashing state within ``subcool_margin`` of
+      the vapor pressure, which neither branch can size.
+    """
+    if requested == "gas":
+        return False, True, "gas", "phase forced to gas (compressible branch)"
     if Tcrit is not None and T >= 0.98 * Tcrit:
-        phase = "supercritical"
-        return False, phase, (
-            f"T={T:.1f} K is at/above 0.98*Tcrit={0.98*Tcrit:.1f} K "
-            f"(supercritical/near-critical); needs a real-fluid branch"
-        )
+        return False, True, "supercritical", (
+            f"T={T:.1f} K at/above 0.98*Tcrit={0.98*Tcrit:.1f} K -> "
+            f"compressible (dense-gas) branch")
     if not math.isnan(Pvap):
         if P <= Pvap:
-            return False, "gas", (
+            if requested == "liquid":
+                return False, False, "gas", (
+                    f"phase forced to liquid but feed pressure {P/1e5:.2f} bar "
+                    f"<= vapor pressure {Pvap/1e5:.2f} bar")
+            return False, True, "gas", (
                 f"feed pressure {P/1e5:.2f} bar <= vapor pressure "
-                f"{Pvap/1e5:.2f} bar; the stream is gaseous/flashing"
-            )
+                f"{Pvap/1e5:.2f} bar -> compressible (gas) branch")
         if P < (1.0 + subcool_margin) * Pvap:
-            return False, "liquid", (
+            return False, False, "two_phase", (
                 f"feed pressure {P/1e5:.2f} bar within {subcool_margin*100:.0f}% "
-                f"of vapor pressure {Pvap/1e5:.2f} bar (cavitation/flashing risk)"
-            )
-    if requested == "gas":
-        return False, "gas", "phase forced to gas (unsupported in liquid MVP)"
-    return True, "liquid", ""
+                f"of vapor pressure {Pvap/1e5:.2f} bar (cavitation/flashing "
+                f"risk; neither liquid nor gas branch applies)")
+    return True, False, "liquid", ""
 
 
 # ---------------------------------------------------------------------------
 # Hydraulic sizing
 # ---------------------------------------------------------------------------
-def _orifice_area(mdot: float, cd: float, rho: float, dp: float) -> float:
-    """Geometric flow area from the incompressible orifice law."""
-    if dp <= 0.0:
-        raise ValueError("injector pressure drop must be positive")
-    return mdot / (cd * math.sqrt(2.0 * rho * dp))
-
-
 def _annulus_from_area(area: float, pintle_diameter: float) -> dict:
     """Annular gap geometry from a required flow area and inner diameter."""
     Di = pintle_diameter
@@ -565,15 +880,475 @@ def _slots_from_area(area: float, n_slots: int, aspect_ratio: float,
     }
 
 
-def _stream_numbers(role, geom, mdot, dp, cd, area, dh, rho, mu, sigma):
-    v = mdot / (rho * area)
-    re = rho * v * dh / mu
+def _stream_numbers(role, geom, mdot, dp, cd, area, dh, rho, mu, sigma,
+                    velocity=None):
+    v = velocity if velocity is not None else mdot / (rho * area)
+    re = rho * v * dh / mu if mu > 0 else float("nan")
     we = rho * v * v * dh / sigma if sigma > 0 else float("nan")
     oh = mu / math.sqrt(rho * sigma * dh) if sigma > 0 else float("nan")
     return StreamResult(
         role=role, geometry=geom, mdot=mdot, dp=dp, cd=cd, area=area,
         velocity=v, hydraulic_diameter=dh, reynolds=re, weber=we, ohnesorge=oh,
     )
+
+
+def _stream_mass_flux(fs: FeedState, dp: float, cd: float, P_back: float):
+    """Mass flux ``G = mdot/A`` [kg/(m^2 s)] for one feed stream.
+
+    Liquid -> incompressible orifice ``G = Cd sqrt(2 rho dp)``.
+    Gas / supercritical -> compressible orifice with an explicit choke test
+    against the critical pressure ratio (Sutton & Biblarz; Anderson, *Modern
+    Compressible Flow*).  Returns ``(G, v_inj, choked, branch, info)`` where
+    ``v_inj`` is the throat injection velocity (sonic when choked).
+    """
+    if fs.liquid_ok:
+        G = cd * math.sqrt(2.0 * fs.density * dp)
+        return G, G / fs.density, False, "incompressible", {}
+    g, R, T0 = fs.gamma, fs.gas_constant, fs.temperature
+    if not (g and g > 1.0 and R and R > 0.0 and T0 and T0 > 0.0):
+        raise InjectorUnsupportedState(
+            f"{fs.role} gas feed lacks gamma/R for the compressible branch")
+    P0 = P_back + dp                      # upstream stagnation pressure
+    crit = (2.0 / (g + 1.0)) ** (g / (g - 1.0))
+    pr = P_back / P0
+    info = {"critical_pressure_ratio": crit, "pressure_ratio": pr,
+            "stagnation_pressure": P0}
+    if pr <= crit:                        # choked
+        G = (cd * P0 * math.sqrt(g / (R * T0))
+             * (2.0 / (g + 1.0)) ** ((g + 1.0) / (2.0 * (g - 1.0))))
+        v = math.sqrt(g * R * T0 * 2.0 / (g + 1.0))   # sonic at the throat
+        return G, v, True, "compressible_choked", info
+    G = cd * P0 * math.sqrt(
+        2.0 * g / ((g - 1.0) * R * T0)
+        * (pr ** (2.0 / g) - pr ** ((g + 1.0) / g)))
+    M = math.sqrt(max(0.0, 2.0 / (g - 1.0)
+                      * ((P0 / P_back) ** ((g - 1.0) / g) - 1.0)))
+    T = T0 / (1.0 + (g - 1.0) / 2.0 * M * M)
+    v = M * math.sqrt(g * R * T)
+    info["exit_mach"] = M
+    return G, v, False, "compressible_subsonic", info
+
+
+# Atomization / vaporization screening constants (all clearly screening-grade).
+_HINZE_CRITICAL_WEBER = 13.0      # max stable drop We_g (Hinze 1955)
+_PRIMARY_BREAKUP_DIAMETERS = 15.0  # atomization-regime primary breakup length / d_jet
+_ATOMIZATION_WEBER_FLOOR = 40.0   # below this We_g, primary breakup is poor
+_DEFAULT_EVAPORATION_CONSTANT = 1.0e-6   # m^2/s, d^2-law burning-rate K (hydrocarbon class)
+
+
+def _stream_atomization(s, feed, rho_g, chamber_length, K_b):
+    """Primary-atomization + d^2-law vaporization screen for one stream.
+
+    SMD from the Hinze critical-Weber aerodynamic-breakup limit
+    (``d_32 = We_crit sigma / (rho_g v^2)``, Hinze, AIChE J. 1 (1955)),
+    capped at the jet hydraulic diameter.  In the atomization regime primary
+    breakup completes within ~10-30 jet diameters (Reitz & Bracco), taken here
+    as ``L_b = C d_jet``.  Vaporization follows the d^2-law
+    (``d^2(t) = d_32^2 - K_b t``) over the post-breakup residence, the chamber
+    residence using the injection velocity as the convective scale.  Combustion
+    efficiency is approximated by the vaporized mass fraction (Priem & Heidmann,
+    NASA TR R-67, 1960: vaporization-limited combustion).  The breakup length and
+    the vaporized fraction share the same residence so they stay consistent.
+    """
+    v = s.velocity
+    d_jet = s.hydraulic_diameter
+    sigma = feed.surface_tension
+    rho_l = feed.density
+    if not (sigma > 0) or not (rho_g > 0) or not (v > 0):
+        return StreamAtomization(
+            role=s.role, sauter_mean_diameter=float("nan"),
+            aerodynamic_weber=float("nan"), breakup_length=float("nan"),
+            vaporization_length=float("nan"), combustion_length=float("nan"),
+            vaporized_fraction=float("nan"),
+            regime="indeterminate (missing surface tension / gas density)")
+    we_g = rho_g * v * v * d_jet / sigma
+    d32 = min(_HINZE_CRITICAL_WEBER * sigma / (rho_g * v * v), d_jet)
+    L_breakup = _PRIMARY_BREAKUP_DIAMETERS * d_jet
+    # length to ~99% vaporized mass (1% volume remaining → d=d32·0.01^(1/3))
+    t_99 = d32 * d32 * (1.0 - 0.01 ** (2.0 / 3.0)) / K_b
+    L_vap = v * t_99
+    L_comb = L_breakup + L_vap
+    # vaporized fraction in the chamber length downstream of primary breakup
+    t_res = max(0.0, chamber_length - L_breakup) / v
+    d_rem2 = max(0.0, d32 * d32 - K_b * t_res)
+    vap_frac = 1.0 - (d_rem2 / (d32 * d32)) ** 1.5 if d32 > 0 else 1.0
+    regime = ("aerodynamic atomization" if we_g >= _ATOMIZATION_WEBER_FLOOR
+              else f"below atomization regime (We_g={we_g:.0f} < "
+                   f"{_ATOMIZATION_WEBER_FLOOR:.0f}; poor primary breakup, "
+                   f"cold-flow required)")
+    return StreamAtomization(
+        role=s.role, sauter_mean_diameter=d32, aerodynamic_weber=we_g,
+        breakup_length=L_breakup, vaporization_length=L_vap,
+        combustion_length=L_comb, vaporized_fraction=vap_frac, regime=regime)
+
+
+def spray_atomization(
+    streams: dict, feed: dict, *, Pc, Tc, R_gas, chamber_length,
+    evaporation_constant: float = _DEFAULT_EVAPORATION_CONSTANT,
+) -> SprayAtomization:
+    """Whole-injector spray atomization / vaporization / c* screen."""
+    rho_g = Pc / (R_gas * Tc)
+    per = {
+        role: _stream_atomization(streams[role], feed[role], rho_g,
+                                  chamber_length, evaporation_constant)
+        for role in ("fuel", "oxidizer")
+    }
+    # The limiting (longest-combustion-length) stream sets the development need.
+    limiting_role = max(
+        per, key=lambda r: (per[r].combustion_length
+                            if per[r].combustion_length == per[r].combustion_length
+                            else -1.0))
+    L_comb = per[limiting_role].combustion_length
+    margin = chamber_length / L_comb if L_comb > 0 else float("inf")
+    # Mass-weighted vaporized fraction → c* efficiency surrogate.
+    mdot = {r: streams[r].mdot for r in per}
+    total = sum(mdot.values())
+    eta = sum(per[r].vaporized_fraction * mdot[r] for r in per) / max(total, 1e-12)
+    notes = [
+        "Order-of-magnitude screening only (Hinze SMD + Reitz-Bracco breakup + "
+        "d^2-law + Priem-Heidmann vaporization-limited c*); spray distribution "
+        "and SMD require cold-flow validation (NASA SP-8089).",
+    ]
+    return SprayAtomization(
+        chamber_gas_density=rho_g, evaporation_constant=evaporation_constant,
+        streams=per, limiting_role=limiting_role, combustion_length=L_comb,
+        available_chamber_length=chamber_length, development_margin=margin,
+        predicted_cstar_efficiency=float(min(max(eta, 0.0), 1.0)),
+        model="hinze_reitzbracco_d2law_priem_heidmann_screen", notes=notes)
+
+
+def manifold_distribution(result, spec, dp_fuel, dp_ox) -> ManifoldDistribution:
+    """Per-propellant manifold maldistribution (annular two-header network).
+
+    Each propellant manifold is an annular header ring fed by discrete ports;
+    the slotted stream distributes into the slots and the annulus into a
+    circumferential discretization.  The square-law network gives the
+    element-to-element flow spread for the assumed geometry (NASA SP-8087;
+    Kang & Sun, JTHT 25, 2011).  Gas streams use the same incompressible
+    network as a screen.
+    """
+    from raosim.thermofluids import solve_annular_manifold_network
+    dp_by_role = {"fuel": dp_fuel, "oxidizer": dp_ox}
+    ports_by_role = {"fuel": int(spec.fuel_manifold_ports),
+                     "oxidizer": int(spec.oxidizer_manifold_ports)}
+    streams: dict[str, ManifoldResult] = {}
+    worst = 0.0
+    for role, s in result.streams.items():
+        feeds = s.geometry
+        dp = dp_by_role[role]
+        ports = max(ports_by_role[role], 1)
+        if feeds == "slots":
+            n_elem = max(int(result.slot_count), 2)
+            manifold_radius = 0.5 * result.pintle_diameter
+        else:
+            n_elem = max(12, 4 * ports)   # discretize the continuous annulus
+            manifold_radius = 0.5 * s.detail.get(
+                "outer_diameter", result.pintle_diameter)
+        try:
+            net = solve_annular_manifold_network(
+                channel_count=n_elem, ports_per_manifold=ports,
+                total_mass_flow=s.mdot, density=result.feed[role].density,
+                channel_pressure_drop=max(dp, 1.0), channel_total_area=s.area,
+                manifold_radius=manifold_radius)
+            spread = float(net["maldistribution_fraction"])
+            mr = ManifoldResult(
+                role=role, feeds=feeds, element_count=n_elem, port_count=ports,
+                maldistribution_fraction=spread,
+                min_flow_ratio=float(net["minimum_channel_flow_ratio"]),
+                max_flow_ratio=float(net["maximum_channel_flow_ratio"]),
+                manifold_pressure_drop=float(
+                    net["total_pressure_drop"]
+                    - net["channel_branch_pressure_drop_reference"]),
+                port_diameter=float(net["port_diameter"]),
+                plenum_area=float(net["plenum_cross_section_area"]),
+                status=str(net["status"]))
+            if spread == spread:
+                worst = max(worst, spread)
+        except Exception as exc:
+            mr = ManifoldResult(
+                role=role, feeds=feeds, element_count=n_elem, port_count=ports,
+                maldistribution_fraction=float("nan"),
+                min_flow_ratio=float("nan"), max_flow_ratio=float("nan"),
+                manifold_pressure_drop=float("nan"),
+                port_diameter=float("nan"), plenum_area=float("nan"),
+                status=f"unscreened:{type(exc).__name__}")
+        streams[role] = mr
+    return ManifoldDistribution(
+        streams=streams, worst_maldistribution=worst,
+        notes=["1-D annular two-header square-law network (NASA SP-8087; "
+               "Kang & Sun JTHT 25, 2011); requires 3-D manifold validation."])
+
+
+def _convective_wall(T_aw, T_cool, h_g, h_c, t_wall, k_wall):
+    """1-D series gas/wall/coolant circuit -> (q, T_wg)."""
+    R = 1.0 / max(h_g, 1e-12) + t_wall / max(k_wall, 1e-9) + 1.0 / max(h_c, 1e-12)
+    q = (T_aw - T_cool) / R
+    T_wg = T_aw - q / max(h_g, 1e-12)
+    return q, T_wg
+
+
+def face_tip_thermal(result, spec, *, Pc, Tc, gamma, R_gas,
+                     recirculation_temp_fraction=0.8,
+                     recirculation_velocity_fraction=0.2,
+                     tip_wall_thickness=None):
+    """Screening heat balance for the injector face and pintle tip.
+
+    Both surfaces sit in recirculating combustion gas (recovery temperature
+    ~``f·Tc``) and are cooled from behind by the propellant passing through the
+    pintle (tip) and the manifolds (face).  A turbulent Dittus-Boelter gas-side
+    coefficient and a Dittus-Boelter coolant-side coefficient feed a 1-D
+    series gas/wall/coolant circuit (cf. the SP-125 regen wall solve), giving a
+    gas-side wall temperature and a margin against the material limit.  This is
+    a screening indicator (recirculation/film effects need CFD/cold-flow), not
+    a qualified thermal analysis.
+    """
+    from types import SimpleNamespace
+    from raosim.physics import gas_transport_properties
+    notes = []
+    # Chamber-gas transport + density.
+    ns = SimpleNamespace(gamma=gamma, R_gas=R_gas,
+                         Mw=8.31446 / R_gas, Tc=Tc)
+    try:
+        cp_g, Pr_g, mu_g = gas_transport_properties(ns)
+    except Exception:
+        cp_g, Pr_g, mu_g = 2000.0, 0.5, 1.0e-4
+        notes.append("gas transport properties estimated (fallback)")
+    rho_g = Pc / (R_gas * Tc)
+    k_g = mu_g * cp_g / max(Pr_g, 1e-6)
+    T_aw = recirculation_temp_fraction * Tc
+
+    # Pintle/face material limit + conductivity.
+    k_wall, T_limit = 350.0, 800.0
+    try:
+        from raosim.materials import get_material
+        if spec.pintle_material:
+            mat = get_material(spec.pintle_material)
+            k_wall, T_limit = mat.conductivity, mat.max_temperature
+    except Exception:
+        notes.append("pintle material unresolved; copper-class defaults used")
+    t_wall = (tip_wall_thickness if tip_wall_thickness is not None
+              else max(2.0 * spec.manufacturing.min_feature, 1.0e-3))
+
+    def _surface(stream, length, label):
+        fs = result.feed[stream.role]
+        # gas-side recirculation Dittus-Boelter
+        U = recirculation_velocity_fraction * stream.velocity
+        Re_g = rho_g * U * length / max(mu_g, 1e-12)
+        h_g = 0.023 * Re_g ** 0.8 * Pr_g ** 0.4 * k_g / max(length, 1e-9)
+        # coolant-side Dittus-Boelter (propellant through the passage)
+        cp_l = fs.cp if fs.cp else 2000.0
+        k_l = fs.conductivity if fs.conductivity else 0.13
+        if fs.cp is None or fs.conductivity is None:
+            notes.append(f"{stream.role} cp/k estimated (fallback)")
+        Pr_l = fs.viscosity * cp_l / max(k_l, 1e-9)
+        dh = stream.hydraulic_diameter
+        h_c = (0.023 * max(stream.reynolds, 1.0) ** 0.8 * Pr_l ** 0.4
+               * k_l / max(dh, 1e-9))
+        q, T_wg = _convective_wall(T_aw, fs.temperature, h_g, h_c, t_wall, k_wall)
+        return {"h_g": h_g, "h_c": h_c, "q": q, "T_wg": T_wg,
+                "margin": T_limit / max(T_wg, 1.0), "label": label}
+
+    # Tip cooled by the radial (slotted) stream; face by the annulus stream.
+    tip = _surface(result.slots, result.pintle_diameter, "tip")
+    face = _surface(result.annulus, result.chamber_radius, "face")
+    limiting = "tip" if tip["margin"] <= face["margin"] else "face"
+    return FaceTipThermal(
+        recovery_temperature=T_aw,
+        tip_gas_coefficient=tip["h_g"], tip_coolant_coefficient=tip["h_c"],
+        tip_heat_flux=tip["q"], tip_wall_temperature=tip["T_wg"],
+        tip_margin=tip["margin"], face_heat_flux=face["q"],
+        face_wall_temperature=face["T_wg"], face_margin=face["margin"],
+        limiting=limiting, wall_temperature_limit=T_limit,
+        governing_margin=min(tip["margin"], face["margin"]),
+        model="recirculation_dittus_boelter_series_circuit_screen",
+        notes=notes)
+
+
+def stability_screen(result, *, Pc, Tc, gamma, R_gas, chi_fuel, chi_oxidizer):
+    """Combustion-stability screen beyond the bare ``c/2L`` estimate.
+
+    Three coupled mechanisms, all screening-grade (NASA SP-8113 / SP-194,
+    *Liquid Rocket Engine Combustion Stability*; Crocco & Cheng sensitive
+    time-lag n-τ):
+
+    * **Chug / feed-system coupling** — the injector pressure-drop fraction
+      decouples the feed from the chamber; ``min(χ_f, χ_o) ≥ ~0.2`` is the
+      usual stability rule, ``< 0.1`` is chug-prone.
+    * **Chamber acoustics** — longitudinal ``a/(2L)`` and the transverse
+      tangential ``1.8412·a/(πD)`` and radial ``3.8317·a/(πD)`` modes.
+    * **n-τ intrinsic coupling** — the combustion time lag ``τ`` (taken as the
+      atomization/vaporization development time) against the L1 period; the
+      reduced frequency ``τ·f_L1`` falling in the first sensitive band flags a
+      high-frequency screening concern.
+    """
+    a = math.sqrt(gamma * R_gas * Tc)
+    Lc = max(result.chamber_length, 1e-9)
+    Dc = max(2.0 * result.chamber_radius, 1e-9)
+    f_L1 = a / (2.0 * Lc)
+    f_L2 = 2.0 * f_L1
+    f_T1 = 1.8412 * a / (math.pi * Dc)
+    f_R1 = 3.8317 * a / (math.pi * Dc)
+    decoupling = min(chi_fuel, chi_oxidizer)
+    chug = ("good (≥0.2 Pc)" if decoupling >= 0.20 else
+            "marginal (0.1–0.2 Pc)" if decoupling >= 0.10 else
+            "chug-prone (<0.1 Pc)")
+    # Combustion time lag ~ development length / limiting injection velocity.
+    if result.atomization is not None:
+        lim = result.atomization.limiting_role
+        v = max(result.streams[lim].velocity, 1e-6)
+        tau = result.atomization.combustion_length / v
+    else:
+        tau = float("nan")
+    reduced = tau * f_L1 if tau == tau else float("nan")
+    sensitive = bool(0.1 < reduced < 0.5) if reduced == reduced else False
+    notes = [
+        "Screening only: chug rule (SP-8113/SP-194), closed-chamber acoustic "
+        "modes, and an n-τ reduced-frequency band (Crocco sensitive time lag). "
+        "A real stability assessment needs the feed admittance, the combustion "
+        "response function, and damping (baffles/cavities).",
+    ]
+    return StabilityScreen(
+        sound_speed=a, f_L1=f_L1, f_L2=f_L2, f_T1=f_T1, f_R1=f_R1,
+        injector_decoupling_fraction=decoupling, chug_status=chug,
+        combustion_time_lag=tau, reduced_frequency_L1=reduced,
+        sensitive_band=sensitive,
+        model="chug_plus_chamber_acoustics_plus_ntau_screen", notes=notes)
+
+
+@dataclass
+class ThrottlePoint:
+    throttle: float                 # mdot/mdot_full
+    Pc: float
+    mdot_total: float
+    mixture_ratio: float
+    dp_fuel_fraction: float
+    dp_oxidizer_fraction: float
+    annulus_gap: float
+    slot_width: float
+    sleeve_stroke_fraction: float   # annulus area(f) / area(full)
+    v_annulus: float
+    v_slots: float
+    reynolds_slots: float
+    weber_slots: float
+    total_momentum_ratio: float
+    spray_half_angle_deg: float
+    spray_wall_axial_distance: float
+    smd_limiting: float
+    predicted_cstar_efficiency: float
+    thermal_margin: float
+    feasible: bool
+
+
+@dataclass
+class ThrottleMap:
+    points: list[ThrottlePoint]
+    preserved: dict[str, bool]
+    pc_exponent: float
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "pc_exponent": self.pc_exponent,
+            "preserved": self.preserved,
+            "points": [
+                {
+                    "throttle": p.throttle, "Pc_pa": p.Pc,
+                    "mdot_total_kg_s": p.mdot_total,
+                    "mixture_ratio": p.mixture_ratio,
+                    "dp_fuel_fraction": p.dp_fuel_fraction,
+                    "dp_oxidizer_fraction": p.dp_oxidizer_fraction,
+                    "annulus_gap_m": p.annulus_gap, "slot_width_m": p.slot_width,
+                    "sleeve_stroke_fraction": p.sleeve_stroke_fraction,
+                    "v_annulus_m_s": p.v_annulus, "v_slots_m_s": p.v_slots,
+                    "reynolds_slots": p.reynolds_slots,
+                    "weber_slots": p.weber_slots,
+                    "total_momentum_ratio": p.total_momentum_ratio,
+                    "spray_half_angle_deg": p.spray_half_angle_deg,
+                    "spray_wall_axial_distance_m": p.spray_wall_axial_distance,
+                    "smd_limiting_m": p.smd_limiting,
+                    "predicted_cstar_efficiency": p.predicted_cstar_efficiency,
+                    "thermal_margin": p.thermal_margin, "feasible": p.feasible,
+                }
+                for p in self.points
+            ],
+            "notes": self.notes,
+        }
+
+
+def throttle_map(
+    spec: InjectorSpec, *, mdot_fuel_full, mdot_oxidizer_full, Pc_full,
+    mixture_ratio, chamber_radius, chamber_length, gamma, Tc, R_gas,
+    levels=(0.2, 0.4, 0.6, 0.8, 1.0), pc_exponent=1.0,
+) -> ThrottleMap:
+    """Movable-sleeve throttle schedule: resize the area to hold the
+    pressure-drop fractions (and therefore O/F and TMR) constant as the engine
+    throttles, instead of letting a fixed area collapse ΔP ∝ ṁ².
+
+    The chamber pressure follows ``Pc(f) = Pc_full · f^pc_exponent`` (1.0 = the
+    physical deep-throttle case Pc ∝ ṁ; 0.0 = a constant-Pc study).  At each
+    level the auto solver re-sizes the openings to the dp-fraction, which the
+    movable sleeve realizes as a stroke schedule (the annulus area ratio).
+    """
+    pts: list[ThrottlePoint] = []
+    results: list[tuple[float, InjectorDesignResult]] = []
+    for f in sorted(levels):
+        if not (0.0 < f <= 1.0):
+            raise InjectorSpecError("throttle levels must be in (0, 1]")
+        Pc_f = Pc_full * (f ** pc_exponent)
+        local = copy.deepcopy(spec)
+        local.sizing = "auto"   # the movable sleeve resizes to the dp-fraction
+        r = size_pintle_injector(
+            local, mdot_fuel=f * mdot_fuel_full,
+            mdot_oxidizer=f * mdot_oxidizer_full, Pc=Pc_f,
+            mixture_ratio=mixture_ratio, chamber_radius=chamber_radius,
+            chamber_length=chamber_length, gamma=gamma, Tc=Tc, R_gas=R_gas)
+        results.append((f, r))
+    area_full = results[-1][1].annulus.area
+    for f, r in results:
+        at = r.atomization
+        lim = at.streams[at.limiting_role].sauter_mean_diameter if at else float("nan")
+        pts.append(ThrottlePoint(
+            throttle=f, Pc=Pc_full * (f ** pc_exponent),
+            mdot_total=r.annulus.mdot + r.slots.mdot,
+            mixture_ratio=r.streams["oxidizer"].mdot / max(r.streams["fuel"].mdot, 1e-12),
+            dp_fuel_fraction=spec.fuel_dp_fraction,
+            dp_oxidizer_fraction=spec.oxidizer_dp_fraction,
+            annulus_gap=r.annulus.detail["gap"],
+            slot_width=r.slots.detail["slot_width"],
+            sleeve_stroke_fraction=r.annulus.area / max(area_full, 1e-30),
+            v_annulus=r.annulus.velocity, v_slots=r.slots.velocity,
+            reynolds_slots=r.slots.reynolds, weber_slots=r.slots.weber,
+            total_momentum_ratio=r.total_momentum_ratio,
+            spray_half_angle_deg=r.spray_half_angle_deg,
+            spray_wall_axial_distance=r.spray_wall_axial_distance,
+            smd_limiting=lim,
+            predicted_cstar_efficiency=(
+                at.predicted_cstar_efficiency if at else float("nan")),
+            thermal_margin=(
+                r.thermal.governing_margin if r.thermal else float("nan")),
+            feasible=r.feasible))
+
+    def _spread(vals):
+        vals = [v for v in vals if v == v]
+        if not vals:
+            return float("inf")
+        m = sum(vals) / len(vals)
+        return (max(vals) - min(vals)) / m if m else 0.0
+    preserved = {
+        # O/F is exact; TMR holds to ~1% because liquid density is weakly
+        # pressure-dependent (the manifold pressure shifts with Pc).
+        "mixture_ratio": _spread([p.mixture_ratio for p in pts]) < 1e-4,
+        "dp_fraction": True,   # held by construction
+        "total_momentum_ratio": _spread(
+            [p.total_momentum_ratio for p in pts]) < 1e-2,
+    }
+    notes = [
+        "Movable-sleeve schedule holding the dp-fractions constant; O/F and "
+        "TMR are preserved while velocity/Re/We and atomization fall toward "
+        "low throttle (deep-throttle reality). Stroke = annulus area ratio.",
+    ]
+    return ThrottleMap(points=pts, preserved=preserved,
+                       pc_exponent=pc_exponent, notes=notes)
 
 
 def size_pintle_injector(
@@ -595,7 +1370,10 @@ def size_pintle_injector(
     ``feed`` may be pre-resolved (e.g. the fuel taken from the regen outlet);
     otherwise it is resolved from ``spec.fuel`` / ``spec.oxidizer``.
     """
-    _validate_injector_spec(spec, mdot_fuel, mdot_oxidizer, Pc, mixture_ratio)
+    _validate_injector_spec(
+        spec, mdot_fuel, mdot_oxidizer, Pc, mixture_ratio,
+        chamber_radius, chamber_length, gamma, Tc, R_gas,
+    )
     radial = spec.geometry.radial_stream
 
     dp_fuel = spec.fuel_dp_fraction * Pc
@@ -611,13 +1389,14 @@ def size_pintle_injector(
                 spec.oxidizer, default_pressure=p_manifold_ox),
         }
 
-    # Liquid-only guard (MVP). Reject before sizing so the message is clean.
+    # Phase guard: each stream must be a usable liquid (incompressible branch)
+    # or a usable gas/supercritical state (compressible branch).  A two-phase /
+    # flashing state near the vapor pressure is sizeable by neither.
     for role, fs in feed.items():
-        if not fs.liquid_ok:
+        if not (fs.liquid_ok or fs.gas_ok):
             raise InjectorUnsupportedState(
-                f"{role} feed ('{fs.name}') is not a usable liquid: {fs.reason}. "
-                f"The liquid/liquid MVP does not size gas/near-critical "
-                f"injection (compressible branch deferred)."
+                f"{role} feed ('{fs.name}') is sizeable by neither the liquid "
+                f"nor the gas branch: {fs.reason}."
             )
 
     streams_in = {
@@ -642,6 +1421,7 @@ def size_pintle_injector(
 
     # ----- axial annulus stream -----
     m_a_req, dp_a, cd_a, fs_a = streams_in[axial]
+    G_a, v_a, choked_a, branch_a, info_a = _stream_mass_flux(fs_a, dp_a, cd_a, Pc)
     if fixed and spec.geometry.annulus_gap is not None:
         gap = spec.geometry.annulus_gap
         Do = Dp + 2.0 * gap
@@ -649,7 +1429,7 @@ def size_pintle_injector(
         ann_geom = {"inner_diameter": Dp, "outer_diameter": Do, "gap": gap,
                     "hydraulic_diameter": Do - Dp}
     else:
-        A_a = _orifice_area(m_a_req, cd_a, fs_a.density, dp_a)
+        A_a = m_a_req / G_a
         ann_geom = _annulus_from_area(A_a, Dp)
     # Annulus passage length: the injector face thickness when known, else the
     # same L/D target used for slots, so L/D is always reported.
@@ -660,14 +1440,16 @@ def size_pintle_injector(
         ann_len / ann_geom["hydraulic_diameter"]
         if ann_geom["hydraulic_diameter"] > 0 else float("nan"))
     ann_geom["area"] = A_a
-    m_a = cd_a * A_a * math.sqrt(2.0 * fs_a.density * dp_a)  # delivered
+    m_a = G_a * A_a  # delivered
     annulus = _stream_numbers(
         axial, "annulus", m_a, dp_a, cd_a, A_a, ann_geom["hydraulic_diameter"],
-        fs_a.density, fs_a.viscosity, fs_a.surface_tension)
+        fs_a.density, fs_a.viscosity, fs_a.surface_tension, velocity=v_a)
+    ann_geom["injection"] = {"branch": branch_a, "choked": choked_a, **info_a}
     annulus.detail = ann_geom
 
     # ----- radial slot stream -----
     m_r_req, dp_r, cd_r, fs_r = streams_in[radial]
+    G_r, v_r, choked_r, branch_r, info_r = _stream_mass_flux(fs_r, dp_r, cd_r, Pc)
     if fixed and spec.geometry.slot_width is not None:
         w = spec.geometry.slot_width
         h = spec.geometry.slot_height or (spec.geometry.slot_aspect_ratio * w)
@@ -684,15 +1466,16 @@ def size_pintle_injector(
             "area_each": w * h, "area": A_r,
         }
     else:
-        A_r = _orifice_area(m_r_req, cd_r, fs_r.density, dp_r)
+        A_r = m_r_req / G_r
         slot_geom = _slots_from_area(
             A_r, spec.geometry.slot_count, spec.geometry.slot_aspect_ratio,
             Dp, spec.geometry.slot_depth, spec.geometry.slot_length_over_dh)
         slot_geom["area"] = A_r
-    m_r = cd_r * A_r * math.sqrt(2.0 * fs_r.density * dp_r)  # delivered
+    m_r = G_r * A_r  # delivered
     slots = _stream_numbers(
         radial, "slots", m_r, dp_r, cd_r, A_r, slot_geom["hydraulic_diameter"],
-        fs_r.density, fs_r.viscosity, fs_r.surface_tension)
+        fs_r.density, fs_r.viscosity, fs_r.surface_tension, velocity=v_r)
+    slot_geom["injection"] = {"branch": branch_r, "choked": choked_r, **info_r}
     slots.detail = slot_geom
 
     # Required (cycle) mass flows per role, for the closure gate.
@@ -734,11 +1517,144 @@ def size_pintle_injector(
         blockage_factor=slot_geom["blockage_factor"],
         minimum_web=slot_geom["web"], gates=[], feed=feed,
     )
+    result.atomization = spray_atomization(
+        streams, feed, Pc=Pc, Tc=Tc, R_gas=R_gas,
+        chamber_length=chamber_length,
+        evaporation_constant=spec.evaporation_constant)
+    result.manifold = manifold_distribution(result, spec, dp_fuel, dp_ox)
+    result.thermal = face_tip_thermal(
+        result, spec, Pc=Pc, Tc=Tc, gamma=gamma, R_gas=R_gas)
+    result.stability = stability_screen(
+        result, Pc=Pc, Tc=Tc, gamma=gamma, R_gas=R_gas,
+        chi_fuel=spec.fuel_dp_fraction, chi_oxidizer=spec.oxidizer_dp_fraction)
     result.gates = injector_gates(
         spec, result, Pc=Pc, mixture_ratio=mixture_ratio,
         dp_fuel=dp_fuel, dp_ox=dp_ox, p_manifold_fuel=p_manifold_fuel,
         p_manifold_ox=p_manifold_ox, gamma=gamma, Tc=Tc, R_gas=R_gas,
         mdot_required=mdot_required)
+    result.feasible = not any(g.status == "fail" for g in result.gates)
+    return result
+
+
+def evaluate_pintle_injector(
+    spec: InjectorSpec,
+    *,
+    mdot_fuel: float,
+    mdot_oxidizer: float,
+    Pc: float,
+    mixture_ratio: float,
+    chamber_radius: float,
+    chamber_length: float,
+    gamma: float,
+    Tc: float,
+    R_gas: float,
+    fuel_name: str | None = None,
+    oxidizer_name: str | None = None,
+    cooling: Any | None = None,
+    cooling_result: dict[str, Any] | None = None,
+) -> InjectorDesignResult:
+    """Evaluate one pintle consistently for CLI and API/backend workflows.
+
+    Besides calling :func:`size_pintle_injector`, this integration boundary:
+
+    * fills missing feed identities from the thermochemistry request;
+    * checks that a direct regenerative-cooling-to-injector handoff carries
+      the same fuel mass flow as the engine cycle;
+    * hands the calculated jacket outlet temperature/pressure to the fuel
+      property resolver only when that continuity check is credible; and
+    * appends the coupling gate before recomputing overall feasibility.
+
+    A mismatched coolant flow is not silently interpreted as a bypass circuit:
+    bypassed fuel would need an explicit split and mixing-temperature model.
+    """
+    local = copy.deepcopy(spec)
+    if not local.fuel.name:
+        local.fuel.name = fuel_name
+    if not local.oxidizer.name:
+        local.oxidizer.name = oxidizer_name
+
+    coupling_gate = InjectorGate(
+        "regen_fuel_flow_closure",
+        "info",
+        "no direct regenerative-cooling-to-fuel-injector handoff requested",
+    )
+    coupling_note = coupling_gate.detail
+
+    cooling_method = str(getattr(cooling, "method", "none") or "none").lower()
+    coolant_raw = getattr(cooling, "coolant", None)
+    fuel_is_coolant = bool(
+        cooling_method == "regenerative"
+        and coolant_raw
+        and local.fuel.name
+        and canonical_coolant_name(coolant_raw)
+        == canonical_coolant_name(local.fuel.name)
+    )
+
+    if fuel_is_coolant:
+        coolant_mdot = float(
+            getattr(cooling, "coolant_mass_flow", 0.0) or 0.0
+        )
+        rel_error = abs(coolant_mdot - mdot_fuel) / max(mdot_fuel, 1e-12)
+        if rel_error <= _REGEN_FLOW_PASS_TOL:
+            status = "pass"
+        elif rel_error < _REGEN_FLOW_FAIL_TOL:
+            status = "warn"
+        else:
+            status = "fail"
+        coupling_note = (
+            f"regen coolant flow {coolant_mdot:.6g} kg/s vs cycle fuel flow "
+            f"{mdot_fuel:.6g} kg/s ({rel_error*100:.2f}% error; "
+            f"fail >= {_REGEN_FLOW_FAIL_TOL*100:.0f}% without a bypass/mixing "
+            "model)"
+        )
+        coupling_gate = InjectorGate(
+            "regen_fuel_flow_closure", status, coupling_note
+        )
+
+        # Only a closed direct-flow path can supply an authoritative injector
+        # inlet state. A warning/failure retains explicitly supplied feed
+        # conditions (or the feed resolver's defaults) instead.
+        if status == "pass" and cooling_result is not None:
+            outlet_T = cooling_result.get("coolant_outlet_temperature")
+            outlet_P = cooling_result.get("coolant_outlet_pressure")
+            if local.fuel.inlet_temperature is None and outlet_T is not None:
+                local.fuel.inlet_temperature = float(outlet_T)
+            if local.fuel.inlet_pressure is None and outlet_P is not None:
+                local.fuel.inlet_pressure = float(outlet_P)
+            coupling_note += (
+                f"; injector feed state uses jacket outlet "
+                f"T={local.fuel.inlet_temperature:.3g} K, "
+                f"P={local.fuel.inlet_pressure/1e5:.3g} bar"
+                if (
+                    local.fuel.inlet_temperature is not None
+                    and local.fuel.inlet_pressure is not None
+                )
+                else "; jacket outlet state was incomplete"
+            )
+            coupling_gate.detail = coupling_note
+        elif status == "pass":
+            coupling_gate = InjectorGate(
+                "regen_fuel_flow_closure",
+                "info",
+                coupling_note
+                + "; cooling state was not evaluated, so inlet feed "
+                  "conditions are retained",
+            )
+
+    result = size_pintle_injector(
+        local,
+        mdot_fuel=mdot_fuel,
+        mdot_oxidizer=mdot_oxidizer,
+        Pc=Pc,
+        mixture_ratio=mixture_ratio,
+        chamber_radius=chamber_radius,
+        chamber_length=chamber_length,
+        gamma=gamma,
+        Tc=Tc,
+        R_gas=R_gas,
+    )
+    result.gates.append(coupling_gate)
+    result.notes.append(coupling_gate.detail)
     result.feasible = not any(g.status == "fail" for g in result.gates)
     return result
 
@@ -794,9 +1710,10 @@ def injector_gates(
                 f"{role} feed {supplied/1e5:.1f} bar >= manifold "
                 f"{p_man/1e5:.1f} bar")
         else:
-            status, txt = "warn", (
+            status, txt = "fail", (
                 f"{role} feed {supplied/1e5:.1f} bar < manifold "
-                f"{p_man/1e5:.1f} bar (add feed/regen head)")
+                f"{p_man/1e5:.1f} bar; requested injector delta-P cannot be "
+                "produced")
         g.append(InjectorGate(f"upstream_pressure_{role}", status, txt))
 
     # 3) cavitation / vapor-pressure margin.
@@ -816,11 +1733,30 @@ def injector_gates(
             f"{role} cavitation number K=(P_man-Pvap)/dp={K:.2f} "
             f"(>=1.5 desired)"))
 
-    # 4) explicit liquid / choke state.
-    g.append(InjectorGate(
-        "injection_state", "info",
-        "both streams liquid (incompressible orifice law); gas/choked "
-        "injection not in this MVP"))
+    # 4) explicit injection state (liquid vs gas, and the gas choke state).
+    for s in (r.annulus, r.slots):
+        inj = s.detail.get("injection", {})
+        branch = inj.get("branch", "incompressible")
+        fs = r.feed[s.role]
+        if branch == "incompressible":
+            g.append(InjectorGate(
+                f"injection_state_{s.role}", "info",
+                f"{s.role} liquid ({fs.phase}); incompressible orifice law"))
+        elif branch == "compressible_choked":
+            g.append(InjectorGate(
+                f"injection_state_{s.role}", "info",
+                f"{s.role} gas ({fs.phase}) CHOKED: "
+                f"Pc/P0={inj.get('pressure_ratio', float('nan')):.3f} <= "
+                f"critical {inj.get('critical_pressure_ratio', float('nan')):.3f}; "
+                f"sonic injection, flow set by upstream P0/T0"))
+        else:
+            g.append(InjectorGate(
+                f"injection_state_{s.role}", "info",
+                f"{s.role} gas ({fs.phase}) subsonic: "
+                f"Pc/P0={inj.get('pressure_ratio', float('nan')):.3f} > critical "
+                f"{inj.get('critical_pressure_ratio', float('nan')):.3f}, "
+                f"M={inj.get('exit_mach', float('nan')):.2f} "
+                f"(weak feed-system decoupling near critical)"))
 
     # 5) Cd / L-over-D / hydraulic-flip / correlation domain.
     for s in (r.annulus, r.slots):
@@ -863,9 +1799,22 @@ def injector_gates(
         f"{mfg.concentricity_tolerance*1e3:.3f} mm); flow maldistribution "
         f"~2x eccentricity"))
 
-    # 8) manifold maldistribution (annular header network, radial stream).
-    g.append(_manifold_maldistribution_gate(r, dp_ox if r.radial_stream ==
-                                            "oxidizer" else dp_fuel))
+    # 8) manifold maldistribution — one gate per propellant manifold.
+    if r.manifold is not None:
+        for role, m in r.manifold.streams.items():
+            spread = m.maldistribution_fraction
+            if not (spread == spread):  # NaN -> unscreened
+                g.append(InjectorGate(
+                    f"manifold_maldistribution_{role}", "info",
+                    f"{role} manifold ({m.feeds}) not screened ({m.status})"))
+                continue
+            status = ("pass" if spread < 0.10 else
+                      "warn" if spread < 0.25 else "fail")
+            g.append(InjectorGate(
+                f"manifold_maldistribution_{role}", status,
+                f"{role} manifold ({m.feeds}, {m.port_count} ports) "
+                f"element flow spread {spread*100:.1f}% "
+                f"[{m.min_flow_ratio:.2f}–{m.max_flow_ratio:.2f}×]"))
 
     # 9) spray-wall clearance.
     if not math.isfinite(r.spray_wall_axial_distance):
@@ -889,6 +1838,28 @@ def injector_gates(
                 f"at {r.spray_wall_axial_distance*1e3:.1f} mm ({frac*100:.0f}% "
                 f"of Lc)")
         g.append(InjectorGate("spray_wall_clearance", status, txt))
+
+    # 9a) combustion-development length vs available chamber length (the L*/
+    #     injector-quality coupling; vaporization-limited c* surrogate).
+    if r.atomization is not None:
+        at = r.atomization
+        # A vaporization-limited SURROGATE: warn (iterate L*/geometry/Δp) but
+        # never hard-fail export over a screening estimate (SP-8089).
+        m = at.development_margin
+        if not math.isfinite(m):
+            status, txt = "info", "combustion length indeterminate"
+        else:
+            status = "pass" if m >= 1.0 else "warn"
+            hint = ("" if m >= 1.0 else
+                    "; increase L*/Δp/velocity or change stream assignment")
+            smd_um = at.streams[at.limiting_role].sauter_mean_diameter * 1e6
+            txt = (f"{at.limiting_role} combustion-development length "
+                   f"{at.combustion_length*1e3:.0f} mm vs chamber "
+                   f"{at.available_chamber_length*1e3:.0f} mm (margin {m:.2f}{hint}); "
+                   f"SMD≈{smd_um:.0f} µm, predicted η_c*≈"
+                   f"{at.predicted_cstar_efficiency:.2f} "
+                   f"(vaporization-limited surrogate)")
+        g.append(InjectorGate("combustion_development_length", status, txt))
 
     # 9b) target momentum ratio (when requested): compare achieved TMR.
     if spec.target_momentum_ratio is not None:
@@ -938,11 +1909,19 @@ def injector_gates(
             "edge_distance", "info",
             "edge distance not checked (supply face OD via --injector-face-od)"))
 
-    # 10) face / pintle-tip thermal margin (screening indicator).
-    g.append(InjectorGate(
-        "face_tip_thermal_margin", "info",
-        "face/tip heat load is regen/film dependent; pintle-tip and face "
-        "cooling not yet coupled (screening indicator only)"))
+    # 10) face / pintle-tip thermal margin (recirculation + series circuit).
+    if r.thermal is not None:
+        t = r.thermal
+        mg = t.governing_margin
+        # Screening recirculation estimate -> warn-capped (never hard-fail on
+        # a rough chamber-side heat balance); report the limiting surface.
+        status = "pass" if mg >= 1.2 else "warn"
+        g.append(InjectorGate(
+            "face_tip_thermal_margin", status,
+            f"{t.limiting} governs: T_wg≈"
+            f"{(t.tip_wall_temperature if t.limiting=='tip' else t.face_wall_temperature):.0f} K "
+            f"vs limit {t.wall_temperature_limit:.0f} K (margin {mg:.2f}); "
+            f"recirculation+series-circuit screen, needs CFD"))
 
     # 11) throttle-point mixture-ratio drift (fixed geometry).
     g.append(InjectorGate(
@@ -951,14 +1930,31 @@ def injector_gates(
         "preserved only while both dp-fractions scale together — a movable "
         "pintle is needed for deep throttling"))
 
-    # 12) feed/chamber acoustic-frequency screening.
-    a_gas = math.sqrt(gamma * R_gas * Tc)
-    f_L1 = a_gas / (2.0 * max(r.chamber_length, 1e-9))
-    f_T1 = 1.8412 * a_gas / (math.pi * 2.0 * r.chamber_radius)
-    g.append(InjectorGate(
-        "acoustic_screen", "info",
-        f"chamber a={a_gas:.0f} m/s -> f_L1~{f_L1:.0f} Hz, f_T1~{f_T1:.0f} Hz; "
-        f"separate feed-coupling/admittance screening still required"))
+    # 12) stability: chug (feed decoupling) + chamber acoustics + n-τ band.
+    if r.stability is not None:
+        st = r.stability
+        # chug gate (a real, well-grounded feed-decoupling rule)
+        chug_status = ("pass" if st.injector_decoupling_fraction >= 0.20 else
+                       "warn" if st.injector_decoupling_fraction >= 0.10 else
+                       "fail")
+        g.append(InjectorGate(
+            "feed_system_chug", chug_status,
+            f"injector decoupling min(χ)={st.injector_decoupling_fraction:.2f} "
+            f"-> {st.chug_status}"))
+        # acoustic modes (informational)
+        g.append(InjectorGate(
+            "chamber_acoustic_modes", "info",
+            f"a={st.sound_speed:.0f} m/s -> L1 {st.f_L1:.0f} Hz, "
+            f"L2 {st.f_L2:.0f} Hz, T1 {st.f_T1:.0f} Hz, R1 {st.f_R1:.0f} Hz"))
+        # n-τ reduced-frequency band (screening)
+        nt_status = "warn" if st.sensitive_band else "info"
+        g.append(InjectorGate(
+            "ntau_coupling", nt_status,
+            f"combustion lag τ≈{st.combustion_time_lag*1e3:.2f} ms, "
+            f"τ·f_L1={st.reduced_frequency_L1:.2f}"
+            + (" (in the sensitive n-τ band — high-frequency risk)"
+               if st.sensitive_band else " (outside the first sensitive band)")
+            + "; screening, needs the combustion response function"))
 
     # 13) mandatory cold-flow + hot-fire validation status.
     g.append(InjectorGate(
@@ -968,28 +1964,3 @@ def injector_gates(
 
     return g
 
-
-def _manifold_maldistribution_gate(r: InjectorDesignResult, dp) -> InjectorGate:
-    """Run the annular-header network on the slotted stream as a screen."""
-    try:
-        from raosim.thermofluids import solve_annular_manifold_network
-        net = solve_annular_manifold_network(
-            channel_count=max(int(r.slot_count), 2),
-            ports_per_manifold=4,
-            total_mass_flow=r.slots.mdot,
-            density=r.feed[r.radial_stream].density,
-            channel_pressure_drop=max(dp, 1.0),
-            channel_total_area=r.slots.area,
-            manifold_radius=0.5 * r.pintle_diameter,
-        )
-        spread = net["maldistribution_fraction"]
-        status = "pass" if spread < 0.10 else ("warn" if spread < 0.25
-                                               else "fail")
-        return InjectorGate(
-            "manifold_maldistribution", status,
-            f"slot-to-slot flow spread {spread*100:.1f}% across the annular "
-            f"header ({net['status']})")
-    except Exception as exc:
-        return InjectorGate(
-            "manifold_maldistribution", "info",
-            f"manifold network not screened ({type(exc).__name__})")
