@@ -143,6 +143,7 @@ def print_tags() -> None:
             ("--channels", "channel count"),
             ("--channel-width / --channel-height", "cross-section [m]"),
             ("--wall-thickness", "uniform reference thickness [m]"),
+            ("--wall-sizing {scalar,regen}", "scalar wall input or regen+SP-125 sizing"),
             ("--helix-turns", "0 = axial, >0 = helical coils"),
             ("--coolant / --coolant-mdot", "rp1/methane/lh2/water/ethanol; flow [kg/s]"),
             ("--coolant-inlet-temperature", "coolant inlet [K]; cryogenic defaults by fluid"),
@@ -251,6 +252,43 @@ def _default_coolant_inlet_temperature(coolant: str) -> float:
     return default_coolant_inlet_temperature(coolant)
 
 
+def _apply_wall_sizing_mode(args, parser, argv) -> None:
+    """Resolve the user-facing wall-sizing mode into the existing switches."""
+    wall_thickness_given = "--wall-thickness" in argv
+    if args.wall_sizing == "scalar":
+        if args.size_wall:
+            parser.error("--wall-sizing scalar cannot be combined with --size-wall")
+        args._wall_sizing_mode = "scalar"
+        args._wall_thickness_source = (
+            "user_supplied_scalar" if wall_thickness_given else "default_scalar"
+        )
+        return
+
+    if args.wall_sizing == "regen":
+        args.regen = True
+        args.size_wall = True
+        args._wall_sizing_mode = "regen_thermostructural"
+        args._wall_thickness_source = (
+            "user_supplied_seed_for_regen_sizing"
+            if wall_thickness_given else "default_seed_for_regen_sizing"
+        )
+        return
+
+    if args.size_wall:
+        args.regen = True
+        args._wall_sizing_mode = "regen_thermostructural"
+        args._wall_thickness_source = (
+            "user_supplied_seed_for_regen_sizing"
+            if wall_thickness_given else "default_seed_for_regen_sizing"
+        )
+    else:
+        args._wall_sizing_mode = "scalar"
+        args._wall_thickness_source = (
+            "user_supplied" if wall_thickness_given
+            else "default_uniform_reference"
+        )
+
+
 def _interactive(args) -> None:
     """Prompt for the design dimensions + options, overriding ``args``."""
     print(dim("Interactive setup — press Enter to accept each [default].  Ctrl-C to abort."))
@@ -298,15 +336,30 @@ def _interactive(args) -> None:
         args.material = _prompt(
             "Wall material (sets k + temp limit + structural; Enter for none)",
             args.material or "", str) or None
+        sizing_default = args.wall_sizing or (
+            "regen" if args.size_wall else "scalar"
+        )
+        sizing_mode = _prompt(
+            "Wall sizing mode (scalar / regen)", sizing_default, str
+        ).strip().lower()
+        if sizing_mode in {"regen", "regen+sizing", "sized", "size-wall"}:
+            args.wall_sizing = "regen"
+            args.size_wall = True
+        else:
+            args.wall_sizing = "scalar"
+            args.size_wall = False
+            args.wall_thickness = _prompt(
+                "Uniform hot-wall thickness [m]", args.wall_thickness
+            )
         args.channel_height = _prompt("Channel height/depth [m]", args.channel_height)
         args.helix_turns = _prompt("Helix turns (0 = axial, >0 = helical coils)",
                                    args.helix_turns)
         args.auto_size = _prompt_bool(
             "Auto-size channel count & width from the cooling requirement?",
             bool(args.auto_size))
-        if args.auto_size:
+        if args.auto_size or args.size_wall:
             print(dim("    (you give the requirements; the coolant flow comes "
-                      "from the engine cycle, and N & width are solved for)"))
+                      "from the engine cycle, and geometry is solved for)"))
             args.pc = _prompt("Chamber pressure Pc [Pa]", args.pc)
             args.coolant = _prompt("Coolant (rp1/methane/lh2/water/ethanol)",
                                    args.coolant, str)
@@ -324,6 +377,19 @@ def _interactive(args) -> None:
                                          args.margin_target)
             args.wall_temp_limit = _prompt("Max wall temperature [K]", args.wall_temp_limit)
             args.dp_budget = _prompt("Pressure-drop budget [bar]", args.dp_budget)
+            if args.size_wall:
+                args.structural_fos = _prompt(
+                    "Structural factor of safety", args.structural_fos
+                )
+                args.required_cycles = _prompt(
+                    "Required thermal cycles", args.required_cycles
+                )
+                args.t_hot_min = _prompt(
+                    "Minimum hot-wall thickness [m]", args.t_hot_min
+                )
+                args.t_hot_max = _prompt(
+                    "Maximum hot-wall thickness [m]", args.t_hot_max
+                )
         else:
             args.channels = _prompt("Channel count", args.channels, int)
             args.channel_width = _prompt("Channel width [m]", args.channel_width)
@@ -521,6 +587,11 @@ def main() -> int:
     ap.add_argument("--wall-thickness", type=float, default=0.001,
                     help="uniform reference thickness [m]; --size-wall "
                          "replaces it with a station-wise analyzed profile")
+    ap.add_argument("--wall-sizing", choices=("scalar", "regen"), default=None,
+                    help="wall-thickness mode: scalar uses --wall-thickness "
+                         "uniformly; regen enables regenerative hot-wall + "
+                         "channel sizing using the SP-125 structural screen "
+                         "(needs --material)")
     ap.add_argument("--helix-turns", type=float, default=0.0,
                     help="0 = axial channels; >0 = helical coils")
     ap.add_argument("--coolant", default="rp1")
@@ -580,12 +651,19 @@ def main() -> int:
     ap.add_argument("--throttle-pc-exponent", type=float, default=1.0,
                     help="Pc(f)=Pc·f^exp for the throttle map (1=Pc∝ṁ, "
                          "0=constant Pc)")
-    ap.add_argument("--injector-cad", choices=("none", "auto", "step"),
+    ap.add_argument("--injector-cad",
+                    choices=("none", "auto", "reference", "parts", "step"),
                     default="auto",
-                    help="export the named-body pintle assembly (STEP "
-                         "authoritative + per-body STL) with --injector pintle: "
-                         "'auto' (default) exports when CadQuery is installed and "
-                         "skips otherwise, 'step' requires it, 'none' disables")
+                    help="pintle package CAD mode with --injector pintle: "
+                         "none writes only JSON/CSV/SVG/PNG; reference writes a "
+                         "single CAD-neutral reference file; parts also writes "
+                         "named part files; auto uses parts when CadQuery is "
+                         "available and otherwise keeps the mandatory package; "
+                         "step is the legacy alias for required STEP parts")
+    ap.add_argument("--injector-cad-format", choices=("step", "stl", "dxf"),
+                    default="step",
+                    help="format for --injector-cad reference/parts/auto "
+                         "(STEP default; DXF is a 2-D meridional profile)")
     ap.add_argument("--pintle-sleeve", action="store_true",
                     help="include the movable sleeve body in the pintle CAD")
     # fixed-geometry overrides (only used with --injector-sizing fixed)
@@ -597,6 +675,22 @@ def main() -> int:
     ap.add_argument("--pintle-body-length", type=float, default=None)
     ap.add_argument("--injector-face-thickness", type=float, default=None)
     ap.add_argument("--injector-face-od", type=float, default=None)
+    ap.add_argument("--flange-od", type=float, default=None,
+                    help="optional chamber/injector flange outer diameter [m]")
+    ap.add_argument("--flange-length", type=float, default=None,
+                    help="optional upstream axial flange length [m]")
+    ap.add_argument("--bolt-count", type=int, default=None,
+                    help="optional injector/chamber bolt count")
+    ap.add_argument("--bolt-circle", type=float, default=None,
+                    help="optional bolt circle diameter [m]")
+    ap.add_argument("--bolt-hole", type=float, default=None,
+                    help="optional bolt hole diameter [m]")
+    ap.add_argument("--bolt-diameter", type=float, default=None,
+                    help="optional actual bolt/tensile diameter [m]")
+    ap.add_argument("--bolt-allowable-stress", type=float, default=None,
+                    help="optional bolt allowable tensile stress [Pa]")
+    ap.add_argument("--joint-separation-factor", type=float, default=1.5,
+                    help="clamp-load factor on Pc*pi*Rc^2 separating load")
     ap.add_argument("--coolant-property-backend",
                     choices=("auto", "constant", "coolprop"), default="auto",
                     help="coolant properties: CoolProp methane/LH2 when "
@@ -725,10 +819,7 @@ def main() -> int:
                     help="pop up the flow-field / animation in a live window "
                          "(on by default for interactive runs)")
     args = ap.parse_args()
-    args._wall_thickness_source = (
-        "user_supplied" if "--wall-thickness" in sys.argv
-        else "default_uniform_reference"
-    )
+    _apply_wall_sizing_mode(args, ap, sys.argv)
     if args.regen_manifolds:
         args.regen_brep = True
         args.hydraulic_network = True
@@ -740,6 +831,20 @@ def main() -> int:
         ap.error("--l-star must be positive")
     if args.contraction_ratio <= 1.0:
         ap.error("--contraction-ratio must be greater than one")
+    if (args.flange_od is None) != (args.flange_length is None):
+        ap.error("--flange-od and --flange-length must be supplied together")
+    for _name in (
+        "flange_od", "flange_length", "bolt_circle", "bolt_hole",
+        "bolt_diameter", "bolt_allowable_stress", "injector_face_od",
+        "injector_face_thickness",
+    ):
+        _value = getattr(args, _name)
+        if _value is not None and _value <= 0.0:
+            ap.error(f"--{_name.replace('_', '-')} must be positive")
+    if args.bolt_count is not None and args.bolt_count <= 0:
+        ap.error("--bolt-count must be positive")
+    if args.joint_separation_factor <= 0.0:
+        ap.error("--joint-separation-factor must be positive")
     if args.shoulder_radius_factor is None:
         args.shoulder_radius_factor = 0.25
         args._shoulder_radius_source = "geometric_placeholder"
@@ -800,6 +905,7 @@ def main() -> int:
     if args.interactive or bare:
         print_tags()
         _interactive(args)
+        _apply_wall_sizing_mode(args, ap, sys.argv)
 
     if args.coolant_inlet_temperature is None:
         args.coolant_inlet_temperature = _default_coolant_inlet_temperature(
@@ -972,6 +1078,12 @@ def main() -> int:
     print(cyan("▸ " + bold("Build plan")))
     style = (f"helical {args.helix_turns:g} turns" if args.helix_turns
              else "axial") if args.regen else "—"
+    wall_plan = (
+        f"regen thermostructural sizing (thermal margin≥{args.margin_target:g}, "
+        f"SP-125 FoS≥{args.structural_fos:g}, Δp≤{args.dp_budget:g} bar)"
+        if args.size_wall else
+        f"scalar uniform input ({args.wall_thickness*1e3:g} mm)"
+    )
     for k, v in [
         ("nozzle", f"Rt={args.rt*1e3:g} mm, eps={args.epsilon:g}, "
                    f"L={args.length_pct:g}%, gamma={args.gamma:g}"),
@@ -981,17 +1093,23 @@ def main() -> int:
         ("solver", f"{args.backend}  (max_nfev={args.max_nfev}, "
                    f"n_control={args.n_control}, n_kernel={args.n_kernel})"),
         ("regen", (
-            (f"auto-size from requirement (margin≥{args.margin_target:g}, "
+            (f"wall+channel sizing from requirement "
+             f"(margin≥{args.margin_target:g}, FoS≥{args.structural_fos:g}, "
+             f"Δp≤{args.dp_budget:g} bar, T_wall≤{args.wall_temp_limit:g} K)"
+             if args.size_wall else
+             f"auto-size from requirement (margin≥{args.margin_target:g}, "
              f"Δp≤{args.dp_budget:g} bar, T_wall≤{args.wall_temp_limit:g} K)"
              if args.auto_size else
              f"{args.channels} channels, {style}, "
              f"{args.channel_width*1e3:g}×{args.channel_height*1e3:g} mm")
             if args.regen else dim("off"))),
+        ("wall sizing", wall_plan),
         ("thermal", (f"on  (Pc={args.pc/1e5:g} bar, {args.coolant} "
                      f"@ {args.coolant_inlet_temperature:g} K, "
                      + (f"MR={args.mixture_ratio:g} → cycle flow"
-                        if args.auto_size else f"{args.coolant_mdot:g} kg/s") + ")"
-                     if (args.thermal or args.auto_size) and args.regen
+                        if (args.auto_size or args.size_wall)
+                        else f"{args.coolant_mdot:g} kg/s") + ")"
+                     if (args.thermal or args.auto_size or args.size_wall) and args.regen
                      else dim("off"))),
         ("material", (f"{mat.name}  (k={args.wall_k:g} W/mK, "
                       f"T≤{args.wall_temp_limit:g} K, "
@@ -1796,6 +1914,37 @@ def main() -> int:
             except Exception as exc:
                 print(yellow(f"    throttle map skipped: {exc}"))
 
+        # ---- pintle deliverable package (mandatory schematic + table) ---
+        try:
+            from raosim.injector_export import export_pintle_package
+
+            cad_mode = args.injector_cad
+            cad_format = args.injector_cad_format
+            if args.injector_cad == "step":
+                cad_mode = "parts"
+                cad_format = "step"
+            elif args.injector_cad == "auto":
+                cad_mode = "parts"
+
+            pkg = export_pintle_package(
+                inj, args.out / "pintle", spec=inj_spec,
+                cad=cad_mode, cad_format=cad_format,
+                movable_sleeve=args.pintle_sleeve)
+            summary["injector_package"] = {
+                "dir": pkg["dir"],
+                "files": pkg["files"],
+                "notes": pkg["notes"],
+            }
+            for p in pkg["files"].values():
+                artifacts.append(os.path.relpath(str(p), str(args.out)))
+            print(green(f"    wrote pintle/ package "
+                        f"({len(pkg['files'])} files)"))
+            for note in pkg["notes"]:
+                msg = f"    pintle package: {note}"
+                print(red(msg) if args.injector_cad == "step" else yellow(msg))
+        except Exception as exc:
+            print(yellow(f"    pintle package skipped: {exc}"))
+
         # ---- injector diagnostic figures (full set) ------------------
         try:
             from raosim.injector_plots import export_all_injector_figures
@@ -1809,28 +1958,54 @@ def main() -> int:
         except Exception as exc:
             print(yellow(f"    injector figures skipped: {exc}"))
 
-        # ---- named-body pintle STEP/STL CAD --------------------------
-        if args.injector_cad != "none":
-            try:
-                from raosim.injector_cad import (
-                    export_pintle_step, cadquery_available)
-                if not cadquery_available():
-                    _msg = ("    pintle STEP skipped: CadQuery not installed "
-                            "(pip install cadquery)")
-                    print(yellow(_msg) if args.injector_cad == "auto"
-                          else red(_msg + "  — required by --injector-cad step"))
-                else:
-                    cad = export_pintle_step(
-                        inj, args.out / "pintle.step",
-                        movable_sleeve=args.pintle_sleeve,
-                        stl_dir=args.out / "pintle_stl")
-                    summary["injector_cad"] = cad
-                    artifacts.append("pintle.step")
-                    print(green(f"    wrote pintle.step  "
-                                f"({len(cad['named_bodies'])} named bodies) "
-                                f"+ pintle_stl/"))
-            except Exception as exc:
-                print(yellow(f"    pintle STEP skipped: {exc}"))
+    # ---- injector/chamber mechanical interface screen -----------------
+    try:
+        from raosim.interface import screen_injector_chamber_interface
+
+        interface_ledger = screen_injector_chamber_interface(
+            chamber_pressure=args.pc,
+            chamber_radius=chamber["Rc"],
+            wall_thickness=args.wall_thickness,
+            face_outer_diameter=args.injector_face_od,
+            face_thickness=args.injector_face_thickness,
+            flange_outer_diameter=args.flange_od,
+            flange_length=args.flange_length,
+            bolt_count=args.bolt_count,
+            bolt_circle_diameter=args.bolt_circle,
+            bolt_hole_diameter=args.bolt_hole,
+            bolt_diameter=args.bolt_diameter,
+            bolt_allowable_stress=args.bolt_allowable_stress,
+            material_yield_strength=(mat.yield_strength if mat else None),
+            material_elastic_modulus=(mat.elastic_modulus if mat else None),
+            material_poisson_ratio=(mat.poisson_ratio if mat else None),
+            joint_separation_factor=args.joint_separation_factor,
+        )
+        summary["injector_interface"] = interface_ledger.to_dict()
+        if args.injector == "pintle" or any(
+            v is not None for v in (
+                args.injector_face_od, args.injector_face_thickness,
+                args.flange_od, args.bolt_count, args.bolt_circle,
+                args.bolt_hole, args.bolt_diameter,
+            )
+        ):
+            failed = [g for g in interface_ledger.gates if g.status == "fail"]
+            warnish = [g for g in interface_ledger.gates if g.status == "info"]
+            badge = red("FAIL") if failed else (
+                yellow("screen") if warnish else green("pass")
+            )
+            print("\n" + cyan("▸ " + bold("Injector interface"))
+                  + dim("  (pressure load + faceplate + bolt pattern)"))
+            print(
+                f"    pressure separating load: "
+                f"{interface_ledger.separating_force/1000:.1f} kN   "
+                f"status: {badge}"
+            )
+            for gate in failed[:3]:
+                print(red(f"    {gate.name}: {gate.detail}"))
+            for gate in warnish[:2]:
+                print(yellow(f"    {gate.name}: {gate.detail}"))
+    except Exception as exc:
+        print(yellow(f"    injector interface screen skipped: {exc}"))
 
     # ---- 3.8 solid wall CAD, using the final sized thickness ----------
     # Unlike the regen visualization below, this is a closed material body:
@@ -1867,6 +2042,8 @@ def main() -> int:
     wall_path = export_stl(
         x, y, args.out / "wall.stl", n_angular=96,
         wall_thickness=wall_thickness_geometry,
+        flange_od=args.flange_od,
+        flange_length=args.flange_length,
     )
     wall_mesh = inspect_stl(wall_path)
     print(green(
@@ -1878,6 +2055,7 @@ def main() -> int:
     summary["wall_geometry"] = {
         "uniform_seed_thickness_m": float(args.wall_thickness),
         "uniform_seed_source": args._wall_thickness_source,
+        "selected_sizing_mode": args._wall_sizing_mode,
         "thickness_mode": wall_thickness_mode,
         "t_hot_range_m": [
             float(np.min(np.asarray(wall_thickness_geometry))),
@@ -1890,6 +2068,8 @@ def main() -> int:
         "stl_nonmanifold_edge_count": wall_mesh["nonmanifold_edge_count"],
         "stl_volume_m3": wall_mesh["volume_m3"],
         "wall_scope": "liner_base_only_no_channel_ribs_or_jacket",
+        "flange_od_m": args.flange_od,
+        "flange_length_m": args.flange_length,
     }
 
     # A station-wise --size-wall result also defines a separately sized
@@ -1920,12 +2100,16 @@ def main() -> int:
             step_path = export_step(
                 x, y, args.out / "wall.step", n_angular=96,
                 wall_thickness=wall_thickness_geometry,
+                flange_od=args.flange_od,
+                flange_length=args.flange_length,
                 require_brep=args.require_brep,
                 metadata={
                     "uniform_seed_thickness_m": args.wall_thickness,
                     "thickness_mode": wall_thickness_mode,
                     "t_hot_range_m":
                         summary["wall_geometry"]["t_hot_range_m"],
+                    "flange_od_m": args.flange_od,
+                    "flange_length_m": args.flange_length,
                     "material": mat.name if mat else None,
                     "hardware_qualified": False,
                 },

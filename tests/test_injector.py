@@ -5,6 +5,8 @@ import math
 import pytest
 
 from raosim.injector import (
+    FeedLineSpec,
+    FeedSystemSpec,
     InjectorManufacturingSpec,
     InjectorSpec,
     InjectorUnsupportedState,
@@ -430,6 +432,30 @@ class TestIntegratedCoupling:
         assert r.feed["fuel"].temperature == pytest.approx(410.0)
         assert r.feed["fuel"].pressure == pytest.approx(8.4e6)
 
+    def test_regen_pressure_drop_charged_to_feed_ledger(self):
+        r = evaluate_pintle_injector(
+            _spec(),
+            mdot_fuel=MDOT_F,
+            mdot_oxidizer=MDOT_O,
+            Pc=PC,
+            mixture_ratio=MR,
+            chamber_radius=0.0339,
+            chamber_length=0.10,
+            gamma=1.24,
+            Tc=3571.0,
+            R_gas=379.6,
+            cooling=self._Cooling(MDOT_F),
+            cooling_result={
+                "coolant_outlet_temperature": 410.0,
+                "coolant_outlet_pressure": 8.4e6,
+                "coolant_pressure_drop": 2.0e6,
+            },
+        )
+        ln = r.feed_system.lines["fuel"]
+        assert ln.regen_loss == pytest.approx(2.0e6, rel=1e-12)
+        assert ln.required_outlet_pressure == pytest.approx(
+            ln.chamber_pressure + ln.injector_dp + ln.regen_loss, rel=1e-12)
+
 
 # ---- spray atomization / vaporization screen ----------------------------
 class TestAtomization:
@@ -647,3 +673,138 @@ def test_to_dict_round_trips_json():
     assert d["slots"]["role"] == "fuel"
     assert len(d["gates"]) > 10
     assert d["atomization"] is not None
+    # feed_system is attached by evaluate_pintle_injector (regen-aware path),
+    # not by bare size_pintle_injector, so it is legitimately None here.
+    assert d["feed_system"] is None
+
+
+# ---- feed-system pressure ledger ---------------------------------------
+def _eval(spec=None, **kw):
+    return evaluate_pintle_injector(
+        spec or _spec(),
+        mdot_fuel=kw.pop("mdot_fuel", MDOT_F),
+        mdot_oxidizer=kw.pop("mdot_oxidizer", MDOT_O),
+        Pc=PC,
+        mixture_ratio=kw.pop("mixture_ratio", MR),
+        chamber_radius=kw.pop("chamber_radius", 0.0339),
+        chamber_length=kw.pop("chamber_length", 0.10),
+        gamma=1.24, Tc=3571.0, R_gas=379.6,
+        fuel_name="RP-1", oxidizer_name="LOX", **kw,
+    )
+
+
+def _gate_status(r, name):
+    for g in r.gates:
+        if g.name == name:
+            return g.status
+    return None
+
+
+class TestFeedSystemLedger:
+    def test_attached_and_serializes(self):
+        import json
+        r = _eval()
+        assert r.feed_system is not None
+        d = r.to_dict()["feed_system"]
+        assert set(d["lines"]) == {"fuel", "oxidizer"}
+        json.dumps(d)
+
+    def test_minimal_budget_is_pc_plus_injector_only(self):
+        # No pump data and no allowances -> required is just Pc + metering drop.
+        r = _eval()
+        ln = r.feed_system.lines["fuel"]
+        assert ln.injector_dp == pytest.approx(0.2 * PC, rel=1e-6)
+        assert ln.manifold_loss == 0.0
+        assert ln.line_valve_loss == 0.0
+        assert ln.control_margin == 0.0
+        assert ln.regen_loss == 0.0
+        assert ln.required_outlet_pressure == pytest.approx(
+            PC + ln.injector_dp, rel=1e-6)
+
+    def test_manifold_screen_reported_but_not_charged(self):
+        # The maldistribution network produces a nonzero estimate that must NOT
+        # be charged to the pump budget automatically.
+        r = _eval()
+        ln = r.feed_system.lines["fuel"]
+        assert ln.manifold_screen_loss > 0.0
+        assert ln.manifold_loss == 0.0
+        assert ln.required_outlet_pressure == pytest.approx(
+            ln.chamber_pressure + ln.injector_dp + ln.manifold_loss
+            + ln.regen_loss + ln.line_valve_loss + ln.control_margin, rel=1e-9)
+
+    def test_budget_reconciles_with_allowances(self):
+        fs = FeedSystemSpec(
+            fuel=FeedLineSpec(line_loss_fraction=0.05,
+                              control_margin_fraction=0.05,
+                              manifold_loss_fraction=0.03),
+            oxidizer=FeedLineSpec(line_loss_fraction=0.05,
+                                  control_margin_fraction=0.05,
+                                  manifold_loss_fraction=0.03))
+        r = _eval(_spec(feed_system=fs))
+        for ln in r.feed_system.lines.values():
+            assert ln.line_valve_loss == pytest.approx(0.05 * PC, rel=1e-6)
+            assert ln.manifold_loss == pytest.approx(0.03 * PC, rel=1e-6)
+            assert ln.required_outlet_pressure == pytest.approx(
+                ln.chamber_pressure + ln.injector_dp + ln.manifold_loss
+                + ln.regen_loss + ln.line_valve_loss + ln.control_margin,
+                rel=1e-9)
+
+    def test_no_pump_data_is_info(self):
+        r = _eval()
+        assert _gate_status(r, "feed_pump_pressure_fuel") == "info"
+        assert _gate_status(r, "feed_pump_pressure_oxidizer") == "info"
+        assert r.feed_system.lines["fuel"].status == "info"
+
+    def test_pump_pressure_gate_pass_and_fail(self):
+        ok = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5))))
+        assert _gate_status(ok, "feed_pump_pressure_fuel") == "pass"
+
+        bad = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=PC),   # below Pc + dp
+            oxidizer=FeedLineSpec(supply_pressure=200e5))))
+        assert _gate_status(bad, "feed_pump_pressure_fuel") == "fail"
+        assert bad.feasible is False
+
+    def test_pump_head_and_flow(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=4e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=4e5))))
+        ln = r.feed_system.lines["fuel"]
+        rho = r.feed["fuel"].density
+        assert ln.volumetric_flow == pytest.approx(
+            r.streams["fuel"].mdot / rho, rel=1e-9)
+        rise = ln.required_outlet_pressure - 4e5
+        assert ln.required_pressure_rise == pytest.approx(rise, rel=1e-9)
+        assert ln.required_pump_head == pytest.approx(
+            rise / (rho * 9.80665), rel=1e-9)
+
+    def test_pump_head_is_zero_when_tank_pressure_exceeds_requirement(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=200e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=200e5))))
+        ln = r.feed_system.lines["fuel"]
+        assert ln.required_pressure_rise == pytest.approx(0.0, abs=1e-12)
+        assert ln.required_pump_head == pytest.approx(0.0, abs=1e-12)
+        assert ln.ideal_pump_power == pytest.approx(0.0, abs=1e-12)
+
+    def test_capacity_gate_fail(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, flow_capacity=MDOT_F * 0.5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5))))
+        assert _gate_status(r, "feed_pump_capacity_fuel") == "fail"
+        assert r.feed_system.lines["fuel"].capacity_margin < 0.0
+
+    def test_npsh_gate_fail_and_pass(self):
+        bad = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=3e5,
+                              npsh_required=50e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5))))
+        assert _gate_status(bad, "feed_npsh_fuel") == "fail"
+
+        ok = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=10e5,
+                              npsh_required=1e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5))))
+        assert _gate_status(ok, "feed_npsh_fuel") == "pass"

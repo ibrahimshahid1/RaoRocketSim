@@ -187,3 +187,147 @@ def export_pintle_step(inj, path, *, movable_sleeve=False,
                 continue
         result["stl_bodies"] = written
     return result
+
+
+# ---------------------------------------------------------------------------
+# Named reference PARTS (the four bodies the CLI deliverable names)
+# ---------------------------------------------------------------------------
+def build_pintle_parts(inj) -> dict:
+    """Return ``{part_name: cadquery solid}`` for the four reference parts:
+    ``pintle_rod`` (hollow post), ``pintle_tip`` (rounded nose),
+    ``annular_sleeve`` (outer annulus wall) and ``injector_face`` (faceplate).
+    Geometry matches :func:`build_pintle_assembly` and the 2-D schematic.
+    """
+    cq = _cq()
+    Dp = inj.pintle_diameter
+    Rp = 0.5 * Dp
+    gap = max(inj.annulus.detail.get("gap", 0.1 * Rp), 1e-4)
+    Ro = 0.5 * inj.annulus.detail.get("outer_diameter", Dp + 2 * gap)
+    Rc = inj.chamber_radius
+    t_sleeve = max(0.4 * gap, 0.5e-3)
+    t_wall = max(0.25 * Rp, 1e-3)
+    body_len = 3.0 * Dp
+    body_straight = body_len - Rp
+    t_face = max(0.4 * Dp, 2 * gap)
+    R_face = max(Rc, Ro + 2e-3)
+
+    rod = (cq.Workplane("XY").circle(Rp).circle(max(Rp - t_wall, 1e-4))
+           .extrude(body_straight))
+    sphere = cq.Workplane("XY").workplane(offset=body_straight).sphere(Rp)
+    upper = (cq.Workplane("XY").workplane(offset=body_straight)
+             .box(2.2 * Rp, 2.2 * Rp, 2.2 * Rp, centered=(True, True, False)))
+    tip = sphere.intersect(upper)
+    sleeve = (cq.Workplane("XY").workplane(offset=-t_face)
+              .circle(Ro + t_sleeve).circle(Ro)
+              .extrude(t_face + 0.6 * body_straight))
+    face = (cq.Workplane("XY").workplane(offset=-t_face)
+            .circle(R_face).circle(Ro).extrude(t_face))
+    return {"pintle_rod": rod, "pintle_tip": tip,
+            "annular_sleeve": sleeve, "injector_face": face}
+
+
+def _pintle_profile_loops(inj) -> dict:
+    """Closed meridional half-section loops (mm) for a 2-D DXF profile."""
+    mm = 1.0e3
+    Dp = float(inj.pintle_diameter); Rp = 0.5 * Dp
+    gap = float(inj.annulus.detail.get("gap", 0.1 * Rp))
+    Ro = 0.5 * float(inj.annulus.detail.get("outer_diameter", Dp + 2 * gap))
+    t_sleeve = max(0.4 * gap, 0.5e-3)
+    t_face = max(0.4 * Dp, 2 * gap)
+    Rc = float(inj.chamber_radius)
+    body_len = 3.0 * Dp
+    body_straight = body_len - Rp
+    rod = [(0.0, 0.0), (0.0, Rp), (body_straight, Rp)]
+    for i in range(1, 17):                       # quarter-arc to the apex
+        a = i / 16.0 * (math.pi / 2.0)
+        rod.append((body_straight + Rp * math.sin(a), Rp * math.cos(a)))
+    rod.append((0.0, 0.0))
+    xs = 0.55 * body_len
+    sleeve = [(0.0, Ro), (xs, Ro), (xs, Ro + t_sleeve), (0.0, Ro + t_sleeve),
+              (0.0, Ro)]
+    R_face = max(Rc, Ro + 2e-3)
+    face = [(-t_face, Ro + t_sleeve), (0.0, Ro + t_sleeve), (0.0, R_face),
+            (-t_face, R_face), (-t_face, Ro + t_sleeve)]
+    loops = {"pintle_rod_tip": rod, "annular_sleeve": sleeve,
+             "injector_face": face}
+    return {k: [(x * mm, y * mm) for x, y in v] for k, v in loops.items()}
+
+
+def write_pintle_profile_dxf(inj, path):
+    """Write the 2-D meridional profile as DXF (ezdxf if present, else a
+    hand-written R12 DXF so DXF works without any optional dependency)."""
+    from pathlib import Path
+    path = Path(path)
+    loops = _pintle_profile_loops(inj)
+    try:
+        import ezdxf
+        doc = ezdxf.new("R2010")
+        msp = doc.modelspace()
+        for name, pts in loops.items():
+            msp.add_lwpolyline(pts, close=True, dxfattribs={"layer": name})
+        doc.saveas(str(path))
+        return path
+    except Exception:
+        pass
+    out = ["0", "SECTION", "2", "ENTITIES"]
+    for name, pts in loops.items():
+        out += ["0", "POLYLINE", "8", name, "66", "1", "70", "1"]
+        for x, y in pts:
+            out += ["0", "VERTEX", "8", name,
+                    "10", f"{x:.4f}", "20", f"{y:.4f}", "30", "0.0"]
+        out += ["0", "SEQEND"]
+    out += ["0", "ENDSEC", "0", "EOF"]
+    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return path
+
+
+def export_pintle_cad(inj, out_dir, *, mode="reference", fmt="step",
+                      movable_sleeve=False) -> dict:
+    """Write CAD-neutral reference geometry for the sized pintle.
+
+    ``mode``  : ``reference`` (single assembly file) | ``parts`` (also the four
+                named part files in ``pintle_parts/``).
+    ``fmt``   : ``step`` (portable B-rep, default) | ``stl`` (mesh preview) |
+                ``dxf`` (2-D meridional profile).
+    STEP/STL require CadQuery; DXF does not.  Returns ``{files, notes}``.
+    """
+    from pathlib import Path
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    files: dict[str, str] = {}
+    notes: list[str] = []
+
+    if fmt == "dxf":
+        files["reference_dxf"] = str(write_pintle_profile_dxf(
+            inj, out_dir / "pintle_reference.dxf"))
+        notes.append("DXF is the 2-D meridional profile (revolve to recover the "
+                     "solid); use --injector-cad-format step for 3-D parts.")
+        return {"files": files, "notes": notes}
+
+    cq = _cq()                                   # STEP/STL need CadQuery
+    ext = "step" if fmt == "step" else "stl"
+    etype = "STEP" if fmt == "step" else "STL"
+
+    ref = out_dir / f"pintle_reference.{ext}"
+    if fmt == "step":
+        export_pintle_step(inj, ref, movable_sleeve=movable_sleeve)
+    else:
+        asm = build_pintle_assembly(inj, movable_sleeve=movable_sleeve)
+        try:
+            shape = asm.toCompound()
+        except Exception:
+            shape = asm
+        cq.exporters.export(shape, str(ref), exportType="STL")
+    files[f"reference_{ext}"] = str(ref)
+
+    if mode == "parts":
+        pdir = out_dir / "pintle_parts"
+        pdir.mkdir(parents=True, exist_ok=True)
+        for name, solid in build_pintle_parts(inj).items():
+            p = pdir / f"{name}.{ext}"
+            try:
+                cq.exporters.export(solid, str(p), exportType=etype)
+                files[f"part_{name}"] = str(p)
+            except Exception as exc:
+                notes.append(f"part {name} export failed: {type(exc).__name__}")
+    return {"files": files, "notes": notes}

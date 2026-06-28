@@ -41,6 +41,8 @@ from raosim.gas_dynamics import (
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.engine import compute_engine_performance, g0
 from raosim.injector import (
+    FeedLineSpec,
+    FeedSystemSpec,
     InjectorManufacturingSpec,
     InjectorSpec,
     PintleGeometrySpec,
@@ -216,8 +218,16 @@ Examples:
                    help='Optional bolt circle diameter [mm]')
     p.add_argument('--bolt-hole', type=float, default=None,
                    help='Optional bolt hole diameter [mm]')
+    p.add_argument('--bolt-diameter', type=float, default=None,
+                   help='Optional actual bolt/tensile diameter [mm]')
+    p.add_argument('--bolt-allowable-stress', type=float, default=None,
+                   help='Optional bolt allowable tensile stress [MPa]')
+    p.add_argument('--joint-separation-factor', type=float, default=1.5,
+                   help='Clamp-load factor on Pc*pi*Rc^2 separating load')
     p.add_argument('--injector-face-od', type=float, default=None,
                    help='Optional injector face outer diameter [mm]')
+    p.add_argument('--injector-face-thickness', type=float, default=None,
+                   help='Optional injector faceplate thickness [mm]')
     p.add_argument('--injector', choices=['none', 'pintle'], default='none',
                    help='Integrated injector model for the v2 workflow')
     p.add_argument('--fuel-injector-dp-fraction', type=float, default=0.2,
@@ -248,6 +258,48 @@ Examples:
                    help='Minimum injector slot/gap/web feature [mm]')
     p.add_argument('--allow-infeasible-injector', action='store_true',
                    help='Return preliminary output despite failed injector gates')
+    # --- feed-system / pump closure (feed-pressure ledger) --------------
+    p.add_argument('--feed-architecture', choices=['pump_fed', 'pressure_fed'],
+                   default='pump_fed',
+                   help='Feed-system architecture label for the pump/tank closure')
+    p.add_argument('--fuel-supply-pressure', type=float, default=None,
+                   help='Available fuel pump/tank outlet pressure [bar]')
+    p.add_argument('--oxidizer-supply-pressure', type=float, default=None,
+                   help='Available oxidizer pump/tank outlet pressure [bar]')
+    p.add_argument('--fuel-flow-capacity', type=float, default=None,
+                   help='Available fuel pump mass-flow capacity [kg/s]')
+    p.add_argument('--oxidizer-flow-capacity', type=float, default=None,
+                   help='Available oxidizer pump mass-flow capacity [kg/s]')
+    p.add_argument('--fuel-line-loss-fraction', type=float, default=0.0,
+                   help='Fuel line+valve loss as a fraction of Pc (default 0)')
+    p.add_argument('--oxidizer-line-loss-fraction', type=float, default=0.0,
+                   help='Oxidizer line+valve loss as a fraction of Pc (default 0)')
+    p.add_argument('--fuel-manifold-loss-fraction', type=float, default=0.0,
+                   help='Fuel manifold-loss ALLOWANCE charged to the budget '
+                        '(fraction of Pc; screen value reported separately)')
+    p.add_argument('--oxidizer-manifold-loss-fraction', type=float, default=0.0,
+                   help='Oxidizer manifold-loss allowance (fraction of Pc)')
+    p.add_argument('--feed-control-margin-fraction', type=float, default=0.0,
+                   help='Control/transient margin held above the steady '
+                        'requirement on both lines (fraction of Pc)')
+    p.add_argument('--fuel-tank-pressure', type=float, default=None,
+                   help='Fuel tank/inlet pressure for pump head + NPSH [bar]')
+    p.add_argument('--oxidizer-tank-pressure', type=float, default=None,
+                   help='Oxidizer tank/inlet pressure for pump head + NPSH [bar]')
+    p.add_argument('--fuel-npsh-required', type=float, default=None,
+                   help='Fuel pump required NPSH [bar]')
+    p.add_argument('--oxidizer-npsh-required', type=float, default=None,
+                   help='Oxidizer pump required NPSH [bar]')
+    # --- injector reference-geometry / CAD output ----------------------
+    p.add_argument('--injector-cad', choices=['none', 'reference', 'parts'],
+                   default='none',
+                   help='Pintle CAD output: none (schematic+JSON+CSV only, '
+                        'always written), reference (single file), or parts '
+                        '(reference + named part files)')
+    p.add_argument('--injector-cad-format', choices=['step', 'stl', 'dxf'],
+                   default='step',
+                   help='Pintle CAD format: step (portable B-rep, default), '
+                        'stl (mesh preview), or dxf (2-D meridional profile)')
     p.add_argument('--interface-length', type=float, default=None,
                    help='Optional chamber/nozzle interface length [mm]')
     p.add_argument('--throat-insert', action='store_true',
@@ -315,7 +367,11 @@ def _should_use_v2(args) -> bool:
         args.bolt_count is not None,
         args.bolt_circle is not None,
         args.bolt_hole is not None,
+        args.bolt_diameter is not None,
+        args.bolt_allowable_stress is not None,
+        args.joint_separation_factor != 1.5,
         args.injector_face_od is not None,
+        args.injector_face_thickness is not None,
         args.injector != 'none',
         args.interface_length is not None,
         args.throat_insert,
@@ -390,7 +446,14 @@ def run_batch_v2(args):
             bolt_count=args.bolt_count,
             bolt_circle_diameter=_mm_to_m(args.bolt_circle),
             bolt_hole_diameter=_mm_to_m(args.bolt_hole),
+            bolt_diameter=_mm_to_m(args.bolt_diameter),
+            bolt_allowable_stress=(
+                args.bolt_allowable_stress * 1e6
+                if args.bolt_allowable_stress is not None else None
+            ),
+            joint_separation_factor=args.joint_separation_factor,
             injector_face_od=_mm_to_m(args.injector_face_od),
+            injector_face_thickness=_mm_to_m(args.injector_face_thickness),
             chamber_interface_length=_mm_to_m(args.interface_length),
         ),
         manufacturing=ManufacturingSpec(
@@ -436,10 +499,46 @@ def run_batch_v2(args):
                 deflector_angle=args.pintle_deflector_angle,
                 radial_stream=args.pintle_radial_stream,
                 face_od=_mm_to_m(args.injector_face_od),
+                face_thickness=_mm_to_m(args.injector_face_thickness),
             ),
             manufacturing=InjectorManufacturingSpec(
                 min_feature=_mm_to_m(args.injector_min_feature),
             ),
+            feed_system=FeedSystemSpec(
+                architecture=args.feed_architecture,
+                fuel=FeedLineSpec(
+                    supply_pressure=(args.fuel_supply_pressure * 1e5
+                                     if args.fuel_supply_pressure is not None
+                                     else None),
+                    flow_capacity=args.fuel_flow_capacity,
+                    line_loss_fraction=args.fuel_line_loss_fraction,
+                    manifold_loss_fraction=args.fuel_manifold_loss_fraction,
+                    control_margin_fraction=args.feed_control_margin_fraction,
+                    tank_pressure=(args.fuel_tank_pressure * 1e5
+                                   if args.fuel_tank_pressure is not None
+                                   else None),
+                    npsh_required=(args.fuel_npsh_required * 1e5
+                                   if args.fuel_npsh_required is not None
+                                   else None),
+                ),
+                oxidizer=FeedLineSpec(
+                    supply_pressure=(args.oxidizer_supply_pressure * 1e5
+                                     if args.oxidizer_supply_pressure is not None
+                                     else None),
+                    flow_capacity=args.oxidizer_flow_capacity,
+                    line_loss_fraction=args.oxidizer_line_loss_fraction,
+                    manifold_loss_fraction=args.oxidizer_manifold_loss_fraction,
+                    control_margin_fraction=args.feed_control_margin_fraction,
+                    tank_pressure=(args.oxidizer_tank_pressure * 1e5
+                                   if args.oxidizer_tank_pressure is not None
+                                   else None),
+                    npsh_required=(args.oxidizer_npsh_required * 1e5
+                                   if args.oxidizer_npsh_required is not None
+                                   else None),
+                ),
+            ),
+            cad=args.injector_cad,
+            cad_format=args.injector_cad_format,
         ),
         strict_gates=args.strict_gates,
     )

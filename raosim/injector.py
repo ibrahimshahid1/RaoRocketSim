@@ -64,6 +64,61 @@ class PropellantFeedSpec:
 
 
 @dataclass
+class FeedLineSpec:
+    """Per-propellant feed-system inputs for the pump/tank pressure closure.
+
+    The pintle sets only the injector metering drop; the propellant still has to
+    be delivered against chamber pressure plus every downstream loss.  This
+    captures the rest of the feed budget so the tool can answer whether the
+    chosen pump/tank can actually supply the geometry it sized (Huzel & Huang,
+    *Design of Liquid Propellant Rocket Engines*, NASA SP-125, Ch. 1-2; Sutton &
+    Biblarz, *Rocket Propulsion Elements*, feed-system chapter; inducer/NPSH per
+    NASA SP-8052).
+
+    All pressures are absolute Pa.  Fields left ``None`` are unknown: the ledger
+    then reports the *requirement* as an info gate instead of judging a pump it
+    was never told about.
+    """
+
+    # Available pump-discharge (pump-fed) or tank-ullage (pressure-fed) pressure
+    # at the propellant outlet, upstream of the losses below.  Pa.
+    supply_pressure: float | None = None
+    # Delivered mass-flow capacity of the pump/feed line.  kg/s.
+    flow_capacity: float | None = None
+    # Lumped line + valve + filter loss between supply and injector manifold,
+    # as an absolute pressure and/or a fraction of Pc (the two are summed).
+    line_loss: float = 0.0                    # Pa
+    line_loss_fraction: float = 0.0           # x Pc
+    # Injector manifold (header + port distribution) loss ALLOWANCE charged to
+    # the pump budget, absolute and/or fraction of Pc (summed).  Defaults to 0:
+    # the maldistribution-network estimate is reported separately as
+    # ``manifold_screen_loss`` (informational, requires 3-D validation) and is
+    # NOT charged automatically, so an unvalidated screen value cannot silently
+    # dominate the pump requirement.  Set this from that screen once trusted.
+    manifold_loss: float = 0.0                # Pa
+    manifold_loss_fraction: float = 0.0       # x Pc
+    # Control / transient / mixture-ratio-trim margin held above the steady
+    # requirement (absolute and/or fraction of Pc, summed).
+    control_margin: float = 0.0               # Pa
+    control_margin_fraction: float = 0.0      # x Pc
+    # Suction side, for the NPSH screen: tank/inlet stagnation pressure and the
+    # pump's required net positive suction pressure (both Pa).
+    tank_pressure: float | None = None
+    npsh_required: float | None = None
+    # Assumed pump efficiency for the ideal shaft-power estimate (0, 1].
+    pump_efficiency: float = 0.7
+
+
+@dataclass
+class FeedSystemSpec:
+    """Both propellant feed lines plus the feed-architecture label."""
+
+    architecture: str = "pump_fed"            # "pump_fed" | "pressure_fed"
+    fuel: FeedLineSpec = field(default_factory=lambda: FeedLineSpec())
+    oxidizer: FeedLineSpec = field(default_factory=lambda: FeedLineSpec())
+
+
+@dataclass
 class PintleGeometrySpec:
     """Pintle geometric anchors + manufacturing-driven slot division."""
 
@@ -128,6 +183,12 @@ class InjectorSpec:
     manufacturing: InjectorManufacturingSpec = field(
         default_factory=InjectorManufacturingSpec
     )
+    # Pump/tank feed-system inputs for the feed-pressure closure (§ feed ledger).
+    feed_system: FeedSystemSpec = field(default_factory=FeedSystemSpec)
+    # Injector CAD/reference-geometry output: "none" | "reference" | "parts";
+    # format "step" (portable B-rep) | "stl" (mesh) | "dxf" (2-D profile).
+    cad: str = "none"
+    cad_format: str = "step"
 
 
 # ---------------------------------------------------------------------------
@@ -368,6 +429,78 @@ class InjectorGate:
 
 
 @dataclass
+class FeedLineLedger:
+    """Resolved feed-pressure budget and pump duty for one propellant."""
+
+    role: str
+    chamber_pressure: float                   # Pa
+    injector_dp: float                        # Pa  (metering drop across orifice)
+    manifold_loss: float                      # Pa  (charged header/port allowance)
+    manifold_screen_loss: float               # Pa  (maldistribution-network estimate, info only)
+    regen_loss: float                         # Pa  (jacket dP if stream cools first)
+    line_valve_loss: float                    # Pa
+    control_margin: float                     # Pa
+    required_outlet_pressure: float           # Pa  (sum of the above)
+    available_outlet_pressure: float | None   # Pa
+    pressure_margin: float | None             # Pa  (available - required)
+    density: float                            # kg/m^3
+    volumetric_flow: float                    # m^3/s  (mdot / rho)
+    required_pressure_rise: float | None      # Pa  max(required_outlet - tank, 0)
+    required_pump_head: float | None          # m
+    ideal_pump_power: float | None            # W   (Q * rise / eta_pump)
+    flow_capacity: float | None               # kg/s
+    capacity_margin: float | None             # kg/s
+    npsh_available: float | None              # Pa
+    npsh_required: float | None               # Pa
+    npsh_margin: float | None                 # Pa
+    status: str                               # pass | warn | fail | info
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "chamber_pressure_pa": self.chamber_pressure,
+            "injector_dp_pa": self.injector_dp,
+            "manifold_loss_pa": self.manifold_loss,
+            "manifold_screen_loss_pa": self.manifold_screen_loss,
+            "regen_loss_pa": self.regen_loss,
+            "line_valve_loss_pa": self.line_valve_loss,
+            "control_margin_pa": self.control_margin,
+            "required_outlet_pressure_pa": self.required_outlet_pressure,
+            "available_outlet_pressure_pa": self.available_outlet_pressure,
+            "pressure_margin_pa": self.pressure_margin,
+            "density_kg_m3": self.density,
+            "volumetric_flow_m3_s": self.volumetric_flow,
+            "required_pressure_rise_pa": self.required_pressure_rise,
+            "required_pump_head_m": self.required_pump_head,
+            "ideal_pump_power_w": self.ideal_pump_power,
+            "flow_capacity_kg_s": self.flow_capacity,
+            "capacity_margin_kg_s": self.capacity_margin,
+            "npsh_available_pa": self.npsh_available,
+            "npsh_required_pa": self.npsh_required,
+            "npsh_margin_pa": self.npsh_margin,
+            "status": self.status,
+        }
+
+
+@dataclass
+class FeedSystemLedger:
+    """Whole-engine feed-pressure closure across both propellants."""
+
+    architecture: str
+    lines: dict[str, FeedLineLedger]
+    governing_required_pressure: float        # Pa  (max across streams)
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "architecture": self.architecture,
+            "governing_required_pressure_pa": self.governing_required_pressure,
+            "lines": {k: v.to_dict() for k, v in self.lines.items()},
+            "notes": self.notes,
+        }
+
+
+@dataclass
 class InjectorDesignResult:
     feasible: bool
     sizing: str
@@ -391,6 +524,7 @@ class InjectorDesignResult:
     manifold: ManifoldDistribution | None = None
     thermal: FaceTipThermal | None = None
     stability: StabilityScreen | None = None
+    feed_system: FeedSystemLedger | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -439,6 +573,9 @@ class InjectorDesignResult:
             ),
             "stability": (
                 self.stability.to_dict() if self.stability else None
+            ),
+            "feed_system": (
+                self.feed_system.to_dict() if self.feed_system else None
             ),
             "feed": {k: _feed(v) for k, v in self.feed.items()},
             "gates": [
@@ -1536,6 +1673,161 @@ def size_pintle_injector(
     return result
 
 
+_GRAVITY = 9.80665   # m/s^2, standard gravity for pump-head conversion
+
+
+def feed_system_ledger(
+    result: InjectorDesignResult,
+    spec: InjectorSpec,
+    *,
+    Pc: float,
+    regen_loss_fuel: float = 0.0,
+    regen_loss_oxidizer: float = 0.0,
+) -> FeedSystemLedger:
+    """Per-propellant feed-pressure budget -> required pump/tank outlet pressure.
+
+    Implements the standard liquid-rocket feed-pressure balance (Huzel & Huang,
+    NASA SP-125, Ch. 1-2; Sutton & Biblarz, *Rocket Propulsion Elements*):
+
+        P_pump_outlet >= Pc + dP_injector + dP_manifold + dP_regen(if upstream)
+                          + dP_lines/valves + control_margin
+
+    plus a pump-capacity check (mdot <= delivered capacity) and an NPSH screen
+    (NPSH_available = P_tank - P_vapor >= NPSH_required; inducer sizing per NASA
+    SP-8052).  Each stream is evaluated independently; only the coolant stream
+    carries the regen-jacket loss.  The injector metering drop is taken from the
+    sized stream (``StreamResult.dp``) so the ledger reconciles exactly with the
+    upstream-pressure gate.  Pumps/tanks the user did not specify yield an
+    info-level requirement rather than a pass/fail verdict.
+    """
+    fs_spec = spec.feed_system
+    by_role = {
+        "fuel": (regen_loss_fuel, fs_spec.fuel),
+        "oxidizer": (regen_loss_oxidizer, fs_spec.oxidizer),
+    }
+    lines: dict[str, FeedLineLedger] = {}
+    governing = 0.0
+    for role, (regen_loss, line_spec) in by_role.items():
+        stream = result.streams[role]
+        feed = result.feed[role]
+        rho = feed.density
+        mdot = stream.mdot
+        dp_inj = float(stream.dp)
+
+        # Manifold (header + port) distribution loss.  The maldistribution
+        # network's value is retained only as an INFORMATIONAL screen; the
+        # amount actually charged to the pump budget is the user allowance
+        # (default 0), so an unvalidated screen estimate cannot silently
+        # dominate the required pump pressure.
+        manifold_screen = 0.0
+        if result.manifold is not None and role in result.manifold.streams:
+            ml = result.manifold.streams[role].manifold_pressure_drop
+            manifold_screen = float(ml) if ml == ml else 0.0
+        manifold_loss = (float(line_spec.manifold_loss)
+                         + float(line_spec.manifold_loss_fraction) * Pc)
+
+        line_loss = (float(line_spec.line_loss)
+                     + float(line_spec.line_loss_fraction) * Pc)
+        margin = (float(line_spec.control_margin)
+                  + float(line_spec.control_margin_fraction) * Pc)
+        required = (Pc + dp_inj + manifold_loss + float(regen_loss)
+                    + line_loss + margin)
+        governing = max(governing, required)
+
+        available = line_spec.supply_pressure
+        pressure_margin = (available - required) if available is not None else None
+
+        Q = mdot / rho if rho > 0 else float("nan")
+        rise = (max(0.0, required - line_spec.tank_pressure)
+                if line_spec.tank_pressure is not None else None)
+        head = (rise / (rho * _GRAVITY)
+                if (rise is not None and rho > 0) else None)
+        power = (Q * rise / max(line_spec.pump_efficiency, 1e-6)
+                 if rise is not None else None)
+
+        cap = line_spec.flow_capacity
+        cap_margin = (cap - mdot) if cap is not None else None
+
+        npsh_avail = None
+        if (line_spec.tank_pressure is not None
+                and feed.vapor_pressure == feed.vapor_pressure):
+            npsh_avail = line_spec.tank_pressure - feed.vapor_pressure
+        npsh_req = line_spec.npsh_required
+        npsh_margin = (npsh_avail - npsh_req
+                       if (npsh_avail is not None and npsh_req is not None)
+                       else None)
+
+        # info when no pump data supplied; otherwise pass unless any check fails
+        status = "info"
+        if available is not None:
+            status = "pass" if (pressure_margin is not None
+                                and pressure_margin >= 0.0) else "fail"
+        if cap_margin is not None and cap_margin < 0.0:
+            status = "fail"
+        if npsh_margin is not None and npsh_margin < 0.0:
+            status = "fail"
+
+        lines[role] = FeedLineLedger(
+            role=role, chamber_pressure=Pc, injector_dp=dp_inj,
+            manifold_loss=manifold_loss, manifold_screen_loss=manifold_screen,
+            regen_loss=float(regen_loss),
+            line_valve_loss=line_loss, control_margin=margin,
+            required_outlet_pressure=required,
+            available_outlet_pressure=available,
+            pressure_margin=pressure_margin, density=rho,
+            volumetric_flow=Q, required_pressure_rise=rise,
+            required_pump_head=head, ideal_pump_power=power,
+            flow_capacity=cap, capacity_margin=cap_margin,
+            npsh_available=npsh_avail, npsh_required=npsh_req,
+            npsh_margin=npsh_margin, status=status)
+
+    notes = [
+        "Feed-pressure balance per Huzel & Huang (NASA SP-125) and Sutton & "
+        "Biblarz; NPSH screen per NASA SP-8052. Manifold loss from the "
+        "two-header maldistribution solve; regen jacket loss applied to the "
+        "coolant stream only.",
+    ]
+    return FeedSystemLedger(
+        architecture=fs_spec.architecture, lines=lines,
+        governing_required_pressure=governing, notes=notes)
+
+
+def feed_system_gates(ledger: FeedSystemLedger) -> list[InjectorGate]:
+    """Pump/feed closure gates (info-level when no pump/tank data was given)."""
+    g: list[InjectorGate] = []
+    for role, ln in ledger.lines.items():
+        if ln.available_outlet_pressure is None:
+            g.append(InjectorGate(
+                f"feed_pump_pressure_{role}", "info",
+                f"{role} needs >= {ln.required_outlet_pressure/1e5:.1f} bar at the "
+                f"pump/tank outlet [Pc {ln.chamber_pressure/1e5:.1f} + inj "
+                f"{ln.injector_dp/1e5:.2f} + manifold {ln.manifold_loss/1e5:.2f} + "
+                f"regen {ln.regen_loss/1e5:.2f} + lines {ln.line_valve_loss/1e5:.2f} "
+                f"+ margin {ln.control_margin/1e5:.2f} bar]; no supply pressure given "
+                f"(manifold screen est. {ln.manifold_screen_loss/1e5:.2f} bar, not charged)"))
+        else:
+            ok = ln.pressure_margin is not None and ln.pressure_margin >= 0.0
+            g.append(InjectorGate(
+                f"feed_pump_pressure_{role}", "pass" if ok else "fail",
+                f"{role} supply {ln.available_outlet_pressure/1e5:.1f} bar "
+                f"{'>=' if ok else '<'} required "
+                f"{ln.required_outlet_pressure/1e5:.1f} bar "
+                f"(margin {ln.pressure_margin/1e5:+.2f} bar)"))
+        if ln.capacity_margin is not None:
+            ok = ln.capacity_margin >= 0.0
+            g.append(InjectorGate(
+                f"feed_pump_capacity_{role}", "pass" if ok else "fail",
+                f"{role} pump capacity margin {ln.capacity_margin:+.4g} kg/s "
+                f"({'ok' if ok else 'EXCEEDED'})"))
+        if ln.npsh_margin is not None:
+            g.append(InjectorGate(
+                f"feed_npsh_{role}",
+                "pass" if ln.npsh_margin >= 0.0 else "fail",
+                f"{role} NPSH available {ln.npsh_available/1e5:.2f} bar vs required "
+                f"{ln.npsh_required/1e5:.2f} bar (margin {ln.npsh_margin/1e5:+.2f} bar)"))
+    return g
+
+
 def evaluate_pintle_injector(
     spec: InjectorSpec,
     *,
@@ -1655,6 +1947,26 @@ def evaluate_pintle_injector(
     )
     result.gates.append(coupling_gate)
     result.notes.append(coupling_gate.detail)
+
+    # Feed-system pressure closure (pump/tank budget + capacity + NPSH).  The
+    # regen-jacket loss is charged to the fuel line only when fuel is the
+    # coolant and routed to the injector through the jacket; the pump must then
+    # overcome the jacket dP on top of the injector requirement.
+    regen_loss_fuel = 0.0
+    if fuel_is_coolant and cooling_result is not None:
+        _dp_pa = cooling_result.get("coolant_pressure_drop")
+        if _dp_pa is not None and _dp_pa == _dp_pa:   # not NaN
+            regen_loss_fuel = float(_dp_pa)
+        else:
+            _dp_bar = cooling_result.get("pressure_drop_bar")
+            if _dp_bar is not None and _dp_bar == _dp_bar:   # not NaN
+                regen_loss_fuel = float(_dp_bar) * 1.0e5
+    ledger = feed_system_ledger(
+        result, local, Pc=Pc, regen_loss_fuel=regen_loss_fuel)
+    result.feed_system = ledger
+    result.gates.extend(feed_system_gates(ledger))
+    result.notes.extend(ledger.notes)
+
     result.feasible = not any(g.status == "fail" for g in result.gates)
     return result
 
@@ -1963,4 +2275,3 @@ def injector_gates(
         "(NASA SP-8089: pintle spray distributions need cold-flow testing)"))
 
     return g
-

@@ -31,6 +31,7 @@ def test_seed_geometry_exports_only_after_geometry_gates_pass(tmp_path):
     proc = subprocess.run(
         [sys.executable, "scripts/run_nozzle.py",
          "--max-nfev", "0", "--regen", "--channels", "20",
+         "--wall-sizing", "scalar",
          "--material", "grcop-84",
          "--l-star", "0.9", "--contraction-ratio", "3.0",
          "--shoulder-radius-factor", "0.2",
@@ -53,6 +54,7 @@ def test_seed_geometry_exports_only_after_geometry_gates_pass(tmp_path):
     assert checks["offset_self_intersections"] is False
     assert summary["wall_geometry"]["stl_watertight"] is True
     assert summary["wall_geometry"]["stl_boundary_edge_count"] == 0
+    assert summary["wall_geometry"]["selected_sizing_mode"] == "scalar"
     for name in ("contour.csv", "profile.png", "wall.stl", "wall.step",
                  "regen.stl", "regen_3d.png", "summary.json"):
         assert (out / name).exists(), f"missing {name}\n{proc.stdout}"
@@ -73,6 +75,34 @@ def test_size_wall_requires_a_material(tmp_path):
     )
     assert proc.returncode == 2
     assert "--size-wall needs --material" in proc.stdout
+
+
+def test_wall_sizing_regen_implies_regen_sizing_and_requires_material(tmp_path):
+    out = tmp_path / "ws"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py", "--max-nfev", "0",
+         "--wall-sizing", "regen", "--n-control", "8", "--n-kernel", "12",
+         "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "MPLBACKEND": "Agg",
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=300,
+    )
+    assert proc.returncode == 2
+    assert "--size-wall needs --material" in proc.stdout
+
+
+def test_wall_sizing_scalar_rejects_size_wall_conflict(tmp_path):
+    out = tmp_path / "conflict"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py", "--wall-sizing", "scalar",
+         "--size-wall", "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=120,
+    )
+    assert proc.returncode == 2
+    assert "--wall-sizing scalar cannot be combined with --size-wall" in proc.stderr
 
 
 def test_list_materials_flag_prints_catalog_and_exits():
@@ -98,6 +128,6 @@ def test_tags_flag_lists_run_tags_and_exits():
     # The grouped flag overview is shown.
     for tag in (
         "--epsilon", "--l-star", "--contraction-ratio", "--regen",
-        "--helix-turns", "--thermal", "--backend",
+        "--wall-sizing", "--helix-turns", "--thermal", "--backend",
     ):
         assert tag in proc.stdout, tag

@@ -33,6 +33,7 @@ from raosim.gas_dynamics import (
     thrust_coefficient,
 )
 from raosim.injector import InjectorSpec, evaluate_pintle_injector
+from raosim.interface import screen_injector_chamber_interface
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.physics import (
     bartz_heat_flux,
@@ -239,7 +240,11 @@ class InterfaceSpec:
     bolt_count: int | None = None
     bolt_circle_diameter: float | None = None
     bolt_hole_diameter: float | None = None
+    bolt_diameter: float | None = None
+    bolt_allowable_stress: float | None = None
+    joint_separation_factor: float = 1.5
     injector_face_od: float | None = None
+    injector_face_thickness: float | None = None
     chamber_interface_length: float | None = None
 
 
@@ -474,6 +479,16 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         input.manufacturing.wall_thickness, thermal, cooling,
         channel_width=getattr(input.cooling, "channel_width", None),
     )
+    injector_interface = _injector_interface_screen(input, contour)
+    for gate in injector_interface.gates:
+        gate_report.add(
+            "interface",
+            gate.name,
+            gate.status != "fail",
+            value=gate.value if gate.value is not None else gate.status,
+            limit=gate.limit if gate.limit is not None else "status != fail",
+            message=gate.detail,
+        )
     cad_readiness = _cad_readiness(input, contour, gate_report)
     benchmark_status = _benchmark_status(input.method)
 
@@ -518,6 +533,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             if injector_result is not None
             else {"type": "none", "status": "disabled", "feasible": True}
         ),
+        "injector_interface": injector_interface.to_dict(),
         "structural": structural,
         "cad_readiness": cad_readiness,
         "benchmark_status": benchmark_status,
@@ -547,7 +563,8 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "Design gates failed: " + "; ".join(gate_report.warnings)
         )
 
-    files = _write_v2_artifacts(input, contour, gate_report, report_sections)
+    files = _write_v2_artifacts(input, contour, gate_report, report_sections,
+                                injector_result=injector_result)
     return ValidatedDesignResult(
         input=input,
         thermochemistry=thermo,
@@ -704,6 +721,20 @@ def _validate_design_input(input: DesignInput) -> None:
             raise ValueError("CAD export requires manufacturing.wall_thickness > 0")
     if (input.interface.flange_od is None) != (input.interface.flange_length is None):
         raise ValueError("flange_od and flange_length must be supplied together")
+    if input.interface.joint_separation_factor <= 0.0:
+        raise ValueError("interface.joint_separation_factor must be positive")
+    for name, value in (
+        ("interface.bolt_count", input.interface.bolt_count),
+        ("interface.bolt_circle_diameter", input.interface.bolt_circle_diameter),
+        ("interface.bolt_hole_diameter", input.interface.bolt_hole_diameter),
+        ("interface.bolt_diameter", input.interface.bolt_diameter),
+        ("interface.bolt_allowable_stress", input.interface.bolt_allowable_stress),
+        ("interface.injector_face_od", input.interface.injector_face_od),
+        ("interface.injector_face_thickness", input.interface.injector_face_thickness),
+        ("interface.chamber_interface_length", input.interface.chamber_interface_length),
+    ):
+        if value is not None and value <= 0.0:
+            raise ValueError(f"{name} must be positive when supplied")
     if input.cooling.method not in {"none", "regenerative"}:
         raise ValueError("cooling.method must be 'none' or 'regenerative'")
     if input.injector.type not in {"none", "pintle"}:
@@ -903,6 +934,37 @@ def _cad_readiness(
     }
 
 
+def _injector_interface_screen(input: DesignInput, contour: dict):
+    geometry = getattr(input.injector, "geometry", None)
+    face_od = input.interface.injector_face_od
+    if face_od is None and geometry is not None:
+        face_od = getattr(geometry, "face_od", None)
+    face_thickness = input.interface.injector_face_thickness
+    if face_thickness is None and geometry is not None:
+        face_thickness = getattr(geometry, "face_thickness", None)
+
+    chamber = contour.get("chamber", {})
+    chamber_radius = float(chamber.get("Rc", contour["y"][0]))
+    return screen_injector_chamber_interface(
+        chamber_pressure=input.Pc,
+        chamber_radius=chamber_radius,
+        wall_thickness=input.manufacturing.wall_thickness,
+        face_outer_diameter=face_od,
+        face_thickness=face_thickness,
+        flange_outer_diameter=input.interface.flange_od,
+        flange_length=input.interface.flange_length,
+        bolt_count=input.interface.bolt_count,
+        bolt_circle_diameter=input.interface.bolt_circle_diameter,
+        bolt_hole_diameter=input.interface.bolt_hole_diameter,
+        bolt_diameter=input.interface.bolt_diameter,
+        bolt_allowable_stress=input.interface.bolt_allowable_stress,
+        material_yield_strength=input.material.yield_strength,
+        material_elastic_modulus=input.material.elastic_modulus,
+        material_poisson_ratio=input.material.poisson_ratio,
+        joint_separation_factor=input.interface.joint_separation_factor,
+    )
+
+
 def _benchmark_status(method: str) -> dict:
     if method == "bezier":
         return {
@@ -983,6 +1045,7 @@ def _write_v2_artifacts(
     contour: dict,
     gate_report: DesignGateReport,
     report_sections: dict[str, Any],
+    injector_result: Any | None = None,
 ) -> dict[str, Path]:
     if input.manufacturing.output_dir is None:
         return {}
@@ -994,6 +1057,29 @@ def _write_v2_artifacts(
         contour["x"], contour["y"], out / "thrust_chamber_profile.csv",
         input.manufacturing.csv_points,
     )
+
+    # Pintle deliverable folder: labeled schematic (SVG+PNG), parameters JSON,
+    # dimensions CSV (always) + optional STEP/STL/DXF reference geometry.  A
+    # plotting/CAD hiccup must not abort the chamber artifacts, so failures are
+    # captured to pintle/EXPORT_ERROR.txt instead of raising.
+    if injector_result is not None and input.injector.type == "pintle":
+        pintle_dir = out / "pintle"
+        try:
+            from raosim.injector_export import export_pintle_package
+            pkg = export_pintle_package(
+                injector_result, pintle_dir, spec=input.injector,
+                cad=getattr(input.injector, "cad", "none"),
+                cad_format=getattr(input.injector, "cad_format", "step"))
+            files["pintle_dir"] = Path(pkg["dir"])
+            for key, path in pkg["files"].items():
+                files[f"pintle_{key}"] = Path(path)
+        except Exception as exc:           # pragma: no cover - defensive
+            import traceback
+            pintle_dir.mkdir(parents=True, exist_ok=True)
+            (pintle_dir / "EXPORT_ERROR.txt").write_text(
+                "pintle package export failed:\n" + traceback.format_exc(),
+                encoding="utf-8")
+            files["pintle_error"] = pintle_dir / "EXPORT_ERROR.txt"
 
     metadata = _v2_metadata(input, contour, gate_report, report_sections)
     cad = input.manufacturing.cad.lower()
@@ -1060,6 +1146,11 @@ def _v2_metadata(
         "bolt_count": interface.bolt_count,
         "bolt_circle_diameter": interface.bolt_circle_diameter,
         "bolt_hole_diameter": interface.bolt_hole_diameter,
+        "bolt_diameter": interface.bolt_diameter,
+        "bolt_allowable_stress": interface.bolt_allowable_stress,
+        "joint_separation_factor": interface.joint_separation_factor,
+        "injector_face_od": interface.injector_face_od,
+        "injector_face_thickness": interface.injector_face_thickness,
         "throat_insert": manufacturing.throat_insert,
         "throat_insert_material": manufacturing.throat_insert_material,
         "tolerance": manufacturing.tolerance,
