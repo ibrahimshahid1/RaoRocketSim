@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: testpypi
-      url: https://test.pypi.org/project/RaoRocketSim/
+      url: https://test.pypi.org/project/lrekit/
     permissions:
       contents: read
       id-token: write
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/RaoRocketSim/
+      url: https://pypi.org/project/lrekit/
     permissions:
       contents: read
       id-token: write

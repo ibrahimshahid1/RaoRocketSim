@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-main.py – CLI for the Rao Bell Nozzle Design Toolbox.
+main.py – legacy CLI for the LREKit/Rao bell nozzle design toolbox.
 
 Usage:
-    RaoRocketSim                          # interactive mode
-    RaoRocketSim --help                   # show all flags
-    RaoRocketSim --Rt 25 --Pc 60 \\
+    lrekit                                # interactive mode
+    lrekit --help                         # show all flags
+    lrekit --Rt 25 --Pc 60 \\
         --propellant LOX/LCH4 --epsilon 12 \\
         --output nozzle.csv               # batch mode (no prompts)
-    RaoRocketSim --sweep epsilon 4 50 20  # parameter sweep
+    lrekit --sweep epsilon 4 50 20        # parameter sweep
 """
 
 from __future__ import annotations
@@ -94,9 +94,9 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  Interactive:   RaoRocketSim
-  Batch:         RaoRocketSim --propellant LOX/RP-1 --Pc 45 --Rt 20 --epsilon 10
-  Sweep:         RaoRocketSim --propellant LOX/LCH4 --Pc 60 --Rt 25 \\
+  Interactive:   lrekit
+  Batch:         lrekit --propellant LOX/RP-1 --Pc 45 --Rt 20 --epsilon 10
+  Sweep:         lrekit --propellant LOX/LCH4 --Pc 60 --Rt 25 \\
                      --sweep epsilon 4 50 20
 """,
     )

@@ -45,7 +45,7 @@ def test_seed_geometry_exports_only_after_geometry_gates_pass(tmp_path):
         timeout=300,
     )
     assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
-    assert "RaoRocketSim" in proc.stdout
+    assert "LREKit" in proc.stdout
     summary = json.loads((out / "summary.json").read_text())
     checks = summary["chamber"]["geometry_checks"]
     assert checks["axial_coordinates_monotonic"] is True

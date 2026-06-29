@@ -165,7 +165,7 @@ def _annular_cap(x_pos, r_inner, r_outer, theta, n_angular, direction):
 def _write_stl(path: Path, triangles: list):
     """Write triangle list to binary STL."""
     with open(path, "wb") as f:
-        header = b"RaoRocketSim nozzle" + b"\x00" * (80 - 19)
+        header = b"LREKit nozzle" + b"\x00" * (80 - 13)
         f.write(header)
         f.write(struct.pack("<I", len(triangles)))
         for normal, v1, v2, v3 in triangles:
@@ -431,8 +431,8 @@ def _write_faceted_step(path: Path, triangles: list,
     lines: list[str] = [
         "ISO-10303-21;",
         "HEADER;",
-        "FILE_DESCRIPTION(('RaoRocketSim faceted nozzle solid'),'2;1');",
-        "FILE_NAME('rao_nozzle.step','',('RaoRocketSim'),('RaoRocketSim'),'','','');",
+        "FILE_DESCRIPTION(('LREKit faceted nozzle solid'),'2;1');",
+        "FILE_NAME('rao_nozzle.step','',('LREKit'),('LREKit'),'','','');",
         "FILE_SCHEMA(('AUTOMOTIVE_DESIGN_CC2'));",
         "ENDSEC;",
         "DATA;",
@@ -470,9 +470,9 @@ def _write_faceted_step(path: Path, triangles: list,
         + ",".join(f"#{fid}" for fid in face_ids)
         + "))"
     )
-    brep_id = entity(f"FACETED_BREP('RaoRocketSim nozzle',#{shell_id})")
+    brep_id = entity(f"FACETED_BREP('LREKit nozzle',#{shell_id})")
     entity("GEOMETRIC_REPRESENTATION_CONTEXT(3)")
-    entity(f"SHAPE_REPRESENTATION('RaoRocketSim nozzle',(#{brep_id}),#%d)" % (next_id - 1))
+    entity(f"SHAPE_REPRESENTATION('LREKit nozzle',(#{brep_id}),#%d)" % (next_id - 1))
 
     for key, value in sorted(metadata.items()):
         safe_key = str(key).replace("'", "")
@@ -671,7 +671,7 @@ def package_ipt_request(step_path: str | Path, path: str | Path,
         "authoritative_step": str(step_path),
         "ipt_target": str(path.with_suffix(".ipt")),
         "note": (
-            "RaoRocketSim does not write native IPT directly. Use Autodesk "
+            "LREKit does not write native IPT directly. Use Autodesk "
             "Inventor automation to import the STEP and save the IPT."
         ),
         "metadata": metadata or {},

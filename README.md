@@ -1,13 +1,14 @@
-# RaoRocketSim
+# LREKit
 
-RaoRocketSim is a Python research and preliminary-design toolbox for
-axisymmetric rocket-nozzle aerodynamics. It pairs a practical Rao
-thrust-optimized parabolic (TOP) bell workflow with quasi-one-dimensional
+LREKit is a Python research and preliminary-design toolkit for liquid rocket
+engine simulation and CAD export. It currently covers nozzle, throat, chamber,
+regenerative-cooling, and pintle-injector workflows, pairing a practical Rao
+thrust-optimized parabolic (TOP) bell path with quasi-one-dimensional
 performance estimation, low-order engineering screens, an axisymmetric
-method-of-characteristics (MOC) solver, a finite-dimensional Rao
-variational boundary-value problem (BVP), a vendored NASA/JHU
-reference-code port, and a differentiable JAX backend with exact-Jacobian
-solves and gradient sensitivities.
+method-of-characteristics (MOC) solver, a finite-dimensional Rao variational
+boundary-value problem (BVP), a vendored NASA/JHU reference-code port, and a
+differentiable JAX backend with exact-Jacobian solves and gradient
+sensitivities.
 
 The **default, trusted** path is the chart-based Rao/TOP quadratic-Bézier
 contour: it is deterministic, endpoint-exact, and benchmarked against
@@ -110,7 +111,7 @@ consistency, parity between backends, and agreement with reference fixtures
 ## What the tool does
 
 Given a chamber pressure, ambient pressure, throat size or target thrust,
-expansion ratio, propellant model, and contour method, RaoRocketSim can:
+expansion ratio, propellant model, and contour method, LREKit can:
 
 - generate a reduced-length Rao/TOP bell, a conical nozzle, an
   MOC-optimized bell, or an experimental Rao variational/MOC contour;
@@ -775,24 +776,24 @@ tested JAX stack.
 For a normal user install after the first PyPI release:
 
 ```bash
-python3.12 -m pip install RaoRocketSim
+python3.12 -m pip install lrekit
 ```
 
 Optional integrations can be requested with extras:
 
 ```bash
 # Optional thermochemistry (variable chamber properties)
-python3.12 -m pip install "RaoRocketSim[cea]"
+python3.12 -m pip install "lrekit[cea]"
 
 # Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
-python3.12 -m pip install "RaoRocketSim[cad]"
+python3.12 -m pip install "lrekit[cad]"
 ```
 
 Until the package is published on PyPI, install directly from GitHub:
 
 ```bash
 python3.12 -m pip install \
-  "RaoRocketSim @ git+https://github.com/ibrahimshahid1/RaoRocketSim.git"
+  "lrekit @ git+https://github.com/ibrahimshahid1/RaoRocketSim.git"
 ```
 
 For repository development:
@@ -812,13 +813,14 @@ The PyPI release checklist is in
 After installation, the toolbox CLI is available as:
 
 ```bash
-RaoRocketSim --help
-RaoRocketSim
+lrekit --help
+lrekit
 ```
 
-`RaoRocketSim` launches the current nozzle/chamber/regenerative-cooling/pintle
+`lrekit` launches the current nozzle/chamber/regenerative-cooling/pintle
 runner, the same implementation as `python scripts/run_nozzle.py ...`. The
-older top-level toolbox interface is still available as:
+existing `RaoRocketSim` command remains as a compatibility alias. The older
+top-level toolbox interface is still available as:
 
 ```bash
 RaoRocketSimLegacy --help
@@ -828,7 +830,7 @@ To ensure a triangle-based STEP fallback is never mistaken for editable
 B-rep CAD:
 
 ```bash
-RaoRocketSim --max-nfev 4000 --regen \
+lrekit --max-nfev 4000 --regen \
   --l-star 1.0 --contraction-ratio 2.5 \
   --material grcop-84 --size-wall --cad step --require-brep --regen-brep \
   --out builds/regen_brep
@@ -841,7 +843,7 @@ full-channel hydraulic graph. The fluid/radiation/phase screens can be run
 without CAD, for example:
 
 ```bash
-RaoRocketSim --max-nfev 4000 --regen --thermal \
+lrekit --max-nfev 4000 --regen --thermal \
   --coolant methane --coolant-inlet-temperature 120 \
   --coolant-property-backend coolprop \
   --hydraulic-network --radiation-model leccese_gray \
@@ -851,7 +853,7 @@ RaoRocketSim --max-nfev 4000 --regen --thermal \
 For pintle injector manufacturing geometry, request the machined CAD package:
 
 ```bash
-RaoRocketSim --injector pintle --injector-cad machined \
+lrekit --injector pintle --injector-cad machined \
   --injector-face-od 0.10 --injector-face-thickness 0.010 \
   --bolt-count 8 --bolt-circle 0.085 --bolt-hole 0.004 \
   --min-tool-diameter 0.0005 --injector-tolerance 0.00005
@@ -880,7 +882,7 @@ units throughout.
 ### Preliminary Rao/TOP design
 
 ```bash
-RaoRocketSim \
+lrekit \
   --propellant LOX/RP-1 \
   --Pc 45 --Pa 101.325 \
   --Rt 20 --epsilon 10 --length-pct 80 \
@@ -894,7 +896,7 @@ together with `metadata.txt`.
 ### Size the throat from thrust
 
 ```bash
-RaoRocketSim \
+lrekit \
   --propellant LOX/LCH4 \
   --Pc 60 --target-thrust 10000 --epsilon 12 --no-plot
 ```
@@ -908,7 +910,7 @@ $$
 ### Experimental Rao variational / MOC solve
 
 ```bash
-RaoRocketSim \
+lrekit \
   --propellant LOX/RP-1 \
   --Pc 45 --Rt 20 --epsilon 10 \
   --method rao_variational_moc \
@@ -924,7 +926,7 @@ MOC reliability promotion.
 ### Sweep a design variable
 
 ```bash
-RaoRocketSim \
+lrekit \
   --propellant LOX/LCH4 \
   --Pc 60 --Rt 25 --epsilon 10 \
   --sweep epsilon 4 50 20 --no-plot
@@ -935,7 +937,7 @@ Supported sweep variables are `epsilon`, `Pc`, and `Rt`.
 ### Run a literature benchmark
 
 ```bash
-RaoRocketSim \
+lrekit \
   --benchmark-case lea_top_schomberg_2014 \
   --benchmark-method bezier \
   --benchmark-report builds/benchmarks --no-plot
@@ -953,9 +955,9 @@ behind a single pass/fail number.
 ### Baseline contour and performance
 
 ```python
-from raosim.engine import compute_engine_performance
-from raosim.nozzle_geometry import bell_nozzle_contour
-from raosim.propellants import get_propellant
+from lrekit.engine import compute_engine_performance
+from lrekit.nozzle_geometry import bell_nozzle_contour
+from lrekit.propellants import get_propellant
 
 prop = get_propellant("LOX/RP-1")
 contour = bell_nozzle_contour(
@@ -970,7 +972,7 @@ performance = compute_engine_performance(
 ### Design-gated workflow
 
 ```python
-from raosim.design import DesignInput, ThermoSpec, design_nozzle_v2
+from lrekit.design import DesignInput, ThermoSpec, design_nozzle_v2
 
 result = design_nozzle_v2(DesignInput(
     thermo=ThermoSpec(mode="constant_gamma", propellant_name="LOX/RP-1"),
@@ -992,8 +994,8 @@ and all internal gates to pass.
 ### Rao BVP and sensitivities
 
 ```python
-from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
-from raosim.jax import rao_sensitivities
+from lrekit.rao_variational import RaoSolverConfig, solve_rao_bvp
+from lrekit.jax.api import rao_sensitivities
 
 config = RaoSolverConfig(
     Rt=0.020, epsilon=10.0, gamma=1.4, length_pct=80.0,

@@ -3,17 +3,21 @@ requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "RaoRocketSim"
+name = "lrekit"
 version = "0.1.0"
-description = "Research and preliminary-design toolbox for Rao rocket-nozzle simulation."
+description = "Research and preliminary-design toolkit for liquid rocket engine simulation and CAD export."
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 authors = [
     { name = "Ibrahim Shahid" },
 ]
 keywords = [
+    "lre",
     "rocket",
+    "engine",
     "nozzle",
+    "injector",
+    "chamber",
     "rao",
     "moc",
     "regenerative-cooling",
@@ -55,6 +59,8 @@ Repository = "https://github.com/ibrahimshahid1/RaoRocketSim"
 Issues = "https://github.com/ibrahimshahid1/RaoRocketSim/issues"
 
 [project.scripts]
+lrekit = "lrekit.cli:main"
+raosim = "raosim.cli:main"
 RaoRocketSim = "raosim.cli:main"
 RaoRocketSimLegacy = "raosim.cli:legacy_main"
 
@@ -63,7 +69,7 @@ py-modules = ["main"]
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["raosim*"]
+include = ["raosim*", "lrekit*"]
 
 [tool.setuptools.package-data]
 raosim = [

@@ -1,4 +1,4 @@
-"""Console entry points for RaoRocketSim."""
+"""Console entry points for LREKit and the legacy RaoRocketSim alias."""
 
 from __future__ import annotations
 

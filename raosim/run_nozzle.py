@@ -94,12 +94,12 @@ def red(s): return _c(s, "31")
 
 
 _LOGO = r"""
-   ██████╗  █████╗  ██████╗      RaoRocketSim
-   ██╔══██╗██╔══██╗██╔═══██╗     rocket nozzle design suite
-   ██████╔╝███████║██║   ██║     ───────────────────────────
-   ██╔══██╗██╔══██║██║   ██║     Rao TOP · MOC · JAX-differentiable
-   ██║  ██║██║  ██║╚██████╔╝     regen cooling · 3-D coils
-   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝
+   ██╗     ██████╗ ███████╗      LREKit
+   ██║     ██╔══██╗██╔════╝      liquid rocket engine toolkit
+   ██║     ██████╔╝█████╗        ───────────────────────────
+   ██║     ██╔══██╗██╔══╝        nozzle · chamber · injector
+   ███████╗██║  ██║███████╗      regen cooling · CAD export
+   ╚══════╝╚═╝  ╚═╝╚══════╝
 """
 
 
