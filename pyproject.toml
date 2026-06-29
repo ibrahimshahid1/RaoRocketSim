@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RaoRocketSim"
+version = "1.0.0"
+description = "Research and preliminary-design toolbox for Rao rocket-nozzle simulation."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "CoolProp>=7.0",
+    "jax==0.6.2",
+    "jaxlib==0.6.2",
+    "optimistix==0.0.11",
+    "equinox==0.13.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+cea = ["rocketcea>=1.2"]
+cad = ["cadquery"]
+
+[project.scripts]
+RaoRocketSim = "raosim.cli:main"
+RaoRocketSimLegacy = "raosim.cli:legacy_main"
+
+[tool.setuptools]
+py-modules = ["main"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["raosim*"]
+
+[tool.setuptools.package-data]
+raosim = [
+    "benchmark_data/cases/*.json",
+    "benchmark_data/curves/*.csv",
+]

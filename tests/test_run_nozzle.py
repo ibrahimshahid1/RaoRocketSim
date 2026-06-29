@@ -131,3 +131,15 @@ def test_tags_flag_lists_run_tags_and_exits():
         "--wall-sizing", "--helix-turns", "--thermal", "--backend",
     ):
         assert tag in proc.stdout, tag
+
+
+def test_package_module_entrypoint_uses_current_runner():
+    proc = subprocess.run(
+        [sys.executable, "-m", "raosim", "--tags"],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=120,
+    )
+    assert proc.returncode == 0
+    assert "--wall-sizing" in proc.stdout
+    assert "Rao Bell Nozzle Design Toolbox" not in proc.stdout

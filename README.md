@@ -776,26 +776,41 @@ tested JAX stack.
 python3.12 -m venv .venv-jax
 source .venv-jax/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt pytest
+python -m pip install -e ".[dev]"
 ```
 
 Core dependencies are NumPy, SciPy, Matplotlib, CoolProp, JAX, JAXlib,
 Optimistix, and Equinox. Optional integrations are not installed by
-`requirements.txt`:
+default:
 
 ```bash
 # Optional thermochemistry (variable chamber properties)
-python -m pip install rocketcea
+python -m pip install -e ".[cea]"
 
 # Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
-python -m pip install cadquery
+python -m pip install -e ".[cad]"
+```
+
+After installation, the toolbox CLI is available as:
+
+```bash
+RaoRocketSim --help
+RaoRocketSim
+```
+
+`RaoRocketSim` launches the current nozzle/chamber/regenerative-cooling/pintle
+runner, the same implementation as `python scripts/run_nozzle.py ...`. The
+older top-level toolbox interface is still available as:
+
+```bash
+RaoRocketSimLegacy --help
 ```
 
 To ensure a triangle-based STEP fallback is never mistaken for editable
 B-rep CAD:
 
 ```bash
-PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 4000 --regen \
+RaoRocketSim --max-nfev 4000 --regen \
   --l-star 1.0 --contraction-ratio 2.5 \
   --material grcop-84 --size-wall --cad step --require-brep --regen-brep \
   --out builds/regen_brep
@@ -808,7 +823,7 @@ full-channel hydraulic graph. The fluid/radiation/phase screens can be run
 without CAD, for example:
 
 ```bash
-PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 4000 --regen --thermal \
+RaoRocketSim --max-nfev 4000 --regen --thermal \
   --coolant methane --coolant-inlet-temperature 120 \
   --coolant-property-backend coolprop \
   --hydraulic-network --radiation-model leccese_gray \
@@ -819,8 +834,8 @@ Without `--require-brep`, the summary records either `brep` or
 `faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
 STEP as a solid body; it will not contain native Inventor feature history.
 
-Run commands from the repository root; the project does not yet ship as an
-installable Python package.
+For repo-local development, `python scripts/run_nozzle.py ...` remains a thin
+compatibility wrapper around the packaged runner.
 
 ---
 
@@ -833,7 +848,7 @@ units throughout.
 ### Preliminary Rao/TOP design
 
 ```bash
-.venv-jax/bin/python main.py \
+RaoRocketSim \
   --propellant LOX/RP-1 \
   --Pc 45 --Pa 101.325 \
   --Rt 20 --epsilon 10 --length-pct 80 \
@@ -847,7 +862,7 @@ together with `metadata.txt`.
 ### Size the throat from thrust
 
 ```bash
-.venv-jax/bin/python main.py \
+RaoRocketSim \
   --propellant LOX/LCH4 \
   --Pc 60 --target-thrust 10000 --epsilon 12 --no-plot
 ```
@@ -861,7 +876,7 @@ $$
 ### Experimental Rao variational / MOC solve
 
 ```bash
-.venv-jax/bin/python main.py \
+RaoRocketSim \
   --propellant LOX/RP-1 \
   --Pc 45 --Rt 20 --epsilon 10 \
   --method rao_variational_moc \
@@ -877,7 +892,7 @@ MOC reliability promotion.
 ### Sweep a design variable
 
 ```bash
-.venv-jax/bin/python main.py \
+RaoRocketSim \
   --propellant LOX/LCH4 \
   --Pc 60 --Rt 25 --epsilon 10 \
   --sweep epsilon 4 50 20 --no-plot
@@ -888,7 +903,7 @@ Supported sweep variables are `epsilon`, `Pc`, and `Rt`.
 ### Run a literature benchmark
 
 ```bash
-.venv-jax/bin/python main.py \
+RaoRocketSim \
   --benchmark-case lea_top_schomberg_2014 \
   --benchmark-method bezier \
   --benchmark-report builds/benchmarks --no-plot

@@ -13,8 +13,14 @@ test_failures.log
 # macOS
 .DS_Store
 .venv-jax/
+.claude/
 
 # Local reference material and temporary files
 /propulsion_texts/
 /tmp/
 pdfs/
+
+# Packaging
+dist/
+build/
+*.egg-info/

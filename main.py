@@ -3,12 +3,12 @@
 main.py – CLI for the Rao Bell Nozzle Design Toolbox.
 
 Usage:
-    python main.py                        # interactive mode
-    python main.py --help                 # show all flags
-    python main.py --Rt 25 --Pc 60 \\
+    RaoRocketSim                          # interactive mode
+    RaoRocketSim --help                   # show all flags
+    RaoRocketSim --Rt 25 --Pc 60 \\
         --propellant LOX/LCH4 --epsilon 12 \\
         --output nozzle.csv               # batch mode (no prompts)
-    python main.py --sweep epsilon 4 50 20  # parameter sweep
+    RaoRocketSim --sweep epsilon 4 50 20  # parameter sweep
 """
 
 from __future__ import annotations
@@ -93,9 +93,9 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  Interactive:   python main.py
-  Batch:         python main.py --propellant LOX/RP-1 --Pc 45 --Rt 20 --epsilon 10
-  Sweep:         python main.py --propellant LOX/LCH4 --Pc 60 --Rt 25 \\
+  Interactive:   RaoRocketSim
+  Batch:         RaoRocketSim --propellant LOX/RP-1 --Pc 45 --Rt 20 --epsilon 10
+  Sweep:         RaoRocketSim --propellant LOX/LCH4 --Pc 60 --Rt 25 \\
                      --sweep epsilon 4 50 20
 """,
     )
