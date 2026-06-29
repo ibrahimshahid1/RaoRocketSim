@@ -4,6 +4,9 @@ builds/
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.swp
+*.swo
 .pytest_cache/
 test_failures.log
 

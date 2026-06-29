@@ -772,6 +772,31 @@ six-degree-of-freedom dynamics.
 Python 3.12 is recommended because the differentiable backend is pinned to a
 tested JAX stack.
 
+For a normal user install after the first PyPI release:
+
+```bash
+python3.12 -m pip install RaoRocketSim
+```
+
+Optional integrations can be requested with extras:
+
+```bash
+# Optional thermochemistry (variable chamber properties)
+python3.12 -m pip install "RaoRocketSim[cea]"
+
+# Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
+python3.12 -m pip install "RaoRocketSim[cad]"
+```
+
+Until the package is published on PyPI, install directly from GitHub:
+
+```bash
+python3.12 -m pip install \
+  "RaoRocketSim @ git+https://github.com/ibrahimshahid1/RaoRocketSim.git"
+```
+
+For repository development:
+
 ```bash
 python3.12 -m venv .venv-jax
 source .venv-jax/bin/activate
@@ -780,16 +805,9 @@ python -m pip install -e ".[dev]"
 ```
 
 Core dependencies are NumPy, SciPy, Matplotlib, CoolProp, JAX, JAXlib,
-Optimistix, and Equinox. Optional integrations are not installed by
-default:
-
-```bash
-# Optional thermochemistry (variable chamber properties)
-python -m pip install -e ".[cea]"
-
-# Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
-python -m pip install -e ".[cad]"
-```
+Optimistix, and Equinox. Optional integrations are not installed by default.
+The PyPI release checklist is in
+[`docs/pypi_release.md`](docs/pypi_release.md).
 
 After installation, the toolbox CLI is available as:
 
@@ -829,6 +847,20 @@ RaoRocketSim --max-nfev 4000 --regen --thermal \
   --hydraulic-network --radiation-model leccese_gray \
   --radiation-family methane --boiling-chf
 ```
+
+For pintle injector manufacturing geometry, request the machined CAD package:
+
+```bash
+RaoRocketSim --injector pintle --injector-cad machined \
+  --injector-face-od 0.10 --injector-face-thickness 0.010 \
+  --bolt-count 8 --bolt-circle 0.085 --bolt-hole 0.004 \
+  --min-tool-diameter 0.0005 --injector-tolerance 0.00005
+```
+
+This writes `pintle/injector_manufacturing_report.json` on every run and, when
+CadQuery/OpenCascade is installed, exports `injector_face_machined.step`,
+`pintle_post_slotted.step`, `annular_sleeve.step`, and
+`injector_assembly_machined.step`.
 
 Without `--require-brep`, the summary records either `brep` or
 `faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
@@ -991,6 +1023,9 @@ Normal CLI runs create `builds/vNNN_YYYYMMDD_HHMMSS/` and may contain:
 - with variable wall sizing, separate liner and closeout-jacket solids;
 - optionally, `regen.step`: one full-channel-count cooling-aware material
   solid, with connected plenum/port voids when requested;
+- optionally, a pintle machined-CAD package with Boolean-cut STEP bodies for
+  the face, slotted pintle post, annular sleeve, and assembly, plus an injector
+  manufacturing report;
 - an Inventor conversion manifest pointing to the authoritative STEP file;
 - optional regen STL/PNG visualization surfaces for liner, channels, and
   jacket;
@@ -999,9 +1034,12 @@ Normal CLI runs create `builds/vNNN_YYYYMMDD_HHMMSS/` and may contain:
 - human-readable `metadata.txt` with inputs, performance, warnings, gate
   results, and generated filenames.
 
-Native Autodesk Inventor IPT writing is not implemented. Bolt patterns,
-injector interfaces, throat inserts, tolerances, and weld/braze allowances
-are metadata/readiness placeholders, not modeled solid features.
+Native Autodesk Inventor IPT writing is not implemented. Pintle `machined` mode
+models injector bolt holes, manifolds, feed/inlet ports, seal grooves, annulus
+passages, and slot cut-throughs, but remains preliminary until cold-flow and
+joint/fitting-specific validation are complete. Throat inserts, weld/braze
+allowances, and non-pintle injector interfaces are metadata/readiness
+placeholders, not modeled solid features.
 
 ---
 
