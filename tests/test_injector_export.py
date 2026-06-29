@@ -7,6 +7,7 @@ import pytest
 
 from raosim.injector import (
     InjectorSpec,
+    PintleMechanicalSpec,
     PintleGeometrySpec,
     PropellantFeedSpec,
     evaluate_pintle_injector,
@@ -128,3 +129,99 @@ class TestPackage:
         if not cadquery_available():
             assert any("CadQuery" in n for n in res["notes"])
             assert not (tmp_path / "pintle_reference.step").exists()
+
+    def test_machined_mode_writes_manufacturing_report(self, tmp_path):
+        from raosim.injector_cad import cadquery_available
+        inj, spec = _inj()
+        spec.mechanical = PintleMechanicalSpec(
+            bolt_count=6,
+            bolt_circle_diameter=0.085,
+            bolt_hole_diameter=0.004,
+            faceplate_outer_diameter=0.10,
+            faceplate_thickness=0.010,
+            fuel_inlet_count=2,
+            oxidizer_inlet_count=2,
+            min_tool_diameter=0.0005,
+            tolerance=0.00005,
+        )
+        res = export_pintle_package(inj, tmp_path, spec=spec, cad="machined",
+                                    cad_format="step")
+        report = tmp_path / "injector_manufacturing_report.json"
+        assert report.exists() and report.stat().st_size > 0
+        data = json.loads(report.read_text())
+        assert data["status"] == \
+            "preliminary_machined_layout_requires_cold_flow_validation"
+        assert data["resolved"]["slot_cut_depth_m"] >= \
+            data["resolved"]["pintle_wall_thickness_m"]
+        assert data["resolved"]["bolt_count"] == 6
+        assert data["flow_continuity"]["status"] == \
+            "preliminary_transfer_paths_modeled"
+        assert "manufacturing_report" in res["files"]
+        assert any("NASA SP-8089" in s for s in data["literature_basis"])
+        if not cadquery_available():
+            assert data["cad_export"]["status"] == "cadquery_unavailable"
+
+    def test_machined_layout_screens_ports_and_slots(self):
+        from raosim.injector_cad import resolve_machined_pintle_layout
+        inj, spec = _inj()
+        spec.mechanical = PintleMechanicalSpec(min_tool_diameter=0.0004)
+        layout = resolve_machined_pintle_layout(inj, spec=spec)
+        names = {g["name"] for g in layout["manufacturing_gates"]}
+        assert "slot_cut_through" in names
+        assert "fuel_inlet_velocity" in names
+        assert "oxidizer_manifold_velocity" in names
+        assert "faceplate_manifold_pocket_depth" in names
+        assert "bolt_manifold_clearance" in names
+        assert layout["roles"]["fuel"]["inlet_count"] == 2
+
+    def test_machined_layout_grows_thin_face_and_bolt_circle(self):
+        from raosim.injector_cad import resolve_machined_pintle_layout
+        inj, spec = _inj()
+        spec.mechanical = PintleMechanicalSpec(
+            faceplate_thickness=0.004,
+            fuel_manifold_depth=0.016,
+            oxidizer_manifold_depth=0.020,
+            bolt_count=8,
+            bolt_circle_diameter=0.040,
+            bolt_hole_diameter=0.004,
+        )
+        layout = resolve_machined_pintle_layout(inj, spec=spec)
+        r = layout["resolved"]
+        assert r["faceplate_thickness_m"] >= \
+            r["faceplate_minimum_thickness_m"]
+        assert r["bolt_circle_diameter_m"] >= \
+            r["bolt_circle_minimum_diameter_m"]
+        gates = {g["name"]: g for g in layout["manufacturing_gates"]}
+        assert gates["faceplate_manifold_pocket_depth"]["status"] == "warn"
+        assert gates["bolt_manifold_clearance"]["status"] == "warn"
+
+    def test_machined_step_face_round_trips_single_solid(self, tmp_path):
+        from raosim.injector_cad import (
+            cadquery_available,
+            export_machined_pintle_cad,
+        )
+        if not cadquery_available():
+            pytest.skip("CadQuery not installed")
+        inj, spec = _inj()
+        spec.mechanical = PintleMechanicalSpec(
+            faceplate_outer_diameter=0.10,
+            faceplate_thickness=0.01287,
+            fuel_manifold_depth=0.016,
+            oxidizer_manifold_depth=0.020,
+            bolt_count=8,
+            bolt_circle_diameter=0.085,
+            bolt_hole_diameter=0.004,
+            min_tool_diameter=0.0005,
+            tolerance=0.00005,
+        )
+        res = export_machined_pintle_cad(inj, tmp_path, spec=spec)
+        face_path = tmp_path / "injector_face_machined.step"
+        assert "injector_face_machined" in res["files"]
+        assert face_path.exists() and face_path.stat().st_size > 1000
+        assert res["layout"]["cad_export"]["inspection"][
+            "injector_face_machined"]["single_solid"]
+        import cadquery as cq
+        imported = cq.importers.importStep(str(face_path))
+        solids = [solid for shape in imported.vals() for solid in shape.Solids()]
+        assert len(solids) == 1
+        assert solids[0].isValid()

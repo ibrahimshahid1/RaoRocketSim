@@ -11,6 +11,11 @@ deliverable folder::
       pintle_reference.step       # optional, --injector-cad reference
       pintle_parts/               # optional, --injector-cad parts
         pintle_rod.step  pintle_tip.step  annular_sleeve.step  injector_face.step
+      injector_face_machined.step # optional, --injector-cad machined
+      pintle_post_slotted.step
+      annular_sleeve.step
+      injector_assembly_machined.step
+      injector_manufacturing_report.json
 
 Naming follows the repo's FIXED annulus + radial-slot pintle and, where they
 correspond, Son et al. (*Design Procedure of a Movable Pintle Injector*, J.
@@ -216,7 +221,7 @@ def export_pintle_package(
     out_dir,
     *,
     spec=None,
-    cad: str = "none",            # "none" | "reference" | "parts"
+    cad: str = "none",            # "none" | "reference" | "parts" | "machined"
     cad_format: str = "step",     # "step" | "stl" | "dxf"
     movable_sleeve: bool = False,
 ) -> dict[str, Any]:
@@ -224,7 +229,8 @@ def export_pintle_package(
 
     The labeled schematic (SVG + PNG), parameters JSON and dimensions CSV are
     ALWAYS written.  CAD (STEP/STL/DXF) is optional and degrades gracefully when
-    CadQuery is unavailable (an ``info`` note is recorded instead of failing).
+    CadQuery is unavailable.  Machined mode always writes the manufacturing
+    report and writes true STEP bodies when OpenCascade is installed.
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -256,8 +262,17 @@ def export_pintle_package(
 
     # --- optional: CAD-neutral reference geometry ----------------------
     if cad and cad != "none":
-        from raosim.injector_cad import export_pintle_cad, cadquery_available
-        if cad_format in ("step", "stl") and not cadquery_available():
+        from raosim.injector_cad import (
+            export_machined_pintle_cad,
+            export_pintle_cad,
+            cadquery_available,
+        )
+        if cad == "machined":
+            cad_files = export_machined_pintle_cad(
+                inj, out_dir, spec=spec, fmt=cad_format)
+            files.update(cad_files.get("files", {}))
+            notes.extend(cad_files.get("notes", []))
+        elif cad_format in ("step", "stl") and not cadquery_available():
             notes.append(
                 "CAD export requested but CadQuery/OpenCascade is not installed; "
                 "skipped (pip install cadquery). JSON/CSV/SVG/PNG still written.")

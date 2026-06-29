@@ -25,6 +25,8 @@ import math
 from dataclasses import dataclass, field
 from typing import Any
 
+import numpy as np
+
 
 _FACEPLATE_CLAMPED_K = 0.75
 _DEFAULT_JOINT_SEPARATION_FACTOR = 1.5
@@ -47,6 +49,21 @@ def _status_from_margin(margin: float | None, *, missing: str = "info") -> str:
     return "pass" if margin >= 0.0 else "fail"
 
 
+def _station_array(value, n: int, name: str, *, default: float | None = None) -> np.ndarray:
+    if value is None:
+        if default is None:
+            raise ValueError(f"{name} is required")
+        return np.full(n, float(default))
+    arr = np.asarray(value, dtype=float)
+    if arr.ndim == 0:
+        return np.full(n, float(arr))
+    if arr.shape != (n,):
+        raise ValueError(f"{name} must be scalar or shape ({n},)")
+    if not np.all(np.isfinite(arr)):
+        raise ValueError(f"{name} must be finite")
+    return arr
+
+
 @dataclass
 class InterfaceGate:
     name: str
@@ -62,6 +79,77 @@ class InterfaceGate:
             "detail": self.detail,
             "value": self.value,
             "limit": self.limit,
+        }
+
+
+@dataclass
+class CompositeRegenWallScreen:
+    """Bonded liner plus closeout jacket hoop screen for a sized regen wall."""
+
+    model: str
+    qualification_status: str
+    liner_material: str | None
+    jacket_material: str | None
+    governing_index: int
+    governing_component: str
+    chamber_pressure: float
+    chamber_radius: float
+    structural_fos: float
+    liner_allowable_stress: float
+    jacket_allowable_stress: float
+    min_liner_margin: float
+    min_jacket_margin: float
+    min_margin: float
+    liner_total_stress: float
+    jacket_total_stress: float
+    liner_local_sp125_stress: float
+    liner_global_membrane_stress: float
+    jacket_coolant_hoop_stress: float
+    jacket_global_membrane_stress: float
+    t_liner_equivalent_min: float
+    t_liner_equivalent_max: float
+    t_jacket_min: float
+    t_jacket_max: float
+    land_fraction_min: float
+    land_fraction_max: float
+    stress_free_temperature: float
+
+    @property
+    def status(self) -> str:
+        return "pass" if self.min_margin >= 1.0 else "fail"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "model": self.model,
+            "qualification_status": self.qualification_status,
+            "liner_material": self.liner_material,
+            "jacket_material": self.jacket_material,
+            "governing_index": self.governing_index,
+            "governing_component": self.governing_component,
+            "chamber_pressure_pa": self.chamber_pressure,
+            "chamber_radius_m": self.chamber_radius,
+            "structural_fos": self.structural_fos,
+            "liner_allowable_stress_pa": self.liner_allowable_stress,
+            "jacket_allowable_stress_pa": self.jacket_allowable_stress,
+            "min_liner_margin": self.min_liner_margin,
+            "min_jacket_margin": self.min_jacket_margin,
+            "min_margin": self.min_margin,
+            "liner_total_stress_pa": self.liner_total_stress,
+            "jacket_total_stress_pa": self.jacket_total_stress,
+            "liner_local_sp125_stress_pa": self.liner_local_sp125_stress,
+            "liner_global_membrane_stress_pa": self.liner_global_membrane_stress,
+            "jacket_coolant_hoop_stress_pa": self.jacket_coolant_hoop_stress,
+            "jacket_global_membrane_stress_pa": self.jacket_global_membrane_stress,
+            "t_liner_equivalent_range_m": [
+                self.t_liner_equivalent_min,
+                self.t_liner_equivalent_max,
+            ],
+            "t_jacket_range_m": [self.t_jacket_min, self.t_jacket_max],
+            "land_fraction_range": [
+                self.land_fraction_min,
+                self.land_fraction_max,
+            ],
+            "stress_free_temperature_K": self.stress_free_temperature,
         }
 
 
@@ -88,6 +176,7 @@ class InjectorInterfaceLedger:
     inner_edge_distance: float | None
     outer_edge_distance: float | None
     pitch: float | None
+    composite_wall: CompositeRegenWallScreen | None = None
     gates: list[InterfaceGate] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -124,10 +213,189 @@ class InjectorInterfaceLedger:
             "inner_edge_distance_m": self.inner_edge_distance,
             "outer_edge_distance_m": self.outer_edge_distance,
             "bolt_pitch_m": self.pitch,
+            "composite_wall": (
+                self.composite_wall.to_dict() if self.composite_wall else None
+            ),
             "feasible": self.feasible,
             "gates": [g.to_dict() for g in self.gates],
             "notes": self.notes,
         }
+
+
+def screen_composite_regen_wall(
+    *,
+    chamber_pressure: float,
+    wall_profile: Any,
+    liner_material: Any,
+    jacket_material: Any | None = None,
+    structural_fos: float = 1.5,
+    gas_side_wall_temperature=None,
+    coolant_side_wall_temperature=None,
+    coolant_temperature=None,
+    coolant_pressure=None,
+    liner_pressure_differential=None,
+    heat_flux=None,
+    stress_free_temperature: float = 293.15,
+) -> CompositeRegenWallScreen:
+    """Screen chamber hoop sharing in a bonded liner plus jacket regen wall.
+
+    The local copper liner channel-roof term stays separate from the global
+    chamber hoop membrane.  The global membrane uses a common hoop strain for
+    smeared copper ribs plus the outer jacket at each station:
+
+        eps = (N_theta + sum(E*t*alpha*dT)) / sum(E*t)
+
+    This is a preliminary bonded-shell screen, not CHT/FEA qualification.
+    """
+
+    Pc = float(chamber_pressure)
+    if Pc <= 0.0:
+        raise ValueError("chamber_pressure must be positive")
+    if structural_fos <= 0.0:
+        raise ValueError("structural_fos must be positive")
+    if wall_profile is None:
+        raise ValueError("wall_profile is required")
+
+    x = np.asarray(wall_profile.x, dtype=float)
+    r_inner = np.asarray(wall_profile.r_inner, dtype=float)
+    t_hot = np.asarray(wall_profile.t_hot, dtype=float)
+    channel_width = np.asarray(wall_profile.channel_width, dtype=float)
+    channel_height = np.asarray(wall_profile.channel_height, dtype=float)
+    land_width = np.asarray(wall_profile.land_width, dtype=float)
+    t_jacket = np.asarray(wall_profile.t_jacket, dtype=float)
+    n = len(x)
+    for name, arr in (
+        ("r_inner", r_inner),
+        ("t_hot", t_hot),
+        ("channel_width", channel_width),
+        ("channel_height", channel_height),
+        ("land_width", land_width),
+        ("t_jacket", t_jacket),
+    ):
+        if arr.shape != (n,) or not np.all(np.isfinite(arr)):
+            raise ValueError(f"wall_profile.{name} must be finite shape ({n},)")
+    if np.any(r_inner <= 0.0) or np.any(t_hot <= 0.0) or np.any(t_jacket <= 0.0):
+        raise ValueError("wall radii and thicknesses must be positive")
+
+    jmat = jacket_material if jacket_material is not None else liner_material
+    E_l = float(getattr(liner_material, "elastic_modulus"))
+    a_l = float(getattr(liner_material, "thermal_expansion"))
+    nu_l = float(getattr(liner_material, "poisson_ratio"))
+    k_l = float(getattr(liner_material, "conductivity"))
+    Sy_l = float(getattr(liner_material, "yield_strength"))
+    E_j = float(getattr(jmat, "elastic_modulus"))
+    a_j = float(getattr(jmat, "thermal_expansion"))
+    Sy_j = float(getattr(jmat, "yield_strength"))
+
+    land_fraction = land_width / np.maximum(land_width + channel_width, 1e-12)
+    land_fraction = np.clip(land_fraction, 0.0, 1.0)
+    t_liner_eq = t_hot + land_fraction * channel_height
+
+    from raosim.regen_profile import normal_offset_contour
+
+    _, r_jacket = normal_offset_contour(
+        x,
+        r_inner,
+        t_hot + channel_height,
+    )
+
+    T_wg = _station_array(
+        gas_side_wall_temperature,
+        n,
+        "gas_side_wall_temperature",
+        default=stress_free_temperature,
+    )
+    T_wc = _station_array(
+        coolant_side_wall_temperature,
+        n,
+        "coolant_side_wall_temperature",
+        default=stress_free_temperature,
+    )
+    T_c = _station_array(
+        coolant_temperature,
+        n,
+        "coolant_temperature",
+        default=stress_free_temperature,
+    )
+    liner_mean_T = 0.5 * (T_wg + T_wc)
+    jacket_mean_T = 0.5 * (T_wc + T_c)
+    dT_l = liner_mean_T - float(stress_free_temperature)
+    dT_j = jacket_mean_T - float(stress_free_temperature)
+
+    coolant_p = _station_array(
+        coolant_pressure,
+        n,
+        "coolant_pressure",
+        default=Pc,
+    )
+    liner_dp = _station_array(
+        liner_pressure_differential,
+        n,
+        "liner_pressure_differential",
+        default=0.0,
+    )
+    q = _station_array(heat_flux, n, "heat_flux", default=0.0)
+
+    local_radius = np.maximum(0.5 * channel_width, 1e-9)
+    liner_pressure = np.abs(liner_dp) * local_radius / np.maximum(t_hot, 1e-12)
+    liner_thermal = (
+        E_l * a_l * q * t_hot
+        / max(2.0 * (1.0 - nu_l) * max(k_l, 1e-12), 1e-12)
+    )
+    liner_local = liner_pressure + liner_thermal
+
+    N_theta = Pc * r_inner
+    denom = E_l * t_liner_eq + E_j * t_jacket
+    eps = (
+        N_theta
+        + E_l * t_liner_eq * a_l * dT_l
+        + E_j * t_jacket * a_j * dT_j
+    ) / np.maximum(denom, 1e-12)
+    sigma_l_global = E_l * (eps - a_l * dT_l)
+    sigma_j_global = E_j * (eps - a_j * dT_j)
+    jacket_hoop = coolant_p * r_jacket / np.maximum(t_jacket, 1e-12)
+
+    liner_total = liner_local + np.abs(sigma_l_global)
+    jacket_total = jacket_hoop + np.abs(sigma_j_global)
+    liner_allow = Sy_l / structural_fos
+    jacket_allow = Sy_j / structural_fos
+    liner_margin = liner_allow / np.maximum(liner_total, 1e-9)
+    jacket_margin = jacket_allow / np.maximum(jacket_total, 1e-9)
+    component_margin = np.minimum(liner_margin, jacket_margin)
+    idx = int(np.nanargmin(component_margin))
+    governing_component = (
+        "liner" if liner_margin[idx] <= jacket_margin[idx] else "jacket"
+    )
+
+    return CompositeRegenWallScreen(
+        model="bonded_smeared_liner_jacket_common_strain_screen",
+        qualification_status="screening_only_not_validated_cht_fea",
+        liner_material=getattr(liner_material, "name", None),
+        jacket_material=getattr(jmat, "name", None),
+        governing_index=idx,
+        governing_component=governing_component,
+        chamber_pressure=Pc,
+        chamber_radius=float(r_inner[idx]),
+        structural_fos=float(structural_fos),
+        liner_allowable_stress=float(liner_allow),
+        jacket_allowable_stress=float(jacket_allow),
+        min_liner_margin=float(np.nanmin(liner_margin)),
+        min_jacket_margin=float(np.nanmin(jacket_margin)),
+        min_margin=float(component_margin[idx]),
+        liner_total_stress=float(liner_total[idx]),
+        jacket_total_stress=float(jacket_total[idx]),
+        liner_local_sp125_stress=float(liner_local[idx]),
+        liner_global_membrane_stress=float(sigma_l_global[idx]),
+        jacket_coolant_hoop_stress=float(jacket_hoop[idx]),
+        jacket_global_membrane_stress=float(sigma_j_global[idx]),
+        t_liner_equivalent_min=float(np.min(t_liner_eq)),
+        t_liner_equivalent_max=float(np.max(t_liner_eq)),
+        t_jacket_min=float(np.min(t_jacket)),
+        t_jacket_max=float(np.max(t_jacket)),
+        land_fraction_min=float(np.min(land_fraction)),
+        land_fraction_max=float(np.max(land_fraction)),
+        stress_free_temperature=float(stress_free_temperature),
+    )
 
 
 def screen_injector_chamber_interface(
@@ -148,6 +416,7 @@ def screen_injector_chamber_interface(
     material_poisson_ratio: float | None = None,
     structural_fos: float = 1.5,
     bolt_allowable_stress: float | None = None,
+    composite_wall_screen: CompositeRegenWallScreen | None = None,
     joint_separation_factor: float = _DEFAULT_JOINT_SEPARATION_FACTOR,
     edge_distance_factor: float = _DEFAULT_EDGE_DISTANCE_FACTOR,
     pitch_factor: float = _DEFAULT_PITCH_FACTOR,
@@ -238,7 +507,22 @@ def screen_injector_chamber_interface(
     # 1. Wall pressure-only hoop screen. The thermostructural regen profile is
     # handled elsewhere; this prevents the interface summary from pretending a
     # 1 mm reference wall was sized.
-    if wall_thickness is None:
+    if composite_wall_screen is not None:
+        comp = composite_wall_screen
+        gates.append(InterfaceGate(
+            "composite_regen_wall_hoop",
+            comp.status,
+            (
+                f"bonded liner+jacket hoop screen margin {comp.min_margin:.2f}; "
+                f"liner {comp.liner_total_stress/1e6:.1f} MPa vs "
+                f"{comp.liner_allowable_stress/1e6:.1f} MPa, jacket "
+                f"{comp.jacket_total_stress/1e6:.1f} MPa vs "
+                f"{comp.jacket_allowable_stress/1e6:.1f} MPa"
+            ),
+            value=comp.min_margin,
+            limit=1.0,
+        ))
+    elif wall_thickness is None:
         gates.append(InterfaceGate(
             "chamber_wall_hoop_pressure", "info",
             "no chamber wall thickness supplied; wall STL would be a reference shell",
@@ -400,7 +684,7 @@ def screen_injector_chamber_interface(
         inner_edge_distance=inner_edge,
         outer_edge_distance=outer_edge,
         pitch=pitch,
+        composite_wall=composite_wall_screen,
         gates=gates,
         notes=notes,
     )
-

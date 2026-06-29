@@ -22,7 +22,8 @@ F_sep = Pc * A_projected = Pc * pi * Rc^2
 
 This is the basic pressure-vessel free-body load on the injector closure.
 
-Thin chamber-wall pressure screen:
+Thin chamber-wall pressure screen, used only when no sized regenerative wall
+profile is available:
 
 ```text
 sigma_hoop = Pc * Rc / t_wall
@@ -31,6 +32,23 @@ sigma_hoop = Pc * Rc / t_wall
 This is the standard thin-cylinder pressure-vessel relation.  The regenerative
 wall model remains the authoritative path for station-wise thermal/structural
 liner sizing.
+
+When `run_nozzle.py` has a resolved `RegenWallProfile` from `--size-wall`, the
+interface ledger replaces this scalar gate with `composite_regen_wall_hoop`.
+That screen keeps the local SP-125 liner channel-roof stress separate from a
+smeared bonded-shell chamber-hoop load shared by the copper liner/ribs and the
+outer jacket:
+
+```text
+t_cu,eq = t_hot + land_fraction * channel_height
+N_theta = Pc * r
+eps = (N_theta + sum(E_i * t_i * alpha_i * DeltaT_i)) / sum(E_i * t_i)
+sigma_i = E_i * (eps - alpha_i * DeltaT_i)
+```
+
+The reported copper demand conservatively adds the local liner stress to the
+absolute composite membrane stress.  The reported jacket demand adds the
+coolant-pressure hoop stress to the absolute composite membrane stress.
 
 Injector faceplate bending screen:
 
@@ -84,4 +102,3 @@ thread engagement, local boss stress, weld/braze details, thermal gradients
 through the injector body, fatigue, creep, proof factors, or nonlinear contact.
 Final hardware needs detailed joint design, FEA, inspection planning, and test
 evidence.
-

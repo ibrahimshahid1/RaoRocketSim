@@ -138,11 +138,17 @@ The inner-liner stress is evaluated at every station using SP-125 equation
 
 $$
 \sigma_c(x) =
-\frac{|p_\mathrm{cool}(x)-p_g(x)|r(x)}{t_\mathrm{hot}(x)}
+\frac{|p_\mathrm{cool}(x)-p_g(x)|r_\mathrm{channel}(x)}
+     {t_\mathrm{hot}(x)}
 +
 \frac{E\alpha q''(x)t_\mathrm{hot}(x)}
      {2(1-\nu)k_w}.
 $$
+
+For the local liner channel-roof hoop term, `r_channel` is the coolant-passage
+scale (`channel_width/2` for the milled rectangular channels in the variable
+profile path), not the nozzle/chamber shell radius.  The shell radius is still
+used where the model is actually a shell or jacket hoop screen.
 
 The outer closeout jacket uses the preliminary thin-shell hoop screen
 

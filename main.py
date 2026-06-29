@@ -45,6 +45,7 @@ from raosim.injector import (
     FeedSystemSpec,
     InjectorManufacturingSpec,
     InjectorSpec,
+    PintleMechanicalSpec,
     PintleGeometrySpec,
     PropellantFeedSpec,
 )
@@ -291,11 +292,13 @@ Examples:
     p.add_argument('--oxidizer-npsh-required', type=float, default=None,
                    help='Oxidizer pump required NPSH [bar]')
     # --- injector reference-geometry / CAD output ----------------------
-    p.add_argument('--injector-cad', choices=['none', 'reference', 'parts'],
+    p.add_argument('--injector-cad',
+                   choices=['none', 'reference', 'parts', 'machined'],
                    default='none',
                    help='Pintle CAD output: none (schematic+JSON+CSV only, '
-                        'always written), reference (single file), or parts '
-                        '(reference + named part files)')
+                        'always written), reference (single file), parts '
+                        '(reference + named part files), or machined '
+                        '(Boolean-cut STEP bodies + report)')
     p.add_argument('--injector-cad-format', choices=['step', 'stl', 'dxf'],
                    default='step',
                    help='Pintle CAD format: step (portable B-rep, default), '
@@ -503,6 +506,17 @@ def run_batch_v2(args):
             ),
             manufacturing=InjectorManufacturingSpec(
                 min_feature=_mm_to_m(args.injector_min_feature),
+            ),
+            mechanical=PintleMechanicalSpec(
+                bolt_count=args.bolt_count,
+                bolt_circle_diameter=_mm_to_m(args.bolt_circle),
+                bolt_hole_diameter=_mm_to_m(args.bolt_hole),
+                faceplate_thickness=_mm_to_m(args.injector_face_thickness),
+                faceplate_outer_diameter=_mm_to_m(args.injector_face_od),
+                min_tool_diameter=_mm_to_m(args.injector_min_feature),
+                min_corner_radius=_mm_to_m(args.injector_min_feature) / 2.0
+                if args.injector_min_feature is not None else None,
+                tolerance=_mm_to_m(args.tolerance),
             ),
             feed_system=FeedSystemSpec(
                 architecture=args.feed_architecture,

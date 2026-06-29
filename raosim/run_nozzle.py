@@ -652,14 +652,17 @@ def main() -> int:
                     help="Pc(f)=Pc·f^exp for the throttle map (1=Pc∝ṁ, "
                          "0=constant Pc)")
     ap.add_argument("--injector-cad",
-                    choices=("none", "auto", "reference", "parts", "step"),
+                    choices=("none", "auto", "reference", "parts", "step",
+                             "machined"),
                     default="auto",
                     help="pintle package CAD mode with --injector pintle: "
                          "none writes only JSON/CSV/SVG/PNG; reference writes a "
                          "single CAD-neutral reference file; parts also writes "
                          "named part files; auto uses parts when CadQuery is "
                          "available and otherwise keeps the mandatory package; "
-                         "step is the legacy alias for required STEP parts")
+                         "machined writes Boolean-cut STEP bodies and a "
+                         "manufacturing report; step is the legacy alias for "
+                         "required STEP parts")
     ap.add_argument("--injector-cad-format", choices=("step", "stl", "dxf"),
                     default="step",
                     help="format for --injector-cad reference/parts/auto "
@@ -671,10 +674,63 @@ def main() -> int:
     ap.add_argument("--pintle-slot-width", type=float, default=None)
     ap.add_argument("--pintle-slot-height", type=float, default=None)
     ap.add_argument("--pintle-slot-depth", type=float, default=None)
+    ap.add_argument("--pintle-slot-corner-radius", type=float, default=None,
+                    help="machined slot corner/end radius [m]")
+    ap.add_argument("--pintle-slot-end-condition",
+                    choices=("square", "rounded", "drilled", "edm"),
+                    default="rounded",
+                    help="machined slot end/corner condition")
     ap.add_argument("--pintle-tip-radius", type=float, default=None)
     ap.add_argument("--pintle-body-length", type=float, default=None)
+    ap.add_argument("--pintle-annulus-length", type=float, default=None,
+                    help="machined annular sleeve passage length [m]")
+    ap.add_argument("--pintle-wall-thickness", type=float, default=None,
+                    help="machined pintle post wall thickness [m]")
+    ap.add_argument("--sleeve-wall-thickness", type=float, default=None,
+                    help="machined annular sleeve wall thickness [m]")
     ap.add_argument("--injector-face-thickness", type=float, default=None)
     ap.add_argument("--injector-face-od", type=float, default=None)
+    ap.add_argument("--fuel-inlet-count", type=int, default=2)
+    ap.add_argument("--fuel-inlet-diameter", type=float, default=None,
+                    help="fuel inlet/feed-port diameter [m]")
+    ap.add_argument("--fuel-inlet-angle", type=float, default=0.0,
+                    help="first fuel inlet angle on the face [deg]")
+    ap.add_argument("--fuel-inlet-fitting", default="layout_only",
+                    help="fuel fitting style label; layout_only is not a standard")
+    ap.add_argument("--oxidizer-inlet-count", type=int, default=2)
+    ap.add_argument("--oxidizer-inlet-diameter", type=float, default=None,
+                    help="oxidizer inlet/feed-port diameter [m]")
+    ap.add_argument("--oxidizer-inlet-angle", type=float, default=90.0,
+                    help="first oxidizer inlet angle on the face [deg]")
+    ap.add_argument("--oxidizer-inlet-fitting", default="layout_only",
+                    help="oxidizer fitting style label; layout_only is not a standard")
+    ap.add_argument("--fuel-manifold-width", type=float, default=None,
+                    help="fuel annular manifold radial width [m]")
+    ap.add_argument("--fuel-manifold-depth", type=float, default=None,
+                    help="fuel annular manifold axial depth [m]")
+    ap.add_argument("--oxidizer-manifold-width", type=float, default=None,
+                    help="oxidizer annular manifold radial width [m]")
+    ap.add_argument("--oxidizer-manifold-depth", type=float, default=None,
+                    help="oxidizer annular manifold axial depth [m]")
+    ap.add_argument("--manifold-velocity-limit", type=float, default=8.0,
+                    help="manifold sizing velocity limit [m/s]")
+    ap.add_argument("--inlet-velocity-limit", type=float, default=20.0,
+                    help="inlet/feed-port sizing velocity limit [m/s]")
+    ap.add_argument("--igniter-port-diameter", type=float, default=None,
+                    help="central igniter port diameter [m]")
+    ap.add_argument("--igniter-port-depth", type=float, default=None,
+                    help="central igniter port modeled depth [m]")
+    ap.add_argument("--seal-type", choices=("none", "o_ring", "gasket"),
+                    default="o_ring")
+    ap.add_argument("--o-ring-groove-width", type=float, default=None)
+    ap.add_argument("--o-ring-groove-depth", type=float, default=None)
+    ap.add_argument("--gasket-land-width", type=float, default=None)
+    ap.add_argument("--min-tool-diameter", type=float, default=None,
+                    help="minimum machining tool/EDM wire diameter [m]")
+    ap.add_argument("--min-corner-radius", type=float, default=None,
+                    help="minimum internal corner radius [m]")
+    ap.add_argument("--injector-tolerance", type=float, default=None,
+                    help="machined injector dimensional tolerance [m]")
     ap.add_argument("--flange-od", type=float, default=None,
                     help="optional chamber/injector flange outer diameter [m]")
     ap.add_argument("--flange-length", type=float, default=None,
@@ -1791,7 +1847,7 @@ def main() -> int:
     if args.injector == "pintle":
         from raosim.injector import (
             InjectorSpec, PropellantFeedSpec, PintleGeometrySpec,
-            InjectorManufacturingSpec, InjectorUnsupportedState,
+            PintleMechanicalSpec, InjectorManufacturingSpec, InjectorUnsupportedState,
             InjectorSpecError, evaluate_pintle_injector,
         )
         from raosim.design import CoolingSpec
@@ -1837,6 +1893,41 @@ def main() -> int:
                 face_od=args.injector_face_od),
             manufacturing=InjectorManufacturingSpec(
                 min_feature=args.injector_min_feature),
+            mechanical=PintleMechanicalSpec(
+                bolt_count=args.bolt_count,
+                bolt_circle_diameter=args.bolt_circle,
+                bolt_hole_diameter=args.bolt_hole,
+                faceplate_thickness=args.injector_face_thickness,
+                faceplate_outer_diameter=args.injector_face_od,
+                fuel_inlet_count=args.fuel_inlet_count,
+                fuel_inlet_diameter=args.fuel_inlet_diameter,
+                fuel_inlet_angle=args.fuel_inlet_angle,
+                fuel_inlet_fitting=args.fuel_inlet_fitting,
+                oxidizer_inlet_count=args.oxidizer_inlet_count,
+                oxidizer_inlet_diameter=args.oxidizer_inlet_diameter,
+                oxidizer_inlet_angle=args.oxidizer_inlet_angle,
+                oxidizer_inlet_fitting=args.oxidizer_inlet_fitting,
+                fuel_manifold_width=args.fuel_manifold_width,
+                fuel_manifold_depth=args.fuel_manifold_depth,
+                oxidizer_manifold_width=args.oxidizer_manifold_width,
+                oxidizer_manifold_depth=args.oxidizer_manifold_depth,
+                manifold_velocity_limit=args.manifold_velocity_limit,
+                inlet_velocity_limit=args.inlet_velocity_limit,
+                slot_depth=args.pintle_slot_depth,
+                slot_corner_radius=args.pintle_slot_corner_radius,
+                slot_end_condition=args.pintle_slot_end_condition,
+                annulus_length=args.pintle_annulus_length,
+                sleeve_wall_thickness=args.sleeve_wall_thickness,
+                pintle_wall_thickness=args.pintle_wall_thickness,
+                igniter_port_diameter=args.igniter_port_diameter,
+                igniter_port_depth=args.igniter_port_depth,
+                seal_type=args.seal_type,
+                o_ring_groove_width=args.o_ring_groove_width,
+                o_ring_groove_depth=args.o_ring_groove_depth,
+                gasket_land_width=args.gasket_land_width,
+                min_tool_diameter=args.min_tool_diameter,
+                min_corner_radius=args.min_corner_radius,
+                tolerance=args.injector_tolerance),
         )
         try:
             coupling_cooling = CoolingSpec(
@@ -1960,7 +2051,39 @@ def main() -> int:
 
     # ---- injector/chamber mechanical interface screen -----------------
     try:
-        from raosim.interface import screen_injector_chamber_interface
+        from raosim.interface import (
+            screen_composite_regen_wall,
+            screen_injector_chamber_interface,
+        )
+
+        composite_wall_screen = None
+        sized_interface_profile = getattr(args, "_wall_profile", None)
+        if cooling_result is not None and sized_interface_profile is not None and mat:
+            from raosim.design import MaterialSpec
+
+            liner_screen_material = MaterialSpec.from_catalog(args._material.name)
+            liner_screen_material.conductivity = float(args.wall_k)
+            liner_screen_material.max_temperature = float(args.wall_temp_limit)
+            jacket_screen_material = (
+                MaterialSpec.from_catalog(args.jacket_material)
+                if args.jacket_material else liner_screen_material
+            )
+            composite_wall_screen = screen_composite_regen_wall(
+                chamber_pressure=args.pc,
+                wall_profile=sized_interface_profile,
+                liner_material=liner_screen_material,
+                jacket_material=jacket_screen_material,
+                structural_fos=args.structural_fos,
+                gas_side_wall_temperature=
+                    cooling_result["gas_side_wall_temperature"],
+                coolant_side_wall_temperature=
+                    cooling_result["coolant_side_wall_temperature"],
+                coolant_temperature=cooling_result["coolant_temperature"],
+                coolant_pressure=cooling_result["coolant_pressure"],
+                liner_pressure_differential=
+                    cooling_result["liner_pressure_differential"],
+                heat_flux=cooling_result["q"],
+            )
 
         interface_ledger = screen_injector_chamber_interface(
             chamber_pressure=args.pc,
@@ -1978,6 +2101,7 @@ def main() -> int:
             material_yield_strength=(mat.yield_strength if mat else None),
             material_elastic_modulus=(mat.elastic_modulus if mat else None),
             material_poisson_ratio=(mat.poisson_ratio if mat else None),
+            composite_wall_screen=composite_wall_screen,
             joint_separation_factor=args.joint_separation_factor,
         )
         summary["injector_interface"] = interface_ledger.to_dict()

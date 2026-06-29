@@ -1038,7 +1038,8 @@ def size_wall_profile(
             p_diff = np.abs(
                 np.asarray(res["liner_pressure_differential"], dtype=float)
             )
-            a = p_diff * r_inner
+            liner_hoop_radius = channel_pressure_hoop_radius(w, t_hot)
+            a = p_diff * liner_hoop_radius
             b = E * alpha * q / (2.0 * (1.0 - nu) * k)
             disc = Slim * Slim - 4.0 * a * b
             with np.errstate(divide="ignore", invalid="ignore"):
@@ -1113,8 +1114,9 @@ def size_wall_profile(
         Twg = np.asarray(res["gas_side_wall_temperature"], dtype=float)
         Twc = np.asarray(res["coolant_side_wall_temperature"], dtype=float)
         thermal_ok = Twg <= T_limit + 1e-6
+        liner_hoop_radius = channel_pressure_hoop_radius(w, t_hot)
         combined = (
-            p_diff * r_inner / np.maximum(t_hot, 1e-12)
+            p_diff * liner_hoop_radius / np.maximum(t_hot, 1e-12)
             + E * alpha * q * t_hot / (2.0 * (1.0 - nu) * k)
         )
         struct_margin = Sy / np.maximum(combined, 1e-9)
@@ -1211,6 +1213,7 @@ def size_wall_profile(
             "h": h_arr,
             "thermal_ok": thermal_ok,
             "structural_margin_profile": struct_margin,
+            "liner_pressure_hoop_radius_profile": liner_hoop_radius,
             "jacket_stress_profile": jacket_stress,
             "jacket_margin_profile": jacket_margin,
             "sp125_429_critical_stress_profile": critical_429,
@@ -1295,6 +1298,10 @@ def size_wall_profile(
         "min_structural_margin": float(
             np.min(best["structural_margin_profile"])
         ),
+        "liner_pressure_hoop_radius_profile":
+            best["liner_pressure_hoop_radius_profile"],
+        "liner_pressure_hoop_radius_basis":
+            "channel_half_width_sp125_eq_4_27_4_31",
         "jacket_stress_profile": best["jacket_stress_profile"],
         "jacket_margin_profile": best["jacket_margin_profile"],
         "min_jacket_margin": float(np.min(best["jacket_margin_profile"])),

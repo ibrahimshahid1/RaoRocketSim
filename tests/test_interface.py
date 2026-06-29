@@ -1,5 +1,6 @@
 import math
 
+import numpy as np
 import pytest
 
 from raosim.design import (
@@ -10,7 +11,11 @@ from raosim.design import (
     ThermoSpec,
     design_nozzle_v2,
 )
-from raosim.interface import screen_injector_chamber_interface
+from raosim.interface import (
+    screen_composite_regen_wall,
+    screen_injector_chamber_interface,
+)
+from raosim.regen_profile import RegenWallProfile
 
 
 def _gate(ledger, name):
@@ -61,6 +66,117 @@ def test_interface_missing_bolt_data_is_informational():
     assert ledger.feasible is True
 
 
+def test_composite_regen_wall_screen_uses_common_strain():
+    contour = {
+        "x": np.array([0.0, 0.1]),
+        "y": np.array([0.05, 0.05]),
+        "Rt": 0.05,
+    }
+    profile = RegenWallProfile.uniform(
+        contour,
+        channel_count=80,
+        channel_width=0.001,
+        channel_height=0.003,
+        land_width=0.001,
+        t_hot=0.001,
+        t_jacket=0.002,
+    )
+    liner = MaterialSpec(
+        name="copper liner",
+        yield_strength=200e6,
+        conductivity=300.0,
+        elastic_modulus=100e9,
+        thermal_expansion=17e-6,
+        poisson_ratio=0.33,
+    )
+    jacket = MaterialSpec(
+        name="jacket alloy",
+        yield_strength=900e6,
+        conductivity=15.0,
+        elastic_modulus=200e9,
+        thermal_expansion=13e-6,
+        poisson_ratio=0.29,
+    )
+
+    screen = screen_composite_regen_wall(
+        chamber_pressure=4.0e6,
+        wall_profile=profile,
+        liner_material=liner,
+        jacket_material=jacket,
+        structural_fos=1.0,
+        gas_side_wall_temperature=np.array([500.0, 500.0]),
+        coolant_side_wall_temperature=np.array([400.0, 400.0]),
+        coolant_temperature=np.array([330.0, 330.0]),
+        coolant_pressure=np.array([5.0e6, 5.0e6]),
+        liner_pressure_differential=np.array([1.0e6, 1.0e6]),
+        heat_flux=np.array([1.0e6, 1.0e6]),
+    )
+
+    t_cu_eq = 0.001 + 0.5 * 0.003
+    dT_cu = 0.5 * (500.0 + 400.0) - 293.15
+    dT_j = 0.5 * (400.0 + 330.0) - 293.15
+    eps = (
+        4.0e6 * 0.05
+        + 100e9 * t_cu_eq * 17e-6 * dT_cu
+        + 200e9 * 0.002 * 13e-6 * dT_j
+    ) / (100e9 * t_cu_eq + 200e9 * 0.002)
+    expected_liner_global = 100e9 * (eps - 17e-6 * dT_cu)
+
+    assert screen.t_liner_equivalent_min == pytest.approx(t_cu_eq)
+    assert screen.land_fraction_min == pytest.approx(0.5)
+    assert screen.liner_global_membrane_stress == pytest.approx(
+        expected_liner_global
+    )
+    assert screen.min_margin > 1.0
+    assert screen.status == "pass"
+
+
+def test_interface_replaces_scalar_wall_gate_with_composite_screen():
+    contour = {
+        "x": np.array([0.0, 0.1]),
+        "y": np.array([0.05, 0.05]),
+        "Rt": 0.05,
+    }
+    profile = RegenWallProfile.uniform(
+        contour,
+        channel_count=80,
+        channel_width=0.001,
+        channel_height=0.003,
+        land_width=0.001,
+        t_hot=0.001,
+        t_jacket=0.002,
+    )
+    material = MaterialSpec(
+        name="screen alloy",
+        yield_strength=900e6,
+        conductivity=300.0,
+        elastic_modulus=120e9,
+        thermal_expansion=16e-6,
+        poisson_ratio=0.3,
+    )
+    composite = screen_composite_regen_wall(
+        chamber_pressure=2.0e6,
+        wall_profile=profile,
+        liner_material=material,
+        jacket_material=material,
+        structural_fos=1.0,
+    )
+
+    ledger = screen_injector_chamber_interface(
+        chamber_pressure=2.0e6,
+        chamber_radius=0.05,
+        wall_thickness=0.001,
+        material_yield_strength=900e6,
+        composite_wall_screen=composite,
+    )
+    names = {gate.name for gate in ledger.gates}
+    assert "composite_regen_wall_hoop" in names
+    assert "chamber_wall_hoop_pressure" not in names
+    assert ledger.to_dict()["composite_wall"]["min_margin"] == pytest.approx(
+        composite.min_margin
+    )
+
+
 def test_v2_report_contains_injector_interface_screen():
     result = design_nozzle_v2(
         DesignInput(
@@ -96,4 +212,3 @@ def test_v2_report_contains_injector_interface_screen():
         "bolt_joint_separation",
         "bolt_pattern_lands",
     }
-

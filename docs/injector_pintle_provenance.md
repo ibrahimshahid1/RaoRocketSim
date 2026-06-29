@@ -108,10 +108,17 @@ Beyond hydraulic sizing the result carries (all screening-grade):
   development, the face/tip thermal stack, stability (modes + chug + n-τ),
   manifold maldistribution, the gate scorecard, and (with `--throttle-map`) the
   throttle sweep.
-- **CAD** (`raosim.injector_cad`) — a CadQuery named-body assembly (faceplate,
-  hollow pintle body, tip, axial annulus, radial slot network, fuel/oxidizer
-  manifolds, igniter interface, regen-coolant outlet, optional movable sleeve);
-  STEP is authoritative, per-body STLs for printing.
+- **CAD** (`raosim.injector_cad`) — two tiers. Reference CAD is the legacy
+  CadQuery named-body assembly (faceplate, hollow pintle body, tip, axial
+  annulus, radial slot network, fuel/oxidizer manifolds, igniter interface,
+  regen-coolant outlet, optional movable sleeve). `--injector-cad machined`
+  adds a mechanical layout layer that resolves faceplate, bolt circle,
+  feed/inlet ports, annular manifolds, seal groove, sleeve, igniter bore, slot
+  end condition, tool radius, and tolerance floors, then writes Boolean-cut STEP
+  bodies plus `injector_manufacturing_report.json`. It includes preliminary
+  radial transfer cuts between manifolds and the annulus/slotted-pintle feed
+  volumes. The report retains the literature basis and marks the layout
+  preliminary.
 
 ## What is explicitly NOT validated here
 
@@ -120,5 +127,7 @@ combustion stability, manifold maldistribution, and face/tip heating are
 screening surrogates or informational gates. SP-8089 is explicit that pintle
 spray distributions require **cold-flow** testing, and the engine requires
 **hot-fire** validation. Both are reported by the `validation_status` gate as
-REQUIRED and not performed. The CAD is a preliminary schematic, not a
-drawing-ready part.
+REQUIRED and not performed. Machined CAD is a real B-rep layout when CadQuery is
+available, but it is still not a released manufacturing drawing: fitting
+standards, transfer-port loss coefficients, O-ring crush, bolt preload, surface
+finish, GD&T, and cold-flow validation remain required.

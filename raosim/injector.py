@@ -151,6 +151,58 @@ class InjectorManufacturingSpec:
 
 
 @dataclass
+class PintleMechanicalSpec:
+    """Machined injector layout inputs layered on the hydraulic pintle result.
+
+    The hydraulic model answers "how much flow area is required"; this spec
+    answers how those areas are packaged into cut metal.  Defaults are
+    preliminary manufacturability/layout rules and are reported as such.
+    """
+
+    bolt_count: int | None = None
+    bolt_circle_diameter: float | None = None
+    bolt_hole_diameter: float | None = None
+    faceplate_thickness: float | None = None
+    faceplate_outer_diameter: float | None = None
+
+    fuel_inlet_count: int = 2
+    fuel_inlet_diameter: float | None = None
+    fuel_inlet_angle: float = 0.0
+    fuel_inlet_fitting: str = "layout_only"
+    oxidizer_inlet_count: int = 2
+    oxidizer_inlet_diameter: float | None = None
+    oxidizer_inlet_angle: float = 90.0
+    oxidizer_inlet_fitting: str = "layout_only"
+
+    fuel_manifold_width: float | None = None
+    fuel_manifold_depth: float | None = None
+    oxidizer_manifold_width: float | None = None
+    oxidizer_manifold_depth: float | None = None
+    manifold_velocity_limit: float = 8.0
+    inlet_velocity_limit: float = 20.0
+
+    slot_depth: float | None = None
+    slot_corner_radius: float | None = None
+    slot_end_condition: str = "rounded"  # square | rounded | drilled | edm
+
+    annulus_length: float | None = None
+    sleeve_wall_thickness: float | None = None
+    pintle_wall_thickness: float | None = None
+
+    igniter_port_diameter: float | None = None
+    igniter_port_depth: float | None = None
+
+    seal_type: str = "o_ring"  # none | o_ring | gasket
+    o_ring_groove_width: float | None = None
+    o_ring_groove_depth: float | None = None
+    gasket_land_width: float | None = None
+
+    min_tool_diameter: float | None = None
+    min_corner_radius: float | None = None
+    tolerance: float | None = None
+
+
+@dataclass
 class InjectorSpec:
     """Top-level injector request attached to a DesignInput."""
 
@@ -183,9 +235,11 @@ class InjectorSpec:
     manufacturing: InjectorManufacturingSpec = field(
         default_factory=InjectorManufacturingSpec
     )
+    mechanical: PintleMechanicalSpec = field(default_factory=PintleMechanicalSpec)
     # Pump/tank feed-system inputs for the feed-pressure closure (§ feed ledger).
     feed_system: FeedSystemSpec = field(default_factory=FeedSystemSpec)
     # Injector CAD/reference-geometry output: "none" | "reference" | "parts";
+    # "machined" writes true Boolean-cut STEP bodies when CadQuery is available;
     # format "step" (portable B-rep) | "stl" (mesh) | "dxf" (2-D profile).
     cad: str = "none"
     cad_format: str = "step"
@@ -687,6 +741,46 @@ def _validate_injector_spec(
             errs.append(f"{name} must be > 0")
     if spec.manufacturing.concentricity_tolerance < 0.0:
         errs.append("concentricity_tolerance must be >= 0")
+    mech = spec.mechanical
+    if mech.bolt_count is not None and int(mech.bolt_count) < 0:
+        errs.append("mechanical.bolt_count must be >= 0")
+    if int(mech.fuel_inlet_count) < 0:
+        errs.append("mechanical.fuel_inlet_count must be >= 0")
+    if int(mech.oxidizer_inlet_count) < 0:
+        errs.append("mechanical.oxidizer_inlet_count must be >= 0")
+    for name, value in (
+        ("bolt_circle_diameter", mech.bolt_circle_diameter),
+        ("bolt_hole_diameter", mech.bolt_hole_diameter),
+        ("faceplate_thickness", mech.faceplate_thickness),
+        ("faceplate_outer_diameter", mech.faceplate_outer_diameter),
+        ("fuel_inlet_diameter", mech.fuel_inlet_diameter),
+        ("oxidizer_inlet_diameter", mech.oxidizer_inlet_diameter),
+        ("fuel_manifold_width", mech.fuel_manifold_width),
+        ("fuel_manifold_depth", mech.fuel_manifold_depth),
+        ("oxidizer_manifold_width", mech.oxidizer_manifold_width),
+        ("oxidizer_manifold_depth", mech.oxidizer_manifold_depth),
+        ("manifold_velocity_limit", mech.manifold_velocity_limit),
+        ("inlet_velocity_limit", mech.inlet_velocity_limit),
+        ("slot_depth", mech.slot_depth),
+        ("slot_corner_radius", mech.slot_corner_radius),
+        ("annulus_length", mech.annulus_length),
+        ("sleeve_wall_thickness", mech.sleeve_wall_thickness),
+        ("pintle_wall_thickness", mech.pintle_wall_thickness),
+        ("igniter_port_diameter", mech.igniter_port_diameter),
+        ("igniter_port_depth", mech.igniter_port_depth),
+        ("o_ring_groove_width", mech.o_ring_groove_width),
+        ("o_ring_groove_depth", mech.o_ring_groove_depth),
+        ("gasket_land_width", mech.gasket_land_width),
+        ("min_tool_diameter", mech.min_tool_diameter),
+        ("min_corner_radius", mech.min_corner_radius),
+        ("tolerance", mech.tolerance),
+    ):
+        if value is not None and value <= 0.0:
+            errs.append(f"mechanical.{name} must be > 0")
+    if mech.slot_end_condition not in ("square", "rounded", "drilled", "edm"):
+        errs.append("mechanical.slot_end_condition must be square, rounded, drilled, or edm")
+    if mech.seal_type not in ("none", "o_ring", "gasket"):
+        errs.append("mechanical.seal_type must be none, o_ring, or gasket")
     if spec.sizing == "fixed":
         if geo.annulus_gap is None or geo.slot_width is None:
             errs.append(

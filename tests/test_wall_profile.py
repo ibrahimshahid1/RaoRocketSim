@@ -38,12 +38,18 @@ def test_wall_profile_is_variable_not_uniform(prop, contour):
                           t_hot_min=0.0005, t_hot_max=0.003, **_KW)
     p = r["profile"]
     assert isinstance(p, RegenWallProfile)
-    assert not p.is_uniform                         # genuinely varies along x
-    assert r["t_hot_max_mm"] > r["t_hot_min_mm"] + 0.05
-    # Thicker toward the large-radius exit (pressure stress ∝ p_diff·R/t),
-    # thinnest near the throat (held at/above the manufacturing floor).
-    ti = int(np.argmin(np.asarray(contour["y"])))
-    assert p.t_hot[-1] > p.t_hot[ti]
+    assert not p.is_uniform                         # channel height varies along x
+    assert r["channel_height_max_mm"] > r["channel_height_min_mm"]
+    assert r["liner_pressure_hoop_radius_basis"] == (
+        "channel_half_width_sp125_eq_4_27_4_31"
+    )
+    assert np.allclose(
+        r["liner_pressure_hoop_radius_profile"],
+        0.5 * np.asarray(p.channel_width),
+    )
+    assert float(np.max(r["liner_pressure_hoop_radius_profile"])) < (
+        0.02 * float(np.min(np.asarray(contour["y"])))
+    )
     assert r["t_hot_min_mm"] >= 0.5 - 1e-6          # honors the mfg floor
 
 
@@ -101,8 +107,9 @@ def test_geometry_consumes_the_variable_profile(prop, contour, tmp_path):
     reg = generate_regen_nozzle(contour, None, 0.001, wall_profile=r["profile"],
                                 stl_path=tmp_path / "regen.stl")
     s = reg["summary"]
+    assert r["channel_height_max_mm"] > r["channel_height_min_mm"]
     assert s["variable_profile"] is True
-    assert s["t_hot_range_mm"][1] > s["t_hot_range_mm"][0]    # carried through
+    assert "t_hot_range_mm" in s                              # carried through
     assert "t_jacket_range_mm" in s
     assert reg.get("jacket_verts") is not None                # jacket surface built
     assert (tmp_path / "regen.stl").stat().st_size > 1000
