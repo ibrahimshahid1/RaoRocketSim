@@ -863,7 +863,31 @@ class TestElectricPumpSizing:
         assert curve.points[0].head > curve.points[-1].head
         assert fuel.drive.rpm > 0.0
         assert fuel.drive.voltage > 0.0
+        assert pump.lines["oxidizer"].drive.voltage == pytest.approx(
+            fuel.drive.voltage
+        )
+        assert pump.battery.voltage == pytest.approx(fuel.drive.voltage)
         assert pump.assumptions["pump_rpm"] == "auto"
+        assert pump.assumptions["electric_bus_architecture"] == "shared_pack_bus"
+        assert pump.assumptions["selected_bus_voltage_source"].startswith("shared_")
+        assert any(
+            g.name == "pump_efficiency_screen_fuel" and g.status == "warn"
+            for g in pump.feasibility.gates
+        )
+
+    def test_shared_bus_flags_inconsistent_explicit_voltages(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=5e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=6e5))))
+        pump = size_electric_pumps(r.feed_system, PumpSizingSpec(
+            drive=ElectricDriveSpec(voltage=96.0),
+            battery=BatterySpec(voltage=270.0),
+        ))
+
+        assert pump.feasible is False
+        gate = next(g for g in pump.feasibility.gates
+                    if g.name == "electric_bus_voltage_consistency")
+        assert gate.status == "fail"
 
     def test_missing_tank_pressure_reports_requirement_without_geometry(self):
         r = _eval()

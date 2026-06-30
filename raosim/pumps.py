@@ -131,6 +131,11 @@ class PumpSizingSpec:
     min_outlet_width: float = 3.0e-4
     max_outlet_width_ratio: float = 0.12
     auto_current_target: float = SCREENING_DEFAULTS["auto_current_target"]
+    # If neither --motor-voltage nor --battery-voltage is supplied, the default
+    # architecture is one common DC pack/bus feeding both propellant pump drives.
+    # Per-stream voltages would require explicit DC/DC converters or separate
+    # packs, so the screening solver does not silently assume them.
+    shared_bus: bool = True
     min_capacity_margin: float = SCREENING_DEFAULTS["pump_margin"]
 
 
@@ -567,20 +572,59 @@ def _screen_status(value: float, warn: float, fail: float, *, high_bad=True) -> 
     return "pass"
 
 
+def _standard_bus_at_or_above(required_voltage: float) -> tuple[float, str]:
+    for candidate in (24.0, 48.0, 96.0, 120.0, 270.0, 400.0, 540.0, 800.0):
+        if candidate >= required_voltage:
+            return candidate, "auto_standard_bus"
+    return required_voltage, "auto_minimum_for_current_limit"
+
+
 def _select_voltage(electric_power: float, spec: PumpSizingSpec) -> tuple[float, str]:
     drive = spec.drive
     if drive.voltage is not None:
         return float(drive.voltage), "user"
+    if spec.battery.voltage is not None:
+        return float(spec.battery.voltage), "battery_user"
     current_target = (
         drive.max_current
         or spec.battery.max_current
         or max(spec.auto_current_target, 1.0)
     )
     required = electric_power / max(current_target, 1e-9)
-    for candidate in (24.0, 48.0, 96.0, 120.0, 270.0, 400.0, 540.0, 800.0):
-        if candidate >= required:
-            return candidate, "auto_standard_bus"
-    return required, "auto_minimum_for_current_limit"
+    return _standard_bus_at_or_above(required)
+
+
+def _select_shared_bus_voltage(
+    line_electric_power: dict[str, float],
+    spec: PumpSizingSpec,
+) -> tuple[float, str]:
+    """Select one DC bus for every pump drive in the default architecture."""
+    drive = spec.drive
+    batt = spec.battery
+    if batt.voltage is not None:
+        return float(batt.voltage), "user_battery_shared_bus"
+    if drive.voltage is not None:
+        return float(drive.voltage), "user_motor_shared_bus"
+    if not line_electric_power:
+        return 48.0, "auto_default_shared_bus"
+
+    per_drive_limit = drive.max_current
+    pack_limit = batt.max_current
+    current_target = max(spec.auto_current_target, 1.0)
+    required = 0.0
+    for power in line_electric_power.values():
+        required = max(required, power / max(per_drive_limit or current_target, 1e-9))
+    total_power = sum(max(0.0, p) for p in line_electric_power.values())
+    if pack_limit is not None:
+        required = max(required, total_power / max(pack_limit, 1e-9))
+    elif per_drive_limit is None:
+        # In the default no-hardware-map case, keep total pack current around
+        # the same target as the per-drive current.  This avoids the old behavior
+        # where two independently selected low-voltage drives were summarized as
+        # one higher-voltage pack after the fact.
+        required = max(required, total_power / current_target)
+    voltage, source = _standard_bus_at_or_above(required)
+    return voltage, f"shared_{source}"
 
 
 def _drive_sizing(
@@ -588,6 +632,9 @@ def _drive_sizing(
     shaft_power: float,
     rpm: float,
     spec: PumpSizingSpec,
+    *,
+    bus_voltage: float | None = None,
+    voltage_source: str | None = None,
 ) -> ElectricDriveSizing:
     drive = spec.drive
     eta_m = max(1e-6, min(1.0, drive.motor_efficiency))
@@ -595,7 +642,11 @@ def _drive_sizing(
     motor_input_power = shaft_power / eta_m
     electric_power = motor_input_power / eta_i
     omega = 2.0 * math.pi * max(rpm, 1e-9) / 60.0
-    voltage, voltage_source = _select_voltage(electric_power, spec)
+    if bus_voltage is None:
+        voltage, voltage_source = _select_voltage(electric_power, spec)
+    else:
+        voltage = float(bus_voltage)
+        voltage_source = voltage_source or "shared_bus"
     current = electric_power / max(voltage, 1e-9)
     if drive.power_density is not None:
         motor_controller_mass = electric_power / max(drive.power_density, 1e-9)
@@ -636,7 +687,11 @@ def _battery_sizing(
     mass_power = total_electric_power / max(batt.power_density, 1e-9)
     limiting = "energy" if mass_energy >= mass_power else "power"
     mass = max(mass_energy, mass_power) * max(1.0, batt.structural_margin)
-    voltage = batt.voltage or spec.drive.voltage or selected_bus_voltage
+    voltage = (
+        selected_bus_voltage
+        if spec.shared_bus
+        else (batt.voltage or spec.drive.voltage or selected_bus_voltage)
+    )
     current = total_electric_power / max(voltage, 1e-9)
     heat = total_electric_power * (1.0 / eta - 1.0)
     mass_fraction = None
@@ -864,7 +919,10 @@ def _hydraulic_meanline(
         incidence_loss + loading_loss + passage_loss + disk_loss
         + leakage_loss + recirc_loss
     )
-    eta = _clamp(stage_head / max(stage_head + total_loss, 1e-9), 0.20, 0.84)
+    # Keep the automatic meanline result conservative for small, high-head
+    # rocket-pump screening.  Higher values should come from a real pump curve
+    # or a user-supplied efficiency, not from this loss bucket model.
+    eta = _clamp(stage_head / max(stage_head + total_loss, 1e-9), 0.20, 0.78)
     losses = PumpHydraulicLossBreakdown(
         reynolds_number=re,
         incidence_loss_head=incidence_loss,
@@ -1009,6 +1067,21 @@ def _feasibility(
     drive = spec.drive
     batt = spec.battery
 
+    if spec.shared_bus and drive.voltage is not None and batt.voltage is not None:
+        mismatch = abs(float(drive.voltage) - float(batt.voltage))
+        gates.append(InjectorGate(
+            "electric_bus_voltage_consistency",
+            "pass" if mismatch <= 1.0e-6 * max(abs(float(batt.voltage)), 1.0) else "fail",
+            f"shared-bus architecture requires one bus voltage; motor "
+            f"{float(drive.voltage):.0f} V, battery {float(batt.voltage):.0f} V",
+        ))
+        if mismatch > 1.0e-6 * max(abs(float(batt.voltage)), 1.0):
+            suggestions.append(
+                "Use one shared --motor-voltage/--battery-voltage value, or "
+                "model explicit DC/DC converters/separate packs before using "
+                "different drive and pack voltages."
+            )
+
     for role, sizing in lines.items():
         ln = ledger.lines[role]
         if sizing.pressure_rise is None:
@@ -1023,6 +1096,18 @@ def _feasibility(
         assert sizing.impeller is not None
         assert sizing.inducer is not None
         assert sizing.diffuser_volute is not None
+
+        if (
+            sizing.efficiency_source != "user"
+            and sizing.efficiency is not None
+            and sizing.efficiency >= 0.74
+        ):
+            gates.append(InjectorGate(
+                f"pump_efficiency_screen_{role}", "warn",
+                f"{role} auto pump efficiency {sizing.efficiency:.2f} is near "
+                "the screening cap; replace with a measured/vendor pump curve "
+                "or user-supplied efficiency before hardware decisions",
+            ))
 
         gates.append(InjectorGate(
             f"electric_pump_power_{role}",
@@ -1201,8 +1286,10 @@ def size_electric_pumps(
     """Size electric pump feed hardware from an injector feed-system ledger."""
     spec = spec or PumpSizingSpec()
     lines: dict[str, PumpLineSizing] = {}
-    total_electric = 0.0
-    selected_bus_voltage = spec.drive.voltage or spec.battery.voltage or 0.0
+    pending_drive: dict[str, tuple[float, float]] = {}
+    line_electric_power: dict[str, float] = {}
+    eta_m = max(1e-6, min(1.0, spec.drive.motor_efficiency))
+    eta_i = max(1e-6, min(1.0, spec.drive.inverter_efficiency))
     for role, ln in ledger.lines.items():
         eta, eta_source = _line_efficiency(
             spec, role, ln.volumetric_flow, ln.required_pump_head
@@ -1229,9 +1316,8 @@ def size_electric_pumps(
                 eta = meanline.hydraulic_efficiency
                 eta_source = meanline.efficiency_source
             shaft = hydraulic / max(eta, 1e-9)
-            drive = _drive_sizing(role, shaft, rpm, spec)
-            total_electric += drive.electric_power
-            selected_bus_voltage = max(selected_bus_voltage, drive.voltage)
+            pending_drive[role] = (shaft, rpm)
+            line_electric_power[role] = shaft / max(eta_m * eta_i, 1e-12)
             inducer = _inducer_geometry(role, ln.volumetric_flow, ln, impeller, spec)
             diffuser = _diffuser_volute_geometry(role, ln.volumetric_flow, impeller, spec)
             curve = _pump_performance_curve(
@@ -1255,16 +1341,43 @@ def size_electric_pumps(
             performance_curve=curve,
         )
 
+    if spec.shared_bus:
+        selected_bus_voltage, selected_bus_source = _select_shared_bus_voltage(
+            line_electric_power, spec
+        )
+    else:
+        selected_bus_voltage = 0.0
+        selected_bus_source = "per_stream_drive_bus"
+    total_electric = 0.0
+    for role, (shaft, rpm) in pending_drive.items():
+        if spec.shared_bus:
+            drive = _drive_sizing(
+                role, shaft, rpm, spec,
+                bus_voltage=selected_bus_voltage,
+                voltage_source=selected_bus_source,
+            )
+        else:
+            drive = _drive_sizing(role, shaft, rpm, spec)
+            selected_bus_voltage = max(selected_bus_voltage, drive.voltage)
+        lines[role].drive = drive
+        total_electric += drive.electric_power
     if selected_bus_voltage <= 0.0:
         selected_bus_voltage = 48.0
+        selected_bus_source = "auto_default_no_pump_duty"
     battery = _battery_sizing(total_electric, spec, selected_bus_voltage)
     feasibility = _feasibility(ledger, lines, battery, spec)
     assumptions = {
         "burn_time_s": spec.burn_time,
         "pump_rpm": spec.drive.rpm if spec.drive.rpm is not None else "auto",
+        "electric_bus_architecture": (
+            "shared_pack_bus" if spec.shared_bus else "per_stream_drive_bus"
+        ),
         "selected_bus_voltage_v": selected_bus_voltage,
+        "selected_bus_voltage_source": selected_bus_source,
         "motor_voltage_v": spec.drive.voltage if spec.drive.voltage is not None else "auto",
-        "battery_voltage_v": spec.battery.voltage or spec.drive.voltage or selected_bus_voltage,
+        "battery_voltage_v": selected_bus_voltage if spec.shared_bus else (
+            spec.battery.voltage or spec.drive.voltage or selected_bus_voltage
+        ),
         "motor_efficiency": spec.drive.motor_efficiency,
         "inverter_efficiency": spec.drive.inverter_efficiency,
         "motor_power_density_w_per_kg": spec.drive.motor_power_density,

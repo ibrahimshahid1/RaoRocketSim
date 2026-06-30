@@ -1,12 +1,14 @@
 # Making the chamber "shoulder radius" solver-determined — design basis & proposal
 
-**Scope.** Today `--shoulder-radius-factor` is a free input with a "geometric
-placeholder" default of `0.25·Rt` (`raosim/chamber_geometry.py:72`,
-`raosim/run_nozzle.py:905`). This memo researches what physically sets that
-radius, which variables control it, and how to turn it into something the
-solver computes from operating parameters. All claims are grounded in the
-`propulsion_texts` corpus; a few standard transonic results are cited to the
-primary literature the corpus only reproduces as charts.
+**Scope.** The CLI now defaults to `--shoulder-sizing auto`, deriving the
+chamber shoulder fillet from geometric closure. A scalar
+`--shoulder-radius-factor` remains available for explicit override, with the
+legacy `0.25·Rt` value used only when scalar mode is requested without a value.
+This memo records what physically sets that radius, which variables control it,
+and which parts are geometric closure versus future physical optimization. All
+claims are grounded in the `propulsion_texts` corpus; a few standard transonic
+results are cited to the primary literature the corpus only reproduces as
+charts.
 
 ---
 
@@ -19,7 +21,7 @@ already separates them:
 | Radius | Code variable | Default | Where it lives | What governs it |
 |---|---|---|---|---|
 | **Throat‑approach (upstream) radius `Ru`** | `upstream_radius_ratio` (`throat_geometry.py:16`) | `1.5·Rt` | The arc *immediately* upstream of the throat (within ~1 `Rt`) | **Performance‑determinate**: transonic flow, discharge coefficient, throat heat flux |
-| **Chamber contraction entrance fillet `Rs`** (the "shoulder") | `shoulder_radius_factor` (`chamber_geometry.py:72`) | `0.25·Rt` | The fillet where the cylindrical chamber turns into the convergent cone, far upstream of the throat | **Subsonic / manufacturing trade**: contraction pressure loss, corner recirculation, local heat flux, length, weight |
+| **Chamber contraction entrance fillet `Rs`** (the "shoulder") | `shoulder_radius_factor` (`chamber_geometry.py:72`) | auto geometric closure (`0.25·Rt` only in legacy scalar mode) | The fillet where the cylindrical chamber turns into the convergent cone, far upstream of the throat | **Subsonic / manufacturing trade**: contraction pressure loss, corner recirculation, local heat flux, length, weight |
 
 NASA SP‑8120 is explicit that the throat flowfield "is independent of the
 nozzle geometry downstream of the throat and **for a distance of about one
@@ -46,7 +48,8 @@ cylinder (radius Rc) → shoulder arc (Rs) → straight convergent cone (half-an
 
 with
 - `Rc = sqrt(contraction_ratio)·Rt`            (chamber radius)
-- `Rs = shoulder_radius_factor·Rt`             (the shoulder, **free input**)
+- `Rs = shoulder_radius_factor·Rt`             (the shoulder, auto-derived by
+  default or explicitly overridden)
 - `Ru = upstream_radius_ratio·Rt` (=1.5·Rt)    (`throat_geometry.py`)
 - `α  = convergent_half_angle_deg` (=45°)
 - cylinder length `Lc` is **already solved** by root‑finding the conical‑frustum
@@ -138,7 +141,7 @@ manufacturable), not a closed‑form one.
 
 ---
 
-## 4. Proposal — make each radius solver‑determined
+## 4. Proposal and implementation — make each radius solver‑determined
 
 ### 4A. Throat‑approach radius `Ru` (recommended; physically closed)
 
@@ -154,10 +157,11 @@ manufacturable), not a closed‑form one.
   computable in the thermal path;
 - optional film‑cooling preference → bias toward `Ru/Rt ≈ 1.4` (SP‑8120).
 
-**New parameters needed:** `--cd-target` (or a `perf↔heat` weight), and reuse of
-existing `γ`, throat `Re` (from `ṁ, μ, Rt`), and the cooling‑margin output.
-**Already available:** `γ`, `ṁ` and `Rt` (from the operating point), the Bartz/
-curvature heat model, `--margin-target`.
+**Implemented first closure:** `--cd-target` derives `Ru/Rt` from the Hall
+leading-order inviscid discharge-coefficient relation and enforces the
+SP‑8120 `0.6 ≤ Ru/Rt ≤ 2` range. The higher-fidelity heat-load optimization
+can still reuse existing `γ`, throat `Re` (from `ṁ, μ, Rt`), and cooling-margin
+outputs in a later validated mode.
 
 ### 4B. Chamber shoulder `Rs` (what was literally asked)
 
@@ -189,12 +193,10 @@ enforced).
 model, the geometric feasibility check in `chamber_geometry.py`.
 
 ### Recommended path
-Implement **4A (`Ru` from `Cd*` + heat‑flux + 0.6–2 bound)** first — it is the
-one the literature closes in a formula and it directly affects delivered
-thrust/`Isp`. Implement **4B Tier 1** for `Rs` immediately (it deletes the
-arbitrary `0.25` placeholder with no new physics), and keep **4B Tier 2** as the
-"validated" mode behind a flag, mirroring how `--size-wall` upgrades the wall
-from a scalar to a screened profile.
+The first implementation now covers **4A's `Cd*` closure** and **4B Tier 1**.
+The remaining upgrade is **4B Tier 2**: a validated subsonic contraction-loss /
+local heat-flux optimization behind an explicit flag, mirroring how
+`--size-wall` upgrades the wall from a scalar to a screened profile.
 
 ---
 

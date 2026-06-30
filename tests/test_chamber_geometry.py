@@ -14,7 +14,11 @@ from raosim.chamber_geometry import (
 from raosim.design import DesignInput, ThermoSpec, design_nozzle_v2
 from raosim.export import _clean_meridian_for_brep
 from raosim.nozzle_geometry import bell_nozzle_contour
-from raosim.throat_geometry import ThroatGeometrySpec
+from raosim.throat_geometry import (
+    ThroatGeometrySpec,
+    throat_discharge_coefficient_hall,
+    upstream_radius_ratio_for_discharge_coefficient,
+)
 
 
 def test_max_feasible_shoulder_factor_matches_analytic_cap():
@@ -66,6 +70,27 @@ def test_auto_shoulder_factor_opens_up_at_shallower_convergent_angle():
     cap30 = max_feasible_shoulder_factor(Rt, CR, convergent_half_angle_deg=30.0)
     # a shallower convergent cone leaves more room for the shoulder fillet
     assert cap30 > cap45
+
+
+def test_hall_throat_discharge_coefficient_and_inverse():
+    gamma = 1.24
+    assert throat_discharge_coefficient_hall(1.5, gamma) == pytest.approx(
+        1.0 - ((gamma + 1.0) / 96.0) / (1.5**2)
+    )
+
+    ru_ratio = upstream_radius_ratio_for_discharge_coefficient(0.99, gamma)
+    assert ru_ratio == pytest.approx(
+        math.sqrt(((gamma + 1.0) / 96.0) / (1.0 - 0.99))
+    )
+    assert throat_discharge_coefficient_hall(ru_ratio, gamma) == pytest.approx(
+        0.99
+    )
+
+    assert upstream_radius_ratio_for_discharge_coefficient(0.93, gamma) == (
+        pytest.approx(0.6)
+    )
+    with pytest.raises(ValueError, match="exceeds Hall/SP-8120"):
+        upstream_radius_ratio_for_discharge_coefficient(0.999, gamma)
 
 
 def test_shared_throat_spec_removes_chamber_nozzle_discontinuity():

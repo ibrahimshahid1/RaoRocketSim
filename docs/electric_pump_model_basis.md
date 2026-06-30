@@ -65,12 +65,17 @@ Some pump parameters can be inferred from the solved duty; others remain
 hardware assumptions until real component data exist.
 
 - Pump efficiency is auto-estimated from the stream flow/head duty unless a
-  user-supplied efficiency is passed.
+  user-supplied efficiency is passed. The automatic meanline result is capped
+  conservatively for screening; values near the cap emit a warning and should
+  be replaced with a measured/vendor pump curve before hardware decisions.
 - Pump rpm is auto-selected from target nondimensional specific speed plus
   impeller diameter and outlet-width bounds unless a user-supplied rpm is
   passed.
-- Bus voltage is auto-selected from electric power and current limits unless a
-  user-supplied motor voltage is passed.
+- The default electric architecture is one shared DC pack/bus feeding all pump
+  drives. Bus voltage is auto-selected from total electric power and current
+  limits unless a user-supplied motor or battery voltage is passed. Different
+  motor and battery voltages require explicit converter/separate-pack modeling;
+  the screening path flags that mismatch instead of silently assuming it.
 - Head coefficient, flow coefficient, maximum head per stage, and impeller
   material tip-speed limit are screening assumptions.
 - Motor speed range / maximum rpm is still a hardware constraint.
@@ -124,7 +129,8 @@ engine duty
   -> torque through rpm
   -> impeller diameter/width through head and flow coefficients
   -> inducer/NPSH screen through inlet pressure, vapor pressure, rpm, and Q
-  -> electric power/current/heat through motor and inverter efficiency
+  -> electric power/heat through motor and inverter efficiency
+  -> shared DC bus voltage/current from total power and current limits
   -> battery mass/current/heat through burn time, voltage, energy density,
      power density, and discharge efficiency
 ```

@@ -344,10 +344,14 @@ conical frustum, including the shoulder and upstream throat arc. Infeasible
 combinations are rejected rather than assigned an arbitrary short cylinder.
 
 `ThroatGeometrySpec` is shared by chamber and nozzle and owns $R_u/R_t$,
-$R_d/R_t$, convergent angle, and throat location. The minimum cylindrical
-length and chamber-shoulder radius factor are explicit design inputs; their
-fallback values are geometric placeholders, not injector- or
-combustion-qualified limits.
+$R_d/R_t$, convergent angle, and throat location. The upstream throat radius
+can be supplied directly or derived from `--cd-target` using the Hall
+leading-order throat discharge-coefficient relation over the SP-8120
+`0.6 <= Ru/Rt <= 2` range. The chamber-shoulder fillet defaults to
+`--shoulder-sizing auto`, a geometric closure based on $R_t$, contraction
+ratio, convergent angle, and $R_u$; scalar `--shoulder-radius-factor` remains
+available as an explicit override. The minimum cylindrical length fallback is
+still a geometric placeholder, not an injector- or combustion-qualified limit.
 
 This remains a **geometric volume model only**: $L^*$ is a residence-time
 proxy, and its minimum useful value depends on propellants, injector/mixing,

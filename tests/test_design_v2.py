@@ -22,6 +22,7 @@ from raosim.physics import (
     resolve_coolant_properties,
 )
 from raosim.propellants import get_propellant
+from raosim.throat_geometry import upstream_radius_ratio_for_discharge_coefficient
 
 
 def _prelim_input(**kwargs):
@@ -48,6 +49,24 @@ def test_preliminary_v2_constant_gamma_runs():
     assert result.report_sections["thermochemistry"]["source"] == "built_in_constant_gamma"
     assert result.report_sections["boundary_layer"]["effective_epsilon"] < result.input.epsilon
     assert result.contour["hardware_qualified"] is False
+
+
+def test_v2_derives_throat_radius_from_cd_target_and_auto_shoulder():
+    result = design_nozzle_v2(_prelim_input(throat_cd_target=0.99))
+
+    expected_ru = upstream_radius_ratio_for_discharge_coefficient(
+        0.99, result.propellant.gamma
+    )
+    chamber = result.report_sections["chamber_geometry"]
+
+    assert result.input.throat_geometry.upstream_radius_ratio == pytest.approx(
+        expected_ru
+    )
+    assert result.input.shoulder_radius_factor is not None
+    assert result.input.shoulder_radius_factor != pytest.approx(0.25)
+    assert chamber["shoulder_radius_source"] == "auto_geometric_closure"
+    assert chamber["throat_upstream_radius_source"] == "cd_target_hall_sp8120"
+    assert chamber["throat_discharge_coefficient_hall"] == pytest.approx(0.99)
 
 
 def test_v2_backend_evaluates_requested_pintle():

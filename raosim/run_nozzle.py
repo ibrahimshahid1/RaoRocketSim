@@ -129,7 +129,9 @@ def print_tags() -> None:
             ("--l-star", "characteristic length Vc/At [m]"),
             ("--contraction-ratio", "chamber/throat area ratio Ac/At"),
             ("--shoulder-radius-factor", "chamber shoulder radius / Rt"),
+            ("--shoulder-sizing {scalar,auto}", "manual shoulder or geometric closure"),
             ("--minimum-cylindrical-length", "minimum useful cylinder [m]"),
+            ("--ru-factor / --cd-target", "upstream throat radius or target inviscid Cd"),
         ]),
         ("Solver", [
             ("--backend {jax,numpy}", "jax = differentiable LM; numpy = oracle"),
@@ -200,19 +202,30 @@ def print_tags() -> None:
 
 import numpy as np
 
-import matplotlib
-# Pop up live windows for interactive / --show runs, but ONLY when
-# attached to a real terminal — otherwise (piped, headless, CI) render
-# to files (Agg) so plt.show() never hangs waiting for a display.
-# Decided before pyplot is imported.
-_INTERACTIVE_RUN = (
-    len(sys.argv) == 1 or "-i" in sys.argv or "--interactive" in sys.argv
-)
-_WANT_WINDOWS = (("--show" in sys.argv or _INTERACTIVE_RUN)
-                 and sys.stdout.isatty())
-if not _WANT_WINDOWS:
-    matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+plt = None
+
+
+def _want_windows(args=None) -> bool:
+    """True when plots should use a live backend instead of file-only Agg."""
+    interactive_run = (
+        len(sys.argv) == 1 or "-i" in sys.argv or "--interactive" in sys.argv
+    )
+    requested_show = bool(getattr(args, "show", False)) if args is not None else (
+        "--show" in sys.argv
+    )
+    return bool((requested_show or interactive_run) and sys.stdout.isatty())
+
+
+def _ensure_pyplot(show: bool):
+    """Import Matplotlib lazily so parse-only paths such as --help stay light."""
+    global plt
+    if plt is None:
+        import matplotlib
+        if not show:
+            matplotlib.use("Agg")
+        import matplotlib.pyplot as _plt
+        plt = _plt
+    return plt
 
 import raosim.rao_variational as rv
 from raosim.export import (
@@ -232,7 +245,11 @@ from raosim.materials import get_material, material_names, material_table
 from raosim.physics import default_coolant_inlet_temperature
 from raosim.rao_variational import RaoSolverConfig
 from raosim.regen_geometry import generate_regen_nozzle
-from raosim.throat_geometry import ThroatGeometrySpec
+from raosim.throat_geometry import (
+    ThroatGeometrySpec,
+    throat_discharge_coefficient_hall,
+    upstream_radius_ratio_for_discharge_coefficient,
+)
 from raosim.coolants import canonical_coolant_name
 
 
@@ -493,13 +510,23 @@ def _interactive(args) -> None:
     args.contraction_ratio = _prompt(
         "Contraction ratio Ac/At", args.contraction_ratio
     )
-    shoulder_default = (
-        args.shoulder_radius_factor
-        if args.shoulder_radius_factor is not None else 0.25
-    )
-    args.shoulder_radius_factor = _prompt(
-        "Shoulder radius / Rt", shoulder_default
-    )
+    if _prompt_bool("Auto-size chamber shoulder fillet?", args.shoulder_sizing == "auto"):
+        args.shoulder_sizing = "auto"
+        args.shoulder_radius_factor = None
+        args._shoulder_radius_source = "auto_pending"
+        args.shoulder_fill_fraction = _prompt(
+            "Shoulder fill fraction of max feasible", args.shoulder_fill_fraction
+        )
+    else:
+        args.shoulder_sizing = "scalar"
+        shoulder_default = (
+            args.shoulder_radius_factor
+            if args.shoulder_radius_factor is not None else 0.25
+        )
+        args.shoulder_radius_factor = _prompt(
+            "Shoulder radius / Rt", shoulder_default
+        )
+        args._shoulder_radius_source = "user_supplied"
     cylinder_default = (
         args.minimum_cylindrical_length
         if args.minimum_cylindrical_length is not None else 1e-6
@@ -804,16 +831,17 @@ def main() -> int:
     ap.add_argument("--contraction-ratio", type=float, default=2.5,
                     help="chamber/throat area ratio Ac/At")
     ap.add_argument("--shoulder-radius-factor", type=float, default=None,
-                    help="chamber shoulder radius / Rt; geometric placeholder "
-                         "0.25 when omitted (ignored when --shoulder-sizing "
-                         "auto)")
+                    help="chamber shoulder radius / Rt; used only with "
+                         "--shoulder-sizing scalar. When omitted in scalar "
+                         "mode, the legacy placeholder is 0.25.")
     ap.add_argument("--shoulder-sizing", choices=("scalar", "auto"),
-                    default="scalar",
-                    help="scalar: use --shoulder-radius-factor (placeholder "
-                         "0.25); auto: derive the fillet geometrically as the "
+                    default="auto",
+                    help="auto: derive the fillet geometrically as the "
                          "smoothest contraction the contour allows for the "
                          "given Rt, contraction ratio, convergent angle and Ru "
-                         "(see docs/shoulder_radius_design_basis.md)")
+                         "(default; see docs/shoulder_radius_design_basis.md). "
+                         "scalar: use --shoulder-radius-factor or the legacy "
+                         "0.25 placeholder.")
     ap.add_argument("--shoulder-fill-fraction", type=float, default=0.8,
                     help="with --shoulder-sizing auto, fraction of the maximum "
                          "feasible fillet to use (0<f<1; 0.8 keeps a ~20%% "
@@ -825,6 +853,10 @@ def main() -> int:
                     help="shared chamber/nozzle convergent half-angle [deg]")
     ap.add_argument("--ru-factor", type=float, default=1.5,
                     help="shared upstream throat radius / Rt")
+    ap.add_argument("--cd-target", type=float, default=None,
+                    help="derive --ru-factor from a target inviscid throat "
+                         "discharge coefficient using Hall's leading-order "
+                         "transonic relation, bounded to SP-8120 Ru/Rt 0.6-2")
     ap.add_argument("--rd-factor", type=float, default=0.382,
                     help="shared downstream throat radius / Rt")
     # solver
@@ -1270,6 +1302,8 @@ def main() -> int:
         ap.error("--regen-brep requires --regen")
     if args.regen_brep and args.cad == "none":
         ap.error("--regen-brep requires --cad step, ipt, or both")
+    if args.gamma <= 1.0:
+        ap.error("--gamma must be greater than one")
     if args.l_star <= 0.0:
         ap.error("--l-star must be positive")
     if args.contraction_ratio <= 1.0:
@@ -1288,15 +1322,37 @@ def main() -> int:
         ap.error("--bolt-count must be positive")
     if args.joint_separation_factor <= 0.0:
         ap.error("--joint-separation-factor must be positive")
-    if args.shoulder_radius_factor is None:
+    shoulder_factor_explicit = _argument_present(sys.argv, "--shoulder-radius-factor")
+    shoulder_sizing_explicit = _argument_present(sys.argv, "--shoulder-sizing")
+    if (
+        shoulder_factor_explicit
+        and shoulder_sizing_explicit
+        and args.shoulder_sizing == "auto"
+    ):
+        ap.error("--shoulder-radius-factor cannot be combined with --shoulder-sizing auto")
+    if shoulder_factor_explicit and not shoulder_sizing_explicit:
+        args.shoulder_sizing = "scalar"
+    if args.shoulder_sizing == "scalar" and args.shoulder_radius_factor is None:
         args.shoulder_radius_factor = 0.25
-        args._shoulder_radius_source = "geometric_placeholder"
-    else:
+        args._shoulder_radius_source = "legacy_scalar_placeholder"
+    elif args.shoulder_radius_factor is not None:
         args._shoulder_radius_source = "user_supplied"
-    if args.shoulder_radius_factor <= 0.0:
+    else:
+        args._shoulder_radius_source = "auto_pending"
+    if args.shoulder_radius_factor is not None and args.shoulder_radius_factor <= 0.0:
         ap.error("--shoulder-radius-factor must be positive")
     if not 0.0 < args.shoulder_fill_fraction < 1.0:
         ap.error("--shoulder-fill-fraction must be in the open interval (0, 1)")
+    ru_explicit = _argument_present(sys.argv, "--ru-factor")
+    if args.cd_target is not None and ru_explicit:
+        ap.error("--cd-target and --ru-factor both set the upstream throat radius")
+    if args.cd_target is not None and not 0.0 < args.cd_target < 1.0:
+        ap.error("--cd-target must be in (0, 1)")
+    if args.ru_factor <= 0.0:
+        ap.error("--ru-factor must be positive")
+    if args.rd_factor <= 0.0:
+        ap.error("--rd-factor must be positive")
+    args._ru_factor_source = "user_supplied" if ru_explicit else "default"
     if args.minimum_cylindrical_length is None:
         args.minimum_cylindrical_length = 1e-6
         args._minimum_cylinder_source = "geometric_placeholder"
@@ -1331,8 +1387,9 @@ def main() -> int:
         "boiling_chf": args.boiling_chf,
         "gate_chf": args.gate_chf,
     }
-    # Live windows for interactive/--show; saved files otherwise.
-    show = bool(_WANT_WINDOWS)
+    # Live windows for interactive/--show; saved files otherwise. Matplotlib is
+    # imported lazily after parse-time exits so --help/--tags stay fast/quiet.
+    show = _want_windows(args)
 
     bare = len(sys.argv) == 1
     if not args.no_banner:
@@ -1351,6 +1408,8 @@ def main() -> int:
         print_tags()
         _interactive(args)
         _apply_wall_sizing_mode(args, ap, sys.argv)
+
+    _ensure_pyplot(show)
 
     if args.coolant_inlet_temperature is None:
         args.coolant_inlet_temperature = _default_coolant_inlet_temperature(
@@ -1484,6 +1543,14 @@ def main() -> int:
             prop.name = name
     if not gamma_explicit:
         args.gamma = prop.gamma
+    if args.cd_target is not None:
+        try:
+            args.ru_factor = upstream_radius_ratio_for_discharge_coefficient(
+                args.cd_target, args.gamma
+            )
+        except ValueError as exc:
+            ap.error(str(exc))
+        args._ru_factor_source = "cd_target_hall_sp8120"
     args._prop = prop
     args._prop_warnings = prop_warnings
 
@@ -1523,12 +1590,20 @@ def main() -> int:
         if args.shoulder_sizing == "auto"
         else f"{args.shoulder_radius_factor:g} Rt"
     )
+    cd_hall = throat_discharge_coefficient_hall(args.ru_factor, args.gamma)
+    throat_plan = (
+        f"Ru={args.ru_factor:g} Rt [{args._ru_factor_source}], "
+        f"Rd={args.rd_factor:g} Rt, Cd_Hall={cd_hall:.4f}"
+    )
+    if args.cd_target is not None:
+        throat_plan += f" (target {args.cd_target:g})"
     for k, v in [
         ("nozzle", f"Rt={args.rt*1e3:g} mm, eps={args.epsilon:g}, "
                    f"L={args.length_pct:g}%, gamma={args.gamma:g}"),
         ("chamber", f"L*={args.l_star:g} m, CR={args.contraction_ratio:g}, "
                     f"shoulder={shoulder_plan}, "
                     f"Lc,min={args.minimum_cylindrical_length:g} m"),
+        ("throat", throat_plan),
         ("solver", f"{args.backend}  (max_nfev={args.max_nfev}, "
                    f"n_control={args.n_control}, n_kernel={args.n_kernel})"),
         ("regen", (
@@ -1668,6 +1743,14 @@ def main() -> int:
         "theta_E_deg": math.degrees(sol.theta_E),
         "Cf": float(sol.thrust_coefficient),
         "exit_radius": float(y[-1]),
+        "throat_geometry": {
+            "upstream_radius_ratio": args.ru_factor,
+            "upstream_radius_source": args._ru_factor_source,
+            "discharge_coefficient_hall": cd_hall,
+            "discharge_coefficient_target": args.cd_target,
+            "downstream_radius_ratio": args.rd_factor,
+            "convergent_half_angle_deg": args.convergent_angle,
+        },
         "chamber": {
             "L_star_m": args.l_star,
             "contraction_ratio": args.contraction_ratio,
@@ -1717,49 +1800,6 @@ def main() -> int:
         "max_wall_temperature_K": args.wall_temp_limit,
         "source": mat.source if mat else None,
     }
-    if args.injector == "pintle":
-        try:
-            from raosim.interface import resolve_bolted_interface_geometry
-
-            interface_resolution = resolve_bolted_interface_geometry(
-                chamber_pressure=args.pc,
-                chamber_radius=chamber["Rc"],
-                wall_thickness=args.wall_thickness,
-                flange_outer_diameter=args.flange_od,
-                flange_length=args.flange_length,
-                face_outer_diameter=args.injector_face_od,
-                face_thickness=args.injector_face_thickness,
-                bolt_count=args.bolt_count,
-                bolt_circle_diameter=args.bolt_circle,
-                bolt_hole_diameter=args.bolt_hole,
-                bolt_diameter=args.bolt_diameter,
-                bolt_allowable_stress=args.bolt_allowable_stress,
-                material_yield_strength=(mat.yield_strength if mat else None),
-                min_feature=args.injector_min_feature,
-                min_tool_diameter=args.min_tool_diameter,
-                joint_separation_factor=args.joint_separation_factor,
-            )
-            args.flange_od = interface_resolution.flange_outer_diameter
-            args.flange_length = interface_resolution.flange_length
-            args.injector_face_od = interface_resolution.face_outer_diameter
-            args.injector_face_thickness = interface_resolution.face_thickness
-            args.bolt_count = interface_resolution.bolt_count
-            args.bolt_circle = interface_resolution.bolt_circle_diameter
-            args.bolt_hole = interface_resolution.bolt_hole_diameter
-            summary["injector_interface_resolution"] = (
-                interface_resolution.to_dict()
-            )
-            auto = interface_resolution.auto_sized_fields
-            if auto:
-                print(dim(
-                    "    injector/chamber interface auto-sized: "
-                    f"flange OD {args.flange_od*1e3:.1f} mm, "
-                    f"BCD {args.bolt_circle*1e3:.1f} mm, "
-                    f"{args.bolt_count}x Ø{args.bolt_hole*1e3:.1f} mm"
-                ))
-        except Exception as exc:
-            print(yellow(f"    injector/chamber interface auto-size skipped: {exc}"))
-
     # ---- 2. export the contour reference (solid wall follows sizing) --
     np.savetxt(args.out / "contour.csv",
                np.column_stack([x, y]), delimiter=",",
@@ -2505,6 +2545,15 @@ def main() -> int:
             summary["injector_interface_resolution"] = (
                 interface_resolution.to_dict()
             )
+            auto = interface_resolution.auto_sized_fields
+            print(dim(
+                "    final injector/chamber interface: "
+                f"flange OD {args.flange_od*1e3:.1f} mm, "
+                f"face OD {args.injector_face_od*1e3:.1f} mm, "
+                f"BCD {args.bolt_circle*1e3:.1f} mm, "
+                f"{args.bolt_count}x Ø{args.bolt_hole*1e3:.1f} mm"
+                + ("  (auto-sized)" if auto else "")
+            ))
         except Exception as exc:
             print(yellow(f"    injector interface/layout sync skipped: {exc}"))
 

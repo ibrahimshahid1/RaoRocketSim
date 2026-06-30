@@ -16,6 +16,11 @@ from pathlib import Path
 
 import pytest
 
+from raosim.throat_geometry import (
+    throat_discharge_coefficient_hall,
+    upstream_radius_ratio_for_discharge_coefficient,
+)
+
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -157,6 +162,33 @@ def test_wall_sizing_scalar_rejects_size_wall_conflict(tmp_path):
     assert "--wall-sizing scalar cannot be combined with --size-wall" in proc.stderr
 
 
+def test_cd_target_derives_ru_factor_and_is_reported(tmp_path):
+    out = tmp_path / "cd"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py", "--no-banner",
+         "--max-nfev", "0", "--cd-target", "0.99",
+         "--n-control", "8", "--n-kernel", "12",
+         "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "MPLBACKEND": "Agg",
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=300,
+    )
+    assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
+
+    summary = json.loads((out / "summary.json").read_text())
+    throat = summary["throat_geometry"]
+    expected_ru = upstream_radius_ratio_for_discharge_coefficient(
+        0.99, summary["gamma"]
+    )
+    assert throat["upstream_radius_source"] == "cd_target_hall_sp8120"
+    assert throat["upstream_radius_ratio"] == pytest.approx(expected_ru)
+    assert throat["discharge_coefficient_hall"] == pytest.approx(
+        throat_discharge_coefficient_hall(expected_ru, summary["gamma"])
+    )
+    assert throat["discharge_coefficient_hall"] == pytest.approx(0.99)
+
+
 def test_list_materials_flag_prints_catalog_and_exits():
     proc = subprocess.run(
         [sys.executable, "scripts/run_nozzle.py", "--list-materials"],
@@ -185,6 +217,49 @@ def test_tags_flag_lists_run_tags_and_exits():
         assert tag in proc.stdout, tag
 
 
+@pytest.mark.smoke
+def test_electric_pump_cli_exports_shared_bus_and_visualization(tmp_path):
+    out = tmp_path / "pump"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py",
+         "--no-banner",
+         "--max-nfev", "0",
+         "--n-control", "8",
+         "--n-kernel", "12",
+         "--injector", "pintle",
+         "--injector-cad", "none",
+         "--electric-pump",
+         "--pump-visualize",
+         "--oxidizer", "LOX",
+         "--fuel", "RP-1",
+         "--fuel-tank-pressure", "500000",
+         "--oxidizer-tank-pressure", "600000",
+         "--allow-infeasible-injector",
+         "--allow-infeasible-pump",
+         "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "MPLBACKEND": "Agg",
+             "MPLCONFIGDIR": str(tmp_path / "mpl"),
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=360,
+    )
+    assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
+    assert "final injector/chamber interface" in proc.stdout
+    assert "injector/chamber interface auto-sized:" not in proc.stdout
+
+    pump = json.loads((out / "pump.json").read_text())
+    assert pump["assumptions"]["electric_bus_architecture"] == "shared_pack_bus"
+    assert pump["assumptions"]["selected_bus_voltage_source"].startswith("shared_")
+    voltages = {
+        line["drive"]["voltage_v"]
+        for line in pump["lines"].values()
+        if line["drive"] is not None
+    }
+    assert len(voltages) == 1
+    assert pump["battery"]["voltage_v"] == pytest.approx(next(iter(voltages)))
+    assert (out / "pump_particles.gif").exists()
+
+
 def test_package_module_entrypoint_uses_current_runner():
     proc = subprocess.run(
         [sys.executable, "-m", "raosim", "--tags"],
@@ -195,3 +270,16 @@ def test_package_module_entrypoint_uses_current_runner():
     assert proc.returncode == 0
     assert "--wall-sizing" in proc.stdout
     assert "Rao Bell Nozzle Design Toolbox" not in proc.stdout
+
+
+def test_lrekit_help_does_not_wake_matplotlib_cache():
+    proc = subprocess.run(
+        [sys.executable, "-m", "lrekit", "--help"],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO),
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=120,
+    )
+    assert proc.returncode == 0
+    assert "Matplotlib" not in proc.stderr
+    assert "Fontconfig" not in proc.stderr

@@ -20,6 +20,7 @@ from raosim.cea import (
     resolve_thermochemistry,
 )
 from raosim.chamber_geometry import (
+    auto_shoulder_factor,
     chamber_contour,
     full_engine_contour,
     thrust_chamber_geometry_checks,
@@ -46,7 +47,11 @@ from raosim.physics import (
     structural_screen,
 )
 from raosim.propellants import Propellant
-from raosim.throat_geometry import ThroatGeometrySpec
+from raosim.throat_geometry import (
+    ThroatGeometrySpec,
+    throat_discharge_coefficient_hall,
+    upstream_radius_ratio_for_discharge_coefficient,
+)
 from raosim.validation import DesignGateReport, evaluate_design_gates
 
 
@@ -284,7 +289,9 @@ class DesignInput:
     contraction_ratio: float | None = None
     L_star: float | None = None
     shoulder_radius_factor: float | None = None
+    shoulder_fill_fraction: float = 0.8
     minimum_cylindrical_length: float | None = None
+    throat_cd_target: float | None = None
     throat_geometry: ThroatGeometrySpec = field(default_factory=ThroatGeometrySpec)
     ambient: MissionAmbientSpec = field(default_factory=MissionAmbientSpec)
     cooling: CoolingSpec = field(default_factory=CoolingSpec)
@@ -413,13 +420,13 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     if (
         input.L_star is None
         or input.contraction_ratio is None
-        or input.shoulder_radius_factor is None
         or input.minimum_cylindrical_length is None
     ):
         warnings.append(
             "Chamber sizing used one or more geometric placeholders "
-            "(L*=1.0 m, contraction ratio=2.5, shoulder radius=0.25 Rt, "
-            "minimum cylinder=1e-6 m). Select injector-, mixing-, packaging-, "
+            "(L*=1.0 m, contraction ratio=2.5, minimum cylinder=1e-6 m). "
+            "The chamber shoulder fillet is auto-derived from geometric "
+            "closure when not supplied. Select injector-, mixing-, packaging-, "
             "pressure-, mixture-ratio-, and duty-informed values."
         )
     performance = compute_engine_performance(
@@ -546,6 +553,20 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "L_star": contour["L_star"],
             "contraction_ratio": contour["contraction_ratio"],
             "shoulder_radius_factor": contour["shoulder_radius_factor"],
+            "shoulder_radius_source": contour["chamber"].get(
+                "shoulder_radius_source"
+            ),
+            "shoulder_fill_fraction": contour["chamber"].get(
+                "shoulder_fill_fraction"
+            ),
+            "throat_geometry": contour["chamber"].get("throat_geometry"),
+            "throat_upstream_radius_source": contour["chamber"].get(
+                "throat_upstream_radius_source"
+            ),
+            "throat_discharge_coefficient_hall": contour["chamber"].get(
+                "throat_discharge_coefficient_hall"
+            ),
+            "throat_cd_target": contour["chamber"].get("throat_cd_target"),
             "minimum_cylindrical_length": contour[
                 "minimum_cylindrical_length"
             ],
@@ -723,6 +744,13 @@ def _validate_design_input(input: DesignInput) -> None:
         and input.shoulder_radius_factor <= 0.0
     ):
         raise ValueError("shoulder_radius_factor must be positive when supplied")
+    if not 0.0 < input.shoulder_fill_fraction < 1.0:
+        raise ValueError("shoulder_fill_fraction must be in the open interval (0, 1)")
+    if (
+        input.throat_cd_target is not None
+        and not 0.0 < input.throat_cd_target < 1.0
+    ):
+        raise ValueError("throat_cd_target must be in (0, 1) when supplied")
     if (
         input.minimum_cylindrical_length is not None
         and input.minimum_cylindrical_length <= 0.0
@@ -854,6 +882,18 @@ def _build_v2_contour(
     epsilon: float,
     prop: Propellant,
 ) -> dict:
+    throat_geometry = input.throat_geometry
+    throat_upstream_radius_source = "input_throat_geometry"
+    if input.throat_cd_target is not None:
+        throat_geometry = replace(
+            throat_geometry,
+            upstream_radius_ratio=upstream_radius_ratio_for_discharge_coefficient(
+                input.throat_cd_target, prop.gamma
+            ),
+        )
+        input.throat_geometry = throat_geometry
+        throat_upstream_radius_source = "cd_target_hall_sp8120"
+
     if input.method == "bezier":
         theta_n = input.theta_n
         theta_e = input.theta_e
@@ -863,32 +903,49 @@ def _build_v2_contour(
             theta_e = theta_e if theta_e is not None else te_l
         nozzle = bell_nozzle_contour(
             Rt, epsilon, theta_n, theta_e, input.length_pct, gamma=prop.gamma,
-            throat_geometry=input.throat_geometry,
+            throat_geometry=throat_geometry,
         )
     else:
         nozzle = bell_nozzle_contour(
             Rt, epsilon, method=input.method,
             length_pct=input.length_pct, gamma=prop.gamma,
-            throat_geometry=input.throat_geometry,
+            throat_geometry=throat_geometry,
         )
 
+    contraction_ratio = float(
+        input.contraction_ratio
+        if input.contraction_ratio is not None else 2.5
+    )
+    shoulder_radius_source = "user_supplied"
+    if input.shoulder_radius_factor is None:
+        input.shoulder_radius_factor = auto_shoulder_factor(
+            Rt,
+            contraction_ratio,
+            throat_geometry=throat_geometry,
+            fill_fraction=input.shoulder_fill_fraction,
+        )
+        shoulder_radius_source = "auto_geometric_closure"
+    shoulder_radius_factor = float(input.shoulder_radius_factor)
     chamber = chamber_contour(
         Rt,
         L_star=float(input.L_star if input.L_star is not None else 1.0),
-        contraction_ratio=float(
-            input.contraction_ratio
-            if input.contraction_ratio is not None else 2.5
-        ),
-        shoulder_radius_factor=float(
-            input.shoulder_radius_factor
-            if input.shoulder_radius_factor is not None else 0.25
-        ),
+        contraction_ratio=contraction_ratio,
+        shoulder_radius_factor=shoulder_radius_factor,
         minimum_cylindrical_length=float(
             input.minimum_cylindrical_length
             if input.minimum_cylindrical_length is not None else 1e-6
         ),
-        throat_geometry=input.throat_geometry,
+        throat_geometry=throat_geometry,
     )
+    chamber["shoulder_radius_source"] = shoulder_radius_source
+    chamber["shoulder_fill_fraction"] = float(input.shoulder_fill_fraction)
+    chamber["throat_upstream_radius_source"] = throat_upstream_radius_source
+    chamber["throat_discharge_coefficient_hall"] = (
+        throat_discharge_coefficient_hall(
+            throat_geometry.upstream_radius_ratio, prop.gamma
+        )
+    )
+    chamber["throat_cd_target"] = input.throat_cd_target
     contour = full_engine_contour(chamber, nozzle)
     contour["geometry_checks"] = thrust_chamber_geometry_checks(
         contour,
