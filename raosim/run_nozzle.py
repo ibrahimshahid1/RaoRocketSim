@@ -147,8 +147,8 @@ def print_tags() -> None:
             ("--helix-turns", "0 = axial, >0 = helical coils"),
             ("--coolant / --coolant-mdot", "rp1/methane/lh2/water/ethanol; flow [kg/s]"),
             ("--coolant-inlet-temperature", "coolant inlet [K]; cryogenic defaults by fluid"),
-            ("--coolant-outlet-pressure / --injector-pressure-drop",
-             "absolute jacket outlet pressure / injector loss [Pa]"),
+            ("--coolant-outlet-pressure",
+             "absolute jacket outlet pressure override [Pa]"),
         ]),
         ("Thermal", [
             ("--thermal", "run cooling analysis + colour coils by wall T"),
@@ -162,6 +162,16 @@ def print_tags() -> None:
             ("--t-hot-min / --t-hot-max", "process floor / search ceiling for liner [m]"),
             ("--margin-target / --structural-fos / --required-cycles / --dp-budget",
              "sizing requirements (thermal / stress / fatigue N_f / Δp)"),
+        ]),
+        ("Electric pump", [
+            ("--electric-pump", "size electric pump drive, battery, and pump geometry"),
+            ("--pump-rpm / --burn-time", "pump speed [rpm] / burn duration [s]"),
+            ("--motor-voltage / --inverter-power-density", "drive bus / inverter sizing"),
+            ("--battery-energy-density / --battery-power-density",
+             "pack-level energy [J/kg] / pulse power [W/kg]"),
+            ("--fuel-tank-pressure / --oxidizer-tank-pressure",
+             "pump suction pressure for head, power, and NPSH"),
+            ("--pump-visualize", "save a simplified pump particle GIF"),
         ]),
         ("Visualisation", [
             ("--flowfield", "render the steady MOC Mach/temperature field"),
@@ -213,6 +223,7 @@ from raosim.export import (
     step_representation,
 )
 from raosim.chamber_geometry import (
+    auto_shoulder_factor,
     chamber_contour,
     failed_thrust_chamber_geometry_checks,
     full_engine_contour,
@@ -222,6 +233,10 @@ from raosim.physics import default_coolant_inlet_temperature
 from raosim.rao_variational import RaoSolverConfig
 from raosim.regen_geometry import generate_regen_nozzle
 from raosim.throat_geometry import ThroatGeometrySpec
+from raosim.coolants import canonical_coolant_name
+
+
+_DEFAULT_INJECTOR_DP_FRACTION = 0.2
 
 
 def _prompt(label, default, cast=float):
@@ -250,6 +265,181 @@ def _section(title: str) -> None:
 def _default_coolant_inlet_temperature(coolant: str) -> float:
     """Backward-compatible alias for the central physics-layer resolver."""
     return default_coolant_inlet_temperature(coolant)
+
+
+def _argument_present(argv: list[str], option: str) -> bool:
+    return any(arg == option or arg.startswith(option + "=") for arg in argv)
+
+
+def _reject_legacy_injector_pressure_drop(parser, argv: list[str]) -> None:
+    if _argument_present(argv, "--injector-pressure-drop"):
+        parser.error(
+            "--injector-pressure-drop is deprecated and no longer controls "
+            "injector sizing or regen pressure boundaries. Use "
+            "--fuel-injector-dp-fraction and --oxidizer-injector-dp-fraction "
+            "for the split injector model, or --coolant-outlet-pressure for "
+            "an explicit absolute jacket outlet pressure."
+        )
+
+
+def _coolant_is_cycle_fuel(coolant: str | None, fuel_name: str | None) -> bool:
+    return bool(
+        coolant
+        and fuel_name
+        and canonical_coolant_name(coolant) == canonical_coolant_name(fuel_name)
+    )
+
+
+def _apply_split_injector_pressure_model(args, parser) -> None:
+    """Resolve authoritative fuel/oxidizer injector dP fractions for this run."""
+    if args.fuel_injector_dp_fraction is None:
+        args.fuel_injector_dp_fraction = _DEFAULT_INJECTOR_DP_FRACTION
+    if args.oxidizer_injector_dp_fraction is None:
+        args.oxidizer_injector_dp_fraction = _DEFAULT_INJECTOR_DP_FRACTION
+    if args.fuel_injector_dp_fraction <= 0.0:
+        parser.error("--fuel-injector-dp-fraction must be positive")
+    if args.oxidizer_injector_dp_fraction <= 0.0:
+        parser.error("--oxidizer-injector-dp-fraction must be positive")
+
+    args._fuel_injector_pressure_drop = args.fuel_injector_dp_fraction * args.pc
+    args._oxidizer_injector_pressure_drop = (
+        args.oxidizer_injector_dp_fraction * args.pc
+    )
+    args._regen_injector_pressure_drop = 0.0
+    args._regen_fuel_injector_dp_fraction = None
+    args._regen_pressure_boundary_source = "pc_boundary_no_fuel_coolant_handoff"
+    if args.coolant_outlet_pressure is not None:
+        args._regen_pressure_boundary_source = "user_supplied_coolant_outlet_pressure"
+    elif _coolant_is_cycle_fuel(args.coolant, getattr(args, "_fuel_name", None)):
+        args._regen_injector_pressure_drop = args._fuel_injector_pressure_drop
+        args._regen_fuel_injector_dp_fraction = args.fuel_injector_dp_fraction
+        args._regen_pressure_boundary_source = (
+            "fuel_injector_dp_fraction_split_model"
+        )
+
+
+def _positive_if_supplied(args, parser, names, *, allow_zero=False) -> None:
+    for name in names:
+        value = getattr(args, name)
+        if value is None:
+            continue
+        bad = value < 0.0 if allow_zero else value <= 0.0
+        if bad:
+            op = "nonnegative" if allow_zero else "positive"
+            parser.error(f"--{name.replace('_', '-')} must be {op}")
+
+
+def _validate_pump_args(args, parser) -> None:
+    if args.pump_visualize:
+        args.electric_pump = True
+    if args.electric_pump and args.injector != "pintle":
+        parser.error("--electric-pump requires --injector pintle")
+    feed_nonnegative = [
+        "fuel_supply_pressure", "oxidizer_supply_pressure",
+        "fuel_line_loss", "oxidizer_line_loss",
+        "fuel_line_loss_fraction", "oxidizer_line_loss_fraction",
+        "fuel_manifold_loss", "oxidizer_manifold_loss",
+        "fuel_manifold_loss_fraction", "oxidizer_manifold_loss_fraction",
+        "fuel_control_margin", "oxidizer_control_margin",
+        "fuel_control_margin_fraction", "oxidizer_control_margin_fraction",
+        "fuel_tank_pressure", "oxidizer_tank_pressure",
+        "fuel_npsh_required", "oxidizer_npsh_required",
+    ]
+    _positive_if_supplied(args, parser, feed_nonnegative, allow_zero=True)
+    _positive_if_supplied(args, parser, [
+        "fuel_flow_capacity", "oxidizer_flow_capacity",
+        "pump_rpm", "pump_max_rpm", "burn_time", "motor_voltage",
+        "motor_power_density", "inverter_power_density", "battery_energy_density",
+        "battery_power_density", "battery_structural_margin",
+        "vehicle_mass", "pump_head_coefficient", "pump_flow_coefficient",
+        "pump_tip_speed_limit", "pump_max_head_per_stage",
+    ])
+    _positive_if_supplied(args, parser, [
+        "motor_max_power", "motor_max_current", "motor_torque_limit",
+        "motor_heat_rejection_limit", "battery_voltage",
+        "battery_max_current",
+    ])
+    for name in (
+        "pump_efficiency_fuel", "pump_efficiency_oxidizer",
+        "motor_efficiency", "inverter_efficiency",
+        "battery_discharge_efficiency",
+    ):
+        value = getattr(args, name)
+        if value is None:
+            continue
+        if not (0.0 < value <= 1.0):
+            parser.error(f"--{name.replace('_', '-')} must be in (0, 1]")
+    if args.battery_max_mass_fraction is not None:
+        if not (0.0 < args.battery_max_mass_fraction <= 1.0):
+            parser.error("--battery-max-mass-fraction must be in (0, 1]")
+
+
+def _feed_system_spec_from_args(args):
+    from raosim.injector import FeedLineSpec, FeedSystemSpec
+
+    def line(role: str) -> FeedLineSpec:
+        return FeedLineSpec(
+            supply_pressure=getattr(args, f"{role}_supply_pressure"),
+            flow_capacity=getattr(args, f"{role}_flow_capacity"),
+            line_loss=getattr(args, f"{role}_line_loss"),
+            line_loss_fraction=getattr(args, f"{role}_line_loss_fraction"),
+            manifold_loss=getattr(args, f"{role}_manifold_loss"),
+            manifold_loss_fraction=getattr(args, f"{role}_manifold_loss_fraction"),
+            control_margin=getattr(args, f"{role}_control_margin"),
+            control_margin_fraction=getattr(args, f"{role}_control_margin_fraction"),
+            tank_pressure=getattr(args, f"{role}_tank_pressure"),
+            npsh_required=getattr(args, f"{role}_npsh_required"),
+            pump_efficiency=(
+                getattr(args, f"pump_efficiency_{role}")
+                if getattr(args, f"pump_efficiency_{role}") is not None
+                else 0.7
+            ),
+        )
+
+    return FeedSystemSpec(
+        architecture=args.feed_architecture,
+        fuel=line("fuel"),
+        oxidizer=line("oxidizer"),
+    )
+
+
+def _pump_spec_from_args(args):
+    from raosim.pumps import BatterySpec, ElectricDriveSpec, PumpSizingSpec
+
+    return PumpSizingSpec(
+        drive=ElectricDriveSpec(
+            motor_efficiency=args.motor_efficiency,
+            inverter_efficiency=args.inverter_efficiency,
+            voltage=args.motor_voltage,
+            rpm=args.pump_rpm,
+            max_rpm=args.pump_max_rpm,
+            max_motor_power=args.motor_max_power,
+            max_current=args.motor_max_current,
+            motor_power_density=args.motor_power_density,
+            inverter_power_density=args.inverter_power_density,
+            torque_limit=args.motor_torque_limit,
+            heat_rejection_limit=args.motor_heat_rejection_limit,
+        ),
+        battery=BatterySpec(
+            energy_density=args.battery_energy_density,
+            power_density=args.battery_power_density,
+            discharge_efficiency=args.battery_discharge_efficiency,
+            structural_margin=args.battery_structural_margin,
+            voltage=args.battery_voltage,
+            max_current=args.battery_max_current,
+            max_mass_fraction=args.battery_max_mass_fraction,
+            vehicle_mass=args.vehicle_mass,
+        ),
+        burn_time=args.burn_time,
+        pump_efficiency={
+            "fuel": args.pump_efficiency_fuel,
+            "oxidizer": args.pump_efficiency_oxidizer,
+        },
+        head_coefficient=args.pump_head_coefficient,
+        flow_coefficient=args.pump_flow_coefficient,
+        material_tip_speed_limit=args.pump_tip_speed_limit,
+        max_head_per_stage=args.pump_max_head_per_stage,
+    )
 
 
 def _apply_wall_sizing_mode(args, parser, argv) -> None:
@@ -498,7 +688,77 @@ def _print_injector_panel(inj) -> None:
     print(f"    {green('verdict:'):<16}{verdict}")
 
 
+def _print_pump_panel(pump) -> None:
+    """Console panel for electric pump sizing."""
+    total_shaft = sum(
+        (ln.shaft_power or 0.0) for ln in pump.lines.values()
+    )
+    total_elec = pump.battery.electric_power
+    print(f"    {green('power:'):<16}shaft {total_shaft/1000:.2f} kW   "
+          f"electric {total_elec/1000:.2f} kW   "
+          f"battery {pump.battery.mass:.2f} kg ({pump.battery.limiting})")
+    print(f"    {green('battery:'):<16}{pump.battery.current:.0f} A   "
+          f"energy {pump.battery.energy_required/1000:.1f} kJ   "
+          f"heat {pump.battery.heat:.0f} W")
+    for role, ln in pump.lines.items():
+        if ln.impeller is None or ln.drive is None:
+            print(f"    {green(role + ':'):<16}"
+                  "tank pressure missing; head/power/geometry not sized")
+            continue
+        imp = ln.impeller
+        ind = ln.inducer
+        dif = ln.diffuser_volute
+        print(f"    {green(role + ':'):<16}"
+              f"H={ln.head:.0f} m  rise={ln.pressure_rise/1e5:.1f} bar  "
+              f"Pshaft={ln.shaft_power/1000:.2f} kW  "
+              f"T={ln.drive.torque:.3g} N m")
+        print(f"    {dim(''):<16}"
+              f"rpm={ln.drive.rpm:.0f}  V={ln.drive.voltage:.0f}  "
+              f"ηp={ln.efficiency:.2f} ({ln.efficiency_source})")
+        print(f"    {dim(''):<16}"
+              f"D2={imp.impeller_diameter*1e3:.1f} mm  "
+              f"b2={imp.outlet_width*1e3:.2f} mm  "
+              f"U2={imp.tip_speed:.0f} m/s  Ns={imp.specific_speed:.2f}  "
+              f"{dif.selection if dif else 'diffuser'}")
+        if ln.hydraulic_meanline is not None:
+            ml = ln.hydraulic_meanline
+            tri = ml.velocity_triangle
+            re = ml.losses.reynolds_number
+            re_text = "unknown" if re is None else f"{re:.2g}"
+            print(f"    {dim(''):<16}"
+                  f"slip={tri.slip_factor:.2f}  "
+                  f"Euler margin={tri.euler_head_margin:.0f} m/stage  "
+                  f"loss={ml.losses.total_loss_head:.0f} m/stage  "
+                  f"Re={re_text}")
+        if ind is not None:
+            ss = "unknown" if ind.suction_specific_speed is None else f"{ind.suction_specific_speed:.2f}"
+            print(f"    {dim(''):<16}"
+                  f"inducer D={ind.diameter*1e3:.1f} mm  "
+                  f"NSS={ss}  NPSH margin="
+                  f"{'unknown' if ind.npsh_margin is None else f'{ind.npsh_margin/1e5:+.2f} bar'}")
+    n_pass = sum(g.status == "pass" for g in pump.feasibility.gates)
+    n_warn = sum(g.status == "warn" for g in pump.feasibility.gates)
+    n_fail = sum(g.status == "fail" for g in pump.feasibility.gates)
+    print(f"    {green('gates:'):<16}{green(str(n_pass)+' pass')}  "
+          f"{yellow(str(n_warn)+' warn')}  "
+          f"{red(str(n_fail)+' fail') if n_fail else dim('0 fail')}")
+    for g in pump.feasibility.gates:
+        if g.status == "fail":
+            print(red(f"      ✗ {g.name}: {g.detail}"))
+        elif g.status == "warn":
+            print(yellow(f"      ● {g.name}: {g.detail}"))
+    if pump.feasible:
+        print(f"    {green('verdict:'):<16}{green('✓ screening pass')}")
+    else:
+        print(f"    {green('verdict:'):<16}{red('✗ electric pump screening failed')}")
+    for suggestion in pump.feasibility.suggestions[:3]:
+        print(yellow(f"    suggestion: {suggestion}") if not pump.feasible
+              else dim(f"    note: {suggestion}"))
+
+
 def main() -> int:
+    from raosim.pumps import SCREENING_DEFAULTS as PUMP_DEFAULTS
+
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     # nozzle
     ap.add_argument("--rt", type=float, default=0.020, help="throat radius [m]")
@@ -545,7 +805,19 @@ def main() -> int:
                     help="chamber/throat area ratio Ac/At")
     ap.add_argument("--shoulder-radius-factor", type=float, default=None,
                     help="chamber shoulder radius / Rt; geometric placeholder "
-                         "0.25 when omitted")
+                         "0.25 when omitted (ignored when --shoulder-sizing "
+                         "auto)")
+    ap.add_argument("--shoulder-sizing", choices=("scalar", "auto"),
+                    default="scalar",
+                    help="scalar: use --shoulder-radius-factor (placeholder "
+                         "0.25); auto: derive the fillet geometrically as the "
+                         "smoothest contraction the contour allows for the "
+                         "given Rt, contraction ratio, convergent angle and Ru "
+                         "(see docs/shoulder_radius_design_basis.md)")
+    ap.add_argument("--shoulder-fill-fraction", type=float, default=0.8,
+                    help="with --shoulder-sizing auto, fraction of the maximum "
+                         "feasible fillet to use (0<f<1; 0.8 keeps a ~20%% "
+                         "straight convergent cone)")
     ap.add_argument("--minimum-cylindrical-length", type=float, default=None,
                     help="minimum cylindrical chamber length [m]; geometric "
                          "floor 1e-6 when omitted")
@@ -601,11 +873,10 @@ def main() -> int:
                          "for methane, 25 K for LH2, and 300 K otherwise")
     ap.add_argument("--coolant-outlet-pressure", type=float, default=None,
                     help="absolute coolant pressure at jacket outlet [Pa]; "
-                         "default Pc + injector pressure drop")
-    ap.add_argument("--injector-pressure-drop", type=float, default=0.0,
-                    help="DEPRECATED absolute cooling-outlet loss [Pa]; prefer "
-                         "--fuel-injector-dp-fraction. Only a single boundary "
-                         "loss, not a complete injector.")
+                         "default Pc plus the fuel injector dP when the "
+                         "coolant is the cycle fuel")
+    ap.add_argument("--injector-pressure-drop", type=float, default=None,
+                    help=argparse.SUPPRESS)
     ap.add_argument("--fuel-injector-dp-fraction", type=float, default=None,
                     help="fuel injector pressure drop as a fraction of Pc "
                          "(ΔP_f/Pc); sets the regen coolant outlet boundary to "
@@ -645,6 +916,121 @@ def main() -> int:
     ap.add_argument("--allow-infeasible-injector", action="store_true",
                     help="export the chamber even when injector gates fail "
                          "(default: failing gates block export, exit nonzero)")
+    # feed-system ledger inputs (also consumed by --electric-pump)
+    ap.add_argument("--feed-architecture", choices=("pump_fed", "pressure_fed"),
+                    default="pump_fed",
+                    help="feed architecture label stored in the feed ledger")
+    ap.add_argument("--fuel-supply-pressure", type=float, default=None,
+                    help="available fuel pump/tank outlet pressure [Pa]")
+    ap.add_argument("--oxidizer-supply-pressure", type=float, default=None,
+                    help="available oxidizer pump/tank outlet pressure [Pa]")
+    ap.add_argument("--fuel-flow-capacity", type=float, default=None,
+                    help="available fuel pump/feed capacity [kg/s]")
+    ap.add_argument("--oxidizer-flow-capacity", type=float, default=None,
+                    help="available oxidizer pump/feed capacity [kg/s]")
+    ap.add_argument("--fuel-line-loss", type=float, default=0.0,
+                    help="fuel line/valve/filter loss charged to pump [Pa]")
+    ap.add_argument("--oxidizer-line-loss", type=float, default=0.0,
+                    help="oxidizer line/valve/filter loss charged to pump [Pa]")
+    ap.add_argument("--fuel-line-loss-fraction", type=float, default=0.0,
+                    help="fuel line loss as a fraction of Pc")
+    ap.add_argument("--oxidizer-line-loss-fraction", type=float, default=0.0,
+                    help="oxidizer line loss as a fraction of Pc")
+    ap.add_argument("--fuel-manifold-loss", type=float, default=0.0,
+                    help="fuel manifold loss allowance charged to pump [Pa]")
+    ap.add_argument("--oxidizer-manifold-loss", type=float, default=0.0,
+                    help="oxidizer manifold loss allowance charged to pump [Pa]")
+    ap.add_argument("--fuel-manifold-loss-fraction", type=float, default=0.0,
+                    help="fuel manifold allowance as a fraction of Pc")
+    ap.add_argument("--oxidizer-manifold-loss-fraction", type=float, default=0.0,
+                    help="oxidizer manifold allowance as a fraction of Pc")
+    ap.add_argument("--fuel-control-margin", type=float, default=0.0,
+                    help="fuel feed control/transient margin [Pa]")
+    ap.add_argument("--oxidizer-control-margin", type=float, default=0.0,
+                    help="oxidizer feed control/transient margin [Pa]")
+    ap.add_argument("--fuel-control-margin-fraction", type=float, default=0.0,
+                    help="fuel control margin as a fraction of Pc")
+    ap.add_argument("--oxidizer-control-margin-fraction", type=float, default=0.0,
+                    help="oxidizer control margin as a fraction of Pc")
+    ap.add_argument("--fuel-tank-pressure", type=float, default=None,
+                    help="fuel pump inlet/tank pressure for head/NPSH [Pa]")
+    ap.add_argument("--oxidizer-tank-pressure", type=float, default=None,
+                    help="oxidizer pump inlet/tank pressure for head/NPSH [Pa]")
+    ap.add_argument("--fuel-npsh-required", type=float, default=None,
+                    help="fuel pump required NPSH pressure margin [Pa]")
+    ap.add_argument("--oxidizer-npsh-required", type=float, default=None,
+                    help="oxidizer pump required NPSH pressure margin [Pa]")
+    ap.add_argument("--pump-efficiency-fuel", type=float, default=None,
+                    help="fuel pump efficiency override; default auto-estimates "
+                         "from pump flow/head duty")
+    ap.add_argument("--pump-efficiency-oxidizer", type=float, default=None,
+                    help="oxidizer pump efficiency override; default auto-estimates "
+                         "from pump flow/head duty")
+    # electric pump sizing
+    ap.add_argument("--electric-pump", action="store_true",
+                    help="size electric pump drive, battery, impeller, inducer, and diffuser")
+    ap.add_argument("--pump-rpm", type=float, default=None,
+                    help="pump shaft speed override [rpm]; default solves from "
+                         "specific speed and impeller geometry bounds")
+    ap.add_argument("--pump-max-rpm", type=float, default=120000.0,
+                    help="selected motor/pump maximum speed [rpm]")
+    ap.add_argument("--burn-time", type=float, default=10.0,
+                    help="burn duration for battery energy sizing [s]")
+    ap.add_argument("--motor-voltage", type=float, default=None,
+                    help="motor/inverter DC bus voltage [V]; default selects a "
+                         "standard bus from power/current requirements")
+    ap.add_argument("--motor-efficiency", type=float,
+                    default=PUMP_DEFAULTS["motor_efficiency"],
+                    help="motor efficiency for electric pump sizing")
+    ap.add_argument("--inverter-efficiency", type=float,
+                    default=PUMP_DEFAULTS["inverter_efficiency"],
+                    help="inverter efficiency for electric pump sizing")
+    ap.add_argument("--motor-power-density", type=float,
+                    default=PUMP_DEFAULTS["motor_power_density"],
+                    help="motor power density [W/kg]")
+    ap.add_argument("--inverter-power-density", type=float,
+                    default=PUMP_DEFAULTS["inverter_power_density"],
+                    help="inverter/controller power density [W/kg]")
+    ap.add_argument("--motor-max-power", type=float, default=None,
+                    help="per-stream motor shaft-power limit [W]")
+    ap.add_argument("--motor-max-current", type=float, default=None,
+                    help="per-stream drive current limit [A]")
+    ap.add_argument("--motor-torque-limit", type=float, default=None,
+                    help="per-stream shaft torque limit [N m]")
+    ap.add_argument("--motor-heat-rejection-limit", type=float, default=None,
+                    help="per-stream motor+inverter heat rejection limit [W]")
+    ap.add_argument("--battery-energy-density", type=float,
+                    default=PUMP_DEFAULTS["battery_energy_density"],
+                    help="pack-level usable energy density [J/kg]")
+    ap.add_argument("--battery-power-density", type=float,
+                    default=PUMP_DEFAULTS["battery_power_density"],
+                    help="pack-level discharge power density [W/kg]")
+    ap.add_argument("--battery-discharge-efficiency", type=float,
+                    default=PUMP_DEFAULTS["battery_discharge_efficiency"],
+                    help="battery discharge efficiency")
+    ap.add_argument("--battery-structural-margin", type=float,
+                    default=PUMP_DEFAULTS["battery_structural_margin"],
+                    help="battery mass multiplier for packaging/structure")
+    ap.add_argument("--battery-voltage", type=float, default=None,
+                    help="battery pack voltage [V]; defaults to --motor-voltage")
+    ap.add_argument("--battery-max-current", type=float, default=None,
+                    help="battery/controller current limit [A]")
+    ap.add_argument("--vehicle-mass", type=float, default=None,
+                    help="vehicle gross/liftoff mass for battery mass fraction [kg]")
+    ap.add_argument("--battery-max-mass-fraction", type=float, default=None,
+                    help="maximum acceptable battery/vehicle mass fraction")
+    ap.add_argument("--pump-head-coefficient", type=float, default=0.55,
+                    help="centrifugal impeller head coefficient psi")
+    ap.add_argument("--pump-flow-coefficient", type=float, default=0.08,
+                    help="centrifugal impeller flow coefficient phi")
+    ap.add_argument("--pump-tip-speed-limit", type=float, default=350.0,
+                    help="screening impeller material/fabrication tip-speed limit [m/s]")
+    ap.add_argument("--pump-max-head-per-stage", type=float, default=2500.0,
+                    help="screening maximum head per centrifugal stage [m]")
+    ap.add_argument("--pump-visualize", action="store_true",
+                    help="save pump_particles.gif for the sized electric pump")
+    ap.add_argument("--allow-infeasible-pump", action="store_true",
+                    help="continue exporting when electric-pump gates fail")
     ap.add_argument("--throttle-map", default=None,
                     help="movable-sleeve throttle study: comma-separated "
                          "throttle levels in (0,1], e.g. '0.2,0.4,0.6,0.8,1.0'")
@@ -875,6 +1261,7 @@ def main() -> int:
                     help="pop up the flow-field / animation in a live window "
                          "(on by default for interactive runs)")
     args = ap.parse_args()
+    _reject_legacy_injector_pressure_drop(ap, sys.argv)
     _apply_wall_sizing_mode(args, ap, sys.argv)
     if args.regen_manifolds:
         args.regen_brep = True
@@ -908,6 +1295,8 @@ def main() -> int:
         args._shoulder_radius_source = "user_supplied"
     if args.shoulder_radius_factor <= 0.0:
         ap.error("--shoulder-radius-factor must be positive")
+    if not 0.0 < args.shoulder_fill_fraction < 1.0:
+        ap.error("--shoulder-fill-fraction must be in the open interval (0, 1)")
     if args.minimum_cylindrical_length is None:
         args.minimum_cylindrical_length = 1e-6
         args._minimum_cylinder_source = "geometric_placeholder"
@@ -1110,23 +1499,12 @@ def main() -> int:
     args._mdot_o = args.mixture_ratio * args._mdot_f
     args._design_ambient = Pa
 
-    # Injector pressure-drop fractions (replace the single legacy loss).
-    # Explicit flag wins; else derive from the legacy absolute loss; else use
-    # a standard ~20% Pc injector stiffness so --injector works out of the box.
-    if args.fuel_injector_dp_fraction is None:
-        if args.injector_pressure_drop > 0 and args.pc > 0:
-            args.fuel_injector_dp_fraction = args.injector_pressure_drop / args.pc
-        else:
-            args.fuel_injector_dp_fraction = 0.2
-    if args.oxidizer_injector_dp_fraction is None:
-        args.oxidizer_injector_dp_fraction = args.fuel_injector_dp_fraction
-    # The fuel injector drop sets the regen coolant outlet boundary Pc·(1+χ_f)
-    # (continuous pressure accounting: jacket -> fuel manifold -> injector).
-    # Only override the cooling boundary when the fuel drop is meaningful for
-    # this run (explicit flag, or an active pintle) so plain cooling runs keep
-    # their existing Pc boundary.
-    if "--fuel-injector-dp-fraction" in sys.argv or args.injector == "pintle":
-        args.injector_pressure_drop = args.fuel_injector_dp_fraction * args.pc
+    # Injector pressure-drop fractions are authoritative. The legacy single
+    # --injector-pressure-drop flag is rejected at parse time; any scalar dP
+    # passed to the cooling solver below is derived from the fuel split only
+    # when the regenerative coolant is the cycle fuel.
+    _apply_split_injector_pressure_model(args, ap)
+    _validate_pump_args(args, ap)
 
     args.out.mkdir(parents=True, exist_ok=True)
 
@@ -1140,11 +1518,16 @@ def main() -> int:
         if args.size_wall else
         f"scalar uniform input ({args.wall_thickness*1e3:g} mm)"
     )
+    shoulder_plan = (
+        f"auto ({args.shoulder_fill_fraction:g}×max-feasible Rt)"
+        if args.shoulder_sizing == "auto"
+        else f"{args.shoulder_radius_factor:g} Rt"
+    )
     for k, v in [
         ("nozzle", f"Rt={args.rt*1e3:g} mm, eps={args.epsilon:g}, "
                    f"L={args.length_pct:g}%, gamma={args.gamma:g}"),
         ("chamber", f"L*={args.l_star:g} m, CR={args.contraction_ratio:g}, "
-                    f"shoulder={args.shoulder_radius_factor:g} Rt, "
+                    f"shoulder={shoulder_plan}, "
                     f"Lc,min={args.minimum_cylindrical_length:g} m"),
         ("solver", f"{args.backend}  (max_nfev={args.max_nfev}, "
                    f"n_control={args.n_control}, n_kernel={args.n_kernel})"),
@@ -1167,6 +1550,11 @@ def main() -> int:
                         else f"{args.coolant_mdot:g} kg/s") + ")"
                      if (args.thermal or args.auto_size or args.size_wall) and args.regen
                      else dim("off"))),
+        ("electric pump", (
+            f"on  ({'auto' if args.pump_rpm is None else f'{args.pump_rpm:g}'} rpm, "
+            f"{'auto' if args.motor_voltage is None else f'{args.motor_voltage:g}'} V, "
+            f"burn {args.burn_time:g} s)"
+            if args.electric_pump else dim("off"))),
         ("material", (f"{mat.name}  (k={args.wall_k:g} W/mK, "
                       f"T≤{args.wall_temp_limit:g} K, "
                       f"{mat.category.replace('_', ' ')})" if mat else
@@ -1232,6 +1620,14 @@ def main() -> int:
     nozzle["throat_geometry"] = throat_geometry.to_dict()
     nozzle["throat_location"] = throat_geometry.throat_location
     try:
+        if args.shoulder_sizing == "auto":
+            args.shoulder_radius_factor = auto_shoulder_factor(
+                args.rt,
+                args.contraction_ratio,
+                throat_geometry=throat_geometry,
+                fill_fraction=args.shoulder_fill_fraction,
+            )
+            args._shoulder_radius_source = "auto_geometric_closure"
         chamber = chamber_contour(
             args.rt,
             L_star=args.l_star,
@@ -1321,6 +1717,48 @@ def main() -> int:
         "max_wall_temperature_K": args.wall_temp_limit,
         "source": mat.source if mat else None,
     }
+    if args.injector == "pintle":
+        try:
+            from raosim.interface import resolve_bolted_interface_geometry
+
+            interface_resolution = resolve_bolted_interface_geometry(
+                chamber_pressure=args.pc,
+                chamber_radius=chamber["Rc"],
+                wall_thickness=args.wall_thickness,
+                flange_outer_diameter=args.flange_od,
+                flange_length=args.flange_length,
+                face_outer_diameter=args.injector_face_od,
+                face_thickness=args.injector_face_thickness,
+                bolt_count=args.bolt_count,
+                bolt_circle_diameter=args.bolt_circle,
+                bolt_hole_diameter=args.bolt_hole,
+                bolt_diameter=args.bolt_diameter,
+                bolt_allowable_stress=args.bolt_allowable_stress,
+                material_yield_strength=(mat.yield_strength if mat else None),
+                min_feature=args.injector_min_feature,
+                min_tool_diameter=args.min_tool_diameter,
+                joint_separation_factor=args.joint_separation_factor,
+            )
+            args.flange_od = interface_resolution.flange_outer_diameter
+            args.flange_length = interface_resolution.flange_length
+            args.injector_face_od = interface_resolution.face_outer_diameter
+            args.injector_face_thickness = interface_resolution.face_thickness
+            args.bolt_count = interface_resolution.bolt_count
+            args.bolt_circle = interface_resolution.bolt_circle_diameter
+            args.bolt_hole = interface_resolution.bolt_hole_diameter
+            summary["injector_interface_resolution"] = (
+                interface_resolution.to_dict()
+            )
+            auto = interface_resolution.auto_sized_fields
+            if auto:
+                print(dim(
+                    "    injector/chamber interface auto-sized: "
+                    f"flange OD {args.flange_od*1e3:.1f} mm, "
+                    f"BCD {args.bolt_circle*1e3:.1f} mm, "
+                    f"{args.bolt_count}x Ø{args.bolt_hole*1e3:.1f} mm"
+                ))
+        except Exception as exc:
+            print(yellow(f"    injector/chamber interface auto-size skipped: {exc}"))
 
     # ---- 2. export the contour reference (solid wall follows sizing) --
     np.savetxt(args.out / "contour.csv",
@@ -1435,7 +1873,7 @@ def main() -> int:
             n_height=args.channel_height_steps,
             t_hot_min=args.t_hot_min, t_hot_max=args.t_hot_max, objective=obj,
             coolant_outlet_pressure=args.coolant_outlet_pressure,
-            injector_pressure_drop=args.injector_pressure_drop,
+            fuel_injector_dp_fraction=args._regen_fuel_injector_dp_fraction,
             cooling_options=args._cooling_options)
         print(f"    coolant flow (cycle): {jd['mdot_total']:.2f} kg/s total → "
               f"{bold('%.2f kg/s' % jd['mdot_cool'])} coolant "
@@ -1545,7 +1983,7 @@ def main() -> int:
                 args.buckling_tangent_modulus_fraction,
             gate_sp125_429=args.gate_sp125_tube_buckling,
             coolant_outlet_pressure=args.coolant_outlet_pressure,
-            injector_pressure_drop=args.injector_pressure_drop,
+            fuel_injector_dp_fraction=args._regen_fuel_injector_dp_fraction,
             cooling_options=args._cooling_options)
         args._wall_profile = prof["profile"]
         jck = (f" + {prof['jacket_material']} jacket" if args.jacket_material
@@ -1649,7 +2087,7 @@ def main() -> int:
             channel_roughness=args.channel_roughness,
             coolant_mass_flow=args.coolant_mdot,
             coolant_outlet_pressure=args.coolant_outlet_pressure,
-            injector_pressure_drop=args.injector_pressure_drop,
+            injector_pressure_drop=args._regen_injector_pressure_drop,
             max_wall_temperature=args.wall_temp_limit,
             **args._cooling_options,
         )
@@ -1666,7 +2104,7 @@ def main() -> int:
             wall_profile=analysis_wall_profile,
             curvature_correction=args.curvature_correction,
             coolant_outlet_pressure=args.coolant_outlet_pressure,
-            injector_pressure_drop=args.injector_pressure_drop)
+            injector_pressure_drop=args._regen_injector_pressure_drop)
         pf = cooling_result.get("passage_length_factor", 1.0)
         summary["cooling"] = {
             "peak_wall_T_K": cooling_result["peak_gas_side_wall_temperature"],
@@ -1928,6 +2366,7 @@ def main() -> int:
                 min_tool_diameter=args.min_tool_diameter,
                 min_corner_radius=args.min_corner_radius,
                 tolerance=args.injector_tolerance),
+            feed_system=_feed_system_spec_from_args(args),
         )
         try:
             coupling_cooling = CoolingSpec(
@@ -1964,6 +2403,55 @@ def main() -> int:
         (args.out / "pintle.json").write_text(json.dumps(inj_dict, indent=2))
         artifacts.append("pintle.json")
         print(green("    wrote pintle.json"))
+        if args.electric_pump:
+            print("\n" + cyan("▸ " + bold("Electric pump")) +
+                  dim("  (drive, battery, impeller, inducer, diffuser)"))
+            from raosim.pumps import size_electric_pumps
+
+            pump = size_electric_pumps(
+                inj.feed_system,
+                _pump_spec_from_args(args),
+            )
+            _print_pump_panel(pump)
+            pump_dict = pump.to_dict()
+            summary["electric_pump"] = pump_dict
+            (args.out / "pump.json").write_text(json.dumps(pump_dict, indent=2))
+            artifacts.append("pump.json")
+            print(green("    wrote pump.json"))
+            if args.pump_visualize:
+                try:
+                    from raosim.flow_viz import animate_pump_particles
+
+                    viz_role = (
+                        "fuel"
+                        if pump.lines.get("fuel")
+                        and pump.lines["fuel"].impeller is not None
+                        else next(
+                            role for role, line in pump.lines.items()
+                            if line.impeller is not None
+                        )
+                    )
+                    animate_pump_particles(
+                        pump,
+                        role=viz_role,
+                        save_path=args.out / "pump_particles.gif",
+                        fps=25,
+                        show=show,
+                    )
+                    artifacts.append("pump_particles.gif")
+                    print(green("    wrote pump_particles.gif")
+                          + (dim("  (window)") if show else ""))
+                except Exception as exc:
+                    print(yellow(f"    pump visualization skipped: {exc}"))
+            if not pump.feasible and not args.allow_infeasible_pump:
+                print(red("    electric pump gates FAILED — blocking chamber "
+                          "export; re-run with --allow-infeasible-pump to "
+                          "override."))
+                (args.out / "summary.json").write_text(json.dumps(summary, indent=2))
+                return 2
+            print(green("    electric pump sized ✓") if pump.feasible else
+                  yellow("    electric pump sized with FAILING gates "
+                         "(--allow-infeasible-pump)"))
         if not inj.feasible and not args.allow_infeasible_injector:
             print(red("    injector gates FAILED — blocking chamber export; "
                       "re-run with --allow-infeasible-injector to override."))
@@ -1972,6 +2460,53 @@ def main() -> int:
         print(green("    injector sized ✓") if inj.feasible else
               yellow("    injector sized with FAILING gates "
                      "(--allow-infeasible-injector)"))
+        try:
+            from raosim.injector_cad import resolve_machined_pintle_layout
+            from raosim.interface import resolve_bolted_interface_geometry
+
+            layout = resolve_machined_pintle_layout(inj, spec=inj_spec)
+            lr = layout["resolved"]
+            interface_resolution = resolve_bolted_interface_geometry(
+                chamber_pressure=args.pc,
+                chamber_radius=chamber["Rc"],
+                wall_thickness=args.wall_thickness,
+                flange_outer_diameter=args.flange_od,
+                flange_length=args.flange_length,
+                face_outer_diameter=args.injector_face_od,
+                face_thickness=args.injector_face_thickness,
+                bolt_count=args.bolt_count,
+                bolt_circle_diameter=args.bolt_circle,
+                bolt_hole_diameter=args.bolt_hole,
+                bolt_diameter=args.bolt_diameter,
+                bolt_allowable_stress=args.bolt_allowable_stress,
+                material_yield_strength=(mat.yield_strength if mat else None),
+                min_feature=args.injector_min_feature,
+                min_tool_diameter=args.min_tool_diameter,
+                minimum_face_outer_diameter=lr["faceplate_outer_diameter_m"],
+                minimum_face_thickness=lr["faceplate_thickness_m"],
+                minimum_bolt_circle_diameter=lr["bolt_circle_diameter_m"],
+                minimum_bolt_hole_diameter=lr["bolt_hole_diameter_m"],
+                joint_separation_factor=args.joint_separation_factor,
+            )
+            args.flange_od = interface_resolution.flange_outer_diameter
+            args.flange_length = interface_resolution.flange_length
+            args.injector_face_od = interface_resolution.face_outer_diameter
+            args.injector_face_thickness = interface_resolution.face_thickness
+            args.bolt_count = interface_resolution.bolt_count
+            args.bolt_circle = interface_resolution.bolt_circle_diameter
+            args.bolt_hole = interface_resolution.bolt_hole_diameter
+            inj_spec.geometry.face_od = args.injector_face_od
+            inj_spec.geometry.face_thickness = args.injector_face_thickness
+            inj_spec.mechanical.bolt_count = args.bolt_count
+            inj_spec.mechanical.bolt_circle_diameter = args.bolt_circle
+            inj_spec.mechanical.bolt_hole_diameter = args.bolt_hole
+            inj_spec.mechanical.faceplate_outer_diameter = args.injector_face_od
+            inj_spec.mechanical.faceplate_thickness = args.injector_face_thickness
+            summary["injector_interface_resolution"] = (
+                interface_resolution.to_dict()
+            )
+        except Exception as exc:
+            print(yellow(f"    injector interface/layout sync skipped: {exc}"))
 
         # ---- optional movable-sleeve throttle map (computed before the
         #      figures so it can be plotted alongside them) --------------
@@ -2083,6 +2618,8 @@ def main() -> int:
                 liner_pressure_differential=
                     cooling_result["liner_pressure_differential"],
                 heat_flux=cooling_result["q"],
+                screen_station_index=0,
+                screen_selection="injector_face_chamber_station",
             )
 
         interface_ledger = screen_injector_chamber_interface(

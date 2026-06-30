@@ -16,6 +16,12 @@ from raosim.injector import (
     resolve_feed_state,
     size_pintle_injector,
 )
+from raosim.pumps import (
+    BatterySpec,
+    ElectricDriveSpec,
+    PumpSizingSpec,
+    size_electric_pumps,
+)
 
 
 # ---- representative LOX/RP-1 operating point ---------------------------
@@ -808,3 +814,81 @@ class TestFeedSystemLedger:
                               npsh_required=1e5),
             oxidizer=FeedLineSpec(supply_pressure=200e5))))
         assert _gate_status(ok, "feed_npsh_fuel") == "pass"
+
+
+# ---- electric pump sizing ------------------------------------------------
+class TestElectricPumpSizing:
+    def test_sizes_drive_battery_and_geometry_from_feed_ledger(self):
+        import json
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=5e5,
+                              npsh_required=1e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=6e5,
+                                  npsh_required=1e5))))
+        pump = size_electric_pumps(r.feed_system, PumpSizingSpec(
+            burn_time=12.0,
+            drive=ElectricDriveSpec(voltage=96.0, rpm=60000.0),
+            battery=BatterySpec(voltage=96.0, vehicle_mass=80.0),
+            pump_efficiency={"fuel": 0.55, "oxidizer": 0.60},
+        ))
+        d = pump.to_dict()
+        json.dumps(d)
+        assert pump.battery.mass > 0.0
+        assert pump.lines["fuel"].shaft_power > 0.0
+        assert pump.lines["fuel"].efficiency_source == "user"
+        assert pump.lines["fuel"].impeller.impeller_diameter > 0.0
+        assert pump.lines["fuel"].hydraulic_meanline is not None
+        assert pump.lines["fuel"].performance_curve is not None
+        assert pump.lines["oxidizer"].inducer.diameter > 0.0
+        assert any(g.name == "impeller_tip_speed_fuel"
+                   for g in pump.feasibility.gates)
+
+    def test_default_electric_pump_path_solves_rpm_and_efficiency(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=5e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=6e5))))
+        pump = size_electric_pumps(r.feed_system)
+        fuel = pump.lines["fuel"]
+        assert fuel.rpm_source.startswith("auto_")
+        assert fuel.efficiency_source.startswith("meanline_loss_model")
+        assert fuel.hydraulic_meanline is not None
+        assert fuel.efficiency == pytest.approx(
+            fuel.hydraulic_meanline.hydraulic_efficiency)
+        assert fuel.hydraulic_meanline.velocity_triangle.slip_factor < 1.0
+        assert fuel.hydraulic_meanline.losses.total_loss_head > 0.0
+        curve = fuel.performance_curve
+        assert curve is not None
+        design = next(p for p in curve.points if abs(p.flow_ratio - 1.0) < 1e-12)
+        assert design.head == pytest.approx(fuel.head)
+        assert curve.points[0].head > curve.points[-1].head
+        assert fuel.drive.rpm > 0.0
+        assert fuel.drive.voltage > 0.0
+        assert pump.assumptions["pump_rpm"] == "auto"
+
+    def test_missing_tank_pressure_reports_requirement_without_geometry(self):
+        r = _eval()
+        pump = size_electric_pumps(r.feed_system)
+        assert pump.lines["fuel"].shaft_power is None
+        assert pump.lines["fuel"].impeller is None
+        gate = next(g for g in pump.feasibility.gates
+                    if g.name == "electric_pump_pressure_rise_fuel")
+        assert gate.status == "info"
+        assert "needs" in gate.detail
+
+    def test_envelope_failures_are_direct_and_actionable(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=2e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=2e5))))
+        pump = size_electric_pumps(r.feed_system, PumpSizingSpec(
+            drive=ElectricDriveSpec(
+                voltage=24.0, rpm=180000.0, max_rpm=60000.0,
+                max_motor_power=50.0, max_current=1.0,
+            ),
+            battery=BatterySpec(voltage=24.0, max_current=1.0),
+            material_tip_speed_limit=40.0,
+        ))
+        assert pump.feasible is False
+        assert any(g.status == "fail" for g in pump.feasibility.gates)
+        assert pump.feasibility.suggestions[0].startswith(
+            "Electric pump feed is infeasible for this Pc"
+        )

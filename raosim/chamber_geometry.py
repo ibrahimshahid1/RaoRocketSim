@@ -60,6 +60,81 @@ def _bisect_root(function, lower: float, upper: float, *, xtol: float) -> float:
     return 0.5 * (lower + upper)
 
 
+def max_feasible_shoulder_factor(
+    Rt: float,
+    contraction_ratio: float,
+    *,
+    convergent_half_angle_deg: float = 45.0,
+    throat_geometry: ThroatGeometrySpec | None = None,
+) -> float:
+    """Largest ``shoulder_radius_factor`` (Rs/Rt) that still leaves a
+    non-negative straight convergent segment between the chamber shoulder
+    fillet and the upstream throat arc.
+
+    Derived from the same construction as :func:`chamber_contour`.  The straight
+    convergent run exists only while (see the ``radial_straight_drop`` check
+    below)::
+
+        Rc - Rs*(1 - cos a) >= Rt + Ru*(1 - cos a),   Rc = Rt*sqrt(eps_c)
+
+    so the closed-form cap is::
+
+        Rs_max = (Rc - Rt - Ru*(1 - cos a)) / (1 - cos a)
+
+    The chamber shoulder is a subsonic / manufacturing feature, not a
+    throat-performance one: NASA SP-8120 §2.1.1 notes the throat flowfield is
+    independent of geometry beyond ~1 Rt upstream.  This closure therefore
+    derives the fillet geometrically rather than from a performance equation
+    (see ``docs/shoulder_radius_design_basis.md``).
+    """
+    if Rt <= 0.0:
+        raise ValueError("Rt must be positive")
+    if contraction_ratio <= 1.0:
+        raise ValueError("contraction_ratio must be > 1")
+    spec = resolve_throat_geometry(
+        throat_geometry, convergent_half_angle_deg=convergent_half_angle_deg
+    )
+    one_minus_cos = 1.0 - math.cos(math.radians(spec.convergent_half_angle_deg))
+    Ru = spec.upstream_radius(Rt)
+    Rc = Rt * math.sqrt(contraction_ratio)
+    numerator = Rc - Rt - Ru * one_minus_cos
+    if numerator <= 0.0:
+        raise ValueError(
+            "infeasible chamber geometry: contraction ratio "
+            f"{contraction_ratio:g} at convergent half-angle "
+            f"{spec.convergent_half_angle_deg:g} deg with Ru/Rt="
+            f"{spec.upstream_radius_ratio:g} leaves no room for a shoulder "
+            "fillet; raise --contraction-ratio or lower --convergent-angle"
+        )
+    return numerator / (one_minus_cos * Rt)
+
+
+def auto_shoulder_factor(
+    Rt: float,
+    contraction_ratio: float,
+    *,
+    convergent_half_angle_deg: float = 45.0,
+    throat_geometry: ThroatGeometrySpec | None = None,
+    fill_fraction: float = 0.8,
+) -> float:
+    """Solver-determined ``shoulder_radius_factor``: the smoothest contraction
+    fillet the geometry allows, taken as ``fill_fraction`` of the cap from
+    :func:`max_feasible_shoulder_factor` (default 0.8 keeps a ~20% straight
+    convergent cone).  Replaces the hand-set 0.25 placeholder with a value
+    derived from ``Rt``, the contraction ratio, the convergent half-angle and
+    the upstream throat radius.
+    """
+    if not 0.0 < fill_fraction < 1.0:
+        raise ValueError("fill_fraction must be in the open interval (0, 1)")
+    cap = max_feasible_shoulder_factor(
+        Rt,
+        contraction_ratio,
+        convergent_half_angle_deg=convergent_half_angle_deg,
+        throat_geometry=throat_geometry,
+    )
+    return fill_fraction * cap
+
+
 def chamber_contour(
     Rt: float,
     L_star: float = 1.0,

@@ -34,21 +34,25 @@ wall model remains the authoritative path for station-wise thermal/structural
 liner sizing.
 
 When `run_nozzle.py` has a resolved `RegenWallProfile` from `--size-wall`, the
-interface ledger replaces this scalar gate with `composite_regen_wall_hoop`.
-That screen keeps the local SP-125 liner channel-roof stress separate from a
-smeared bonded-shell chamber-hoop load shared by the copper liner/ribs and the
-outer jacket:
+interface ledger replaces this scalar gate with `composite_regen_wall_hoop` at
+the injector-face chamber station.  It does not let the throat/nozzle station
+govern an injector/chamber interface check.  That screen keeps the local SP-125
+liner channel-roof stress separate from the absolute coolant-pressure hoop
+carried by the outer jacket.  Any chamber-over-coolant residual pressure is then
+shared by the smeared bonded liner/rib plus jacket section:
 
 ```text
 t_cu,eq = t_hot + land_fraction * channel_height
-N_theta = Pc * r
+N_theta = max(Pc - p_coolant, 0) * r
 eps = (N_theta + sum(E_i * t_i * alpha_i * DeltaT_i)) / sum(E_i * t_i)
 sigma_i = E_i * (eps - alpha_i * DeltaT_i)
 ```
 
 The reported copper demand conservatively adds the local liner stress to the
-absolute composite membrane stress.  The reported jacket demand adds the
-coolant-pressure hoop stress to the absolute composite membrane stress.
+absolute residual/common-strain membrane stress.  The reported jacket demand
+adds the absolute coolant-pressure hoop stress to that residual/common-strain
+stress, so the jacket pressure load is not counted once as coolant hoop and
+again as full chamber-pressure membrane.
 
 Injector faceplate bending screen:
 

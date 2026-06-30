@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import json
 import math
-from dataclasses import asdict, dataclass, field, is_dataclass
+from dataclasses import asdict, dataclass, field, is_dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +24,7 @@ from raosim.chamber_geometry import (
     full_engine_contour,
     thrust_chamber_geometry_checks,
 )
+from raosim.coolants import canonical_coolant_name
 from raosim.engine import EnginePerformance, compute_engine_performance
 from raosim.export import export_csv, export_step, export_stl, package_ipt_request
 from raosim.gas_dynamics import (
@@ -33,7 +34,10 @@ from raosim.gas_dynamics import (
     thrust_coefficient,
 )
 from raosim.injector import InjectorSpec, evaluate_pintle_injector
-from raosim.interface import screen_injector_chamber_interface
+from raosim.interface import (
+    resolve_bolted_interface_geometry,
+    screen_injector_chamber_interface,
+)
 from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
 from raosim.physics import (
     bartz_heat_flux,
@@ -130,10 +134,13 @@ class CoolingSpec:
     # 25 K, and 300 K for the current non-cryogenic preliminary defaults.
     coolant_inlet_temperature: float | None = None
     # Absolute jacket pressure immediately before the coolant leaves the
-    # cooling passages for the injector/manifold.  When omitted, the regen
-    # solver uses Pc + injector_pressure_drop as the minimum physically
-    # meaningful boundary for station-wise liner pressure stress.
+    # cooling passages for the injector/manifold.  When omitted, high-level
+    # workflows derive the boundary from InjectorSpec.fuel_dp_fraction when
+    # the coolant is the cycle fuel.
     coolant_outlet_pressure: float | None = None
+    # Deprecated compatibility field for direct low-level cooling callers.
+    # design_nozzle_v2 ignores user-supplied values here and derives the
+    # fuel-side boundary from InjectorSpec.fuel_dp_fraction instead.
     injector_pressure_drop: float = 0.0
     max_wall_temperature: float = 950.0
     # Optional coolant transport properties (override the built-in
@@ -402,6 +409,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         warnings.append(f"Sized Rt from target thrust: Rt = {Rt * 1000:.3f} mm.")
 
     contour = _build_v2_contour(input, Rt, float(epsilon), prop)
+    interface_resolution = _apply_pintle_interface_resolution(input, contour)
     if (
         input.L_star is None
         or input.contraction_ratio is None
@@ -418,22 +426,16 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         input.Pc, input.ambient.Pa, Rt, float(epsilon), prop
     )
 
-    gate_report = evaluate_design_gates(
-        contour,
-        input.Pc,
-        input.ambient.Pa,
-        prop.gamma,
-        wall_thickness=input.manufacturing.wall_thickness,
-        flange_od=input.interface.flange_od,
-        flange_length=input.interface.flange_length,
-    )
-
     boundary_layer = boundary_layer_displacement(contour, input.Pc, prop)
     thermal = bartz_heat_flux(contour, input.Pc, prop)
     # Pass prop + Pc so the cooling screen runs the real coupled
     # Sieder-Tate / 1-D wall-conduction solve (gas side = full Bartz).
+    cooling_input, cooling_boundary_warnings = (
+        _cooling_with_split_pressure_boundary(input)
+    )
+    warnings.extend(cooling_boundary_warnings)
     cooling = regenerative_cooling_screen(
-        thermal, contour, input.cooling, input.material,
+        thermal, contour, cooling_input, input.material,
         input.manufacturing.wall_thickness, prop, input.Pc,
     )
     injector_result = None
@@ -465,6 +467,31 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             cooling=input.cooling,
             cooling_result=cooling,
         )
+        interface_resolution = _apply_pintle_interface_resolution(
+            input, contour, injector_result=injector_result
+        )
+    gate_flange_od = (
+        input.interface.flange_od
+        if (
+            input.manufacturing.wall_thickness is not None
+            or input.manufacturing.cad.lower() != CAD_NONE
+        )
+        else None
+    )
+    gate_flange_length = (
+        input.interface.flange_length
+        if gate_flange_od is not None else None
+    )
+    gate_report = evaluate_design_gates(
+        contour,
+        input.Pc,
+        input.ambient.Pa,
+        prop.gamma,
+        wall_thickness=input.manufacturing.wall_thickness,
+        flange_od=gate_flange_od,
+        flange_length=gate_flange_length,
+    )
+    if injector_result is not None:
         for gate in injector_result.gates:
             gate_report.add(
                 "injector",
@@ -532,6 +559,11 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             injector_result.to_dict()
             if injector_result is not None
             else {"type": "none", "status": "disabled", "feasible": True}
+        ),
+        "injector_interface_resolution": (
+            interface_resolution.to_dict()
+            if interface_resolution is not None
+            else {"status": "not_requested"}
         ),
         "injector_interface": injector_interface.to_dict(),
         "structural": structural,
@@ -719,7 +751,11 @@ def _validate_design_input(input: DesignInput) -> None:
     if cad in {CAD_STEP, CAD_STL, CAD_BOTH}:
         if input.manufacturing.wall_thickness is None or input.manufacturing.wall_thickness <= 0.0:
             raise ValueError("CAD export requires manufacturing.wall_thickness > 0")
-    if (input.interface.flange_od is None) != (input.interface.flange_length is None):
+    if (
+        (input.interface.flange_od is None)
+        != (input.interface.flange_length is None)
+        and input.injector.type != "pintle"
+    ):
         raise ValueError("flange_od and flange_length must be supplied together")
     if input.interface.joint_separation_factor <= 0.0:
         raise ValueError("interface.joint_separation_factor must be positive")
@@ -764,6 +800,52 @@ def _thermo_feed_names(thermo: ThermoSpec) -> tuple[str | None, str | None]:
         oxidizer = oxidizer or pair_oxidizer
         fuel = fuel or pair_fuel
     return oxidizer, fuel
+
+
+def _cooling_with_split_pressure_boundary(
+    input: DesignInput,
+) -> tuple[CoolingSpec, list[str]]:
+    """Return a cooling spec whose regen boundary follows the split dP model."""
+    warnings: list[str] = []
+    cooling = input.cooling
+    if cooling.coolant_outlet_pressure is not None:
+        if float(cooling.injector_pressure_drop or 0.0) != 0.0:
+            warnings.append(
+                "CoolingSpec.injector_pressure_drop is deprecated and ignored "
+                "because coolant_outlet_pressure is an explicit absolute "
+                "jacket outlet boundary."
+            )
+        return replace(cooling, injector_pressure_drop=0.0), warnings
+
+    _, fuel_name = _thermo_feed_names(input.thermo)
+    fuel_is_coolant = bool(
+        cooling.method == "regenerative"
+        and cooling.coolant
+        and fuel_name
+        and canonical_coolant_name(cooling.coolant)
+        == canonical_coolant_name(fuel_name)
+    )
+    if fuel_is_coolant:
+        if float(cooling.injector_pressure_drop or 0.0) != 0.0:
+            warnings.append(
+                "CoolingSpec.injector_pressure_drop is deprecated and ignored; "
+                "the fuel-side regen boundary is derived from "
+                "injector.fuel_dp_fraction."
+            )
+        return replace(
+            cooling,
+            injector_pressure_drop=(
+                float(input.injector.fuel_dp_fraction) * float(input.Pc)
+            ),
+        ), warnings
+
+    if float(cooling.injector_pressure_drop or 0.0) != 0.0:
+        warnings.append(
+            "CoolingSpec.injector_pressure_drop is deprecated and ignored; "
+            "set coolant_outlet_pressure for an absolute regen boundary or "
+            "set injector.fuel_dp_fraction for the fuel-side split dP model."
+        )
+    return replace(cooling, injector_pressure_drop=0.0), warnings
 
 
 def _build_v2_contour(
@@ -813,6 +895,120 @@ def _build_v2_contour(
         offset_distance=input.manufacturing.wall_thickness,
     )
     return contour
+
+
+def _resolved_max(current, resolved):
+    """Use the resolved layout value unless an explicit larger value exists."""
+    if current is None:
+        return resolved
+    return max(float(current), float(resolved))
+
+
+def _apply_pintle_interface_resolution(
+    input: DesignInput,
+    contour: dict,
+    injector_result: Any | None = None,
+):
+    """Synchronize the chamber flange and pintle face bolt pattern.
+
+    The first call happens before pintle sizing so injector gates have a real
+    face OD and bolt pattern.  A second call after pintle sizing can fold in
+    the machined faceplate's manifold-driven minimums, keeping the chamber
+    flange STEP and injector STEP on the same bolt-together interface.
+    """
+
+    if input.injector.type != "pintle":
+        return None
+
+    chamber = contour.get("chamber", {})
+    chamber_radius = float(chamber.get("Rc", contour["y"][0]))
+    min_feature = getattr(input.injector.manufacturing, "min_feature", None)
+    min_tool = getattr(input.injector.mechanical, "min_tool_diameter", None)
+    min_face_od = min_face_t = min_bcd = min_hole = None
+
+    if injector_result is not None:
+        try:
+            from raosim.injector_cad import resolve_machined_pintle_layout
+
+            layout = resolve_machined_pintle_layout(
+                injector_result, spec=input.injector
+            )
+            resolved = layout["resolved"]
+            min_face_od = resolved["faceplate_outer_diameter_m"]
+            min_face_t = resolved["faceplate_thickness_m"]
+            min_bcd = resolved["bolt_circle_diameter_m"]
+            min_hole = resolved["bolt_hole_diameter_m"]
+        except Exception:
+            # The generic bolted-interface resolver is still useful without
+            # the machined layout report; artifact export captures CAD issues.
+            pass
+
+    resolution = resolve_bolted_interface_geometry(
+        chamber_pressure=input.Pc,
+        chamber_radius=chamber_radius,
+        wall_thickness=input.manufacturing.wall_thickness,
+        flange_outer_diameter=input.interface.flange_od,
+        flange_length=input.interface.flange_length,
+        face_outer_diameter=input.interface.injector_face_od,
+        face_thickness=input.interface.injector_face_thickness,
+        bolt_count=input.interface.bolt_count,
+        bolt_circle_diameter=input.interface.bolt_circle_diameter,
+        bolt_hole_diameter=input.interface.bolt_hole_diameter,
+        bolt_diameter=input.interface.bolt_diameter,
+        bolt_allowable_stress=input.interface.bolt_allowable_stress,
+        material_yield_strength=input.material.yield_strength,
+        structural_fos=1.5,
+        min_feature=min_feature,
+        min_tool_diameter=min_tool,
+        minimum_face_outer_diameter=min_face_od,
+        minimum_face_thickness=min_face_t,
+        minimum_bolt_circle_diameter=min_bcd,
+        minimum_bolt_hole_diameter=min_hole,
+        joint_separation_factor=input.interface.joint_separation_factor,
+    )
+
+    input.interface.flange_od = _resolved_max(
+        input.interface.flange_od, resolution.flange_outer_diameter
+    )
+    input.interface.flange_length = _resolved_max(
+        input.interface.flange_length, resolution.flange_length
+    )
+    input.interface.injector_face_od = _resolved_max(
+        input.interface.injector_face_od, resolution.face_outer_diameter
+    )
+    input.interface.injector_face_thickness = _resolved_max(
+        input.interface.injector_face_thickness, resolution.face_thickness
+    )
+    input.interface.bolt_count = max(
+        int(input.interface.bolt_count or 0), int(resolution.bolt_count)
+    )
+    input.interface.bolt_circle_diameter = _resolved_max(
+        input.interface.bolt_circle_diameter, resolution.bolt_circle_diameter
+    )
+    input.interface.bolt_hole_diameter = _resolved_max(
+        input.interface.bolt_hole_diameter, resolution.bolt_hole_diameter
+    )
+
+    geo = input.injector.geometry
+    mech = input.injector.mechanical
+    geo.face_od = _resolved_max(geo.face_od, input.interface.injector_face_od)
+    geo.face_thickness = _resolved_max(
+        geo.face_thickness, input.interface.injector_face_thickness
+    )
+    mech.bolt_count = max(int(mech.bolt_count or 0), int(input.interface.bolt_count))
+    mech.bolt_circle_diameter = _resolved_max(
+        mech.bolt_circle_diameter, input.interface.bolt_circle_diameter
+    )
+    mech.bolt_hole_diameter = _resolved_max(
+        mech.bolt_hole_diameter, input.interface.bolt_hole_diameter
+    )
+    mech.faceplate_outer_diameter = _resolved_max(
+        mech.faceplate_outer_diameter, input.interface.injector_face_od
+    )
+    mech.faceplate_thickness = _resolved_max(
+        mech.faceplate_thickness, input.interface.injector_face_thickness
+    )
+    return resolution
 
 
 def _add_v2_gate_checks(
@@ -895,11 +1091,13 @@ def _cad_readiness(
 ) -> dict:
     cad = input.manufacturing.cad.lower()
     max_od = 2.0 * float(max(contour["y"]))
+    chamber_section = contour.get("chamber", {})
+    interface_od = 2.0 * float(chamber_section.get("Rc", max(contour["y"])))
     flange_ok = (
         input.interface.flange_od is None
         or (
             input.interface.flange_length is not None
-            and input.interface.flange_od > max_od
+            and input.interface.flange_od > interface_od
             and input.interface.flange_length > 0.0
         )
     )
@@ -929,6 +1127,7 @@ def _cad_readiness(
         ),
         "flange_ok": flange_ok,
         "max_nozzle_od": max_od,
+        "interface_reference_od": interface_od,
         "placeholders": placeholders,
         "legacy_gate_passed_before_v2": gate_report.passed,
     }

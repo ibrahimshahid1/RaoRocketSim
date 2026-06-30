@@ -385,3 +385,157 @@ def animate_particles(
     anim = FuncAnimation(fig, update, frames=n_frames,
                          interval=interval, blit=False, repeat=True)
     return _save_or_show(anim, fig, save_path, show, fps)
+
+
+def _obj_value(obj, name, default=None):
+    if obj is None:
+        return default
+    if isinstance(obj, dict):
+        return obj.get(name, default)
+    return getattr(obj, name, default)
+
+
+def _obj_first(obj, names, default=None):
+    for name in names:
+        value = _obj_value(obj, name, None)
+        if value is not None:
+            return value
+    return default
+
+
+def animate_pump_particles(
+    pump_result,
+    *,
+    role: str = "fuel",
+    n_particles: int = 180,
+    n_frames: int = 220,
+    interval: int = 40,
+    fps: int = 25,
+    save_path: str | None = None,
+    show: bool = False,
+):
+    """Animate a simplified electric-pump flow path.
+
+    This is a sizing visualization, not CFD: particles enter axially through
+    the inducer, pick up swirl, accelerate radially across the impeller, then
+    slow through the diffuser/volute collection path.
+    """
+    import matplotlib
+    if save_path is not None and not show:
+        matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.animation import FuncAnimation
+
+    lines = _obj_value(pump_result, "lines", {})
+    if role not in lines:
+        role = next(iter(lines))
+    line = lines[role]
+    imp = _obj_value(line, "impeller")
+    ind = _obj_value(line, "inducer")
+    dif = _obj_value(line, "diffuser_volute")
+    if imp is None:
+        raise ValueError("pump visualization needs a line with impeller geometry")
+
+    d2 = float(_obj_first(imp, ("impeller_diameter", "impeller_diameter_m"), 0.05)
+               or 0.05)
+    d1 = float(_obj_first(imp, ("inlet_diameter", "inlet_diameter_m"), 0.35 * d2)
+               or 0.35 * d2)
+    r2 = max(0.5 * d2, 1e-4)
+    r1 = max(0.5 * d1, 0.18 * r2)
+    inducer_r = max(
+        0.5 * float(_obj_first(ind, ("diameter", "diameter_m"), d1) or d1),
+        r1,
+    )
+    volute_r = 1.55 * r2
+    diffuser_r = 1.25 * r2
+    entry_len = 1.35 * r2
+    rng = np.random.default_rng(2)
+    phase0 = rng.random(n_particles)
+    theta0 = rng.uniform(0.0, 2.0 * np.pi, n_particles)
+    lane = rng.normal(0.0, 0.18 * inducer_r, n_particles)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.set_aspect("equal")
+    ax.set_xlim(-entry_len * 1.20, volute_r * 1.35)
+    ax.set_ylim(-volute_r * 1.25, volute_r * 1.25)
+    ax.set_xlabel("axial entry / radial pump plane [m]")
+    ax.set_ylabel("pump radius [m]")
+    ax.set_title(f"{role} electric pump particle path", fontsize=11)
+
+    # Axial inlet/inducer sketch.
+    ax.plot([-entry_len, 0.0], [inducer_r, inducer_r], color="0.25", lw=1.1)
+    ax.plot([-entry_len, 0.0], [-inducer_r, -inducer_r], color="0.25", lw=1.1)
+    ax.fill_between([-entry_len, 0.0], -inducer_r, inducer_r,
+                    color="tab:blue", alpha=0.06)
+    # Impeller, diffuser, and volute.
+    for radius, color, lw, ls in (
+        (r1, "0.25", 1.0, "--"),
+        (r2, "0.05", 1.8, "-"),
+        (diffuser_r, "tab:green", 1.2, "--"),
+        (volute_r, "tab:purple", 1.4, "-"),
+    ):
+        ax.add_patch(plt.Circle((0.0, 0.0), radius, fill=False,
+                                color=color, lw=lw, ls=ls, alpha=0.85))
+    blades = int(_obj_value(imp, "blade_count", 6) or 6)
+    for k in range(max(3, blades)):
+        th = 2.0 * np.pi * k / max(3, blades)
+        rr = np.linspace(r1, r2, 80)
+        tt = th + 0.75 * (rr - r1) / max(r2 - r1, 1e-9)
+        ax.plot(rr * np.cos(tt), rr * np.sin(tt),
+                color="0.15", lw=0.8, alpha=0.45)
+    ax.text(-entry_len * 0.95, inducer_r * 1.18, "inducer", fontsize=9)
+    ax.text(r2 * 0.15, -r2 * 0.20, "impeller", fontsize=9)
+    ax.text(diffuser_r * 0.70, diffuser_r * 0.22,
+            _obj_value(dif, "selection", "diffuser/volute"), fontsize=9)
+
+    sc = ax.scatter([], [], s=14, c=[], cmap="plasma", vmin=0.0, vmax=1.0,
+                    edgecolors="none")
+    fig.colorbar(sc, ax=ax, pad=0.01, fraction=0.045,
+                 label="normalized particle energy")
+
+    def positions(frame):
+        p = (phase0 + frame / n_frames) % 1.0
+        x = np.empty(n_particles)
+        y = np.empty(n_particles)
+        energy = np.empty(n_particles)
+
+        m = p < 0.25
+        s = p[m] / 0.25
+        x[m] = -entry_len * (1.0 - s)
+        y[m] = lane[m] + 0.10 * inducer_r * np.sin(8.0 * np.pi * s + theta0[m])
+        energy[m] = 0.15 + 0.20 * s
+
+        m = (p >= 0.25) & (p < 0.62)
+        s = (p[m] - 0.25) / 0.37
+        rr = r1 + (r2 - r1) * s**1.35
+        th = theta0[m] + 4.8 * np.pi * s
+        x[m] = rr * np.cos(th)
+        y[m] = rr * np.sin(th)
+        energy[m] = 0.35 + 0.55 * s
+
+        m = (p >= 0.62) & (p < 0.82)
+        s = (p[m] - 0.62) / 0.20
+        rr = r2 + (diffuser_r - r2) * s
+        th = theta0[m] + 4.8 * np.pi + 0.65 * np.pi * s
+        x[m] = rr * np.cos(th)
+        y[m] = rr * np.sin(th)
+        energy[m] = 0.90 - 0.20 * s
+
+        m = p >= 0.82
+        s = (p[m] - 0.82) / 0.18
+        th = theta0[m] + 5.45 * np.pi + 1.3 * np.pi * s
+        rr = diffuser_r + (volute_r - diffuser_r) * s
+        x[m] = rr * np.cos(th) + 0.18 * r2 * s
+        y[m] = rr * np.sin(th)
+        energy[m] = 0.70 - 0.18 * s
+        return np.column_stack([x, y]), energy
+
+    def update(frame):
+        xy, energy = positions(frame)
+        sc.set_offsets(xy)
+        sc.set_array(energy)
+        return (sc,)
+
+    anim = FuncAnimation(fig, update, frames=n_frames,
+                         interval=interval, blit=False, repeat=True)
+    return _save_or_show(anim, fig, save_path, show, fps)

@@ -33,6 +33,9 @@ _DEFAULT_JOINT_SEPARATION_FACTOR = 1.5
 _DEFAULT_EDGE_DISTANCE_FACTOR = 1.5
 _DEFAULT_PITCH_FACTOR = 3.0
 _THREAD_TENSILE_AREA_FACTOR = 0.75
+_DEFAULT_INTERFACE_BOLT_COUNT = 8
+_DEFAULT_INTERFACE_BOLT_HOLE = 6.0e-3
+_DEFAULT_INTERFACE_FLANGE_LENGTH = 6.0e-3
 
 
 def _finite(value) -> float | None:
@@ -46,7 +49,19 @@ def _finite(value) -> float | None:
 def _status_from_margin(margin: float | None, *, missing: str = "info") -> str:
     if margin is None:
         return missing
-    return "pass" if margin >= 0.0 else "fail"
+    # Auto-sized layouts often land exactly on a rule boundary; avoid turning
+    # binary floating-point dust into a failed mechanical screen.
+    return "pass" if margin >= -1.0e-12 else "fail"
+
+
+def _finite_positive(value) -> float | None:
+    v = _finite(value)
+    return v if v is not None and v > 0.0 else None
+
+
+def _round_up_even(value: float) -> int:
+    count = int(math.ceil(max(value, 1.0)))
+    return count if count % 2 == 0 else count + 1
 
 
 def _station_array(value, n: int, name: str, *, default: float | None = None) -> np.ndarray:
@@ -106,12 +121,16 @@ class CompositeRegenWallScreen:
     liner_global_membrane_stress: float
     jacket_coolant_hoop_stress: float
     jacket_global_membrane_stress: float
+    global_residual_pressure: float
+    global_residual_membrane_load: float
     t_liner_equivalent_min: float
     t_liner_equivalent_max: float
     t_jacket_min: float
     t_jacket_max: float
     land_fraction_min: float
     land_fraction_max: float
+    screened_station_count: int
+    screen_selection: str
     stress_free_temperature: float
 
     @property
@@ -140,6 +159,9 @@ class CompositeRegenWallScreen:
             "liner_global_membrane_stress_pa": self.liner_global_membrane_stress,
             "jacket_coolant_hoop_stress_pa": self.jacket_coolant_hoop_stress,
             "jacket_global_membrane_stress_pa": self.jacket_global_membrane_stress,
+            "global_residual_pressure_pa": self.global_residual_pressure,
+            "global_residual_membrane_load_n_per_m":
+                self.global_residual_membrane_load,
             "t_liner_equivalent_range_m": [
                 self.t_liner_equivalent_min,
                 self.t_liner_equivalent_max,
@@ -149,6 +171,8 @@ class CompositeRegenWallScreen:
                 self.land_fraction_min,
                 self.land_fraction_max,
             ],
+            "screened_station_count": self.screened_station_count,
+            "screen_selection": self.screen_selection,
             "stress_free_temperature_K": self.stress_free_temperature,
         }
 
@@ -222,6 +246,253 @@ class InjectorInterfaceLedger:
         }
 
 
+@dataclass
+class InterfaceGeometryResolution:
+    """Resolved bolt-together chamber flange / injector face dimensions."""
+
+    chamber_radius: float
+    chamber_outer_diameter: float
+    flange_outer_diameter: float
+    flange_length: float
+    face_outer_diameter: float
+    face_thickness: float
+    bolt_count: int
+    bolt_circle_diameter: float
+    bolt_hole_diameter: float
+    bolt_diameter: float | None
+    inner_edge_distance: float
+    outer_edge_distance: float
+    bolt_pitch: float
+    edge_distance_requirement: float
+    pitch_requirement: float
+    auto_sized_fields: dict[str, str] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "model": "resolved_bolted_chamber_injector_interface",
+            "chamber_radius_m": self.chamber_radius,
+            "chamber_outer_diameter_m": self.chamber_outer_diameter,
+            "flange_outer_diameter_m": self.flange_outer_diameter,
+            "flange_length_m": self.flange_length,
+            "injector_face_outer_diameter_m": self.face_outer_diameter,
+            "injector_face_thickness_m": self.face_thickness,
+            "bolt_count": self.bolt_count,
+            "bolt_circle_diameter_m": self.bolt_circle_diameter,
+            "bolt_hole_diameter_m": self.bolt_hole_diameter,
+            "bolt_diameter_m": self.bolt_diameter,
+            "inner_edge_distance_m": self.inner_edge_distance,
+            "outer_edge_distance_m": self.outer_edge_distance,
+            "bolt_pitch_m": self.bolt_pitch,
+            "edge_distance_requirement_m": self.edge_distance_requirement,
+            "pitch_requirement_m": self.pitch_requirement,
+            "auto_sized_fields": self.auto_sized_fields,
+            "notes": self.notes,
+        }
+
+
+def resolve_bolted_interface_geometry(
+    *,
+    chamber_radius: float,
+    chamber_pressure: float | None = None,
+    wall_thickness: float | None = None,
+    flange_outer_diameter: float | None = None,
+    flange_length: float | None = None,
+    face_outer_diameter: float | None = None,
+    face_thickness: float | None = None,
+    bolt_count: int | None = None,
+    bolt_circle_diameter: float | None = None,
+    bolt_hole_diameter: float | None = None,
+    bolt_diameter: float | None = None,
+    bolt_allowable_stress: float | None = None,
+    material_yield_strength: float | None = None,
+    structural_fos: float = 1.5,
+    min_feature: float | None = None,
+    min_tool_diameter: float | None = None,
+    minimum_face_outer_diameter: float | None = None,
+    minimum_face_thickness: float | None = None,
+    minimum_bolt_circle_diameter: float | None = None,
+    minimum_bolt_hole_diameter: float | None = None,
+    edge_distance_factor: float = _DEFAULT_EDGE_DISTANCE_FACTOR,
+    pitch_factor: float = _DEFAULT_PITCH_FACTOR,
+    joint_separation_factor: float = _DEFAULT_JOINT_SEPARATION_FACTOR,
+    default_bolt_count: int = _DEFAULT_INTERFACE_BOLT_COUNT,
+) -> InterfaceGeometryResolution:
+    """Resolve matching chamber flange and injector-face dimensions.
+
+    The resolver is deliberately a layout screen, not a bolted-joint design.
+    It fills missing dimensions, grows undersized layout values, and preserves
+    explicit larger user values.  Strength is represented only through a
+    first-pass bolt-count estimate when pressure and allowable data exist; the
+    detailed joint check remains :func:`screen_injector_chamber_interface`.
+    """
+
+    r = float(chamber_radius)
+    if r <= 0.0 or not math.isfinite(r):
+        raise ValueError("chamber_radius must be positive")
+    if structural_fos <= 0.0:
+        raise ValueError("structural_fos must be positive")
+    if edge_distance_factor <= 0.0 or pitch_factor <= 0.0:
+        raise ValueError("edge and pitch factors must be positive")
+
+    wall = _finite_positive(wall_thickness) or 0.0
+    feature = max(_finite_positive(min_feature) or 3.0e-4, 1.0e-9)
+    tool = max(_finite_positive(min_tool_diameter) or feature, feature)
+    chamber_d = 2.0 * r
+    chamber_od = chamber_d + 2.0 * wall
+    auto: dict[str, str] = {}
+    notes: list[str] = []
+
+    def resolved(name: str, supplied, minimum: float, default: float | None = None) -> float:
+        supplied_value = _finite_positive(supplied)
+        target = max(float(minimum), float(default if default is not None else minimum))
+        if supplied_value is None:
+            auto[name] = "auto_sized"
+            return target
+        if supplied_value < minimum:
+            auto[name] = f"increased_from_{supplied_value:.9g}_m"
+            notes.append(
+                f"{name} increased from {supplied_value:.6g} m to "
+                f"{minimum:.6g} m to satisfy bolt/flange layout rules."
+            )
+            return float(minimum)
+        return supplied_value
+
+    bolt_hole_min = max(
+        minimum_bolt_hole_diameter or 0.0,
+        2.5 * tool,
+        2.0 * feature,
+    )
+    bolt_hole_default = max(
+        bolt_hole_min,
+        _DEFAULT_INTERFACE_BOLT_HOLE,
+        0.06 * chamber_d,
+    )
+    hole = resolved(
+        "bolt_hole_diameter",
+        bolt_hole_diameter,
+        bolt_hole_min,
+        bolt_hole_default,
+    )
+
+    requested_count = bolt_count if bolt_count is not None else default_bolt_count
+    count = int(max(requested_count, 1))
+    if bolt_count is None:
+        auto["bolt_count"] = "auto_sized"
+
+    bolt_allow = _finite_positive(bolt_allowable_stress)
+    if bolt_allow is None and material_yield_strength is not None:
+        bolt_allow = float(material_yield_strength) / structural_fos
+    Pc = _finite_positive(chamber_pressure)
+    if Pc is not None and bolt_allow is not None and bolt_allow > 0.0:
+        inferred_bolt = _finite_positive(bolt_diameter) or 0.9 * hole
+        tensile_area = (
+            _THREAD_TENSILE_AREA_FACTOR
+            * math.pi * inferred_bolt * inferred_bolt / 4.0
+        )
+        capacity = max(bolt_allow * tensile_area, 1.0e-12)
+        required_clamp = joint_separation_factor * Pc * math.pi * r * r
+        strength_count = _round_up_even(required_clamp / capacity)
+        if bolt_count is None and strength_count > count:
+            count = strength_count
+            auto["bolt_count"] = "auto_sized_from_pressure_load"
+
+    edge_req = edge_distance_factor * hole
+    pitch_req = pitch_factor * hole
+    bcd_min = max(
+        chamber_od + hole + 2.0 * edge_req,
+        count * pitch_req / math.pi,
+        minimum_bolt_circle_diameter or 0.0,
+    )
+    bcd_default = max(bcd_min, chamber_od + 6.0 * hole)
+    bcd = resolved(
+        "bolt_circle_diameter",
+        bolt_circle_diameter,
+        bcd_min,
+        bcd_default,
+    )
+
+    face_od_min = max(
+        chamber_od + 4.0 * edge_req,
+        bcd + hole + 2.0 * edge_req,
+        minimum_face_outer_diameter or 0.0,
+    )
+    face_od_resolved = resolved(
+        "injector_face_od",
+        face_outer_diameter,
+        face_od_min,
+        face_od_min,
+    )
+    flange_od_resolved = resolved(
+        "flange_od",
+        flange_outer_diameter,
+        max(face_od_min, face_od_resolved),
+        max(face_od_min, face_od_resolved),
+    )
+    matched_od = max(face_od_resolved, flange_od_resolved)
+    if face_od_resolved < matched_od:
+        auto["injector_face_od"] = "matched_to_flange_od"
+        face_od_resolved = matched_od
+    if flange_od_resolved < matched_od:
+        auto["flange_od"] = "matched_to_injector_face_od"
+        flange_od_resolved = matched_od
+
+    plate_req = 0.0
+    yield_strength = _finite_positive(material_yield_strength)
+    if Pc is not None and yield_strength is not None:
+        allowable = yield_strength / structural_fos
+        if allowable > 0.0:
+            plate_req = r * math.sqrt(_FACEPLATE_CLAMPED_K * Pc / allowable)
+    face_t_min = max(
+        minimum_face_thickness or 0.0,
+        plate_req,
+        2.0 * hole,
+        6.0 * tool,
+        _DEFAULT_INTERFACE_FLANGE_LENGTH,
+    )
+    face_t = resolved(
+        "injector_face_thickness",
+        face_thickness,
+        face_t_min,
+        face_t_min,
+    )
+    flange_l = resolved(
+        "flange_length",
+        flange_length,
+        max(2.0 * hole, 3.0 * wall, 6.0 * tool),
+        max(2.0 * hole, 3.0 * wall, 6.0 * tool, _DEFAULT_INTERFACE_FLANGE_LENGTH),
+    )
+
+    inner_edge = 0.5 * (bcd - chamber_od) - 0.5 * hole
+    outer_edge = 0.5 * flange_od_resolved - 0.5 * bcd - 0.5 * hole
+    pitch = math.pi * bcd / count
+    notes.append(
+        "Resolved flange and injector face are preliminary matching layout "
+        "dimensions; final joint design still needs gasket/seal compression, "
+        "preload scatter, thread engagement, thermal distortion, FEA, and test."
+    )
+
+    return InterfaceGeometryResolution(
+        chamber_radius=r,
+        chamber_outer_diameter=chamber_od,
+        flange_outer_diameter=flange_od_resolved,
+        flange_length=flange_l,
+        face_outer_diameter=face_od_resolved,
+        face_thickness=face_t,
+        bolt_count=count,
+        bolt_circle_diameter=bcd,
+        bolt_hole_diameter=hole,
+        bolt_diameter=_finite_positive(bolt_diameter),
+        inner_edge_distance=inner_edge,
+        outer_edge_distance=outer_edge,
+        bolt_pitch=pitch,
+        edge_distance_requirement=edge_req,
+        pitch_requirement=pitch_req,
+        auto_sized_fields=auto,
+        notes=notes,
+    )
+
+
 def screen_composite_regen_wall(
     *,
     chamber_pressure: float,
@@ -236,6 +507,8 @@ def screen_composite_regen_wall(
     liner_pressure_differential=None,
     heat_flux=None,
     stress_free_temperature: float = 293.15,
+    screen_station_index: int | None = None,
+    screen_selection: str | None = None,
 ) -> CompositeRegenWallScreen:
     """Screen chamber hoop sharing in a bonded liner plus jacket regen wall.
 
@@ -245,7 +518,11 @@ def screen_composite_regen_wall(
 
         eps = (N_theta + sum(E*t*alpha*dT)) / sum(E*t)
 
-    This is a preliminary bonded-shell screen, not CHT/FEA qualification.
+    ``coolant_pressure`` is treated as the absolute pressure contained by the
+    outer closeout jacket.  The common-strain pressure load is therefore only
+    residual chamber-over-coolant pressure, avoiding double-counting the jacket
+    hoop term.  This is a preliminary bonded-shell screen, not CHT/FEA
+    qualification.
     """
 
     Pc = float(chamber_pressure)
@@ -336,6 +613,22 @@ def screen_composite_regen_wall(
     )
     q = _station_array(heat_flux, n, "heat_flux", default=0.0)
 
+    if screen_station_index is None:
+        active = np.ones(n, dtype=bool)
+        selection = screen_selection or "all_stations"
+    else:
+        selected = int(screen_station_index)
+        if selected < 0:
+            selected += n
+        if selected < 0 or selected >= n:
+            raise ValueError(
+                f"screen_station_index {screen_station_index} outside 0..{n - 1}"
+            )
+        active = np.zeros(n, dtype=bool)
+        active[selected] = True
+        selection = screen_selection or f"station_{selected}"
+    active_indices = np.flatnonzero(active)
+
     local_radius = np.maximum(0.5 * channel_width, 1e-9)
     liner_pressure = np.abs(liner_dp) * local_radius / np.maximum(t_hot, 1e-12)
     liner_thermal = (
@@ -344,7 +637,8 @@ def screen_composite_regen_wall(
     )
     liner_local = liner_pressure + liner_thermal
 
-    N_theta = Pc * r_inner
+    residual_pressure = np.maximum(Pc - coolant_p, 0.0)
+    N_theta = residual_pressure * r_inner
     denom = E_l * t_liner_eq + E_j * t_jacket
     eps = (
         N_theta
@@ -362,13 +656,13 @@ def screen_composite_regen_wall(
     liner_margin = liner_allow / np.maximum(liner_total, 1e-9)
     jacket_margin = jacket_allow / np.maximum(jacket_total, 1e-9)
     component_margin = np.minimum(liner_margin, jacket_margin)
-    idx = int(np.nanargmin(component_margin))
+    idx = int(active_indices[np.nanargmin(component_margin[active])])
     governing_component = (
         "liner" if liner_margin[idx] <= jacket_margin[idx] else "jacket"
     )
 
     return CompositeRegenWallScreen(
-        model="bonded_smeared_liner_jacket_common_strain_screen",
+        model="bonded_smeared_liner_jacket_residual_common_strain_screen",
         qualification_status="screening_only_not_validated_cht_fea",
         liner_material=getattr(liner_material, "name", None),
         jacket_material=getattr(jmat, "name", None),
@@ -379,8 +673,8 @@ def screen_composite_regen_wall(
         structural_fos=float(structural_fos),
         liner_allowable_stress=float(liner_allow),
         jacket_allowable_stress=float(jacket_allow),
-        min_liner_margin=float(np.nanmin(liner_margin)),
-        min_jacket_margin=float(np.nanmin(jacket_margin)),
+        min_liner_margin=float(np.nanmin(liner_margin[active])),
+        min_jacket_margin=float(np.nanmin(jacket_margin[active])),
         min_margin=float(component_margin[idx]),
         liner_total_stress=float(liner_total[idx]),
         jacket_total_stress=float(jacket_total[idx]),
@@ -388,12 +682,16 @@ def screen_composite_regen_wall(
         liner_global_membrane_stress=float(sigma_l_global[idx]),
         jacket_coolant_hoop_stress=float(jacket_hoop[idx]),
         jacket_global_membrane_stress=float(sigma_j_global[idx]),
-        t_liner_equivalent_min=float(np.min(t_liner_eq)),
-        t_liner_equivalent_max=float(np.max(t_liner_eq)),
-        t_jacket_min=float(np.min(t_jacket)),
-        t_jacket_max=float(np.max(t_jacket)),
-        land_fraction_min=float(np.min(land_fraction)),
-        land_fraction_max=float(np.max(land_fraction)),
+        global_residual_pressure=float(residual_pressure[idx]),
+        global_residual_membrane_load=float(N_theta[idx]),
+        t_liner_equivalent_min=float(np.min(t_liner_eq[active])),
+        t_liner_equivalent_max=float(np.max(t_liner_eq[active])),
+        t_jacket_min=float(np.min(t_jacket[active])),
+        t_jacket_max=float(np.max(t_jacket[active])),
+        land_fraction_min=float(np.min(land_fraction[active])),
+        land_fraction_max=float(np.max(land_fraction[active])),
+        screened_station_count=int(active_indices.size),
+        screen_selection=selection,
         stress_free_temperature=float(stress_free_temperature),
     )
 
@@ -514,6 +812,7 @@ def screen_injector_chamber_interface(
             comp.status,
             (
                 f"bonded liner+jacket hoop screen margin {comp.min_margin:.2f}; "
+                f"{comp.screen_selection}, "
                 f"liner {comp.liner_total_stress/1e6:.1f} MPa vs "
                 f"{comp.liner_allowable_stress/1e6:.1f} MPa, jacket "
                 f"{comp.jacket_total_stress/1e6:.1f} MPa vs "

@@ -4,15 +4,68 @@ import numpy as np
 import pytest
 
 from raosim.chamber_geometry import (
+    auto_shoulder_factor,
     chamber_contour,
     enclosed_volume,
     full_engine_contour,
+    max_feasible_shoulder_factor,
     thrust_chamber_geometry_checks,
 )
 from raosim.design import DesignInput, ThermoSpec, design_nozzle_v2
 from raosim.export import _clean_meridian_for_brep
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.throat_geometry import ThroatGeometrySpec
+
+
+def test_max_feasible_shoulder_factor_matches_analytic_cap():
+    Rt, CR = 0.0234, 2.5
+    spec = ThroatGeometrySpec()  # Ru/Rt = 1.5, convergent 45 deg
+    cap = max_feasible_shoulder_factor(Rt, CR, throat_geometry=spec)
+    omc = 1.0 - math.cos(math.radians(spec.convergent_half_angle_deg))
+    Rc = Rt * math.sqrt(CR)
+    Ru = spec.upstream_radius(Rt)
+    expected = (Rc - Rt - Ru * omc) / (omc * Rt)
+    assert cap == pytest.approx(expected, rel=1e-12)
+    # the contour builds just below the cap and is rejected just above it
+    chamber_contour(Rt, L_star=1.1, contraction_ratio=CR,
+                    throat_geometry=spec, shoulder_radius_factor=0.98 * cap)
+    with pytest.raises(ValueError):
+        chamber_contour(Rt, L_star=1.1, contraction_ratio=CR,
+                        throat_geometry=spec, shoulder_radius_factor=1.02 * cap)
+
+
+def test_auto_shoulder_factor_is_fraction_of_cap_and_builds():
+    Rt, CR = 0.0234, 2.5
+    spec = ThroatGeometrySpec()
+    cap = max_feasible_shoulder_factor(Rt, CR, throat_geometry=spec)
+    f = auto_shoulder_factor(Rt, CR, throat_geometry=spec, fill_fraction=0.8)
+    assert f == pytest.approx(0.8 * cap, rel=1e-12)
+    assert 0.0 < f < cap
+    chamber = chamber_contour(Rt, L_star=1.1, contraction_ratio=CR,
+                              throat_geometry=spec, shoulder_radius_factor=f)
+    full = full_engine_contour(
+        chamber, bell_nozzle_contour(Rt, 6.5, throat_geometry=spec)
+    )
+    assert full["geometry_checks"]["slope_continuity"]
+    assert full["geometry_checks"]["measured_volume_within_tolerance"]
+
+
+def test_auto_shoulder_factor_rejects_bad_inputs():
+    spec = ThroatGeometrySpec()
+    # contraction ratio too small to fit any fillet at 45 deg with Ru/Rt = 1.5
+    with pytest.raises(ValueError):
+        max_feasible_shoulder_factor(0.0234, 1.2, throat_geometry=spec)
+    # fill_fraction must be in the open interval (0, 1)
+    with pytest.raises(ValueError):
+        auto_shoulder_factor(0.0234, 2.5, throat_geometry=spec, fill_fraction=1.0)
+
+
+def test_auto_shoulder_factor_opens_up_at_shallower_convergent_angle():
+    Rt, CR = 0.0234, 2.5
+    cap45 = max_feasible_shoulder_factor(Rt, CR, convergent_half_angle_deg=45.0)
+    cap30 = max_feasible_shoulder_factor(Rt, CR, convergent_half_angle_deg=30.0)
+    # a shallower convergent cone leaves more room for the shoulder fillet
+    assert cap30 > cap45
 
 
 def test_shared_throat_spec_removes_chamber_nozzle_discontinuity():

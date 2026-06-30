@@ -12,6 +12,7 @@ from raosim.design import (
     design_nozzle_v2,
 )
 from raosim.interface import (
+    resolve_bolted_interface_geometry,
     screen_composite_regen_wall,
     screen_injector_chamber_interface,
 )
@@ -20,6 +21,50 @@ from raosim.regen_profile import RegenWallProfile
 
 def _gate(ledger, name):
     return next(g for g in ledger.gates if g.name == name)
+
+
+def test_resolve_bolted_interface_geometry_matches_flange_and_face():
+    resolution = resolve_bolted_interface_geometry(
+        chamber_pressure=8.0e6,
+        chamber_radius=0.035,
+        wall_thickness=0.002,
+        material_yield_strength=900e6,
+        min_tool_diameter=0.0005,
+    )
+
+    assert resolution.flange_outer_diameter == pytest.approx(
+        resolution.face_outer_diameter
+    )
+    assert resolution.bolt_count >= 8
+    assert resolution.bolt_hole_diameter >= 0.006
+    assert resolution.inner_edge_distance >= (
+        resolution.edge_distance_requirement - 1e-12
+    )
+    assert resolution.outer_edge_distance >= (
+        resolution.edge_distance_requirement - 1e-12
+    )
+    assert resolution.bolt_pitch >= resolution.pitch_requirement - 1e-12
+    assert resolution.face_thickness >= resolution.bolt_hole_diameter * 2.0
+    assert resolution.auto_sized_fields["flange_od"] == "auto_sized"
+
+
+def test_bolt_pattern_boundary_roundoff_does_not_fail():
+    ledger = screen_injector_chamber_interface(
+        chamber_pressure=7.0e6,
+        chamber_radius=0.033466401061363026,
+        wall_thickness=0.002,
+        face_outer_diameter=0.1312596721478973,
+        face_thickness=0.02050656591523077,
+        bolt_count=18,
+        bolt_circle_diameter=0.1072596721478973,
+        bolt_hole_diameter=0.006,
+        material_yield_strength=900e6,
+    )
+
+    gate = _gate(ledger, "bolt_pattern_lands")
+    assert gate.value < 0.0
+    assert gate.value == pytest.approx(0.0, abs=1e-12)
+    assert gate.status == "pass"
 
 
 def test_interface_faceplate_and_bolt_equations():
@@ -116,8 +161,7 @@ def test_composite_regen_wall_screen_uses_common_strain():
     dT_cu = 0.5 * (500.0 + 400.0) - 293.15
     dT_j = 0.5 * (400.0 + 330.0) - 293.15
     eps = (
-        4.0e6 * 0.05
-        + 100e9 * t_cu_eq * 17e-6 * dT_cu
+        100e9 * t_cu_eq * 17e-6 * dT_cu
         + 200e9 * 0.002 * 13e-6 * dT_j
     ) / (100e9 * t_cu_eq + 200e9 * 0.002)
     expected_liner_global = 100e9 * (eps - 17e-6 * dT_cu)
@@ -127,6 +171,8 @@ def test_composite_regen_wall_screen_uses_common_strain():
     assert screen.liner_global_membrane_stress == pytest.approx(
         expected_liner_global
     )
+    assert screen.global_residual_pressure == pytest.approx(0.0)
+    assert screen.global_residual_membrane_load == pytest.approx(0.0)
     assert screen.min_margin > 1.0
     assert screen.status == "pass"
 
@@ -160,6 +206,8 @@ def test_interface_replaces_scalar_wall_gate_with_composite_screen():
         liner_material=material,
         jacket_material=material,
         structural_fos=1.0,
+        screen_station_index=0,
+        screen_selection="injector_face_chamber_station",
     )
 
     ledger = screen_injector_chamber_interface(
@@ -174,6 +222,10 @@ def test_interface_replaces_scalar_wall_gate_with_composite_screen():
     assert "chamber_wall_hoop_pressure" not in names
     assert ledger.to_dict()["composite_wall"]["min_margin"] == pytest.approx(
         composite.min_margin
+    )
+    assert (
+        ledger.to_dict()["composite_wall"]["screen_selection"]
+        == "injector_face_chamber_station"
     )
 
 

@@ -58,6 +58,27 @@ from raosim.regen_profile import (
 )
 
 
+def _fuel_injector_drop_from_split(
+    Pc: float,
+    *,
+    fuel_injector_dp_fraction: float | None,
+    injector_pressure_drop: float,
+) -> float:
+    """Resolve the fuel-side regen outlet dP from the split injector model."""
+    legacy_drop = float(injector_pressure_drop or 0.0)
+    if legacy_drop != 0.0:
+        raise ValueError(
+            "injector_pressure_drop is deprecated and no longer controls "
+            "thermal sizing; use fuel_injector_dp_fraction or an explicit "
+            "coolant_outlet_pressure."
+        )
+    if fuel_injector_dp_fraction is None:
+        return 0.0
+    if fuel_injector_dp_fraction <= 0.0:
+        raise ValueError("fuel_injector_dp_fraction must be positive")
+    return float(fuel_injector_dp_fraction) * float(Pc)
+
+
 # --------------------------------------------------------------------------- #
 # Channel auto-sizing — solve channel count/width FROM the requirement         #
 # --------------------------------------------------------------------------- #
@@ -485,6 +506,7 @@ def joint_wall_channel_design(
     n_w: int = 4,
     n_count: int = 6,
     coolant_outlet_pressure: float | None = None,
+    fuel_injector_dp_fraction: float | None = None,
     injector_pressure_drop: float = 0.0,
     cooling_options: dict[str, Any] | None = None,
     objective: str = "min_mass",
@@ -539,6 +561,11 @@ def joint_wall_channel_design(
     circ = 2.0 * math.pi * Rt
     mdot_cool, mdot_total = coolant_flow_from_cycle(
         Pc, Rt, float(prop.c_star), mixture_ratio, cooling_fraction=cooling_fraction)
+    injector_drop = _fuel_injector_drop_from_split(
+        Pc,
+        fuel_injector_dp_fraction=fuel_injector_dp_fraction,
+        injector_pressure_drop=injector_pressure_drop,
+    )
     hf = bartz_heat_flux(contour, Pc, prop, wall_temperature=900.0)
     T_max = float(getattr(mat, "max_temperature"))
     E = float(mat.elastic_modulus); alpha = float(mat.thermal_expansion)
@@ -596,7 +623,7 @@ def joint_wall_channel_design(
                         n_iter=n_iter, helix_turns=helix_turns,
                         curvature_correction=curvature_correction,
                         coolant_outlet_pressure=coolant_outlet_pressure,
-                        injector_pressure_drop=injector_pressure_drop)
+                        injector_pressure_drop=injector_drop)
                     th_margin = float(res["cooling_margin"])
                     dp_bar = float(res["coolant_pressure_drop"] / 1e5)
                     fits = not any("do not fit" in m for m in res["warnings"])
@@ -822,7 +849,7 @@ def joint_wall_channel_design(
         "coolant_outlet_pressure": (
             float(coolant_outlet_pressure)
             if coolant_outlet_pressure is not None
-            else float(Pc) + max(float(injector_pressure_drop), 0.0)
+            else float(Pc) + max(float(injector_drop), 0.0)
         ),
         "coolant_pressure_boundary_source": (
             "user_supplied_coolant_outlet_pressure"
@@ -890,6 +917,7 @@ def size_wall_profile(
     buckling_plate_knockdown: float = 0.65,
     gate_sp125_429: bool = False,
     coolant_outlet_pressure: float | None = None,
+    fuel_injector_dp_fraction: float | None = None,
     injector_pressure_drop: float = 0.0,
     cooling_options: dict[str, Any] | None = None,
     n_outer: int = 4,
@@ -972,6 +1000,11 @@ def size_wall_profile(
         Pc, Rt, float(prop.c_star), mixture_ratio,
         cooling_fraction=cooling_fraction,
     )
+    injector_drop = _fuel_injector_drop_from_split(
+        Pc,
+        fuel_injector_dp_fraction=fuel_injector_dp_fraction,
+        injector_pressure_drop=injector_pressure_drop,
+    )
     hf = bartz_heat_flux(contour, Pc, prop, wall_temperature=900.0)
     heat_shape = np.asarray(hf["q"], dtype=float)
     heat_shape = heat_shape / max(float(np.max(heat_shape)), 1e-12)
@@ -989,7 +1022,7 @@ def size_wall_profile(
             max_wall_temperature=T_max, coolant_density=None,
             coolant_viscosity=None, coolant_conductivity=None,
             coolant_outlet_pressure=coolant_outlet_pressure,
-            injector_pressure_drop=injector_pressure_drop,
+            injector_pressure_drop=injector_drop,
         )
         fields.update(cooling_options or {})
         return SimpleNamespace(**fields)
@@ -1025,7 +1058,7 @@ def size_wall_profile(
             curvature_correction=curvature_correction,
             wall_profile=_profile(t_hot, h_arr, t_hot),
             coolant_outlet_pressure=coolant_outlet_pressure,
-            injector_pressure_drop=injector_pressure_drop,
+            injector_pressure_drop=injector_drop,
         )
 
     def _evaluate_height_profile(h_arr):

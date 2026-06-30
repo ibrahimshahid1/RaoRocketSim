@@ -7,8 +7,11 @@ without the host-scale LM solve.
 from __future__ import annotations
 
 import json
+import argparse
+import importlib
 import subprocess
 import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 import pytest
@@ -23,6 +26,55 @@ def test_coolant_specific_cli_temperature_defaults():
     assert _default_coolant_inlet_temperature("methane") == 120.0
     assert _default_coolant_inlet_temperature("lh2") == 25.0
     assert _default_coolant_inlet_temperature("rp1") == 300.0
+
+
+def test_current_runner_rejects_legacy_single_injector_pressure_drop(tmp_path):
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py", "--no-banner",
+         "--injector-pressure-drop", "1400000", "--out", str(tmp_path / "run")],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO),
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=120,
+    )
+    assert proc.returncode == 2
+    assert "--injector-pressure-drop is deprecated" in proc.stderr
+
+
+def test_split_injector_dp_defaults_are_independent_and_drive_regen_boundary():
+    from raosim.run_nozzle import _apply_split_injector_pressure_model
+
+    args = SimpleNamespace(
+        fuel_injector_dp_fraction=0.33,
+        oxidizer_injector_dp_fraction=None,
+        pc=8.0e6,
+        coolant="RP-1",
+        _fuel_name="rp1",
+        coolant_outlet_pressure=None,
+    )
+    _apply_split_injector_pressure_model(args, argparse.ArgumentParser())
+
+    assert args.fuel_injector_dp_fraction == pytest.approx(0.33)
+    assert args.oxidizer_injector_dp_fraction == pytest.approx(0.2)
+    assert args._fuel_injector_pressure_drop == pytest.approx(0.33 * 8.0e6)
+    assert args._oxidizer_injector_pressure_drop == pytest.approx(0.2 * 8.0e6)
+    assert args._regen_injector_pressure_drop == pytest.approx(0.33 * 8.0e6)
+    assert args._regen_pressure_boundary_source == (
+        "fuel_injector_dp_fraction_split_model"
+    )
+
+
+def test_legacy_main_cli_exposes_only_split_injector_dp_flags():
+    parser = importlib.import_module("main").build_parser()
+    options = {
+        option
+        for action in parser._actions
+        for option in action.option_strings
+    }
+
+    assert "--injector-pressure-drop" not in options
+    assert "--fuel-injector-dp-fraction" in options
+    assert "--oxidizer-injector-dp-fraction" in options
 
 
 @pytest.mark.smoke

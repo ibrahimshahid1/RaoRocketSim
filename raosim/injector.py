@@ -498,6 +498,8 @@ class FeedLineLedger:
     available_outlet_pressure: float | None   # Pa
     pressure_margin: float | None             # Pa  (available - required)
     density: float                            # kg/m^3
+    viscosity: float                          # Pa.s
+    vapor_pressure: float                     # Pa
     volumetric_flow: float                    # m^3/s  (mdot / rho)
     required_pressure_rise: float | None      # Pa  max(required_outlet - tank, 0)
     required_pump_head: float | None          # m
@@ -523,6 +525,8 @@ class FeedLineLedger:
             "available_outlet_pressure_pa": self.available_outlet_pressure,
             "pressure_margin_pa": self.pressure_margin,
             "density_kg_m3": self.density,
+            "viscosity_pa_s": self.viscosity,
+            "vapor_pressure_pa": self.vapor_pressure,
             "volumetric_flow_m3_s": self.volumetric_flow,
             "required_pressure_rise_pa": self.required_pressure_rise,
             "required_pump_head_m": self.required_pump_head,
@@ -848,6 +852,14 @@ _DEFAULT_INLET_T = {
 # explicitly screening-grade (no T-dependence modelled).  Sutton & Biblarz
 # RPE; NASA SP-8087; CRC handbook.
 _LITERATURE_FEED_PROPERTIES = {
+    "lox": dict(
+        rho=1140.0, mu=1.9e-4, sigma=0.013, Pvap=1.0e5, T_ref=90.0,
+        Tcrit=154.6, Pcrit=5.04e6, cp=1700.0, k=0.15,
+        gamma=1.4, gas_constant=259.8,
+        source="LOX/Oxygen representative storage state: rho~1140 kg/m^3, "
+        "mu~1.9e-4 Pa.s, sigma~0.013 N/m, Pvap~100 kPa @90 K "
+        "(constant-property screening fallback when CoolProp is unavailable)",
+    ),
     "rp1": dict(
         rho=810.0, mu=1.6e-3, sigma=0.023, Pvap=2.0e3, T_ref=298.0,
         Tcrit=678.0, Pcrit=2.2e6, cp=2010.0, k=0.13,
@@ -877,6 +889,8 @@ _LITERATURE_FEED_PROPERTIES = {
 }
 
 _LITERATURE_ALIASES = {
+    "oxygen": "lox", "lox": "lox", "o2": "lox", "gox": "lox",
+    "lo2": "lox",
     "rp1": "rp1", "rp-1": "rp1", "kerosene": "rp1", "jeta": "rp1",
     "jet-a": "rp1", "jp8": "rp1",
     "mmh": "mmh", "monomethylhydrazine": "mmh",
@@ -948,15 +962,23 @@ def resolve_feed_state(
         liquid_ok, gas_ok, phase, reason = _classify_phase(
             T, P, Pvap, Tcrit, spec.phase, subcool_margin
         )
+        gamma = gas_constant = None
         if gas_ok:
-            # The literature table carries only liquid constants; it cannot
-            # supply gas gamma/R, so a gas state here is not sizeable.
-            gas_ok = False
-            reason = (reason + "; literature table has no gas gamma/R "
-                      "(use a CoolProp fluid or explicit overrides for gas)")
+            gamma = d.get("gamma")
+            gas_constant = d.get("gas_constant")
+            if gamma is None or gas_constant is None:
+                gas_ok = False
+                reason = (reason + "; literature table has no gas gamma/R "
+                          "(use a CoolProp fluid or explicit overrides for gas)")
+        density_default = (
+            P / (gas_constant * T)
+            if gas_ok and gas_constant and T > 0.0 else d["rho"]
+        )
         return FeedState(
             role=role, name=raw, temperature=T, pressure=P,
-            density=float(spec.density if spec.density is not None else d["rho"]),
+            density=float(
+                spec.density if spec.density is not None else density_default
+            ),
             viscosity=float(spec.viscosity if spec.viscosity is not None
                             else d["mu"]),
             surface_tension=float(spec.surface_tension
@@ -966,6 +988,7 @@ def resolve_feed_state(
             critical_temperature=Tcrit, critical_pressure=d.get("Pcrit"),
             source=spec.property_source or d["source"], liquid_ok=liquid_ok,
             reason=reason, gas_ok=gas_ok,
+            gamma=gamma, gas_constant=gas_constant,
             cp=d.get("cp"), conductivity=d.get("k"),
         )
 
@@ -1869,6 +1892,7 @@ def feed_system_ledger(
             required_outlet_pressure=required,
             available_outlet_pressure=available,
             pressure_margin=pressure_margin, density=rho,
+            viscosity=feed.viscosity, vapor_pressure=feed.vapor_pressure,
             volumetric_flow=Q, required_pressure_rise=rise,
             required_pump_head=head, ideal_pump_power=power,
             flow_capacity=cap, capacity_margin=cap_margin,

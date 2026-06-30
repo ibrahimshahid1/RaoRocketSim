@@ -65,6 +65,35 @@ def test_v2_backend_evaluates_requested_pintle():
     )
 
 
+def test_v2_pintle_resolves_matching_chamber_and_injector_interface():
+    request = _prelim_input(
+        injector=InjectorSpec(type="pintle"),
+        manufacturing=ManufacturingSpec(wall_thickness=0.002),
+    )
+
+    result = design_nozzle_v2(request)
+
+    interface = result.input.interface
+    geometry = result.input.injector.geometry
+    mechanical = result.input.injector.mechanical
+    resolution = result.report_sections["injector_interface_resolution"]
+
+    assert interface.flange_od == pytest.approx(interface.injector_face_od)
+    assert geometry.face_od == pytest.approx(interface.injector_face_od)
+    assert mechanical.faceplate_outer_diameter == pytest.approx(
+        interface.injector_face_od
+    )
+    assert mechanical.bolt_circle_diameter == pytest.approx(
+        interface.bolt_circle_diameter
+    )
+    assert mechanical.bolt_hole_diameter == pytest.approx(
+        interface.bolt_hole_diameter
+    )
+    assert interface.flange_length is not None
+    assert resolution["auto_sized_fields"]
+    assert result.report_sections["cad_readiness"]["flange_ok"] is True
+
+
 def test_v2_backend_blocks_infeasible_pintle():
     request = _prelim_input(
         injector=InjectorSpec(
@@ -138,6 +167,35 @@ def test_v2_backend_uses_central_methane_temperature_default():
     assert cooling["coolant_inlet_temperature"] == 120.0
     assert cooling["coolant_inlet_temperature_source"] == (
         "central_coolant_default"
+    )
+
+
+def test_v2_regen_boundary_uses_fuel_split_not_legacy_scalar():
+    result = design_nozzle_v2(_prelim_input(
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="rp1",
+            channel_count=40,
+            channel_width=0.0008,
+            channel_height=0.0025,
+            coolant_mass_flow=10.0,
+            coolant_property_backend="constant",
+            injector_pressure_drop=99.0e6,
+        ),
+        injector=InjectorSpec(type="none", fuel_dp_fraction=0.31),
+        manufacturing=ManufacturingSpec(wall_thickness=0.001),
+    ))
+
+    cooling = result.report_sections["cooling"]
+    assert cooling["coolant_outlet_pressure"] == pytest.approx(
+        result.input.Pc * (1.0 + 0.31)
+    )
+    assert cooling["coolant_pressure_boundary_source"] == (
+        "minimum_injector_entry_pressure_Pc_plus_injector_drop"
+    )
+    assert any(
+        "CoolingSpec.injector_pressure_drop is deprecated and ignored" in w
+        for w in result.warnings
     )
 
 

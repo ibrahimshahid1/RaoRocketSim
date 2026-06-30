@@ -137,3 +137,16 @@ def test_objective_must_be_known(prop, big_contour):
         joint_wall_channel_design(
             big_contour, prop, 2.0e6, material="grcop-84",
             objective="bogus", n_t=2, n_w=2, n_count=2, n_iter=4)
+
+
+def test_joint_design_uses_split_dp_and_rejects_legacy_scalar(prop, big_contour):
+    r = joint_wall_channel_design(
+        big_contour, prop, 1.0e6, material="grcop-84", mixture_ratio=2.0,
+        fuel_injector_dp_fraction=0.27, channel_height=0.005,
+        n_t=2, n_w=1, n_count=1, n_iter=4)
+
+    assert r["coolant_outlet_pressure"] == pytest.approx(1.27e6)
+    with pytest.raises(ValueError, match="injector_pressure_drop is deprecated"):
+        joint_wall_channel_design(
+            big_contour, prop, 1.0e6, material="grcop-84",
+            injector_pressure_drop=1.0e5, n_t=2, n_w=1, n_count=1, n_iter=4)

@@ -324,11 +324,15 @@ def evaluate_design_gates(
         value=wall_thickness, limit="> 0 m when solid CAD is requested",
         message="Solid CAD export requires a positive wall thickness.",
     )
+    chamber_section = contour.get("chamber", {})
+    flange_reference_od = 2.0 * float(
+        chamber_section.get("Rc", float(np.max(y)))
+    )
     flange_ok = (
         flange_od is None and flange_length is None
         or (
             flange_od is not None and flange_length is not None
-            and flange_od > 2.0 * float(np.max(y))
+            and flange_od > flange_reference_od
             and flange_length > 0.0
         )
     )
@@ -336,7 +340,7 @@ def evaluate_design_gates(
         "cad", "flange_geometry",
         flange_ok,
         value={"flange_od": flange_od, "flange_length": flange_length},
-        limit="flange_od > nozzle OD and flange_length > 0",
+        limit="flange_od > chamber/interface OD and flange_length > 0",
         message="Flange dimensions are incomplete or too small.",
     )
 
