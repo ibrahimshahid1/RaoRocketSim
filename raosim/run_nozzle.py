@@ -66,6 +66,7 @@ import argparse
 import json
 import math
 import os
+import shlex
 import sys
 from pathlib import Path
 
@@ -118,6 +119,24 @@ def print_banner() -> None:
 def print_tags() -> None:
     """Show every run tag (flag), grouped — what the CLI accepts."""
     groups = [
+        ("Default package", [
+            ("bare run / --complete-package",
+             "screen nozzle + chamber + pintle injector + electric pump"),
+            ("--injector {pintle,none}", "selected injector package"),
+            ("--electric-pump / --no-electric-pump",
+             "selected fuel-pump package"),
+            ("--propellant 'LOX/RP-1'", "default complete-package propellant"),
+        ]),
+        ("Propellant / operating point", [
+            ("--propellant / --oxidizer / --fuel",
+             "combustion pair and injector feed identities"),
+            ("--thermo-mode {constant-gamma,cea}",
+             "built-in screening table or RocketCEA chamber snapshot"),
+            ("--pc / --pa-over-p0", "chamber pressure [Pa] / ambient ratio"),
+            ("--target-thrust / --rt", "size throat from thrust, or set Rt"),
+            ("--mixture-ratio", "O/F flow split; default from propellant table"),
+            ("--eta-cstar / --eta-cf", "combustion and nozzle efficiency overrides"),
+        ]),
         ("Nozzle", [
             ("--rt", "throat radius [m]"),
             ("--epsilon", "expansion ratio Ae/At"),
@@ -165,14 +184,62 @@ def print_tags() -> None:
             ("--margin-target / --structural-fos / --required-cycles / --dp-budget",
              "sizing requirements (thermal / stress / fatigue N_f / Δp)"),
         ]),
+        ("Pintle injector", [
+            ("--injector {pintle,none}", "generate/evaluate the selected injector"),
+            ("--injector-sizing {auto,fixed}",
+             "auto-size passages, or evaluate supplied fixed geometry"),
+            ("--fuel/oxidizer-injector-dp-fraction",
+             "metering pressure drop as ΔP/Pc"),
+            ("--fuel/oxidizer-discharge-coefficient",
+             "per-stream metering Cd"),
+            ("--pintle-radial-stream {fuel,oxidizer}",
+             "which stream feeds the radial slots"),
+            ("--pintle-diameter / --pintle-slot-count",
+             "pintle anchor diameter and radial openings"),
+            ("--pintle-slot-aspect-ratio / --pintle-deflector-angle",
+             "slot h/w and spray deflection"),
+            ("--pintle-target-momentum-ratio",
+             "optional TMR gate for radial/axial momentum balance"),
+            ("--pintle-annulus-gap / --pintle-slot-width/height/depth",
+             "fixed-geometry passage overrides"),
+            ("--injector-face-od / --injector-face-thickness",
+             "faceplate packaging and interface screen"),
+            ("--bolt-count / --bolt-circle / --bolt-hole / --bolt-diameter",
+             "injector-to-chamber bolted joint"),
+            ("--fuel/oxidizer-inlet-count/diameter/angle",
+             "feed-port layout and inlet velocity screens"),
+            ("--fuel/oxidizer-manifold-width/depth",
+             "annular manifold layout screens"),
+            ("--injector-cad / --injector-cad-format / --pintle-sleeve",
+             "pintle deliverable package"),
+        ]),
         ("Electric pump", [
             ("--electric-pump", "size electric pump drive, battery, and pump geometry"),
+            ("--no-electric-pump", "disable the default complete-package pump"),
+            ("--feed-architecture {pump_fed,pressure_fed}",
+             "feed ledger label"),
+            ("--fuel/oxidizer-tank-pressure",
+             "pump inlet pressure for head, power, and NPSH"),
+            ("--fuel/oxidizer-supply-pressure",
+             "available pump/tank outlet pressure gate"),
+            ("--fuel/oxidizer-flow-capacity",
+             "available pump/feed mass-flow capacity gate"),
+            ("--fuel/oxidizer-line-loss[-fraction]",
+             "line, valve, and filter losses charged to pump"),
+            ("--fuel/oxidizer-manifold-loss[-fraction]",
+             "validated manifold allowance charged to pump"),
             ("--pump-rpm / --burn-time", "pump speed [rpm] / burn duration [s]"),
             ("--motor-voltage / --inverter-power-density", "drive bus / inverter sizing"),
             ("--battery-energy-density / --battery-power-density",
              "pack-level energy [J/kg] / pulse power [W/kg]"),
-            ("--fuel-tank-pressure / --oxidizer-tank-pressure",
-             "pump suction pressure for head, power, and NPSH"),
+            ("--pump-head-coefficient / --pump-flow-coefficient",
+             "centrifugal meanline design coefficients"),
+            ("--pump-tip-speed-limit / --pump-max-head-per-stage",
+             "geometry and staging screens"),
+            ("--pump-cad / --pump-cad-format",
+             "pump part CAD package: impeller, inducer, diffuser, drive"),
+            ("--allow-open-pump-mesh",
+             "waive the pump part STL watertightness gate"),
             ("--pump-visualize", "save a simplified pump particle GIF"),
         ]),
         ("Visualisation", [
@@ -197,7 +264,11 @@ def print_tags() -> None:
     for name, items in groups:
         print("  " + cyan(name))
         for flag, desc in items:
-            print("    " + green(f"{flag:<42}") + dim(desc))
+            if len(flag) > 41:
+                print("    " + green(flag))
+                print("      " + dim(desc))
+            else:
+                print("    " + green(f"{flag:<42}") + dim(desc))
     print()
 
 import numpy as np
@@ -205,13 +276,14 @@ import numpy as np
 plt = None
 
 
-def _want_windows(args=None) -> bool:
+def _want_windows(args=None, argv: list[str] | None = None) -> bool:
     """True when plots should use a live backend instead of file-only Agg."""
+    argv = sys.argv[1:] if argv is None else argv
     interactive_run = (
-        len(sys.argv) == 1 or "-i" in sys.argv or "--interactive" in sys.argv
+        len(argv) == 0 or "-i" in argv or "--interactive" in argv
     )
     requested_show = bool(getattr(args, "show", False)) if args is not None else (
-        "--show" in sys.argv
+        "--show" in argv
     )
     return bool((requested_show or interactive_run) and sys.stdout.isatty())
 
@@ -254,6 +326,9 @@ from raosim.coolants import canonical_coolant_name
 
 
 _DEFAULT_INJECTOR_DP_FRACTION = 0.2
+_DEFAULT_COMPLETE_PROPELLANT = "LOX/RP-1"
+_DEFAULT_COMPLETE_FUEL_TANK_PRESSURE = 5.0e5
+_DEFAULT_COMPLETE_OXIDIZER_TANK_PRESSURE = 6.0e5
 
 
 def _prompt(label, default, cast=float):
@@ -266,6 +341,41 @@ def _prompt(label, default, cast=float):
     except ValueError:
         print(f"    (couldn't parse {raw!r}; keeping {default})")
         return default
+
+
+def _prompt_optional_float(label, default):
+    shown = "auto" if default is None else default
+    raw = input(f"  {label} [{shown}]: ").strip()
+    if raw == "":
+        return default
+    if raw.lower() in {"auto", "none", "blank", "-"}:
+        return None
+    try:
+        return float(raw)
+    except ValueError:
+        print(f"    (couldn't parse {raw!r}; keeping {shown})")
+        return default
+
+
+def _prompt_optional_str(label, default):
+    shown = "blank" if default is None else default
+    raw = input(f"  {label} [{shown}]: ").strip()
+    if raw == "":
+        return default
+    if raw.lower() in {"none", "blank", "-"}:
+        return None
+    return raw
+
+
+def _prompt_choice(label, default, choices):
+    raw = input(f"  {label} [{default}]: ").strip()
+    if raw == "":
+        return default
+    value = raw.lower()
+    if value in choices:
+        return value
+    print(f"    (choose one of {', '.join(choices)}; keeping {default})")
+    return default
 
 
 def _prompt_bool(label, default):
@@ -286,6 +396,109 @@ def _default_coolant_inlet_temperature(coolant: str) -> float:
 
 def _argument_present(argv: list[str], option: str) -> bool:
     return any(arg == option or arg.startswith(option + "=") for arg in argv)
+
+
+def _any_argument_present(argv: list[str], options: tuple[str, ...]) -> bool:
+    return any(_argument_present(argv, option) for option in options)
+
+
+def _expand_arg_files(
+    argv: list[str],
+    *,
+    base_dir: Path | None = None,
+    seen: frozenset[Path] = frozenset(),
+) -> list[str]:
+    """Expand ``@path`` arguments into shell-style CLI tokens.
+
+    Arg files are intentionally simple: blank lines and ``#`` comments are
+    ignored, quoting follows POSIX shell rules, and nested ``@`` files are
+    resolved relative to the file that includes them.
+    """
+    expanded: list[str] = []
+    for arg in argv:
+        if not (arg.startswith("@") and len(arg) > 1):
+            expanded.append(arg)
+            continue
+
+        path = Path(arg[1:])
+        if not path.is_absolute() and base_dir is not None:
+            path = base_dir / path
+        path = path.resolve()
+        if path in seen:
+            raise ValueError(f"recursive argument file include: @{path}")
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            raise ValueError(f"could not read argument file @{path}: {exc}") from exc
+
+        file_args: list[str] = []
+        for lineno, line in enumerate(text.splitlines(), start=1):
+            try:
+                file_args.extend(shlex.split(line, comments=True, posix=True))
+            except ValueError as exc:
+                raise ValueError(
+                    f"could not parse argument file @{path}:{lineno}: {exc}"
+                ) from exc
+        expanded.extend(
+            _expand_arg_files(
+                file_args, base_dir=path.parent, seen=seen | frozenset({path})
+            )
+        )
+    return expanded
+
+
+def _apply_complete_package_defaults(args, argv: list[str], *, reason: str) -> None:
+    """Turn the accessible default package into concrete backend inputs.
+
+    This keeps batch compatibility: explicit user flags always win, while a
+    bare or ``--complete-package`` run has enough data to produce the nozzle,
+    selected pintle injector, and selected electric pump geometry.
+    """
+    notes = getattr(args, "_complete_package_default_notes", [])
+    prop_explicit = _any_argument_present(
+        argv,
+        ("--propellant", "--oxidizer", "--fuel"),
+    )
+    if not prop_explicit and args.propellant is None:
+        args.propellant = _DEFAULT_COMPLETE_PROPELLANT
+        notes.append(f"propellant={args.propellant}")
+
+    injector_explicit = _argument_present(argv, "--injector")
+    if not injector_explicit and args.injector == "none":
+        args.injector = "pintle"
+        notes.append("injector=pintle")
+
+    electric_explicit = _any_argument_present(
+        argv, ("--electric-pump", "--no-electric-pump")
+    )
+    if not electric_explicit:
+        args.electric_pump = args.injector == "pintle"
+        if args.electric_pump:
+            notes.append("electric_pump=on")
+
+    if args.electric_pump:
+        if (
+            not _argument_present(argv, "--fuel-tank-pressure")
+            and args.fuel_tank_pressure is None
+        ):
+            args.fuel_tank_pressure = _DEFAULT_COMPLETE_FUEL_TANK_PRESSURE
+            notes.append(
+                f"fuel_tank_pressure={args.fuel_tank_pressure:g} Pa"
+            )
+        if (
+            not _argument_present(argv, "--oxidizer-tank-pressure")
+            and args.oxidizer_tank_pressure is None
+        ):
+            args.oxidizer_tank_pressure = (
+                _DEFAULT_COMPLETE_OXIDIZER_TANK_PRESSURE
+            )
+            notes.append(
+                f"oxidizer_tank_pressure={args.oxidizer_tank_pressure:g} Pa"
+            )
+
+    args._complete_package_defaults = bool(notes)
+    args._complete_package_reason = reason
+    args._complete_package_default_notes = notes
 
 
 def _reject_legacy_injector_pressure_drop(parser, argv: list[str]) -> None:
@@ -351,6 +564,17 @@ def _validate_pump_args(args, parser) -> None:
         args.electric_pump = True
     if args.electric_pump and args.injector != "pintle":
         parser.error("--electric-pump requires --injector pintle")
+    if (args.electric_pump and args.pump_cad != "none"
+            and args.pump_cad_format in ("step", "both")):
+        from raosim.pump_cad_brep import cadquery_available
+
+        if not cadquery_available():
+            parser.error(
+                "--pump-cad-format step/both requires CadQuery/OpenCascade "
+                "for the true B-rep pump path (pip install cadquery); the "
+                "old faceted pseudo-STEP was removed - use "
+                "--pump-cad-format stl for the mesh package"
+            )
     feed_nonnegative = [
         "fuel_supply_pressure", "oxidizer_supply_pressure",
         "fuel_line_loss", "oxidizer_line_loss",
@@ -461,7 +685,7 @@ def _pump_spec_from_args(args):
 
 def _apply_wall_sizing_mode(args, parser, argv) -> None:
     """Resolve the user-facing wall-sizing mode into the existing switches."""
-    wall_thickness_given = "--wall-thickness" in argv
+    wall_thickness_given = _argument_present(argv, "--wall-thickness")
     if args.wall_sizing == "scalar":
         if args.size_wall:
             parser.error("--wall-sizing scalar cannot be combined with --size-wall")
@@ -499,6 +723,35 @@ def _apply_wall_sizing_mode(args, parser, argv) -> None:
 def _interactive(args) -> None:
     """Prompt for the design dimensions + options, overriding ``args``."""
     print(dim("Interactive setup — press Enter to accept each [default].  Ctrl-C to abort."))
+    if getattr(args, "_complete_package_defaults", False):
+        notes = ", ".join(args._complete_package_default_notes)
+        print(dim(f"    complete-package defaults applied: {notes}"))
+
+    _section("Propellant and operating point")
+    args.propellant = _prompt_optional_str(
+        "Propellant pair OX/FUEL", args.propellant
+    )
+    if args.propellant is None:
+        args.oxidizer = _prompt_optional_str("Oxidizer name", args.oxidizer)
+        args.fuel = _prompt_optional_str("Fuel name", args.fuel)
+    else:
+        if "/" not in args.propellant:
+            args.oxidizer = _prompt_optional_str("Oxidizer name", args.oxidizer)
+            args.fuel = _prompt_optional_str("Fuel name", args.fuel)
+    args.thermo_mode = _prompt_choice(
+        "Thermochemistry mode (constant-gamma / cea)",
+        args.thermo_mode,
+        {"constant-gamma", "cea"},
+    )
+    args.pc = _prompt("Chamber pressure Pc [Pa]", args.pc)
+    args.mixture_ratio = _prompt_optional_float(
+        "Mixture ratio O/F (blank = propellant nominal)",
+        args.mixture_ratio,
+    )
+    args.target_thrust = _prompt_optional_float(
+        "Target thrust [N] (blank = use Rt)", args.target_thrust
+    )
+
     _section("Nozzle dimensions")
     args.rt = _prompt("Throat radius Rt [m]", args.rt)
     args.epsilon = _prompt("Expansion ratio  epsilon = Ae/At", args.epsilon)
@@ -545,6 +798,241 @@ def _interactive(args) -> None:
                     args.animate is not None):
         args.animate = _prompt(
             "  which? (march / particles / both)", args.animate or "both", str)
+
+    _section("Pintle injector")
+    use_pintle = _prompt_bool(
+        "Generate the selected pintle injector package?",
+        args.injector == "pintle",
+    )
+    args.injector = "pintle" if use_pintle else "none"
+    if args.injector == "pintle":
+        args.injector_sizing = _prompt_choice(
+            "Injector sizing mode (auto / fixed)",
+            args.injector_sizing,
+            {"auto", "fixed"},
+        )
+        args.pintle_radial_stream = _prompt_choice(
+            "Radial/slotted stream (fuel / oxidizer)",
+            args.pintle_radial_stream,
+            {"fuel", "oxidizer"},
+        )
+        args.fuel_injector_dp_fraction = _prompt(
+            "Fuel injector pressure drop ΔP/Pc",
+            (args.fuel_injector_dp_fraction
+             if args.fuel_injector_dp_fraction is not None
+             else _DEFAULT_INJECTOR_DP_FRACTION),
+        )
+        args.oxidizer_injector_dp_fraction = _prompt(
+            "Oxidizer injector pressure drop ΔP/Pc",
+            (args.oxidizer_injector_dp_fraction
+             if args.oxidizer_injector_dp_fraction is not None
+             else _DEFAULT_INJECTOR_DP_FRACTION),
+        )
+        args.fuel_discharge_coefficient = _prompt(
+            "Fuel discharge coefficient Cd", args.fuel_discharge_coefficient
+        )
+        args.oxidizer_discharge_coefficient = _prompt(
+            "Oxidizer discharge coefficient Cd",
+            args.oxidizer_discharge_coefficient,
+        )
+        args.pintle_diameter = _prompt_optional_float(
+            "Pintle diameter [m] (blank = auto)", args.pintle_diameter
+        )
+        args.pintle_slot_count = _prompt(
+            "Pintle radial slot count", args.pintle_slot_count, int
+        )
+        args.pintle_slot_aspect_ratio = _prompt(
+            "Pintle slot aspect ratio h/w", args.pintle_slot_aspect_ratio
+        )
+        args.pintle_deflector_angle = _prompt(
+            "Pintle deflector angle [deg]", args.pintle_deflector_angle
+        )
+        args.pintle_target_momentum_ratio = _prompt_optional_float(
+            "Target total momentum ratio (blank = no gate)",
+            args.pintle_target_momentum_ratio,
+        )
+        args.pintle_impingement_distance = _prompt_optional_float(
+            "Impingement distance [m] (blank = auto)",
+            args.pintle_impingement_distance,
+        )
+        args.injector_min_feature = _prompt(
+            "Minimum injector feature [m]", args.injector_min_feature
+        )
+        if args.injector_sizing == "fixed" or _prompt_bool(
+            "Edit fixed passage overrides?", False
+        ):
+            args.pintle_annulus_gap = _prompt_optional_float(
+                "Fixed annulus gap [m]", args.pintle_annulus_gap
+            )
+            args.pintle_slot_width = _prompt_optional_float(
+                "Fixed slot width [m]", args.pintle_slot_width
+            )
+            args.pintle_slot_height = _prompt_optional_float(
+                "Fixed slot height [m]", args.pintle_slot_height
+            )
+            args.pintle_slot_depth = _prompt_optional_float(
+                "Fixed slot depth [m]", args.pintle_slot_depth
+            )
+            args.pintle_tip_radius = _prompt_optional_float(
+                "Pintle tip radius [m]", args.pintle_tip_radius
+            )
+            args.pintle_body_length = _prompt_optional_float(
+                "Pintle body length [m]", args.pintle_body_length
+            )
+        if _prompt_bool("Edit injector face, ports, and bolt pattern?", False):
+            args.injector_face_od = _prompt_optional_float(
+                "Injector face outer diameter [m]", args.injector_face_od
+            )
+            args.injector_face_thickness = _prompt_optional_float(
+                "Injector face thickness [m]", args.injector_face_thickness
+            )
+            args.bolt_count = _prompt("Bolt count", args.bolt_count or 8, int)
+            args.bolt_circle = _prompt_optional_float(
+                "Bolt circle diameter [m]", args.bolt_circle
+            )
+            args.bolt_hole = _prompt_optional_float(
+                "Bolt hole diameter [m]", args.bolt_hole
+            )
+            args.bolt_diameter = _prompt_optional_float(
+                "Bolt tensile diameter [m]", args.bolt_diameter
+            )
+            args.fuel_inlet_count = _prompt(
+                "Fuel inlet count", args.fuel_inlet_count, int
+            )
+            args.fuel_inlet_diameter = _prompt_optional_float(
+                "Fuel inlet diameter [m]", args.fuel_inlet_diameter
+            )
+            args.oxidizer_inlet_count = _prompt(
+                "Oxidizer inlet count", args.oxidizer_inlet_count, int
+            )
+            args.oxidizer_inlet_diameter = _prompt_optional_float(
+                "Oxidizer inlet diameter [m]", args.oxidizer_inlet_diameter
+            )
+            args.fuel_manifold_width = _prompt_optional_float(
+                "Fuel manifold width [m]", args.fuel_manifold_width
+            )
+            args.fuel_manifold_depth = _prompt_optional_float(
+                "Fuel manifold depth [m]", args.fuel_manifold_depth
+            )
+            args.oxidizer_manifold_width = _prompt_optional_float(
+                "Oxidizer manifold width [m]", args.oxidizer_manifold_width
+            )
+            args.oxidizer_manifold_depth = _prompt_optional_float(
+                "Oxidizer manifold depth [m]", args.oxidizer_manifold_depth
+            )
+        args.injector_cad = _prompt_choice(
+            "Pintle CAD package (auto / none / reference / parts / machined)",
+            args.injector_cad,
+            {"auto", "none", "reference", "parts", "machined", "step"},
+        )
+        args.injector_cad_format = _prompt_choice(
+            "Pintle CAD format (step / stl / dxf)",
+            args.injector_cad_format,
+            {"step", "stl", "dxf"},
+        )
+        args.pintle_sleeve = _prompt_bool(
+            "Include movable pintle sleeve body?", bool(args.pintle_sleeve)
+        )
+
+    _section("Feed system and electric pump")
+    if args.injector == "pintle":
+        args.electric_pump = _prompt_bool(
+            "Size the selected electric pump package?", bool(args.electric_pump)
+        )
+        args.feed_architecture = _prompt_choice(
+            "Feed architecture (pump_fed / pressure_fed)",
+            args.feed_architecture,
+            {"pump_fed", "pressure_fed"},
+        )
+        args.fuel_tank_pressure = _prompt_optional_float(
+            "Fuel tank / pump inlet pressure [Pa]", args.fuel_tank_pressure
+        )
+        args.oxidizer_tank_pressure = _prompt_optional_float(
+            "Oxidizer tank / pump inlet pressure [Pa]",
+            args.oxidizer_tank_pressure,
+        )
+        args.fuel_supply_pressure = _prompt_optional_float(
+            "Available fuel pump outlet pressure [Pa]",
+            args.fuel_supply_pressure,
+        )
+        args.oxidizer_supply_pressure = _prompt_optional_float(
+            "Available oxidizer pump outlet pressure [Pa]",
+            args.oxidizer_supply_pressure,
+        )
+        args.fuel_flow_capacity = _prompt_optional_float(
+            "Available fuel flow capacity [kg/s]", args.fuel_flow_capacity
+        )
+        args.oxidizer_flow_capacity = _prompt_optional_float(
+            "Available oxidizer flow capacity [kg/s]",
+            args.oxidizer_flow_capacity,
+        )
+        args.fuel_line_loss_fraction = _prompt(
+            "Fuel line loss fraction of Pc", args.fuel_line_loss_fraction
+        )
+        args.oxidizer_line_loss_fraction = _prompt(
+            "Oxidizer line loss fraction of Pc",
+            args.oxidizer_line_loss_fraction,
+        )
+        args.fuel_control_margin_fraction = _prompt(
+            "Fuel control margin fraction of Pc",
+            args.fuel_control_margin_fraction,
+        )
+        args.oxidizer_control_margin_fraction = _prompt(
+            "Oxidizer control margin fraction of Pc",
+            args.oxidizer_control_margin_fraction,
+        )
+        if args.electric_pump:
+            args.pump_rpm = _prompt_optional_float(
+                "Pump speed [rpm] (blank = auto)", args.pump_rpm
+            )
+            args.pump_max_rpm = _prompt(
+                "Pump maximum speed [rpm]", args.pump_max_rpm
+            )
+            args.burn_time = _prompt(
+                "Burn time for battery sizing [s]", args.burn_time
+            )
+            args.motor_voltage = _prompt_optional_float(
+                "Motor DC bus voltage [V] (blank = auto)", args.motor_voltage
+            )
+            args.motor_efficiency = _prompt(
+                "Motor efficiency", args.motor_efficiency
+            )
+            args.inverter_efficiency = _prompt(
+                "Inverter efficiency", args.inverter_efficiency
+            )
+            args.battery_energy_density = _prompt(
+                "Battery usable energy density [J/kg]",
+                args.battery_energy_density,
+            )
+            args.battery_power_density = _prompt(
+                "Battery pulse power density [W/kg]",
+                args.battery_power_density,
+            )
+            args.pump_head_coefficient = _prompt(
+                "Pump head coefficient psi", args.pump_head_coefficient
+            )
+            args.pump_flow_coefficient = _prompt(
+                "Pump flow coefficient phi", args.pump_flow_coefficient
+            )
+            args.pump_tip_speed_limit = _prompt(
+                "Pump tip-speed limit [m/s]", args.pump_tip_speed_limit
+            )
+            args.pump_cad = _prompt_choice(
+                "Pump CAD package (auto / none / reference / parts)",
+                args.pump_cad,
+                {"auto", "none", "reference", "parts"},
+            )
+            args.pump_cad_format = _prompt_choice(
+                "Pump CAD format (stl / step B-rep / both)",
+                args.pump_cad_format,
+                {"stl", "step", "both"},
+            )
+            args.pump_visualize = _prompt_bool(
+                "Save pump particle GIF?", bool(args.pump_visualize)
+            )
+    else:
+        args.electric_pump = False
+
     _section("Regenerative cooling")
     args.regen = _prompt_bool("Add regen cooling channels (the coils)?",
                               bool(args.regen))
@@ -747,6 +1235,11 @@ def _print_pump_panel(pump) -> None:
               f"b2={imp.outlet_width*1e3:.2f} mm  "
               f"U2={imp.tip_speed:.0f} m/s  Ns={imp.specific_speed:.2f}  "
               f"{dif.selection if dif else 'diffuser'}")
+        if getattr(ln, "architecture", None) is not None:
+            arch = ln.architecture
+            print(f"    {dim(''):<16}"
+                  f"architecture={arch.primary_type}  "
+                  f"{arch.stage_mode}  {arch.suction_assist}")
         if ln.hydraulic_meanline is not None:
             ml = ln.hydraulic_meanline
             tri = ml.velocity_triangle
@@ -783,7 +1276,7 @@ def _print_pump_panel(pump) -> None:
               else dim(f"    note: {suggestion}"))
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     from raosim.pumps import SCREENING_DEFAULTS as PUMP_DEFAULTS
 
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
@@ -999,8 +1492,11 @@ def main() -> int:
                     help="oxidizer pump efficiency override; default auto-estimates "
                          "from pump flow/head duty")
     # electric pump sizing
-    ap.add_argument("--electric-pump", action="store_true",
-                    help="size electric pump drive, battery, impeller, inducer, and diffuser")
+    ap.add_argument("--electric-pump", action=argparse.BooleanOptionalAction,
+                    default=False,
+                    help="size electric pump drive, battery, impeller, inducer, "
+                         "and diffuser; use --no-electric-pump to disable the "
+                         "complete-package default")
     ap.add_argument("--pump-rpm", type=float, default=None,
                     help="pump shaft speed override [rpm]; default solves from "
                          "specific speed and impeller geometry bounds")
@@ -1061,6 +1557,27 @@ def main() -> int:
                     help="screening maximum head per centrifugal stage [m]")
     ap.add_argument("--pump-visualize", action="store_true",
                     help="save pump_particles.gif for the sized electric pump")
+    ap.add_argument("--pump-cad", choices=("none", "auto", "reference", "parts"),
+                    default="auto",
+                    help="electric-pump CAD/reference package: none skips CAD; "
+                         "auto/parts writes per-component CAD for impeller, "
+                         "inducer, diffuser/volute, motor, inverter, and "
+                         "battery when geometry is solved; reference also "
+                         "writes the assembly reference")
+    ap.add_argument("--pump-cad-format", choices=("stl", "step", "both"),
+                    default="stl",
+                    help="pump CAD exchange format; stl = faceted mesh "
+                         "package, step = true CadQuery B-rep parts + named "
+                         "assemblies (requires cadquery; the old faceted "
+                         "pseudo-STEP was removed), both = stl and step")
+    ap.add_argument("--allow-open-pump-mesh", action="store_true",
+                    help="export pump part STLs even when the mesh gate finds "
+                         "boundary/non-manifold edges or bad winding "
+                         "(default: fail like the wall STL gate)")
+    ap.add_argument("--engine-assembly", action="store_true",
+                    help="assemble the exported wall/jacket/pintle/pump STEP "
+                         "artifacts into one engine_assembly.step (requires "
+                         "CadQuery; layout placement, not routed feed lines)")
     ap.add_argument("--allow-infeasible-pump", action="store_true",
                     help="continue exporting when electric-pump gates fail")
     ap.add_argument("--throttle-map", default=None,
@@ -1286,15 +1803,33 @@ def main() -> int:
                          "(defaults to the liner); e.g. inconel718 over a copper liner")
     ap.add_argument("-i", "--interactive", action="store_true",
                     help="prompt for the dimensions/options instead of using flags")
+    ap.add_argument("--complete-package", action="store_true",
+                    help="apply accessible starter defaults for a complete "
+                         "nozzle + pintle injector + electric pump screening "
+                         "package (bare runs do this automatically)")
     ap.add_argument("--tags", action="store_true",
                     help="print every run tag (flag) and exit")
     ap.add_argument("--no-banner", action="store_true", help="suppress the logo")
     ap.add_argument("--show", action="store_true",
                     help="pop up the flow-field / animation in a live window "
                          "(on by default for interactive runs)")
-    args = ap.parse_args()
-    _reject_legacy_injector_pressure_drop(ap, sys.argv)
-    _apply_wall_sizing_mode(args, ap, sys.argv)
+    raw_argv = list(sys.argv[1:] if argv is None else argv)
+    try:
+        expanded_argv = _expand_arg_files(raw_argv)
+    except ValueError as exc:
+        ap.error(str(exc))
+    cli_argv = [sys.argv[0], *expanded_argv]
+
+    args = ap.parse_args(expanded_argv)
+    _reject_legacy_injector_pressure_drop(ap, cli_argv)
+    bare = len(expanded_argv) == 0
+    if args.complete_package or bare:
+        _apply_complete_package_defaults(
+            args,
+            cli_argv,
+            reason="bare_run" if bare else "complete_package_flag",
+        )
+    _apply_wall_sizing_mode(args, ap, cli_argv)
     if args.regen_manifolds:
         args.regen_brep = True
         args.hydraulic_network = True
@@ -1322,8 +1857,8 @@ def main() -> int:
         ap.error("--bolt-count must be positive")
     if args.joint_separation_factor <= 0.0:
         ap.error("--joint-separation-factor must be positive")
-    shoulder_factor_explicit = _argument_present(sys.argv, "--shoulder-radius-factor")
-    shoulder_sizing_explicit = _argument_present(sys.argv, "--shoulder-sizing")
+    shoulder_factor_explicit = _argument_present(cli_argv, "--shoulder-radius-factor")
+    shoulder_sizing_explicit = _argument_present(cli_argv, "--shoulder-sizing")
     if (
         shoulder_factor_explicit
         and shoulder_sizing_explicit
@@ -1343,7 +1878,7 @@ def main() -> int:
         ap.error("--shoulder-radius-factor must be positive")
     if not 0.0 < args.shoulder_fill_fraction < 1.0:
         ap.error("--shoulder-fill-fraction must be in the open interval (0, 1)")
-    ru_explicit = _argument_present(sys.argv, "--ru-factor")
+    ru_explicit = _argument_present(cli_argv, "--ru-factor")
     if args.cd_target is not None and ru_explicit:
         ap.error("--cd-target and --ru-factor both set the upstream throat radius")
     if args.cd_target is not None and not 0.0 < args.cd_target < 1.0:
@@ -1389,9 +1924,8 @@ def main() -> int:
     }
     # Live windows for interactive/--show; saved files otherwise. Matplotlib is
     # imported lazily after parse-time exits so --help/--tags stay fast/quiet.
-    show = _want_windows(args)
+    show = _want_windows(args, expanded_argv)
 
-    bare = len(sys.argv) == 1
     if not args.no_banner:
         print_banner()
     if args.tags:
@@ -1405,9 +1939,15 @@ def main() -> int:
 
     # Ask for the inputs when run bare (no flags) or with -i/--interactive.
     if args.interactive or bare:
+        if args.interactive and not getattr(args, "_complete_package_defaults", False):
+            _apply_complete_package_defaults(
+                args,
+                cli_argv,
+                reason="interactive_default",
+            )
         print_tags()
         _interactive(args)
-        _apply_wall_sizing_mode(args, ap, sys.argv)
+        _apply_wall_sizing_mode(args, ap, cli_argv)
 
     _ensure_pyplot(show)
 
@@ -1458,8 +1998,8 @@ def main() -> int:
     from raosim.design import throat_radius_for_target_thrust
     from raosim.propellants import custom_propellant
 
-    rt_explicit = "--rt" in sys.argv
-    gamma_explicit = "--gamma" in sys.argv
+    rt_explicit = _argument_present(cli_argv, "--rt")
+    gamma_explicit = _argument_present(cli_argv, "--gamma")
     if args.target_thrust is not None and rt_explicit:
         ap.error("--target-thrust and --rt are mutually exclusive")
     if args.target_thrust is not None and args.target_thrust <= 0.0:
@@ -1597,7 +2137,15 @@ def main() -> int:
     )
     if args.cd_target is not None:
         throat_plan += f" (target {args.cd_target:g})"
+    package_plan = (
+        f"complete-package defaults [{args._complete_package_reason}: "
+        + ", ".join(args._complete_package_default_notes)
+        + "]"
+        if getattr(args, "_complete_package_defaults", False)
+        else "explicit flags / legacy defaults"
+    )
     for k, v in [
+        ("package", package_plan),
         ("nozzle", f"Rt={args.rt*1e3:g} mm, eps={args.epsilon:g}, "
                    f"L={args.length_pct:g}%, gamma={args.gamma:g}"),
         ("chamber", f"L*={args.l_star:g} m, CR={args.contraction_ratio:g}, "
@@ -1737,6 +2285,11 @@ def main() -> int:
     summary = {
         "backend": args.backend, "Rt": args.rt, "epsilon": args.epsilon,
         "length_pct": args.length_pct, "gamma": args.gamma,
+        "run_defaults": {
+            "complete_package": getattr(args, "_complete_package_defaults", False),
+            "reason": getattr(args, "_complete_package_reason", None),
+            "notes": getattr(args, "_complete_package_default_notes", []),
+        },
         "max_scaled": float(r.max_scaled), "gate_2e3": bool(gate),
         "reliability": sol.reliability.value,
         "theta_N_deg": math.degrees(sol.theta_N),
@@ -2458,6 +3011,76 @@ def main() -> int:
             (args.out / "pump.json").write_text(json.dumps(pump_dict, indent=2))
             artifacts.append("pump.json")
             print(green("    wrote pump.json"))
+            if pump_dict.get("hardware_bom"):
+                (args.out / "pump_bom.json").write_text(
+                    json.dumps(pump_dict["hardware_bom"], indent=2)
+                )
+                artifacts.append("pump_bom.json")
+                print(green("    wrote pump_bom.json"))
+            reference_geometry = {
+                role: line["reference_geometry"]
+                for role, line in pump_dict.get("lines", {}).items()
+                if line.get("reference_geometry") is not None
+            }
+            if reference_geometry:
+                (args.out / "pump_reference_geometry.json").write_text(
+                    json.dumps(reference_geometry, indent=2)
+                )
+                artifacts.append("pump_reference_geometry.json")
+                print(green("    wrote pump_reference_geometry.json"))
+            if args.pump_cad != "none":
+                try:
+                    from raosim.pump_cad import export_pump_package
+
+                    pump_cad_mode = (
+                        "parts" if args.pump_cad == "auto" else args.pump_cad
+                    )
+                    fmt = args.pump_cad_format
+                    # The mesh writer handles STL; parameters json/csv are
+                    # always written.  step/both add the CadQuery B-rep
+                    # package (true parts + named assemblies).
+                    pkg = export_pump_package(
+                        pump,
+                        args.out / "pump",
+                        cad=pump_cad_mode if fmt != "step" else "none",
+                        cad_format="stl",
+                        allow_open_mesh=args.allow_open_pump_mesh,
+                    )
+                    summary["pump_package"] = {
+                        "dir": pkg["dir"],
+                        "files": pkg["files"],
+                        "notes": pkg["notes"],
+                    }
+                    if fmt in ("step", "both"):
+                        from raosim.pump_cad_brep import (
+                            export_pump_brep_package,
+                        )
+
+                        brep = export_pump_brep_package(
+                            pump, args.out / "pump"
+                        )
+                        pkg["files"].update(brep["files"])
+                        pkg["notes"].extend(brep["notes"])
+                        summary["pump_package"]["step_representation"] = (
+                            brep["step_representation"]
+                        )
+                        summary["pump_package"]["brep_diagnostics"] = {
+                            key: {
+                                "valid": info["valid"],
+                                "solid_count": info["solid_count"],
+                                "volume_mm3": info["volume_mm3"],
+                            }
+                            for key, info in brep["diagnostics"].items()
+                        }
+                    for path in pkg["files"].values():
+                        artifacts.append(os.path.relpath(str(path), str(args.out)))
+                    print(green(
+                        f"    wrote pump/ package ({len(pkg['files'])} files)"
+                    ))
+                    for note in pkg["notes"]:
+                        print(dim(f"    pump package: {note}"))
+                except Exception as exc:
+                    print(yellow(f"    pump package skipped: {exc}"))
             if args.pump_visualize:
                 try:
                     from raosim.flow_viz import animate_pump_particles
@@ -2950,6 +3573,54 @@ def main() -> int:
         if not s["channels_fit"]:
             print(red("    channels exceed the throat circumference; "
                       "reduce --channels or --channel-width."))
+
+    # ---- optional engine-level assembly (pump CAD plan Phase 3) ----------
+    if getattr(args, "engine_assembly", False):
+        try:
+            from raosim.engine_cad import (
+                cadquery_available as _engine_cq_ok,
+                export_engine_assembly,
+            )
+
+            if not _engine_cq_ok():
+                raise RuntimeError(
+                    "--engine-assembly requires CadQuery/OpenCascade "
+                    "(pip install cadquery)"
+                )
+            candidates = {
+                "wall": args.out / "wall.step",
+                "jacket": args.out / "jacket.step",
+                "pintle_injector": next(
+                    (p for p in (
+                        args.out / "pintle" / "injector_assembly_machined.step",
+                        args.out / "pintle" / "pintle_assembly.step",
+                        args.out / "pintle" / "pintle_reference.step",
+                    ) if p.exists()),
+                    args.out / "pintle" / "pintle_reference.step",
+                ),
+                "fuel_pump": args.out / "pump" / "pump_brep" / "fuel_pump.step",
+                "oxidizer_pump": (
+                    args.out / "pump" / "pump_brep" / "oxidizer_pump.step"
+                ),
+                "shared_battery_pack": (
+                    args.out / "pump" / "pump_brep" / "shared_battery_pack.step"
+                ),
+            }
+            engine_info = export_engine_assembly(
+                args.out / "engine_assembly.step",
+                {k: v for k, v in candidates.items() if v.exists()},
+                pump_result=summary.get("electric_pump"),
+            )
+            summary["engine_assembly"] = engine_info
+            artifacts.append("engine_assembly.step")
+            print(green(
+                f"    wrote engine_assembly.step "
+                f"({len(engine_info['children'])} placed bodies)"
+            ))
+            for note in engine_info["notes"]:
+                print(dim(f"    engine assembly: {note}"))
+        except Exception as exc:
+            print(yellow(f"    engine assembly skipped: {exc}"))
 
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2))
     artifacts.append("summary.json")

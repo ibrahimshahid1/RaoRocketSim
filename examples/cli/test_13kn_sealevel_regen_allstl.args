@@ -1,0 +1,93 @@
+# Regression-test engine: 13 kN sea-level LOX/RP-1, non-scalar (station-wise)
+# regen wall sizing, all component CAD exported as STL.
+#
+# Run from the repository root with:
+#   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_sealevel_regen_allstl.args
+# (or `lrekit @examples/cli/test_13kn_sealevel_regen_allstl.args` when installed)
+#
+# Any later command-line flag overrides the value here, e.g. append
+# `--max-nfev 4000 --out builds/tests/13kn_sl_full` for the deep solver check.
+#
+# Parameter provenance (see TEST_PROMPT.md and docs/REPO_PHYSICS_AUDIT_2026-07-02.md):
+#   - LOX/RP-1 gamma/Mw/Tc/O-F from the built-in table anchored to Sutton &
+#     Biblarz RPE 9th ed. Table 5-5 (raosim/propellants.py source note).
+#   - Pc = 3.0 MPa: verified feasible for the station-wise GRCop-84 regen
+#     sizing at this thrust class; Bartz throat heat flux scales ~Pc^0.8
+#     (Bartz 1957, propulsion_texts/technical-notes-1957.pdf), and 7 MPa was
+#     probed thermally infeasible for every catalog liner at 13 kN.
+#   - Sea-level matched expansion Pe = Pa = 101325 Pa (optimum CF when
+#     Pe = Pa, Sutton RPE; repo relation expansion_ratio_from_pressure):
+#     epsilon = 4.524, pa/p0 = 101325/3.0e6 = 0.033775.
+#   - GRCop-84 liner + Inconel 718 closeout per NASA GRCop chamber work
+#     (propulsion_texts/gradl2016..2020.pdf); catalog T_max 1000 K, S_y 186 MPa.
+#   - SP-125 station-wise liner stress screens (eqs 4-28/29/31/32, audited
+#     2026-07-02); Hall Cd inversion for Ru/Rt via --cd-target 0.99.
+
+--no-banner
+
+# Operating point: 13 kN at sea level, matched expansion.
+--propellant LOX/RP-1
+--oxidizer LOX
+--fuel RP-1
+--pc 3.0e6
+--target-thrust 13000
+--epsilon 4.524
+--pa-over-p0 0.033775
+--length-pct 80
+
+# Chamber and throat package.
+--l-star 1.0
+--contraction-ratio 3.0
+--minimum-cylindrical-length 0.03
+--cd-target 0.99
+
+# Fast seed contour by default; override --max-nfev for the full JAX solve.
+--max-nfev 0
+--n-control 8
+--n-kernel 12
+
+# Non-scalar regen: station-wise hot-wall + channel thermostructural sizing
+# (SP-125 screens), GRCop-84 liner with Inconel 718 closeout jacket.
+--regen
+--wall-sizing regen
+--material grcop-84
+--jacket-material inconel718
+--channel-height 0.0025
+--channel-height-steps 6
+--helix-turns 1.0
+--coolant rp1
+--coolant-inlet-temperature 293
+--cooling-fraction 1.0
+--margin-target 1.05
+--structural-fos 1.0
+--required-cycles 25
+--life-fos 1.0
+--dp-budget 500
+--t-hot-min 0.0006
+--t-hot-max 0.003
+--thermal
+
+# Pintle injector and electric pump feed package.
+--injector pintle
+--electric-pump
+--fuel-tank-pressure 500000
+--oxidizer-tank-pressure 600000
+--fuel-injector-dp-fraction 0.20
+--oxidizer-injector-dp-fraction 0.20
+--fuel-line-loss-fraction 0.02
+--oxidizer-line-loss-fraction 0.02
+--fuel-manifold-loss-fraction 0.02
+--oxidizer-manifold-loss-fraction 0.02
+--pump-max-rpm 120000
+--burn-time 12
+
+# All component CAD as STL. wall.stl / jacket.stl / regen.stl are always
+# written; pintle part STLs need CadQuery (pip install cadquery); pump part
+# STLs are native meshes gated watertight by default. No STEP requested.
+--injector-cad parts
+--injector-cad-format stl
+--pump-cad parts
+--pump-cad-format stl
+--cad none
+
+--out builds/tests/13kn_sl_fast

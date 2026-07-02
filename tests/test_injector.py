@@ -875,6 +875,42 @@ class TestElectricPumpSizing:
             for g in pump.feasibility.gates
         )
 
+    def test_pump_exports_architecture_bom_reference_geometry_and_screens(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=5e5,
+                              npsh_required=1e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=6e5,
+                                  npsh_required=1e5))))
+        pump = size_electric_pumps(r.feed_system)
+        d = pump.to_dict()
+        fuel = d["lines"]["fuel"]
+
+        assert fuel["architecture"]["primary_type"]
+        assert "electric_motor_driven" in fuel["architecture"]["candidate_types"]
+        assert fuel["reference_geometry"]["editable"] is True
+        assert fuel["reference_geometry"]["impeller_disk"]["outer_diameter_m"] > 0.0
+        assert fuel["system_curve"]["points"]
+        assert fuel["system_curve"]["supported_throttle_range"] is not None
+        assert fuel["thermal_stress"]["thermal"]["estimated_propellant_temperature_rise_k"] >= 0.0
+        assert fuel["thermal_stress"]["stress"]["impeller_rotating_hoop_stress_pa"] > 0.0
+        components = {
+            item["component"]
+            for item in d["hardware_bom"]
+            if item["role"] in {"fuel", "shared"}
+        }
+        for component in (
+            "axial inducer", "centrifugal impeller", "shaft and coupling",
+            "motor", "inverter/controller", "bearings",
+            "dynamic shaft seals", "pump casing", "battery pack / DC bus",
+        ):
+            assert component in components
+        assert any(g.name == "system_curve_throttle_margin_fuel"
+                   for g in pump.feasibility.gates)
+        assert any(g.name == "shaft_torsion_fuel"
+                   for g in pump.feasibility.gates)
+        assert any(g.name == "seal_face_speed_fuel"
+                   for g in pump.feasibility.gates)
+
     def test_shared_bus_flags_inconsistent_explicit_voltages(self):
         r = _eval(_spec(feed_system=FeedSystemSpec(
             fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=5e5),
@@ -916,3 +952,22 @@ class TestElectricPumpSizing:
         assert pump.feasibility.suggestions[0].startswith(
             "Electric pump feed is infeasible for this Pc"
         )
+
+    def test_pump_thermal_stress_screens_can_fail(self):
+        r = _eval(_spec(feed_system=FeedSystemSpec(
+            fuel=FeedLineSpec(supply_pressure=200e5, tank_pressure=2e5),
+            oxidizer=FeedLineSpec(supply_pressure=200e5, tank_pressure=2e5))))
+        pump = size_electric_pumps(r.feed_system, PumpSizingSpec(
+            rotor_yield_strength=5.0e6,
+            casing_yield_strength=5.0e6,
+            bearing_dn_limit=1000.0,
+            seal_face_speed_limit=0.5,
+            max_propellant_temperature_rise=0.01,
+        ))
+
+        assert pump.feasible is False
+        failed = {g.name for g in pump.feasibility.gates if g.status == "fail"}
+        assert "impeller_rotating_stress_fuel" in failed
+        assert "bearing_dn_fuel" in failed
+        assert "seal_face_speed_fuel" in failed
+        assert "propellant_heating_fuel" in failed

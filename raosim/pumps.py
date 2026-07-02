@@ -33,6 +33,12 @@ SCREENING_DEFAULTS = {
     "battery_discharge_efficiency": 0.95,
     "battery_structural_margin": 1.20,
     "auto_current_target": 250.0,
+    "rotor_material_density": 7800.0,
+    "rotor_yield_strength": 600.0e6,
+    "casing_yield_strength": 300.0e6,
+    "structural_fos": 1.5,
+    "bearing_dn_limit": 1.0e6,
+    "seal_face_speed_limit": 35.0,
 }
 
 
@@ -118,12 +124,52 @@ class PumpSizingSpec:
     head_coefficient: float = 0.55
     flow_coefficient: float = 0.08
     inlet_flow_coefficient: float = 0.12
-    blade_count: int = 6
+    # None = select the minimum blade number from the SP-8109 fig. 16
+    # chart (digitized) and snap it to a multiple of the inducer blade
+    # count (SP-8052 sec. 3.1.14); an int forces the count.
+    blade_count: int | None = None
+    # SP-8052 sec. 3.1.14: 2..5 blades, three preferred (odd count prevents
+    # alternate cavitation).
     inducer_blade_count: int = 3
-    inducer_solidity: float = 1.5
+    # SP-8052 sec. 3.1.15: solidity 2.5 for a low-head inducer proper
+    # (flat-plate inlet region 2.0..2.5; Hong et al. 2012 flew 2.6).
+    inducer_solidity: float = 2.5
     inducer_hub_ratio: float = 0.35
+    # SP-8052 sec. 3.1.9: incidence-to-blade-angle ratio alpha/beta is the
+    # cavitation design variable; 0.35 (thin blades) .. 0.50 (thick),
+    # "a mean value, 0.425, has gained preference".
+    inducer_incidence_to_blade_ratio: float = 0.425
     diffuser_vane_count: int = 8
     material_tip_speed_limit: float = 350.0
+    rotor_material_density: float = SCREENING_DEFAULTS["rotor_material_density"]
+    rotor_yield_strength: float = SCREENING_DEFAULTS["rotor_yield_strength"]
+    casing_yield_strength: float = SCREENING_DEFAULTS["casing_yield_strength"]
+    structural_fos: float = SCREENING_DEFAULTS["structural_fos"]
+    blade_thickness_ratio: float = 0.04
+    # 0.4 mm manufacturing floor; small-pump performance is sensitive to
+    # blade thickness/outlet angle at this scale (corpus: "Influence of
+    # Blade Outlet Angle and Blade Thickness ... Mini Centrifugal Pump",
+    # IOP mini-impeller studies) - treat thinner blades as unbuildable
+    # rather than better.
+    min_blade_thickness: float = 4.0e-4
+    shaft_diameter_ratio: float = 0.30
+    min_shaft_diameter: float = 6.0e-3
+    casing_wall_thickness_ratio: float = 0.035
+    min_casing_wall_thickness: float = 1.5e-3
+    # Wear-ring radial clearance is a manufacturing/vendor input, not a
+    # meanline output; when provided, the SP-8109 sec. 3.5.2.1 rule
+    # (balance-hole flow area ~= 4 x seal-clearance area) sizes the
+    # impeller balance holes.
+    wear_ring_radial_clearance: float | None = None
+    bearing_dn_limit: float = SCREENING_DEFAULTS["bearing_dn_limit"]
+    seal_face_speed_limit: float = SCREENING_DEFAULTS["seal_face_speed_limit"]
+    seal_friction_coefficient: float = 0.04
+    max_propellant_temperature_rise: float = 15.0
+    fluid_specific_heat: dict[str, float] = field(default_factory=lambda: {
+        "fuel": 2100.0,
+        "oxidizer": 1700.0,
+        "default": 2000.0,
+    })
     max_head_per_stage: float = 2500.0
     target_specific_speed: float = 0.45
     min_impeller_diameter: float = 0.008
@@ -222,6 +268,7 @@ class CentrifugalPumpGeometry:
     inlet_blade_angle_deg: float
     outlet_blade_angle_deg: float
     recommendation: str
+    blade_count_source: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -237,6 +284,7 @@ class CentrifugalPumpGeometry:
             "inlet_diameter_m": self.inlet_diameter,
             "outlet_width_m": self.outlet_width,
             "blade_count": self.blade_count,
+            "blade_count_source": self.blade_count_source,
             "inlet_blade_angle_deg": self.inlet_blade_angle_deg,
             "outlet_blade_angle_deg": self.outlet_blade_angle_deg,
             "recommendation": self.recommendation,
@@ -255,6 +303,17 @@ class InducerGeometry:
     suction_specific_speed: float | None
     npsh_margin: float | None
     recommendation: str
+    # SP-8052 flat-plate inducer blade geometry (secs. 2.1.9/3.1.9,
+    # 2.1.10/3.1.10): inlet tip blade angle from the tip flow coefficient
+    # plus the incidence set by the alpha/beta design ratio; constant-lead
+    # helix r*tan(beta) = const gives the hub angle and the pitch.
+    inlet_flow_coefficient: float | None = None
+    inlet_flow_angle_deg: float | None = None
+    inlet_tip_blade_angle_deg: float | None = None
+    hub_blade_angle_deg: float | None = None
+    incidence_deg: float | None = None
+    incidence_to_blade_ratio: float | None = None
+    leading_edge_thickness: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -268,6 +327,13 @@ class InducerGeometry:
             "suction_specific_speed": self.suction_specific_speed,
             "npsh_margin_pa": self.npsh_margin,
             "recommendation": self.recommendation,
+            "inlet_flow_coefficient": self.inlet_flow_coefficient,
+            "inlet_flow_angle_deg": self.inlet_flow_angle_deg,
+            "inlet_tip_blade_angle_deg": self.inlet_tip_blade_angle_deg,
+            "hub_blade_angle_deg": self.hub_blade_angle_deg,
+            "incidence_deg": self.incidence_deg,
+            "incidence_to_blade_ratio": self.incidence_to_blade_ratio,
+            "leading_edge_thickness_m": self.leading_edge_thickness,
         }
 
 
@@ -433,6 +499,158 @@ class PumpPerformanceCurve:
 
 
 @dataclass
+class PumpArchitectureClassification:
+    role: str
+    primary_type: str
+    stage_mode: str
+    suction_assist: str
+    electric_architecture: str
+    candidate_types: list[str]
+    rationale: list[str]
+    metrics: dict[str, float | int | str | None]
+    source_ids: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "primary_type": self.primary_type,
+            "stage_mode": self.stage_mode,
+            "suction_assist": self.suction_assist,
+            "electric_architecture": self.electric_architecture,
+            "candidate_types": self.candidate_types,
+            "rationale": self.rationale,
+            "metrics": self.metrics,
+            "source_ids": self.source_ids,
+        }
+
+
+@dataclass
+class PumpHardwareBOMItem:
+    role: str
+    subsystem: str
+    component: str
+    quantity: int
+    status: str
+    mass_estimate_kg: float | None
+    key_parameters: dict[str, float | int | str | None]
+    editable_reference_id: str | None
+    source_ids: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "subsystem": self.subsystem,
+            "component": self.component,
+            "quantity": self.quantity,
+            "status": self.status,
+            "mass_estimate_kg": self.mass_estimate_kg,
+            "key_parameters": self.key_parameters,
+            "editable_reference_id": self.editable_reference_id,
+            "source_ids": self.source_ids,
+        }
+
+
+@dataclass
+class PumpReferenceGeometry:
+    role: str
+    coordinate_system: str
+    editable: bool
+    source_ids: list[str]
+    meridional_profile: list[dict[str, float | str]]
+    impeller_disk: dict[str, float | int | str]
+    blade_envelope: dict[str, float | int | str]
+    inducer_helix: dict[str, float | int | str | None]
+    diffuser_vane_ring: dict[str, float | int | str]
+    volute_scroll: dict[str, float | int | str]
+    shaft_datum: dict[str, float | str]
+    ports: dict[str, dict[str, float | str]]
+    notes: list[str]
+    meridional_channel: dict | None = None
+    thrust_balance: dict | None = None
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "coordinate_system": self.coordinate_system,
+            "editable": self.editable,
+            "source_ids": self.source_ids,
+            "meridional_profile": self.meridional_profile,
+            "impeller_disk": self.impeller_disk,
+            "blade_envelope": self.blade_envelope,
+            "inducer_helix": self.inducer_helix,
+            "diffuser_vane_ring": self.diffuser_vane_ring,
+            "volute_scroll": self.volute_scroll,
+            "shaft_datum": self.shaft_datum,
+            "ports": self.ports,
+            "notes": self.notes,
+            "meridional_channel": self.meridional_channel,
+            "thrust_balance": self.thrust_balance,
+        }
+
+
+@dataclass
+class PumpSystemCurvePoint:
+    flow_ratio: float
+    throttle: float
+    volumetric_flow: float
+    required_pressure_rise: float
+    pump_pressure_rise: float
+    pressure_margin: float
+    status: str
+
+    def to_dict(self) -> dict:
+        return {
+            "flow_ratio": self.flow_ratio,
+            "throttle": self.throttle,
+            "volumetric_flow_m3_s": self.volumetric_flow,
+            "required_pressure_rise_pa": self.required_pressure_rise,
+            "pump_pressure_rise_pa": self.pump_pressure_rise,
+            "pressure_margin_pa": self.pressure_margin,
+            "status": self.status,
+        }
+
+
+@dataclass
+class PumpSystemCurve:
+    role: str
+    model: str
+    source_ids: list[str]
+    points: list[PumpSystemCurvePoint]
+    supported_throttle_range: list[float] | None
+    notes: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "model": self.model,
+            "source_ids": self.source_ids,
+            "points": [p.to_dict() for p in self.points],
+            "supported_throttle_range": self.supported_throttle_range,
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class PumpThermalStressLedger:
+    role: str
+    source_ids: list[str]
+    thermal: dict[str, float | str | None]
+    stress: dict[str, float | str | None]
+    loads: dict[str, float | str | None]
+    margins: dict[str, float | None]
+
+    def to_dict(self) -> dict:
+        return {
+            "role": self.role,
+            "source_ids": self.source_ids,
+            "thermal": self.thermal,
+            "stress": self.stress,
+            "loads": self.loads,
+            "margins": self.margins,
+        }
+
+
+@dataclass
 class PumpLineSizing:
     role: str
     pressure_rise: float | None
@@ -449,6 +667,10 @@ class PumpLineSizing:
     diffuser_volute: DiffuserVoluteGeometry | None
     hydraulic_meanline: PumpHydraulicMeanline | None = None
     performance_curve: PumpPerformanceCurve | None = None
+    architecture: PumpArchitectureClassification | None = None
+    reference_geometry: PumpReferenceGeometry | None = None
+    system_curve: PumpSystemCurve | None = None
+    thermal_stress: PumpThermalStressLedger | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -474,6 +696,19 @@ class PumpLineSizing:
             "performance_curve": (
                 self.performance_curve.to_dict()
                 if self.performance_curve else None
+            ),
+            "architecture": (
+                self.architecture.to_dict() if self.architecture else None
+            ),
+            "reference_geometry": (
+                self.reference_geometry.to_dict()
+                if self.reference_geometry else None
+            ),
+            "system_curve": (
+                self.system_curve.to_dict() if self.system_curve else None
+            ),
+            "thermal_stress": (
+                self.thermal_stress.to_dict() if self.thermal_stress else None
             ),
         }
 
@@ -502,6 +737,7 @@ class ElectricPumpSizingResult:
     battery: BatterySizing
     feasibility: PumpFeasibility
     assumptions: dict
+    hardware_bom: list[PumpHardwareBOMItem] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -511,6 +747,7 @@ class ElectricPumpSizingResult:
             "battery": self.battery.to_dict(),
             "feasibility": self.feasibility.to_dict(),
             "assumptions": self.assumptions,
+            "hardware_bom": [item.to_dict() for item in self.hardware_bom],
             "notes": self.notes,
         }
 
@@ -569,6 +806,16 @@ def _screen_status(value: float, warn: float, fail: float, *, high_bad=True) -> 
             return "fail"
         if value <= warn:
             return "warn"
+    return "pass"
+
+
+def _margin_status(margin: float | None, *, warn: float = 1.25) -> str:
+    if margin is None:
+        return "pass"
+    if margin < 1.0:
+        return "fail"
+    if margin < warn:
+        return "warn"
     return "pass"
 
 
@@ -756,6 +1003,90 @@ def _select_rpm(Q: float, head: float, spec: PumpSizingSpec) -> tuple[float, str
     return min(max(rpm, rpm_min), rpm_max), "auto_specific_speed_geometry"
 
 
+# NASA SP-8109 fig. 16 (19740020848.pdf, printed p. 30): "minimum number
+# of blades that can satisfy impeller velocity-gradient limits", plotted as
+# pump head coefficient psi = gH/U2^2 vs impeller discharge flow
+# coefficient phi2 = cm2/U2 at best efficiency; zero prewhirl, SHROUDED
+# impellers, inlet/discharge tip diameter ratio delta = 0.65.  Digitized
+# from the 300-dpi scan at the carpet nodes (same practice as the Rao
+# theta-angle tables); read-off accuracy ~ +/-0.02 in psi.  Each row:
+# (Z, ((phi2, psi_max), ...)) with phi2 ascending along the Z curve.
+_SP8109_FIG16_MIN_BLADES: tuple[tuple[int, tuple[tuple[float, float], ...]], ...] = (
+    (3, ((0.095, 0.350), (0.135, 0.310))),
+    (4, ((0.085, 0.415), (0.125, 0.385), (0.165, 0.350), (0.205, 0.320),
+         (0.250, 0.295))),
+    (5, ((0.075, 0.465), (0.115, 0.440), (0.155, 0.410), (0.198, 0.378),
+         (0.243, 0.350), (0.290, 0.320))),
+    (6, ((0.070, 0.500), (0.110, 0.482), (0.150, 0.455), (0.192, 0.428),
+         (0.236, 0.400), (0.283, 0.370))),
+    (8, ((0.060, 0.555), (0.100, 0.542), (0.140, 0.520), (0.184, 0.498),
+         (0.228, 0.474), (0.275, 0.448))),
+    (10, ((0.055, 0.590), (0.095, 0.578), (0.135, 0.560), (0.178, 0.542),
+          (0.221, 0.520), (0.268, 0.498), (0.298, 0.470))),
+    (12, ((0.050, 0.625), (0.090, 0.612), (0.130, 0.598), (0.172, 0.582),
+          (0.215, 0.562), (0.260, 0.542), (0.295, 0.510))),
+    (16, ((0.042, 0.663), (0.122, 0.640), (0.205, 0.610), (0.250, 0.592),
+          (0.290, 0.552))),
+    (20, ((0.037, 0.688), (0.115, 0.668), (0.198, 0.640), (0.245, 0.622),
+          (0.285, 0.578))),
+    (24, ((0.078, 0.697), (0.200, 0.660), (0.270, 0.620))),
+)
+
+
+def _interp_clamped(nodes: tuple[tuple[float, float], ...], x: float) -> float:
+    if x <= nodes[0][0]:
+        return nodes[0][1]
+    if x >= nodes[-1][0]:
+        return nodes[-1][1]
+    for (x0, y0), (x1, y1) in zip(nodes, nodes[1:]):
+        if x0 <= x <= x1:
+            return y0 + (y1 - y0) * (x - x0) / max(x1 - x0, 1e-12)
+    return nodes[-1][1]
+
+
+def sp8109_min_blade_count(
+    head_coefficient: float,
+    discharge_flow_coefficient: float,
+    *,
+    multiple_of: int | None = None,
+) -> dict:
+    """Minimum impeller blade number from the SP-8109 fig. 16 chart.
+
+    Returns the smallest digitized Z whose fig.-16 curve reaches the
+    requested head coefficient at the given discharge flow coefficient
+    (clamped to the charted phi2 range).  ``multiple_of`` optionally bumps
+    the count to a multiple of the inducer blade number, per SP-8052
+    sec. 3.1.14 ("whenever possible the blade number N be selected so that
+    the impeller blade number is a multiple of N").
+    """
+    psi = float(head_coefficient)
+    phi2 = float(discharge_flow_coefficient)
+    selected = None
+    for count, nodes in _SP8109_FIG16_MIN_BLADES:
+        if _interp_clamped(nodes, phi2) >= psi:
+            selected = count
+            break
+    if selected is None:
+        selected = _SP8109_FIG16_MIN_BLADES[-1][0]
+        status = "head_coefficient_beyond_digitized_chart"
+    else:
+        status = "within_chart"
+    basis = "sp8109_fig16_min_blade_number"
+    blade_count = selected
+    if multiple_of is not None and multiple_of > 1:
+        snapped = multiple_of * math.ceil(blade_count / multiple_of)
+        if snapped != blade_count:
+            basis += f"_snapped_to_multiple_of_{multiple_of}"
+        blade_count = snapped
+    return {
+        "blade_count": blade_count,
+        "chart_minimum": selected,
+        "status": status,
+        "basis": basis,
+        "source": "NASA SP-8109 fig. 16 (zero prewhirl, shrouded, delta=0.65)",
+    }
+
+
 def _impeller_geometry(
     role: str,
     Q: float,
@@ -779,6 +1110,17 @@ def _impeller_geometry(
     ds = d2 * (G0 * stage_head) ** 0.25 / max(math.sqrt(max(Q, 1e-18)), 1e-12)
     outlet_angle = 25.0 if stage_head > 0.0 else 0.0
     inlet_angle = math.degrees(math.atan2(phi, 1.0))
+    if spec.blade_count is not None:
+        blade_count = int(spec.blade_count)
+        blade_count_source = "user_specified"
+    else:
+        chart = sp8109_min_blade_count(
+            psi, phi, multiple_of=spec.inducer_blade_count
+        )
+        blade_count = chart["blade_count"]
+        blade_count_source = chart["basis"]
+        if chart["status"] != "within_chart":
+            blade_count_source += f" ({chart['status']})"
     recommendation = "shrouded radial impeller"
     if tip_speed > 0.80 * spec.material_tip_speed_limit:
         recommendation = "split head across stages or use higher-strength impeller"
@@ -798,10 +1140,11 @@ def _impeller_geometry(
         impeller_diameter=d2,
         inlet_diameter=d1,
         outlet_width=b2,
-        blade_count=spec.blade_count,
+        blade_count=blade_count,
         inlet_blade_angle_deg=inlet_angle,
         outlet_blade_angle_deg=outlet_angle,
         recommendation=recommendation,
+        blade_count_source=blade_count_source,
     )
 
 
@@ -990,6 +1333,464 @@ def _pump_performance_curve(
     )
 
 
+def _architecture_classification(
+    role: str,
+    ln,
+    impeller: CentrifugalPumpGeometry,
+    inducer: InducerGeometry,
+    spec: PumpSizingSpec,
+) -> PumpArchitectureClassification:
+    ns = impeller.specific_speed
+    stage_mode = "single_stage" if impeller.stages == 1 else "staged"
+    suction_assist = (
+        "inducer_required"
+        if ln.npsh_margin is not None and ln.npsh_margin < 0.0 else
+        "inducer_assisted" if inducer is not None else "none"
+    )
+    candidates: list[str] = []
+    rationale: list[str] = []
+    if ns < 0.20:
+        primary = "radial_centrifugal_low_specific_speed"
+        candidates.extend(["radial_centrifugal", "positive_displacement_candidate"])
+        rationale.append("low nondimensional specific speed favors radial centrifugal duty; very low Ns can also justify a positive-displacement trade")
+    elif ns <= 0.90:
+        primary = "radial_centrifugal"
+        candidates.append("radial_centrifugal")
+        rationale.append("Ns lies in the radial centrifugal screening band used by SP-8109-style meanline sizing")
+    elif ns <= 1.60:
+        primary = "mixed_flow_candidate"
+        candidates.extend(["mixed_flow", "radial_centrifugal_revisit"])
+        rationale.append("high Ns pushes the current radial impeller toward mixed-flow geometry")
+    else:
+        primary = "axial_or_mixed_flow_candidate"
+        candidates.extend(["axial", "mixed_flow", "multi_stage_centrifugal"])
+        rationale.append("very high Ns is outside the radial centrifugal screening band")
+    if impeller.stages > 1:
+        candidates.append("staged_centrifugal")
+        rationale.append(f"head exceeds the {spec.max_head_per_stage:.0f} m/stage screen")
+    if ln.volumetric_flow < 1.0e-4 and (ln.required_pump_head or 0.0) > 1000.0:
+        candidates.append("off_the_shelf_electric_feed_with_custom_validation")
+        rationale.append("small high-head duty should be checked against miniature pump efficiency and cavitation data")
+    candidates.append("electric_motor_driven")
+    # Preserve order while deduping.
+    candidates = list(dict.fromkeys(candidates))
+    return PumpArchitectureClassification(
+        role=role,
+        primary_type=primary,
+        stage_mode=stage_mode,
+        suction_assist=suction_assist,
+        electric_architecture="shared_pack_bus" if spec.shared_bus else "per_stream_drive_bus",
+        candidate_types=candidates,
+        rationale=rationale,
+        metrics={
+            "specific_speed": ns,
+            "specific_diameter": impeller.specific_diameter,
+            "flow_coefficient": impeller.flow_coefficient,
+            "head_coefficient": impeller.head_coefficient,
+            "stage_count": impeller.stages,
+            "suction_specific_speed": inducer.suction_specific_speed,
+            "npsh_margin_pa": inducer.npsh_margin,
+        },
+        source_ids=["NASA SP-8109", "NASA SP-8052", "Spiller, Stabile, Lentini 2013"],
+    )
+
+
+def _shaft_diameter(impeller: CentrifugalPumpGeometry, spec: PumpSizingSpec) -> float:
+    return max(
+        spec.min_shaft_diameter,
+        spec.shaft_diameter_ratio * max(impeller.inlet_diameter, 0.35 * impeller.impeller_diameter),
+    )
+
+
+def _casing_wall_thickness(
+    impeller: CentrifugalPumpGeometry,
+    spec: PumpSizingSpec,
+) -> float:
+    return max(
+        spec.min_casing_wall_thickness,
+        spec.casing_wall_thickness_ratio * impeller.impeller_diameter,
+    )
+
+
+def impeller_blade_camber(
+    inlet_radius: float,
+    outlet_radius: float,
+    inlet_blade_angle_deg: float,
+    outlet_blade_angle_deg: float,
+    samples: int = 61,
+) -> list[dict[str, float]]:
+    """Blade camber line theta(r) between the solved velocity-triangle angles.
+
+    Integrates d(theta)/dr = 1/(r*tan(beta(r))) with the blade angle beta
+    varying linearly in radius from beta1 at the inlet eye to beta2 at the
+    exit — the standard circular-arc/log-spiral centrifugal blade layout
+    (NASA SP-8109 blade-geometry practice; constant beta recovers the pure
+    log spiral).  Angles are measured from the tangential direction.
+    Returns polar samples [{radius_m, theta_rad}] with theta(r1) = 0; wrap
+    is positive, so CAD mirrors for rotation handedness.
+    """
+    r1 = float(inlet_radius)
+    r2 = float(outlet_radius)
+    beta1 = math.radians(float(inlet_blade_angle_deg))
+    beta2 = math.radians(float(outlet_blade_angle_deg))
+    if not 0.0 < r1 < r2:
+        raise ValueError("camber line needs 0 < inlet radius < outlet radius")
+    if min(beta1, beta2) <= 0.0 or max(beta1, beta2) >= 0.5 * math.pi:
+        raise ValueError(
+            "blade angles must lie strictly between 0 and 90 deg from "
+            "tangential for a log-spiral-family camber line"
+        )
+    n = max(int(samples), 2)
+    points: list[dict[str, float]] = []
+    theta = 0.0
+    prev_r = r1
+    prev_slope = 1.0 / (r1 * math.tan(beta1))
+    for i in range(n):
+        r = r1 + (r2 - r1) * i / (n - 1)
+        beta = beta1 + (beta2 - beta1) * (r - r1) / (r2 - r1)
+        slope = 1.0 / (r * math.tan(beta))
+        if i > 0:
+            theta += 0.5 * (prev_slope + slope) * (r - prev_r)
+        points.append({"radius_m": r, "theta_rad": theta})
+        prev_r = r
+        prev_slope = slope
+    return points
+
+
+def _meridional_channel(
+    role: str,
+    Q: float,
+    impeller: CentrifugalPumpGeometry,
+    inducer: InducerGeometry,
+    axial_width: float,
+    samples: int = 21,
+) -> dict:
+    """Quarter-ellipse hub/shroud meridional channel honoring D1, D2, b2.
+
+    Replaces the coarse 6-station envelope with smooth hub and shroud
+    curves from the axial eye annulus to the radial exit band, and screens
+    the meridional-velocity progression against SP-8109 sec. 2.3.1.2
+    ("the discharge meridional component of velocity c_m2 may vary from
+    1 to 1.5 times the impeller inlet velocity").  Curve endpoints are
+    exact: inlet area = pi*(r1^2 - r_hub^2), exit area = 2*pi*r2*b2.
+    Coordinates: x axial (exit plane x = 0, flow arrives from -x), r radial.
+    """
+    r1 = 0.5 * impeller.inlet_diameter
+    r2 = 0.5 * impeller.impeller_diameter
+    b2 = impeller.outlet_width
+    width = max(float(axial_width), 1.5 * b2)
+    r_hub_raw = 0.5 * inducer.hub_ratio * inducer.diameter
+    # The impeller eye hub carries through from the inducer hub; clamp so
+    # the eye annulus stays open when the solved eye is small.
+    r_hub = min(r_hub_raw, 0.85 * r1)
+    hub_clamped = r_hub < r_hub_raw
+
+    n = max(int(samples), 3)
+    hub_curve: list[dict[str, float]] = []
+    shroud_curve: list[dict[str, float]] = []
+    areas: list[float] = []
+    for i in range(n):
+        theta = 0.5 * math.pi * i / (n - 1)
+        s, c = math.sin(theta), math.cos(theta)
+        x_h = -width * (1.0 - s)
+        r_h = r2 - (r2 - r_hub) * c
+        x_s = -width + (width - b2) * s
+        r_s = r2 - (r2 - r1) * c
+        hub_curve.append({"x_m": x_h, "r_m": r_h})
+        shroud_curve.append({"x_m": x_s, "r_m": r_s})
+        span = math.hypot(x_h - x_s, r_h - r_s)
+        areas.append(2.0 * math.pi * 0.5 * (r_h + r_s) * span)
+
+    q = max(float(Q), 0.0)
+    inlet_area = areas[0]
+    exit_area = areas[-1]
+    cm_inlet = q / max(inlet_area, 1e-12)
+    cm_exit = q / max(exit_area, 1e-12)
+    cm_ratio = cm_exit / max(cm_inlet, 1e-12)
+    # SP-8109 sec. 2.3.1.2 discharge/inlet meridional-velocity practice.
+    cm_status = "pass" if 1.0 <= cm_ratio <= 1.5 else "warn"
+    contracting = all(
+        a1 <= a0 * (1.0 + 1e-9) for a0, a1 in zip(areas, areas[1:])
+    )
+    return {
+        "reference_id": f"{role}.meridional_channel",
+        "model": "quarter_ellipse_hub_shroud_v1",
+        "hub_curve": hub_curve,
+        "shroud_curve": shroud_curve,
+        "eye_hub_radius_m": r_hub,
+        "eye_hub_radius_clamped": hub_clamped,
+        "inlet_area_m2": inlet_area,
+        "exit_area_m2": exit_area,
+        "inlet_meridional_velocity_m_s": cm_inlet,
+        "exit_meridional_velocity_m_s": cm_exit,
+        "cm_ratio": cm_ratio,
+        "cm_ratio_status": cm_status,
+        "area_progression_contracting": contracting,
+        "source": (
+            "NASA SP-8109 sec. 2.3.1.2 impeller design practice "
+            "(cm2 = 1 to 1.5 x impeller inlet velocity)"
+        ),
+    }
+
+
+def _thrust_balance_geometry(
+    role: str,
+    impeller: CentrifugalPumpGeometry,
+    channel: dict,
+    shaft_d: float,
+    spec: PumpSizingSpec,
+) -> dict:
+    """Wear-ring / seal-land / balance-hole hooks (SP-8109 secs. 2.5.2/3.5.2).
+
+    Wear rings are the recommended thrust-balance method (sec. 3.5.2.1:
+    insensitive to cavitation and axial clearance, unlike balance ribs).
+    The hub-side ring is laid out at the solved eye diameter D1 (neutral
+    equal-diameter start; the relative ring diameters are the thrust-trim
+    variable and stay editable).  Balance holes vent the back cavity to the
+    impeller inlet (sec. 3.5.2.2); when a wear-ring radial clearance is
+    supplied, the hole area follows sec. 3.5.2.1: leakage flow area
+    approximately FOUR TIMES the seal-clearance area.  The shaft seal land
+    records the solved face speed against the screening limit.
+    """
+    d_ring = impeller.inlet_diameter
+    omega = 2.0 * math.pi * max(impeller.rpm, 0.0) / 60.0
+    face_speed = omega * 0.5 * shaft_d
+    clearance = spec.wear_ring_radial_clearance
+    hole_count = impeller.blade_count
+    holes: dict[str, float | int | str | None]
+    if clearance is not None and clearance > 0.0:
+        clearance_area = math.pi * d_ring * clearance
+        hole_area_total = 4.0 * clearance_area
+        hole_d = math.sqrt(4.0 * hole_area_total / (math.pi * hole_count))
+        holes = {
+            "status": "sized",
+            "count": hole_count,
+            "diameter_m": hole_d,
+            "total_area_m2": hole_area_total,
+            "seal_clearance_area_m2": clearance_area,
+        }
+    else:
+        holes = {
+            "status": "clearance_not_specified",
+            "count": hole_count,
+            "diameter_m": None,
+            "total_area_m2": None,
+            "seal_clearance_area_m2": None,
+        }
+    return {
+        "reference_id": f"{role}.thrust_balance",
+        "selection": "impeller_wear_rings",
+        "selection_source": (
+            "NASA SP-8109 sec. 3.5.2.1: wear rings recommended over balance "
+            "ribs (not subject to cavitation/axial-clearance force changes)"
+        ),
+        "hub_wear_ring_diameter_m": d_ring,
+        "front_wear_ring_diameter_m": d_ring,
+        "wear_ring_diameters_note": (
+            "equal-diameter neutral start; relative diameters are the "
+            "axial-thrust trim variable (SP-8109 sec. 2.5.2.1) and remain "
+            "editable"
+        ),
+        "wear_ring_radial_clearance_m": clearance,
+        "balance_holes": holes,
+        "balance_hole_rule": (
+            "leakage flow area ~= 4 x seal-clearance area "
+            "(NASA SP-8109 sec. 3.5.2.1)"
+        ),
+        "shaft_seal_land": {
+            "diameter_m": shaft_d,
+            "face_speed_m_s": face_speed,
+            "face_speed_limit_m_s": spec.seal_face_speed_limit,
+            "status": (
+                "pass" if face_speed <= spec.seal_face_speed_limit
+                else "warn"
+            ),
+        },
+        "eye_hub_radius_m": channel.get("eye_hub_radius_m"),
+    }
+
+
+def _reference_geometry(
+    role: str,
+    ln,
+    impeller: CentrifugalPumpGeometry,
+    inducer: InducerGeometry,
+    diffuser: DiffuserVoluteGeometry,
+    spec: PumpSizingSpec,
+    meanline: PumpHydraulicMeanline | None = None,
+) -> PumpReferenceGeometry:
+    d2 = impeller.impeller_diameter
+    d1 = impeller.inlet_diameter
+    b2 = impeller.outlet_width
+    shaft_d = _shaft_diameter(impeller, spec)
+    casing_r = 0.68 * d2
+    casing_t = _casing_wall_thickness(impeller, spec)
+    length = max(1.8 * d2, inducer.diameter + d2)
+    meridional = [
+        {"station": "inlet_port", "x_m": -0.55 * length, "radius_m": 0.50 * d1},
+        {"station": "inducer_leading_edge", "x_m": -0.35 * length, "radius_m": 0.50 * inducer.diameter},
+        {"station": "impeller_eye", "x_m": -0.08 * length, "radius_m": 0.50 * d1},
+        {"station": "impeller_exit", "x_m": 0.0, "radius_m": 0.50 * d2},
+        {"station": "diffuser_exit", "x_m": 0.22 * length, "radius_m": 0.58 * d2},
+        {"station": "volute_exit", "x_m": 0.40 * length, "radius_m": casing_r},
+    ]
+    channel = _meridional_channel(
+        role, ln.volumetric_flow, impeller, inducer, 0.08 * length
+    )
+    thrust_balance = _thrust_balance_geometry(
+        role, impeller, channel, shaft_d, spec
+    )
+    return PumpReferenceGeometry(
+        role=role,
+        coordinate_system="axisymmetric pump datum: x along shaft, radius from shaft centerline",
+        editable=True,
+        source_ids=["NASA SP-8109", "NASA SP-8052"],
+        meridional_profile=meridional,
+        impeller_disk={
+            "reference_id": f"{role}.impeller_disk",
+            "outer_diameter_m": d2,
+            "eye_diameter_m": d1,
+            "outlet_width_m": b2,
+            "stage_count": impeller.stages,
+            "tip_speed_m_s": impeller.tip_speed,
+        },
+        blade_envelope={
+            "reference_id": f"{role}.impeller_blade_envelope",
+            "blade_count": impeller.blade_count,
+            "inlet_angle_deg": impeller.inlet_blade_angle_deg,
+            "outlet_angle_deg": impeller.outlet_blade_angle_deg,
+            "estimated_blade_thickness_m": max(
+                spec.min_blade_thickness,
+                spec.blade_thickness_ratio * d2,
+            ),
+        },
+        inducer_helix={
+            "reference_id": f"{role}.inducer_helix",
+            "diameter_m": inducer.diameter,
+            "hub_ratio": inducer.hub_ratio,
+            "blade_count": inducer.blade_count,
+            "pitch_m": inducer.pitch,
+            "wrap_angle_deg": inducer.wrap_angle_deg,
+            # SP-8052 flat-plate blade geometry (secs. 3.1.9/3.1.10).
+            "inlet_tip_blade_angle_deg": inducer.inlet_tip_blade_angle_deg,
+            "hub_blade_angle_deg": inducer.hub_blade_angle_deg,
+            "incidence_deg": inducer.incidence_deg,
+            "inlet_flow_coefficient": inducer.inlet_flow_coefficient,
+            "leading_edge_thickness_m": inducer.leading_edge_thickness,
+        },
+        diffuser_vane_ring={
+            "reference_id": f"{role}.diffuser_vane_ring",
+            "selection": diffuser.selection,
+            "vane_count": diffuser.vane_count,
+            "vane_width_m": diffuser.vane_width,
+            "throat_area_m2": diffuser.throat_area,
+            # Solved absolute flow angle at impeller exit (atan cm2/cu2 with
+            # slip): the vane inlet is set to the flow, SP-8109 diffusion
+            # system practice.
+            "vane_angle_deg": (
+                meanline.velocity_triangle.outlet_absolute_flow_angle_deg
+                if meanline is not None else None
+            ),
+        },
+        volute_scroll={
+            "reference_id": f"{role}.volute_scroll",
+            "exit_area_m2": diffuser.volute_exit_area,
+            "diffusion_ratio": diffuser.diffusion_ratio,
+            "casing_inner_radius_m": casing_r,
+            "casing_wall_thickness_m": casing_t,
+        },
+        shaft_datum={
+            "reference_id": f"{role}.shaft_datum",
+            "diameter_m": shaft_d,
+            "estimated_span_m": length,
+        },
+        ports={
+            "inlet": {
+                "reference_id": f"{role}.inlet_port",
+                "diameter_m": d1,
+                "area_m2": math.pi * d1**2 / 4.0,
+            },
+            "outlet": {
+                "reference_id": f"{role}.outlet_port",
+                "area_m2": diffuser.volute_exit_area,
+                "equivalent_diameter_m": _safe_sqrt(4.0 * diffuser.volute_exit_area / math.pi),
+            },
+        },
+        notes=[
+            "Reference geometry is an editable sizing envelope, not blade-resolved CAD.",
+            "Use the reference IDs to map BOM rows to future CAD features.",
+        ],
+        meridional_channel=channel,
+        thrust_balance=thrust_balance,
+    )
+
+
+def _system_curve_coupling(
+    role: str,
+    ln,
+    curve: PumpPerformanceCurve,
+) -> PumpSystemCurve:
+    if ln.required_pressure_rise is None:
+        return PumpSystemCurve(
+            role=role,
+            model="not_evaluated_missing_tank_pressure",
+            source_ids=["Huzel and Huang SP-125", "NASA SP-8109"],
+            points=[],
+            supported_throttle_range=None,
+            notes=["Tank/inlet pressure is needed before pump curve and system curve can be intersected."],
+        )
+    tank_pressure = ln.required_outlet_pressure - ln.required_pressure_rise
+    dynamic_design = (
+        ln.injector_dp + ln.manifold_loss + ln.regen_loss + ln.line_valve_loss
+    )
+    supported: list[float] = []
+    points: list[PumpSystemCurvePoint] = []
+    for p in curve.points:
+        q = p.flow_ratio
+        throttle = q
+        required_outlet = (
+            ln.chamber_pressure * throttle
+            + dynamic_design * q * q
+            + ln.control_margin * throttle
+        )
+        required_rise = max(0.0, required_outlet - tank_pressure)
+        margin = p.pressure_rise - required_rise
+        denom = max(required_rise, 1.0)
+        if margin >= 0.0:
+            status = "pass"
+            supported.append(throttle)
+        elif margin >= -0.10 * denom:
+            status = "warn"
+        else:
+            status = "fail"
+        points.append(PumpSystemCurvePoint(
+            flow_ratio=q,
+            throttle=throttle,
+            volumetric_flow=p.volumetric_flow,
+            required_pressure_rise=required_rise,
+            pump_pressure_rise=p.pressure_rise,
+            pressure_margin=margin,
+            status=status,
+        ))
+    throttle_range = [min(supported), max(supported)] if supported else None
+    return PumpSystemCurve(
+        role=role,
+        model="fixed_speed_pump_curve_vs_quadratic_feed_system_curve_v1",
+        source_ids=["Huzel and Huang SP-125", "NASA SP-8109"],
+        points=points,
+        supported_throttle_range=throttle_range,
+        notes=[
+            "Chamber pressure is scaled linearly with throttle; injector, line, manifold, and regen losses are scaled with flow squared.",
+            "Use a measured pump map and valve/sleeve schedule before treating the range as qualified.",
+        ],
+    )
+
+
+# SP-8052 sec. 2.1.6: knife-sharp leading edge ideal; J-2/F-1 practice
+# leaves the edge 0.005 to 0.010 in. thick.  Small pumps take the low end.
+_INDUCER_LEADING_EDGE_THICKNESS = 0.005 * 0.0254
+
+
 def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry, spec: PumpSizingSpec) -> InducerGeometry:
     rpm = max(impeller.rpm, 1e-9)
     omega = 2.0 * math.pi * rpm / 60.0
@@ -1001,8 +1802,34 @@ def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry
         # SP-8052 suction screen: Nss = omega*sqrt(Q)/(g*NPSH)^0.75.
         suction_ns = omega * math.sqrt(max(Q, 0.0)) / max((G0 * npsh_head) ** 0.75, 1e-12)
     eye_d = max(impeller.inlet_diameter, 0.45 * impeller.impeller_diameter)
-    pitch = math.pi * eye_d / max(spec.inducer_blade_count, 1)
-    wrap = 360.0 * spec.inducer_solidity / max(spec.inducer_blade_count, 1)
+    blade_count = max(spec.inducer_blade_count, 1)
+    hub_ratio = min(max(spec.inducer_hub_ratio, 0.0), 0.95)
+
+    # SP-8052 secs. 2.1.9/3.1.9: the tip flow coefficient (zero prewhirl)
+    # sets the flow angle; the blade angle carries it plus the incidence
+    # from the alpha/beta design ratio (0.35 thin .. 0.50 thick, 0.425
+    # preferred), the cavitation design variable.
+    eye_area = 0.25 * math.pi * eye_d**2 * max(1.0 - hub_ratio**2, 1e-9)
+    cm1 = max(Q, 0.0) / max(eye_area, 1e-12)
+    tip_speed = omega * 0.5 * eye_d
+    phi_tip = cm1 / max(tip_speed, 1e-9)
+    flow_angle = math.atan(phi_tip)
+    ratio = min(max(float(spec.inducer_incidence_to_blade_ratio), 0.0), 0.9)
+    blade_angle = flow_angle / max(1.0 - ratio, 1e-9)
+    incidence = blade_angle - flow_angle
+
+    # SP-8052 secs. 2.1.10/3.1.10: flat-plate constant-lead helix,
+    # lambda = r*tan(beta) constant, lead = 2*pi*lambda; the hub blade
+    # angle follows from the same lead.
+    pitch = 2.0 * math.pi * (0.5 * eye_d) * math.tan(blade_angle)
+    hub_angle = math.atan(math.tan(blade_angle) / max(hub_ratio, 1e-9))
+    # SP-8052 sec. 3.1.15 solidity with the developed helical chord
+    # c = r*wrap/cos(beta): wrap = 2*pi*sigma*cos(beta)/N.
+    wrap = math.degrees(
+        2.0 * math.pi * spec.inducer_solidity * math.cos(blade_angle)
+        / blade_count
+    )
+
     recommendation = "axial inducer ahead of impeller eye"
     if ln.npsh_margin is not None and ln.npsh_margin < 0.0:
         recommendation = "negative NPSH margin; raise tank pressure/subcooling or lower inlet losses"
@@ -1011,14 +1838,21 @@ def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry
     return InducerGeometry(
         role=role,
         diameter=eye_d,
-        hub_ratio=spec.inducer_hub_ratio,
-        blade_count=spec.inducer_blade_count,
+        hub_ratio=hub_ratio,
+        blade_count=blade_count,
         solidity=spec.inducer_solidity,
         pitch=pitch,
         wrap_angle_deg=wrap,
         suction_specific_speed=suction_ns,
         npsh_margin=ln.npsh_margin,
         recommendation=recommendation,
+        inlet_flow_coefficient=phi_tip,
+        inlet_flow_angle_deg=math.degrees(flow_angle),
+        inlet_tip_blade_angle_deg=math.degrees(blade_angle),
+        hub_blade_angle_deg=math.degrees(hub_angle),
+        incidence_deg=math.degrees(incidence),
+        incidence_to_blade_ratio=ratio,
+        leading_edge_thickness=_INDUCER_LEADING_EDGE_THICKNESS,
     )
 
 
@@ -1046,6 +1880,291 @@ def _diffuser_volute_geometry(role: str, Q: float, impeller: CentrifugalPumpGeom
         diffusion_ratio=volute_exit_area / max(throat_area, 1e-12),
         recommendation=recommendation,
     )
+
+
+def _margin(allowable: float, demand: float) -> float | None:
+    if demand <= 0.0:
+        return None
+    return allowable / demand
+
+
+def _thermal_stress_ledger(
+    role: str,
+    ln,
+    sizing: PumpLineSizing,
+    spec: PumpSizingSpec,
+) -> PumpThermalStressLedger | None:
+    if (
+        sizing.impeller is None
+        or sizing.inducer is None
+        or sizing.drive is None
+        or sizing.hydraulic_meanline is None
+        or sizing.hydraulic_power is None
+        or sizing.shaft_power is None
+    ):
+        return None
+    imp = sizing.impeller
+    ind = sizing.inducer
+    drv = sizing.drive
+    meanline = sizing.hydraulic_meanline
+    tri = meanline.velocity_triangle
+    rho_l = max(float(ln.density), 1e-9)
+    mdot = max(ln.volumetric_flow * rho_l, 1e-12)
+    cp = spec.fluid_specific_heat.get(role, spec.fluid_specific_heat.get("default", 2000.0))
+    pump_loss_heat = max(0.0, sizing.shaft_power - sizing.hydraulic_power)
+    disk_heat = rho_l * G0 * ln.volumetric_flow * meanline.losses.disk_friction_loss_head
+    fluid_heat = 0.70 * pump_loss_heat + disk_heat
+    fluid_delta_t = fluid_heat / max(mdot * cp, 1e-12)
+    motor_heat_fraction = drv.total_heat / max(drv.shaft_power, 1.0)
+
+    omega = 2.0 * math.pi * drv.rpm / 60.0
+    shaft_d = _shaft_diameter(imp, spec)
+    casing_t = _casing_wall_thickness(imp, spec)
+    casing_radius = 0.68 * imp.impeller_diameter
+    rotor_allow = spec.rotor_yield_strength / max(spec.structural_fos, 1e-9)
+    casing_allow = spec.casing_yield_strength / max(spec.structural_fos, 1e-9)
+    shear_allow = 0.35 * spec.rotor_yield_strength / max(spec.structural_fos, 1e-9)
+
+    impeller_hoop = spec.rotor_material_density * imp.tip_speed**2
+    inducer_tip_speed = omega * ind.diameter / 2.0
+    inducer_hoop = spec.rotor_material_density * inducer_tip_speed**2
+    blade_force = rho_l * ln.volumetric_flow * abs(tri.outlet_whirl_velocity)
+    force_per_blade = blade_force / max(imp.blade_count, 1)
+    blade_thickness = max(
+        spec.min_blade_thickness,
+        spec.blade_thickness_ratio * imp.impeller_diameter,
+    )
+    blade_section_modulus = max(imp.outlet_width * blade_thickness**2 / 6.0, 1e-15)
+    blade_bending = force_per_blade * max(imp.outlet_width, 1e-6) / blade_section_modulus
+    shaft_torsion = 16.0 * drv.torque / max(math.pi * shaft_d**3, 1e-18)
+    casing_pressure = max(float(ln.required_outlet_pressure), float(ln.required_pressure_rise or 0.0))
+    casing_hoop = casing_pressure * casing_radius / max(casing_t, 1e-12)
+    eye_area = math.pi * imp.inlet_diameter**2 / 4.0
+    axial_thrust = max(float(ln.required_pressure_rise or 0.0), 0.0) * eye_area
+    radial_load = 0.05 * max(float(ln.required_pressure_rise or 0.0), 0.0) * imp.impeller_diameter * max(imp.outlet_width, 1e-9)
+    bearing_dn = shaft_d * 1000.0 * drv.rpm
+    seal_face_speed = math.pi * shaft_d * drv.rpm / 60.0
+    seal_heat = spec.seal_friction_coefficient * axial_thrust * seal_face_speed
+
+    margins = {
+        "motor_heat_fraction_to_50pct": _margin(0.50, motor_heat_fraction),
+        "propellant_delta_t": _margin(spec.max_propellant_temperature_rise, fluid_delta_t),
+        "impeller_rotating_stress": _margin(rotor_allow, impeller_hoop),
+        "inducer_rotating_stress": _margin(rotor_allow, inducer_hoop),
+        "blade_root_bending": _margin(rotor_allow, blade_bending),
+        "shaft_torsion": _margin(shear_allow, shaft_torsion),
+        "casing_pressure": _margin(casing_allow, casing_hoop),
+        "bearing_dn": _margin(spec.bearing_dn_limit, bearing_dn),
+        "seal_face_speed": _margin(spec.seal_face_speed_limit, seal_face_speed),
+    }
+    return PumpThermalStressLedger(
+        role=role,
+        source_ids=["NASA SP-8109", "NASA SP-8052", "NASA SP-8107/SP-8112 family"],
+        thermal={
+            "motor_heat_w": drv.motor_heat,
+            "controller_heat_w": drv.controller_heat,
+            "drive_total_heat_w": drv.total_heat,
+            "drive_heat_fraction_of_shaft_power": motor_heat_fraction,
+            "pump_loss_heat_w": pump_loss_heat,
+            "disk_friction_heat_w": disk_heat,
+            "estimated_propellant_heat_pickup_w": fluid_heat,
+            "fluid_specific_heat_j_kg_k": cp,
+            "estimated_propellant_temperature_rise_k": fluid_delta_t,
+            "model": "loss_heat_to_fluid_screen_v1",
+        },
+        stress={
+            "rotor_material_density_kg_m3": spec.rotor_material_density,
+            "rotor_yield_strength_pa": spec.rotor_yield_strength,
+            "rotor_allowable_pa": rotor_allow,
+            "casing_yield_strength_pa": spec.casing_yield_strength,
+            "casing_allowable_pa": casing_allow,
+            "impeller_rotating_hoop_stress_pa": impeller_hoop,
+            "inducer_rotating_hoop_stress_pa": inducer_hoop,
+            "blade_root_bending_stress_pa": blade_bending,
+            "shaft_torsional_shear_pa": shaft_torsion,
+            "casing_hoop_stress_pa": casing_hoop,
+            "model": "screening_rotor_shaft_casing_bearing_seal_v1",
+        },
+        loads={
+            "shaft_diameter_m": shaft_d,
+            "casing_inner_radius_m": casing_radius,
+            "casing_wall_thickness_m": casing_t,
+            "casing_pressure_pa": casing_pressure,
+            "axial_thrust_n": axial_thrust,
+            "radial_load_n": radial_load,
+            "bearing_dn_mm_rpm": bearing_dn,
+            "bearing_dn_limit_mm_rpm": spec.bearing_dn_limit,
+            "seal_face_speed_m_s": seal_face_speed,
+            "seal_face_speed_limit_m_s": spec.seal_face_speed_limit,
+            "seal_friction_heat_w": seal_heat,
+        },
+        margins=margins,
+    )
+
+
+def _estimate_component_masses(
+    line: PumpLineSizing,
+    spec: PumpSizingSpec,
+) -> dict[str, float | None]:
+    imp = line.impeller
+    ind = line.inducer
+    if imp is None or ind is None:
+        return {}
+    shaft_d = _shaft_diameter(imp, spec)
+    length = max(1.8 * imp.impeller_diameter, ind.diameter + imp.impeller_diameter)
+    casing_r = 0.68 * imp.impeller_diameter
+    casing_t = _casing_wall_thickness(imp, spec)
+    rho = spec.rotor_material_density
+    impeller = rho * math.pi * (imp.impeller_diameter / 2.0) ** 2 * max(imp.outlet_width, 1e-6) * 0.55
+    inducer = rho * math.pi * (ind.diameter / 2.0) ** 2 * max(0.35 * ind.diameter, 1e-6) * 0.20
+    shaft = rho * math.pi * shaft_d**2 / 4.0 * length
+    casing = rho * 4.0 * math.pi * casing_r**2 * casing_t * 0.55
+    return {
+        "impeller": impeller,
+        "inducer": inducer,
+        "shaft_coupling": shaft,
+        "casing": casing,
+        "bearings": 0.12 * shaft,
+        "seals": 0.08 * shaft,
+        "ports_instrumentation": None,
+    }
+
+
+def _hardware_bom(
+    lines: dict[str, PumpLineSizing],
+    battery: BatterySizing,
+    spec: PumpSizingSpec,
+) -> list[PumpHardwareBOMItem]:
+    items: list[PumpHardwareBOMItem] = []
+    for role, line in lines.items():
+        imp = line.impeller
+        ind = line.inducer
+        dif = line.diffuser_volute
+        drv = line.drive
+        if imp is None or ind is None or dif is None or drv is None:
+            continue
+        masses = _estimate_component_masses(line, spec)
+
+        def add(
+            subsystem: str,
+            component: str,
+            params: dict[str, float | int | str | None],
+            *,
+            mass_key: str | None = None,
+            reference_id: str | None = None,
+            status: str = "screening_sized",
+            source_ids: list[str] | None = None,
+        ) -> None:
+            items.append(PumpHardwareBOMItem(
+                role=role,
+                subsystem=subsystem,
+                component=component,
+                quantity=1,
+                status=status,
+                mass_estimate_kg=(masses.get(mass_key) if mass_key else None),
+                key_parameters=params,
+                editable_reference_id=reference_id,
+                source_ids=source_ids or ["NASA SP-8109"],
+            ))
+
+        add("hydraulic", "axial inducer", {
+            "diameter_m": ind.diameter,
+            "blade_count": ind.blade_count,
+            "solidity": ind.solidity,
+            "suction_specific_speed": ind.suction_specific_speed,
+        }, mass_key="inducer", reference_id=f"{role}.inducer_helix",
+           source_ids=["NASA SP-8052"])
+        add("hydraulic", "centrifugal impeller", {
+            "outer_diameter_m": imp.impeller_diameter,
+            "outlet_width_m": imp.outlet_width,
+            "blade_count": imp.blade_count,
+            "rpm": imp.rpm,
+            "stage_count": imp.stages,
+        }, mass_key="impeller", reference_id=f"{role}.impeller_disk")
+        add("hydraulic", dif.selection, {
+            "throat_area_m2": dif.throat_area,
+            "vane_count": dif.vane_count,
+            "volute_exit_area_m2": dif.volute_exit_area,
+        }, reference_id=f"{role}.diffuser_vane_ring")
+        add("mechanical", "shaft and coupling", {
+            "shaft_diameter_m": _shaft_diameter(imp, spec),
+            "torque_n_m": drv.torque,
+            "rpm": drv.rpm,
+        }, mass_key="shaft_coupling", reference_id=f"{role}.shaft_datum")
+        add("electrical", "motor", {
+            "shaft_power_w": drv.shaft_power,
+            "rpm": drv.rpm,
+            "voltage_v": drv.voltage,
+            "current_a": drv.current,
+            "heat_w": drv.motor_heat,
+        }, reference_id=None, status="technology_assumption",
+           source_ids=["Lee et al. 2021", "Spiller, Stabile, Lentini 2013"])
+        add("electrical", "inverter/controller", {
+            "electric_power_w": drv.electric_power,
+            "voltage_v": drv.voltage,
+            "current_a": drv.current,
+            "heat_w": drv.controller_heat,
+        }, reference_id=None, status="technology_assumption",
+           source_ids=["Lee et al. 2021"])
+        add("mechanical", "bearings", {
+            "bearing_dn_mm_rpm": (
+                line.thermal_stress.loads["bearing_dn_mm_rpm"]
+                if line.thermal_stress else None
+            ),
+            "radial_load_n": (
+                line.thermal_stress.loads["radial_load_n"]
+                if line.thermal_stress else None
+            ),
+            "axial_thrust_n": (
+                line.thermal_stress.loads["axial_thrust_n"]
+                if line.thermal_stress else None
+            ),
+        }, mass_key="bearings", status="placeholder_screen")
+        add("mechanical", "dynamic shaft seals", {
+            "seal_face_speed_m_s": (
+                line.thermal_stress.loads["seal_face_speed_m_s"]
+                if line.thermal_stress else None
+            ),
+            "seal_friction_heat_w": (
+                line.thermal_stress.loads["seal_friction_heat_w"]
+                if line.thermal_stress else None
+            ),
+        }, mass_key="seals", status="placeholder_screen")
+        add("pressure_boundary", "pump casing", {
+            "required_outlet_pressure_pa": line.thermal_stress.loads.get("casing_pressure_pa")
+            if line.thermal_stress else None,
+            "wall_thickness_m": (
+                line.thermal_stress.loads["casing_wall_thickness_m"]
+                if line.thermal_stress else None
+            ),
+        }, mass_key="casing", reference_id=f"{role}.volute_scroll")
+        add("interface", "inlet and outlet ports", {
+            "inlet_diameter_m": imp.inlet_diameter,
+            "outlet_area_m2": dif.volute_exit_area,
+        }, mass_key="ports_instrumentation", reference_id=f"{role}.inlet_port",
+           status="reference_placeholder")
+        add("instrumentation", "pressure/temperature/speed sensors", {
+            "minimum_channels": "inlet pressure, outlet pressure, motor temperature, speed pickup",
+        }, status="placeholder")
+
+    items.append(PumpHardwareBOMItem(
+        role="shared",
+        subsystem="electrical",
+        component="battery pack / DC bus",
+        quantity=1,
+        status="technology_assumption",
+        mass_estimate_kg=battery.mass,
+        key_parameters={
+            "voltage_v": battery.voltage,
+            "electric_power_w": battery.electric_power,
+            "current_a": battery.current,
+            "heat_w": battery.heat,
+            "burn_time_s": battery.burn_time,
+        },
+        editable_reference_id=None,
+        source_ids=["Lee et al. 2021"],
+    ))
+    return items
 
 
 def _requirement_message() -> str:
@@ -1232,6 +2351,85 @@ def _feasibility(
                 "consider vaned diffusion",
             ))
 
+        if sizing.architecture is not None:
+            arch = sizing.architecture
+            arch_status = (
+                "pass" if arch.primary_type in {
+                    "radial_centrifugal",
+                    "radial_centrifugal_low_specific_speed",
+                } else "warn"
+            )
+            gates.append(InjectorGate(
+                f"pump_architecture_{role}", arch_status,
+                f"{role} classified as {arch.primary_type} "
+                f"({arch.stage_mode}, {arch.suction_assist})",
+            ))
+
+        if sizing.system_curve is not None and sizing.system_curve.points:
+            worst_margin = min(p.pressure_margin for p in sizing.system_curve.points)
+            design_fail = any(
+                p.status == "fail" and abs(p.flow_ratio - 1.0) <= 1e-9
+                for p in sizing.system_curve.points
+            )
+            any_fail = any(p.status == "fail" for p in sizing.system_curve.points)
+            any_warn = any(p.status == "warn" for p in sizing.system_curve.points)
+            gates.append(InjectorGate(
+                f"system_curve_throttle_margin_{role}",
+                "fail" if design_fail else (
+                    "warn" if (any_fail or any_warn) else "pass"
+                ),
+                f"{role} fixed-speed pump curve vs throttle system curve: "
+                f"worst margin {worst_margin/1e5:+.2f} bar, supported range "
+                f"{sizing.system_curve.supported_throttle_range}",
+            ))
+
+        if sizing.thermal_stress is not None:
+            ts = sizing.thermal_stress
+            margins = ts.margins
+            thermal = ts.thermal
+            stress = ts.stress
+            loads = ts.loads
+
+            gates.append(InjectorGate(
+                f"motor_heat_screen_{role}",
+                _margin_status(margins.get("motor_heat_fraction_to_50pct"), warn=1.5),
+                f"{role} drive heat fraction "
+                f"{thermal['drive_heat_fraction_of_shaft_power']:.2f} of shaft power",
+            ))
+            gates.append(InjectorGate(
+                f"propellant_heating_{role}",
+                _margin_status(margins.get("propellant_delta_t"), warn=1.5),
+                f"{role} estimated pump heat pickup raises propellant "
+                f"{thermal['estimated_propellant_temperature_rise_k']:.2f} K",
+            ))
+            for key, label, value_key in (
+                ("impeller_rotating_stress", "impeller rotating hoop", "impeller_rotating_hoop_stress_pa"),
+                ("inducer_rotating_stress", "inducer rotating hoop", "inducer_rotating_hoop_stress_pa"),
+                ("blade_root_bending", "blade-root bending", "blade_root_bending_stress_pa"),
+                ("shaft_torsion", "shaft torsional shear", "shaft_torsional_shear_pa"),
+                ("casing_pressure", "casing pressure hoop", "casing_hoop_stress_pa"),
+            ):
+                margin = margins.get(key)
+                gates.append(InjectorGate(
+                    f"{key}_{role}",
+                    _margin_status(margin),
+                    f"{role} {label} screen margin "
+                    f"{'n/a' if margin is None else f'{margin:.2f}'} "
+                    f"(stress {stress[value_key]/1e6:.1f} MPa)",
+                ))
+            for key, label, value_key, unit in (
+                ("bearing_dn", "bearing DN", "bearing_dn_mm_rpm", "mm-rpm"),
+                ("seal_face_speed", "seal face speed", "seal_face_speed_m_s", "m/s"),
+            ):
+                margin = margins.get(key)
+                gates.append(InjectorGate(
+                    f"{key}_{role}",
+                    _margin_status(margin),
+                    f"{role} {label} margin "
+                    f"{'n/a' if margin is None else f'{margin:.2f}'} "
+                    f"({loads[value_key]:.3g} {unit})",
+                ))
+
     if batt.max_current is not None:
         gates.append(InjectorGate(
             "battery_current", "pass" if battery.current <= batt.max_current else "fail",
@@ -1303,6 +2501,9 @@ def size_electric_pumps(
         diffuser = None
         meanline = None
         curve = None
+        architecture = None
+        reference_geometry = None
+        system_curve = None
         if _finite(ln.required_pressure_rise):
             rise = max(0.0, float(ln.required_pressure_rise))
             hydraulic = ln.volumetric_flow * rise
@@ -1323,6 +2524,13 @@ def size_electric_pumps(
             curve = _pump_performance_curve(
                 role, ln.volumetric_flow, head, ln.density, rpm, eta
             )
+            architecture = _architecture_classification(
+                role, ln, impeller, inducer, spec
+            )
+            reference_geometry = _reference_geometry(
+                role, ln, impeller, inducer, diffuser, spec, meanline
+            )
+            system_curve = _system_curve_coupling(role, ln, curve)
         lines[role] = PumpLineSizing(
             role=role,
             pressure_rise=ln.required_pressure_rise,
@@ -1339,6 +2547,9 @@ def size_electric_pumps(
             diffuser_volute=diffuser,
             hydraulic_meanline=meanline,
             performance_curve=curve,
+            architecture=architecture,
+            reference_geometry=reference_geometry,
+            system_curve=system_curve,
         )
 
     if spec.shared_bus:
@@ -1365,7 +2576,12 @@ def size_electric_pumps(
         selected_bus_voltage = 48.0
         selected_bus_source = "auto_default_no_pump_duty"
     battery = _battery_sizing(total_electric, spec, selected_bus_voltage)
+    for role, line in lines.items():
+        line.thermal_stress = _thermal_stress_ledger(
+            role, ledger.lines[role], line, spec
+        )
     feasibility = _feasibility(ledger, lines, battery, spec)
+    hardware_bom = _hardware_bom(lines, battery, spec)
     assumptions = {
         "burn_time_s": spec.burn_time,
         "pump_rpm": spec.drive.rpm if spec.drive.rpm is not None else "auto",
@@ -1390,6 +2606,13 @@ def size_electric_pumps(
         "head_coefficient": spec.head_coefficient,
         "flow_coefficient": spec.flow_coefficient,
         "material_tip_speed_limit_m_s": spec.material_tip_speed_limit,
+        "rotor_material_density_kg_m3": spec.rotor_material_density,
+        "rotor_yield_strength_pa": spec.rotor_yield_strength,
+        "casing_yield_strength_pa": spec.casing_yield_strength,
+        "structural_fos": spec.structural_fos,
+        "bearing_dn_limit_mm_rpm": spec.bearing_dn_limit,
+        "seal_face_speed_limit_m_s": spec.seal_face_speed_limit,
+        "max_propellant_temperature_rise_k": spec.max_propellant_temperature_rise,
         "pump_efficiency_by_role": spec.pump_efficiency,
         "pump_efficiency_model": "centrifugal meanline loss model unless pump_efficiency is supplied",
         "target_specific_speed": spec.target_specific_speed,
@@ -1409,6 +2632,8 @@ def size_electric_pumps(
             "motor and inverter efficiencies convert shaft power to electrical power, current, and heat",
             "battery energy density, power density, voltage, discharge efficiency, and burn time set pack mass/current/heat",
             "fluid density, vapor pressure/inlet pressure, rpm, and inlet geometry set cavitation/NPSH risk",
+            "pump curve and feed-system curve are compared over throttle flow ratios",
+            "loss heat, rotor speed, pressure loads, shaft torque, bearing DN, and seal speed create first-pass thermal/stress gates",
         ],
         "literature_sources": LITERATURE_SOURCES,
     }
@@ -1429,5 +2654,6 @@ def size_electric_pumps(
         battery=battery,
         feasibility=feasibility,
         assumptions=assumptions,
+        hardware_bom=hardware_bom,
         notes=notes,
     )

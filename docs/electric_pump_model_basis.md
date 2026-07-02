@@ -90,6 +90,58 @@ The defaults are screening values, not constants. Replace them with pump
 curves, motor maps, inverter limits, and battery pulse/thermal data as soon as
 hardware exists.
 
+## Current Status And Next Work
+
+Implemented now:
+
+- feed-ledger coupling from injector demand to per-stream pump pressure rise,
+  head, volumetric flow, hydraulic power, and NPSH bookkeeping;
+- electric drive, inverter, shared DC bus, battery energy/power/current/heat,
+  and preliminary feasibility gates;
+- centrifugal impeller geometry from head/flow coefficients, selected or
+  auto-solved RPM, specific speed, outlet width, and tip-speed screens;
+- inducer diameter, hub ratio, solidity, suction-specific-speed, and NPSH
+  screens;
+- diffuser/volute selection, velocity triangle, meanline loss buckets, and a
+  screening pump curve in `pump.json`;
+- explicit pump architecture classification per stream.  The classifier keeps
+  the current radial-centrifugal meanline when the duty fits, but flags
+  mixed-flow, axial, staged centrifugal, positive-displacement, inducer-assisted,
+  and off-the-shelf electric-feed candidates from specific speed, head per
+  stage, flow scale, and NPSH state;
+- normalized hardware BOM export.  `pump.json` carries `hardware_bom`, and the
+  CLI also writes `pump_bom.json`, with rows for inducer, impeller,
+  diffuser/volute, shaft/coupling, motor, inverter/controller, battery, casing,
+  bearings, seals, inlet/outlet ports, and instrumentation placeholders;
+- editable reference geometry export.  Each pump line carries
+  `reference_geometry` with meridional stations, impeller disk, blade envelope,
+  inducer helix, diffuser vane ring, volute scroll, shaft datum, and ports; the
+  CLI writes this as `pump_reference_geometry.json`;
+- pump CAD/reference package export.  `--pump-cad auto`/`parts` writes a
+  `pump/` folder with `pump_parameters.json`, `pump_dimensions.csv`,
+  per-component impeller, inducer, diffuser/volute, motor, inverter, and battery
+  package reference solids, and a `pump_reference_assembly` in STL, faceted
+  STEP, or both;
+- fixed-speed pump-curve versus feed-system curve coupling over throttle/flow
+  ratios.  The screen compares the generated pump curve against a quadratic
+  injector/line/regen loss curve and a linearly scaled chamber-pressure demand,
+  reporting supported throttle range and margin;
+- basic thermal and stress ledgers: motor/controller heat, pump loss heat,
+  estimated propellant temperature rise, impeller and inducer rotating hoop
+  stress, blade-root bending, shaft torsion, casing hoop stress, bearing DN,
+  seal face speed, seal heat, and margin gates.
+
+Still explicitly preliminary:
+
+- named pump/motor/battery technology records and measured pump maps are not
+  yet attached.  The current defaults are versioned assumptions in
+  `PumpSizingSpec`, exported in `pump.json`, and should be replaced by vendor
+  curves, motor maps, battery pulse/thermal data, bearing catalogs, seal
+  compatibility data, and material allowables before hardware decisions.
+- propellant heating is reported as a temperature-rise screen only; it does not
+  yet re-solve fluid properties or vapor pressure and feed the changed state
+  back into the inducer/NPSH calculation.
+
 ## Literature Anchors
 
 - NASA SP-8109, *Liquid Rocket Engine Centrifugal Flow Turbopumps*
@@ -133,4 +185,50 @@ engine duty
   -> shared DC bus voltage/current from total power and current limits
   -> battery mass/current/heat through burn time, voltage, energy density,
      power density, and discharge efficiency
+  -> architecture classification, normalized hardware BOM, editable reference
+     geometry, pump/system throttle margin, thermal ledger, and stress screens
 ```
+
+## Blade and Channel Geometry Fidelity (2026-07-02, pump CAD plan Phase 2)
+
+The reference geometry consumed by the CAD chain is now solved, not assumed
+(running record: `docs/PUMP_CAD_IMPLEMENTATION_PLAN.md` STATUS head):
+
+- **Impeller blade count** comes from the digitized NASA SP-8109 fig. 16
+  minimum-blade-number chart (`pumps.sp8109_min_blade_count`; psi vs phi2,
+  zero prewhirl, shrouded, delta = 0.65, read-off ~ +/-0.02 in psi), snapped
+  to a multiple of the inducer blade count per SP-8052 sec. 3.1.14.  An
+  explicit `PumpSizingSpec.blade_count` overrides; the basis string is
+  exported with the geometry.
+- **Impeller blade camber** is the log-spiral family
+  d(theta)/dr = 1/(r tan beta(r)) with beta linear from the solved
+  velocity-triangle beta1 to beta2 (`pumps.impeller_blade_camber`); CAD
+  sweeps it, physics owns it.
+- **Inducer blade angles** follow NASA SP-8052: the inlet tip blade angle
+  carries the tip flow angle atan(phi_tip) plus the incidence from the
+  alpha/beta design ratio (sec. 3.1.9; 0.35 thin .. 0.50 thick, 0.425
+  preferred, the cavitation design variable); the blades are a constant-lead
+  helix r tan(beta) = const (sec. 3.1.10) whose lead sets the exported pitch;
+  wrap comes from cascade solidity 2.5 (sec. 3.1.15) with the developed-chord
+  cos(beta) factor; leading edges take the low end of the J-2/F-1 0.005-0.010
+  in. edge practice (sec. 2.1.6).  Cross-checked against the Hong et al. 2012
+  rocket turbopump inducer (10.4 deg tip blade angle, 3 blades, solidity 2.6).
+- **Meridional channel**: quarter-ellipse hub/shroud curves honoring D1, D2,
+  b2 and the inducer hub, with exact eye-annulus and exit areas; the
+  discharge/inlet meridional-velocity ratio is screened against SP-8109
+  sec. 2.3.1.2 (cm2 = 1 to 1.5 x inlet).
+- **Thrust balance hooks**: hub-side wear ring at the eye diameter
+  (SP-8109 sec. 3.5.2.1 recommends wear rings over balance ribs), shaft seal
+  land with the solved face speed vs the screening limit, and balance holes
+  sized by the sec. 3.5.2.1 rule (flow area ~ 4 x seal-clearance area) once a
+  wear-ring radial clearance is supplied
+  (`PumpSizingSpec.wear_ring_radial_clearance`).
+- **Benchmarks pinned as tests** (`tests/test_pumps.py`): Lee et al. 2021
+  500 N / 20 bar / 600 s case closes the drive/battery mass chain (motor
+  451.2 g, battery 985.6 g, power-limited); solved specific speeds sit inside
+  the SP-8109 flight-proven 450-2100 (US units) envelope.
+
+CAD remains labeled reference geometry: blade-to-blade CFD, rotordynamics
+beyond the DN screen, bearing/seal selection, motor electromagnetic design,
+and measured pump maps stay out of scope
+(`qualification_status: reference_geometry_not_hardware_qualified`).

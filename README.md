@@ -879,30 +879,63 @@ compatibility wrapper around the packaged runner.
 
 ## Command-line usage
 
-CLI pressure units are **bar** for $P_c$, **kPa** for $P_a$, and
-**millimeters** for $R_t$ and manufacturing dimensions. Internal APIs use SI
-units throughout.
+The current `lrekit` / `raosim` runner uses **SI units** at the CLI:
+pressure in Pa, length in m, thrust in N, mass flow in kg/s. Run
+`lrekit --tags` for the grouped splash list and `lrekit --help` for the full
+argparse reference.
 
-### Preliminary Rao/TOP design
+### Complete starter package
+
+```bash
+lrekit --complete-package --max-nfev 0 --out builds/complete_seed
+```
+
+Bare `lrekit` runs enter the same complete-package interactive interview by
+default. The starter package applies LOX/RP-1 screening defaults, sizes the
+nozzle/chamber, generates a pintle injector package, and sizes the selected
+electric fuel/oxidizer pump hardware. It writes `contour.csv`, `profile.png`,
+`wall.stl`, `pintle.json`, `pump.json`, `pump_bom.json`,
+`pump_reference_geometry.json`, `summary.json`, and the `pintle/` and `pump/`
+deliverable folders. The pump folder includes reference pump parameters,
+dimension tables, assembly CAD, and per-part impeller, inducer,
+diffuser/volute, motor, inverter, and battery package geometry.
+
+Use `--injector none --no-electric-pump` for a nozzle/chamber-only run.
+
+### Reusable full-engine sample
+
+For repeated update checks, the repository includes a complete 13 kN
+LOX/RP-1 sample that exercises throat sizing, chamber geometry, regenerative
+wall sizing, thermal screens, a copper liner, a 316L stainless jacket, pintle
+injector sizing, electric pump sizing, and core CAD export:
+
+```bash
+lrekit @examples/cli/lox_rp1_13kn_copper_316l_full_engine.args \
+  --out builds/samples/latest_13kn_check
+```
+
+Argument files use one normal CLI token line at a time, with `#` comments.
+Any later command-line flag overrides the value from the file.
+
+### Rao variational / MOC runner
 
 ```bash
 lrekit \
   --propellant LOX/RP-1 \
-  --Pc 45 --Pa 101.325 \
-  --Rt 20 --epsilon 10 --length-pct 80 \
-  --method bezier --no-plot \
-  --output nozzle_profile.csv
+  --pc 7.0e6 --rt 0.020 --epsilon 10 --length-pct 80 \
+  --max-nfev 4000 --out builds/nozzle_moc
 ```
 
-Output is written to a versioned directory `builds/vNNN_YYYYMMDD_HHMMSS/`
-together with `metadata.txt`.
+The default backend is the JAX Rao variational / MOC BVP path. Use
+`--max-nfev 0` for a fast seed-geometry smoke run.
 
 ### Size the throat from thrust
 
 ```bash
 lrekit \
   --propellant LOX/LCH4 \
-  --Pc 60 --target-thrust 10000 --epsilon 12 --no-plot
+  --pc 6.0e6 --target-thrust 10000 --epsilon 12 \
+  --complete-package --out builds/ten_kn_complete
 ```
 
 The sizing relation is
@@ -911,41 +944,59 @@ $$
 R_t=\sqrt{\frac{F_{\mathrm{target}}}{\pi\,C_{F,\mathrm{actual}}\,p_c}} .
 $$
 
-### Experimental Rao variational / MOC solve
+### Pintle injector and electric pump
 
 ```bash
 lrekit \
   --propellant LOX/RP-1 \
-  --Pc 45 --Rt 20 --epsilon 10 \
-  --method rao_variational_moc \
-  --rao-moc-n-control 12 --rao-moc-n-kernel 12 \
-  --rao-moc-max-nfev 200 --no-plot
+  --pc 7.0e6 --rt 0.020 --epsilon 10 \
+  --injector pintle --electric-pump \
+  --fuel-tank-pressure 5.0e5 --oxidizer-tank-pressure 6.0e5 \
+  --injector-cad auto --pump-cad parts --pump-cad-format stl \
+  --out builds/pintle_pump
 ```
 
-This path can be computationally expensive and remains experimental
-(`--rao-moc-max-nfev` defaults to 25). `--rao-moc-skip-moc` skips raw
-wall/net diagnostics for a faster residual-only study, but that also prevents
-MOC reliability promotion.
+The injector questions and flags feed `InjectorSpec`, `FeedSystemSpec`, and
+`PumpSizingSpec` directly. `pump.json` includes the feed-pressure ledger,
+selected RPM/bus voltage, battery and motor sizing, architecture classification,
+normalized BOM rows, editable reference geometry, impeller, inducer,
+diffuser/volute, velocity-triangle/meanline, pump curve, system-curve throttle
+margin, thermal/stress screens, gates, and literature assumptions. `--pump-cad`
+exports a meanline reference CAD package; use
+`--pump-cad-format step` or `both` when a faceted STEP exchange file is more
+useful than STL for CAD review.
 
-### Sweep a design variable
+### Regenerative cooling, thermal, and stress screens
 
 ```bash
 lrekit \
+  --propellant LOX/RP-1 \
+  --pc 7.0e6 --rt 0.020 --epsilon 10 \
+  --regen --material grcop-84 --jacket-material inconel718 \
+  --size-wall --thermal --cad step --out builds/regen_thermostructural
+```
+
+This path uses Bartz heat flux, Sieder-Tate channel cooling, coolant-property
+screens, station-wise SP-125 liner stress, fatigue screening where sourced
+material coefficients exist, and optional STEP/regen CAD exports.
+
+### Legacy sweeps and benchmark commands
+
+```bash
+RaoRocketSimLegacy \
   --propellant LOX/LCH4 \
   --Pc 60 --Rt 25 --epsilon 10 \
   --sweep epsilon 4 50 20 --no-plot
-```
 
-Supported sweep variables are `epsilon`, `Pc`, and `Rt`.
-
-### Run a literature benchmark
-
-```bash
-lrekit \
+RaoRocketSimLegacy \
   --benchmark-case lea_top_schomberg_2014 \
   --benchmark-method bezier \
   --benchmark-report builds/benchmarks --no-plot
 ```
+
+The legacy alias keeps the older bar/kPa/mm CLI, sweep workflow, and benchmark
+entrypoints available while the maintained runner focuses on complete
+component package generation.
 
 Available manifests are `lea_top_schomberg_2014`, `rao_scarfed_moc_1990`, and
 `vulcain_s1_separation_similarity`. Each metric is classified `strict`,

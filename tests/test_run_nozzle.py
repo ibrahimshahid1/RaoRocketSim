@@ -218,6 +218,77 @@ def test_tags_flag_lists_run_tags_and_exits():
 
 
 @pytest.mark.smoke
+def test_complete_package_defaults_export_nozzle_pintle_and_pump(tmp_path):
+    out = tmp_path / "complete"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py",
+         "--no-banner",
+         "--complete-package",
+         "--max-nfev", "0",
+         "--n-control", "8",
+         "--n-kernel", "12",
+         "--injector-cad", "none",
+         "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "MPLBACKEND": "Agg",
+             "MPLCONFIGDIR": str(tmp_path / "mpl"),
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=360,
+    )
+    assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
+
+    summary = json.loads((out / "summary.json").read_text())
+    assert summary["run_defaults"]["complete_package"] is True
+    assert summary["injector"]["feasible"] is True
+    assert summary["electric_pump"]["feasible"] is True
+    for name in ("contour.csv", "profile.png", "wall.stl",
+                 "pintle.json", "pump.json", "pump_bom.json",
+                 "pump_reference_geometry.json", "summary.json"):
+        assert (out / name).exists(), f"missing {name}\n{proc.stdout}"
+    for name in ("pump_parameters.json", "pump_dimensions.csv",
+                 "pump_reference_assembly.stl"):
+        assert (out / "pump" / name).exists(), f"missing pump/{name}"
+    assert (out / "pump" / "pump_parts" / "fuel_impeller.stl").exists()
+
+
+@pytest.mark.smoke
+def test_lrekit_args_file_full_engine_sample(tmp_path):
+    out = tmp_path / "lox_rp1_13kn"
+    sample = REPO / "examples/cli/lox_rp1_13kn_copper_316l_full_engine.args"
+    proc = subprocess.run(
+        [sys.executable, "scripts/run_nozzle.py", f"@{sample}",
+         "--out", str(out)],
+        cwd=REPO, capture_output=True, text=True,
+        env={"PYTHONPATH": str(REPO), "MPLBACKEND": "Agg",
+             "MPLCONFIGDIR": str(tmp_path / "mpl"),
+             "XDG_CACHE_HOME": str(tmp_path / "cache"),
+             "PATH": __import__("os").environ.get("PATH", "")},
+        timeout=480,
+    )
+    assert proc.returncode == 0, (proc.stdout + proc.stderr)[-4000:]
+
+    summary = json.loads((out / "summary.json").read_text())
+    perf = summary["performance"]
+    assert perf["propellant"] == "LOX/RP-1"
+    assert perf["rt_from_target_thrust"] is True
+    assert perf["target_thrust_N"] == pytest.approx(13_000.0)
+    assert perf["thrust_N"] == pytest.approx(13_000.0)
+    assert summary["material"]["name"] == "OFHC Copper"
+    assert summary["wall_profile"]["jacket_material"] == "Stainless 316L"
+    assert summary["injector"]["feasible"] is True
+    assert summary["electric_pump"]["feasible"] is True
+    assert summary["wall_geometry"]["selected_sizing_mode"] == (
+        "regen_thermostructural"
+    )
+    for name in (
+        "contour.csv", "profile.png", "wall.stl", "jacket.stl",
+        "wall.step", "jacket.step", "regen.stl", "regen_3d.png",
+        "pintle.json", "pump.json", "summary.json",
+    ):
+        assert (out / name).exists(), f"missing {name}\n{proc.stdout}"
+
+
+@pytest.mark.smoke
 def test_electric_pump_cli_exports_shared_bus_and_visualization(tmp_path):
     out = tmp_path / "pump"
     proc = subprocess.run(
@@ -258,6 +329,8 @@ def test_electric_pump_cli_exports_shared_bus_and_visualization(tmp_path):
     assert len(voltages) == 1
     assert pump["battery"]["voltage_v"] == pytest.approx(next(iter(voltages)))
     assert (out / "pump_particles.gif").exists()
+    assert (out / "pump_bom.json").exists()
+    assert (out / "pump_reference_geometry.json").exists()
 
 
 def test_package_module_entrypoint_uses_current_runner():

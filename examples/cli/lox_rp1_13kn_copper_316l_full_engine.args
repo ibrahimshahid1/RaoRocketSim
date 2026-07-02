@@ -1,0 +1,68 @@
+# Full-engine CLI regression sample.
+#
+# Run from the repository root with:
+#   lrekit @examples/cli/lox_rp1_13kn_copper_316l_full_engine.args
+#
+# Override the output directory by appending another --out after the @file.
+
+--no-banner
+
+# Operating point: 13 kN LOX/RP-1 at sea-level ambient pressure.
+--propellant LOX/RP-1
+--oxidizer LOX
+--fuel RP-1
+--pc 7.0e6
+--target-thrust 13000
+--epsilon 10
+--length-pct 80
+--pa-over-p0 0.014475
+
+# Chamber and throat package.
+--l-star 1.0
+--contraction-ratio 3.0
+--minimum-cylindrical-length 0.03
+--cd-target 0.99
+
+# Fast seed contour for update checks.
+--max-nfev 0
+--n-control 8
+--n-kernel 12
+
+# Regenerative wall: copper liner with 316L stainless closeout jacket.
+--regen
+--wall-sizing regen
+--material copper
+--jacket-material 316l
+--channel-height 0.0025
+--channel-height-steps 2
+--helix-turns 1.0
+--coolant rp1
+--coolant-inlet-temperature 293
+--cooling-fraction 1.0
+--margin-target 1.05
+--structural-fos 1.0
+--required-cycles 25
+--life-fos 1.0
+--dp-budget 500
+--t-hot-min 0.0006
+--t-hot-max 0.003
+--thermal
+
+# Pintle injector and electric pump feed package.
+--injector pintle
+--injector-cad none
+--electric-pump
+--fuel-tank-pressure 500000
+--oxidizer-tank-pressure 600000
+--fuel-injector-dp-fraction 0.20
+--oxidizer-injector-dp-fraction 0.20
+--fuel-line-loss-fraction 0.02
+--oxidizer-line-loss-fraction 0.02
+--fuel-manifold-loss-fraction 0.02
+--oxidizer-manifold-loss-fraction 0.02
+--pump-max-rpm 120000
+--burn-time 12
+
+# Export the core wall and jacket STEP, but avoid CadQuery-only regen B-rep.
+--cad step
+--out builds/samples/lox_rp1_13kn_copper_316l_full_engine
