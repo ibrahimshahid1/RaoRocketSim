@@ -12,11 +12,15 @@ from raosim.rao_variational import (
     RaoResidualReport,
     RaoSolverConfig,
     _ce_interp_node,
+    _bde_wall_tangency_errors,
+    _link_crossing_report,
     _control_surface_flow_nodes,
+    characteristic_crossing_samples,
     characteristic_net_compatibility_residuals,
     characteristic_net_links,
     characteristic_net_segments,
     check_characteristic_crossing,
+    bde_mesh_links,
     curve_mass_flux,
     kernel_bd_segment,
     moc_net_compatibility_report,
@@ -27,7 +31,13 @@ from raosim.rao_variational import (
     solve_rao_bvp,
     summarize_characteristic_net_compatibility,
 )
-from raosim.moc import _make_point, approximate_starting_line, march_coupled_net, FlowNode
+from raosim.moc import (
+    CharRow,
+    FlowNode,
+    _make_point,
+    approximate_starting_line,
+    march_coupled_net,
+)
 from raosim.rao_residuals import residual_Cminus_axisym, residual_Cplus_axisym
 from raosim.wall_model import SplineWall
 from raosim.chamber_geometry import chamber_contour, full_engine_contour
@@ -174,6 +184,81 @@ def test_characteristic_crossing_checker_detects_empty_net_as_clean():
     assert check_characteristic_crossing([]) == 0
 
 
+def test_characteristic_crossing_samples_identify_crossed_links():
+    gamma = 1.4
+    row0 = CharRow(
+        axis=None,
+        interior=[
+            _make_point(0.0, 0.010, 0.0, 2.0, gamma),
+            _make_point(0.0, 0.020, 0.0, 2.0, gamma),
+        ],
+        wall=_make_point(0.0, 0.030, 0.0, 2.0, gamma),
+    )
+    row1 = CharRow(
+        axis=None,
+        interior=[
+            _make_point(1.0, 0.030, 0.0, 2.0, gamma),
+            _make_point(1.0, 0.010, 0.0, 2.0, gamma),
+        ],
+        wall=None,
+    )
+
+    samples = characteristic_crossing_samples([row0, row1], limit=2)
+
+    assert check_characteristic_crossing([row0, row1]) >= 1
+    assert len(samples) >= 1
+    assert samples[0]["intersection"] is not None
+    assert samples[0]["segment_1"]["family"] in {"cplus", "cminus"}
+    assert samples[0]["segment_2"]["family"] in {"cplus", "cminus"}
+
+
+def test_bde_mesh_crossing_audit_detects_folded_rows():
+    gamma = 1.4
+    grid_rows = (
+        (
+            FlowNode(0.0, 0.0, 2.0, 0.0),
+            FlowNode(1.0, 0.0, 2.0, 0.0),
+        ),
+        (
+            FlowNode(0.0, 1.0, 2.0, 0.0),
+            FlowNode(1.0, 1.0, 2.0, 0.0),
+        ),
+        (
+            FlowNode(0.5, -0.5, 2.0, 0.0),
+            FlowNode(0.5, 1.5, 2.0, 0.0),
+        ),
+    )
+
+    crossings, samples = _link_crossing_report(
+        bde_mesh_links(grid_rows, gamma),
+        sample_limit=2,
+        cross_family_only=True,
+    )
+
+    assert crossings >= 1
+    assert samples
+    assert samples[0]["intersection"] is not None
+
+
+def test_bde_wall_tangency_audit_uses_wall_node_theta():
+    theta = math.radians(10.0)
+    wall = (
+        FlowNode(0.0, 0.0, 2.0, theta),
+        FlowNode(1.0, math.tan(theta), 2.0, theta),
+    )
+    bad_wall = (
+        FlowNode(0.0, 0.0, 2.0, theta + math.radians(1.0)),
+        FlowNode(1.0, math.tan(theta), 2.0, theta + math.radians(1.0)),
+    )
+
+    assert _bde_wall_tangency_errors(wall)[0] == pytest.approx(
+        0.0, abs=1e-12
+    )
+    assert abs(_bde_wall_tangency_errors(bad_wall)[0]) == pytest.approx(
+        math.radians(1.0), rel=1e-12
+    )
+
+
 def test_endpoint_mismatch_raises():
     raw_wall = np.array([
         [0.0, 1.2],
@@ -282,6 +367,71 @@ def test_curve_mass_flux_is_positive_for_oblique_surface():
     ]
 
     assert curve_mass_flux(nodes, gamma=1.4) > 0.0
+
+
+def test_partial_de_thrust_audit_is_not_full_nozzle_gate():
+    solution = solve_rao_bvp(RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=0,
+        evaluate_moc=False,
+    ))
+
+    thrust_sanity = solution.construction_diagnostics["thrust_sanity"]
+
+    assert thrust_sanity["surface_scope"] == "partial_control_surface_de"
+    assert thrust_sanity["applicable"] is False
+    assert thrust_sanity["gate_basis"] == "mass_fraction_scaled_de_cf"
+    assert thrust_sanity["passes"] is True
+    assert 0.0 < thrust_sanity["kernel_bd_mass_fraction"] < 1.0
+    assert thrust_sanity["mass_fraction_scaled_cf_passes"] is True
+    assert "mass_fraction_scaled_cf_rel_error" in thrust_sanity
+
+
+def test_bde_topology_audit_is_the_moc_gate_basis():
+    solution = solve_rao_bvp(RaoSolverConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.4,
+        pa_over_p0=0.01,
+        length_pct=80.0,
+        n_control=8,
+        n_kernel=8,
+        max_nfev=0,
+        evaluate_moc=True,
+        wall_method="bde",
+    ))
+
+    report = solution.construction_diagnostics["net_report"]
+
+    assert report["audit_basis"] == "bde_topology_measured_mesh"
+    assert report["crossings"] == 0
+    assert report["crossing_samples"] == []
+    assert report["measured_crossing_passes"] is True
+    assert report["measured_wall_tangency_passes"] is True
+    assert 0.0 < report["wall_tangency_rms"] < math.radians(0.25)
+    assert 0.0 < report["wall_tangency_max"] < math.radians(0.25)
+    assert report["wall_monotone_x"] is True
+    # Axis truncation is a normal near-axis event: the mesh still ran to
+    # completion, and with the truncation confined to the axis band and no
+    # adjacent-cell folds, the topology audit passes on a clean mesh.  (Overall
+    # promotion still needs the separate residual gate, which a max_nfev=0
+    # seed solve does not clear.)
+    assert report["bde_negative_r_truncated_rows"] == 1
+    assert report["bde_complete_remaining_mesh"] is True
+    assert report["bde_truncation_confined_to_axis"] is True
+    assert report["bde_truncation_axis_band_fraction"] < 0.10
+    assert report["passes"] is True
+    assert solution.residuals.characteristic_crossings == 0
+    assert solution.residuals.wall_tangency_rms == pytest.approx(
+        report["wall_tangency_rms"]
+    )
+    assert solution.construction_diagnostics["moc_compatibility_preserved"] is True
 
 
 def test_phase4_mass_closure_uses_kernel_bd_segment():

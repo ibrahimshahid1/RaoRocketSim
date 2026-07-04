@@ -59,6 +59,209 @@ def _count(value, default=0):
         return int(default)
 
 
+def _reference_tip_length(Rp):
+    return max(0.35 * Rp, 0.5e-3)
+
+
+def resolve_reference_pintle_layout(inj, spec=None) -> dict:
+    """Single source of truth for the reference pintle stations and radii.
+
+    The schematic (:func:`raosim.injector_plots.plot_pintle_schematic`), the
+    2-D DXF profile, and the 3-D reference assembly all consume this dict so
+    the drawing, the profile, and the solid cannot disagree.  Formulas match
+    the historical reference geometry; the tip is a conical deflector at the
+    geometry spec's ``deflector_angle`` (blunt cap when the angle is zero).
+    All values metres/degrees; z is axial from the injector face (chamber
+    side positive), r radial.
+    """
+    geo = _geometry_spec(spec)
+    Dp = float(inj.pintle_diameter)
+    Rp = 0.5 * Dp
+    gap = _positive(inj.annulus.detail.get("gap"), 0.1 * Rp)
+    Ro = 0.5 * _positive(
+        inj.annulus.detail.get("outer_diameter"), Dp + 2.0 * gap
+    )
+    slot_w = max(_positive(inj.slots.detail.get("slot_width"), 0.4 * gap), 5e-5)
+    slot_h = max(_positive(inj.slots.detail.get("slot_height"), slot_w), 5e-5)
+    n_slot = max(int(inj.slot_count), 1)
+    t_wall = max(0.25 * Rp, 1.0e-3)
+    t_sleeve = max(0.4 * gap, 0.5e-3)
+    t_face = max(0.4 * Dp, 2.0 * gap)
+    body_len = _positive(
+        getattr(geo, "body_length", None) if geo is not None else None,
+        3.0 * Dp,
+    )
+    tip_len = _reference_tip_length(Rp)
+    body_straight = body_len - tip_len
+    z_slot = max(body_straight - 0.6 * slot_h, 0.1 * body_straight)
+    z_sleeve_exit = min(
+        max(0.48 * body_len, z_slot - max(2.2 * slot_h, 0.18 * Dp)),
+        z_slot - 0.5 * slot_h,
+    )
+    deflector_angle = _positive(
+        getattr(geo, "deflector_angle", None) if geo is not None else None,
+        15.0,
+    )
+    # Conical deflector tip: the flank drops from the full radius to a
+    # machinable nose flat at EXACTLY the deflector angle (measured from
+    # the radial plane), so the drawn/built cone matches the theta_pt
+    # callout.
+    tip_flat_radius = max(0.35 * Rp, 1.0e-3)
+    tip_len = max(
+        (Rp - tip_flat_radius) * math.tan(
+            math.radians(max(min(deflector_angle, 80.0), 1.0))
+        ),
+        0.5e-3,
+    )
+    body_straight = body_len - tip_len
+    Rc = float(inj.chamber_radius)
+    R_face = max(Rc, Ro + t_sleeve + 2.0e-3)
+    # The center bore runs to the post/tip joint; the separate conical tip
+    # closes the nose (screwed-on tip practice, cf. the machined package).
+    bore_end = body_straight
+    # Converging sleeve exit (outer wall chamfers down to the annulus exit).
+    sleeve_exit_chamfer = min(
+        1.5 * t_sleeve, 0.5 * max((z_slot - 0.5 * slot_h) - z_sleeve_exit,
+                                  1e-6)
+    )
+    dims = None
+    try:
+        half = float(inj.spray_half_angle_deg)
+    except Exception:
+        half = None
+    return {
+        "pintle_radius_m": Rp,
+        "bore_radius_m": max(Rp - t_wall, 0.12 * Rp),
+        "pintle_wall_m": t_wall,
+        "annulus_gap_m": gap,
+        "annulus_outer_radius_m": Ro,
+        "sleeve_outer_radius_m": Ro + t_sleeve,
+        "sleeve_wall_m": t_sleeve,
+        "face_thickness_m": t_face,
+        "face_outer_radius_m": R_face,
+        "chamber_radius_m": Rc,
+        "body_length_m": body_len,
+        "body_straight_m": body_straight,
+        "tip_length_m": tip_len,
+        "tip_flat_radius_m": tip_flat_radius,
+        "deflector_angle_deg": deflector_angle,
+        "slot_width_m": slot_w,
+        "slot_height_m": slot_h,
+        "slot_count": n_slot,
+        "z_slot_center_m": z_slot,
+        "z_slot_top_m": z_slot - 0.5 * slot_h,
+        "z_sleeve_exit_m": z_sleeve_exit,
+        "skip_length_m": (z_slot - 0.5 * slot_h) - z_sleeve_exit,
+        "sleeve_exit_chamfer_m": sleeve_exit_chamfer,
+        "bore_end_m": bore_end,
+        "spray_half_angle_deg": half,
+        "coordinate_system": (
+            "z axial from the injector face (chamber side positive), "
+            "r radial; revolve about z"
+        ),
+        "_dims": dims,
+    }
+
+
+def _reference_slot_cutter(cq, Rp, t_wall, slot_w, slot_h, z_slot, angle_deg):
+    cut_depth = max(t_wall + 0.25 * slot_w, t_wall + 1.0e-4)
+    cutter = (
+        cq.Workplane("XY").workplane(offset=z_slot)
+        .center(Rp - 0.5 * cut_depth, 0.0)
+        .box(cut_depth, slot_w, slot_h, centered=(True, True, True))
+    )
+    return cutter.rotate((0, 0, 0), (0, 0, 1), angle_deg)
+
+
+def _cut_reference_slots(cq, solid, Rp, t_wall, slot_w, slot_h, n_slot, z_slot):
+    for i in range(max(int(n_slot), 1)):
+        solid = solid.cut(
+            _reference_slot_cutter(
+                cq, Rp, t_wall, slot_w, slot_h, z_slot,
+                360.0 * i / max(int(n_slot), 1),
+            )
+        )
+    return solid
+
+
+def _blunt_tip(cq, Rp, z0, length):
+    tip = cq.Workplane("XY").workplane(offset=z0).circle(Rp).extrude(length)
+    try:
+        tip = tip.edges(">Z").fillet(min(0.18 * Rp, 0.45 * length))
+    except Exception:
+        pass
+    return tip
+
+
+def _revolve_rz(cq, points_rz):
+    """Revolve a closed (radius, z) polyline about the +Z injector axis."""
+    return (
+        cq.Workplane("XZ")
+        .polyline(points_rz)
+        .close()
+        .revolve(360.0, (0.0, 0.0, 0.0), (0.0, 1.0, 0.0))
+    )
+
+
+def _pintle_post_solid(cq, lay, n_slot):
+    """One-piece pintle post from the shared reference layout: rod through
+    the faceplate, center bore to the tip joint, radial slots through the
+    wall at the metering station."""
+    Rp = lay["pintle_radius_m"]
+    Ri = lay["bore_radius_m"]
+    t_face = lay["face_thickness_m"]
+    bs = lay["body_straight_m"]
+    z_back = -t_face
+    post = _revolve_rz(cq, [
+        (0.0, z_back), (Rp, z_back), (Rp, bs), (0.0, bs),
+    ])
+    bore = (
+        cq.Workplane("XY").workplane(offset=z_back - 1.0e-3)
+        .circle(Ri).extrude(bs - z_back + 2.0e-3)
+    )
+    post = post.cut(bore)
+    return _cut_reference_slots(
+        cq, post, Rp, lay["pintle_wall_m"], lay["slot_width_m"],
+        lay["slot_height_m"], n_slot, lay["z_slot_center_m"])
+
+
+def _pintle_tip_solid(cq, lay):
+    """Conical deflector tip (separate screwed-on piece closing the bore),
+    flank at the geometry spec's deflector angle down to a machinable flat."""
+    Rp = lay["pintle_radius_m"]
+    bs = lay["body_straight_m"]
+    Lb = lay["body_length_m"]
+    flat = lay["tip_flat_radius_m"]
+    return _revolve_rz(cq, [
+        (0.0, bs), (Rp, bs), (flat, Lb), (0.0, Lb),
+    ])
+
+
+def _sleeve_solid(cq, lay):
+    """Annular sleeve with the converging exit from the shared layout."""
+    Ro = lay["annulus_outer_radius_m"]
+    Rs = lay["sleeve_outer_radius_m"]
+    t_face = lay["face_thickness_m"]
+    z_se = lay["z_sleeve_exit_m"]
+    ch = lay["sleeve_exit_chamfer_m"]
+    return _revolve_rz(cq, [
+        (Ro, -t_face), (Rs, -t_face), (Rs, z_se - ch), (Ro, z_se),
+    ])
+
+
+def _stl_tolerances(lay) -> dict:
+    """Mesh tolerances scaled to the part so STL previews are smooth.
+
+    injector_cad builds in SI metres, and CadQuery's default STL linear
+    tolerance is 0.1 MODEL UNITS = 0.1 m here - coarser than the whole
+    injector, which is why untuned previews came out blocky."""
+    d = 2.0 * lay["pintle_radius_m"]
+    return {
+        "tolerance": max(2.0e-5, 0.002 * d),
+        "angularTolerance": 0.08,
+    }
+
+
 def _clean_json(value):
     """Map dataclasses and non-finite floats to JSON-safe values."""
     if is_dataclass(value):
@@ -552,7 +755,8 @@ def inspect_machined_step(path) -> dict:
 
 
 def build_pintle_assembly(inj, *, movable_sleeve=False,
-                          igniter_diameter=None):
+                          igniter_diameter=None,
+                          include_flow_volumes=True):
     """Return a named ``cadquery.Assembly`` for the sized pintle injector."""
     cq = _cq()
     # --- sized dimensions ------------------------------------------------
@@ -566,13 +770,16 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
     n_slot = max(int(inj.slot_count), 1)
     t_wall = max(0.25 * Rp, 1e-3)               # pintle wall thickness
     body_len = 3.0 * Dp                         # protrusion into the chamber
-    body_straight = body_len - Rp               # body before the rounded tip
+    tip_len = _reference_tip_length(Rp)
+    body_straight = body_len - tip_len          # body before the blunt tip
     t_face = max(0.4 * Dp, 2 * gap)             # faceplate thickness
     R_face = max(Rc, Ro + 2e-3)                 # faceplate spans the chamber bore
     t_sleeve = max(0.4 * gap, 0.5e-3)
     R_ig = 0.5 * (igniter_diameter if igniter_diameter
                   else max(0.3 * (Rp - t_wall), 1.5e-3))
+    z_slot = max(body_straight - 0.6 * slot_h, 0.1 * body_straight)
 
+    lay = resolve_reference_pintle_layout(inj)
     asm = cq.Assembly(name="pintle_injector")
 
     # --- injector faceplate: disk with a central bore for the annulus ----
@@ -581,47 +788,53 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
         .circle(R_face).circle(Ro)
         .extrude(t_face)
     )
+    bolt_count = 8
+    bolt_hole = max(0.08 * R_face, 1.5e-3)
+    bolt_circle_r = min(0.78 * R_face, max(Ro + 3.0e-3, 0.58 * R_face))
+    if bolt_circle_r > Ro + 0.75 * bolt_hole:
+        pts = _points_on_circle(bolt_circle_r, bolt_count, 0.0)
+        bolt_cut = (
+            cq.Workplane("XY").workplane(offset=-t_face - 1.0e-6)
+            .pushPoints(pts).circle(0.5 * bolt_hole)
+            .extrude(t_face + 2.0e-6)
+        )
+        faceplate = faceplate.cut(bolt_cut)
     asm.add(faceplate, name="injector_faceplate",
             color=cq.Color(0.6, 0.6, 0.65))
 
-    # --- hollow pintle body (tube) ---------------------------------------
-    pintle = (
-        cq.Workplane("XY").circle(Rp).circle(max(Rp - t_wall, 1e-4))
-        .extrude(body_straight)
-    )
-    asm.add(pintle, name="hollow_pintle_body", color=cq.Color(0.7, 0.7, 0.72))
+    # --- fixed annular sleeve with converging exit -----------------------
+    sleeve = _sleeve_solid(cq, lay)
+    asm.add(sleeve, name="annular_sleeve", color=cq.Color(0.55, 0.56, 0.58))
 
-    # --- pintle tip: hemispherical dome on the body end ------------------
-    sphere = (cq.Workplane("XY").workplane(offset=body_straight)
-              .sphere(Rp))
-    upper = (cq.Workplane("XY").workplane(offset=body_straight)
-             .box(2.2 * Rp, 2.2 * Rp, 2.2 * Rp, centered=(True, True, False)))
-    tip = sphere.intersect(upper)
+    # --- pintle post (rod through the face, bore to the tip joint, radial
+    # slot cut-throughs) + separate conical deflector tip -----------------
+    pintle = _pintle_post_solid(cq, lay, n_slot)
+    asm.add(pintle, name="hollow_pintle_body", color=cq.Color(0.7, 0.7, 0.72))
+    tip = _pintle_tip_solid(cq, lay)
     asm.add(tip, name="pintle_tip", color=cq.Color(0.75, 0.72, 0.6))
 
-    # --- axial annulus (flow passage between pintle OD and sleeve ID) ----
-    annulus = (
-        cq.Workplane("XY").workplane(offset=-t_face)
-        .circle(Ro).circle(Rp)
-        .extrude(t_face + 0.6 * body_straight)
-    )
-    asm.add(annulus, name="axial_annulus", color=cq.Color(0.3, 0.55, 0.85))
-
-    # --- radial slot network (boxes through the tip wall) ----------------
-    slot_assembly = cq.Assembly(name="radial_slot_network")
-    z_slot = body_straight - 0.5 * slot_h
-    for i in range(n_slot):
-        ang = 360.0 * i / n_slot
-        box = (
-            cq.Workplane("XY").workplane(offset=z_slot)
-            .center(Rp - 0.5 * t_wall, 0.0)
-            .box(2.0 * (gap + t_wall), slot_w, slot_h,
-                 centered=(True, True, False))
-            .rotate((0, 0, 0), (0, 0, 1), ang)
+    if include_flow_volumes:
+        # --- named flow volumes for STEP review only ---------------------
+        annulus = (
+            cq.Workplane("XY").workplane(offset=-t_face)
+            .circle(Ro).circle(Rp)
+            .extrude(t_face + 0.6 * body_straight)
         )
-        slot_assembly.add(box, name=f"slot_{i:02d}",
-                          color=cq.Color(0.9, 0.5, 0.2))
-    asm.add(slot_assembly, name="radial_slot_network")
+        asm.add(annulus, name="axial_annulus", color=cq.Color(0.3, 0.55, 0.85))
+
+        slot_assembly = cq.Assembly(name="radial_slot_network")
+        for i in range(n_slot):
+            ang = 360.0 * i / n_slot
+            box = (
+                cq.Workplane("XY").workplane(offset=z_slot)
+                .center(Rp - 0.5 * t_wall, 0.0)
+                .box(2.0 * (gap + t_wall), slot_w, slot_h,
+                     centered=(True, True, False))
+                .rotate((0, 0, 0), (0, 0, 1), ang)
+            )
+            slot_assembly.add(box, name=f"slot_{i:02d}",
+                              color=cq.Color(0.9, 0.5, 0.2))
+        asm.add(slot_assembly, name="radial_slot_network")
 
     # --- propellant manifolds (annular rings behind the face) -----------
     fuel_manifold = (
@@ -653,7 +866,8 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
     # --- optional movable sleeve ----------------------------------------
     if movable_sleeve:
         sleeve = (
-            cq.Workplane("XY").circle(Ro + t_sleeve).circle(Ro)
+            cq.Workplane("XY").circle(Ro + 2.2 * t_sleeve)
+            .circle(Ro + t_sleeve)
             .extrude(0.6 * body_straight)
         )
         asm.add(sleeve, name="movable_sleeve", color=cq.Color(0.55, 0.55, 0.6))
@@ -691,12 +905,13 @@ def export_pintle_step(inj, path, *, movable_sleeve=False,
         stl_dir = Path(stl_dir)
         stl_dir.mkdir(parents=True, exist_ok=True)
         written = []
+        mesh_tol = _stl_tolerances(resolve_reference_pintle_layout(inj))
         for child in asm.children:
             try:
                 shape = child.obj
                 cq.exporters.export(
                     shape, str(stl_dir / f"{child.name}.stl"),
-                    exportType="STL")
+                    exportType="STL", **mesh_tol)
                 written.append(f"{child.name}.stl")
             except Exception:
                 continue
@@ -709,7 +924,7 @@ def export_pintle_step(inj, path, *, movable_sleeve=False,
 # ---------------------------------------------------------------------------
 def build_pintle_parts(inj) -> dict:
     """Return ``{part_name: cadquery solid}`` for the four reference parts:
-    ``pintle_rod`` (hollow post), ``pintle_tip`` (rounded nose),
+    ``pintle_rod`` (slotted hollow post), ``pintle_tip`` (blunt cap),
     ``annular_sleeve`` (outer annulus wall) and ``injector_face`` (faceplate).
     Geometry matches :func:`build_pintle_assembly` and the 2-D schematic.
     """
@@ -719,22 +934,21 @@ def build_pintle_parts(inj) -> dict:
     gap = max(inj.annulus.detail.get("gap", 0.1 * Rp), 1e-4)
     Ro = 0.5 * inj.annulus.detail.get("outer_diameter", Dp + 2 * gap)
     Rc = inj.chamber_radius
+    slot_w = max(inj.slots.detail.get("slot_width", 0.4 * gap), 5e-5)
+    slot_h = max(inj.slots.detail.get("slot_height", slot_w), 5e-5)
     t_sleeve = max(0.4 * gap, 0.5e-3)
     t_wall = max(0.25 * Rp, 1e-3)
     body_len = 3.0 * Dp
-    body_straight = body_len - Rp
+    tip_len = _reference_tip_length(Rp)
+    body_straight = body_len - tip_len
     t_face = max(0.4 * Dp, 2 * gap)
     R_face = max(Rc, Ro + 2e-3)
+    z_slot = max(body_straight - 0.6 * slot_h, 0.1 * body_straight)
 
-    rod = (cq.Workplane("XY").circle(Rp).circle(max(Rp - t_wall, 1e-4))
-           .extrude(body_straight))
-    sphere = cq.Workplane("XY").workplane(offset=body_straight).sphere(Rp)
-    upper = (cq.Workplane("XY").workplane(offset=body_straight)
-             .box(2.2 * Rp, 2.2 * Rp, 2.2 * Rp, centered=(True, True, False)))
-    tip = sphere.intersect(upper)
-    sleeve = (cq.Workplane("XY").workplane(offset=-t_face)
-              .circle(Ro + t_sleeve).circle(Ro)
-              .extrude(t_face + 0.6 * body_straight))
+    lay = resolve_reference_pintle_layout(inj)
+    rod = _pintle_post_solid(cq, lay, max(int(inj.slot_count), 1))
+    tip = _pintle_tip_solid(cq, lay)
+    sleeve = _sleeve_solid(cq, lay)
     face = (cq.Workplane("XY").workplane(offset=-t_face)
             .circle(R_face).circle(Ro).extrude(t_face))
     return {"pintle_rod": rod, "pintle_tip": tip,
@@ -955,153 +1169,73 @@ def build_machined_pintle_bodies(
     }
 
 
-def export_machined_pintle_cad(inj, out_dir, *, spec=None, fmt="step") -> dict:
-    """Export machined pintle STEP bodies plus a manufacturing report.
+def _to_mm_step_solid(shape):
+    """Scale a built CadQuery body from SI metres to millimetres for STEP.
 
-    The STEP files are true OpenCascade B-rep solids with Boolean-subtracted
-    slots, annulus/sleeve passages, manifolds, feed/inlet ports, bolt holes,
-    igniter bore, and seal grooves.  If CadQuery is unavailable, the sizing and
-    manufacturing report are still written so the run is auditable.
+    Repo convention (see ``export.py`` line 412 and ``pump_cad_brep._M_TO_MM``):
+    public geometry is SI metres, but STEP/OpenCascade geometry is conventionally
+    millimetres.  The machined-pintle bodies are built from the metre-valued
+    injector dimensions, so without this scale the exported STEP is 1000x too
+    small and collapses to a speck in the engine assembly.  The scale is about
+    the origin, which is the injector-face axis reference, so the "+Z face at
+    Z=0, chamber side Z>0" convention is preserved.
     """
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    files: dict[str, str] = {}
-    notes: list[str] = []
-    layout = resolve_machined_pintle_layout(inj, spec=spec)
+    solid = shape.val() if hasattr(shape, "val") else shape
+    return solid.scale(1000.0)
 
-    if fmt != "step":
-        notes.append(
-            "machined mode is STEP-only; writing true STEP filenames and "
-            f"ignoring requested format {fmt!r}")
 
-    if not cadquery_available():
-        layout["cad_export"] = {
-            "status": "cadquery_unavailable",
-            "representation": "report_only",
-            "required_extra": "pip install -e .[cad]",
-        }
-        report = write_machined_pintle_report(
-            layout, out_dir / "injector_manufacturing_report.json")
-        files["manufacturing_report"] = str(report)
-        notes.append(
-            "machined STEP export requested but CadQuery/OpenCascade is not "
-            "installed; manufacturing report written and STEP bodies skipped.")
-        return {"files": files, "notes": notes, "layout": layout}
+def export_machined_pintle_cad(
+    inj, out_dir, *, spec=None, fmt="step", radial_style="holes"
+) -> dict:
+    """Export the machined pintle package.
 
-    cq = _cq()
-    step_files = {
-        "injector_face_machined": out_dir / "injector_face_machined.step",
-        "pintle_post_slotted": out_dir / "pintle_post_slotted.step",
-        "annular_sleeve": out_dir / "annular_sleeve.step",
-    }
-    try:
-        bodies = build_machined_pintle_bodies(inj, spec=spec, layout=layout)
-        inspections = {}
-        inlet_bosses_exported = True
-        for name, solid in bodies.items():
-            cq.exporters.export(solid, str(step_files[name]), exportType="STEP")
-            inspection = inspect_machined_step(step_files[name])
-            if (
-                name == "injector_face_machined"
-                and not (
-                    inspection["single_solid"]
-                    and inspection["all_solids_valid"]
-                )
-            ):
-                notes.append(
-                    "injector_face_machined STEP re-imported as "
-                    f"{inspection['solid_count']} solids with layout-only "
-                    "inlet bosses; re-exporting the face as a single body "
-                    "without additive fitting bosses.")
-                inlet_bosses_exported = False
-                solid = _build_machined_faceplate(
-                    cq, layout, include_inlet_bosses=False)
-                bodies[name] = solid
-                cq.exporters.export(solid, str(step_files[name]), exportType="STEP")
-                inspection = inspect_machined_step(step_files[name])
-            if not (
-                inspection["single_solid"] and inspection["all_solids_valid"]
-            ):
-                raise RuntimeError(
-                    f"{name} STEP round-trip is not one valid solid: {inspection}"
-                )
-            inspections[name] = inspection
-            files[name] = str(step_files[name])
+    Compatibility wrapper for the physically coherent coaxial five-part
+    generator.  The public mode remains ``machined`` and the assembly filename
+    remains ``injector_assembly_machined.step`` so existing CLI and engine
+    assembly callers keep working, but the topology is now the Nardi/TRW stack:
+    pintle body, replaceable pintle tip, injector body, orifice plate, and
+    faceplate.
+    """
+    from raosim.injector_coaxial_cad import export_coaxial_pintle_cad
 
-        asm = cq.Assembly(name="pintle_injector_machined")
-        colors = {
-            "injector_face_machined": cq.Color(0.60, 0.60, 0.65),
-            "pintle_post_slotted": cq.Color(0.72, 0.72, 0.70),
-            "annular_sleeve": cq.Color(0.50, 0.55, 0.60),
-        }
-        for name, solid in bodies.items():
-            asm.add(solid, name=name, color=colors.get(name))
-        assembly_path = out_dir / "injector_assembly_machined.step"
-        try:
-            asm.export(str(assembly_path))
-        except Exception:
-            asm.save(str(assembly_path))
-        files["machined_assembly"] = str(assembly_path)
-        layout["cad_export"] = {
-            "status": "step_written",
-            "representation": "open_cascade_brep_boolean_cut_solids",
-            "files": files.copy(),
-            "inspection": inspections,
-            "inlet_bosses_exported": inlet_bosses_exported,
-            "boolean_features": [
-                f"{int(layout['hydraulic_basis']['slot_count'])} radial pintle slot cut-throughs",
-                "annular sleeve passage",
-                "annular manifold cavities",
-                "radial manifold transfer cuts",
-                "annulus sleeve transfer holes",
-                "pintle-post transfer holes for the slotted stream",
-                (
-                    "fuel/oxidizer feed and side inlet ports with layout-only inlet bosses"
-                    if inlet_bosses_exported else
-                    "fuel/oxidizer feed and side inlet ports; additive inlet bosses suppressed for single-solid STEP"
-                ),
-                "bolt holes on bolt circle",
-                "central igniter bore",
-                "O-ring groove when seal_type=o_ring",
-            ],
-        }
-    except Exception as exc:
-        layout["cad_export"] = {
-            "status": "step_export_failed",
-            "error": f"{type(exc).__name__}: {exc}",
-        }
-        notes.append(f"machined STEP export failed: {type(exc).__name__}: {exc}")
-
-    report = write_machined_pintle_report(
-        layout, out_dir / "injector_manufacturing_report.json")
-    files["manufacturing_report"] = str(report)
-    return {"files": files, "notes": notes, "layout": layout}
+    return export_coaxial_pintle_cad(
+        inj, out_dir, spec=spec, fmt=fmt, radial_style=radial_style
+    )
 
 
 def _pintle_profile_loops(inj) -> dict:
-    """Closed meridional half-section loops (mm) for a 2-D DXF profile."""
+    """Closed meridional half-section loops (mm) for a 2-D DXF profile.
+
+    Loops are (x=axial from the injector face, y=radius) in mm and come from
+    the same :func:`resolve_reference_pintle_layout` record as the schematic
+    and the 3-D reference assembly."""
     mm = 1.0e3
-    Dp = float(inj.pintle_diameter); Rp = 0.5 * Dp
-    gap = float(inj.annulus.detail.get("gap", 0.1 * Rp))
-    Ro = 0.5 * float(inj.annulus.detail.get("outer_diameter", Dp + 2 * gap))
-    t_sleeve = max(0.4 * gap, 0.5e-3)
-    t_face = max(0.4 * Dp, 2 * gap)
-    Rc = float(inj.chamber_radius)
-    body_len = 3.0 * Dp
-    body_straight = body_len - Rp
-    rod = [(0.0, 0.0), (0.0, Rp), (body_straight, Rp)]
-    for i in range(1, 17):                       # quarter-arc to the apex
-        a = i / 16.0 * (math.pi / 2.0)
-        rod.append((body_straight + Rp * math.sin(a), Rp * math.cos(a)))
-    rod.append((0.0, 0.0))
-    xs = 0.55 * body_len
-    sleeve = [(0.0, Ro), (xs, Ro), (xs, Ro + t_sleeve), (0.0, Ro + t_sleeve),
-              (0.0, Ro)]
-    R_face = max(Rc, Ro + 2e-3)
-    face = [(-t_face, Ro + t_sleeve), (0.0, Ro + t_sleeve), (0.0, R_face),
-            (-t_face, R_face), (-t_face, Ro + t_sleeve)]
-    loops = {"pintle_rod_tip": rod, "annular_sleeve": sleeve,
-             "injector_face": face}
+    lay = resolve_reference_pintle_layout(inj)
+    Rp = lay["pintle_radius_m"]
+    Ri = lay["bore_radius_m"]
+    Ro = lay["annulus_outer_radius_m"]
+    Rs = lay["sleeve_outer_radius_m"]
+    t_face = lay["face_thickness_m"]
+    bs = lay["body_straight_m"]
+    Lb = lay["body_length_m"]
+    flat = lay["tip_flat_radius_m"]
+    z_se = lay["z_sleeve_exit_m"]
+    ch = lay["sleeve_exit_chamfer_m"]
+    R_face = lay["face_outer_radius_m"]
+    rod = [
+        (-t_face, Ri), (-t_face, Rp), (bs, Rp), (bs, Ri), (-t_face, Ri),
+    ]
+    tip = [
+        (bs, 0.0), (bs, Rp), (Lb, flat), (Lb, 0.0), (bs, 0.0),
+    ]
+    sleeve = [
+        (-t_face, Ro), (-t_face, Rs), (z_se - ch, Rs), (z_se, Ro),
+        (-t_face, Ro),
+    ]
+    face = [(-t_face, Rs), (0.0, Rs), (0.0, R_face),
+            (-t_face, R_face), (-t_face, Rs)]
+    loops = {"pintle_rod_tip": rod, "pintle_tip_cone": tip,
+             "annular_sleeve": sleeve, "injector_face": face}
     return {k: [(x * mm, y * mm) for x, y in v] for k, v in loops.items()}
 
 
@@ -1168,12 +1302,19 @@ def export_pintle_cad(inj, out_dir, *, mode="reference", fmt="step",
     if fmt == "step":
         export_pintle_step(inj, ref, movable_sleeve=movable_sleeve)
     else:
-        asm = build_pintle_assembly(inj, movable_sleeve=movable_sleeve)
+        asm = build_pintle_assembly(
+            inj, movable_sleeve=movable_sleeve,
+            include_flow_volumes=False)
         try:
             shape = asm.toCompound()
         except Exception:
             shape = asm
-        cq.exporters.export(shape, str(ref), exportType="STL")
+        cq.exporters.export(
+            shape, str(ref), exportType="STL",
+            **_stl_tolerances(resolve_reference_pintle_layout(inj)))
+        notes.append(
+            "STL preview exports hardware only; named flow-volume bodies are "
+            "omitted so annulus/slot passages do not appear as solid blocks.")
     files[f"reference_{ext}"] = str(ref)
 
     if mode == "parts":

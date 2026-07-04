@@ -11,9 +11,11 @@ deliverable folder::
       pintle_reference.step       # optional, --injector-cad reference
       pintle_parts/               # optional, --injector-cad parts
         pintle_rod.step  pintle_tip.step  annular_sleeve.step  injector_face.step
-      injector_face_machined.step # optional, --injector-cad machined
-      pintle_post_slotted.step
-      annular_sleeve.step
+      pintle_body.step            # optional, --injector-cad machined
+      pintle_tip.step
+      injector_body.step
+      orifice_plate.step
+      faceplate.step
       injector_assembly_machined.step
       injector_manufacturing_report.json
 
@@ -46,6 +48,10 @@ def _t_sleeve(gap):
 
 def _body_len(Dp):
     return 3.0 * Dp                      # protrusion into chamber
+
+
+def _tip_len(Rp):
+    return max(0.35 * Rp, 0.5e-3)        # short blunt/chamfered tip cap
 
 
 def _f(x) -> float | None:
@@ -109,7 +115,9 @@ def pintle_reference_geometry(inj, spec=None) -> dict[str, Any]:
              kind="schematic", note="schematic protrusion into chamber (3*D_pr)"),
         # --- pintle tip -------------------------------------------------
         _dim("pintle_tip", "D_tip", "pintle tip diameter", tip_d,
-             note="rounded (hemispherical) nose unless a tip radius is sized"),
+             note="short blunt/chamfered cap unless a tip radius is sized"),
+        _dim("pintle_tip", "L_tip", "pintle tip cap length", _tip_len(Rp),
+             kind="schematic", note="schematic blunt-tip length for CAD/drawing"),
         _dim("pintle_tip", "theta_pt", "tip / radial deflection angle",
              theta_pt if theta_pt is not None else 0.0, unit="deg", kind="input",
              note="radial-stream deflection; not a Son conical theta_pt unless "
@@ -224,6 +232,7 @@ def export_pintle_package(
     cad: str = "none",            # "none" | "reference" | "parts" | "machined"
     cad_format: str = "step",     # "step" | "stl" | "dxf"
     movable_sleeve: bool = False,
+    radial_style: str = "holes",  # coaxial tip exit: "holes" | "slots"
 ) -> dict[str, Any]:
     """Write the full ``pintle/`` deliverable folder for a solved injector.
 
@@ -236,6 +245,21 @@ def export_pintle_package(
     out_dir.mkdir(parents=True, exist_ok=True)
     files: dict[str, str] = {}
     notes: list[str] = []
+    cad = (cad or "none").lower()
+    cad_format = (cad_format or "step").lower()
+    if cad == "auto":
+        cad = "machined"
+        cad_format = "step"
+        notes.append(
+            "auto pintle CAD selected the machined STEP package "
+            "(injector_assembly_machined.step plus per-body STEP files)."
+        )
+    elif cad == "step":
+        cad = "machined"
+        cad_format = "step"
+        notes.append(
+            "legacy pintle CAD mode 'step' is treated as machined STEP output."
+        )
 
     geom = pintle_reference_geometry(inj, spec=spec)
 
@@ -247,7 +271,7 @@ def export_pintle_package(
 
     # --- mandatory: labeled 2-D schematic (SVG + PNG) ------------------
     from raosim.injector_plots import plot_pintle_schematic
-    fig = plot_pintle_schematic(inj, geom=geom)
+    fig = plot_pintle_schematic(inj, geom=geom, spec=spec)
     svg = out_dir / "pintle_schematic.svg"
     png = out_dir / "pintle_cross_section.png"
     fig.savefig(str(svg))                       # vector
@@ -268,8 +292,12 @@ def export_pintle_package(
             cadquery_available,
         )
         if cad == "machined":
+            # Machined mode builds the physically-coherent coaxial (TRW/Nardi)
+            # 5-part injector with sealed inner/outer circuits (see
+            # export_machined_pintle_cad -> raosim.injector_coaxial_cad).
             cad_files = export_machined_pintle_cad(
-                inj, out_dir, spec=spec, fmt=cad_format)
+                inj, out_dir, spec=spec, fmt=cad_format,
+                radial_style=radial_style)
             files.update(cad_files.get("files", {}))
             notes.extend(cad_files.get("notes", []))
         elif cad_format in ("step", "stl") and not cadquery_available():

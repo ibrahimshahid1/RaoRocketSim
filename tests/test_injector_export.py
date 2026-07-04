@@ -155,11 +155,63 @@ class TestPackage:
             data["resolved"]["pintle_wall_thickness_m"]
         assert data["resolved"]["bolt_count"] == 6
         assert data["flow_continuity"]["status"] == \
-            "preliminary_transfer_paths_modeled"
+            "coaxial_circuits_sealed_until_chamber_exit"
+        assert data["coaxial"]["inner_role"] == "fuel"
+        assert data["coaxial"]["outer_role"] == "oxidizer"
         assert "manufacturing_report" in res["files"]
         assert any("NASA SP-8089" in s for s in data["literature_basis"])
+        assert data["cad_export"]["architecture"] == \
+            "coaxial_five_part_center_bore_annular_sheet"
+        assert data["cad_export"]["flow_separation_audit"]["circuits_sealed"]
         if not cadquery_available():
             assert data["cad_export"]["status"] == "cadquery_unavailable"
+
+    def test_auto_cad_selects_machined_package(self, tmp_path):
+        from raosim.injector_cad import cadquery_available
+        inj, spec = _inj()
+        res = export_pintle_package(inj, tmp_path, spec=spec, cad="auto",
+                                    cad_format="stl")
+        report = tmp_path / "injector_manufacturing_report.json"
+        assert report.exists() and "manufacturing_report" in res["files"]
+        assert any("machined STEP package" in n for n in res["notes"])
+        data = json.loads(report.read_text())
+        assert data["status"] == \
+            "preliminary_machined_layout_requires_cold_flow_validation"
+        assert data["architecture"] == \
+            "coaxial_five_part_center_bore_annular_sheet"
+        if cadquery_available():
+            assert "machined_assembly" in res["files"]
+            assert (tmp_path / "injector_assembly_machined.step").exists()
+        else:
+            assert data["cad_export"]["status"] == "cadquery_unavailable"
+
+    def test_coaxial_layout_sizes_distribution_and_seals_circuits(self):
+        from raosim.injector_coaxial_cad import (
+            analytic_flow_separation,
+            resolve_coaxial_layout,
+        )
+        inj, spec = _inj()
+        layout = resolve_coaxial_layout(inj, spec=spec)
+        S = layout["coaxial"]
+        assert S["inner_role"] == "fuel"
+        assert S["outer_role"] == "oxidizer"
+        assert S["orifice_plate_open_area_m2"] >= \
+            1.25 * layout["roles"]["oxidizer"]["stream_area_m2"]
+        audit = analytic_flow_separation(layout)
+        assert audit["circuits_sealed"]
+        assert audit["minimum_radial_separation_m"] > 0.0
+
+    def test_machined_wrapper_accepts_radial_exit_styles(self, tmp_path):
+        from raosim.injector_cad import export_machined_pintle_cad
+        inj, spec = _inj()
+        res = export_machined_pintle_cad(
+            inj, tmp_path, spec=spec, radial_style="slots")
+        report = tmp_path / "injector_manufacturing_report.json"
+        assert report.exists()
+        data = json.loads(report.read_text())
+        assert data["cad_export"]["radial_exit_style"] == "slots"
+        assert data["cad_export"]["flow_separation_audit"]["circuits_sealed"]
+        assert "manufacturing_report" in res["files"]
 
     def test_machined_layout_screens_ports_and_slots(self):
         from raosim.injector_cad import resolve_machined_pintle_layout
@@ -215,13 +267,102 @@ class TestPackage:
             tolerance=0.00005,
         )
         res = export_machined_pintle_cad(inj, tmp_path, spec=spec)
-        face_path = tmp_path / "injector_face_machined.step"
-        assert "injector_face_machined" in res["files"]
+        face_path = tmp_path / "faceplate.step"
+        assert "faceplate" in res["files"]
         assert face_path.exists() and face_path.stat().st_size > 1000
         assert res["layout"]["cad_export"]["inspection"][
-            "injector_face_machined"]["single_solid"]
+            "faceplate"]["single_solid"]
         import cadquery as cq
         imported = cq.importers.importStep(str(face_path))
         solids = [solid for shape in imported.vals() for solid in shape.Solids()]
         assert len(solids) == 1
         assert solids[0].isValid()
+
+    def test_machined_step_is_millimetre_scale(self, tmp_path):
+        """The STEP is written in millimetres (repo convention), so the pintle
+        post OD matches pintle_diameter*1e3 -- guards the metres-as-mm bug that
+        collapsed the injector to a speck in the engine assembly."""
+        from raosim.injector_cad import (
+            cadquery_available,
+            export_machined_pintle_cad,
+        )
+        if not cadquery_available():
+            pytest.skip("CadQuery not installed")
+        inj, spec = _inj()
+        export_machined_pintle_cad(inj, tmp_path, spec=spec)
+        import cadquery as cq
+        post = cq.importers.importStep(
+            str(tmp_path / "pintle_body.step"))
+        faces = [f for v in post.vals() for f in v.Faces()]
+        bb = cq.Compound.makeCompound(faces).BoundingBox()
+        expected_od_mm = inj.pintle_diameter * 1.0e3
+        # post OD is the transverse (x/y) extent; allow for a chamfer/flat.
+        assert bb.xlen == pytest.approx(expected_od_mm, rel=0.05)
+        assert bb.ylen == pytest.approx(expected_od_mm, rel=0.05)
+        # a real ~10-40 mm pintle, never the sub-mm speck of the old bug.
+        assert 3.0 < bb.xlen < 200.0
+
+
+class TestReferenceLayoutSingleSource:
+    """The schematic, DXF profile, and 3-D reference assembly all consume
+    resolve_reference_pintle_layout - these invariants keep them honest."""
+
+    def test_tip_cone_honors_deflector_angle(self):
+        import math
+        from raosim.injector_cad import resolve_reference_pintle_layout
+        inj, spec = _inj()
+        lay = resolve_reference_pintle_layout(inj, spec)
+        flank = math.degrees(math.atan2(
+            lay["tip_length_m"],
+            lay["pintle_radius_m"] - lay["tip_flat_radius_m"]))
+        assert flank == pytest.approx(lay["deflector_angle_deg"], rel=1e-9)
+        assert (lay["body_straight_m"] + lay["tip_length_m"]
+                == pytest.approx(lay["body_length_m"], rel=1e-12))
+
+    def test_stations_are_ordered(self):
+        from raosim.injector_cad import resolve_reference_pintle_layout
+        inj, spec = _inj()
+        lay = resolve_reference_pintle_layout(inj, spec)
+        assert lay["skip_length_m"] >= 0.0
+        assert lay["z_sleeve_exit_m"] < lay["z_slot_top_m"]
+        assert (lay["z_slot_top_m"] + lay["slot_height_m"]
+                <= lay["body_straight_m"] + 1e-12)
+        # bore closes at the post/tip joint (screwed-on tip practice)
+        assert lay["bore_end_m"] == pytest.approx(lay["body_straight_m"])
+        assert lay["bore_radius_m"] < lay["pintle_radius_m"]
+
+    def test_dxf_profile_matches_layout(self):
+        from raosim.injector_cad import (
+            _pintle_profile_loops,
+            resolve_reference_pintle_layout,
+        )
+        inj, spec = _inj()
+        lay = resolve_reference_pintle_layout(inj)
+        loops = _pintle_profile_loops(inj)
+        assert set(loops) == {"pintle_rod_tip", "pintle_tip_cone",
+                              "annular_sleeve", "injector_face"}
+        x_nose, r_nose = loops["pintle_tip_cone"][2]
+        assert x_nose == pytest.approx(lay["body_length_m"] * 1e3, rel=1e-9)
+        assert r_nose == pytest.approx(lay["tip_flat_radius_m"] * 1e3,
+                                       rel=1e-9)
+
+    def test_reference_solids_valid_and_conical(self):
+        from raosim.injector_cad import cadquery_available
+        if not cadquery_available():
+            pytest.skip("CadQuery not installed")
+        from raosim.injector_cad import (
+            build_pintle_parts,
+            resolve_reference_pintle_layout,
+        )
+        inj, spec = _inj()
+        lay = resolve_reference_pintle_layout(inj)
+        parts = build_pintle_parts(inj)
+        for name, wp in parts.items():
+            solid = wp.val() if hasattr(wp, "val") else wp
+            assert solid.isValid(), name
+        tip = parts["pintle_tip"].val()
+        bb = tip.BoundingBox()
+        assert bb.zlen == pytest.approx(lay["tip_length_m"], rel=1e-6)
+        assert bb.xlen == pytest.approx(2.0 * lay["pintle_radius_m"],
+                                        rel=1e-6)
+        assert bb.zmin == pytest.approx(lay["body_straight_m"], rel=1e-6)

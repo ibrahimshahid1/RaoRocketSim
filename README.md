@@ -864,8 +864,9 @@ lrekit --injector pintle --injector-cad machined \
 ```
 
 This writes `pintle/injector_manufacturing_report.json` on every run and, when
-CadQuery/OpenCascade is installed, exports `injector_face_machined.step`,
-`pintle_post_slotted.step`, `annular_sleeve.step`, and
+CadQuery/OpenCascade is installed, exports the coaxial five-part pintle stack
+(`pintle_body.step`, `pintle_tip.step`, `injector_body.step`,
+`orifice_plate.step`, `faceplate.step`) plus
 `injector_assembly_machined.step`.
 
 Without `--require-brep`, the summary records either `brep` or
@@ -965,6 +966,13 @@ margin, thermal/stress screens, gates, and literature assumptions. `--pump-cad`
 exports a meanline reference CAD package; use
 `--pump-cad-format step` or `both` when a faceted STEP exchange file is more
 useful than STL for CAD review.
+
+For pintle CAD, `--injector-cad auto` now selects the machined STEP package:
+`pintle_body.step`, `pintle_tip.step`, `injector_body.step`,
+`orifice_plate.step`, `faceplate.step`, `injector_assembly_machined.step`, and
+`injector_manufacturing_report.json`. Use `reference` or `parts` only when you
+want the older schematic reference bodies instead of the machining-oriented
+coaxial assembly.
 
 ### Regenerative cooling, thermal, and stress screens
 

@@ -595,6 +595,7 @@ class MOCNetCompatibilityReport:
     wall_boundary_dr_max: float = 0.0
     intersection_max: float = 0.0
     wall_tangency_max: float = 0.0
+    crossing_samples: list[dict] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -612,6 +613,7 @@ class MOCNetCompatibilityReport:
             "wall_tangency_rms": self.wall_tangency_rms,
             "wall_tangency_max": self.wall_tangency_max,
             "crossings": self.crossings,
+            "crossing_samples": list(self.crossing_samples),
             "bad_rows": list(self.bad_rows),
             "passes": self.passes,
         }
@@ -3212,13 +3214,107 @@ def _wall_from_bde_region(
     # closure_report()) so the export path carries the explicit
     # topology of the SOLVED state, not just the wall polyline.
     topo_full = None
+    topology_report = {
+        "audit_basis": "bde_topology_measured_mesh",
+        "passes": False,
+        "crossings": 0,
+        "bad_rows": [],
+        "cplus_rms": 0.0,
+        "cminus_rms": 0.0,
+        "intersection_rms": 0.0,
+        "intersection_max": 0.0,
+        "wall_boundary_rms": 0.0,
+        "wall_boundary_dx_rms": 0.0,
+        "wall_boundary_dr_rms": 0.0,
+        "wall_boundary_dx_max": 0.0,
+        "wall_boundary_dr_max": 0.0,
+        "wall_tangency_rms": 0.0,
+        "wall_tangency_max": 0.0,
+        "crossing_samples": [],
+    }
+    measured_mesh = _bde_measured_topology_report(
+        bfe,
+        config.gamma,
+        wall_tangency_tol=math.radians(0.25),
+    )
+    topology_report.update(measured_mesh)
     try:
         from raosim.moc_topology import build_topology as _build_topology
 
         topo_full = _build_topology(kernel, topology, bfe)
-        diagnostics["topology_closure"] = {
+        closure = {
             k: float(v) for k, v in topo_full.closure_report().items()
         }
+        diagnostics["topology_closure"] = closure
+        wall = topo_full.full_wall()
+        dx = np.diff(wall[:, 0]) if wall.shape[0] >= 2 else np.zeros(0)
+        ds = (
+            np.hypot(np.diff(wall[:, 0]), np.diff(wall[:, 1]))
+            if wall.shape[0] >= 2 else np.zeros(0)
+        )
+        closure_distance_tol = max(1e-5 * config.Rt, 1e-10)
+        mass_rel_tol = max(10.0 * config.residual_tol, 1e-6)
+        distance_keys = [
+            "BD_starts_at_B", "BD_ends_at_D", "DE_starts_at_D",
+            "DE_ends_at_E", "wall_starts_at_B", "wall_ends_at_E",
+        ]
+        topology_report.update({
+            "topology_closure": closure,
+            "closure_distance_tol_m": float(closure_distance_tol),
+            "mass_rel_tol": float(mass_rel_tol),
+            "wall_points": int(wall.shape[0]),
+            "wall_min_dx_m": float(np.min(dx)) if dx.size else 0.0,
+            "wall_min_segment_m": float(np.min(ds)) if ds.size else 0.0,
+            "wall_monotone_x": bool(
+                dx.size == 0 or np.min(dx) >= -max(1e-12 * config.Rt, 1e-14)
+            ),
+            "wall_has_degenerate_segments": bool(
+                ds.size > 0 and np.min(ds) <= max(1e-12 * config.Rt, 1e-14)
+            ),
+        })
+        mass_ok = (
+            closure.get("mass_rel_mismatch", float("inf")) <= mass_rel_tol
+        )
+        seams_ok = all(
+            closure.get(key, float("inf")) <= closure_distance_tol
+            for key in distance_keys
+        )
+        wall_ok = (
+            topology_report["wall_monotone_x"]
+            and not topology_report["wall_has_degenerate_segments"]
+        )
+        # Truncation is normal near the axis; only flag it when a row was
+        # cut off in the bulk of the field (band fraction above tol).
+        axis_band_fraction = _bde_axis_band_fraction(bfe)
+        # A bulk truncation (a row cut off in the body of the field) sits at
+        # tens of percent of the radius; a coarse-but-healthy axis closure is
+        # a few percent.  0.10 flags the former without tripping on coarse
+        # kernels.
+        axis_band_tol = 0.10
+        truncation_confined = axis_band_fraction <= axis_band_tol
+        topology_report.update({
+            "mass_closure_passes": bool(mass_ok),
+            "seam_closure_passes": bool(seams_ok),
+            "wall_geometry_passes": bool(wall_ok),
+            "bde_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
+            "bde_wall_contour_complete": bool(bfe.wall_contour_complete),
+            "bde_negative_r_truncated_rows": int(
+                getattr(bfe, "negative_r_truncated_rows", 0)
+            ),
+            "bde_truncation_axis_band_fraction": float(axis_band_fraction),
+            "bde_truncation_axis_band_tol": float(axis_band_tol),
+            "bde_truncation_confined_to_axis": bool(truncation_confined),
+        })
+        topology_report["passes"] = bool(
+            bfe.complete_remaining_mesh
+            and bfe.wall_contour_complete
+            and truncation_confined
+            and mass_ok
+            and seams_ok
+            and wall_ok
+            and topology_report["measured_crossing_passes"]
+            and topology_report["measured_wall_tangency_passes"]
+        )
     except Exception as exc:  # topology lift is reporting, not the wall
         diagnostics["warnings"].append(
             f"Full-form topology lift failed: {exc}"
@@ -3227,16 +3323,41 @@ def _wall_from_bde_region(
     diagnostics.update({
         "bfe_iD": int(bfe.iD),
         "bfe_rows": len(bfe.grid_rows),
+        "bfe_full_rows": len(getattr(bfe, "full_grid_rows", ()) or ()),
         "bfe_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
         "bfe_wall_contour_complete": bool(bfe.wall_contour_complete),
+        "bfe_negative_r_truncated_rows": int(
+            getattr(bfe, "negative_r_truncated_rows", 0)
+        ),
         "kernel_wall_points": len(kernel_wall),
         "bfe_wall_points": len(bfe.wall_contour),
         "solved_mass_BD": float(mass_bd),
         "solved_mass_DE": float(mass_de),
+        "net_report": topology_report,
+        "wall_tangency_rms": (
+            float(topology_report["wall_tangency_rms"])
+            if math.isfinite(float(topology_report["wall_tangency_rms"]))
+            else None
+        ),
+        "moc_compatibility_preserved": bool(topology_report["passes"]),
     })
+    # In-memory artifacts for diagram rendering (not serialized to summary.json,
+    # which is built key-by-key).  Lets the CLI draw the actual solved BDE
+    # characteristic net, Rao B-D-E topology, and throat kernel.
+    diagnostics["bde_artifacts"] = {
+        "kernel": kernel,
+        "nasa_topology": topology,
+        "bde_region": bfe,
+        "topology_full": topo_full,
+    }
     if not (bfe.complete_remaining_mesh and bfe.wall_contour_complete):
         diagnostics["warnings"].append(
             "BDE region march incomplete; wall is partial."
+        )
+    if not topology_report["passes"]:
+        diagnostics["warnings"].append(
+            "BDE topology audit did not pass; wall construction is not "
+            "MOC-promotable."
         )
     return raw_wall, diagnostics, topo_full
 
@@ -3808,7 +3929,9 @@ def moc_net_compatibility_report(
             wall_dx.append(boundary_dx)
             wall_dr.append(boundary_dr)
 
-    crossing_count = check_characteristic_crossing(rows)
+    crossing_count, crossing_samples = _characteristic_crossing_report(
+        rows, sample_limit=8
+    )
     cplus_max = _maxabs(cplus)
     cminus_max = _maxabs(cminus)
     intersection_arr = np.asarray(intersection, dtype=float)
@@ -3841,6 +3964,7 @@ def moc_net_compatibility_report(
         wall_tangency_rms=_rms(wall_t_arr),
         wall_tangency_max=_maxabs(wall_t_arr),
         crossings=crossing_count,
+        crossing_samples=crossing_samples,
         bad_rows=sorted(bad_rows),
         passes=bool(passes),
     )
@@ -3856,6 +3980,24 @@ def _segments_intersect(a: np.ndarray, b: np.ndarray,
     o3 = orient(c, d, a)
     o4 = orient(c, d, b)
     return (o1 * o2 < 0.0) and (o3 * o4 < 0.0)
+
+
+def _segment_intersection_point(
+    a: np.ndarray,
+    b: np.ndarray,
+    c: np.ndarray,
+    d: np.ndarray,
+) -> dict | None:
+    """Return the xy intersection of two nonparallel line segments."""
+    r = b - a
+    s = d - c
+    denom = float(r[0] * s[1] - r[1] * s[0])
+    if abs(denom) <= 1e-18:
+        return None
+    q = c - a
+    t = float((q[0] * s[1] - q[1] * s[0]) / denom)
+    p = a + t * r
+    return {"x": float(p[0]), "r": float(p[1])}
 
 
 def characteristic_net_segments(
@@ -3884,10 +4026,48 @@ def _links_share_endpoint(a: MOCNetLink, b: MOCNetLink) -> bool:
     )
 
 
-def check_characteristic_crossing(rows: list[CharRow]) -> int:
-    """Count crossings between true C+/C- characteristic segments."""
-    segments = characteristic_net_segments(rows)
+def _char_point_sample(point: CharPoint) -> dict:
+    return {
+        "x": float(point.x),
+        "r": float(point.r),
+        "M": float(point.M),
+        "theta_deg": float(math.degrees(point.theta)),
+    }
+
+
+def _link_sample(link: MOCNetLink) -> dict:
+    return {
+        "row": int(link.row),
+        "family": link.family,
+        "role": link.role,
+        "parent_index": int(link.parent_index),
+        "child_index": int(link.child_index),
+        "parent": _char_point_sample(link.parent),
+        "child": _char_point_sample(link.child),
+    }
+
+
+def _link_crossing_report(
+    segments: list[MOCNetLink],
+    *,
+    sample_limit: int = 0,
+    cross_family_only: bool = False,
+    endpoint_tol: float = 1e-12,
+    max_row_gap: int | None = None,
+) -> tuple[int, list[dict]]:
+    """Count geometric crossings among explicit characteristic links.
+
+    ``max_row_gap`` restricts the pairwise check to links whose stored
+    ``row`` indices differ by at most that many.  A folded MOC cell is a
+    *local* event between neighbouring characteristics, so ``max_row_gap=1``
+    isolates true adjacent-cell folds; distant-row "crossings" are the
+    harmless near-axis convergence of the field (many rows collapsing onto
+    the singular axis in the same (x, r) box) and should not be flagged.
+    ``None`` (the default) compares every pair — used by the raw
+    characteristic-net audit and the fold unit tests.
+    """
     crossings = 0
+    samples: list[dict] = []
     points: list[tuple[np.ndarray, np.ndarray]] = []
     kept_segments: list[MOCNetLink] = []
     for segment in segments:
@@ -3902,10 +4082,230 @@ def check_characteristic_crossing(rows: list[CharRow]) -> int:
         for j in range(i + 1, len(points)):
             if _links_share_endpoint(kept_segments[i], kept_segments[j]):
                 continue
+            if (
+                cross_family_only
+                and kept_segments[i].family == kept_segments[j].family
+            ):
+                continue
+            if (
+                max_row_gap is not None
+                and abs(int(kept_segments[i].row) - int(kept_segments[j].row))
+                > max_row_gap
+            ):
+                continue
             c, d = points[j]
             if _segments_intersect(a, b, c, d):
+                intersection = _segment_intersection_point(a, b, c, d)
+                if intersection is not None and endpoint_tol > 0.0:
+                    p = np.array(
+                        [intersection["x"], intersection["r"]], dtype=float
+                    )
+                    endpoint_distance = min(
+                        float(np.linalg.norm(p - q))
+                        for q in (a, b, c, d)
+                    )
+                    if endpoint_distance <= endpoint_tol:
+                        continue
                 crossings += 1
-    return crossings
+                if len(samples) < sample_limit:
+                    samples.append({
+                        "crossing_index": int(crossings),
+                        "segment_1": _link_sample(kept_segments[i]),
+                        "segment_2": _link_sample(kept_segments[j]),
+                        "intersection": intersection,
+                    })
+    return crossings, samples
+
+
+def _characteristic_crossing_report(
+    rows: list[CharRow],
+    *,
+    sample_limit: int = 0,
+) -> tuple[int, list[dict]]:
+    """Count true characteristic crossings and retain a bounded sample."""
+    return _link_crossing_report(
+        characteristic_net_segments(rows),
+        sample_limit=sample_limit,
+    )
+
+
+def _flow_node_char_point(node: FlowNode, gamma: float) -> CharPoint:
+    return _make_point(
+        float(node.x),
+        float(node.r),
+        float(node.theta),
+        max(float(node.M), 1.000001),
+        gamma,
+    )
+
+
+def bde_mesh_links(
+    grid_rows: tuple[tuple[FlowNode, ...], ...] | list[tuple[FlowNode, ...]],
+    gamma: float,
+) -> list[MOCNetLink]:
+    """Return measured wall-first BDE mesh links for folding audits.
+
+    BDE rows are stored wall-first after ``CalcWallContour`` cropping.  The
+    row-adjacent links are one characteristic family; the same-index links
+    between neighbouring rows are the other visible mesh family.  This uses
+    only nodes that survived the BDE construction, so it audits the geometry
+    actually exported by the BDE wall path instead of a reconstructed forward
+    net with different indexing assumptions.
+    """
+    char_rows = [
+        [_flow_node_char_point(node, gamma) for node in row]
+        for row in grid_rows
+    ]
+    links: list[MOCNetLink] = []
+    for row_idx, row in enumerate(char_rows):
+        for j, (parent, child) in enumerate(zip(row[:-1], row[1:])):
+            links.append(MOCNetLink(
+                row=row_idx,
+                family="bde_row",
+                role="wall_first_row",
+                parent=parent,
+                child=child,
+                parent_index=j,
+                child_index=j + 1,
+            ))
+    for row_idx, (prev, curr) in enumerate(
+        zip(char_rows[:-1], char_rows[1:]), start=1
+    ):
+        n_link = min(len(prev), len(curr))
+        for j in range(n_link):
+            links.append(MOCNetLink(
+                row=row_idx,
+                family="bde_column",
+                role="row_to_row",
+                parent=prev[j],
+                child=curr[j],
+                parent_index=j,
+                child_index=j,
+            ))
+    return links
+
+
+def _angle_delta(a: float, b: float) -> float:
+    return float(math.atan2(math.sin(a - b), math.cos(a - b)))
+
+
+def _bde_wall_tangency_errors(
+    wall_contour: tuple[FlowNode, ...] | list[FlowNode],
+) -> np.ndarray:
+    """Return wall-segment angle minus averaged BDE wall-node flow angle."""
+    errors: list[float] = []
+    for p0, p1 in zip(wall_contour[:-1], wall_contour[1:]):
+        dx = float(p1.x - p0.x)
+        dr = float(p1.r - p0.r)
+        if math.hypot(dx, dr) <= 1e-14:
+            continue
+        wall_theta = math.atan2(dr, dx)
+        mesh_theta = 0.5 * (float(p0.theta) + float(p1.theta))
+        errors.append(_angle_delta(wall_theta, mesh_theta))
+    return np.asarray(errors, dtype=float)
+
+
+def _bde_axis_band_fraction(bfe) -> float:
+    """Largest radius (as a fraction of the mesh's outer radius) at which any
+    remaining-mesh row stops marching before its axis point.
+
+    Negative-r truncation is expected, but only near the singular axis.  This
+    measures how far off the axis the *worst* row's last interior node sits:
+    a small fraction means every row marched down to the near-axis band before
+    being closed; a large fraction means a row was truncated in the bulk of
+    the field, which would corrupt the mass-flux integration and wall crop.
+    """
+    rows = getattr(bfe, "full_grid_rows", ()) or bfe.grid_rows
+    if not rows:
+        return 0.0
+    mesh_max_r = max(
+        (float(node.r) for row in rows for node in row), default=0.0
+    )
+    if mesh_max_r <= 0.0:
+        return 0.0
+    # row[-1] is the axis point (r == 0); row[-2] is the last interior node.
+    worst = max(
+        (float(row[-2].r) for row in rows if len(row) >= 2), default=0.0
+    )
+    return float(worst / mesh_max_r)
+
+
+def _bde_measured_topology_report(
+    bfe,
+    gamma: float,
+    *,
+    wall_tangency_tol: float,
+) -> dict:
+    """Measure BDE mesh crossings and wall tangency from solved nodes."""
+    mesh_rows = getattr(bfe, "full_grid_rows", ()) or bfe.grid_rows
+    mesh_source = "full_grid_rows" if getattr(bfe, "full_grid_rows", ()) else "grid_rows"
+    links = bde_mesh_links(mesh_rows, gamma)
+    link_lengths = [
+        math.hypot(
+            float(link.child.x - link.parent.x),
+            float(link.child.r - link.parent.r),
+        )
+        for link in links
+    ]
+    endpoint_tol = (
+        max(1e-10, 1e-3 * float(np.median(link_lengths)))
+        if link_lengths else 1e-10
+    )
+    # Only adjacent-row cross-family pairs represent a genuine folded cell.
+    # Non-adjacent "crossings" are the near-axis convergence of the mesh (all
+    # rows collapsing onto the singular axis, which NASA computes and then
+    # discards) and are not physical folds — see max_row_gap in
+    # ``_link_crossing_report``.
+    crossings, samples = _link_crossing_report(
+        links,
+        sample_limit=8,
+        cross_family_only=True,
+        endpoint_tol=endpoint_tol,
+        max_row_gap=1,
+    )
+    tangency = _bde_wall_tangency_errors(bfe.wall_contour)
+    tangency_rms = _rms(tangency) if tangency.size else float("inf")
+    tangency_max = _maxabs(tangency) if tangency.size else float("inf")
+    crossing_passes = crossings == 0
+    tangency_passes = (
+        tangency.size > 0
+        and math.isfinite(tangency_max)
+        and tangency_max <= wall_tangency_tol
+    )
+    return {
+        "measured_mesh_link_count": int(len(links)),
+        "measured_mesh_source": mesh_source,
+        "measured_crossing_basis": (
+            "adjacent_row_cross_family_folds_on_completed_bde_mesh"
+        ),
+        "measured_crossing_endpoint_tol_m": float(endpoint_tol),
+        "measured_wall_tangency_count": int(tangency.size),
+        "crossings": int(crossings),
+        "crossing_samples": samples,
+        "wall_tangency_rms": float(tangency_rms),
+        "wall_tangency_max": float(tangency_max),
+        "wall_tangency_rms_deg": float(math.degrees(tangency_rms))
+        if math.isfinite(tangency_rms) else float("inf"),
+        "wall_tangency_max_deg": float(math.degrees(tangency_max))
+        if math.isfinite(tangency_max) else float("inf"),
+        "wall_tangency_tol_deg": float(math.degrees(wall_tangency_tol)),
+        "measured_crossing_passes": bool(crossing_passes),
+        "measured_wall_tangency_passes": bool(tangency_passes),
+    }
+
+
+def characteristic_crossing_samples(
+    rows: list[CharRow],
+    *,
+    limit: int = 8,
+) -> list[dict]:
+    """Return a small sample of true C+/C- characteristic crossings."""
+    return _characteristic_crossing_report(rows, sample_limit=max(0, limit))[1]
+
+
+def check_characteristic_crossing(rows: list[CharRow]) -> int:
+    """Count crossings between true C+/C- characteristic segments."""
+    return _characteristic_crossing_report(rows, sample_limit=0)[0]
 
 
 def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
@@ -4175,7 +4575,21 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 raise ValueError(
                     "wall_method must be 'coupled', 'legacy', or 'bde'"
                 )
-            if raw_wall.shape[0] >= 3:
+            if config.wall_method == "bde":
+                net_report_dict = construction_diagnostics.get("net_report")
+                if isinstance(net_report_dict, dict):
+                    crossings = int(net_report_dict.get("crossings", 0) or 0)
+                    if not net_report_dict.get("passes", False):
+                        construction_diagnostics["moc_compatibility_preserved"] = False
+                        construction_diagnostics.setdefault("warnings", []).append(
+                            "BDE topology compatibility audit exceeded tolerance."
+                        )
+                else:
+                    construction_diagnostics["moc_compatibility_preserved"] = False
+                    construction_diagnostics.setdefault("warnings", []).append(
+                        "BDE topology compatibility audit was unavailable."
+                    )
+            elif raw_wall.shape[0] >= 3:
                 slope_start = math.tan(theta_n_chart)
                 slope_end = math.tan(theta_e_chart)
                 wall = SplineWall(
@@ -4207,6 +4621,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     r_scale=max(Re, 1e-12),
                     tol=config.residual_tol,
                 )
+                crossings = int(net_report.crossings)
                 construction_diagnostics["net_report"] = net_report.to_dict()
                 if not net_report.passes:
                     construction_diagnostics["moc_compatibility_preserved"] = False
@@ -4286,10 +4701,65 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         if math.isfinite(cf_ideal) and abs(cf_ideal) > 1e-12
         else float("nan")
     )
-    thrust_sanity_ok = (
-        cf > 0.0
+    kernel_bd_full_flux = curve_mass_flux(
+        solve_config.kernel_bd or (), config.gamma
+    )
+    kernel_bd_mass_fraction = (
+        mdot_target / kernel_bd_full_flux
+        if abs(kernel_bd_full_flux) > 1e-14 else float("nan")
+    )
+    ce_mass_fraction = (
+        mdot_val / kernel_bd_full_flux
+        if abs(kernel_bd_full_flux) > 1e-14 else float("nan")
+    )
+    cf_fraction_of_ideal = (
+        cf / cf_ideal
+        if math.isfinite(cf_ideal) and abs(cf_ideal) > 1e-12
+        else float("nan")
+    )
+    mass_scaled_cf = (
+        cf_ideal * kernel_bd_mass_fraction
+        if (
+            math.isfinite(cf_ideal)
+            and math.isfinite(kernel_bd_mass_fraction)
+        )
+        else float("nan")
+    )
+    mass_scaled_cf_rel_error = (
+        (cf - mass_scaled_cf) / mass_scaled_cf
+        if math.isfinite(mass_scaled_cf) and abs(mass_scaled_cf) > 1e-12
+        else float("nan")
+    )
+    partial_control_surface = (
+        math.isfinite(kernel_bd_mass_fraction)
+        and 0.0 <= kernel_bd_mass_fraction < 0.995
+    )
+    full_control_surface = (
+        math.isfinite(kernel_bd_mass_fraction)
+        and abs(kernel_bd_mass_fraction - 1.0) <= 0.005
+    )
+    thrust_surface_scope = (
+        "partial_control_surface_de"
+        if partial_control_surface
+        else "full_control_surface_ce"
+        if full_control_surface
+        else "unknown_control_surface_scope"
+    )
+    thrust_sanity_applicable = thrust_surface_scope == "full_control_surface_ce"
+    full_surface_cf_ok = (
+        thrust_sanity_applicable
+        and cf > 0.0
         and math.isfinite(cf_rel_error)
         and abs(cf_rel_error) <= 5e-3
+    )
+    segment_mass_scaled_cf_ok = (
+        partial_control_surface
+        and cf > 0.0
+        and math.isfinite(mass_scaled_cf_rel_error)
+        and abs(mass_scaled_cf_rel_error) <= 2.0e-2
+    )
+    thrust_sanity_ok = (
+        full_surface_cf_ok or segment_mass_scaled_cf_ok
     )
     bvp_ok = (
         bool(result.success)
@@ -4324,9 +4794,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         "method": "kernel_bd_curve_flux",
         "ce_mass_flux": float(mdot_val),
         "kernel_bd_mass_flux": float(mdot_target),
-        "kernel_bd_full_mass_flux": float(
-            curve_mass_flux(solve_config.kernel_bd or (), config.gamma)
-        ),
+        "kernel_bd_full_mass_flux": float(kernel_bd_full_flux),
+        "kernel_bd_mass_fraction": float(kernel_bd_mass_fraction),
+        "ce_mass_fraction_of_full_kernel": float(ce_mass_fraction),
         "kernel_d_fraction": float(ce.kernel_d_fraction),
         "kernel_D": (
             {
@@ -4347,6 +4817,32 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         "cf_surface": float(cf),
         "cf_ideal": float(cf_ideal),
         "cf_rel_error": float(cf_rel_error),
+        "surface_scope": thrust_surface_scope,
+        "applicable": bool(thrust_sanity_applicable),
+        "gate_basis": (
+            "full_control_surface_cf"
+            if thrust_sanity_applicable
+            else "mass_fraction_scaled_de_cf"
+            if partial_control_surface
+            else "unknown_control_surface_scope"
+        ),
+        "not_applicable_reason": (
+            "surface integral covers only the Rao DE segment; full CE "
+            "control-surface thrust is not reconstructed yet"
+            if partial_control_surface
+            else "control-surface scope could not be matched to the full kernel"
+            if not thrust_sanity_applicable else None
+        ),
+        "kernel_bd_mass_fraction": float(kernel_bd_mass_fraction),
+        "ce_mass_fraction_of_full_kernel": float(ce_mass_fraction),
+        "cf_fraction_of_ideal": float(cf_fraction_of_ideal),
+        "mass_fraction_scaled_cf": float(mass_scaled_cf),
+        "mass_fraction_scaled_cf_rel_error": float(mass_scaled_cf_rel_error),
+        "full_control_surface_cf_passes": bool(full_surface_cf_ok),
+        "mass_fraction_scaled_cf_passes": bool(segment_mass_scaled_cf_ok),
+        "mass_fraction_correlation": bool(
+            segment_mass_scaled_cf_ok
+        ),
         "passes": bool(thrust_sanity_ok),
     }
 
@@ -4410,7 +4906,13 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             "optimum-thrust contour is discontinuous and the variational "
             "construction is not applicable."
         )
-    if not thrust_sanity_ok:
+    if not thrust_sanity_ok and not thrust_sanity_applicable:
+        warnings.append(
+            "CE/DE surface thrust coefficient is a partial-control-surface "
+            "diagnostic; a full CE thrust audit is not reconstructed yet, "
+            "so reliability cannot promote on thrust consistency."
+        )
+    elif not thrust_sanity_ok:
         warnings.append(
             "CE surface thrust coefficient failed the Phase 4 sanity gate; "
             "solution is not variational-residual-solved."

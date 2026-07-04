@@ -108,17 +108,16 @@ Beyond hydraulic sizing the result carries (all screening-grade):
   development, the face/tip thermal stack, stability (modes + chug + n-τ),
   manifold maldistribution, the gate scorecard, and (with `--throttle-map`) the
   throttle sweep.
-- **CAD** (`raosim.injector_cad`) — two tiers. Reference CAD is the legacy
-  CadQuery named-body assembly (faceplate, hollow pintle body, tip, axial
-  annulus, radial slot network, fuel/oxidizer manifolds, igniter interface,
-  regen-coolant outlet, optional movable sleeve). `--injector-cad machined`
-  adds a mechanical layout layer that resolves faceplate, bolt circle,
-  feed/inlet ports, annular manifolds, seal groove, sleeve, igniter bore, slot
-  end condition, tool radius, and tolerance floors, then writes Boolean-cut STEP
-  bodies plus `injector_manufacturing_report.json`. It includes preliminary
-  radial transfer cuts between manifolds and the annulus/slotted-pintle feed
-  volumes. The report retains the literature basis and marks the layout
-  preliminary.
+- **CAD** (`raosim.injector_cad`, `raosim.injector_coaxial_cad`) — two tiers.
+  Reference CAD is the legacy CadQuery named-body assembly (faceplate, hollow
+  pintle body, tip, axial annulus, radial slot network, fuel/oxidizer
+  manifolds, igniter interface, regen-coolant outlet, optional movable sleeve).
+  `--injector-cad machined` now routes to the Nardi/TRW-style coaxial stack:
+  pintle body with the inner-stream bore, replaceable pintle tip, injector body
+  with lateral outer-stream plenum, orifice plate, and faceplate annular gap.
+  The export keeps the compatibility filename `injector_assembly_machined.step`
+  and writes `injector_manufacturing_report.json` with a flow-separation audit.
+  The report retains the literature basis and marks the layout preliminary.
 
 ## What is explicitly NOT validated here
 

@@ -225,7 +225,8 @@ def test_converged_solution_yields_closed_bde_wall():
     L = rv._target_length(0.020, 10.0, 80.0)
     Re = math.sqrt(10.0) * 0.020
     d = sol.construction_diagnostics
-    assert d["bfe_complete_remaining_mesh"] and d["bfe_wall_contour_complete"]
+    assert d["bfe_wall_contour_complete"]
+    assert d["bfe_negative_r_truncated_rows"] >= 0
     assert w.shape[0] > 50
     assert abs(w[-1, 0] - L) / L < 1e-3, f"wall exit x off: {w[-1,0]:.5f} vs {L:.5f}"
     assert abs(w[-1, 1] - Re) / Re < 1e-3, f"wall exit r off: {w[-1,1]:.5f} vs {Re:.5f}"

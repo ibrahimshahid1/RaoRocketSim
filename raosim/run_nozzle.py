@@ -63,6 +63,7 @@ only and is useful for diagnostics; hard geometry-gate failures block export.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
 import os
@@ -387,6 +388,71 @@ def _prompt_bool(label, default):
 
 def _section(title: str) -> None:
     print("\n" + cyan("▸ " + bold(title)))
+
+
+def _write_moc_crossing_samples(path: Path, samples: list[dict]) -> None:
+    """Write a flat CSV table for the sampled MOC characteristic crossings."""
+    fields = [
+        "crossing_index",
+        "intersection_x_m",
+        "intersection_r_m",
+        "segment_1_family",
+        "segment_1_row",
+        "segment_1_role",
+        "segment_1_parent_index",
+        "segment_1_child_index",
+        "segment_1_parent_x_m",
+        "segment_1_parent_r_m",
+        "segment_1_child_x_m",
+        "segment_1_child_r_m",
+        "segment_2_family",
+        "segment_2_row",
+        "segment_2_role",
+        "segment_2_parent_index",
+        "segment_2_child_index",
+        "segment_2_parent_x_m",
+        "segment_2_parent_r_m",
+        "segment_2_child_x_m",
+        "segment_2_child_r_m",
+    ]
+
+    def row_for(sample: dict) -> dict:
+        s1 = sample.get("segment_1", {}) or {}
+        s2 = sample.get("segment_2", {}) or {}
+        p1 = s1.get("parent", {}) or {}
+        c1 = s1.get("child", {}) or {}
+        p2 = s2.get("parent", {}) or {}
+        c2 = s2.get("child", {}) or {}
+        ix = sample.get("intersection", {}) or {}
+        return {
+            "crossing_index": sample.get("crossing_index"),
+            "intersection_x_m": ix.get("x"),
+            "intersection_r_m": ix.get("r"),
+            "segment_1_family": s1.get("family"),
+            "segment_1_row": s1.get("row"),
+            "segment_1_role": s1.get("role"),
+            "segment_1_parent_index": s1.get("parent_index"),
+            "segment_1_child_index": s1.get("child_index"),
+            "segment_1_parent_x_m": p1.get("x"),
+            "segment_1_parent_r_m": p1.get("r"),
+            "segment_1_child_x_m": c1.get("x"),
+            "segment_1_child_r_m": c1.get("r"),
+            "segment_2_family": s2.get("family"),
+            "segment_2_row": s2.get("row"),
+            "segment_2_role": s2.get("role"),
+            "segment_2_parent_index": s2.get("parent_index"),
+            "segment_2_child_index": s2.get("child_index"),
+            "segment_2_parent_x_m": p2.get("x"),
+            "segment_2_parent_r_m": p2.get("r"),
+            "segment_2_child_x_m": c2.get("x"),
+            "segment_2_child_r_m": c2.get("r"),
+        }
+
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fields)
+        writer.writeheader()
+        for sample in samples:
+            writer.writerow(row_for(sample))
 
 
 def _default_coolant_inlet_temperature(coolant: str) -> float:
@@ -1427,6 +1493,10 @@ def main(argv: list[str] | None = None) -> int:
                          "default 0.30·chamber diameter")
     ap.add_argument("--pintle-slot-count", type=int, default=24,
                     help="number of radial slots/holes")
+    ap.add_argument("--pintle-radial-exit", choices=("holes", "slots"),
+                    default="holes",
+                    help="coaxial pintle tip radial exit style: drilled round "
+                         "jets (holes, default) or rectangular slots")
     ap.add_argument("--pintle-slot-aspect-ratio", type=float, default=1.0,
                     help="slot height/width for auto-sizing")
     ap.add_argument("--pintle-deflector-angle", type=float, default=0.0,
@@ -1593,11 +1663,12 @@ def main(argv: list[str] | None = None) -> int:
                     help="pintle package CAD mode with --injector pintle: "
                          "none writes only JSON/CSV/SVG/PNG; reference writes a "
                          "single CAD-neutral reference file; parts also writes "
-                         "named part files; auto uses parts when CadQuery is "
-                         "available and otherwise keeps the mandatory package; "
+                         "named part files; auto writes the machined STEP package "
+                         "when CadQuery is available and otherwise keeps the "
+                         "mandatory package plus manufacturing report; "
                          "machined writes Boolean-cut STEP bodies and a "
                          "manufacturing report; step is the legacy alias for "
-                         "required STEP parts")
+                         "machined STEP output")
     ap.add_argument("--injector-cad-format", choices=("step", "stl", "dxf"),
                     default="step",
                     help="format for --injector-cad reference/parts/auto "
@@ -2215,11 +2286,217 @@ def main(argv: list[str] | None = None) -> int:
         print(yellow("    note: full JAX LM solve — this runs for minutes."))
     sol = _solve(args)
     r = sol.residuals
-    gate = r.max_scaled <= 2e-3
+    residual_tol = 2e-3
+    gate = r.max_scaled <= residual_tol
     da = sol.construction_diagnostics.get("design_angles", {})
+    export_diag = sol.construction_diagnostics.get("export", {})
+    if not isinstance(export_diag, dict):
+        export_diag = {}
+    wall_tangency_rms = sol.construction_diagnostics.get(
+        "wall_tangency_rms", r.wall_tangency_rms
+    )
+    wall_tangency_rms_deg = (
+        math.degrees(wall_tangency_rms)
+        if wall_tangency_rms is not None else None
+    )
+    mass_gate = abs(r.mass_residual_rel) <= residual_tol
+    length_gate = abs(r.length_residual_rel) <= residual_tol
+    residual_gate = bool(gate and mass_gate and length_gate)
+    endpoint_enforced = bool(
+        export_diag.get("endpoint_enforced_for_export", False)
+    )
+    monotonic_cleanup = bool(
+        export_diag.get("monotonic_cleanup_for_export", False)
+    )
+    postprocessed = bool(
+        sol.construction_diagnostics.get("postprocessed", False)
+    )
+    no_postprocessing = not (
+        postprocessed or endpoint_enforced or monotonic_cleanup
+    )
+    moc_compatibility_preserved = bool(
+        sol.construction_diagnostics.get("moc_compatibility_preserved", False)
+    )
+    moc_gate = bool(
+        no_postprocessing
+        and moc_compatibility_preserved
+        and wall_tangency_rms is not None
+        and wall_tangency_rms < math.radians(0.25)
+        and r.characteristic_crossings == 0
+    )
+    boundary_min = sol.construction_diagnostics.get("boundary_min")
+    valid_region_gate = bool(
+        boundary_min is not None and boundary_min >= -residual_tol
+    )
+    thrust_sanity = sol.construction_diagnostics.get("thrust_sanity")
+    if not isinstance(thrust_sanity, dict):
+        thrust_sanity = {}
+    thrust_sanity_applicable = bool(thrust_sanity.get("applicable", True))
+    thrust_sanity_gate = bool(thrust_sanity.get("passes", False))
+    net_report = sol.construction_diagnostics.get("net_report")
+    if not isinstance(net_report, dict):
+        net_report = {}
+    crossing_samples = net_report.get("crossing_samples")
+    if not isinstance(crossing_samples, list):
+        crossing_samples = []
+    promotion_blockers: list[str] = []
+    if args.max_nfev <= 0:
+        promotion_blockers.append("seed-only contour")
+    elif not residual_gate:
+        promotion_blockers.append("BVP residual closure")
+    if not moc_gate:
+        moc_notes: list[str] = []
+        if not moc_compatibility_preserved:
+            if str(net_report.get("audit_basis", "")).startswith("bde_"):
+                if not net_report.get("bde_complete_remaining_mesh", True):
+                    moc_notes.append("BDE remaining mesh incomplete")
+                n_trunc = int(net_report.get(
+                    "bde_negative_r_truncated_rows", 0
+                ) or 0)
+                if n_trunc:
+                    moc_notes.append(
+                        f"{n_trunc} negative-r truncated rows"
+                    )
+                if not net_report.get("measured_crossing_passes", True):
+                    moc_notes.append("measured mesh crossings")
+                if not net_report.get("measured_wall_tangency_passes", True):
+                    wall_tmax = net_report.get("wall_tangency_max_deg")
+                    if isinstance(wall_tmax, (int, float)):
+                        moc_notes.append(
+                            f"BDE wall tangency max {wall_tmax:.2f} deg"
+                        )
+                    else:
+                        moc_notes.append("BDE wall tangency")
+            else:
+                moc_notes.append("net compatibility")
+        if wall_tangency_rms is None:
+            moc_notes.append("wall tangency unavailable")
+        elif wall_tangency_rms >= math.radians(0.25):
+            moc_notes.append(
+                f"wall tangency {math.degrees(wall_tangency_rms):.2f} deg"
+            )
+        if r.characteristic_crossings:
+            moc_notes.append(f"{r.characteristic_crossings} crossings")
+        if not no_postprocessing:
+            moc_notes.append("export postprocessing")
+        promotion_blockers.append(
+            "MOC closure" + (
+                f" ({', '.join(moc_notes)})" if moc_notes else ""
+            )
+        )
+    if not valid_region_gate:
+        promotion_blockers.append(f"Rao valid region boundary={boundary_min}")
+    if not thrust_sanity_gate:
+        if not thrust_sanity_applicable:
+            mass_fraction = thrust_sanity.get("kernel_bd_mass_fraction")
+            scaled_error = thrust_sanity.get("mass_fraction_scaled_cf_rel_error")
+            thrust_notes: list[str] = []
+            if (
+                isinstance(mass_fraction, (int, float))
+                and math.isfinite(mass_fraction)
+            ):
+                thrust_notes.append(
+                    f"DE mass fraction {100.0 * mass_fraction:.1f}%"
+                )
+            if (
+                isinstance(scaled_error, (int, float))
+                and math.isfinite(scaled_error)
+            ):
+                thrust_notes.append(
+                    f"mass-scaled Cf error {100.0 * scaled_error:.1f}%"
+                )
+            promotion_blockers.append(
+                "full-control-surface thrust audit unavailable"
+                + (f" ({', '.join(thrust_notes)})" if thrust_notes else "")
+            )
+        elif (
+            isinstance((cf_rel_error := thrust_sanity.get("cf_rel_error")),
+                       (int, float))
+            and math.isfinite(cf_rel_error)
+        ):
+            promotion_blockers.append(
+                f"thrust sanity Cf error {100.0 * cf_rel_error:.1f}%"
+            )
+        else:
+            promotion_blockers.append("thrust sanity")
+    contour_reliability = {
+        "solver_backend": args.backend,
+        "max_nfev": int(args.max_nfev),
+        "seed_only": bool(args.max_nfev <= 0),
+        "residual_tol": residual_tol,
+        "max_scaled": float(r.max_scaled),
+        "rms_scaled": float(r.rms_scaled),
+        "mass_residual_rel": float(r.mass_residual_rel),
+        "length_residual_rel": float(r.length_residual_rel),
+        "max_scaled_gate_passed": bool(gate),
+        "mass_residual_gate_passed": bool(mass_gate),
+        "length_residual_gate_passed": bool(length_gate),
+        "residual_gate_passed": bool(residual_gate),
+        "moc_gate_passed": bool(moc_gate),
+        "valid_region_gate_passed": bool(valid_region_gate),
+        "thrust_sanity_gate_applicable": bool(thrust_sanity_applicable),
+        "thrust_sanity_gate_passed": bool(thrust_sanity_gate),
+        "optimization_converged": bool(sol.converged),
+        "reliability": sol.reliability.value,
+        "promotion_blockers": promotion_blockers,
+        "moc_compatibility_preserved": moc_compatibility_preserved,
+        "wall_tangency_rms_deg": wall_tangency_rms_deg,
+        "characteristic_crossings": int(r.characteristic_crossings),
+        "characteristic_crossing_samples": crossing_samples,
+        "postprocessed": postprocessed,
+        "endpoint_enforced_for_export": endpoint_enforced,
+        "monotonic_cleanup_for_export": monotonic_cleanup,
+        "rao_region": sol.construction_diagnostics.get("rao_region"),
+        "boundary_min": boundary_min,
+        "thrust_sanity": thrust_sanity,
+        "warnings": list(sol.warnings),
+    }
     badge = green("✓ gate passed") if gate else yellow("● seed / not converged")
     print(f"    max_scaled={r.max_scaled:.3e}   {badge}   "
           f"reliability={sol.reliability.value}")
+    if args.max_nfev <= 0:
+        print(yellow("    seed-only contour: --max-nfev 0 skipped the "
+                     "least-squares/JAX solve; no residual-solved promotion."))
+    elif not gate:
+        print(yellow("    residual gate failed: "
+                     f"max_scaled {r.max_scaled:.3e} > {residual_tol:.1e}."))
+    elif sol.reliability.value == "geometric_approximation" and promotion_blockers:
+        print(yellow("    reliability blockers: "
+                     + "; ".join(promotion_blockers)))
+    if crossing_samples:
+        first_crossing = crossing_samples[0]
+        s1 = first_crossing.get("segment_1", {}) or {}
+        s2 = first_crossing.get("segment_2", {}) or {}
+        ix = first_crossing.get("intersection", {}) or {}
+        loc = (
+            f"x={1000.0 * ix.get('x', 0.0):.2f} mm, "
+            f"r={1000.0 * ix.get('r', 0.0):.2f} mm"
+            if ix else "location unavailable"
+        )
+        print(yellow(
+            "    first MOC crossing sample: "
+            f"{s1.get('family', '?')} row {s1.get('row', '?')} vs "
+            f"{s2.get('family', '?')} row {s2.get('row', '?')} at {loc}"
+        ))
+    if thrust_sanity_gate and not thrust_sanity_applicable:
+        mass_fraction = thrust_sanity.get("kernel_bd_mass_fraction")
+        scaled_error = thrust_sanity.get("mass_fraction_scaled_cf_rel_error")
+        notes: list[str] = []
+        if (
+            isinstance(mass_fraction, (int, float))
+            and math.isfinite(mass_fraction)
+        ):
+            notes.append(f"DE mass fraction {100.0 * mass_fraction:.1f}%")
+        if (
+            isinstance(scaled_error, (int, float))
+            and math.isfinite(scaled_error)
+        ):
+            notes.append(f"mass-scaled Cf error {100.0 * scaled_error:.1f}%")
+        print(dim(
+            "    thrust consistency: "
+            + (", ".join(notes) if notes else "partial DE audit passed")
+            + " (full CE thrust audit not reconstructed)"
+        ))
     print(f"    theta_N={math.degrees(sol.theta_N):.2f}° "
           f"{dim('['+da.get('theta_N_source','?')+']')}   "
           f"theta_E={math.degrees(sol.theta_E):.2f}°   "
@@ -2292,6 +2569,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "max_scaled": float(r.max_scaled), "gate_2e3": bool(gate),
         "reliability": sol.reliability.value,
+        "contour_reliability": contour_reliability,
         "theta_N_deg": math.degrees(sol.theta_N),
         "theta_E_deg": math.degrees(sol.theta_E),
         "Cf": float(sol.thrust_coefficient),
@@ -2365,6 +2643,16 @@ def main(argv: list[str] | None = None) -> int:
                   f"Cf={sol.thrust_coefficient:.3f}")
     fig.tight_layout(); fig.savefig(args.out / "profile.png", dpi=150); fig.clf()
     artifacts = ["contour.csv", "profile.png"]
+    if crossing_samples:
+        _write_moc_crossing_samples(
+            args.out / "contour_moc_crossings.csv",
+            crossing_samples,
+        )
+        artifacts.append("contour_moc_crossings.csv")
+        print(yellow(
+            "    wrote contour_moc_crossings.csv "
+            f"({len(crossing_samples)} sampled crossings)"
+        ))
 
     # The pintle injector is sized later (after the cooling analysis) so the
     # fuel feed state can come from the regen jacket outlet.  None until then.
@@ -2384,6 +2672,36 @@ def main(argv: list[str] | None = None) -> int:
         print(green("    wrote separation_contour.png"))
     except Exception as exc:  # plotting must never break the run
         print(yellow(f"    separation_contour.png skipped: {exc}"))
+
+    # ---- MOC / Rao construction diagrams -----------------------------
+    # The characteristic contour is built by the NASA/JHU MOC kernel + Rao
+    # B-D-E topology + BDE remaining-mesh march; these render that actual
+    # construction (kernel expansion fan, B-D-E topology, BDE net) from the
+    # in-memory artifacts the bde wall method stashes on the solution.  They
+    # only exist for an evaluate_moc bde solve, so each is guarded and skips
+    # cleanly otherwise (plotting must never break the run).
+    if sol.construction_diagnostics.get("bde_artifacts"):
+        print("\n" + cyan("▸ " + bold("MOC construction")) +
+              dim("  (kernel fan, Rao B-D-E topology, BDE characteristic net)"))
+        for _fn, _name, _label in (
+            ("plot_kernel_expansion_fan", "kernel_fan.png",
+             "throat kernel / expansion fan"),
+            ("plot_rao_topology", "rao_topology.png",
+             "Rao B-D-E topology"),
+            ("plot_bde_mesh", "bde_mesh.png",
+             "BDE characteristic net"),
+        ):
+            try:
+                import raosim.moc_diagrams as _md
+                fig = getattr(_md, _fn)(sol, save_path=args.out / _name,
+                                        show=show)
+                if not show:
+                    fig.clf()
+                artifacts.append(_name)
+                print(green(f"    wrote {_name}")
+                      + (dim("  (window)") if show else ""))
+            except Exception as exc:  # plotting must never break the run
+                print(yellow(f"    {_name} skipped: {exc}"))
 
     # ---- optional steady flow-field render ---------------------------
     if args.flowfield:
@@ -3219,15 +3537,17 @@ def main(argv: list[str] | None = None) -> int:
             cad_mode = args.injector_cad
             cad_format = args.injector_cad_format
             if args.injector_cad == "step":
-                cad_mode = "parts"
+                cad_mode = "machined"
                 cad_format = "step"
             elif args.injector_cad == "auto":
-                cad_mode = "parts"
+                cad_mode = "machined"
+                cad_format = "step"
 
             pkg = export_pintle_package(
                 inj, args.out / "pintle", spec=inj_spec,
                 cad=cad_mode, cad_format=cad_format,
-                movable_sleeve=args.pintle_sleeve)
+                movable_sleeve=args.pintle_sleeve,
+                radial_style=args.pintle_radial_exit)
             summary["injector_package"] = {
                 "dir": pkg["dir"],
                 "files": pkg["files"],

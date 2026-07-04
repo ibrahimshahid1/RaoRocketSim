@@ -242,11 +242,16 @@ def test_calc_bde_region_builds_wall_to_de_seed_rows():
 
     region = calc_bde_region(kernel, topology)
 
+    # Axis truncation is a normal near-axis event; the mesh still ran to
+    # completion (every row reached the axis), so it is complete even though
+    # some rows were negative-r truncated.
     assert region.complete_remaining_mesh is True
     assert region.wall_contour_complete is True
+    assert region.negative_r_truncated_rows > 0
     assert region.iD >= 1
     assert len(region.rows) == max(len(topology.DE) - 1, 0)
     assert len(region.grid_rows) == len(region.rows)
+    assert len(region.full_grid_rows) == len(region.rows)
     assert len(region.wall_contour) == len(region.grid_rows)
     assert region.rows
     for row in region.rows:
@@ -287,13 +292,17 @@ def test_build_source_contour_from_kernel_reports_uncropped_status():
 
     diag = contour.diagnostics
     assert diag["canonical_reference_track"] == "visible_source_port"
-    assert diag["source_contour_complete"] is True
+    # The interior mesh reached the axis (complete), but the source contour is
+    # still not "complete" because length closure / CropNozzleToLength is not
+    # ported — that, not the normal axis truncation, is the remaining gate.
+    assert diag["source_contour_complete"] is False
     assert diag["length_closed"] is False
     assert diag["crop_nozzle_to_length"] == "not_ported"
     assert diag["outer_theta_b_driver"] == "not_canonical"
     assert diag["nasa_reference_matched_eligible"] is False
     assert contour.bfe.complete_remaining_mesh is True
     assert contour.bfe.wall_contour_complete is True
+    assert contour.bfe.negative_r_truncated_rows > 0
     assert contour.wall_export.shape == (len(contour.wall), 2)
     assert len(contour.wall) == len(kernel.rrcs) + len(contour.bfe.wall_contour)
 

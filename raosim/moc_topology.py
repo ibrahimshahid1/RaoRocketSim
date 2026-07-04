@@ -219,6 +219,8 @@ def build_topology(
                 bde_region.complete_remaining_mesh),
             "bfe_wall_contour_complete": bool(
                 bde_region.wall_contour_complete),
+            "bfe_negative_r_truncated_rows": int(
+                bde_region.negative_r_truncated_rows),
             "kernel_reached_wall": bool(kernel.reached_wall),
             "kernel_fallback_used": bool(kernel.fallback_used),
         },

@@ -50,7 +50,9 @@
 
 # Pintle injector and electric pump feed package.
 --injector pintle
---injector-cad none
+--pintle-radial-exit holes
+--injector-cad auto
+--injector-cad-format step
 --electric-pump
 --fuel-tank-pressure 500000
 --oxidizer-tank-pressure 600000
@@ -63,6 +65,8 @@
 --pump-max-rpm 120000
 --burn-time 12
 
-# Export the core wall and jacket STEP, but avoid CadQuery-only regen B-rep.
+# Export the core wall and jacket STEP. Pintle CAD auto writes the coaxial
+# five-part machined STEP package when CadQuery/OpenCascade is available, and
+# always writes injector_manufacturing_report.json.
 --cad step
 --out builds/samples/lox_rp1_13kn_copper_316l_full_engine

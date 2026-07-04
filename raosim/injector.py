@@ -238,9 +238,10 @@ class InjectorSpec:
     mechanical: PintleMechanicalSpec = field(default_factory=PintleMechanicalSpec)
     # Pump/tank feed-system inputs for the feed-pressure closure (§ feed ledger).
     feed_system: FeedSystemSpec = field(default_factory=FeedSystemSpec)
-    # Injector CAD/reference-geometry output: "none" | "reference" | "parts";
-    # "machined" writes true Boolean-cut STEP bodies when CadQuery is available;
-    # format "step" (portable B-rep) | "stl" (mesh) | "dxf" (2-D profile).
+    # Injector CAD/reference-geometry output: "none" | "auto" | "reference" |
+    # "parts" | "machined"; "auto"/"machined" write true Boolean-cut STEP
+    # bodies when CadQuery is available; format "step" (portable B-rep) |
+    # "stl" (mesh) | "dxf" (2-D profile) applies to legacy reference/parts.
     cad: str = "none"
     cad_format: str = "step"
 

@@ -1,12 +1,13 @@
 # Regression-test engine: 13 kN sea-level LOX/RP-1, non-scalar (station-wise)
-# regen wall sizing, all component CAD exported as STL.
+# regen wall sizing, machined pintle STEP, and pump CAD package.
 #
 # Run from the repository root with:
 #   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_sealevel_regen_allstl.args
 # (or `lrekit @examples/cli/test_13kn_sealevel_regen_allstl.args` when installed)
 #
-# Any later command-line flag overrides the value here, e.g. append
-# `--max-nfev 4000 --out builds/tests/13kn_sl_full` for the deep solver check.
+# This file is the full benchmark package. Any later command-line flag
+# overrides the value here; append `--max-nfev 0 --out builds/tests/13kn_sl_fast`
+# only when you intentionally want a quick seed-geometry smoke run.
 #
 # Parameter provenance (see TEST_PROMPT.md and docs/REPO_PHYSICS_AUDIT_2026-07-02.md):
 #   - LOX/RP-1 gamma/Mw/Tc/O-F from the built-in table anchored to Sutton &
@@ -41,10 +42,11 @@
 --minimum-cylindrical-length 0.03
 --cd-target 0.99
 
-# Fast seed contour by default; override --max-nfev for the full JAX solve.
---max-nfev 0
---n-control 8
---n-kernel 12
+# Full JAX Rao/MOC solve budget and default benchmark resolution. This is
+# intentionally host-scale; use a command-line override for quick smoke checks.
+--max-nfev 4000
+--n-control 24
+--n-kernel 24
 
 # Non-scalar regen: station-wise hot-wall + channel thermostructural sizing
 # (SP-125 screens), GRCop-84 liner with Inconel 718 closeout jacket.
@@ -69,6 +71,7 @@
 
 # Pintle injector and electric pump feed package.
 --injector pintle
+--pintle-radial-exit holes
 --electric-pump
 --fuel-tank-pressure 500000
 --oxidizer-tank-pressure 600000
@@ -81,13 +84,20 @@
 --pump-max-rpm 120000
 --burn-time 12
 
-# All component CAD as STL. wall.stl / jacket.stl / regen.stl are always
-# written; pintle part STLs need CadQuery (pip install cadquery); pump part
-# STLs are native meshes gated watertight by default. No STEP requested.
---injector-cad parts
---injector-cad-format stl
+# CAD package: wall.stl / jacket.stl / regen.stl are always written. Pintle
+# machined mode writes the Nardi/TRW coaxial five-part stack
+# (pintle_body, pintle_tip, injector_body, orifice_plate, faceplate) plus
+# injector_assembly_machined.step when CadQuery/OpenCascade is installed.
+# Pump format `both` = fast prism envelope meshes (pump_parts/) PLUS the true
+# CadQuery B-rep parts (pump_brep/, STEP + STL per part): meridional
+# hub/backplate revolve, log-spiral camber blades from the solved beta1/beta2
+# (pumps.impeller_blade_camber; SP-8109), helical constant-lead inducer
+# (SP-8052 sec.3.1.10), diffuser vanes at the solved flow angle, volute
+# scroll. Plain `stl` would ship only the placeholder prisms.
+--injector-cad machined
+--injector-cad-format step
 --pump-cad parts
---pump-cad-format stl
+--pump-cad-format both
 --cad none
 
---out builds/tests/13kn_sl_fast
+--out builds/tests/13kn_sl_full

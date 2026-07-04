@@ -39,100 +39,8 @@ def _metal(ax, xy, w, h, **kw):
 
 
 def plot_pintle_cross_section(inj, *, show=False, save_path=None) -> "plt.Figure":
-    """Meridional half-section of the sized pintle: faceplate, hollow pintle
-    body, tip, axial annulus and the radial slots, with the chamber wall."""
-    Dp = inj.pintle_diameter
-    Rp = 0.5 * Dp
-    gap = inj.annulus.detail.get("gap", 0.1 * Rp)
-    Ro = inj.annulus.detail.get("outer_diameter", Dp + 2 * gap) * 0.5
-    Rc = inj.chamber_radius
-    slot_w = inj.slots.detail.get("slot_width", 0.4 * gap)
-    slot_h = inj.slots.detail.get("slot_height", slot_w)
-    tip_r = 0.5 * Dp
-    body_len = 3.0 * Dp                      # pintle protrusion into the chamber
-    t_face = max(0.4 * Dp, 2 * gap)          # faceplate thickness (schematic)
-    mm = 1e3
-
-    fig, ax = plt.subplots(figsize=(8, 5))
-    # faceplate (behind the face plane x=0), from the sleeve OD out to the wall
-    _metal(ax, (-t_face * mm, Ro * mm), t_face * mm, (Rc - Ro) * mm)
-    ax.add_patch(Rectangle((-t_face * mm, -Rc * mm), t_face * mm,
-                           (Rc - Ro) * mm, facecolor="0.75", edgecolor="0.3",
-                           hatch="////", linewidth=1.0))
-    # outer sleeve walls bounding the annulus (thin)
-    t_sleeve = max(0.15 * gap, 0.2e-3)
-    for sgn in (1, -1):
-        _metal(ax, (0, sgn * Ro * mm), body_len * 0.55 * mm,
-               sgn * t_sleeve * mm)
-    # hollow pintle body (the post), mirrored; the body stops where the
-    # rounded tip begins so the nose reads as a rounded cap, not a notch.
-    body_straight = body_len - tip_r
-    for sgn in (1, -1):
-        ax.add_patch(Rectangle((0, 0), body_straight * mm, sgn * Rp * mm,
-                               facecolor="0.82", edgecolor="0.3",
-                               linewidth=1.0))
-    # hollow internal feed passage
-    ax.add_patch(Rectangle((0, -0.55 * Rp * mm), (body_len - tip_r) * mm,
-                           1.10 * Rp * mm, facecolor="#cfe8ff",
-                           edgecolor="none"))
-    # rounded tip
-    th = np.linspace(-math.pi / 2, math.pi / 2, 40)
-    ax.add_patch(Polygon(
-        np.column_stack([((body_len - tip_r) + tip_r * np.cos(th)) * mm,
-                         tip_r * np.sin(th) * mm]),
-        closed=True, facecolor="0.82", edgecolor="0.3", linewidth=1.0))
-
-    # axial annulus passages (between pintle OD and sleeve ID)
-    for sgn in (1, -1):
-        ax.add_patch(Rectangle((-t_face * mm, sgn * Rp * mm),
-                               (body_len * 0.55 + t_face) * mm,
-                               sgn * gap * mm, facecolor="#9ecae1",
-                               edgecolor="none", alpha=0.9))
-    # radial slots near the tip (the slotted stream exits the pintle wall)
-    n_show = min(int(inj.slot_count), 6)
-    xs = np.linspace(body_len - tip_r - slot_h, body_len - tip_r,
-                     n_show + 1)[:-1]
-    for x in xs:
-        for sgn in (1, -1):
-            ax.add_patch(Rectangle((x * mm, sgn * Rp * mm), slot_w * mm,
-                                   sgn * slot_h * mm, facecolor="#fdae6b",
-                                   edgecolor="0.4", linewidth=0.5))
-    # chamber wall
-    ax.plot([-t_face * mm, body_len * 1.15 * mm], [Rc * mm, Rc * mm],
-            "k-", lw=2)
-    ax.plot([-t_face * mm, body_len * 1.15 * mm], [-Rc * mm, -Rc * mm],
-            "k-", lw=2)
-    ax.axhline(0, color="0.6", lw=0.6, ls="--")
-
-    # annotations
-    ax.annotate(f"pintle Ø{Dp*mm:.1f} mm", (0.5 * body_len * mm, 0),
-                ha="center", va="center", fontsize=9)
-    ax.annotate(f"annulus gap {gap*mm:.2f} mm\n({inj.annulus.role})",
-                (0.25 * body_len * mm, (Rp + 0.5 * gap) * mm),
-                (0.25 * body_len * mm, (Rc * 0.65) * mm), fontsize=8,
-                ha="center", arrowprops=dict(arrowstyle="->", color="#3182bd"))
-    ax.annotate(
-        f"{inj.slot_count}× slots {slot_w*mm:.2f}×{slot_h*mm:.2f} mm\n"
-        f"({inj.slots.role})",
-        ((body_len - tip_r) * mm, (Rp + slot_h) * mm),
-        ((body_len - tip_r) * mm, (Rc * 0.78) * mm), fontsize=8, ha="center",
-        arrowprops=dict(arrowstyle="->", color="#e6550d"))
-    ax.text(body_len * 1.0 * mm, Rc * 0.92 * mm, "chamber wall",
-            fontsize=8, ha="right")
-
-    ax.set_xlabel("axial x [mm]")
-    ax.set_ylabel("radius r [mm]")
-    ax.set_title(f"Pintle cross-section  (TMR={inj.total_momentum_ratio:.2f}, "
-                 f"radial={inj.radial_stream})")
-    ax.set_aspect("equal")
-    ax.set_xlim(-t_face * mm * 1.5, body_len * 1.2 * mm)
-    ax.set_ylim(-Rc * 1.15 * mm, Rc * 1.15 * mm)
-    fig.tight_layout()
-    if save_path:
-        fig.savefig(save_path, dpi=150)
-    if show:
-        plt.show()
-    return fig
+    """CAD-oriented meridional section of the sized pintle injector."""
+    return plot_pintle_schematic(inj, show=show, save_path=save_path)
 
 
 def plot_spray_envelope(inj, *, show=False, save_path=None) -> "plt.Figure":
@@ -489,171 +397,287 @@ def _dim_line(ax, p0, p1, text, *, color="0.25", off=0.0, fs=8, va="center",
                                     ec="none", alpha=0.85))
 
 
-def plot_pintle_schematic(inj, *, geom=None, show=False, save_path=None) -> "plt.Figure":
-    """Mandatory labeled 2-D design schematic of the sized pintle.
+def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
+                          save_path=None) -> "plt.Figure":
+    """Dimensioned meridional section of the sized pintle (drafting style).
 
-    Two meridional half-section panels drawn entirely from the solved geometry:
-    (left) a zoomed pintle-head DETAIL with the fine dimensions — pintle post +
-    rounded tip, axial annulus, radial slots, sleeve — leadered with D_pr, h_ann,
-    D_ann_o, D_ob, slot w x h x N and tip diameter; (right) the chamber-scale
-    SPRAY view — the pintle at the head, the spray cone at the solved half-angle,
-    its chamber-wall intercept, and D_c / L_c.  Values come from the same
-    reference-geometry records the CSV/JSON use, so drawing and tables agree.
+    Geometry stations come from
+    :func:`raosim.injector_cad.resolve_reference_pintle_layout` — the same
+    record the DXF profile and the 3-D reference assembly consume — and the
+    labeled values from :func:`pintle_reference_geometry`, so the drawing,
+    the CSV/JSON tables, and the solids agree.  Main panel: zoomed section
+    around the metering end with true dimension lines (hatched metal, flow
+    arrows, impinging point).  Right column: whole-injector context with the
+    spray fan, and the tip end view with the slot pattern.
     """
+    from raosim.injector_cad import resolve_reference_pintle_layout
+
     if geom is None:
         from raosim.injector_export import pintle_reference_geometry
-        geom = pintle_reference_geometry(inj)
+        geom = pintle_reference_geometry(inj, spec=spec)
+    lay = resolve_reference_pintle_layout(inj, spec)
 
     mm = 1.0e3
-    Dp = float(inj.pintle_diameter); Rp = 0.5 * Dp
-    gap = float(inj.annulus.detail.get("gap", 0.1 * Rp))
-    Do = float(inj.annulus.detail.get("outer_diameter", Dp + 2 * gap))
-    Ro = 0.5 * Do
-    Rc = float(inj.chamber_radius); Lc = float(inj.chamber_length)
-    slot_w = float(inj.slots.detail.get("slot_width", 0.4 * gap))
-    slot_h = float(inj.slots.detail.get("slot_height", slot_w))
-    n_slot = int(inj.slot_count)
-    t_sleeve = max(0.4 * gap, 0.5e-3)
-    t_face = max(0.4 * Dp, 2 * gap)
-    body_len = 3.0 * Dp
-    body_straight = body_len - Rp
-    half = float(inj.spray_half_angle_deg)
-    x_wall = float(inj.spray_wall_axial_distance)
+    Rp = lay["pintle_radius_m"] * mm
+    Ri = lay["bore_radius_m"] * mm
+    Ro = lay["annulus_outer_radius_m"] * mm
+    Rs = lay["sleeve_outer_radius_m"] * mm
+    gap = lay["annulus_gap_m"] * mm
+    t_sl = lay["sleeve_wall_m"] * mm
+    t_face = lay["face_thickness_m"] * mm
+    Rf = lay["face_outer_radius_m"] * mm
+    Rc = lay["chamber_radius_m"] * mm
+    Lb = lay["body_length_m"] * mm
+    bs = lay["body_straight_m"] * mm
+    tip_flat = lay["tip_flat_radius_m"] * mm
+    th_pt = lay["deflector_angle_deg"]
+    ws = lay["slot_width_m"] * mm
+    hs = lay["slot_height_m"] * mm
+    ns = int(lay["slot_count"])
+    z_st = lay["z_slot_top_m"] * mm
+    z_sc = lay["z_slot_center_m"] * mm
+    z_se = lay["z_sleeve_exit_m"] * mm
+    L_skip = lay["skip_length_m"] * mm
+    bore_end = lay["bore_end_m"] * mm
+    half = lay["spray_half_angle_deg"] or 0.0
+    Dp = 2.0 * Rp
 
-    fig, (axd, axs) = plt.subplots(
-        1, 2, figsize=(15.5, 4.8),
-        gridspec_kw={"width_ratios": [1.0, 1.25]})
+    web = float(inj.slots.detail.get("web", 0.0)) * mm
+    bf = float(inj.slots.detail.get("blockage_factor", 0.0))
+    radial_name = getattr(inj, "radial_stream", "fuel")
+    axial_name = "oxidizer" if radial_name == "fuel" else "fuel"
 
-    # ================= LEFT: pintle-head detail =======================
-    axd.axhline(0, color="0.5", lw=0.8, ls="-.")
-    # faceplate behind the face plane (sleeve OD outward, truncated for detail)
-    _metal(axd, (-t_face * mm, (Ro + t_sleeve) * mm), t_face * mm, 0.7 * Ro * mm)
-    # outer sleeve wall bounding the annulus
-    _metal(axd, (0, Ro * mm), 0.7 * body_len * mm, t_sleeve * mm)
-    # pintle post + rounded tip
-    axd.add_patch(Rectangle((0, 0), body_straight * mm, Rp * mm,
-                            facecolor="0.82", edgecolor="0.3", lw=1.0))
-    th = np.linspace(-math.pi / 2, math.pi / 2, 60)
-    axd.add_patch(Polygon(
-        np.column_stack([(body_straight + Rp * np.cos(th)) * mm,
-                         np.clip(Rp * np.sin(th), 0, None) * mm]),
-        closed=True, facecolor="0.82", edgecolor="0.3", lw=1.0))
-    # hollow internal feed bore (schematic)
-    t_wall = max(0.25 * Rp, 1.0e-3)
-    axd.add_patch(Rectangle((0, 0), body_straight * mm, (Rp - t_wall) * mm,
-                            facecolor="#eaf3fb", edgecolor="none"))
-    # axial annulus passage (pintle OD -> sleeve ID)
-    axd.add_patch(Rectangle((-t_face * mm, Rp * mm),
-                            (0.7 * body_len + t_face) * mm, gap * mm,
-                            facecolor="#9ecae1", edgecolor="none"))
-    # radial slots near the tip
-    for x in np.linspace(body_straight - slot_h, body_straight,
-                         max(1, min(n_slot, 6)) + 1)[:-1]:
-        axd.add_patch(Rectangle((x * mm, Rp * mm), slot_w * mm, slot_h * mm,
-                                facecolor="#fdae6b", edgecolor="0.4", lw=0.5))
-    # detail callouts (labels parked well above the post, staggered in x)
-    ylab1, ylab2 = 1.55 * Ro * mm, 2.10 * Ro * mm
-    _dim_line(axd, (0.42 * body_straight * mm, 0), (0.42 * body_straight * mm, Rp * mm),
-              f"Ø D_pr\n{Dp*mm:.2f} mm", fs=8, ha="center")
-    axd.annotate(f"h_ann {gap*mm:.3f} mm", (0.03 * body_len * mm, (Rp + 0.5 * gap) * mm),
-                 (0.04 * body_len * mm, ylab1), fontsize=7.5, color="#08519c",
-                 ha="left", arrowprops=dict(arrowstyle="->", color="#08519c"))
-    axd.annotate(f"Ø D_ann_o {Do*mm:.2f}\nØ D_ob {(Do+2*t_sleeve)*mm:.2f} mm",
-                 (0.45 * body_len * mm, (Ro + t_sleeve) * mm),
-                 (0.30 * body_len * mm, ylab2), fontsize=7.5, ha="center",
-                 arrowprops=dict(arrowstyle="->", color="0.3"))
-    axd.annotate(f"{n_slot}× slots {slot_w*mm:.2f}×{slot_h*mm:.2f} mm\n"
-                 f"({inj.slots.role}, radial)",
-                 (body_straight * mm, (Rp + slot_h) * mm),
-                 (0.66 * body_len * mm, ylab1), fontsize=7.5, ha="center",
-                 arrowprops=dict(arrowstyle="->", color="#e6550d"))
-    axd.annotate(f"rounded tip Ø{2*Rp*mm:.2f} mm\n({inj.annulus.role} annulus)",
-                 (body_len * mm, 0.20 * Rp * mm),
-                 ((body_len + 0.12 * Dp) * mm, 0.80 * Rp * mm), fontsize=7.5,
-                 arrowprops=dict(arrowstyle="->", color="0.3"))
-    axd.set_title("Pintle head detail  (annulus + radial slots)", fontsize=10)
-    axd.set_xlabel("axial  x  [mm]"); axd.set_ylabel("radius  r  [mm]")
-    axd.set_aspect("equal")
-    axd.set_xlim(-1.7 * t_face * mm, (body_len + 1.0 * Dp) * mm)
-    axd.set_ylim(-0.15 * Rp * mm, 2.45 * Ro * mm)
+    fig = plt.figure(figsize=(13.6, 9.4))
+    gs = fig.add_gridspec(2, 2, width_ratios=[2.05, 1.0],
+                          height_ratios=[1.05, 1.0],
+                          wspace=0.14, hspace=0.20,
+                          left=0.055, right=0.985, top=0.92, bottom=0.075)
+    axm = fig.add_subplot(gs[:, 0])
+    axc = fig.add_subplot(gs[0, 1])
+    axe = fig.add_subplot(gs[1, 1])
 
-    # ================= RIGHT: chamber + spray =========================
-    axs.axhline(0, color="0.5", lw=0.8, ls="-.")
-    axs.plot([-t_face * mm, Lc * mm], [Rc * mm, Rc * mm], "k-", lw=2.2)
-    axs.plot([-t_face * mm, -t_face * mm], [0, Rc * mm], "k-", lw=2.0)  # face
-    axs.text(Lc * mm, Rc * mm * 1.01, "chamber wall", fontsize=8, ha="right",
-             va="bottom")
-    # pintle post block (to chamber scale)
-    axs.add_patch(Rectangle((0, 0), body_straight * mm, Rp * mm,
-                            facecolor="0.82", edgecolor="0.3"))
-    axs.add_patch(Polygon(
-        np.column_stack([(body_straight + Rp * np.cos(th)) * mm,
-                         np.clip(Rp * np.sin(th), 0, None) * mm]),
-        closed=True, facecolor="0.82", edgecolor="0.3"))
-    r0, x_tip0 = Rp, body_straight
-    if 0.0 < half < 90.0:
-        reaches = math.isfinite(x_wall) and (x_tip0 + x_wall) <= Lc
-        x_hit = (x_tip0 + x_wall) if reaches else Lc
-        r_hit = min(r0 + (x_hit - x_tip0) * math.tan(math.radians(half)), Rc)
-        col = "#31a354" if reaches else "#de2d26"
-        axs.add_patch(Polygon([[x_tip0 * mm, r0 * mm], [x_hit * mm, r_hit * mm],
-                               [x_hit * mm, 0]], closed=True, facecolor=col,
-                              alpha=0.13, edgecolor="none"))
-        axs.plot([x_tip0 * mm, x_hit * mm], [r0 * mm, r_hit * mm], color=col, lw=1.8)
-        ar = 1.4 * Dp * mm
-        aa = np.linspace(0, math.radians(half), 24)
-        axs.plot(x_tip0 * mm + ar * np.cos(aa), r0 * mm + ar * np.sin(aa),
-                 color=col, lw=1.0)
-        axs.text(x_tip0 * mm + ar * 1.05, r0 * mm + 0.5 * ar,
-                 f"θ_s = {half:.1f}°", color=col, fontsize=9, va="bottom")
-        if reaches:
-            axs.plot([x_hit * mm], [r_hit * mm], "o", color=col, ms=7)
-            frac = (x_wall / Lc * 100.0) if Lc > 0 else float("inf")
-            axs.annotate(f"wall intercept\nx_wall = {x_wall*mm:.1f} mm ({frac:.0f}% L_c)",
-                         (x_hit * mm, r_hit * mm), (0.45 * Lc * mm, 0.88 * Rc * mm),
-                         color=col, fontsize=8.5, ha="center",
-                         arrowprops=dict(arrowstyle="->", color=col))
-        else:
-            axs.text(0.5 * Lc * mm, 0.42 * Rc * mm,
-                     f"spray does NOT reach the wall within L_c\n"
-                     f"(needs x_wall = {x_wall*mm:.0f} mm > L_c)",
-                     color=col, fontsize=8.5, ha="center")
-    else:
-        axs.text(0.4 * Lc * mm, 0.5 * Rc * mm,
-                 "spray nearly axial / reversed", color="#de2d26", fontsize=9)
-    _dim_line(axs, (Lc * mm, 0), (Lc * mm, Rc * mm), f"Ø D_c\n{2*Rc*mm:.0f} mm",
-              fs=8, ha="left")
-    _dim_line(axs, (-t_face * mm, -0.09 * Rc * mm), (Lc * mm, -0.09 * Rc * mm),
-              f"L_c {Lc*mm:.0f} mm", fs=8, off=-0.07 * Rc * mm)
+    HATCH = dict(facecolor="white", edgecolor="0.15", hatch="//////",
+                 linewidth=1.1)
+    DIM = "0.20"
+    LIQ = "#1f6fb5"     # central / radial stream
+    GAS = "#c23b22"     # annular stream
+    SPRAY = "#2ca25f"
 
-    # parameter box
-    lines = [
-        f"architecture : fixed annulus + {n_slot} radial slots",
-        f"radial stream: {inj.slots.role}   axial: {inj.annulus.role}",
-        f"TMR = {inj.total_momentum_ratio:.3f}    BF = {inj.blockage_factor*100:.0f}%",
-        f"spray half-angle = {half:.1f}°",
-    ]
-    fs_ = getattr(inj, "feed_system", None)
-    if fs_ is not None:
-        f_ln = fs_.lines.get("fuel"); o_ln = fs_.lines.get("oxidizer")
-        if f_ln and o_ln:
-            lines.append(
-                f"req pump out: fuel {f_ln.required_outlet_pressure/1e5:.0f} / "
-                f"ox {o_ln.required_outlet_pressure/1e5:.0f} bar")
-    axs.text(0.015, 0.08, "\n".join(lines), transform=axs.transAxes,
-             fontsize=8.5, va="bottom", ha="left", family="monospace",
-             bbox=dict(boxstyle="round,pad=0.4", fc="#f7f7f7", ec="0.6"))
-    axs.set_title("Spray cone vs chamber", fontsize=10)
-    axs.set_xlabel("axial  x  [mm]")
-    axs.set_aspect("auto")
-    axs.set_xlim(-t_face * mm * 1.6, Lc * mm * 1.05)
-    axs.set_ylim(-0.32 * Rc * mm, Rc * 1.20 * mm)
+    def poly(ax, pts, **kw):
+        ax.add_patch(Polygon(np.asarray(pts), closed=True, **kw))
 
+    def rect(ax, x0, z0, w, h, **kw):
+        ax.add_patch(Rectangle((x0, z0), w, h, **kw))
+
+    def ext_line(ax, x, z0, z1):
+        ax.plot([x, x], [z0, z1], color="0.55", lw=0.6)
+
+    def dim_h(ax, x0, x1, z, text, *, ext_from=None, fs=8.3, above=True):
+        if ext_from is not None:
+            ext_line(ax, x0, ext_from, z)
+            ext_line(ax, x1, ext_from, z)
+        ax.annotate("", xy=(x1, z), xytext=(x0, z),
+                    arrowprops=dict(arrowstyle="<->", color=DIM, lw=1.0))
+        dz = -0.014 * Lb if above else 0.030 * Lb
+        ax.text(0.5 * (x0 + x1), z + dz, text, color=DIM, fontsize=fs,
+                ha="center", va="bottom" if above else "top",
+                bbox=dict(boxstyle="round,pad=0.10", fc="white", ec="none",
+                          alpha=0.9))
+
+    def dim_v(ax, z0, z1, x, text, *, ext_from=None, fs=8.3, side=1):
+        if ext_from is not None:
+            ax.plot([ext_from, x], [z0, z0], color="0.55", lw=0.6)
+            ax.plot([ext_from, x], [z1, z1], color="0.55", lw=0.6)
+        ax.annotate("", xy=(x, z1), xytext=(x, z0),
+                    arrowprops=dict(arrowstyle="<->", color=DIM, lw=1.0))
+        ax.text(x + side * 0.010 * Lb, 0.5 * (z0 + z1), text, color=DIM,
+                fontsize=fs, ha="left" if side > 0 else "right", va="center",
+                rotation=90,
+                bbox=dict(boxstyle="round,pad=0.10", fc="white", ec="none",
+                          alpha=0.9))
+
+    def leader(ax, xy, xytext, text, *, color=DIM, fs=8.3):
+        ax.annotate(text, xy=xy, xytext=xytext, color=color, fontsize=fs,
+                    ha="left", va="center",
+                    arrowprops=dict(arrowstyle="->", color=color, lw=0.9),
+                    bbox=dict(boxstyle="round,pad=0.12", fc="white",
+                              ec="none", alpha=0.9))
+
+    # ---- metal (hatched) -------------------------------------------------
+    Rf_draw = min(Rf, 2.4 * Ro)
+    ch = lay["sleeve_exit_chamfer_m"] * mm
+    for s in (+1, -1):
+        # faceplate (clipped for the zoom; full extent in the context view)
+        rect(axm, s * Rs if s > 0 else -Rf_draw, -t_face, Rf_draw - Rs,
+             t_face, **HATCH)
+        # sleeve with converging exit
+        poly(axm, [(s * Ro, -t_face), (s * Rs, -t_face),
+                   (s * Rs, z_se - ch), (s * Ro, z_se)], **HATCH)
+        # pintle half-section: outer wall, tip cone flank, nose flat to the
+        # axis, back up the closed nose and the bore wall
+        poly(axm, [(s * Ri, -t_face), (s * Rp, -t_face), (s * Rp, bs),
+                   (s * tip_flat, Lb), (0.0, Lb), (0.0, bore_end),
+                   (s * Ri, bore_end), ], **HATCH)
+        # slot window through the pintle wall
+        rect(axm, min(s * Ri, s * Rp), z_st, abs(s * Rp - s * Ri), hs,
+             facecolor="white", edgecolor="0.15", lw=1.0)
+
+    axm.axvline(0.0, color="0.5", lw=0.7, ls="-.")
+    axm.plot([-Rf_draw, Rf_draw], [0.0, 0.0], color="0.35", lw=0.9, ls=":")
+    axm.text(Rf_draw - 0.01 * Lb, 0.015 * Lb, "injector face  z = 0",
+             fontsize=7.5, color="0.35", ha="right", va="top")
+
+    # ---- flow arrows -----------------------------------------------------
+    rb = 0.45 * Ri
+    axm.annotate("", xy=(rb, z_sc), xytext=(rb, -t_face - 0.36 * Lb),
+                 arrowprops=dict(arrowstyle="-", color=LIQ, lw=2.2))
+    axm.annotate("", xy=(Rp + 0.9 * gap, z_sc), xytext=(rb, z_sc),
+                 arrowprops=dict(arrowstyle="->", color=LIQ, lw=2.2))
+    axm.text(rb + 0.02 * Lb, -t_face - 0.365 * Lb,
+             f"{radial_name}  (central bore → {ns} radial slots)",
+             color=LIQ, fontsize=8.4, ha="left", va="bottom")
+    r_ann = 0.5 * (Rp + Ro)
+    for s in (+1, -1):
+        axm.annotate("", xy=(s * r_ann, z_se + 0.6 * L_skip),
+                     xytext=(s * r_ann, -t_face - 0.31 * Lb),
+                     arrowprops=dict(arrowstyle="->", color=GAS, lw=2.0))
+    axm.text(-r_ann - 0.02 * Lb, -t_face - 0.315 * Lb,
+             f"{axial_name}  (annular gap)", color=GAS, fontsize=8.4,
+             ha="right", va="bottom")
+
+    # impinging point + spray fan
+    x_imp, z_imp = Rp + 0.9 * gap, z_sc
+    axm.plot([x_imp], [z_imp], "o", color=SPRAY, ms=7, zorder=6)
+    L_ar = 0.24 * Lb
+    for dth in (-8.0, 0.0, 8.0):
+        a = math.radians(half + dth)
+        axm.annotate("", xy=(x_imp + L_ar * math.sin(a),
+                             z_imp + L_ar * math.cos(a)),
+                     xytext=(x_imp, z_imp),
+                     arrowprops=dict(arrowstyle="->", color=SPRAY, lw=1.5,
+                                     ls="--"))
+    leader(axm, (x_imp, z_imp),
+           (x_imp + 0.40 * Lb, z_imp - 0.16 * Lb),
+           f"impinging point\nθ_s = {half:.1f}° spray half-angle",
+           color=SPRAY)
+
+    # ---- dimension lines ---------------------------------------------
+    row = -t_face - 0.075 * Lb
+    step = 0.062 * Lb
+    dim_h(axm, -Ri, Ri, row, f"D_cg  Ø{2 * Ri:.2f}", ext_from=-t_face)
+    dim_h(axm, -Rp, Rp, row - step, f"D_pr  Ø{Dp:.2f}", ext_from=-t_face)
+    dim_h(axm, -Ro, Ro, row - 2 * step, f"D_ann_o  Ø{2 * Ro:.2f}",
+          ext_from=-t_face)
+    dim_h(axm, -Rs, Rs, row - 3 * step, f"D_ob  Ø{2 * Rs:.2f}",
+          ext_from=-t_face)
+    dim_h(axm, -tip_flat, tip_flat, Lb + 0.05 * Lb,
+          f"Ø{2 * tip_flat:.2f} tip flat", ext_from=Lb, above=False)
+
+    xv2 = Rs + 0.24 * Dp
+    xv3 = Rs + 0.42 * Dp
+    dim_v(axm, z_se, z_st, xv2, f"L_skip {L_skip:.2f}", ext_from=Rs)
+    dim_v(axm, 0.0, Lb, xv3, f"L_body {Lb:.1f}", ext_from=None)
+    leader(axm, (Rp + 0.3 * (Ro - Rp), z_sc),
+           (xv3 + 0.12 * Dp, z_sc + 0.06 * Lb), f"L_open {hs:.2f}")
+    ax_t = -(Rf_draw + 0.06 * Dp)
+    dim_v(axm, -t_face, 0.0, ax_t, f"t_face {t_face:.2f}",
+          ext_from=-Rf_draw, side=-1)
+
+    leader(axm, (0.5 * (Rp + Ro), 0.30 * bs),
+           (Rs + 0.10 * Dp, 0.24 * bs), f"δ_ann {gap:.3f}")
+    leader(axm, (0.5 * (Ro + Rs), 0.12 * bs),
+           (Rs + 0.10 * Dp, 0.08 * bs), f"δ_sleeve {t_sl:.2f}")
+    leader(axm, (-0.5 * (Ri + Rp), z_sc),
+           (-Rs - 0.72 * Dp, z_sc - 0.12 * Lb),
+           f"{ns} × {ws:.2f} × {hs:.2f} slots\n(web {web:.2f}, BF {bf:.0%})")
+
+    # tip cone angle callout
+    from matplotlib.patches import Arc
+    flank_ang = math.degrees(math.atan2(Lb - bs, Rp - tip_flat))
+    axm.plot([tip_flat, Rp + 0.16 * Dp], [Lb, Lb], color="0.55", lw=0.6,
+             ls="--")
+    axm.add_patch(Arc((tip_flat, Lb), 0.30 * Dp, 0.30 * Dp,
+                      angle=0.0, theta1=-flank_ang, theta2=0.0,
+                      color=DIM, lw=1.0))
+    leader(axm, (tip_flat + 0.16 * Dp * math.cos(math.radians(0.5 * flank_ang)),
+                 Lb - 0.16 * Dp * math.sin(math.radians(0.5 * flank_ang))),
+           (-Rp - 0.62 * Dp, Lb + 0.075 * Lb),
+           f"θ_pt {th_pt:.0f}° deflector")
+
+    axm.set_aspect("equal")
+    axm.set_xlim(-(Rf_draw + 0.75 * Dp), Rf_draw + 0.95 * Dp)
+    axm.set_ylim(Lb + 0.30 * Lb, -t_face - 0.44 * Lb)
+    axm.set_xlabel("radius r [mm]")
+    axm.set_ylabel("axial z from injector face [mm]")
+    axm.set_title("Dimensioned meridional section  (values in mm; "
+                  "matches pintle_dimensions.csv)", fontsize=10)
+
+    # ---- context view ------------------------------------------------
+    Lc = float(inj.chamber_length) * mm
+    try:
+        x_wall = float(inj.spray_wall_axial_distance) * mm
+    except Exception:
+        x_wall = float("nan")
+    z_end = min(Lc, (x_wall if math.isfinite(x_wall) else 0.6 * Lc)
+                + Lb + 0.25 * Lc)
+    for s in (+1, -1):
+        axc.plot([s * Rc, s * Rc], [0.0, z_end], color="0.1", lw=1.8)
+        rect(axc, s * Rs if s > 0 else -Rf, -t_face, Rf - Rs, t_face, **HATCH)
+        poly(axc, [(s * Ri, 0.0), (s * Rp, 0.0), (s * Rp, bs),
+                   (s * tip_flat, Lb), (0.0, Lb), (0.0, bore_end),
+                   (s * Ri, bore_end)],
+             facecolor="0.85", edgecolor="0.2", lw=0.8)
+    if math.isfinite(x_wall):
+        z_hit = z_sc + x_wall
+        for s in (+1, -1):
+            axc.plot([s * x_imp, s * Rc], [z_imp, z_hit], color=SPRAY,
+                     lw=1.4, ls="--")
+        axc.plot([Rc, -Rc], [z_hit, z_hit], lw=0, marker="o", ms=5,
+                 color=SPRAY)
+        leader(axc, (Rc, z_hit), (0.15 * Rc, z_hit + 0.16 * Lc),
+               f"wall intercept\nz = {z_hit:.0f} ({100 * z_hit / Lc:.0f}% L_c)",
+               color=SPRAY)
+    dim_h(axc, -Rc, Rc, z_end - 0.03 * Lc, f"D_c  Ø{2 * Rc:.1f}",
+          above=True)
+    axc.set_aspect("equal")
+    axc.set_xlim(-1.25 * Rf, 1.25 * Rf)
+    axc.set_ylim(z_end + 0.06 * Lc, -t_face - 0.12 * Lc)
+    axc.set_title("chamber context", fontsize=9)
+    axc.tick_params(labelsize=7)
+
+    # ---- tip end view -------------------------------------------------
+    tt = np.linspace(0.0, 2.0 * math.pi, 181)
+    axe.plot(Rp * np.cos(tt), Rp * np.sin(tt), color="0.15", lw=1.4)
+    axe.plot(Ri * np.cos(tt), Ri * np.sin(tt), color="0.4", lw=0.9, ls="--")
+    axe.plot(Ro * np.cos(tt), Ro * np.sin(tt), color="0.55", lw=0.8)
+    axe.plot(Rs * np.cos(tt), Rs * np.sin(tt), color="0.15", lw=1.0)
+    for i in range(ns):
+        a = 2.0 * math.pi * i / ns
+        ca, sa = math.cos(a), math.sin(a)
+        na, ta = (ca, sa), (-sa, ca)
+        r0, r1 = Ri, Rp
+        hw = 0.5 * ws
+        pts = [(r0 * na[0] + hw * ta[0], r0 * na[1] + hw * ta[1]),
+               (r1 * na[0] + hw * ta[0], r1 * na[1] + hw * ta[1]),
+               (r1 * na[0] - hw * ta[0], r1 * na[1] - hw * ta[1]),
+               (r0 * na[0] - hw * ta[0], r0 * na[1] - hw * ta[1])]
+        poly(axe, pts, facecolor="white", edgecolor="0.15", lw=0.7)
+    leader(axe, (Rp * math.cos(0.4), Rp * math.sin(0.4)),
+           (1.25 * Rs, 0.75 * Rs),
+           f"{ns} × {ws:.2f} mm slots\nweb {web:.2f} mm\nBF {bf:.0%}")
+    axe.set_aspect("equal")
+    lim = 1.9 * Rs
+    axe.set_xlim(-lim, 2.4 * Rs)
+    axe.set_ylim(-lim, lim)
+    axe.set_title("tip end view (slot pattern)", fontsize=9)
+    axe.axis("off")
+
+    tmr = float(inj.total_momentum_ratio)
     fig.suptitle(
-        f"Pintle injector reference schematic  —  fixed liquid/liquid, "
-        f"D_pr Ø{Dp*mm:.2f} mm, {n_slot} slots, TMR {inj.total_momentum_ratio:.2f}",
-        fontsize=12)
-    fig.subplots_adjust(left=0.055, right=0.985, bottom=0.17, top=0.82, wspace=0.22)
+        f"Pintle injector — D_pr Ø{Dp:.2f} mm, {ns} slots, "
+        f"TMR {tmr:.2f}, radial stream: {radial_name}   "
+        "(fixed annulus + radial slots; reference geometry, "
+        "not hardware-qualified)", fontsize=11)
     if save_path:
         fig.savefig(save_path, dpi=200)
     if show:

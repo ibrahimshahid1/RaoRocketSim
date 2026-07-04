@@ -177,9 +177,21 @@ class BDERegion:
     rows: tuple[tuple[FlowNode, ...], ...]
     iD: int
     grid_rows: tuple[tuple[FlowNode, ...], ...] = ()
+    full_grid_rows: tuple[tuple[FlowNode, ...], ...] = ()
     wall_contour: tuple[FlowNode, ...] = ()
+    # ``complete_remaining_mesh`` is True when every remaining-mesh row was
+    # built and terminated on the axis (r == 0) — i.e. the march ran to
+    # completion.  It is independent of negative-r truncation, which is a
+    # normal near-axis event (see ``negative_r_truncated_rows``); a completed
+    # mesh may still contain axis-truncated rows.
     complete_remaining_mesh: bool = False
     wall_contour_complete: bool = False
+    # Number of CalcRemainingMesh rows that terminated early because the
+    # interior unit process produced a negative-radius point.  NASA's source
+    # closes such rows at the axis and continues, so this is a diagnostic
+    # count, not a failure: it lets audits distinguish "ran to completion"
+    # from "ran to completion but some rows were axis-truncated".
+    negative_r_truncated_rows: int = 0
 
 
 @dataclass(frozen=True)
@@ -2446,35 +2458,45 @@ def _calc_remaining_mesh_row(
     current_seed_row: list[MOCNode],
     iD: int,
     gamma: float,
-) -> list[MOCNode] | None:
-    """Port one ``CalcRemainingMesh`` row below the known DE point."""
+) -> tuple[list[MOCNode] | None, bool]:
+    """Port one ``CalcRemainingMesh`` row below the known DE point.
+
+    Returns ``(row, negative_r_truncated)``.  ``negative_r_truncated`` is
+    True when the interior march stopped early because the unit process
+    produced a negative-radius point; NASA's source then closes the row at
+    the axis and continues, so the row is still usable but shorter than the
+    nominal ``iLast[j-1] + 1`` length.  Callers must not treat such rows as
+    fully marched.
+    """
     if len(current_seed_row) != iD + 1:
         raise ValueError("current_seed_row must contain wall through DE")
     if len(previous_full_row) <= iD:
-        return None
+        return None, False
 
     current = list(current_seed_row)
     prev_chars = [_moc_to_char_point(node, gamma) for node in previous_full_row]
 
     # NASA sets iLast[j] = iLast[j-1] + 1 and computes interior points for
     # iD+1 <= i < iLast[j].  The final index is closed by CalcAxialMeshPoint.
+    truncated = False
     while len(current) < len(previous_full_row):
         curr_chars = [_moc_to_char_point(node, gamma) for node in current]
         point, negative_r = _calc_interior_mesh_point(
             prev_chars, curr_chars, len(current), True, gamma,
         )
         if negative_r:
+            truncated = True
             break
         if point is None:
-            return None
+            return None, truncated
         current.append(MOCNode.from_char_point(point, gamma))
 
     curr_chars = [_moc_to_char_point(node, gamma) for node in current]
     axis = _calc_axial_mesh_point(curr_chars, gamma)
     if axis is None:
-        return None
+        return None, truncated
     current.append(MOCNode.from_char_point(axis, gamma))
-    return current
+    return current, truncated
 
 
 def _de_cumulative_mass(de_nodes: list[MOCNode]) -> list[float]:
@@ -2686,6 +2708,7 @@ def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
     bfe_full_rows: list[list[MOCNode]] = []
     previous_seed = bd_seed_row
     previous_full = bd_full_row
+    negative_r_truncations = 0
     for de_node in de_nodes[1:]:
         current: list[MOCNode | None] = [None] * (iD + 1)
         current[iD] = de_node
@@ -2694,13 +2717,16 @@ def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
             if point is None:
                 return BDERegion(
                     rows=tuple(rows), iD=iD, complete_remaining_mesh=False,
+                    negative_r_truncated_rows=negative_r_truncations,
                 )
             current[i] = point
         completed = [node for node in current if node is not None]
         rows.append(tuple(node.to_flow_node() for node in completed))
-        remaining = _calc_remaining_mesh_row(
+        remaining, row_truncated = _calc_remaining_mesh_row(
             previous_full, completed, iD, kernel.gamma,
         )
+        if row_truncated:
+            negative_r_truncations += 1
         if remaining is None:
             return BDERegion(
                 rows=tuple(rows), iD=iD,
@@ -2708,7 +2734,12 @@ def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
                     tuple(node.to_flow_node() for node in row)
                     for row in bfe_full_rows
                 ),
+                full_grid_rows=tuple(
+                    tuple(node.to_flow_node() for node in row)
+                    for row in bfe_full_rows
+                ),
                 complete_remaining_mesh=False,
+                negative_r_truncated_rows=negative_r_truncations,
             )
         bfe_full_rows.append(remaining)
         previous_seed = completed
@@ -2719,6 +2750,16 @@ def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
         bd_full_row, bfe_full_rows, de_masses, iD, kernel.gamma,
     )
 
+    # ``complete_remaining_mesh`` certifies the mesh ran to completion — every
+    # remaining-mesh row was built and terminated on the axis (r == 0).
+    # Negative-r truncation is a NORMAL feature of axisymmetric MOC converging
+    # onto the singular axis (NASA CalcRemainingMesh drops such points and
+    # continues); it is reported separately via ``negative_r_truncated_rows``
+    # and does not by itself make the mesh incomplete.
+    axis_tol = 1e-6 * max(kernel.Rt, 1e-12)
+    reached_axis = bool(bfe_full_rows) and all(
+        row and abs(row[-1].r) <= axis_tol for row in bfe_full_rows
+    )
     return BDERegion(
         rows=tuple(rows),
         iD=iD,
@@ -2726,9 +2767,14 @@ def calc_bde_region(kernel: MOCKernel, topology: RaoTopology) -> BDERegion:
             tuple(node.to_flow_node() for node in row)
             for row in cropped_rows
         ),
+        full_grid_rows=tuple(
+            tuple(node.to_flow_node() for node in row)
+            for row in bfe_full_rows
+        ),
         wall_contour=tuple(node.to_flow_node() for node in wall_nodes),
-        complete_remaining_mesh=True,
+        complete_remaining_mesh=reached_axis,
         wall_contour_complete=bool(wall_complete),
+        negative_r_truncated_rows=negative_r_truncations,
     )
 
 
@@ -2779,11 +2825,16 @@ def build_source_contour_from_kernel(
     r_scale = max(abs(target_r), kernel.Rt, 1e-12)
     exit_rel_error = max(abs(exit_dx) / x_scale, abs(exit_dr) / r_scale)
     length_closed = bool(exit_rel_error <= float(exit_rel_tol))
+    # The source contour is only "complete" once length is also closed via
+    # the (not-yet-ported) CropNozzleToLength stage.  ``complete_remaining_mesh``
+    # now certifies the interior mesh reached the axis, so length closure is
+    # the remaining gate that keeps this honest.
     source_contour_complete = bool(
         not kernel.fallback_used
         and kernel.reached_wall
         and bfe.complete_remaining_mesh
         and bfe.wall_contour_complete
+        and length_closed
         and len(wall) > 0
     )
     diagnostics = {
@@ -2795,7 +2846,9 @@ def build_source_contour_from_kernel(
         "kernel_rrcs": len(kernel.rrcs),
         "bfe_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
         "bfe_wall_contour_complete": bool(bfe.wall_contour_complete),
+        "bfe_negative_r_truncated_rows": int(bfe.negative_r_truncated_rows),
         "bfe_grid_rows": len(bfe.grid_rows),
+        "bfe_full_grid_rows": len(bfe.full_grid_rows),
         "wall_points": len(wall),
         "target_exit": {"x": target_x, "r": target_r},
         "source_exit": {"x": float(topology.E.x), "r": float(topology.E.r)},

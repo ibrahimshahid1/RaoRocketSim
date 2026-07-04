@@ -249,6 +249,9 @@ Examples:
                    help='Pintle diameter [mm]; defaults from chamber diameter')
     p.add_argument('--pintle-slot-count', type=int, default=24,
                    help='Number of radial pintle slots')
+    p.add_argument('--pintle-radial-exit', choices=['holes', 'slots'],
+                   default='holes',
+                   help='Coaxial pintle tip radial exit style for machined CAD')
     p.add_argument('--pintle-slot-aspect-ratio', type=float, default=1.0,
                    help='Auto-sized slot height/width')
     p.add_argument('--pintle-deflector-angle', type=float, default=0.0,
@@ -293,12 +296,14 @@ Examples:
                    help='Oxidizer pump required NPSH [bar]')
     # --- injector reference-geometry / CAD output ----------------------
     p.add_argument('--injector-cad',
-                   choices=['none', 'reference', 'parts', 'machined'],
+                   choices=['none', 'auto', 'reference', 'parts', 'machined',
+                            'step'],
                    default='none',
                    help='Pintle CAD output: none (schematic+JSON+CSV only, '
-                        'always written), reference (single file), parts '
+                        'always written), auto/machined (Boolean-cut STEP '
+                        'bodies + report), reference (single file), parts '
                         '(reference + named part files), or machined '
-                        '(Boolean-cut STEP bodies + report)')
+                        '(same as auto). step is a legacy alias for machined.')
     p.add_argument('--injector-cad-format', choices=['step', 'stl', 'dxf'],
                    default='step',
                    help='Pintle CAD format: step (portable B-rep, default), '
