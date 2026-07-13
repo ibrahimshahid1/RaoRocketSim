@@ -155,8 +155,8 @@ def test_fixed_end_topology_closes_at_rao_reference():
 def test_fixed_end_topology_wall_is_bell_shaped():
     """Kernel arc wall + BDE wall from the fixed-end topology = TOP bell.
 
-    This is the geometry-level counterpart of the (still-xfail) solved-CE
-    shape test in test_jax_convergence.py: slope must peak near theta_B
+    This is the geometry-level counterpart of the solved-CE convergence
+    research cases in test_jax_convergence.py: slope must peak near theta_B
     right after the throat arc and decrease monotonically — no mid-bell
     flare (the old Rao-case contour peaked 35.6 deg at 60% length).
     """

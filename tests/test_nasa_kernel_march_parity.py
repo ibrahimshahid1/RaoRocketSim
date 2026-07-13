@@ -5,23 +5,28 @@ These tests pin the two root-cause fixes that unblocked the RRC march:
 
 1. ``_visible_source_kl_throat`` honours the C++ *integer-division*
    semantics in ``z*(y*y - 5/8)`` (== ``z*y*y``; 5/8 is 0 in C++).  The
-   binary that generated ``outputs_M3.5Perf`` ran with the term dropped,
-   so binary fidelity requires dropping it too.  (The theory-correct
+   explicit compatibility mode reproduces ``outputs_M3.5Perf`` with the term
+   dropped.  This is output compatibility, not proof of the unavailable
+   historical executable's provenance.  (The theory-correct
    ``y^2 - 5/8`` lives in ``raosim.transonic_kernel.kliegel_levine``.)
 2. ``build_kernel`` evaluates the transonic start line with the
    *upstream* throat radius (C++ ``CalcInitialThroatLine(rUp, ...)``)
    via the new ``Ru=`` parameter, while the marching arc keeps the
    downstream radius.
 
-Oracle: the checked-in NASA/JHU M3.5Perf outputs
+Regression overlay: the checked-in NASA/JHU M3.5Perf outputs
 (``Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/outputs_M3.5Perf``):
 ``TT'.out`` (start line), ``TT'BF_Kernel.out`` (full kernel grid),
 ``LastKernel.out`` (BD, j=57).
 
+The overlay generator's exact executable/source variant remains unresolved;
+these tests verify the explicit source-visible compatibility mode and do not
+authorize a ``NASA_REFERENCE_MATCHED`` reliability promotion.
+
 Historical note: before these fixes the march never advanced past TT'
 (``rrcs == 1`` for every tested configuration) and silently fell back to
-a degenerate arc+sonic-line BD — the actual root cause of the Phase 6
-``max_scaled ~ 8`` convergence xfail (see JAX_DIFFERENTIABLE_PLAN.md §10
+a degenerate arc+sonic-line BD — the root cause of the former Phase 6
+``max_scaled ~ 8`` expected failure (see JAX_DIFFERENTIABLE_PLAN.md §10
 and tests/test_jax_convergence.py).
 """
 

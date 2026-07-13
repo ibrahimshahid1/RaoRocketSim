@@ -81,8 +81,27 @@ def resolve_reference_pintle_layout(inj, spec=None) -> dict:
     Ro = 0.5 * _positive(
         inj.annulus.detail.get("outer_diameter"), Dp + 2.0 * gap
     )
-    slot_w = max(_positive(inj.slots.detail.get("slot_width"), 0.4 * gap), 5e-5)
-    slot_h = max(_positive(inj.slots.detail.get("slot_height"), slot_w), 5e-5)
+    radial_style = str(getattr(inj.slots, "geometry", "slots")).lower()
+    if radial_style == "holes":
+        # Reference geometry must preserve the solved metering area too.  A
+        # below-tool-floor bore is a failed manufacturing gate, not permission
+        # for the exporter to silently enlarge the orifice.
+        hole_d = _positive(
+            inj.slots.detail.get("hole_diameter"), 0.4 * gap
+        )
+        # Compatibility names below are the opening's tangential and axial
+        # extents.  For a round radial hole both equal its diameter.
+        slot_w = slot_h = hole_d
+    elif radial_style == "slots":
+        hole_d = None
+        slot_w = max(
+            _positive(inj.slots.detail.get("slot_width"), 0.4 * gap), 5e-5
+        )
+        slot_h = max(
+            _positive(inj.slots.detail.get("slot_height"), slot_w), 5e-5
+        )
+    else:
+        raise ValueError(f"unsupported radial exit geometry {radial_style!r}")
     n_slot = max(int(inj.slot_count), 1)
     t_wall = max(0.25 * Rp, 1.0e-3)
     t_sleeve = max(0.4 * gap, 0.5e-3)
@@ -145,6 +164,8 @@ def resolve_reference_pintle_layout(inj, spec=None) -> dict:
         "tip_length_m": tip_len,
         "tip_flat_radius_m": tip_flat_radius,
         "deflector_angle_deg": deflector_angle,
+        "radial_exit_style": radial_style,
+        "radial_hole_diameter_m": hole_d,
         "slot_width_m": slot_w,
         "slot_height_m": slot_h,
         "slot_count": n_slot,
@@ -204,9 +225,7 @@ def _revolve_rz(cq, points_rz):
 
 
 def _pintle_post_solid(cq, lay, n_slot):
-    """One-piece pintle post from the shared reference layout: rod through
-    the faceplate, center bore to the tip joint, radial slots through the
-    wall at the metering station."""
+    """One-piece reference post with the solved radial opening style."""
     Rp = lay["pintle_radius_m"]
     Ri = lay["bore_radius_m"]
     t_face = lay["face_thickness_m"]
@@ -220,6 +239,18 @@ def _pintle_post_solid(cq, lay, n_slot):
         .circle(Ri).extrude(bs - z_back + 2.0e-3)
     )
     post = post.cut(bore)
+    if lay.get("radial_exit_style") == "holes":
+        diameter = lay["radial_hole_diameter_m"]
+        for i in range(max(int(n_slot), 1)):
+            post = post.cut(_radial_cylinder(
+                cq,
+                Ri - diameter,
+                Rp + diameter,
+                lay["z_slot_center_m"],
+                diameter,
+                360.0 * i / max(int(n_slot), 1),
+            ))
+        return post
     return _cut_reference_slots(
         cq, post, Rp, lay["pintle_wall_m"], lay["slot_width_m"],
         lay["slot_height_m"], n_slot, lay["z_slot_center_m"])
@@ -333,19 +364,51 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
     Rp = 0.5 * Dp
     gap = _positive(inj.annulus.detail.get("gap"), 0.1 * Rp)
     Ro = 0.5 * _positive(inj.annulus.detail.get("outer_diameter"), Dp + 2.0 * gap)
-    slot_w = _positive(inj.slots.detail.get("slot_width"), min_feature)
-    slot_h = _positive(inj.slots.detail.get("slot_height"), slot_w)
-    slot_depth_source = (
-        mech.slot_depth
-        if mech.slot_depth is not None else
-        getattr(geo, "slot_depth", None)
-        if geo is not None and getattr(geo, "slot_depth", None) is not None else
-        inj.slots.detail.get("slot_depth")
-    )
+    radial_style = str(inj.slots.geometry)
+    if radial_style == "holes":
+        # Round-hole hydraulics own the bore diameter and length.  In
+        # particular, never substitute the manufacturing floor here: doing so
+        # would export a larger metering area than the injector solver used.
+        slot_w = _positive(inj.slots.detail.get("hole_diameter"), min_feature)
+        slot_h = slot_w
+        slot_depth_source = inj.slots.detail.get("hole_length")
+    else:
+        slot_w = _positive(inj.slots.detail.get("slot_width"), min_feature)
+        slot_h = _positive(inj.slots.detail.get("slot_height"), slot_w)
+        slot_depth_source = (
+            mech.slot_depth
+            if mech.slot_depth is not None else
+            getattr(geo, "slot_depth", None)
+            if geo is not None and getattr(geo, "slot_depth", None) is not None else
+            inj.slots.detail.get("slot_depth")
+        )
 
-    base_wall = max(0.25 * Rp, 1.0e-3)
     requested_slot_depth = _positive(slot_depth_source, inj.slots.hydraulic_diameter)
-    pintle_wall = min(_positive(mech.pintle_wall_thickness, base_wall), 0.80 * Rp)
+    base_wall = max(0.25 * Rp, 1.0e-3)
+    if radial_style == "holes":
+        if requested_slot_depth >= 0.80 * Rp:
+            raise ValueError(
+                "solved radial-hole length consumes at least 80% of the "
+                "pintle radius; no viable center bore remains"
+            )
+        if (
+            mech.pintle_wall_thickness is not None
+            and not math.isclose(
+                float(mech.pintle_wall_thickness), requested_slot_depth,
+                rel_tol=1.0e-6, abs_tol=1.0e-9,
+            )
+        ):
+            raise ValueError(
+                "round-hole flow length and pintle_wall_thickness disagree; "
+                "a through radial bore's physical L is the pintle wall"
+            )
+        # For a round through-bore, L is not an abstract correlation input: it
+        # is exactly the radial wall traversed from the center bore to the OD.
+        pintle_wall = requested_slot_depth
+    else:
+        pintle_wall = min(
+            _positive(mech.pintle_wall_thickness, base_wall), 0.80 * Rp
+        )
     # A cut-through STEP must actually breach the pintle wall.  Preserve the
     # requested value in the report and use a cut depth that reaches the bore.
     slot_cut_depth = max(requested_slot_depth, pintle_wall + 2.0 * tol)
@@ -461,11 +524,22 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
         )
         d["transfer_z_m"] = -face_t + 0.5 * d["manifold_depth_m"]
 
+    # The chamber joint seal must enclose both the hot-gas bore and every
+    # injector manifold.  Resolve that envelope before the bolt circle so the
+    # common chamber/injector pattern cannot place a bolt through the gland.
+    o_width = _positive(mech.o_ring_groove_width, max(2.0 * min_tool, 1.5e-3))
+    o_depth = _positive(mech.o_ring_groove_depth, max(0.75 * min_tool, 7.5e-4))
+    seal_inner = max(float(inj.chamber_radius), next_inner) + land
+    seal_center = seal_inner + 0.5 * o_width
+
     bolt_count = _count(mech.bolt_count, 8)
     bolt_hole = _positive(mech.bolt_hole_diameter, max(2.5 * min_tool, 3.0e-3))
     outermost_manifold = max(d["manifold_outer_radius_m"] for d in roles.values())
     bolt_circle_requested = _f(mech.bolt_circle_diameter)
-    bolt_circle_min = 2.0 * (outermost_manifold + land + 0.5 * bolt_hole)
+    bolt_circle_min = 2.0 * max(
+        outermost_manifold + land + 0.5 * bolt_hole,
+        seal_center + 0.5 * o_width + land + 0.5 * bolt_hole,
+    )
     face_od_min = max(
         2.0 * inj.chamber_radius,
         2.0 * (next_inner + 2.0 * land + bolt_hole),
@@ -489,13 +563,6 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
     igniter_d = min(igniter_d, max(2.0 * (inner_pintle_radius - min_feature), min_tool))
     igniter_depth = _positive(mech.igniter_port_depth, face_t + body_len)
 
-    o_width = _positive(mech.o_ring_groove_width, max(2.0 * min_tool, 1.5e-3))
-    o_depth = _positive(mech.o_ring_groove_depth, max(0.75 * min_tool, 7.5e-4))
-    seal_center = min(
-        max(next_inner + land + 0.5 * o_width, Rs + 2.0 * land),
-        max(face_R - land - 0.5 * o_width, Rs + 2.0 * land),
-    )
-
     slot_corner = _positive(mech.slot_corner_radius, min_corner)
     max_slot_corner = 0.49 * min(slot_w, slot_h)
     slot_corner = min(slot_corner, max_slot_corner)
@@ -509,12 +576,16 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
             "detail": detail,
         })
 
+    opening_name = "hole diameter" if radial_style == "holes" else "slot width"
     gate(
-        "slot_cut_through",
+        "radial_cut_through",
         slot_cut_depth >= pintle_wall + tol,
-        f"slot Boolean depth {slot_cut_depth*1e3:.3f} mm vs pintle wall "
+        f"radial-opening Boolean depth {slot_cut_depth*1e3:.3f} mm vs pintle wall "
         f"{pintle_wall*1e3:.3f} mm plus tolerance {tol*1e3:.3f} mm",
     )
+    # Compatibility name retained for reports/tests produced before the
+    # geometry-specific radial exit was introduced.
+    gates.append({**gates[-1], "name": "slot_cut_through"})
     gate(
         "slot_corner_radius",
         slot_corner >= min_corner or max_slot_corner < min_corner,
@@ -525,7 +596,8 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
     gate(
         "minimum_tool_diameter",
         slot_w >= min_tool and gap >= min_tool,
-        f"slot width {slot_w*1e3:.3f} mm and annulus gap {gap*1e3:.3f} mm vs "
+        f"{opening_name} {slot_w*1e3:.3f} mm and annulus gap "
+        f"{gap*1e3:.3f} mm vs "
         f"minimum tool {min_tool*1e3:.3f} mm",
     )
     gates.append({
@@ -595,8 +667,14 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
     if mech.seal_type == "o_ring":
         gate(
             "o_ring_groove",
-            o_width >= 2.0 * min_tool and o_depth >= 0.5 * min_tool,
+            (
+                o_width >= 2.0 * min_tool
+                and o_depth >= 0.5 * min_tool
+                and seal_center + 0.5 * o_width + land
+                <= 0.5 * bolt_circle - 0.5 * bolt_hole + 1.0e-12
+            ),
             f"O-ring groove {o_width*1e3:.3f} x {o_depth*1e3:.3f} mm; "
+            f"centre radius {seal_center*1e3:.3f} mm outside chamber/manifolds; "
             "crush/preload must be checked against the selected seal standard",
             warn=True,
         )
@@ -623,6 +701,10 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
         ),
         "hydraulic_basis": {
             "annulus_area_m2": inj.annulus.area,
+            "radial_opening_area_total_m2": inj.slots.area,
+            "radial_opening_count": int(inj.slot_count),
+            "radial_exit_style": radial_style,
+            # Deprecated aliases retained for existing report consumers.
             "slot_area_total_m2": inj.slots.area,
             "slot_count": int(inj.slot_count),
             "radial_stream": inj.radial_stream,
@@ -657,6 +739,13 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
             "bolt_hole_diameter_m": bolt_hole,
             "slot_width_m": slot_w,
             "slot_height_m": slot_h,
+            "radial_exit_style": radial_style,
+            "radial_hole_diameter_m": (
+                slot_w if radial_style == "holes" else None
+            ),
+            "radial_hole_length_m": (
+                requested_slot_depth if radial_style == "holes" else None
+            ),
             "slot_depth_requested_m": requested_slot_depth,
             "slot_cut_depth_m": slot_cut_depth,
             "slot_corner_radius_m": slot_corner,
@@ -679,7 +768,7 @@ def resolve_machined_pintle_layout(inj, spec=None) -> dict:
             "features": [
                 "radial faceplate transfer cuts from each manifold toward the central bore",
                 "radial sleeve wall transfer holes for the annulus-fed stream",
-                "radial pintle-post transfer holes for the slot-fed stream",
+                "radial pintle-post transfer holes for the radial-opening stream",
             ],
             "limits": (
                 "Transfer paths are geometric continuity features only; detailed "
@@ -750,7 +839,14 @@ def inspect_machined_step(path) -> dict:
         "solid_count": len(solids),
         "single_solid": len(solids) == 1,
         "all_solids_valid": bool(solids) and all(s.isValid() for s in solids),
-        "volumes_m3": volumes,
+        # OpenCascade/CadQuery STEP geometry is written in millimetres in this
+        # repository.  ``Shape.Volume`` is therefore mm^3, not m^3.  Keep the
+        # old key as an explicitly deprecated alias for downstream readers
+        # which consumed early reports, but never label the numeric values as
+        # SI volume again.
+        "volumes_mm3": volumes,
+        "volumes_m3_deprecated_alias": volumes,
+        "units": "STEP coordinates mm; volume mm^3",
     }
 
 
@@ -765,8 +861,6 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
     gap = max(inj.annulus.detail.get("gap", 0.1 * Rp), 1e-4)
     Ro = 0.5 * inj.annulus.detail.get("outer_diameter", Dp + 2 * gap)
     Rc = inj.chamber_radius
-    slot_w = max(inj.slots.detail.get("slot_width", 0.4 * gap), 5e-5)
-    slot_h = max(inj.slots.detail.get("slot_height", slot_w), 5e-5)
     n_slot = max(int(inj.slot_count), 1)
     t_wall = max(0.25 * Rp, 1e-3)               # pintle wall thickness
     body_len = 3.0 * Dp                         # protrusion into the chamber
@@ -777,8 +871,6 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
     t_sleeve = max(0.4 * gap, 0.5e-3)
     R_ig = 0.5 * (igniter_diameter if igniter_diameter
                   else max(0.3 * (Rp - t_wall), 1.5e-3))
-    z_slot = max(body_straight - 0.6 * slot_h, 0.1 * body_straight)
-
     lay = resolve_reference_pintle_layout(inj)
     asm = cq.Assembly(name="pintle_injector")
 
@@ -822,19 +914,42 @@ def build_pintle_assembly(inj, *, movable_sleeve=False,
         )
         asm.add(annulus, name="axial_annulus", color=cq.Color(0.3, 0.55, 0.85))
 
-        slot_assembly = cq.Assembly(name="radial_slot_network")
+        style = lay["radial_exit_style"]
+        network_name = (
+            "radial_hole_network" if style == "holes"
+            else "radial_slot_network"
+        )
+        opening_assembly = cq.Assembly(name=network_name)
         for i in range(n_slot):
             ang = 360.0 * i / n_slot
-            box = (
-                cq.Workplane("XY").workplane(offset=z_slot)
-                .center(Rp - 0.5 * t_wall, 0.0)
-                .box(2.0 * (gap + t_wall), slot_w, slot_h,
-                     centered=(True, True, False))
-                .rotate((0, 0, 0), (0, 0, 1), ang)
+            if style == "holes":
+                opening = _radial_cylinder(
+                    cq,
+                    lay["bore_radius_m"],
+                    lay["pintle_radius_m"] + gap,
+                    lay["z_slot_center_m"],
+                    lay["radial_hole_diameter_m"],
+                    ang,
+                )
+                child_name = f"hole_{i:02d}"
+            else:
+                opening = (
+                    cq.Workplane("XY")
+                    .workplane(offset=lay["z_slot_center_m"])
+                    .center(Rp - 0.5 * t_wall, 0.0)
+                    .box(
+                        2.0 * (gap + t_wall),
+                        lay["slot_width_m"],
+                        lay["slot_height_m"],
+                        centered=(True, True, True),
+                    )
+                    .rotate((0, 0, 0), (0, 0, 1), ang)
+                )
+                child_name = f"slot_{i:02d}"
+            opening_assembly.add(
+                opening, name=child_name, color=cq.Color(0.9, 0.5, 0.2)
             )
-            slot_assembly.add(box, name=f"slot_{i:02d}",
-                              color=cq.Color(0.9, 0.5, 0.2))
-        asm.add(slot_assembly, name="radial_slot_network")
+        asm.add(opening_assembly, name=network_name)
 
     # --- propellant manifolds (annular rings behind the face) -----------
     fuel_manifold = (
@@ -885,8 +1000,28 @@ def export_pintle_step(inj, path, *, movable_sleeve=False,
     cq = _cq()
     from pathlib import Path
     path = Path(path)
-    asm = build_pintle_assembly(
+    asm_si = build_pintle_assembly(
         inj, movable_sleeve=movable_sleeve, igniter_diameter=igniter_diameter)
+    # Reference CAD historically exported the SI-valued construction bodies
+    # directly.  STEP readers interpret those numbers as millimetres, making
+    # the reference/parts modes 1000x smaller than the machined mode.  Rebuild
+    # the named tree at the neutral-file boundary with every leaf scaled to
+    # canonical millimetres.  Builders remain SI so their public contract and
+    # geometric tests do not change.
+    def scaled_assembly(node):
+        out = cq.Assembly(name=node.name)
+        for child in node.children:
+            if child.children:
+                out.add(scaled_assembly(child), name=child.name)
+                continue
+            obj = child.obj
+            shape = obj.val() if hasattr(obj, "val") else obj
+            if shape is None:
+                continue
+            out.add(_to_mm_step_solid(shape), name=child.name)
+        return out
+
+    asm = scaled_assembly(asm_si)
     # STEP (authoritative, carries the named assembly tree)
     try:
         asm.export(str(path))
@@ -905,7 +1040,11 @@ def export_pintle_step(inj, path, *, movable_sleeve=False,
         stl_dir = Path(stl_dir)
         stl_dir.mkdir(parents=True, exist_ok=True)
         written = []
-        mesh_tol = _stl_tolerances(resolve_reference_pintle_layout(inj))
+        mesh_tol_si = _stl_tolerances(resolve_reference_pintle_layout(inj))
+        mesh_tol = {
+            "tolerance": 1000.0 * mesh_tol_si["tolerance"],
+            "angularTolerance": mesh_tol_si["angularTolerance"],
+        }
         for child in asm.children:
             try:
                 shape = child.obj
@@ -1112,7 +1251,7 @@ def _build_machined_pintle_post(cq, layout: dict):
         post = post.cut(_slot_cutter(cq, layout, 360.0 * i / n_slot))
 
     for role, d in layout["roles"].items():
-        if d["feeds"] != "slots":
+        if d["feeds"] not in ("slots", "holes"):
             continue
         count = int(d["transfer_count"])
         for i in range(count):
@@ -1185,7 +1324,7 @@ def _to_mm_step_solid(shape):
 
 
 def export_machined_pintle_cad(
-    inj, out_dir, *, spec=None, fmt="step", radial_style="holes"
+    inj, out_dir, *, spec=None, fmt="step", radial_style=None
 ) -> dict:
     """Export the machined pintle package.
 
@@ -1292,6 +1431,15 @@ def export_pintle_cad(inj, out_dir, *, mode="reference", fmt="step",
             inj, out_dir / "pintle_reference.dxf"))
         notes.append("DXF is the 2-D meridional profile (revolve to recover the "
                      "solid); use --injector-cad-format step for 3-D parts.")
+        units_path = out_dir / "pintle_cad_units.json"
+        units_path.write_text(json.dumps({
+            "schema": "raosim.cad_units.v1",
+            "public_api_linear_unit": "m",
+            "neutral_file_linear_unit": "mm",
+            "files": {"pintle_reference.dxf": "mm"},
+            "stl_unit_policy": "numeric coordinates are millimetres",
+        }, indent=2) + "\n", encoding="utf-8")
+        files["cad_units"] = str(units_path)
         return {"files": files, "notes": notes}
 
     cq = _cq()                                   # STEP/STL need CadQuery
@@ -1309,9 +1457,12 @@ def export_pintle_cad(inj, out_dir, *, mode="reference", fmt="step",
             shape = asm.toCompound()
         except Exception:
             shape = asm
+        shape = _to_mm_step_solid(shape)
+        mesh_tol_si = _stl_tolerances(resolve_reference_pintle_layout(inj))
         cq.exporters.export(
             shape, str(ref), exportType="STL",
-            **_stl_tolerances(resolve_reference_pintle_layout(inj)))
+            tolerance=1000.0 * mesh_tol_si["tolerance"],
+            angularTolerance=mesh_tol_si["angularTolerance"])
         notes.append(
             "STL preview exports hardware only; named flow-volume bodies are "
             "omitted so annulus/slot passages do not appear as solid blocks.")
@@ -1323,8 +1474,40 @@ def export_pintle_cad(inj, out_dir, *, mode="reference", fmt="step",
         for name, solid in build_pintle_parts(inj).items():
             p = pdir / f"{name}.{ext}"
             try:
-                cq.exporters.export(solid, str(p), exportType=etype)
+                export_shape = _to_mm_step_solid(solid)
+                kwargs = {}
+                if fmt == "stl":
+                    mesh_tol_si = _stl_tolerances(
+                        resolve_reference_pintle_layout(inj))
+                    kwargs = {
+                        "tolerance": 1000.0 * mesh_tol_si["tolerance"],
+                        "angularTolerance": mesh_tol_si["angularTolerance"],
+                    }
+                cq.exporters.export(
+                    export_shape, str(p), exportType=etype, **kwargs)
                 files[f"part_{name}"] = str(p)
             except Exception as exc:
                 notes.append(f"part {name} export failed: {type(exc).__name__}")
+
+    units_path = out_dir / "pintle_cad_units.json"
+    units_path.write_text(json.dumps({
+        "schema": "raosim.cad_units.v1",
+        "public_api_linear_unit": "m",
+        "neutral_file_linear_unit": "mm",
+        "step_schema": "AP214",
+        "files": {
+            Path(value).name: "mm"
+            for key, value in files.items()
+            if key != "cad_units"
+        },
+        "stl_unit_policy": (
+            "STL has no embedded unit; all numeric coordinates exported by "
+            "RaoRocketSim are millimetres"
+        ),
+    }, indent=2) + "\n", encoding="utf-8")
+    files["cad_units"] = str(units_path)
+    notes.append(
+        "Neutral CAD uses millimetre coordinates; pintle_cad_units.json is "
+        "the authoritative unit sidecar (including unitless STL)."
+    )
     return {"files": files, "notes": notes}

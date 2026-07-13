@@ -5,13 +5,11 @@ coils, run the cooling analysis, and export everything.
 
 Pipeline
 --------
-1. Solve the Rao variational / MOC nozzle boundary-value problem
-   (``solve_rao_bvp``) on the chosen backend — ``--backend jax`` is the
-   differentiable Optimistix-LM path with exact autodiff Jacobians;
-   ``--backend numpy`` is the SciPy finite-difference oracle.  The wall
-   is built by NASA's BDE-region method-of-characteristics march
-   (``wall_method="bde"``), i.e. the real characteristic contour, not
-   the chart Bézier.
+1. Construct the trusted deterministic Rao/TOP chart Bézier contour by
+   default.  ``--contour-method rao-bvp`` opts into the experimental Rao
+   variational / MOC boundary-value problem (``solve_rao_bvp``):
+   ``--backend jax`` is the differentiable Optimistix-LM path and
+   ``--backend numpy`` is the SciPy finite-difference oracle.
 2. Build the chamber from ``L*`` and contraction ratio using the same
    throat geometry as the nozzle.
 3. ``--regen`` adds the N regenerative cooling channels (axial, or
@@ -32,8 +30,8 @@ Run examples
     python scripts/run_nozzle.py
     python scripts/run_nozzle.py -i
 
-    # contour only (differentiable backend), host (full quality):
-    PYTHONPATH=. python scripts/run_nozzle.py --backend jax \
+    # experimental BVP contour, host (full quality):
+    PYTHONPATH=. python scripts/run_nozzle.py --contour-method rao-bvp --backend jax \
         --rt 0.02 --epsilon 10 --length-pct 80 --gamma 1.24 \
         --out builds/run1
 
@@ -56,7 +54,8 @@ Run examples
     PYTHONPATH=. python scripts/run_nozzle.py --max-nfev 0 --regen \
         --out builds/run_smoke
 
-Note: the full ``--backend jax`` solve (max_nfev ~4000 + weight ladder)
+Note: the full ``--contour-method rao-bvp --backend jax`` solve
+(max_nfev ~4000 + weight ladder)
 runs for minutes — it is a host job. ``--max-nfev 0`` evaluates the seed
 only and is useful for diagnostics; hard geometry-gate failures block export.
 """
@@ -93,6 +92,26 @@ def orange(s): return _c(s, "38;5;208")
 def green(s): return _c(s, "32")
 def yellow(s): return _c(s, "33")
 def red(s): return _c(s, "31")
+
+
+def _parse_opening_cd_map(value: str) -> tuple[tuple[float, float], ...]:
+    """Parse ``opening_fraction:Cd`` pairs for movable-pintle calibration."""
+
+    points: list[tuple[float, float]] = []
+    try:
+        for item in str(value).split(","):
+            fraction_text, cd_text = item.strip().split(":", 1)
+            points.append((float(fraction_text), float(cd_text)))
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError(
+            "expected comma-separated opening_fraction:Cd pairs, e.g. "
+            "'0:0.62,0.5:0.70,1:0.76'"
+        ) from exc
+    if len(points) < 2:
+        raise argparse.ArgumentTypeError(
+            "movable-pintle Cd map requires at least two points"
+        )
+    return tuple(points)
 
 
 _LOGO = r"""
@@ -133,12 +152,17 @@ def print_tags() -> None:
              "combustion pair and injector feed identities"),
             ("--thermo-mode {constant-gamma,cea}",
              "built-in screening table or RocketCEA chamber snapshot"),
+            ("--nozzle-expansion-model {constant-gamma,frozen-variable-cp}",
+             "calorically perfect or fixed-composition variable-cp Q1D"),
+            ("--frozen-gas-table", "strict provenance-bound cp(T) JSON table"),
             ("--pc / --pa-over-p0", "chamber pressure [Pa] / ambient ratio"),
             ("--target-thrust / --rt", "size throat from thrust, or set Rt"),
             ("--mixture-ratio", "O/F flow split; default from propellant table"),
             ("--eta-cstar / --eta-cf", "combustion and nozzle efficiency overrides"),
         ]),
         ("Nozzle", [
+            ("--contour-method {bezier,rao-bvp}",
+             "trusted Rao/TOP chart contour (default) or experimental BVP"),
             ("--rt", "throat radius [m]"),
             ("--epsilon", "expansion ratio Ae/At"),
             ("--length-pct", "bell length [% of 15° cone]"),
@@ -187,8 +211,10 @@ def print_tags() -> None:
         ]),
         ("Pintle injector", [
             ("--injector {pintle,none}", "generate/evaluate the selected injector"),
-            ("--injector-sizing {auto,fixed}",
-             "auto-size passages, or evaluate supplied fixed geometry"),
+            ("--injector-architecture {fixed_discrete,son_continuous_movable}",
+             "fixed openings or Son continuous moving centre rod"),
+            ("--injector-sizing {auto,fixed,movable}",
+             "auto-size, evaluate fixed geometry, or hold annulus and solve travel"),
             ("--fuel/oxidizer-injector-dp-fraction",
              "metering pressure drop as ΔP/Pc"),
             ("--fuel/oxidizer-discharge-coefficient",
@@ -213,6 +239,12 @@ def print_tags() -> None:
              "annular manifold layout screens"),
             ("--injector-cad / --injector-cad-format / --pintle-sleeve",
              "pintle deliverable package"),
+            ("--movable-post-* / --movable-center-gap-* / --movable-cd-map",
+             "Son geometry and configuration-controlled hydraulic calibration"),
+            ("--movable-position-* / --movable-actuator-* / --movable-stem-*",
+             "metrology and static actuation evidence"),
+            ("--movable-sheet-thickness-*",
+             "separate VOF/measured sheet handoff evidence"),
         ]),
         ("Electric pump", [
             ("--electric-pump", "size electric pump drive, battery, and pump geometry"),
@@ -228,7 +260,7 @@ def print_tags() -> None:
             ("--fuel/oxidizer-line-loss[-fraction]",
              "line, valve, and filter losses charged to pump"),
             ("--fuel/oxidizer-manifold-loss[-fraction]",
-             "validated manifold allowance charged to pump"),
+             "declared manifold allowance charged once to pump"),
             ("--pump-rpm / --burn-time", "pump speed [rpm] / burn duration [s]"),
             ("--motor-voltage / --inverter-power-density", "drive bus / inverter sizing"),
             ("--battery-energy-density / --battery-power-density",
@@ -319,6 +351,8 @@ from raosim.physics import default_coolant_inlet_temperature
 from raosim.rao_variational import RaoSolverConfig
 from raosim.regen_geometry import generate_regen_nozzle
 from raosim.throat_geometry import (
+    REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS,
+    SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS,
     ThroatGeometrySpec,
     throat_discharge_coefficient_hall,
     upstream_radius_ratio_for_discharge_coefficient,
@@ -872,10 +906,15 @@ def _interactive(args) -> None:
     )
     args.injector = "pintle" if use_pintle else "none"
     if args.injector == "pintle":
+        args.injector_architecture = _prompt_choice(
+            "Injector architecture (fixed_discrete / son_continuous_movable)",
+            args.injector_architecture,
+            {"fixed_discrete", "son_continuous_movable"},
+        )
         args.injector_sizing = _prompt_choice(
-            "Injector sizing mode (auto / fixed)",
+            "Injector sizing mode (auto / fixed / movable)",
             args.injector_sizing,
-            {"auto", "fixed"},
+            {"auto", "fixed", "movable"},
         )
         args.pintle_radial_stream = _prompt_choice(
             "Radial/slotted stream (fuel / oxidizer)",
@@ -905,8 +944,30 @@ def _interactive(args) -> None:
             "Pintle diameter [m] (blank = auto)", args.pintle_diameter
         )
         args.pintle_slot_count = _prompt(
-            "Pintle radial slot count", args.pintle_slot_count, int
+            "Pintle radial opening count", args.pintle_slot_count, int
         )
+        args.pintle_radial_exit = _prompt_choice(
+            "Radial exit style (holes / slots / continuous_radial_gap)",
+            args.pintle_radial_exit,
+            {"holes", "slots", "continuous_radial_gap"},
+        )
+        if args.pintle_radial_exit == "continuous_radial_gap":
+            args.movable_post_diameter = _prompt_optional_float(
+                "Movable post diameter D_post [m]",
+                args.movable_post_diameter,
+            )
+            args.movable_post_thickness = _prompt_optional_float(
+                "Movable post thickness t_post [m]",
+                args.movable_post_thickness,
+            )
+            args.movable_center_gap_diameter = _prompt_optional_float(
+                "Centre-gap diameter D_cg [m]",
+                args.movable_center_gap_diameter,
+            )
+            args.movable_pintle_rod_diameter = _prompt_optional_float(
+                "Centre rod diameter D_pr [m]",
+                args.movable_pintle_rod_diameter,
+            )
         args.pintle_slot_aspect_ratio = _prompt(
             "Pintle slot aspect ratio h/w", args.pintle_slot_aspect_ratio
         )
@@ -924,21 +985,40 @@ def _interactive(args) -> None:
         args.injector_min_feature = _prompt(
             "Minimum injector feature [m]", args.injector_min_feature
         )
-        if args.injector_sizing == "fixed" or _prompt_bool(
+        if args.injector_sizing in ("fixed", "movable") or _prompt_bool(
             "Edit fixed passage overrides?", False
         ):
             args.pintle_annulus_gap = _prompt_optional_float(
                 "Fixed annulus gap [m]", args.pintle_annulus_gap
             )
-            args.pintle_slot_width = _prompt_optional_float(
-                "Fixed slot width [m]", args.pintle_slot_width
-            )
-            args.pintle_slot_height = _prompt_optional_float(
-                "Fixed slot height [m]", args.pintle_slot_height
-            )
-            args.pintle_slot_depth = _prompt_optional_float(
-                "Fixed slot depth [m]", args.pintle_slot_depth
-            )
+            if args.pintle_radial_exit == "continuous_radial_gap":
+                if args.injector_sizing == "fixed":
+                    args.movable_commanded_opening = _prompt_optional_float(
+                        "Fixed mechanical opening L_open [m]",
+                        args.movable_commanded_opening,
+                    )
+                args.movable_maximum_opening = _prompt_optional_float(
+                    "Physical open stop [m] (blank = derived)",
+                    args.movable_maximum_opening,
+                )
+            elif args.pintle_radial_exit == "holes":
+                args.pintle_hole_diameter = _prompt_optional_float(
+                    "Fixed radial hole diameter [m]",
+                    args.pintle_hole_diameter,
+                )
+                args.pintle_hole_length = _prompt_optional_float(
+                    "Fixed radial hole length [m]", args.pintle_hole_length
+                )
+            else:
+                args.pintle_slot_width = _prompt_optional_float(
+                    "Fixed slot width [m]", args.pintle_slot_width
+                )
+                args.pintle_slot_height = _prompt_optional_float(
+                    "Fixed slot height [m]", args.pintle_slot_height
+                )
+                args.pintle_slot_depth = _prompt_optional_float(
+                    "Fixed slot depth [m]", args.pintle_slot_depth
+                )
             args.pintle_tip_radius = _prompt_optional_float(
                 "Pintle tip radius [m]", args.pintle_tip_radius
             )
@@ -1186,7 +1266,92 @@ def _interactive(args) -> None:
     print()
 
 
+class _TrustedTopSolution:
+    """Small compatibility adapter for the deterministic Rao/TOP path.
+
+    The CLI historically assumed every contour came from ``RaoSolution``.
+    Keeping a common read-only result surface lets the trusted chart path be
+    the default without fabricating or running an optimization problem.
+    """
+
+    def __init__(self, contour: dict, cf_ideal: float):
+        from types import SimpleNamespace
+
+        self._contour = contour
+        self.theta_N = math.radians(float(contour["theta_n"]))
+        self.theta_E = math.radians(float(contour["theta_e"]))
+        self.thrust_coefficient = float(cf_ideal)
+        self.residuals = SimpleNamespace(
+            max_scaled=0.0,
+            rms_scaled=0.0,
+            mass_residual_rel=0.0,
+            length_residual_rel=0.0,
+            wall_tangency_rms=0.0,
+            characteristic_crossings=0,
+        )
+        extrapolated = bool(contour.get("rao_chart_extrapolated", False))
+        self.reliability = (
+            rv.ContourReliability.GEOMETRIC_APPROXIMATION
+            if extrapolated else rv.ContourReliability.BENCHMARK_VALIDATED
+        )
+        self.converged = True
+        self.warnings = list(contour.get("warnings", []))
+        self.construction_diagnostics = {
+            "contour_method": "bezier",
+            "rao_chart_domain": contour.get("rao_chart_domain"),
+            "rao_chart_extrapolated": extrapolated,
+            "design_angles": {
+                "theta_N_source": contour.get("angle_source", {}).get(
+                    "theta_n", "rao_top_chart"
+                ),
+                "theta_E_source": contour.get("angle_source", {}).get(
+                    "theta_e", "rao_top_chart"
+                ),
+            },
+            "postprocessed": False,
+            "moc_compatibility_preserved": True,
+            "wall_tangency_rms": 0.0,
+            "boundary_min": 0.0,
+            "thrust_sanity": {
+                "applicable": True,
+                "passes": True,
+                "gate_basis": "quasi_1d_attached_flow",
+                "cf_surface": float(cf_ideal),
+                "cf_ideal": float(cf_ideal),
+                "cf_rel_error": 0.0,
+            },
+            "net_report": {},
+        }
+
+    def to_contour_dict(self, **_kwargs) -> dict:
+        return dict(self._contour)
+
+
 def _solve(args):
+    if args.contour_method == "bezier":
+        from raosim.nozzle_geometry import bell_nozzle_contour
+
+        contour = bell_nozzle_contour(
+            Rt=args.rt,
+            epsilon=args.epsilon,
+            length_pct=args.length_pct,
+            gamma=args.gamma,
+            pa_over_p0=args.pa_over_p0,
+            Ru_factor=args.ru_factor,
+            Rd_factor=args.rd_factor,
+            convergent_half_angle_deg=args.convergent_angle,
+        )
+        if args._performance.frozen_flow is not None:
+            from raosim.validation import add_contour_reliability_metadata
+
+            add_contour_reliability_metadata(
+                contour,
+                "bezier",
+                args.gamma,
+                frozen_expansion=args._performance.frozen_flow,
+            )
+        return _TrustedTopSolution(contour, args._performance.Cf_ideal)
+
     rv.PHYSICS_WEIGHT = 1.0
     cfg = RaoSolverConfig(
         Rt=args.rt, epsilon=args.epsilon, gamma=args.gamma,
@@ -1207,8 +1372,9 @@ def _print_injector_panel(inj) -> None:
     """Console panel for a sized pintle injector."""
     fs = inj.streams["fuel"]
     os = inj.streams["oxidizer"]
+    radial_style = inj.slots.geometry
     print(f"    {green('streams:'):<16}radial={inj.radial_stream} "
-          f"({'slots' if inj.radial_stream == inj.slots.role else 'annulus'})  "
+          f"({radial_style if inj.radial_stream == inj.slots.role else 'annulus'})  "
           f"Dp={inj.pintle_diameter*1e3:.1f} mm  "
           f"feed: fuel {inj.feed['fuel'].name} / ox {inj.feed['oxidizer'].name}")
     for label, s in (("fuel", fs), ("ox", os)):
@@ -1219,25 +1385,72 @@ def _print_injector_panel(inj) -> None:
               f"A={s.area*1e6:.2f} mm²  v={s.velocity:.0f} m/s  "
               f"Re={s.reynolds:.0f}  We={we}  Oh={oh}")
     sd, ad = inj.slots.detail, inj.annulus.detail
-    print(f"    {green('geometry:'):<16}annulus gap={ad['gap']*1e3:.3f} mm   "
-          f"slot {sd['slot_width']*1e3:.3f}×{sd['slot_height']*1e3:.3f} mm "
-          f"×{inj.slot_count}   web={inj.minimum_web*1e3:.3f} mm   "
-          f"blockage={inj.blockage_factor:.2f}")
+    if radial_style == "holes":
+        radial_description = (
+            f"holes Ø{sd['hole_diameter']*1e3:.3f} mm ×{inj.slot_count} "
+            f"L={sd['hole_length']*1e3:.3f} mm"
+        )
+    elif radial_style == "slots":
+        radial_description = (
+            f"slots {sd['slot_width']*1e3:.3f}×"
+            f"{sd['slot_height']*1e3:.3f} mm ×{inj.slot_count}"
+        )
+    else:
+        radial_description = (
+            f"Son L_open={sd['opening_distance']*1e3:.4f} mm  "
+            f"A_tip={sd['tip_minimum_area']*1e6:.3f} mm²  "
+            f"A_cg={sd['center_gap_area']*1e6:.3f} mm²"
+        )
+    if radial_style == "continuous_radial_gap":
+        print(
+            f"    {green('geometry:'):<16}"
+            f"annulus gap={ad['gap']*1e3:.3f} mm   {radial_description}   "
+            "continuous 360° sheet (no discrete web)"
+        )
+        act = inj.actuation
+        if act is not None:
+            force_margin = (
+                f"{act.actuator_force_margin:.2f}"
+                if act.actuator_force_margin is not None else "—"
+            )
+            print(
+                f"    {green('actuation:'):<16}"
+                f"stroke={act.opening_fraction:.3f} of open stop   "
+                f"Cd={act.discharge_coefficient:.3f} "
+                f"({act.discharge_coefficient_model})   "
+                f"static force margin={force_margin}"
+            )
+    else:
+        print(
+            f"    {green('geometry:'):<16}"
+            f"annulus gap={ad['gap']*1e3:.3f} mm   "
+            f"{radial_description}   web={inj.minimum_web*1e3:.3f} mm   "
+            f"blockage={inj.blockage_factor:.2f}"
+        )
     wall = (f"{inj.spray_wall_axial_distance*1e3:.0f} mm"
             if inj.spray_wall_axial_distance == inj.spray_wall_axial_distance
             and inj.spray_wall_axial_distance != float("inf") else "—")
     print(f"    {green('spray:'):<16}TMR={inj.total_momentum_ratio:.2f}   "
           f"half-angle={inj.spray_half_angle_deg:.0f}°   "
-          f"wall@{wall}   slot/gap={inj.slot_to_annulus_width_ratio:.2f}")
+          f"wall@{wall}   opening/gap="
+          f"{inj.slot_to_annulus_width_ratio:.2f}")
     at = getattr(inj, "atomization", None)
     if at is not None:
-        lim = at.streams[at.limiting_role]
-        print(f"    {green('atomization:'):<16}"
-              f"SMD {lim.sauter_mean_diameter*1e6:.0f} µm ({at.limiting_role})   "
-              f"L_comb {at.combustion_length*1e3:.0f} mm   "
-              f"margin {at.development_margin:.2f}   "
-              f"η_c*≈{at.predicted_cstar_efficiency:.2f} "
-              + dim("(vaporization-limited surrogate)"))
+        applicable = [s for s in at.streams.values() if s.applicable]
+        if at.limiting_role is None or not applicable:
+            print(f"    {green('atomization:'):<16}"
+                  "not applicable: no liquid droplet stream; "
+                  "eta_vaporization unavailable")
+        else:
+            lim = at.streams[at.limiting_role]
+            print(f"    {green('atomization:'):<16}"
+                  f"SMD {lim.sauter_mean_diameter*1e6:.0f} µm "
+                  f"({at.limiting_role}; {len(applicable)} liquid stream"
+                  f"{'s' if len(applicable) != 1 else ''})   "
+                  f"L_dev {at.combustion_length*1e3:.0f} mm   "
+                  f"margin {at.development_margin:.2f}   "
+                  f"η_vaporization≈{at.eta_vaporization:.2f} "
+                  + dim("(eta_mixing/eta_combustion/eta_c* unavailable)"))
     th = getattr(inj, "thermal", None)
     if th is not None:
         twg = (th.tip_wall_temperature if th.limiting == "tip"
@@ -1342,6 +1555,64 @@ def _print_pump_panel(pump) -> None:
               else dim(f"    note: {suggestion}"))
 
 
+def _cooling_summary_payload(cooling_result, args) -> dict:
+    """Serialize the final cooling iterate without stale pre-loop values."""
+
+    passage_factor = cooling_result.get("passage_length_factor", 1.0)
+    return {
+        "peak_wall_T_K": cooling_result["peak_gas_side_wall_temperature"],
+        "cooling_margin": cooling_result["cooling_margin"],
+        "coolant_outlet_T_K": cooling_result["coolant_outlet_temperature"],
+        "coolant_inlet_T_K": cooling_result.get(
+            "coolant_inlet_temperature", args.coolant_inlet_temperature
+        ),
+        "coolant_mass_flow_kg_s": args.coolant_mdot,
+        "coolant_chemistry_margin": cooling_result.get(
+            "coolant_chemistry_margin"
+        ),
+        "coolant_chemistry_status": cooling_result.get(
+            "coolant_chemistry_status"
+        ),
+        "pressure_drop_bar": cooling_result["coolant_pressure_drop"] / 1e5,
+        "channel_roughness_m": cooling_result.get("channel_roughness"),
+        "pressure_drop_correlation": cooling_result.get(
+            "pressure_drop_correlation"
+        ),
+        "peak_channel_velocity_m_s": cooling_result.get(
+            "peak_channel_velocity"
+        ),
+        "gas_radiation_status": cooling_result.get("gas_radiation_status"),
+        "coolant_property_backend": cooling_result.get(
+            "coolant_property_backend"
+        ),
+        "coolant_property_status": cooling_result.get(
+            "coolant_property_status"
+        ),
+        "hydraulic_network_status": cooling_result.get(
+            "hydraulic_network_status"
+        ),
+        "channel_friction_pressure_drop_bar": (
+            cooling_result.get("channel_friction_pressure_drop", 0.0) / 1e5
+        ),
+        "boiling_chf_status": cooling_result.get("boiling_chf_status"),
+        "curvature_correlation_status": cooling_result.get(
+            "curvature_correlation_status"
+        ),
+        "helix_turns": cooling_result.get("helix_turns", 0.0),
+        "passage_length_factor": passage_factor,
+        "coolant_inlet_pressure_Pa": cooling_result.get(
+            "coolant_inlet_pressure"
+        ),
+        "coolant_outlet_pressure_Pa": cooling_result.get(
+            "coolant_outlet_pressure"
+        ),
+        "coolant_pressure_boundary_source": cooling_result.get(
+            "coolant_pressure_boundary_source"
+        ),
+        "outer_loop_state": "final_spray_cstar_regen_iterate",
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     from raosim.pumps import SCREENING_DEFAULTS as PUMP_DEFAULTS
 
@@ -1353,6 +1624,17 @@ def main(argv: list[str] | None = None) -> int:
                          "Mutually exclusive with an explicit --rt.")
     ap.add_argument("--epsilon", type=float, default=10.0)
     ap.add_argument("--length-pct", type=float, default=80.0)
+    ap.add_argument(
+        "--contour-method", choices=("bezier", "rao-bvp"), default="bezier",
+        help="bezier = trusted deterministic Rao/TOP chart contour (default); "
+             "rao-bvp = experimental variational/MOC solve",
+    )
+    ap.add_argument(
+        "--allow-chart-extrapolation", action="store_true",
+        help="write diagnostic Bezier artifacts when epsilon/length lies "
+             "outside the digitized Rao/TOP chart domain; such artifacts are "
+             "not benchmark-qualified",
+    )
     ap.add_argument("--gamma", type=float, default=1.24,
                     help="combustion-product gamma; overridden by the resolved "
                          "propellant unless passed explicitly")
@@ -1361,8 +1643,30 @@ def main(argv: list[str] | None = None) -> int:
     # propellant + thermochemistry (drives gamma, c*, Tc, mass flow)
     ap.add_argument("--thermo-mode", choices=("cea", "constant-gamma"),
                     default="constant-gamma",
-                    help="cea = RocketCEA when installed (validated); "
-                         "constant-gamma = built-in literature table (screening)")
+                    help="cea = external RocketCEA chamber-state snapshot "
+                         "when installed (nozzle expansion remains frozen "
+                         "constant-gamma; not local physical validation); "
+                         "constant-gamma = built-in literature table "
+                         "(screening)")
+    ap.add_argument(
+        "--nozzle-expansion-model",
+        choices=("constant-gamma", "frozen-variable-cp"),
+        default="constant-gamma",
+        help=(
+            "constant-gamma = existing calorically-perfect expansion; "
+            "frozen-variable-cp = thermally-perfect, fixed-composition "
+            "quasi-1-D expansion from --frozen-gas-table (Bezier only)"
+        ),
+    )
+    ap.add_argument(
+        "--frozen-gas-table",
+        type=Path,
+        default=None,
+        help=(
+            "strict, provenance-bound JSON cp(T) table required by "
+            "--nozzle-expansion-model frozen-variable-cp"
+        ),
+    )
     ap.add_argument("--propellant", default=None,
                     help="named combustion pair, e.g. 'LOX/RP-1' "
                          "(see the built-in table); or use --oxidizer/--fuel")
@@ -1384,6 +1688,27 @@ def main(argv: list[str] | None = None) -> int:
                     help="combustion (c*) efficiency override")
     ap.add_argument("--eta-cf", type=float, default=None,
                     help="nozzle (thrust-coefficient) efficiency override")
+    ap.add_argument(
+        "--spray-cstar-coupling", action="store_true",
+        help="opt into a relaxed fixed point from injector vaporization to "
+             "eta_cstar and cycle mass flow; requires --injector pintle plus "
+             "explicit --spray-eta-mixing/--spray-eta-combustion",
+    )
+    ap.add_argument("--spray-eta-mixing", type=float, default=None,
+                    help="independently supplied spray mixing efficiency (0,1]")
+    ap.add_argument("--spray-eta-combustion", type=float, default=None,
+                    help="independently supplied chemical-completion efficiency (0,1]")
+    ap.add_argument("--spray-coupling-relaxation", type=float, default=0.5,
+                    help="relaxation factor for the spray/c-star fixed point")
+    ap.add_argument("--spray-coupling-tolerance", type=float, default=1.0e-4,
+                    help="relative eta_cstar closure tolerance")
+    ap.add_argument("--spray-coupling-max-iterations", type=int, default=25,
+                    help="maximum spray/c-star fixed-point iterations")
+    ap.add_argument(
+        "--spray-evaporation-constant", type=float, default=1.0e-6,
+        help="calibrated d-squared-law evaporation constant [m^2/s]; default "
+             "1e-6 is only a hydrocarbon-class screening value",
+    )
     # chamber and shared throat
     ap.add_argument("--l-star", type=float, default=1.0,
                     help="chamber characteristic length Vc/At [m]")
@@ -1415,7 +1740,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cd-target", type=float, default=None,
                     help="derive --ru-factor from a target inviscid throat "
                          "discharge coefficient using Hall's leading-order "
-                         "transonic relation, bounded to SP-8120 Ru/Rt 0.6-2")
+                         "transonic relation, bounded to the cited SP-8120 "
+                         "Ru/Rt range 0.6-1.5")
+    ap.add_argument(
+        "--allow-throat-radius-extension", action="store_true",
+        help="allow the repository-only diagnostic Ru/Rt extension from the "
+             "SP-8120 upper bound 1.5 to 2.0",
+    )
     ap.add_argument("--rd-factor", type=float, default=0.382,
                     help="shared downstream throat radius / Rt")
     # solver
@@ -1427,6 +1758,21 @@ def main(argv: list[str] | None = None) -> int:
                     help="LM iteration budget; 0 = seed contour only (instant)")
     ap.add_argument("--theta-b-guess", type=float, default=30.0)
     ap.add_argument("--allow-unconverged", action="store_true")
+    ap.add_argument(
+        "--release-evidence-manifest", type=Path, default=None,
+        help="versioned JSON manifest containing traceable CFD/FEA/drawing/"
+             "proof/cold-flow/hot-fire evidence for the exported configuration",
+    )
+    ap.add_argument(
+        "--configuration-id", default=None,
+        help="configuration-controlled design/hardware identifier that must "
+             "match every release-evidence record",
+    )
+    ap.add_argument(
+        "--require-release-evidence", action="store_true",
+        help="block the run before artifact generation unless every physical-"
+             "release evidence requirement in the manifest passes",
+    )
     # regen (the 'tag' that adds the coils)
     ap.add_argument("--regen", action="store_true",
                     help="add the regenerative cooling channels to the geometry")
@@ -1478,12 +1824,20 @@ def main(argv: list[str] | None = None) -> int:
     # injector (pintle) — sized from the cycle mass-flow split
     ap.add_argument("--injector", choices=("none", "pintle"), default="none",
                     help="generate a pintle injector from the operating point")
-    ap.add_argument("--injector-sizing", choices=("auto", "fixed"),
+    ap.add_argument(
+                    "--injector-architecture",
+                    choices=("fixed_discrete", "son_continuous_movable"),
+                    default="fixed_discrete",
+                    help="fixed slots/holes, or the Son 2017 continuous "
+                         "movable centre-pintle architecture")
+    ap.add_argument("--injector-sizing", choices=("auto", "fixed", "movable"),
                     default="auto",
                     help="auto: derive openings from ṁ/ΔP; fixed: evaluate "
-                         "supplied geometry without resizing")
+                         "supplied geometry without resizing; movable: hold "
+                         "the axial annulus fixed and solve the Son opening")
     ap.add_argument("--pintle-radial-stream", choices=("fuel", "oxidizer"),
-                    default="fuel", help="which stream is slotted (radial)")
+                    default="fuel", help="which stream uses the radial holes "
+                                         "or slots")
     ap.add_argument("--fuel-discharge-coefficient", type=float, default=0.7,
                     help="fuel metering discharge coefficient Cd")
     ap.add_argument("--oxidizer-discharge-coefficient", type=float, default=0.7,
@@ -1493,17 +1847,20 @@ def main(argv: list[str] | None = None) -> int:
                          "default 0.30·chamber diameter")
     ap.add_argument("--pintle-slot-count", type=int, default=24,
                     help="number of radial slots/holes")
-    ap.add_argument("--pintle-radial-exit", choices=("holes", "slots"),
+    ap.add_argument("--pintle-radial-exit",
+                    choices=("holes", "slots", "continuous_radial_gap"),
                     default="holes",
                     help="coaxial pintle tip radial exit style: drilled round "
-                         "jets (holes, default) or rectangular slots")
+                         "jets (holes, default), rectangular slots, or the "
+                         "Son continuous movable gap")
     ap.add_argument("--pintle-slot-aspect-ratio", type=float, default=1.0,
                     help="slot height/width for auto-sizing")
     ap.add_argument("--pintle-deflector-angle", type=float, default=0.0,
                     help="radial-stream deflector angle [deg]")
     ap.add_argument("--pintle-target-momentum-ratio", type=float, default=None,
-                    help="optional target radial/axial momentum ratio; "
-                         "currently gates the achieved design")
+                    help="optional target radial/axial momentum ratio; in "
+                         "auto sizing, solves the radial stream dP/Pc over "
+                         "the configured injector design envelope")
     ap.add_argument("--pintle-impingement-distance", type=float, default=None,
                     help="distance from openings to stream interaction [m]")
     ap.add_argument("--injector-min-feature", type=float, default=3.0e-4,
@@ -1651,8 +2008,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--allow-infeasible-pump", action="store_true",
                     help="continue exporting when electric-pump gates fail")
     ap.add_argument("--throttle-map", default=None,
-                    help="movable-sleeve throttle study: comma-separated "
-                         "throttle levels in (0,1], e.g. '0.2,0.4,0.6,0.8,1.0'")
+                    help="comma-separated throttle levels in (0,1]. Fixed "
+                         "discrete injectors receive a non-kinematic area "
+                         "study; Son movable injectors hold hardware fixed "
+                         "and solve physical travel plus the required separate "
+                         "upstream annulus controller")
     ap.add_argument("--throttle-pc-exponent", type=float, default=1.0,
                     help="Pc(f)=Pc·f^exp for the throttle map (1=Pc∝ṁ, "
                          "0=constant Pc)")
@@ -1675,11 +2035,110 @@ def main(argv: list[str] | None = None) -> int:
                          "(STEP default; DXF is a 2-D meridional profile)")
     ap.add_argument("--pintle-sleeve", action="store_true",
                     help="include the movable sleeve body in the pintle CAD")
+    # Son et al. (2017) continuous movable-pintle geometry, calibration,
+    # metrology, and static actuator evidence.  These stay separate from the
+    # fixed slot/hole CAD fields above.
+    ap.add_argument("--movable-post-diameter", type=float, default=None,
+                    help="Son movable post outside diameter D_post [m]")
+    ap.add_argument("--movable-post-thickness", type=float, default=None,
+                    help="Son post lip thickness t_post [m]")
+    ap.add_argument("--movable-center-gap-diameter", type=float, default=None,
+                    help="fixed centre-gap outside diameter D_cg [m]")
+    ap.add_argument("--movable-pintle-rod-diameter", type=float, default=None,
+                    help="centre rod diameter D_pr [m]")
+    ap.add_argument("--movable-maximum-opening", type=float, default=None,
+                    help="physical open stop [m]; default derives a stop below "
+                         "the Son centre-gap transition")
+    ap.add_argument("--movable-commanded-opening", type=float, default=None,
+                    help="fixed-mode mechanical opening L_open [m]")
+    ap.add_argument("--movable-transition-area-fraction", type=float,
+                    default=0.95,
+                    help="derived open-stop A_tip/A_cg fraction (<1)")
+    ap.add_argument("--movable-minimum-uniform-sheet-opening", type=float,
+                    default=1.0e-4,
+                    help="literature applicability warning floor for L_open [m]")
+    ap.add_argument("--movable-cd-map", type=_parse_opening_cd_map,
+                    default=(), metavar="F:CD,...",
+                    help="configuration-controlled Cd versus L/Lmax map, e.g. "
+                         "'0:0.62,0.5:0.70,1:0.76'")
+    ap.add_argument("--movable-cd-source", default=None,
+                    help="provenance label for --movable-cd-map")
+    ap.add_argument("--movable-cd-sha256", default=None,
+                    help="SHA-256 of the configuration-controlled Cd artifact")
+    ap.add_argument("--movable-cd-geometry-sha256", default=None,
+                    help="Son geometry fingerprint recorded by the Cd artifact")
+    ap.add_argument("--movable-cd-fluid", default=None,
+                    help="fluid identity covered by the Cd calibration")
+    ap.add_argument("--movable-cd-re-min", type=float, default=None)
+    ap.add_argument("--movable-cd-re-max", type=float, default=None)
+    ap.add_argument("--movable-cd-dp-min", type=float, default=None)
+    ap.add_argument("--movable-cd-dp-max", type=float, default=None)
+    ap.add_argument("--movable-cd-temperature-min", type=float, default=None)
+    ap.add_argument("--movable-cd-temperature-max", type=float, default=None)
+    ap.add_argument("--movable-cd-cavitation-min", type=float, default=None)
+    ap.add_argument("--movable-cd-cavitation-max", type=float, default=None)
+    ap.add_argument("--movable-position-tolerance", type=float, default=None,
+                    help="opening-position tolerance [m]")
+    ap.add_argument("--movable-position-feedback-resolution", type=float,
+                    default=None, help="position feedback resolution [m]")
+    ap.add_argument("--movable-backlash", type=float, default=None,
+                    help="bounded mechanism backlash [m]")
+    ap.add_argument("--movable-metrology-source", default=None)
+    ap.add_argument("--movable-metrology-sha256", default=None)
+    ap.add_argument("--movable-closed-leakage-area", type=float, default=None,
+                    help="measured/bounded closed-stop leakage area [m²]")
+    ap.add_argument("--movable-leakage-source", default=None)
+    ap.add_argument("--movable-leakage-sha256", default=None)
+    ap.add_argument("--movable-unbalanced-pressure-area", type=float,
+                    default=None,
+                    help="explicit net projected pressure area [m²]; zero is "
+                         "allowed only as a declared balanced assumption")
+    ap.add_argument("--movable-spring-preload-force", type=float, default=0.0,
+                    help="spring/preload force opposing motion [N]")
+    ap.add_argument("--movable-seal-friction-force", type=float, default=None,
+                    help="bounded seal/guide friction force [N]")
+    ap.add_argument("--movable-moving-mass", type=float, default=None,
+                    help="moving rod/actuator mass [kg]")
+    ap.add_argument("--movable-maximum-acceleration", type=float, default=None,
+                    help="declared maximum command acceleration [m/s²]")
+    ap.add_argument("--movable-actuator-force-capacity", type=float,
+                    default=None, help="available actuator force [N]")
+    ap.add_argument("--movable-force-safety-factor", type=float, default=1.5)
+    ap.add_argument("--movable-stem-diameter", type=float, default=None,
+                    help="loaded actuator stem diameter [m]")
+    ap.add_argument("--movable-stem-allowable-stress", type=float, default=None,
+                    help="temperature-appropriate stem allowable [Pa]")
+    ap.add_argument("--movable-actuator-source", default=None)
+    ap.add_argument("--movable-actuator-sha256", default=None)
+    ap.add_argument("--movable-sheet-thickness", type=float, default=None,
+                    help="independently VOF-resolved or measured liquid-sheet "
+                         "thickness [m], never L_open")
+    ap.add_argument("--movable-sheet-thickness-method",
+                    choices=("vof", "measured"), default=None)
+    ap.add_argument("--movable-sheet-thickness-source", default=None)
+    ap.add_argument("--movable-sheet-thickness-sha256", default=None)
+    ap.add_argument("--movable-sheet-geometry-sha256", default=None,
+                    help="Son geometry fingerprint recorded by the sheet artifact")
+    ap.add_argument("--movable-sheet-thickness-fluid", default=None)
+    ap.add_argument("--movable-sheet-opening-min", type=float, default=None)
+    ap.add_argument("--movable-sheet-opening-max", type=float, default=None)
+    ap.add_argument("--movable-sheet-dp-min", type=float, default=None)
+    ap.add_argument("--movable-sheet-dp-max", type=float, default=None)
+    ap.add_argument("--movable-sheet-mass-flow-min", type=float, default=None)
+    ap.add_argument("--movable-sheet-mass-flow-max", type=float, default=None)
+    ap.add_argument("--movable-axial-controller-dp-fraction-min", type=float,
+                    default=1.0e-4)
+    ap.add_argument("--movable-axial-controller-dp-fraction-max", type=float,
+                    default=1.0)
     # fixed-geometry overrides (only used with --injector-sizing fixed)
     ap.add_argument("--pintle-annulus-gap", type=float, default=None)
     ap.add_argument("--pintle-slot-width", type=float, default=None)
     ap.add_argument("--pintle-slot-height", type=float, default=None)
     ap.add_argument("--pintle-slot-depth", type=float, default=None)
+    ap.add_argument("--pintle-hole-diameter", type=float, default=None,
+                    help="fixed-mode radial round-hole diameter [m]")
+    ap.add_argument("--pintle-hole-length", type=float, default=None,
+                    help="fixed-mode radial round-hole metering length [m]")
     ap.add_argument("--pintle-slot-corner-radius", type=float, default=None,
                     help="machined slot corner/end radius [m]")
     ap.add_argument("--pintle-slot-end-condition",
@@ -1852,15 +2311,29 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cad", choices=("none", "step", "ipt", "both"), default="none",
                     help="optional solid CAD export; IPT writes an Inventor "
                          "conversion manifest around the authoritative STEP")
-    ap.add_argument("--require-brep", action="store_true",
-                    help="require CadQuery/OpenCascade true B-rep STEP output; "
-                         "do not accept the faceted AP214 fallback")
+    ap.add_argument(
+        "--require-brep",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="require CadQuery/OpenCascade true B-rep STEP output (default); "
+             "--no-require-brep permits an explicitly diagnostic faceted "
+             "AP214 fallback that is not manufacturing CAD",
+    )
     ap.add_argument("--regen-brep", action="store_true",
                     help="export a full-N one-solid regenerative wall STEP "
                          "(patterned positive ribs; requires CadQuery)")
     ap.add_argument("--regen-manifolds", action="store_true",
                     help="with --regen-brep, cut annular plenums and radial "
                          "ports into the one-solid wall")
+    ap.add_argument(
+        "--regen-release-mode",
+        choices=("reference", "cold-flow"),
+        default="reference",
+        help=(
+            "reference permits sealed-end channel geometry for CAD review; "
+            "cold-flow requires --regen-manifolds and connected external ports"
+        ),
+    )
     ap.add_argument("--regen-cad-sections", type=int, default=24,
                     help="axial loft sections used by --regen-brep")
     ap.add_argument("--regen-ports-per-manifold", type=int, default=4,
@@ -1901,6 +2374,51 @@ def main(argv: list[str] | None = None) -> int:
             reason="bare_run" if bare else "complete_package_flag",
         )
     _apply_wall_sizing_mode(args, ap, cli_argv)
+    frozen_expansion_requested = (
+        args.nozzle_expansion_model == "frozen-variable-cp"
+    )
+    if frozen_expansion_requested:
+        if args.frozen_gas_table is None:
+            ap.error(
+                "--nozzle-expansion-model frozen-variable-cp requires "
+                "--frozen-gas-table"
+            )
+        if args.contour_method != "bezier":
+            ap.error(
+                "frozen-variable-cp expansion is currently Bezier-only; "
+                "constant-gamma MOC/Rao characteristic equations cannot "
+                "accept a station-varying gamma"
+            )
+        if _argument_present(cli_argv, "--gamma"):
+            ap.error(
+                "--gamma cannot be supplied with frozen-variable-cp; gamma(T) "
+                "is derived from the fixed-composition cp(T) table"
+            )
+        if args.cd_target is not None:
+            ap.error(
+                "--cd-target is unavailable with frozen-variable-cp because "
+                "the Hall/SP-8120 throat-discharge screen is constant-gamma"
+            )
+        unsupported_thermal = []
+        if args.regen:
+            unsupported_thermal.append("--regen")
+        if args.thermal:
+            unsupported_thermal.append("--thermal")
+        if args.auto_size:
+            unsupported_thermal.append("--auto-size")
+        if args.size_wall:
+            unsupported_thermal.append("--size-wall")
+        if unsupported_thermal:
+            ap.error(
+                "frozen-variable-cp currently blocks the constant-gamma "
+                "Bartz/boundary-layer/regen sizing path; remove "
+                + ", ".join(unsupported_thermal)
+            )
+    elif args.frozen_gas_table is not None:
+        ap.error(
+            "--frozen-gas-table requires --nozzle-expansion-model "
+            "frozen-variable-cp"
+        )
     if args.regen_manifolds:
         args.regen_brep = True
         args.hydraulic_network = True
@@ -1908,6 +2426,55 @@ def main(argv: list[str] | None = None) -> int:
         ap.error("--regen-brep requires --regen")
     if args.regen_brep and args.cad == "none":
         ap.error("--regen-brep requires --cad step, ipt, or both")
+    if args.regen_release_mode == "cold-flow" and not args.regen_manifolds:
+        ap.error(
+            "--regen-release-mode cold-flow requires --regen-manifolds so "
+            "the exported channels have connected inlet/outlet ports"
+        )
+    if args.contour_method == "bezier" and (args.flowfield or args.animate):
+        ap.error(
+            "--flowfield/--animate require --contour-method rao-bvp; the "
+            "Rao/TOP Bezier path has no resolved characteristic flow field"
+        )
+    if args.contour_method == "bezier" and args.allow_unconverged:
+        ap.error("--allow-unconverged applies only to --contour-method rao-bvp")
+    if args.contour_method != "bezier" and args.allow_chart_extrapolation:
+        ap.error(
+            "--allow-chart-extrapolation applies only to "
+            "--contour-method bezier"
+        )
+    spray_assumptions_supplied = (
+        args.spray_eta_mixing is not None
+        or args.spray_eta_combustion is not None
+    )
+    if args.spray_cstar_coupling:
+        if args.injector != "pintle":
+            ap.error("--spray-cstar-coupling requires --injector pintle")
+        from raosim.spray_coupling import SprayCStarCouplingSpec
+        try:
+            SprayCStarCouplingSpec(
+                enabled=True,
+                eta_mixing=args.spray_eta_mixing,
+                eta_combustion=args.spray_eta_combustion,
+                relaxation=args.spray_coupling_relaxation,
+                relative_tolerance=args.spray_coupling_tolerance,
+                max_iterations=args.spray_coupling_max_iterations,
+            ).validate()
+        except ValueError as exc:
+            ap.error(str(exc))
+    elif spray_assumptions_supplied:
+        ap.error(
+            "--spray-eta-mixing/--spray-eta-combustion require "
+            "--spray-cstar-coupling"
+        )
+    if args.spray_evaporation_constant <= 0.0:
+        ap.error("--spray-evaporation-constant must be positive")
+    if args.require_release_evidence and args.release_evidence_manifest is None:
+        ap.error(
+            "--require-release-evidence requires --release-evidence-manifest"
+        )
+    if args.require_release_evidence and not str(args.configuration_id or "").strip():
+        ap.error("--require-release-evidence requires --configuration-id")
     if args.gamma <= 1.0:
         ap.error("--gamma must be greater than one")
     if args.l_star <= 0.0:
@@ -2008,6 +2575,26 @@ def main(argv: list[str] | None = None) -> int:
         print(material_table())
         return 0
 
+    from raosim.release_readiness import (
+        evaluate_release_readiness,
+        load_evidence_manifest,
+    )
+    try:
+        release_readiness = (
+            load_evidence_manifest(
+                args.release_evidence_manifest,
+                expected_target="engine",
+                expected_configuration_id=args.configuration_id,
+            )
+            if args.release_evidence_manifest is not None
+            else evaluate_release_readiness(target="engine")
+        )
+        if args.require_release_evidence:
+            release_readiness.require_complete()
+    except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
+        ap.error(f"physical-release evidence rejected: {exc}")
+    args._release_readiness = release_readiness
+
     # Ask for the inputs when run bare (no flags) or with -i/--interactive.
     if args.interactive or bare:
         if args.interactive and not getattr(args, "_complete_package_defaults", False):
@@ -2071,6 +2658,11 @@ def main(argv: list[str] | None = None) -> int:
 
     rt_explicit = _argument_present(cli_argv, "--rt")
     gamma_explicit = _argument_present(cli_argv, "--gamma")
+    if gamma_explicit and args.thermo_mode == "cea":
+        ap.error(
+            "--gamma cannot override RocketCEA thermochemistry. Remove "
+            "--gamma or select --thermo-mode constant-gamma."
+        )
     if args.target_thrust is not None and rt_explicit:
         ap.error("--target-thrust and --rt are mutually exclusive")
     if args.target_thrust is not None and args.target_thrust <= 0.0:
@@ -2086,6 +2678,16 @@ def main(argv: list[str] | None = None) -> int:
         ox_name, fuel_name = (s.strip() for s in args.propellant.split("/", 1))
     args._ox_name = ox_name
     args._fuel_name = fuel_name
+    if (
+        args.spray_cstar_coupling
+        and args.regen
+        and not _coolant_is_cycle_fuel(args.coolant, fuel_name)
+    ):
+        ap.error(
+            "--spray-cstar-coupling with --regen requires --coolant to be "
+            "the cycle fuel; an independent coolant/bypass needs an explicit "
+            "split and mixing model"
+        )
     thermo_mode = (THERMO_CEA_FROZEN if args.thermo_mode == "cea"
                    else THERMO_CONSTANT_GAMMA)
     prop_warnings: list[str] = []
@@ -2152,25 +2754,111 @@ def main(argv: list[str] | None = None) -> int:
                 source=prop.source,
             )
             prop.name = name
-    if not gamma_explicit:
+    if gamma_explicit and prop_name is not None and args.gamma != prop.gamma:
+        original_name = prop.name
+        original_gamma = prop.gamma
+        prop = custom_propellant(
+            gamma=args.gamma,
+            Mw=prop.Mw,
+            Tc=prop.Tc,
+            OF=prop.OF,
+            eta_cstar=prop.eta_cstar,
+            eta_CF=prop.eta_CF,
+            source=(
+                f"{prop.source}; user --gamma override replaced gamma="
+                f"{original_gamma:g} with gamma={args.gamma:g}"
+            ),
+        )
+        prop.name = original_name
+        prop_warnings.append(
+            f"Explicit --gamma={args.gamma:g} replaced the {original_name} "
+            f"table value {original_gamma:g}; c*, performance, contour, "
+            "separation, thermal, and injector calculations all use the "
+            "overridden value."
+        )
+    frozen_gas = None
+    if frozen_expansion_requested:
+        if prop_name is None:
+            ap.error(
+                "frozen-variable-cp requires --propellant or an explicit "
+                "--oxidizer/--fuel pair so the table can be checked against "
+                "the selected chamber state"
+            )
+        try:
+            from raosim.frozen_flow import load_frozen_gas_table
+
+            frozen_gas = load_frozen_gas_table(args.frozen_gas_table)
+            if (
+                frozen_gas.freeze_basis == "chamber_equilibrium_snapshot"
+                and not math.isclose(
+                    float(frozen_gas.mixture_ratio),
+                    float(args.mixture_ratio),
+                    rel_tol=1.0e-9,
+                    abs_tol=1.0e-12,
+                )
+            ):
+                raise ValueError(
+                    "table mixture_ratio does not match --mixture-ratio"
+                )
+            chamber_gamma = frozen_gas.gamma(prop.Tc)
+        except (OSError, TypeError, ValueError) as exc:
+            ap.error(f"frozen gas table rejected: {exc}")
+        args.gamma = chamber_gamma
+        prop_warnings.append(
+            "Nozzle expansion uses the supplied thermally-perfect, "
+            "fixed-composition cp(T) table. The scalar chamber gamma shown "
+            "in geometry/injector diagnostics is derived from that table; "
+            "MOC/Rao and thermal/regen paths are disabled."
+        )
+    else:
+        # One authoritative value is used downstream.  This assignment also
+        # covers the normal table/CEA path where --gamma was not supplied.
         args.gamma = prop.gamma
+    args._frozen_gas = frozen_gas
     if args.cd_target is not None:
         try:
+            radius_bounds = (
+                REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS
+                if args.allow_throat_radius_extension
+                else SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS
+            )
             args.ru_factor = upstream_radius_ratio_for_discharge_coefficient(
-                args.cd_target, args.gamma
+                args.cd_target,
+                args.gamma,
+                min_ratio=radius_bounds[0],
+                max_ratio=radius_bounds[1],
             )
         except ValueError as exc:
             ap.error(str(exc))
-        args._ru_factor_source = "cd_target_hall_sp8120"
+        args._ru_factor_source = (
+            "cd_target_hall_repository_extension"
+            if args.ru_factor > SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS[1]
+            else "cd_target_hall_sp8120"
+        )
     args._prop = prop
     args._prop_warnings = prop_warnings
 
     Pa = args.pa_over_p0 * args.pc
-    if args.target_thrust is not None:
-        args.rt = throat_radius_for_target_thrust(
-            args.target_thrust, args.pc, Pa, args.epsilon, prop)
-    args._performance = compute_engine_performance(
-        Pc=args.pc, Pa=Pa, Rt=args.rt, epsilon=args.epsilon, prop=prop)
+    try:
+        if args.target_thrust is not None:
+            args.rt = throat_radius_for_target_thrust(
+                args.target_thrust,
+                args.pc,
+                Pa,
+                args.epsilon,
+                prop,
+                frozen_gas=frozen_gas,
+            )
+        args._performance = compute_engine_performance(
+            Pc=args.pc,
+            Pa=Pa,
+            Rt=args.rt,
+            epsilon=args.epsilon,
+            prop=prop,
+            frozen_gas=frozen_gas,
+        )
+    except (TypeError, ValueError) as exc:
+        ap.error(f"nozzle expansion rejected: {exc}")
     perf = args._performance
     args._mdot = perf.m_dot
     args._mdot_f = perf.m_dot / (1.0 + max(args.mixture_ratio, 0.0))
@@ -2218,13 +2906,18 @@ def main(argv: list[str] | None = None) -> int:
     for k, v in [
         ("package", package_plan),
         ("nozzle", f"Rt={args.rt*1e3:g} mm, eps={args.epsilon:g}, "
-                   f"L={args.length_pct:g}%, gamma={args.gamma:g}"),
+                   f"L={args.length_pct:g}%, gamma={args.gamma:g}, "
+                   f"method={args.contour_method}"),
         ("chamber", f"L*={args.l_star:g} m, CR={args.contraction_ratio:g}, "
                     f"shoulder={shoulder_plan}, "
                     f"Lc,min={args.minimum_cylindrical_length:g} m"),
         ("throat", throat_plan),
-        ("solver", f"{args.backend}  (max_nfev={args.max_nfev}, "
-                   f"n_control={args.n_control}, n_kernel={args.n_kernel})"),
+        ("solver", (
+            f"{args.backend}  (max_nfev={args.max_nfev}, "
+            f"n_control={args.n_control}, n_kernel={args.n_kernel})"
+            if args.contour_method == "rao-bvp"
+            else "not applicable (deterministic Rao/TOP chart geometry)"
+        )),
         ("regen", (
             (f"wall+channel sizing from requirement "
              f"(margin≥{args.margin_target:g}, FoS≥{args.structural_fos:g}, "
@@ -2280,14 +2973,23 @@ def main(argv: list[str] | None = None) -> int:
         print(dim(f"    source: {prop.source}"))
 
     # ---- 1. solve the contour (differentiable / MOC) -----------------
-    print("\n" + cyan("▸ " + bold("Solving contour")) +
-          dim("  (Rao variational / MOC BVP)"))
-    if args.backend == "jax" and args.max_nfev > 200:
+    bvp_mode = args.contour_method == "rao-bvp"
+    contour_label = (
+        "Rao variational / MOC BVP"
+        if bvp_mode else "Rao/TOP chart + quadratic Bezier"
+    )
+    print("\n" + cyan("▸ " + bold("Constructing contour")) +
+          dim(f"  ({contour_label})"))
+    if bvp_mode and args.backend == "jax" and args.max_nfev > 200:
         print(yellow("    note: full JAX LM solve — this runs for minutes."))
     sol = _solve(args)
     r = sol.residuals
     residual_tol = 2e-3
     gate = r.max_scaled <= residual_tol
+    chart_extrapolated = bool(
+        sol.construction_diagnostics.get("rao_chart_extrapolated", False)
+    )
+    chart_domain_gate = not chart_extrapolated
     da = sol.construction_diagnostics.get("design_angles", {})
     export_diag = sol.construction_diagnostics.get("export", {})
     if not isinstance(export_diag, dict):
@@ -2340,11 +3042,13 @@ def main(argv: list[str] | None = None) -> int:
     if not isinstance(crossing_samples, list):
         crossing_samples = []
     promotion_blockers: list[str] = []
-    if args.max_nfev <= 0:
+    if not bvp_mode and not chart_domain_gate:
+        promotion_blockers.append("Rao/TOP chart extrapolation")
+    if bvp_mode and args.max_nfev <= 0:
         promotion_blockers.append("seed-only contour")
-    elif not residual_gate:
+    elif bvp_mode and not residual_gate:
         promotion_blockers.append("BVP residual closure")
-    if not moc_gate:
+    if bvp_mode and not moc_gate:
         moc_notes: list[str] = []
         if not moc_compatibility_preserved:
             if str(net_report.get("audit_basis", "")).startswith("bde_"):
@@ -2384,9 +3088,9 @@ def main(argv: list[str] | None = None) -> int:
                 f" ({', '.join(moc_notes)})" if moc_notes else ""
             )
         )
-    if not valid_region_gate:
+    if bvp_mode and not valid_region_gate:
         promotion_blockers.append(f"Rao valid region boundary={boundary_min}")
-    if not thrust_sanity_gate:
+    if bvp_mode and not thrust_sanity_gate:
         if not thrust_sanity_applicable:
             mass_fraction = thrust_sanity.get("kernel_bd_mass_fraction")
             scaled_error = thrust_sanity.get("mass_fraction_scaled_cf_rel_error")
@@ -2421,6 +3125,13 @@ def main(argv: list[str] | None = None) -> int:
             promotion_blockers.append("thrust sanity")
     contour_reliability = {
         "solver_backend": args.backend,
+        "contour_method": args.contour_method,
+        "solver_gates_applicable": bvp_mode,
+        "rao_chart_domain": sol.construction_diagnostics.get(
+            "rao_chart_domain"
+        ),
+        "rao_chart_extrapolated": chart_extrapolated,
+        "rao_chart_domain_gate_passed": chart_domain_gate,
         "max_nfev": int(args.max_nfev),
         "seed_only": bool(args.max_nfev <= 0),
         "residual_tol": residual_tol,
@@ -2450,14 +3161,27 @@ def main(argv: list[str] | None = None) -> int:
         "boundary_min": boundary_min,
         "thrust_sanity": thrust_sanity,
         "warnings": list(sol.warnings),
+        "quasi_1d_expansion_model": perf.expansion_model,
+        "frozen_property_performance_benchmark_passed": (
+            None if perf.frozen_flow is None else False
+        ),
+        "variable_property_moc_rao_applicable": (
+            None if perf.frozen_flow is None else False
+        ),
     }
-    badge = green("✓ gate passed") if gate else yellow("● seed / not converged")
+    badge = (
+        (green("✓ trusted chart path") if chart_domain_gate
+         else yellow("● unqualified chart extrapolation"))
+        if not bvp_mode
+        else green("✓ gate passed") if gate
+        else yellow("● seed / not converged")
+    )
     print(f"    max_scaled={r.max_scaled:.3e}   {badge}   "
           f"reliability={sol.reliability.value}")
-    if args.max_nfev <= 0:
+    if bvp_mode and args.max_nfev <= 0:
         print(yellow("    seed-only contour: --max-nfev 0 skipped the "
                      "least-squares/JAX solve; no residual-solved promotion."))
-    elif not gate:
+    elif bvp_mode and not gate:
         print(yellow("    residual gate failed: "
                      f"max_scaled {r.max_scaled:.3e} > {residual_tol:.1e}."))
     elif sol.reliability.value == "geometric_approximation" and promotion_blockers:
@@ -2478,7 +3202,7 @@ def main(argv: list[str] | None = None) -> int:
             f"{s1.get('family', '?')} row {s1.get('row', '?')} vs "
             f"{s2.get('family', '?')} row {s2.get('row', '?')} at {loc}"
         ))
-    if thrust_sanity_gate and not thrust_sanity_applicable:
+    if bvp_mode and thrust_sanity_gate and not thrust_sanity_applicable:
         mass_fraction = thrust_sanity.get("kernel_bd_mass_fraction")
         scaled_error = thrust_sanity.get("mass_fraction_scaled_cf_rel_error")
         notes: list[str] = []
@@ -2494,16 +3218,47 @@ def main(argv: list[str] | None = None) -> int:
             notes.append(f"mass-scaled Cf error {100.0 * scaled_error:.1f}%")
         print(dim(
             "    thrust consistency: "
-            + (", ".join(notes) if notes else "partial DE audit passed")
-            + " (full CE thrust audit not reconstructed)"
+            + (", ".join(notes) if notes else "partial D-E diagnostic only")
+            + " (full kernel-connected C-D-E reconstruction unavailable for this solve)"
         ))
     print(f"    theta_N={math.degrees(sol.theta_N):.2f}° "
           f"{dim('['+da.get('theta_N_source','?')+']')}   "
           f"theta_E={math.degrees(sol.theta_E):.2f}°   "
           f"Cf={bold('%.4f' % sol.thrust_coefficient)}")
-    if not gate and not args.allow_unconverged and args.max_nfev > 0:
-        print(yellow("    not converged to the 2e-3 gate; rerun with "
-                     "--allow-unconverged or more --max-nfev."), flush=True)
+    contour_export_gate = bool(
+        chart_domain_gate
+        if not bvp_mode
+        else (
+            sol.converged
+            and residual_gate
+            and moc_gate
+            and valid_region_gate
+            and thrust_sanity_gate
+        )
+    )
+    diagnostic_export_override = bool(
+        (bvp_mode and args.allow_unconverged)
+        or (not bvp_mode and args.allow_chart_extrapolation)
+    )
+    if not contour_export_gate and not diagnostic_export_override:
+        print(red(
+            "    contour failed the export gate; no contour "
+            "or CAD artifacts were written.  Blockers: "
+            + "; ".join(promotion_blockers)
+            + (
+                ". Rerun with --allow-unconverged only for explicit "
+                "diagnostic artifacts."
+                if bvp_mode else
+                ". Rerun with --allow-chart-extrapolation only for explicit "
+                "diagnostic artifacts."
+            )
+        ), flush=True)
+        return 2
+    if not contour_export_gate:
+        print(yellow(
+            "    diagnostic override active: exporting a contour with "
+            "unresolved reliability blockers."
+        ))
 
     throat_geometry = ThroatGeometrySpec(
         upstream_radius_ratio=args.ru_factor,
@@ -2516,6 +3271,10 @@ def main(argv: list[str] | None = None) -> int:
         Ru_factor=args.ru_factor,
         Rd_factor=args.rd_factor,
         convergent_half_angle_deg=args.convergent_angle,
+    )
+    nozzle["quasi_1d_expansion_model"] = perf.expansion_model
+    nozzle["frozen_flow_fingerprint_sha256"] = (
+        perf.frozen_flow_fingerprint
     )
     nozzle["throat_geometry"] = throat_geometry.to_dict()
     nozzle["throat_location"] = throat_geometry.throat_location
@@ -2560,7 +3319,8 @@ def main(argv: list[str] | None = None) -> int:
     x = np.asarray(contour["x"]); y = np.asarray(contour["y"])
 
     summary = {
-        "backend": args.backend, "Rt": args.rt, "epsilon": args.epsilon,
+        "backend": args.backend, "contour_method": args.contour_method,
+        "Rt": args.rt, "epsilon": args.epsilon,
         "length_pct": args.length_pct, "gamma": args.gamma,
         "run_defaults": {
             "complete_package": getattr(args, "_complete_package_defaults", False),
@@ -2573,12 +3333,39 @@ def main(argv: list[str] | None = None) -> int:
         "theta_N_deg": math.degrees(sol.theta_N),
         "theta_E_deg": math.degrees(sol.theta_E),
         "Cf": float(sol.thrust_coefficient),
+        "thrust_closure": {
+            "sizing_basis": (
+                "quasi_1d_thermally_perfect_frozen_composition"
+                if perf.frozen_flow is not None
+                else "quasi_1d_calorically_perfect_attached_flow"
+            ),
+            "quasi_1d_Cf_ideal": float(perf.Cf_ideal),
+            "quasi_1d_Cf_delivered": float(perf.Cf_actual),
+            "contour_audit_Cf": float(sol.thrust_coefficient),
+            "contour_audit_basis": (
+                "same_quasi_1d_model"
+                if not bvp_mode else thrust_sanity.get(
+                    "gate_basis", "unavailable_full_cde_surface"
+                )
+            ),
+            "relative_difference_from_quasi_1d_ideal": float(
+                (sol.thrust_coefficient - perf.Cf_ideal)
+                / max(abs(perf.Cf_ideal), 1e-30)
+            ),
+            "export_gate_passed": contour_export_gate,
+            "diagnostic_override": bool(
+                not contour_export_gate and diagnostic_export_override
+            ),
+        },
         "exit_radius": float(y[-1]),
         "throat_geometry": {
             "upstream_radius_ratio": args.ru_factor,
             "upstream_radius_source": args._ru_factor_source,
             "discharge_coefficient_hall": cd_hall,
             "discharge_coefficient_target": args.cd_target,
+            "discharge_coefficient_model_applicable": (
+                perf.frozen_flow is None
+            ),
             "downstream_radius_ratio": args.rd_factor,
             "convergent_half_angle_deg": args.convergent_angle,
         },
@@ -2592,10 +3379,44 @@ def main(argv: list[str] | None = None) -> int:
             "minimum_cylindrical_length_source":
                 args._minimum_cylinder_source,
             "cylindrical_length_m": chamber["Lc"],
+            "injector_face_to_throat_length_m":
+                chamber["injector_to_throat_length"],
             "target_volume_m3": chamber["V_target"],
             "polyline_frustum_volume_m3": chamber["V_chamber"],
             "geometry_checks": contour["geometry_checks"],
         },
+    }
+    from raosim.model_registry import audit_model_registry, model_provenance_dict
+    summary["hardware_qualified"] = False
+    summary["configuration_id"] = args.configuration_id
+    summary["physical_release_readiness"] = (
+        args._release_readiness.to_dict()
+    )
+    summary["model_registry_audit"] = audit_model_registry(REPO_ROOT)
+    summary["model_provenance"] = model_provenance_dict()
+    summary["spray_cstar_coupling"] = {
+        "enabled": False,
+        "status": "disabled",
+        "reason": "requires an explicitly requested pintle injector and efficiencies",
+    }
+    summary["flow_model_gates"] = {
+        "frozen_q1d_conservation_closure": (
+            None
+            if perf.frozen_flow is None
+            else bool(perf.frozen_flow.all_closures_pass)
+        ),
+        "frozen_property_and_performance_benchmark": (
+            None if perf.frozen_flow is None else False
+        ),
+        "variable_property_moc_rao": (
+            None if perf.frozen_flow is None else False
+        ),
+        "variable_property_bartz_boundary_layer_regen": (
+            None if perf.frozen_flow is None else False
+        ),
+        "variable_property_hall_throat_cd": (
+            None if perf.frozen_flow is None else False
+        ),
     }
     summary["performance"] = {
         "propellant": perf.propellant_name,
@@ -2604,7 +3425,9 @@ def main(argv: list[str] | None = None) -> int:
         "Pc_pa": args.pc,
         "Pa_pa": Pa,
         "mixture_ratio": args.mixture_ratio,
-        "gamma": prop.gamma,
+        "gamma": perf.gamma,
+        "gamma_throat": perf.gamma_throat,
+        "gamma_exit": perf.gamma_exit,
         "Mw_kg_per_mol": prop.Mw,
         "Tc_K": prop.Tc,
         "c_star_ideal_m_s": perf.c_star,
@@ -2617,6 +3440,12 @@ def main(argv: list[str] | None = None) -> int:
         "Cf_actual": perf.Cf_actual,
         "Me": perf.Me,
         "Pe_pa": perf.Pe,
+        "exit_temperature_K": perf.exit_temperature,
+        "expansion_model": perf.expansion_model,
+        "frozen_flow_fingerprint_sha256": perf.frozen_flow_fingerprint,
+        "frozen_expansion": (
+            perf.frozen_flow.as_dict() if perf.frozen_flow is not None else None
+        ),
         "mdot_total_kg_s": perf.m_dot,
         "mdot_fuel_kg_s": args._mdot_f,
         "mdot_oxidizer_kg_s": args._mdot_o,
@@ -2666,6 +3495,7 @@ def main(argv: list[str] | None = None) -> int:
         _sep_prop = args._prop
         fig = plot_separation_on_contour(
             contour, args.pc, _sep_prop,
+            frozen_expansion=perf.frozen_flow,
             save_path=args.out / "separation_contour.png", show=show)
         fig.clf()
         artifacts.append("separation_contour.png")
@@ -3159,7 +3989,7 @@ def main(argv: list[str] | None = None) -> int:
             txt = f"σ-margin {sm:.2f}"
             # Copper liners run near yield (LCF), so ≥1.0 is acceptable.
             sbadge = green(txt + " ✓") if sm >= 1.0 else (
-                yellow(txt + " (near yield/LCF)") if sm >= 0.8 else red(txt + " ✗"))
+                  yellow(txt + " (near yield/LCF)") if sm >= 0.8 else red(txt + " ✗"))
             print(f"    wall stress {bold('%.0f MPa' % (stress['combined_stress']/1e6))} "
                   f"{dim('(thermal %.0f + pressure %.0f)' % (stress['thermal_stress']/1e6, stress['pressure_stress']/1e6))}   "
                   f"{sbadge}   {dim('[SP-125 eq.4-31 station-wise, S_y=%.0f MPa]' % (material.yield_strength/1e6))}")
@@ -3197,23 +4027,94 @@ def main(argv: list[str] | None = None) -> int:
         from raosim.injector import (
             InjectorSpec, PropellantFeedSpec, PintleGeometrySpec,
             PintleMechanicalSpec, InjectorManufacturingSpec, InjectorUnsupportedState,
-            InjectorSpecError, evaluate_pintle_injector,
+            InjectorSpecError, MovablePintleSpec, evaluate_pintle_injector,
         )
-        from raosim.design import CoolingSpec
+        from raosim.design import (
+            CoolingSpec,
+            MaterialSpec,
+            SprayRegenIterationPayload,
+        )
         print("\n" + cyan("▸ " + bold("Injector")) +
               dim("  (pintle, liquid/liquid, sized from the ṁ split)"))
         if not args._ox_name or not args._fuel_name:
             print(red("    --injector pintle needs real propellant identities; "
                       "pass --oxidizer/--fuel or --propellant 'OX/FUEL'."))
             return 2
+        range_inputs = (
+            ("movable Cd Reynolds", args.movable_cd_re_min, args.movable_cd_re_max),
+            ("movable Cd pressure-drop", args.movable_cd_dp_min, args.movable_cd_dp_max),
+            (
+                "movable Cd temperature",
+                args.movable_cd_temperature_min,
+                args.movable_cd_temperature_max,
+            ),
+            (
+                "movable Cd cavitation-number",
+                args.movable_cd_cavitation_min,
+                args.movable_cd_cavitation_max,
+            ),
+            (
+                "movable sheet opening",
+                args.movable_sheet_opening_min,
+                args.movable_sheet_opening_max,
+            ),
+            (
+                "movable sheet pressure-drop",
+                args.movable_sheet_dp_min,
+                args.movable_sheet_dp_max,
+            ),
+            (
+                "movable sheet mass-flow",
+                args.movable_sheet_mass_flow_min,
+                args.movable_sheet_mass_flow_max,
+            ),
+        )
+        for label, lower, upper in range_inputs:
+            if (lower is None) != (upper is None):
+                print(red(
+                    f"    {label} validity requires both minimum and maximum."
+                ))
+                return 2
+
+        def optional_range(lower, upper):
+            return None if lower is None else (lower, upper)
+
+        movable_cd_reynolds_range = optional_range(
+            args.movable_cd_re_min, args.movable_cd_re_max
+        )
+        movable_cd_pressure_drop_range = optional_range(
+            args.movable_cd_dp_min, args.movable_cd_dp_max
+        )
+        movable_cd_temperature_range = optional_range(
+            args.movable_cd_temperature_min, args.movable_cd_temperature_max
+        )
+        movable_cd_cavitation_range = optional_range(
+            args.movable_cd_cavitation_min, args.movable_cd_cavitation_max
+        )
+        movable_sheet_opening_range = optional_range(
+            args.movable_sheet_opening_min, args.movable_sheet_opening_max
+        )
+        movable_sheet_dp_range = optional_range(
+            args.movable_sheet_dp_min, args.movable_sheet_dp_max
+        )
+        movable_sheet_mass_flow_range = optional_range(
+            args.movable_sheet_mass_flow_min,
+            args.movable_sheet_mass_flow_max,
+        )
         inj_spec = InjectorSpec(
-            type="pintle", sizing=args.injector_sizing,
+            type="pintle", architecture=args.injector_architecture,
+            sizing=args.injector_sizing,
             fuel_dp_fraction=args.fuel_injector_dp_fraction,
             oxidizer_dp_fraction=args.oxidizer_injector_dp_fraction,
             fuel_cd=args.fuel_discharge_coefficient,
             oxidizer_cd=args.oxidizer_discharge_coefficient,
             faceplate_material=args.material, pintle_material=args.material,
             target_momentum_ratio=args.pintle_target_momentum_ratio,
+            movable_axial_controller_dp_fraction_bounds=(
+                args.movable_axial_controller_dp_fraction_min,
+                args.movable_axial_controller_dp_fraction_max,
+            ),
+            evaporation_constant=args.spray_evaporation_constant,
             allow_infeasible=args.allow_infeasible_injector,
             fuel=PropellantFeedSpec(
                 role="fuel", name=args._fuel_name,
@@ -3228,6 +4129,9 @@ def main(argv: list[str] | None = None) -> int:
             geometry=PintleGeometrySpec(
                 pintle_diameter=args.pintle_diameter,
                 slot_count=args.pintle_slot_count,
+                radial_exit_style=args.pintle_radial_exit,
+                radial_hole_diameter=args.pintle_hole_diameter,
+                radial_hole_length=args.pintle_hole_length,
                 slot_aspect_ratio=args.pintle_slot_aspect_ratio,
                 deflector_angle=args.pintle_deflector_angle,
                 impingement_distance=args.pintle_impingement_distance,
@@ -3277,6 +4181,73 @@ def main(argv: list[str] | None = None) -> int:
                 min_tool_diameter=args.min_tool_diameter,
                 min_corner_radius=args.min_corner_radius,
                 tolerance=args.injector_tolerance),
+            movable_pintle=MovablePintleSpec(
+                post_diameter=args.movable_post_diameter,
+                post_thickness=args.movable_post_thickness,
+                center_gap_diameter=args.movable_center_gap_diameter,
+                pintle_rod_diameter=args.movable_pintle_rod_diameter,
+                maximum_opening=args.movable_maximum_opening,
+                commanded_opening=args.movable_commanded_opening,
+                transition_area_fraction=(
+                    args.movable_transition_area_fraction
+                ),
+                minimum_uniform_sheet_opening=(
+                    args.movable_minimum_uniform_sheet_opening
+                ),
+                cd_vs_opening_fraction=args.movable_cd_map,
+                cd_calibration_source=args.movable_cd_source,
+                cd_calibration_artifact_sha256=args.movable_cd_sha256,
+                cd_geometry_fingerprint_sha256=(
+                    args.movable_cd_geometry_sha256
+                ),
+                cd_reynolds_range=movable_cd_reynolds_range,
+                cd_pressure_drop_range=movable_cd_pressure_drop_range,
+                cd_temperature_range=movable_cd_temperature_range,
+                cd_cavitation_number_range=movable_cd_cavitation_range,
+                cd_fluid_name=args.movable_cd_fluid,
+                position_tolerance=args.movable_position_tolerance,
+                position_feedback_resolution=(
+                    args.movable_position_feedback_resolution
+                ),
+                backlash=args.movable_backlash,
+                closed_leakage_area=args.movable_closed_leakage_area,
+                metrology_source=args.movable_metrology_source,
+                metrology_artifact_sha256=args.movable_metrology_sha256,
+                leakage_source=args.movable_leakage_source,
+                leakage_artifact_sha256=args.movable_leakage_sha256,
+                unbalanced_pressure_area=(
+                    args.movable_unbalanced_pressure_area
+                ),
+                spring_preload_force=args.movable_spring_preload_force,
+                seal_friction_force=args.movable_seal_friction_force,
+                moving_mass=args.movable_moving_mass,
+                maximum_acceleration=args.movable_maximum_acceleration,
+                actuator_force_capacity=(
+                    args.movable_actuator_force_capacity
+                ),
+                force_safety_factor=args.movable_force_safety_factor,
+                stem_diameter=args.movable_stem_diameter,
+                stem_allowable_stress=args.movable_stem_allowable_stress,
+                actuator_source=args.movable_actuator_source,
+                actuator_artifact_sha256=args.movable_actuator_sha256,
+                sheet_thickness=args.movable_sheet_thickness,
+                sheet_thickness_method=args.movable_sheet_thickness_method,
+                sheet_thickness_source=args.movable_sheet_thickness_source,
+                sheet_thickness_artifact_sha256=(
+                    args.movable_sheet_thickness_sha256
+                ),
+                sheet_thickness_geometry_fingerprint_sha256=(
+                    args.movable_sheet_geometry_sha256
+                ),
+                sheet_thickness_fluid_name=(
+                    args.movable_sheet_thickness_fluid
+                ),
+                sheet_thickness_opening_range=movable_sheet_opening_range,
+                sheet_thickness_pressure_drop_range=movable_sheet_dp_range,
+                sheet_thickness_mass_flow_range=(
+                    movable_sheet_mass_flow_range
+                ),
+            ),
             feed_system=_feed_system_spec_from_args(args),
         )
         try:
@@ -3284,18 +4255,339 @@ def main(argv: list[str] | None = None) -> int:
                 method="regenerative" if args.regen else "none",
                 coolant=args.coolant,
                 coolant_mass_flow=args.coolant_mdot,
+                channel_count=args.channels,
+                channel_width=args.channel_width,
+                channel_height=args.channel_height,
+                channel_roughness=args.channel_roughness,
+                coolant_outlet_pressure=args.coolant_outlet_pressure,
+                injector_pressure_drop=args._regen_injector_pressure_drop,
+                max_wall_temperature=args.wall_temp_limit,
+                **args._cooling_options,
             )
-            inj = evaluate_pintle_injector(
-                inj_spec,
-                mdot_fuel=args._mdot_f,
-                mdot_oxidizer=args._mdot_o,
-                Pc=args.pc, mixture_ratio=args.mixture_ratio,
-                chamber_radius=chamber["Rc"], chamber_length=chamber["Lc"],
-                gamma=prop.gamma, Tc=prop.Tc, R_gas=prop.R_gas,
-                fuel_name=args._fuel_name, oxidizer_name=args._ox_name,
-                cooling=coupling_cooling, cooling_result=cooling_result,
+
+            iteration_material = (
+                MaterialSpec.from_catalog(args._material.name)
+                if args._material else MaterialSpec(conductivity=args.wall_k)
             )
-        except (InjectorUnsupportedState, InjectorSpecError) as exc:
+            iteration_material.conductivity = args.wall_k
+
+            def evaluate_cli_cooling(total_mdot, gas_propellant):
+                if not args.regen:
+                    return coupling_cooling, cooling_result, None
+                from dataclasses import replace
+                from raosim.physics import (
+                    bartz_heat_flux,
+                    regenerative_cooling_analysis,
+                )
+
+                fuel_mdot = total_mdot / (1.0 + args.mixture_ratio)
+                trial_spec = replace(
+                    coupling_cooling, coolant_mass_flow=fuel_mdot
+                )
+                trial_heat_flux = bartz_heat_flux(
+                    contour, args.pc, gas_propellant, wall_temperature=900.0
+                )
+                trial_cooling = regenerative_cooling_analysis(
+                    trial_heat_flux,
+                    contour,
+                    trial_spec,
+                    iteration_material,
+                    args.wall_thickness,
+                    gas_propellant,
+                    args.pc,
+                    helix_turns=args.helix_turns,
+                    wall_profile=getattr(args, "_wall_profile", None),
+                    curvature_correction=args.curvature_correction,
+                    coolant_outlet_pressure=args.coolant_outlet_pressure,
+                    injector_pressure_drop=args._regen_injector_pressure_drop,
+                )
+                return trial_spec, trial_cooling, trial_heat_flux
+
+            def evaluate_cli_injector(
+                total_mdot,
+                gas_propellant,
+                *,
+                iteration_cooling=coupling_cooling,
+                iteration_cooling_result=cooling_result,
+            ):
+                mdot_fuel = total_mdot / (1.0 + args.mixture_ratio)
+                mdot_oxidizer = args.mixture_ratio * mdot_fuel
+                return evaluate_pintle_injector(
+                    inj_spec,
+                    mdot_fuel=mdot_fuel,
+                    mdot_oxidizer=mdot_oxidizer,
+                    Pc=args.pc, mixture_ratio=args.mixture_ratio,
+                    chamber_radius=chamber["Rc"],
+                    chamber_length=chamber["injector_to_throat_length"],
+                    gamma=gas_propellant.gamma,
+                    Tc=gas_propellant.Tc,
+                    R_gas=gas_propellant.R_gas,
+                    fuel_name=args._fuel_name,
+                    oxidizer_name=args._ox_name,
+                    cooling=iteration_cooling,
+                    cooling_result=iteration_cooling_result,
+                )
+
+            if args.spray_cstar_coupling:
+                from raosim.spray_coupling import (
+                    SprayCStarCouplingSpec,
+                    solve_spray_cstar_fixed_point,
+                )
+
+                coupling_spec = SprayCStarCouplingSpec(
+                    enabled=True,
+                    eta_mixing=args.spray_eta_mixing,
+                    eta_combustion=args.spray_eta_combustion,
+                    relaxation=args.spray_coupling_relaxation,
+                    relative_tolerance=args.spray_coupling_tolerance,
+                    max_iterations=args.spray_coupling_max_iterations,
+                )
+
+                def trial_propellant(eta_cstar):
+                    trial = custom_propellant(
+                        gamma=args.gamma,
+                        Mw=prop.Mw,
+                        Tc=prop.Tc,
+                        OF=prop.OF,
+                        eta_cstar=eta_cstar,
+                        eta_CF=prop.eta_CF,
+                        source=prop.source,
+                    )
+                    trial.name = prop.name
+                    # Preserve a RocketCEA-provided ideal c-star rather than
+                    # reconstructing it from the chamber snapshot.
+                    trial.c_star = prop.c_star
+                    return trial
+
+                def spray_evaluator(eta_cstar, total_mdot):
+                    trial_prop = trial_propellant(eta_cstar)
+                    trial_cooling_spec, trial_cooling, trial_heat_flux = (
+                        evaluate_cli_cooling(total_mdot, trial_prop)
+                    )
+                    trial_injector = evaluate_cli_injector(
+                        total_mdot,
+                        trial_prop,
+                        iteration_cooling=trial_cooling_spec,
+                        iteration_cooling_result=trial_cooling,
+                    )
+                    if trial_injector.atomization is None:
+                        raise RuntimeError(
+                            "injector did not return an atomization result"
+                        )
+                    fuel_mdot = total_mdot / (1.0 + args.mixture_ratio)
+                    state = SprayRegenIterationPayload(
+                        injector=trial_injector,
+                        thermal=(trial_heat_flux or {}),
+                        cooling=(trial_cooling or {"method": "none"}),
+                        total_mass_flow=total_mdot,
+                        fuel_mass_flow=fuel_mdot,
+                        oxidizer_mass_flow=args.mixture_ratio * fuel_mdot,
+                        coolant_mass_flow=(
+                            fuel_mdot if args.regen else 0.0
+                        ),
+                    )
+                    return trial_injector.atomization, state
+
+                spray_coupling = solve_spray_cstar_fixed_point(
+                    coupling_spec,
+                    initial_eta_cstar=prop.eta_cstar,
+                    ideal_cstar=perf.c_star,
+                    chamber_pressure=args.pc,
+                    throat_area=math.pi * args.rt ** 2,
+                    evaluator=spray_evaluator,
+                )
+                prop = trial_propellant(spray_coupling.eta_cstar)
+                perf = compute_engine_performance(
+                    Pc=args.pc,
+                    Pa=Pa,
+                    Rt=args.rt,
+                    epsilon=args.epsilon,
+                    prop=prop,
+                    frozen_gas=args._frozen_gas,
+                )
+                args._prop = prop
+                args._performance = perf
+                args._mdot = perf.m_dot
+                args._mdot_f = perf.m_dot / (1.0 + args.mixture_ratio)
+                args._mdot_o = args.mixture_ratio * args._mdot_f
+                final_state = spray_coupling.payload
+                if not isinstance(final_state, SprayRegenIterationPayload):
+                    raise RuntimeError(
+                        "spray/c-star evaluator returned an unexpected final state"
+                    )
+                inj = final_state.injector
+                if args.regen:
+                    cooling_result = final_state.cooling
+                    args.coolant_mdot = final_state.coolant_mass_flow
+                    summary["cooling"] = _cooling_summary_payload(
+                        cooling_result, args
+                    )
+                    from dataclasses import replace
+                    final_cooling_spec = replace(
+                        coupling_cooling,
+                        coolant_mass_flow=final_state.coolant_mass_flow,
+                    )
+                    analysis_wall_profile = getattr(args, "_wall_profile", None)
+                    final_wall_thickness = (
+                        analysis_wall_profile.t_hot
+                        if analysis_wall_profile is not None
+                        else args.wall_thickness
+                    )
+                    if iteration_material.elastic_modulus:
+                        from raosim.physics import (
+                            channel_pressure_hoop_radius,
+                            coaxial_shell_wall_stress_profile,
+                        )
+                        final_stress = coaxial_shell_wall_stress_profile(
+                            pressure_differential=cooling_result[
+                                "liner_pressure_differential"
+                            ],
+                            inner_radius=channel_pressure_hoop_radius(
+                                args.channel_width, final_wall_thickness
+                            ),
+                            wall_thickness=final_wall_thickness,
+                            heat_flux=cooling_result["q"],
+                            elastic_modulus=iteration_material.elastic_modulus,
+                            thermal_expansion=iteration_material.thermal_expansion,
+                            poisson_ratio=iteration_material.poisson_ratio,
+                            conductivity=args.wall_k,
+                            yield_strength=iteration_material.yield_strength,
+                        )
+                        summary["structural"] = {
+                            "combined_stress_MPa": (
+                                final_stress["combined_stress"] / 1e6
+                            ),
+                            "thermal_stress_MPa": (
+                                final_stress["thermal_stress"] / 1e6
+                            ),
+                            "pressure_stress_MPa": (
+                                final_stress["pressure_stress"] / 1e6
+                            ),
+                            "yield_strength_MPa": (
+                                iteration_material.yield_strength / 1e6
+                            ),
+                            "stress_margin": final_stress["stress_margin"],
+                            "model": final_stress["model"],
+                            "governing_index": final_stress["governing_index"],
+                            "max_liner_pressure_differential_bar": float(
+                                max(cooling_result["liner_pressure_differential"])
+                                / 1e5
+                            ),
+                            "outer_loop_state": (
+                                "final_spray_cstar_regen_iterate"
+                            ),
+                        }
+                    # Previously generated thermal/structural figures used the
+                    # pre-coupling flow.  Overwrite them from the final iterate.
+                    try:
+                        from raosim.plotting import (
+                            plot_cooling_profile,
+                            plot_coolant_channel_march,
+                        )
+                        figure = plot_cooling_profile(
+                            cooling_result,
+                            contour=contour,
+                            max_wall_temperature=getattr(
+                                iteration_material, "max_temperature", None
+                            ),
+                            save_path=args.out / "cooling_profile.png",
+                            show=show,
+                        )
+                        figure.clf()
+                        figure = plot_coolant_channel_march(
+                            cooling_result,
+                            save_path=args.out / "channel_march.png",
+                            show=show,
+                        )
+                        figure.clf()
+                        for name in ("cooling_profile.png", "channel_march.png"):
+                            if name not in artifacts:
+                                artifacts.append(name)
+                    except Exception as exc:
+                        print(yellow(
+                            f"    final coupled cooling plots skipped: {exc}"
+                        ))
+                    try:
+                        from raosim.physics import wall_cross_section_field
+                        from raosim.plotting import plot_channel_cross_section
+                        final_cross_section = wall_cross_section_field(
+                            cooling_result,
+                            final_state.thermal,
+                            contour,
+                            final_cooling_spec,
+                            iteration_material,
+                            final_wall_thickness,
+                            prop,
+                            args.pc,
+                            station="peak",
+                        )
+                        figure = plot_channel_cross_section(
+                            final_cross_section,
+                            save_path=args.out / "cross_section.png",
+                            show=show,
+                        )
+                        figure.clf()
+                        if "cross_section.png" not in artifacts:
+                            artifacts.append("cross_section.png")
+                    except Exception as exc:
+                        print(yellow(
+                            f"    final coupled cross-section skipped: {exc}"
+                        ))
+                    if iteration_material.elastic_modulus:
+                        try:
+                            from raosim.plotting import (
+                                plot_structural_life_dashboard,
+                            )
+                            figure = plot_structural_life_dashboard(
+                                cooling_result,
+                                final_stress,
+                                material=iteration_material,
+                                required_cycles=getattr(
+                                    args, "required_cycles", None
+                                ),
+                                save_path=args.out / "structural_life.png",
+                                show=show,
+                            )
+                            figure.clf()
+                            if "structural_life.png" not in artifacts:
+                                artifacts.append("structural_life.png")
+                        except Exception as exc:
+                            print(yellow(
+                                "    final coupled structural plot skipped: "
+                                f"{exc}"
+                            ))
+                summary["spray_cstar_coupling"] = {
+                    "enabled": True,
+                    **spray_coupling.to_dict(),
+                }
+                summary["performance"].update({
+                    "c_star_effective_m_s": perf.c_star_effective,
+                    "eta_cstar": perf.eta_cstar,
+                    "eta_Isp": perf.eta_Isp,
+                    "Isp_s": perf.Isp,
+                    "mdot_total_kg_s": perf.m_dot,
+                    "mdot_fuel_kg_s": args._mdot_f,
+                    "mdot_oxidizer_kg_s": args._mdot_o,
+                })
+                summary["thrust_closure"].update({
+                    "spray_cstar_fixed_point_enabled": True,
+                    "effective_cstar_m_s": perf.c_star_effective,
+                    "required_mass_flow_kg_s": perf.m_dot,
+                })
+                print(dim(
+                    "    spray/c-star fixed point: "
+                    f"eta_cstar={perf.eta_cstar:.4f}, "
+                    f"mdot={perf.m_dot:.4f} kg/s, "
+                    f"{len(spray_coupling.iterations)} iterations"
+                ))
+            else:
+                inj = evaluate_cli_injector(perf.m_dot, prop)
+                summary["spray_cstar_coupling"] = {
+                    "enabled": False,
+                    "status": "disabled",
+                    "reason": "vaporization screen is report-only by default",
+                }
+        except (InjectorUnsupportedState, InjectorSpecError, RuntimeError, ValueError) as exc:
             print(red(f"    injector rejected: {exc}"))
             summary["injector"] = {"type": "pintle", "feasible": False,
                                    "rejected": str(exc)}
@@ -3390,6 +4682,29 @@ def main(argv: list[str] | None = None) -> int:
                             }
                             for key, info in brep["diagnostics"].items()
                         }
+                        summary["pump_package"]["assembly_gates"] = brep[
+                            "assembly_gates"
+                        ]
+                        summary["pump_package"]["cold_flow_release_ready"] = (
+                            brep["cold_flow_release_ready"]
+                        )
+                        summary["pump_package"]["hardware_qualified"] = brep[
+                            "hardware_qualified"
+                        ]
+                        summary["pump_package"]["external_release_blockers"] = (
+                            brep["external_release_blockers"]
+                        )
+                        failed_reference_gates = [
+                            name
+                            for name, gate_info in brep["assembly_gates"].items()
+                            if not bool(gate_info.get("passed", False))
+                        ]
+                        if failed_reference_gates:
+                            print(yellow(
+                                "    pump B-rep remains packaging-reference "
+                                "geometry; unresolved gates: "
+                                + ", ".join(failed_reference_gates)
+                            ))
                     for path in pkg["files"].values():
                         artifacts.append(os.path.relpath(str(path), str(args.out)))
                     print(green(
@@ -3398,7 +4713,19 @@ def main(argv: list[str] | None = None) -> int:
                     for note in pkg["notes"]:
                         print(dim(f"    pump package: {note}"))
                 except Exception as exc:
-                    print(yellow(f"    pump package skipped: {exc}"))
+                    message = (
+                        "requested pump CAD package failed a required "
+                        f"geometry/export gate: {exc}"
+                    )
+                    print(red(f"    {message}"))
+                    summary["pump_package"] = {
+                        "status": "failed",
+                        "error": f"{type(exc).__name__}: {exc}",
+                    }
+                    (args.out / "summary.json").write_text(
+                        json.dumps(summary, indent=2)
+                    )
+                    return 2
             if args.pump_visualize:
                 try:
                     from raosim.flow_viz import animate_pump_particles
@@ -3476,6 +4803,14 @@ def main(argv: list[str] | None = None) -> int:
             args.bolt_count = interface_resolution.bolt_count
             args.bolt_circle = interface_resolution.bolt_circle_diameter
             args.bolt_hole = interface_resolution.bolt_hole_diameter
+            args._interface_seal_center = (
+                lr["seal_center_radius_m"]
+                if lr["seal_type"] == "o_ring" else None
+            )
+            args._interface_seal_width = (
+                lr["o_ring_groove_width_m"]
+                if lr["seal_type"] == "o_ring" else None
+            )
             inj_spec.geometry.face_od = args.injector_face_od
             inj_spec.geometry.face_thickness = args.injector_face_thickness
             inj_spec.mechanical.bolt_count = args.bolt_count
@@ -3498,8 +4833,8 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as exc:
             print(yellow(f"    injector interface/layout sync skipped: {exc}"))
 
-        # ---- optional movable-sleeve throttle map (computed before the
-        #      figures so it can be plotted alongside them) --------------
+        # ---- optional architecture-dispatched throttle map (computed before
+        #      the figures so it can be plotted alongside them) -----------
         tm = None
         if args.throttle_map:
             from raosim.injector import throttle_map
@@ -3510,25 +4845,71 @@ def main(argv: list[str] | None = None) -> int:
                     inj_spec, mdot_fuel_full=args._mdot_f,
                     mdot_oxidizer_full=args._mdot_o, Pc_full=args.pc,
                     mixture_ratio=args.mixture_ratio,
-                    chamber_radius=chamber["Rc"], chamber_length=chamber["Lc"],
+                    chamber_radius=chamber["Rc"],
+                    chamber_length=chamber["injector_to_throat_length"],
                     gamma=prop.gamma, Tc=prop.Tc, R_gas=prop.R_gas,
                     levels=levels, pc_exponent=args.throttle_pc_exponent)
                 summary["injector_throttle_map"] = tm.to_dict()
-                print("\n    " + bold("Throttle map")
-                      + dim(f"  (Pc∝f^{args.throttle_pc_exponent:g}; "
-                            "O/F+TMR held by the sleeve)"))
-                print(f"      {'f':>5} {'Pc[bar]':>8} {'stroke':>7} "
-                      f"{'v_a':>6} {'TMR':>6} {'SMD[µm]':>8} {'η_c*':>6} "
-                      f"{'feas':>5}")
-                for p in tm.points:
-                    badge = green("yes") if p.feasible else red("no")
-                    print(f"      {p.throttle:>5.2f} {p.Pc/1e5:>8.1f} "
-                          f"{p.sleeve_stroke_fraction:>7.3f} {p.v_annulus:>6.0f} "
-                          f"{p.total_momentum_ratio:>6.3f} "
-                          f"{p.smd_limiting*1e6:>8.0f} "
-                          f"{p.predicted_cstar_efficiency:>6.2f} {badge:>5}")
+                if tm.kinematic_model is not None:
+                    controller_role = tm.points[0].axial_controller_role
+                    print(
+                        "\n    " + bold("Throttle map")
+                        + dim(
+                            f"  (Pc∝f^{args.throttle_pc_exponent:g}; fixed "
+                            f"hardware, physical radial travel + separate "
+                            f"{controller_role} controller)"
+                        )
+                    )
+                    print(
+                        f"      {'f':>5} {'Pc[bar]':>8} {'Lopen[mm]':>9} "
+                        f"{'stroke':>7} {'χ_ax':>7} {'TMR':>6} "
+                        f"{'SMD[µm]':>8} {'feas':>5}"
+                    )
+                    for p in tm.points:
+                        badge = green("yes") if p.feasible else red("no")
+                        print(
+                            f"      {p.throttle:>5.2f} {p.Pc/1e5:>8.1f} "
+                            f"{p.radial_opening*1e3:>9.4f} "
+                            f"{p.actuator_stroke_fraction:>7.3f} "
+                            f"{p.required_axial_controller_dp_fraction:>7.4f} "
+                            f"{p.total_momentum_ratio:>6.3f} "
+                            f"{p.smd_limiting*1e6:>8.0f} {badge:>5}"
+                        )
+                else:
+                    print(
+                        "\n    " + bold("Throttle map")
+                        + dim(
+                            f"  (Pc∝f^{args.throttle_pc_exponent:g}; "
+                            "commanded hydraulic areas, no actuator "
+                            "kinematics)"
+                        )
+                    )
+                    print(
+                        f"      {'f':>5} {'Pc[bar]':>8} {'A_a/Afull':>9} "
+                        f"{'v_a':>6} {'TMR':>6} {'SMD[µm]':>8} "
+                        f"{'η_vap':>6} {'feas':>5}"
+                    )
+                    for p in tm.points:
+                        badge = green("yes") if p.feasible else red("no")
+                        print(
+                            f"      {p.throttle:>5.2f} {p.Pc/1e5:>8.1f} "
+                            f"{p.annulus_area_command_fraction:>9.3f} "
+                            f"{p.v_annulus:>6.0f} "
+                            f"{p.total_momentum_ratio:>6.3f} "
+                            f"{p.smd_limiting*1e6:>8.0f} "
+                            f"{p.eta_vaporization:>6.2f} {badge:>5}"
+                        )
             except Exception as exc:
-                print(yellow(f"    throttle map skipped: {exc}"))
+                message = f"requested throttle map is not reachable: {exc}"
+                print(red(f"    {message}"))
+                summary["injector_throttle_map"] = {
+                    "status": "failed",
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+                (args.out / "summary.json").write_text(
+                    json.dumps(summary, indent=2)
+                )
+                return 2
 
         # ---- pintle deliverable package (mandatory schematic + table) ---
         try:
@@ -3551,6 +4932,7 @@ def main(argv: list[str] | None = None) -> int:
             summary["injector_package"] = {
                 "dir": pkg["dir"],
                 "files": pkg["files"],
+                "cad_audit": pkg.get("cad_audit"),
                 "notes": pkg["notes"],
             }
             for p in pkg["files"].values():
@@ -3561,7 +4943,21 @@ def main(argv: list[str] | None = None) -> int:
                 msg = f"    pintle package: {note}"
                 print(red(msg) if args.injector_cad == "step" else yellow(msg))
         except Exception as exc:
-            print(yellow(f"    pintle package skipped: {exc}"))
+            if args.injector_cad != "none":
+                message = (
+                    "requested pintle CAD package failed a required "
+                    f"geometry/export gate: {exc}"
+                )
+                print(red(f"    {message}"))
+                summary["injector_package"] = {
+                    "status": "failed",
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+                (args.out / "summary.json").write_text(
+                    json.dumps(summary, indent=2)
+                )
+                return 2
+            print(yellow(f"    pintle diagnostic package skipped: {exc}"))
 
         # ---- injector diagnostic figures (full set) ------------------
         try:
@@ -3755,6 +5151,15 @@ def main(argv: list[str] | None = None) -> int:
                 wall_thickness=wall_thickness_geometry,
                 flange_od=args.flange_od,
                 flange_length=args.flange_length,
+                bolt_count=args.bolt_count,
+                bolt_circle_diameter=args.bolt_circle,
+                bolt_hole_diameter=args.bolt_hole,
+                seal_center_radius=getattr(
+                    args, "_interface_seal_center", None
+                ),
+                seal_groove_width=getattr(
+                    args, "_interface_seal_width", None
+                ),
                 require_brep=args.require_brep,
                 metadata={
                     "uniform_seed_thickness_m": args.wall_thickness,
@@ -3819,6 +5224,7 @@ def main(argv: list[str] | None = None) -> int:
                     regen_step_path,
                     max_sections=args.regen_cad_sections,
                     include_manifolds=args.regen_manifolds,
+                    release_mode=args.regen_release_mode,
                     ports_per_manifold=args.regen_ports_per_manifold,
                     port_area_ratio=args.regen_port_area_ratio,
                     port_diameter=args.regen_port_diameter,
@@ -3831,6 +5237,11 @@ def main(argv: list[str] | None = None) -> int:
                     "channel_count": rb["channel_count"],
                     "void_fraction": rb["void_fraction"],
                     "include_manifolds": rb["include_manifolds"],
+                    "release_mode": rb["release_mode"],
+                    "flow_path_status": rb["flow_path_status"],
+                    "cold_flow_geometry_ready": rb[
+                        "cold_flow_geometry_ready"
+                    ],
                     "manifold_metrics": rb["manifold_metrics"],
                     "network_overlaps": rb["network_overlaps"],
                     "fuse_healing": rb["fuse_healing"],
@@ -3940,7 +5351,10 @@ def main(argv: list[str] | None = None) -> int:
             for note in engine_info["notes"]:
                 print(dim(f"    engine assembly: {note}"))
         except Exception as exc:
-            print(yellow(f"    engine assembly skipped: {exc}"))
+            raise RuntimeError(
+                "requested engine assembly failed a required placement/export "
+                f"gate: {exc}"
+            ) from exc
 
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2))
     artifacts.append("summary.json")
@@ -3949,8 +5363,19 @@ def main(argv: list[str] | None = None) -> int:
     print("\n" + green("▸ " + bold("Done")) + f"  →  {bold(str(args.out))}/")
     for a in artifacts:
         print(f"    {dim('•')} {a}")
-    print(dim("\n  Preliminary design geometry — not hardware-qualified "
-              "(needs CFD, thermal/structural review, hot-fire)."))
+    release_report = args._release_readiness
+    if release_report.blocked:
+        print(yellow(
+            "\n  Physical release BLOCKED: "
+            f"{len(release_report.blockers)} external evidence requirements "
+            "are missing, invalid, or failed (see summary.json)."
+        ))
+    else:
+        print(dim(
+            "\n  Release evidence is complete for this manifest; hardware "
+            "qualification still requires the external engineering authority."
+        ))
+    print(dim("  Numerical design/CAD output is never hardware-qualified by LREKit."))
     return 0
 
 

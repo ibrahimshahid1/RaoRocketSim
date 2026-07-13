@@ -92,6 +92,7 @@ def add_contour_reliability_metadata(
     method: str,
     gamma: float,
     *,
+    frozen_expansion=None,
     exit_radius_rel_tol: float = 5e-3,
     exit_mach_rel_tol: float = 0.25,
     exit_theta_max_deg: float = 10.0,
@@ -117,8 +118,18 @@ def add_contour_reliability_metadata(
         warnings.append(f"Could not verify exit radius: {exc}")
 
     try:
-        ideal_me = mach_from_area_ratio(float(contour["epsilon"]), gamma, supersonic=True)
+        ideal_me = (
+            float(frozen_expansion.exit.mach)
+            if frozen_expansion is not None
+            else mach_from_area_ratio(
+                float(contour["epsilon"]), gamma, supersonic=True
+            )
+        )
         contour["ideal_exit_Mach"] = ideal_me
+        contour["quasi_1d_expansion_model"] = (
+            "frozen_variable_cp_q1d"
+            if frozen_expansion is not None else "constant_gamma"
+        )
         if "exit_M_mean" in contour:
             moc_me = float(contour["exit_M_mean"])
             rel_err = abs(moc_me - ideal_me) / max(ideal_me, 1e-15)
@@ -153,6 +164,7 @@ def evaluate_design_gates(
     Pa: float,
     gamma: float,
     *,
+    frozen_expansion=None,
     wall_thickness: float | None = None,
     flange_od: float | None = None,
     flange_length: float | None = None,
@@ -252,7 +264,9 @@ def evaluate_design_gates(
     try:
         from raosim.wall_pressure import wall_pressure_distribution
 
-        wp = wall_pressure_distribution(contour, Pc, gamma)
+        wp = wall_pressure_distribution(
+            contour, Pc, gamma, frozen_expansion=frozen_expansion
+        )
         report.add(
             "flow", "wall_pressure_monotonic",
             bool(wp["monotonic"]),
@@ -265,7 +279,9 @@ def evaluate_design_gates(
     try:
         from raosim.separation import check_separation
 
-        sep = check_separation(contour, Pc, Pa, gamma)
+        sep = check_separation(
+            contour, Pc, Pa, gamma, frozen_expansion=frozen_expansion
+        )
         report.add(
             "flow", "separation_margin",
             not bool(sep["separated"]),
@@ -276,7 +292,11 @@ def evaluate_design_gates(
         report.add("flow", "separation_margin", False, message=str(exc))
 
     if "exit_M_mean" in contour:
-        ideal_me = mach_from_area_ratio(epsilon, gamma, supersonic=True)
+        ideal_me = (
+            float(frozen_expansion.exit.mach)
+            if frozen_expansion is not None
+            else mach_from_area_ratio(epsilon, gamma, supersonic=True)
+        )
         rel_me = abs(float(contour["exit_M_mean"]) - ideal_me) / max(ideal_me, 1e-15)
         report.add(
             "solver", "exit_mach_consistency",

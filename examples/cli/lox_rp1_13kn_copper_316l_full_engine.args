@@ -22,6 +22,7 @@
 --contraction-ratio 3.0
 --minimum-cylindrical-length 0.03
 --cd-target 0.99
+--allow-throat-radius-extension
 
 # Fast seed contour for update checks.
 --max-nfev 0

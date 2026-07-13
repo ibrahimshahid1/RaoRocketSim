@@ -23,6 +23,25 @@ class TestLookupAngles:
         assert 20.0 < tn < 45.0
         assert 5.0 < te < 25.0
 
+    def test_chart_extrapolation_is_explicitly_unqualified(self):
+        contour = bell_nozzle_contour(
+            Rt=0.020, epsilon=60.0, length_pct=80.0
+        )
+        assert contour["rao_chart_domain"]["in_domain"] is False
+        assert contour["rao_chart_extrapolated"] is True
+        assert any("extrapolated" in warning for warning in contour["warnings"])
+
+    def test_explicit_angles_do_not_claim_chart_extrapolation(self):
+        contour = bell_nozzle_contour(
+            Rt=0.020,
+            epsilon=60.0,
+            length_pct=80.0,
+            theta_n_deg=36.0,
+            theta_e_deg=20.0,
+        )
+        assert contour["rao_chart_domain"]["in_domain"] is False
+        assert contour["rao_chart_extrapolated"] is False
+
 
 class TestBellNozzleContour:
 

@@ -1234,8 +1234,17 @@ def plot_channel_cross_section(cross_section, *, mirror=True, cmap="inferno",
     return fig
 
 
-def plot_separation_on_contour(contour, Pc, prop, *, ambient_pressures=None,
-                               method="schmucker", show=False, save_path=None):
+def plot_separation_on_contour(
+    contour,
+    Pc,
+    prop,
+    *,
+    ambient_pressures=None,
+    method="schmucker",
+    frozen_expansion=None,
+    show=False,
+    save_path=None,
+):
     """Where the over-expanded flow detaches from the wall, on the contour.
 
     For each ambient pressure the wall separation point (Summerfield /
@@ -1262,7 +1271,14 @@ def plot_separation_on_contour(contour, Pc, prop, *, ambient_pressures=None,
 
     cmap = plt.get_cmap("viridis")
     for k, Pa in enumerate(Pas):
-        res = check_separation(contour, Pc, float(Pa), gamma, method=method)
+        res = check_separation(
+            contour,
+            Pc,
+            float(Pa),
+            gamma,
+            method=method,
+            frozen_expansion=frozen_expansion,
+        )
         color = cmap(k / max(len(Pas) - 1, 1))
         if res["separated"] and res["x_sep"] is not None:
             xs, ys = float(res["x_sep"]), float(res["y_sep"])
@@ -1274,7 +1290,14 @@ def plot_separation_on_contour(contour, Pc, prop, *, ambient_pressures=None,
                     label=f"Pa={Pa / 1e3:.0f} kPa → flowing full")
 
     # Shade the sea-level (highest-Pa) separated region red, attached blue.
-    res0 = check_separation(contour, Pc, float(Pas[0]), gamma, method=method)
+    res0 = check_separation(
+        contour,
+        Pc,
+        float(Pas[0]),
+        gamma,
+        method=method,
+        frozen_expansion=frozen_expansion,
+    )
     if res0["separated"] and res0["x_sep"] is not None:
         mask = x >= float(res0["x_sep"])
         ax.fill_between(x, -y, y, where=mask, color="#d93025", alpha=0.12,
@@ -1286,8 +1309,14 @@ def plot_separation_on_contour(contour, Pc, prop, *, ambient_pressures=None,
 
     ax.set_xlabel("axial position  x [m]")
     ax.set_ylabel("radial position  r [m]")
-    ax.set_title(f"Flow separation on the contour  "
-                 f"({method}, Pc = {Pc / 1e6:.1f} MPa)")
+    expansion_label = (
+        "variable-cp frozen Q1D"
+        if frozen_expansion is not None else "constant-gamma Q1D"
+    )
+    ax.set_title(
+        f"Flow separation on the contour  "
+        f"({method}, {expansion_label}, Pc = {Pc / 1e6:.1f} MPa)"
+    )
     ax.set_aspect("equal", "box")
     ax.grid(True, ls=":", alpha=0.3)
     ax.legend(loc="best", fontsize=8)

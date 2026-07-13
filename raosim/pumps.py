@@ -145,17 +145,36 @@ class PumpSizingSpec:
     rotor_yield_strength: float = SCREENING_DEFAULTS["rotor_yield_strength"]
     casing_yield_strength: float = SCREENING_DEFAULTS["casing_yield_strength"]
     structural_fos: float = SCREENING_DEFAULTS["structural_fos"]
-    blade_thickness_ratio: float = 0.04
+    blade_thickness_ratio: float = 0.012
     # 0.4 mm manufacturing floor; small-pump performance is sensitive to
     # blade thickness/outlet angle at this scale (corpus: "Influence of
     # Blade Outlet Angle and Blade Thickness ... Mini Centrifugal Pump",
     # IOP mini-impeller studies) - treat thinner blades as unbuildable
     # rather than better.
     min_blade_thickness: float = 4.0e-4
+    # Tapered leading edge; kept distinct from the discharge/root thickness.
+    # This is a manufacturing-process input and is exported for inspection.
+    min_impeller_leading_edge_thickness: float = 2.0e-4
+    # SP-8109 inlet free-area practice is satisfied with only the full-length
+    # main blades at the eye; the remaining discharge blades begin as
+    # splitters downstream.  Four main blades is the default in the cited
+    # 4..8 inlet-blade range.
+    impeller_inlet_blade_count: int = 4
+    splitter_start_radius_fraction: float = 0.55
+    max_impeller_inlet_blockage: float = 0.20
+    max_impeller_exit_blockage: float = 0.15
     shaft_diameter_ratio: float = 0.30
     min_shaft_diameter: float = 6.0e-3
+    # These are hydraulic/mechanical interface dimensions, not CAD repair
+    # constants.  The annular eye, inducer hub, and velocity triangle are
+    # solved around them before a reference solid is constructed.
+    shaft_fit_radial_clearance: float = 15.0e-6
+    min_impeller_hub_wall_thickness: float = 3.0e-4
+    min_inducer_hub_wall_thickness: float = 2.0e-4
     casing_wall_thickness_ratio: float = 0.035
     min_casing_wall_thickness: float = 1.5e-3
+    split_casing_machining_tool_diameter: float = 5.0e-4
+    split_casing_joint_separation_factor: float = 1.5
     # Wear-ring radial clearance is a manufacturing/vendor input, not a
     # meanline output; when provided, the SP-8109 sec. 3.5.2.1 rule
     # (balance-hole flow area ~= 4 x seal-clearance area) sizes the
@@ -269,6 +288,18 @@ class CentrifugalPumpGeometry:
     outlet_blade_angle_deg: float
     recommendation: str
     blade_count_source: str | None = None
+    legacy_screening_inlet_angle_deg: float | None = None
+    inlet_blade_count: int | None = None
+    splitter_blade_count: int = 0
+    splitter_start_radius_fraction: float | None = None
+    blade_thickness: float | None = None
+    blade_thickness_source: str | None = None
+    blade_root_structural_minimum_thickness: float | None = None
+    blade_root_structural_geometry_limited: bool = False
+    inlet_blade_thickness: float | None = None
+    inlet_blockage_fraction: float | None = None
+    exit_blockage_fraction: float | None = None
+    target_flow_coefficient: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -286,6 +317,26 @@ class CentrifugalPumpGeometry:
             "blade_count": self.blade_count,
             "blade_count_source": self.blade_count_source,
             "inlet_blade_angle_deg": self.inlet_blade_angle_deg,
+            "legacy_screening_inlet_angle_deg": (
+                self.legacy_screening_inlet_angle_deg
+            ),
+            "inlet_blade_count": self.inlet_blade_count,
+            "splitter_blade_count": self.splitter_blade_count,
+            "splitter_start_radius_fraction": (
+                self.splitter_start_radius_fraction
+            ),
+            "blade_thickness_m": self.blade_thickness,
+            "blade_thickness_source": self.blade_thickness_source,
+            "blade_root_structural_minimum_thickness_m": (
+                self.blade_root_structural_minimum_thickness
+            ),
+            "blade_root_structural_geometry_limited": (
+                self.blade_root_structural_geometry_limited
+            ),
+            "inlet_blade_thickness_m": self.inlet_blade_thickness,
+            "inlet_blockage_fraction": self.inlet_blockage_fraction,
+            "exit_blockage_fraction": self.exit_blockage_fraction,
+            "target_flow_coefficient": self.target_flow_coefficient,
             "outlet_blade_angle_deg": self.outlet_blade_angle_deg,
             "recommendation": self.recommendation,
         }
@@ -379,6 +430,9 @@ class PumpVelocityTriangle:
     inlet_relative_velocity: float
     outlet_relative_velocity: float
     inlet_blade_angle_deg: float
+    inlet_relative_flow_angle_deg: float
+    inlet_blade_metal_angle_deg: float
+    inlet_incidence_deg: float
     outlet_blade_angle_deg: float
     outlet_absolute_flow_angle_deg: float
     slip_factor: float
@@ -397,6 +451,11 @@ class PumpVelocityTriangle:
             "inlet_relative_velocity_m_s": self.inlet_relative_velocity,
             "outlet_relative_velocity_m_s": self.outlet_relative_velocity,
             "inlet_blade_angle_deg": self.inlet_blade_angle_deg,
+            "inlet_relative_flow_angle_deg": (
+                self.inlet_relative_flow_angle_deg
+            ),
+            "inlet_blade_metal_angle_deg": self.inlet_blade_metal_angle_deg,
+            "inlet_incidence_deg": self.inlet_incidence_deg,
             "outlet_blade_angle_deg": self.outlet_blade_angle_deg,
             "outlet_absolute_flow_angle_deg": self.outlet_absolute_flow_angle_deg,
             "slip_factor": self.slip_factor,
@@ -1093,6 +1152,8 @@ def _impeller_geometry(
     head: float,
     rpm: float,
     spec: PumpSizingSpec,
+    *,
+    blade_root_structural_floor: float = 0.0,
 ) -> CentrifugalPumpGeometry:
     rpm = max(rpm, 1e-9)
     omega = 2.0 * math.pi * rpm / 60.0
@@ -1104,10 +1165,6 @@ def _impeller_geometry(
     # Ns = omega*sqrt(Q)/(gH)^0.75, Ds = D2*(gH)^0.25/sqrt(Q).
     tip_speed = _safe_sqrt(G0 * stage_head / psi)
     d2 = 2.0 * tip_speed / omega
-    b2 = Q / max(math.pi * d2 * phi * tip_speed, 1e-12)
-    d1 = _safe_sqrt(4.0 * Q / max(math.pi * spec.inlet_flow_coefficient * tip_speed, 1e-12))
-    ns = omega * math.sqrt(max(Q, 0.0)) / max((G0 * stage_head) ** 0.75, 1e-12)
-    ds = d2 * (G0 * stage_head) ** 0.25 / max(math.sqrt(max(Q, 1e-18)), 1e-12)
     outlet_angle = 25.0 if stage_head > 0.0 else 0.0
     inlet_angle = math.degrees(math.atan2(phi, 1.0))
     if spec.blade_count is not None:
@@ -1121,6 +1178,85 @@ def _impeller_geometry(
         blade_count_source = chart["basis"]
         if chart["status"] != "within_chart":
             blade_count_source += f" ({chart['status']})"
+    if blade_count <= 0:
+        raise ValueError("impeller blade count must be positive")
+    requested_inlet_count = min(
+        blade_count, max(int(spec.impeller_inlet_blade_count), 1)
+    )
+    divisors = [
+        count for count in range(4, min(8, blade_count) + 1)
+        if blade_count % count == 0
+    ]
+    inlet_blade_count = (
+        min(divisors, key=lambda count: (abs(count - requested_inlet_count), count))
+        if divisors else blade_count
+    )
+    splitter_count = blade_count - inlet_blade_count
+
+    # Enforce the SP-8109 free-area screen before fixing RPM.  With a
+    # manufacturing-floor thickness, reducing RPM grows D2 and creates the
+    # required circumferential passage.  A user-fixed RPM is rejected rather
+    # than silently changed.
+    beta2 = math.radians(max(outlet_angle, 1.0e-6))
+    max_b2 = _clamp(float(spec.max_impeller_exit_blockage), 1e-3, 0.95)
+    ratio_blockage = (
+        blade_count * max(float(spec.blade_thickness_ratio), 0.0)
+        / max(math.pi * math.sin(beta2), 1e-12)
+    )
+    if ratio_blockage > max_b2 + 1.0e-12:
+        raise ValueError(
+            "impeller blade-thickness ratio cannot satisfy the exit "
+            f"free-area gate: blockage={ratio_blockage:.6g} > {max_b2:.6g}"
+        )
+    effective_blade_floor = max(
+        spec.min_blade_thickness,
+        float(blade_root_structural_floor),
+    )
+    d2_floor = (
+        blade_count * effective_blade_floor
+        / max(math.pi * math.sin(beta2) * max_b2, 1e-12)
+    )
+    structural_geometry_limited = False
+    if d2 < d2_floor:
+        if spec.drive.rpm is None:
+            if d2_floor > spec.max_impeller_diameter:
+                if blade_root_structural_floor <= 0.0:
+                    raise ValueError(
+                        "exit free-area closure requires an impeller larger "
+                        "than max_impeller_diameter"
+                    )
+                d2 = spec.max_impeller_diameter
+                structural_geometry_limited = True
+            else:
+                d2 = d2_floor
+            omega = 2.0 * tip_speed / max(d2, 1e-12)
+            rpm = omega * 60.0 / (2.0 * math.pi)
+        elif blade_root_structural_floor > 0.0:
+            structural_geometry_limited = True
+    blade_t = max(
+        effective_blade_floor,
+        spec.blade_thickness_ratio * d2,
+    )
+    exit_blockage = (
+        blade_count * blade_t
+        / max(math.pi * d2 * math.sin(beta2), 1e-12)
+    )
+    open_exit_perimeter = math.pi * d2 * (1.0 - exit_blockage)
+    if open_exit_perimeter <= 0.0:
+        raise ValueError("impeller blades close the discharge flow area")
+    required_b2 = Q / max(open_exit_perimeter * phi * tip_speed, 1e-12)
+    b2 = max(required_b2, spec.min_outlet_width)
+    if b2 > spec.max_outlet_width_ratio * d2 * (1.0 + 1e-9):
+        if spec.drive.rpm is None:
+            raise ValueError(
+                "net-area discharge continuity requires an excessive impeller "
+                "outlet width"
+            )
+    achieved_phi = Q / max(open_exit_perimeter * b2 * tip_speed, 1e-12)
+    # Placeholder only; the coupled annular-eye solve below replaces D1.
+    d1 = 0.45 * d2
+    ns = omega * math.sqrt(max(Q, 0.0)) / max((G0 * stage_head) ** 0.75, 1e-12)
+    ds = d2 * (G0 * stage_head) ** 0.25 / max(math.sqrt(max(Q, 1e-18)), 1e-12)
     recommendation = "shrouded radial impeller"
     if tip_speed > 0.80 * spec.material_tip_speed_limit:
         recommendation = "split head across stages or use higher-strength impeller"
@@ -1135,7 +1271,7 @@ def _impeller_geometry(
         specific_speed=ns,
         specific_diameter=ds,
         head_coefficient=psi,
-        flow_coefficient=phi,
+        flow_coefficient=achieved_phi,
         tip_speed=tip_speed,
         impeller_diameter=d2,
         inlet_diameter=d1,
@@ -1145,6 +1281,29 @@ def _impeller_geometry(
         outlet_blade_angle_deg=outlet_angle,
         recommendation=recommendation,
         blade_count_source=blade_count_source,
+        legacy_screening_inlet_angle_deg=inlet_angle,
+        inlet_blade_count=inlet_blade_count,
+        splitter_blade_count=splitter_count,
+        splitter_start_radius_fraction=_clamp(
+            spec.splitter_start_radius_fraction, 0.05, 0.95
+        ),
+        blade_thickness=blade_t,
+        blade_thickness_source=(
+            "blade_root_structural_closure"
+            if blade_root_structural_floor > max(
+                spec.min_blade_thickness,
+                spec.blade_thickness_ratio * d2,
+            )
+            else "manufacturing_or_diameter_ratio"
+        ),
+        blade_root_structural_minimum_thickness=(
+            float(blade_root_structural_floor)
+            if blade_root_structural_floor > 0.0 else None
+        ),
+        blade_root_structural_geometry_limited=structural_geometry_limited,
+        inlet_blade_thickness=spec.min_impeller_leading_edge_thickness,
+        exit_blockage_fraction=exit_blockage,
+        target_flow_coefficient=phi,
     )
 
 
@@ -1165,22 +1324,36 @@ def _velocity_triangle(
     head: float,
     impeller: CentrifugalPumpGeometry,
     spec: PumpSizingSpec,
+    *,
+    inlet_area: float | None = None,
 ) -> PumpVelocityTriangle:
     stages = max(impeller.stages, 1)
     stage_head = max(head, 0.0) / stages
     omega = 2.0 * math.pi * max(impeller.rpm, 1e-9) / 60.0
     u2 = max(impeller.tip_speed, 1e-9)
     u1 = omega * max(impeller.inlet_diameter, 0.0) / 2.0
-    area1 = math.pi * max(impeller.inlet_diameter, 1e-12) ** 2 / 4.0
+    area1 = (
+        float(inlet_area)
+        if inlet_area is not None
+        else math.pi * max(impeller.inlet_diameter, 1e-12) ** 2 / 4.0
+    )
+    if not math.isfinite(area1) or area1 <= 0.0:
+        raise ValueError("pump velocity triangle requires positive inlet area")
     cm1 = max(Q, 0.0) / max(area1, 1e-12)
-    cm2 = max(spec.flow_coefficient * u2, 0.0)
+    cm2 = max(impeller.flow_coefficient * u2, 0.0)
     beta2 = math.radians(_clamp(impeller.outlet_blade_angle_deg, 5.0, 80.0))
     slip = _slip_factor(impeller.blade_count, impeller.outlet_blade_angle_deg)
     cu2 = max(0.0, slip * u2 - cm2 / max(math.tan(beta2), 1e-12))
     euler_head = u2 * cu2 / G0
     w1 = math.hypot(cm1, u1)
     w2 = math.hypot(cm2, max(u2 - cu2, 0.0))
-    beta1 = math.degrees(math.atan2(cm1, max(u1, 1e-12)))
+    beta1_flow = math.degrees(
+        math.atan2(cm1, max(u1 - 0.0, 1e-12))
+    )
+    # Zero prewhirl and zero design-point incidence are explicit assumptions;
+    # the blade metal angle therefore equals the relative-flow angle.  Keep
+    # ``inlet_blade_angle_deg`` as a backward-compatible alias.
+    beta1_metal = beta1_flow
     alpha2 = math.degrees(math.atan2(cm2, max(cu2, 1e-12)))
     return PumpVelocityTriangle(
         inlet_tip_speed=u1,
@@ -1191,7 +1364,10 @@ def _velocity_triangle(
         outlet_whirl_velocity=cu2,
         inlet_relative_velocity=w1,
         outlet_relative_velocity=w2,
-        inlet_blade_angle_deg=beta1,
+        inlet_blade_angle_deg=beta1_metal,
+        inlet_relative_flow_angle_deg=beta1_flow,
+        inlet_blade_metal_angle_deg=beta1_metal,
+        inlet_incidence_deg=beta1_metal - beta1_flow,
         outlet_blade_angle_deg=impeller.outlet_blade_angle_deg,
         outlet_absolute_flow_angle_deg=alpha2,
         slip_factor=slip,
@@ -1216,8 +1392,12 @@ def _hydraulic_meanline(
     ln,
     impeller: CentrifugalPumpGeometry,
     spec: PumpSizingSpec,
+    *,
+    inlet_area: float | None = None,
 ) -> PumpHydraulicMeanline:
-    triangle = _velocity_triangle(Q, head, impeller, spec)
+    triangle = _velocity_triangle(
+        Q, head, impeller, spec, inlet_area=inlet_area
+    )
     stage_head = triangle.required_stage_head
     re = _pump_reynolds_number(ln, impeller)
 
@@ -1237,8 +1417,9 @@ def _hydraulic_meanline(
     if triangle.euler_head < stage_head:
         loading_loss += stage_head - triangle.euler_head
 
+    incidence_rad = math.radians(triangle.inlet_incidence_deg)
     incidence_loss = stage_head * (
-        0.006 if 5.0 <= triangle.inlet_blade_angle_deg <= 35.0 else 0.025
+        0.006 + min(0.20, 0.05 * (incidence_rad / 0.10) ** 2)
     )
     passage_loss = stage_head * friction_fraction
     disk_loss = min(0.10 * stage_head, 0.004 * impeller.tip_speed**2 / G0)
@@ -1278,7 +1459,7 @@ def _hydraulic_meanline(
     )
     return PumpHydraulicMeanline(
         role=role,
-        model="centrifugal_meanline_v1",
+        model="centrifugal_meanline_annular_eye_v2",
         source_ids=["NASA SP-8109", "NASA SP-8052"],
         design_flow=Q,
         total_head=head,
@@ -1395,21 +1576,241 @@ def _architecture_classification(
     )
 
 
-def _shaft_diameter(impeller: CentrifugalPumpGeometry, spec: PumpSizingSpec) -> float:
-    return max(
+def _shaft_diameter(
+    impeller: CentrifugalPumpGeometry,
+    spec: PumpSizingSpec,
+    *,
+    shaft_power: float | None = None,
+) -> float:
+    """Return the larger packaging- and torsion-driven shaft diameter."""
+    packaging = max(
         spec.min_shaft_diameter,
         spec.shaft_diameter_ratio * max(impeller.inlet_diameter, 0.35 * impeller.impeller_diameter),
     )
+    if shaft_power is None or shaft_power <= 0.0:
+        return packaging
+    omega = 2.0 * math.pi * max(impeller.rpm, 1e-9) / 60.0
+    torque = float(shaft_power) / omega
+    shear_allow = (
+        0.35 * spec.rotor_yield_strength
+        / max(spec.structural_fos, 1e-9)
+    )
+    torsion = (
+        16.0 * torque / max(math.pi * shear_allow, 1e-18)
+    ) ** (1.0 / 3.0)
+    return max(packaging, torsion)
+
+
+def _solve_annular_eye_and_shaft(
+    Q: float,
+    impeller: CentrifugalPumpGeometry,
+    spec: PumpSizingSpec,
+    *,
+    shaft_power: float | None = None,
+) -> dict[str, float | int | bool | str]:
+    """Couple eye diameter, shaft, root wall, and inlet flow coefficient.
+
+    The solved radius satisfies
+
+    ``Q = pi (R1^2 - Rh^2) phi1 omega R1``
+
+    with ``Rh`` the larger of the requested inducer hub ratio and the shaft
+    plus fit-clearance/root-wall envelope.  This removes the old full-disk
+    continuity assumption and prevents CAD from shrinking the flow annulus.
+    """
+    q = max(float(Q), 0.0)
+    omega = 2.0 * math.pi * max(impeller.rpm, 1e-9) / 60.0
+    phi1 = max(float(spec.inlet_flow_coefficient), 1e-9)
+    hub_ratio = _clamp(float(spec.inducer_hub_ratio), 0.0, 0.85)
+    blade_t = float(
+        impeller.inlet_blade_thickness or spec.min_blade_thickness
+    )
+    root_wall = max(spec.min_impeller_hub_wall_thickness, blade_t)
+    inlet_blades = max(
+        int(impeller.inlet_blade_count or impeller.blade_count), 1
+    )
+    beta_target = math.atan(phi1)
+
+    def state(radius: float) -> tuple[float, float, float, float, float]:
+        impeller.inlet_diameter = 2.0 * radius
+        shaft_d = _shaft_diameter(
+            impeller, spec, shaft_power=shaft_power
+        )
+        hub_r = max(
+            hub_ratio * radius,
+            0.5 * shaft_d + spec.shaft_fit_radial_clearance + root_wall,
+        )
+        area = math.pi * max(radius * radius - hub_r * hub_r, 0.0)
+        blockage = (
+            inlet_blades * blade_t
+            / max(2.0 * math.pi * radius * math.sin(beta_target), 1e-18)
+        )
+        effective_area = area * max(1.0 - blockage, 0.0)
+        capacity = effective_area * phi1 * omega * radius
+        return capacity - q, shaft_d, hub_r, area, blockage
+
+    lower = max(0.05 * impeller.impeller_diameter, 1.0e-6)
+    # Find a sign-changing bracket.  The shaft packaging term grows only
+    # linearly with R1 while capacity grows cubically for the allowed ratios.
+    upper = max(lower * 1.05, lower + 1.0e-6)
+    f_upper, _, _, _, _ = state(upper)
+    expansions = 0
+    while f_upper < 0.0 and expansions < 80:
+        upper *= 1.20
+        f_upper, _, _, _, _ = state(upper)
+        expansions += 1
+    if f_upper < 0.0:
+        raise ValueError(
+            "could not bracket a mechanically feasible annular pump eye"
+        )
+    f_lower, _, _, _, _ = state(lower)
+    if f_lower >= 0.0:
+        radius = lower
+        iterations = 0
+    else:
+        iterations = 0
+        for iterations in range(1, 101):
+            radius = 0.5 * (lower + upper)
+            f_mid, _, _, _, _ = state(radius)
+            if abs(f_mid) <= max(q, 1.0e-12) * 1.0e-12:
+                break
+            if f_mid < 0.0:
+                lower = radius
+            else:
+                upper = radius
+        else:
+            raise RuntimeError("annular pump-eye solve did not converge")
+    residual, shaft_d, hub_r, area, blockage = state(radius)
+    if hub_r >= radius:
+        raise ValueError("shaft/hub envelope closes the pump inlet annulus")
+    cm1 = q / max(area, 1e-18)
+    effective_area = area * (1.0 - blockage)
+    cm1_effective = q / max(effective_area, 1e-18)
+    impeller.inlet_blockage_fraction = blockage
+    return {
+        "model": "coupled_annular_eye_shaft_bisection_v1",
+        "converged": True,
+        "iterations": iterations,
+        "eye_radius_m": radius,
+        "eye_hub_radius_m": hub_r,
+        "inlet_area_m2": area,
+        "effective_inlet_area_m2": effective_area,
+        "inlet_meridional_velocity_m_s": cm1_effective,
+        "gross_area_meridional_velocity_m_s": cm1,
+        "inlet_flow_coefficient": (
+            cm1_effective / max(omega * radius, 1e-18)
+        ),
+        "target_inlet_flow_coefficient": phi1,
+        "inlet_blade_count": inlet_blades,
+        "inlet_blockage_fraction": blockage,
+        "inlet_free_area_fraction": 1.0 - blockage,
+        "inlet_blockage_limit": spec.max_impeller_inlet_blockage,
+        "inlet_blockage_status": (
+            "pass" if blockage <= spec.max_impeller_inlet_blockage
+            else "fail"
+        ),
+        "continuity_residual_m3_s": residual,
+        "shaft_diameter_m": shaft_d,
+        "shaft_fit_radial_clearance_m": spec.shaft_fit_radial_clearance,
+        "impeller_hub_wall_thickness_m": root_wall,
+        "shaft_power_coupled": shaft_power is not None,
+    }
 
 
 def _casing_wall_thickness(
     impeller: CentrifugalPumpGeometry,
     spec: PumpSizingSpec,
+    *,
+    design_pressure: float | None = None,
 ) -> float:
-    return max(
+    empirical = max(
         spec.min_casing_wall_thickness,
         spec.casing_wall_thickness_ratio * impeller.impeller_diameter,
     )
+    if design_pressure is None or design_pressure <= 0.0:
+        return empirical
+    radius = 0.68 * impeller.impeller_diameter
+    allowable = spec.casing_yield_strength / max(spec.structural_fos, 1e-9)
+    pressure_wall = float(design_pressure) * radius / max(allowable, 1e-9)
+    return max(empirical, pressure_wall)
+
+
+def _split_casing_joint_layout(
+    casing_radius: float,
+    casing_wall: float,
+    volute_exit_area: float,
+    design_pressure: float,
+    spec: PumpSizingSpec,
+) -> dict[str, float | int | str | bool]:
+    """Preliminary pressure-loaded keyhole split-casing joint layout.
+
+    The projected area includes the round scroll footprint plus the split
+    tangential outlet neck.  This is an auditable clamp/land layout, not a
+    gasket, preload-scatter, thread-engagement, or flange-flexibility
+    qualification.
+    """
+    a_exit = math.sqrt(max(volute_exit_area, 0.0) / math.pi)
+    wetted_radius = casing_radius + a_exit
+    outlet_length = 3.0 * a_exit
+    projected_area = (
+        math.pi * wetted_radius**2 + 2.0 * a_exit * outlet_length
+    )
+    separation_factor = max(
+        float(spec.split_casing_joint_separation_factor), 1.0
+    )
+    required_clamp = separation_factor * design_pressure * projected_area
+    bolt_allow = spec.casing_yield_strength / max(spec.structural_fos, 1e-9)
+    bolt_d = max(3.0e-3, 0.08 * casing_radius)
+    tensile_area = 0.75 * math.pi * bolt_d**2 / 4.0
+    required_count = max(
+        8,
+        int(math.ceil(required_clamp / max(bolt_allow * tensile_area, 1e-12))),
+    )
+    body_count = required_count if required_count % 2 == 0 else required_count + 1
+    outlet_pair_count = 4
+    total_count = body_count + outlet_pair_count
+    gasket_land = max(2.0e-3, 1.5 * casing_wall)
+    edge_land = max(1.5 * 1.15 * bolt_d, 2.0e-3)
+    flange_outer_radius = wetted_radius + gasket_land + edge_land
+    flange_thickness = max(casing_wall, 1.5 * bolt_d)
+    bolt_stress = required_clamp / max(total_count * tensile_area, 1e-12)
+    min_scroll_section_d = 2.0 * a_exit / math.sqrt(24.0)
+    return {
+        "model": "keyhole_full_face_gasket_split_joint_v1",
+        "parting_plane": "volute_scroll_centerplane",
+        "design_pressure_pa": design_pressure,
+        "projected_pressure_area_m2": projected_area,
+        "pressure_separating_force_n": design_pressure * projected_area,
+        "joint_separation_factor": separation_factor,
+        "required_total_clamp_n": required_clamp,
+        "body_bolt_count": body_count,
+        "outlet_neck_bolt_count": outlet_pair_count,
+        "total_bolt_count": total_count,
+        "bolt_nominal_diameter_m": bolt_d,
+        "bolt_hole_diameter_m": 1.15 * bolt_d,
+        "bolt_allowable_stress_pa": bolt_allow,
+        "bolt_screen_stress_pa": bolt_stress,
+        "bolt_screen_passed": bolt_stress <= bolt_allow,
+        "gasket_selection": "full_face_keyhole_sheet_gasket_unqualified",
+        "gasket_land_width_m": gasket_land,
+        "minimum_free_edge_land_m": edge_land,
+        "flange_outer_radius_m": flange_outer_radius,
+        "flange_thickness_m": flange_thickness,
+        "outlet_neck_length_m": outlet_length,
+        "selected_scroll_tool_diameter_m": (
+            spec.split_casing_machining_tool_diameter
+        ),
+        "minimum_modeled_scroll_section_diameter_m": min_scroll_section_d,
+        "scroll_tool_access_passed": (
+            spec.split_casing_machining_tool_diameter
+            <= min_scroll_section_d
+        ),
+        "qualification": (
+            "preliminary pressure/clamp/land layout only; gasket material, "
+            "preload scatter, flange bending, fatigue, threads, dowel fits, "
+            "thermal distortion, and proof testing remain required"
+        ),
+    }
 
 
 def impeller_blade_camber(
@@ -1463,6 +1864,10 @@ def _meridional_channel(
     impeller: CentrifugalPumpGeometry,
     inducer: InducerGeometry,
     axial_width: float,
+    *,
+    shaft_diameter: float | None = None,
+    spec: PumpSizingSpec | None = None,
+    eye_solve: dict | None = None,
     samples: int = 21,
 ) -> dict:
     """Quarter-ellipse hub/shroud meridional channel honoring D1, D2, b2.
@@ -1480,10 +1885,26 @@ def _meridional_channel(
     b2 = impeller.outlet_width
     width = max(float(axial_width), 1.5 * b2)
     r_hub_raw = 0.5 * inducer.hub_ratio * inducer.diameter
-    # The impeller eye hub carries through from the inducer hub; clamp so
-    # the eye annulus stays open when the solved eye is small.
-    r_hub = min(r_hub_raw, 0.85 * r1)
-    hub_clamped = r_hub < r_hub_raw
+    r_hub = r_hub_raw
+    mechanical_hub = None
+    if shaft_diameter is not None and spec is not None:
+        blade_t = float(
+            impeller.inlet_blade_thickness or spec.min_blade_thickness
+        )
+        wall = max(spec.min_impeller_hub_wall_thickness, blade_t)
+        mechanical_hub = (
+            0.5 * shaft_diameter
+            + spec.shaft_fit_radial_clearance
+            + wall
+        )
+        r_hub = max(r_hub, mechanical_hub)
+    if eye_solve is not None:
+        r_hub = max(r_hub, float(eye_solve["eye_hub_radius_m"]))
+    if r_hub >= 0.95 * r1:
+        raise ValueError(
+            "coupled shaft/hub envelope leaves no credible impeller-eye annulus"
+        )
+    hub_adjusted = r_hub > r_hub_raw + 1.0e-12
 
     n = max(int(samples), 3)
     hub_curve: list[dict[str, float]] = []
@@ -1503,24 +1924,63 @@ def _meridional_channel(
 
     q = max(float(Q), 0.0)
     inlet_area = areas[0]
+    inlet_blockage = (
+        float(eye_solve.get("inlet_blockage_fraction", 0.0))
+        if eye_solve is not None else 0.0
+    )
+    effective_inlet_area = inlet_area * (1.0 - inlet_blockage)
     exit_area = areas[-1]
-    cm_inlet = q / max(inlet_area, 1e-12)
-    cm_exit = q / max(exit_area, 1e-12)
+    exit_blockage = float(impeller.exit_blockage_fraction or 0.0)
+    effective_exit_area = exit_area * (1.0 - exit_blockage)
+    cm_inlet = q / max(effective_inlet_area, 1e-12)
+    cm_exit = q / max(effective_exit_area, 1e-12)
     cm_ratio = cm_exit / max(cm_inlet, 1e-12)
     # SP-8109 sec. 2.3.1.2 discharge/inlet meridional-velocity practice.
     cm_status = "pass" if 1.0 <= cm_ratio <= 1.5 else "warn"
+    effective_areas = [
+        area * (
+            1.0
+            - inlet_blockage
+            - (exit_blockage - inlet_blockage) * i / max(n - 1, 1)
+        )
+        for i, area in enumerate(areas)
+    ]
     contracting = all(
-        a1 <= a0 * (1.0 + 1e-9) for a0, a1 in zip(areas, areas[1:])
+        a1 <= a0 * (1.0 + 1e-9)
+        for a0, a1 in zip(effective_areas, effective_areas[1:])
     )
     return {
         "reference_id": f"{role}.meridional_channel",
-        "model": "quarter_ellipse_hub_shroud_v1",
+        "model": "quarter_ellipse_coupled_annular_eye_v2",
         "hub_curve": hub_curve,
         "shroud_curve": shroud_curve,
         "eye_hub_radius_m": r_hub,
-        "eye_hub_radius_clamped": hub_clamped,
+        "eye_hub_radius_mechanically_constrained": hub_adjusted,
+        "mechanical_minimum_hub_radius_m": mechanical_hub,
+        "shaft_diameter_m": shaft_diameter,
+        "shaft_fit_radial_clearance_m": (
+            spec.shaft_fit_radial_clearance if spec is not None else None
+        ),
+        "impeller_hub_wall_thickness_m": (
+            max(
+                spec.min_impeller_hub_wall_thickness,
+                float(
+                    impeller.inlet_blade_thickness
+                    or spec.min_blade_thickness
+                ),
+            )
+            if spec is not None else None
+        ),
+        "eye_solve": dict(eye_solve) if eye_solve is not None else None,
         "inlet_area_m2": inlet_area,
+        "effective_inlet_area_m2": effective_inlet_area,
+        "inlet_blockage_fraction": inlet_blockage,
+        "inlet_free_area_fraction": 1.0 - inlet_blockage,
         "exit_area_m2": exit_area,
+        "effective_exit_area_m2": effective_exit_area,
+        "exit_blockage_fraction": exit_blockage,
+        "exit_free_area_fraction": 1.0 - exit_blockage,
+        "effective_area_profile_m2": effective_areas,
         "inlet_meridional_velocity_m_s": cm_inlet,
         "exit_meridional_velocity_m_s": cm_exit,
         "cm_ratio": cm_ratio,
@@ -1618,13 +2078,26 @@ def _reference_geometry(
     diffuser: DiffuserVoluteGeometry,
     spec: PumpSizingSpec,
     meanline: PumpHydraulicMeanline | None = None,
+    *,
+    channel: dict | None = None,
+    shaft_diameter: float | None = None,
 ) -> PumpReferenceGeometry:
     d2 = impeller.impeller_diameter
     d1 = impeller.inlet_diameter
     b2 = impeller.outlet_width
-    shaft_d = _shaft_diameter(impeller, spec)
+    shaft_d = (
+        float(shaft_diameter)
+        if shaft_diameter is not None
+        else _shaft_diameter(impeller, spec)
+    )
     casing_r = 0.68 * d2
-    casing_t = _casing_wall_thickness(impeller, spec)
+    casing_pressure = max(
+        float(ln.required_outlet_pressure),
+        float(ln.required_pressure_rise or 0.0),
+    )
+    casing_t = _casing_wall_thickness(
+        impeller, spec, design_pressure=casing_pressure
+    )
     length = max(1.8 * d2, inducer.diameter + d2)
     meridional = [
         {"station": "inlet_port", "x_m": -0.55 * length, "radius_m": 0.50 * d1},
@@ -1634,9 +2107,16 @@ def _reference_geometry(
         {"station": "diffuser_exit", "x_m": 0.22 * length, "radius_m": 0.58 * d2},
         {"station": "volute_exit", "x_m": 0.40 * length, "radius_m": casing_r},
     ]
-    channel = _meridional_channel(
-        role, ln.volumetric_flow, impeller, inducer, 0.08 * length
-    )
+    if channel is None:
+        channel = _meridional_channel(
+            role,
+            ln.volumetric_flow,
+            impeller,
+            inducer,
+            0.08 * length,
+            shaft_diameter=shaft_d,
+            spec=spec,
+        )
     thrust_balance = _thrust_balance_geometry(
         role, impeller, channel, shaft_d, spec
     )
@@ -1657,11 +2137,37 @@ def _reference_geometry(
         blade_envelope={
             "reference_id": f"{role}.impeller_blade_envelope",
             "blade_count": impeller.blade_count,
-            "inlet_angle_deg": impeller.inlet_blade_angle_deg,
+            "inlet_blade_count": impeller.inlet_blade_count,
+            "splitter_blade_count": impeller.splitter_blade_count,
+            "splitter_start_radius_fraction": (
+                impeller.splitter_start_radius_fraction
+            ),
+            "inlet_angle_deg": (
+                meanline.velocity_triangle.inlet_blade_metal_angle_deg
+                if meanline is not None
+                else impeller.inlet_blade_angle_deg
+            ),
+            "inlet_relative_flow_angle_deg": (
+                meanline.velocity_triangle.inlet_relative_flow_angle_deg
+                if meanline is not None else None
+            ),
+            "inlet_incidence_deg": (
+                meanline.velocity_triangle.inlet_incidence_deg
+                if meanline is not None else None
+            ),
+            "legacy_screening_inlet_angle_deg": (
+                impeller.legacy_screening_inlet_angle_deg
+            ),
             "outlet_angle_deg": impeller.outlet_blade_angle_deg,
-            "estimated_blade_thickness_m": max(
-                spec.min_blade_thickness,
-                spec.blade_thickness_ratio * d2,
+            "estimated_blade_thickness_m": impeller.blade_thickness,
+            "inlet_blade_thickness_m": impeller.inlet_blade_thickness,
+            "inlet_blockage_fraction": impeller.inlet_blockage_fraction,
+            "exit_blockage_fraction": impeller.exit_blockage_fraction,
+            "inlet_blockage_limit": spec.max_impeller_inlet_blockage,
+            "exit_blockage_limit": spec.max_impeller_exit_blockage,
+            "camber_handedness": (
+                "positive theta is counter-clockwise viewed from +shaft; "
+                "rotation handedness must be selected before release"
             ),
         },
         inducer_helix={
@@ -1677,6 +2183,13 @@ def _reference_geometry(
             "incidence_deg": inducer.incidence_deg,
             "inlet_flow_coefficient": inducer.inlet_flow_coefficient,
             "leading_edge_thickness_m": inducer.leading_edge_thickness,
+            "shaft_fit_radial_clearance_m": (
+                spec.shaft_fit_radial_clearance
+            ),
+            "hub_wall_thickness_m": max(
+                spec.min_inducer_hub_wall_thickness,
+                inducer.leading_edge_thickness or 0.0,
+            ),
         },
         diffuser_vane_ring={
             "reference_id": f"{role}.diffuser_vane_ring",
@@ -1695,9 +2208,25 @@ def _reference_geometry(
         volute_scroll={
             "reference_id": f"{role}.volute_scroll",
             "exit_area_m2": diffuser.volute_exit_area,
+            "area_schedule": (
+                "A(theta)=A_exit*theta/(2*pi); "
+                "constant_mean_velocity_screen"
+            ),
             "diffusion_ratio": diffuser.diffusion_ratio,
             "casing_inner_radius_m": casing_r,
             "casing_wall_thickness_m": casing_t,
+            "design_pressure_pa": casing_pressure,
+            "wall_sizing_model": (
+                "max(manufacturing_floor, diameter_ratio, "
+                "thin_wall_pressure_screen)"
+            ),
+            "split_casing_joint": _split_casing_joint_layout(
+                casing_r,
+                casing_t,
+                diffuser.volute_exit_area,
+                casing_pressure,
+                spec,
+            ),
         },
         shaft_datum={
             "reference_id": f"{role}.shaft_datum",
@@ -1791,7 +2320,15 @@ def _system_curve_coupling(
 _INDUCER_LEADING_EDGE_THICKNESS = 0.005 * 0.0254
 
 
-def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry, spec: PumpSizingSpec) -> InducerGeometry:
+def _inducer_geometry(
+    role: str,
+    Q: float,
+    ln,
+    impeller: CentrifugalPumpGeometry,
+    spec: PumpSizingSpec,
+    *,
+    shaft_diameter: float | None = None,
+) -> InducerGeometry:
     rpm = max(impeller.rpm, 1e-9)
     omega = 2.0 * math.pi * rpm / 60.0
     npsh_head = None
@@ -1803,7 +2340,21 @@ def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry
         suction_ns = omega * math.sqrt(max(Q, 0.0)) / max((G0 * npsh_head) ** 0.75, 1e-12)
     eye_d = max(impeller.inlet_diameter, 0.45 * impeller.impeller_diameter)
     blade_count = max(spec.inducer_blade_count, 1)
-    hub_ratio = min(max(spec.inducer_hub_ratio, 0.0), 0.95)
+    hub_ratio = min(max(spec.inducer_hub_ratio, 0.0), 0.85)
+    if shaft_diameter is not None:
+        required_hub_r = (
+            0.5 * shaft_diameter
+            + spec.shaft_fit_radial_clearance
+            + max(
+                spec.min_inducer_hub_wall_thickness,
+                _INDUCER_LEADING_EDGE_THICKNESS,
+            )
+        )
+        hub_ratio = max(hub_ratio, required_hub_r / max(0.5 * eye_d, 1e-12))
+    if hub_ratio >= 0.95:
+        raise ValueError(
+            "coupled shaft/root-wall envelope closes the inducer inlet annulus"
+        )
 
     # SP-8052 secs. 2.1.9/3.1.9: the tip flow coefficient (zero prewhirl)
     # sets the flow angle; the blade angle carries it plus the incidence
@@ -1857,7 +2408,7 @@ def _inducer_geometry(role: str, Q: float, ln, impeller: CentrifugalPumpGeometry
 
 
 def _diffuser_volute_geometry(role: str, Q: float, impeller: CentrifugalPumpGeometry, spec: PumpSizingSpec) -> DiffuserVoluteGeometry:
-    cm2 = max(spec.flow_coefficient * impeller.tip_speed, 1e-9)
+    cm2 = max(impeller.flow_coefficient * impeller.tip_speed, 1e-9)
     area_impeller_exit = 2.0 * math.pi * (0.5 * impeller.impeller_diameter) * max(impeller.outlet_width, 1e-9)
     throat_area = max(1.15 * Q / cm2, 0.35 * area_impeller_exit)
     vane_width = max(impeller.outlet_width * 1.15, 1e-6)
@@ -1918,8 +2469,13 @@ def _thermal_stress_ledger(
     motor_heat_fraction = drv.total_heat / max(drv.shaft_power, 1.0)
 
     omega = 2.0 * math.pi * drv.rpm / 60.0
-    shaft_d = _shaft_diameter(imp, spec)
-    casing_t = _casing_wall_thickness(imp, spec)
+    shaft_d = float(
+        (sizing.reference_geometry.shaft_datum or {}).get(
+            "diameter_m", _shaft_diameter(
+                imp, spec, shaft_power=sizing.shaft_power
+            )
+        )
+    )
     casing_radius = 0.68 * imp.impeller_diameter
     rotor_allow = spec.rotor_yield_strength / max(spec.structural_fos, 1e-9)
     casing_allow = spec.casing_yield_strength / max(spec.structural_fos, 1e-9)
@@ -1931,6 +2487,7 @@ def _thermal_stress_ledger(
     blade_force = rho_l * ln.volumetric_flow * abs(tri.outlet_whirl_velocity)
     force_per_blade = blade_force / max(imp.blade_count, 1)
     blade_thickness = max(
+        float(imp.blade_thickness or 0.0),
         spec.min_blade_thickness,
         spec.blade_thickness_ratio * imp.impeller_diameter,
     )
@@ -1938,6 +2495,9 @@ def _thermal_stress_ledger(
     blade_bending = force_per_blade * max(imp.outlet_width, 1e-6) / blade_section_modulus
     shaft_torsion = 16.0 * drv.torque / max(math.pi * shaft_d**3, 1e-18)
     casing_pressure = max(float(ln.required_outlet_pressure), float(ln.required_pressure_rise or 0.0))
+    casing_t = _casing_wall_thickness(
+        imp, spec, design_pressure=casing_pressure
+    )
     casing_hoop = casing_pressure * casing_radius / max(casing_t, 1e-12)
     eye_area = math.pi * imp.inlet_diameter**2 / 4.0
     axial_thrust = max(float(ln.required_pressure_rise or 0.0), 0.0) * eye_area
@@ -1981,6 +2541,11 @@ def _thermal_stress_ledger(
             "impeller_rotating_hoop_stress_pa": impeller_hoop,
             "inducer_rotating_hoop_stress_pa": inducer_hoop,
             "blade_root_bending_stress_pa": blade_bending,
+            "blade_root_thickness_m": blade_thickness,
+            "blade_root_thickness_source": imp.blade_thickness_source,
+            "blade_root_structural_minimum_thickness_m": (
+                imp.blade_root_structural_minimum_thickness
+            ),
             "shaft_torsional_shear_pa": shaft_torsion,
             "casing_hoop_stress_pa": casing_hoop,
             "model": "screening_rotor_shaft_casing_bearing_seal_v1",
@@ -2010,10 +2575,18 @@ def _estimate_component_masses(
     ind = line.inducer
     if imp is None or ind is None:
         return {}
-    shaft_d = _shaft_diameter(imp, spec)
+    shaft_d = float(
+        line.reference_geometry.shaft_datum["diameter_m"]
+        if line.reference_geometry is not None
+        else _shaft_diameter(imp, spec, shaft_power=line.shaft_power)
+    )
     length = max(1.8 * imp.impeller_diameter, ind.diameter + imp.impeller_diameter)
     casing_r = 0.68 * imp.impeller_diameter
-    casing_t = _casing_wall_thickness(imp, spec)
+    casing_t = float(
+        line.reference_geometry.volute_scroll["casing_wall_thickness_m"]
+        if line.reference_geometry is not None
+        else _casing_wall_thickness(imp, spec)
+    )
     rho = spec.rotor_material_density
     impeller = rho * math.pi * (imp.impeller_diameter / 2.0) ** 2 * max(imp.outlet_width, 1e-6) * 0.55
     inducer = rho * math.pi * (ind.diameter / 2.0) ** 2 * max(0.35 * ind.diameter, 1e-6) * 0.20
@@ -2087,7 +2660,11 @@ def _hardware_bom(
             "volute_exit_area_m2": dif.volute_exit_area,
         }, reference_id=f"{role}.diffuser_vane_ring")
         add("mechanical", "shaft and coupling", {
-            "shaft_diameter_m": _shaft_diameter(imp, spec),
+            "shaft_diameter_m": (
+                line.reference_geometry.shaft_datum["diameter_m"]
+                if line.reference_geometry is not None
+                else _shaft_diameter(imp, spec, shaft_power=line.shaft_power)
+            ),
             "torque_n_m": drv.torque,
             "rpm": drv.rpm,
         }, mass_key="shaft_coupling", reference_id=f"{role}.shaft_datum")
@@ -2313,6 +2890,110 @@ def _feasibility(
                 f"{role} outlet width {sizing.impeller.outlet_width*1e3:.2f} mm; "
                 "mini pump scale effects will dominate efficiency",
             ))
+        width_ratio = (
+            sizing.impeller.outlet_width
+            / max(sizing.impeller.impeller_diameter, 1e-12)
+        )
+        gates.append(InjectorGate(
+            f"impeller_width_ratio_{role}",
+            "pass" if width_ratio <= spec.max_outlet_width_ratio else "fail",
+            f"{role} b2/D2={width_ratio:.3f} vs limit "
+            f"{spec.max_outlet_width_ratio:.3f}",
+        ))
+
+        channel = (
+            sizing.reference_geometry.meridional_channel
+            if sizing.reference_geometry is not None else None
+        )
+        if channel is not None:
+            eye = channel.get("eye_solve") or {}
+            continuity_residual = abs(
+                float(eye.get("continuity_residual_m3_s", float("inf")))
+            )
+            continuity_tol = max(sizing.volumetric_flow, 1e-12) * 1e-9
+            gates.append(InjectorGate(
+                f"pump_annular_eye_continuity_{role}",
+                "pass" if continuity_residual <= continuity_tol else "fail",
+                f"{role} annular-eye continuity residual "
+                f"{continuity_residual:.3e} m3/s vs {continuity_tol:.3e}; "
+                f"effective area {channel['effective_inlet_area_m2']:.3e} m2",
+            ))
+            phi1 = float(eye.get("inlet_flow_coefficient", float("nan")))
+            phi1_target = float(
+                eye.get("target_inlet_flow_coefficient", spec.inlet_flow_coefficient)
+            )
+            gates.append(InjectorGate(
+                f"pump_inlet_flow_coefficient_{role}",
+                "pass" if math.isfinite(phi1) and abs(phi1 - phi1_target)
+                <= 1e-8 * max(abs(phi1_target), 1.0) else "fail",
+                f"{role} achieved phi_t1={phi1:.6g} vs target "
+                f"{phi1_target:.6g} using the net annular eye area",
+            ))
+            b1 = float(channel.get("inlet_blockage_fraction", float("inf")))
+            b2 = float(channel.get("exit_blockage_fraction", float("inf")))
+            gates.append(InjectorGate(
+                f"impeller_inlet_free_area_{role}",
+                "pass" if b1 <= spec.max_impeller_inlet_blockage else "fail",
+                f"{role} inlet blockage {b1:.3f} with "
+                f"{sizing.impeller.inlet_blade_count} full blades; limit "
+                f"{spec.max_impeller_inlet_blockage:.3f}",
+            ))
+            gates.append(InjectorGate(
+                f"impeller_exit_free_area_{role}",
+                "pass" if b2 <= spec.max_impeller_exit_blockage + 1e-12 else "fail",
+                f"{role} exit blockage {b2:.3f} with "
+                f"{sizing.impeller.blade_count} total blades; limit "
+                f"{spec.max_impeller_exit_blockage:.3f}",
+            ))
+            if sizing.impeller.blade_root_structural_geometry_limited:
+                gates.append(InjectorGate(
+                    f"blade_root_geometry_closure_{role}",
+                    "fail",
+                    f"{role} structurally required blade-root thickness "
+                    f"{sizing.impeller.blade_thickness*1e3:.3f} mm cannot fit "
+                    "the exit free-area envelope at the fixed RPM or maximum "
+                    f"impeller diameter {spec.max_impeller_diameter*1e3:.1f} mm",
+                ))
+            shaft_d = float(sizing.reference_geometry.shaft_datum["diameter_m"])
+            fit = float(channel["shaft_fit_radial_clearance_m"])
+            wall = float(channel["impeller_hub_wall_thickness_m"])
+            hub = float(channel["eye_hub_radius_m"])
+            fit_margin = hub - (0.5 * shaft_d + fit + wall)
+            gates.append(InjectorGate(
+                f"pump_shaft_hub_fit_{role}",
+                "pass" if fit_margin >= -1e-12 else "fail",
+                f"{role} solved eye hub fit margin {fit_margin*1e3:+.4f} mm "
+                "after shaft, bore clearance, and root wall",
+            ))
+        if sizing.hydraulic_meanline is not None:
+            tri = sizing.hydraulic_meanline.velocity_triangle
+            gates.append(InjectorGate(
+                f"impeller_design_incidence_{role}",
+                "pass" if abs(tri.inlet_incidence_deg) <= 1e-9 else "fail",
+                f"{role} beta1 flow={tri.inlet_relative_flow_angle_deg:.4f} deg, "
+                f"metal={tri.inlet_blade_metal_angle_deg:.4f} deg, "
+                f"incidence={tri.inlet_incidence_deg:+.4g} deg",
+            ))
+        if sizing.reference_geometry is not None:
+            joint = sizing.reference_geometry.volute_scroll.get(
+                "split_casing_joint", {}
+            )
+            gates.append(InjectorGate(
+                f"split_casing_bolt_clamp_screen_{role}",
+                "pass" if joint.get("bolt_screen_passed") else "fail",
+                f"{role} split casing preliminary bolt stress "
+                f"{float(joint.get('bolt_screen_stress_pa', float('nan')))/1e6:.1f} "
+                f"MPa vs allowable "
+                f"{float(joint.get('bolt_allowable_stress_pa', float('nan')))/1e6:.1f} MPa",
+            ))
+            gates.append(InjectorGate(
+                f"split_casing_scroll_tool_access_{role}",
+                "pass" if joint.get("scroll_tool_access_passed") else "fail",
+                f"{role} selected scroll tool "
+                f"{float(joint.get('selected_scroll_tool_diameter_m', float('nan')))*1e3:.3f} mm "
+                f"vs minimum modeled scroll section "
+                f"{float(joint.get('minimum_modeled_scroll_section_diameter_m', float('nan')))*1e3:.3f} mm",
+            ))
 
         if ln.capacity_margin is not None:
             cap_frac = ln.capacity_margin / max(ln.volumetric_flow * ln.density, 1e-12)
@@ -2477,6 +3158,206 @@ def _feasibility(
     return PumpFeasibility(feasible=feasible, gates=gates, suggestions=suggestions)
 
 
+def _solve_coupled_line_geometry(
+    role: str,
+    ln,
+    head: float,
+    hydraulic_power: float,
+    initial_rpm: float,
+    initial_efficiency: float,
+    efficiency_source: str,
+    spec: PumpSizingSpec,
+) -> tuple[
+    CentrifugalPumpGeometry,
+    InducerGeometry,
+    PumpHydraulicMeanline,
+    dict,
+    float,
+    float,
+    float,
+]:
+    """Close blade free area around the shaft/eye/meanline fixed point."""
+    rpm_trial = float(initial_rpm)
+    user_efficiency = efficiency_source == "user"
+    blade_root_structural_floor = 0.0
+    for free_area_iteration in range(1, 31):
+        impeller = _impeller_geometry(
+            role,
+            ln.volumetric_flow,
+            head,
+            rpm_trial,
+            spec,
+            blade_root_structural_floor=blade_root_structural_floor,
+        )
+        shaft_guess = hydraulic_power / max(initial_efficiency, 1e-9)
+        shaft_d = _shaft_diameter(
+            impeller, spec, shaft_power=shaft_guess
+        )
+        channel = None
+        eye_solve = None
+        for coupled_iteration in range(1, 26):
+            prior = (
+                impeller.inlet_diameter,
+                shaft_d,
+                shaft_guess,
+            )
+            eye_solve = _solve_annular_eye_and_shaft(
+                ln.volumetric_flow,
+                impeller,
+                spec,
+                shaft_power=shaft_guess,
+            )
+            shaft_d = float(eye_solve["shaft_diameter_m"])
+            inducer = _inducer_geometry(
+                role,
+                ln.volumetric_flow,
+                ln,
+                impeller,
+                spec,
+                shaft_diameter=shaft_d,
+            )
+            length = max(
+                1.8 * impeller.impeller_diameter,
+                inducer.diameter + impeller.impeller_diameter,
+            )
+            channel = _meridional_channel(
+                role,
+                ln.volumetric_flow,
+                impeller,
+                inducer,
+                0.08 * length,
+                shaft_diameter=shaft_d,
+                spec=spec,
+                eye_solve=eye_solve,
+            )
+            meanline = _hydraulic_meanline(
+                role,
+                ln.volumetric_flow,
+                head,
+                ln,
+                impeller,
+                spec,
+                inlet_area=channel["effective_inlet_area_m2"],
+            )
+            eta_next = (
+                initial_efficiency
+                if user_efficiency
+                else meanline.hydraulic_efficiency
+            )
+            shaft_next = hydraulic_power / max(eta_next, 1e-9)
+            next_shaft_d = _shaft_diameter(
+                impeller, spec, shaft_power=shaft_next
+            )
+            change = max(
+                abs(impeller.inlet_diameter - prior[0])
+                / max(impeller.inlet_diameter, 1e-12),
+                abs(next_shaft_d - prior[1])
+                / max(next_shaft_d, 1e-12),
+                abs(shaft_next - prior[2])
+                / max(shaft_next, 1.0),
+            )
+            shaft_guess = shaft_next
+            shaft_d = next_shaft_d
+            if change <= 1.0e-10:
+                break
+        else:
+            raise RuntimeError(
+                f"{role} coupled shaft/eye/meanline solve did not converge"
+            )
+        assert channel is not None and eye_solve is not None
+        # Close the existing blade-root cantilever screen back onto the actual
+        # blade thickness before accepting the hydraulic geometry.  With
+        # Z blades, F_blade=rho*Q*|Vtheta2|/Z and the rectangular root section
+        # used by the stress ledger gives sigma=6*F_blade/t^2.  The allowable
+        # already includes structural_fos.  If the required root grows, the
+        # next outer iteration re-closes exit free area and RPM/D2 around it.
+        rotor_allowable = (
+            spec.rotor_yield_strength / max(spec.structural_fos, 1.0e-12)
+        )
+        blade_force_total = (
+            max(float(ln.density), 1.0e-12)
+            * ln.volumetric_flow
+            * abs(meanline.velocity_triangle.outlet_whirl_velocity)
+        )
+        blade_force_each = blade_force_total / max(impeller.blade_count, 1)
+        required_root_thickness = math.sqrt(
+            6.0 * blade_force_each / max(rotor_allowable, 1.0e-12)
+        )
+        impeller.blade_root_structural_minimum_thickness = (
+            required_root_thickness
+        )
+        current_blade_thickness = float(impeller.blade_thickness or 0.0)
+        if required_root_thickness > current_blade_thickness * (1.0 + 1.0e-10):
+            blade_root_structural_floor = max(
+                blade_root_structural_floor,
+                required_root_thickness * (1.0 + 1.0e-9),
+            )
+            continue
+        inlet_blockage = float(eye_solve["inlet_blockage_fraction"])
+        exit_blockage = float(impeller.exit_blockage_fraction or 0.0)
+        if (
+            inlet_blockage <= spec.max_impeller_inlet_blockage + 1e-12
+            and exit_blockage <= spec.max_impeller_exit_blockage + 1e-12
+        ):
+            channel["coupled_mechanical_hydraulic_iterations"] = (
+                coupled_iteration
+            )
+            channel["coupled_mechanical_hydraulic_converged"] = True
+            channel["blade_free_area_iterations"] = free_area_iteration
+            channel["blade_free_area_converged"] = True
+            channel["shaft_diameter_m"] = shaft_d
+            impeller.inlet_blade_angle_deg = (
+                meanline.velocity_triangle.inlet_blade_metal_angle_deg
+            )
+            eta = (
+                initial_efficiency
+                if user_efficiency else meanline.hydraulic_efficiency
+            )
+            shaft_power = hydraulic_power / max(eta, 1e-9)
+            return (
+                impeller,
+                inducer,
+                meanline,
+                channel,
+                shaft_d,
+                eta,
+                shaft_power,
+            )
+        if (
+            spec.drive.rpm is not None
+            or impeller.blade_root_structural_geometry_limited
+        ):
+            channel["coupled_mechanical_hydraulic_iterations"] = (
+                coupled_iteration
+            )
+            channel["coupled_mechanical_hydraulic_converged"] = True
+            channel["blade_free_area_iterations"] = free_area_iteration
+            channel["blade_free_area_converged"] = False
+            channel["shaft_diameter_m"] = shaft_d
+            impeller.inlet_blade_angle_deg = (
+                meanline.velocity_triangle.inlet_blade_metal_angle_deg
+            )
+            eta = (
+                initial_efficiency
+                if user_efficiency else meanline.hydraulic_efficiency
+            )
+            shaft_power = hydraulic_power / max(eta, 1e-9)
+            return (
+                impeller, inducer, meanline, channel, shaft_d, eta, shaft_power
+            )
+        # Lower speed grows D2/D1 at unchanged U2.  A damped ratio update is
+        # monotone for this similarity solve and avoids overshooting width
+        # and maximum-diameter constraints.
+        ratio = (
+            spec.max_impeller_inlet_blockage
+            / max(inlet_blockage, 1e-12)
+        )
+        rpm_trial = impeller.rpm * _clamp(0.90 * ratio, 0.35, 0.90)
+    raise RuntimeError(
+        f"{role} impeller blade free-area solve did not converge"
+    )
+
+
 def size_electric_pumps(
     ledger: FeedSystemLedger,
     spec: PumpSizingSpec | None = None,
@@ -2509,17 +3390,34 @@ def size_electric_pumps(
             hydraulic = ln.volumetric_flow * rise
             head = ln.required_pump_head if ln.required_pump_head is not None else 0.0
             rpm, rpm_source = _select_rpm(ln.volumetric_flow, head, spec)
-            impeller = _impeller_geometry(role, ln.volumetric_flow, head, rpm, spec)
-            meanline = _hydraulic_meanline(
-                role, ln.volumetric_flow, head, ln, impeller, spec
+            (
+                impeller,
+                inducer,
+                meanline,
+                channel,
+                shaft_d,
+                eta,
+                shaft,
+            ) = _solve_coupled_line_geometry(
+                role,
+                ln,
+                head,
+                hydraulic,
+                rpm,
+                eta,
+                eta_source,
+                spec,
             )
             if eta_source != "user":
-                eta = meanline.hydraulic_efficiency
                 eta_source = meanline.efficiency_source
-            shaft = hydraulic / max(eta, 1e-9)
+            rpm = impeller.rpm
+            rpm_source = (
+                f"{rpm_source}; coupled shaft/annular-eye/blade-free-area "
+                f"solve ({channel['blade_free_area_iterations']} outer "
+                "iterations)"
+            )
             pending_drive[role] = (shaft, rpm)
             line_electric_power[role] = shaft / max(eta_m * eta_i, 1e-12)
-            inducer = _inducer_geometry(role, ln.volumetric_flow, ln, impeller, spec)
             diffuser = _diffuser_volute_geometry(role, ln.volumetric_flow, impeller, spec)
             curve = _pump_performance_curve(
                 role, ln.volumetric_flow, head, ln.density, rpm, eta
@@ -2528,7 +3426,15 @@ def size_electric_pumps(
                 role, ln, impeller, inducer, spec
             )
             reference_geometry = _reference_geometry(
-                role, ln, impeller, inducer, diffuser, spec, meanline
+                role,
+                ln,
+                impeller,
+                inducer,
+                diffuser,
+                spec,
+                meanline,
+                channel=channel,
+                shaft_diameter=shaft_d,
             )
             system_curve = _system_curve_coupling(role, ln, curve)
         lines[role] = PumpLineSizing(
@@ -2605,6 +3511,10 @@ def size_electric_pumps(
         "battery_structural_margin": spec.battery.structural_margin,
         "head_coefficient": spec.head_coefficient,
         "flow_coefficient": spec.flow_coefficient,
+        "blade_root_structural_closure": (
+            "t_root>=sqrt(6*F_blade/(rotor_yield/structural_fos)); "
+            "solved thickness is re-closed through exit blockage and RPM/D2"
+        ),
         "material_tip_speed_limit_m_s": spec.material_tip_speed_limit,
         "rotor_material_density_kg_m3": spec.rotor_material_density,
         "rotor_yield_strength_pa": spec.rotor_yield_strength,

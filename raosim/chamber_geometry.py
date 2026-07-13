@@ -251,6 +251,9 @@ def chamber_contour(
     measured_volume = enclosed_volume(x_full, y_full)
     volume_rel_error = abs(measured_volume - target_volume) / target_volume
 
+    injector_location = float(x_full[0])
+    injector_to_throat_length = throat_x - injector_location
+
     return {
         "x": x_full,
         "y": y_full,
@@ -277,7 +280,12 @@ def chamber_contour(
         "minimum_cylindrical_length": minimum_cylindrical_length,
         "throat_geometry": spec.to_dict(),
         "throat_location": throat_x,
-        "injector_location": float(x_full[0]),
+        "injector_location": injector_location,
+        # The injector spray, residence-time, and longitudinal-acoustic
+        # models need the complete face-to-throat distance.  ``Lc`` is only
+        # the constant-radius cylinder and deliberately excludes the
+        # shoulder, straight convergent, and upstream throat arc.
+        "injector_to_throat_length": injector_to_throat_length,
     }
 
 

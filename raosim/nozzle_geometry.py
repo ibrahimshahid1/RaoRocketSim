@@ -108,6 +108,24 @@ def lookup_angles(epsilon: float, length_pct: float) -> tuple[float, float]:
     return theta_n, theta_e
 
 
+def rao_chart_domain_status(epsilon: float, length_pct: float) -> dict:
+    """Return whether ``(epsilon, length_pct)`` is inside the digitized chart.
+
+    ``RegularGridInterpolator`` deliberately supports extrapolation for
+    research comparisons, but production callers need an explicit provenance
+    flag: extrapolated angles have not been benchmarked as Rao/TOP chart data.
+    """
+    eps_min, eps_max = float(_EPSILON_VALS[0]), float(_EPSILON_VALS[-1])
+    lp_min, lp_max = float(_LPCT_VALS[0]), float(_LPCT_VALS[-1])
+    in_domain = eps_min <= epsilon <= eps_max and lp_min <= length_pct <= lp_max
+    return {
+        "in_domain": bool(in_domain),
+        "extrapolated": not bool(in_domain),
+        "epsilon_range": [eps_min, eps_max],
+        "length_pct_range": [lp_min, lp_max],
+    }
+
+
 
 
 def _full_cone_length(Rt: float, epsilon: float) -> float:
@@ -251,11 +269,14 @@ def bell_nozzle_contour(
         raise ValueError("epsilon must be > 1")
 
 
-    if theta_n_deg is None or theta_e_deg is None:
+    theta_n_from_chart = theta_n_deg is None
+    theta_e_from_chart = theta_e_deg is None
+    chart_status = rao_chart_domain_status(epsilon, length_pct)
+    if theta_n_from_chart or theta_e_from_chart:
         tn_lookup, te_lookup = lookup_angles(epsilon, length_pct)
-        if theta_n_deg is None:
+        if theta_n_from_chart:
             theta_n_deg = tn_lookup
-        if theta_e_deg is None:
+        if theta_e_from_chart:
             theta_e_deg = te_lookup
 
     theta_n = math.radians(theta_n_deg)
@@ -344,7 +365,23 @@ def bell_nozzle_contour(
         'x_bell': x_bell,
         'y_bell': y_bell,
         'method': 'bezier',
+        'angle_source': {
+            'theta_n': 'rao_top_chart' if theta_n_from_chart else 'user',
+            'theta_e': 'rao_top_chart' if theta_e_from_chart else 'user',
+        },
+        'rao_chart_domain': chart_status,
+        'rao_chart_extrapolated': bool(
+            chart_status['extrapolated']
+            and (theta_n_from_chart or theta_e_from_chart)
+        ),
     }
+    if contour['rao_chart_extrapolated']:
+        contour['warnings'] = [
+            "Rao/TOP angle lookup extrapolated outside the digitized chart "
+            f"domain epsilon={chart_status['epsilon_range']} and "
+            f"length_pct={chart_status['length_pct_range']}; this contour is "
+            "diagnostic and is not benchmark-qualified for design export."
+        ]
     return add_contour_reliability_metadata(contour, 'bezier', gamma)
 
 

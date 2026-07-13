@@ -80,6 +80,8 @@ class TestSeparation:
                                method='summerfield')
         assert 'margin' in sep
         assert 'exit_pressure' in sep
+        assert sep['criterion_evaluated_locally'] is True
+        assert 'exit_criterion_pressure' in sep
 
 
 
@@ -120,6 +122,12 @@ class TestAltitudePerformance:
         assert len(apm['h']) == 20
         assert len(apm['thrust']) == 20
         assert len(apm['Isp']) == 20
+        assert apm['thrust'] is apm['attached_thrust']
+        assert apm['Isp'] is apm['attached_Isp']
+        assert apm['Cf'] is apm['attached_Cf']
+        assert apm['performance_model'] == (
+            'quasi_1d_attached_flow_no_separation_loss'
+        )
 
     def test_thrust_increases_with_altitude(self, lox_rp1, standard_contour):
         """Thrust should increase as Pa decreases."""

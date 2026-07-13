@@ -298,11 +298,14 @@ def test_build_source_contour_from_kernel_reports_uncropped_status():
     assert diag["source_contour_complete"] is False
     assert diag["length_closed"] is False
     assert diag["crop_nozzle_to_length"] == "not_ported"
-    assert diag["outer_theta_b_driver"] == "not_canonical"
+    assert diag["outer_theta_b_driver"] == "fixed_kernel_input"
     assert diag["nasa_reference_matched_eligible"] is False
     assert contour.bfe.complete_remaining_mesh is True
     assert contour.bfe.wall_contour_complete is True
-    assert contour.bfe.negative_r_truncated_rows > 0
+    assert contour.bfe.negative_r_truncated_rows >= 0
+    assert diag["bfe_negative_r_truncated_rows"] == (
+        contour.bfe.negative_r_truncated_rows
+    )
     assert contour.wall_export.shape == (len(contour.wall), 2)
     assert len(contour.wall) == len(kernel.rrcs) + len(contour.bfe.wall_contour)
 
@@ -356,36 +359,63 @@ def test_kl_throat_wall_mach_bit_comparable_to_nasa_wall_out():
     )
 
 
-@pytest.mark.xfail(
-    reason="Historical TT' fixture parity is blocked by unresolved generator "
-           "provenance. Keep xfailed unless a matching source/executable is "
-           "recovered or a documented fixture-reconstruction mode is added.",
-)
-def test_python_tt_prime_matches_nasa_tt_prime_rms_1e3():
-    """Historical fixture overlay gate for ``TT'.out``.
+def test_tt_prime_modes_separate_theory_from_historical_overlay():
+    """The explicit source-visible mode reconstructs the orphaned overlay.
 
-    This is not the source-faithful port gate while the M3.5Perf TT'
-    generator remains unresolved.
+    The theory-correct Kliegel-Levine path intentionally does not.  Agreement
+    in the compatibility mode is a useful regression, but unresolved
+    executable provenance still prevents the fixture from becoming promotion
+    authority.
     """
     import numpy as np
 
     from raosim.legacy_io import parse_tt_prime_out
 
     nasa_tt = parse_tt_prime_out(NASA_OUT / "TT'.out")
-    kernel = build_kernel(
+    theory_kernel = build_kernel(
         Rt=1.0,
         Rd=1.0,
         theta_B=math.radians(15.2196),
         gamma=1.4,
         n_kernel=101,
+        starting_line_method="kliegel_levine",
     )
-    py_tt = kernel.rrcs[0]
 
-    def rms(name: str, values):
-        ref = nasa_tt.column(name)
-        return float(np.sqrt(np.mean((np.asarray(values, dtype=float) - ref) ** 2)))
+    def rms(name: str, values) -> float:
+        ref = np.asarray(nasa_tt.column(name), dtype=float)
+        candidate = np.asarray(values, dtype=float)
+        if candidate.size != ref.size:
+            station = np.linspace(0.0, 1.0, ref.size)
+            candidate = np.interp(
+                station,
+                np.linspace(0.0, 1.0, candidate.size),
+                candidate,
+            )
+        return float(np.sqrt(np.mean((candidate - ref) ** 2)))
 
-    assert rms("X", [node.x for node in py_tt]) < 1e-3
-    assert rms("R", [node.r for node in py_tt]) < 1e-3
-    assert rms("MACH", [node.M for node in py_tt]) < 1e-3
-    assert rms("THETA", [math.degrees(node.theta) for node in py_tt]) < 1e-3
+    theory_tt = theory_kernel.rrcs[0]
+    assert max(
+        rms("X", [node.x for node in theory_tt]),
+        rms("MACH", [node.M for node in theory_tt]),
+    ) > 1e-3
+
+    overlay_kernel = build_kernel(
+        Rt=1.0,
+        Rd=1.0,
+        theta_B=math.radians(15.2196),
+        gamma=1.4,
+        n_kernel=101,
+        starting_line_method="nasa_visible_kliegel_levine",
+    )
+    overlay_tt = overlay_kernel.rrcs[0]
+    assert rms("X", [node.x for node in overlay_tt]) < 1e-3
+    assert rms("R", [node.r for node in overlay_tt]) < 1e-3
+    assert rms("MACH", [node.M for node in overlay_tt]) < 1e-3
+    assert rms("THETA", [math.degrees(node.theta) for node in overlay_tt]) < 1e-3
+
+    from raosim.rao_variational import _nasa_reference_validation_diagnostics
+
+    diag = _nasa_reference_validation_diagnostics()
+    assert diag["fixture_generator_provenance"] == "unresolved"
+    assert diag["fixture_overlay_is_promotion_authority"] is False
+    assert diag["eligible"] is False

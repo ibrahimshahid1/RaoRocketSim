@@ -151,6 +151,9 @@ def pump_reference_geometry(pump_result) -> dict[str, Any]:
         blade_thickness = _finite(
             _obj_value(envelope, "estimated_blade_thickness_m")
         )
+        inlet_blade_thickness = _finite(
+            _obj_value(envelope, "inlet_blade_thickness_m")
+        )
         if None in (d2, d1, b2, blade_thickness):
             raise ValueError(
                 f"{role} pump reference geometry is missing impeller disk or "
@@ -174,15 +177,24 @@ def pump_reference_geometry(pump_result) -> dict[str, Any]:
             _dim("impeller", role, "t_b", "impeller blade thickness estimate",
                  blade_thickness, "m", "meanline blade envelope",
                  "spec thickness ratio with manufacturing floor"),
+            _dim("impeller", role, "t_b1", "impeller inlet blade thickness",
+                 inlet_blade_thickness, "m", "tapered meanline blade envelope",
+                 "selected leading-edge manufacturing input"),
             _dim("impeller", role, "Z", "impeller blade count",
                  blade_count, "count",
                  "NASA SP-8109 fig. 16 minimum blade number (digitized)"),
+            _dim("impeller", role, "Z_main", "full-length inlet blades",
+                 _obj_value(envelope, "inlet_blade_count"), "count",
+                 "SP-8109 inlet free-area practice"),
+            _dim("impeller", role, "Z_split", "downstream splitter blades",
+                 _obj_value(envelope, "splitter_blade_count"), "count",
+                 "SP-8109 inlet/discharge blade-count separation"),
             _dim("impeller", role, "beta1",
-                 "screening inlet blade angle",
+                 "solved inlet blade metal angle",
                  _obj_value(envelope, "inlet_angle_deg"), "deg",
                  "meanline velocity triangle"),
             _dim("impeller", role, "beta2",
-                 "screening outlet blade angle",
+                 "solved outlet blade metal angle",
                  _obj_value(envelope, "outlet_angle_deg"), "deg",
                  "meanline velocity triangle"),
             _dim("impeller", role, "theta_c", "impeller camber wrap angle",
@@ -203,7 +215,33 @@ def pump_reference_geometry(pump_result) -> dict[str, Any]:
                 "outlet_width_m": b2,
                 "axial_width_m": pump_axial_width,
                 "blade_thickness_m": blade_thickness,
+                "inlet_blade_thickness_m": inlet_blade_thickness,
                 "blade_count": blade_count,
+                "inlet_blade_count": int(
+                    _obj_value(envelope, "inlet_blade_count", blade_count)
+                    or blade_count
+                ),
+                "splitter_blade_count": int(
+                    _obj_value(envelope, "splitter_blade_count", 0) or 0
+                ),
+                "splitter_start_radius_fraction": _finite(
+                    _obj_value(envelope, "splitter_start_radius_fraction")
+                ),
+                "inlet_blockage_fraction": _finite(
+                    _obj_value(envelope, "inlet_blockage_fraction")
+                ),
+                "exit_blockage_fraction": _finite(
+                    _obj_value(envelope, "exit_blockage_fraction")
+                ),
+                "inlet_blockage_limit": _finite(
+                    _obj_value(envelope, "inlet_blockage_limit")
+                ),
+                "exit_blockage_limit": _finite(
+                    _obj_value(envelope, "exit_blockage_limit")
+                ),
+                "legacy_screening_inlet_angle_deg": _finite(
+                    _obj_value(envelope, "legacy_screening_inlet_angle_deg")
+                ),
                 "inlet_blade_angle_deg": _finite(
                     _obj_value(envelope, "inlet_angle_deg")
                 ),
@@ -301,6 +339,12 @@ def pump_reference_geometry(pump_result) -> dict[str, Any]:
                 "leading_edge_thickness_m": _finite(
                     _obj_value(helix, "leading_edge_thickness_m")
                 ),
+                "shaft_fit_radial_clearance_m": _finite(
+                    _obj_value(helix, "shaft_fit_radial_clearance_m")
+                ),
+                "hub_wall_thickness_m": _finite(
+                    _obj_value(helix, "hub_wall_thickness_m")
+                ),
             }
 
         channel = _obj_value(ref, "meridional_channel")
@@ -368,11 +412,21 @@ def pump_reference_geometry(pump_result) -> dict[str, Any]:
                 ),
                 "selection": _obj_value(vane_ring, "selection", "diffuser"),
                 "volute_exit_area_m2": volute_exit_area,
+                "area_schedule": _obj_value(scroll, "area_schedule"),
                 "casing_inner_radius_m": _finite(
                     _obj_value(scroll, "casing_inner_radius_m")
                 ),
                 "casing_wall_thickness_m": _finite(
                     _obj_value(scroll, "casing_wall_thickness_m")
+                ),
+                "design_pressure_pa": _finite(
+                    _obj_value(scroll, "design_pressure_pa")
+                ),
+                "wall_sizing_model": _obj_value(
+                    scroll, "wall_sizing_model"
+                ),
+                "split_casing_joint": _clean(
+                    _obj_value(scroll, "split_casing_joint", {}) or {}
                 ),
             }
 
@@ -624,9 +678,13 @@ def _inducer_mesh(comp):
     r_tip = 0.5 * d
     r_hub = 0.5 * hub
     tris = _annular_cylinder(r_hub, 0.0, -0.5 * length, 0.5 * length)
-    # Placeholder blade thickness: the meanline does not solve inducer
-    # leading-edge thickness (SP-8052 wedge rules land in plan Phase 2).
-    blade_thickness = max(0.025 * d, 3.0e-4)
+    solved_thickness = comp.get("leading_edge_thickness_m")
+    if solved_thickness is None or float(solved_thickness) <= 0.0:
+        raise ValueError(
+            "inducer leading-edge thickness is missing from the solved "
+            "pump manifest; refusing to substitute a CAD-only diameter ratio"
+        )
+    blade_thickness = float(solved_thickness)
     blade_radial = max(r_tip - r_hub, 1e-6)
     for i in range(max(int(comp["blade_count"]), 1)):
         angle = 2.0 * math.pi * i / max(int(comp["blade_count"]), 1)
@@ -701,6 +759,30 @@ def _part_meshes_for_role(role_components: dict[str, Any]) -> dict[str, list]:
     return {name: tris for name, tris in meshes.items() if tris}
 
 
+def _mesh_bounds(triangles: list) -> dict[str, float]:
+    vertices = [point for _normal, *points in triangles for point in points]
+    if not vertices:
+        raise ValueError("cannot bound an empty pump mesh")
+    return {
+        "xmin": min(v[0] for v in vertices),
+        "xmax": max(v[0] for v in vertices),
+        "ymin": min(v[1] for v in vertices),
+        "ymax": max(v[1] for v in vertices),
+        "zmin": min(v[2] for v in vertices),
+        "zmax": max(v[2] for v in vertices),
+    }
+
+
+def _translate_mesh(triangles: list, dx: float, dy: float, dz: float) -> list:
+    def move(point):
+        return (point[0] + dx, point[1] + dy, point[2] + dz)
+
+    return [
+        _tri(move(a), move(b), move(c))
+        for _normal, a, b, c in triangles
+    ]
+
+
 def export_pump_package(
     pump_result,
     out_dir,
@@ -720,7 +802,10 @@ def export_pump_package(
     geom = pump_reference_geometry(pump_result)
     files: dict[str, str] = {}
     notes: list[str] = [
-        "Pump CAD is meanline reference geometry, not production blade design.",
+        "Legacy triangle-mesh CAD is schematic_only: its blade twists and "
+        "volute solids are not the solved B-rep geometry.",
+        "Use pump_cad_brep export for solved beta1, main/splitter blades, "
+        "annular hubs, connected flow voids, and separable casing halves.",
         "Use blade-to-blade CFD, rotordynamics, structural FEA, seals/bearings, "
         "vendor motor maps, and cold-flow tests before hardware release.",
     ]
@@ -733,10 +818,15 @@ def export_pump_package(
 
     if not cad or cad == "none":
         return {"dir": str(out_dir), "files": files, "geometry": geom,
+                "cad_fidelity": "parameters_only_no_solid",
+                "cold_flow_release_ready": False,
                 "notes": notes}
 
     cad_dir = out_dir / "pump_parts"
     assembly_mesh: list = []
+    assembly_placements: list[dict[str, Any]] = []
+    assembly_x_cursor = 0.0
+    exploded_gap_m = 0.010
     cad_files: dict[str, str] = {}
     cad_diagnostics: dict[str, Any] = {}
     for role, components in geom["components"].items():
@@ -744,7 +834,6 @@ def export_pump_package(
             notes.append(f"{role} pump CAD skipped: {components['reason']}")
             continue
         for part, triangles in _part_meshes_for_role(components).items():
-            assembly_mesh.extend(triangles)
             path = cad_dir / f"{role}_{part}.stl"
             info = _write_part(
                 path,
@@ -761,11 +850,21 @@ def export_pump_package(
             key = f"{role}_{part}_stl"
             cad_files[key] = str(path)
             cad_diagnostics[key] = info
+            bounds = _mesh_bounds(triangles)
+            dx = assembly_x_cursor - bounds["xmin"]
+            assembly_mesh.extend(_translate_mesh(triangles, dx, 0.0, 0.0))
+            placed_xmax = bounds["xmax"] + dx
+            assembly_placements.append({
+                "role": role,
+                "component": part,
+                "translation_m": [dx, 0.0, 0.0],
+                "source_bounds_m": bounds,
+            })
+            assembly_x_cursor = placed_xmax + exploded_gap_m
 
     if geom.get("battery"):
         battery_mesh = _box_component_mesh(geom["battery"])
         if battery_mesh:
-            assembly_mesh.extend(battery_mesh)
             path = cad_dir / "shared_battery_pack.stl"
             info = _write_part(
                 path,
@@ -781,6 +880,18 @@ def export_pump_package(
             )
             cad_files["shared_battery_pack_stl"] = str(path)
             cad_diagnostics["shared_battery_pack_stl"] = info
+            bounds = _mesh_bounds(battery_mesh)
+            dx = assembly_x_cursor - bounds["xmin"]
+            assembly_mesh.extend(_translate_mesh(
+                battery_mesh, dx, 0.0, 0.0
+            ))
+            assembly_placements.append({
+                "role": "shared",
+                "component": "battery_pack",
+                "translation_m": [dx, 0.0, 0.0],
+                "source_bounds_m": bounds,
+            })
+            assembly_x_cursor = bounds["xmax"] + dx + exploded_gap_m
 
     if cad in ("reference", "parts", "auto") and assembly_mesh:
         path = out_dir / "pump_reference_assembly.stl"
@@ -797,6 +908,22 @@ def export_pump_package(
         )
         cad_files["reference_assembly_stl"] = str(path)
         cad_diagnostics["reference_assembly_stl"] = info
+        layout_path = out_dir / "pump_reference_assembly_layout.json"
+        layout_path.write_text(json.dumps({
+            "schema": "raosim.pump_exploded_layout.v1",
+            "artifact": path.name,
+            "status": "noninterfering_exploded_reference_not_operating_assembly",
+            "numeric_coordinate_unit": "m",
+            "minimum_x_gap_m": exploded_gap_m,
+            "placements": assembly_placements,
+            "hardware_qualified": False,
+            "note": (
+                "The legacy STL is an exploded inspection layout. Use the "
+                "OpenCascade pump B-rep package for shaft-aligned mechanical "
+                "assembly and interference/clearance gates."
+            ),
+        }, indent=2) + "\n", encoding="utf-8")
+        cad_files["reference_assembly_layout_json"] = str(layout_path)
 
     files.update(cad_files)
     return {
@@ -804,5 +931,8 @@ def export_pump_package(
         "files": files,
         "geometry": geom,
         "cad_diagnostics": cad_diagnostics,
+        "cad_fidelity": "schematic_only_not_meanline_faithful",
+        "cold_flow_release_ready": False,
+        "hardware_qualified": False,
         "notes": notes,
     }

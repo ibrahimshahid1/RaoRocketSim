@@ -369,7 +369,7 @@ def test_curve_mass_flux_is_positive_for_oblique_surface():
     assert curve_mass_flux(nodes, gamma=1.4) > 0.0
 
 
-def test_partial_de_thrust_audit_is_not_full_nozzle_gate():
+def test_full_cde_thrust_is_reconstructed_without_mass_scaling():
     solution = solve_rao_bvp(RaoSolverConfig(
         Rt=0.020,
         epsilon=10.0,
@@ -384,13 +384,32 @@ def test_partial_de_thrust_audit_is_not_full_nozzle_gate():
 
     thrust_sanity = solution.construction_diagnostics["thrust_sanity"]
 
-    assert thrust_sanity["surface_scope"] == "partial_control_surface_de"
-    assert thrust_sanity["applicable"] is False
-    assert thrust_sanity["gate_basis"] == "mass_fraction_scaled_de_cf"
+    assert thrust_sanity["surface_scope"] == "full_control_surface_cde"
+    assert thrust_sanity["applicable"] is True
+    assert thrust_sanity["gate_basis"] == "direct_full_cde_surface_integral"
     assert thrust_sanity["passes"] is True
+    assert thrust_sanity["cf_cd"] > 0.0
+    assert thrust_sanity["cf_surface"] == pytest.approx(
+        thrust_sanity["cf_cd"] + thrust_sanity["cf_de_partial"], rel=1e-10
+    )
     assert 0.0 < thrust_sanity["kernel_bd_mass_fraction"] < 1.0
-    assert thrust_sanity["mass_fraction_scaled_cf_passes"] is True
-    assert "mass_fraction_scaled_cf_rel_error" in thrust_sanity
+    assert thrust_sanity["mass_fraction_scaling_is_gate"] is False
+    assert thrust_sanity["mass_fraction_scaled_cf_applicable"] is False
+    assert thrust_sanity["mass_fraction_scaled_cf_passes"] is None
+    assert thrust_sanity["mass_fraction_correlation"] is None
+    assert thrust_sanity["cde_reconstruction_complete"] is True
+    assert abs(thrust_sanity["cde_mass_residual_rel"]) <= (
+        thrust_sanity["cde_mass_residual_rel_tol"]
+    )
+    assert thrust_sanity["d_projection_distance_over_rt"] <= (
+        thrust_sanity["d_projection_tol_over_rt"]
+    )
+    assert abs(thrust_sanity["d_state_mach_jump"]) <= (
+        thrust_sanity["d_mach_jump_tol"]
+    )
+    assert abs(thrust_sanity["d_state_theta_jump"]) <= (
+        thrust_sanity["d_theta_jump_tol"]
+    )
 
 
 def test_bde_topology_audit_is_the_moc_gate_basis():

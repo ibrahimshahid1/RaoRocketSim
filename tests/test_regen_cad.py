@@ -108,12 +108,31 @@ def test_full_n_manifold_network_is_one_connected_material_solid(profile, tmp_pa
         tmp_path / "network.step",
         max_sections=16,
         include_manifolds=True,
+        release_mode="cold_flow",
         ports_per_manifold=2,
     )
     assert info["single_solid"] and info["inspection"]["single_solid"]
     assert info["include_manifolds"]
+    assert info["release_mode"] == "cold_flow"
+    assert info["cold_flow_geometry_ready"]
+    assert info["cold_flow_release_ready"] is False
+    assert info["hardware_qualified"] is False
+    assert info["external_release_blockers"]
+    assert info["flow_path_status"] == \
+        "connected_inlet_channels_outlet_with_external_ports"
     assert min(info["network_overlaps"].values()) > 0.0
     assert (
         info["manifold_metrics"]["hydraulic_status"]
         == "continuity_area_screen_only_no_maldistribution_solution"
     )
+
+
+def test_cold_flow_release_rejects_sealed_channel_ends(profile, tmp_path):
+    with pytest.raises(ValueError, match="requires include_manifolds=True"):
+        export_channel_wall_step(
+            profile, tmp_path / "sealed.step", release_mode="cold_flow"
+        )
+    with pytest.raises(ValueError, match="requires include_manifolds=True"):
+        export_regen_brep(
+            profile, tmp_path / "sealed_brep.step", release_mode="cold_flow"
+        )

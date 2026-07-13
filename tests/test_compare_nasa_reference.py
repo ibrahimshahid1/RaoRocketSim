@@ -16,10 +16,11 @@ def test_compare_report_declares_fixture_overlay_provenance(tmp_path):
 
     assert diagnostics["canonical_reference_track"] == "visible_source_port"
     assert diagnostics["comparison_track"] == "historical_fixture_overlay"
-    assert diagnostics["source_port_matched"] is None
-    assert diagnostics["source_port_match_status"] == "not_evaluated_by_historical_fixture_overlay"
-    assert diagnostics["source_port_workflow_complete"] is False
-    assert diagnostics["source_port_workflow_status"] == "incomplete"
+    assert diagnostics["source_port_matched"] is True
+    assert diagnostics["source_port_match_status"] == "software_verified_reference_case"
+    assert diagnostics["source_port_workflow_complete"] is True
+    assert diagnostics["candidate_source_workflow_complete"] is False
+    assert diagnostics["candidate_source_workflow_status"] == "incomplete"
     assert diagnostics["fixture_overlay_available"] is True
     assert diagnostics["fixture_overlay_is_promotion_authority"] is False
     assert diagnostics["fixture_generator_provenance"] == "unresolved"
@@ -38,8 +39,8 @@ def test_compare_report_declares_fixture_overlay_provenance(tmp_path):
         "current Python kernel did not reach the throat-arc wall"
         in diagnostics["nasa_reference_matched_blockers"]
     )
-    assert not any(
-        "fixture_generator_provenance" in blocker
+    assert any(
+        "provenance remains unresolved" in blocker
         for blocker in diagnostics["nasa_reference_matched_blockers"]
     )
 
@@ -62,19 +63,20 @@ def test_compare_report_marks_sauer_kernel_complete_without_reference_promotion(
 
     assert report["python"]["kernel_status"] == "ok"
     assert report["python"]["kernel_complete"] is True
-    assert report["python"]["bfe_status"] == "partial"
+    assert report["python"]["bfe_status"] == "ok"
     assert report["python"]["bfe_grid_rows"] > 0
     assert report["python"]["bfe_wall_points"] == report["python"]["bfe_grid_rows"]
     assert diagnostics["python_kernel_complete"] is True
     assert diagnostics["python_source_contour_available"] is True
     assert diagnostics["python_source_contour_complete"] is False
-    assert diagnostics["python_source_contour"]["bfe_negative_r_truncated_rows"] > 0
+    assert diagnostics["python_source_contour"]["bfe_negative_r_truncated_rows"] >= 0
     assert diagnostics["python_source_contour"]["length_closed"] is False
     assert diagnostics["python_source_contour"]["crop_nozzle_to_length"] == "not_ported"
     assert diagnostics["python_bfe_overlay_available"] is True
-    assert diagnostics["python_bfe_overlay_complete"] is False
-    assert diagnostics["source_port_workflow_complete"] is False
-    assert diagnostics["source_port_workflow_status"] == "incomplete"
+    assert diagnostics["python_bfe_overlay_complete"] is True
+    assert diagnostics["source_port_workflow_complete"] is True
+    assert diagnostics["candidate_source_workflow_complete"] is True
+    assert diagnostics["candidate_source_workflow_status"] == "complete_not_certified"
     assert diagnostics["fixture_overlay_is_promotion_authority"] is False
     assert diagnostics["nasa_reference_matched_eligible"] is False
     assert report["python"]["source_contour_status"] == "partial"

@@ -24,10 +24,13 @@ design-validated or hardware-qualified status.
 > combustion-stability work, material allowables, manufacturing review,
 > inspection, proof testing, or hot-fire qualification.
 
-All symbols, ratios, and governing equations in this document have been
-cross-checked against the source code and against the primary literature
-stored in [`propulsion_texts/`](propulsion_texts/); citations are given
-inline and collected at the end.
+Literature-attributed relations in this document are routed to the local
+sources in [`propulsion_texts/`](propulsion_texts/). Repository-created
+heuristics and packaging defaults are labeled as assumptions rather than
+being presented as literature laws; the machine-readable inventory and its
+validity levels live in [`docs/MODEL_REGISTRY.md`](docs/MODEL_REGISTRY.md).
+The dated closure map for the audit-driven changes is
+[`docs/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md`](docs/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md).
 
 ---
 
@@ -58,13 +61,15 @@ inline and collected at the end.
 |---|---|---|
 | Rao/TOP geometry | Upstream + downstream throat arcs and a quadratic Bézier bell using interpolated Rao-chart angles | **Trusted preliminary baseline** |
 | Ideal performance | Constant-$\gamma$, calorically perfect, quasi-1D isentropic flow; $C_F$, thrust, $I_{sp}$, $c^*$, $\dot m$, exit state | Preliminary |
-| Thermochemistry | Built-in combustion-product constants, or optional RocketCEA chamber $\gamma$, $M_w$, $T_c$, $c^*$ | Preliminary; nozzle flow stays constant-$\gamma$ |
+| Frozen variable-$c_p$ performance | Fixed-composition, thermally perfect quasi-1D throat/exit profile with exact piecewise-linear $c_p$ integrals, profile-driven wall pressure/separation, and strict property provenance | Software-verified preliminary; Bézier only, not physically validated |
+| Thermochemistry | Built-in combustion-product constants, optional RocketCEA chamber snapshot, or a strict externally generated frozen-mixture $c_p(T)$ table | Preliminary; no equilibrium nozzle chemistry |
 | Direct MOC wall optimization | Axisymmetric characteristic march coupled to a monotone spline wall under SLSQP / Nelder–Mead | Experimental |
 | Rao variational / MOC BVP | NASA-topology seed, Rao stationarity, characteristic compatibility, mass + length closure, $D$-state continuity, validity and topology diagnostics | Experimental research path |
 | Differentiable solver | JAX/Optimistix Levenberg–Marquardt residual solve, differentiable NASA-style kernel march, optional solved $\theta_B$, exact $C_F$ sensitivities | Implemented, research-grade |
 | Wall pressure & separation | Quasi-1D wall-pressure estimate; Summerfield, Kalt–Badal, Schmucker separation screens | Screening only |
-| Thermal / cooling / structure | Bartz convection, Sieder-Tate rectangular channels with a circular-duct laminar proxy, fin correction, rough/helical Darcy loss, coolant-chemistry screens, station-wise SP-125 liner stress | Screening / preliminary sizing |
-| Geometry export | CSV/STL, neutral STEP, Inventor manifest, and optional full-N one-solid regen B-rep with patterned ribs plus plenum/port voids | Preliminary manufacturing geometry, not production definition |
+| Thermal / cooling / structure | Bartz convection, turbulent Sieder-Tate plus the Shah-London rectangular-duct laminar branch, fin correction, rough/helical Darcy loss, coolant-chemistry screens, station-wise SP-125 liner stress | Screening / preliminary sizing |
+| Pintle injector | Fixed slot/hole sizing plus a Son-2017 continuous movable radial-gap branch with exact tip/center-gap control area, evidence-gated `Cd(L/Lmax)`, static actuation, and fixed-hardware throttle scheduling through a separate axial controller | Software-verified preliminary; configuration-specific cold-flow/hot-fire validation required |
+| Geometry export | CSV/STL and unit-declared neutral B-rep STEP for the requested nozzle, regen, injector, pump, and engine packages, with kernel re-import, connectivity, and clearance/interference gates | Verified preliminary geometry, not production definition |
 | Validation | Unit/regression tests, literature manifests, NASA/JHU parsers, kernel/topology parity, diagnostic reports | Strong software verification; incomplete physical validation |
 
 The maturity column is enforced in code. Each contour carries a
@@ -79,27 +84,45 @@ The maturity column is enforced in code. Each contour carries a
 
 ## Test and validation status
 
-The most recently recorded run of the normal (non-`slow`) selection, on
-**June 14, 2026**, reports:
+The full normal (non-`slow`) selection completed on **July 11, 2026** with:
 
 ```text
-784 passed, 4 xfailed, 26 deselected in 350.73 s
+1246 passed, 26 deselected, 3 warnings in 1086.67s (0:18:06)
 ```
 
-produced with
+using
 
 ```bash
 MPLCONFIGDIR=/tmp/raosim-mpl \
   .venv-jax/bin/python -m pytest -q -m "not slow"
 ```
 
-The repository contains 339 test functions, expanded by parametrization to
-the counts above. The four expected `xfail`s record known research gaps:
-the unresolved provenance of one historical NASA `TT'` fixture, an
-unpackaged Cuffel–Back–Massier dataset, and literature-promotion tests for
-the experimental MOC and legacy variational paths. The 26 deselected tests
-are long JAX solves, convergence studies, NASA fixed-end closure, and the
-full Rao-chart sweep, all gated behind the `slow` marker.
+The complementary selection of every test marked `slow` completed on the
+same date with:
+
+```text
+26 passed, 1247 deselected in 592.96s (0:09:52)
+```
+
+using
+
+```bash
+.venv-jax/bin/python -m pytest -q -m slow
+```
+
+This is the exact completed-run record, not an immutable future test count. A
+provenance-only registry assertion added after that process had collected its
+tests was verified separately with `5 passed` in
+`tests/test_model_registry.py`. For historical comparison, the June 14 normal
+baseline was `784 passed, 4 xfailed, 26 deselected in 350.73 s`.
+
+The repository now has no `@pytest.mark.xfail` literature/reference tests: Rao
+1958 Nozzle B is a strict published-data benchmark; the scarfed 1990 case is
+explicitly unsupported by the axisymmetric solver; Cuffel–Back–Massier uses
+packaged, source-labelled narrative anchors; the historical `TT'` artifact is
+an explicit theory-vs-overlay mode regression; and the obsolete parabola-fit
+agreement target is a negative-applicability test. Slow JAX solves, fixed-end
+closure, and the full Rao-chart sweep remain selected with the `slow` marker.
 
 This is **software and mathematical verification**. It demonstrates internal
 consistency, parity between backends, and agreement with reference fixtures
@@ -124,9 +147,12 @@ expansion ratio, propellant model, and contour method, LREKit can:
   thin-wall pressure stress;
 - generate one injector-to-exit thrust-chamber contour from $L^*$,
   contraction ratio, shoulder geometry, and a shared throat specification;
+- optionally close injector vaporization, explicitly supplied mixing/chemical
+  efficiencies, delivered $c^*$, and cycle mass flow through a relaxed fixed
+  point (with strict phase/applicability gates);
 - sweep $\varepsilon$, $P_c$, or $R_t$; compare contour families; and run
-  literature-backed benchmark cases with explicit pass / report / xfail
-  policies;
+  literature-backed benchmark cases with explicit strict, report-only, or
+  unsupported policies;
 - plot contours, characteristic nets, Mach / pressure / angle fields, wall
   distributions, exit-plane profiles, topology, residual diagnostics, and
   JAX sensitivity fields;
@@ -140,7 +166,7 @@ expansion ratio, propellant model, and contour method, LREKit can:
 
 ### Assumptions
 
-The core gas-dynamics and nozzle solvers assume:
+The default gas-dynamics and all characteristic-based nozzle solvers assume:
 
 - steady, inviscid, adiabatic flow;
 - a calorically perfect ideal gas with constant $\gamma$;
@@ -152,10 +178,14 @@ The core gas-dynamics and nozzle solvers assume:
   film cooling, wall roughness, ablation, embedded shocks, side loads, or
   fluid–structure interaction inside the solved flowfield.
 
-The optional CEA integration supplies a chamber-property *snapshot*. The
-`cea_frozen` and `cea_equilibrium` modes preserve provenance and
-configuration intent, but the nozzle flow is still evaluated with a single
-effective chamber $\gamma$; variable-property MOC is not implemented.
+The optional CEA integration supplies a frozen chamber-property *snapshot*.
+`cea_frozen` remains the supported constant-$\gamma$ approximation and
+`cea_equilibrium` is rejected. A separate, opt-in
+`frozen-variable-cp` quasi-1D path resolves a fixed composition with bounded
+$c_p(T)$ data and is restricted to the Bézier geometry route. It does not
+make the MOC/Rao equations variable-property, and it does not model
+equilibrium composition shifting. See
+[`docs/FROZEN_VARIABLE_CP_EXPANSION.md`](docs/FROZEN_VARIABLE_CP_EXPANSION.md).
 
 ### Propellant / thermochemistry table
 
@@ -164,10 +194,10 @@ exhaust gas at the nominal mixture ratio), not raw propellant properties:
 
 | Propellant | $\gamma$ | $M_w$ [kg/mol] | $T_c$ [K] | $\eta_{Isp}$ | O/F |
 |---|---:|---:|---:|---:|---:|
-| N2O/Ethanol | 1.22 | 0.0260 | 2800 | 0.92 | 5.5 |
-| LOX/RP-1 | 1.23 | 0.0235 | 3400 | 0.96 | 2.6 |
-| LOX/LCH4 | 1.24 | 0.0220 | 3500 | 0.96 | 3.5 |
-| LOX/LH2 | 1.20 | 0.0100 | 3250 | 0.98 | 6.0 |
+| N2O/Ethanol | 1.22 | 0.0264 | 2950 | 0.921 | 5.5 |
+| LOX/RP-1 | 1.24 | 0.0219 | 3571 | 0.960 | 2.27 |
+| LOX/LCH4 | 1.20 | 0.0203 | 3533 | 0.960 | 3.5 |
+| LOX/LH2 | 1.26 | 0.0089 | 2999 | 0.980 | 4.83 |
 
 The specific gas constant is $R = R_u / M_w$ with
 $R_u = 8314.46~\mathrm{J\,kmol^{-1}K^{-1}}$. Users may also supply custom
@@ -318,8 +348,9 @@ $\gamma = 1.23$; per Rao, *Recent Developments in Rocket Nozzle
 Configurations* (ARS J. 31(11), 1961), the optimal **contour** is nearly
 $\gamma$-insensitive at fixed $(\varepsilon, L)$ — only $C_F$ depends
 strongly on $\gamma$ — so the angle tables remain valid comparison targets
-at other $\gamma$. Inputs outside the grid are linearly extrapolated by the
-interpolator and should be treated cautiously.
+at other $\gamma$. Inputs outside the grid are linearly extrapolated, marked
+`rao_chart_extrapolated`, and blocked by the benchmark/design gate; they are
+available only as diagnostic geometry.
 
 This method is the trusted preliminary baseline because it is deterministic,
 smooth, endpoint-exact, benchmarked against explicit TOP geometry, and does
@@ -347,11 +378,16 @@ combinations are rejected rather than assigned an arbitrary short cylinder.
 $R_d/R_t$, convergent angle, and throat location. The upstream throat radius
 can be supplied directly or derived from `--cd-target` using the Hall
 leading-order throat discharge-coefficient relation over the SP-8120
-`0.6 <= Ru/Rt <= 2` range. The chamber-shoulder fillet defaults to
+`0.6 <= Ru/Rt <= 1.5` range. The CLI permits a separately labelled
+repository-only diagnostic extension to 2.0 only with
+`--allow-throat-radius-extension`; it is not attributed to SP-8120. The
+chamber-shoulder fillet defaults to
 `--shoulder-sizing auto`, a geometric closure based on $R_t$, contraction
 ratio, convergent angle, and $R_u$; scalar `--shoulder-radius-factor` remains
 available as an explicit override. The minimum cylindrical length fallback is
-still a geometric placeholder, not an injector- or combustion-qualified limit.
+still a geometric placeholder, not an injector- or combustion-qualified
+limit, and validated mode therefore requires explicit `L_star`, contraction
+ratio, and minimum cylindrical length inputs.
 
 This remains a **geometric volume model only**: $L^*$ is a residence-time
 proxy, and its minimum useful value depends on propellants, injector/mixing,
@@ -370,10 +406,12 @@ For each candidate wall it builds a transonic starting line, marches an
 axisymmetric characteristic net with wall feedback, samples the exit plane,
 and minimizes a cost combining negative exit thrust, exit-flow-angle
 penalties, radius monotonicity, and curvature regularization. SciPy SLSQP is
-used when available, with a NumPy Nelder–Mead fallback. The exported bell is
-currently *reconstructed* as a smooth quadratic Bézier from the optimized
-entrance and exit angles rather than exporting the sparse spline directly —
-one reason the method remains `experimental_moc_geometry`.
+used when available, with a NumPy Nelder–Mead fallback. The exported bell now
+samples the same optimized monotone cubic-Hermite spline used by the objective
+and constraints. The endpoint-tangent Bézier intersection is retained only as
+reference metadata; it no longer replaces the optimized wall. The method
+remains `experimental_moc_geometry` because its flow and optimization model is
+not physically validated.
 
 ### 3. Legacy direct variational path — `method="rao"`
 
@@ -381,8 +419,9 @@ The legacy Rao path discretizes a supersonic control surface, evaluates
 thrust / mass-flow / length functionals, solves a finite-dimensional
 constrained optimization, and attempts a control-surface-driven MOC wall
 construction. It is retained for regression and comparison; its public
-status is `experimental_variational_geometry`, and literature-promotion
-tests are expected to fail.
+status is `experimental_variational_geometry`. Unsupported applicability and
+unmet promotion requirements are asserted directly; there are no expected-
+failure literature tests standing in for missing physics.
 
 ### 4. Rao variational / MOC BVP — `method="rao_variational_moc"` (main research solver)
 
@@ -485,6 +524,13 @@ f_3=\cot\phi ,
 $$
 
 representing axial thrust, mass flow, and axial length respectively.
+
+The public performance gate reconstructs the complete $C$-$D$ segment from
+the kernel, joins it to $D$-$E$, and directly integrates thrust over the full
+$C$-$D$-$E$ control surface. It also checks the projected $D$ seam state,
+kernel-to-surface mass closure, and a two-percent ideal-$C_F$ sanity envelope.
+A partial $D$-$E$ value remains diagnostic only and cannot authorize
+literature or reliability promotion.
 
 #### Mass and endpoint closure
 
@@ -639,11 +685,14 @@ area-ratio, throat-curvature, and wall-temperature property factor. Gas
 transport properties remain estimated unless supplied from CEA or measured
 data, so it is still preliminary design physics rather than a validated CHT
 boundary condition. Regenerative cooling is marched station by station in
-the coolant-flow direction. The coolant-side coefficient uses Sieder–Tate
-with local rectangular hydraulic diameter, bulk/wall viscosity, a `Nu=4.36`
-circular-duct laminar proxy, and fin area. Rectangular laminar aspect-ratio,
-heated-wall, and developing-flow effects remain unresolved. The optional
-curved-channel multiplier is the Niino-Kumakawa/Taylor relation reproduced by
+the coolant-flow direction. The coolant-side coefficient uses Sieder–Tate in
+turbulent flow and the Shah–London all-walls-uniform-heat-flux polynomial in
+laminar flow, with the local rectangular hydraulic diameter, channel aspect
+ratio, bulk/wall viscosity, and fin area. Unequal wall heating, thermal-entry,
+and hydrodynamic-developing effects remain unresolved. A lower-level legacy
+call that omits rectangular geometry retains `Nu=4.36` only as the explicit
+circular-duct API branch. The optional curved-channel multiplier is the
+Niino-Kumakawa/Taylor relation reproduced by
 Pizzarelli et al. (2011) and Torres et al. (2009). It remains disabled in
 automatic liquid-coolant sizing because NASA SP-8087 recommends experimental
 calibration before crediting curvature enhancement;
@@ -786,10 +835,10 @@ python3.12 -m pip install lrekit
 Optional integrations can be requested with extras:
 
 ```bash
-# Optional thermochemistry (variable chamber properties)
+# Optional thermochemistry (frozen chamber-property snapshot)
 python3.12 -m pip install "lrekit[cea]"
 
-# Optional true revolved B-rep STEP export; otherwise a faceted STEP is used
+# CadQuery/OpenCascade support for true B-rep STEP export
 python3.12 -m pip install "lrekit[cad]"
 ```
 
@@ -830,8 +879,10 @@ top-level toolbox interface is still available as:
 RaoRocketSimLegacy --help
 ```
 
-To ensure a triangle-based STEP fallback is never mistaken for editable
-B-rep CAD:
+True B-rep is the default hard requirement for requested STEP output. A run
+fails if the required CAD kernel or a geometry/re-import gate is unavailable.
+For an explicitly non-manufacturing wall diagnostic only,
+`--no-require-brep` permits the labelled faceted AP214 fallback. For example:
 
 ```bash
 lrekit --max-nfev 4000 --regen \
@@ -854,7 +905,8 @@ lrekit --max-nfev 4000 --regen --thermal \
   --radiation-family methane --boiling-chf
 ```
 
-For pintle injector manufacturing geometry, request the machined CAD package:
+For fixed-discrete pintle injector manufacturing geometry, request the
+machined CAD package:
 
 ```bash
 lrekit --injector pintle --injector-cad machined \
@@ -869,9 +921,27 @@ CadQuery/OpenCascade is installed, exports the coaxial five-part pintle stack
 `orifice_plate.step`, `faceplate.step`) plus
 `injector_assembly_machined.step`.
 
-Without `--require-brep`, the summary records either `brep` or
-`faceted_brep`. Inventor, Fusion, SolidWorks, and FreeCAD can import the true
-STEP as a solid body; it will not contain native Inventor feature history.
+The Son continuous movable-pintle branch is selected with
+`--injector-architecture son_continuous_movable` and
+`--pintle-radial-exit continuous_radial_gap`. It implements Son Eq. 1 tip
+area, the fixed center-gap cap, a configuration-specific `Cd(L/Lmax)`
+contract bound to an exact Son-geometry fingerprint, physical opening/stops,
+and a throttle map that holds the annulus
+hardware fixed while reporting the required separate upstream controller.
+Position, leakage, and actuator/material gates require separate source/hash-
+bound evidence records rather than accepting unproven nominal values.
+Mechanical opening is not liquid-sheet thickness; a spray handoff requires
+independent, geometry-matched, in-domain VOF or measured thickness evidence. Use
+`--injector-cad none`: every movable CAD request fails closed until a swept
+moving assembly with stops, running clearances, seals, and collision checks is
+implemented. See the full model and CLI example in
+[`docs/MOVABLE_PINTLE_MODEL.md`](docs/MOVABLE_PINTLE_MODEL.md).
+
+The default `--require-brep` policy applies to this request. The CLI will not
+silently substitute a mesh-derived STEP if the five-part package cannot be
+built and re-imported as valid solids. Inventor, Fusion, SolidWorks, and
+FreeCAD can import the neutral STEP bodies; they do not contain native
+Inventor feature history.
 
 For repo-local development, `python scripts/run_nozzle.py ...` remains a thin
 compatibility wrapper around the packaged runner.
@@ -924,11 +994,14 @@ Any later command-line flag overrides the value from the file.
 lrekit \
   --propellant LOX/RP-1 \
   --pc 7.0e6 --rt 0.020 --epsilon 10 --length-pct 80 \
+  --contour-method rao-bvp --backend jax \
   --max-nfev 4000 --out builds/nozzle_moc
 ```
 
-The default backend is the JAX Rao variational / MOC BVP path. Use
-`--max-nfev 0` for a fast seed-geometry smoke run.
+The CLI contour default remains the trusted deterministic Rao/TOP Bézier.
+`--contour-method rao-bvp` explicitly enters the experimental BVP; within that
+path, JAX is the default inner-solver backend. Use `--max-nfev 0` for a fast
+seed-geometry diagnostic, not a design export.
 
 ### Size the throat from thrust
 
@@ -944,6 +1017,28 @@ The sizing relation is
 $$
 R_t=\sqrt{\frac{F_{\mathrm{target}}}{\pi\,C_{F,\mathrm{actual}}\,p_c}} .
 $$
+
+### Fixed-composition variable-$c_p$ expansion
+
+```bash
+lrekit \
+  --propellant LOX/RP-1 --mixture-ratio 2.27 \
+  --pc 8.0e6 --target-thrust 13000 --epsilon 8 \
+  --contour-method bezier \
+  --nozzle-expansion-model frozen-variable-cp \
+  --frozen-gas-table path/to/configuration-controlled-mixture.json \
+  --injector none --no-electric-pump --cad none \
+  --out builds/frozen_q1d
+```
+
+The JSON table is not synthesized from the scalar propellant row. It must use
+the strict schema-v2 property/provenance contract, including frozen mass
+fractions, freeze state, generator/database identity, and source-artifact
+SHA-256. Target-thrust and matched-pressure sizing use the integrated frozen
+profile. MOC/Rao, explicit `--gamma`, Hall-$C_d$ throat sizing, and the
+constant-$\gamma$ Bartz/regen path are rejected in this mode. Conservation
+closure is reported separately from the still-failed physical property and
+performance benchmark gate.
 
 ### Pintle injector and electric pump
 
@@ -963,11 +1058,42 @@ selected RPM/bus voltage, battery and motor sizing, architecture classification,
 normalized BOM rows, editable reference geometry, impeller, inducer,
 diffuser/volute, velocity-triangle/meanline, pump curve, system-curve throttle
 margin, thermal/stress screens, gates, and literature assumptions. `--pump-cad`
-exports a meanline reference CAD package; use
-`--pump-cad-format step` or `both` when a faceted STEP exchange file is more
-useful than STL for CAD review.
+exports a meanline/packaging reference CAD package. `--pump-cad-format step`
+or `both` requests true B-rep parts and assemblies, including the connected
+inlet-to-outlet fluid volume; the request fails without CadQuery/OpenCascade
+or when the export/re-import gates fail. The hydraulic solve now closes the
+shaft/fit/root-wall annular eye, inlet/exit blade blockage, net-area flow
+coefficients, velocity-triangle beta1, main/splitter layout, casing pressure
+wall, and pump duty before CAD. The blade-root bending screen also feeds its
+required thickness back through exit blockage and the RPM/diameter iteration;
+a fixed-RPM design that cannot fit the structural root fails the free-area
+gate. B-rep export treats any subsequent hub change as a hard regression. The
+volute is exported as separable rear-body/front-cover
+halves with a keyhole gasket land, body/outlet-neck bolt holes, dowels, and a
+preliminary pressure-clamp gate. The legacy STL path is explicitly schematic.
+`cold_flow_release_ready` remains false until selected joint hardware,
+bearings, seals, shaft retention, tolerances, rotordynamics, proof/cold-flow
+tests, and measured maps exist.
 
-For pintle CAD, `--injector-cad auto` now selects the machined STEP package:
+The correlation-based spray screen is report-only by default. An explicit
+fixed point is available with `--spray-cstar-coupling`,
+`--spray-eta-mixing`, and `--spray-eta-combustion`; see
+[`docs/SPRAY_CSTAR_COUPLING.md`](docs/SPRAY_CSTAR_COUPLING.md). The opt-in
+deterministic one-way parcel mid-tier and its validation limits are documented
+in [`docs/LAGRANGIAN_SPRAY_MODEL.md`](docs/LAGRANGIAN_SPRAY_MODEL.md). It is not
+a replacement for VOF, reacting CFD, or cold-/hot-fire evidence.
+
+The implemented Son continuous movable-pintle branch is documented in
+[`docs/MOVABLE_PINTLE_MODEL.md`](docs/MOVABLE_PINTLE_MODEL.md). At each
+throttle point it holds the post, rod, center gap, open stop, and axial annulus
+fixed; solves radial center-rod travel; and solves a separately identified
+upstream controller pressure drop for the axial stream. It requires a
+configuration-bound `Cd` artifact to pass its hydraulic gate and never treats
+mechanical opening or a continuity-equivalent gap as VOF/measured sheet
+thickness.
+
+For fixed-discrete pintle CAD, `--injector-cad auto` now selects the machined
+STEP package:
 `pintle_body.step`, `pintle_tip.step`, `injector_body.step`,
 `orifice_plate.step`, `faceplate.step`, `injector_assembly_machined.step`, and
 `injector_manufacturing_report.json`. Use `reference` or `parts` only when you
@@ -1006,10 +1132,11 @@ The legacy alias keeps the older bar/kPa/mm CLI, sweep workflow, and benchmark
 entrypoints available while the maintained runner focuses on complete
 component package generation.
 
-Available manifests are `lea_top_schomberg_2014`, `rao_scarfed_moc_1990`, and
-`vulcain_s1_separation_similarity`. Each metric is classified `strict`,
-`xfail`, or `report`, so missing physics is recorded rather than hidden
-behind a single pass/fail number.
+Available manifests are `lea_top_schomberg_2014`, `rao1958_nozzle_b`,
+`rao_scarfed_moc_1990`, and `vulcain_s1_separation_similarity`. Current method
+policies are `strict`, `report`, or `unsupported`: Rao 1958 Nozzle B is a
+strict axisymmetric BVP benchmark, while the scarfed 1990 geometry is
+explicitly unsupported by the axisymmetric solvers.
 
 ---
 
@@ -1083,18 +1210,25 @@ Normal CLI runs create `builds/vNNN_YYYYMMDD_HHMMSS/` and may contain:
 
 - contour CSV in meters;
 - a binary STL closed wall solid;
-- a STEP solid (CadQuery revolved B-rep when available, else a faceted AP214
-  fallback);
+- a true B-rep STEP solid when requested (the default hard policy), or a
+  clearly labelled faceted AP214 wall diagnostic only when the user explicitly
+  supplies `--no-require-brep`;
 - with variable wall sizing, separate liner and closeout-jacket solids;
 - optionally, `regen.step`: one full-channel-count cooling-aware material
   solid, with connected plenum/port voids when requested;
 - optionally, a pintle machined-CAD package with Boolean-cut STEP bodies for
   the face, slotted pintle post, annular sleeve, and assembly, plus an injector
   manufacturing report;
+- for a Son continuous movable pintle with `--injector-cad none`, a report-only
+  JSON/CSV/SVG/PNG package that separates control area, physical opening,
+  actuator/calibration evidence, and liquid-sheet evidence; movable STEP/DXF/
+  parts/machined requests fail closed until swept-assembly CAD exists;
 - an Inventor conversion manifest pointing to the authoritative STEP file;
 - optional regen STL/PNG visualization surfaces for liner, channels, and
   jacket;
 - design-gate JSON and v2 physics-screening sections;
+- canonical-unit sidecars, CAD manufacturing/assembly gate reports, and an
+  optional configuration-bound physical-evidence report;
 - sweep CSV or benchmark JSON / Markdown reports;
 - human-readable `metadata.txt` with inputs, performance, warnings, gate
   results, and generated filenames.
@@ -1122,20 +1256,23 @@ Kliegel–Levine coefficients and NASA-visible-source semantics; characteristic
 topology, mass conservation, BDE closure, wall tangency, and crossing checks;
 NumPy/JAX primitive and residual parity; exact-Jacobian convergence,
 kernel-march parity, solved-$\theta_B$ derivatives, and $C_F$ sensitivities;
-literature-manifest parsing with strict/report/xfail policies; NASA/JHU
+literature-manifest parsing with strict/report/unsupported policies; NASA/JHU
 legacy-output and Tecplot parsing; and plotting/diagnostic metadata.
 
 ### NASA/JHU reference port
 
 [`Three-Dimensional-Nozzle-Design-Code-master/`](Three-Dimensional-Nozzle-Design-Code-master/)
 vendors the Rice/JHU 2D MOC, streamline-tracing, and 3D MOC source package
-plus sample outputs. The active Python port implements major pieces of the
-axisymmetric 2D workflow: the initial throat line and kernel march; arc-wall,
-interior, special-wall, and axis unit processes; mass flow along
-right-running characteristics; point-$D$ selection, point-$E$ integration,
-and fixed-/free-end closure; the $\theta_B$ secant solution; BDE-region and
-wall-contour construction; and explicit `RaoTopology` objects for $TT'$, $B$,
-$BF$, $D$, $BD$, $DE$, $E$, and the wall streamline.
+plus sample outputs. For the pinned M3.5 perfect-nozzle configuration, the
+visible-source reference track is SHA-256 pinned and software-verified for the
+initial throat line, kernel rows, and BDE wall extraction. The active Python
+implementation also provides arc-wall, interior, special-wall, and axis unit
+processes; characteristic mass flow; point-$D$ selection; fixed-end
+point-$E$ closure; complete $C$-$D$-$E$ thrust reconstruction; and explicit
+`RaoTopology` objects for $TT'$, $B$, $BF$, $D$, $BD$, $DE$, $E$, and the
+wall streamline. The general contoured workflow is not certified: the source
+`CropNozzleToLength` path is not ported for exported interior grids, and an
+arbitrary BVP solve is not automatically the pinned reference case.
 
 The checked-in M3.5 perfect-nozzle wall comparison is within the repository's
 $10^{-3}$ RMS regression gate (the perfect-nozzle pipeline currently measures
@@ -1233,11 +1370,16 @@ Rocket_nozzle_sim_phase2.py     Legacy monolithic prototype; not the primary API
    graph, CoolProp properties, fatigue, buckling, and CHF remain preliminary
    screens—not qualification CHT, 3-D manifold CFD, cyclic plasticity, creep,
    or FEA.
-9. **Preliminary manufacturing CAD.** The full-N channels, ribs, optional
-   plenums, and ports are solid-modeled, but bolt holes, injector faces,
-   fillets, inserts, welds, tolerances, and process-specific rules are not.
-10. **No package metadata or stable API guarantee.** The project runs from its
-    source tree and research interfaces may change.
+9. **Preliminary manufacturing CAD.** Engine/injector bolt patterns, retention
+   features, seal/thread envelopes, mating flow passages, regen plenums/ports,
+   pump fluid volumes, nominal clearances, and interference checks are modeled
+   and B-rep-gated. The repository still does not issue released drawings,
+   GD&T or a signed tolerance stack, selected seal/thread/fastener standards,
+   process-specific weld/braze/AM allowances, cleaning/NDE plans, or inspection
+   and assembly instructions.
+10. **Alpha API and release status.** Package metadata and CLI entry points
+    exist, but the research interfaces do not yet carry a stable compatibility
+    guarantee and the first public PyPI release is still pending.
 
 ---
 
@@ -1246,33 +1388,45 @@ Rocket_nozzle_sim_phase2.py     Legacy monolithic prototype; not the primary API
 A practical roadmap, grounded in the current code rather than historical phase
 labels:
 
-1. Complete and publish the exact-variational chart/reference sweep, define
-   accepted exact-vs-TOP-fit deltas, and set the criteria for flipping
-   `BENCHMARK_VALIDATED_AT_RELEASE = True`.
+1. Obtain independent review of the exact-variational chart/reference sweep,
+   publish accepted exact-vs-TOP-fit deltas, and define the evidence required
+   before `BENCHMARK_VALIDATED_AT_RELEASE` could ever be enabled.
 2. Make the live differentiable $\theta_B$ solve a routinely exercised
    production path and finish total implicit design derivatives with respect
    to $R_t$, $\varepsilon$, $L_{\%}$, $\gamma$, and ambient pressure.
 3. Differentiate or replace the remaining start-line and BDE/final-wall steps
    so sensitivities reach manufacturable wall coordinates, not only the
    control surface.
-4. Finish source-port provenance and public reliability wiring for the
-   NASA/JHU reference workflow, including the unresolved historical `TT'`
-   fixture.
-5. Add variable-property frozen/equilibrium thermochemistry and transport
-   properties to the nozzle flowfield.
+4. Generalize the pinned M3.5 source-visible reference port by implementing
+   `CropNozzleToLength` for exported interior grids. Preserve the unresolved
+   historical `TT'` generator provenance as an overlay limitation; do not use
+   it as promotion authority.
+5. Validate the implemented frozen-composition variable-$c_p$ quasi-1D path
+   against configuration-controlled CEA/property fixtures, then add
+   profile-aware transport/thermal adapters. Equilibrium expansion and a
+   variable-property characteristic flowfield remain separate future models.
 6. Couple viscous displacement, wall pressure, separation, and side-load
    physics to the contour solution; validate against published experiments
    and CFD.
 7. Add independent axisymmetric Euler/RANS CFD comparisons with quantitative
    gates for $C_F$, wall pressure, exit Mach, and flow angle.
-8. Replace thermal/cooling/structural screens with conjugate heat transfer,
-   coolant pressure-drop/property models, temperature-dependent materials,
-   and structural analysis.
-9. Promote CAD from a revolved screening solid to a manufacturing definition
-   with channels, interfaces, fasteners, tolerances, joints, and inspection
-   features.
-10. Retire or clearly isolate legacy paths, add package metadata, and publish
-    a stable API and reproducible release artifacts.
+8. Extend the implemented, version-pinned OpenFOAM v13 external-gap VOF wedge
+   to the full internal movable-pintle passage, run strict mesh/solver and
+   convergence studies, and physically validate the typed VOF-to-Lagrangian
+   parcel bridge. Static case export and the current correlation fixed point
+   are not parcel CFD or validation evidence.
+9. Replace screening thermal/structural models with independently reviewed
+   CHT and FEA, and calibrate coolant/manifold pressure losses and material
+   behavior with configuration-controlled data.
+10. Validate the coupled pump meanline/shaft/hub/blade-free-area/split-casing
+    design with bearing/seal/retention detail, rotordynamics, cavitation,
+    pressure proof, cold flow, and measured pump maps.
+11. Complete drawings, GD&T, fits, selected seals/threads/fasteners, process
+    plans, NDE/inspection, proof/leak tests, cold flow, stability assessment,
+    and hot-fire evidence for each released configuration. The evidence
+    manifest can record these results; the software cannot create them.
+12. Retire or clearly isolate legacy paths, define API compatibility policy,
+    complete release engineering/licensing, and publish reproducible artifacts.
 
 ---
 

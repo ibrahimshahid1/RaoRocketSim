@@ -16,8 +16,8 @@
   },
   "status_policy": {
     "bezier": "strict",
-    "moc": "xfail",
-    "rao": "xfail"
+    "moc": "report",
+    "rao": "report"
   },
   "inputs": {
     "Rt": 0.01362,
@@ -128,6 +128,6 @@
   "expected_physics_gaps": [
     "Viscous thrust loss and boundary-layer displacement are not modeled by the current inviscid solver.",
     "Wall-pressure comparison is trend/report-only until the code has CFD-grade or boundary-layer-corrected pressure prediction.",
-    "MOC/Rao paths are diagnostic xfail until they reproduce published exit-flow and wall-pressure behavior."
+    "This LEA TOP manifest applies to the quadratic Rao/TOP approximation. MOC/Rao methods use their own strict Rao 1958 and source-port benchmarks and are not evaluated by this geometry-only case."
   ]
 }

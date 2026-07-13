@@ -117,7 +117,9 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                   n_char: int = 30,
                   max_iter: int = 200,
                   starting_line_method: str = 'area_ratio',
-                  enforce_pressure_monotonic: bool = False) -> dict:
+                  enforce_pressure_monotonic: bool = False,
+                  Ru_factor: float = 1.5,
+                  Rd_factor: float = 0.382) -> dict:
     """
     Find thrust-optimal wall via constrained optimization.
 
@@ -126,7 +128,9 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
     """
     Re = math.sqrt(epsilon) * Rt
     Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
-    Rd = 0.382 * Rt
+    if Ru_factor <= 0.0 or Rd_factor <= 0.0:
+        raise ValueError("Ru_factor and Rd_factor must be positive")
+    Rd = Rd_factor * Rt
 
     theta_n_seed = math.radians(_lookup_theta_n(epsilon, length_pct))
 
@@ -159,6 +163,8 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
             result = solve_flowfield(
                 Rt, epsilon, gamma, wall, n_char,
                 starting_line_method=starting_line_method,
+                throat_upstream_radius_factor=Ru_factor,
+                throat_downstream_radius_factor=Rd_factor,
             )
             metrics = result['exit_metrics']
 
@@ -222,7 +228,12 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
             def _pressure_progression(params):
                 theta_n, control_r = _unpack(params)
                 wall, _, _ = _build_wall(theta_n, control_r)
-                result = solve_flowfield(Rt, epsilon, gamma, wall, n_char)
+                result = solve_flowfield(
+                    Rt, epsilon, gamma, wall, n_char,
+                    starting_line_method=starting_line_method,
+                    throat_upstream_radius_factor=Ru_factor,
+                    throat_downstream_radius_factor=Rd_factor,
+                )
                 wall_rows = [row.wall for row in result['rows'] if row.wall is not None]
                 if len(wall_rows) < 3:
                     return np.array([0.0])
@@ -266,6 +277,8 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
     final = solve_flowfield(
         Rt, epsilon, gamma, wall_opt, n_char,
         starting_line_method=starting_line_method,
+        throat_upstream_radius_factor=Ru_factor,
+        throat_downstream_radius_factor=Rd_factor,
     )
 
     return {
@@ -301,9 +314,12 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     Ru = Ru_factor * Rt
     Rd = Rd_factor * Rt
 
-    opt = optimize_wall(Rt, epsilon, gamma, length_pct,
-                        n_control, n_char, max_iter,
-                        starting_line_method=starting_line_method)
+    opt = optimize_wall(
+        Rt, epsilon, gamma, length_pct, n_control, n_char, max_iter,
+        starting_line_method=starting_line_method,
+        Ru_factor=Ru_factor,
+        Rd_factor=Rd_factor,
+    )
 
     conv_angle = math.radians(convergent_half_angle_deg)
     n_conv = 100
@@ -316,14 +332,12 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
     x_throat = Rd * np.cos(t_thr)
     y_throat = (Rt + Rd) + Rd * np.sin(t_thr)
 
-    # ── Bell section: quadratic Bézier from optimised angles ─────
-    # The MoC optimizer determines the thrust-optimal θ_n and θ_e.
-    # Rather than sampling the sparse SplineWall (which is only C1
-    # at its knots and visually kinked), we construct the divergent
-    # bell as a quadratic Bézier — identical to the standard Rao
-    # near-optimum approximation, but with MoC-optimised angles.
-    # This is C∞ smooth, guaranteed monotonic, and G1-continuous
-    # with the upstream throat arc at the inflection point N.
+    # ── Bell section: export the wall that the MOC optimizer solved ─────
+    # The old exporter discarded every optimized interior control radius and
+    # reconstructed an unrelated quadratic Bézier from only the endpoint
+    # angles.  That made the reported flow metrics and exported geometry refer
+    # to different walls.  Sample the monotone cubic Hermite SplineWall used
+    # by the objective/constraints so geometry and flow now share one state.
     Nx_opt = opt['Nx']
     Ny_opt = opt['Ny']
     theta_e_rad = math.radians(opt['theta_e'])
@@ -338,16 +352,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         x_p1 = 0.5 * (Nx_opt + Ln)
     y_p1 = Ny_opt + m1 * (x_p1 - Nx_opt)
 
-    N_pt = np.array([Nx_opt, Ny_opt])
-    E_pt = np.array([Ln, Re])
-    P1_pt = np.array([x_p1, y_p1])
-
-    t_bell = np.linspace(0.0, 1.0, n_conv)
-    bell = ((1 - t_bell) ** 2 * N_pt[:, None]
-            + 2 * (1 - t_bell) * t_bell * P1_pt[:, None]
-            + t_bell ** 2 * E_pt[:, None])
-    wall_x = bell[0]
-    wall_r = bell[1]
+    wall_x, wall_r, _wall_theta = opt['wall'].sample(n_conv)
 
     x_full = np.concatenate([x_conv, x_throat[1:], wall_x[1:]])
     y_full = np.concatenate([y_conv, y_throat[1:], wall_r[1:]])
@@ -369,6 +374,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'N': (Nx_opt, Ny_opt),
         'E': (Ln, Re),
         'P1': (x_p1, y_p1),
+        'P1_role': 'tangent_intersection_reference_only',
         'x_conv': x_conv,
         'y_conv': y_conv,
         'x_throat': x_throat,
@@ -376,10 +382,15 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'x_bell': wall_x,
         'y_bell': wall_r,
         'method': 'moc',
+        'wall_export_basis': 'optimized_monotone_cubic_hermite_spline',
+        'optimized_wall_x_knots': opt['wall'].x_knots.copy(),
+        'optimized_wall_r_knots': opt['wall'].r_knots.copy(),
         'exit_theta_max': metrics['theta_max'],
         'exit_theta_rms': metrics['theta_rms'],
         'exit_M_uniformity': metrics['M_std'],
         'exit_M_mean': metrics['M_mean'],
+        'exit_Cf': metrics['Cf'],
+        'exit_thrust_normalization_basis': metrics['normalization_basis'],
         'optimization_converged': opt['converged'],
         'starting_line_method': starting_line_method,
     }

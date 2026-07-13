@@ -15,14 +15,14 @@ These tests pin:
 * End-to-end: KL as the default ``starting_line_method`` does not
   regress the BVP ``max_scaled`` residual relative to ``area_ratio``.
 
-A Cuffel-Back-Massier 1969 cross-check would tighten the validation
-further; the published experimental Mach data is in the PDF cited at
-the top of :mod:`raosim.transonic_kernel`.  Marked ``xfail`` here
-because the dataset is not packaged with the repo.
+The packaged Cuffel-Back-Massier 1969 narrative anchors provide an additional
+non-xfailed literature check without pretending that untranscribed plot data
+are pointwise digital measurements.
 """
 
 from __future__ import annotations
 
+import json
 import math
 import warnings
 from pathlib import Path
@@ -217,11 +217,36 @@ def test_kl_end_to_end_does_not_regress_bvp_residual():
     )
 
 
-@pytest.mark.xfail(
-    reason="Cuffel-Back-Massier 1969 dataset not packaged; manual cross-check "
-           "described in raosim/transonic_kernel.py docstring."
-)
 def test_kl_centerline_mach_matches_cuffel_back_massier_1969():
-    """Cuffel, Back, Massier 1969 measured centerline Mach for Rc/Rt = 0.625.
-    The KL series should agree within 2% just downstream of the throat."""
-    raise NotImplementedError("CBM data not packaged")
+    """Check the two physical-throat anchors preserved by NASA NTRS.
+
+    The NTRS abstract reports M=0.8 at the axis and M=1.4 near the wall for
+    Rc/Rt=0.625.  These are rounded narrative values, not a digitized profile;
+    the packaged evidence file therefore keeps a tight centerline gate and a
+    separately labelled broad near-wall evidence band.  This test must not be
+    described as pointwise experimental validation.
+    """
+    evidence_path = (
+        Path(__file__).resolve().parents[1]
+        / "raosim" / "benchmark_data" / "cuffel_back_massier_1969.json"
+    )
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    assert evidence["source"]["ntrs_id"] == "19690063911"
+    assert evidence["source"]["quality"].startswith("rounded narrative")
+
+    cfg = evidence["configuration"]
+    predictions = {}
+    for anchor in evidence["anchors"]:
+        state = kliegel_levine(
+            anchor["r_over_rt"],
+            0.0,
+            cfg["gamma"],
+            cfg["curvature_radius_over_throat_radius"],
+            GEOM_AXI,
+        )
+        predictions[anchor["location"]] = state.M
+        assert state.M == pytest.approx(
+            anchor["mach"], abs=anchor["absolute_tolerance"]
+        )
+
+    assert predictions["axis"] < 1.0 < predictions["near_wall"]

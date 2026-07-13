@@ -344,7 +344,9 @@ _VALID_STARTING_LINE_METHODS = (
 
 def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
                                gamma: float, n_points: int = 40,
-                               method: str = 'kliegel_levine') -> list[CharPoint]:
+                               method: str = 'kliegel_levine', *,
+                               transonic_curvature_radius: float | None = None,
+                               ) -> list[CharPoint]:
     """
     Approximate transonic starting line on the downstream throat arc.
 
@@ -358,6 +360,10 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
     method      : one of ``'kliegel_levine'`` (default), ``'sauer_modified'``,
                   ``'area_ratio'``, or ``'hall'`` (deprecated alias for
                   ``'sauer_modified'``).
+    transonic_curvature_radius : convergent-side radius used in the
+                  Hall/Kliegel-Levine coefficients.  Defaults to ``Rd`` for
+                  backward-compatible low-level calls; integrated nozzle
+                  workflows pass the shared upstream ``Ru`` explicitly.
 
     Methods
     -------
@@ -405,12 +411,17 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
 
     At = math.pi * Rt * Rt
     y_center = Rt + Rd
+    Rc = Rd if transonic_curvature_radius is None else float(
+        transonic_curvature_radius
+    )
+    if Rc <= 0.0:
+        raise ValueError("transonic_curvature_radius must be positive")
 
     angles = np.linspace(1e-4, theta_n_max, n_points)
     points = []
 
     if method == 'sauer_modified':
-        rho_c = Rd / Rt
+        rho_c = Rc / Rt
         gp1 = gamma + 1.0
         a1 = math.sqrt(2.0 / (gp1 * rho_c))
         a2 = gp1 / (12.0 * rho_c)
@@ -427,7 +438,7 @@ def approximate_starting_line(Rt: float, Rd: float, theta_n_max: float,
                 r_over_Rt=r / Rt,
                 x_over_Rt=x / Rt,
                 gamma=gamma,
-                Rc_over_Rt=Rd / Rt,
+                Rc_over_Rt=Rc / Rt,
                 geom=GEOM_AXI,
             )
             M = max(state.M, 1.0 + 1e-6)
@@ -676,7 +687,8 @@ def sample_exit_plane(rows: list[CharRow], x_exit: float,
 def compute_exit_thrust(samples: list[dict], gamma: float,
                         p_ambient: float = 0.0,
                         Pc: float = 1.0, Tc: float = 1.0,
-                        R_gas: float = 1.0) -> dict:
+                        R_gas: float = 1.0,
+                        throat_radius: float | None = None) -> dict:
     """
     Compute thrust from exit-plane samples using the momentum-pressure
     integral:
@@ -689,14 +701,26 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
       ρ = p / (R_gas * T)
       Vx = M * sqrt(γ R_gas T) * cos(theta)
 
-    Returns dimensional and normalized thrust metrics.
+    Returns dimensional and normalized thrust metrics.  A physical nozzle
+    thrust coefficient requires ``throat_radius`` because ``Cf = F/(Pc*At)``.
+    Low-level legacy calls that omit it retain an explicitly labelled exit-area
+    normalization and must not present that value as a nozzle Cf.
     """
     if len(samples) < 2:
+        reference_area = (
+            math.pi * throat_radius**2
+            if throat_radius is not None and throat_radius > 0.0 else 0.0
+        )
         return {
             'F': 0.0,
             'F_dimensional': 0.0,
             'F_normalized': 0.0,
             'Cf': 0.0,
+            'normalization_basis': (
+                'throat_area' if throat_radius is not None
+                else 'exit_area_legacy_not_nozzle_cf'
+            ),
+            'reference_area': reference_area,
             'theta_max': 0.0,
             'theta_rms': 0.0,
             'M_std': 0.0,
@@ -711,11 +735,20 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
     # Collapse duplicate radial stations (possible from trace/interpolation artifacts).
     r_unique, inv = np.unique(r_vals, return_inverse=True)
     if r_unique.size < 2:
+        reference_area = (
+            math.pi * throat_radius**2
+            if throat_radius is not None and throat_radius > 0.0 else 0.0
+        )
         return {
             'F': 0.0,
             'F_dimensional': 0.0,
             'F_normalized': 0.0,
             'Cf': 0.0,
+            'normalization_basis': (
+                'throat_area' if throat_radius is not None
+                else 'exit_area_legacy_not_nozzle_cf'
+            ),
+            'reference_area': reference_area,
             'theta_max': float(np.max(np.abs(np.degrees(th_vals)))) if th_vals.size else 0.0,
             'theta_rms': float(np.degrees(np.sqrt(np.mean(th_vals**2)))) if th_vals.size else 0.0,
             'M_std': float(np.std(m_vals)) if m_vals.size else 0.0,
@@ -745,14 +778,29 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
     F_dim = float(2.0 * math.pi * np.trapezoid(integrand * r_vals, r_vals))
 
     r_exit = float(np.max(r_vals))
-    At = math.pi * r_exit * r_exit if r_exit > 0.0 else 0.0
-    F_norm = F_dim / max(Pc * At, 1e-30) if At > 0.0 else 0.0
+    exit_area = math.pi * r_exit * r_exit if r_exit > 0.0 else 0.0
+    if throat_radius is not None:
+        if not math.isfinite(throat_radius) or throat_radius <= 0.0:
+            raise ValueError("throat_radius must be finite and positive")
+        reference_area = math.pi * throat_radius * throat_radius
+        normalization_basis = "throat_area"
+        cf = F_dim / max(Pc * reference_area, 1e-30)
+    else:
+        reference_area = exit_area
+        normalization_basis = "exit_area_legacy_not_nozzle_cf"
+        cf = None
+    F_norm = (
+        F_dim / max(Pc * reference_area, 1e-30)
+        if reference_area > 0.0 else 0.0
+    )
 
     return {
         'F': F_dim,
         'F_dimensional': F_dim,
         'F_normalized': F_norm,
-        'Cf': F_norm,
+        'Cf': cf,
+        'normalization_basis': normalization_basis,
+        'reference_area': reference_area,
         'theta_max': float(np.max(np.abs(np.degrees(th_vals)))),
         'theta_rms': float(np.degrees(np.sqrt(np.mean(th_vals**2)))),
         'M_std': float(np.std(m_vals)),
@@ -762,7 +810,9 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
 
 def solve_flowfield(Rt: float, epsilon: float, gamma: float,
                     wall, n_char: int = 40,
-                    starting_line_method: str = 'kliegel_levine') -> dict:
+                    starting_line_method: str = 'kliegel_levine',
+                    throat_upstream_radius_factor: float = 1.5,
+                    throat_downstream_radius_factor: float = 0.382) -> dict:
     """
     Full MOC forward solve with coupled wall marching.
 
@@ -777,22 +827,38 @@ def solve_flowfield(Rt: float, epsilon: float, gamma: float,
     n_char  : points on initial characteristic line
     starting_line_method : method passed to approximate_starting_line
                            ('area_ratio' default, or 'hall')
+    throat_upstream_radius_factor : Ru/Rt used by the transonic start-line
+                           expansion (default 1.5, shared Rao/SP-8120 throat)
+    throat_downstream_radius_factor : Rd/Rt locating the downstream arc on
+                           which the start-line samples are constructed
 
     Returns
     -------
     dict with rows, exit_samples, exit_metrics, starting_line
     """
-    Rd = 0.382 * Rt
+    if throat_upstream_radius_factor <= 0.0:
+        raise ValueError("throat_upstream_radius_factor must be positive")
+    if throat_downstream_radius_factor <= 0.0:
+        raise ValueError("throat_downstream_radius_factor must be positive")
+    # Hall/Kliegel-Levine transonic theory is parameterized by the
+    # convergent-side curvature.  The previous direct-MOC path silently used
+    # the 0.382 Rt downstream fillet, even though the NASA/JHU source passes
+    # rUp and the rest of this repository's shared throat uses Ru=1.5 Rt.
+    Ru = throat_upstream_radius_factor * Rt
+    Rd = throat_downstream_radius_factor * Rt
     Re = math.sqrt(epsilon) * Rt
     theta_n = wall.theta(wall.x_start)
 
     starting_line = approximate_starting_line(
-        Rt, Rd, theta_n, gamma, n_char, method=starting_line_method
+        Rt, Rd, theta_n, gamma, n_char, method=starting_line_method,
+        transonic_curvature_radius=Ru,
     )
     rows = march_coupled_net(starting_line, wall, gamma, axisymmetric=True)
 
     exit_samples = sample_exit_plane(rows, wall.x_end, gamma)
-    exit_metrics = compute_exit_thrust(exit_samples, gamma)
+    exit_metrics = compute_exit_thrust(
+        exit_samples, gamma, throat_radius=Rt
+    )
 
     return {
         'rows': rows,

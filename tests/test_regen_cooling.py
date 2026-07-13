@@ -254,6 +254,40 @@ def test_sieder_tate_uses_laminar_fallback_below_re_2300():
     assert h == pytest.approx(4.36 * props["k"] / diameter)
 
 
+def test_rectangular_laminar_branch_uses_aspect_ratio():
+    from raosim.physics import (
+        rectangular_duct_laminar_nusselt,
+        sieder_tate_coefficient,
+    )
+
+    props = {"k": 0.12, "cp": 2010.0}
+    mu = 1.0e-3
+    diameter = 1.0e-3
+    mass_flux = 1000.0 * mu / diameter
+    square_nu = rectangular_duct_laminar_nusselt(1.0)
+    plate_nu = rectangular_duct_laminar_nusselt(1.0e-6)
+    assert square_nu == pytest.approx(3.610224, rel=2e-5)
+    assert plate_nu == pytest.approx(8.235, rel=3e-6)
+
+    h = float(sieder_tate_coefficient(
+        mass_flux,
+        diameter,
+        props,
+        mu_bulk=mu,
+        mu_wall=mu,
+        rectangular_aspect_ratio=1.0,
+    ))
+    assert h == pytest.approx(square_nu * props["k"] / diameter)
+
+
+@pytest.mark.parametrize("aspect_ratio", [0.0, -0.1, 1.01, float("nan")])
+def test_rectangular_laminar_nusselt_rejects_invalid_aspect_ratio(aspect_ratio):
+    from raosim.physics import rectangular_duct_laminar_nusselt
+
+    with pytest.raises(ValueError, match="aspect_ratio"):
+        rectangular_duct_laminar_nusselt(aspect_ratio)
+
+
 def test_curvature_factor_sign_convention():
     from raosim.physics import curvature_correction_factor
     concave = float(curvature_correction_factor(3e4, 0.001, +0.02))

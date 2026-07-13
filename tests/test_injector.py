@@ -9,8 +9,10 @@ from raosim.injector import (
     FeedSystemSpec,
     InjectorManufacturingSpec,
     InjectorSpec,
+    InjectorSpecError,
     InjectorUnsupportedState,
     PintleGeometrySpec,
+    MovablePintleSpec,
     PropellantFeedSpec,
     evaluate_pintle_injector,
     resolve_feed_state,
@@ -22,6 +24,7 @@ from raosim.pumps import (
     PumpSizingSpec,
     size_electric_pumps,
 )
+from raosim.movable_pintle import movable_geometry_fingerprint
 
 
 # ---- representative LOX/RP-1 operating point ---------------------------
@@ -51,13 +54,102 @@ def _spec(**kw):
 
 
 def _size(spec=None, **kw):
+    pc = kw.pop("Pc", PC)
     return size_pintle_injector(
         spec or _spec(), mdot_fuel=kw.pop("mdot_fuel", MDOT_F),
-        mdot_oxidizer=kw.pop("mdot_oxidizer", MDOT_O), Pc=PC,
+        mdot_oxidizer=kw.pop("mdot_oxidizer", MDOT_O), Pc=pc,
         mixture_ratio=kw.pop("mixture_ratio", MR),
         chamber_radius=kw.pop("chamber_radius", 0.0339),
         chamber_length=kw.pop("chamber_length", 0.10),
         gamma=1.24, Tc=3571.0, R_gas=379.6, **kw,
+    )
+
+
+def _movable_spec(*, calibrated=True, sheet_evidence=True, **overrides):
+    movable = MovablePintleSpec(
+        post_diameter=0.020,
+        post_thickness=0.001,
+        center_gap_diameter=0.012,
+        pintle_rod_diameter=0.008,
+        cd_vs_opening_fraction=(
+            ((0.0, 0.62), (0.5, 0.70), (1.0, 0.76))
+            if calibrated else ()
+        ),
+        cd_calibration_source=(
+            "configuration-controlled unit-test cold-flow map"
+            if calibrated else None
+        ),
+        cd_calibration_artifact_sha256=("b" * 64 if calibrated else None),
+        cd_reynolds_range=((1.0, 1.0e9) if calibrated else None),
+        cd_pressure_drop_range=((1.0, 1.0e9) if calibrated else None),
+        cd_temperature_range=((200.0, 400.0) if calibrated else None),
+        cd_cavitation_number_range=((0.0, 100.0) if calibrated else None),
+        cd_fluid_name=("RP-1" if calibrated else None),
+        position_tolerance=1.0e-6,
+        position_feedback_resolution=1.0e-6,
+        backlash=1.0e-6,
+        closed_leakage_area=0.0,
+        metrology_source="configuration-controlled metrology fixture",
+        metrology_artifact_sha256="c" * 64,
+        leakage_source="configuration-controlled leakage fixture",
+        leakage_artifact_sha256="d" * 64,
+        unbalanced_pressure_area=2.0e-5,
+        spring_preload_force=5.0,
+        seal_friction_force=4.0,
+        moving_mass=0.2,
+        maximum_acceleration=50.0,
+        actuator_force_capacity=500.0,
+        stem_diameter=0.006,
+        stem_allowable_stress=200.0e6,
+        actuator_source="configuration-controlled actuator/material fixture",
+        actuator_artifact_sha256="e" * 64,
+        sheet_thickness=(0.125e-3 if sheet_evidence else None),
+        sheet_thickness_method=("vof" if sheet_evidence else None),
+        sheet_thickness_source=(
+            "configuration-controlled VOF unit-test fixture"
+            if sheet_evidence else None
+        ),
+        sheet_thickness_artifact_sha256=("a" * 64 if sheet_evidence else None),
+        sheet_thickness_fluid_name=("RP-1" if sheet_evidence else None),
+        sheet_thickness_opening_range=(
+            (1.0e-6, 2.0e-3) if sheet_evidence else None
+        ),
+        sheet_thickness_pressure_drop_range=(
+            (1.0, 1.0e9) if sheet_evidence else None
+        ),
+        sheet_thickness_mass_flow_range=(
+            (1.0e-9, 10.0) if sheet_evidence else None
+        ),
+    )
+    for key, value in overrides.items():
+        setattr(movable, key, value)
+    geometry_digest = movable_geometry_fingerprint(
+        movable, tip_angle_deg=20.0
+    )
+    if calibrated and movable.cd_geometry_fingerprint_sha256 is None:
+        movable.cd_geometry_fingerprint_sha256 = geometry_digest
+    if (
+        sheet_evidence
+        and movable.sheet_thickness_geometry_fingerprint_sha256 is None
+    ):
+        movable.sheet_thickness_geometry_fingerprint_sha256 = geometry_digest
+    return InjectorSpec(
+        type="pintle",
+        architecture="son_continuous_movable",
+        sizing="auto",
+        fuel_dp_fraction=0.2,
+        oxidizer_dp_fraction=0.2,
+        fuel=PropellantFeedSpec(
+            role="fuel", name="RP-1", inlet_temperature=298.0
+        ),
+        oxidizer=PropellantFeedSpec(role="oxidizer", name="LOX"),
+        geometry=PintleGeometrySpec(
+            pintle_diameter=0.020,
+            radial_stream="fuel",
+            radial_exit_style="continuous_radial_gap",
+            deflector_angle=20.0,
+        ),
+        movable_pintle=movable,
     )
 
 
@@ -173,6 +265,165 @@ class TestHydraulics:
         assert r_ox.slots.role == "oxidizer" and r_ox.annulus.role == "fuel"
 
 
+class TestContinuousMovablePintle:
+    def test_auto_solve_closes_son_area_mass_flow_and_actuator_ledger(self):
+        r = _size(_movable_spec())
+        act = r.actuation
+
+        assert r.architecture == "son_continuous_movable"
+        assert r.slots.geometry == "continuous_radial_gap"
+        assert r.slot_count == 1
+        assert act is not None
+        assert r.slots.mdot == pytest.approx(MDOT_F, rel=1e-10)
+        assert r.slots.area == pytest.approx(act.tip_minimum_area)
+        assert act.effective_metering_area < act.center_gap_area
+        assert 0.0 < act.opening_distance < act.maximum_opening
+        assert act.maximum_opening < act.transition_opening
+        assert r.slots.detail["external_sheet_inlet_area_360"] != pytest.approx(
+            r.slots.area
+        )
+        assert r.slots.detail["equivalent_exit_sheet_thickness"] != pytest.approx(
+            act.opening_distance
+        )
+        assert act.sheet_thickness != pytest.approx(act.opening_distance)
+        assert act.actuator_force_margin > 1.0
+        assert act.stem_stress_margin > 1.0
+        assert _gate(r, "movable_center_gap_transition").status in ("pass", "warn")
+        assert _gate(r, "movable_cd_calibration").status == "pass"
+        assert _gate(r, "movable_actuator_force_margin").status == "pass"
+        assert _gate(r, "movable_sheet_thickness_handoff").status == "pass"
+        assert r.feasible
+
+    def test_fixed_opening_reproduces_auto_delivered_flow(self):
+        auto_spec = _movable_spec()
+        auto = _size(auto_spec)
+        fixed_spec = _movable_spec()
+        fixed_spec.sizing = "fixed"
+        fixed_spec.geometry.annulus_gap = auto.annulus.detail["gap"]
+        fixed_spec.movable_pintle.maximum_opening = auto.actuation.maximum_opening
+        fixed_spec.movable_pintle.commanded_opening = auto.actuation.opening_distance
+
+        fixed = _size(fixed_spec)
+
+        assert fixed.slots.mdot == pytest.approx(auto.slots.mdot, rel=2e-10)
+        assert fixed.annulus.mdot == pytest.approx(auto.annulus.mdot, rel=2e-10)
+        assert fixed.actuation.opening_fraction == pytest.approx(
+            auto.actuation.opening_fraction
+        )
+
+    def test_uncalibrated_cd_and_incomplete_actuator_fail_closed(self):
+        spec = _movable_spec(calibrated=False)
+        spec.movable_pintle.unbalanced_pressure_area = None
+        result = _size(spec)
+
+        assert _gate(result, "movable_cd_calibration").status == "fail"
+        assert _gate(result, "movable_actuator_force_margin").status == "fail"
+        assert not result.feasible
+
+    def test_cd_calibration_is_bound_to_fluid_and_operating_domain(self):
+        wrong_fluid = _movable_spec()
+        wrong_fluid.movable_pintle.cd_fluid_name = "water"
+        result = _size(wrong_fluid)
+        assert _gate(result, "movable_cd_calibration").status == "fail"
+        assert not result.feasible
+
+        wrong_dp = _movable_spec()
+        wrong_dp.movable_pintle.cd_pressure_drop_range = (1.0, 1.0e5)
+        result = _size(wrong_dp)
+        assert _gate(result, "movable_cd_calibration").status == "fail"
+        assert not result.feasible
+
+        wrong_geometry = _movable_spec()
+        wrong_geometry.movable_pintle.cd_geometry_fingerprint_sha256 = "d" * 64
+        result = _size(wrong_geometry)
+        assert _gate(result, "movable_cd_calibration").status == "fail"
+        assert not result.feasible
+
+    def test_sheet_evidence_outside_solved_state_is_rejected(self):
+        spec = _movable_spec()
+        spec.movable_pintle.sheet_thickness_opening_range = (
+            1.0e-6,
+            2.0e-6,
+        )
+        result = _size(spec)
+
+        assert _gate(result, "movable_sheet_thickness_handoff").status == "fail"
+        assert not result.feasible
+
+        geometry_mismatch = _movable_spec()
+        geometry_mismatch.movable_pintle.sheet_thickness_geometry_fingerprint_sha256 = (
+            "d" * 64
+        )
+        result = _size(geometry_mismatch)
+        assert _gate(result, "movable_sheet_thickness_handoff").status == "fail"
+        assert not result.feasible
+
+    @pytest.mark.parametrize(
+        ("source_field", "digest_field", "gate_name"),
+        (
+            (
+                "metrology_source",
+                "metrology_artifact_sha256",
+                "movable_position_authority",
+            ),
+            (
+                "leakage_source",
+                "leakage_artifact_sha256",
+                "movable_closed_stop_leakage",
+            ),
+            (
+                "actuator_source",
+                "actuator_artifact_sha256",
+                "movable_actuator_force_margin",
+            ),
+        ),
+    )
+    def test_hardware_ledgers_require_source_hash_evidence(
+        self, source_field, digest_field, gate_name
+    ):
+        spec = _movable_spec()
+        setattr(spec.movable_pintle, source_field, None)
+        setattr(spec.movable_pintle, digest_field, None)
+        result = _size(spec)
+
+        assert _gate(result, gate_name).status == "fail"
+        assert not result.feasible
+
+    def test_architecture_and_geometry_must_be_selected_together(self):
+        wrong_architecture = _movable_spec()
+        wrong_architecture.architecture = "fixed_discrete"
+        with pytest.raises(InjectorSpecError, match="requires architecture"):
+            _size(wrong_architecture)
+
+        wrong_geometry = _spec()
+        wrong_geometry.architecture = "son_continuous_movable"
+        with pytest.raises(InjectorSpecError, match="requires radial_exit_style"):
+            _size(wrong_geometry)
+
+        ignored_movable_input = _spec()
+        ignored_movable_input.movable_pintle.post_diameter = 0.020
+        with pytest.raises(InjectorSpecError, match="not ignored"):
+            _size(ignored_movable_input)
+
+    def test_open_stop_at_center_gap_transition_is_rejected(self):
+        from raosim.movable_pintle import transition_opening
+
+        spec = _movable_spec()
+        transition = transition_opening(
+            spec.movable_pintle,
+            tip_angle_deg=spec.geometry.deflector_angle,
+        )
+        spec.movable_pintle.maximum_opening = transition
+        with pytest.raises(ValueError, match="reaches/exceeds"):
+            _size(spec)
+
+    def test_partial_sheet_evidence_is_rejected(self):
+        spec = _movable_spec(sheet_evidence=False)
+        spec.movable_pintle.sheet_thickness = 0.1e-3
+        with pytest.raises(InjectorSpecError, match="thickness, method, source"):
+            _size(spec)
+
+
 # ---- gates --------------------------------------------------------------
 def _gate(r, name):
     return next(g for g in r.gates if g.name == name)
@@ -259,6 +510,11 @@ class TestPhaseGuard:
         # gas is far less dense -> needs much more area than liquid LOX (~33 mm^2)
         assert r.annulus.area > 5e-5
         assert any(g.name == "injection_state_oxidizer" for g in r.gates)
+        # A gas hydraulic branch is never interpreted as a droplet stream.
+        ox = r.atomization.streams["oxidizer"]
+        assert not ox.applicable
+        assert math.isnan(ox.sauter_mean_diameter)
+        assert "not a liquid droplet phase" in ox.validity_reason
 
     def test_choked_gas_reports_choke(self):
         # A large oxidizer dp-fraction (P0 >> 2 Pc) chokes the gas stream.
@@ -355,12 +611,21 @@ class TestValidation:
 
 # ---- activated geometry parameters --------------------------------------
 class TestActiveParameters:
-    def test_target_momentum_ratio_gates(self):
+    def test_unreachable_target_momentum_ratio_is_rejected(self):
         s = _spec()
         s.target_momentum_ratio = 5.0  # far from the ~0.5 achieved
+        from raosim.injector import InjectorSpecError
+        with pytest.raises(InjectorSpecError, match="achievable TMR"):
+            _size(s)
+
+    def test_target_momentum_ratio_actively_solves_radial_dp(self):
+        s = _spec()
+        s.target_momentum_ratio = 0.50
         r = _size(s)
-        g = _gate(r, "target_momentum_ratio")
-        assert g.status == "fail"
+        assert r.total_momentum_ratio == pytest.approx(0.50, rel=1e-7)
+        assert r.momentum_targeting["active"]
+        assert r.momentum_targeting["solved_role"] == "fuel"
+        assert _gate(r, "target_momentum_ratio").status == "pass"
 
     def test_tip_radius_and_impingement_used(self):
         geom = PintleGeometrySpec(
@@ -458,6 +723,11 @@ class TestIntegratedCoupling:
             },
         )
         ln = r.feed_system.lines["fuel"]
+        assert r.feed["fuel"].temperature == pytest.approx(410.0)
+        assert _gate(r, "regen_fuel_flow_closure").status == "fail"
+        assert "differs from jacket outlet" in _gate(
+            r, "regen_fuel_flow_closure"
+        ).detail
         assert ln.regen_loss == pytest.approx(2.0e6, rel=1e-12)
         assert ln.required_outlet_pressure == pytest.approx(
             ln.chamber_pressure + ln.injector_dp + ln.regen_loss, rel=1e-12)
@@ -466,24 +736,58 @@ class TestIntegratedCoupling:
 # ---- spray atomization / vaporization screen ----------------------------
 class TestAtomization:
     def test_smd_in_micron_range(self):
-        r = _size()
+        r = _size(Pc=1.5e6)
         at = r.atomization
         assert at is not None
-        for s in at.streams.values():
-            # rocket SMD is tens of microns; never larger than the jet
-            assert 1e-6 < s.sauter_mean_diameter < 5e-4
+        for role, s in at.streams.items():
+            # The screen is bounded by its passage hydraulic diameter; it is
+            # not asserted to be a universal "tens of microns" prediction.
+            assert 0.0 < s.sauter_mean_diameter <= r.streams[role].hydraulic_diameter
             assert s.aerodynamic_weber > 0
 
     def test_chamber_gas_density(self):
-        r = _size()
-        # rho_g = Pc/(R Tc) = 7e6/(379.6*3571)
+        r = _size(Pc=1.5e6)
+        # rho_g = Pc/(R Tc)
         assert r.atomization.chamber_gas_density == pytest.approx(
-            7e6 / (379.6 * 3571.0), rel=1e-6)
+            1.5e6 / (379.6 * 3571.0), rel=1e-6)
+
+    def test_hinze_reitz_and_d2_equations_are_independently_recomputed(self):
+        """Verify the three screen equations from primitive result values."""
+        pc = 1.5e6
+        chamber_length = 0.10
+        r = _size(Pc=pc, chamber_length=chamber_length)
+        rho_g = pc / (379.6 * 3571.0)
+        K = 1.0e-6
+        for role, item in r.atomization.streams.items():
+            stream = r.streams[role]
+            sigma = r.feed[role].surface_tension
+            expected_we = (
+                rho_g * stream.velocity**2 * stream.hydraulic_diameter / sigma
+            )
+            expected_d32 = min(
+                13.0 * sigma / (rho_g * stream.velocity**2),
+                stream.hydraulic_diameter,
+            )
+            expected_breakup = 15.0 * stream.hydraulic_diameter
+            expected_t99 = (
+                expected_d32**2 * (1.0 - 0.01 ** (2.0 / 3.0)) / K
+            )
+            expected_vap_length = stream.velocity * expected_t99
+            residence = max(0.0, chamber_length - expected_breakup) / stream.velocity
+            remaining_d2 = max(0.0, expected_d32**2 - K * residence)
+            expected_vaporized = 1.0 - (
+                remaining_d2 / expected_d32**2
+            ) ** 1.5
+            assert item.aerodynamic_weber == pytest.approx(expected_we)
+            assert item.sauter_mean_diameter == pytest.approx(expected_d32)
+            assert item.breakup_length == pytest.approx(expected_breakup)
+            assert item.vaporization_length == pytest.approx(expected_vap_length)
+            assert item.vaporized_fraction == pytest.approx(expected_vaporized)
 
     def test_short_chamber_warns_and_drops_efficiency(self):
         """A too-short chamber cannot develop combustion: warn + η_c* < 1."""
-        short = _size(chamber_length=0.01)
-        long = _size(chamber_length=0.5)
+        short = _size(Pc=1.5e6, chamber_length=0.01)
+        long = _size(Pc=1.5e6, chamber_length=0.5)
         assert (short.atomization.predicted_cstar_efficiency
                 <= long.atomization.predicted_cstar_efficiency)
         assert short.atomization.development_margin < long.atomization.development_margin
@@ -493,13 +797,77 @@ class TestAtomization:
         assert g.status != "fail"
 
     def test_efficiency_bounded(self):
-        r = _size()
-        assert 0.0 <= r.atomization.predicted_cstar_efficiency <= 1.0
+        r = _size(Pc=1.5e6)
+        assert 0.0 <= r.atomization.eta_vaporization <= 1.0
+        assert r.atomization.eta_mixing is None
+        assert r.atomization.eta_combustion is None
+        assert r.atomization.eta_cstar is None
+        # Compatibility alias is explicitly only the vaporization screen.
+        assert (r.atomization.predicted_cstar_efficiency
+                == r.atomization.eta_vaporization)
 
     def test_atomization_in_to_dict(self):
-        d = _size().to_dict()
+        d = _size(Pc=1.5e6).to_dict()
         assert d["atomization"]["model"].startswith("hinze")
         assert "fuel" in d["atomization"]["streams"]
+        assert d["atomization"]["eta_cstar"] is None
+
+    def test_transcritical_pressure_disables_droplet_screen(self):
+        r = _size(Pc=7.0e6)
+        assert r.atomization.limiting_role is None
+        assert math.isnan(r.atomization.eta_vaporization)
+        assert all(not s.applicable for s in r.atomization.streams.values())
+        assert _gate(r, "atomization_applicability_oxidizer").status == "warn"
+
+    def test_round_holes_have_their_own_area_and_hydraulic_diameter(self):
+        s = _spec(geometry=PintleGeometrySpec(
+            pintle_diameter=0.02, slot_count=24, radial_stream="fuel",
+            radial_exit_style="holes",
+        ))
+        r = _size(s, Pc=1.5e6)
+        radial = r.slots
+        d = radial.detail["hole_diameter"]
+        assert radial.geometry == "holes"
+        assert radial.detail["injection_form"] == "round_hole_jet"
+        assert radial.area == pytest.approx(24 * math.pi * d**2 / 4.0)
+        assert radial.hydraulic_diameter == pytest.approx(d)
+        assert radial.detail["length_over_dh"] == pytest.approx(2.0)
+        pitch = math.pi * r.pintle_diameter / 24
+        assert radial.detail["web"] == pytest.approx(pitch - d)
+        assert _gate(r, "min_hole_diameter").name == "min_hole_diameter"
+
+    def test_fixed_round_hole_diameter_sets_delivered_area(self):
+        d = 8.0e-4
+        s = _spec(sizing="fixed", geometry=PintleGeometrySpec(
+            pintle_diameter=0.02, slot_count=24, radial_stream="fuel",
+            radial_exit_style="holes", radial_hole_diameter=d,
+            radial_hole_length=2.0e-3, annulus_gap=3.0e-4,
+        ))
+        r = _size(s, Pc=1.5e6)
+        assert r.slots.area == pytest.approx(24 * math.pi * d**2 / 4.0)
+        assert r.slots.detail["length_over_dh"] == pytest.approx(2.5)
+
+    def test_continuous_radial_sheet_requires_separate_model(self):
+        from raosim.injector import InjectorSpecError
+        s = _spec(geometry=PintleGeometrySpec(
+            pintle_diameter=0.02, slot_count=24, radial_stream="fuel",
+            radial_exit_style="continuous_sheet",
+        ))
+        with pytest.raises(InjectorSpecError, match="radial_exit_style"):
+            _size(s, Pc=1.5e6)
+
+    def test_explicit_cstar_coupling_requires_other_efficiencies(self):
+        from raosim.injector import couple_atomization_to_performance
+        r = _size(Pc=1.5e6)
+        coupled = couple_atomization_to_performance(
+            r.atomization, ideal_cstar=1700.0, chamber_pressure=1.5e6,
+            throat_area=1.0e-3, eta_mixing=0.97, eta_combustion=0.99,
+        )
+        expected_eta = r.atomization.eta_vaporization * 0.97 * 0.99
+        assert coupled.eta_cstar == pytest.approx(expected_eta)
+        assert coupled.required_mass_flow == pytest.approx(
+            1.5e6 * 1.0e-3 / (1700.0 * expected_eta)
+        )
 
 
 # ---- manifold distribution ----------------------------------------------
@@ -579,13 +947,14 @@ class TestStability:
         assert _size().to_dict()["stability"]["chug_status"] is not None
 
 
-# ---- movable-sleeve throttle map ----------------------------------------
+# ---- architecture-dispatched throttle map -------------------------------
 class TestThrottleMap:
     def _map(self, **kw):
         from raosim.injector import throttle_map
+        pc_full = kw.pop("Pc_full", 1.5e6)
         return throttle_map(
             _spec(), mdot_fuel_full=MDOT_F, mdot_oxidizer_full=MDOT_O,
-            Pc_full=PC, mixture_ratio=MR, chamber_radius=0.0339,
+            Pc_full=pc_full, mixture_ratio=MR, chamber_radius=0.0339,
             chamber_length=0.10, gamma=1.24, Tc=3571.0, R_gas=379.6, **kw)
 
     def test_preserves_of_and_tmr(self):
@@ -602,6 +971,8 @@ class TestThrottleMap:
         assert low.v_annulus < high.v_annulus
         assert low.smd_limiting > high.smd_limiting
         assert low.sleeve_stroke_fraction < high.sleeve_stroke_fraction
+        assert low.actuator_stroke_fraction is None
+        assert low.annulus_area_command_fraction == low.sleeve_stroke_fraction
 
     def test_constant_pc_holds_velocity(self):
         # pc_exponent=0 -> constant Pc, so injection velocity is held
@@ -612,6 +983,81 @@ class TestThrottleMap:
     def test_to_dict_serializable(self):
         import json
         json.dumps(self._map(levels=(0.5, 1.0)).to_dict())
+
+    def test_son_map_holds_hardware_and_solves_separate_axial_controller(self):
+        from raosim.injector import throttle_map
+
+        tm = throttle_map(
+            _movable_spec(),
+            mdot_fuel_full=MDOT_F,
+            mdot_oxidizer_full=MDOT_O,
+            Pc_full=PC,
+            mixture_ratio=MR,
+            chamber_radius=0.0339,
+            chamber_length=0.10,
+            gamma=1.24,
+            Tc=3571.0,
+            R_gas=379.6,
+            levels=(0.2, 0.6, 1.0),
+            pc_exponent=1.0,
+        )
+
+        assert tm.architecture == "son_continuous_movable"
+        assert tm.schedule_semantics == (
+            "fixed_hardware_center_pintle_plus_upstream_annulus_controller"
+        )
+        assert tm.kinematic_model == "son2017_continuous_radial_gap"
+        assert tm.preserved["mixture_ratio"]
+        assert tm.preserved["requested_mass_flow"]
+        assert tm.preserved["fixed_hardware"]
+        assert tm.preserved["upstream_controller_schedule"]
+        assert not tm.preserved["dp_fraction"]
+
+        gaps = [point.annulus_gap for point in tm.points]
+        assert gaps == pytest.approx([gaps[-1]] * len(gaps), rel=1e-12)
+        assert all(
+            point.annulus_area_command_fraction == pytest.approx(1.0)
+            for point in tm.points
+        )
+        assert all(point.upstream_controller_required for point in tm.points)
+        assert all(point.axial_controller_role == "oxidizer" for point in tm.points)
+        assert [point.actuator_stroke_fraction for point in tm.points] == sorted(
+            point.actuator_stroke_fraction for point in tm.points
+        )
+        assert [
+            point.required_axial_controller_dp_fraction for point in tm.points
+        ] == sorted(
+            point.required_axial_controller_dp_fraction for point in tm.points
+        )
+        for point in tm.points:
+            assert point.radial_opening == pytest.approx(point.slot_width)
+            assert point.mdot_total == pytest.approx(
+                point.throttle * MDOT, rel=1e-8
+            )
+            assert point.mixture_ratio == pytest.approx(MR, rel=1e-8)
+        assert tm.points[0].slot_area_command_fraction != pytest.approx(
+            tm.points[0].actuator_stroke_fraction
+        )
+
+    def test_son_map_fails_when_controller_envelope_cannot_reach_full_power(self):
+        from raosim.injector import throttle_map
+
+        spec = _movable_spec()
+        spec.movable_axial_controller_dp_fraction_bounds = (0.25, 0.50)
+        with pytest.raises(InjectorSpecError, match="full-power oxidizer"):
+            throttle_map(
+                spec,
+                mdot_fuel_full=MDOT_F,
+                mdot_oxidizer_full=MDOT_O,
+                Pc_full=PC,
+                mixture_ratio=MR,
+                chamber_radius=0.0339,
+                chamber_length=0.10,
+                gamma=1.24,
+                Tc=3571.0,
+                R_gas=379.6,
+                levels=(0.2, 1.0),
+            )
 
 
 # ---- figures ------------------------------------------------------------

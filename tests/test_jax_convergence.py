@@ -20,12 +20,12 @@ The remaining gap to the 2e-3 gate is *seed topology*, not optimisation:
 topology on marched kernels (mass_BD ~ 1e-8, DE of 1-2 nodes), so the CE
 seed stays the legacy linear ramp far from the Rao basin.  That is
 REWRITE_PLAN Phase-12 work (NASA find_point_e / CalcLRCDE), tracked by the
-xfail below.  Homotopy over PHYSICS_WEIGHT, LM restarts, and both bound
+explicit convergence diagnostics below.  Homotopy over PHYSICS_WEIGHT, LM restarts, and both bound
 treatments (sigmoid reparametrisation, vanishing barrier) all land on the
 same stall point — evidence the obstruction is structural, exactly what
 §10 predicted exact Jacobians would reveal.
 
-The non-xfail tests pin today's gains as regression floors.
+The tests pin the measured gains and remaining gates as regression floors.
 """
 
 from __future__ import annotations

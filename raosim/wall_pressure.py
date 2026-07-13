@@ -10,6 +10,7 @@ throat signals separation risk.
 """
 
 from __future__ import annotations
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -24,6 +25,8 @@ def wall_pressure_distribution(
     contour: dict,
     Pc: float,
     gamma: float,
+    *,
+    frozen_expansion=None,
 ) -> dict:
     """
     Compute the wall pressure p(x) along the nozzle contour.
@@ -49,9 +52,27 @@ def wall_pressure_distribution(
     Rt = contour['Rt']
     At = np.pi * Rt**2
 
+    if frozen_expansion is not None:
+        if not math.isclose(
+            float(frozen_expansion.chamber_pressure_pa),
+            float(Pc),
+            rel_tol=1.0e-10,
+            abs_tol=0.0,
+        ):
+            raise ValueError("frozen expansion chamber pressure does not match Pc")
+        if not math.isclose(
+            float(frozen_expansion.expansion_ratio),
+            float(contour["epsilon"]),
+            rel_tol=1.0e-10,
+            abs_tol=1.0e-12,
+        ):
+            raise ValueError("frozen expansion ratio does not match contour epsilon")
+
     n = len(x)
     M_arr = np.zeros(n)
     p_arr = np.zeros(n)
+    T_arr = np.zeros(n)
+    gamma_arr = np.zeros(n)
 
 
     throat_idx = np.argmin(np.abs(y - Rt))
@@ -63,15 +84,26 @@ def wall_pressure_distribution(
         if ar < 1.0:
             ar = 1.0
 
-        try:
-            if i <= throat_idx:
-                M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=False)
-            else:
-                M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=True)
-        except (ValueError, ZeroDivisionError):
-            M_arr[i] = 1.0
+        if frozen_expansion is not None:
+            station = frozen_expansion.station(
+                ar, supersonic=bool(i > throat_idx)
+            )
+            M_arr[i] = station.mach
+            p_arr[i] = station.pressure_pa
+            T_arr[i] = station.temperature_k
+            gamma_arr[i] = station.gamma
+        else:
+            try:
+                if i <= throat_idx:
+                    M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=False)
+                else:
+                    M_arr[i] = mach_from_area_ratio(ar, gamma, supersonic=True)
+            except (ValueError, ZeroDivisionError):
+                M_arr[i] = 1.0
 
-        p_arr[i] = Pc * isentropic_pressure_ratio(M_arr[i], gamma)
+            p_arr[i] = Pc * isentropic_pressure_ratio(M_arr[i], gamma)
+            T_arr[i] = np.nan
+            gamma_arr[i] = gamma
 
 
     p_downstream = p_arr[throat_idx:]
@@ -84,6 +116,12 @@ def wall_pressure_distribution(
         'p': p_arr,
         'p_over_Pc': p_arr / Pc,
         'M': M_arr,
+        'T': T_arr,
+        'gamma': gamma_arr,
+        'expansion_model': (
+            'frozen_variable_cp_q1d'
+            if frozen_expansion is not None else 'constant_gamma'
+        ),
         'monotonic': is_monotonic,
         'violation_indices': violations,
         'throat_idx': throat_idx,

@@ -5,8 +5,8 @@ Implements three empirical separation criteria widely used in rocket nozzle
 design, per the survey in Stark (2009) and NASA SP-8120:
 
   • Summerfield (simple):   p_sep ≈ 0.4 · Pa
-  • Kalt-Badal:             p_sep/Pa ≈ 1 / (1 + 0.5·γ·Me²)^0.195  (approx)
-  • Schmucker (turbulent):  p_sep/Pa ≈ (Pa/Pc)^0.8 / Me
+  • Kalt-Badal:             p_sep/Pa ≈ 1 / (1.88·M − 1)
+  • Schmucker (turbulent):  p_sep/Pc ≈ (Pa/Pc)^0.8 / M
 
 References
 ----------
@@ -68,6 +68,8 @@ def check_separation(
     Pa: float,
     gamma: float,
     method: str = 'schmucker',
+    *,
+    frozen_expansion=None,
 ) -> dict:
     """
     Check whether the nozzle will experience flow separation at the given
@@ -92,58 +94,91 @@ def check_separation(
         'margin'        : Pe/p_sep  (>1 means no separation)
         'exit_pressure' : Pe  [Pa]
     """
-    x = contour['x']
-    y = contour['y']
+    x = np.asarray(contour['x'], dtype=float)
+    y = np.asarray(contour['y'], dtype=float)
     Rt = contour['Rt']
     At = np.pi * Rt**2
     epsilon = contour['epsilon']
 
 
-    Me = mach_from_area_ratio(epsilon, gamma, supersonic=True)
-    Pe = Pc * isentropic_pressure_ratio(Me, gamma)
-
-
-    if method == 'summerfield':
-        p_sep = summerfield_separation_pressure(Pa)
-    elif method == 'kalt_badal':
-        ratio = kalt_badal_separation_ratio(Me, gamma)
-        p_sep = ratio * Pa
-    elif method == 'schmucker':
-        ratio_Pc = schmucker_separation_ratio(Me, Pa / Pc)
-        p_sep = ratio_Pc * Pc
+    if frozen_expansion is not None:
+        if not math.isclose(
+            float(frozen_expansion.chamber_pressure_pa),
+            float(Pc), rel_tol=1.0e-10, abs_tol=0.0,
+        ):
+            raise ValueError("frozen expansion chamber pressure does not match Pc")
+        if not math.isclose(
+            float(frozen_expansion.expansion_ratio),
+            float(epsilon), rel_tol=1.0e-10, abs_tol=1.0e-12,
+        ):
+            raise ValueError("frozen expansion ratio does not match contour epsilon")
+        Me = float(frozen_expansion.exit.mach)
+        Pe = float(frozen_expansion.exit.pressure_pa)
     else:
+        Me = mach_from_area_ratio(epsilon, gamma, supersonic=True)
+        Pe = Pc * isentropic_pressure_ratio(Me, gamma)
+
+
+    if method not in {'summerfield', 'kalt_badal', 'schmucker'}:
         raise ValueError(f"Unknown method '{method}'. "
                          f"Use 'summerfield', 'kalt_badal', or 'schmucker'.")
 
-    separated = Pe < p_sep
+    def criterion_pressure(M_local: float) -> float:
+        if method == 'summerfield':
+            return summerfield_separation_pressure(Pa)
+        if method == 'kalt_badal':
+            return kalt_badal_separation_ratio(M_local, gamma) * Pa
+        return schmucker_separation_ratio(M_local, Pa / Pc) * Pc
+
+    # The Mach-dependent criteria must be evaluated at each candidate wall
+    # station.  Using Me once and then marching against a constant threshold
+    # mixes an exit condition with upstream wall states and can move the
+    # predicted onset substantially.
+    p_sep_exit = criterion_pressure(Me)
+    separated = False
     x_sep = None
     y_sep = None
-
-    if separated:
-        throat_idx = np.argmin(np.abs(y - Rt))
-        for i in range(throat_idx, len(x)):
-            A_local = np.pi * y[i]**2
-            ar = max(A_local / At, 1.0)
+    onset_threshold = None
+    throat_idx = int(np.argmin(np.abs(y - Rt)))
+    for i in range(throat_idx, len(x)):
+        A_local = np.pi * y[i]**2
+        ar = max(A_local / At, 1.0)
+        if frozen_expansion is not None:
+            station = frozen_expansion.station(ar, supersonic=True)
+            M_local = station.mach
+            p_local = station.pressure_pa
+        else:
             try:
                 M_local = mach_from_area_ratio(ar, gamma, supersonic=True)
             except Exception:
                 continue
             p_local = Pc * isentropic_pressure_ratio(M_local, gamma)
-            if p_local <= p_sep:
-                x_sep = float(x[i])
-                y_sep = float(y[i])
-                break
+        threshold = criterion_pressure(M_local)
+        if p_local <= threshold:
+            separated = True
+            x_sep = float(x[i])
+            y_sep = float(y[i])
+            onset_threshold = float(threshold)
+            break
 
-    margin = Pe / p_sep if p_sep > 0 else float('inf')
+    p_sep = onset_threshold if onset_threshold is not None else p_sep_exit
+    margin = Pe / p_sep_exit if p_sep_exit > 0 else float('inf')
 
     return {
         'separated': separated,
         'method': method,
         'p_sep': p_sep,
+        'exit_criterion_pressure': p_sep_exit,
+        'onset_criterion_pressure': onset_threshold,
+        'criterion_evaluated_locally': True,
         'x_sep': x_sep,
         'y_sep': y_sep,
         'margin': margin,
         'exit_pressure': Pe,
+        'expansion_model': (
+            'frozen_variable_cp_q1d'
+            if frozen_expansion is not None else 'constant_gamma'
+        ),
     }
 
 

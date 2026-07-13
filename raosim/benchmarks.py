@@ -9,6 +9,7 @@ strict pass/fail checks from diagnostic xfail/report-only physics gaps.
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
 from collections.abc import Sequence
@@ -32,19 +33,37 @@ from raosim.nozzle_geometry import (
 
 
 DATA_ROOT = Path(__file__).with_name("benchmark_data")
+REPO_ROOT = Path(__file__).resolve().parent.parent
 CASES_DIR = DATA_ROOT / "cases"
 CURVES_DIR = DATA_ROOT / "curves"
 DEFAULT_REPORT_DIR = Path(__file__).resolve().parent.parent / "builds" / "benchmarks"
 
 _VALID_METHODS = {"bezier", "moc", "rao"}
-_VALID_MODES = {"strict", "xfail", "report"}
+_VALID_MODES = {"strict", "xfail", "report", "unsupported"}
 
 
 def list_benchmark_cases() -> list[str]:
-    """Return available benchmark case ids."""
+    """Return available *nozzle* benchmark case ids.
+
+    Other physics packages share ``benchmark_data/cases`` for packaging, but
+    their manifests carry ``benchmark_kind`` and must be loaded by their own
+    validator.  Legacy nozzle manifests omit the field; that remains
+    equivalent to ``benchmark_kind='nozzle'``.
+    """
     if not CASES_DIR.exists():
         return []
-    return sorted(path.stem for path in CASES_DIR.glob("*.json"))
+    cases: list[str] = []
+    for path in CASES_DIR.glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            # Retain malformed manifests so the normal loader reports the
+            # actionable parse/schema error instead of hiding the file.
+            cases.append(path.stem)
+            continue
+        if payload.get("benchmark_kind", "nozzle") == "nozzle":
+            cases.append(path.stem)
+    return sorted(cases)
 
 
 def load_benchmark_case(case_id: str) -> dict[str, Any]:
@@ -55,6 +74,12 @@ def load_benchmark_case(case_id: str) -> dict[str, Any]:
         raise ValueError(f"Unknown benchmark case '{case_id}'. Available: {available}")
 
     case = json.loads(path.read_text(encoding="utf-8"))
+    kind = case.get("benchmark_kind", "nozzle")
+    if kind != "nozzle":
+        raise ValueError(
+            f"Benchmark case '{case_id}' has kind {kind!r}, not 'nozzle'; "
+            "use the owning subsystem benchmark loader"
+        )
     _validate_case(case, path)
     return case
 
@@ -88,6 +113,29 @@ def run_benchmark(
         raise ValueError("method must be one of: bezier, moc, rao")
 
     case = load_benchmark_case(case_id)
+    if case.get("status_policy", {}).get(method) == "unsupported":
+        result = {
+            "case_id": case["case_id"],
+            "title": case["title"],
+            "method": method,
+            "source": case["source"],
+            "status_policy": case.get("status_policy", {}),
+            "overall_status": "unsupported",
+            "metrics": [_message_metric(
+                "capability", "method_applicability", False, "unsupported",
+                case.get("source", {}).get("citation", ""),
+                case.get("unsupported_reasons", {}).get(
+                    method,
+                    "The requested solver and published configuration do not "
+                    "share a compatible physical/modeling domain.",
+                ),
+            )],
+            "physics_gaps": case.get("expected_physics_gaps", []),
+            "contour_design_status": "not_run_incompatible_case",
+            "warnings": [],
+        }
+        _write_reports(result, report_path)
+        return result
     contour = _build_contour(case, method)
 
     metrics = []
@@ -202,7 +250,16 @@ def compare_performance_to_reference(
     metrics = []
     for entry in entries:
         pa_pc = float(entry.get("pa_over_pc", 0.0))
-        cf = thrust_coefficient(Me, gamma, pe_pc, pa_pc, epsilon)
+        prediction = str(entry.get("prediction", "quasi_1d"))
+        if prediction == "solver_full_cde":
+            cf = contour.get("thrust_coefficient")
+            message = (
+                "Computed by direct integration of the current BVP's full "
+                "Rao C-D-E control surface."
+            )
+        else:
+            cf = thrust_coefficient(Me, gamma, pe_pc, pa_pc, epsilon)
+            message = "Computed with current 1-D inviscid thrust coefficient model."
         mode = _mode_for_metric(case_dict, method_name, entry.get("mode", "report"))
         metrics.append(_numeric_metric(
             "performance",
@@ -212,7 +269,7 @@ def compare_performance_to_reference(
             entry.get("tolerance"),
             mode,
             entry.get("source_ref", ""),
-            message="Computed with current 1-D inviscid thrust coefficient model.",
+            message=message,
         ))
     return metrics
 
@@ -243,12 +300,56 @@ def _build_contour(case: dict[str, Any], method: str) -> dict[str, Any]:
         )
 
     if method == "rao":
-        from raosim.rao_variational import rao_variational_contour
+        # The benchmark runner must exercise the current finite-dimensional
+        # BVP, not the retained pre-BVP ``solve_optimal_control_surface``
+        # prototype.  Translate the old manifest option names so existing
+        # report-only cases remain runnable.
+        from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
 
         opts = dict(case.get("solver_options", {}).get("rao", {}))
-        return rao_variational_contour(
-            Rt, epsilon, gamma=gamma, length_pct=length_pct, **opts
+        n_control = int(opts.pop("n_control", opts.pop("n_ce_pts", 12)))
+        n_kernel = int(opts.pop("n_kernel", opts.pop("n_char", 12)))
+        max_nfev = int(opts.pop("max_nfev", opts.pop("max_iter", 200)))
+        residual_tol = float(opts.pop("residual_tol", 5e-3))
+        evaluate_moc = bool(opts.pop("evaluate_moc", True))
+        wall_method = str(opts.pop("wall_method", "bde"))
+        solver_backend = str(opts.pop("solver_backend", "numpy"))
+        starting_line_method = str(
+            opts.pop("starting_line_method", "kliegel_levine")
         )
+        if opts:
+            unknown = ", ".join(sorted(opts))
+            raise ValueError(f"Unknown current-BVP benchmark options: {unknown}")
+        solution = solve_rao_bvp(RaoSolverConfig(
+            Rt=Rt,
+            epsilon=epsilon,
+            gamma=gamma,
+            pa_over_p0=float(inputs.get("Pa", 0.0)) / max(
+                float(inputs.get("Pc", 1.0)), 1e-30,
+            ),
+            length_pct=length_pct,
+            n_control=n_control,
+            n_kernel=n_kernel,
+            max_nfev=max_nfev,
+            residual_tol=residual_tol,
+            evaluate_moc=evaluate_moc,
+            wall_method=wall_method,
+            solver_backend=solver_backend,
+            starting_line_method=starting_line_method,
+        ))
+        contour = solution.to_contour_dict(
+            Rt=Rt,
+            epsilon=epsilon,
+            length_pct=length_pct,
+            pa_over_p0=float(inputs.get("Pa", 0.0)) / max(
+                float(inputs.get("Pc", 1.0)), 1e-30,
+            ),
+        )
+        contour["method"] = "rao"
+        contour["benchmark_solver"] = "solve_rao_bvp"
+        contour["exit_M_mean"] = float(solution.control_surface.M[-1])
+        contour["design_status"] = solution.reliability.value
+        return contour
 
     raise ValueError(f"Unsupported benchmark method '{method}'")
 
@@ -487,6 +588,18 @@ def _validate_case(case: dict[str, Any], path: Path) -> None:
     for method, mode in case.get("status_policy", {}).items():
         if method not in _VALID_METHODS or mode not in _VALID_MODES:
             raise ValueError(f"{path.name}: invalid status policy {method}={mode}")
+    source = case.get("source", {})
+    if source.get("local_path"):
+        source_path = REPO_ROOT / str(source["local_path"])
+        if not source_path.is_file():
+            raise ValueError(f"{path.name}: missing local source {source_path}")
+        expected_sha = source.get("sha256")
+        if expected_sha:
+            actual_sha = hashlib.sha256(source_path.read_bytes()).hexdigest()
+            if actual_sha != str(expected_sha):
+                raise ValueError(
+                    f"{path.name}: local source SHA-256 mismatch for {source_path}"
+                )
     for curve in case.get("reference", {}).get("curves", []):
         curve_path = DATA_ROOT / curve["path"]
         if not curve_path.exists():
@@ -523,6 +636,8 @@ def _mode_for_metric(case: dict[str, Any], method: str, requested: str) -> str:
     if requested not in _VALID_MODES:
         requested = "report"
     policy = case.get("status_policy", {}).get(method, "report")
+    if policy == "unsupported" or requested == "unsupported":
+        return "unsupported"
     if requested == "report" or policy == "report":
         return "report"
     if policy == "xfail" or requested == "xfail":
@@ -588,6 +703,8 @@ def _message_metric(
 def _metric_status(passed: bool, mode: str) -> str:
     if mode == "report":
         return "report"
+    if mode == "unsupported":
+        return "unsupported"
     if mode == "xfail":
         return "xpass" if passed else "xfail"
     return "pass" if passed else "fail"
@@ -601,6 +718,10 @@ def _overall_status(metrics: list[dict[str, Any]]) -> str:
         return "xfail"
     if "xpass" in statuses:
         return "xpass"
+    if "unsupported" in statuses and not any(
+        status in {"pass", "fail", "xfail", "xpass"} for status in statuses
+    ):
+        return "unsupported"
     if "pass" in statuses:
         return "pass"
     return "report"
@@ -742,9 +863,9 @@ def _json_ready(value: Any) -> Any:
 #
 # Historical gates (REWRITE_PLAN.md Phase 7): RMS < 1.5 deg / max <
 # 3.0 deg "plan target", 3 / 6 deg "release" — both defined when the
-# columns were chart-circular.  ``test_rao_chart_benchmark_plan_targets``
-# keeps the plan-target gate as an xfail record; the live full-grid
-# test asserts completion + physical-band sanity and *records* the
+# columns were chart-circular.  The test suite now records that target as an
+# explicit negative-applicability regression; the live full-grid test asserts
+# completion + physical-band sanity and *records* the
 # deltas.  See tests/test_rao_chart_benchmark.py.
 
 

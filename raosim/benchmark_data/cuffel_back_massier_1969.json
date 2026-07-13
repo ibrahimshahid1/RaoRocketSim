@@ -1,0 +1,30 @@
+{
+  "source": {
+    "citation": "Cuffel, R. F., Back, L. H., and Massier, P. F., Transonic Flowfield in a Supersonic Nozzle with Small Throat Radius of Curvature, AIAA Journal 7(7), 1969, pp. 1364-1366, DOI 10.2514/3.5349.",
+    "ntrs_id": "19690063911",
+    "ntrs_url": "https://ntrs.nasa.gov/citations/19690063911",
+    "evidence_location": "NTRS abstract",
+    "quality": "rounded narrative anchors; not a digitized pointwise dataset"
+  },
+  "configuration": {
+    "gamma": 1.4,
+    "curvature_radius_over_throat_radius": 0.625,
+    "station": "physical throat"
+  },
+  "anchors": [
+    {
+      "location": "axis",
+      "r_over_rt": 0.0,
+      "mach": 0.8,
+      "absolute_tolerance": 0.03,
+      "mode": "strict"
+    },
+    {
+      "location": "near_wall",
+      "r_over_rt": 1.0,
+      "mach": 1.4,
+      "absolute_tolerance": 0.2,
+      "mode": "rounded_evidence_band"
+    }
+  ]
+}

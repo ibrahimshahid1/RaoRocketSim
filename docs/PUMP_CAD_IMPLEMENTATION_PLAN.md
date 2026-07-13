@@ -1,5 +1,18 @@
 # Pump CAD implementation plan — 2026-07-02
 
+> **STATUS 2026-07-12 — coupled hydraulic/mechanical and split-casing
+> remediation landed.** The shaft, bore fit, root wall, eye/hub annulus,
+> blade blockage, net phi1/phi2, beta1, b2, and pump power now converge
+> upstream. The B-rep uses tapered main blades plus downstream splitters and
+> is forbidden from enlarging either hub. The volute operating geometry is a
+> rear body plus removable front cover split through the scroll centerplane,
+> with a keyhole gasket land, body/outlet-neck bolt bores, dowels, pressure
+> clamp/tool/access/volume/interference gates, and separate STEP re-imports.
+> The legacy STL remains schematic. This closes the old geometry consistency
+> and trapped-scroll findings, not bearings/seals/shaft retention,
+> rotordynamics, selected joint hardware, tolerance/thermal closure, proof,
+> cold-flow qualification, or measured maps.
+
 > **STATUS 2026-07-02 (latest) — Phases 2 (items 1–4) and 3 landed; plan
 > complete except the deferred default-flip and optional NURBS.**
 > (2.2) SP-8052 inducer blade angles: α/β = 0.425 transcribed from §3.1.9

@@ -1,5 +1,12 @@
 # Legacy Code Audit
 
+> **Historical development snapshot.** The coverage/gap list below records an
+> earlier stage of the NASA/JHU port and is not the current capability status.
+> See
+> [`PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md`](PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md)
+> and [`nasa_tt_prime_provenance.md`](nasa_tt_prime_provenance.md) for the
+> current source-port, benchmark, and provenance boundaries.
+
 This audit covers the NASA/JHU `MOC_Grid_BDE` code that is being ported into
 `raosim.nasa_moc` and compared through `raosim.legacy_io`.
 

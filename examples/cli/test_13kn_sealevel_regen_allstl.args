@@ -71,16 +71,33 @@
 
 # Pintle injector and electric pump feed package.
 --injector pintle
+--pintle-radial-stream fuel
 --pintle-radial-exit holes
+--pintle-slot-count 24
+--pintle-target-momentum-ratio 0.52
 --electric-pump
 --fuel-tank-pressure 500000
 --oxidizer-tank-pressure 600000
+# Feed ledger availability for the 13 kN, Pc=3 MPa sea-level point.
+# Fast-probe cycle flow is ~1.595 kg/s RP-1 and ~3.620 kg/s LOX; capacities
+# below carry ~20% margin. Required outlet pressure is ~42.8 bar fuel
+# including regen and ~37.2 bar LOX before the control margin, so the supply
+# pressures retain several bar of positive feed_pump_pressure margin.
+--fuel-supply-pressure 5000000
+--oxidizer-supply-pressure 4500000
+--fuel-flow-capacity 1.95
+--oxidizer-flow-capacity 4.40
+--fuel-npsh-required 100000
+--oxidizer-npsh-required 100000
 --fuel-injector-dp-fraction 0.20
 --oxidizer-injector-dp-fraction 0.20
 --fuel-line-loss-fraction 0.02
 --oxidizer-line-loss-fraction 0.02
 --fuel-manifold-loss-fraction 0.02
 --oxidizer-manifold-loss-fraction 0.02
+--fuel-control-margin-fraction 0.05
+--oxidizer-control-margin-fraction 0.05
+--throttle-map 0.5,0.75,1.0
 --pump-max-rpm 120000
 --burn-time 12
 

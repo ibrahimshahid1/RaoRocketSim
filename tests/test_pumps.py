@@ -184,6 +184,18 @@ def test_cad_dimensions_come_from_reference_geometry():
     assert geom_from_dict["components"] == geom["components"]
 
 
+def test_pump_mount_pressure_screen_survives_json_shape_roundtrip():
+    from raosim.engine_cad import pump_mount_flange_screen
+
+    pump = _pump_result()
+    object_screen = pump_mount_flange_screen(pump)
+    dict_screen = pump_mount_flange_screen(pump.to_dict())
+
+    assert set(dict_screen) == set(object_screen) == {"fuel", "oxidizer"}
+    for role in object_screen:
+        assert dict_screen[role] == object_screen[role]
+
+
 def test_unsized_line_keeps_honest_not_sized_status(tmp_path):
     pump = _pump_result(oxidizer_tank_pressure=None)
     geom = pump_reference_geometry(pump)
@@ -393,9 +405,102 @@ class TestMeridionalChannel:
             assert ch["cm_ratio"] == pytest.approx(cm2 / cm1, rel=1e-12)
             expected = "pass" if 1.0 <= ch["cm_ratio"] <= 1.5 else "warn"
             assert ch["cm_ratio_status"] == expected
-            assert ch["area_progression_contracting"] == (
-                ch["cm_ratio"] >= 1.0 or ch["area_progression_contracting"]
+            profile = ch["effective_area_profile_m2"]
+            expected_contracting = all(
+                b <= a * (1.0 + 1e-9)
+                for a, b in zip(profile, profile[1:])
             )
+            assert ch["area_progression_contracting"] == expected_contracting
+
+    def test_annular_eye_velocity_triangle_and_blockage_close(self):
+        pump = _pump_result()
+        for line in pump.lines.values():
+            imp = line.impeller
+            tri = line.hydraulic_meanline.velocity_triangle
+            ch = line.reference_geometry.meridional_channel
+            eye = ch["eye_solve"]
+            assert line.volumetric_flow == pytest.approx(
+                ch["effective_inlet_area_m2"]
+                * ch["inlet_meridional_velocity_m_s"], rel=1e-11
+            )
+            assert tri.inlet_meridional_velocity == pytest.approx(
+                ch["inlet_meridional_velocity_m_s"], rel=1e-12
+            )
+            assert eye["inlet_flow_coefficient"] == pytest.approx(
+                eye["target_inlet_flow_coefficient"], rel=1e-10
+            )
+            assert imp.inlet_blockage_fraction <= 0.20
+            assert imp.exit_blockage_fraction <= 0.15 + 1e-12
+            assert imp.inlet_blade_count + imp.splitter_blade_count == imp.blade_count
+            assert imp.blade_count % imp.inlet_blade_count == 0
+
+    def test_beta1_is_converged_metal_angle_not_legacy_placeholder(self):
+        pump = _pump_result()
+        geom = pump_reference_geometry(pump)
+        for role, line in pump.lines.items():
+            tri = line.hydraulic_meanline.velocity_triangle
+            comp = geom["components"][role]["impeller"]
+            assert tri.inlet_incidence_deg == pytest.approx(0.0, abs=1e-15)
+            assert line.impeller.inlet_blade_angle_deg == pytest.approx(
+                tri.inlet_blade_metal_angle_deg, rel=1e-12
+            )
+            assert comp["inlet_blade_angle_deg"] == pytest.approx(
+                tri.inlet_blade_metal_angle_deg, rel=1e-12
+            )
+            assert comp["legacy_screening_inlet_angle_deg"] != pytest.approx(
+                tri.inlet_blade_metal_angle_deg
+            )
+
+    def test_shaft_fit_is_upstream_of_cad(self):
+        pump = _pump_result()
+        for line in pump.lines.values():
+            ch = line.reference_geometry.meridional_channel
+            shaft_r = 0.5 * line.reference_geometry.shaft_datum["diameter_m"]
+            required = (
+                shaft_r + ch["shaft_fit_radial_clearance_m"]
+                + ch["impeller_hub_wall_thickness_m"]
+            )
+            assert ch["eye_hub_radius_m"] >= required - 1e-12
+
+    def test_impossible_blade_thickness_is_rejected(self):
+        from raosim.pumps import PumpSizingSpec
+        with pytest.raises(ValueError, match="free-area gate"):
+            _pump_result_with_spec(PumpSizingSpec(blade_thickness_ratio=0.04))
+
+    def test_blade_root_stress_closes_back_into_thickness_and_free_area(self):
+        from raosim.pumps import PumpSizingSpec
+
+        pump = _pump_result_with_spec(PumpSizingSpec(
+            rotor_yield_strength=100.0e6,
+            structural_fos=2.0,
+        ))
+        assert pump.feasibility.feasible
+        for line in pump.lines.values():
+            imp = line.impeller
+            margin = line.thermal_stress.margins["blade_root_bending"]
+            assert imp.blade_thickness_source == "blade_root_structural_closure"
+            assert imp.blade_thickness >= (
+                imp.blade_root_structural_minimum_thickness
+                * (1.0 - 2.0e-9)
+            )
+            assert margin >= 1.0
+            assert imp.exit_blockage_fraction <= 0.15 + 1.0e-12
+
+    def test_fixed_rpm_reports_when_structural_root_cannot_fit_free_area(self):
+        from raosim.pumps import ElectricDriveSpec, PumpSizingSpec
+
+        pump = _pump_result_with_spec(PumpSizingSpec(
+            drive=ElectricDriveSpec(rpm=100_000.0),
+            rotor_yield_strength=100.0e6,
+            structural_fos=2.0,
+        ))
+        assert not pump.feasibility.feasible
+        failed = {
+            gate.name for gate in pump.feasibility.gates
+            if gate.status == "fail"
+        }
+        assert "impeller_exit_free_area_fuel" in failed
+        assert "impeller_exit_free_area_oxidizer" in failed
 
     def test_channel_reaches_cad_manifest(self):
         pump = _pump_result()

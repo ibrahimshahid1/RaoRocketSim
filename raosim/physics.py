@@ -419,12 +419,42 @@ def hydraulic_diameter(width: float, height: float) -> float:
     return 2.0 * w * h / (w + h)
 
 
+def rectangular_duct_laminar_nusselt(aspect_ratio):
+    """Fully-developed laminar ``Nu`` for a rectangular duct.
+
+    The Shah-London all-walls-uniform-heat-flux polynomial is expressed in
+    terms of ``alpha = min(width, height) / max(width, height)``::
+
+        Nu = 8.235 (1 - 2.0421 a + 3.0853 a^2 - 2.4765 a^3
+                    + 1.0578 a^4 - 0.1861 a^5)
+
+    It approaches 8.235 for parallel plates and approximately 3.61 for a
+    square duct.  Entrance effects and unequal wall heating still require a
+    higher-fidelity model, but this avoids applying the circular-pipe value
+    4.36 to the rectangular regenerative channels.
+    """
+
+    alpha = np.asarray(aspect_ratio, dtype=float)
+    if np.any(~np.isfinite(alpha)) or np.any(alpha <= 0.0) or np.any(alpha > 1.0):
+        raise ValueError("aspect_ratio must be finite and in (0, 1]")
+    poly = (
+        1.0
+        - 2.0421 * alpha
+        + 3.0853 * alpha**2
+        - 2.4765 * alpha**3
+        + 1.0578 * alpha**4
+        - 0.1861 * alpha**5
+    )
+    result = 8.235 * poly
+    return float(result) if result.ndim == 0 else result
+
+
 def sieder_tate_coefficient(
     mass_flux, D_h: float, props: dict[str, float],
-    *, mu_bulk, mu_wall,
+    *, mu_bulk, mu_wall, rectangular_aspect_ratio: float | None = None,
 ):
     """Coolant-side film coefficient h_c [W/(m²·K)] from Sieder-Tate
-    turbulent forced convection, with a circular-duct laminar proxy::
+    turbulent forced convection, with a geometry-aware laminar branch::
 
         Nu = h_c D_h / k = 0.027 · Re^0.8 · Pr^(1/3) · (μ_b/μ_w)^0.14
 
@@ -446,10 +476,15 @@ def sieder_tate_coefficient(
         * np.power(np.maximum(Pr, 1e-6), 1.0 / 3.0)
         * np.power(mu_b / np.maximum(mu_w, 1e-12), 0.14)
     )
-    # Fully developed circular duct under uniform heat flux. Rectangular-duct
-    # Nu depends on aspect ratio and which walls are heated, so this is only a
-    # bounded fallback; do not extrapolate turbulent Sieder-Tate to Re=1.
-    Nu = np.where(Re < 2300.0, 4.36, Nu_turbulent)
+    if rectangular_aspect_ratio is None:
+        # Backward-compatible circular-duct API.  Actual rectangular regen
+        # calls pass their aspect ratio explicitly below.
+        Nu_laminar = 4.36
+    else:
+        Nu_laminar = rectangular_duct_laminar_nusselt(
+            rectangular_aspect_ratio
+        )
+    Nu = np.where(Re < 2300.0, Nu_laminar, Nu_turbulent)
     return Nu * k / np.maximum(D_h, 1e-12)
 
 
@@ -807,16 +842,25 @@ def regenerative_cooling_analysis(
         film_props = dict(cprops)
         film_props["cp"] = cp_profile
         film_props["k"] = k_cool_profile
-        h_c_straight = sieder_tate_coefficient(G, D_h, film_props,
-                                               mu_bulk=mu_b, mu_wall=mu_w)
+        rectangular_aspect_ratio = (
+            np.minimum(w_arr, h_arr) / np.maximum(w_arr, h_arr)
+        )
+        h_c_straight = sieder_tate_coefficient(
+            G,
+            D_h,
+            film_props,
+            mu_bulk=mu_b,
+            mu_wall=mu_w,
+            rectangular_aspect_ratio=rectangular_aspect_ratio,
+        )
         # Level-1 geometry: optional exploratory curvature multiplier, then
         # the literature-standard fin (land) area correction.
         Re_cool = G * D_h / np.maximum(mu_b, 1e-12)
         if np.any(Re_cool < 2300.0):
             msg = (
-                "Laminar coolant stations use the Nu=4.36 circular-duct "
-                "uniform-heat-flux proxy; rectangular aspect ratio, heated-"
-                "wall configuration, and entrance effects are unresolved."
+                "Laminar coolant stations use the fully-developed rectangular-"
+                "duct all-walls-uniform-heat-flux correlation; unequal wall "
+                "heating and entrance effects remain unresolved."
             )
             if msg not in warnings:
                 warnings.append(msg)
@@ -1253,7 +1297,7 @@ def regenerative_cooling_analysis(
         ),
         "gas_radiation_detail": radiation_detail,
         "coolant_heat_transfer_correlation":
-            "sieder_tate_turbulent_with_Nu_4p36_circular_duct_laminar_proxy",
+            "sieder_tate_turbulent_with_shah_london_rectangular_laminar_branch",
         "warnings": warnings,
     }
 
@@ -1769,8 +1813,15 @@ def regenerative_cooling_screen(
     D_h = hydraulic_diameter(w, h)
     G = (mdot / max(N, 1)) / A_ch
     mu_b = coolant_viscosity(cprops, coolant_inlet)
-    h_c = float(sieder_tate_coefficient(G, D_h, cprops,
-                                        mu_bulk=mu_b, mu_wall=mu_b))
+    aspect_ratio = min(w, h) / max(w, h, 1e-12)
+    h_c = float(sieder_tate_coefficient(
+        G,
+        D_h,
+        cprops,
+        mu_bulk=mu_b,
+        mu_wall=mu_b,
+        rectangular_aspect_ratio=aspect_ratio,
+    ))
 
     x = np.asarray(contour["x"], dtype=float)
     y = np.asarray(contour["y"], dtype=float)

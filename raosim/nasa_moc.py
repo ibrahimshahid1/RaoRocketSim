@@ -213,6 +213,43 @@ class RaoSourceContour:
     diagnostics: dict = field(default_factory=dict)
 
 
+@dataclass(frozen=True)
+class FullControlSurfaceResult:
+    """Thrust audit for Rao's complete ``C-D-E`` control surface.
+
+    ``DE`` alone carries only the mass selected between B and D.  Rao's
+    momentum balance (1958, eqs. 1--2 and fig. 1) is written on the complete
+    surface from the symmetry-axis point C, through D, to the wall point E.
+    ``CD`` is recovered from the actual kernel connectivity; no mass-fraction
+    scaling of an ideal thrust coefficient is used.
+    """
+
+    CD: tuple[FlowNode, ...]
+    CDE: tuple[FlowNode, ...]
+    cf_cd: float
+    cf_de: float
+    cf_cde: float
+    mass_flux_cd: float
+    mass_flux_de: float
+    mass_flux_cde: float
+    kernel_throat_mass_flux: float
+    mass_residual_rel: float
+    d_projection_distance: float
+    d_state_mach_jump: float
+    d_state_theta_jump: float
+    d_projection_tol_over_rt: float
+    d_mach_jump_tol: float
+    d_theta_jump_tol: float
+    mass_residual_rel_tol: float
+    complete: bool
+
+
+FULL_CONTROL_D_PROJECTION_TOL_OVER_RT = 5.0e-3
+FULL_CONTROL_D_MACH_JUMP_TOL = 2.0e-2
+FULL_CONTROL_D_THETA_JUMP_TOL = math.radians(0.5)
+FULL_CONTROL_MASS_RESIDUAL_REL_TOL = 2.0e-2
+
+
 # ----------------------------------------------------------------------
 #  Throat-arc wall (downstream curvature)
 # ----------------------------------------------------------------------
@@ -466,10 +503,11 @@ def _visible_source_kl_throat(
         - (4 * G + 15) * y * y / 24.0
         + (10 * G + 57) / 288.0
         + z * (y * y - 0.0)  # C++ ``z*(y*y - 5/8)``: INTEGER division, 5/8 == 0.
-        #                      The binary that generated outputs_M3.5Perf ran
-        #                      with the term dropped; transcribing it as 0.625
-        #                      made this "visible source" port diverge from the
-        #                      fixtures (TT' axis M 1.293 vs the binary's 1.500)
+        #                      The explicit compatibility mode reproduces the
+        #                      checked-in outputs_M3.5Perf with the term dropped;
+        #                      transcribing it as 0.625 made this source-visible
+        #                      port diverge from the overlay (TT' axis M 1.293
+        #                      vs the fixture's 1.500)
         #                      and broke the RRC march that consumes the line.
         #                      Hall/Kliegel-Levine theory *does* carry y^2-5/8
         #                      (Hall 1962 u2; Zucrow & Hoffman V2 Ch.16) — the
@@ -2015,51 +2053,92 @@ def _calc_lrc_de_fixed_end(
             f"exit radius {r_E:.6g}; lower theta_B"
         )
 
-    # Walk D inward along grid nodes while the residual stays negative.
+    # Walk D inward along grid nodes and retain every finite sign-changing
+    # interval.  ``find_point_e`` is adaptive; on coarse/folded BD rows an
+    # isolated trial can take a different integration branch and produce a
+    # very large, non-physical radius jump.  Accepting the first sign change
+    # then brackets that discontinuity instead of the nearby smooth
+    # fixed-end root.  Select the interval whose endpoints are closest to
+    # zero, the discrete analogue of NASA's local secant walk.
     prev_frac = node_fracs[0]
     prev_err = err_b
-    bracket = None
+    brackets: list[tuple[float, float, float, float]] = []
     for i in range(1, len(bd_rrc)):
         frac_i = node_fracs[i]
         err_i, *_ = evaluate(frac_i)
-        if math.isnan(err_i):
-            prev_frac, prev_err = frac_i, err_i
+        if not math.isfinite(err_i):
             continue
-        if not math.isnan(prev_err) and prev_err < 0.0 <= err_i:
-            bracket = (prev_frac, prev_err, frac_i, err_i)
-            break
+        if math.isfinite(prev_err) and prev_err * err_i <= 0.0:
+            brackets.append((prev_frac, prev_err, frac_i, err_i))
         prev_frac, prev_err = frac_i, err_i
-    if bracket is None:
+    if not brackets:
         raise ThetaBTooLow(
             f"no D along BD reaches the target exit radius {r_E:.6g} "
             f"(deepest r_E error {prev_err:.3g}); raise theta_B"
         )
+    bracket = min(
+        brackets,
+        key=lambda values: (
+            max(abs(values[1]), abs(values[3])),
+            abs(values[1]) + abs(values[3]),
+            values[2] - values[0],
+        ),
+    )
 
-    x0, err0, x1, err1 = bracket
-    packed = evaluate(x1)
-    last_packed = packed
-    err1 = packed[0]
-    for _ in range(50):
-        if abs(err1) <= 1e-7:
+    # Keep the sign-changing bracket.  The former unbracketed secant update
+    # replaced the negative endpoint with the positive endpoint after the
+    # first iteration; for the M3.5 reference it then returned an E radius
+    # about 0.3 % short while reporting the result as the fixed-end solution.
+    # A safeguarded regula-falsi/bisection is inexpensive relative to the DE
+    # integration and preserves NASA's stated fixed-end contract.
+    lo, err_lo, hi, err_hi = bracket
+    packed_lo = evaluate(lo)
+    packed_hi = evaluate(hi)
+    err_lo = float(packed_lo[0])
+    err_hi = float(packed_hi[0])
+    last_frac = lo if abs(err_lo) <= abs(err_hi) else hi
+    last_packed = packed_lo if abs(err_lo) <= abs(err_hi) else packed_hi
+    for _ in range(60):
+        if abs(float(last_packed[0])) <= 1e-7:
             break
-        if math.isnan(err0) or math.isnan(err1) or err0 == err1:
+        if not (math.isfinite(err_lo) and math.isfinite(err_hi)):
             break
-        x2 = x1 - err1 * (x1 - x0) / (err1 - err0)
-        x2 = max(0.0, min(x2, 1.0))
-        packed = evaluate(x2)
-        err2 = packed[0]
-        if math.isnan(err2):
-            x2 = 0.5 * (x0 + x1)
-            packed = evaluate(x2)
-            err2 = packed[0]
-        last_packed = packed
-        x0, err0 = x1, err1
-        x1, err1 = x2, err2
+        denom = err_hi - err_lo
+        frac = (
+            hi - err_hi * (hi - lo) / denom
+            if abs(denom) > 1e-15 else 0.5 * (lo + hi)
+        )
+        # Regula falsi can pin one endpoint on a strongly curved residual;
+        # force a bisection whenever it hugs either edge of the bracket.
+        width = hi - lo
+        if (
+            not math.isfinite(frac)
+            or frac <= lo + 0.05 * width
+            or frac >= hi - 0.05 * width
+        ):
+            frac = 0.5 * (lo + hi)
+        packed = evaluate(frac)
+        err = float(packed[0])
+        if not math.isfinite(err):
+            frac = 0.5 * (lo + hi)
+            packed = evaluate(frac)
+            err = float(packed[0])
+        if not math.isfinite(err):
+            break
+        if abs(err) < abs(float(last_packed[0])):
+            last_frac = frac
+            last_packed = packed
+        if err_lo * err <= 0.0:
+            hi, err_hi, packed_hi = frac, err, packed
+        else:
+            lo, err_lo, packed_lo = frac, err, packed
+        if hi - lo <= 1e-10:
+            break
 
     residual_final, mass_BD_final, D_final, de_nodes, mass_DE_final, _ = last_packed
     de_flow_nodes = tuple(node.to_flow_node() for node in de_nodes)
     cf = surface_thrust_coefficient(de_nodes, gamma, Rt, pa_over_p0)
-    d_arc = _arc_position_of_D(bd_rrc, D_final.x)
+    d_arc = float(last_frac)
     theta_control = float(np.mean([node.theta for node in de_nodes]))
     return RaoTopology(
         B=bd_rrc[0].to_flow_node(),
@@ -2811,6 +2890,7 @@ def build_source_contour_from_kernel(
         epsilon=float(epsilon),
         pa_over_p0=float(pa_over_p0),
         n_points=int(n_de_points),
+        end_condition="fixed_end",
     )
     bfe = calc_bde_region(kernel, topology)
     kernel_wall = tuple(
@@ -2839,7 +2919,7 @@ def build_source_contour_from_kernel(
     )
     diagnostics = {
         "canonical_reference_track": "visible_source_port",
-        "stage": "kernel_lrc_de_bde_remaining_wall",
+        "stage": "kernel_fixed_end_lrc_de_bde_remaining_wall",
         "source_contour_complete": source_contour_complete,
         "kernel_fallback_used": bool(kernel.fallback_used),
         "kernel_reached_wall": bool(kernel.reached_wall),
@@ -2858,7 +2938,7 @@ def build_source_contour_from_kernel(
         "length_closed": length_closed,
         "exit_rel_tol": float(exit_rel_tol),
         "crop_nozzle_to_length": "not_ported",
-        "outer_theta_b_driver": "not_canonical",
+        "outer_theta_b_driver": "fixed_kernel_input",
         "nasa_reference_matched_eligible": False,
     }
     return RaoSourceContour(
@@ -3021,6 +3101,169 @@ def _flow_node_seq(nodes: Iterable) -> list[FlowNode]:
                                 M=max(float(n.M), 1.000001),
                                 theta=float(n.theta)))
     return out
+
+
+def _interpolate_kernel_row_index(
+    row: list[MOCNode], fractional_index: float,
+) -> MOCNode:
+    """Interpolate one wall-first kernel row by fractional grid index."""
+    if not row:
+        raise ValueError("kernel row is empty")
+    q = float(np.clip(fractional_index, 0.0, len(row) - 1.0))
+    if q >= len(row) - 1:
+        return row[-1]
+    i = int(math.floor(q))
+    t = q - i
+    return _interp_moc_node(row[i], row[i + 1], t)
+
+
+def _project_node_to_kernel_row(
+    row: list[MOCNode], node: FlowNode,
+) -> tuple[float, MOCNode, float]:
+    """Project ``node`` onto a kernel row.
+
+    Returns fractional wall-first index, interpolated kernel state, and the
+    Euclidean x-r projection distance.
+    """
+    if len(row) < 2:
+        raise ValueError("kernel row must contain at least two nodes")
+    target = np.asarray([node.x, node.r], dtype=float)
+    best_distance = float("inf")
+    best_q = 0.0
+    for i, (p0, p1) in enumerate(zip(row[:-1], row[1:])):
+        a = np.asarray([p0.x, p0.r], dtype=float)
+        b = np.asarray([p1.x, p1.r], dtype=float)
+        ab = b - a
+        denom = float(np.dot(ab, ab))
+        t = 0.0 if denom <= 1e-24 else float(
+            np.clip(np.dot(target - a, ab) / denom, 0.0, 1.0)
+        )
+        distance = float(np.linalg.norm(target - (a + t * ab)))
+        if distance < best_distance:
+            best_distance = distance
+            best_q = float(i + t)
+    return (
+        best_q,
+        _interpolate_kernel_row_index(row, best_q),
+        best_distance,
+    )
+
+
+def trace_kernel_cd(
+    kernel: MOCKernel,
+    D: FlowNode,
+) -> tuple[tuple[FlowNode, ...], dict]:
+    """Recover Rao's kernel-side C-D characteristic from row connectivity.
+
+    During ``CalcRRCsAlongArc`` an interior point ``i`` receives its C+
+    (left-running in the present naming convention) parent from index ``i``
+    of the previous row when a special wall point enlarged the row, otherwise
+    from index ``i+1``.  Reversing that connectivity from D therefore reaches
+    the symmetry-axis point C without inventing a streamline or scaling the
+    DE result by mass fraction.
+    """
+    if not kernel.rrcs or len(kernel.rrcs[-1]) < 2:
+        raise ValueError("kernel must contain a populated final BD row")
+    q, projected_D, projection_distance = _project_node_to_kernel_row(
+        kernel.rrcs[-1], D,
+    )
+    backwards: list[FlowNode] = [FlowNode(
+        x=float(D.x), r=float(D.r), M=float(D.M), theta=float(D.theta),
+    )]
+    reached_axis = abs(float(D.r)) <= 1e-10 * max(kernel.Rt, 1.0)
+    for j in range(len(kernel.rrcs) - 1, 0, -1):
+        current = kernel.rrcs[j]
+        previous = kernel.rrcs[j - 1]
+        # A special wall insertion increases the row length by one and leaves
+        # the C+ parent index unchanged.  Otherwise the parent is i+1.
+        q = q if len(current) > len(previous) else q + 1.0
+        q = min(q, len(previous) - 1.0)
+        parent = _interpolate_kernel_row_index(previous, q)
+        backwards.append(parent.to_flow_node())
+        if q >= len(previous) - 1.0 - 1e-12:
+            reached_axis = abs(parent.r) <= 1e-8 * max(kernel.Rt, 1.0)
+            break
+
+    cd = tuple(reversed(backwards))
+    radii = np.asarray([node.r for node in cd], dtype=float)
+    monotone_radius = bool(
+        radii.size >= 2
+        and np.all(np.diff(radii) >= -1e-9 * max(kernel.Rt, 1.0))
+    )
+    diagnostics = {
+        "method": "nasa_kernel_row_connectivity",
+        "points": len(cd),
+        "reached_axis": bool(reached_axis),
+        "monotone_axis_to_d_radius": monotone_radius,
+        "d_projection_distance": float(projection_distance),
+        "d_projection_distance_over_rt": float(
+            projection_distance / max(kernel.Rt, 1e-12)
+        ),
+        "d_state_mach_jump": float(D.M - projected_D.M),
+        "d_state_theta_jump": float(D.theta - projected_D.theta),
+    }
+    return cd, diagnostics
+
+
+def full_control_surface_thrust(
+    kernel: MOCKernel,
+    de_nodes: Iterable,
+    *,
+    gamma: float,
+    Rt: float,
+    pa_over_p0: float = 0.0,
+) -> FullControlSurfaceResult:
+    """Integrate thrust and mass on the complete Rao C-D-E surface."""
+    de = tuple(_flow_node_seq(de_nodes))
+    if len(de) < 2:
+        raise ValueError("DE must contain at least two nodes")
+    cd, diag = trace_kernel_cd(kernel, de[0])
+    cde = tuple(cd) + tuple(de[1:])
+    cf_cd = surface_thrust_coefficient(cd, gamma, Rt, pa_over_p0)
+    cf_de = surface_thrust_coefficient(de, gamma, Rt, pa_over_p0)
+    cf_cde = surface_thrust_coefficient(cde, gamma, Rt, pa_over_p0)
+    mass_cd = curve_mass_flux(cd, gamma)
+    mass_de = curve_mass_flux(de, gamma)
+    mass_cde = curve_mass_flux(cde, gamma)
+    throat_mass = (
+        float(kernel.massflow[0][0])
+        if kernel.massflow and len(kernel.massflow[0]) else float("nan")
+    )
+    mass_residual_rel = (
+        (mass_cde - throat_mass) / throat_mass
+        if math.isfinite(throat_mass) and abs(throat_mass) > 1e-14
+        else float("nan")
+    )
+    projection_rel = float(
+        diag["d_projection_distance"] / max(abs(kernel.Rt), 1e-12)
+    )
+    complete = bool(
+        diag["reached_axis"]
+        and diag["monotone_axis_to_d_radius"]
+        and math.isfinite(cf_cde)
+        and cf_cde > 0.0
+        and projection_rel <= FULL_CONTROL_D_PROJECTION_TOL_OVER_RT
+        and abs(float(diag["d_state_mach_jump"])) <= FULL_CONTROL_D_MACH_JUMP_TOL
+        and abs(float(diag["d_state_theta_jump"])) <= FULL_CONTROL_D_THETA_JUMP_TOL
+        and math.isfinite(mass_residual_rel)
+        and abs(mass_residual_rel) <= FULL_CONTROL_MASS_RESIDUAL_REL_TOL
+    )
+    return FullControlSurfaceResult(
+        CD=tuple(cd), CDE=cde,
+        cf_cd=float(cf_cd), cf_de=float(cf_de), cf_cde=float(cf_cde),
+        mass_flux_cd=float(mass_cd), mass_flux_de=float(mass_de),
+        mass_flux_cde=float(mass_cde),
+        kernel_throat_mass_flux=float(throat_mass),
+        mass_residual_rel=float(mass_residual_rel),
+        d_projection_distance=float(diag["d_projection_distance"]),
+        d_state_mach_jump=float(diag["d_state_mach_jump"]),
+        d_state_theta_jump=float(diag["d_state_theta_jump"]),
+        d_projection_tol_over_rt=FULL_CONTROL_D_PROJECTION_TOL_OVER_RT,
+        d_mach_jump_tol=FULL_CONTROL_D_MACH_JUMP_TOL,
+        d_theta_jump_tol=FULL_CONTROL_D_THETA_JUMP_TOL,
+        mass_residual_rel_tol=FULL_CONTROL_MASS_RESIDUAL_REL_TOL,
+        complete=complete,
+    )
 
 
 def curve_mass_flux(nodes, gamma: float) -> float:

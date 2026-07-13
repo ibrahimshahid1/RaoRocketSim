@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "benchmark_kind": "spray",
+  "case_id": "radhakrishnan2018_water_air",
+  "title": "Radhakrishnan et al. 2018 water-air pintle spray benchmark",
+  "description": "Cold-flow movable-pintle data with experimental spray half-angle and SMD targets, plus author-reported VOF sheet thickness and WAVE constants. The experiment is a validation target; exact reproduction of the paper's complete stochastic CFD calculation is not possible from the published data alone.",
+  "dataset_revision": "atomization_and_sprays_2018_original",
+  "fluid_system": {
+    "radial_stream": "water",
+    "axial_stream": "air",
+    "nominal_temperature_k": 300.0
+  },
+  "source": {
+    "pdf": "radhakrishnan2018 (1).pdf",
+    "local_path": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+    "sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+    "doi": "10.1615/AtomizSpr.2018022652",
+    "citation": "Radhakrishnan, K., Son, M., Lee, K., and Koo, J., Lagrangian Approach to Axisymmetric Spray Simulation of Pintle Injector for Liquid Rocket Engines, Atomization and Sprays 28(5), 2018, pp. 443-458.",
+    "references": [
+      {
+        "label": "Table 1: injector geometry",
+        "pdf_page_1_based": 4,
+        "printed_page": "446",
+        "data_origin": "author_reported_geometry"
+      },
+      {
+        "label": "Table 2: experimental boundary conditions",
+        "pdf_page_1_based": 5,
+        "printed_page": "447",
+        "data_origin": "experiment_boundary_condition"
+      },
+      {
+        "label": "Table 3: VOF results and calculated WAVE constants",
+        "pdf_page_1_based": 11,
+        "printed_page": "453",
+        "data_origin": "author_simulation_and_derived_constants"
+      },
+      {
+        "label": "Figure 12 and adjacent paragraph: experimental angle and SMD with uncertainty",
+        "pdf_page_1_based": 14,
+        "printed_page": "456",
+        "data_origin": "experiment"
+      }
+    ],
+    "extraction": {
+      "method": "native_pdf_text_plus_rendered_page_visual_verification",
+      "ocr_required": false,
+      "visual_verification_pages_pdf_1_based": [14]
+    }
+  },
+  "injector_geometry": {
+    "post_diameter_mm": 8.0,
+    "center_gap_diameter_mm": 4.55,
+    "pintle_rod_diameter_mm": 3.0,
+    "pintle_tip_diameter_mm": 8.0,
+    "annular_gap_thickness_mm": 0.5,
+    "post_angle_deg": 30.0,
+    "pintle_tip_angle_deg": 40.0,
+    "pintle_tip_thickness_mm": 1.0,
+    "post_recess_length_mm": 3.0,
+    "post_thickness_mm": 0.5
+  },
+  "equation_variant": {
+    "id": "radhakrishnan2018_wave_equations_2_to_7",
+    "source_ref": "Equations 2-7, PDF pages 8-9, printed pages 450-451",
+    "wave_wavelength_second_correction_coefficient": 0.4,
+    "wave_weber_denominator_coefficient": 0.87,
+    "parent_radius_symbol": "a",
+    "published_table_sheet_thickness_symbol": "h",
+    "notes": "The paper describes the injected initial drop diameter as the sheet thickness while the WAVE state uses parent radius a. Preserve diameter/radius naming explicitly in implementations."
+  },
+  "definitions": {
+    "sheet_thickness_full_mm": "Full liquid-sheet thickness reported in Table 3; never pass this column to a radius-based equation without dividing by two.",
+    "spray_half_angle_experiment_deg": "The paper labels alpha as spray angle, but defines it between the injector axis and one spray boundary; this fixture normalizes it as a half-angle.",
+    "tmr": "Total momentum ratio as reported by the authors."
+  },
+  "data": {
+    "format": "csv",
+    "path": "curves/radhakrishnan2018_water_air.csv",
+    "row_schema": "radhakrishnan2018_water_air_v1",
+    "expected_row_count": 4
+  },
+  "units": {
+    "lopen_mm": "mm",
+    "p_liquid_bar": "bar",
+    "p_gas_bar": "bar",
+    "mdot_air_g_s": "g/s",
+    "mdot_water_g_s": "g/s",
+    "tmr": "1",
+    "sheet_thickness_full_mm": "mm",
+    "water_velocity_m_s": "m/s",
+    "wave_b0": "1",
+    "wave_b1": "1",
+    "spray_half_angle_experiment_deg": "deg",
+    "spray_half_angle_experiment_uncertainty_deg": "deg",
+    "smd_experiment_um": "um",
+    "smd_experiment_uncertainty_um": "um"
+  },
+  "column_provenance": {
+    "lopen_mm": {"data_origin": "experiment_boundary_condition", "source_ref": "Table 2"},
+    "p_liquid_bar": {"data_origin": "experiment_boundary_condition", "source_ref": "Table 2 header"},
+    "p_gas_bar": {"data_origin": "experiment_boundary_condition", "source_ref": "Table 2 header"},
+    "mdot_air_g_s": {"data_origin": "experiment_boundary_condition", "source_ref": "Table 2"},
+    "mdot_water_g_s": {"data_origin": "experiment_boundary_condition", "source_ref": "Table 2"},
+    "tmr": {"data_origin": "author_derived_from_experimental_conditions", "source_ref": "Table 2"},
+    "sheet_thickness_full_mm": {"data_origin": "author_vof_simulation", "source_ref": "Table 3"},
+    "water_velocity_m_s": {"data_origin": "author_vof_simulation", "source_ref": "Table 3"},
+    "wave_b0": {"data_origin": "author_derived_model_constant", "source_ref": "Table 3 and Equations 2-7"},
+    "wave_b1": {"data_origin": "author_derived_model_constant", "source_ref": "Table 3 and Equations 4 and 9-11"},
+    "spray_half_angle_experiment_deg": {"data_origin": "experiment", "source_ref": "Figure 12 and adjacent paragraph"},
+    "spray_half_angle_experiment_uncertainty_deg": {"data_origin": "experiment_uncertainty", "source_ref": "Paragraph below Figure 12"},
+    "smd_experiment_um": {"data_origin": "experiment", "source_ref": "Paragraph below Figure 12"},
+    "smd_experiment_uncertainty_um": {"data_origin": "experiment_uncertainty", "source_ref": "Paragraph below Figure 12"}
+  },
+  "uncertainty": {
+    "kind": "per_case_published_plus_minus",
+    "angle_column": "spray_half_angle_experiment_uncertainty_deg",
+    "smd_column": "smd_experiment_uncertainty_um"
+  },
+  "validation_policy": {
+    "role": "physical_cold_flow_validation_target",
+    "strict_component_targets": [
+      "experimental_spray_half_angle",
+      "experimental_smd"
+    ],
+    "literature_reproduction_targets": [
+      "author_vof_sheet_thickness",
+      "author_derived_wave_b0",
+      "author_derived_wave_b1"
+    ],
+    "prohibited_claims": [
+      "The published author CFD can be reproduced bit-for-bit.",
+      "Agreement with this ambient water-air case validates LOX/GCH4 or reacting spray."
+    ]
+  },
+  "readiness": {
+    "strict_end_to_end_smd_validation_ready": false,
+    "available_for": [
+      "cold_flow_experimental_target_comparison",
+      "intermediate_equation_regression",
+      "trend_validation_across_opening_distance"
+    ],
+    "missing_publication_data": [
+      "resolved carrier-gas velocity, pressure, density, and turbulence fields",
+      "complete water and air property values used by Fluent",
+      "parcel injection count/weights and raw parcel histories",
+      "stochastic-dispersion random seed and random-number stream",
+      "raw simulated per-case SMD values underlying Figure 12"
+    ]
+  }
+}

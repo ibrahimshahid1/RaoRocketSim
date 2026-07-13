@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "benchmark_kind": "spray",
+  "case_id": "radhakrishnan2021_water_air_validation",
+  "title": "Radhakrishnan, Lee, and Koo 2021 water-air Lagrangian validation case",
+  "description": "Exact water-air validation values restated in the 2021 paper. This is a distinct publication revision from the nominally similar 0.2 mm case in the 2018 paper and must not overwrite or be averaged with it.",
+  "dataset_revision": "combustion_theory_and_modelling_2021_validation_reanalysis",
+  "fluid_system": {
+    "radial_stream": "water",
+    "axial_stream": "air"
+  },
+  "source": {
+    "pdf": "radhakrishnan2021.pdf",
+    "local_path": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+    "sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+    "doi": "10.1080/13647830.2021.1937702",
+    "citation": "Radhakrishnan, K., Lee, K., and Koo, J., A detailed modelling on spray atomisation and combustion of LOX/GCH4 in variable area pintle injector, Combustion Theory and Modelling, 2021.",
+    "references": [
+      {
+        "label": "Section 2.2 and Equations 1-9: WAVE and SMD definitions",
+        "pdf_page_1_based": 9,
+        "pdf_page_end_1_based": 11,
+        "printed_page": "8-10",
+        "data_origin": "published_model_definition"
+      },
+      {
+        "label": "Water-air validation prose and calculated B0/B1",
+        "pdf_page_1_based": 15,
+        "printed_page": "14",
+        "data_origin": "experiment_and_author_simulation"
+      },
+      {
+        "label": "Table 5: water-air experiment and simulation comparison",
+        "pdf_page_1_based": 16,
+        "printed_page": "15",
+        "data_origin": "experiment_and_author_simulation"
+      }
+    ],
+    "extraction": {
+      "method": "native_pdf_text_plus_rendered_page_visual_verification",
+      "ocr_required": false,
+      "visual_verification_pages_pdf_1_based": [16]
+    }
+  },
+  "revision_relationship": {
+    "related_case_id": "radhakrishnan2018_water_air",
+    "must_remain_separate": true,
+    "published_differences_for_nominal_0p2_mm_case": {
+      "sheet_thickness_full_mm": {"2018": 0.2, "2021": 0.125},
+      "wave_b0": {"2018": 4.92, "2021": 3.059},
+      "wave_b1": {"2018": 0.989, "2021": 1.26},
+      "smd_experiment_uncertainty_um": {"2018": 3.14, "2021": 3.13}
+    }
+  },
+  "equation_variant": {
+    "id": "radhakrishnan2021_wave_equations_1_to_8",
+    "source_ref": "Equations 1-8, PDF pages 9-11, printed pages 8-10",
+    "wave_wavelength_second_correction_coefficient": 0.45,
+    "wave_weber_denominator_coefficient": 0.87,
+    "parent_radius_symbol": "h",
+    "full_sheet_thickness_relation": "sheet_thickness_full = 2*h",
+    "notes": "The validation prose says B0 and B1 were calculated using the procedure in prior works [66,67]. The paper does not provide enough intermediate values to determine whether every implementation detail was recomputed with the 2021 coefficient variant."
+  },
+  "definitions": {
+    "sheet_thickness_full_mm": "Full initial sheet thickness in Table 5. Equations 1-8 use h as half this value.",
+    "spray_half_angle_experiment_deg": "Experimental angle between the injector axis and one spray boundary.",
+    "smd_experiment_um": "Laser-diffraction experimental Sauter mean diameter.",
+    "smd_author_simulation_um": "Author's Lagrangian-simulation result, not an independent experiment."
+  },
+  "data": {
+    "format": "inline",
+    "row_schema": "radhakrishnan2021_water_air_validation_v1",
+    "expected_row_count": 1,
+    "rows": [
+      {
+        "case_id": "water_air_validation",
+        "lopen_mm": 0.2,
+        "mdot_air_g_s": 3.03,
+        "mdot_water_g_s": 22.9,
+        "sheet_thickness_full_mm": 0.125,
+        "wave_b0": 3.059,
+        "wave_b1": 1.26,
+        "spray_half_angle_experiment_deg": 24.4,
+        "spray_half_angle_author_simulation_deg": 24.1,
+        "smd_experiment_um": 108.1,
+        "smd_experiment_uncertainty_um": 3.13,
+        "smd_author_simulation_um": 113.16
+      }
+    ]
+  },
+  "units": {
+    "lopen_mm": "mm",
+    "mdot_air_g_s": "g/s",
+    "mdot_water_g_s": "g/s",
+    "sheet_thickness_full_mm": "mm",
+    "wave_b0": "1",
+    "wave_b1": "1",
+    "spray_half_angle_experiment_deg": "deg",
+    "spray_half_angle_author_simulation_deg": "deg",
+    "smd_experiment_um": "um",
+    "smd_experiment_uncertainty_um": "um",
+    "smd_author_simulation_um": "um"
+  },
+  "column_provenance": {
+    "lopen_mm": {"data_origin": "experiment_boundary_condition", "source_ref": "Validation prose and Table 5"},
+    "mdot_air_g_s": {"data_origin": "experiment_boundary_condition", "source_ref": "Validation prose"},
+    "mdot_water_g_s": {"data_origin": "experiment_boundary_condition", "source_ref": "Validation prose"},
+    "sheet_thickness_full_mm": {"data_origin": "author_vof_simulation", "source_ref": "Validation prose and Table 5"},
+    "wave_b0": {"data_origin": "author_derived_model_constant", "source_ref": "Validation prose"},
+    "wave_b1": {"data_origin": "author_derived_model_constant", "source_ref": "Validation prose"},
+    "spray_half_angle_experiment_deg": {"data_origin": "experiment", "source_ref": "Table 5"},
+    "spray_half_angle_author_simulation_deg": {"data_origin": "author_lagrangian_simulation", "source_ref": "Table 5"},
+    "smd_experiment_um": {"data_origin": "experiment", "source_ref": "Table 5"},
+    "smd_experiment_uncertainty_um": {"data_origin": "experiment_uncertainty", "source_ref": "Table 5"},
+    "smd_author_simulation_um": {"data_origin": "author_lagrangian_simulation", "source_ref": "Table 5"}
+  },
+  "uncertainty": {
+    "smd_experiment": {
+      "kind": "published_plus_minus",
+      "column": "smd_experiment_uncertainty_um"
+    },
+    "spray_half_angle_experiment": {
+      "kind": "not_reported_in_table_5"
+    }
+  },
+  "validation_policy": {
+    "role": "physical_cold_flow_validation_target",
+    "strict_component_targets": [
+      "experimental_spray_half_angle",
+      "experimental_smd"
+    ],
+    "literature_reproduction_targets": [
+      "author_lagrangian_spray_half_angle",
+      "author_lagrangian_smd"
+    ],
+    "prohibited_claims": [
+      "This 2021 revision is interchangeable with the 2018 case.",
+      "The author's stochastic Lagrangian simulation is exactly reproducible from Table 5 alone.",
+      "Water-air agreement validates LOX/GCH4 reacting spray."
+    ]
+  },
+  "readiness": {
+    "strict_end_to_end_smd_validation_ready": false,
+    "available_for": [
+      "cold_flow_experimental_target_comparison",
+      "single_case_literature_result_regression"
+    ],
+    "missing_publication_data": [
+      "complete validation-injector geometry restated in the 2021 paper",
+      "resolved carrier-air flow field and turbulence statistics",
+      "complete water and air property values used by Fluent",
+      "parcel injection count/weights and raw parcel histories",
+      "stochastic-dispersion random seed and random-number stream"
+    ]
+  }
+}

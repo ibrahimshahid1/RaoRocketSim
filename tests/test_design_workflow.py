@@ -129,6 +129,17 @@ def test_station_wise_normal_wall_offset_and_step_export(tmp_path):
     )
     assert path.exists()
     assert step_representation(path) in {"brep", "faceted_brep"}
+    sidecar = path.with_suffix(".cad.json")
+    assert sidecar.exists()
+    if step_representation(path) == "brep":
+        import json
+
+        metadata = json.loads(sidecar.read_text())
+        assert metadata["neutral_file_linear_unit"] == "mm"
+        inspection = metadata["round_trip_inspection"]
+        assert inspection["solid_count"] == 1
+        assert inspection["all_solids_valid"]
+        assert inspection["volume_mm3"] > 0.0
 
 
 def test_require_brep_rejects_faceted_fallback(tmp_path, monkeypatch):

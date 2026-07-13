@@ -5,7 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
-SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS = (0.6, 2.0)
+# NASA SP-8120's cited constant-efficiency design range.  Values above 1.5
+# can still be useful for parametric work, but must not be labelled SP-8120.
+SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS = (0.6, 1.5)
+REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS = (0.6, 2.0)
 
 
 @dataclass(frozen=True)
@@ -98,8 +101,10 @@ def upstream_radius_ratio_for_discharge_coefficient(
 ) -> float:
     """Smallest ``Ru/Rt`` satisfying a target inviscid throat ``Cd``.
 
-    The lower and upper defaults are the SP-8120 throat-approach radius design
-    range called out in ``docs/shoulder_radius_design_basis.md``.  If the lower
+    The lower and upper defaults are the cited SP-8120 throat-approach radius
+    range, 0.6--1.5.  Callers may explicitly pass the repository's broader
+    ``REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS`` for diagnostic
+    studies, but must preserve that different provenance.  If the lower
     bound already exceeds the requested ``Cd``, the lower bound is returned;
     requesting a ``Cd`` above the upper-bound capability is rejected.
     """
@@ -115,8 +120,13 @@ def upstream_radius_ratio_for_discharge_coefficient(
     if cd_target <= cd_min:
         return float(min_ratio)
     if cd_target > cd_max:
+        range_label = (
+            "Hall/SP-8120"
+            if (min_ratio, max_ratio) == SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS
+            else "Hall configured radius-ratio"
+        )
         raise ValueError(
-            f"cd_target={cd_target:g} exceeds Hall/SP-8120 range capability "
+            f"cd_target={cd_target:g} exceeds {range_label} range capability "
             f"{cd_max:g} at Ru/Rt={max_ratio:g} for gamma={gamma:g}"
         )
 

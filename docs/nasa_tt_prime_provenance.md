@@ -97,7 +97,7 @@ For the M3.5Perf reference (`Rt = 1`, `Rd = 1`, `gamma = 1.4`,
 `n_kernel = 101`), the visible source path and the checked-in fixture diverge
 on the first line before the row march starts.
 
-Current corrected Python KL port:
+Theory-correct Python Kliegel-Levine path:
 
 - wall: `x = 0`, `r = 1`, `M = 1.177794`
 - axis: `x ~= 0.679071`, `M ~= 1.267618`
@@ -107,10 +107,16 @@ NASA/JHU fixture:
 - wall: `x = 0`, `r = 1`, `M = 1.17779`
 - axis: `x = 0.724356`, `M = 1.5`
 
-The literal visible `KLThroat` typos were also simulated and do not reproduce
-the fixture axis. The literal path lands around `x ~= 0.969666`,
-`M ~= 1.427405`, so the mismatch is not explained by simply preserving the
-visible transcription mistakes.
+The explicit `nasa_visible_kliegel_levine` compatibility path preserves the
+visible C++ integer-division/coefficient semantics *and* the source's
+per-point `M <= 1.5` control loop. That complete source-visible path now
+reproduces the checked-in TT' line and kernel rows within the regression
+tolerances recorded by `tests/test_nasa_kernel_march_parity.py`.
+
+This numerical compatibility does not recover the executable or prove which
+unpublished source variant generated the fixture. It resolves the software
+reconstruction problem while leaving the historical artifact provenance
+explicitly unresolved.
 
 ## External Primary Documentation
 
@@ -126,15 +132,19 @@ the checked-in TT' values.
 
 ## Working Rule For The Port
 
-Do not tune the Python KL coefficients blindly to hit `TT'.out`. The visible
-source-port track is canonical. Keep the fixture mismatch visible through the
-xfailed TT' parity test and the comparison artifacts in
-`debug_outputs/nasa_comparison`, but treat those artifacts as overlays.
+Do not tune the theory-correct Python KL coefficients to hit `TT'.out`. The
+source-visible compatibility path is separate and explicit. Keep the
+theory/overlay distinction visible through the non-xfailed mode-separation
+test and the comparison artifacts in `debug_outputs/nasa_comparison`, and
+treat the historical files as overlays rather than promotion authority.
 
-The comparison harness should be read as a historical fixture overlay, not as
-a source-port certificate. Its persisted `report.json` records
+The comparison harness keeps the historical overlay distinct from the pinned
+source-port certificate. Its persisted `report.json` records
 `canonical_reference_track = "visible_source_port"`,
 `comparison_track = "historical_fixture_overlay"`,
-`source_port_matched = null`, `fixture_overlay_available = true`,
+`source_port_matched = true` for the SHA-pinned M3.5 software workflow,
+`fixture_overlay_available = true`,
 `fixture_overlay_is_promotion_authority = false`, and
-`fixture_generator_provenance = "unresolved"` for this case.
+`fixture_generator_provenance = "unresolved"`.  That source-port match does
+not promote an arbitrary current BVP solve or establish the provenance of the
+orphaned historical fixture.

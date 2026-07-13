@@ -33,9 +33,9 @@ Gates, accordingly:
   from the de-circularized host record run of
   ``scripts/j5_chart_sweep.py``);
 * the historical plan-target gate (RMS < 1.5 / max < 3 deg agreement
-  with the chart) stays as an xfail record — it is now understood to
-  be *definitionally* unreachable for the exact solution, not
-  solver-blocked.
+  with the chart) is tested as an explicit *negative applicability*
+  regression: the exact solution must not be certified against a tolerance
+  defined for the different parabola-fit model.
 
 Marked ``@pytest.mark.slow`` -- the full sub-grid runs ~3 min.  CI
 runs this nightly / on release candidates.
@@ -44,6 +44,7 @@ runs this nightly / on release candidates.
 from __future__ import annotations
 
 import math
+from functools import lru_cache
 
 import pytest
 
@@ -55,6 +56,12 @@ from raosim.benchmarks import (
 )
 from raosim.nozzle_geometry import lookup_angles
 from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
+
+
+@lru_cache(maxsize=1)
+def _full_chart_sweep():
+    """Share the expensive deterministic sweep across the two slow gates."""
+    return rao_variational_chart_benchmark()
 
 
 # ---------------------------------------------------------------------
@@ -238,7 +245,7 @@ def test_rao_chart_benchmark_full_grid():
     run of scripts/j5_chart_sweep.py lands in builds/, pin per-corner
     delta baselines here as a regression band (the finding becomes the
     reference)."""
-    result = rao_variational_chart_benchmark()
+    result = _full_chart_sweep()
 
     print()  # newline before pytest's captured output
     print(format_chart_benchmark_report(result))
@@ -291,25 +298,17 @@ def test_rao_chart_benchmark_full_grid():
 
 
 @pytest.mark.slow
-@pytest.mark.xfail(
-    reason="DEFINITIONAL, post-J5: the plan's 1.5 / 3 deg targets measure "
-           "agreement with Rao's 1960 parabola-fit charts, but the reported "
-           "angles are now the exact variational solution (solved kernel "
-           "theta_B / CE exit angle), which sits systematically off the "
-           "parabola fit — e.g. 25.57 vs 30 deg and 11.12 vs 15.5 deg at "
-           "eps=10/L80 (the solver-independent smooth existence root).  "
-           "Kept as the historical record of the Phase 7 target; the live "
-           "ground truth is the recorded delta table "
-           "(scripts/j5_chart_sweep.py -> builds/j5_chart_sweep.json).",
-)
-def test_rao_chart_benchmark_plan_targets():
-    """Plan-target gate (REWRITE_PLAN.md Phase 7): RMS 1.5 deg, max 3 deg."""
-    result = rao_variational_chart_benchmark()
-    assert result.passes(rms_tol_deg=1.5, max_tol_deg=3.0), (
-        f"plan-target gate failed: "
+def test_parabola_fit_plan_target_is_inapplicable_to_exact_solution():
+    """Do not certify the exact solution with the old parabola-fit target."""
+    result = _full_chart_sweep()
+    assert not result.passes(rms_tol_deg=1.5, max_tol_deg=3.0), (
+        "the exact-variational sweep unexpectedly became indistinguishable "
+        "from the Rao-1960 parabola fit; investigate model/reporting "
+        "semantics before changing applicability: "
         f"RMS=({result.rms_theta_n_deg:.2f}, {result.rms_theta_e_deg:.2f}) deg, "
         f"max=({result.max_theta_n_deg:.2f}, {result.max_theta_e_deg:.2f}) deg"
     )
+    assert max(result.max_theta_n_deg, result.max_theta_e_deg) > 3.0
 
 
 # ---------------------------------------------------------------------
@@ -366,8 +365,8 @@ def test_benchmark_validation_does_not_promote_until_release_flag_set():
     from raosim.rao_variational import ContourReliability
 
     assert rv.BENCHMARK_VALIDATED_AT_RELEASE is False, (
-        "this test assumes the plan-target test is still xfailed; "
-        "if the flag has been flipped, retire this guardrail."
+        "the release flag must remain false until exact-variational acceptance "
+        "criteria replace the inapplicable parabola-fit agreement target."
     )
 
     cfg = RaoSolverConfig(

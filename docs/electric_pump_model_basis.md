@@ -129,7 +129,13 @@ Implemented now:
 - basic thermal and stress ledgers: motor/controller heat, pump loss heat,
   estimated propellant temperature rise, impeller and inducer rotating hoop
   stress, blade-root bending, shaft torsion, casing hoop stress, bearing DN,
-  seal face speed, seal heat, and margin gates.
+  seal face speed, seal heat, and margin gates.  Blade-root bending is now a
+  sizing closure rather than a report-only check: the rectangular-root section
+  requirement `t_root >= sqrt(6 F_blade / sigma_allow)` feeds back into the
+  impeller thickness, exit blockage, diameter, and RPM/free-area iteration.
+  A user-fixed RPM that cannot accommodate the structurally required root
+  thickness fails the exit-free-area gate instead of silently retaining an
+  overstressed blade.
 
 Still explicitly preliminary:
 
@@ -200,10 +206,25 @@ The reference geometry consumed by the CAD chain is now solved, not assumed
   to a multiple of the inducer blade count per SP-8052 sec. 3.1.14.  An
   explicit `PumpSizingSpec.blade_count` overrides; the basis string is
   exported with the geometry.
+- **The inlet eye and shaft are one solve**, not separate hydraulic and CAD
+  estimates. The monotone eye solve closes
+  `Q = pi (R1^2 - Rh^2) (1-B1) phi1 omega R1`, with `Rh` containing the
+  torsion/manufacturing-sized shaft, bore clearance, and root wall. The same
+  effective annular area feeds the velocity triangle, inducer, NPSH-facing
+  geometry, feasibility gates, and CAD.
+- **Blade free area and count are coupled.** Four full-length blades reach the
+  eye by default; the remainder of the SP-8109 fig.-16 discharge count begin as
+  downstream splitters. `B = Z t/(2 pi r sin beta)` is limited to 20% at the
+  inlet and 15% at discharge. Net rather than gross circumference sizes `b2`
+  and the achieved `phi2`; impossible thickness/RPM combinations fail or are
+  reported infeasible when RPM is user-fixed.
 - **Impeller blade camber** is the log-spiral family
   d(theta)/dr = 1/(r tan beta(r)) with beta linear from the solved
-  velocity-triangle beta1 to beta2 (`pumps.impeller_blade_camber`); CAD
-  sweeps it, physics owns it.
+  zero-incidence relative-flow/metal beta1 to beta2
+  (`pumps.impeller_blade_camber`). The B-rep tapers from the selected leading
+  edge thickness to the discharge thickness and truncates splitter camber at
+  the solved start fraction. The former `atan(phi2)` value remains only as
+  `legacy_screening_inlet_angle_deg` provenance.
 - **Inducer blade angles** follow NASA SP-8052: the inlet tip blade angle
   carries the tip flow angle atan(phi_tip) plus the incidence from the
   alpha/beta design ratio (sec. 3.1.9; 0.35 thin .. 0.50 thick, 0.425
@@ -232,3 +253,13 @@ CAD remains labeled reference geometry: blade-to-blade CFD, rotordynamics
 beyond the DN screen, bearing/seal selection, motor electromagnetic design,
 and measured pump maps stay out of scope
 (`qualification_status: reference_geometry_not_hardware_qualified`).
+
+The operating B-rep casing is now two pieces split at the scroll centerplane,
+so each half-scroll is directly accessible. A keyhole flange surrounds the
+round scroll and split tangential outlet, with full-face gasket land,
+circumferential and outlet-neck bolt holes, dowels, preliminary pressure-clamp
+and tool-access gates, and STEP re-import. This establishes a bounded
+machining/assembly topology only; the gasket, preload/threads/dowel fits,
+flange flexibility/fatigue, shaft retention, proof, and cold-flow evidence are
+still external release blockers. The lightweight STL writer remains explicitly
+schematic and is not the meanline-fidelity CAD path.

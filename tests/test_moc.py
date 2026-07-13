@@ -28,6 +28,50 @@ from raosim.moc import (
 from raosim.wall_model import SplineWall
 
 
+def test_direct_moc_uses_upstream_throat_curvature(monkeypatch):
+    import raosim.moc as moc_module
+
+    Rt = 0.02
+    epsilon = 8.0
+    Re = math.sqrt(epsilon) * Rt
+    Ln = 0.8 * (Re - Rt) / math.tan(math.radians(15.0))
+    theta_n = math.radians(30.0)
+    Rd = 0.382 * Rt
+    Nx = Rd * math.sin(theta_n)
+    Ny = Rt + Rd * (1.0 - math.cos(theta_n))
+    wall = SplineWall.from_controls(
+        np.linspace(Ny, Re, 5)[1:-1], Nx, Ny, Ln, Re, theta_n
+    )
+    captured = {}
+    original = moc_module.approximate_starting_line
+
+    def capture(Rt_arg, downstream_curvature, *args, **kwargs):
+        captured["downstream_curvature"] = downstream_curvature
+        captured["transonic_curvature"] = kwargs.get(
+            "transonic_curvature_radius"
+        )
+        return original(Rt_arg, downstream_curvature, *args, **kwargs)
+
+    monkeypatch.setattr(moc_module, "approximate_starting_line", capture)
+    result = moc_module.solve_flowfield(
+        Rt,
+        epsilon,
+        1.4,
+        wall,
+        n_char=8,
+        starting_line_method="kliegel_levine",
+        throat_upstream_radius_factor=1.5,
+        throat_downstream_radius_factor=0.5,
+    )
+
+    assert captured["downstream_curvature"] == pytest.approx(0.5 * Rt)
+    assert captured["transonic_curvature"] == pytest.approx(1.5 * Rt)
+    assert result["exit_metrics"]["normalization_basis"] == "throat_area"
+    assert result["exit_metrics"]["reference_area"] == pytest.approx(
+        math.pi * Rt**2
+    )
+
+
 class TestGasDynamicsUtilities:
     def test_mach_angle_m2(self):
         assert math.degrees(mach_angle(2.0)) == pytest.approx(30.0, abs=0.01)
@@ -312,5 +356,11 @@ class TestFullPipeline:
         assert np.all(np.isfinite(c["y"]))
         assert np.all(np.isfinite(c["x_bell"]))
         assert np.all(np.isfinite(c["y_bell"]))
+        assert c["wall_export_basis"] == (
+            "optimized_monotone_cubic_hermite_spline"
+        )
+        assert np.interp(
+            c["optimized_wall_x_knots"], c["x_bell"], c["y_bell"]
+        ) == pytest.approx(c["optimized_wall_r_knots"], rel=2e-3)
         assert c["x"][-1] > c["x"][0]
         assert c["y"][-1] == pytest.approx(math.sqrt(epsilon) * 0.02, rel=0.08)

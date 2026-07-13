@@ -39,7 +39,8 @@ from raosim.interface import (
     resolve_bolted_interface_geometry,
     screen_injector_chamber_interface,
 )
-from raosim.nozzle_geometry import bell_nozzle_contour, lookup_angles
+from raosim.model_registry import audit_model_registry, model_provenance_dict
+from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.physics import (
     bartz_heat_flux,
     boundary_layer_displacement,
@@ -47,12 +48,26 @@ from raosim.physics import (
     structural_screen,
 )
 from raosim.propellants import Propellant
+from raosim.release_readiness import (
+    evaluate_release_readiness,
+    load_evidence_manifest,
+)
+from raosim.spray_coupling import (
+    SprayCStarCouplingSpec,
+    solve_spray_cstar_fixed_point,
+)
 from raosim.throat_geometry import (
+    REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS,
+    SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS,
     ThroatGeometrySpec,
     throat_discharge_coefficient_hall,
     upstream_radius_ratio_for_discharge_coefficient,
 )
-from raosim.validation import DesignGateReport, evaluate_design_gates
+from raosim.validation import (
+    DesignGateReport,
+    add_contour_reliability_metadata,
+    evaluate_design_gates,
+)
 
 
 DESIGN_MODE_PRELIMINARY = "preliminary"
@@ -103,6 +118,11 @@ class ThermoSpec:
     fuel: str | None = None
     mixture_ratio: float | None = None
     eta_Isp: float = 0.95
+    # Expansion physics is separate from the chamber-state provider.  The
+    # variable-cp option requires a configuration-controlled fixed-composition
+    # cp(T) JSON table and is currently limited to Bezier geometry.
+    expansion_model: str = "constant_gamma"
+    frozen_gas_table: Path | None = None
 
 
 @dataclass
@@ -292,6 +312,7 @@ class DesignInput:
     shoulder_fill_fraction: float = 0.8
     minimum_cylindrical_length: float | None = None
     throat_cd_target: float | None = None
+    allow_throat_radius_extension: bool = False
     throat_geometry: ThroatGeometrySpec = field(default_factory=ThroatGeometrySpec)
     ambient: MissionAmbientSpec = field(default_factory=MissionAmbientSpec)
     cooling: CoolingSpec = field(default_factory=CoolingSpec)
@@ -299,6 +320,18 @@ class DesignInput:
     interface: InterfaceSpec = field(default_factory=InterfaceSpec)
     manufacturing: ManufacturingSpec = field(default_factory=ManufacturingSpec)
     injector: "InjectorSpec" = field(default_factory=lambda: InjectorSpec())
+    # Opt-in closure of eta_cstar -> cycle mdot -> injector vaporization ->
+    # eta_cstar.  Mixing and chemical-completion efficiencies are never
+    # inferred by the injector screen and must be supplied explicitly.
+    spray_cstar_coupling: SprayCStarCouplingSpec = field(
+        default_factory=SprayCStarCouplingSpec
+    )
+    # Physical release remains separate from numerical/design-gate success.
+    # Supplying a manifest makes its traceable evidence part of the report;
+    # require_release_evidence turns missing/failed evidence into a hard gate.
+    configuration_id: str | None = None
+    release_evidence_manifest: Path | None = None
+    require_release_evidence: bool = False
     strict_gates: bool = False
 
 
@@ -322,10 +355,18 @@ class ValidatedDesignResult:
     def validated(self) -> bool:
         return self.input.mode == DESIGN_MODE_VALIDATED and self.gate_report.passed
 
+    @property
+    def hardware_qualified(self) -> bool:
+        """Hardware qualification can never be asserted by this workflow."""
+
+        return False
+
     def to_dict(self) -> dict:
         return _json_ready({
             "mode": self.input.mode,
             "validated": self.validated,
+            "software_validated": self.validated,
+            "hardware_qualified": False,
             "design_status": self.design_status,
             "warnings": self.warnings,
             "files": {key: str(value) for key, value in self.files.items()},
@@ -336,8 +377,18 @@ class ValidatedDesignResult:
                 "Isp": self.performance.Isp,
                 "m_dot": self.performance.m_dot,
                 "Cf_actual": self.performance.Cf_actual,
+                "Cf_ideal": self.performance.Cf_ideal,
+                "c_star": self.performance.c_star,
+                "c_star_effective": self.performance.c_star_effective,
                 "Pe": self.performance.Pe,
                 "Me": self.performance.Me,
+                "expansion_model": self.performance.expansion_model,
+                "gamma_throat": self.performance.gamma_throat,
+                "gamma_exit": self.performance.gamma_exit,
+                "exit_temperature": self.performance.exit_temperature,
+                "frozen_flow_fingerprint": (
+                    self.performance.frozen_flow_fingerprint
+                ),
             },
         })
 
@@ -373,6 +424,62 @@ class DesignResult:
         }
 
 
+@dataclass(frozen=True)
+class SprayRegenIterationPayload:
+    """State re-solved at one spray/c-star/regen mass-flow iterate."""
+
+    injector: Any
+    thermal: dict[str, Any]
+    cooling: dict[str, Any]
+    total_mass_flow: float
+    fuel_mass_flow: float
+    oxidizer_mass_flow: float
+    coolant_mass_flow: float
+
+    def coupling_summary(self) -> dict[str, Any]:
+        regenerative = self.cooling.get("method") == "regenerative"
+        feed_lines = {}
+        ledger = getattr(self.injector, "feed_system", None)
+        if ledger is not None:
+            for role, line in ledger.lines.items():
+                feed_lines[role] = {
+                    "mass_flow_kg_s": self.injector.streams[role].mdot,
+                    "required_outlet_pressure_pa": line.required_outlet_pressure,
+                    "regen_loss_pa": line.regen_loss,
+                    "volumetric_flow_m3_s": line.volumetric_flow,
+                    "required_pump_head_m": line.required_pump_head,
+                    "ideal_pump_power_w": line.ideal_pump_power,
+                    "status": line.status,
+                }
+        return {
+            "total_mass_flow_kg_s": self.total_mass_flow,
+            "fuel_mass_flow_kg_s": self.fuel_mass_flow,
+            "oxidizer_mass_flow_kg_s": self.oxidizer_mass_flow,
+            "coolant_mass_flow_kg_s": self.coolant_mass_flow,
+            "regen_fuel_relative_flow_error": (
+                abs(self.coolant_mass_flow - self.fuel_mass_flow)
+                / max(self.fuel_mass_flow, 1.0e-30)
+                if regenerative else None
+            ),
+            "outer_loop_scope": (
+                "spray_cycle_regen_wall_feed_and_pump_duty"
+                if regenerative else "injector_and_cycle_mass_flow_no_regen"
+            ),
+            "cooling_margin": self.cooling.get("cooling_margin"),
+            "coolant_outlet_temperature_k": self.cooling.get(
+                "coolant_outlet_temperature"
+            ),
+            "coolant_pressure_drop_pa": self.cooling.get(
+                "coolant_pressure_drop"
+            ),
+            "estimated_wall_temperature_k": self.cooling.get(
+                "estimated_wall_temperature",
+                self.cooling.get("peak_gas_side_wall_temperature"),
+            ),
+            "feed_and_pump_duty_by_role": feed_lines,
+        }
+
+
 def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     """Generate a physics-screened nozzle design from the strict v2 schema."""
     _validate_design_input(input)
@@ -391,18 +498,73 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     )
     prop = thermo.propellant
     warnings = list(thermo.warnings)
+    frozen_gas = None
+    if input.thermo.expansion_model == "frozen_variable_cp":
+        from raosim.frozen_flow import load_frozen_gas_table
+
+        frozen_gas = load_frozen_gas_table(input.thermo.frozen_gas_table)
+        requested_mixture_ratio = (
+            input.thermo.mixture_ratio
+            if input.thermo.mixture_ratio is not None
+            else prop.OF
+        )
+        if (
+            frozen_gas.freeze_basis == "chamber_equilibrium_snapshot"
+            and requested_mixture_ratio is not None
+            and not math.isclose(
+                float(frozen_gas.mixture_ratio),
+                float(requested_mixture_ratio),
+                rel_tol=1.0e-9,
+                abs_tol=1.0e-12,
+            )
+        ):
+            raise ValueError(
+                "frozen gas table mixture_ratio does not match the requested "
+                "chamber composition state"
+            )
+        thermo.exit_state.update({
+            "expansion_model": "frozen_variable_cp_q1d",
+            "frozen_gas_fingerprint_sha256": frozen_gas.fingerprint_sha256,
+            "frozen_gas_input_artifact_sha256": (
+                frozen_gas.input_artifact_sha256
+            ),
+            "composition_mass_fractions": dict(
+                frozen_gas.composition_mass_fractions
+            ),
+            "property_source": frozen_gas.source,
+            "property_table": frozen_gas.as_dict(),
+            "equilibrium_chemistry": False,
+            "moc_or_rao_characteristics": False,
+        })
+        warnings.append(
+            "Using thermally-perfect fixed-composition quasi-1-D expansion. "
+            "MOC/Rao characteristics are disabled; Bartz, boundary-layer, and "
+            "Hall-Cd outputs remain separately failed screening gates until "
+            "profile-aware variable-property models are implemented."
+        )
 
     epsilon = input.epsilon
     if epsilon is None:
-        epsilon, _ = expansion_ratio_from_pressure(
-            input.Pc, input.ambient.design_pressure, prop.gamma
-        )
+        if frozen_gas is not None:
+            from raosim.frozen_flow import expansion_ratio_from_pressure_frozen
+
+            epsilon, _ = expansion_ratio_from_pressure_frozen(
+                frozen_gas,
+                chamber_pressure_pa=input.Pc,
+                chamber_temperature_k=prop.Tc,
+                exit_pressure_pa=input.ambient.design_pressure,
+            )
+        else:
+            epsilon, _ = expansion_ratio_from_pressure(
+                input.Pc, input.ambient.design_pressure, prop.gamma
+            )
         input.epsilon = epsilon
         warnings.append(
             f"Sized epsilon from Pc/design Pa: epsilon = {epsilon:.3f}."
         )
 
     Rt = input.Rt
+    rt_sized_from_target = Rt is None and input.target_thrust is not None
     if Rt is not None and input.target_thrust is not None:
         warnings.append("Both Rt and target_thrust supplied; explicit Rt is used.")
     if Rt is None:
@@ -410,7 +572,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             raise ValueError("Either Rt or target_thrust must be provided.")
         Rt = throat_radius_for_target_thrust(
             input.target_thrust, input.Pc, input.ambient.design_pressure,
-            float(epsilon), prop,
+            float(epsilon), prop, frozen_gas=frozen_gas,
         )
         input.Rt = Rt
         warnings.append(f"Sized Rt from target thrust: Rt = {Rt * 1000:.3f} mm.")
@@ -430,50 +592,185 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "pressure-, mixture-ratio-, and duty-informed values."
         )
     performance = compute_engine_performance(
-        input.Pc, input.ambient.Pa, Rt, float(epsilon), prop
+        input.Pc, input.ambient.Pa, Rt, float(epsilon), prop,
+        frozen_gas=frozen_gas,
     )
+    if performance.frozen_flow is not None:
+        add_contour_reliability_metadata(
+            contour,
+            input.method,
+            prop.gamma,
+            frozen_expansion=performance.frozen_flow,
+        )
+    target_error = None
+    if input.target_thrust is not None:
+        target_error = (
+            performance.thrust - input.target_thrust
+        ) / input.target_thrust
+    thrust_closure = {
+        "sizing_basis": (
+            "quasi_1d_thermally_perfect_frozen_composition_delivered_cf"
+            if frozen_gas is not None
+            else "quasi_1d_calorically_perfect_delivered_cf"
+        ),
+        "rt_sized_from_target_thrust": bool(rt_sized_from_target),
+        "target_thrust_N": input.target_thrust,
+        "calculated_thrust_N": performance.thrust,
+        "relative_target_error": target_error,
+        "quasi_1d_Cf_ideal": performance.Cf_ideal,
+        "quasi_1d_Cf_delivered": performance.Cf_actual,
+        "contour_audit_Cf": None,
+        "contour_audit_basis": "unavailable_for_geometry_only_workflow",
+        "throat_discharge_coefficient_applied_to_mass_flow": False,
+        "throat_discharge_coefficient_note": (
+            "The Hall/SP-8120 throat Cd is a reported inviscid curvature "
+            "screen. It is not folded into mdot=Pc*At/cstar or target-thrust "
+            "sizing; doing so requires a consistently calibrated delivered "
+            "mass-flow/performance model."
+        ),
+    }
 
     boundary_layer = boundary_layer_displacement(contour, input.Pc, prop)
     thermal = bartz_heat_flux(contour, input.Pc, prop)
+    mixture_ratio = input.thermo.mixture_ratio
+    if mixture_ratio is None:
+        mixture_ratio = float(getattr(prop, "OF", 0.0) or 0.0)
     # Pass prop + Pc so the cooling screen runs the real coupled
     # Sieder-Tate / 1-D wall-conduction solve (gas side = full Bartz).
-    cooling_input, cooling_boundary_warnings = (
-        _cooling_with_split_pressure_boundary(input)
+    cooling_input, cooling_boundary_warnings = _cooling_at_cycle_mass_flow(
+        input,
+        total_mass_flow=performance.m_dot,
+        mixture_ratio=mixture_ratio,
     )
-    warnings.extend(cooling_boundary_warnings)
+    if not (
+        input.spray_cstar_coupling.enabled
+        and input.cooling.method == "regenerative"
+    ):
+        warnings.extend(cooling_boundary_warnings)
     cooling = regenerative_cooling_screen(
         thermal, contour, cooling_input, input.material,
         input.manufacturing.wall_thickness, prop, input.Pc,
     )
     injector_result = None
+    spray_coupling_result = None
     if input.injector.type == "pintle":
-        mixture_ratio = input.thermo.mixture_ratio
-        if mixture_ratio is None:
-            mixture_ratio = float(getattr(prop, "OF", 0.0) or 0.0)
         if mixture_ratio <= 0.0:
             raise ValueError(
                 "Pintle injector sizing requires a positive mixture ratio; "
                 "set thermo.mixture_ratio or select a propellant with nominal O/F."
             )
         oxidizer_name, fuel_name = _thermo_feed_names(input.thermo)
-        mdot_fuel = performance.m_dot / (1.0 + mixture_ratio)
-        mdot_oxidizer = mixture_ratio * mdot_fuel
-        injector_result = evaluate_pintle_injector(
-            input.injector,
-            mdot_fuel=mdot_fuel,
-            mdot_oxidizer=mdot_oxidizer,
-            Pc=input.Pc,
-            mixture_ratio=mixture_ratio,
-            chamber_radius=float(contour["chamber"]["Rc"]),
-            chamber_length=float(contour["chamber"]["Lc"]),
-            gamma=prop.gamma,
-            Tc=prop.Tc,
-            R_gas=prop.R_gas,
-            fuel_name=fuel_name,
-            oxidizer_name=oxidizer_name,
-            cooling=input.cooling,
-            cooling_result=cooling,
-        )
+
+        def evaluate_injector_at_mass_flow(
+            total_mdot: float,
+            gas_propellant: Propellant,
+            *,
+            iteration_cooling: CoolingSpec = cooling_input,
+            iteration_cooling_result: dict[str, Any] = cooling,
+        ):
+            mdot_fuel = total_mdot / (1.0 + mixture_ratio)
+            mdot_oxidizer = mixture_ratio * mdot_fuel
+            return evaluate_pintle_injector(
+                input.injector,
+                mdot_fuel=mdot_fuel,
+                mdot_oxidizer=mdot_oxidizer,
+                Pc=input.Pc,
+                mixture_ratio=mixture_ratio,
+                chamber_radius=float(contour["chamber"]["Rc"]),
+                chamber_length=float(
+                    contour["chamber"]["injector_to_throat_length"]
+                ),
+                gamma=gas_propellant.gamma,
+                Tc=gas_propellant.Tc,
+                R_gas=gas_propellant.R_gas,
+                fuel_name=fuel_name,
+                oxidizer_name=oxidizer_name,
+                cooling=iteration_cooling,
+                cooling_result=iteration_cooling_result,
+            )
+
+        if input.spray_cstar_coupling.enabled:
+            ideal_cstar = float(performance.c_star)
+
+            def coupling_evaluator(eta_cstar: float, total_mdot: float):
+                trial_prop = _propellant_with_eta_cstar(prop, eta_cstar)
+                trial_thermal = bartz_heat_flux(
+                    contour, input.Pc, trial_prop
+                )
+                trial_cooling_input, _ = _cooling_at_cycle_mass_flow(
+                    input,
+                    total_mass_flow=total_mdot,
+                    mixture_ratio=mixture_ratio,
+                )
+                trial_cooling = regenerative_cooling_screen(
+                    trial_thermal,
+                    contour,
+                    trial_cooling_input,
+                    input.material,
+                    input.manufacturing.wall_thickness,
+                    trial_prop,
+                    input.Pc,
+                )
+                trial_injector = evaluate_injector_at_mass_flow(
+                    total_mdot,
+                    trial_prop,
+                    iteration_cooling=trial_cooling_input,
+                    iteration_cooling_result=trial_cooling,
+                )
+                if trial_injector.atomization is None:
+                    raise RuntimeError(
+                        "spray/c-star coupling requires an injector atomization result"
+                    )
+                fuel_mdot = total_mdot / (1.0 + mixture_ratio)
+                state = SprayRegenIterationPayload(
+                    injector=trial_injector,
+                    thermal=trial_thermal,
+                    cooling=trial_cooling,
+                    total_mass_flow=total_mdot,
+                    fuel_mass_flow=fuel_mdot,
+                    oxidizer_mass_flow=mixture_ratio * fuel_mdot,
+                    coolant_mass_flow=float(
+                        trial_cooling_input.coolant_mass_flow or 0.0
+                    ),
+                )
+                return trial_injector.atomization, state
+
+            spray_coupling_result = solve_spray_cstar_fixed_point(
+                input.spray_cstar_coupling,
+                initial_eta_cstar=float(prop.eta_cstar),
+                ideal_cstar=ideal_cstar,
+                chamber_pressure=input.Pc,
+                throat_area=math.pi * Rt ** 2,
+                evaluator=coupling_evaluator,
+            )
+            prop = _propellant_with_eta_cstar(
+                prop, spray_coupling_result.eta_cstar
+            )
+            thermo.propellant = prop
+            thermo.chamber_state["eta_cstar_coupled"] = prop.eta_cstar
+            thermo.chamber_state["c_star_effective"] = prop.c_star_effective
+            performance = compute_engine_performance(
+                input.Pc, input.ambient.Pa, Rt, float(epsilon), prop,
+                frozen_gas=frozen_gas,
+            )
+            final_state = spray_coupling_result.payload
+            if not isinstance(final_state, SprayRegenIterationPayload):
+                raise RuntimeError(
+                    "spray/c-star evaluator returned an unexpected final state"
+                )
+            injector_result = final_state.injector
+            thermal = final_state.thermal
+            cooling = final_state.cooling
+            _, final_cooling_warnings = _cooling_at_cycle_mass_flow(
+                input,
+                total_mass_flow=spray_coupling_result.required_mass_flow,
+                mixture_ratio=mixture_ratio,
+            )
+            warnings.extend(final_cooling_warnings)
+        else:
+            injector_result = evaluate_injector_at_mass_flow(
+                performance.m_dot, prop
+            )
         interface_resolution = _apply_pintle_interface_resolution(
             input, contour, injector_result=injector_result
         )
@@ -494,6 +791,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         input.Pc,
         input.ambient.Pa,
         prop.gamma,
+        frozen_expansion=performance.frozen_flow,
         wall_thickness=input.manufacturing.wall_thickness,
         flange_od=gate_flange_od,
         flange_length=gate_flange_length,
@@ -524,16 +822,116 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             message=gate.detail,
         )
     cad_readiness = _cad_readiness(input, contour, gate_report)
-    benchmark_status = _benchmark_status(input.method)
+    benchmark_status = _benchmark_status(input.method, contour)
+
+    if input.release_evidence_manifest is not None:
+        release_readiness = load_evidence_manifest(
+            input.release_evidence_manifest,
+            expected_target="engine",
+            expected_configuration_id=input.configuration_id,
+        )
+    else:
+        release_readiness = evaluate_release_readiness(target="engine")
+    if input.require_release_evidence:
+        # This is intentionally evaluated before any design/CAD artifacts are
+        # written.  Passing it means the configured evidence set is complete;
+        # it still does not confer hardware qualification.
+        release_readiness.require_complete()
+
+    repository_root = Path(__file__).resolve().parents[1]
+    model_registry_audit = audit_model_registry(repository_root)
+    model_provenance = model_provenance_dict()
 
     _add_v2_gate_checks(
         gate_report, input, thermo, boundary_layer, thermal, cooling,
         structural, cad_readiness, benchmark_status,
     )
+    if frozen_gas is not None:
+        gate_report.add(
+            "physics",
+            "frozen_variable_cp_q1d_closure",
+            bool(performance.frozen_flow.all_closures_pass),
+            value=performance.frozen_flow.as_dict()["closures"],
+            limit="all energy/entropy/sonic/area/mass closures pass",
+            message="Frozen-composition quasi-1-D closure failed.",
+        )
+        gate_report.add(
+            "validation",
+            "frozen_property_and_performance_benchmark",
+            False,
+            value="manufactured numerical regression only",
+            limit=(
+                "configuration-controlled CEA/property fixture and independent "
+                "nozzle-performance benchmark"
+            ),
+            message=(
+                "The variable-cp solver has conservation and constant-cp "
+                "collapse tests, but no pinned physical property/performance "
+                "benchmark has cleared release validation."
+            ),
+        )
+        gate_report.add(
+            "physics",
+            "variable_property_boundary_layer",
+            False,
+            value="constant-gamma boundary-layer screen retained for diagnostics",
+            limit="profile-aware viscous displacement model",
+            message=(
+                "Variable-cp expansion is not yet coupled to boundary-layer "
+                "displacement; the reported result is diagnostic only."
+            ),
+        )
+        gate_report.add(
+            "thermal",
+            "variable_property_bartz_recovery",
+            False,
+            value="constant-gamma Bartz/recovery screen retained for diagnostics",
+            limit="profile-aware recovery enthalpy and transport properties",
+            message=(
+                "Variable-cp expansion is not yet coupled to Bartz recovery "
+                "enthalpy/transport properties."
+            ),
+        )
+        gate_report.add(
+            "throat",
+            "variable_property_discharge_coefficient",
+            False,
+            value="Hall correlation evaluated with chamber snapshot gamma",
+            limit="validated throat-local variable-property Cd model",
+            message=(
+                "Hall/SP-8120 discharge coefficient remains a throat-local "
+                "constant-gamma screen in variable-cp mode."
+            ),
+        )
 
     warnings.extend(contour.get("warnings", []))
     warnings.extend(gate_report.warnings)
     warnings.extend(cooling.get("warnings", []))
+    if release_readiness.blocked:
+        warnings.append(
+            "Physical hardware release is blocked by "
+            f"{len(release_readiness.blockers)} missing, invalid, or failed "
+            "external evidence requirements; see report_sections."
+        )
+    else:
+        warnings.append(
+            "The configured physical-release evidence set is complete, but "
+            "hardware qualification still requires the external engineering authority."
+        )
+    if not model_registry_audit["passed"]:
+        warnings.append(
+            "The physical-model provenance registry audit has unresolved entries; "
+            "see report_sections.model_registry_audit."
+        )
+    thrust_closure.update({
+        "eta_cstar": performance.eta_cstar,
+        "eta_CF": performance.eta_CF,
+        "effective_cstar_m_s": performance.c_star_effective,
+        "required_mass_flow_kg_s": performance.m_dot,
+        "spray_cstar_fixed_point_enabled": bool(
+            input.spray_cstar_coupling.enabled
+        ),
+    })
     if injector_result is not None:
         warnings.extend(
             f"Injector {gate.name}: {gate.detail}"
@@ -547,8 +945,14 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "cea_available": thermo.cea_available,
             "chamber_state": thermo.chamber_state,
             "exit_state": thermo.exit_state,
+            "expansion_model": performance.expansion_model,
+            "frozen_expansion": (
+                performance.frozen_flow.as_dict()
+                if performance.frozen_flow is not None else None
+            ),
         },
         "boundary_layer": boundary_layer,
+        "thrust_closure": thrust_closure,
         "chamber_geometry": {
             "L_star": contour["L_star"],
             "contraction_ratio": contour["contraction_ratio"],
@@ -570,6 +974,9 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "minimum_cylindrical_length": contour[
                 "minimum_cylindrical_length"
             ],
+            "injector_to_throat_length": contour["chamber"][
+                "injector_to_throat_length"
+            ],
             "target_volume": contour["V_target"],
             "measured_volume": contour["V_chamber"],
             "geometry_checks": contour["geometry_checks"],
@@ -581,6 +988,18 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             if injector_result is not None
             else {"type": "none", "status": "disabled", "feasible": True}
         ),
+        "spray_cstar_coupling": (
+            spray_coupling_result.to_dict()
+            if spray_coupling_result is not None
+            else {
+                "enabled": False,
+                "status": "disabled",
+                "reason": (
+                    "The correlation screen does not alter cycle mass flow unless "
+                    "explicit eta_mixing and eta_combustion are supplied."
+                ),
+            }
+        ),
         "injector_interface_resolution": (
             interface_resolution.to_dict()
             if interface_resolution is not None
@@ -590,6 +1009,9 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         "structural": structural,
         "cad_readiness": cad_readiness,
         "benchmark_status": benchmark_status,
+        "model_registry_audit": model_registry_audit,
+        "model_provenance": model_provenance,
+        "physical_release_readiness": release_readiness.to_dict(),
     }
 
     if input.mode == DESIGN_MODE_VALIDATED and not gate_report.passed:
@@ -654,14 +1076,8 @@ def design_nozzle(request: NozzleDesignRequest) -> DesignResult:
         request.Rt = Rt
 
     if request.method == "bezier":
-        theta_n = request.theta_n
-        theta_e = request.theta_e
-        if theta_n is None or theta_e is None:
-            tn_l, te_l = lookup_angles(request.epsilon, request.length_pct)
-            theta_n = theta_n if theta_n is not None else tn_l
-            theta_e = theta_e if theta_e is not None else te_l
         contour = bell_nozzle_contour(
-            Rt, request.epsilon, theta_n, theta_e,
+            Rt, request.epsilon, request.theta_n, request.theta_e,
             request.length_pct, gamma=prop.gamma,
         )
     else:
@@ -706,12 +1122,26 @@ def throat_radius_for_target_thrust(
     Pa: float,
     epsilon: float,
     prop: Propellant,
+    *,
+    frozen_gas=None,
 ) -> float:
     if target_thrust <= 0.0:
         raise ValueError("target_thrust must be positive")
-    Me = mach_from_area_ratio(epsilon, prop.gamma, supersonic=True)
-    pe_pc = isentropic_pressure_ratio(Me, prop.gamma)
-    cf_ideal = thrust_coefficient(Me, prop.gamma, pe_pc, Pa / Pc, epsilon)
+    if frozen_gas is not None:
+        from raosim.frozen_flow import solve_frozen_nozzle_expansion
+
+        expansion = solve_frozen_nozzle_expansion(
+            frozen_gas,
+            chamber_pressure_pa=Pc,
+            chamber_temperature_k=prop.Tc,
+            expansion_ratio=epsilon,
+            ambient_pressure_pa=Pa,
+        )
+        cf_ideal = expansion.thrust_coefficient
+    else:
+        Me = mach_from_area_ratio(epsilon, prop.gamma, supersonic=True)
+        pe_pc = isentropic_pressure_ratio(Me, prop.gamma)
+        cf_ideal = thrust_coefficient(Me, prop.gamma, pe_pc, Pa / Pc, epsilon)
     # Thrust = Cf_actual·Pc·At depends on the NOZZLE efficiency only;
     # combustion (c*) efficiency affects mass flow, not the thrust at fixed
     # Pc/At.  (For legacy single-eta_Isp propellants eta_CF == eta_Isp.)
@@ -722,11 +1152,65 @@ def throat_radius_for_target_thrust(
     return math.sqrt(At / math.pi)
 
 
+def _propellant_with_eta_cstar(
+    propellant: Propellant,
+    eta_cstar: float,
+) -> Propellant:
+    """Clone a gas state while changing only delivered c-star efficiency.
+
+    CEA-backed propellants may carry an ideal ``c_star`` that differs from the
+    value reconstructed from their chamber snapshot.  Preserve that explicit
+    value while rebuilding the efficiency split, rather than mutating the
+    shared built-in propellant table or silently replacing the CEA result.
+    """
+
+    clone = Propellant(
+        name=propellant.name,
+        gamma=propellant.gamma,
+        Mw=propellant.Mw,
+        Tc=propellant.Tc,
+        eta_cstar=float(eta_cstar),
+        eta_CF=float(propellant.eta_CF),
+        OF=propellant.OF,
+        source=propellant.source,
+    )
+    clone.c_star = float(propellant.c_star)
+    return clone
+
+
 def _validate_design_input(input: DesignInput) -> None:
     if input.mode not in DESIGN_MODES:
         raise ValueError("mode must be 'preliminary' or 'validated'")
     if input.method not in {"bezier", "moc", "rao", "rao_variational_moc"}:
         raise ValueError("method must be one of: bezier, moc, rao, rao_variational_moc")
+    if input.thermo.expansion_model not in {
+        "constant_gamma", "frozen_variable_cp"
+    }:
+        raise ValueError(
+            "thermo.expansion_model must be 'constant_gamma' or "
+            "'frozen_variable_cp'"
+        )
+    if input.thermo.expansion_model == "frozen_variable_cp":
+        if input.method != "bezier":
+            raise ValueError(
+                "frozen_variable_cp expansion is currently compatible only "
+                "with bezier geometry; MOC/Rao characteristics require "
+                "constant gamma"
+            )
+        if input.thermo.frozen_gas_table is None:
+            raise ValueError(
+                "frozen_variable_cp expansion requires thermo.frozen_gas_table"
+            )
+        if input.mode == DESIGN_MODE_VALIDATED:
+            raise ValueError(
+                "validated mode does not yet accept frozen_variable_cp because "
+                "no configuration-controlled physical property/CFD benchmark "
+                "has cleared its validation gates"
+            )
+    elif input.thermo.frozen_gas_table is not None:
+        raise ValueError(
+            "thermo.frozen_gas_table requires expansion_model='frozen_variable_cp'"
+        )
     if input.Pc <= 0.0:
         raise ValueError("Pc must be positive")
     if input.Rt is not None and input.Rt <= 0.0:
@@ -767,6 +1251,19 @@ def _validate_design_input(input: DesignInput) -> None:
     if input.mode == DESIGN_MODE_VALIDATED:
         if input.method != "bezier":
             raise ValueError("validated mode only supports the benchmarked bezier path")
+        missing_chamber_inputs = [
+            name for name, value in (
+                ("L_star", input.L_star),
+                ("contraction_ratio", input.contraction_ratio),
+                ("minimum_cylindrical_length", input.minimum_cylindrical_length),
+            )
+            if value is None
+        ]
+        if missing_chamber_inputs:
+            raise ValueError(
+                "validated mode requires explicit chamber inputs: "
+                + ", ".join(missing_chamber_inputs)
+            )
         if input.thermo.mode == THERMO_CONSTANT_GAMMA:
             raise RuntimeError("validated mode requires CEA thermochemistry")
     cad = input.manufacturing.cad.lower()
@@ -803,6 +1300,35 @@ def _validate_design_input(input: DesignInput) -> None:
         raise ValueError("cooling.method must be 'none' or 'regenerative'")
     if input.injector.type not in {"none", "pintle"}:
         raise ValueError("injector.type must be 'none' or 'pintle'")
+    input.spray_cstar_coupling.validate()
+    if input.spray_cstar_coupling.enabled and input.injector.type != "pintle":
+        raise ValueError(
+            "spray_cstar_coupling requires injector.type='pintle'"
+        )
+    if (
+        input.spray_cstar_coupling.enabled
+        and input.cooling.method == "regenerative"
+    ):
+        _, fuel_name = _thermo_feed_names(input.thermo)
+        if (
+            not input.cooling.coolant
+            or not fuel_name
+            or canonical_coolant_name(input.cooling.coolant)
+            != canonical_coolant_name(fuel_name)
+        ):
+            raise ValueError(
+                "spray_cstar_coupling with regenerative cooling requires the "
+                "cycle fuel as coolant; an independent coolant/bypass needs an "
+                "explicit split and mixing model"
+            )
+    if input.require_release_evidence and input.release_evidence_manifest is None:
+        raise ValueError(
+            "require_release_evidence requires release_evidence_manifest"
+        )
+    if input.require_release_evidence and not str(input.configuration_id or "").strip():
+        raise ValueError(
+            "require_release_evidence requires a nonblank configuration_id"
+        )
     if input.cooling.method == "regenerative":
         if not input.cooling.channel_count or input.cooling.channel_count <= 0:
             raise ValueError("regenerative cooling requires channel_count > 0")
@@ -810,7 +1336,20 @@ def _validate_design_input(input: DesignInput) -> None:
             raise ValueError("regenerative cooling requires channel_width > 0")
         if not input.cooling.channel_height or input.cooling.channel_height <= 0.0:
             raise ValueError("regenerative cooling requires channel_height > 0")
-        if not input.cooling.coolant_mass_flow or input.cooling.coolant_mass_flow <= 0.0:
+        if (
+            input.cooling.coolant_mass_flow is not None
+            and input.cooling.coolant_mass_flow <= 0.0
+        ):
+            raise ValueError(
+                "coolant_mass_flow must be positive when supplied"
+            )
+        if (
+            not input.spray_cstar_coupling.enabled
+            and (
+                not input.cooling.coolant_mass_flow
+                or input.cooling.coolant_mass_flow <= 0.0
+            )
+        ):
             raise ValueError("regenerative cooling requires coolant_mass_flow > 0")
 
 
@@ -876,6 +1415,34 @@ def _cooling_with_split_pressure_boundary(
     return replace(cooling, injector_pressure_drop=0.0), warnings
 
 
+def _cooling_at_cycle_mass_flow(
+    input: DesignInput,
+    *,
+    total_mass_flow: float,
+    mixture_ratio: float,
+) -> tuple[CoolingSpec, list[str]]:
+    """Resolve cooling pressure and direct-fuel flow for one cycle iterate."""
+
+    cooling, warnings = _cooling_with_split_pressure_boundary(input)
+    if (
+        input.spray_cstar_coupling.enabled
+        and cooling.method == "regenerative"
+    ):
+        fuel_mass_flow = float(total_mass_flow) / (1.0 + float(mixture_ratio))
+        supplied = input.cooling.coolant_mass_flow
+        if supplied is not None and not math.isclose(
+            float(supplied), fuel_mass_flow, rel_tol=1.0e-9, abs_tol=0.0
+        ):
+            warnings.append(
+                "spray/c-star/regen outer closure derives coolant_mass_flow "
+                f"from the current cycle fuel stream ({fuel_mass_flow:.9g} kg/s); "
+                f"the static input value {float(supplied):.9g} kg/s is only an "
+                "initial request and is not reused across iterations."
+            )
+        cooling = replace(cooling, coolant_mass_flow=fuel_mass_flow)
+    return cooling, warnings
+
+
 def _build_v2_contour(
     input: DesignInput,
     Rt: float,
@@ -885,24 +1452,32 @@ def _build_v2_contour(
     throat_geometry = input.throat_geometry
     throat_upstream_radius_source = "input_throat_geometry"
     if input.throat_cd_target is not None:
+        radius_bounds = (
+            REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS
+            if input.allow_throat_radius_extension
+            else SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS
+        )
         throat_geometry = replace(
             throat_geometry,
             upstream_radius_ratio=upstream_radius_ratio_for_discharge_coefficient(
-                input.throat_cd_target, prop.gamma
+                input.throat_cd_target,
+                prop.gamma,
+                min_ratio=radius_bounds[0],
+                max_ratio=radius_bounds[1],
             ),
         )
         input.throat_geometry = throat_geometry
-        throat_upstream_radius_source = "cd_target_hall_sp8120"
+        throat_upstream_radius_source = (
+            "cd_target_hall_repository_extension"
+            if throat_geometry.upstream_radius_ratio
+            > SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS[1]
+            else "cd_target_hall_sp8120"
+        )
 
     if input.method == "bezier":
-        theta_n = input.theta_n
-        theta_e = input.theta_e
-        if theta_n is None or theta_e is None:
-            tn_l, te_l = lookup_angles(epsilon, input.length_pct)
-            theta_n = theta_n if theta_n is not None else tn_l
-            theta_e = theta_e if theta_e is not None else te_l
         nozzle = bell_nozzle_contour(
-            Rt, epsilon, theta_n, theta_e, input.length_pct, gamma=prop.gamma,
+            Rt, epsilon, input.theta_n, input.theta_e, input.length_pct,
+            gamma=prop.gamma,
             throat_geometry=throat_geometry,
         )
     else:
@@ -946,6 +1521,9 @@ def _build_v2_contour(
         )
     )
     chamber["throat_cd_target"] = input.throat_cd_target
+    chamber["allow_throat_radius_extension"] = (
+        input.allow_throat_radius_extension
+    )
     contour = full_engine_contour(chamber, nozzle)
     contour["geometry_checks"] = thrust_chamber_geometry_checks(
         contour,
@@ -1221,18 +1799,31 @@ def _injector_interface_screen(input: DesignInput, contour: dict):
     )
 
 
-def _benchmark_status(method: str) -> dict:
+def _benchmark_status(method: str, contour: dict | None = None) -> dict:
     if method == "bezier":
+        if contour is not None and contour.get("rao_chart_extrapolated", False):
+            return {
+                "status": "unvalidated_rao_chart_extrapolation",
+                "validated_for_design": False,
+                "notes": [
+                    "Bezier angles were extrapolated outside the digitized "
+                    "Rao/TOP chart domain; supply in-domain inputs or explicit "
+                    "angles backed by a separate benchmark."
+                ],
+            }
         return {
             "status": "benchmarked_preliminary_top_geometry",
             "validated_for_design": True,
             "notes": ["Bezier/TOP path is the trusted preliminary baseline."],
         }
     return {
-        "status": "experimental_xfail_until_literature_benchmarks_pass",
+        "status": "experimental_with_strict_literature_benchmark",
         "validated_for_design": False,
         "notes": [
-            "MOC/Rao paths remain diagnostic and blocked from manufacturing outputs."
+            "The Rao 1958 Nozzle-B case is a strict published-data benchmark, "
+            "but generic MOC/Rao contours remain diagnostic and blocked from "
+            "manufacturing outputs until their per-run residual, topology, "
+            "valid-region, thrust, and source-configuration gates pass."
         ],
     }
 
@@ -1315,11 +1906,15 @@ def _write_v2_artifacts(
     )
 
     # Pintle deliverable folder: labeled schematic (SVG+PNG), parameters JSON,
-    # dimensions CSV (always) + optional STEP/STL/DXF reference geometry.  A
-    # plotting/CAD hiccup must not abort the chamber artifacts, so failures are
-    # captured to pintle/EXPORT_ERROR.txt instead of raising.
+    # dimensions CSV (always) + optional STEP/STL/DXF reference geometry.
+    # Diagnostic-only output (cad=none) remains best effort.  If CAD was
+    # explicitly requested, a failed B-rep/topology/export gate is fatal; an
+    # EXPORT_ERROR marker is still written so the failure is inspectable.
     if injector_result is not None and input.injector.type == "pintle":
         pintle_dir = out / "pintle"
+        injector_cad_mode = str(
+            getattr(input.injector, "cad", "none") or "none"
+        ).strip().lower()
         try:
             from raosim.injector_export import export_pintle_package
             pkg = export_pintle_package(
@@ -1336,8 +1931,29 @@ def _write_v2_artifacts(
                 "pintle package export failed:\n" + traceback.format_exc(),
                 encoding="utf-8")
             files["pintle_error"] = pintle_dir / "EXPORT_ERROR.txt"
+            if injector_cad_mode not in {"none", "off"}:
+                raise RuntimeError(
+                    "Requested pintle CAD failed a required geometry/export "
+                    f"gate; see {files['pintle_error']}"
+                ) from exc
 
     metadata = _v2_metadata(input, contour, gate_report, report_sections)
+    seal_center = seal_width = None
+    if injector_result is not None and input.injector.type == "pintle":
+        try:
+            from raosim.injector_cad import resolve_machined_pintle_layout
+
+            interface_layout = resolve_machined_pintle_layout(
+                injector_result, spec=input.injector
+            )["resolved"]
+            if interface_layout["seal_type"] == "o_ring":
+                seal_center = interface_layout["seal_center_radius_m"]
+                seal_width = interface_layout["o_ring_groove_width_m"]
+        except Exception:
+            # The common bolt pattern is still exported.  Missing optional
+            # seal metadata is captured in the design report/CAD readiness
+            # rather than preventing an otherwise valid chamber B-rep.
+            pass
     cad = input.manufacturing.cad.lower()
     if cad in {CAD_STEP, CAD_BOTH}:
         files["step"] = export_step(
@@ -1346,9 +1962,22 @@ def _write_v2_artifacts(
             wall_thickness=input.manufacturing.wall_thickness,
             flange_od=input.interface.flange_od,
             flange_length=input.interface.flange_length,
+            bolt_count=input.interface.bolt_count,
+            bolt_circle_diameter=input.interface.bolt_circle_diameter,
+            bolt_hole_diameter=input.interface.bolt_hole_diameter,
+            seal_center_radius=seal_center,
+            seal_groove_width=seal_width,
+            # The injector face owns the O-ring gland; the chamber flange is
+            # the continuous flat mating land.  Cutting two half-glands would
+            # be an invalid default for a conventional static face O-ring.
+            seal_groove_depth=None,
             metadata=metadata,
             throat_location=contour["throat_location"],
+            require_brep=True,
         )
+        cad_sidecar = files["step"].with_suffix(".cad.json")
+        if cad_sidecar.exists():
+            files["step_cad_metadata"] = cad_sidecar
 
     if cad in {CAD_STL, CAD_BOTH}:
         files["stl"] = export_stl(
@@ -1388,13 +2017,30 @@ def _v2_metadata(
         "hardware_qualified": False,
         "qualification_note": contour.get("qualification_note"),
         "gate_passed": gate_report.passed,
+        "software_gate_passed": gate_report.passed,
+        "physical_release_evidence_complete": report_sections[
+            "physical_release_readiness"
+        ]["evidence_complete"],
+        "physical_release_blocked": report_sections[
+            "physical_release_readiness"
+        ]["blocked"],
+        "configuration_id": input.configuration_id,
         "authoritative_cad": "STEP",
         "native_ipt": "deferred",
         "thermo_mode": input.thermo.mode,
         "thermo_source": report_sections["thermochemistry"]["source"],
+        "nozzle_expansion_model": report_sections["thermochemistry"][
+            "expansion_model"
+        ],
+        "frozen_flow_fingerprint_sha256": (
+            report_sections["thermochemistry"].get("frozen_expansion") or {}
+        ).get("input_fingerprint_sha256"),
         "cooling_method": input.cooling.method,
         "injector_type": input.injector.type,
         "injector_feasible": report_sections["injector"].get("feasible", True),
+        "spray_cstar_coupling_enabled": report_sections[
+            "spray_cstar_coupling"
+        ].get("enabled", input.spray_cstar_coupling.enabled),
         "material": input.material.name,
         "wall_thickness": manufacturing.wall_thickness,
         "flange_od": interface.flange_od,

@@ -20,10 +20,15 @@ Pintle passage geometry:
     axial annulus      A_a = (pi/4) (Do^2 - Di^2)  ~ pi * D_p * h
     radial rect slots  A_r = N_slots * w * h_slot
 
-This first implementation supports a FIXED, LIQUID/LIQUID, automatically-sized
-pintle.  Gaseous / near-critical injection needs a separate compressible /
-real-fluid branch and is explicitly rejected here.  Movable-sleeve throttling
-is a later implementation.
+The hydraulic implementation supports automatically-sized or fixed rectangular
+slots/round holes plus the Son et al. (2017) continuous movable radial gap.
+The Son branch holds the axial annulus fixed, resolves physical centre-rod
+travel below the centre-gap transition, and synthesizes the separate upstream
+annulus-controller schedule required for throttling.  Configuration-specific
+Cd calibration and VOF/measured sheet evidence are provenance- and
+operating-domain-bound.  Single-phase gas streams use an explicit compressible
+orifice branch; the movable radial-sheet branch itself requires liquid.
+Two-phase states and unsupported radial exit geometries are rejected.
 
 NASA SP-8089 identifies momentum balance, annulus/slot geometry, and the
 deflector angle as the governing pintle variables, while warning that spray
@@ -41,6 +46,19 @@ from typing import Any
 import numpy as np
 
 from raosim.coolants import canonical_coolant_name
+from raosim.movable_pintle import (
+    MovablePintleActuation,
+    MovablePintleSpec,
+    SON2017_MODEL_ID,
+    center_gap_area,
+    discharge_coefficient_at_opening,
+    minimum_opening_distance,
+    movable_geometry_fingerprint,
+    resolve_maximum_opening,
+    solve_opening_for_mass_flow,
+    son_minimum_tip_area,
+    static_actuator_ledger,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -128,6 +146,10 @@ class PintleGeometrySpec:
     deflector_angle: float = 0.0             # deg, radial-stream deflection
     impingement_distance: float | None = None  # m, openings -> interaction
     radial_stream: str = "fuel"              # which stream is slotted (radial)
+    # Hydraulic and CAD exporters must use the same radial exit style.
+    radial_exit_style: str = "slots"          # "slots" | "holes"
+    radial_hole_diameter: float | None = None  # m, fixed-mode round hole
+    radial_hole_length: float | None = None    # m, defaults to L/D target
     slot_length_over_dh: float = 2.0         # auto slot depth = (L/D)*D_h
     # Fixed-geometry overrides (only honoured under sizing="fixed").
     annulus_gap: float | None = None         # m
@@ -207,7 +229,8 @@ class InjectorSpec:
     """Top-level injector request attached to a DesignInput."""
 
     type: str = "none"                       # "none" | "pintle"
-    sizing: str = "auto"                     # "auto" | "fixed"
+    architecture: str = "fixed_discrete"     # fixed_discrete | son_continuous_movable
+    sizing: str = "auto"                     # auto | fixed | movable
     fuel_dp_fraction: float = 0.2            # dp_f / Pc
     oxidizer_dp_fraction: float = 0.2        # dp_o / Pc
     fuel_cd: float = 0.7                     # fuel metering discharge coeff
@@ -215,6 +238,17 @@ class InjectorSpec:
     faceplate_material: str | None = None
     pintle_material: str | None = None
     target_momentum_ratio: float | None = None
+    # When a TMR target is requested in auto sizing, solve the radial stream's
+    # dP/Pc while holding the axial stream's commanded fraction.  Bounds are a
+    # design envelope, not a universal stability rule.
+    target_momentum_dp_fraction_bounds: tuple[float, float] = (0.05, 0.50)
+    # Reachable dP/Pc envelope of the *separate upstream controller* required
+    # for the fixed axial annulus in the Son movable-pintle architecture.  The
+    # centre rod meters only the radial stream; it does not resize this area.
+    movable_axial_controller_dp_fraction_bounds: tuple[float, float] = (
+        1.0e-4,
+        1.0,
+    )
     # Discrete feed-port count for each propellant manifold (annular header
     # ring → annulus/slots). Drives the maldistribution network.
     fuel_manifold_ports: int = 4
@@ -236,6 +270,7 @@ class InjectorSpec:
         default_factory=InjectorManufacturingSpec
     )
     mechanical: PintleMechanicalSpec = field(default_factory=PintleMechanicalSpec)
+    movable_pintle: MovablePintleSpec = field(default_factory=MovablePintleSpec)
     # Pump/tank feed-system inputs for the feed-pressure closure (§ feed ledger).
     feed_system: FeedSystemSpec = field(default_factory=FeedSystemSpec)
     # Injector CAD/reference-geometry output: "none" | "auto" | "reference" |
@@ -307,6 +342,9 @@ class StreamAtomization:
     combustion_length: float        # m, breakup + vaporization
     vaporized_fraction: float       # [-], fraction vaporized in the chamber
     regime: str                     # atomization-regime validity flag
+    applicable: bool                # correlation is physically applicable
+    injection_form: str             # annular_sheet | planar_slot_jet | ...
+    validity_reason: str = ""
 
 
 @dataclass
@@ -322,13 +360,27 @@ class SprayAtomization:
     chamber_gas_density: float          # kg/m^3, Pc/(R_gas Tc)
     evaporation_constant: float         # m^2/s, d^2-law burning-rate constant
     streams: dict[str, StreamAtomization]
-    limiting_role: str                  # stream with the worst (longest) dev.
+    limiting_role: str | None           # applicable stream with longest dev.
     combustion_length: float            # m, limiting stream
     available_chamber_length: float     # m
     development_margin: float           # available / required (>=1 good)
-    predicted_cstar_efficiency: float   # mass-weighted vaporized fraction
+    eta_vaporization: float             # liquid-mass-weighted vaporized fraction
+    eta_mixing: float | None            # unavailable in this screen
+    eta_combustion: float | None        # unavailable in this screen
+    eta_cstar: float | None             # requires an explicit coupling model
     model: str
     notes: list[str] = field(default_factory=list)
+
+    @property
+    def predicted_cstar_efficiency(self) -> float:
+        """Deprecated compatibility alias for ``eta_vaporization``.
+
+        This value is *not* a predicted characteristic-velocity efficiency.
+        It remains available so older reports do not crash while callers move
+        to the explicit efficiency fields.
+        """
+
+        return self.eta_vaporization
 
     def to_dict(self) -> dict:
         return {
@@ -338,7 +390,14 @@ class SprayAtomization:
             "combustion_length_m": self.combustion_length,
             "available_chamber_length_m": self.available_chamber_length,
             "development_margin": self.development_margin,
-            "predicted_cstar_efficiency": self.predicted_cstar_efficiency,
+            "eta_vaporization": self.eta_vaporization,
+            "eta_mixing": self.eta_mixing,
+            "eta_combustion": self.eta_combustion,
+            "eta_cstar": self.eta_cstar,
+            # Backward-compatible, explicitly named as a surrogate.  It is the
+            # vaporized liquid fraction, not a c-star prediction.
+            "eta_cstar_surrogate_deprecated": self.eta_vaporization,
+            "predicted_cstar_efficiency": self.eta_vaporization,
             "model": self.model,
             "streams": {
                 role: {
@@ -349,11 +408,101 @@ class SprayAtomization:
                     "combustion_length_m": s.combustion_length,
                     "vaporized_fraction": s.vaporized_fraction,
                     "regime": s.regime,
+                    "applicable": s.applicable,
+                    "injection_form": s.injection_form,
+                    "validity_reason": s.validity_reason,
                 }
                 for role, s in self.streams.items()
             },
             "notes": self.notes,
         }
+
+
+@dataclass(frozen=True)
+class CStarCouplingResult:
+    """Explicit, opt-in bridge from spray screens to cycle mass flow.
+
+    The injector screen cannot infer mixing or chemical-completion efficiency.
+    Callers must provide both, making the assumptions visible instead of
+    silently equating vaporized liquid fraction with c-star efficiency.
+    """
+
+    eta_vaporization: float
+    eta_mixing: float
+    eta_combustion: float
+    eta_cstar: float
+    ideal_cstar: float
+    effective_cstar: float
+    chamber_pressure: float
+    throat_area: float
+    required_mass_flow: float
+    model: str = "explicit_multiplicative_screen"
+
+    def to_dict(self) -> dict[str, float | str]:
+        return {
+            "eta_vaporization": self.eta_vaporization,
+            "eta_mixing": self.eta_mixing,
+            "eta_combustion": self.eta_combustion,
+            "eta_cstar": self.eta_cstar,
+            "ideal_cstar_m_s": self.ideal_cstar,
+            "effective_cstar_m_s": self.effective_cstar,
+            "chamber_pressure_pa": self.chamber_pressure,
+            "throat_area_m2": self.throat_area,
+            "required_mass_flow_kg_s": self.required_mass_flow,
+            "model": self.model,
+        }
+
+
+def couple_atomization_to_performance(
+    atomization: SprayAtomization,
+    *,
+    ideal_cstar: float,
+    chamber_pressure: float,
+    throat_area: float,
+    eta_mixing: float,
+    eta_combustion: float,
+) -> CStarCouplingResult:
+    """Return a transparent one-way spray-to-cycle coupling result.
+
+    ``mdot = Pc*At/(eta_cstar*cstar_ideal)``.  This function does not mutate an
+    engine design or claim fixed-point convergence.  The caller can explicitly
+    re-run the engine/injector loop with the returned mass flow if desired.
+    """
+
+    values = {
+        "ideal_cstar": ideal_cstar,
+        "chamber_pressure": chamber_pressure,
+        "throat_area": throat_area,
+    }
+    for name, value in values.items():
+        if not math.isfinite(value) or value <= 0.0:
+            raise ValueError(f"{name} must be finite and > 0")
+    for name, value in (
+        ("eta_mixing", eta_mixing),
+        ("eta_combustion", eta_combustion),
+    ):
+        if not math.isfinite(value) or not (0.0 < value <= 1.0):
+            raise ValueError(f"{name} must be finite and in (0, 1]")
+    eta_vap = atomization.eta_vaporization
+    if not math.isfinite(eta_vap) or not (0.0 < eta_vap <= 1.0):
+        raise InjectorUnsupportedState(
+            "atomization has no applicable, finite liquid-vaporization "
+            "efficiency; c-star coupling is unavailable"
+        )
+    eta_cstar = eta_vap * eta_mixing * eta_combustion
+    effective = ideal_cstar * eta_cstar
+    mdot = chamber_pressure * throat_area / effective
+    return CStarCouplingResult(
+        eta_vaporization=eta_vap,
+        eta_mixing=eta_mixing,
+        eta_combustion=eta_combustion,
+        eta_cstar=eta_cstar,
+        ideal_cstar=ideal_cstar,
+        effective_cstar=effective,
+        chamber_pressure=chamber_pressure,
+        throat_area=throat_area,
+        required_mass_flow=mdot,
+    )
 
 
 @dataclass
@@ -518,7 +667,11 @@ class FeedLineLedger:
             "chamber_pressure_pa": self.chamber_pressure,
             "injector_dp_pa": self.injector_dp,
             "manifold_loss_pa": self.manifold_loss,
+            "manifold_loss_source": "user_allowance",
             "manifold_screen_loss_pa": self.manifold_screen_loss,
+            "manifold_screen_loss_source": (
+                "one_dimensional_two_header_network_information_only"
+            ),
             "regen_loss_pa": self.regen_loss,
             "line_valve_loss_pa": self.line_valve_loss,
             "control_margin_pa": self.control_margin,
@@ -562,6 +715,7 @@ class FeedSystemLedger:
 @dataclass
 class InjectorDesignResult:
     feasible: bool
+    architecture: str
     sizing: str
     radial_stream: str
     pintle_diameter: float
@@ -579,11 +733,14 @@ class InjectorDesignResult:
     minimum_web: float                    # m, ligament between slots
     gates: list[InjectorGate]
     feed: dict[str, FeedState]
+    momentum_targeting: dict[str, Any] = field(default_factory=dict)
+    model_provenance: dict[str, dict[str, str]] = field(default_factory=dict)
     atomization: SprayAtomization | None = None
     manifold: ManifoldDistribution | None = None
     thermal: FaceTipThermal | None = None
     stability: StabilityScreen | None = None
     feed_system: FeedSystemLedger | None = None
+    actuation: MovablePintleActuation | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -608,8 +765,10 @@ class InjectorDesignResult:
 
         return {
             "feasible": self.feasible,
+            "architecture": self.architecture,
             "sizing": self.sizing,
             "radial_stream": self.radial_stream,
+            "radial_exit_style": self.slots.geometry,
             "pintle_diameter_m": self.pintle_diameter,
             "chamber_radius_m": self.chamber_radius,
             "chamber_length_m": self.chamber_length,
@@ -619,8 +778,12 @@ class InjectorDesignResult:
             "spray_half_angle_deg": self.spray_half_angle_deg,
             "spray_wall_axial_distance_m": self.spray_wall_axial_distance,
             "slot_to_annulus_width_ratio": self.slot_to_annulus_width_ratio,
+            "radial_opening_to_annulus_width_ratio":
+                self.slot_to_annulus_width_ratio,
             "blockage_factor": self.blockage_factor,
             "minimum_web_m": self.minimum_web,
+            "momentum_targeting": self.momentum_targeting,
+            "model_provenance": self.model_provenance,
             "atomization": (
                 self.atomization.to_dict() if self.atomization else None
             ),
@@ -635,6 +798,9 @@ class InjectorDesignResult:
             ),
             "feed_system": (
                 self.feed_system.to_dict() if self.feed_system else None
+            ),
+            "actuation": (
+                self.actuation.to_dict() if self.actuation else None
             ),
             "feed": {k: _feed(v) for k, v in self.feed.items()},
             "gates": [
@@ -684,8 +850,13 @@ def _validate_injector_spec(
     errs: list[str] = []
     if spec.type != "pintle":
         errs.append("injector type must be 'pintle'")
-    if spec.sizing not in ("auto", "fixed"):
-        errs.append("injector sizing must be 'auto' or 'fixed'")
+    if spec.architecture not in ("fixed_discrete", "son_continuous_movable"):
+        errs.append(
+            "injector architecture must be 'fixed_discrete' or "
+            "'son_continuous_movable'"
+        )
+    if spec.sizing not in ("auto", "fixed", "movable"):
+        errs.append("injector sizing must be 'auto', 'fixed', or 'movable'")
     if not (0.0 < spec.fuel_cd <= 1.0):
         errs.append(f"fuel Cd must be in (0, 1], got {spec.fuel_cd}")
     if not (0.0 < spec.oxidizer_cd <= 1.0):
@@ -704,6 +875,13 @@ def _validate_injector_spec(
         errs.append(f"pintle_diameter must be > 0, got {geo.pintle_diameter}")
     if geo.radial_stream not in ("fuel", "oxidizer"):
         errs.append("radial_stream must be 'fuel' or 'oxidizer'")
+    if geo.radial_exit_style not in (
+        "slots", "holes", "continuous_radial_gap"
+    ):
+        errs.append(
+            "radial_exit_style must be 'slots', 'holes', or "
+            "'continuous_radial_gap'"
+        )
     if not (0.0 <= geo.deflector_angle <= 90.0):
         errs.append(
             f"deflector_angle must be in [0, 90] deg, got {geo.deflector_angle}"
@@ -718,6 +896,8 @@ def _validate_injector_spec(
         ("slot_width", geo.slot_width),
         ("slot_height", geo.slot_height),
         ("slot_depth", geo.slot_depth),
+        ("radial_hole_diameter", geo.radial_hole_diameter),
+        ("radial_hole_length", geo.radial_hole_length),
         ("tip_radius", geo.tip_radius),
         ("body_length", geo.body_length),
         ("face_thickness", geo.face_thickness),
@@ -729,6 +909,26 @@ def _validate_injector_spec(
         errs.append("slot_length_over_dh must be > 0")
     if spec.target_momentum_ratio is not None and spec.target_momentum_ratio <= 0:
         errs.append("target_momentum_ratio must be > 0")
+    bounds = spec.target_momentum_dp_fraction_bounds
+    if len(bounds) != 2 or not (0.0 < bounds[0] < bounds[1] <= 1.0):
+        errs.append(
+            "target_momentum_dp_fraction_bounds must satisfy "
+            "0 < lower < upper <= 1"
+        )
+    controller_bounds = spec.movable_axial_controller_dp_fraction_bounds
+    if (
+        len(controller_bounds) != 2
+        or not 0.0 < controller_bounds[0] < controller_bounds[1]
+    ):
+        errs.append(
+            "movable_axial_controller_dp_fraction_bounds must satisfy "
+            "0 < lower < upper"
+        )
+    if spec.target_momentum_ratio is not None and spec.sizing != "auto":
+        errs.append(
+            "target_momentum_ratio is supported only with sizing='auto'; "
+            "fixed geometry requires an external valve/feed-pressure solve"
+        )
     if spec.evaporation_constant <= 0.0:
         errs.append("evaporation_constant must be > 0")
     if int(spec.fuel_manifold_ports) < 1:
@@ -786,11 +986,349 @@ def _validate_injector_spec(
         errs.append("mechanical.slot_end_condition must be square, rounded, drilled, or edm")
     if mech.seal_type not in ("none", "o_ring", "gasket"):
         errs.append("mechanical.seal_type must be none, o_ring, or gasket")
-    if spec.sizing == "fixed":
-        if geo.annulus_gap is None or geo.slot_width is None:
+    movable = spec.movable_pintle
+    if geo.radial_exit_style == "continuous_radial_gap":
+        if spec.architecture != "son_continuous_movable":
             errs.append(
-                "fixed sizing requires both annulus_gap and slot_width "
-                "(otherwise it would silently auto-size the geometry)")
+                "continuous_radial_gap requires architecture="
+                "'son_continuous_movable'"
+            )
+        if geo.deflector_angle >= 90.0:
+            errs.append(
+                "continuous_radial_gap requires deflector_angle/tip angle < 90 deg"
+            )
+        for name, value in (
+            ("post_diameter", movable.post_diameter),
+            ("post_thickness", movable.post_thickness),
+            ("center_gap_diameter", movable.center_gap_diameter),
+            ("pintle_rod_diameter", movable.pintle_rod_diameter),
+        ):
+            if value is None or value <= 0.0:
+                errs.append(f"movable_pintle.{name} must be > 0")
+        if (
+            geo.pintle_diameter is not None
+            and movable.post_diameter is not None
+            and not math.isclose(
+                geo.pintle_diameter,
+                movable.post_diameter,
+                rel_tol=1.0e-9,
+                abs_tol=1.0e-12,
+            )
+        ):
+            errs.append(
+                "geometry.pintle_diameter must equal "
+                "movable_pintle.post_diameter for the shared post/annulus anchor"
+            )
+        for name, value in (
+            ("position_tolerance", movable.position_tolerance),
+            ("position_feedback_resolution", movable.position_feedback_resolution),
+            ("backlash", movable.backlash),
+            ("closed_leakage_area", movable.closed_leakage_area),
+            ("unbalanced_pressure_area", movable.unbalanced_pressure_area),
+            ("seal_friction_force", movable.seal_friction_force),
+            ("maximum_acceleration", movable.maximum_acceleration),
+            ("spring_preload_force", movable.spring_preload_force),
+        ):
+            if value is not None and (
+                not math.isfinite(float(value)) or value < 0.0
+            ):
+                errs.append(f"movable_pintle.{name} must be >= 0")
+        for name, value in (
+            ("maximum_opening", movable.maximum_opening),
+            ("commanded_opening", movable.commanded_opening),
+            ("moving_mass", movable.moving_mass),
+            ("actuator_force_capacity", movable.actuator_force_capacity),
+            ("stem_diameter", movable.stem_diameter),
+            ("stem_allowable_stress", movable.stem_allowable_stress),
+            ("sheet_thickness", movable.sheet_thickness),
+        ):
+            if value is not None and (
+                not math.isfinite(float(value)) or value <= 0.0
+            ):
+                errs.append(f"movable_pintle.{name} must be > 0")
+        if (
+            not math.isfinite(float(movable.minimum_uniform_sheet_opening))
+            or movable.minimum_uniform_sheet_opening < 0.0
+        ):
+            errs.append(
+                "movable_pintle.minimum_uniform_sheet_opening must be >= 0"
+            )
+        if (
+            not math.isfinite(float(movable.transition_area_fraction))
+            or not 0.0 < movable.transition_area_fraction < 1.0
+        ):
+            errs.append(
+                "movable_pintle.transition_area_fraction must be in (0, 1)"
+            )
+        if (
+            not math.isfinite(float(movable.force_safety_factor))
+            or movable.force_safety_factor < 1.0
+        ):
+            errs.append("movable_pintle.force_safety_factor must be >= 1")
+        for label, source, digest in (
+            (
+                "metrology",
+                movable.metrology_source,
+                movable.metrology_artifact_sha256,
+            ),
+            (
+                "leakage",
+                movable.leakage_source,
+                movable.leakage_artifact_sha256,
+            ),
+            (
+                "actuator",
+                movable.actuator_source,
+                movable.actuator_artifact_sha256,
+            ),
+        ):
+            if (source is None) != (digest is None):
+                errs.append(
+                    f"movable_pintle {label} evidence requires source and "
+                    "artifact SHA-256 together"
+                )
+            if source is not None and not str(source).strip():
+                errs.append(
+                    f"movable_pintle.{label}_source must be nonblank"
+                )
+            if digest is not None:
+                digest_text = str(digest).lower()
+                if len(digest_text) != 64 or any(
+                    c not in "0123456789abcdef" for c in digest_text
+                ):
+                    errs.append(
+                        f"movable_pintle.{label}_artifact_sha256 must be a "
+                        "lowercase 64-character SHA-256"
+                    )
+        if spec.sizing == "fixed" and movable.commanded_opening is None:
+            errs.append(
+                "fixed continuous_radial_gap sizing requires "
+                "movable_pintle.commanded_opening"
+            )
+        if spec.sizing == "auto" and movable.commanded_opening is not None:
+            errs.append(
+                "auto continuous_radial_gap sizing solves the opening; do not "
+                "also supply movable_pintle.commanded_opening"
+            )
+        if spec.sizing == "movable":
+            if geo.annulus_gap is None:
+                errs.append(
+                    "movable sizing requires a fixed full-power annulus_gap"
+                )
+            if movable.commanded_opening is not None:
+                errs.append(
+                    "movable sizing solves the center-pintle opening; do not "
+                    "supply commanded_opening"
+                )
+        calibration_ranges = (
+            ("cd_reynolds_range", movable.cd_reynolds_range),
+            ("cd_pressure_drop_range", movable.cd_pressure_drop_range),
+            ("cd_temperature_range", movable.cd_temperature_range),
+            (
+                "cd_cavitation_number_range",
+                movable.cd_cavitation_number_range,
+            ),
+        )
+        for name, value in calibration_ranges:
+            if value is not None and (
+                len(value) != 2
+                or not all(math.isfinite(float(item)) for item in value)
+                or not 0.0 <= value[0] < value[1]
+            ):
+                errs.append(
+                    f"movable_pintle.{name} must satisfy 0 <= min < max"
+                )
+        cd_metadata = (
+            movable.cd_calibration_source,
+            movable.cd_calibration_artifact_sha256,
+            movable.cd_geometry_fingerprint_sha256,
+            movable.cd_reynolds_range,
+            movable.cd_pressure_drop_range,
+            movable.cd_temperature_range,
+            movable.cd_cavitation_number_range,
+            movable.cd_fluid_name,
+        )
+        if movable.cd_vs_opening_fraction and not all(
+            item is not None for item in cd_metadata
+        ):
+            errs.append(
+                "movable-pintle Cd calibration requires source, artifact "
+                "SHA-256, geometry fingerprint, Reynolds/dP/temperature/"
+                "cavitation ranges, and fluid"
+            )
+        if not movable.cd_vs_opening_fraction and any(
+            item is not None for item in cd_metadata
+        ):
+            errs.append(
+                "movable-pintle Cd calibration metadata requires "
+                "cd_vs_opening_fraction points"
+            )
+        if movable.cd_calibration_artifact_sha256 is not None:
+            digest = str(movable.cd_calibration_artifact_sha256).lower()
+            if len(digest) != 64 or any(
+                c not in "0123456789abcdef" for c in digest
+            ):
+                errs.append(
+                    "movable_pintle.cd_calibration_artifact_sha256 must be a "
+                    "lowercase 64-character SHA-256"
+                )
+        if movable.cd_geometry_fingerprint_sha256 is not None:
+            digest = str(movable.cd_geometry_fingerprint_sha256).lower()
+            if len(digest) != 64 or any(
+                c not in "0123456789abcdef" for c in digest
+            ):
+                errs.append(
+                    "movable_pintle.cd_geometry_fingerprint_sha256 must be a "
+                    "lowercase 64-character SHA-256"
+                )
+        if movable.cd_fluid_name is not None and not str(
+            movable.cd_fluid_name
+        ).strip():
+            errs.append("movable_pintle.cd_fluid_name must be nonblank")
+        sheet_evidence = (
+            movable.sheet_thickness,
+            movable.sheet_thickness_method,
+            movable.sheet_thickness_source,
+            movable.sheet_thickness_artifact_sha256,
+            movable.sheet_thickness_geometry_fingerprint_sha256,
+            movable.sheet_thickness_fluid_name,
+            movable.sheet_thickness_opening_range,
+            movable.sheet_thickness_pressure_drop_range,
+            movable.sheet_thickness_mass_flow_range,
+        )
+        if any(item is not None for item in sheet_evidence) and not all(
+            item is not None for item in sheet_evidence
+        ):
+            errs.append(
+                "movable-pintle sheet handoff requires thickness, method, "
+                "source, artifact SHA-256, geometry fingerprint, fluid, and "
+                "opening/dP/mass-flow validity ranges together"
+            )
+        if (
+            movable.sheet_thickness_method is not None
+            and movable.sheet_thickness_method not in ("vof", "measured")
+        ):
+            errs.append(
+                "movable_pintle.sheet_thickness_method must be 'vof', "
+                "or 'measured'"
+            )
+        for name, value in (
+            (
+                "sheet_thickness_opening_range",
+                movable.sheet_thickness_opening_range,
+            ),
+            (
+                "sheet_thickness_pressure_drop_range",
+                movable.sheet_thickness_pressure_drop_range,
+            ),
+            (
+                "sheet_thickness_mass_flow_range",
+                movable.sheet_thickness_mass_flow_range,
+            ),
+        ):
+            if value is not None and (
+                len(value) != 2
+                or not all(math.isfinite(float(item)) for item in value)
+                or not 0.0 < value[0] <= value[1]
+            ):
+                errs.append(
+                    f"movable_pintle.{name} must satisfy 0 < min <= max"
+                )
+        if movable.sheet_thickness_fluid_name is not None and not str(
+            movable.sheet_thickness_fluid_name
+        ).strip():
+            errs.append(
+                "movable_pintle.sheet_thickness_fluid_name must be nonblank"
+            )
+        if movable.sheet_thickness_artifact_sha256 is not None:
+            digest = str(movable.sheet_thickness_artifact_sha256).lower()
+            if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+                errs.append(
+                    "movable_pintle.sheet_thickness_artifact_sha256 must be "
+                    "a lowercase 64-character SHA-256"
+                )
+        if movable.sheet_thickness_geometry_fingerprint_sha256 is not None:
+            digest = str(
+                movable.sheet_thickness_geometry_fingerprint_sha256
+            ).lower()
+            if len(digest) != 64 or any(
+                c not in "0123456789abcdef" for c in digest
+            ):
+                errs.append(
+                    "movable_pintle.sheet_thickness_geometry_fingerprint_sha256 "
+                    "must be a lowercase 64-character SHA-256"
+                )
+    elif spec.architecture == "son_continuous_movable":
+        errs.append(
+            "son_continuous_movable architecture requires "
+            "radial_exit_style='continuous_radial_gap'"
+        )
+    elif spec.sizing == "movable":
+        errs.append(
+            "sizing='movable' is reserved for son_continuous_movable"
+        )
+    else:
+        unused_movable_inputs = (
+            movable.post_diameter,
+            movable.post_thickness,
+            movable.center_gap_diameter,
+            movable.pintle_rod_diameter,
+            movable.maximum_opening,
+            movable.commanded_opening,
+            movable.cd_vs_opening_fraction or None,
+            movable.cd_calibration_source,
+            movable.cd_calibration_artifact_sha256,
+            movable.cd_geometry_fingerprint_sha256,
+            movable.cd_reynolds_range,
+            movable.cd_pressure_drop_range,
+            movable.cd_temperature_range,
+            movable.cd_cavitation_number_range,
+            movable.cd_fluid_name,
+            movable.position_tolerance,
+            movable.position_feedback_resolution,
+            movable.backlash,
+            movable.closed_leakage_area,
+            movable.metrology_source,
+            movable.metrology_artifact_sha256,
+            movable.leakage_source,
+            movable.leakage_artifact_sha256,
+            movable.unbalanced_pressure_area,
+            movable.seal_friction_force,
+            movable.moving_mass,
+            movable.maximum_acceleration,
+            movable.actuator_force_capacity,
+            movable.stem_diameter,
+            movable.stem_allowable_stress,
+            movable.actuator_source,
+            movable.actuator_artifact_sha256,
+            movable.sheet_thickness,
+            movable.sheet_thickness_method,
+            movable.sheet_thickness_source,
+            movable.sheet_thickness_artifact_sha256,
+            movable.sheet_thickness_geometry_fingerprint_sha256,
+            movable.sheet_thickness_fluid_name,
+            movable.sheet_thickness_opening_range,
+            movable.sheet_thickness_pressure_drop_range,
+            movable.sheet_thickness_mass_flow_range,
+        )
+        if any(value is not None for value in unused_movable_inputs):
+            errs.append(
+                "movable_pintle inputs require architecture="
+                "'son_continuous_movable' and radial_exit_style="
+                "'continuous_radial_gap'; they are not ignored on fixed_discrete"
+            )
+    if spec.sizing == "fixed":
+        if geo.radial_exit_style == "slots":
+            radial_size = geo.slot_width
+        elif geo.radial_exit_style == "holes":
+            radial_size = geo.radial_hole_diameter
+        else:
+            radial_size = movable.commanded_opening
+        if geo.annulus_gap is None or radial_size is None:
+            errs.append(
+                "fixed sizing requires annulus_gap and the selected radial "
+                "opening dimension"
+            )
     for feed in (spec.fuel, spec.oxidizer):
         if feed.phase not in ("auto", "liquid", "gas"):
             errs.append(f"{feed.role} phase must be auto, liquid, or gas")
@@ -1135,6 +1673,33 @@ def _slots_from_area(area: float, n_slots: int, aspect_ratio: float,
     }
 
 
+def _holes_from_area(
+    area: float,
+    n_holes: int,
+    pintle_diameter: float,
+    hole_length: float | None,
+    length_over_dh: float,
+) -> dict:
+    """Round-hole geometry from total required radial metering area."""
+
+    area_each = area / n_holes
+    diameter = math.sqrt(4.0 * area_each / math.pi)
+    length = (
+        hole_length if hole_length is not None
+        else max(length_over_dh * diameter, 0.0)
+    )
+    pitch = math.pi * pintle_diameter / n_holes
+    return {
+        "hole_diameter": diameter,
+        "hole_length": length,
+        "hydraulic_diameter": diameter,
+        "web": pitch - diameter,
+        "blockage_factor": diameter / pitch,
+        "length_over_dh": length / diameter if diameter > 0 else float("nan"),
+        "area_each": area_each,
+    }
+
+
 def _stream_numbers(role, geom, mdot, dp, cd, area, dh, rho, mu, sigma,
                     velocity=None):
     v = velocity if velocity is not None else mdot / (rho * area)
@@ -1191,7 +1756,18 @@ _ATOMIZATION_WEBER_FLOOR = 40.0   # below this We_g, primary breakup is poor
 _DEFAULT_EVAPORATION_CONSTANT = 1.0e-6   # m^2/s, d^2-law burning-rate K (hydrocarbon class)
 
 
-def _stream_atomization(s, feed, rho_g, chamber_length, K_b):
+def _inapplicable_atomization(s, injection_form, reason):
+    return StreamAtomization(
+        role=s.role, sauter_mean_diameter=float("nan"),
+        aerodynamic_weber=float("nan"), breakup_length=float("nan"),
+        vaporization_length=float("nan"), combustion_length=float("nan"),
+        vaporized_fraction=float("nan"), regime=f"not applicable: {reason}",
+        applicable=False, injection_form=injection_form,
+        validity_reason=reason,
+    )
+
+
+def _stream_atomization(s, feed, rho_g, chamber_length, K_b, Pc):
     """Primary-atomization + d^2-law vaporization screen for one stream.
 
     SMD from the Hinze critical-Weber aerodynamic-breakup limit
@@ -1200,22 +1776,49 @@ def _stream_atomization(s, feed, rho_g, chamber_length, K_b):
     breakup completes within ~10-30 jet diameters (Reitz & Bracco), taken here
     as ``L_b = C d_jet``.  Vaporization follows the d^2-law
     (``d^2(t) = d_32^2 - K_b t``) over the post-breakup residence, the chamber
-    residence using the injection velocity as the convective scale.  Combustion
-    efficiency is approximated by the vaporized mass fraction (Priem & Heidmann,
-    NASA TR R-67, 1960: vaporization-limited combustion).  The breakup length and
-    the vaporized fraction share the same residence so they stay consistent.
+    residence using the injection velocity as the convective scale.  The result
+    is only a vaporized-liquid fraction.  Mixing, chemical completion, and c-star
+    efficiency are deliberately left unresolved.  The breakup length and the
+    vaporized fraction share the same residence so they stay consistent.
     """
+    injection_form = s.detail.get("injection_form", "unknown")
+    if not feed.liquid_ok or feed.phase != "liquid":
+        return _inapplicable_atomization(
+            s, injection_form,
+            f"{feed.phase} stream is not a liquid droplet phase",
+        )
+    if (
+        feed.critical_pressure is not None
+        and math.isfinite(feed.critical_pressure)
+        and Pc >= feed.critical_pressure
+    ):
+        return _inapplicable_atomization(
+            s, injection_form,
+            f"chamber pressure {Pc/1e6:.3g} MPa is at/above the "
+            f"propellant critical pressure {feed.critical_pressure/1e6:.3g} "
+            "MPa; a subcritical surface-tension/drop model is invalid",
+        )
+    if injection_form not in (
+        "continuous_annular_sheet", "planar_slot_jet", "round_hole_jet"
+    ):
+        return _inapplicable_atomization(
+            s, injection_form,
+            f"unsupported injection form '{injection_form}' for the legacy "
+            "Hinze/Reitz-Bracco screen",
+        )
     v = s.velocity
     d_jet = s.hydraulic_diameter
     sigma = feed.surface_tension
-    rho_l = feed.density
     if not (sigma > 0) or not (rho_g > 0) or not (v > 0):
         return StreamAtomization(
             role=s.role, sauter_mean_diameter=float("nan"),
             aerodynamic_weber=float("nan"), breakup_length=float("nan"),
             vaporization_length=float("nan"), combustion_length=float("nan"),
             vaporized_fraction=float("nan"),
-            regime="indeterminate (missing surface tension / gas density)")
+            regime="indeterminate (missing surface tension / gas density)",
+            applicable=False, injection_form=injection_form,
+            validity_reason="missing positive surface tension, chamber-gas "
+            "density, or injection velocity")
     we_g = rho_g * v * v * d_jet / sigma
     d32 = min(_HINZE_CRITICAL_WEBER * sigma / (rho_g * v * v), d_jet)
     L_breakup = _PRIMARY_BREAKUP_DIAMETERS * d_jet
@@ -1234,42 +1837,68 @@ def _stream_atomization(s, feed, rho_g, chamber_length, K_b):
     return StreamAtomization(
         role=s.role, sauter_mean_diameter=d32, aerodynamic_weber=we_g,
         breakup_length=L_breakup, vaporization_length=L_vap,
-        combustion_length=L_comb, vaporized_fraction=vap_frac, regime=regime)
+        combustion_length=L_comb, vaporized_fraction=vap_frac, regime=regime,
+        applicable=True, injection_form=injection_form,
+        validity_reason=(
+            "screening extrapolation: Hinze stable-drop limit plus a fixed "
+            "15*Dh breakup length; geometry-specific validation required"
+        ))
 
 
 def spray_atomization(
     streams: dict, feed: dict, *, Pc, Tc, R_gas, chamber_length,
     evaporation_constant: float = _DEFAULT_EVAPORATION_CONSTANT,
 ) -> SprayAtomization:
-    """Whole-injector spray atomization / vaporization / c* screen."""
+    """Whole-injector, liquid-only atomization/vaporization screen.
+
+    Gas, supercritical, transcritical, and unsupported-geometry streams remain
+    in the result with explicit ``applicable=False`` metadata and NaN droplet
+    quantities.  They are never folded into a droplet-efficiency calculation.
+    """
     rho_g = Pc / (R_gas * Tc)
     per = {
         role: _stream_atomization(streams[role], feed[role], rho_g,
-                                  chamber_length, evaporation_constant)
+                                  chamber_length, evaporation_constant, Pc)
         for role in ("fuel", "oxidizer")
     }
-    # The limiting (longest-combustion-length) stream sets the development need.
-    limiting_role = max(
-        per, key=lambda r: (per[r].combustion_length
-                            if per[r].combustion_length == per[r].combustion_length
-                            else -1.0))
-    L_comb = per[limiting_role].combustion_length
-    margin = chamber_length / L_comb if L_comb > 0 else float("inf")
-    # Mass-weighted vaporized fraction → c* efficiency surrogate.
-    mdot = {r: streams[r].mdot for r in per}
-    total = sum(mdot.values())
-    eta = sum(per[r].vaporized_fraction * mdot[r] for r in per) / max(total, 1e-12)
+    applicable = [r for r, item in per.items() if item.applicable]
+    if applicable:
+        limiting_role = max(applicable, key=lambda r: per[r].combustion_length)
+        L_comb = per[limiting_role].combustion_length
+        margin = chamber_length / L_comb if L_comb > 0 else float("inf")
+        liquid_mdot = sum(streams[r].mdot for r in applicable)
+        eta = sum(
+            per[r].vaporized_fraction * streams[r].mdot for r in applicable
+        ) / max(liquid_mdot, 1e-12)
+    else:
+        limiting_role = None
+        L_comb = float("nan")
+        margin = float("nan")
+        eta = float("nan")
     notes = [
         "Order-of-magnitude screening only (Hinze SMD + Reitz-Bracco breakup + "
-        "d^2-law + Priem-Heidmann vaporization-limited c*); spray distribution "
-        "and SMD require cold-flow validation (NASA SP-8089).",
+        "d^2-law); spray distribution and SMD require cold-flow validation "
+        "(NASA SP-8089).",
+        "eta_vaporization is the mass-weighted vaporized fraction of applicable "
+        "liquid streams only. eta_mixing, eta_combustion, and eta_cstar are not "
+        "predicted by this model.",
+        "The deprecated predicted_cstar_efficiency attribute aliases "
+        "eta_vaporization for compatibility and must not be interpreted as "
+        "characteristic-velocity efficiency.",
     ]
+    for role, item in per.items():
+        if not item.applicable:
+            notes.append(f"{role} excluded: {item.validity_reason}")
     return SprayAtomization(
         chamber_gas_density=rho_g, evaporation_constant=evaporation_constant,
         streams=per, limiting_role=limiting_role, combustion_length=L_comb,
         available_chamber_length=chamber_length, development_margin=margin,
-        predicted_cstar_efficiency=float(min(max(eta, 0.0), 1.0)),
-        model="hinze_reitzbracco_d2law_priem_heidmann_screen", notes=notes)
+        eta_vaporization=(
+            float(min(max(eta, 0.0), 1.0)) if math.isfinite(eta)
+            else float("nan")
+        ),
+        eta_mixing=None, eta_combustion=None, eta_cstar=None,
+        model="hinze_reitzbracco_d2law_liquid_only_screen_v2", notes=notes)
 
 
 def manifold_distribution(result, spec, dp_fuel, dp_ox) -> ManifoldDistribution:
@@ -1292,7 +1921,7 @@ def manifold_distribution(result, spec, dp_fuel, dp_ox) -> ManifoldDistribution:
         feeds = s.geometry
         dp = dp_by_role[role]
         ports = max(ports_by_role[role], 1)
-        if feeds == "slots":
+        if feeds in ("slots", "holes"):
             n_elem = max(int(result.slot_count), 2)
             manifold_radius = 0.5 * result.pintle_diameter
         else:
@@ -1448,7 +2077,11 @@ def stability_screen(result, *, Pc, Tc, gamma, R_gas, chi_fuel, chi_oxidizer):
             "marginal (0.1–0.2 Pc)" if decoupling >= 0.10 else
             "chug-prone (<0.1 Pc)")
     # Combustion time lag ~ development length / limiting injection velocity.
-    if result.atomization is not None:
+    if (
+        result.atomization is not None
+        and result.atomization.limiting_role is not None
+        and math.isfinite(result.atomization.combustion_length)
+    ):
         lim = result.atomization.limiting_role
         v = max(result.streams[lim].velocity, 1e-6)
         tau = result.atomization.combustion_length / v
@@ -1480,7 +2113,9 @@ class ThrottlePoint:
     dp_oxidizer_fraction: float
     annulus_gap: float
     slot_width: float
-    sleeve_stroke_fraction: float   # annulus area(f) / area(full)
+    annulus_area_command_fraction: float
+    slot_area_command_fraction: float
+    actuator_stroke_fraction: float | None  # unavailable without kinematics
     v_annulus: float
     v_slots: float
     reynolds_slots: float
@@ -1489,9 +2124,26 @@ class ThrottlePoint:
     spray_half_angle_deg: float
     spray_wall_axial_distance: float
     smd_limiting: float
-    predicted_cstar_efficiency: float
+    eta_vaporization: float
     thermal_margin: float
     feasible: bool
+    radial_opening: float | None = None
+    upstream_controller_required: bool = False
+    axial_controller_role: str | None = None
+    required_axial_controller_dp_fraction: float | None = None
+    required_axial_controller_pressure_drop: float | None = None
+
+    @property
+    def sleeve_stroke_fraction(self) -> float:
+        """Deprecated alias for annulus effective-area command, not stroke."""
+
+        return self.annulus_area_command_fraction
+
+    @property
+    def predicted_cstar_efficiency(self) -> float:
+        """Deprecated alias for liquid vaporization efficiency."""
+
+        return self.eta_vaporization
 
 
 @dataclass
@@ -1499,11 +2151,25 @@ class ThrottleMap:
     points: list[ThrottlePoint]
     preserved: dict[str, bool]
     pc_exponent: float
+    schedule_semantics: str = "commanded_effective_metering_areas"
+    kinematic_model: str | None = None
+    architecture: str = "fixed_discrete"
+    controller_dp_fraction_bounds: tuple[float, float] | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
             "pc_exponent": self.pc_exponent,
+            "schedule_semantics": self.schedule_semantics,
+            "kinematic_model": self.kinematic_model,
+            "architecture": self.architecture,
+            "actuator_stroke_available": bool(self.points) and all(
+                p.actuator_stroke_fraction is not None for p in self.points
+            ),
+            "controller_dp_fraction_bounds": (
+                list(self.controller_dp_fraction_bounds)
+                if self.controller_dp_fraction_bounds is not None else None
+            ),
             "preserved": self.preserved,
             "points": [
                 {
@@ -1513,6 +2179,23 @@ class ThrottleMap:
                     "dp_fuel_fraction": p.dp_fuel_fraction,
                     "dp_oxidizer_fraction": p.dp_oxidizer_fraction,
                     "annulus_gap_m": p.annulus_gap, "slot_width_m": p.slot_width,
+                    "annulus_area_command_fraction":
+                        p.annulus_area_command_fraction,
+                    "slot_area_command_fraction": p.slot_area_command_fraction,
+                    "actuator_stroke_fraction": p.actuator_stroke_fraction,
+                    "radial_opening_m": p.radial_opening,
+                    "upstream_controller_required": (
+                        p.upstream_controller_required
+                    ),
+                    "axial_controller_role": p.axial_controller_role,
+                    "required_axial_controller_dp_fraction": (
+                        p.required_axial_controller_dp_fraction
+                    ),
+                    "required_axial_controller_pressure_drop_pa": (
+                        p.required_axial_controller_pressure_drop
+                    ),
+                    # Deprecated compatibility key; this is an effective-area
+                    # fraction and must not be interpreted as physical stroke.
                     "sleeve_stroke_fraction": p.sleeve_stroke_fraction,
                     "v_annulus_m_s": p.v_annulus, "v_slots_m_s": p.v_slots,
                     "reynolds_slots": p.reynolds_slots,
@@ -1521,7 +2204,9 @@ class ThrottleMap:
                     "spray_half_angle_deg": p.spray_half_angle_deg,
                     "spray_wall_axial_distance_m": p.spray_wall_axial_distance,
                     "smd_limiting_m": p.smd_limiting,
-                    "predicted_cstar_efficiency": p.predicted_cstar_efficiency,
+                    "eta_vaporization": p.eta_vaporization,
+                    "eta_cstar_surrogate_deprecated": p.eta_vaporization,
+                    "predicted_cstar_efficiency": p.eta_vaporization,
                     "thermal_margin": p.thermal_margin, "feasible": p.feasible,
                 }
                 for p in self.points
@@ -1530,20 +2215,341 @@ class ThrottleMap:
         }
 
 
+def _movable_pintle_throttle_map(
+    spec: InjectorSpec,
+    *,
+    mdot_fuel_full: float,
+    mdot_oxidizer_full: float,
+    Pc_full: float,
+    mixture_ratio: float,
+    chamber_radius: float,
+    chamber_length: float,
+    gamma: float,
+    Tc: float,
+    R_gas: float,
+    levels: tuple[float, ...] | list[float],
+    pc_exponent: float,
+) -> ThrottleMap:
+    """Fixed-hardware Son schedule with a separate axial-flow controller.
+
+    Son's centre rod changes only the continuous radial metering area.  The
+    axial annulus is sized once at full power and then held fixed.  At every
+    lower operating point this routine solves the *upstream axial controller*
+    pressure drop needed to deliver the requested axial mass flow through that
+    fixed annulus.  The radial opening is solved independently from Son Eq. 1
+    at the full-power radial ``dP/Pc`` command.
+    """
+
+    ordered_levels = tuple(sorted(float(value) for value in levels))
+    if not ordered_levels:
+        raise InjectorSpecError("throttle levels must not be empty")
+    if any(not 0.0 < value <= 1.0 for value in ordered_levels):
+        raise InjectorSpecError("throttle levels must be in (0, 1]")
+    if not math.isfinite(pc_exponent):
+        raise InjectorSpecError("pc_exponent must be finite")
+
+    # Establish the actual full-power hardware once.  A throttle map is a
+    # schedule synthesis operation, so stale fixed commands on the input are
+    # deliberately cleared while declared hard stops/calibration are retained.
+    full_spec = copy.deepcopy(spec)
+    full_spec.sizing = "auto"
+    full_spec.movable_pintle.commanded_opening = None
+    full_result = size_pintle_injector(
+        full_spec,
+        mdot_fuel=mdot_fuel_full,
+        mdot_oxidizer=mdot_oxidizer_full,
+        Pc=Pc_full,
+        mixture_ratio=mixture_ratio,
+        chamber_radius=chamber_radius,
+        chamber_length=chamber_length,
+        gamma=gamma,
+        Tc=Tc,
+        R_gas=R_gas,
+    )
+    if full_result.actuation is None:
+        raise InjectorSpecError(
+            "son_continuous_movable throttle map requires a resolved "
+            "movable-pintle actuation result"
+        )
+
+    radial = spec.geometry.radial_stream
+    axial = "oxidizer" if radial == "fuel" else "fuel"
+    full_gap = float(full_result.annulus.detail["gap"])
+    full_annulus_area = float(full_result.annulus.area)
+    full_radial_area = float(full_result.slots.area)
+    maximum_opening = float(full_result.actuation.maximum_opening)
+    full_dp_fraction = {
+        role: float(full_result.streams[role].dp) / Pc_full
+        for role in ("fuel", "oxidizer")
+    }
+    controller_lo, controller_hi = (
+        float(value)
+        for value in spec.movable_axial_controller_dp_fraction_bounds
+    )
+    if not (
+        controller_lo <= full_dp_fraction[axial] <= controller_hi
+    ):
+        raise InjectorSpecError(
+            f"full-power {axial} dP/Pc={full_dp_fraction[axial]:.6g} lies "
+            "outside movable_axial_controller_dp_fraction_bounds="
+            f"({controller_lo:.6g}, {controller_hi:.6g})"
+        )
+
+    results: list[tuple[float, InjectorDesignResult]] = []
+    target_by_role = {
+        "fuel": float(mdot_fuel_full),
+        "oxidizer": float(mdot_oxidizer_full),
+    }
+
+    for fraction in ordered_levels:
+        Pc_point = Pc_full * fraction ** pc_exponent
+        local = copy.deepcopy(spec)
+        local.sizing = "movable"
+        local.target_momentum_ratio = None
+        local.geometry.annulus_gap = full_gap
+        local.movable_pintle.maximum_opening = maximum_opening
+        local.movable_pintle.commanded_opening = None
+        # The centre-stream pressure schedule is held at its resolved
+        # full-power fraction; travel supplies its metering authority.
+        if radial == "fuel":
+            local.fuel_dp_fraction = full_dp_fraction[radial]
+        else:
+            local.oxidizer_dp_fraction = full_dp_fraction[radial]
+
+        requested_fuel = fraction * mdot_fuel_full
+        requested_oxidizer = fraction * mdot_oxidizer_full
+        requested_axial = fraction * target_by_role[axial]
+
+        def evaluate_controller(
+            dp_fraction: float,
+        ) -> InjectorDesignResult:
+            if axial == "fuel":
+                local.fuel_dp_fraction = dp_fraction
+            else:
+                local.oxidizer_dp_fraction = dp_fraction
+            return size_pintle_injector(
+                local,
+                mdot_fuel=requested_fuel,
+                mdot_oxidizer=requested_oxidizer,
+                Pc=Pc_point,
+                mixture_ratio=mixture_ratio,
+                chamber_radius=chamber_radius,
+                chamber_length=chamber_length,
+                gamma=gamma,
+                Tc=Tc,
+                R_gas=R_gas,
+            )
+
+        low_result = evaluate_controller(controller_lo)
+        high_result = evaluate_controller(controller_hi)
+        low_flow = low_result.streams[axial].mdot
+        high_flow = high_result.streams[axial].mdot
+        if high_flow < low_flow:
+            raise InjectorSpecError(
+                f"{axial} fixed-annulus flow is not monotone over the "
+                "declared upstream-controller dP/Pc envelope"
+            )
+        flow_tolerance = max(1.0e-12, 1.0e-10 * requested_axial)
+        if requested_axial < low_flow - flow_tolerance or requested_axial > high_flow + flow_tolerance:
+            raise InjectorSpecError(
+                f"throttle={fraction:.6g}: requested fixed-annulus {axial} "
+                f"flow {requested_axial:.9g} kg/s is outside controller "
+                f"reach [{low_flow:.9g}, {high_flow:.9g}] kg/s for dP/Pc "
+                f"bounds ({controller_lo:.6g}, {controller_hi:.6g})"
+            )
+
+        if abs(requested_axial - low_flow) <= flow_tolerance:
+            solved = low_result
+        elif abs(requested_axial - high_flow) <= flow_tolerance:
+            solved = high_result
+        else:
+            lower = controller_lo
+            upper = controller_hi
+            solved = high_result
+            for _ in range(80):
+                trial = 0.5 * (lower + upper)
+                candidate = evaluate_controller(trial)
+                delivered = candidate.streams[axial].mdot
+                solved = candidate
+                if abs(delivered - requested_axial) <= flow_tolerance:
+                    break
+                if delivered < requested_axial:
+                    lower = trial
+                else:
+                    upper = trial
+        results.append((fraction, solved))
+
+    def relative_spread(values: list[float]) -> float:
+        finite = [value for value in values if math.isfinite(value)]
+        if not finite:
+            return float("inf")
+        mean = sum(finite) / len(finite)
+        return (max(finite) - min(finite)) / mean if mean else 0.0
+
+    points: list[ThrottlePoint] = []
+    mass_flow_closed = True
+    fixed_hardware = True
+    for fraction, result in results:
+        Pc_point = Pc_full * fraction ** pc_exponent
+        atomization = result.atomization
+        limiting_smd = (
+            atomization.streams[atomization.limiting_role].sauter_mean_diameter
+            if atomization is not None and atomization.limiting_role is not None
+            else float("nan")
+        )
+        actuation = result.actuation
+        if actuation is None:  # defensive; the branch above already requires it
+            raise InjectorSpecError("movable throttle point lost its actuation ledger")
+        requested_total = fraction * (
+            mdot_fuel_full + mdot_oxidizer_full
+        )
+        delivered_total = result.annulus.mdot + result.slots.mdot
+        mass_flow_closed = mass_flow_closed and math.isclose(
+            delivered_total,
+            requested_total,
+            rel_tol=1.0e-8,
+            abs_tol=1.0e-12,
+        )
+        fixed_hardware = fixed_hardware and (
+            math.isclose(
+                result.annulus.area,
+                full_annulus_area,
+                rel_tol=1.0e-12,
+                abs_tol=1.0e-18,
+            )
+            and math.isclose(
+                actuation.maximum_opening,
+                maximum_opening,
+                rel_tol=1.0e-12,
+                abs_tol=1.0e-15,
+            )
+        )
+        axial_fraction = result.streams[axial].dp / Pc_point
+        points.append(
+            ThrottlePoint(
+                throttle=fraction,
+                Pc=Pc_point,
+                mdot_total=delivered_total,
+                mixture_ratio=(
+                    result.streams["oxidizer"].mdot
+                    / max(result.streams["fuel"].mdot, 1.0e-30)
+                ),
+                dp_fuel_fraction=result.streams["fuel"].dp / Pc_point,
+                dp_oxidizer_fraction=(
+                    result.streams["oxidizer"].dp / Pc_point
+                ),
+                annulus_gap=result.annulus.detail["gap"],
+                slot_width=actuation.opening_distance,
+                annulus_area_command_fraction=(
+                    result.annulus.area / full_annulus_area
+                ),
+                slot_area_command_fraction=(
+                    result.slots.area / full_radial_area
+                ),
+                actuator_stroke_fraction=actuation.opening_fraction,
+                v_annulus=result.annulus.velocity,
+                v_slots=result.slots.velocity,
+                reynolds_slots=result.slots.reynolds,
+                weber_slots=result.slots.weber,
+                total_momentum_ratio=result.total_momentum_ratio,
+                spray_half_angle_deg=result.spray_half_angle_deg,
+                spray_wall_axial_distance=result.spray_wall_axial_distance,
+                smd_limiting=limiting_smd,
+                eta_vaporization=(
+                    atomization.eta_vaporization
+                    if atomization is not None else float("nan")
+                ),
+                thermal_margin=(
+                    result.thermal.governing_margin
+                    if result.thermal is not None else float("nan")
+                ),
+                feasible=result.feasible,
+                radial_opening=actuation.opening_distance,
+                upstream_controller_required=True,
+                axial_controller_role=axial,
+                required_axial_controller_dp_fraction=axial_fraction,
+                required_axial_controller_pressure_drop=(
+                    result.streams[axial].dp
+                ),
+            )
+        )
+
+    preserved = {
+        "mixture_ratio": relative_spread(
+            [point.mixture_ratio for point in points]
+        ) < 1.0e-8,
+        # This architecture intentionally schedules the axial dP/Pc; a true
+        # value here would falsely describe the controller action.
+        "dp_fraction": False,
+        "total_momentum_ratio": relative_spread(
+            [point.total_momentum_ratio for point in points]
+        ) < 1.0e-2,
+        "requested_mass_flow": mass_flow_closed,
+        "fixed_hardware": fixed_hardware,
+        "upstream_controller_schedule": True,
+    }
+    notes = [
+        "Fixed-hardware Son 2017 schedule: the centre rod meters only the "
+        "continuous radial gap; annulus gap, post, rod, centre gap, and open "
+        "stop remain fixed at their full-power dimensions.",
+        f"A separate upstream {axial} controller is required. Its solved "
+        "dP/Pc command is reported at every point and is bounded by the "
+        "declared controller envelope; effective annulus area is never "
+        "relabelled as actuator stroke.",
+        "Physical stroke is L_open/L_open_stop. The radial pressure-drop "
+        "fraction is held at its resolved full-power value, while O/F is "
+        "closed by the upstream annulus-controller schedule. TMR is reported, "
+        "not presumed constant.",
+        "Hydraulic reachability is not actuator, valve, seal, transient, "
+        "cold-flow, or hot-fire qualification; failed point gates remain "
+        "failed in the map.",
+    ]
+    return ThrottleMap(
+        points=points,
+        preserved=preserved,
+        pc_exponent=pc_exponent,
+        schedule_semantics=(
+            "fixed_hardware_center_pintle_plus_upstream_annulus_controller"
+        ),
+        kinematic_model=SON2017_MODEL_ID,
+        architecture=spec.architecture,
+        controller_dp_fraction_bounds=(controller_lo, controller_hi),
+        notes=notes,
+    )
+
+
 def throttle_map(
     spec: InjectorSpec, *, mdot_fuel_full, mdot_oxidizer_full, Pc_full,
     mixture_ratio, chamber_radius, chamber_length, gamma, Tc, R_gas,
     levels=(0.2, 0.4, 0.6, 0.8, 1.0), pc_exponent=1.0,
 ) -> ThrottleMap:
-    """Movable-sleeve throttle schedule: resize the area to hold the
-    pressure-drop fractions (and therefore O/F and TMR) constant as the engine
-    throttles, instead of letting a fixed area collapse ΔP ∝ ṁ².
+    """Generate a throttle schedule appropriate to the injector architecture.
+
+    ``fixed_discrete`` retains the legacy commanded-effective-area study: both
+    hydraulic areas are resized and no physical stroke is claimed.
+    ``son_continuous_movable`` instead holds hardware fixed, solves the Son
+    centre-rod opening for the radial stream, and solves the required separate
+    upstream controller pressure drop for the fixed axial annulus.
 
     The chamber pressure follows ``Pc(f) = Pc_full · f^pc_exponent`` (1.0 = the
     physical deep-throttle case Pc ∝ ṁ; 0.0 = a constant-Pc study).  At each
-    level the auto solver re-sizes the openings to the dp-fraction, which the
-    movable sleeve realizes as a stroke schedule (the annulus area ratio).
+    level the architecture-specific solver closes delivered mass flow.
     """
+    if spec.architecture == "son_continuous_movable":
+        return _movable_pintle_throttle_map(
+            spec,
+            mdot_fuel_full=mdot_fuel_full,
+            mdot_oxidizer_full=mdot_oxidizer_full,
+            Pc_full=Pc_full,
+            mixture_ratio=mixture_ratio,
+            chamber_radius=chamber_radius,
+            chamber_length=chamber_length,
+            gamma=gamma,
+            Tc=Tc,
+            R_gas=R_gas,
+            levels=levels,
+            pc_exponent=pc_exponent,
+        )
     pts: list[ThrottlePoint] = []
     results: list[tuple[float, InjectorDesignResult]] = []
     for f in sorted(levels):
@@ -1558,27 +2564,44 @@ def throttle_map(
             mixture_ratio=mixture_ratio, chamber_radius=chamber_radius,
             chamber_length=chamber_length, gamma=gamma, Tc=Tc, R_gas=R_gas)
         results.append((f, r))
-    area_full = results[-1][1].annulus.area
+    annulus_area_full = results[-1][1].annulus.area
+    slot_area_full = results[-1][1].slots.area
     for f, r in results:
+        Pc_point = Pc_full * (f ** pc_exponent)
         at = r.atomization
-        lim = at.streams[at.limiting_role].sauter_mean_diameter if at else float("nan")
+        lim = (
+            at.streams[at.limiting_role].sauter_mean_diameter
+            if at and at.limiting_role is not None else float("nan")
+        )
         pts.append(ThrottlePoint(
-            throttle=f, Pc=Pc_full * (f ** pc_exponent),
+            throttle=f, Pc=Pc_point,
             mdot_total=r.annulus.mdot + r.slots.mdot,
             mixture_ratio=r.streams["oxidizer"].mdot / max(r.streams["fuel"].mdot, 1e-12),
-            dp_fuel_fraction=spec.fuel_dp_fraction,
-            dp_oxidizer_fraction=spec.oxidizer_dp_fraction,
+            dp_fuel_fraction=(
+                r.streams["fuel"].dp / max(Pc_point, 1e-30)
+            ),
+            dp_oxidizer_fraction=(
+                r.streams["oxidizer"].dp / max(Pc_point, 1e-30)
+            ),
             annulus_gap=r.annulus.detail["gap"],
-            slot_width=r.slots.detail["slot_width"],
-            sleeve_stroke_fraction=r.annulus.area / max(area_full, 1e-30),
+            slot_width=r.slots.detail.get(
+                "slot_width", r.slots.detail.get("hole_diameter", float("nan"))
+            ),
+            annulus_area_command_fraction=(
+                r.annulus.area / max(annulus_area_full, 1e-30)
+            ),
+            slot_area_command_fraction=(
+                r.slots.area / max(slot_area_full, 1e-30)
+            ),
+            actuator_stroke_fraction=None,
             v_annulus=r.annulus.velocity, v_slots=r.slots.velocity,
             reynolds_slots=r.slots.reynolds, weber_slots=r.slots.weber,
             total_momentum_ratio=r.total_momentum_ratio,
             spray_half_angle_deg=r.spray_half_angle_deg,
             spray_wall_axial_distance=r.spray_wall_axial_distance,
             smd_limiting=lim,
-            predicted_cstar_efficiency=(
-                at.predicted_cstar_efficiency if at else float("nan")),
+            eta_vaporization=(
+                at.eta_vaporization if at else float("nan")),
             thermal_margin=(
                 r.thermal.governing_margin if r.thermal else float("nan")),
             feasible=r.feasible))
@@ -1590,20 +2613,164 @@ def throttle_map(
         m = sum(vals) / len(vals)
         return (max(vals) - min(vals)) / m if m else 0.0
     preserved = {
-        # O/F is exact; TMR holds to ~1% because liquid density is weakly
-        # pressure-dependent (the manifold pressure shifts with Pc).
+        # O/F is exact. With target-TMR solving, the radial pressure fraction
+        # may legitimately move as density/state changes over the schedule.
         "mixture_ratio": _spread([p.mixture_ratio for p in pts]) < 1e-4,
-        "dp_fraction": True,   # held by construction
+        "dp_fraction": max(
+            _spread([p.dp_fuel_fraction for p in pts]),
+            _spread([p.dp_oxidizer_fraction for p in pts]),
+        ) < 1e-4,
         "total_momentum_ratio": _spread(
             [p.total_momentum_ratio for p in pts]) < 1e-2,
     }
     notes = [
-        "Movable-sleeve schedule holding the dp-fractions constant; O/F and "
-        "TMR are preserved while velocity/Re/We and atomization fall toward "
-        "low throttle (deep-throttle reality). Stroke = annulus area ratio.",
+        "Commanded effective-metering-area schedule holding dP/Pc; O/F and "
+        "TMR are preserved while velocity/Re/We and the applicable "
+        "atomization screen change toward low throttle.",
+        "No actuator or sleeve kinematics are modeled. The deprecated "
+        "sleeve_stroke_fraction alias is the annulus area command fraction, "
+        "not physical travel. Supply a geometry-specific A(stroke), Cd(stroke) "
+        "and common-actuator constraint before treating this as hardware.",
     ]
     return ThrottleMap(points=pts, preserved=preserved,
                        pc_exponent=pc_exponent, notes=notes)
+
+
+def _resolve_injector_feed(
+    spec: InjectorSpec,
+    *,
+    Pc: float,
+    fuel_dp_fraction: float,
+    oxidizer_dp_fraction: float,
+) -> dict[str, FeedState]:
+    """Resolve both feed states at their actual default manifold pressures."""
+
+    return {
+        "fuel": resolve_feed_state(
+            spec.fuel, default_pressure=Pc * (1.0 + fuel_dp_fraction)
+        ),
+        "oxidizer": resolve_feed_state(
+            spec.oxidizer, default_pressure=Pc * (1.0 + oxidizer_dp_fraction)
+        ),
+    }
+
+
+def _target_momentum_dp_fraction(
+    spec: InjectorSpec,
+    *,
+    mdot_fuel: float,
+    mdot_oxidizer: float,
+    Pc: float,
+    feed_override: dict[str, FeedState] | None,
+) -> tuple[float, float, dict[str, FeedState], dict[str, Any]]:
+    """Actively solve radial-stream dP/Pc for a requested TMR.
+
+    The axial fraction remains the user's command.  This is the smallest
+    determinate solve: changing both fractions would leave infinitely many
+    pressure-split solutions.  An unreachable target is rejected with the
+    achievable range instead of being returned as a passive failed gate.
+    """
+
+    radial = spec.geometry.radial_stream
+    axial = "oxidizer" if radial == "fuel" else "fuel"
+    fractions = {
+        "fuel": float(spec.fuel_dp_fraction),
+        "oxidizer": float(spec.oxidizer_dp_fraction),
+    }
+    target = spec.target_momentum_ratio
+
+    def evaluate(radial_fraction: float):
+        trial = dict(fractions)
+        trial[radial] = radial_fraction
+        resolved = (
+            feed_override
+            if feed_override is not None
+            else _resolve_injector_feed(
+                spec,
+                Pc=Pc,
+                fuel_dp_fraction=trial["fuel"],
+                oxidizer_dp_fraction=trial["oxidizer"],
+            )
+        )
+        for role, fs in resolved.items():
+            if not (fs.liquid_ok or fs.gas_ok):
+                raise InjectorUnsupportedState(
+                    f"{role} feed cannot be sized while solving target TMR: "
+                    f"{fs.reason}"
+                )
+        mdot = {"fuel": mdot_fuel, "oxidizer": mdot_oxidizer}
+        velocity: dict[str, float] = {}
+        for role in ("fuel", "oxidizer"):
+            cd = spec.fuel_cd if role == "fuel" else spec.oxidizer_cd
+            _, velocity[role], _, _, _ = _stream_mass_flux(
+                resolved[role], trial[role] * Pc, cd, Pc
+            )
+        tmr = (
+            mdot[radial] * velocity[radial]
+            / max(mdot[axial] * velocity[axial], 1e-30)
+        )
+        return tmr, trial, resolved
+
+    if target is None:
+        resolved = (
+            feed_override
+            if feed_override is not None
+            else _resolve_injector_feed(
+                spec,
+                Pc=Pc,
+                fuel_dp_fraction=fractions["fuel"],
+                oxidizer_dp_fraction=fractions["oxidizer"],
+            )
+        )
+        return (
+            fractions["fuel"], fractions["oxidizer"], resolved,
+            {"active": False, "target": None},
+        )
+
+    lo, hi = (float(v) for v in spec.target_momentum_dp_fraction_bounds)
+    t_lo, _, _ = evaluate(lo)
+    t_hi, _, _ = evaluate(hi)
+    t_min, t_max = min(t_lo, t_hi), max(t_lo, t_hi)
+    tol = max(1e-10, 1e-8 * target)
+    if target < t_min - tol or target > t_max + tol:
+        raise InjectorSpecError(
+            f"target_momentum_ratio={target:.6g} is unreachable by varying "
+            f"the {radial} (radial) dP/Pc over [{lo:.3g}, {hi:.3g}]; "
+            f"achievable TMR is [{t_min:.6g}, {t_max:.6g}]. Change the "
+            "target bounds, axial dP/Pc, mass-flow split, or exit geometry."
+        )
+
+    increasing = t_hi >= t_lo
+    a, b = lo, hi
+    solved_tmr = float("nan")
+    solved_trial: dict[str, float] = fractions
+    solved_feed: dict[str, FeedState] | None = None
+    for _ in range(80):
+        mid = 0.5 * (a + b)
+        solved_tmr, solved_trial, solved_feed = evaluate(mid)
+        if abs(solved_tmr - target) <= tol:
+            break
+        if (solved_tmr < target) == increasing:
+            a = mid
+        else:
+            b = mid
+    assert solved_feed is not None
+    metadata = {
+        "active": True,
+        "target": target,
+        "achieved": solved_tmr,
+        "solved_role": radial,
+        "held_role": axial,
+        "commanded_radial_dp_fraction": fractions[radial],
+        "solved_radial_dp_fraction": solved_trial[radial],
+        "held_axial_dp_fraction": solved_trial[axial],
+        "radial_dp_fraction_bounds": [lo, hi],
+        "achievable_tmr_range": [t_min, t_max],
+        "method": "bisection_on_radial_dp_fraction",
+    }
+    return (
+        solved_trial["fuel"], solved_trial["oxidizer"], solved_feed, metadata
+    )
 
 
 def size_pintle_injector(
@@ -1631,18 +2798,19 @@ def size_pintle_injector(
     )
     radial = spec.geometry.radial_stream
 
-    dp_fuel = spec.fuel_dp_fraction * Pc
-    dp_ox = spec.oxidizer_dp_fraction * Pc
+    fuel_dp_fraction, ox_dp_fraction, feed, momentum_targeting = (
+        _target_momentum_dp_fraction(
+            spec,
+            mdot_fuel=mdot_fuel,
+            mdot_oxidizer=mdot_oxidizer,
+            Pc=Pc,
+            feed_override=feed,
+        )
+    )
+    dp_fuel = fuel_dp_fraction * Pc
+    dp_ox = ox_dp_fraction * Pc
     p_manifold_fuel = Pc + dp_fuel
     p_manifold_ox = Pc + dp_ox
-
-    if feed is None:
-        feed = {
-            "fuel": resolve_feed_state(
-                spec.fuel, default_pressure=p_manifold_fuel),
-            "oxidizer": resolve_feed_state(
-                spec.oxidizer, default_pressure=p_manifold_ox),
-        }
 
     # Phase guard: each stream must be a usable liquid (incompressible branch)
     # or a usable gas/supercritical state (compressible branch).  A two-phase /
@@ -1664,7 +2832,9 @@ def size_pintle_injector(
     # take a fraction of the chamber radius (a packaging default) so the
     # annulus and slots have a real geometric reference.
     Dp = spec.geometry.pintle_diameter
-    if Dp is None:
+    if spec.geometry.radial_exit_style == "continuous_radial_gap":
+        Dp = float(spec.movable_pintle.post_diameter)
+    elif Dp is None:
         Dp = 0.30 * (2.0 * chamber_radius)
 
     # In "auto" sizing the area is solved from the required mass flow so the
@@ -1673,11 +2843,12 @@ def size_pintle_injector(
     # the orifice law (it may not match the cycle split — the closure gate then
     # reports the drift, evaluating the design rather than resizing it).
     fixed = spec.sizing == "fixed"
+    fixed_axial = fixed or spec.sizing == "movable"
 
     # ----- axial annulus stream -----
     m_a_req, dp_a, cd_a, fs_a = streams_in[axial]
     G_a, v_a, choked_a, branch_a, info_a = _stream_mass_flux(fs_a, dp_a, cd_a, Pc)
-    if fixed and spec.geometry.annulus_gap is not None:
+    if fixed_axial and spec.geometry.annulus_gap is not None:
         gap = spec.geometry.annulus_gap
         Do = Dp + 2.0 * gap
         A_a = math.pi / 4.0 * (Do * Do - Dp * Dp)
@@ -1695,6 +2866,7 @@ def size_pintle_injector(
         ann_len / ann_geom["hydraulic_diameter"]
         if ann_geom["hydraulic_diameter"] > 0 else float("nan"))
     ann_geom["area"] = A_a
+    ann_geom["injection_form"] = "continuous_annular_sheet"
     m_a = G_a * A_a  # delivered
     annulus = _stream_numbers(
         axial, "annulus", m_a, dp_a, cd_a, A_a, ann_geom["hydraulic_diameter"],
@@ -1702,36 +2874,317 @@ def size_pintle_injector(
     ann_geom["injection"] = {"branch": branch_a, "choked": choked_a, **info_a}
     annulus.detail = ann_geom
 
-    # ----- radial slot stream -----
+    # ----- radial opening stream (slots, holes, or movable continuous gap) -
     m_r_req, dp_r, cd_r, fs_r = streams_in[radial]
     G_r, v_r, choked_r, branch_r, info_r = _stream_mass_flux(fs_r, dp_r, cd_r, Pc)
-    if fixed and spec.geometry.slot_width is not None:
-        w = spec.geometry.slot_width
-        h = spec.geometry.slot_height or (spec.geometry.slot_aspect_ratio * w)
-        depth = spec.geometry.slot_depth
-        dh = 2.0 * w * h / (w + h)
-        circ = math.pi * Dp
-        A_r = spec.geometry.slot_count * w * h
+    radial_style = spec.geometry.radial_exit_style
+    n_radial = int(spec.geometry.slot_count)
+    movable_context: dict[str, Any] | None = None
+    if radial_style == "continuous_radial_gap":
+        movable = spec.movable_pintle
+        if fixed:
+            maximum_opening, transition, stop_area_fraction = (
+                resolve_maximum_opening(
+                    movable, tip_angle_deg=spec.geometry.deflector_angle
+                )
+            )
+            opening = float(movable.commanded_opening)
+            cd_r, cd_model, cd_source = discharge_coefficient_at_opening(
+                movable,
+                opening_distance=opening,
+                maximum_opening=maximum_opening,
+                fallback_cd=cd_r,
+            )
+            A_r = son_minimum_tip_area(
+                opening,
+                post_diameter=movable.post_diameter,
+                post_thickness=movable.post_thickness,
+                tip_angle_deg=spec.geometry.deflector_angle,
+            )
+        else:
+            (
+                opening,
+                A_r,
+                cd_r,
+                cd_model,
+                cd_source,
+                maximum_opening,
+                transition,
+                stop_area_fraction,
+            ) = solve_opening_for_mass_flow(
+                movable,
+                tip_angle_deg=spec.geometry.deflector_angle,
+                required_mass_flow=m_r_req,
+                fallback_cd=cd_r,
+                mass_flux_for_cd=lambda candidate_cd: _stream_mass_flux(
+                    fs_r, dp_r, candidate_cd, Pc
+                )[0],
+            )
+        G_r, v_r, choked_r, branch_r, info_r = _stream_mass_flux(
+            fs_r, dp_r, cd_r, Pc
+        )
+        geometry_fingerprint = movable_geometry_fingerprint(
+            movable,
+            tip_angle_deg=spec.geometry.deflector_angle,
+        )
+        gap_cap = center_gap_area(
+            movable.center_gap_diameter, movable.pintle_rod_diameter
+        )
+        if A_r >= gap_cap:
+            raise InjectorSpecError(
+                "continuous radial gap reached the center-gap transition; "
+                "pintle travel no longer controls the minimum flow area"
+            )
+        minimum_gap = minimum_opening_distance(
+            opening, spec.geometry.deflector_angle
+        )
+        exit_radius = 0.5 * float(movable.post_diameter)
+        external_sheet_area = 2.0 * math.pi * exit_radius * opening
+        equivalent_exit_thickness = A_r / (2.0 * math.pi * exit_radius)
+        n_radial = 1
         slot_geom = {
-            "slot_width": w, "slot_height": h,
-            "slot_depth": depth if depth is not None else float("nan"),
-            "hydraulic_diameter": dh, "web": circ / spec.geometry.slot_count - w,
-            "blockage_factor": spec.geometry.slot_count * w / circ,
-            "length_over_dh": (depth / dh) if depth else float("nan"),
-            "area_each": w * h, "area": A_r,
+            "opening_distance": opening,
+            "minimum_opening_distance": minimum_gap,
+            "maximum_opening": maximum_opening,
+            "opening_fraction": opening / maximum_opening,
+            "transition_opening": transition,
+            "transition_area_fraction_at_open_stop": stop_area_fraction,
+            "center_gap_area": gap_cap,
+            "tip_minimum_area": A_r,
+            "external_sheet_inlet_area_360": external_sheet_area,
+            "equivalent_exit_sheet_thickness": equivalent_exit_thickness,
+            "equivalent_exit_sheet_thickness_basis": (
+                "continuity_equivalent_Amin_over_2piR_not_VOF_sheet_truth"
+            ),
+            "sheet_thickness": movable.sheet_thickness,
+            "sheet_thickness_method": movable.sheet_thickness_method,
+            "sheet_thickness_source": movable.sheet_thickness_source,
+            "sheet_thickness_artifact_sha256": (
+                movable.sheet_thickness_artifact_sha256
+            ),
+            "resolved_geometry_fingerprint_sha256": geometry_fingerprint,
+            "sheet_thickness_geometry_fingerprint_sha256": (
+                movable.sheet_thickness_geometry_fingerprint_sha256
+            ),
+            "sheet_thickness_fluid_name": (
+                movable.sheet_thickness_fluid_name
+            ),
+            "sheet_thickness_opening_range": (
+                movable.sheet_thickness_opening_range
+            ),
+            "sheet_thickness_pressure_drop_range": (
+                movable.sheet_thickness_pressure_drop_range
+            ),
+            "sheet_thickness_mass_flow_range": (
+                movable.sheet_thickness_mass_flow_range
+            ),
+            "post_diameter": movable.post_diameter,
+            "post_thickness": movable.post_thickness,
+            "center_gap_diameter": movable.center_gap_diameter,
+            "pintle_rod_diameter": movable.pintle_rod_diameter,
+            "tip_angle_deg": spec.geometry.deflector_angle,
+            "hydraulic_diameter": 2.0 * minimum_gap,
+            "spray_characteristic_length": opening,
+            "web": 0.0,
+            "blockage_factor": 1.0,
+            "circumferential_open_fraction": 1.0,
+            "length_over_dh": float("nan"),
+            "area_each": A_r,
+            "discharge_coefficient_model": cd_model,
+            "discharge_coefficient_source": cd_source,
+            "discharge_coefficient_artifact_sha256": (
+                movable.cd_calibration_artifact_sha256
+            ),
+            "discharge_coefficient_geometry_fingerprint_sha256": (
+                movable.cd_geometry_fingerprint_sha256
+            ),
+            "cd_reynolds_range": movable.cd_reynolds_range,
+            "cd_pressure_drop_range": movable.cd_pressure_drop_range,
+            "cd_temperature_range": movable.cd_temperature_range,
+            "cd_cavitation_number_range": (
+                movable.cd_cavitation_number_range
+            ),
+            "cd_fluid_name": movable.cd_fluid_name,
+            "son2017_model_id": SON2017_MODEL_ID,
         }
+        radial_geometry = "continuous_radial_gap"
+        injection_form = "movable_pintle_radial_sheet"
+        opening_width = opening
+        movable_context = {
+            "opening": opening,
+            "minimum_gap": minimum_gap,
+            "maximum_opening": maximum_opening,
+            "transition": transition,
+            "stop_area_fraction": stop_area_fraction,
+            "gap_cap": gap_cap,
+            "cd_model": cd_model,
+            "cd_source": cd_source,
+            "geometry_fingerprint": geometry_fingerprint,
+        }
+    elif radial_style == "holes":
+        if fixed:
+            diameter = float(spec.geometry.radial_hole_diameter)
+            length = spec.geometry.radial_hole_length
+            if length is None:
+                length = spec.geometry.slot_length_over_dh * diameter
+            A_r = n_radial * math.pi * diameter * diameter / 4.0
+            pitch = math.pi * Dp / n_radial
+            slot_geom = {
+                "hole_diameter": diameter,
+                "hole_length": length,
+                "hydraulic_diameter": diameter,
+                "web": pitch - diameter,
+                "blockage_factor": diameter / pitch,
+                "length_over_dh": length / diameter,
+                "area_each": math.pi * diameter * diameter / 4.0,
+            }
+        else:
+            A_r = m_r_req / G_r
+            slot_geom = _holes_from_area(
+                A_r, n_radial, Dp, spec.geometry.radial_hole_length,
+                spec.geometry.slot_length_over_dh,
+            )
+        radial_geometry = "holes"
+        injection_form = "round_hole_jet"
+        opening_width = slot_geom["hole_diameter"]
     else:
-        A_r = m_r_req / G_r
-        slot_geom = _slots_from_area(
-            A_r, spec.geometry.slot_count, spec.geometry.slot_aspect_ratio,
-            Dp, spec.geometry.slot_depth, spec.geometry.slot_length_over_dh)
-        slot_geom["area"] = A_r
+        if fixed:
+            w = float(spec.geometry.slot_width)
+            h = spec.geometry.slot_height or (spec.geometry.slot_aspect_ratio * w)
+            depth = spec.geometry.slot_depth
+            dh = 2.0 * w * h / (w + h)
+            circ = math.pi * Dp
+            A_r = n_radial * w * h
+            slot_geom = {
+                "slot_width": w, "slot_height": h,
+                "slot_depth": depth if depth is not None else float("nan"),
+                "hydraulic_diameter": dh, "web": circ / n_radial - w,
+                "blockage_factor": n_radial * w / circ,
+                "length_over_dh": (depth / dh) if depth else float("nan"),
+                "area_each": w * h,
+            }
+        else:
+            A_r = m_r_req / G_r
+            slot_geom = _slots_from_area(
+                A_r, n_radial, spec.geometry.slot_aspect_ratio,
+                Dp, spec.geometry.slot_depth, spec.geometry.slot_length_over_dh)
+        radial_geometry = "slots"
+        injection_form = "planar_slot_jet"
+        opening_width = slot_geom["slot_width"]
+    slot_geom["area"] = A_r
     m_r = G_r * A_r  # delivered
     slots = _stream_numbers(
-        radial, "slots", m_r, dp_r, cd_r, A_r, slot_geom["hydraulic_diameter"],
+        radial, radial_geometry, m_r, dp_r, cd_r, A_r,
+        slot_geom["hydraulic_diameter"],
         fs_r.density, fs_r.viscosity, fs_r.surface_tension, velocity=v_r)
     slot_geom["injection"] = {"branch": branch_r, "choked": choked_r, **info_r}
+    slot_geom["injection_form"] = injection_form
     slots.detail = slot_geom
+
+    actuation = None
+    if movable_context is not None:
+        movable = spec.movable_pintle
+        position_terms = (
+            movable.position_tolerance,
+            movable.position_feedback_resolution,
+            movable.backlash,
+        )
+        position_uncertainty = (
+            sum(float(value) for value in position_terms)
+            if all(value is not None for value in position_terms)
+            else None
+        )
+        force = static_actuator_ledger(
+            movable,
+            pressure_drop=dp_r,
+            delivered_mass_flow=m_r,
+            injection_velocity=v_r,
+            axial_momentum_fraction=abs(
+                math.sin(math.radians(spec.geometry.deflector_angle))
+            ),
+        )
+        actuation = MovablePintleActuation(
+            model_id=SON2017_MODEL_ID,
+            opening_distance=movable_context["opening"],
+            minimum_opening_distance=movable_context["minimum_gap"],
+            maximum_opening=movable_context["maximum_opening"],
+            opening_fraction=(
+                movable_context["opening"]
+                / movable_context["maximum_opening"]
+            ),
+            transition_opening=movable_context["transition"],
+            tip_minimum_area=A_r,
+            center_gap_area=movable_context["gap_cap"],
+            effective_metering_area=A_r,
+            transition_area_fraction=A_r / movable_context["gap_cap"],
+            transition_margin=(
+                movable_context["transition"] - movable_context["opening"]
+            ) / movable_context["transition"],
+            discharge_coefficient=cd_r,
+            discharge_coefficient_model=movable_context["cd_model"],
+            discharge_coefficient_source=movable_context["cd_source"],
+            discharge_coefficient_artifact_sha256=(
+                movable.cd_calibration_artifact_sha256
+            ),
+            discharge_coefficient_geometry_fingerprint_sha256=(
+                movable.cd_geometry_fingerprint_sha256
+            ),
+            resolved_geometry_fingerprint_sha256=(
+                movable_context["geometry_fingerprint"]
+            ),
+            calibration_reynolds_range=movable.cd_reynolds_range,
+            calibration_pressure_drop_range=movable.cd_pressure_drop_range,
+            calibration_temperature_range=movable.cd_temperature_range,
+            calibration_cavitation_number_range=(
+                movable.cd_cavitation_number_range
+            ),
+            calibration_fluid_name=movable.cd_fluid_name,
+            position_uncertainty_fraction=(
+                position_uncertainty / movable_context["opening"]
+                if position_uncertainty is not None else None
+            ),
+            metrology_source=movable.metrology_source,
+            metrology_artifact_sha256=movable.metrology_artifact_sha256,
+            pressure_force=force["pressure_force"],
+            momentum_reaction_force=force["momentum_reaction_force"],
+            spring_preload_force=force["spring_preload_force"],
+            seal_friction_force=force["seal_friction_force"],
+            inertia_force=force["inertia_force"],
+            required_actuator_force=force["required_actuator_force"],
+            actuator_force_capacity=force["actuator_force_capacity"],
+            actuator_force_margin=force["actuator_force_margin"],
+            stem_axial_stress=force["stem_axial_stress"],
+            stem_allowable_stress=force["stem_allowable_stress"],
+            stem_stress_margin=force["stem_stress_margin"],
+            leakage_source=movable.leakage_source,
+            leakage_artifact_sha256=movable.leakage_artifact_sha256,
+            actuator_source=movable.actuator_source,
+            actuator_artifact_sha256=movable.actuator_artifact_sha256,
+            sheet_thickness=movable.sheet_thickness,
+            sheet_thickness_method=movable.sheet_thickness_method,
+            sheet_thickness_source=movable.sheet_thickness_source,
+            sheet_thickness_artifact_sha256=(
+                movable.sheet_thickness_artifact_sha256
+            ),
+            sheet_thickness_geometry_fingerprint_sha256=(
+                movable.sheet_thickness_geometry_fingerprint_sha256
+            ),
+            sheet_thickness_fluid_name=movable.sheet_thickness_fluid_name,
+            sheet_thickness_opening_range=(
+                movable.sheet_thickness_opening_range
+            ),
+            sheet_thickness_pressure_drop_range=(
+                movable.sheet_thickness_pressure_drop_range
+            ),
+            sheet_thickness_mass_flow_range=(
+                movable.sheet_thickness_mass_flow_range
+            ),
+            assumptions=(
+                "Son 2017 Eq.1 tip/post minimum area; center-gap transition is a hard design boundary",
+                "mechanical opening, continuity-equivalent exit thickness, and VOF/measured sheet thickness remain distinct",
+                "static absolute-load sum; pressure balance, friction, inertia, and stem allowables are caller inputs",
+            ),
+        )
 
     # Required (cycle) mass flows per role, for the closure gate.
     mdot_required = {"fuel": mdot_fuel, "oxidizer": mdot_oxidizer}
@@ -1750,19 +3203,23 @@ def size_pintle_injector(
     # The spray cone originates at the pintle tip radius (tip_radius when
     # supplied, else the pintle radius) and the radial/axial streams interact
     # an impingement_distance downstream of the openings.
-    r0 = spec.geometry.tip_radius if spec.geometry.tip_radius else 0.5 * Dp
+    if actuation is not None:
+        r0 = 0.5 * float(spec.movable_pintle.post_diameter)
+    else:
+        r0 = spec.geometry.tip_radius if spec.geometry.tip_radius else 0.5 * Dp
     impingement = spec.geometry.impingement_distance or 0.0
     if 0.0 < spray_half_angle < 90.0 and spray_tan > 1e-6:
         wall_axial = impingement + (chamber_radius - r0) / spray_tan
     else:
         wall_axial = float("inf")
 
-    width_ratio = slot_geom["slot_width"] / max(ann_geom["gap"], 1e-12)
+    width_ratio = opening_width / max(ann_geom["gap"], 1e-12)
 
     streams = {axial: annulus, radial: slots}
     result = InjectorDesignResult(
-        feasible=True, sizing=spec.sizing, radial_stream=radial,
-        pintle_diameter=Dp, slot_count=int(spec.geometry.slot_count),
+        feasible=True, architecture=spec.architecture,
+        sizing=spec.sizing, radial_stream=radial,
+        pintle_diameter=Dp, slot_count=n_radial,
         chamber_radius=chamber_radius,
         chamber_length=chamber_length, streams=streams, annulus=annulus,
         slots=slots, total_momentum_ratio=tmr,
@@ -1771,7 +3228,11 @@ def size_pintle_injector(
         slot_to_annulus_width_ratio=width_ratio,
         blockage_factor=slot_geom["blockage_factor"],
         minimum_web=slot_geom["web"], gates=[], feed=feed,
+        momentum_targeting=momentum_targeting,
+        actuation=actuation,
     )
+    from raosim.model_registry import model_provenance_dict
+    result.model_provenance = model_provenance_dict(subsystem="injector")
     result.atomization = spray_atomization(
         streams, feed, Pc=Pc, Tc=Tc, R_gas=R_gas,
         chamber_length=chamber_length,
@@ -1781,7 +3242,7 @@ def size_pintle_injector(
         result, spec, Pc=Pc, Tc=Tc, gamma=gamma, R_gas=R_gas)
     result.stability = stability_screen(
         result, Pc=Pc, Tc=Tc, gamma=gamma, R_gas=R_gas,
-        chi_fuel=spec.fuel_dp_fraction, chi_oxidizer=spec.oxidizer_dp_fraction)
+        chi_fuel=fuel_dp_fraction, chi_oxidizer=ox_dp_fraction)
     result.gates = injector_gates(
         spec, result, Pc=Pc, mixture_ratio=mixture_ratio,
         dp_fuel=dp_fuel, dp_ox=dp_ox, p_manifold_fuel=p_manifold_fuel,
@@ -1902,9 +3363,11 @@ def feed_system_ledger(
 
     notes = [
         "Feed-pressure balance per Huzel & Huang (NASA SP-125) and Sutton & "
-        "Biblarz; NPSH screen per NASA SP-8052. Manifold loss from the "
-        "two-header maldistribution solve; regen jacket loss applied to the "
-        "coolant stream only.",
+        "Biblarz; NPSH screen per NASA SP-8052. The manifold loss charged to "
+        "the pressure budget is the user's explicit absolute/fractional "
+        "allowance. The one-dimensional two-header network value is reported "
+        "separately as manifold_screen_loss and is not charged automatically. "
+        "Regen-jacket loss is applied to the coolant stream only.",
     ]
     return FeedSystemLedger(
         architecture=fs_spec.architecture, lines=lines,
@@ -2023,26 +3486,59 @@ def evaluate_pintle_injector(
         )
 
         # Only a closed direct-flow path can supply an authoritative injector
-        # inlet state. A warning/failure retains explicitly supplied feed
-        # conditions (or the feed resolver's defaults) instead.
+        # inlet state.  When it closes, the jacket outlet is the physical
+        # injector inlet; a conflicting explicit feed state is a topology
+        # error, not an override of the solved upstream component.
         if status == "pass" and cooling_result is not None:
             outlet_T = cooling_result.get("coolant_outlet_temperature")
             outlet_P = cooling_result.get("coolant_outlet_pressure")
-            if local.fuel.inlet_temperature is None and outlet_T is not None:
-                local.fuel.inlet_temperature = float(outlet_T)
-            if local.fuel.inlet_pressure is None and outlet_P is not None:
-                local.fuel.inlet_pressure = float(outlet_P)
-            coupling_note += (
-                f"; injector feed state uses jacket outlet "
-                f"T={local.fuel.inlet_temperature:.3g} K, "
-                f"P={local.fuel.inlet_pressure/1e5:.3g} bar"
+            conflicts: list[str] = []
+            if outlet_T is not None:
                 if (
                     local.fuel.inlet_temperature is not None
-                    and local.fuel.inlet_pressure is not None
+                    and not math.isclose(
+                        float(local.fuel.inlet_temperature),
+                        float(outlet_T),
+                        rel_tol=0.01,
+                        abs_tol=1.0,
+                    )
+                ):
+                    conflicts.append(
+                        "explicit fuel inlet temperature differs from jacket outlet"
+                    )
+                local.fuel.inlet_temperature = float(outlet_T)
+            if outlet_P is not None:
+                if (
+                    local.fuel.inlet_pressure is not None
+                    and not math.isclose(
+                        float(local.fuel.inlet_pressure),
+                        float(outlet_P),
+                        rel_tol=0.01,
+                        abs_tol=1.0e3,
+                    )
+                ):
+                    conflicts.append(
+                        "explicit fuel inlet pressure differs from jacket outlet"
+                    )
+                local.fuel.inlet_pressure = float(outlet_P)
+            if (
+                local.fuel.inlet_temperature is not None
+                and local.fuel.inlet_pressure is not None
+            ):
+                coupling_note += (
+                    f"; injector feed state uses jacket outlet "
+                    f"T={local.fuel.inlet_temperature:.3g} K, "
+                    f"P={local.fuel.inlet_pressure/1e5:.3g} bar"
                 )
-                else "; jacket outlet state was incomplete"
-            )
-            coupling_gate.detail = coupling_note
+            else:
+                coupling_note += "; jacket outlet state was incomplete"
+            if conflicts:
+                coupling_note += "; " + "; ".join(conflicts)
+                coupling_gate = InjectorGate(
+                    "regen_fuel_flow_closure", "fail", coupling_note
+                )
+            else:
+                coupling_gate.detail = coupling_note
         elif status == "pass":
             coupling_gate = InjectorGate(
                 "regen_fuel_flow_closure",
@@ -2189,6 +3685,33 @@ def injector_gates(
                 f"M={inj.get('exit_mach', float('nan')):.2f} "
                 f"(weak feed-system decoupling near critical)"))
 
+    # 4a) Droplet-correlation applicability is independent of whether the
+    # hydraulic branch itself can be solved.
+    if r.atomization is not None:
+        for role, item in r.atomization.streams.items():
+            fs = r.feed[role]
+            if item.applicable:
+                status = "pass"
+                detail = (
+                    f"{role} {item.injection_form}: subcritical liquid screen "
+                    "is applicable as an order-of-magnitude correlation"
+                )
+            elif fs.phase in ("gas", "supercritical"):
+                status = "info"
+                detail = (
+                    f"{role}: no liquid parcels evaluated ({item.validity_reason})"
+                )
+            else:
+                status = "warn"
+                detail = (
+                    f"{role}: legacy droplet model disabled "
+                    f"({item.validity_reason}); use a real-fluid/transcritical "
+                    "or geometry-specific model"
+                )
+            g.append(InjectorGate(
+                f"atomization_applicability_{role}", status, detail
+            ))
+
     # 5) Cd / L-over-D / hydraulic-flip / correlation domain.
     for s in (r.annulus, r.slots):
         lod = s.detail.get("length_over_dh", float("nan"))
@@ -2205,21 +3728,355 @@ def injector_gates(
                 f"{s.role} {s.geometry}: L/D={lod:.1f}, Cd={s.cd:.2f}")
         g.append(InjectorGate(f"orifice_domain_{s.geometry}", status, txt))
 
-    # 6) minimum slot width / web / annulus gap / edge distance.
-    w = r.slots.detail["slot_width"]
+    # 6) minimum radial opening / web / annulus gap / edge distance.
+    is_hole = r.slots.geometry == "holes"
+    is_movable = r.slots.geometry == "continuous_radial_gap"
     gap = r.annulus.detail["gap"]
-    g.append(InjectorGate(
-        "min_slot_width", "pass" if w >= min_feat else "fail",
-        f"slot width {w*1e3:.3f} mm vs floor {min_feat*1e3:.3f} mm"))
-    g.append(InjectorGate(
-        "min_web", "pass" if r.minimum_web >= web_min else "fail",
-        f"ligament/web {r.minimum_web*1e3:.3f} mm vs floor {web_min*1e3:.3f} mm"))
+    if is_movable:
+        opening = float(r.slots.detail["opening_distance"])
+        g.append(InjectorGate(
+            "positive_movable_opening",
+            "pass" if opening > 0.0 else "fail",
+            f"commanded Son opening L_open={opening*1e3:.4f} mm",
+        ))
+        g.append(InjectorGate(
+            "continuous_circumferential_opening",
+            "info",
+            "axisymmetric radial opening has no discrete inter-slot web; "
+            "circumferential open fraction is 1.0",
+        ))
+    else:
+        w = r.slots.detail[
+            "hole_diameter" if is_hole else "slot_width"
+        ]
+        g.append(InjectorGate(
+            "min_hole_diameter" if is_hole else "min_slot_width",
+            "pass" if w >= min_feat else "fail",
+            f"{'hole diameter' if is_hole else 'slot width'} {w*1e3:.3f} mm "
+            f"vs floor {min_feat*1e3:.3f} mm"))
+        g.append(InjectorGate(
+            "min_web", "pass" if r.minimum_web >= web_min else "fail",
+            f"ligament/web {r.minimum_web*1e3:.3f} mm vs floor {web_min*1e3:.3f} mm"))
+        g.append(InjectorGate(
+            "hole_blockage" if is_hole else "slot_blockage",
+            "pass" if r.blockage_factor < 1.0 else "fail",
+            f"{'hole' if is_hole else 'slot'} circumferential blockage="
+            f"{r.blockage_factor:.2f} (<1 required)"))
     g.append(InjectorGate(
         "min_annulus_gap", "pass" if gap >= min_feat else "fail",
         f"annulus gap {gap*1e3:.3f} mm vs floor {min_feat*1e3:.3f} mm"))
-    g.append(InjectorGate(
-        "slot_blockage", "pass" if r.blockage_factor < 1.0 else "fail",
-        f"slot blockage N*w/(pi*Dp)={r.blockage_factor:.2f} (<1 required)"))
+
+    if is_movable and r.actuation is not None:
+        act = r.actuation
+        movable = spec.movable_pintle
+        transition_status = (
+            "pass" if act.transition_area_fraction <= 0.90 else "warn"
+        )
+        g.append(InjectorGate(
+            "movable_center_gap_transition",
+            transition_status,
+            f"Son A_tip/A_cg={act.transition_area_fraction:.3f}; "
+            f"L_open={act.opening_distance*1e3:.4f} mm, transition="
+            f"{act.transition_opening*1e3:.4f} mm (must remain < transition)",
+        ))
+        g.append(InjectorGate(
+            "movable_hard_stops",
+            "pass" if 0.0 < act.opening_distance <= act.maximum_opening else "fail",
+            f"closed stop=0, command={act.opening_distance*1e3:.4f} mm, "
+            f"open stop={act.maximum_opening*1e3:.4f} mm",
+        ))
+        uniform_floor = float(movable.minimum_uniform_sheet_opening)
+        g.append(InjectorGate(
+            "uniform_radial_sheet_opening_domain",
+            "pass" if act.opening_distance > uniform_floor else "warn",
+            f"L_open={act.opening_distance*1e3:.4f} mm vs Son/Radhakrishnan "
+            f"water/LOX observation >{uniform_floor*1e3:.4f} mm; this is an "
+            "applicability warning, not a universal hardware limit",
+        ))
+        cd_calibrated = (
+            act.discharge_coefficient_model
+            == "linear_calibrated_cd_vs_opening_fraction"
+        )
+        radial_feed = r.feed[r.radial_stream]
+
+        def fluid_key(value: str | None) -> str:
+            return "".join(
+                char for char in str(value or "").casefold() if char.isalnum()
+            )
+
+        radial_liquid = radial_feed.liquid_ok and radial_feed.phase == "liquid"
+        g.append(InjectorGate(
+            "movable_radial_liquid_sheet_state",
+            "pass" if radial_liquid else "fail",
+            (
+                f"radial stream {r.radial_stream} is resolved liquid "
+                f"{radial_feed.name}"
+                if radial_liquid
+                else f"radial stream {r.radial_stream} is {radial_feed.phase}; "
+                "the Son/Radhakrishnan liquid-sheet model is inapplicable"
+            ),
+        ))
+        re_in_range = (
+            act.calibration_reynolds_range is not None
+            and act.calibration_reynolds_range[0]
+            <= r.slots.reynolds
+            <= act.calibration_reynolds_range[1]
+        )
+        dp_in_range = (
+            act.calibration_pressure_drop_range is not None
+            and act.calibration_pressure_drop_range[0]
+            <= r.slots.dp
+            <= act.calibration_pressure_drop_range[1]
+        )
+        temperature_in_range = (
+            act.calibration_temperature_range is not None
+            and act.calibration_temperature_range[0]
+            <= radial_feed.temperature
+            <= act.calibration_temperature_range[1]
+        )
+        cavitation_number = (
+            (Pc + r.slots.dp - radial_feed.vapor_pressure)
+            / max(r.slots.dp, 1.0e-30)
+            if math.isfinite(radial_feed.vapor_pressure)
+            else float("nan")
+        )
+        cavitation_in_range = (
+            act.calibration_cavitation_number_range is not None
+            and math.isfinite(cavitation_number)
+            and act.calibration_cavitation_number_range[0]
+            <= cavitation_number
+            <= act.calibration_cavitation_number_range[1]
+        )
+        fluid_matches = (
+            bool(fluid_key(act.calibration_fluid_name))
+            and fluid_key(act.calibration_fluid_name)
+            == fluid_key(radial_feed.name)
+        )
+        calibration_digest = str(
+            act.discharge_coefficient_artifact_sha256 or ""
+        ).lower()
+        artifact_bound = (
+            len(calibration_digest) == 64
+            and all(c in "0123456789abcdef" for c in calibration_digest)
+        )
+        cd_geometry_matches = (
+            act.discharge_coefficient_geometry_fingerprint_sha256
+            == act.resolved_geometry_fingerprint_sha256
+        )
+        cd_in_domain = all((
+            cd_calibrated,
+            re_in_range,
+            dp_in_range,
+            temperature_in_range,
+            cavitation_in_range,
+            fluid_matches,
+            artifact_bound,
+            cd_geometry_matches,
+            radial_liquid,
+        ))
+        g.append(InjectorGate(
+            "movable_cd_calibration",
+            "pass" if cd_in_domain else "fail",
+            (
+                f"Cd={act.discharge_coefficient:.4f} from "
+                f"{act.discharge_coefficient_model}; fluid="
+                f"{radial_feed.name}/{act.calibration_fluid_name}, "
+                f"Re={r.slots.reynolds:.4g}/"
+                f"{act.calibration_reynolds_range}, dP={r.slots.dp:.4g}/"
+                f"{act.calibration_pressure_drop_range} Pa, "
+                f"T={radial_feed.temperature:.3f}/"
+                f"{act.calibration_temperature_range} K, cavitation number="
+                f"{cavitation_number:.4g}/"
+                f"{act.calibration_cavitation_number_range}, artifact_sha="
+                f"{'bound' if artifact_bound else 'missing/invalid'}, "
+                f"geometry_fingerprint="
+                f"{'match' if cd_geometry_matches else 'mismatch'}. Son "
+                "Eq.3 defines Cd but supplies no universal transferable law."
+            ),
+        ))
+
+        def evidence_bound(source: str | None, digest: str | None) -> bool:
+            digest_text = str(digest or "").lower()
+            return (
+                bool(str(source or "").strip())
+                and len(digest_text) == 64
+                and all(c in "0123456789abcdef" for c in digest_text)
+            )
+
+        uncertainty = act.position_uncertainty_fraction
+        metrology_bound = evidence_bound(
+            act.metrology_source, act.metrology_artifact_sha256
+        )
+        position_status = (
+            "fail" if (
+                uncertainty is None
+                or uncertainty >= 0.25
+                or not metrology_bound
+            )
+            else "pass" if uncertainty < 0.10 else "warn"
+        )
+        g.append(InjectorGate(
+            "movable_position_authority",
+            position_status,
+            (
+                "position tolerance + feedback resolution + backlash and a "
+                "source/hash-bound metrology artifact are required"
+                if uncertainty is None or not metrology_bound
+                else f"combined position uncertainty/opening={uncertainty:.3f}; "
+                f"metrology={act.metrology_source}"
+            ),
+        ))
+        leakage = movable.closed_leakage_area
+        leakage_fraction = (
+            None if leakage is None else float(leakage) / max(r.slots.area, 1e-30)
+        )
+        leakage_status = (
+            "fail" if (
+                leakage_fraction is None
+                or leakage_fraction >= 0.05
+                or not evidence_bound(
+                    act.leakage_source, act.leakage_artifact_sha256
+                )
+            )
+            else "pass" if leakage_fraction <= 0.01 else "warn"
+        )
+        g.append(InjectorGate(
+            "movable_closed_stop_leakage",
+            leakage_status,
+            (
+                "closed-stop leakage area and source/hash-bound seat/leakage "
+                "evidence are required"
+                if leakage_fraction is None or not evidence_bound(
+                    act.leakage_source, act.leakage_artifact_sha256
+                )
+                else f"closed leakage/effective open area={leakage_fraction:.3%}; "
+                f"evidence={act.leakage_source}"
+            ),
+        ))
+        actuator_margin = act.actuator_force_margin
+        actuator_evidence_bound = evidence_bound(
+            act.actuator_source, act.actuator_artifact_sha256
+        )
+        g.append(InjectorGate(
+            "movable_actuator_force_margin",
+            "pass" if (
+                actuator_margin is not None
+                and actuator_margin >= 1.0
+                and actuator_evidence_bound
+            ) else "fail",
+            (
+                "pressure balance area, friction, moving mass/acceleration, "
+                "actuator capacity, and a source/hash-bound actuator artifact "
+                "are required"
+                if actuator_margin is None or not actuator_evidence_bound
+                else f"capacity/required static force={actuator_margin:.3f}; "
+                f"required={act.required_actuator_force:.3f} N; "
+                f"evidence={act.actuator_source}"
+            ),
+        ))
+        stem_margin = act.stem_stress_margin
+        g.append(InjectorGate(
+            "movable_stem_stress_margin",
+            "pass" if (
+                stem_margin is not None
+                and stem_margin >= 1.0
+                and actuator_evidence_bound
+            ) else "fail",
+            (
+                "stem diameter/allowable, complete force ledger, or "
+                "source/hash-bound actuator/material evidence is missing"
+                if stem_margin is None or not actuator_evidence_bound
+                else f"stem allowable/axial stress={stem_margin:.3f}"
+            ),
+        ))
+        sheet_evidence_present = (
+            act.sheet_thickness is not None
+            and act.sheet_thickness_method in ("vof", "measured")
+            and bool(str(act.sheet_thickness_source or "").strip())
+            and bool(str(act.sheet_thickness_artifact_sha256 or "").strip())
+            and bool(str(
+                act.sheet_thickness_geometry_fingerprint_sha256 or ""
+            ).strip())
+            and bool(str(act.sheet_thickness_fluid_name or "").strip())
+            and act.sheet_thickness_opening_range is not None
+            and act.sheet_thickness_pressure_drop_range is not None
+            and act.sheet_thickness_mass_flow_range is not None
+        )
+        sheet_fluid_matches = (
+            sheet_evidence_present
+            and fluid_key(act.sheet_thickness_fluid_name)
+            == fluid_key(radial_feed.name)
+        )
+        sheet_opening_matches = (
+            sheet_evidence_present
+            and act.sheet_thickness_opening_range[0]
+            <= act.opening_distance
+            <= act.sheet_thickness_opening_range[1]
+        )
+        sheet_dp_matches = (
+            sheet_evidence_present
+            and act.sheet_thickness_pressure_drop_range[0]
+            <= r.slots.dp
+            <= act.sheet_thickness_pressure_drop_range[1]
+        )
+        sheet_flow_matches = (
+            sheet_evidence_present
+            and act.sheet_thickness_mass_flow_range[0]
+            <= r.slots.mdot
+            <= act.sheet_thickness_mass_flow_range[1]
+        )
+        sheet_in_domain = all((
+            sheet_evidence_present,
+            sheet_fluid_matches,
+            sheet_opening_matches,
+            sheet_dp_matches,
+            sheet_flow_matches,
+            (
+                act.sheet_thickness_geometry_fingerprint_sha256
+                == act.resolved_geometry_fingerprint_sha256
+            ),
+            radial_liquid,
+        ))
+        sheet_status = (
+            "pass" if sheet_in_domain
+            else "fail" if any(
+                value is not None
+                for value in (
+                    act.sheet_thickness,
+                    act.sheet_thickness_method,
+                    act.sheet_thickness_source,
+                    act.sheet_thickness_artifact_sha256,
+                )
+            )
+            else "info"
+        )
+        g.append(InjectorGate(
+            "movable_sheet_thickness_handoff",
+            sheet_status,
+            (
+                f"separate {act.sheet_thickness_method} sheet thickness="
+                f"{act.sheet_thickness*1e3:.4f} mm is bound to fluid="
+                f"{act.sheet_thickness_fluid_name}, L_open range="
+                f"{act.sheet_thickness_opening_range} m, dP range="
+                f"{act.sheet_thickness_pressure_drop_range} Pa, and mass-flow "
+                f"range={act.sheet_thickness_mass_flow_range} kg/s; mechanical "
+                "L_open is never reused as parcel diameter and the artifact "
+                "geometry fingerprint matches the solved Son geometry"
+                if sheet_in_domain
+                else "hydraulics are available, but Lagrangian primary/cycle "
+                "handoff is blocked until VOF-resolved or measured sheet "
+                "thickness evidence is supplied and the solved fluid, opening, "
+                "pressure drop, and mass flow lie inside its declared validity "
+                "domain with an exact geometry-fingerprint match; calibrated/"
+                "correlation screens are not parcel truth"
+            ),
+        ))
+        g.append(InjectorGate(
+            "movable_tip_angle_literature_domain",
+            "pass" if r.slots.detail["tip_angle_deg"] <= 40.0 else "warn",
+            f"tip angle={r.slots.detail['tip_angle_deg']:.3f} deg; Son tests "
+            "and published transition benchmark cover 0, 20, and 40 deg",
+        ))
 
     # 7) annulus concentricity / tolerance sensitivity.
     ecc = mfg.concentricity_tolerance / max(gap, 1e-12)
@@ -2277,7 +4134,16 @@ def injector_gates(
         # A vaporization-limited SURROGATE: warn (iterate L*/geometry/Δp) but
         # never hard-fail export over a screening estimate (SP-8089).
         m = at.development_margin
-        if not math.isfinite(m):
+        if at.limiting_role is None:
+            excluded = "; ".join(
+                f"{role}: {item.validity_reason}"
+                for role, item in at.streams.items()
+            )
+            status, txt = (
+                "info",
+                "legacy droplet-development model not applicable; " + excluded,
+            )
+        elif not math.isfinite(m):
             status, txt = "info", "combustion length indeterminate"
         else:
             status = "pass" if m >= 1.0 else "warn"
@@ -2287,21 +4153,24 @@ def injector_gates(
             txt = (f"{at.limiting_role} combustion-development length "
                    f"{at.combustion_length*1e3:.0f} mm vs chamber "
                    f"{at.available_chamber_length*1e3:.0f} mm (margin {m:.2f}{hint}); "
-                   f"SMD≈{smd_um:.0f} µm, predicted η_c*≈"
-                   f"{at.predicted_cstar_efficiency:.2f} "
-                   f"(vaporization-limited surrogate)")
+                   f"SMD≈{smd_um:.0f} µm, eta_vaporization≈"
+                   f"{at.eta_vaporization:.2f}; eta_mixing, eta_combustion, "
+                   "and eta_cstar unresolved")
         g.append(InjectorGate("combustion_development_length", status, txt))
 
     # 9b) target momentum ratio (when requested): compare achieved TMR.
     if spec.target_momentum_ratio is not None:
         tgt = spec.target_momentum_ratio
         rel = abs(r.total_momentum_ratio - tgt) / max(abs(tgt), 1e-9)
-        status = "pass" if rel < 0.15 else ("warn" if rel < 0.40 else "fail")
+        status = "pass" if rel <= 1e-6 else "fail"
+        solved = r.momentum_targeting
         g.append(InjectorGate(
             "target_momentum_ratio", status,
             f"achieved TMR {r.total_momentum_ratio:.2f} vs target {tgt:.2f} "
-            f"({rel*100:.0f}% off); active targeting needs dp-split/geometry "
-            f"adjustment (throttle solver)"))
+            f"({rel*100:.4g}% off); actively solved "
+            f"{solved.get('solved_role', r.radial_stream)} radial dP/Pc="
+            f"{solved.get('solved_radial_dp_fraction', float('nan')):.5g} "
+            f"within {solved.get('radial_dp_fraction_bounds', [])}"))
 
     # 9c) pintle-tip radius sanity (cannot exceed the pintle radius).
     if spec.geometry.tip_radius is not None:
@@ -2357,9 +4226,15 @@ def injector_gates(
     # 11) throttle-point mixture-ratio drift (fixed geometry).
     g.append(InjectorGate(
         "throttle_mr_drift", "info",
-        "fixed areas: dp ~ mdot^2, so at 50% flow dp -> ~25%; O/F is "
-        "preserved only while both dp-fractions scale together — a movable "
-        "pintle is needed for deep throttling"))
+        (
+            "Son center-pintle motion controls only the radial stream; a "
+            "separate upstream controller schedule is required for the fixed "
+            "axial annulus before O/F/TMR preservation can be claimed"
+            if is_movable else
+            "fixed areas: dp ~ mdot^2, so at 50% flow dp -> ~25%; O/F is "
+            "preserved only while both dp-fractions scale together — a "
+            "movable pintle is needed for deep throttling"
+        )))
 
     # 12) stability: chug (feed decoupling) + chamber acoustics + n-τ band.
     if r.stability is not None:

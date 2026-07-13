@@ -18,6 +18,7 @@ EXPECTED_CASES = {
     "lea_top_schomberg_2014",
     "rao_scarfed_moc_1990",
     "vulcain_s1_separation_similarity",
+    "rao1958_nozzle_b",
 }
 
 
@@ -123,23 +124,29 @@ def test_benchmark_cli_writes_reports(tmp_path):
     assert (report_dir / "lea_top_schomberg_2014_bezier_benchmark.md").exists()
 
 
-@pytest.mark.xfail(
-    reason="Current MOC solver does not yet reproduce the published Rao/scarfed Mach and thrust references.",
-    strict=False,
-)
-def test_moc_literature_benchmark_eventually_passes(tmp_path):
+def test_scarfed_case_is_explicitly_unsupported_by_axisymmetric_moc(tmp_path):
     result = run_benchmark(
         "rao_scarfed_moc_1990", "moc", report_path=tmp_path
     )
-    assert result["overall_status"] == "pass"
+    assert result["overall_status"] == "unsupported"
+    metric = result["metrics"][0]
+    assert metric["category"] == "capability"
+    assert metric["status"] == "unsupported"
+    assert "scarfed" in metric["message"].lower()
 
 
-@pytest.mark.xfail(
-    reason="Current variational Rao path does not yet expose a validated exit Mach trace.",
-    strict=False,
-)
-def test_rao_literature_benchmark_eventually_passes(tmp_path):
+def test_current_bvp_passes_strict_rao1958_nozzle_b_tables_2_and_3(tmp_path):
+    case = load_benchmark_case("rao1958_nozzle_b")
+    assert case["source"]["local_path"] == "propulsion_texts/rao1958.pdf"
+    assert len(case["source"]["sha256"]) == 64
     result = run_benchmark(
-        "lea_top_schomberg_2014", "rao", report_path=tmp_path
+        "rao1958_nozzle_b", "rao", report_path=tmp_path
     )
     assert result["overall_status"] == "pass"
+    assert result["contour_design_status"] == "geometric_approximation"
+    metrics = {metric["name"]: metric for metric in result["metrics"]}
+    assert metrics["contour_rms_error"]["status"] == "pass"
+    assert metrics["full_cde_thrust_coefficient"]["status"] == "pass"
+    assert metrics["full_cde_thrust_coefficient"]["message"].startswith(
+        "Computed by direct integration"
+    )

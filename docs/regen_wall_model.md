@@ -73,11 +73,25 @@ $$
 $$
 
 `h_g` uses the repository's Bartz implementation. `h_c` uses turbulent
-Sieder-Tate with local rectangular hydraulic diameter and coolant viscosity,
-plus a `Nu=4.36` circular-duct, uniform-heat-flux laminar proxy and fin area.
-The laminar rectangular-duct aspect ratio, heated-wall configuration, and
-entrance region are not yet resolved. The optional curvature multiplier is the
-Niino-Kumakawa/Taylor relation
+Sieder-Tate with local rectangular hydraulic diameter and coolant viscosity.
+For `Re < 2300`, actual rectangular-channel calls pass
+`alpha = min(width,height)/max(width,height)` to the Shah-London
+all-walls-uniform-heat-flux fully developed solution,
+
+$$
+Nu = 8.235\left(1-2.0421\alpha+3.0853\alpha^2-2.4765\alpha^3
+                 +1.0578\alpha^4-0.1861\alpha^5\right).
+$$
+
+This resolves the rectangular aspect-ratio dependence; it does not resolve
+unequal wall heating or hydrodynamic/thermal entrance effects. The local
+secondary source route is the noncircular-duct section of
+`Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf`,
+which cites Shah and London. The lower-level coefficient API retains
+`Nu=4.36` only when no rectangular aspect ratio is supplied, as a backward-
+compatible circular-duct uniform-heat-flux branch; the regen path does not use
+that branch. Fin area is then applied separately. The optional curvature
+multiplier is the Niino-Kumakawa/Taylor relation
 `Nu_curved/Nu_straight = [Re (D_h/(2R_c))^2]^(+/-0.05)`. Automatic
 liquid-coolant sizing leaves it disabled because SP-8087 recommends that
 liquid curvature enhancement not be credited without experimental

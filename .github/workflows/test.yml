@@ -1,0 +1,69 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "codex/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  non-slow:
+    name: Python 3.12 non-slow suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      MPLBACKEND: Agg
+      MPLCONFIGDIR: /tmp/matplotlib
+      PYTHONHASHSEED: "0"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and test/CAD dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev,cad]"
+
+      - name: Run non-slow regression suite
+        run: python -m pytest -q -m "not slow"
+
+  slow-nozzle:
+    name: Literature, MOC, and JAX slow gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      MPLBACKEND: Agg
+      MPLCONFIGDIR: /tmp/matplotlib
+      PYTHONHASHSEED: "0"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+
+      - name: Run slow and literature benchmarks
+        run: python -m pytest -q -m slow

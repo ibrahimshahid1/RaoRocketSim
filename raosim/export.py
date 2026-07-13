@@ -402,7 +402,18 @@ def _closed_profile(x: np.ndarray, y: np.ndarray, wall_thickness,
     return profile
 
 
-def _export_step_with_cadquery(profile: list[tuple[float, float]], path: Path) -> bool:
+def _export_step_with_cadquery(
+    profile: list[tuple[float, float]],
+    path: Path,
+    *,
+    flange_length: float | None = None,
+    bolt_count: int | None = None,
+    bolt_circle_diameter: float | None = None,
+    bolt_hole_diameter: float | None = None,
+    seal_center_radius: float | None = None,
+    seal_groove_width: float | None = None,
+    seal_groove_depth: float | None = None,
+) -> bool:
     try:
         import cadquery as cq  # type: ignore
     except Exception:
@@ -418,6 +429,62 @@ def _export_step_with_cadquery(profile: list[tuple[float, float]], path: Path) -
             .close()
             .revolve(360.0, (0, 0, 0), (1, 0, 0))
         )
+
+        # A chamber flange and injector face are one mechanical interface,
+        # not two unrelated disks.  When a resolved pattern is supplied, cut
+        # the chamber flange with the same count/BCD/hole diameter used by the
+        # injector CAD.  The nozzle axis is +X, so the bolt circle lies in YZ.
+        if bolt_count:
+            if flange_length is None:
+                raise ValueError("bolt holes require flange_length")
+            if bolt_circle_diameter is None or bolt_hole_diameter is None:
+                raise ValueError(
+                    "bolt_count requires bolt_circle_diameter and "
+                    "bolt_hole_diameter"
+                )
+            x_face = min(x for x, _r in profile_mm)
+            length_mm = 1000.0 * float(flange_length)
+            hole_r = 500.0 * float(bolt_hole_diameter)
+            bolt_r = 500.0 * float(bolt_circle_diameter)
+            eps = max(1.0e-3, 1.0e-4 * length_mm)
+            for i in range(int(bolt_count)):
+                theta = 2.0 * math.pi * i / int(bolt_count)
+                cutter = cq.Solid.makeCylinder(
+                    hole_r,
+                    length_mm + 2.0 * eps,
+                    cq.Vector(
+                        x_face - eps,
+                        bolt_r * math.cos(theta),
+                        bolt_r * math.sin(theta),
+                    ),
+                    cq.Vector(1.0, 0.0, 0.0),
+                )
+                solid = solid.cut(cutter)
+
+        # Normally the O-ring gland is cut in the injector face and this
+        # flange supplies a continuous flat mating land.  An explicit positive
+        # depth is supported for metal C-seal/gasket development where the
+        # chamber side owns the gland; leaving it None preserves the physically
+        # correct one-sided O-ring joint.
+        if seal_groove_depth is not None and seal_groove_depth > 0.0:
+            if seal_center_radius is None or seal_groove_width is None:
+                raise ValueError(
+                    "seal_groove_depth requires seal_center_radius and "
+                    "seal_groove_width"
+                )
+            x_face = min(x for x, _r in profile_mm)
+            center = 1000.0 * float(seal_center_radius)
+            half_w = 500.0 * float(seal_groove_width)
+            depth = 1000.0 * float(seal_groove_depth)
+            outer = cq.Solid.makeCylinder(
+                center + half_w, depth,
+                cq.Vector(x_face, 0.0, 0.0), cq.Vector(1.0, 0.0, 0.0),
+            )
+            inner = cq.Solid.makeCylinder(
+                center - half_w, depth,
+                cq.Vector(x_face, 0.0, 0.0), cq.Vector(1.0, 0.0, 0.0),
+            )
+            solid = solid.cut(outer.cut(inner))
         cq.exporters.export(solid, str(path), exportType="STEP")
         return True
     except Exception:
@@ -605,6 +672,12 @@ def export_step(x: np.ndarray, y: np.ndarray, path: str | Path,
                 wall_thickness=None,
                 flange_od: float | None = None,
                 flange_length: float | None = None,
+                bolt_count: int | None = None,
+                bolt_circle_diameter: float | None = None,
+                bolt_hole_diameter: float | None = None,
+                seal_center_radius: float | None = None,
+                seal_groove_width: float | None = None,
+                seal_groove_depth: float | None = None,
                 metadata: dict | None = None,
                 require_brep: bool = False,
                 throat_location: float | None = None) -> Path:
@@ -634,7 +707,72 @@ def export_step(x: np.ndarray, y: np.ndarray, path: str | Path,
         flange_od=flange_od, flange_length=flange_length,
     )
 
-    if not _export_step_with_cadquery(profile, path):
+    has_interface_features = bool(
+        bolt_count
+        or seal_center_radius is not None
+        or seal_groove_width is not None
+        or (seal_groove_depth is not None and seal_groove_depth > 0.0)
+    )
+    if bolt_count:
+        if flange_od is None or flange_length is None:
+            raise ValueError("bolt holes require flange_od and flange_length")
+        if bolt_circle_diameter is None or bolt_hole_diameter is None:
+            raise ValueError(
+                "bolt_count requires bolt_circle_diameter and "
+                "bolt_hole_diameter"
+            )
+        if int(bolt_count) < 3:
+            raise ValueError("bolt_count must be at least 3")
+        edge = (
+            0.5 * float(flange_od)
+            - 0.5 * float(bolt_circle_diameter)
+            - 0.5 * float(bolt_hole_diameter)
+        )
+        if edge <= 0.0:
+            raise ValueError("bolt pattern breaks through the flange outer edge")
+    if seal_center_radius is not None or seal_groove_width is not None:
+        if seal_center_radius is None or seal_groove_width is None:
+            raise ValueError(
+                "seal_center_radius and seal_groove_width must be supplied together"
+            )
+        if flange_od is None:
+            raise ValueError("seal mating land requires flange_od")
+        seal_inner = float(seal_center_radius) - 0.5 * float(seal_groove_width)
+        seal_outer = float(seal_center_radius) + 0.5 * float(seal_groove_width)
+        if seal_inner <= float(y[0]) or seal_outer >= 0.5 * float(flange_od):
+            raise ValueError("seal envelope does not fit on the chamber flange land")
+        if bolt_count and bolt_circle_diameter and bolt_hole_diameter:
+            bolt_inner = (
+                0.5 * float(bolt_circle_diameter)
+                - 0.5 * float(bolt_hole_diameter)
+            )
+            if seal_outer >= bolt_inner:
+                raise ValueError("seal envelope overlaps the chamber bolt holes")
+
+    if has_interface_features:
+        exported = _export_step_with_cadquery(
+            profile,
+            path,
+            flange_length=flange_length,
+            bolt_count=bolt_count,
+            bolt_circle_diameter=bolt_circle_diameter,
+            bolt_hole_diameter=bolt_hole_diameter,
+            seal_center_radius=seal_center_radius,
+            seal_groove_width=seal_groove_width,
+            seal_groove_depth=seal_groove_depth,
+        )
+    else:
+        # Keep this two-argument call for callers/tests that monkeypatch the
+        # optional CadQuery backend.
+        exported = _export_step_with_cadquery(profile, path)
+
+    if not exported:
+        if has_interface_features:
+            raise RuntimeError(
+                "chamber bolt/seal interface features require a true "
+                "CadQuery/OpenCascade B-rep; a faceted STEP cannot carry "
+                "the shared injector pattern"
+            )
         if require_brep:
             raise RuntimeError(
                 "true B-rep STEP export requires CadQuery/OpenCascade; "
@@ -645,6 +783,63 @@ def export_step(x: np.ndarray, y: np.ndarray, path: str | Path,
             flange_od=flange_od, flange_length=flange_length,
         )
         _write_faceted_step(path, triangles, metadata=metadata)
+
+    inspection = None
+    if step_representation(path) == "brep":
+        try:
+            import cadquery as cq  # type: ignore
+
+            imported = cq.importers.importStep(str(path))
+            solids = [s for value in imported.vals() for s in value.Solids()]
+            inspection = {
+                "solid_count": len(solids),
+                "all_solids_valid": bool(solids) and all(
+                    solid.isValid() for solid in solids
+                ),
+                "volume_mm3": float(sum(abs(s.Volume()) for s in solids)),
+            }
+            if not (
+                inspection["solid_count"] == 1
+                and inspection["all_solids_valid"]
+                and inspection["volume_mm3"] > 0.0
+            ):
+                raise RuntimeError(
+                    f"wall STEP round-trip gate failed: {inspection}"
+                )
+        except RuntimeError:
+            raise
+        except Exception as exc:
+            raise RuntimeError(
+                "wall STEP round-trip inspection failed: "
+                f"{type(exc).__name__}: {exc}"
+            ) from exc
+
+    sidecar = path.with_suffix(".cad.json")
+    sidecar.write_text(json.dumps({
+        "schema": "raosim.cad_export.v1",
+        "artifact": path.name,
+        "public_api_linear_unit": "m",
+        "neutral_file_linear_unit": "mm",
+        "volume_unit": "mm^3",
+        "representation": step_representation(path),
+        "round_trip_inspection": inspection,
+        "interface": {
+            "flange_outer_diameter_m": flange_od,
+            "flange_length_m": flange_length,
+            "bolt_count": int(bolt_count) if bolt_count else None,
+            "bolt_circle_diameter_m": bolt_circle_diameter,
+            "bolt_hole_diameter_m": bolt_hole_diameter,
+            "seal_center_radius_m": seal_center_radius,
+            "seal_groove_width_m": seal_groove_width,
+            "seal_groove_depth_m": seal_groove_depth,
+            "seal_ownership": (
+                "chamber_gland" if seal_groove_depth else
+                "injector_gland_chamber_flat_mating_land"
+                if seal_center_radius is not None else None
+            ),
+        },
+        "metadata": metadata or {},
+    }, indent=2) + "\n", encoding="utf-8")
 
     return path
 

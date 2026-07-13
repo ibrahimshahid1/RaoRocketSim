@@ -60,23 +60,27 @@ REQUIRED_FIXTURE_FILES = (
 
 
 def _comparison_diagnostics(nasa_dir: Path, args: argparse.Namespace) -> dict[str, Any]:
+    from raosim.rao_variational import _nasa_reference_validation_diagnostics
+
+    certificate = _nasa_reference_validation_diagnostics()
     missing = [
         name for name in REQUIRED_FIXTURE_FILES
         if not (nasa_dir / name).exists()
     ]
     fixture_overlay_available = not missing
-    blockers = [
-        "visible-source port parity is not certified by this fixture-overlay harness",
-    ]
+    blockers = list(certificate.get("blockers", []))
     if missing:
         blockers.append("required fixture files are missing")
     return {
         "canonical_reference_track": CANONICAL_REFERENCE_TRACK,
         "comparison_track": HISTORICAL_OVERLAY_TRACK,
         "source_port_candidate": args.starting_line_method,
-        "source_port_matched": None,
-        "source_port_match_status": "not_evaluated_by_historical_fixture_overlay",
-        "source_port_workflow_complete": False,
+        "source_port_matched": certificate["source_port_matched"],
+        "source_port_match_status": certificate["source_port_match_status"],
+        "source_port_workflow_complete": certificate[
+            "source_reference_workflow_complete"
+        ],
+        "source_reference_certificate": certificate,
         "fixture_overlay_available": bool(fixture_overlay_available),
         "fixture_overlay_is_promotion_authority": False,
         "fixture_overlay_missing_files": missing,
@@ -448,13 +452,13 @@ def compare(args: argparse.Namespace) -> dict[str, Any]:
         and bool(getattr(bfe_region, "complete_remaining_mesh", False))
         and bool(getattr(bfe_region, "wall_contour_complete", False))
     )
-    diagnostics["source_port_workflow_complete"] = bool(
+    diagnostics["candidate_source_workflow_complete"] = bool(
         kernel_complete and diagnostics["python_bfe_overlay_complete"]
     )
-    if diagnostics["source_port_workflow_complete"]:
-        diagnostics["source_port_workflow_status"] = "complete_not_certified"
+    if diagnostics["candidate_source_workflow_complete"]:
+        diagnostics["candidate_source_workflow_status"] = "complete_not_certified"
     else:
-        diagnostics["source_port_workflow_status"] = "incomplete"
+        diagnostics["candidate_source_workflow_status"] = "incomplete"
     if bfe_error:
         diagnostics["python_bfe_overlay_reason"] = bfe_error
     if kernel_blockers:
@@ -750,8 +754,12 @@ def _print_human(report: dict[str, Any]) -> None:
             f"{diagnostics.get('fixture_overlay_is_promotion_authority')}"
         )
         print(
-            "Source workflow: "
-            f"{diagnostics.get('source_port_workflow_status')}"
+            "Pinned reference workflow: "
+            f"{diagnostics.get('source_port_match_status')}"
+        )
+        print(
+            "Current candidate workflow: "
+            f"{diagnostics.get('candidate_source_workflow_status')}"
         )
         print(
             "Source port matched: "

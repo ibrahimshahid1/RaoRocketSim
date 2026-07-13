@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "benchmark_kind": "spray",
+  "case_id": "radhakrishnan2021_variable_area_lox_gch4",
+  "title": "Radhakrishnan, Lee, and Koo 2021 variable-area LOX/GCH4 literature-reproduction dataset",
+  "description": "Joined author-reported inputs from Table 3, VOF outputs from Table 7, and WAVE/Lagrangian outputs from Table 8. Tables 7 and 8 are simulation results, never experimental validation data.",
+  "dataset_revision": "combustion_theory_and_modelling_2021_tables_3_7_8",
+  "fluid_system": {
+    "radial_stream": "LOX",
+    "axial_stream": "GCH4",
+    "lox_inlet_temperature_k": 85.0,
+    "gch4_inlet_temperature_k": 300.0,
+    "lox_surface_tension_n_m": 0.01451
+  },
+  "source": {
+    "pdf": "radhakrishnan2021.pdf",
+    "local_path": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+    "sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+    "doi": "10.1080/13647830.2021.1937702",
+    "citation": "Radhakrishnan, K., Lee, K., and Koo, J., A detailed modelling on spray atomisation and combustion of LOX/GCH4 in variable area pintle injector, Combustion Theory and Modelling, 2021.",
+    "references": [
+      {
+        "label": "Table 2: pintle injector dimensions",
+        "pdf_page_1_based": 7,
+        "printed_page": "6",
+        "data_origin": "author_reported_geometry"
+      },
+      {
+        "label": "Table 3: designed boundary conditions",
+        "pdf_page_1_based": 8,
+        "printed_page": "7",
+        "data_origin": "author_designed_input"
+      },
+      {
+        "label": "Section 2.2 and Equations 1-9: WAVE, breakup-time, and SMD definitions",
+        "pdf_page_1_based": 9,
+        "pdf_page_end_1_based": 11,
+        "printed_page": "8-10",
+        "data_origin": "published_model_definition"
+      },
+      {
+        "label": "Table 6: modelling-1 grid independence",
+        "pdf_page_1_based": 20,
+        "printed_page": "19",
+        "data_origin": "author_grid_convergence_simulation"
+      },
+      {
+        "label": "Table 7: summary of VOF simulation",
+        "pdf_page_1_based": 22,
+        "printed_page": "21",
+        "data_origin": "author_vof_simulation"
+      },
+      {
+        "label": "Table 8: WAVE constants and SMDs",
+        "pdf_page_1_based": 25,
+        "printed_page": "24",
+        "data_origin": "author_lagrangian_simulation"
+      }
+    ],
+    "extraction": {
+      "method": "native_pdf_text_plus_rendered_page_visual_verification",
+      "ocr_required": false,
+      "visual_verification_pages_pdf_1_based": [22, 25]
+    }
+  },
+  "injector_geometry": {
+    "annular_gap_thickness_mm": 1.5,
+    "center_gas_diameter_mm": 4.55,
+    "pintle_rod_diameter_mm": 3.0,
+    "post_diameter_mm": 11.2,
+    "pintle_tip_diameter_mm": 11.2,
+    "post_angle_deg": 30.0,
+    "pintle_tip_thickness_mm": 1.0,
+    "post_recess_length_mm": 11.2,
+    "post_thickness_mm": 1.0
+  },
+  "equation_variant": {
+    "id": "radhakrishnan2021_wave_equations_1_to_8",
+    "source_ref": "Equations 1-8, PDF pages 9-11, printed pages 8-10",
+    "wave_wavelength_second_correction_coefficient": 0.45,
+    "wave_weber_denominator_coefficient": 0.87,
+    "parent_radius_symbol": "h",
+    "full_sheet_thickness_relation": "sheet_thickness_full = 2*h",
+    "notes": "This differs from the 0.4 coefficient printed in the 2018 paper's Equation 5. Select the equation variant explicitly when reproducing Table 8."
+  },
+  "definitions": {
+    "sheet_thickness_full_mm": "Full initial LOX sheet thickness reported in Table 7 and shown as 2h in Figure 2. Equations 1-8 use h as the parent radius/half-thickness.",
+    "sheet_breakup_length_mm": "VOF-derived LOX sheet breakup length reported in Table 7.",
+    "wave_b0": "Author-calculated WAVE drop-size constant reported in Table 8.",
+    "wave_b1": "Author-calculated WAVE breakup-time constant reported in Table 8.",
+    "smd_author_simulation_um": "SMD collected from the author's modelling-2 Lagrangian calculation; it is not an experimental measurement."
+  },
+  "data": {
+    "format": "csv",
+    "path": "curves/radhakrishnan2021_tables_3_7_8.csv",
+    "row_schema": "radhakrishnan2021_variable_area_lox_gch4_v1",
+    "expected_row_count": 6
+  },
+  "units": {
+    "lopen_mm": "mm",
+    "pintle_tip_angle_deg": "deg",
+    "pc_mpa": "MPa",
+    "mdot_lox_g_s": "g/s",
+    "mdot_gch4_g_s": "g/s",
+    "tmr": "1",
+    "throttle_percent": "percent",
+    "sheet_thickness_full_mm": "mm",
+    "sheet_breakup_length_mm": "mm",
+    "wave_b0": "1",
+    "wave_b1": "1",
+    "smd_author_simulation_um": "um"
+  },
+  "column_provenance": {
+    "lopen_mm": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "pintle_tip_angle_deg": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "pc_mpa": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "mdot_lox_g_s": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "mdot_gch4_g_s": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "tmr": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "throttle_percent": {"data_origin": "author_designed_input", "source_ref": "Table 3"},
+    "sheet_thickness_full_mm": {"data_origin": "author_vof_simulation", "source_ref": "Table 7"},
+    "sheet_breakup_length_mm": {"data_origin": "author_vof_simulation", "source_ref": "Table 7"},
+    "wave_b0": {"data_origin": "author_derived_model_constant", "source_ref": "Table 8 and Equations 1-8"},
+    "wave_b1": {"data_origin": "author_derived_model_constant", "source_ref": "Table 8 and Equations 5-8"},
+    "smd_author_simulation_um": {"data_origin": "author_lagrangian_simulation", "source_ref": "Table 8"}
+  },
+  "uncertainty": {
+    "smd_author_simulation_um": {
+      "kind": "dataset_level_reported_plus_minus_range",
+      "plus_minus_min_um": 4.0,
+      "plus_minus_max_um": 8.0,
+      "source_ref": "Paragraph following Table 7 and preceding Figure 15, PDF page 22, printed page 21",
+      "notes": "The publication gives a global +/- (4-8) um range, not case-specific uncertainty."
+    }
+  },
+  "sampling": {
+    "smd_measurement_region_axial_start_mm": 10.0,
+    "smd_measurement_region_extent_mm": 10.0,
+    "statistics_collection_time_steps_reported_range": [10, 15],
+    "rosin_rammler_spread_parameter_reported_range": [1.0, 2.0],
+    "raw_droplet_samples_published": false
+  },
+  "grid_independence": {
+    "modelling_1_table_6": [
+      {"grid": "grid_1", "cells": 101325, "sheet_thickness_full_mm": 0.161, "sheet_breakup_length_mm": 4.102},
+      {"grid": "grid_2", "cells": 149072, "sheet_thickness_full_mm": 0.152, "sheet_breakup_length_mm": 3.677},
+      {"grid": "grid_3", "cells": 201032, "sheet_thickness_full_mm": 0.148, "sheet_breakup_length_mm": 3.670}
+    ],
+    "modelling_2_selected_cells": 33298,
+    "modelling_2_minimum_cell_size_um": 8.0,
+    "modelling_2_cell_growth_rate": 1.2,
+    "modelling_2_cfl_range": [0.8, 1.2],
+    "modelling_2_time_step_s": 0.000001
+  },
+  "validation_policy": {
+    "role": "literature_reproduction_only",
+    "strict_component_targets": [],
+    "literature_reproduction_targets": [
+      "table_7_author_vof_sheet_thickness",
+      "table_7_author_vof_breakup_length",
+      "table_8_author_derived_wave_b0",
+      "table_8_author_derived_wave_b1",
+      "table_8_author_lagrangian_smd"
+    ],
+    "prohibited_claims": [
+      "Tables 7 or 8 contain experimental LOX/GCH4 measurements.",
+      "Agreement with Tables 7 or 8 constitutes physical validation.",
+      "The published CFD can be reproduced exactly without its missing carrier fields, property tables, and parcel histories."
+    ]
+  },
+  "readiness": {
+    "strict_end_to_end_smd_validation_ready": false,
+    "available_for": [
+      "literature_result_regression",
+      "equation_variant_regression",
+      "trend_comparison_across_opening_and_tip_angle"
+    ],
+    "missing_publication_data": [
+      "resolved GCH4 carrier velocity, pressure, density, and turbulence fields",
+      "complete temperature-dependent LOX and GCH4 property tables used by Fluent",
+      "parcel injection count/weights and raw parcel histories",
+      "stochastic-dispersion random seed and random-number stream",
+      "per-case Rosin-Rammler fit parameters and raw droplet samples",
+      "complete Fluent case dictionaries and solver defaults"
+    ]
+  }
+}

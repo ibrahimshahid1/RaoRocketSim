@@ -1,0 +1,5 @@
+case_id,lopen_mm,p_liquid_bar,p_gas_bar,mdot_air_g_s,mdot_water_g_s,tmr,sheet_thickness_full_mm,water_velocity_m_s,wave_b0,wave_b1,spray_half_angle_experiment_deg,spray_half_angle_experiment_uncertainty_deg,smd_experiment_um,smd_experiment_uncertainty_um
+case_1,0.2,0.4,0.2,3.03,22.9,0.187,0.2,7.07,4.92,0.989,24.4,0.60,108.10,3.14
+case_2,0.4,0.4,0.2,3.03,45.2,0.316,0.4,7.00,9.93,0.690,29.8,1.59,143.36,4.16
+case_3,0.6,0.4,0.2,3.03,58.9,0.351,0.6,6.20,15.1,0.559,32.4,2.86,197.20,5.72
+case_4,0.8,0.4,0.2,3.03,55.6,0.331,0.568,6.06,14.3,0.574,33.6,1.80,188.9,5.48

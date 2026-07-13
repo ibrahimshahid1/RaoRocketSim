@@ -1,3 +1,6 @@
+from datetime import date
+import hashlib
+import json
 import sys
 import types
 
@@ -14,7 +17,13 @@ from raosim.design import (
     design_nozzle_v2,
 )
 from raosim.nozzle_geometry import bell_nozzle_contour
-from raosim.injector import InjectorSpec, PintleGeometrySpec
+from raosim.injector import (
+    FeedLineSpec,
+    FeedSystemSpec,
+    InjectorSpec,
+    PintleGeometrySpec,
+    PropellantFeedSpec,
+)
 from raosim.physics import bartz_heat_flux, boundary_layer_displacement, regenerative_cooling_screen, structural_screen
 from raosim.coolants import canonical_coolant_name
 from raosim.physics import (
@@ -22,7 +31,42 @@ from raosim.physics import (
     resolve_coolant_properties,
 )
 from raosim.propellants import get_propellant
+from raosim.release_readiness import evidence_manifest_template
+from raosim.spray_coupling import SprayCStarCouplingSpec
 from raosim.throat_geometry import upstream_radius_ratio_for_discharge_coefficient
+
+
+def _write_frozen_lox_rp1_table(
+    tmp_path,
+    *,
+    pressure_pa=8.0e6,
+    temperature_k=3571.0,
+    mixture_ratio=2.27,
+    molecular_weight=0.0219,
+):
+    from raosim.frozen_flow import MODEL_ID
+
+    source_payload = b"manufactured frozen LOX/RP-1 design-v2 fixture"
+    payload = {
+        "schema_version": 2,
+        "model": MODEL_ID,
+        "molecular_weight_kg_mol": molecular_weight,
+        "composition_mass_fractions": {"manufactured_products": 1.0},
+        "temperature_nodes_k": [150.0, 500.0, 1000.0, 1800.0, 2600.0, 3300.0, 3800.0],
+        "cp_nodes_j_kg_k": [1180.0, 1300.0, 1480.0, 1710.0, 1900.0, 2040.0, 2120.0],
+        "source": "manufactured design-v2 variable-cp regression fixture",
+        "freeze_basis": "chamber_equilibrium_snapshot",
+        "composition_state_pressure_pa": pressure_pa,
+        "composition_state_temperature_k": temperature_k,
+        "mixture_ratio": mixture_ratio,
+        "generator": "pytest manufactured table builder",
+        "generator_version": "1",
+        "thermo_database": "manufactured piecewise-linear cp",
+        "source_artifact_sha256": hashlib.sha256(source_payload).hexdigest(),
+    }
+    path = tmp_path / "frozen_lox_rp1.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
 
 
 def _prelim_input(**kwargs):
@@ -49,13 +93,234 @@ def test_preliminary_v2_constant_gamma_runs():
     assert result.report_sections["thermochemistry"]["source"] == "built_in_constant_gamma"
     assert result.report_sections["boundary_layer"]["effective_epsilon"] < result.input.epsilon
     assert result.contour["hardware_qualified"] is False
+    assert result.hardware_qualified is False
+    assert result.report_sections["physical_release_readiness"]["blocked"] is True
+    assert result.report_sections["model_registry_audit"]["passed"] is True
+
+
+def test_v2_frozen_variable_cp_bezier_uses_profile_and_fails_validation_gate(
+    tmp_path,
+):
+    table = _write_frozen_lox_rp1_table(tmp_path)
+    request = _prelim_input(
+        thermo=ThermoSpec(
+            mode="constant_gamma",
+            propellant_name="LOX/RP-1",
+            mixture_ratio=2.27,
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=table,
+        )
+    )
+
+    result = design_nozzle_v2(request)
+    frozen = result.performance.frozen_flow
+
+    assert frozen is not None
+    assert frozen.all_closures_pass is True
+    assert result.performance.expansion_model == "frozen_variable_cp_q1d"
+    assert result.performance.Me == pytest.approx(frozen.exit.mach)
+    assert result.contour["ideal_exit_Mach"] == pytest.approx(frozen.exit.mach)
+    assert result.contour["quasi_1d_expansion_model"] == (
+        "frozen_variable_cp_q1d"
+    )
+    thermo_report = result.report_sections["thermochemistry"]
+    assert thermo_report["frozen_expansion"]["closures"]["all_pass"] is True
+    assert thermo_report["exit_state"]["property_table"]["freeze_basis"] == (
+        "chamber_equilibrium_snapshot"
+    )
+    gates = {check.name: check for check in result.gate_report.checks}
+    assert gates["frozen_variable_cp_q1d_closure"].passed is True
+    assert gates["frozen_property_and_performance_benchmark"].passed is False
+    assert gates["variable_property_boundary_layer"].passed is False
+    assert gates["variable_property_bartz_recovery"].passed is False
+    assert gates["variable_property_discharge_coefficient"].passed is False
+    serialized = result.to_dict()["performance"]
+    assert serialized["expansion_model"] == "frozen_variable_cp_q1d"
+    assert serialized["frozen_flow_fingerprint"] == (
+        result.performance.frozen_flow_fingerprint
+    )
+
+
+def test_v2_frozen_variable_cp_closes_target_thrust_and_matched_pressure(
+    tmp_path, monkeypatch
+):
+    import raosim.design as design_module
+
+    table = _write_frozen_lox_rp1_table(tmp_path)
+
+    def constant_gamma_inverse_forbidden(*_args, **_kwargs):
+        raise AssertionError("constant-gamma pressure inverse was called")
+
+    monkeypatch.setattr(
+        design_module,
+        "expansion_ratio_from_pressure",
+        constant_gamma_inverse_forbidden,
+    )
+    request = _prelim_input(
+        Rt=None,
+        target_thrust=13_000.0,
+        epsilon=None,
+        thermo=ThermoSpec(
+            mode="constant_gamma",
+            propellant_name="LOX/RP-1",
+            mixture_ratio=2.27,
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=table,
+        ),
+    )
+
+    result = design_nozzle_v2(request)
+
+    assert result.performance.thrust == pytest.approx(13_000.0, rel=2e-12)
+    assert result.performance.Pe == pytest.approx(
+        request.ambient.design_pressure, rel=5e-10
+    )
+    assert result.input.Rt is not None
+    assert result.input.epsilon > 1.0
+
+
+@pytest.mark.parametrize("method", ("moc", "rao", "rao_variational_moc"))
+def test_v2_frozen_variable_cp_rejects_constant_gamma_characteristic_methods(
+    tmp_path, method
+):
+    table = _write_frozen_lox_rp1_table(tmp_path)
+    request = _prelim_input(
+        method=method,
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=table,
+        ),
+    )
+    with pytest.raises(ValueError, match="compatible only with bezier"):
+        design_nozzle_v2(request)
+
+
+def test_v2_frozen_variable_cp_requires_explicit_consistent_property_evidence(
+    tmp_path,
+):
+    missing = _prelim_input(
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            expansion_model="frozen_variable_cp",
+        )
+    )
+    with pytest.raises(ValueError, match="requires thermo.frozen_gas_table"):
+        design_nozzle_v2(missing)
+
+    table = _write_frozen_lox_rp1_table(tmp_path)
+    stale_constant = _prelim_input(
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            frozen_gas_table=table,
+        )
+    )
+    with pytest.raises(ValueError, match="requires expansion_model"):
+        design_nozzle_v2(stale_constant)
+
+    wrong_of = _prelim_input(
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            mixture_ratio=2.5,
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=table,
+        )
+    )
+    with pytest.raises(ValueError, match="mixture_ratio does not match"):
+        design_nozzle_v2(wrong_of)
+
+
+def test_v2_frozen_variable_cp_rejects_stale_state_and_validated_claim(
+    tmp_path,
+):
+    stale_table = _write_frozen_lox_rp1_table(
+        tmp_path, pressure_pa=7.5e6
+    )
+    stale = _prelim_input(
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            mixture_ratio=2.27,
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=stale_table,
+        )
+    )
+    with pytest.raises(ValueError, match="snapshot pressure"):
+        design_nozzle_v2(stale)
+
+    table = _write_frozen_lox_rp1_table(tmp_path)
+    validated = _prelim_input(
+        mode="validated",
+        thermo=ThermoSpec(
+            propellant_name="LOX/RP-1",
+            mixture_ratio=2.27,
+            expansion_model="frozen_variable_cp",
+            frozen_gas_table=table,
+        ),
+    )
+    with pytest.raises(ValueError, match="validated mode does not yet accept"):
+        design_nozzle_v2(validated)
+
+
+def test_v2_release_evidence_hard_gate_requires_a_manifest():
+    with pytest.raises(ValueError, match="release_evidence_manifest"):
+        design_nozzle_v2(_prelim_input(require_release_evidence=True))
+    with pytest.raises(ValueError, match="configuration_id"):
+        design_nozzle_v2(_prelim_input(
+            require_release_evidence=True,
+            release_evidence_manifest="evidence.json",
+        ))
+
+
+def test_v2_release_gate_matches_configuration_but_never_qualifies_hardware(
+    tmp_path,
+):
+    configuration_id = "ENGINE-CFG-UNIT-TEST"
+    manifest = evidence_manifest_template("engine")
+    manifest["configuration_id"] = configuration_id
+    for record in manifest["evidence"]:
+        record.update({
+            "passed": True,
+            "artifact": "archive://qualification/" + record["requirement_id"],
+            "artifact_sha256": "a" * 64,
+            "configuration_id": configuration_id,
+            "reviewed_by": "independent test authority",
+            "review_date": date.today().isoformat(),
+        })
+    path = tmp_path / "engine_evidence.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    result = design_nozzle_v2(_prelim_input(
+        configuration_id=configuration_id,
+        release_evidence_manifest=path,
+        require_release_evidence=True,
+    ))
+    release = result.report_sections["physical_release_readiness"]
+    assert release["evidence_complete"] is True
+    assert release["blocked"] is False
+    assert release["hardware_qualified"] is False
+    assert result.hardware_qualified is False
+
+
+def test_equilibrium_cea_mode_is_rejected_until_expansion_is_supported():
+    from raosim.cea import resolve_thermochemistry
+
+    with pytest.raises(NotImplementedError, match="cea_equilibrium"):
+        resolve_thermochemistry(
+            thermo_mode="cea_equilibrium",
+            propellant_name="LOX/RP-1",
+            Pc=80e5,
+            mixture_ratio=2.6,
+            oxidizer="LOX",
+            fuel="RP-1",
+            epsilon=8.0,
+        )
 
 
 def test_v2_derives_throat_radius_from_cd_target_and_auto_shoulder():
-    result = design_nozzle_v2(_prelim_input(throat_cd_target=0.99))
+    result = design_nozzle_v2(_prelim_input(throat_cd_target=0.989))
 
     expected_ru = upstream_radius_ratio_for_discharge_coefficient(
-        0.99, result.propellant.gamma
+        0.989, result.propellant.gamma
     )
     chamber = result.report_sections["chamber_geometry"]
 
@@ -66,7 +331,22 @@ def test_v2_derives_throat_radius_from_cd_target_and_auto_shoulder():
     assert result.input.shoulder_radius_factor != pytest.approx(0.25)
     assert chamber["shoulder_radius_source"] == "auto_geometric_closure"
     assert chamber["throat_upstream_radius_source"] == "cd_target_hall_sp8120"
-    assert chamber["throat_discharge_coefficient_hall"] == pytest.approx(0.99)
+    assert chamber["throat_discharge_coefficient_hall"] == pytest.approx(0.989)
+
+
+def test_throat_radius_beyond_sp8120_requires_explicit_extension():
+    with pytest.raises(ValueError, match="SP-8120 range capability"):
+        design_nozzle_v2(_prelim_input(throat_cd_target=0.99))
+
+    result = design_nozzle_v2(_prelim_input(
+        throat_cd_target=0.99,
+        allow_throat_radius_extension=True,
+    ))
+    chamber = result.report_sections["chamber_geometry"]
+    assert chamber["throat_upstream_radius_source"] == (
+        "cd_target_hall_repository_extension"
+    )
+    assert result.input.throat_geometry.upstream_radius_ratio > 1.5
 
 
 def test_v2_backend_evaluates_requested_pintle():
@@ -80,6 +360,208 @@ def test_v2_backend_evaluates_requested_pintle():
     assert injector["feed"]["oxidizer"]["name"] == "LOX"
     assert any(
         check.category == "injector"
+        for check in result.gate_report.checks
+    )
+    expected_length = (
+        result.contour["throat_location"]
+        - result.contour["injector_location"]
+    )
+    assert result.report_sections["injector"]["chamber_length_m"] == pytest.approx(
+        expected_length
+    )
+    assert result.report_sections["chamber_geometry"][
+        "injector_to_throat_length"
+    ] == pytest.approx(expected_length)
+
+
+def test_v2_explicit_pintle_cad_failure_is_a_hard_failure(
+    tmp_path, monkeypatch
+):
+    import raosim.injector_export as injector_export
+
+    def fail_export(*_args, **_kwargs):
+        raise RuntimeError("synthetic CAD topology failure")
+
+    monkeypatch.setattr(
+        injector_export, "export_pintle_package", fail_export
+    )
+    request = _prelim_input(
+        injector=InjectorSpec(type="pintle", cad="machined"),
+        manufacturing=ManufacturingSpec(
+            output_dir=tmp_path,
+            cad="none",
+        ),
+    )
+    with pytest.raises(RuntimeError, match="Requested pintle CAD failed"):
+        design_nozzle_v2(request)
+    error = tmp_path / "pintle" / "EXPORT_ERROR.txt"
+    assert error.exists()
+    assert "synthetic CAD topology failure" in error.read_text()
+
+
+def test_v2_diagnostic_only_pintle_package_can_remain_best_effort(
+    tmp_path, monkeypatch
+):
+    import raosim.injector_export as injector_export
+
+    def fail_export(*_args, **_kwargs):
+        raise RuntimeError("synthetic plot failure")
+
+    monkeypatch.setattr(
+        injector_export, "export_pintle_package", fail_export
+    )
+    result = design_nozzle_v2(_prelim_input(
+        injector=InjectorSpec(type="pintle", cad="none"),
+        manufacturing=ManufacturingSpec(
+            output_dir=tmp_path,
+            cad="none",
+        ),
+    ))
+    assert result.files["pintle_error"].exists()
+
+
+def test_v2_opt_in_spray_cstar_loop_closes_injector_and_cycle_mass_flow():
+    result = design_nozzle_v2(_prelim_input(
+        Pc=1.5e6,
+        injector=InjectorSpec(
+            type="pintle",
+            fuel_dp_fraction=0.7,
+            oxidizer_dp_fraction=0.7,
+            evaporation_constant=1.0e-4,
+        ),
+        spray_cstar_coupling=SprayCStarCouplingSpec(
+            enabled=True,
+            eta_mixing=0.98,
+            eta_combustion=0.99,
+            relative_tolerance=1.0e-5,
+        ),
+    ))
+
+    coupling = result.report_sections["spray_cstar_coupling"]
+    injector = result.report_sections["injector"]
+    injector_mdot = (
+        injector["annulus"]["mdot_kg_s"] + injector["slots"]["mdot_kg_s"]
+    )
+
+    assert coupling["converged"] is True
+    assert coupling["iteration_count"] > 0
+    assert result.performance.eta_cstar == pytest.approx(coupling["eta_cstar"])
+    assert result.performance.m_dot == pytest.approx(
+        coupling["required_mass_flow_kg_s"]
+    )
+    assert injector_mdot == pytest.approx(result.performance.m_dot)
+    assert result.report_sections["thrust_closure"][
+        "spray_cstar_fixed_point_enabled"
+    ] is True
+
+
+def test_v2_spray_cstar_regen_outer_loop_recloses_cooling_and_pump_duty():
+    request = _prelim_input(
+        Pc=1.5e6,
+        thermo=ThermoSpec(
+            mode="constant_gamma",
+            propellant_name="N2O/Ethanol",
+            mixture_ratio=1.0,
+        ),
+        injector=InjectorSpec(
+            type="pintle",
+            allow_infeasible=True,
+            fuel_dp_fraction=0.9,
+            oxidizer_dp_fraction=0.7,
+            evaporation_constant=1.0e-4,
+            feed_system=FeedSystemSpec(
+                fuel=FeedLineSpec(tank_pressure=1.0e5),
+                oxidizer=FeedLineSpec(tank_pressure=1.0e5),
+            ),
+            oxidizer=PropellantFeedSpec(
+                role="oxidizer",
+                name="N2O",
+                inlet_temperature=270.0,
+                inlet_pressure=4.0e6,
+                phase="liquid",
+                density=900.0,
+                viscosity=1.0e-4,
+                surface_tension=0.02,
+                vapor_pressure=2.0e6,
+                property_source="explicit test-state properties",
+            ),
+        ),
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="ethanol",
+            coolant_inlet_temperature=220.0,
+            coolant_mass_flow=None,
+            channel_count=40,
+            channel_width=8.0e-4,
+            channel_height=2.5e-3,
+            coolant_property_backend="constant",
+        ),
+        manufacturing=ManufacturingSpec(wall_thickness=1.0e-3),
+        spray_cstar_coupling=SprayCStarCouplingSpec(
+            enabled=True,
+            eta_mixing=0.98,
+            eta_combustion=0.99,
+            relative_tolerance=1.0e-5,
+        ),
+    )
+    result = design_nozzle_v2(request)
+    coupling = result.report_sections["spray_cstar_coupling"]
+    final = coupling["final_state_summary"]
+    assert coupling["converged"] is True
+    assert final["total_mass_flow_kg_s"] == pytest.approx(
+        result.performance.m_dot
+    )
+    assert final["coolant_mass_flow_kg_s"] == pytest.approx(
+        final["fuel_mass_flow_kg_s"]
+    )
+    assert final["regen_fuel_relative_flow_error"] == pytest.approx(0.0)
+    assert final["coolant_pressure_drop_pa"] == pytest.approx(
+        result.report_sections["cooling"]["coolant_pressure_drop"]
+    )
+    assert final["feed_and_pump_duty_by_role"]["fuel"][
+        "regen_loss_pa"
+    ] == pytest.approx(final["coolant_pressure_drop_pa"])
+    assert final["feed_and_pump_duty_by_role"]["fuel"][
+        "ideal_pump_power_w"
+    ] > 0.0
+    for iteration in coupling["iterations"]:
+        state = iteration["state_summary"]
+        assert state["coolant_mass_flow_kg_s"] == pytest.approx(
+            state["fuel_mass_flow_kg_s"]
+        )
+        assert state["feed_and_pump_duty_by_role"]["fuel"][
+            "ideal_pump_power_w"
+        ] > 0.0
+
+
+def test_v2_spray_regen_rejects_unmodelled_independent_coolant_split():
+    request = _prelim_input(
+        injector=InjectorSpec(type="pintle"),
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="water",
+            channel_count=12,
+            channel_width=1.0e-3,
+            channel_height=1.0e-3,
+        ),
+        spray_cstar_coupling=SprayCStarCouplingSpec(
+            enabled=True,
+            eta_mixing=0.98,
+            eta_combustion=0.99,
+        ),
+    )
+    with pytest.raises(ValueError, match="independent coolant/bypass"):
+        design_nozzle_v2(request)
+
+
+def test_v2_blocks_unbenchmarked_bezier_chart_extrapolation():
+    result = design_nozzle_v2(_prelim_input(epsilon=60.0))
+    benchmark = result.report_sections["benchmark_status"]
+
+    assert benchmark["validated_for_design"] is False
+    assert benchmark["status"] == "unvalidated_rao_chart_extrapolation"
+    assert any(
+        check.name == "benchmark_status" and not check.passed
         for check in result.gate_report.checks
     )
 
@@ -219,10 +701,34 @@ def test_v2_regen_boundary_uses_fuel_split_not_legacy_scalar():
 
 
 def test_validated_requires_cea():
-    request = _prelim_input(mode="validated")
+    request = _prelim_input(
+        mode="validated",
+        L_star=1.0,
+        contraction_ratio=2.5,
+        minimum_cylindrical_length=0.01,
+    )
 
     with pytest.raises(RuntimeError, match="requires CEA"):
         design_nozzle_v2(request)
+
+
+def test_validated_mode_rejects_placeholder_chamber_inputs():
+    request = _prelim_input(
+        mode="validated",
+        thermo=ThermoSpec(
+            mode="cea_frozen",
+            propellant_name="LOX/RP-1",
+            oxidizer="LOX",
+            fuel="RP-1",
+            mixture_ratio=2.6,
+        ),
+    )
+
+    with pytest.raises(ValueError, match="explicit chamber inputs") as exc:
+        design_nozzle_v2(request)
+    assert "L_star" in str(exc.value)
+    assert "contraction_ratio" in str(exc.value)
+    assert "minimum_cylindrical_length" in str(exc.value)
 
 
 def test_experimental_methods_block_validated_and_manufacturing():
@@ -244,6 +750,22 @@ def test_target_thrust_loses_to_explicit_rt():
 
     assert result.input.Rt == pytest.approx(0.020)
     assert any("explicit Rt is used" in warning for warning in result.warnings)
+    closure = result.report_sections["thrust_closure"]
+    assert closure["rt_sized_from_target_thrust"] is False
+    assert closure["target_thrust_N"] == pytest.approx(5000.0)
+    assert closure["throat_discharge_coefficient_applied_to_mass_flow"] is False
+
+
+def test_target_thrust_sizing_reports_quasi_1d_closure_basis():
+    request = _prelim_input(Rt=None, target_thrust=5000.0)
+    result = design_nozzle_v2(request)
+
+    closure = result.report_sections["thrust_closure"]
+    assert closure["rt_sized_from_target_thrust"] is True
+    assert closure["calculated_thrust_N"] == pytest.approx(5000.0)
+    assert closure["relative_target_error"] == pytest.approx(0.0, abs=1e-12)
+    assert closure["contour_audit_Cf"] is None
+    assert closure["sizing_basis"].startswith("quasi_1d")
 
 
 def test_schema_rejects_bad_regen_dimensions():
@@ -323,6 +845,9 @@ def test_mocked_rocketcea_feeds_validated_thermochemistry(monkeypatch):
         ),
         Pc=70e5,
         epsilon=4.0,
+        L_star=1.0,
+        contraction_ratio=2.5,
+        minimum_cylindrical_length=0.01,
         manufacturing=ManufacturingSpec(wall_thickness=0.001, cad="none"),
         cooling=CoolingSpec(
             method="regenerative",

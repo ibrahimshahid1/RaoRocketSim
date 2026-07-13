@@ -1,0 +1,102 @@
+{
+  "case_id": "rao1958_nozzle_b",
+  "title": "Rao 1958 optimum-thrust Nozzle B",
+  "description": "Strict axisymmetric inviscid benchmark of the current Rao BVP against Rao 1958 Tables 2 and 3. Table-2 coordinates are rounded to 0.01 Rt; the contour RMS tolerance accounts for that printed precision and finite BVP grid resolution.",
+  "source": {
+    "pdf": "rao1958.pdf",
+    "local_path": "propulsion_texts/rao1958.pdf",
+    "sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "citation": "Rao, G. V. R., Exhaust Nozzle Contour for Optimum Thrust, Jet Propulsion 28(6), 1958, pp. 377-382, DOI 10.2514/8.7324.",
+    "references": [
+      "Table 2: Optimum thrust nozzle B coordinates, Mach number, and wall slope",
+      "Table 3: L/Rt=2.94, Ae/At=4.973, Cf=1.5829",
+      "Figure 1 and equations 1-2: complete C-D-E control-surface momentum integral"
+    ],
+    "notes": "The strict thrust metric uses the directly reconstructed full C-D-E surface, never ideal-Cf mass scaling."
+  },
+  "status_policy": {
+    "bezier": "report",
+    "moc": "report",
+    "rao": "strict"
+  },
+  "inputs": {
+    "Rt": 1.0,
+    "epsilon": 4.973,
+    "length_pct": 64.0452248702277,
+    "gamma": 1.23,
+    "Pc": 1.0,
+    "Pa": 0.0
+  },
+  "solver_options": {
+    "rao": {
+      "n_control": 10,
+      "n_kernel": 10,
+      "max_nfev": 100,
+      "residual_tol": 0.005,
+      "evaluate_moc": true,
+      "wall_method": "bde",
+      "solver_backend": "numpy",
+      "starting_line_method": "kliegel_levine"
+    }
+  },
+  "reference": {
+    "geometry": {
+      "exit_radius_over_rt": {
+        "value": 2.23,
+        "tolerance": 0.005,
+        "mode": "strict",
+        "source_ref": "Table 2"
+      },
+      "length_over_rt": {
+        "value": 2.94,
+        "tolerance": 0.005,
+        "mode": "strict",
+        "source_ref": "Tables 2 and 3"
+      },
+      "area_ratio": {
+        "value": 4.973,
+        "tolerance": 0.0,
+        "mode": "strict",
+        "source_ref": "Table 3"
+      }
+    },
+    "solver": {
+      "design_exit_mach": {
+        "value": 2.60,
+        "tolerance": 0.05,
+        "mode": "strict",
+        "source_ref": "Table 2 exit row"
+      }
+    },
+    "performance": {
+      "thrust_coefficients": [
+        {
+          "name": "full_cde_thrust_coefficient",
+          "pa_over_pc": 0.0,
+          "value": 1.5829,
+          "tolerance": 0.01,
+          "prediction": "solver_full_cde",
+          "mode": "strict",
+          "source_ref": "Table 3"
+        }
+      ]
+    },
+    "curves": [
+      {
+        "kind": "contour",
+        "path": "curves/rao1958_nozzle_b_table2.csv",
+        "x_column": "x_over_rt",
+        "y_column": "y_over_rt",
+        "uncertainty": 0.015,
+        "mode": "strict",
+        "source_ref": "Table 2",
+        "axis_calibration": "Printed x/Rt and y/Rt values; both rounded to 0.01"
+      }
+    ]
+  },
+  "expected_physics_gaps": [
+    "The solve remains an inviscid constant-gamma benchmark; it is not a viscous performance or hardware validation.",
+    "The current nonlinear residual may remain above the reliability-promotion tolerance even when the published contour and full-surface thrust checks pass.",
+    "Table-2 values are sparse and rounded, so this case validates the published integral/shape envelope rather than pointwise CFD flowfield detail."
+  ]
+}

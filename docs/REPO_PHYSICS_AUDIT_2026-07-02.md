@@ -1,5 +1,19 @@
 # Repository physics & CAD audit — 2026-07-02
 
+> **Historical snapshot — superseded for current-status decisions.** This file
+> records what the repository and shipped build artifacts looked like on
+> 2026-07-02. Its census, test counts, findings, and recommended actions are
+> intentionally preserved rather than silently rewritten. Several issues it
+> identified were closed afterward, including the SP-8120 bound attribution,
+> rectangular-channel laminar correlation, full $C$-$D$-$E$ BVP thrust,
+> direct-MOC spline export, injector/cycle coupling, true pump B-rep and fluid
+> connectivity, CAD units/interfaces/clearances, and physical-release evidence
+> gates. Use the dated
+> [physical-integrity remediation record](PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md)
+> and the [model registry](MODEL_REGISTRY.md) for current behavior. Remaining
+> CFD, CHT, FEA, drawing, manufacturing, cold-flow, and hot-fire requirements
+> are explicit external blockers, not software-complete claims.
+
 Full-repo verification of the bell nozzle, throat geometry, chamber, regen wall,
 pintle injector, engine CAD assembly, and electric-pump CAD against the
 `propulsion_texts/` corpus. Every equation checked below was traced to its code

@@ -68,7 +68,7 @@ def test_nasa_reference_matched_reliability_level_exists():
     )
 
 
-def test_nasa_reference_gate_reports_unresolved_fixture_provenance():
+def test_nasa_reference_gate_separates_verified_port_from_fixture_authority():
     cfg = RaoSolverConfig(
         Rt=0.020,
         epsilon=10.0,
@@ -85,19 +85,18 @@ def test_nasa_reference_gate_reports_unresolved_fixture_provenance():
 
     assert diag["canonical_reference_track"] == "visible_source_port"
     assert diag["historical_overlay_track"] == "historical_fixture_overlay"
-    assert diag["source_port_matched"] is None
-    assert diag["source_port_match_status"] == "not_evaluated"
-    assert diag["source_reference_workflow_complete"] is False
-    assert diag["source_reference_metrics_available"] is False
-    assert diag["fixture_overlay_available"] is False
+    assert diag["source_port_matched"] is True
+    assert diag["source_port_match_status"] == "software_verified_reference_case"
+    assert diag["source_reference_workflow_complete"] is True
+    assert diag["source_reference_metrics_available"] is True
+    assert diag["source_identity_verified"] is True
+    assert len(diag["source_reference_regression_metrics"]) == 4
+    assert diag["fixture_overlay_available"] is True
     assert diag["fixture_overlay_is_promotion_authority"] is False
     assert diag["fixture_generator_provenance"] == "unresolved"
     assert diag["eligible"] is False
-    assert "visible-source port parity has not been certified" in diag["blockers"]
-    assert not any(
-        "fixture generator provenance" in blocker
-        for blocker in diag["blockers"]
-    )
+    assert any("reference certificate covers only" in item for item in diag["blockers"])
+    assert any("provenance remains unresolved" in item for item in diag["blockers"])
     assert solution.reliability != ContourReliability.NASA_REFERENCE_MATCHED
 
 

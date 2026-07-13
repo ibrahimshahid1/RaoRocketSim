@@ -66,6 +66,13 @@ def cea_propellant(
 
     if thermo_mode not in CEA_THERMO_MODES:
         raise ValueError("thermo_mode must be 'cea_frozen' or 'cea_equilibrium'")
+    if thermo_mode == THERMO_CEA_EQUILIBRIUM:
+        raise NotImplementedError(
+            "cea_equilibrium is not implemented by the current constant-gamma "
+            "nozzle model.  RocketCEA equilibrium exit properties cannot be "
+            "represented by a single chamber gamma; use cea_frozen or add a "
+            "variable-composition expansion model."
+        )
 
     cea = CEA_Obj(
         oxName=oxidizer,
@@ -110,6 +117,17 @@ def resolve_thermochemistry(
     if thermo_mode not in THERMO_MODES:
         raise ValueError(
             "thermo_mode must be one of: " + ", ".join(sorted(THERMO_MODES))
+        )
+
+    # Do not accept two public mode names that execute the same calculation.
+    # The nozzle/performance stack presently carries one calorically-perfect
+    # chamber gamma through the entire expansion, so an equilibrium-shifting
+    # CEA expansion would be falsely labelled if allowed here.
+    if thermo_mode == THERMO_CEA_EQUILIBRIUM:
+        raise NotImplementedError(
+            "cea_equilibrium is unsupported until the nozzle solver consumes "
+            "station-dependent equilibrium composition/properties.  Select "
+            "cea_frozen for the supported chamber-snapshot approximation."
         )
 
     warnings: list[str] = []
@@ -183,6 +201,12 @@ def resolve_thermochemistry(
             warnings=warnings,
         )
 
+    warnings.append(
+        "RocketCEA supplies the chamber thermochemical snapshot only. The "
+        "downstream nozzle still uses one calorically-perfect chamber gamma; "
+        "this is a constant-gamma frozen-composition approximation, not a "
+        "station-resolved CEA frozen-performance expansion."
+    )
     return ThermochemistryResult(
         propellant=prop,
         mode=thermo_mode,
@@ -200,6 +224,9 @@ def resolve_thermochemistry(
         exit_state={
             "epsilon": epsilon,
             "thermo_mode": thermo_mode,
+            "expansion_model": "constant_gamma_chamber_snapshot",
+            "station_resolved_cea_exit_properties": False,
+            "composition_evolution": "frozen_by_approximation_at_chamber_state",
         },
         warnings=warnings,
     )

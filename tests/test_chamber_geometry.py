@@ -15,6 +15,7 @@ from raosim.design import DesignInput, ThermoSpec, design_nozzle_v2
 from raosim.export import _clean_meridian_for_brep
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.throat_geometry import (
+    REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS,
     ThroatGeometrySpec,
     throat_discharge_coefficient_hall,
     upstream_radius_ratio_for_discharge_coefficient,
@@ -78,13 +79,23 @@ def test_hall_throat_discharge_coefficient_and_inverse():
         1.0 - ((gamma + 1.0) / 96.0) / (1.5**2)
     )
 
-    ru_ratio = upstream_radius_ratio_for_discharge_coefficient(0.99, gamma)
+    ru_ratio = upstream_radius_ratio_for_discharge_coefficient(0.989, gamma)
     assert ru_ratio == pytest.approx(
-        math.sqrt(((gamma + 1.0) / 96.0) / (1.0 - 0.99))
+        math.sqrt(((gamma + 1.0) / 96.0) / (1.0 - 0.989))
     )
     assert throat_discharge_coefficient_hall(ru_ratio, gamma) == pytest.approx(
-        0.99
+        0.989
     )
+
+    with pytest.raises(ValueError, match="SP-8120 range capability"):
+        upstream_radius_ratio_for_discharge_coefficient(0.99, gamma)
+    extended = upstream_radius_ratio_for_discharge_coefficient(
+        0.99,
+        gamma,
+        min_ratio=REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS[0],
+        max_ratio=REPOSITORY_UPSTREAM_RADIUS_RATIO_EXTENSION_BOUNDS[1],
+    )
+    assert extended > 1.5
 
     assert upstream_radius_ratio_for_discharge_coefficient(0.93, gamma) == (
         pytest.approx(0.6)
@@ -125,6 +136,10 @@ def test_sampled_chamber_volume_matches_lstar(L_star, contraction_ratio):
         target, rel=1e-10
     )
     assert chamber["Lc"] >= chamber["minimum_cylindrical_length"]
+    assert chamber["injector_to_throat_length"] == pytest.approx(
+        chamber["throat_location"] - chamber["injector_location"]
+    )
+    assert chamber["injector_to_throat_length"] > chamber["Lc"]
 
 
 def test_volume_is_exact_polyline_frustum_not_trapezoidal_area():

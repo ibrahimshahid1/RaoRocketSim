@@ -19,9 +19,9 @@ R_EARTH = 6_371_000.0  # m
 class StageResult:
     burn_time: float       # s
     ideal_dv: float        # m/s
-    actual_dv: float       # m/s
-    gravity_loss: float    # m/s
-    drag_loss: float       # m/s
+    actual_dv: float       # burnout velocity change, burnout_vel - v0 [m/s]
+    gravity_loss: float    # burn-phase gravity loss [m/s]
+    drag_loss: float       # burn-phase drag loss [m/s]
     burnout_alt: float     # m
     burnout_vel: float     # m/s
     final_mass: float      # kg
@@ -66,16 +66,17 @@ def simulate_stage(
 
 
     while t < t_burn:
+        step = min(dt, t_burn - t)
         rho = density(max(h, 0.0))
         D = 0.5 * rho * v * abs(v) * Cd * A_ref
         grav = g0 * (R_EARTH / (R_EARTH + max(h, 0.0))) ** 2
         a = (thrust - D) / m - grav
-        loss_g += grav * dt
-        loss_d += (D / m) * dt if m > 0.0 else 0.0
-        v += a * dt
-        h += v * dt
-        m -= m_dot * dt
-        t += dt
+        loss_g += grav * step
+        loss_d += (D / m) * step if m > 0.0 else 0.0
+        v += a * step
+        h += v * step
+        m -= m_dot * step
+        t += step
 
     burnout_v = v
     burnout_h = h
@@ -87,14 +88,16 @@ def simulate_stage(
             D = 0.5 * rho * v * abs(v) * Cd * A_ref
             grav = g0 * (R_EARTH / (R_EARTH + max(h, 0.0))) ** 2
             a = -grav - D / m
-            loss_g += grav * dt
-            loss_d += (D / m) * dt if m > 0.0 else 0.0
             v += a * dt
             h += v * dt
             t += dt
 
     ideal_dv = g0 * Isp * math.log(m0 / max(m0 - m_prop, 0.1))
-    actual_dv = math.sqrt(max(0.0, 2.0 * g0 * (h - h0)))
+    # Delivered stage delta-v is the velocity change accumulated during the
+    # burn.  The previous expression sqrt(2*g0*apogee_height) was an
+    # equivalent-energy velocity evaluated after the optional coast, so it
+    # was neither a stage delta-v nor consistent when h0/v0 were nonzero.
+    actual_dv = burnout_v - v0
 
     return StageResult(
         burn_time=t_burn,

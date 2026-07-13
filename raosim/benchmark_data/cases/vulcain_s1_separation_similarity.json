@@ -15,8 +15,8 @@
   },
   "status_policy": {
     "bezier": "report",
-    "moc": "xfail",
-    "rao": "xfail"
+    "moc": "report",
+    "rao": "report"
   },
   "inputs": {
     "Rt": 0.03354,

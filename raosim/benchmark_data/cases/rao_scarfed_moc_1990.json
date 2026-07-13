@@ -15,8 +15,12 @@
   },
   "status_policy": {
     "bezier": "report",
-    "moc": "xfail",
-    "rao": "xfail"
+    "moc": "unsupported",
+    "rao": "unsupported"
+  },
+  "unsupported_reasons": {
+    "moc": "The published nozzle is scarfed/truncated and requires a non-axisymmetric external-flow domain; the current direct MOC solver is axisymmetric.",
+    "rao": "The published nozzle is scarfed/truncated and cannot be represented by the current axisymmetric Rao BVP."
   },
   "inputs": {
     "Rt": 0.0254,

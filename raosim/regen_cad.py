@@ -570,6 +570,7 @@ def export_channel_wall_step(
     bond_overlap: float = 50e-6,
     fuzzy_tolerance_mm: float = 1e-3,
     include_manifolds: bool = False,
+    release_mode: str = "reference",
     manifold_length_fraction: float = 0.06,
     ports_per_manifold: int = 4,
     port_area_ratio: float = 1.0,
@@ -588,6 +589,14 @@ def export_channel_wall_step(
     is a geometry/hydraulic-area screen, not a manifold-maldistribution CFD
     model.
     """
+    release_mode = str(release_mode).strip().lower().replace("-", "_")
+    if release_mode not in {"reference", "cold_flow"}:
+        raise ValueError("release_mode must be 'reference' or 'cold_flow'")
+    if release_mode == "cold_flow" and not include_manifolds:
+        raise ValueError(
+            "cold_flow regen export requires include_manifolds=True so every "
+            "channel has connected inlet/outlet plenums and external ports"
+        )
     cq = _cq()
     path = Path(path).expanduser().resolve()
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -840,6 +849,25 @@ def export_channel_wall_step(
             envelope_volume - material_volume
         ) / max(envelope_volume, 1e-9),
         "include_manifolds": bool(include_manifolds),
+        "release_mode": release_mode,
+        "flow_path_status": (
+            "connected_inlet_channels_outlet_with_external_ports"
+            if include_manifolds else
+            "reference_only_channels_sealed_at_both_ends"
+        ),
+        "cold_flow_geometry_ready": bool(
+            release_mode == "cold_flow" and include_manifolds
+            and network_overlaps and min(network_overlaps.values()) > 1.0e-6
+        ),
+        "cold_flow_release_ready": False,
+        "hardware_qualified": False,
+        "external_release_blockers": [
+            "released port/manifold/channel drawings and tolerance stack",
+            "liner/jacket material certificates and bond/process qualification",
+            "proof/leak and hydrostatic test evidence",
+            "cold-flow distribution and pressure-drop correlation evidence",
+            "conjugate heat-transfer, structural-life, and hot-fire evidence",
+        ],
         "manifold_metrics": manifold_metrics,
         "network_overlaps": network_overlaps,
         "port_diameters_m": port_diameters,
@@ -872,6 +900,7 @@ def export_regen_brep(
     boolean_clearance: float = 5e-6,
     fuzzy_tolerance_mm: float = 1e-3,
     include_manifolds: bool = False,
+    release_mode: str = "reference",
     stl_path: str | Path | None = None,
 ) -> dict:
     """Build and export one cooling-aware regenerative STEP solid.
@@ -885,9 +914,17 @@ def export_regen_brep(
     that intersect every passage and radial ports to the exterior, forming a
     connected coolant network.  Those extra curved booleans are markedly less
     robust in OpenCascade (they can leave the body non-manifold or shatter
-    it), so they are opt-in; the default ships the validated channel-void
+    it), so they are opt-in; the default ships the topology-checked channel-void
     solid.
     """
+    release_mode = str(release_mode).strip().lower().replace("-", "_")
+    if release_mode not in {"reference", "cold_flow"}:
+        raise ValueError("release_mode must be 'reference' or 'cold_flow'")
+    if release_mode == "cold_flow" and not include_manifolds:
+        raise ValueError(
+            "cold_flow regen export requires include_manifolds=True so every "
+            "channel has connected inlet/outlet plenums and external ports"
+        )
     cq = _cq()
     data = _clean_profile(profile, max_sections=max_sections)
     x = data["x"]
@@ -1067,6 +1104,25 @@ def export_regen_brep(
         )),
         "helix_turns": float(profile.helix_turns),
         "include_manifolds": bool(include_manifolds),
+        "release_mode": release_mode,
+        "flow_path_status": (
+            "connected_inlet_channels_outlet_with_external_ports"
+            if include_manifolds else
+            "reference_only_channels_sealed_at_both_ends"
+        ),
+        "cold_flow_geometry_ready": bool(
+            release_mode == "cold_flow" and include_manifolds
+            and overlaps and min(overlaps.values()) > 1.0e-6
+        ),
+        "cold_flow_release_ready": False,
+        "hardware_qualified": False,
+        "external_release_blockers": [
+            "released port/manifold/channel drawings and tolerance stack",
+            "liner/jacket material certificates and bond/process qualification",
+            "proof/leak and hydrostatic test evidence",
+            "cold-flow distribution and pressure-drop correlation evidence",
+            "conjugate heat-transfer, structural-life, and hot-fire evidence",
+        ],
         "manifold_length_m": float(plenum_length) if include_manifolds else None,
         "end_seal_length_m": float(seal),
         "inlet_port_diameter_m": float(inlet_diameter) if inlet_diameter else None,

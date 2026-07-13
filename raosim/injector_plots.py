@@ -156,14 +156,29 @@ def plot_atomization(inj, *, show=False, save_path=None):
     """SMD per stream and the combustion-development length vs the chamber."""
     at = inj.atomization
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4.8))
-    roles = ["fuel", "oxidizer"]
-    colors = ["#e6550d", "#3182bd"]
+    roles = [r for r in ("fuel", "oxidizer") if at.streams[r].applicable]
+    color_by_role = {"fuel": "#e6550d", "oxidizer": "#3182bd"}
+    colors = [color_by_role[r] for r in roles]
+    if not roles:
+        reasons = "\n".join(
+            f"{r}: {at.streams[r].validity_reason}"
+            for r in ("fuel", "oxidizer")
+        )
+        for ax in (ax1, ax2):
+            ax.axis("off")
+        ax1.text(
+            0.02, 0.98,
+            "Legacy liquid-droplet screen not applicable\n\n" + reasons,
+            transform=ax1.transAxes, va="top", wrap=True, fontsize=9,
+        )
+        fig.suptitle("Spray atomization / vaporization applicability", fontsize=11)
+        return _finish(fig, save_path, show)
     smd = [at.streams[r].sauter_mean_diameter * 1e6 for r in roles]
-    x = np.arange(2)
+    x = np.arange(len(roles))
     ax1.bar(x, smd, color=colors, edgecolor="0.3")
     ax1.set_xticks(x); ax1.set_xticklabels(roles)
     ax1.set_ylabel("SMD d₃₂  [µm]")
-    ax1.set_title("Sauter mean diameter (Hinze)")
+    ax1.set_title("Sauter mean diameter (Hinze screen)")
     for xi, v in zip(x, smd):
         ax1.text(xi, v, f"{v:.0f}", ha="center", va="bottom", fontsize=9)
 
@@ -183,7 +198,8 @@ def plot_atomization(inj, *, show=False, save_path=None):
     ax2.legend(fontsize=8, loc="upper right")
     ax2.text(0.5, 0.62,
              f"limiting: {at.limiting_role}\nmargin {at.development_margin:.2f}\n"
-             f"predicted η_c*≈{at.predicted_cstar_efficiency:.2f}",
+             f"eta_vaporization≈{at.eta_vaporization:.2f}\n"
+             "eta_cstar unresolved",
              transform=ax2.transAxes, ha="center", va="center", fontsize=9,
              bbox=dict(boxstyle="round", fc="#fff7bc", ec="0.6"))
     fig.suptitle("Spray atomization / vaporization (screening)", fontsize=11)
@@ -321,12 +337,12 @@ def plot_injector_gates(inj, *, show=False, save_path=None):
 
 
 def plot_throttle_map(tm, *, show=False, save_path=None):
-    """Throttle-sweep curves: velocity, TMR, SMD, η_c*, sleeve stroke."""
+    """Throttle curves with architecture-appropriate command semantics."""
     pts = tm.points
     f = [p.throttle for p in pts]
     fig, axes = plt.subplots(2, 2, figsize=(10, 7))
     axes[0, 0].plot(f, [p.v_annulus for p in pts], "o-", label="annulus")
-    axes[0, 0].plot(f, [p.v_slots for p in pts], "s-", label="slots")
+    axes[0, 0].plot(f, [p.v_slots for p in pts], "s-", label="radial")
     axes[0, 0].set_ylabel("injection velocity [m/s]"); axes[0, 0].legend(fontsize=8)
     axes[0, 0].set_title("Velocity")
     axes[0, 1].plot(f, [p.total_momentum_ratio for p in pts], "o-",
@@ -335,20 +351,42 @@ def plot_throttle_map(tm, *, show=False, save_path=None):
     axes[1, 0].plot(f, [p.smd_limiting * 1e6 for p in pts], "o-",
                     color="#e6550d")
     axes[1, 0].set_ylabel("SMD [µm]"); axes[1, 0].set_title("Atomization (SMD)")
-    axes[1, 1].plot(f, [p.predicted_cstar_efficiency for p in pts], "o-",
-                    color="#31a354", label="η_c*")
-    axes[1, 1].plot(f, [p.sleeve_stroke_fraction for p in pts], "s--",
-                    color="0.4", label="sleeve stroke")
+    axes[1, 1].plot(f, [p.eta_vaporization for p in pts], "o-",
+                    color="#31a354", label="eta_vaporization")
+    if tm.kinematic_model is not None:
+        axes[1, 1].plot(
+            f, [p.actuator_stroke_fraction for p in pts], "s--",
+            color="0.4", label="physical L_open/L_stop",
+        )
+        axes[1, 1].plot(
+            f, [p.required_axial_controller_dp_fraction for p in pts], "^:",
+            color="#636363", label="upstream axial controller dP/Pc",
+        )
+        command_title = "Vaporization, travel, and axial controller"
+        figure_title = "Fixed-hardware Son movable-pintle throttle map"
+    else:
+        axes[1, 1].plot(
+            f, [p.annulus_area_command_fraction for p in pts], "s--",
+            color="0.4", label="annulus area command",
+        )
+        axes[1, 1].plot(
+            f, [p.slot_area_command_fraction for p in pts], "^:",
+            color="#636363", label="radial area command",
+        )
+        command_title = "Vaporization screen and area commands"
+        figure_title = "Commanded effective-area throttle map"
     axes[1, 1].set_ylabel("fraction"); axes[1, 1].legend(fontsize=8)
-    axes[1, 1].set_title("Predicted η_c* and sleeve stroke")
+    axes[1, 1].set_title(command_title)
     for ax in axes.ravel():
         ax.set_xlabel("throttle  f = ṁ/ṁ_full"); ax.grid(alpha=0.3)
         for p in pts:
             if not p.feasible:
                 ax.axvspan(p.throttle - 0.02, p.throttle + 0.02,
                            color="#de2d26", alpha=0.10)
-    fig.suptitle(f"Movable-sleeve throttle map  (Pc∝f^{tm.pc_exponent:g}; "
-                 "red = infeasible)", fontsize=11)
+    fig.suptitle(
+        f"{figure_title}  (Pc∝f^{tm.pc_exponent:g}; "
+        "red = infeasible)", fontsize=11,
+    )
     return _finish(fig, save_path, show)
 
 
@@ -431,8 +469,13 @@ def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
     bs = lay["body_straight_m"] * mm
     tip_flat = lay["tip_flat_radius_m"] * mm
     th_pt = lay["deflector_angle_deg"]
-    ws = lay["slot_width_m"] * mm
-    hs = lay["slot_height_m"] * mm
+    radial_style = str(getattr(inj.slots, "geometry", "slots")).lower()
+    if radial_style == "holes":
+        hole_d = float(inj.slots.detail["hole_diameter"]) * mm
+        ws = hs = hole_d
+    else:
+        ws = lay["slot_width_m"] * mm
+        hs = lay["slot_height_m"] * mm
     ns = int(lay["slot_count"])
     z_st = lay["z_slot_top_m"] * mm
     z_sc = lay["z_slot_center_m"] * mm
@@ -534,7 +577,7 @@ def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
     axm.annotate("", xy=(Rp + 0.9 * gap, z_sc), xytext=(rb, z_sc),
                  arrowprops=dict(arrowstyle="->", color=LIQ, lw=2.2))
     axm.text(rb + 0.02 * Lb, -t_face - 0.365 * Lb,
-             f"{radial_name}  (central bore → {ns} radial slots)",
+             f"{radial_name}  (central bore → {ns} radial {radial_style})",
              color=LIQ, fontsize=8.4, ha="left", va="bottom")
     r_ann = 0.5 * (Rp + Ro)
     for s in (+1, -1):
@@ -577,8 +620,10 @@ def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
     xv3 = Rs + 0.42 * Dp
     dim_v(axm, z_se, z_st, xv2, f"L_skip {L_skip:.2f}", ext_from=Rs)
     dim_v(axm, 0.0, Lb, xv3, f"L_body {Lb:.1f}", ext_from=None)
+    opening_label = "d_hole" if radial_style == "holes" else "h_slot"
     leader(axm, (Rp + 0.3 * (Ro - Rp), z_sc),
-           (xv3 + 0.12 * Dp, z_sc + 0.06 * Lb), f"L_open {hs:.2f}")
+           (xv3 + 0.12 * Dp, z_sc + 0.06 * Lb),
+           f"{opening_label} {hs:.2f}")
     ax_t = -(Rf_draw + 0.06 * Dp)
     dim_v(axm, -t_face, 0.0, ax_t, f"t_face {t_face:.2f}",
           ext_from=-Rf_draw, side=-1)
@@ -587,9 +632,14 @@ def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
            (Rs + 0.10 * Dp, 0.24 * bs), f"δ_ann {gap:.3f}")
     leader(axm, (0.5 * (Ro + Rs), 0.12 * bs),
            (Rs + 0.10 * Dp, 0.08 * bs), f"δ_sleeve {t_sl:.2f}")
+    radial_callout = (
+        f"{ns} × Ø{ws:.2f} holes"
+        if radial_style == "holes"
+        else f"{ns} × {ws:.2f} × {hs:.2f} slots"
+    )
     leader(axm, (-0.5 * (Ri + Rp), z_sc),
            (-Rs - 0.72 * Dp, z_sc - 0.12 * Lb),
-           f"{ns} × {ws:.2f} × {hs:.2f} slots\n(web {web:.2f}, BF {bf:.0%})")
+           f"{radial_callout}\n(web {web:.2f}, BF {bf:.0%})")
 
     # tip cone angle callout
     from matplotlib.patches import Arc
@@ -654,29 +704,36 @@ def plot_pintle_schematic(inj, *, geom=None, spec=None, show=False,
     for i in range(ns):
         a = 2.0 * math.pi * i / ns
         ca, sa = math.cos(a), math.sin(a)
-        na, ta = (ca, sa), (-sa, ca)
-        r0, r1 = Ri, Rp
-        hw = 0.5 * ws
-        pts = [(r0 * na[0] + hw * ta[0], r0 * na[1] + hw * ta[1]),
-               (r1 * na[0] + hw * ta[0], r1 * na[1] + hw * ta[1]),
-               (r1 * na[0] - hw * ta[0], r1 * na[1] - hw * ta[1]),
-               (r0 * na[0] - hw * ta[0], r0 * na[1] - hw * ta[1])]
-        poly(axe, pts, facecolor="white", edgecolor="0.15", lw=0.7)
+        if radial_style == "holes":
+            from matplotlib.patches import Circle
+            axe.add_patch(Circle(
+                (0.5 * (Ri + Rp) * ca, 0.5 * (Ri + Rp) * sa),
+                0.5 * ws, facecolor="white", edgecolor="0.15", lw=0.7,
+            ))
+        else:
+            na, ta = (ca, sa), (-sa, ca)
+            r0, r1 = Ri, Rp
+            hw = 0.5 * ws
+            pts = [(r0 * na[0] + hw * ta[0], r0 * na[1] + hw * ta[1]),
+                   (r1 * na[0] + hw * ta[0], r1 * na[1] + hw * ta[1]),
+                   (r1 * na[0] - hw * ta[0], r1 * na[1] - hw * ta[1]),
+                   (r0 * na[0] - hw * ta[0], r0 * na[1] - hw * ta[1])]
+            poly(axe, pts, facecolor="white", edgecolor="0.15", lw=0.7)
     leader(axe, (Rp * math.cos(0.4), Rp * math.sin(0.4)),
            (1.25 * Rs, 0.75 * Rs),
-           f"{ns} × {ws:.2f} mm slots\nweb {web:.2f} mm\nBF {bf:.0%}")
+           f"{radial_callout}\nweb {web:.2f} mm\nBF {bf:.0%}")
     axe.set_aspect("equal")
     lim = 1.9 * Rs
     axe.set_xlim(-lim, 2.4 * Rs)
     axe.set_ylim(-lim, lim)
-    axe.set_title("tip end view (slot pattern)", fontsize=9)
+    axe.set_title(f"tip end view ({radial_style} pattern)", fontsize=9)
     axe.axis("off")
 
     tmr = float(inj.total_momentum_ratio)
     fig.suptitle(
-        f"Pintle injector — D_pr Ø{Dp:.2f} mm, {ns} slots, "
+        f"Pintle injector — D_pr Ø{Dp:.2f} mm, {ns} {radial_style}, "
         f"TMR {tmr:.2f}, radial stream: {radial_name}   "
-        "(fixed annulus + radial slots; reference geometry, "
+        f"(fixed annulus + radial {radial_style}; reference geometry, "
         "not hardware-qualified)", fontsize=11)
     if save_path:
         fig.savefig(save_path, dpi=200)
