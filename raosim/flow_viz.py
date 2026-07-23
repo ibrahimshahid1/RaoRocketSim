@@ -1,12 +1,13 @@
 """
 flow_viz.py — physically-interpretable steady flow-field visualisation.
 
-The MOC solve already computes the full supersonic flow state (Mach,
-flow angle, hence pressure/temperature) at every characteristic-net
-node.  This module turns that scattered data into a real field:
+The MOC solve computes the resolved supersonic flow state (Mach, flow
+angle, hence pressure/temperature) at every characteristic-net node.
+This module turns that scattered data into a field while explicitly
+checking that the solved nodes cover the nozzle from axis to wall:
 
-* smooth filled **Mach** and **temperature** contours, interpolated
-  from the MOC net onto a grid and masked to the nozzle interior;
+* smooth filled **Mach**, **pressure**, **flow-angle**, and **temperature**
+  contours, interpolated from the MOC net and masked to the nozzle interior;
 * the **characteristic lines** (the Mach waves) overlaid — the visible
   physics of MOC, including the throat expansion fan;
 * **streamlines** integrated through the flow-angle field (the gas
@@ -31,17 +32,110 @@ from raosim.gas_dynamics import (
 # --------------------------------------------------------------------------- #
 # Gather the scattered MOC field data                                          #
 # --------------------------------------------------------------------------- #
-def _field_nodes(solution):
-    """(x, r, M, theta) over the characteristic net + throat kernel."""
-    xs, rs, Ms, ths = [], [], [], []
+def _bde_artifacts(solution):
+    diagnostics = getattr(solution, "construction_diagnostics", None)
+    if not isinstance(diagnostics, dict):
+        return None, None
+    artifacts = diagnostics.get("bde_artifacts")
+    if not isinstance(artifacts, dict):
+        return None, None
+    return artifacts.get("kernel"), artifacts.get("bde_region")
+
+
+def _row_points(row):
+    return row.all_points() if hasattr(row, "all_points") else list(row)
+
+
+def _deduplicate_nodes(x, r, M, theta):
+    """Merge coincident nodes shared by adjacent construction regions."""
+    x = np.asarray(x, dtype=float)
+    r = np.asarray(r, dtype=float)
+    M = np.asarray(M, dtype=float)
+    theta = np.asarray(theta, dtype=float)
+    if not x.size:
+        return x, r, M, theta
+    scale = max(float(np.ptp(x)), float(np.ptp(r)), 1.0)
+    key = np.round(np.column_stack([x, r]) / scale, decimals=13)
+    _, inverse = np.unique(key, axis=0, return_inverse=True)
+    count = np.bincount(inverse).astype(float)
+
+    def averaged(values):
+        return np.bincount(inverse, weights=values) / count
+
+    return averaged(x), averaged(r), averaged(M), averaged(theta)
+
+
+def _field_node_rows(solution):
+    """Return solved rows and their provenance.
+
+    The BDE wall path stores its complete construction in diagnostics rather
+    than in ``RaoSolution.characteristic_net``.  Its physical field is the
+    union of the throat kernel, the wall-to-DE B-D-E strip, and the valid
+    DE-to-axis continuation.  Only the continuation at/after ``iD`` is used;
+    its raw prefix lies outside the extracted wall and is diagnostic-only.
+    """
+    kernel, bde = _bde_artifacts(solution)
+    if kernel is not None and bde is not None:
+        rows = list(getattr(kernel, "rrcs", ()) or ())
+        rows.extend(list(getattr(bde, "grid_rows", ()) or ()))
+        iD = int(getattr(bde, "iD", 0) or 0)
+        for row in (getattr(bde, "full_grid_rows", ()) or ()):
+            pts = _row_points(row)
+            if len(pts) > iD:
+                rows.append(pts[iD:])
+        wall = list(getattr(bde, "wall_contour", ()) or ())
+        if wall:
+            rows.append(wall)
+        return rows, "bde"
+
+    rows = []
     for row in (getattr(solution, "characteristic_net", None) or []):
-        pts = row.all_points() if hasattr(row, "all_points") else list(row)
-        for p in pts:
+        rows.append(_row_points(row))
+    kernel_points = list(getattr(solution, "kernel_points", None) or [])
+    if kernel_points:
+        rows.append(kernel_points)
+    return rows, "legacy"
+
+
+def _field_nodes(solution):
+    """(x, r, M, theta) over every available solved MOC region."""
+    xs, rs, Ms, ths = [], [], [], []
+    rows, _ = _field_node_rows(solution)
+    for row in rows:
+        for p in _row_points(row):
             xs.append(p.x); rs.append(p.r); Ms.append(p.M); ths.append(p.theta)
-    for p in (getattr(solution, "kernel_points", None) or []):
-        xs.append(p.x); rs.append(p.r); Ms.append(p.M); ths.append(p.theta)
-    return (np.asarray(xs), np.asarray(rs),
-            np.asarray(Ms), np.asarray(ths))
+    return _deduplicate_nodes(xs, rs, Ms, ths)
+
+
+def _characteristic_polylines(solution):
+    """Characteristic polylines used by the field overlay.
+
+    BDE solutions expose both the row and column families.  The exterior
+    prefix of a full BDE row is harmless here because the plotting filter
+    clips it to the actual nozzle wall.
+    """
+    kernel, bde = _bde_artifacts(solution)
+    if kernel is None or bde is None:
+        return [
+            ("net", _row_points(row))
+            for row in (getattr(solution, "characteristic_net", None) or [])
+        ]
+
+    lines = [("rrc", _row_points(row))
+             for row in (getattr(kernel, "rrcs", ()) or ())]
+    full_rows = [
+        _row_points(row)
+        for row in (getattr(bde, "full_grid_rows", ()) or ())
+    ]
+    lines.extend(("rrc", _row_points(row))
+                 for row in (getattr(bde, "grid_rows", ()) or ()))
+    lines.extend(("rrc", row) for row in full_rows)
+    max_len = max((len(row) for row in full_rows), default=0)
+    for index in range(max_len):
+        column = [row[index] for row in full_rows if index < len(row)]
+        if len(column) >= 2:
+            lines.append(("lrc", column))
+    return lines
 
 
 def _wall_polyline(solution, geometry="raw"):
@@ -52,26 +146,31 @@ def _wall_polyline(solution, geometry="raw"):
     return wall[order, 0], wall[order, 1]
 
 
-def _streamlines(x, r, theta, wx, wr, *, n_lines=11, ds=None, max_steps=4000):
+def _streamlines(
+    x, r, theta, wx, wr, *, n_lines=11, ds=None, max_steps=4000,
+    x_start=None,
+):
     """Integrate streamlines through the flow-angle field from a rake of
     seeds at the upstream edge to the exit (or the wall)."""
     from scipy.interpolate import LinearNDInterpolator
     th_interp = LinearNDInterpolator(np.column_stack([x, r]), theta,
                                      fill_value=np.nan)
-    x0, x1 = float(x.min()), float(x.max())
+    x0, x1 = float(wx.min()), float(wx.max())
     if ds is None:
         ds = (x1 - x0) / 600.0
     wall_at = lambda xx: float(np.interp(xx, wx, wr))
     seeds = np.linspace(0.04, 0.92, n_lines)        # fraction of local radius
     lines = []
-    x_seed = x0 + 0.02 * (x1 - x0)
+    if x_start is None or not np.isfinite(x_start):
+        x_start = x0
+    x_seed = max(float(x_start), x0) + 0.005 * (x1 - x0)
     for frac in seeds:
         xc, rc = x_seed, frac * wall_at(x_seed)
         xs, rs = [xc], [rc]
         for _ in range(max_steps):
             th = th_interp(xc, rc)
             if not np.isfinite(th):
-                th = 0.0
+                break
             xc += ds * np.cos(th)
             rc += ds * np.sin(th)
             rc = max(rc, 0.0)
@@ -86,8 +185,9 @@ def _streamlines(x, r, theta, wx, wr, *, n_lines=11, ds=None, max_steps=4000):
 def _field_arrays(solution, gamma, *, anchor=True):
     """Filtered (x, r, M, theta) field nodes + wall polyline, shared by
     the static plot and the animations.  Drops non-physical/runaway
-    seed-march nodes and (optionally) anchors the near-wall gap with the
-    quasi-1-D wall Mach."""
+    seed-march nodes and (optionally, for the legacy path only) anchors the
+    near-wall gap with the quasi-1-D wall Mach.  A BDE field never receives
+    synthetic wall states."""
     from raosim.gas_dynamics import mach_from_area_ratio
     x, r, M, theta = _field_nodes(solution)
     if x.size < 8:
@@ -100,15 +200,22 @@ def _field_arrays(solution, gamma, *, anchor=True):
         M_cap = 1.3 * mach_from_area_ratio(eps_est, gamma, supersonic=True)
     except Exception:
         M_cap = 8.0
+    _, source = _field_node_rows(solution)
+    bde_field = source == "bde"
+    length = max(float(wx.max() - wx.min()), 1e-12)
+    support_hi = float(wx.max() + (0.20 * length if bde_field else 1e-9))
     wall_r_at = np.interp(x, wx, wr)
-    keep = (np.isfinite(M) & np.isfinite(theta) & (M >= 1.0) & (M <= M_cap)
-            & (x >= wx.min() - 1e-9) & (x <= wx.max() + 1e-9)
+    keep = (np.isfinite(x) & np.isfinite(r) & np.isfinite(M)
+            & np.isfinite(theta) & (M >= 1.0)
+            & (M <= (20.0 if bde_field else M_cap))
+            & (x >= wx.min() - 1e-9) & (x <= support_hi)
             & (r >= -1e-9) & (r <= wall_r_at * 1.05))
     x, r, M, theta = x[keep], r[keep], M[keep], theta[keep]
     if x.size < 8:
         raise ValueError("flow field has too few physical nodes after "
                          "filtering; try a converged solve (max_nfev > 0)")
-    if anchor:
+    x, r, M, theta = _deduplicate_nodes(x, r, M, theta)
+    if anchor and not bde_field:
         xa = np.linspace(x.min(), wx.max(), 80)
         wra = np.interp(xa, wx, wr)
         eps_a = np.maximum((wra / Rt_est) ** 2, 1.0001)
@@ -123,13 +230,129 @@ def _field_arrays(solution, gamma, *, anchor=True):
 def _grid_field(x, r, vals, wx, wr, *, nx=320, nr=120):
     """Interpolate scattered ``vals`` onto a grid, NaN outside the wall."""
     from scipy.interpolate import griddata
-    xi = np.linspace(x.min(), x.max(), nx)
+    # Support nodes slightly downstream of the exit are retained so the exit
+    # plane is interpolated rather than extrapolated, but the rendered domain
+    # is always exactly the nozzle wall extent.
+    xi = np.linspace(wx.min(), wx.max(), nx)
     ri = np.linspace(0.0, wr.max() * 1.001, nr)
     Xg, Rg = np.meshgrid(xi, ri)
     Vg = griddata((x, r), vals, (Xg, Rg), method="linear")
     wall_at = np.interp(Xg, wx, wr)
     Vg = np.where(Rg <= wall_at, Vg, np.nan)
     return Xg, Rg, Vg
+
+
+def _field_coverage_report(
+    Xg, Rg, field, wx, wr, *, min_radial_fraction=0.98,
+    min_resolved_axial_fraction=0.70,
+):
+    """Measure contiguous wall-to-axis coverage through the exit."""
+    inside = Rg <= np.interp(Xg, wx, wr) + 1e-12
+    finite = np.isfinite(field) & inside
+    counts = np.count_nonzero(inside, axis=0)
+    radial_fraction = np.divide(
+        np.count_nonzero(finite, axis=0), np.maximum(counts, 1),
+    )
+    axis_finite = finite[0, :]
+    full_column = (radial_fraction >= min_radial_fraction) & axis_finite
+    tail_is_full = np.logical_and.accumulate(full_column[::-1])[::-1]
+    candidates = np.flatnonzero(tail_is_full)
+    start_index = int(candidates[0]) if candidates.size else None
+    x0 = float(Xg[0, 0])
+    x1 = float(Xg[0, -1])
+    if start_index is None or x1 <= x0:
+        resolved_fraction = 0.0
+        resolved_x_min = None
+    else:
+        resolved_x_min = float(Xg[0, start_index])
+        resolved_fraction = float((x1 - resolved_x_min) / (x1 - x0))
+    passes = bool(
+        start_index is not None
+        and resolved_fraction >= min_resolved_axial_fraction
+        and full_column[-1]
+    )
+    return {
+        "passes": passes,
+        "overall_fraction": float(
+            np.count_nonzero(finite) / max(np.count_nonzero(inside), 1)
+        ),
+        "axis_column_fraction": float(np.mean(axis_finite)),
+        "exit_radial_fraction": float(radial_fraction[-1]),
+        "resolved_x_min_m": resolved_x_min,
+        "resolved_axial_fraction": resolved_fraction,
+        "minimum_radial_fraction": float(min_radial_fraction),
+        "minimum_resolved_axial_fraction": float(
+            min_resolved_axial_fraction
+        ),
+        "radial_fraction_by_column": radial_fraction,
+    }
+
+
+def _bde_support_report(solution, exit_x):
+    """Verify that the actual BDE construction reaches the exit plane."""
+    kernel, bde = _bde_artifacts(solution)
+    if kernel is None or bde is None:
+        return {"available": False, "passes": True}
+    full_rows = list(getattr(bde, "full_grid_rows", ()) or ())
+    iD = int(getattr(bde, "iD", 0) or 0)
+    frontiers = [
+        float(_row_points(row)[-1].x)
+        for row in full_rows if len(_row_points(row)) > iD
+    ]
+    axis_x = [
+        float(_row_points(row)[-1].x)
+        for row in (getattr(kernel, "rrcs", ()) or ()) if _row_points(row)
+    ]
+    diagnostics = getattr(solution, "construction_diagnostics", {})
+    net_report = (
+        diagnostics.get("net_report", {})
+        if isinstance(diagnostics, dict) else {}
+    )
+    wall_complete = bool(getattr(bde, "wall_contour_complete", False))
+    physical_complete = bool(
+        net_report.get("bde_physical_mesh_complete", wall_complete)
+    )
+    frontier_min = min(frontiers) if frontiers else float("nan")
+    continuation_to_exit = bool(
+        getattr(bde, "complete_remaining_mesh", False)
+        or (np.isfinite(frontier_min) and frontier_min >= exit_x - 1e-9)
+    )
+    kernel_axis_to_exit = bool(axis_x and max(axis_x) >= exit_x - 1e-9)
+    passes = bool(
+        wall_complete and physical_complete and full_rows
+        and continuation_to_exit and kernel_axis_to_exit
+    )
+    return {
+        "available": True,
+        "passes": passes,
+        "wall_contour_complete": wall_complete,
+        "physical_bde_complete": physical_complete,
+        "continuation_complete_to_axis": bool(
+            getattr(bde, "complete_remaining_mesh", False)
+        ),
+        "continuation_frontier_min_x_m": (
+            frontier_min if np.isfinite(frontier_min) else None
+        ),
+        "continuation_reaches_exit": continuation_to_exit,
+        "kernel_axis_reaches_exit": kernel_axis_to_exit,
+    }
+
+
+def _axisymmetric_exit_mean(Rg, Mg) -> float:
+    """Area-weighted Mach on the last populated axial grid cut."""
+    for column in range(Mg.shape[1] - 1, -1, -1):
+        radius = np.asarray(Rg[:, column], dtype=float)
+        mach = np.asarray(Mg[:, column], dtype=float)
+        finite = np.isfinite(radius) & np.isfinite(mach)
+        if np.count_nonzero(finite) < 2:
+            continue
+        radius = radius[finite]
+        mach = mach[finite]
+        denominator = float(np.trapezoid(radius, radius))
+        if denominator > 0.0:
+            return float(np.trapezoid(mach * radius, radius) / denominator)
+        return float(np.mean(mach))
+    return float("nan")
 
 
 # --------------------------------------------------------------------------- #
@@ -140,6 +363,7 @@ def plot_flowfield(
     gamma: float = 1.4,
     *,
     Tc: float | None = None,
+    exit_mach: float | None = None,
     show_characteristics: bool = True,
     show_streamlines: bool = True,
     n_streamlines: int = 11,
@@ -147,13 +371,20 @@ def plot_flowfield(
     nr: int = 120,
     save_path: str | None = None,
     show: bool = False,
+    allow_partial: bool = False,
 ):
-    """Render the steady flow field: filled Mach + temperature contours
-    (MOC net interpolated onto a grid), characteristic lines, and
-    streamlines, mirrored about the axis.
+    """Render the resolved steady supersonic MOC field.
+
+    Mach, pressure, flow angle, and temperature are interpolated from the
+    solved nodes, with characteristic lines and streamlines mirrored about
+    the axis.  By default a partial construction is rejected instead of being
+    labelled as a full steady field.  ``allow_partial=True`` is an explicit
+    diagnostic override and changes the figure title accordingly.
 
     ``Tc`` gives absolute temperatures [K]; otherwise the temperature
-    panel is the stagnation ratio T/T0.
+    panel is the stagnation ratio T/T0.  ``exit_mach`` should be the design
+    exit value when available; otherwise an axisymmetric area-weighted value
+    is measured from the final populated field cut.
     """
     import matplotlib
     if save_path is not None and not show:
@@ -163,33 +394,76 @@ def plot_flowfield(
     x, r, M, theta, wx, wr = _field_arrays(solution, gamma, anchor=True)
 
     Xg, Rg, Mg = _grid_field(x, r, M, wx, wr, nx=nx, nr=nr)
+    _, _, Thetag = _grid_field(x, r, theta, wx, wr, nx=nx, nr=nr)
+    coverage = _field_coverage_report(Xg, Rg, Mg, wx, wr)
+    bde_support = _bde_support_report(solution, float(wx.max()))
+    full_field = bool(coverage["passes"] and bde_support["passes"])
+    if not full_field and not allow_partial:
+        if save_path is not None:
+            from pathlib import Path
+            Path(save_path).unlink(missing_ok=True)
+        raise ValueError(
+            "partial MOC coverage: refusing to label it as a steady nozzle "
+            "flow field "
+            f"(overall={100.0 * coverage['overall_fraction']:.1f}%, "
+            f"exit wall-to-axis={100.0 * coverage['exit_radial_fraction']:.1f}%, "
+            f"axis columns={100.0 * coverage['axis_column_fraction']:.1f}%)"
+        )
+
+    Pg = isentropic_pressure_ratio(np.clip(Mg, 1.0, None), gamma)
     Tg = isentropic_temperature_ratio(np.clip(Mg, 1.0, None), gamma)
     if Tc is not None:
         Tg = Tg * Tc
-    streams = (_streamlines(x, r, theta, wx, wr, n_lines=n_streamlines)
-               if show_streamlines else [])
+    resolved_x_min = coverage["resolved_x_min_m"]
+    streams = (
+        _streamlines(
+            x, r, theta, wx, wr, n_lines=n_streamlines,
+            x_start=resolved_x_min,
+        )
+        if show_streamlines else []
+    )
 
-    fig, axes = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
+    fig, axes_grid = plt.subplots(
+        2, 2, figsize=(12, 8.5), sharex=True, sharey=True,
+    )
+    axes = axes_grid.ravel()
+    theta_deg = np.degrees(Thetag)
+    theta_limit = max(float(np.nanmax(np.abs(theta_deg))), 1e-6)
     panels = [
-        (axes[0], Mg, "turbo", "Mach number", None),
-        (axes[1], Tg, "inferno",
-         "Temperature" + (" [K]" if Tc else "  T/T0"), None),
+        (axes[0], Mg, "turbo", "Mach number", False, None),
+        (axes[1], Pg, "viridis", "Pressure ratio  p/p0", False, None),
+        (axes[2], theta_deg, "coolwarm", "Flow angle  θ [deg]", True,
+         np.linspace(-theta_limit, theta_limit, 31)),
+        (axes[3], Tg, "inferno",
+         "Temperature" + (" [K]" if Tc else "  T/T0"), False, None),
     ]
-    for ax, field, cmap, label, _ in panels:
-        levels = np.linspace(np.nanmin(field), np.nanmax(field), 30)
+    for ax, field, cmap, label, mirror_sign, explicit_levels in panels:
+        finite_values = np.asarray(field)[np.isfinite(field)]
+        if not finite_values.size:
+            raise ValueError(f"{label} field has no finite values")
+        if explicit_levels is not None:
+            levels = explicit_levels
+        else:
+            low = float(np.min(finite_values))
+            high = float(np.max(finite_values))
+            if high - low <= 1e-12 * max(abs(low), abs(high), 1.0):
+                high = low + 1e-9
+            levels = np.linspace(low, high, 30)
         for sgn in (1.0, -1.0):                     # mirror about the axis
-            cf = ax.contourf(Xg, sgn * Rg, field, levels=levels, cmap=cmap,
+            plotted = sgn * field if mirror_sign else field
+            cf = ax.contourf(Xg, sgn * Rg, plotted, levels=levels, cmap=cmap,
                              extend="both")
         cb = fig.colorbar(cf, ax=ax, pad=0.01, fraction=0.05)
         cb.set_label(label)
         # wall (both halves) + axis
         ax.plot(wx, wr, color="k", lw=1.6); ax.plot(wx, -wr, color="k", lw=1.6)
-        ax.axhline(0.0, color="w", lw=0.4, ls=":")
+        ax.axhline(0.0, color="0.35", lw=0.5, ls=":")
         if show_streamlines:
             for xs, rs in streams:
                 ax.plot(xs, rs, color="w", lw=0.7, alpha=0.8)
                 ax.plot(xs, -rs, color="w", lw=0.7, alpha=0.8)
         ax.set_ylabel("r [m]")
+        ax.set_xlabel("x [m]")
         ax.set_aspect("equal")
 
     # characteristic lines (the Mach waves / expansion fan) on the Mach
@@ -197,30 +471,70 @@ def plot_flowfield(
     # past the exit).
     x_lo, x_hi = float(wx.min()), float(wx.max())
     if show_characteristics:
-        for row in (getattr(solution, "characteristic_net", None) or []):
-            pts = row.all_points() if hasattr(row, "all_points") else list(row)
+        all_lines = _characteristic_polylines(solution)
+        family_counts = {
+            family: sum(kind == family for kind, _ in all_lines)
+            for family, _ in all_lines
+        }
+        family_seen = {family: 0 for family in family_counts}
+        for family, pts in all_lines:
+            line_index = family_seen[family]
+            family_seen[family] += 1
+            stride = max(1, int(np.ceil(family_counts[family] / 36.0)))
+            if (line_index % stride != 0
+                    and line_index != family_counts[family] - 1):
+                continue
             seg = [(p.x, p.r) for p in pts
                    if x_lo - 1e-9 <= p.x <= x_hi + 1e-9
                    and 0.0 <= p.r <= np.interp(p.x, wx, wr) * 1.05]
             if len(seg) < 2:
                 continue
             px = [s[0] for s in seg]; pr = [s[1] for s in seg]
-            axes[0].plot(px, pr, color="k", lw=0.3, alpha=0.35)
-            axes[0].plot(px, [-v for v in pr], color="k", lw=0.3, alpha=0.35)
+            color = "white" if family == "lrc" else "black"
+            alpha = 0.24 if family == "lrc" else 0.25
+            axes[0].plot(px, pr, color=color, lw=0.25, alpha=alpha)
+            axes[0].plot(px, [-v for v in pr], color=color, lw=0.25,
+                         alpha=alpha)
 
     for ax in axes:                                  # frame the nozzle
         ax.set_xlim(x_lo - 0.03 * (x_hi - x_lo), x_hi + 0.02 * (x_hi - x_lo))
         ax.set_ylim(-1.15 * float(wr.max()), 1.15 * float(wr.max()))
 
-    Me = float(np.nanmax(Mg))
-    axes[0].set_title(
-        f"Steady flow field — Mach (top) & temperature (bottom)   "
-        f"exit M≈{Me:.2f}"
-        + (f", Cf={solution.thrust_coefficient:.3f}"
-           if hasattr(solution, "thrust_coefficient") else ""),
-        fontsize=11)
-    axes[1].set_xlabel("x [m]")
-    fig.tight_layout()
+    measured_exit_mach = (
+        _axisymmetric_exit_mean(Rg, Mg) if coverage["passes"] else float("nan")
+    )
+    title_parts = [
+        "Steady supersonic MOC field" if full_field
+        else "Partial MOC construction field",
+    ]
+    if resolved_x_min is not None:
+        title_parts.append(
+            f"wall-to-axis coverage from x={1e3 * resolved_x_min:.1f} mm"
+        )
+    if exit_mach is not None and np.isfinite(exit_mach):
+        title_parts.append(f"design exit M≈{float(exit_mach):.2f}")
+    if np.isfinite(measured_exit_mach):
+        title_parts.append(f"resolved exit ⟨M⟩A≈{measured_exit_mach:.2f}")
+    if hasattr(solution, "thrust_coefficient"):
+        title_parts.append(f"Cf={solution.thrust_coefficient:.3f}")
+    fig.suptitle("   |   ".join(title_parts), fontsize=11)
+    bottom = 0.045 if (
+        resolved_x_min is not None and resolved_x_min > x_lo + 1e-9
+    ) else 0.0
+    if bottom:
+        fig.text(
+            0.5, 0.012,
+            "Blank throat wedge: transonic core upstream of the first "
+            "supersonic characteristic; no flow state is fabricated there.",
+            ha="center", va="bottom", fontsize=8, color="0.25",
+        )
+    fig.tight_layout(rect=(0.0, bottom, 1.0, 0.96))
+    fig.flowfield_coverage = {
+        **{key: value for key, value in coverage.items()
+           if key != "radial_fraction_by_column"},
+        "bde_support": bde_support,
+        "full_field": full_field,
+    }
 
     if save_path is not None:
         fig.savefig(save_path, dpi=160, bbox_inches="tight")
@@ -264,8 +578,9 @@ def animate_moc_march(
     x_lo, x_hi = float(wx.min()), float(wx.max())
     # physical per-row polylines (x, r, M)
     rows = []
-    for row in (getattr(solution, "characteristic_net", None) or []):
-        pts = row.all_points() if hasattr(row, "all_points") else list(row)
+    for family, pts in _characteristic_polylines(solution):
+        if family == "lrc":
+            continue
         seg = [(p.x, p.r, p.M) for p in pts
                if x_lo - 1e-9 <= p.x <= x_hi + 1e-9
                and 0.0 <= p.r <= np.interp(p.x, wx, wr) * 1.05
@@ -313,6 +628,7 @@ def animate_particles(
     solution, gamma: float = 1.4, *,
     n_particles: int = 260, n_frames: int = 220, interval: int = 40, fps: int = 25,
     Tc: float | None = None, save_path: str | None = None, show: bool = False,
+    allow_partial: bool = False,
 ):
     """Advect tracer particles released at the throat through the steady
     flow field — they follow the true streamlines, coloured by local
@@ -327,13 +643,26 @@ def animate_particles(
 
     x, r, M, theta, wx, wr = _field_arrays(solution, gamma, anchor=True)
     pts = np.column_stack([x, r])
-    th_i = LinearNDInterpolator(pts, theta, fill_value=0.0)
-    M_i = LinearNDInterpolator(pts, M, fill_value=1.0)
+    th_i = LinearNDInterpolator(pts, theta, fill_value=np.nan)
+    M_i = LinearNDInterpolator(pts, M, fill_value=np.nan)
     x_lo, x_hi = float(wx.min()), float(wx.max())
     wall_at = lambda xx: np.interp(xx, wx, wr)
 
+    Xg, Rg, Mg = _grid_field(x, r, M, wx, wr, nx=240, nr=90)
+    coverage = _field_coverage_report(Xg, Rg, Mg, wx, wr)
+    bde_support = _bde_support_report(solution, x_hi)
+    full_field = bool(coverage["passes"] and bde_support["passes"])
+    if not full_field and not allow_partial:
+        raise ValueError(
+            "partial MOC coverage: particle advection requires an explicit "
+            "allow_partial=True diagnostic override"
+        )
+
     rng = np.random.default_rng(0)
-    x_seed = x_lo + 0.01 * (x_hi - x_lo)
+    resolved_x_min = coverage["resolved_x_min_m"]
+    x_seed = (
+        float(resolved_x_min) if resolved_x_min is not None else x_lo
+    ) + 0.005 * (x_hi - x_lo)
 
     def seed(n):
         fr = rng.uniform(0.03, 0.95, n)
@@ -343,21 +672,25 @@ def animate_particles(
     # speed ∝ local gas velocity M·sqrt(T); normalise so a fast particle
     # crosses the nozzle in ~half the frames.
     def speed(P):
-        m = np.clip(M_i(P[:, 0], P[:, 1]), 1.0, None)
+        m = np.asarray(M_i(P[:, 0], P[:, 1]), dtype=float)
+        m = np.where(np.isfinite(m), np.clip(m, 1.0, None), 1.0)
         T = isentropic_temperature_ratio(m, gamma)
         return m * np.sqrt(T)
     v0 = float(np.nanmean(speed(P)))
     dt = (x_hi - x_lo) / (0.55 * n_frames * max(v0, 1e-6))
 
     fig, ax = plt.subplots(figsize=(11, 4.5))
-    Xg, Rg, Mg = _grid_field(x, r, M, wx, wr, nx=240, nr=90)
     for sgn in (1.0, -1.0):
         ax.contourf(Xg, sgn * Rg, Mg, levels=24, cmap="turbo", alpha=0.30)
     ax.plot(wx, wr, "k", lw=1.6); ax.plot(wx, -wr, "k", lw=1.6)
     ax.set_xlim(x_lo - 0.03 * (x_hi - x_lo), x_hi + 0.02 * (x_hi - x_lo))
     ax.set_ylim(-1.15 * float(wr.max()), 1.15 * float(wr.max()))
     ax.set_aspect("equal"); ax.set_xlabel("x [m]"); ax.set_ylabel("r [m]")
-    ax.set_title("Particle advection through the steady flow field", fontsize=11)
+    ax.set_title(
+        "Particle advection through the resolved MOC field"
+        if full_field else "Particle advection through a partial MOC construction",
+        fontsize=11,
+    )
     from matplotlib import cm, colors as mcolors
     norm = mcolors.Normalize(1.0, float(np.nanmax(Mg)))
     sc = ax.scatter(P[:, 0], P[:, 1], c=speed(P) * 0 + 1.0, cmap="inferno",
@@ -369,12 +702,32 @@ def animate_particles(
 
     def update(_frame):
         nonlocal P
-        th = th_i(P[:, 0], P[:, 1]); th = np.where(np.isfinite(th), th, 0.0)
+        th = np.asarray(th_i(P[:, 0], P[:, 1]), dtype=float)
+        mach = np.asarray(M_i(P[:, 0], P[:, 1]), dtype=float)
+        invalid = ~np.isfinite(th) | ~np.isfinite(mach)
+        if invalid.any():
+            P[invalid] = seed(int(invalid.sum()))
+            th[invalid] = np.asarray(
+                th_i(P[invalid, 0], P[invalid, 1]), dtype=float,
+            )
+            mach[invalid] = np.asarray(
+                M_i(P[invalid, 0], P[invalid, 1]), dtype=float,
+            )
+        # A failed seed is held and retried next frame; it is never assigned a
+        # fabricated zero flow angle.
+        movable = np.isfinite(th) & np.isfinite(mach)
         v = speed(P)
-        P = P + dt * v[:, None] * np.column_stack([np.cos(th), np.sin(th)])
+        direction = np.zeros_like(P)
+        direction[movable] = np.column_stack([
+            np.cos(th[movable]), np.sin(th[movable]),
+        ])
+        P = P + dt * v[:, None] * direction
         P[:, 1] = np.clip(P[:, 1], 0.0, None)
         # re-seed particles that left the nozzle (exit or through the wall)
-        gone = (P[:, 0] >= x_hi) | (P[:, 1] > wall_at(P[:, 0]) * 1.02)
+        field_valid = np.isfinite(M_i(P[:, 0], P[:, 1]))
+        gone = ((P[:, 0] >= x_hi)
+                | (P[:, 1] > wall_at(P[:, 0]) * 1.02)
+                | ~field_valid)
         if gone.any():
             P[gone] = seed(int(gone.sum()))
         m = np.clip(M_i(P[:, 0], P[:, 1]), 1.0, None)

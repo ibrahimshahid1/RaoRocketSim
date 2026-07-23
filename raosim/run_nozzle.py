@@ -276,7 +276,7 @@ def print_tags() -> None:
             ("--pump-visualize", "save a simplified pump particle GIF"),
         ]),
         ("Visualisation", [
-            ("--flowfield", "render the steady MOC Mach/temperature field"),
+            ("--flowfield", "render resolved MOC Mach/p/theta/T fields"),
             ("--animate {march,particles,both}", "save a flow animation GIF"),
             ("--chamber-temp", "chamber T [K] for the temperature panel"),
         ]),
@@ -892,7 +892,7 @@ def _interactive(args) -> None:
     args.max_nfev = _prompt("LM budget max_nfev (0 = instant seed contour)",
                             args.max_nfev, int)
     args.flowfield = _prompt_bool(
-        "Render the steady flow field (Mach + temperature)?",
+        "Render the resolved steady field (Mach, pressure, angle, temperature)?",
         bool(args.flowfield))
     if _prompt_bool("Animate the flow (MOC march + particle advection)?",
                     args.animate is not None):
@@ -2300,7 +2300,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="let the equivalent-tube SP-125 eq.4-29 screen gate "
                          "a milled-channel wall (off by default)")
     ap.add_argument("--flowfield", action="store_true",
-                    help="render the steady MOC Mach/temperature flow field")
+                    help="render resolved MOC Mach/pressure/angle/temperature fields")
     ap.add_argument("--animate", choices=("march", "particles", "both"),
                     default=None,
                     help="save an animation GIF: 'march' (MOC net building), "
@@ -3052,8 +3052,8 @@ def main(argv: list[str] | None = None) -> int:
         moc_notes: list[str] = []
         if not moc_compatibility_preserved:
             if str(net_report.get("audit_basis", "")).startswith("bde_"):
-                if not net_report.get("bde_complete_remaining_mesh", True):
-                    moc_notes.append("BDE remaining mesh incomplete")
+                if not net_report.get("bde_physical_mesh_complete", True):
+                    moc_notes.append("physical B-D-E mesh incomplete")
                 n_trunc = int(net_report.get(
                     "bde_negative_r_truncated_rows", 0
                 ) or 0)
@@ -3063,6 +3063,31 @@ def main(argv: list[str] | None = None) -> int:
                     )
                 if not net_report.get("measured_crossing_passes", True):
                     moc_notes.append("measured mesh crossings")
+                if not net_report.get("measured_cell_orientation_passes", True):
+                    moc_notes.append(
+                        f"{int(net_report.get('measured_invalid_cell_count', 0))} "
+                        "zero/negative-area cells"
+                    )
+                if not net_report.get("measured_compatibility_passes", True):
+                    moc_notes.append(
+                        "BDE compatibility "
+                        f"C-={float(net_report.get('cminus_max', float('nan'))):.3g} deg, "
+                        f"C+={float(net_report.get('cplus_max', float('nan'))):.3g} deg"
+                    )
+                if not net_report.get("measured_mach_line_direction_passes", True):
+                    moc_notes.append("Mach-line direction mismatch")
+                if not net_report.get("axis_condition_passes", True):
+                    moc_notes.append("axis regularity")
+                if not net_report.get("measured_neighbor_smoothness_passes", True):
+                    moc_notes.append("neighbor-state smoothness")
+                if not net_report.get("axial_mass_conservation_passes", True):
+                    mass_error = net_report.get("axial_mass_cut_max_rel_error")
+                    if isinstance(mass_error, (int, float)):
+                        moc_notes.append(
+                            f"axial mass error {100.0 * mass_error:.2f}%"
+                        )
+                    else:
+                        moc_notes.append("axial mass conservation")
                 if not net_report.get("measured_wall_tangency_passes", True):
                     wall_tmax = net_report.get("wall_tangency_max_deg")
                     if isinstance(wall_tmax, (int, float)):
@@ -3154,9 +3179,69 @@ def main(argv: list[str] | None = None) -> int:
         "wall_tangency_rms_deg": wall_tangency_rms_deg,
         "characteristic_crossings": int(r.characteristic_crossings),
         "characteristic_crossing_samples": crossing_samples,
+        "bde_integrity": {
+            key: net_report.get(key) for key in (
+                "measured_mesh_source",
+                "measured_mesh_link_count",
+                "crossings",
+                "cminus_rms",
+                "cminus_max",
+                "cplus_rms",
+                "cplus_max",
+                "compatibility_tol_deg",
+                "measured_compatibility_passes",
+                "mach_line_direction_rms_deg",
+                "mach_line_direction_max_deg",
+                "mach_line_direction_tol_deg",
+                "measured_mach_line_direction_passes",
+                "measured_cell_count",
+                "measured_invalid_cell_count",
+                "measured_min_oriented_cell_area_m2",
+                "measured_cell_orientation_passes",
+                "neighbor_mach_p99",
+                "neighbor_mach_max",
+                "neighbor_theta_p99_deg",
+                "neighbor_theta_max_deg",
+                "neighbor_pressure_ratio_p99",
+                "neighbor_pressure_ratio_max",
+                "measured_neighbor_smoothness_passes",
+                "axis_node_count",
+                "axis_max_abs_r_m",
+                "axis_max_abs_theta_deg",
+                "axis_mach_min",
+                "axis_mach_max",
+                "axis_thermodynamics_finite",
+                "axis_condition_passes",
+                "axial_mass_cut_count",
+                "axial_mass_cut_valid_count",
+                "axial_mass_cut_x_m",
+                "axial_mass_cut_coverage",
+                "axial_mass_cut_rel_errors",
+                "axial_mass_cut_max_rel_error",
+                "axial_mass_cut_rel_tol",
+                "axial_mass_conservation_passes",
+                "bde_physical_mesh_complete",
+                "bde_auxiliary_continuation_caustic",
+                "bde_auxiliary_frontier_min_x_m",
+                "bde_auxiliary_caustic_downstream_of_exit",
+            )
+        },
         "postprocessed": postprocessed,
         "endpoint_enforced_for_export": endpoint_enforced,
         "monotonic_cleanup_for_export": monotonic_cleanup,
+        "wall_export_interpolation_basis": export_diag.get(
+            "interpolation_basis"
+        ),
+        "wall_export_point_count": export_diag.get("export_point_count"),
+        "wall_export_max_adjacent_turn_deg": export_diag.get(
+            "max_adjacent_turn_deg"
+        ),
+        "wall_export_max_adjacent_turn_tol_deg": export_diag.get(
+            "max_adjacent_turn_tol_deg"
+        ),
+        "wall_export_turn_gate_passed": export_diag.get(
+            "polyline_turn_gate_passed"
+        ),
         "rao_region": sol.construction_diagnostics.get("rao_region"),
         "boundary_min": boundary_min,
         "thrust_sanity": thrust_sanity,
@@ -3225,6 +3310,14 @@ def main(argv: list[str] | None = None) -> int:
           f"{dim('['+da.get('theta_N_source','?')+']')}   "
           f"theta_E={math.degrees(sol.theta_E):.2f}°   "
           f"Cf={bold('%.4f' % sol.thrust_coefficient)}")
+    if export_diag.get("interpolation_basis"):
+        print(dim(
+            "    wall export: "
+            f"{export_diag['interpolation_basis']}, "
+            f"{int(export_diag.get('export_point_count', 0))} points, "
+            "max adjacent turn "
+            f"{float(export_diag.get('max_adjacent_turn_deg', float('nan'))):.3f}°"
+        ))
     contour_export_gate = bool(
         chart_domain_gate
         if not bvp_mode
@@ -3512,7 +3605,7 @@ def main(argv: list[str] | None = None) -> int:
     # cleanly otherwise (plotting must never break the run).
     if sol.construction_diagnostics.get("bde_artifacts"):
         print("\n" + cyan("▸ " + bold("MOC construction")) +
-              dim("  (kernel fan, Rao B-D-E topology, BDE characteristic net)"))
+              dim("  (kernel fan, Rao topology, BDE net + diagnostics)"))
         for _fn, _name, _label in (
             ("plot_kernel_expansion_fan", "kernel_fan.png",
              "throat kernel / expansion fan"),
@@ -3520,11 +3613,21 @@ def main(argv: list[str] | None = None) -> int:
              "Rao B-D-E topology"),
             ("plot_bde_mesh", "bde_mesh.png",
              "BDE characteristic net"),
+            ("plot_bde_diagnostics", "bde_diagnostics.png",
+             "BDE flow / compatibility / mass diagnostics"),
+            ("plot_bde_integrity", "bde_integrity.png",
+             "BDE link / cell / axis / smoothness integrity audit"),
         ):
             try:
                 import raosim.moc_diagrams as _md
-                fig = getattr(_md, _fn)(sol, save_path=args.out / _name,
-                                        show=show)
+                _kwargs = {}
+                if _fn == "plot_bde_diagnostics":
+                    _kwargs = {"gamma": args.gamma, "p0": args.pc}
+                elif _fn == "plot_bde_integrity":
+                    _kwargs = {"gamma": args.gamma, "residual_tol": 2e-3}
+                fig = getattr(_md, _fn)(
+                    sol, save_path=args.out / _name, show=show, **_kwargs
+                )
                 if not show:
                     fig.clf()
                 artifacts.append(_name)
@@ -3536,16 +3639,25 @@ def main(argv: list[str] | None = None) -> int:
     # ---- optional steady flow-field render ---------------------------
     if args.flowfield:
         print("\n" + cyan("▸ " + bold("Flow field")) +
-              dim("  (MOC Mach + temperature, characteristics, streamlines)"))
+              dim("  (resolved MOC Mach/p/theta/T + characteristics)"))
         try:
             from raosim.flow_viz import plot_flowfield
             fig = plot_flowfield(sol, gamma=args.gamma, Tc=args.chamber_temp,
+                                 exit_mach=perf.Me,
                                  save_path=args.out / "flowfield.png", show=show)
+            field_coverage = getattr(fig, "flowfield_coverage", {})
             if not show:
                 fig.clf()
             artifacts.append("flowfield.png")
             print(green("    wrote flowfield.png")
                   + (dim("  (window)") if show else ""))
+            if field_coverage.get("full_field"):
+                print(dim(
+                    "    resolved wall-to-axis field: "
+                    f"x={1e3 * float(field_coverage['resolved_x_min_m']):.1f} "
+                    "mm to exit; exit radial coverage "
+                    f"{100.0 * float(field_coverage['exit_radial_fraction']):.1f}%"
+                ))
         except Exception as exc:
             print(yellow(f"    flow field skipped: {exc}"))
 

@@ -242,12 +242,12 @@ def test_calc_bde_region_builds_wall_to_de_seed_rows():
 
     region = calc_bde_region(kernel, topology)
 
-    # Axis truncation is a normal near-axis event; the mesh still ran to
-    # completion (every row reached the axis), so it is complete even though
-    # some rows were negative-r truncated.
-    assert region.complete_remaining_mesh is True
+    # The physical B-D-E strip and wall complete.  Its auxiliary post-DE
+    # continuation encounters a downstream caustic and must stop before a
+    # zero/reversed cell instead of forcing an axis closure through the fold.
+    assert region.complete_remaining_mesh is False
     assert region.wall_contour_complete is True
-    assert region.negative_r_truncated_rows > 0
+    assert region.topology_truncated_rows > 0
     assert region.iD >= 1
     assert len(region.rows) == max(len(topology.DE) - 1, 0)
     assert len(region.grid_rows) == len(region.rows)
@@ -259,10 +259,12 @@ def test_calc_bde_region_builds_wall_to_de_seed_rows():
         assert row[0].r > row[-1].r
         assert row[-1].r >= topology.D.r
         assert all(point.M > 1.0 for point in row)
-    for row in region.grid_rows:
-        assert len(row) > region.iD
-        assert row[0].r > row[-1].r
-        assert row[-1].r == pytest.approx(0.0, abs=1e-10)
+    for row, de_point in zip(region.grid_rows, topology.DE[1:]):
+        assert len(row) >= 1
+        if len(row) > 1:
+            assert row[0].r > row[-1].r
+        assert row[-1].x == pytest.approx(de_point.x, abs=1e-10)
+        assert row[-1].r == pytest.approx(de_point.r, abs=1e-10)
         assert all(point.M > 1.0 for point in row)
 
 
@@ -292,19 +294,25 @@ def test_build_source_contour_from_kernel_reports_uncropped_status():
 
     diag = contour.diagnostics
     assert diag["canonical_reference_track"] == "visible_source_port"
-    # The interior mesh reached the axis (complete), but the source contour is
-    # still not "complete" because length closure / CropNozzleToLength is not
-    # ported — that, not the normal axis truncation, is the remaining gate.
+    # The physical B-D-E mesh and wall complete, while the auxiliary
+    # continuation stops at its downstream caustic.  Length closure /
+    # CropNozzleToLength remains the separate source-contour gate.
     assert diag["source_contour_complete"] is False
     assert diag["length_closed"] is False
     assert diag["crop_nozzle_to_length"] == "not_ported"
     assert diag["outer_theta_b_driver"] == "fixed_kernel_input"
     assert diag["nasa_reference_matched_eligible"] is False
-    assert contour.bfe.complete_remaining_mesh is True
+    assert diag["bfe_physical_mesh_complete"] is True
     assert contour.bfe.wall_contour_complete is True
-    assert contour.bfe.negative_r_truncated_rows >= 0
+    if contour.bfe.complete_remaining_mesh:
+        assert contour.bfe.topology_truncated_rows == 0
+    else:
+        assert contour.bfe.topology_truncated_rows > 0
     assert diag["bfe_negative_r_truncated_rows"] == (
         contour.bfe.negative_r_truncated_rows
+    )
+    assert diag["bfe_topology_truncated_rows"] == (
+        contour.bfe.topology_truncated_rows
     )
     assert contour.wall_export.shape == (len(contour.wall), 2)
     assert len(contour.wall) == len(kernel.rrcs) + len(contour.bfe.wall_contour)

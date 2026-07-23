@@ -1760,18 +1760,79 @@ def _split_casing_joint_layout(
     )
     required_clamp = separation_factor * design_pressure * projected_area
     bolt_allow = spec.casing_yield_strength / max(spec.structural_fos, 1e-9)
-    bolt_d = max(3.0e-3, 0.08 * casing_radius)
-    tensile_area = 0.75 * math.pi * bolt_d**2 / 4.0
-    required_count = max(
-        8,
-        int(math.ceil(required_clamp / max(bolt_allow * tensile_area, 1e-12))),
+    gasket_land = max(2.0e-3, 1.5 * casing_wall)
+
+    # Clamp-driven bolt sizing must also FIT the flange: iterate the nominal
+    # diameter up through standard coarse metric sizes until the required
+    # count sits on the clear bolt-circle arc at no less than the minimum
+    # pitch of 2.5 d (standard bolted-flange spacing practice; Shigley,
+    # Mechanical Engineering Design — outside the propulsion corpus, generic
+    # machine design).  Without this, a high-pressure/large-scroll casing
+    # (e.g. the 13 kN LOX line: 56 x M3, evaluation 2026-07-13 FINDING 2)
+    # requests more bolts than the flange circumference can carry and the
+    # CAD layout correctly refuses.  The clear arc excludes the tangential
+    # outlet-neck keep-out using the same criterion as
+    # ``pump_cad_brep._split_joint_hole_layout``.
+    min_pitch_factor = 2.5
+    port_radius = a_exit  # outlet port area equals the scroll exit area
+    bolt_d = None
+    tensile_area = required_count = body_count = None
+    edge_land = flange_outer_radius = bolt_radius = None
+    clear_circumference = None
+    fit_note = "first_size_fit"
+    standard_sizes = [3.0e-3, 4.0e-3, 5.0e-3, 6.0e-3, 8.0e-3, 1.0e-2, 1.2e-2]
+    start_d = max(3.0e-3, 0.08 * casing_radius)
+    candidate_sizes = [d for d in standard_sizes if d >= start_d - 1e-12]
+    if not candidate_sizes:
+        candidate_sizes = [standard_sizes[-1]]
+    for trial_d in candidate_sizes:
+        trial_area = 0.75 * math.pi * trial_d**2 / 4.0
+        trial_count = max(
+            8,
+            int(math.ceil(
+                required_clamp / max(bolt_allow * trial_area, 1e-12)
+            )),
+        )
+        trial_body = trial_count if trial_count % 2 == 0 else trial_count + 1
+        trial_hole_r = 0.5 * 1.15 * trial_d
+        trial_edge = max(1.5 * 1.15 * trial_d, 2.0e-3)
+        trial_flange = wetted_radius + gasket_land + trial_edge
+        trial_bolt_r = 0.5 * (
+            wetted_radius + gasket_land + trial_flange - trial_hole_r
+        )
+        # Clear fraction of the bolt circle outside the outlet-neck keep-out
+        # (segment x = casing_radius, y in [0, outlet_length], exclusion
+        # radius port + gasket + 1.5 hole radii) — same rule as the CAD.
+        exclusion = port_radius + gasket_land + 1.5 * trial_hole_r
+        samples = 720
+        clear = 0
+        for k in range(samples):
+            ang = 2.0 * math.pi * (k + 0.5) / samples
+            x = trial_bolt_r * math.cos(ang)
+            y = trial_bolt_r * math.sin(ang)
+            y_near = min(max(y, 0.0), outlet_length)
+            if math.hypot(x - casing_radius, y - y_near) > exclusion:
+                clear += 1
+        trial_clear_circ = 2.0 * math.pi * trial_bolt_r * clear / samples
+        bolt_d = trial_d
+        tensile_area = trial_area
+        required_count = trial_count
+        body_count = trial_body
+        edge_land = trial_edge
+        flange_outer_radius = trial_flange
+        bolt_radius = trial_bolt_r
+        clear_circumference = trial_clear_circ
+        # One extra pitch of slack absorbs the CAD's discrete candidate
+        # snapping and the clear-arc boundary at the outlet neck, so the
+        # placed holes can never undercut the minimum pitch.
+        if (trial_body + 1) * min_pitch_factor * trial_d <= trial_clear_circ:
+            break
+        fit_note = "diameter_grown_to_fit_clear_arc"
+    bolt_layout_fits = (
+        (body_count + 1) * min_pitch_factor * bolt_d <= clear_circumference
     )
-    body_count = required_count if required_count % 2 == 0 else required_count + 1
     outlet_pair_count = 4
     total_count = body_count + outlet_pair_count
-    gasket_land = max(2.0e-3, 1.5 * casing_wall)
-    edge_land = max(1.5 * 1.15 * bolt_d, 2.0e-3)
-    flange_outer_radius = wetted_radius + gasket_land + edge_land
     flange_thickness = max(casing_wall, 1.5 * bolt_d)
     bolt_stress = required_clamp / max(total_count * tensile_area, 1e-12)
     min_scroll_section_d = 2.0 * a_exit / math.sqrt(24.0)
@@ -1788,6 +1849,15 @@ def _split_casing_joint_layout(
         "total_bolt_count": total_count,
         "bolt_nominal_diameter_m": bolt_d,
         "bolt_hole_diameter_m": 1.15 * bolt_d,
+        "bolt_min_pitch_m": min_pitch_factor * bolt_d,
+        "bolt_min_pitch_rule": (
+            "2.5d minimum bolt spacing (standard bolted-flange machine-design"
+            " practice, Shigley; not a propulsion-corpus value)"
+        ),
+        "bolt_circle_radius_m": bolt_radius,
+        "clear_bolt_circumference_m": clear_circumference,
+        "bolt_layout_fits_clear_arc": bolt_layout_fits,
+        "bolt_sizing_note": fit_note,
         "bolt_allowable_stress_pa": bolt_allow,
         "bolt_screen_stress_pa": bolt_stress,
         "bolt_screen_passed": bolt_stress <= bolt_allow,

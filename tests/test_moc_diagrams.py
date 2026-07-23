@@ -12,6 +12,8 @@ matplotlib.use("Agg")
 import pytest
 
 from raosim.moc_diagrams import (
+    plot_bde_diagnostics,
+    plot_bde_integrity,
     plot_bde_mesh,
     plot_kernel_expansion_fan,
     plot_rao_topology,
@@ -58,6 +60,34 @@ def test_plot_bde_mesh_renders(bde_solution, tmp_path):
     assert out.exists()
     # full net + near-axis zoom panels.
     assert len(fig.axes) >= 2
+
+
+def test_plot_bde_diagnostics_renders_requested_checks(bde_solution, tmp_path):
+    out = tmp_path / "bde_diagnostics.png"
+    fig = plot_bde_diagnostics(
+        bde_solution, gamma=1.4, p0=3.0e6, save_path=str(out)
+    )
+    assert out.exists()
+    titles = " ".join(ax.get_title() for ax in fig.axes)
+    assert "Mach" in titles
+    assert "Pressure" in titles
+    assert "Flow angle" in titles
+    assert "compatibility" in titles
+    assert "Axial mass" in titles
+    assert "Post-DE prefix" in titles
+
+
+def test_plot_bde_integrity_renders_four_requested_panels(bde_solution, tmp_path):
+    out = tmp_path / "bde_integrity.png"
+    fig = plot_bde_integrity(
+        bde_solution, gamma=1.4, residual_tol=2e-3, save_path=str(out)
+    )
+    assert out.exists()
+    titles = " ".join(ax.get_title() for ax in fig.axes)
+    assert "Characteristic links" in titles
+    assert "Cell orientation" in titles
+    assert "Axis condition" in titles
+    assert "Mach smoothness" in titles
 
 
 def test_diagrams_need_bde_artifacts():

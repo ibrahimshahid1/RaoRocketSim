@@ -1,0 +1,72 @@
+# Variant check: Son (2017) continuous-gap MOVABLE pintle on the 13 kN
+# sea-level LOX/RP-1 benchmark operating point.
+#
+# Companion to examples/cli/test_13kn_sealevel_regen_allstl.args — the movable
+# architecture (--injector-architecture son_continuous_movable) replaces the
+# fixed discrete radial exits, so it cannot share the machined coaxial CAD
+# benchmark run.  Operating point, chamber, and feed values are identical to
+# the main benchmark file (provenance documented there).  Without a measured
+# Cd map / metrology / actuator artifacts the movable model runs in its
+# labelled constant-Cd screening mode and the release gates stay
+# evidence-blocked — that is the expected result of this check, not a FAIL.
+#
+#   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_movable_pintle.args
+
+--no-banner
+
+# Operating point (same as main benchmark).
+--propellant LOX/RP-1
+--oxidizer LOX
+--fuel RP-1
+--pc 3.0e6
+--target-thrust 13000
+--epsilon 4.524
+--pa-over-p0 0.033775
+--length-pct 80
+
+# Chamber and throat (same as main benchmark).
+--l-star 1.0
+--contraction-ratio 3.0
+--minimum-cylindrical-length 0.03
+--ru-factor 1.5
+
+# Seed contour: this variant checks the movable-injector model chain, not the
+# MOC solve (the main benchmark owns the full --max-nfev 4000 solve).
+--max-nfev 0
+
+# Movable pintle architecture (Son 2017 Eq. (1) continuous annular gap;
+# raosim/movable_pintle.py, docs/MOVABLE_PINTLE_MODEL.md).  Openings default
+# to the model's derived stop; constant-Cd screening mode is labelled in the
+# manifest because no Cd-map artifact is supplied.
+--injector pintle
+--pintle-radial-stream fuel
+--pintle-target-momentum-ratio 0.52
+--pintle-radial-exit continuous_radial_gap
+--injector-architecture son_continuous_movable
+# Movable hardware dimensions: the repo's documented CLI example set
+# (docs/MOVABLE_PINTLE_MODEL.md §CLI usage; post OD 20 mm, post wall 1 mm,
+# rod 8 mm) with the center gap flow-sized 12 -> 14 mm so the open-stop
+# capacity below the center-gap transition passes the 13 kN fuel flow
+# (1.595 kg/s required vs 1.29 kg/s at the 12 mm doc example; area scales
+# with D^2, disclosed sizing, not a literature dimension).
+--movable-post-diameter 0.020
+--movable-post-thickness 0.001
+--movable-center-gap-diameter 0.014
+--movable-pintle-rod-diameter 0.008
+
+# Feed system (same fractions as main benchmark) so injector dp and feed
+# gates resolve.
+--fuel-tank-pressure 500000
+--oxidizer-tank-pressure 600000
+--fuel-supply-pressure 5000000
+--oxidizer-supply-pressure 4500000
+--fuel-injector-dp-fraction 0.20
+--oxidizer-injector-dp-fraction 0.20
+--fuel-line-loss-fraction 0.02
+--oxidizer-line-loss-fraction 0.02
+--fuel-manifold-loss-fraction 0.02
+--oxidizer-manifold-loss-fraction 0.02
+--fuel-control-margin-fraction 0.05
+--oxidizer-control-margin-fraction 0.05
+
+--out builds/tests/13kn_movable_pintle

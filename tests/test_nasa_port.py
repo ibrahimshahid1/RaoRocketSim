@@ -173,8 +173,11 @@ def test_fixed_end_topology_wall_is_bell_shaped():
         Ru=1.5 * Rt, end_condition="fixed_end", max_iter=30,
     )
     bfe = calc_bde_region(kern, topo)
-    assert bfe.complete_remaining_mesh
     assert bfe.wall_contour_complete
+    assert len(bfe.rows) == len(topo.DE) - 1
+    if not bfe.complete_remaining_mesh:
+        assert bfe.topology_truncated_rows > 0
+        assert min(row[-1].x for row in bfe.full_grid_rows) > topo.E.x
 
     kernel_wall = [(row[0].x, row[0].r) for row in kern.rrcs if row]
     bfe_wall = [(p.x, p.r) for p in bfe.wall_contour]

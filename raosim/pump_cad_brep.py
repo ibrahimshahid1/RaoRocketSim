@@ -654,15 +654,33 @@ def _split_joint_hole_layout(ring_comp, ports_comp) -> dict[str, Any]:
     wet_r = casing_r + a_exit
     bolt_r = 0.5 * (wet_r + gasket_land + flange_r - hole_r)
     requested = int(joint.get("body_bolt_count") or 8)
+    # Candidate density follows the joint's minimum bolt pitch (2.5 d flange
+    # practice; sized to fit in pumps._split_casing_joint_layout) instead of
+    # a fixed 48-slot ring: a clamp-driven count above 48 is legitimate on a
+    # large casing, and the fixed ring artificially failed the 13 kN LOX
+    # volute (evaluation 2026-07-13, FINDING 2).  Four samples per pitch
+    # keeps the stride selection near-even along the clear arc.
+    joint_pitch_m = joint.get("bolt_min_pitch_m")
+    min_pitch = (
+        _mm(float(joint_pitch_m)) if joint_pitch_m
+        else 2.5 * (2.0 * hole_r / 1.15)  # mm; 2.5 x nominal d from hole
+    )
+    n_samples = int(min(
+        2880,
+        max(96, math.ceil(2.0 * math.pi * bolt_r / max(0.25 * min_pitch, 0.5))),
+    ))
     candidates = []
-    for k in range(48):
-        angle = 2.0 * math.pi * (k + 0.5) / 48.0
+    for k in range(n_samples):
+        angle = 2.0 * math.pi * (k + 0.5) / n_samples
         x, y = bolt_r * math.cos(angle), bolt_r * math.sin(angle)
         y_near = min(max(y, 0.0), 3.0 * a_exit)
         outlet_distance = math.hypot(x - casing_r, y - y_near)
         if outlet_distance > port_r + gasket_land + 1.5 * hole_r:
             candidates.append((x, y))
-    if len(candidates) < requested:
+    clear_circumference = (
+        2.0 * math.pi * bolt_r * len(candidates) / max(n_samples, 1)
+    )
+    if len(candidates) < requested or requested * min_pitch > clear_circumference:
         raise ValueError("split casing has insufficient clear body-bolt sectors")
     stride = len(candidates) / requested
     body_holes = [candidates[int(i * stride)] for i in range(requested)]
@@ -734,6 +752,24 @@ def build_split_volute_casing(
         ),
     )
     jointed = one_piece.fuse(round_flange, neck).cut(passage)
+    # The round flange disk is fused across the full radius, re-filling the
+    # shaft corridor that ``build_volute_casing`` cut through the scroll
+    # envelope; re-cut it over the whole flange slab so the rear body never
+    # intersects the shaft (interference audit, evaluation 2026-07-13 —
+    # masked previously because the oxidizer bolt-layout failure aborted the
+    # package before the audit ran).
+    if shaft_comp is not None:
+        corridor_r = (
+            0.5 * _mm(shaft_comp["diameter_m"])
+            + _MOTOR_SHAFT_RADIAL_CLEARANCE_MM
+        )
+        corridor_half = max(a_exit + 2.0 * _mm(
+            ring_comp["casing_wall_thickness_m"]), flange_t)
+        jointed = jointed.cut(_cylinder(
+            cq, corridor_r,
+            z_mid - corridor_half,
+            z_mid + corridor_half,
+        ))
     all_holes = [
         *layout["body_bolt_centers_mm"],
         *layout["outlet_neck_bolt_centers_mm"],

@@ -22,7 +22,16 @@
 #   - GRCop-84 liner + Inconel 718 closeout per NASA GRCop chamber work
 #     (propulsion_texts/gradl2016..2020.pdf); catalog T_max 1000 K, S_y 186 MPa.
 #   - SP-125 station-wise liner stress screens (eqs 4-28/29/31/32, audited
-#     2026-07-02); Hall Cd inversion for Ru/Rt via --cd-target 0.99.
+#     2026-07-02).
+#   - Upstream throat radius Ru = 1.5 Rt explicitly (--ru-factor 1.5): the
+#     SP-8120 throat-approach radius-ratio upper bound (0.6-1.5, verbatim;
+#     SP8120_UPSTREAM_RADIUS_RATIO_BOUNDS in raosim/throat_geometry.py) and
+#     the standard Rao/Sutton bell convention Ru = 1.5 Rt
+#     (propulsion_texts/nozzle_geometries.pdf, audited 2026-07-02).  The
+#     implied Hall inviscid Cd at gamma = 1.24 is 0.98963.  The file
+#     previously requested --cd-target 0.99, which inverts to Ru/Rt = 1.5275
+#     — outside the strict SP-8120 range now enforced — and aborted at
+#     argument validation (evaluation 2026-07-13, FINDING 1).
 
 --no-banner
 
@@ -40,7 +49,7 @@
 --l-star 1.0
 --contraction-ratio 3.0
 --minimum-cylindrical-length 0.03
---cd-target 0.99
+--ru-factor 1.5
 
 # Full JAX Rao/MOC solve budget and default benchmark resolution. This is
 # intentionally host-scale; use a command-line override for quick smoke checks.
@@ -115,6 +124,33 @@
 --injector-cad-format step
 --pump-cad parts
 --pump-cad-format both
---cad none
+
+# Full-feature coverage (2026-07-13): exercise every co-runnable exporter and
+# renderer in one benchmark pass.
+#   --cad step          chamber/nozzle wall STEP B-rep with the flange/bolt
+#                       interface features (export.py; CadQuery required)
+#   --regen-brep        full-N one-solid regen wall STEP; --regen-manifolds
+#                       adds the inlet/outlet manifold bodies and ports
+#   --engine-assembly   assemble wall/jacket/pintle/pump STEP into the
+#                       engine_cad assembly (requires --cad step)
+#   --pump-visualize    pump_particles.gif for the sized electric pumps
+# NOT co-runnable in this file (kept as separate checks):
+#   - movable-pintle architecture: examples/cli/test_13kn_movable_pintle.args
+#     (--injector-architecture son_continuous_movable conflicts with the
+#     fixed machined coaxial CAD benchmarked here)
+#   - MOC flow-field render + Rao/BDE construction diagrams + crossing CSV:
+#     examples/cli/test_13kn_rao_bvp_flowfield.args (--flowfield requires
+#     --contour-method rao-bvp; this benchmark's authoritative export
+#     contour is the Bezier/TOP-chart path)
+#   - OpenFOAM spray-case export: `python -m raosim export-openfoam-spray ...`
+#     (separate subcommand, consumes a finished run directory)
+#   - spray<->performance coupling: opt-in fixed point, blocked with --regen
+#     at the CLI by design (one-way solver, docs/SPRAY_CSTAR_COUPLING.md)
+#   - --animate march/particles GIFs: minutes of render time, cosmetic only
+--cad step
+--regen-brep
+--regen-manifolds
+--engine-assembly
+--pump-visualize
 
 --out builds/tests/13kn_sl_full

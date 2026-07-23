@@ -929,6 +929,9 @@ class RaoSolution:
             "raw_wall_points": self.wall_raw,
             "construction_diagnostics": self.construction_diagnostics,
             "wall_export_resampled": True,
+            "wall_export_interpolation": self.construction_diagnostics.get(
+                "export", {}
+            ).get("interpolation_basis", "unknown"),
             "thrust_coefficient": self.thrust_coefficient,
             "warnings": list(self.warnings),
         }
@@ -3307,9 +3310,47 @@ def _wall_from_bde_region(
     measured_mesh = _bde_measured_topology_report(
         bfe,
         config.gamma,
+        compatibility_tol=config.residual_tol,
         wall_tangency_tol=math.radians(0.25),
     )
     topology_report.update(measured_mesh)
+
+    kernel_axis = [rrc[-1] for rrc in kernel.rrcs if rrc]
+    axis_r = np.asarray([float(p.r) for p in kernel_axis], dtype=float)
+    axis_theta = np.asarray([float(p.theta) for p in kernel_axis], dtype=float)
+    axis_mach = np.asarray([float(p.M) for p in kernel_axis], dtype=float)
+    axis_thermo = np.concatenate([
+        np.asarray(isentropic_temperature_ratio(axis_mach, config.gamma), dtype=float),
+        np.asarray(isentropic_pressure_ratio(axis_mach, config.gamma), dtype=float),
+        np.asarray(isentropic_density_ratio(axis_mach, config.gamma), dtype=float),
+    ]) if axis_mach.size else np.zeros(0)
+    axis_finite = bool(
+        axis_mach.size
+        and np.all(np.isfinite(np.concatenate([
+            axis_r, axis_theta, axis_mach, axis_thermo,
+        ])))
+    )
+    axis_r_tol = max(1e-10 * config.Rt, 1e-14)
+    axis_theta_tol = math.radians(1e-6)
+    axis_passes = bool(
+        axis_finite
+        and _maxabs(axis_r) <= axis_r_tol
+        and _maxabs(axis_theta) <= axis_theta_tol
+        and np.all(axis_mach > 1.0)
+    )
+    topology_report.update({
+        "axis_basis": "kernel_rrc_axis_nodes",
+        "axis_node_count": int(axis_mach.size),
+        "axis_max_abs_r_m": _maxabs(axis_r),
+        "axis_max_abs_theta_deg": float(math.degrees(_maxabs(axis_theta))),
+        "axis_mach_min": float(np.min(axis_mach)) if axis_mach.size else None,
+        "axis_mach_max": float(np.max(axis_mach)) if axis_mach.size else None,
+        "axis_thermodynamics_finite": axis_finite,
+        "axis_condition_passes": axis_passes,
+    })
+    topology_report.update(_bde_axial_mass_cut_report(
+        kernel, bfe, config.gamma,
+    ))
     try:
         from raosim.moc_topology import build_topology as _build_topology
 
@@ -3355,37 +3396,60 @@ def _wall_from_bde_region(
             topology_report["wall_monotone_x"]
             and not topology_report["wall_has_degenerate_segments"]
         )
-        # Truncation is normal near the axis; only flag it when a row was
-        # cut off in the bulk of the field (band fraction above tol).
-        axis_band_fraction = _bde_axis_band_fraction(bfe)
-        # A bulk truncation (a row cut off in the body of the field) sits at
-        # tens of percent of the radius; a coarse-but-healthy axis closure is
-        # a few percent.  0.10 flags the former without tripping on coarse
-        # kernels.
+        n_negative_r = int(getattr(bfe, "negative_r_truncated_rows", 0))
+        axis_band_fraction = (
+            _bde_axis_band_fraction(bfe) if n_negative_r > 0 else 0.0
+        )
         axis_band_tol = 0.10
         truncation_confined = axis_band_fraction <= axis_band_tol
+        auxiliary_rows = getattr(bfe, "full_grid_rows", ()) or ()
+        auxiliary_frontier_x = min(
+            (float(row[-1].x) for row in auxiliary_rows if row),
+            default=float("inf"),
+        )
+        auxiliary_caustic = bool(
+            getattr(bfe, "topology_truncated_rows", 0) > 0
+        )
+        caustic_downstream = bool(
+            auxiliary_caustic
+            and auxiliary_frontier_x > float(topology.E.x)
+        )
+        physical_mesh_complete = bool(
+            len(bfe.rows) == max(len(topology.DE) - 1, 0)
+            and bfe.wall_contour_complete
+        )
         topology_report.update({
             "mass_closure_passes": bool(mass_ok),
             "seam_closure_passes": bool(seams_ok),
             "wall_geometry_passes": bool(wall_ok),
             "bde_complete_remaining_mesh": bool(bfe.complete_remaining_mesh),
             "bde_wall_contour_complete": bool(bfe.wall_contour_complete),
-            "bde_negative_r_truncated_rows": int(
-                getattr(bfe, "negative_r_truncated_rows", 0)
+            "bde_negative_r_truncated_rows": n_negative_r,
+            "bde_topology_truncated_rows": int(
+                getattr(bfe, "topology_truncated_rows", 0)
             ),
             "bde_truncation_axis_band_fraction": float(axis_band_fraction),
             "bde_truncation_axis_band_tol": float(axis_band_tol),
             "bde_truncation_confined_to_axis": bool(truncation_confined),
+            "bde_physical_mesh_complete": physical_mesh_complete,
+            "bde_auxiliary_continuation_caustic": auxiliary_caustic,
+            "bde_auxiliary_frontier_min_x_m": float(auxiliary_frontier_x),
+            "bde_auxiliary_caustic_downstream_of_exit": caustic_downstream,
         })
         topology_report["passes"] = bool(
-            bfe.complete_remaining_mesh
-            and bfe.wall_contour_complete
-            and truncation_confined
+            physical_mesh_complete
             and mass_ok
             and seams_ok
             and wall_ok
             and topology_report["measured_crossing_passes"]
             and topology_report["measured_wall_tangency_passes"]
+            and topology_report["measured_compatibility_passes"]
+            and topology_report["measured_mach_line_direction_passes"]
+            and topology_report["measured_cell_orientation_passes"]
+            and topology_report["measured_neighbor_smoothness_passes"]
+            and topology_report["axis_condition_passes"]
+            and topology_report["axial_mass_conservation_passes"]
+            and (not auxiliary_caustic or caustic_downstream)
         )
     except Exception as exc:  # topology lift is reporting, not the wall
         diagnostics["warnings"].append(
@@ -3400,6 +3464,9 @@ def _wall_from_bde_region(
         "bfe_wall_contour_complete": bool(bfe.wall_contour_complete),
         "bfe_negative_r_truncated_rows": int(
             getattr(bfe, "negative_r_truncated_rows", 0)
+        ),
+        "bfe_topology_truncated_rows": int(
+            getattr(bfe, "topology_truncated_rows", 0)
         ),
         "kernel_wall_points": len(kernel_wall),
         "bfe_wall_points": len(bfe.wall_contour),
@@ -3422,9 +3489,15 @@ def _wall_from_bde_region(
         "bde_region": bfe,
         "topology_full": topo_full,
     }
-    if not (bfe.complete_remaining_mesh and bfe.wall_contour_complete):
+    if not topology_report.get("bde_physical_mesh_complete", False):
         diagnostics["warnings"].append(
-            "BDE region march incomplete; wall is partial."
+            "Physical B-D-E region or wall construction is incomplete."
+        )
+    elif not bfe.complete_remaining_mesh:
+        diagnostics["warnings"].append(
+            "Auxiliary DE-to-axis continuation terminated at a downstream "
+            "characteristic caustic; the physical B-D-E region and wall "
+            "remain complete."
         )
     if not topology_report["passes"]:
         diagnostics["warnings"].append(
@@ -3714,55 +3787,120 @@ def resample_wall_for_export(
     end: tuple[float, float],
     n: int = 100,
     residual_tol: float = 2e-3,
+    max_polyline_turn_deg: float = 0.25,
+    max_points: int = 4096,
 ) -> tuple[np.ndarray, dict]:
-    """Create a plotting/CAD polyline from raw wall points."""
+    """Create a smooth, shape-preserving plotting/CAD wall polyline.
+
+    The solved MOC wall is intentionally left untouched.  The export layer is
+    a monotone PCHIP interpolant through those raw stations, sampled densely
+    enough that the faceted CSV/STL representation does not re-introduce large
+    tangent jumps.  PCHIP is C1 and shape preserving, so it removes the slope
+    plateaus/kinks produced by linear interpolation without overshooting a
+    monotone nozzle wall.
+    """
     diagnostics = {
         "resampled_for_export": True,
+        "interpolation_basis": "pchip_c1_shape_preserving",
+        "c1_interpolant": True,
         "endpoint_enforced_for_export": False,
         "start_radius_delta": 0.0,
         "end_radius_delta": 0.0,
         "monotonic_cleanup_for_export": False,
+        "requested_point_count": int(n),
+        "export_point_count": 0,
+        "max_adjacent_turn_deg": float("inf"),
+        "max_adjacent_turn_tol_deg": float(max_polyline_turn_deg),
+        "polyline_turn_gate_passed": False,
     }
     if raw_wall.shape[0] < 2:
         raise ValueError("raw_wall needs at least two points")
     if residual_tol < 0.0:
         raise ValueError("residual_tol must be non-negative")
+    if n < 3:
+        raise ValueError("n must be at least 3")
+    if max_polyline_turn_deg <= 0.0:
+        raise ValueError("max_polyline_turn_deg must be positive")
+    if max_points < n:
+        raise ValueError("max_points must be greater than or equal to n")
+
     order = np.argsort(raw_wall[:, 0])
     wall = raw_wall[order]
     x_unique, unique_idx = np.unique(wall[:, 0], return_index=True)
     r_unique = wall[unique_idx, 1]
-    x_export = np.linspace(start[0], end[0], n)
-    r_export = np.interp(x_export, x_unique, r_unique)
-    start_delta = abs(float(r_export[0]) - start[1])
-    end_delta = abs(float(r_export[-1]) - end[1])
-    diagnostics["start_radius_delta"] = start_delta
-    diagnostics["end_radius_delta"] = end_delta
+    if x_unique.size < 2:
+        raise ValueError("raw_wall needs at least two unique x coordinates")
+
+    x_scale = max(abs(float(end[0] - start[0])), 1e-12)
+    # The BDE endpoint is reconstructed through characteristic projection and
+    # can differ from the analytical target by a few picometres.  Accept that
+    # roundoff-scale closure and clip it below; reject any material span gap.
+    x_tol = max(1e-12, 1e-9 * x_scale)
+    if start[0] < x_unique[0] - x_tol or end[0] > x_unique[-1] + x_tol:
+        raise RaoEndpointMismatchError(
+            "Raw Rao/MOC wall does not span the requested export interval: "
+            f"raw=[{x_unique[0]:.6g}, {x_unique[-1]:.6g}] m, "
+            f"requested=[{start[0]:.6g}, {end[0]:.6g}] m."
+        )
 
     radius_scale = max(abs(end[1]), abs(start[1]), 1e-12)
     endpoint_limit = residual_tol * radius_scale
+
+    r_interp = r_unique.copy()
+    if np.any(np.diff(r_interp) < -1e-9):
+        diagnostics["monotonic_cleanup_for_export"] = True
+        r_interp = np.maximum.accumulate(r_interp)
+
+    from scipy.interpolate import PchipInterpolator
+
+    interpolator = PchipInterpolator(x_unique, r_interp, extrapolate=False)
+    endpoint_x = np.clip(
+        np.asarray([start[0], end[0]], dtype=float),
+        x_unique[0],
+        x_unique[-1],
+    )
+    endpoint_r = np.asarray(interpolator(endpoint_x), dtype=float)
+    start_delta = abs(float(endpoint_r[0]) - start[1])
+    end_delta = abs(float(endpoint_r[-1]) - end[1])
+    diagnostics["start_radius_delta"] = start_delta
+    diagnostics["end_radius_delta"] = end_delta
     if start_delta > endpoint_limit or end_delta > endpoint_limit:
         diagnostics["endpoint_enforced_for_export"] = True
         raise RaoEndpointMismatchError(
-            "Raw Rao/MOC wall endpoints do not close to target geometry: "
+            "Raw Rao/MOC wall does not close to target geometry at the "
+            "requested export endpoints: "
             f"start radius delta={start_delta:.6g} m, "
             f"end radius delta={end_delta:.6g} m, "
             f"limit={endpoint_limit:.6g} m."
         )
-    if np.any(np.diff(r_export) < -1e-9):
-        diagnostics["monotonic_cleanup_for_export"] = True
-        r_export = np.maximum.accumulate(r_export)
-        cleaned_start_delta = abs(float(r_export[0]) - start[1])
-        cleaned_end_delta = abs(float(r_export[-1]) - end[1])
-        diagnostics["start_radius_delta"] = cleaned_start_delta
-        diagnostics["end_radius_delta"] = cleaned_end_delta
-        if cleaned_start_delta > endpoint_limit or cleaned_end_delta > endpoint_limit:
-            raise RaoEndpointMismatchError(
-                "Export monotonic cleanup moved Rao/MOC wall endpoints outside "
-                "the closure tolerance: "
-                f"start radius delta={cleaned_start_delta:.6g} m, "
-                f"end radius delta={cleaned_end_delta:.6g} m, "
-                f"limit={endpoint_limit:.6g} m."
-            )
+
+    point_count = int(n)
+    while True:
+        x_export = np.linspace(start[0], end[0], point_count)
+        # Clip only roundoff-scale endpoint excursions.  The interval-span
+        # check above rejects any actual geometric mismatch.
+        x_eval = np.clip(x_export, x_unique[0], x_unique[-1])
+        r_export = np.asarray(interpolator(x_eval), dtype=float)
+        if not np.all(np.isfinite(r_export)):
+            raise ValueError("PCHIP wall export produced non-finite radii")
+
+        segment_angles = np.unwrap(np.arctan2(
+            np.diff(r_export), np.diff(x_export)
+        ))
+        max_turn = (
+            float(np.max(np.abs(np.diff(segment_angles))))
+            if segment_angles.size > 1 else 0.0
+        )
+        max_turn_deg = math.degrees(max_turn)
+        if max_turn_deg <= max_polyline_turn_deg or point_count >= max_points:
+            break
+        point_count = min(max_points, 2 * point_count - 1)
+
+    diagnostics["export_point_count"] = int(point_count)
+    diagnostics["max_adjacent_turn_deg"] = float(max_turn_deg)
+    diagnostics["polyline_turn_gate_passed"] = bool(
+        max_turn_deg <= max_polyline_turn_deg
+    )
     return np.column_stack([x_export, r_export]), diagnostics
 
 
@@ -4245,6 +4383,11 @@ def bde_mesh_links(
     ):
         n_link = min(len(prev), len(curr))
         for j in range(n_link):
+            # Consecutive axis points form the symmetry boundary, not a C+
+            # characteristic.  Treating that boundary as a mesh column can
+            # manufacture folds and compatibility links at r=0.
+            if max(abs(float(prev[j].r)), abs(float(curr[j].r))) <= 1e-12:
+                continue
             links.append(MOCNetLink(
                 row=row_idx,
                 family="bde_column",
@@ -4302,15 +4445,123 @@ def _bde_axis_band_fraction(bfe) -> float:
     return float(worst / mesh_max_r)
 
 
+def _bde_axial_mass_cut_report(
+    kernel,
+    bfe,
+    gamma: float,
+    *,
+    n_cuts: int = 7,
+    relative_tol: float = 5e-3,
+) -> dict:
+    """Mass conservation on vertical cuts through the physical nozzle.
+
+    The valid auxiliary prefix supplies lower-radius states through the exit;
+    it is already stopped before any downstream caustic.  At least four cuts
+    need 98% interpolation coverage for the check to be applicable.
+    """
+    from scipy.interpolate import LinearNDInterpolator
+    from raosim.nasa_moc import calc_massflow_along_rrc
+
+    wall = list(bfe.wall_contour)
+    flow_rows = getattr(bfe, "full_grid_rows", ()) or bfe.grid_rows
+    nodes = [node for rrc in kernel.rrcs for node in rrc]
+    nodes.extend(node for row in flow_rows for node in row)
+    if len(wall) < 3 or len(nodes) < 8:
+        return {
+            "axial_mass_cut_count": 0,
+            "axial_mass_cut_valid_count": 0,
+            "axial_mass_cut_max_rel_error": float("inf"),
+            "axial_mass_cut_rel_tol": float(relative_tol),
+            "axial_mass_conservation_passes": False,
+        }
+
+    points = np.asarray([(float(p.x), float(p.r)) for p in nodes], dtype=float)
+    mach = np.asarray([float(p.M) for p in nodes], dtype=float)
+    theta = np.asarray([float(p.theta) for p in nodes], dtype=float)
+    temperature = np.asarray(
+        isentropic_temperature_ratio(mach, gamma), dtype=float
+    )
+    density = np.asarray(isentropic_density_ratio(mach, gamma), dtype=float)
+    axial_flux = (
+        density * mach * np.sqrt(gamma * temperature) * np.cos(theta)
+    )
+
+    rounded = np.round(points, decimals=13)
+    unique, inverse = np.unique(rounded, axis=0, return_inverse=True)
+    flux_sum = np.zeros(len(unique), dtype=float)
+    counts = np.zeros(len(unique), dtype=float)
+    np.add.at(flux_sum, inverse, axial_flux)
+    np.add.at(counts, inverse, 1.0)
+    interpolator = LinearNDInterpolator(
+        unique, flux_sum / counts, fill_value=np.nan
+    )
+
+    wall_x = np.asarray([float(p.x) for p in wall], dtype=float)
+    wall_r = np.asarray([float(p.r) for p in wall], dtype=float)
+    order = np.argsort(wall_x)
+    wall_x, wall_r = wall_x[order], wall_r[order]
+    pad = 0.04 * max(float(wall_x[-1] - wall_x[0]), 0.0)
+    cut_x = np.linspace(wall_x[0] + pad, wall_x[-1] - pad, n_cuts)
+    cut_mass = np.full(n_cuts, np.nan, dtype=float)
+    coverage = np.zeros(n_cuts, dtype=float)
+    for k, x_value in enumerate(cut_x):
+        radius = float(np.interp(x_value, wall_x, wall_r))
+        radial = np.linspace(0.0, radius, 500)
+        values = np.asarray(interpolator(np.column_stack([
+            np.full_like(radial, x_value), radial,
+        ])), dtype=float)
+        finite = np.isfinite(values)
+        coverage[k] = float(np.mean(finite))
+        if coverage[k] < 0.98:
+            continue
+        if not np.all(finite):
+            values = np.interp(radial, radial[finite], values[finite])
+        cut_mass[k] = float(np.trapezoid(
+            2.0 * math.pi * radial * values, radial
+        ))
+
+    throat_mass = float(calc_massflow_along_rrc(
+        kernel.rrcs[0], gamma
+    )[0])
+    valid = np.isfinite(cut_mass)
+    errors = cut_mass / throat_mass - 1.0
+    max_error = (
+        float(np.max(np.abs(errors[valid])))
+        if np.any(valid) and math.isfinite(throat_mass) and abs(throat_mass) > 1e-15
+        else float("inf")
+    )
+    passes = bool(np.sum(valid) >= 4 and max_error <= relative_tol)
+    return {
+        "axial_mass_cut_count": int(n_cuts),
+        "axial_mass_cut_valid_count": int(np.sum(valid)),
+        "axial_mass_cut_x_m": cut_x.tolist(),
+        "axial_mass_cut_coverage": coverage.tolist(),
+        "axial_mass_cut_rel_errors": [
+            float(value) if math.isfinite(float(value)) else None
+            for value in errors
+        ],
+        "axial_mass_cut_max_rel_error": max_error,
+        "axial_mass_cut_rel_tol": float(relative_tol),
+        "axial_mass_conservation_passes": passes,
+    }
+
+
 def _bde_measured_topology_report(
     bfe,
     gamma: float,
     *,
+    compatibility_tol: float,
     wall_tangency_tol: float,
 ) -> dict:
-    """Measure BDE mesh crossings and wall tangency from solved nodes."""
-    mesh_rows = getattr(bfe, "full_grid_rows", ()) or bfe.grid_rows
-    mesh_source = "full_grid_rows" if getattr(bfe, "full_grid_rows", ()) else "grid_rows"
+    """Measure the physical B-D-E strip and its characteristic equations.
+
+    ``bfe.rows`` has stable B-to-DE indexing and is the actual characteristic
+    region bounded by BD, DE, and the wall.  The remaining-mesh continuation
+    is auxiliary construction state downstream of DE; it is audited
+    separately and is never allowed to redefine the physical topology gate.
+    """
+    mesh_rows = bfe.rows or bfe.grid_rows
+    mesh_source = "rows_bounded_by_BD_DE" if bfe.rows else "grid_rows"
     links = bde_mesh_links(mesh_rows, gamma)
     link_lengths = [
         math.hypot(
@@ -4323,18 +4574,99 @@ def _bde_measured_topology_report(
         max(1e-10, 1e-3 * float(np.median(link_lengths)))
         if link_lengths else 1e-10
     )
-    # Only adjacent-row cross-family pairs represent a genuine folded cell.
-    # Non-adjacent "crossings" are the near-axis convergence of the mesh (all
-    # rows collapsing onto the singular axis, which NASA computes and then
-    # discards) and are not physical folds — see max_row_gap in
-    # ``_link_crossing_report``.
+    # Adjacent-row checks catch both ordinary cross-family folds and one
+    # characteristic overtaking another member of its own family.
     crossings, samples = _link_crossing_report(
         links,
         sample_limit=8,
-        cross_family_only=True,
+        cross_family_only=False,
         endpoint_tol=endpoint_tol,
         max_row_gap=1,
     )
+
+    row_links = [link for link in links if link.family == "bde_row"]
+    column_links = [link for link in links if link.family == "bde_column"]
+    one_degree = math.radians(1.0)
+
+    def ordered(link: MOCNetLink) -> tuple[FlowNode, FlowNode]:
+        p0 = link.parent.to_flow_node()
+        p1 = link.child.to_flow_node()
+        return (p0, p1) if p1.x >= p0.x else (p1, p0)
+
+    cminus = np.asarray([
+        residual_Cminus_axisym(*ordered(link), gamma) / one_degree
+        for link in row_links
+    ], dtype=float)
+    cplus = np.asarray([
+        residual_Cplus_axisym(*ordered(link), gamma) / one_degree
+        for link in column_links
+    ], dtype=float)
+
+    direction_errors: list[float] = []
+    for family_sign, family_links in ((-1.0, row_links), (1.0, column_links)):
+        for link in family_links:
+            p0, p1 = ordered(link)
+            geometric = math.atan2(p1.r - p0.r, p1.x - p0.x)
+            theta = 0.5 * (p0.theta + p1.theta)
+            mu = 0.5 * (p0.mu + p1.mu)
+            predicted = theta + family_sign * mu
+            direction_errors.append(_angle_delta(geometric, predicted))
+    direction = np.asarray(direction_errors, dtype=float)
+
+    neighbor_mach = np.asarray([
+        abs(float(link.child.M) - float(link.parent.M)) for link in links
+    ], dtype=float)
+    neighbor_theta = np.asarray([
+        abs(math.degrees(float(link.child.theta - link.parent.theta)))
+        for link in links
+    ], dtype=float)
+    neighbor_pressure = np.asarray([
+        abs(
+            float(isentropic_pressure_ratio(link.child.M, gamma))
+            - float(isentropic_pressure_ratio(link.parent.M, gamma))
+        )
+        for link in links
+    ], dtype=float)
+    smoothness_limits = {
+        "mach": 0.10,
+        "theta_deg": 2.0,
+        "pressure_ratio": 0.02,
+    }
+    smoothness_passes = bool(
+        _maxabs(neighbor_mach) <= smoothness_limits["mach"]
+        and _maxabs(neighbor_theta) <= smoothness_limits["theta_deg"]
+        and _maxabs(neighbor_pressure) <= smoothness_limits["pressure_ratio"]
+    )
+
+    raw_areas: list[float] = []
+    for row0, row1 in zip(mesh_rows[:-1], mesh_rows[1:]):
+        for i in range(max(0, min(len(row0), len(row1)) - 1)):
+            polygon = (row0[i], row0[i + 1], row1[i + 1], row1[i])
+            raw_areas.append(0.5 * sum(
+                float(a.x) * float(b.r) - float(a.r) * float(b.x)
+                for a, b in zip(polygon, polygon[1:] + polygon[:1])
+            ))
+    raw_area = np.asarray(raw_areas, dtype=float)
+    nonzero_area = raw_area[np.abs(raw_area) > 1e-24]
+    orientation = (
+        float(np.sign(np.median(nonzero_area))) if nonzero_area.size else 1.0
+    )
+    if orientation == 0.0:
+        orientation = 1.0
+    oriented_area = orientation * raw_area
+    median_area = (
+        float(np.median(np.abs(oriented_area))) if oriented_area.size else 0.0
+    )
+    area_tol = max(1e-12 * median_area, 1e-18)
+    invalid_cells = int(np.sum(oriented_area <= area_tol))
+
+    compatibility_passes = bool(
+        _maxabs(cminus) <= compatibility_tol
+        and _maxabs(cplus) <= compatibility_tol
+    )
+    direction_tol = math.radians(0.05)
+    direction_passes = bool(_maxabs(direction) <= direction_tol)
+    cell_orientation_passes = invalid_cells == 0
     tangency = _bde_wall_tangency_errors(bfe.wall_contour)
     tangency_rms = _rms(tangency) if tangency.size else float("inf")
     tangency_max = _maxabs(tangency) if tangency.size else float("inf")
@@ -4348,7 +4680,7 @@ def _bde_measured_topology_report(
         "measured_mesh_link_count": int(len(links)),
         "measured_mesh_source": mesh_source,
         "measured_crossing_basis": (
-            "adjacent_row_cross_family_folds_on_completed_bde_mesh"
+            "adjacent_row_all_family_crossings_on_physical_bde_mesh"
         ),
         "measured_crossing_endpoint_tol_m": float(endpoint_tol),
         "measured_wall_tangency_count": int(tangency.size),
@@ -4363,6 +4695,41 @@ def _bde_measured_topology_report(
         "wall_tangency_tol_deg": float(math.degrees(wall_tangency_tol)),
         "measured_crossing_passes": bool(crossing_passes),
         "measured_wall_tangency_passes": bool(tangency_passes),
+        "cplus_rms": _rms(cplus),
+        "cminus_rms": _rms(cminus),
+        "cplus_max": _maxabs(cplus),
+        "cminus_max": _maxabs(cminus),
+        "compatibility_tol_deg": float(compatibility_tol),
+        "measured_compatibility_passes": compatibility_passes,
+        "mach_line_direction_rms_deg": float(math.degrees(_rms(direction))),
+        "mach_line_direction_max_deg": float(math.degrees(_maxabs(direction))),
+        "mach_line_direction_tol_deg": float(math.degrees(direction_tol)),
+        "measured_mach_line_direction_passes": direction_passes,
+        "measured_cell_count": int(oriented_area.size),
+        "measured_invalid_cell_count": invalid_cells,
+        "measured_min_oriented_cell_area_m2": (
+            float(np.min(oriented_area)) if oriented_area.size else 0.0
+        ),
+        "measured_cell_orientation_passes": cell_orientation_passes,
+        "neighbor_mach_p99": (
+            float(np.percentile(neighbor_mach, 99))
+            if neighbor_mach.size else 0.0
+        ),
+        "neighbor_mach_max": _maxabs(neighbor_mach),
+        "neighbor_theta_p99_deg": (
+            float(np.percentile(neighbor_theta, 99))
+            if neighbor_theta.size else 0.0
+        ),
+        "neighbor_theta_max_deg": _maxabs(neighbor_theta),
+        "neighbor_pressure_ratio_p99": (
+            float(np.percentile(neighbor_pressure, 99))
+            if neighbor_pressure.size else 0.0
+        ),
+        "neighbor_pressure_ratio_max": _maxabs(neighbor_pressure),
+        "neighbor_mach_limit": smoothness_limits["mach"],
+        "neighbor_theta_limit_deg": smoothness_limits["theta_deg"],
+        "neighbor_pressure_ratio_limit": smoothness_limits["pressure_ratio"],
+        "measured_neighbor_smoothness_passes": smoothness_passes,
     }
 
 

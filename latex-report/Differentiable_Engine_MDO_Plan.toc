@@ -1,0 +1,29 @@
+\contentsline {section}{\numberline {1}Scope and one-paragraph statement}{2}{section.1}%
+\contentsline {section}{\numberline {2}Corrected literature foundation}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}The Rao 1958 vs.\ Rao 1999 correction (load-bearing)}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Verified source identities}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Verified discipline mappings}{3}{subsection.2.3}%
+\contentsline {section}{\numberline {3}System boundary and mass ledger}{4}{section.3}%
+\contentsline {section}{\numberline {4}Mathematical formulation}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Variables and states}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}The MDF optimization problem}{4}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Total derivatives by implicit differentiation}{4}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Differentiating converged fixed points}{5}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Coupling structure}{5}{section.5}%
+\contentsline {section}{\numberline {6}Disciplinary models and residual blocks}{6}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Nozzle and performance}{6}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Regenerative cooling}{7}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Injector and spray}{7}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Pumps and electrical system}{8}{subsection.6.4}%
+\contentsline {section}{\numberline {7}The Rao existence boundary: a three-diagnostic framework}{8}{section.7}%
+\contentsline {section}{\numberline {8}Objectives and constraints}{9}{section.8}%
+\contentsline {section}{\numberline {9}Differentiability rules}{9}{section.9}%
+\contentsline {section}{\numberline {10}Repository architecture}{10}{section.10}%
+\contentsline {section}{\numberline {11}Implementation phases and acceptance gates}{10}{section.11}%
+\contentsline {section}{\numberline {12}Implementation and sequencing}{11}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Four rules that keep it tractable}{11}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Phase-to-code mapping}{12}{subsection.12.2}%
+\contentsline {subsection}{\numberline {12.3}The coupled-solve core (Phase\nobreakspace {}7)}{12}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Two parallel tracks}{13}{subsection.12.4}%
+\contentsline {subsection}{\numberline {12.5}First increment (the walking skeleton)}{13}{subsection.12.5}%
+\contentsline {section}{\numberline {13}Open risks and decision log}{13}{section.13}%

@@ -221,6 +221,12 @@ def build_topology(
                 bde_region.wall_contour_complete),
             "bfe_negative_r_truncated_rows": int(
                 bde_region.negative_r_truncated_rows),
+            "bfe_topology_truncated_rows": int(
+                bde_region.topology_truncated_rows),
+            "bfe_physical_mesh_complete": bool(
+                len(bde_region.rows) == max(len(nasa_topology.DE) - 1, 0)
+                and bde_region.wall_contour_complete
+            ),
             "kernel_reached_wall": bool(kernel.reached_wall),
             "kernel_fallback_used": bool(kernel.fallback_used),
         },

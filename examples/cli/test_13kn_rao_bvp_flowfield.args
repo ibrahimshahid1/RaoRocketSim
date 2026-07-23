@@ -1,0 +1,44 @@
+# Variant check: full Rao variational MOC (rao-bvp) solve with flow-field
+# render and construction diagrams, on the 13 kN sea-level benchmark
+# operating point.
+#
+# Companion to examples/cli/test_13kn_sealevel_regen_allstl.args — that file
+# owns the authoritative Bezier/TOP-chart export benchmark; --flowfield (and
+# the kernel_fan / rao_topology / bde_mesh construction diagrams plus the
+# characteristic-crossing CSV) require --contour-method rao-bvp and live
+# here.  Expect minutes of JAX BVP runtime; non-convergence exits nonzero
+# (no --allow-unconverged).
+#
+#   PYTHONPATH=. python -m raosim @examples/cli/test_13kn_rao_bvp_flowfield.args
+
+--no-banner
+
+# Operating point (same as main benchmark; provenance documented there).
+--propellant LOX/RP-1
+--oxidizer LOX
+--fuel RP-1
+--pc 3.0e6
+--target-thrust 13000
+--epsilon 4.524
+--pa-over-p0 0.033775
+--length-pct 80
+
+# Chamber and throat (same as main benchmark).
+--l-star 1.0
+--contraction-ratio 3.0
+--minimum-cylindrical-length 0.03
+--ru-factor 1.5
+
+# Full variational MOC: rao-bvp contour, benchmark resolution and solve
+# budget, JAX backend default.
+--contour-method rao-bvp
+--max-nfev 4000
+--n-control 24
+--n-kernel 24
+
+# Flow-field render (Mach/pressure/flow-angle/temperature contours) — the rao-bvp
+# solve also stashes the BDE construction diagnostics, so kernel_fan.png,
+# rao_topology.png, bde_mesh.png and the MOC crossing-sample CSV are written.
+--flowfield
+
+--out builds/tests/13kn_rao_bvp_flowfield

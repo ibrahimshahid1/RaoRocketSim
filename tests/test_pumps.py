@@ -654,3 +654,74 @@ def test_cli_rejects_pump_step_format_without_cadquery(
     assert excinfo.value.code == 2
     err = capsys.readouterr().err
     assert "CadQuery" in err and "--pump-cad-format" in err
+
+
+# --------------------------------------------------------------------------- #
+# Split-casing bolt layout must FIT the flange (2026-07-13 FINDING 2)          #
+# --------------------------------------------------------------------------- #
+
+def _joint_and_cad_layout(ring_like, ports_like):
+    from raosim.pump_cad_brep import _split_joint_hole_layout
+    return _split_joint_hole_layout(ring_like, ports_like)
+
+
+def test_split_casing_bolts_fit_clear_arc_at_13kn_lox_scale():
+    """Regression: 13 kN LOX volute demanded 56 x M3 body bolts, more than
+    the flange circumference carries; sizing must grow bolt diameter until
+    the clamp-driven count fits the clear arc at >= 2.5 d pitch, and the CAD
+    hole layout must then place exactly that count at >= the minimum pitch.
+    Numbers captured from builds/tests/13kn_sl_sandbox_20260713 stage P."""
+    from raosim.pumps import PumpSizingSpec, _split_casing_joint_layout
+
+    spec = PumpSizingSpec()
+    joint = _split_casing_joint_layout(
+        0.031313,          # casing inner radius [m]
+        0.001612,          # casing wall [m]
+        0.001133,          # volute exit area [m^2]
+        3.87e6,            # design pressure [Pa]
+        spec,
+    )
+    assert joint["bolt_layout_fits_clear_arc"] is True
+    assert joint["bolt_screen_passed"] is True
+    assert joint["bolt_nominal_diameter_m"] >= 3.0e-3
+    assert joint["body_bolt_count"] >= 8
+    assert (
+        (joint["body_bolt_count"] + 1) * joint["bolt_min_pitch_m"]
+        <= joint["clear_bolt_circumference_m"] + 1e-9
+    )
+
+    ring = {
+        "casing_inner_radius_m": 0.031313,
+        "volute_exit_area_m2": 0.001133,
+        "split_casing_joint": joint,
+    }
+    ports = {"outlet_equivalent_diameter_m": 0.037980842896640735}
+    layout = _joint_and_cad_layout(ring, ports)
+    pts = layout["body_bolt_centers_mm"]
+    assert len(pts) == joint["body_bolt_count"]
+    min_pitch_mm = joint["bolt_min_pitch_m"] * 1e3
+    spacing = [
+        math.dist(pts[i], pts[(i + 1) % len(pts)]) for i in range(len(pts))
+    ]
+    assert min(spacing) >= min_pitch_mm - 1e-6, (min(spacing), min_pitch_mm)
+
+
+def test_split_casing_bolt_layout_fits_for_both_solved_roles():
+    pump = _pump_result()
+    for role in ("fuel", "oxidizer"):
+        geo = pump.lines[role].reference_geometry
+        assert geo is not None
+        scroll = geo.volute_scroll
+        joint = scroll["split_casing_joint"]
+        assert joint["bolt_layout_fits_clear_arc"] is True, (role, joint)
+        ring = {
+            "casing_inner_radius_m": scroll["casing_inner_radius_m"],
+            "volute_exit_area_m2": scroll["exit_area_m2"],
+            "split_casing_joint": joint,
+        }
+        ports = {
+            "outlet_equivalent_diameter_m":
+                geo.ports["outlet"]["equivalent_diameter_m"],
+        }
+        layout = _joint_and_cad_layout(ring, ports)
+        assert len(layout["body_bolt_centers_mm"]) == joint["body_bolt_count"]

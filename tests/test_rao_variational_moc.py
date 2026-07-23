@@ -86,6 +86,7 @@ def test_rao_variational_moc_contour_exposes_raw_and_export_layers():
     assert contour["hardware_qualified"] is False
     assert contour["rao_full_optimum_claimed"] is False
     assert contour["wall_export_resampled"] is True
+    assert contour["wall_export_interpolation"] == "pchip_c1_shape_preserving"
     assert "raw_wall_points" in contour
     assert contour["y"][-1] == math.sqrt(10.0) * 0.020
 
@@ -274,6 +275,40 @@ def test_endpoint_mismatch_raises():
         )
 
 
+def test_wall_export_uses_smooth_shape_preserving_interpolation():
+    raw_wall = np.array([
+        [0.00, 1.00],
+        [0.25, 1.03],
+        [0.50, 1.20],
+        [0.75, 1.32],
+        [1.00, 1.40],
+    ])
+
+    wall, diagnostics = resample_wall_for_export(
+        raw_wall,
+        start=(0.0, 1.0),
+        end=(1.0, 1.4),
+        n=101,
+        max_polyline_turn_deg=0.25,
+        max_points=4096,
+    )
+
+    segment_angles = np.unwrap(np.arctan2(
+        np.diff(wall[:, 1]), np.diff(wall[:, 0])
+    ))
+    max_turn_deg = math.degrees(float(np.max(np.abs(np.diff(segment_angles)))))
+
+    assert diagnostics["interpolation_basis"] == "pchip_c1_shape_preserving"
+    assert diagnostics["c1_interpolant"] is True
+    assert diagnostics["polyline_turn_gate_passed"] is True
+    assert diagnostics["export_point_count"] >= 101
+    assert max_turn_deg <= 0.25
+    assert np.all(np.diff(wall[:, 0]) > 0.0)
+    assert np.all(np.diff(wall[:, 1]) >= 0.0)
+    assert wall[0] == pytest.approx(raw_wall[0])
+    assert wall[-1] == pytest.approx(raw_wall[-1])
+
+
 def test_postprocessed_does_not_claim_residual_solved(monkeypatch):
     import raosim.rao_variational as rv
 
@@ -436,21 +471,27 @@ def test_bde_topology_audit_is_the_moc_gate_basis():
     assert 0.0 < report["wall_tangency_rms"] < math.radians(0.25)
     assert 0.0 < report["wall_tangency_max"] < math.radians(0.25)
     assert report["wall_monotone_x"] is True
-    # Axis truncation is a normal near-axis event: the mesh still ran to
-    # completion, and with the truncation confined to the axis band and no
-    # adjacent-cell folds, the topology audit passes on a clean mesh.  (Overall
-    # promotion still needs the separate residual gate, which a max_nfev=0
-    # seed solve does not clear.)
-    assert report["bde_negative_r_truncated_rows"] == 1
-    assert report["bde_complete_remaining_mesh"] is True
-    assert report["bde_truncation_confined_to_axis"] is True
-    assert report["bde_truncation_axis_band_fraction"] < 0.10
-    assert report["passes"] is True
+    assert report["bde_physical_mesh_complete"] is True
+    assert report["bde_complete_remaining_mesh"] is False
+    assert report["bde_topology_truncated_rows"] > 0
+    assert report["bde_auxiliary_caustic_downstream_of_exit"] is True
+    assert report["measured_compatibility_passes"] is (
+        max(report["cplus_max"], report["cminus_max"])
+        <= report["compatibility_tol_deg"]
+    )
+    assert report["measured_mach_line_direction_passes"] is True
+    assert report["measured_cell_orientation_passes"] is True
+    assert report["measured_invalid_cell_count"] == 0
+    assert report["axis_condition_passes"] is True
+    # This is an intentionally unsolved, coarse seed (max_nfev=0), so the
+    # newly enforced compatibility gate correctly prevents MOC promotion.
+    assert report["measured_compatibility_passes"] is False
+    assert report["passes"] is False
     assert solution.residuals.characteristic_crossings == 0
     assert solution.residuals.wall_tangency_rms == pytest.approx(
         report["wall_tangency_rms"]
     )
-    assert solution.construction_diagnostics["moc_compatibility_preserved"] is True
+    assert solution.construction_diagnostics["moc_compatibility_preserved"] is False
 
 
 def test_phase4_mass_closure_uses_kernel_bd_segment():
