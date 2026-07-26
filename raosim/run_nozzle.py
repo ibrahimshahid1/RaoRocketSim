@@ -1613,6 +1613,349 @@ def _cooling_summary_payload(cooling_result, args) -> dict:
     }
 
 
+_MODE_MENU = """
+==============================================================================
+  LREKit — liquid rocket engine design
+==============================================================================
+  Choose a workflow:
+
+    1) Traditional solver      nozzle contour + chamber/injector/pump sizing,
+                               reports + CAD export (the classic LREKit run)
+
+    2) Whole-engine MDO        ONE coupled, differentiable evaluation of the
+       (single point)          nozzle + regen cooling + pintle injector +
+                               electric pump feed at YOUR design point, with
+                               every constraint margin reported
+
+    3) Whole-engine MDO        the optimiser: you give requirements + an Isp
+       (optimise)              target, it SOLVES for the design (Pc, eps,
+                               injector dP, pintle dia, pump rpm, cooling
+                               channels, film fraction) at minimum mass
+==============================================================================
+"""
+
+
+def _interactive_engine_mdo(args, *, optimise: bool) -> None:
+    """Prompt for the parameters the MDO workflows actually use.
+
+    Deliberately short: mission requirements first, then the cooling choice
+    (pure regen vs fuel-film), then the mode-specific settings.
+    """
+    print("\n-- mission requirements ---------------------------------------")
+    args.target_thrust = _prompt("Target thrust [N]",
+                                 args.target_thrust or 13000.0)
+    args.mixture_ratio = _prompt("Mixture ratio O/F",
+                                 args.mixture_ratio or 2.3)
+    args.burn_time = _prompt("Burn time [s]", args.burn_time or 120.0)
+    args.engine_mdo_ambient = _prompt(
+        "Ambient pressure [Pa]  (101325 = sea level, ~1000 = high altitude)",
+        args.engine_mdo_ambient if args.engine_mdo_ambient is not None
+        else 101325.0)
+
+    print("\n-- cooling ----------------------------------------------------")
+    cooling = _prompt_choice(
+        "Cooling: 'regen' (regenerative only) or 'film' (regen + fuel film)",
+        "film" if optimise else "regen", ("regen", "film"))
+    if cooling == "regen":
+        args.film_frac = 0.0
+        print("    pure regenerative cooling (film fraction = 0)")
+        if optimise:
+            print("    NOTE: with RP-1 the wall is coolant-enthalpy-limited, so "
+                  "pure regen\n          usually violates the SP-8087 coking "
+                  "limit — expect an infeasible\n          solve unless you "
+                  "lower Pc a lot.  'film' is the physical fix.")
+    elif not optimise:
+        args.film_frac = _prompt("Fuel film fraction (0-0.3)",
+                                 args.film_frac if args.film_frac is not None
+                                 else 0.05)
+        args.film_slot_height = _prompt(
+            "Film-injector slot height [m]",
+            args.film_slot_height if args.film_slot_height is not None
+            else 2.0e-3)
+
+    if optimise:
+        print("\n-- optimiser --------------------------------------------------")
+        sweep = _prompt_bool("Trace the mass-Isp Pareto frontier "
+                             "(no = single min-mass solve)", False)
+        if sweep:
+            lo = _prompt("  Isp floor: from [s]", 190.0)
+            hi = _prompt("  Isp floor: to [s]", 210.0)
+            n = int(_prompt("  number of points", 5))
+            args.isp_sweep = f"{lo},{hi},{n}"
+        else:
+            args.isp_min = _prompt("Minimum Isp [s] (the epsilon-constraint)",
+                                   args.isp_min or 200.0)
+    else:
+        print("\n-- design point -----------------------------------------------")
+        args.pc = _prompt("Chamber pressure Pc [Pa]", args.pc or 3.0e6)
+        args.epsilon = _prompt("Expansion ratio eps", args.epsilon or 8.0)
+        args.fuel_injector_dp_fraction = _prompt(
+            "Fuel injector dP / Pc", args.fuel_injector_dp_fraction or 0.20)
+        args.oxidizer_injector_dp_fraction = _prompt(
+            "Oxidizer injector dP / Pc",
+            args.oxidizer_injector_dp_fraction or 0.20)
+        args.channel_height = _prompt("Cooling channel height [m]",
+                                      args.channel_height or 3.0e-3)
+    args.design_margins = _prompt_bool(
+        "Apply SP-8087/Mirzamoghadam design margins (heat flux x1.10, channel "
+        "flow x0.90, film capacity x2) instead of nominal", False)
+    args.engine_mdo_couple_cstar = _prompt_bool(
+        "Enable the spray->eta_c* feedback edge (screening correlation; "
+        "default off = frozen + ablation)", False)
+
+
+def _select_mode_interactively(args) -> str:
+    """Bare-run front door: pick the workflow, then gather its parameters.
+
+    Returns 'traditional' | 'mdo' | 'mdo_optimize'.
+    """
+    print(_MODE_MENU)
+    choice = _prompt_choice("Workflow", "1", ("1", "2", "3"))
+    if choice == "2":
+        _interactive_engine_mdo(args, optimise=False)
+        return "mdo"
+    if choice == "3":
+        _interactive_engine_mdo(args, optimise=True)
+        return "mdo_optimize"
+    return "traditional"
+
+
+def _run_engine_mdo(args) -> int:
+    """Whole-engine differentiable MDO evaluation (``raosim.mdo.engine``).
+
+    Selected by ``--engine-mdo``: builds a ``MissionSpec``/``DesignVector`` from
+    the shared CLI flags and runs the coupled solve — nozzle performance, regen
+    cooling, pintle injector, and electric pump feed as ONE differentiable
+    evaluation with the cooling Δp → pump-rise hydraulic edge closed.  Prints
+    performance, the closed edge, the §3 mass ledger, and every constraint
+    margin.  ``--engine-mdo-couple-cstar`` turns on the optional spray→η_c*
+    feedback (default frozen — the RQ1 ablation reference).  jax is imported
+    lazily so ordinary CLI runs never pay for it.
+    """
+    import dataclasses
+    import jax
+    jax.config.update("jax_enable_x64", True)
+    import jax.numpy as jnp
+    from raosim.mdo.schema import MissionSpec, DesignVector
+    from raosim.mdo.engine import solve_engine, ablation_delta
+
+    thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
+    of = args.mixture_ratio if args.mixture_ratio is not None else 2.3
+    chi_f = (args.fuel_injector_dp_fraction
+             if args.fuel_injector_dp_fraction is not None else 0.20)
+    chi_o = (args.oxidizer_injector_dp_fraction
+             if args.oxidizer_injector_dp_fraction is not None else 0.20)
+    overrides = {"thrust": float(thrust), "OF": float(of)}
+    if args.pump_rpm is not None:
+        overrides["pump_speed_rpm"] = float(args.pump_rpm)
+    if getattr(args, "engine_mdo_ambient", None) is not None:
+        overrides["Pa"] = float(args.engine_mdo_ambient)
+    if getattr(args, "burn_time", None) is not None:
+        overrides["burn_time"] = float(args.burn_time)
+    if getattr(args, "design_margins", False):
+        overrides.update(heat_flux_margin=1.10, channel_flow_margin=0.90,
+                         film_capacity_margin=2.0)
+    # Derive the thrust-scaled architecture (channel count, pintle diameter,
+    # pump speed) rather than using the 13 kN-class defaults — otherwise the
+    # design box contains no feasible point at other thrust classes.
+    _thrust = overrides.pop("thrust")
+    _prop = getattr(args, "mdo_propellant", None)
+    if _prop:
+        overrides.pop("OF", None)      # the propellant supplies its own O/F
+        if args.mixture_ratio is not None:
+            overrides["OF"] = float(args.mixture_ratio)
+        mission = MissionSpec.for_propellant(_prop, _thrust, **overrides)
+    else:
+        mission = MissionSpec.for_thrust(_thrust, **overrides)
+    film = args.film_frac if args.film_frac is not None else 0.0
+    cw = args.channel_width if args.channel_width is not None else 5.0e-4
+    ch = args.channel_height if args.channel_height is not None else 1.5e-3
+    if args.film_slot_height is not None:
+        mission = dataclasses.replace(
+            mission, film_slot_height_default=float(args.film_slot_height))
+    x = DesignVector(Pc=jnp.asarray(float(args.pc)),
+                     eps=jnp.asarray(float(args.epsilon)),
+                     dp_f_frac=jnp.asarray(chi_f), dp_o_frac=jnp.asarray(chi_o),
+                     channel_width=jnp.asarray(float(cw)),
+                     channel_height=jnp.asarray(float(ch)),
+                     film_frac=jnp.asarray(float(film)),
+                     t_wall=jnp.asarray(float(
+                         args.t_wall if args.t_wall is not None else 8.0e-4)))
+    couple = bool(getattr(args, "engine_mdo_couple_cstar", False))
+    r = solve_engine(x, mission, couple_eta_cstar=couple)
+    F = float
+
+    print("=" * 66)
+    print(" Whole-engine differentiable MDO  (raosim.mdo.engine, Phase 7)")
+    print("=" * 66)
+    print(f" propellant : {mission.propellant_name}   L*={mission.l_star:.3f} m   "
+          f"coolant wall limit="
+          + ("none (no coking)" if mission.rp1_coking_wall_temp_K > 5e3
+             else f"{mission.rp1_coking_wall_temp_K:.0f} K"))
+    print(f" design : Pc={F(x.Pc)/1e6:.2f} MPa  eps={F(x.eps):.1f}  "
+          f"O/F={mission.OF:.2f}  F={mission.thrust/1e3:.1f} kN  "
+          f"chi_f={chi_f:.2f} chi_o={chi_o:.2f}")
+    if getattr(args, "design_margins", False):
+        print("          DESIGN MARGINS ON: heat flux x1.10, channel flow x0.90,"
+              " film capacity x2 (SP-8087/Mirzamoghadam)")
+    print(f"          film_frac={F(x.film_frac):.3f}  "
+          f"channel={F(x.channel_width)*1e3:.2f}x{F(x.channel_height)*1e3:.2f} mm"
+          f"  film slot={mission.film_slot_height_default*1e3:.2f} mm")
+    print(f" eta_c* : {F(r.eta_cstar):.4f}  "
+          f"({'coupled spray-TMR surrogate' if couple else 'frozen (default)'})")
+    print(" -- performance ------------------------------------------------")
+    print(f"    Rt = {F(r.Rt)*1e3:7.2f} mm     mdot = {F(r.mdot):6.3f} kg/s")
+    print(f"    Cf = {F(r.Cf):7.3f}        Isp  = {F(r.Isp):6.1f} s")
+    print(f"    Me = {F(r.Me):7.2f}        Pe   = {F(r.Pe)/1e3:6.1f} kPa   "
+          f"(thrust resid {F(r.thrust_residual):+.1e})")
+    print(" -- cooling  →  feed hydraulic edge (closed §5 loop) ------------")
+    print(f"    jacket dp_regen = {F(r.dp_regen)/1e5:6.2f} bar  →  "
+          f"fuel pump rise = {F(r.dp_rise_fuel)/1e5:6.2f} bar")
+    print(f"    T_wg,max = {F(jnp.max(r.T_wg)):5.0f} K   "
+          f"T_wc,max = {F(jnp.max(r.cooling.T_wc)):5.0f} K   "
+          f"coolant out = {F(r.cooling.T_coolant_exit):5.0f} K")
+    d = r.diagnostics
+    print(f"    t_wall = {F(x.t_wall)*1e3:.2f} mm   sigma_thermal = "
+          f"{F(d['sigma_thermal_max'])/1e6:.0f} MPa  (pressure bending "
+          f"{F(d['sigma_pressure'])/1e6:.2f} MPa)")
+    print(f"    coolant Mach = {F(d['coolant_mach']):.4f} (limit 0.35)   "
+          f"v_cool = {F(d['coolant_velocity']):.2f} m/s   "
+          f"eta_film = {F(d['eta_film_cooling']):.3f}")
+    print(" -- injector ---------------------------------------------------")
+    print(f"    TMR = {F(r.injector.momentum_ratio):.3f}   "
+          f"spray half-angle = {F(r.injector.spray_half_angle_deg):.1f} deg   "
+          f"BF = {F(r.injector.blockage_factor):.3f}")
+    print(" -- electric feed ----------------------------------------------")
+    print(f"    P_electric = {F(r.feed.P_electric_total)/1e3:.2f} kW    "
+          f"battery E/P = {F(r.feed.battery.energy_limited_mass):.1f}"
+          f"/{F(r.feed.battery.power_limited_mass):.1f} kg")
+    print(" -- mass ledger [kg] -------------------------------------------")
+    for k, v in r.mass_ledger.items():
+        print(f"    {k:30s} {F(v):8.2f}")
+    print(f"    {'PACKAGE TOTAL':30s} {F(r.package_mass):8.2f}")
+    print(" -- constraint margins (>= 0 feasible) -------------------------")
+    for k, v in r.constraints.items():
+        print(f"    {k:30s} {F(v):+.4g}"
+              f"{'   <-- VIOLATED' if F(v) < 0.0 else ''}")
+    if getattr(args, "mdo_export", False):
+        from raosim.mdo.postprocess import reevaluate, summarise
+        print(" -- authoritative re-evaluation (Phase 11) --------------------")
+        dd = {k: float(v) for k, v in x.as_dict().items()}
+        rv = reevaluate(dd, mission,
+                        mdot_cool=float(mission.cooling_fraction
+                                        * F(r.mdot) / (1.0 + mission.OF)
+                                        * (1.0 - F(x.film_frac))),
+                        mdo_summary={"Isp": F(r.Isp), "Rt": F(r.Rt),
+                                     "eps": F(x.eps)})
+        print(summarise(rv))
+        c = rv.result.contour
+        print(f"    authoritative Rao contour: {len(c['x'])} points, "
+              f"Rt={c['Rt']*1e3:.2f} mm, exit r={max(c['y'])*1e3:.2f} mm")
+    if not couple:
+        d = F(ablation_delta(x, mission, "Isp"))
+        print(" -- RQ1 ablation -----------------------------------------------")
+        print(f"    dIsp(couple eta_c*) = {d:+.2f} s  "
+              "(bound on the spray→c* correlation)")
+    print("=" * 66)
+    return 0
+
+
+def _run_engine_mdo_optimize(args) -> int:
+    """ε-constraint hard-constrained whole-engine MDO (``raosim.mdo.nlp``).
+
+    Selected by ``--engine-mdo-optimize``: the user supplies the mission
+    requirements (thrust, O/F, burn time, ambient) and an Isp target, and the
+    optimiser solves for the DESIGN (Pc, eps, injector Δp fractions, D_pintle,
+    pump rpm) that minimises electric-package mass s.t. Isp ≥ floor and every
+    enforced discipline margin ≥ 0, with exact JAX Jacobians (SLSQP).
+    ``--isp-sweep LO,HI,N`` traces the mass–Isp Pareto frontier; ``--isp-min``
+    does a single min-mass solve.  jax is imported lazily.
+    """
+    import jax
+    jax.config.update("jax_enable_x64", True)
+    from raosim.mdo.schema import MissionSpec
+    from raosim.mdo.nlp import solve_min_mass, pareto_frontier, DEFAULT_ENFORCED
+
+    thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
+    of = args.mixture_ratio if args.mixture_ratio is not None else 2.3
+    overrides = {"thrust": float(thrust), "OF": float(of)}
+    if args.pump_rpm is not None:
+        overrides["pump_speed_rpm"] = float(args.pump_rpm)
+    if args.engine_mdo_ambient is not None:
+        overrides["Pa"] = float(args.engine_mdo_ambient)
+    if args.burn_time is not None:
+        overrides["burn_time"] = float(args.burn_time)
+    if args.design_margins:
+        overrides.update(heat_flux_margin=1.10, channel_flow_margin=0.90,
+                         film_capacity_margin=2.0)
+    # Derive the thrust-scaled architecture (channel count, pintle diameter,
+    # pump speed) rather than using the 13 kN-class defaults — otherwise the
+    # design box contains no feasible point at other thrust classes.
+    _thrust = overrides.pop("thrust")
+    _prop = getattr(args, "mdo_propellant", None)
+    if _prop:
+        overrides.pop("OF", None)      # the propellant supplies its own O/F
+        if args.mixture_ratio is not None:
+            overrides["OF"] = float(args.mixture_ratio)
+        mission = MissionSpec.for_propellant(_prop, _thrust, **overrides)
+    else:
+        mission = MissionSpec.for_thrust(_thrust, **overrides)
+    couple = bool(args.engine_mdo_couple_cstar)
+
+    print("=" * 78)
+    print(" Whole-engine ε-constraint MDO  (raosim.mdo.nlp, Phase 8/9)")
+    print("=" * 78)
+    print(f" propellant : {mission.propellant_name}  (L*={mission.l_star:.3f} m)")
+    print(f" mission : F={mission.thrust/1e3:.1f} kN  O/F={mission.OF:.2f}  "
+          f"Pa={mission.Pa/1e3:.1f} kPa  burn={mission.burn_time:.0f} s   "
+          f"eta_c*={'coupled' if couple else 'frozen'}")
+    print(" objective: min electric-package mass    enforced margins ≥ 0: "
+          f"{', '.join(DEFAULT_ENFORCED)}")
+    if args.design_margins:
+        print(" margins: SP-8087/Mirzamoghadam DESIGN MARGINS ON (heat flux "
+              "x1.10, flow x0.90, film capacity x2)")
+    print(" note: coking is ENFORCED via film cooling (design var film_frac) —"
+          " the wall is\n       coolant-enthalpy-limited, so film (not channel"
+          " geometry) is the coking lever;\n       film costs c*/Isp, so the"
+          " frontier is genuinely thermal-limited.")
+    print("-" * 78)
+
+    def _fmt(r):
+        d = r.design
+        return (f" Isp>={r.isp_min:6.1f} | mass={r.package_mass:7.2f} kg  "
+                f"Isp={r.Isp:6.1f} s | Pc={d['Pc']/1e6:4.2f}MPa eps={d['eps']:5.2f} "
+                f"film={d['film_frac']:.3f} t_w={d['t_wall']*1e3:.2f}mm "
+                f"N={d['N_rpm']/1e3:4.1f}k | feas={r.feasible!s:5} "
+                f"cok={r.constraints['coking']:+.0f}")
+
+    if args.isp_sweep:
+        try:
+            lo, hi, n = args.isp_sweep.split(",")
+            lo, hi, n = float(lo), float(hi), int(n)
+            grid = [lo + (hi - lo) * i / max(n - 1, 1) for i in range(n)]
+        except Exception:
+            print("  --isp-sweep must be LO,HI,N  (e.g. 250,320,6)")
+            return 2
+        print(f" Pareto frontier over Isp floors {grid[0]:.0f}..{grid[-1]:.0f} "
+              f"({len(grid)} pts; warm-started):")
+        for r in pareto_frontier(mission, grid, couple_eta_cstar=couple):
+            print(_fmt(r))
+    else:
+        isp_min = args.isp_min if args.isp_min is not None else 230.0
+        r = solve_min_mass(mission, float(isp_min), couple_eta_cstar=couple)
+        print(_fmt(r))
+        if args.mdo_export:
+            from raosim.mdo.postprocess import reevaluate, summarise
+            print(" -- authoritative re-evaluation (Phase 11) ----------------")
+            rv = reevaluate(r.design, mission,
+                            mdo_summary={"Isp": r.Isp, "eps": r.design["eps"]})
+            print(summarise(rv))
+        print(f"  solver: {r.message}  "
+              f"(iters={r.n_iter}, max_violation={r.max_violation:.1e})")
+    print("=" * 78)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     from raosim.pumps import SCREENING_DEFAULTS as PUMP_DEFAULTS
 
@@ -2357,6 +2700,71 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--show", action="store_true",
                     help="pop up the flow-field / animation in a live window "
                          "(on by default for interactive runs)")
+    ap.add_argument("--engine-mdo", action="store_true",
+                    help="run the whole-engine differentiable MDO evaluation "
+                         "(raosim.mdo.engine): nozzle + regen cooling + pintle "
+                         "injector + electric pump feed solved as one coupled, "
+                         "differentiable model; prints performance, the closed "
+                         "cooling→feed hydraulic edge, mass ledger and all "
+                         "constraint margins, then exits (uses --pc/--epsilon/"
+                         "--target-thrust/--mixture-ratio/--*-injector-dp-"
+                         "fraction/--pump-rpm)")
+    ap.add_argument("--engine-mdo-couple-cstar", action="store_true",
+                    help="with --engine-mdo/-optimize, enable the optional "
+                         "spray→η_c* feedback edge (default frozen η_c*; this is "
+                         "the RQ1 ablation knob — a screening correlation, not "
+                         "validated physics)")
+    ap.add_argument("--engine-mdo-optimize", action="store_true",
+                    help="run the ε-constraint hard-constrained MDO "
+                         "(raosim.mdo.nlp): minimise electric-package mass s.t. "
+                         "Isp ≥ --isp-min and every enforced discipline margin "
+                         "≥ 0, solving for Pc/eps/injector-Δp/D_pintle/pump-rpm "
+                         "with exact JAX Jacobians (SLSQP). Use --isp-sweep to "
+                         "trace the mass–Isp Pareto frontier. Set the mission "
+                         "with --target-thrust/--mixture-ratio/--burn-time/"
+                         "--engine-mdo-ambient")
+    ap.add_argument("--isp-min", type=float, default=None,
+                    help="with --engine-mdo-optimize: the Isp floor [s] "
+                         "(ε-constraint) for a single min-mass solve")
+    ap.add_argument("--isp-sweep", default=None, metavar="LO,HI,N",
+                    help="with --engine-mdo-optimize: trace the Pareto frontier "
+                         "over N Isp floors from LO to HI (e.g. 250,320,6)")
+    ap.add_argument("--engine-mdo-ambient", type=float, default=None,
+                    metavar="PA",
+                    help="ambient pressure [Pa] for --engine-mdo/-optimize "
+                         "(default sea level 101325; use a small value for the "
+                         "altitude/vacuum frontier — the mass–Isp trade is only "
+                         "strong when higher eps is not overexpanded)")
+    ap.add_argument("--film-frac", type=float, default=None,
+                    help="with --engine-mdo: fuel fraction diverted to wall film "
+                         "cooling (0 = pure regen; reduces the coking wall temp "
+                         "at a c* penalty).  Channel geometry reuses the existing "
+                         "--channel-width / --channel-height flags.")
+    ap.add_argument("--mdo-propellant", default=None, metavar="NAME",
+                    help="with --engine-mdo/-optimize: propellant combination "
+                         "(lox/rp-1, lox/lch4, lox/lh2, n2o4/mmh, n2o/ethanol). "
+                         "Drives chamber gases, L*, densities, coolant "
+                         "properties and the SP-8087 coolant wall limit.")
+    ap.add_argument("--mdo-export", action="store_true",
+                    help="with --engine-mdo/-optimize: hand the MDO design to "
+                         "the authoritative LREKit pipeline (design_nozzle_v2) "
+                         "for the real Rao contour + reports, and print the "
+                         "Phase-11 discrepancy report (screening vs "
+                         "authoritative)")
+    ap.add_argument("--design-margins", action="store_true",
+                    help="with --engine-mdo/-optimize: apply the SP-8087 / "
+                         "Mirzamoghadam hot-channel DESIGN MARGINS (+10%% heat "
+                         "flux for injector streaking, -10%% channel flow for "
+                         "maldistribution, 2x film-system capacity) instead of "
+                         "nominal conditions")
+    ap.add_argument("--t-wall", type=float, default=None, metavar="M",
+                    help="with --engine-mdo: hot-gas wall thickness [m] "
+                         "(default 8e-4; optimised in --engine-mdo-optimize)")
+    ap.add_argument("--film-slot-height", type=float, default=None, metavar="M",
+                    help="with --engine-mdo: tangential film-injector annular "
+                         "slot height [m] (Hatch & Papell TN D-130 tested "
+                         "0.0016-0.0127 m); sets the film injection velocity "
+                         "via continuity")
     raw_argv = list(sys.argv[1:] if argv is None else argv)
     try:
         expanded_argv = _expand_arg_files(raw_argv)
@@ -2367,6 +2775,26 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(expanded_argv)
     _reject_legacy_injector_pressure_drop(ap, cli_argv)
     bare = len(expanded_argv) == 0
+    # Front door: a bare `lrekit` (or `lrekit -i`) asks which workflow to run
+    # and then prompts for that workflow's parameters.  Explicit mode flags
+    # skip the menu entirely, so scripted/CI use is unchanged.
+    if (bare or args.interactive) and not (args.engine_mdo
+                                           or args.engine_mdo_optimize):
+        try:
+            mode = _select_mode_interactively(args)
+        except (EOFError, KeyboardInterrupt):
+            print("\naborted")
+            return 130
+        if mode == "mdo":
+            return _run_engine_mdo(args)
+        if mode == "mdo_optimize":
+            return _run_engine_mdo_optimize(args)
+        bare = True          # traditional path keeps its starter defaults
+        args.interactive = True
+    if getattr(args, "engine_mdo_optimize", False):
+        return _run_engine_mdo_optimize(args)
+    if getattr(args, "engine_mdo", False):
+        return _run_engine_mdo(args)
     if args.complete_package or bare:
         _apply_complete_package_defaults(
             args,

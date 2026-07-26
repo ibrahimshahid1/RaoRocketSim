@@ -40,14 +40,15 @@
 
 ### A.2 Deviations and gaps found
 
-**A.2.1 Flow-separation criteria are cross-labeled and quantitatively off (the one substantive finding).**
+**A.2.1 Flow-separation criteria are cross-labeled and quantitatively off (the one substantive finding). — FIXED 2026-07-22, same day.**
 The corpus (Östlund 2002, `fulltext01.md` PDF p.52) gives:
 
-- Schilling form: p_sep/p_c = k₁·(p_a/p_c)^(1−k₂ style exponent), with Kalt–Badal's fit **k₁ = 2/3, k₂ = −0.2** → p_sep/p_c = 0.667·(p_a/p_c)^0.8;
+- **Schilling** (Eq. 29): **p_i/p_a = k₁·(p_c/p_a)^k₂**, with k₁ = 0.582, k₂ = −0.195 (contoured) / 0.541, −0.136 (conical); **Kalt–Badal** (1965) refit Schilling's form with **k₁ = 2/3, k₂ = −0.2**, i.e. p_sep/p_a = (2/3)·(p_c/p_a)^(−0.2) (equivalently p_sep/p_c = (2/3)·(p_a/p_c)^1.2);
 - **Schmucker** (Eq. 30): **p_i/p_a = (1.88·M_i − 1)^(−0.64)**, "still widely used"; NASA's 1976 recommendation adds a 20% margin (consistent with SP-8120, `19770009165.md` line 4062).
 
-The repo implements (`raosim/separation.py`): "Kalt-Badal: p_sep/p_a = 1/(1.88·M − 1)" — Schmucker's functional form with exponent −1 instead of −0.64 — and "Schmucker: p_sep/P_c = (P_a/P_c)^0.8/M" — the Schilling/Kalt–Badal pressure-ratio form with 1/M in place of 2/3. At M_e = 3, P_a/P_c = 0.034, the repo's "Schmucker" gives p_sep/P_c ≈ 0.022 vs true Schmucker ≈ 0.012 and true Kalt–Badal ≈ 0.044 — a ~75% error against its namesake, sitting between the two real criteria. `jax/thermal.py:121` propagates the same form into the differentiable screen.
-**Why it matters for the MDO:** separation is a constraint *at every operating point* (plan §8, Phase 10), and gradient optimizers drive designs onto active constraints. This must be corrected (both NumPy and JAX mirrors + tests) **before** Phase 10; it is a small, isolated fix. Recommend implementing Schmucker exactly per Östlund Eq. 30, keeping Kalt–Badal as 0.667·(p_a/p_c)^0.8, retaining Summerfield 0.4·p_a (which is correct), and adding SP-8120's 20% margin as the constraint offset.
+The repo implemented (`raosim/separation.py`, pre-fix): "Kalt-Badal: p_sep/p_a = 1/(1.88·M − 1)" — Schmucker's functional form with exponent −1 instead of −0.64 — and "Schmucker: p_sep/P_c = (P_a/P_c)^0.8/M" — a pressure-ratio form matching neither namesake. At M_e = 3, P_a/P_c = 0.034: repo-"Schmucker" p_sep/P_c ≈ 0.0223 vs true Schmucker ≈ 0.0127 (**1.75×** its namesake) vs true Kalt–Badal ≈ 0.0115. `jax/thermal.py:121` propagated the same form into the differentiable screen.
+**Why it matters for the MDO:** separation is a constraint *at every operating point* (plan §8, Phase 10), and gradient optimizers drive designs onto active constraints.
+**Resolution (landed 2026-07-22):** `separation.py` rewritten with Schmucker per Eq. 30 (local-Mach march retained, correctly applying only to the local-Mach criterion), Kalt–Badal per the Schilling k₁=2/3/k₂=−0.2 form (signature now takes P_c/P_a), Schilling itself added as a fourth method, Summerfield 0.4·p_a retained, and the SP-8120 "within 20%" rule reported as `design_margin_required/ok` (default 1.2) without changing the physical separated/attached semantics. `jax/thermal.py:schmucker_separation_margin` corrected in lock-step; `jax/design_opt.py` `sep_margin_min` default 1.0 → 1.2. Tests re-baselined and extended (`test_v2_features.py` pins all four criteria against the Östlund forms + cross-family magnitude clustering + vacuum behavior; `test_jax_thermal_design_opt.py` pins NumPy↔JAX parity and re-baselines the "tight" threshold 2.0 → 4.0 since corrected margins roughly double). Affected suites green (v2 20, design-opt 11, frozen-flow 43, design_v2+injector 140/1 pre-existing cadquery-env fail). **Host follow-up:** the 13 kN baseline snapshot's separation-margin fields will drift on the next full run — expected, re-baseline the snapshot.
 
 **A.2.2 Equilibrium chemistry is honestly absent.** `cea.py:68` raises `NotImplementedError` for `cea_equilibrium` because a single chamber γ cannot represent shifting-composition expansion. This is correct engineering honesty, but it means **RQ4 has an unstated dependency** (§D.3).
 
@@ -132,7 +133,7 @@ The plan's own build order is correct; this section states, per component, what 
 
 ## F. Recommended amendments (actionable, ordered)
 
-1. **Fix `separation.py` + `jax/thermal.py` criteria** per Östlund Eq. 30 / Kalt–Badal k₁=2/3 (A.2.1); add SP-8120's 20% margin as the constraint offset; re-baseline the affected tests. Do this before any MDO constraint work.
+1. **[DONE 2026-07-22] Fix `separation.py` + `jax/thermal.py` criteria** per Östlund Eq. 30 / Kalt–Badal k₁=2/3, k₂=−0.2 (A.2.1); SP-8120's 20% margin added as `design_margin` reporting + the design-opt constraint default; affected tests re-baselined and extended. Remaining: re-baseline the 13 kN host snapshot's separation fields.
 2. In plan §7, state the Rao 1999 boundary operationally (boundary function/dR positivity, Eq. 6) alongside the caustic language; cite Fig. 7's boundary-coincides-with-max-performance result in RQ3's motivation (B.2).
 3. Split RQ4 into 4-P (Pareto, property surfaces — in scope) and 4-B (boundary, variable-property characteristics — explicitly scoped or deferred) (D.3.2).
 4. In §12.2 row 4b, credit `physics.py:regenerative_cooling_2d` as the existing NumPy oracle.

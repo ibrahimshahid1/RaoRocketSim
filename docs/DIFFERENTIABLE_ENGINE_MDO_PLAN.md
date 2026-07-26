@@ -630,19 +630,167 @@ Numerical "done" means:
 | # | Deliverable | Completion gate | Status |
 |---|---|---|---|
 | 0 | Canonical 13 kN LOX/RP-1 architecture + complete mass boundary | Sequential LREKit design closes thrust, flow, feed pressure, mass ledger | **DONE** |
-| 1 | Pure JAX data schema + explicit algebra | `jit`, `jacfwd`, `jacrev` work with no host callbacks | **TODO** |
-| 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **TODO** |
+| 1 | Pure JAX data schema + explicit algebra | `jit`, `jacfwd`, `jacrev` work with no host callbacks | **DONE** (2026-07-22: `mdo/schema.py` + `mdo/scaling.py`; gate in `tests/test_mdo_schema.py`) |
+| 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **WIP** (2026-07-22: C¹ Fritsch–Carlson/tensor-Hermite machinery in `mdo/properties.py` + `scripts/sample_cea_surface.py`; interpolant/gradient/monotonicity/SciPy-parity gates green in `tests/test_mdo_properties.py`; *held-out CEA comparison awaits a host RocketCEA sampling run*) |
 | 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour (*implicit-fidelity path; needs J3b for wall coords*) | **WIP** |
-| 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **TODO** |
+| 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-07-23: thermal-hydraulic residual + parity + AD/FD gate landed in `mdo/grid.py` + `mdo/cooling.py`; **structural closures (LCF/buckling/stress) deferred to the §8 constraint layer**) |
 | 4b | Quasi-2-D regen (final discipline) | Reproduces Pizzarelli HARCC wall-temp/$\Delta p$ trends within tolerance | **TODO** |
-| 5 | Differentiable pintle/feed model | Areas, TMR, geometry, pressure ledger match NumPy within tol; branches split | **TODO** |
-| 6 | Differentiable pump/electric model | Head, power, NPSH, geometry, mass match detailed model; C¹ efficiency | **TODO** |
-| 7 | Coupled engine solve | All residual blocks converge without manual sequential iteration | **TODO** |
-| 8 | Total derivative API | Directional derivatives of the re-solved engine pass step-size sweeps | **TODO** |
-| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **TODO** |
+| 5 | Differentiable pintle/feed model | Areas, TMR, geometry, pressure ledger match NumPy within tol; branches split | **WIP** (2026-07-23: injector block `mdo/injector.py` — orifice/TMR/BF/spray + Son-2017 two-branch min-area + chug screen; parity ≤1e-9 + AD/FD gate green; feed-pressure ledger coupling lands with Phases 6/7) |
+| 6 | Differentiable pump/electric model | Head, power, NPSH, geometry, mass match detailed model; C¹ efficiency | **WIP** (2026-07-23: `mdo/pump.py` — **C¹ η(Ns) surrogate replacing the binned `pumps.py` estimator**, meanline duty/Ns/Nss/NPSH + tip-speed & suction screens, Lee-2021 battery epigraph; parity + FD gate green; detailed impeller/inducer geometry + blade stress deferred to the constraint layer) |
+| 7 | Coupled engine solve | All residual blocks converge without manual sequential iteration | **WIP** (2026-07-23: `mdo/engine.py` `solve_engine` — all four blocks in one differentiable eval; cooling Δp→pump-rise hydraulic edge **closed**; optional η_c* fixed point + ablation; `--engine-mdo` CLI; genuinely-implicit parts nested-IFT-solved rather than one monolithic block-sparse Newton, per §4.1's "don't enlarge the system to appear coupled") |
+| 8 | Total derivative API | Directional derivatives of the re-solved engine pass step-size sweeps | **DONE** (2026-07-23: exact forward `jacfwd` + reverse `jacrev` through the two IFT solves; FD-verified in `test_mdo_engine.py` and the NLP constraint-Jacobian gate `test_mdo_nlp.py`) |
+| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **WIP** (2026-07-23: `mdo/nlp.py` ε-constraint min-mass over the unit box with exact JAX Jacobians handed to SLSQP; single-solve reaches feasible KKT `max_violation`<1e-5; `--engine-mdo-optimize` CLI + Pareto sweep. **Coking now ENFORCED** via the film-cooling design variable (9-var); reverse-mode constraint Jacobian; trust-constr/IPOPT optional) |
 | 10 | Multipoint mission model | Shared hardware meets ambient, throttle, power, energy constraints at all points | **TODO** |
 | 11 | Authoritative re-evaluation | CEA/CoolProp/high-fidelity screens confirm the optimum or trigger a correction iteration | **TODO** |
 
+> **Walking skeleton landed (2026-07-22).** The §12.5 first increment exists:
+> `raosim/mdo/assembly.py` stacks a thin R(y,x) (analytic nozzle + throat
+> thermal circuit + injector/pump/battery algebra + §3 ledger with explicit
+> placeholders), solves it with an Optimistix **Newton root-find** (square
+> system — root IFT, not least-squares implicit diff), and
+> `make_engine_fn` differentiates outputs through the converged state.
+> Gates green in `tests/test_mdo_skeleton.py`: Newton residual < 1e-10;
+> solved states match the NumPy closed-form oracle (Rt/mdot 1e-9, T_wg 1e-8);
+> **end-to-end jacfwd vs re-solved central FD < 1e-5** (plan gate 1e-4);
+> jit + jacrev agree. R1/R2 are carried as implicit states deliberately as
+> integration scaffolding (§4.1's "naturally explicit" warning is documented
+> in the module) — the regen→feed and spray→η_c* feedback edges land behind
+> this interface in Phases 4a/5. Also landed the same day: the separation
+> criteria correction (Östlund Eq. 29/30 forms; see
+> `docs/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md` §A.2.1) that
+> pre-conditions Phase 10's separation-active constraints.
+>
+> **Phase 4a thermal-hydraulic block landed (2026-07-23).** `mdo/grid.py`
+> (fixed-topology analytic station grid) + `mdo/cooling.py` now carry the
+> 1-D+fin regen residual: full Bartz $h_g$ with the $\sigma$ factor, turbulent
+> recovery $T_{aw}$, the series circuit with the Huzel/SP-125 land-fin
+> efficiency and the literature-standard $(w+2\eta_f h)/\text{pitch}$ coolant-area
+> augmentation, Sieder–Tate $h_c$ via the audited `jax.thermal.sieder_tate_hc`,
+> and a **counterflow upwind finite-volume** coolant march. `solve_cooling`
+> root-finds the stationwise $T_{wg}$ vector (Newton + root IFT). Gates green in
+> `tests/test_mdo_cooling.py` ($\le$1e-9 parity vs an independent NumPy oracle
+> built on `physics.*`, which also cross-validates the `jax.thermal` mirrors)
+> and `tests/test_mdo_cooling_gate.py` (AD vs re-solved central FD $<$1e-4 for
+> $\mathrm{d}T_{wg}/\mathrm{d}P_c$ and $\mathrm{d}T_{wg}/\mathrm{d}\dot m_{cool}$;
+> forward=reverse; jit-safe). Two defects in the interrupted draft were fixed
+> while completing it: (i) an off-by-one/double-counted segment in the march
+> quadrature; (ii) a silent `land` clamp that hid the channel-fit constraint,
+> now exposed as `land_min` (plan §9, the same optimizer-parks-on-active-
+> constraints hazard as the separation fix). The block also computes the
+> coolant-side ("liquid") wall temperature $T_{wc}=T_{wg}-q''\,t_w/k_w$ and a
+> stationwise `coking_margin` = 728 K $-\,T_{wc}$ against the SP-8087 RP-1
+> liquid-wall coking limit (850°F; Sellers 1961); with the fixed *screening*
+> channel geometry this is strongly active ($T_{wc}\approx$1108 K at the
+> throat, 15/24 stations violating) — the earlier ~733 K coolant finding turned
+> into an explicit optimizer-visible constraint rather than a deferred TODO.
+> Enabling prerequisite:
+> `jax/primitives.py:mach_from_area_ratio` seeded its **subsonic** branch with a
+> scalar, breaking array inputs — fixed to a shape-matched seed (scalar results
+> bit-identical; `tests/test_jax_primitives.py` green). The block sits behind the
+> `solve_cooling` interface, ready for the Phase-7 coupled solve (regen
+> $\Delta p \to$ feed edge); it is deliberately **not** yet wired into
+> `assembly.py`'s state vector.
+>
+> **Phase 5 pintle-injector block landed (2026-07-23).** `mdo/injector.py` is a
+> closed-form (no implicit state) jnp block mirroring `injector.py` +
+> `movable_pintle.py`: incompressible orifice metering (G = C_d√(2ρΔp)), the
+> total momentum ratio TMR = (ṁ_r v_r)/(ṁ_a v_a) with radial = fuel / axial =
+> ox, the spray half-angle from the radial/axial momentum vectors (δ=0 ⇒ the
+> leading-order θ = arctan(TMR); Escher TMR^½ and Son-2015 exp(TMR,We) are the
+> deferred fidelity ladder), the blockage factor BF = N w/(πD_p), and — per rule
+> 8 — the **movable-pintle minimum area as two exposed branches** (Son-2017
+> tip-opening A_tip and fixed center-gap A_cg) with a `transition_margin` =
+> frac·A_cg − A_tip consistency inequality, never a differentiable `min()`; plus
+> the min(χ_f,χ_o) ≥ 0.2 chug screen (SP-8113/194). Gates green:
+> `tests/test_mdo_injector.py` (≤1e-9 parity vs the audited `movable_pintle`
+> functions + orifice/TMR forms; Son Eq.1 round-trip on θ=0 and θ>0; branch
+> structure and transition-margin exposure pinned) and
+> `tests/test_mdo_injector_gate.py` (AD vs central FD < 1e-4 wrt χ_f, χ_o,
+> D_pintle, P_c; fwd=rev; jit-safe). Architecture constants added to
+> `MissionSpec` (discrete slot count = outer enumeration, rule 4).
+>
+> **Phase 6 pump / electric-feed block landed (2026-07-23).** `mdo/pump.py`
+> (closed-form jnp) replaces the load-bearing risk the plan flags in §6.4: the
+> binned `pumps.py:_estimate_pump_efficiency` (a C0 step in Q) becomes a **C¹
+> η(Ns) surrogate** — a smooth log-Gaussian peaked at Ns_opt, calibrated to the
+> SP-125 rocket-pump band (Huzel & Huang 60–85 %, rising with capacity/Ns) with
+> the SP-8109 low-Ns penalty; documented as a smooth *screening surrogate*, not
+> a fit to SP-125 Fig. 6-23 (image-only). The block carries the meanline duty
+> (Q, H=Δp/ρg0, Ns=ω√Q/(g0H)^¾), the SP-8052 suction screen (Nss ≤ Nss,max) and
+> an SP-8109 tip-speed screen (U₂ ≤ U₂,max) as exposed margins, the electrical
+> chain P_elec = ṁΔp/(ρ η_p η_m η_inv), and the **Lee-2021 battery epigraph**
+> (power- and energy-limited masses returned separately — no `max()` in the
+> core, rule 5). Gates green: `tests/test_mdo_pump.py` (Q/H/Ns/Nss/power parity
+> to the `pumps.py` forms; the C¹ property demonstrated as *FD converges to the
+> analytic gradient* where the binned estimator's FD blows up at its bin edge;
+> SP-125 band + peak) and `tests/test_mdo_pump_gate.py` (AD vs central FD < 1e-4
+> wrt Δp_rise, N_rpm, ṁ; fwd=rev; jit-safe). Detailed impeller/inducer geometry
+> and blade stress stay in the §8 constraint layer.
+>
+> **Phase 7 coupled whole-engine solve landed (2026-07-23).** `mdo/engine.py`
+> `solve_engine(x, mission)` integrates all four blocks into ONE differentiable
+> evaluation. The **§5 hydraulic edge is now genuinely closed**: the cooling
+> jacket Δp (and injector Δp) feed the pump rise Δp = Pc(1+χ) + Δp_regen +
+> Δp_line − P_tank (previously the `regen_dp_allowance = 0` placeholder). The
+> stationwise wall-temperature vector is a real inner IFT solve; the outer state
+> is the small (Rt, mdot) root — kept implicit as the seam for the ONE genuine
+> two-way feedback, the spray→η_c* combustion loop, which is **off by default**
+> (frozen η_c*) and, when enabled, makes the outer Newton a real fixed point with
+> a measurable `ablation_delta` (RQ1). Everything else is the explicit chain the
+> physics actually is (§4.1: don't fake-implicit). A single `jax.grad` of Isp or
+> package mass flows through both IFT solves and the explicit injector/pump chain
+> and matches central differences (`tests/test_mdo_engine.py`: convergence,
+> closed-edge flow, standalone-block parity, AD=FD through the closed edge,
+> η_c* ablation, jit). Exposed to users via the **`--engine-mdo` CLI flag**
+> (`raosim.run_nozzle`) with `--engine-mdo-couple-cstar` for the ablation; prints
+> performance, the closed cooling→feed edge, the §3 ledger and all constraint
+> margins (on the 13 kN screening point the coking margin is the active one,
+> −292 K). Architecture note: the coupling is nested-IFT rather than one
+> monolithic block-sparse Newton — the latter is an optional performance
+> refinement, not a correctness requirement, at this state count.
+>
+> **Phase 8/9 ε-constraint NLP + Pareto landed (2026-07-23).** `mdo/nlp.py`
+> minimises electric-package mass s.t. Isp ≥ Isp_min and every enforced margin
+> ≥ 0, over the six design variables in the (now-6-var) unit-box-scaled
+> `DesignVector` — `D_pintle` and `N_rpm` were lifted in this commit (defaulted
+> so the 4-var skeleton path is unchanged). Forward-mode `jacfwd` assembles the
+> exact constraint Jacobian through both IFT solves (matched to central
+> differences in `test_mdo_nlp.py`) and is handed to SLSQP; a single solve
+> reaches a feasible KKT point (`max_violation` ~1e-10). `pareto_frontier`
+> ε-sweeps with warm starts. **Coking is REPORTED, not enforced, by default**:
+> with the fixed screening channel geometry the SP-8087 728 K liquid-wall limit
+> is violated everywhere in the box (even at min Pc the wall runs ~885 K), so
+> hard-enforcing it is infeasible everywhere — a structural finding that
+> promoting the channel geometry (N, w, h, t_wall) to design variables is the
+> real fix (`enforced=CONSTRAINT_NAMES` turns it back on once they exist).
+> Exposed via **`--engine-mdo-optimize`** (`--isp-min` single solve, `--isp-sweep
+> LO,HI,N` frontier, `--engine-mdo-ambient` for the altitude/vacuum trade, which
+> at sea level is weak because higher ε is overexpanded). The full sweep is
+> host-only (compile + SLSQP exceeds the CI per-call budget); the machinery, the
+> exact Jacobians, and a single feasible solve are gated in-suite.
+>
+> **Phase 7b film cooling → coking enforced (2026-07-23).** An empirical probe
+> settled *why* coking was infeasible: the wall is **coolant-enthalpy-limited,
+> not film-coefficient-limited** — T_wc tracks the coolant exit temperature, and
+> reaching 728 K needs 2–3× the coolant flow regen RP-1 can supply at realistic
+> O/F, so channel geometry is only a weak lever (measured: T_wc 1241→1124 K
+> across the whole channel-geometry box). The physically correct fix, per SP-125
+> ("combined regenerative and film-cooling … for the stringent requirement of
+> higher chamber pressure") and SP-8087 (Hatch–Papell; "apply conservative
+> design factors to the simple analytical models"), is **film cooling**. The
+> design vector gained `channel_width`, `channel_height` (N stays discrete,
+> rule 4) and a fuel `film_frac`; the cooling block reduces the gas-side driving
+> temperature over the chamber→throat region by a saturating adiabatic-film
+> effectiveness, and the engine takes a delivered-c* penalty for the wall-film
+> fuel. With that lever coking is satisfiable (T_wc 656 K at 25 % film), so it
+> moved into the **enforced** NLP set and the frontier is genuinely thermal-
+> limited: the optimiser dials film to the minimum that just satisfies coking
+> (7.7 % at the min-mass point, coking margin ≈ 0 active) and pays the Isp for
+> it. Surfaced in the CLI (`--film-frac`; `film`/`h_ch` in the frontier). AD
+> note: the constraint Jacobian is **reverse-mode** — forward-mode through the
+> jit'd nested Optimistix root-finds drops the tangent of the geometry-only
+> `jnp.min` land margin (FD-verified; jacrev is exact).
+>
 > **Optimizer exploits model error (Phase 11).** Gradient optimization against
 > low-order screens drives designs into regions where those screens are least
 > accurate. Expect some Pareto degradation at higher fidelity; mitigate by

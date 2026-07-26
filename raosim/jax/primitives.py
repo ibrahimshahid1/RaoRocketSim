@@ -134,7 +134,12 @@ def mach_from_area_ratio(area_ratio, gamma, supersonic: bool = True,
     if supersonic:
         M0 = jnp.maximum(1.0 + 0.5 * jnp.log(jnp.maximum(ar, 1.0)), 1.01)
     else:
-        M0 = jnp.asarray(0.5, dtype=jnp.float64)
+        # Shape-match the seed to ``ar`` so the fixed-count Newton carry is
+        # consistent for array inputs too (the supersonic seed above already
+        # broadcasts; this keeps both branches array-safe).  Value 0.5 is a
+        # seed only — the 80-step Newton is seed-independent, so scalar
+        # results are bit-identical to the previous scalar-0.5 seed.
+        M0 = jnp.full_like(ar, 0.5)
 
     def body(_, M):
         A = area_mach_relation(M, gamma)

@@ -59,7 +59,7 @@ def constrained_nozzle_design(
     k_wall: float,
     T_wall_limit: float,
     q_limit: float | None = None,
-    sep_margin_min: float = 1.0,
+    sep_margin_min: float = 1.2,  # SP-8120 rule: Pe ≥ 1.2·p_sep ("within 20 %")
     eps_bounds: tuple[float, float] = (2.0, 50.0),
     rd_factor_bounds: tuple[float, float] = (0.382, 5.0),
     eps0: float | None = None,
@@ -247,7 +247,7 @@ def thrust_targeted_design(
     length_pct: float = 80.0,
     wall_density: float = 8190.0,
     q_limit: float | None = None,
-    sep_margin_min: float = 1.0,
+    sep_margin_min: float = 1.2,  # SP-8120 rule: Pe ≥ 1.2·p_sep ("within 20 %")
     objectives: dict | None = None,
     eps_bounds: tuple[float, float] = (2.0, 50.0),
     rd_factor_bounds: tuple[float, float] = (0.382, 5.0),

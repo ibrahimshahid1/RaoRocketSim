@@ -120,10 +120,19 @@ def throat_wall_temperature(
 # --------------------------------------------------------------------------- #
 def schmucker_separation_margin(epsilon, gamma, Pc, Pa, *, supersonic=True):
     """Separation margin Pe/p_sep (>1 = attached) — Schmucker criterion
-    p_sep/Pc = (Pa/Pc)^0.8 / Me (jnp mirror of separation.schmucker_*)."""
+    p_sep/Pa = (1.88·Me − 1)^(−0.64), evaluated at the exit Mach number
+    (Östlund 2002 Eq. 30; jnp mirror of separation.schmucker_separation_ratio).
+
+    Corrected 2026-07-22: the previous form (Pa/Pc)^0.8 / Me was a
+    cross-labeled variant ~1.75× off the literature Schmucker at Me = 3
+    (docs/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md §A.2.1).  Keep in
+    lock-step with the NumPy twin (parity test in
+    tests/test_jax_thermal_design_opt.py).
+    """
     Me = mach_from_area_ratio(epsilon, gamma, supersonic=supersonic)
     Pe_over_Pc = isentropic_pressure_ratio(Me, gamma)
-    p_sep_over_Pc = (Pa / Pc) ** 0.8 / Me
+    denom = jnp.maximum(1.88 * Me - 1.0, 1e-12)
+    p_sep_over_Pc = denom ** (-0.64) * (Pa / Pc)
     return Pe_over_Pc / p_sep_over_Pc
 
 

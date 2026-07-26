@@ -12,8 +12,10 @@ from raosim.propellants import get_propellant, custom_propellant
 from raosim.engine import compute_engine_performance
 from raosim.wall_pressure import wall_pressure_distribution
 from raosim.separation import (
+    SP8120_DESIGN_MARGIN,
     check_separation, summerfield_separation_pressure,
-    kalt_badal_separation_ratio, schmucker_separation_ratio,
+    kalt_badal_separation_ratio, schilling_separation_ratio,
+    schmucker_separation_ratio,
 )
 from raosim.trade_study import sweep_epsilon, sweep_Pc
 from raosim.altitude_performance import altitude_performance_map
@@ -64,15 +66,55 @@ class TestSeparation:
         """p_sep = 0.4 * Pa."""
         assert summerfield_separation_pressure(101325) == pytest.approx(0.4 * 101325)
 
-    def test_schmucker_returns_value(self):
-        ratio = schmucker_separation_ratio(3.0, 101325 / 45e5)
+    def test_schmucker_matches_ostlund_eq30(self):
+        # Östlund (2002) Eq. 30: p_sep/Pa = (1.88·Me − 1)^(−0.64), returned
+        # here rescaled to p_sep/Pc.  (Criterion corrected 2026-07-22.)
+        Me, Pa_over_Pc = 3.0, 101325 / 45e5
+        ratio = schmucker_separation_ratio(Me, Pa_over_Pc)
+        assert ratio == pytest.approx(
+            (1.88 * Me - 1.0) ** (-0.64) * Pa_over_Pc, rel=1e-12)
+        # Literature magnitude: p_sep/Pa ≈ 0.375 at Me = 3.
+        assert ratio / Pa_over_Pc == pytest.approx(0.3746, abs=5e-3)
         assert 0 < ratio < 1
+
+    def test_kalt_badal_matches_ostlund(self):
+        # Östlund (2002) p. 52: Schilling form with k1 = 2/3, k2 = −0.2.
+        assert kalt_badal_separation_ratio(30.0) == pytest.approx(
+            (2.0 / 3.0) * 30.0 ** (-0.2), rel=1e-12)
+        assert kalt_badal_separation_ratio(30.0) == pytest.approx(0.3377, abs=5e-3)
+
+    def test_schilling_contoured_constants(self):
+        # Östlund (2002) Eq. 29, contoured: k1 = 0.582, k2 = −0.195.
+        assert schilling_separation_ratio(30.0) == pytest.approx(
+            0.582 * 30.0 ** (-0.195), rel=1e-12)
+        assert schilling_separation_ratio(30.0, contoured=False) == pytest.approx(
+            0.541 * 30.0 ** (-0.136), rel=1e-12)
+
+    def test_criteria_agree_in_magnitude(self):
+        # At Pc/Pa = 30, Me ≈ 3 the four criteria should cluster within a
+        # factor ~2 of each other (0.3–0.5 of ambient) — cross-family sanity.
+        pa_ratios = [
+            0.4,
+            kalt_badal_separation_ratio(30.0),
+            schilling_separation_ratio(30.0),
+            schmucker_separation_ratio(3.0, 1 / 30.0) * 30.0,
+        ]
+        assert all(0.25 < r < 0.55 for r in pa_ratios)
 
     def test_check_no_separation_high_Pc(self, standard_contour):
         """At very high Pc, nozzle shouldn't separate."""
         sep = check_separation(standard_contour, 100e5, 101325, 1.23)
         # With Pc=100 bar, eps=10, Pe should be well above separation
         assert isinstance(sep['separated'], bool)
+        assert 'design_margin_ok' in sep
+        assert sep['design_margin_required'] == pytest.approx(SP8120_DESIGN_MARGIN)
+
+    def test_vacuum_never_separates(self, standard_contour):
+        for method in ('summerfield', 'kalt_badal', 'schmucker', 'schilling'):
+            sep = check_separation(standard_contour, 45e5, 0.0, 1.23,
+                                   method=method)
+            assert not sep['separated']
+            assert sep['design_margin_ok']
 
     def test_check_at_sea_level(self, standard_contour):
         """At moderate Pc with eps=10, check runs without error."""

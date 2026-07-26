@@ -63,13 +63,24 @@ def test_bartz_sigma_parity():
 
 
 def test_schmucker_parity():
-    Me = 3.5
+    # Re-baselined 2026-07-22: criterion corrected to Östlund (2002) Eq. 30,
+    # p_sep/Pa = (1.88·Me − 1)^(−0.64)  (was a cross-labeled (Pa/Pc)^0.8/Me;
+    # see docs/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md §A.2.1).
+    eps = 12.0
     Pc, Pa = 70e5, 101325.0
-    margin = float(T.schmucker_separation_margin(
-        (Me ** 2), GAMMA, Pc, Pa))  # rough eps proxy not needed; direct:
-    # Direct parity on the ratio formula at a known Me.
+    from raosim.gas_dynamics import (
+        isentropic_pressure_ratio as np_pr,
+        mach_from_area_ratio as np_mach,
+    )
+    Me = np_mach(eps, GAMMA, supersonic=True)
+    # Corrected closed form, pinned.
     np_ratio = schmucker_separation_ratio(Me, Pa / Pc)
-    assert np_ratio == pytest.approx((Pa / Pc) ** 0.8 / Me, rel=1e-12)
+    assert np_ratio == pytest.approx(
+        (1.88 * Me - 1.0) ** (-0.64) * (Pa / Pc), rel=1e-12)
+    # JAX margin == NumPy margin (lock-step mirrors).
+    np_margin = np_pr(Me, GAMMA) / np_ratio
+    jx_margin = float(T.schmucker_separation_margin(eps, GAMMA, Pc, Pa))
+    assert jx_margin == pytest.approx(np_margin, rel=1e-8)
 
 
 def test_thrust_coefficient_has_interior_optimum(args):
@@ -123,11 +134,14 @@ def test_loose_constraints_reach_unconstrained_cf_optimum(args):
 def test_tight_separation_constraint_caps_expansion(args):
     loose = constrained_nozzle_design(**args, T_wall_limit=1100.0,
                                       sep_margin_min=1.0)
+    # Threshold re-baselined 2026-07-22: the corrected Schmucker criterion
+    # (Östlund Eq. 30) gives ~2.7 at this case's unconstrained Cf optimum
+    # (the old cross-labeled form gave ~1.34), so "tight" is now 4.0.
     tight = constrained_nozzle_design(**args, T_wall_limit=1100.0,
-                                      sep_margin_min=2.0)
+                                      sep_margin_min=4.0)
     assert tight.separation_active
     assert tight.feasible
-    assert tight.separation_margin == pytest.approx(2.0, abs=0.05)
+    assert tight.separation_margin == pytest.approx(4.0, abs=0.1)
     # The constraint pushed ε below the unconstrained optimum...
     assert tight.epsilon < loose.epsilon
     # ... at a small Cf cost.
