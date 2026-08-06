@@ -63,10 +63,25 @@ from raosim.mdo.schema import MissionSpec
 
 Array = jnp.ndarray
 
-#: Sharpness for the radial smooth maximum, in 1/m.  The radial stack varies
-#: over O(0.1 m), so 1e3 resolves stations to well under a millimetre while
-#: staying far from overflow in float64.
-_RADIAL_SHARPNESS = 1.0e3
+#: Sharpness for the radial smooth maximum, in 1/m.
+#: ``logsumexp(k·v)/k`` overshoots the true maximum by at most ``ln(n)/k``,
+#: where ``n`` is the station count — so the envelope is conservative by a
+#: bounded, computable amount rather than an unknown one.  At the default
+#: 24-station grid and ``k = 1e4`` that bound is ``ln(24)/1e4 = 0.32 mm`` on the
+#: radius, i.e. 0.64 mm on the diameter, which is below any manufacturing
+#: tolerance the envelope requirement would be written to.  ``jax.scipy``'s
+#: ``logsumexp`` applies the max-shift, so the large exponent does not overflow.
+_RADIAL_SHARPNESS = 1.0e4
+
+#: Guaranteed upper bound on the diameter overshoot, in metres, as a function
+#: of station count.  Exposed so a report can state the conservatism instead of
+#: leaving the reader to derive it.
+def diameter_overshoot_bound(n_stations: int) -> float:
+    """Maximum amount by which :func:`chamber_envelope` overstates diameter."""
+
+    import math
+
+    return 2.0 * math.log(max(int(n_stations), 1)) / _RADIAL_SHARPNESS
 
 
 class ChamberEnvelope(NamedTuple):

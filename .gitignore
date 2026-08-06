@@ -27,3 +27,6 @@ pdfs/
 dist/
 build/
 *.egg-info/
+
+latex-report/
+
