@@ -18,7 +18,11 @@ import jax
 import jax.numpy as jnp
 
 from raosim.mdo.schema import MissionSpec, DesignVector
-from raosim.mdo.grid import build_station_grid
+from raosim.mdo.grid import (
+    build_station_grid,
+    rao_chart_domain_violation,
+    rao_wall_angles,
+)
 from raosim.mdo.cooling import solve_cooling
 from raosim.mdo.injector import injector_readouts
 from raosim.mdo.pump import electric_feed
@@ -44,6 +48,68 @@ def test_engine_converges_and_reports_constraints():
         assert key in r.constraints
 
 
+def test_jax_rao_angles_match_repository_linear_chart_between_knots():
+    """MDO's differentiable chart path preserves the contour-oracle values."""
+    from raosim.nozzle_geometry import lookup_angles
+
+    eps, length_pct = 12.3, 76.4
+    tn, te = rao_wall_angles(jnp.asarray(eps), jnp.asarray(length_pct))
+    ref_n, ref_e = lookup_angles(eps, length_pct)
+    assert float(jnp.rad2deg(tn)) == pytest.approx(ref_n, rel=1e-12)
+    assert float(jnp.rad2deg(te)) == pytest.approx(ref_e, rel=1e-12)
+
+
+@pytest.mark.parametrize(
+    ("eps", "length_pct"),
+    (
+        (4.0, 60.0),
+        (4.0, 100.0),
+        (50.0, 60.0),
+        (50.0, 100.0),
+    ),
+)
+def test_jax_rao_angles_match_all_chart_domain_corners(eps, length_pct):
+    from raosim.nozzle_geometry import lookup_angles
+
+    actual = rao_wall_angles(
+        jnp.asarray(eps),
+        jnp.asarray(length_pct),
+    )
+    expected = lookup_angles(eps, length_pct)
+    assert float(jnp.rad2deg(actual[0])) == pytest.approx(expected[0])
+    assert float(jnp.rad2deg(actual[1])) == pytest.approx(expected[1])
+    assert np.all(
+        np.asarray(rao_chart_domain_violation(eps, length_pct)) <= 0.0
+    )
+
+
+def test_jax_rao_out_of_domain_clipping_is_finite_and_explicitly_infeasible():
+    outside = rao_wall_angles(jnp.asarray(3.0), jnp.asarray(55.0))
+    clipped = rao_wall_angles(jnp.asarray(4.0), jnp.asarray(60.0))
+    assert np.allclose(np.asarray(outside), np.asarray(clipped))
+
+    violation = np.asarray(
+        jax.jit(rao_chart_domain_violation)(
+            jnp.asarray(3.0),
+            jnp.asarray(55.0),
+        )
+    )
+    assert violation == pytest.approx([1.0, -47.0, 5.0, -45.0])
+    assert np.max(violation) > 0.0
+
+
+def test_jax_rao_chart_has_finite_nonzero_interior_design_derivatives():
+    def angles(inputs):
+        return jnp.stack(rao_wall_angles(inputs[0], inputs[1]))
+
+    jacobian = np.asarray(
+        jax.jit(jax.jacrev(angles))(jnp.asarray([12.3, 76.4]))
+    )
+    assert jacobian.shape == (2, 2)
+    assert np.all(np.isfinite(jacobian))
+    assert np.all(np.linalg.norm(jacobian, axis=0) > 0.0)
+
+
 def test_hydraulic_edge_is_closed():
     """Cooling jacket Δp feeds the fuel pump rise (previously a 0 placeholder);
     the fuel rise exceeds the ox rise by exactly the regen Δp."""
@@ -56,6 +122,37 @@ def test_hydraulic_edge_is_closed():
     gap = float(r.dp_rise_fuel) - float(r.dp_rise_ox)
     assert gap == pytest.approx(float(r.dp_regen) + (m.P_tank_ox - m.P_tank_fuel),
                                 rel=1e-9)
+
+
+def test_film_branch_bypasses_regenerative_jacket():
+    """The defined MDO architecture sends the film branch around the jacket."""
+    m = MissionSpec()
+    x = DesignVector(Pc=jnp.asarray(3.0e6), eps=jnp.asarray(8.0),
+                     dp_f_frac=jnp.asarray(0.2), dp_o_frac=jnp.asarray(0.2),
+                     film_frac=jnp.asarray(0.10))
+    r = solve_engine(x, m)
+    mdot_f = r.mdot / (1.0 + m.OF)
+    mdot_film = mdot_f * x.film_frac
+    mdot_regen = m.cooling_fraction * (mdot_f - mdot_film)
+    grid = build_station_grid(r.Rt, x.eps, m, gamma=jnp.asarray(m.gamma))
+    _, expected = solve_cooling(
+        grid, Pc=x.Pc, gamma=jnp.asarray(m.gamma), Tc=jnp.asarray(m.Tc),
+        c_star_del=r.eta_cstar * jnp.asarray(m.c_star_ideal()),
+        mdot_cool=mdot_regen, mdot_film=mdot_film, mission=m,
+        film_frac=x.film_frac,
+    )
+    assert float(r.cooling.dp_total) == pytest.approx(float(expected.dp_total), rel=1e-9)
+
+
+def test_nozzle_efficiency_and_separation_reserve_are_explicit():
+    m = MissionSpec()
+    r = solve_engine(_x(), m)
+    assert float(r.Cf) == pytest.approx(float(r.Cf_ideal) * m.eta_CF, rel=1e-12)
+    # eps=8 is attached with the configured 20% SP-8120 design reserve.
+    assert float(r.constraints["separation_margin"]) > 0.0
+    rv = solve_engine(_x(), MissionSpec(Pa=0.0))
+    assert np.isfinite(float(rv.constraints["separation_margin"]))
+    assert float(rv.constraints["separation_margin"]) > 0.0
 
 
 def test_integration_parity_with_standalone_blocks():
@@ -81,7 +178,7 @@ def test_integration_parity_with_standalone_blocks():
 
 
 def test_end_to_end_differentiable_through_closed_edge():
-    """AD of package mass w.r.t. Pc — which flows Pc → state → cooling → Δp_regen
+    """AD of objective mass w.r.t. Pc — Pc → state → cooling → Δp_regen
     → pump → battery — matches central differences (both IFT solves included)."""
     m = MissionSpec()
 

@@ -2662,6 +2662,50 @@ def _estimate_component_masses(
     inducer = rho * math.pi * (ind.diameter / 2.0) ** 2 * max(0.35 * ind.diameter, 1e-6) * 0.20
     shaft = rho * math.pi * shaft_d**2 / 4.0 * length
     casing = rho * 4.0 * math.pi * casing_r**2 * casing_t * 0.55
+
+    # ---- diffusion system ------------------------------------------------ #
+    # Previously ``None``, which made ``_pump_hardware_mass`` withhold the
+    # whole pump mass and left the engine dry-mass ledger permanently open.
+    # The diffusion system's distinct metal is the vane ring standing between
+    # the impeller tip and the casing wall: ``n_v`` radial vanes, each spanning
+    # the radial gap, of axial extent ``vane_width``.  NASA SP-8109 (*Liquid
+    # Rocket Engine Centrifugal Flow Turbopumps*, 1973,
+    # ``propulsion_texts/fuel_pump_design/19740020848.pdf``) treats the
+    # diffusion system as vaned diffuser / vaneless volute hardware carried by
+    # the same casing; there is no published vane-thickness correlation, so the
+    # vane is taken at the casing wall thickness -- both are machined from the
+    # same pressure-boundary stock and sized by the same discharge pressure.
+    # A vaneless volute has no vane ring and therefore contributes no extra
+    # metal beyond the casing already counted above; that is an exact zero, not
+    # a missing estimate.
+    dif = line.diffuser_volute
+    if dif is None:
+        diffuser = None
+    else:
+        vane_count = int(getattr(dif, "vane_count", 0) or 0)
+        vane_width = max(float(getattr(dif, "vane_width", 0.0) or 0.0), 0.0)
+        radial_gap = max(casing_r - 0.5 * imp.impeller_diameter, 0.0)
+        diffuser = rho * vane_count * vane_width * radial_gap * casing_t
+
+    # ---- inlet / outlet port stubs --------------------------------------- #
+    # Thin-wall stubs at the casing wall thickness, taken two diameters long
+    # (the shortest run that still admits a weld/flange land and a straight
+    # settling length upstream of the inducer).  Shell mass follows the same
+    # relation as NASA SP-125 eq. 8-32: mid-surface circumference x wall x
+    # length x density.
+    outlet_d = _safe_sqrt(4.0 * float(dif.volute_exit_area) / math.pi) if dif else 0.0
+    ports = 0.0
+    for diameter in (float(imp.inlet_diameter), float(outlet_d)):
+        if diameter <= 0.0:
+            continue
+        ports += (
+            rho * math.pi * (diameter + casing_t) * casing_t * (2.0 * diameter)
+        )
+
+    # The drive masses are already solved by ``_drive_sizing`` from the
+    # published power densities; surfacing them here means the BOM and the
+    # ``ElectricDriveSizing`` rollup can never disagree.
+    drv = line.drive
     return {
         "impeller": impeller,
         "inducer": inducer,
@@ -2669,7 +2713,11 @@ def _estimate_component_masses(
         "casing": casing,
         "bearings": 0.12 * shaft,
         "seals": 0.08 * shaft,
-        "ports_instrumentation": None,
+        "diffuser_volute": diffuser,
+        "ports": ports,
+        "ports_instrumentation": ports,
+        "motor": float(drv.motor_mass) if drv is not None else None,
+        "inverter": float(drv.inverter_mass) if drv is not None else None,
     }
 
 
@@ -2727,8 +2775,11 @@ def _hardware_bom(
         add("hydraulic", dif.selection, {
             "throat_area_m2": dif.throat_area,
             "vane_count": dif.vane_count,
+            "vane_width_m": dif.vane_width,
             "volute_exit_area_m2": dif.volute_exit_area,
-        }, reference_id=f"{role}.diffuser_vane_ring")
+        }, mass_key="diffuser_volute",
+           reference_id=f"{role}.diffuser_vane_ring",
+           source_ids=["NASA SP-8109"])
         add("mechanical", "shaft and coupling", {
             "shaft_diameter_m": (
                 line.reference_geometry.shaft_datum["diameter_m"]
@@ -2744,14 +2795,16 @@ def _hardware_bom(
             "voltage_v": drv.voltage,
             "current_a": drv.current,
             "heat_w": drv.motor_heat,
-        }, reference_id=None, status="technology_assumption",
+        }, mass_key="motor", reference_id=None,
+           status="technology_assumption",
            source_ids=["Lee et al. 2021", "Spiller, Stabile, Lentini 2013"])
         add("electrical", "inverter/controller", {
             "electric_power_w": drv.electric_power,
             "voltage_v": drv.voltage,
             "current_a": drv.current,
             "heat_w": drv.controller_heat,
-        }, reference_id=None, status="technology_assumption",
+        }, mass_key="inverter", reference_id=None,
+           status="technology_assumption",
            source_ids=["Lee et al. 2021"])
         add("mechanical", "bearings", {
             "bearing_dn_mm_rpm": (
@@ -2788,8 +2841,10 @@ def _hardware_bom(
         add("interface", "inlet and outlet ports", {
             "inlet_diameter_m": imp.inlet_diameter,
             "outlet_area_m2": dif.volute_exit_area,
-        }, mass_key="ports_instrumentation", reference_id=f"{role}.inlet_port",
-           status="reference_placeholder")
+            "stub_length_over_diameter": 2.0,
+            "wall_thickness_basis": "casing wall thickness",
+        }, mass_key="ports", reference_id=f"{role}.inlet_port",
+           status="screening_sized", source_ids=["NASA SP-125 eq. 8-32"])
         add("instrumentation", "pressure/temperature/speed sensors", {
             "minimum_channels": "inlet pressure, outlet pressure, motor temperature, speed pickup",
         }, status="placeholder")

@@ -31,13 +31,21 @@ Build state (see the plan's §11 tracker):
   hydraulic edge closed and an optional spray→η_c* fixed point (default frozen +
   ablation).  Surfaced via the ``--engine-mdo`` CLI flag.
 * Phase 8/9 — ``nlp.py``: the ε-constraint hard-constrained NLP ``solve_min_mass``
-  / ``pareto_frontier`` — min package mass s.t. Isp ≥ floor and every enforced
-  margin ≥ 0, over the 6-var unit-box design vector, exact JAX Jacobians → SLSQP.
+  / ``pareto_frontier`` — min smooth electric-feed objective mass s.t. Isp ≥
+  floor and every enforced margin ≥ 0, over the 10-variable unit-box design
+  vector, exact JAX Jacobians → SLSQP.  Results also retain the exact installed
+  electric-package mass as a distinct reporting quantity.
   Surfaced via ``--engine-mdo-optimize``.
+* Output contracts — ``state.py`` provides a fixed-shape pure-JAX
+  ``EngineState``; ``snapshot.py`` and ``postprocess.py`` map MDO and
+  traditional results into one versioned host contract, run the authoritative
+  nozzle/electric-pump re-evaluation, and compare common scalars/profiles.
 
-Hard rules inherited from the plan (§0.1): no ``max()`` in the differentiable
-core; discrete choices enumerated outside; never differentiate through solver
-iterations; every block keeps a NumPy oracle + parity test.
+Hard rules inherited from the plan (§0.1): discrete choices are enumerated
+outside the traced core; converged implicit states are differentiated by the
+IFT rather than by unrolling solver iterations; non-smooth reporting branches
+remain explicit while conservative smooth envelopes are used where the NLP
+requires derivatives; authoritative re-evaluation stays host-side.
 """
 
 from raosim.mdo.schema import (  # noqa: F401
@@ -61,6 +69,33 @@ from raosim.mdo.engine import (  # noqa: F401
     engine_outputs,
     ablation_delta,
     EngineResult,
+)
+from raosim.mdo.state import (  # noqa: F401
+    ENGINE_STATE_SCHEMA_VERSION,
+    EngineState,
+    InputConventionState,
+    engine_state_from_result,
+    solve_engine_state,
+)
+from raosim.mdo.snapshot import (  # noqa: F401
+    CONTRACT_NAME as SNAPSHOT_CONTRACT_NAME,
+    CONTRACT_VERSION as SNAPSHOT_CONTRACT_VERSION,
+    SNAPSHOT_FIELD_MANIFEST,
+    EngineAnalysisSnapshot,
+    FieldComparison,
+    NormalizedProfile,
+    SnapshotComparison,
+    SnapshotSection,
+    SnapshotValue,
+    compare_snapshots,
+    snapshot_from_mdo,
+    snapshot_from_traditional,
+)
+from raosim.mdo.postprocess import (  # noqa: F401
+    ReEvaluation,
+    reevaluate,
+    summarise,
+    to_design_input,
 )
 from raosim.mdo.nlp import (  # noqa: F401
     solve_min_mass,

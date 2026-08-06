@@ -77,10 +77,14 @@ def test_schmucker_parity():
     np_ratio = schmucker_separation_ratio(Me, Pa / Pc)
     assert np_ratio == pytest.approx(
         (1.88 * Me - 1.0) ** (-0.64) * (Pa / Pc), rel=1e-12)
-    # JAX margin == NumPy margin (lock-step mirrors).
+    # JAX helper preserves the raw attached-flow ratio for its legacy API.
     np_margin = np_pr(Me, GAMMA) / np_ratio
     jx_margin = float(T.schmucker_separation_margin(eps, GAMMA, Pc, Pa))
     assert jx_margin == pytest.approx(np_margin, rel=1e-8)
+    # The ambient-referenced correlation degenerates in vacuum; the MDO
+    # margin must remain finite and positive rather than emit inf/nan.
+    vacuum = float(T.schmucker_separation_margin(eps, GAMMA, Pc, 0.0))
+    assert np.isfinite(vacuum) and vacuum > 0.0
 
 
 def test_thrust_coefficient_has_interior_optimum(args):

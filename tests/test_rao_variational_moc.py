@@ -91,6 +91,104 @@ def test_rao_variational_moc_contour_exposes_raw_and_export_layers():
     assert contour["y"][-1] == math.sqrt(10.0) * 0.020
 
 
+def test_rao_variational_wrapper_forwards_complete_host_config(monkeypatch):
+    import raosim.rao_variational as rao_module
+
+    captured = {}
+    sentinel = object()
+
+    def fake_solve(config):
+        captured["config"] = config
+        return sentinel
+
+    monkeypatch.setattr(rao_module, "solve_rao_bvp", fake_solve)
+
+    result = rao_module.rao_variational_moc_contour(
+        Rt=0.020,
+        epsilon=10.0,
+        gamma=1.23,
+        pa_over_p0=0.04,
+        length_pct=75.0,
+        Ru_factor=1.8,
+        throat_downstream_radius_factor=0.45,
+        thetaN_guess_deg=34.0,
+        starting_line_method="area_ratio",
+        n_control=18,
+        n_kernel=20,
+        max_nfev=321,
+        evaluate_moc=False,
+        solver_backend="numpy",
+        wall_method="bde",
+        kernel_d_fraction_max=0.7,
+        physics_weight=1.0,
+        return_solution=True,
+    )
+
+    config = captured["config"]
+    assert result is sentinel
+    assert config.throat_upstream_radius_factor == pytest.approx(1.8)
+    assert config.throat_downstream_radius_factor == pytest.approx(0.45)
+    assert config.thetaN_guess_deg == pytest.approx(34.0)
+    assert config.starting_line_method == "area_ratio"
+    assert config.n_control == 18
+    assert config.n_kernel == 20
+    assert config.max_nfev == 321
+    assert config.evaluate_moc is False
+    assert config.solver_backend == "numpy"
+    assert config.wall_method == "bde"
+    assert config.kernel_d_fraction_max == pytest.approx(0.7)
+    assert config.physics_weight == pytest.approx(1.0)
+
+
+def test_nozzle_geometry_forwards_host_rao_controls(monkeypatch):
+    import raosim.rao_variational as rao_module
+
+    captured = {}
+
+    def fake_contour(Rt, epsilon, **kwargs):
+        captured.update(kwargs)
+        return {
+            "x": np.array([0.0, 1.0]),
+            "y": np.array([Rt, math.sqrt(epsilon) * Rt]),
+            "Rt": Rt,
+            "epsilon": epsilon,
+        }
+
+    monkeypatch.setattr(
+        rao_module, "rao_variational_moc_contour", fake_contour
+    )
+    bell_nozzle_contour(
+        0.020,
+        10.0,
+        method="rao_variational_moc",
+        Ru_factor=1.8,
+        Rd_factor=0.45,
+        starting_line_method="area_ratio",
+        rao_moc_n_control=18,
+        rao_moc_n_kernel=20,
+        rao_moc_max_nfev=321,
+        rao_moc_evaluate_moc=False,
+        rao_moc_theta_n_guess_deg=34.0,
+        rao_moc_solver_backend="numpy",
+        rao_moc_wall_method="bde",
+        rao_moc_kernel_d_fraction_max=0.7,
+        rao_moc_physics_weight=1.0,
+    )
+
+    assert captured["Ru_factor"] == pytest.approx(1.8)
+    assert captured["throat_downstream_radius_factor"] == pytest.approx(0.45)
+    assert captured["thetaN_guess_deg"] == pytest.approx(34.0)
+    assert captured["starting_line_method"] == "area_ratio"
+    assert captured["n_control"] == 18
+    assert captured["n_kernel"] == 20
+    assert captured["max_nfev"] == 321
+    assert captured["evaluate_moc"] is False
+    assert captured["solver_backend"] == "numpy"
+    assert captured["wall_method"] == "bde"
+    assert captured["kernel_d_fraction_max"] == pytest.approx(0.7)
+    assert captured["physics_weight"] == pytest.approx(1.0)
+
+
 def test_zero_length_throat_arc_collapses_to_one_station():
     solution = solve_rao_bvp(RaoSolverConfig(
         Rt=0.020,

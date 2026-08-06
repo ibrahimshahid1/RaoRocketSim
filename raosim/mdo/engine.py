@@ -41,6 +41,7 @@ from dataclasses import dataclass
 
 import raosim.jax  # noqa: F401  -- float64
 import jax.numpy as jnp
+import jax.scipy as jsp
 import optimistix as optx
 
 from raosim.jax import thermal as jt
@@ -48,14 +49,33 @@ from raosim.jax.primitives import isentropic_pressure_ratio, mach_from_area_rati
 from raosim.mdo.assembly import StateScales
 from raosim.mdo.properties import ChamberSurfaces, constant_chamber_surfaces
 from raosim.mdo.schema import DesignVector, MissionSpec
-from raosim.mdo.grid import build_station_grid, GridTopology
+from raosim.mdo.grid import (
+    build_station_grid, chamber_barrel_length, GridTopology,
+)
 from raosim.mdo.cooling import (
     solve_cooling, CoolingMarch, film_cooling_efficiency,
 )
 from raosim.mdo.injector import injector_readouts, InjectorReadout
+from raosim.mdo.mass import chamber_mass, ChamberMassBreakdown
+from raosim.mdo.envelope import (
+    chamber_envelope, envelope_margins, ChamberEnvelope,
+)
 from raosim.mdo.pump import electric_feed, ElectricFeed
+from raosim.mdo.structures import nozzle_collapse_screen, NozzleCollapseScreen
 
 Array = jnp.ndarray
+
+
+def _smooth_min(values: Array, sharpness: float) -> Array:
+    """Conservative differentiable lower envelope (never above ``min``)."""
+    v = jnp.asarray(values, dtype=jnp.float64)
+    return -jsp.special.logsumexp(-sharpness * v) / sharpness
+
+
+def _smooth_max(values: Array, sharpness: float) -> Array:
+    """Conservative differentiable upper envelope (never below ``max``)."""
+    v = jnp.asarray(values, dtype=jnp.float64)
+    return jsp.special.logsumexp(sharpness * v) / sharpness
 
 
 # --------------------------------------------------------------------------- #
@@ -111,7 +131,8 @@ def engine_residual(y: Array, x: DesignVector, mission: MissionSpec,
     eta_cs = _eta_cstar(mdot, x, mission, surfaces, couple)
     cstar_del = eta_cs * cstar_ideal
 
-    Cf = jt.ambient_thrust_coefficient(eps, gamma, Pc, mission.Pa)
+    Cf_ideal = jt.ambient_thrust_coefficient(eps, gamma, Pc, mission.Pa)
+    Cf = mission.eta_CF * Cf_ideal
     At = jnp.pi * Rt * Rt
     R1 = (mission.thrust - Cf * Pc * At) / mission.thrust
     R2 = (mdot - Pc * At / cstar_del) / scales.mdot_ref
@@ -121,7 +142,8 @@ def engine_residual(y: Array, x: DesignVector, mission: MissionSpec,
 def _initial_state(x: DesignVector, mission: MissionSpec,
                    surfaces: ChamberSurfaces, scales: StateScales) -> Array:
     gamma = surfaces.gamma(x.Pc, mission.OF)
-    Cf = jt.ambient_thrust_coefficient(x.eps, gamma, x.Pc, mission.Pa)
+    Cf = mission.eta_CF * jt.ambient_thrust_coefficient(
+        x.eps, gamma, x.Pc, mission.Pa)
     Rt = jnp.sqrt(mission.thrust / (Cf * x.Pc * jnp.pi))
     cstar_del = mission.eta_cstar * surfaces.c_star_ideal(x.Pc, mission.OF)
     mdot = x.Pc * jnp.pi * Rt * Rt / cstar_del
@@ -138,6 +160,7 @@ class EngineResult:
     mdot: Array
     T_wg: Array           # (n,) solved gas-side wall temperatures [K]
     eta_cstar: Array
+    Cf_ideal: Array
     Cf: Array
     Isp: Array
     Me: Array
@@ -151,13 +174,35 @@ class EngineResult:
     dp_regen: Array
     dp_rise_fuel: Array
     dp_rise_ox: Array
-    # mass ledger (reporting)
-    package_mass: Array
+    # Smooth electric-feed objective.  This is deliberately not labelled as a
+    # physical package total: its battery branch is a log-sum-exp surrogate.
+    objective_mass: Array
+    electric_package_exact_mass: Array
+    # Thrust-chamber structural metal, integrated on the station grid.  Real
+    # hardware mass, not a surrogate -- but conditional on the closeout
+    # thickness assumption documented in :mod:`raosim.mdo.mass`.
+    chamber_mass: ChamberMassBreakdown
+    # Smallest enclosing cylinder of the cooled chamber (SP-125 §2.1 item 6).
+    # A lower bound on the installed envelope -- no flange, injector body or
+    # feed hardware.  See raosim.mdo.envelope.
+    envelope: ChamberEnvelope
     mass_ledger: dict
     # constraint margins (reporting scalars; ≥0 feasible)
     constraints: dict
     # reported diagnostics (not constraints)
     diagnostics: dict
+    # Explicit numerical status: feasibility must not be inferred from a
+    # partially converged root merely because its reported physics is finite.
+    solver_residual_max: Array
+    solver_status_ok: Array
+    solver_converged: Array
+    finite: Array
+
+    @property
+    def package_mass(self) -> Array:
+        """Deprecated compatibility alias for :attr:`objective_mass`."""
+
+        return self.objective_mass
 
 
 def chamber_surfaces_for(mission: MissionSpec) -> ChamberSurfaces:
@@ -210,22 +255,39 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     cstar_del = eta_cs * surfaces.c_star_ideal(Pc, mission.OF)
 
     # --- performance ------------------------------------------------------- #
-    Cf = jt.ambient_thrust_coefficient(eps, gamma, Pc, mission.Pa)
+    Cf_ideal = jt.ambient_thrust_coefficient(eps, gamma, Pc, mission.Pa)
+    Cf = mission.eta_CF * Cf_ideal
     Me = mach_from_area_ratio(eps, gamma, supersonic=True)
     Pe = Pc * isentropic_pressure_ratio(Me, gamma)
     Isp = Cf * cstar_del / mission.g0
-    sep_margin = jt.schmucker_separation_margin(eps, gamma, Pc, mission.Pa)
+    # The helper exposes the raw attached-flow ratio Pe/p_sep.  Design
+    # admission requires the SP-8120-style 20% reserve, while vacuum is an
+    # automatic finite pass because an ambient-referenced separation criterion
+    # has no physical threshold there.
+    sep_raw_margin = jt.schmucker_separation_margin(eps, gamma, Pc, mission.Pa)
+    sep_margin = jnp.where(
+        mission.Pa <= 0.0, 1.0,
+        sep_raw_margin - mission.separation_design_margin,
+    )
 
     mdot_f, mdot_o = _split(mdot, mission)
 
     # --- cooling (inner IFT solve on the stationwise wall temperatures) ----- #
-    grid = build_station_grid(Rt, eps, mission, topo)
-    mdot_cool = mission.cooling_fraction * mdot_f
+    grid = build_station_grid(Rt, eps, mission, topo, gamma=gamma)
+    # Defined architecture: ``film_frac`` is a fuel branch that bypasses the
+    # regenerative jacket.  Only the remainder reaches that jacket; sending
+    # total fuel through it double-counts film and overstates heat capacity.
+    mdot_film = mdot_f * x.film_frac
+    mdot_cool = mission.cooling_fraction * (mdot_f - mdot_film)
     T_wg, cooling = solve_cooling(grid, Pc=Pc, gamma=gamma, Tc=Tc,
                                   c_star_del=cstar_del, mdot_cool=mdot_cool,
                                   mission=mission, channel_width=x.channel_width,
                                   channel_height=x.channel_height,
-                                  film_frac=x.film_frac, t_wall=x.t_wall)
+                                  film_frac=x.film_frac, mdot_film=mdot_film,
+                                  t_wall=x.t_wall,
+                                  coolant_outlet_pressure=(
+                                      Pc * (1.0 + x.dp_f_frac)
+                                  ))
     dp_regen = cooling.dp_total
 
     # --- injector ---------------------------------------------------------- #
@@ -243,30 +305,126 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
                          N_rpm=x.N_rpm, mission=mission)
 
     # --- §3 mass ledger (battery max = reporting epigraph only) ------------- #
-    m_batt = jnp.maximum(feed.battery.energy_limited_mass,
-                         feed.battery.power_limited_mass) \
+    m_batt_objective = _smooth_max(jnp.stack([
+        feed.battery.energy_limited_mass, feed.battery.power_limited_mass]), 2.0) \
         * mission.battery_structural_margin
+    m_batt_energy_installed = (
+        feed.battery.energy_limited_mass * mission.battery_structural_margin
+    )
+    m_batt_power_installed = (
+        feed.battery.power_limited_mass * mission.battery_structural_margin
+    )
+    m_batt_exact = jnp.maximum(
+        m_batt_energy_installed, m_batt_power_installed
+    )
+    # Thrust-chamber structure is now integrated from the same station grid the
+    # cooling march uses (SP-125 eq. 8-32 shell mass; see mdo/mass.py), so the
+    # optimizer can trade wall thickness and channel geometry against feed-
+    # system mass instead of minimising only the electric package.  The
+    # injector remains a hydraulic sizing here -- its hardware mass needs the
+    # resolved machined layout, which lives on the host side
+    # (raosim.mass_ledger.injector_mass_ledger) -- so it stays unavailable
+    # rather than being written as a misleading zero.
+    chamber = chamber_mass(
+        grid, mission,
+        t_wall=x.t_wall,
+        channel_width=x.channel_width,
+        channel_height=x.channel_height,
+        # The jacket is sized against the SOLVED jacket pressure, so the
+        # structure and the hydraulics cannot disagree about the load.
+        coolant_pressure=cooling.coolant_pressure,
+    )
+    # SP-8087 sec. 2.1.3 nozzle hoop-compression collapse.  The jacket alone
+    # is screened (conservative: crediting the land-stiffened liner/jacket
+    # sandwich needs SP-8007 sec. 4.4), over the full divergent length, which
+    # assumes no retainer bands.
+    collapse = nozzle_collapse_screen(
+        grid, mission,
+        gas_pressure=cooling.gas_pressure,
+        shell_thickness=chamber.closeout_thickness,
+        shell_length=(mission.length_pct / 100.0)
+        * (Rt * jnp.sqrt(x.eps) - Rt) / jnp.tan(jnp.deg2rad(15.0)),
+    )
+    # SP-125 §2.1 item 6: the smallest enclosing cylinder of the cooled thrust
+    # chamber.  A LOWER BOUND on the installed envelope -- it has no flange,
+    # injector body or feed hardware; see raosim.mdo.envelope.
+    envelope = chamber_envelope(
+        grid,
+        t_wall=x.t_wall,
+        channel_height=x.channel_height,
+        # Reuse the jacket the mass ledger already solved, so the envelope and
+        # the mass cannot describe different jackets.
+        closeout_thickness=chamber.closeout_thickness,
+    )
+    envelope_d_margin, envelope_l_margin = envelope_margins(envelope, mission)
     ledger = {
         "pumps": feed.pump_mass, "motors": feed.motor_mass,
-        "inverters": feed.inverter_mass, "battery": m_batt,
-        "thrust_chamber_placeholder": jnp.asarray(0.0),
-        "injector_placeholder": jnp.asarray(0.0),
+        "inverters": feed.inverter_mass,
+        "battery_energy_installed": m_batt_energy_installed,
+        "battery_power_installed": m_batt_power_installed,
+        "battery_selected_exact": m_batt_exact,
+        "battery_objective_smooth": m_batt_objective,
+        "thrust_chamber_liner": chamber.liner,
+        "thrust_chamber_lands": chamber.lands,
+        "thrust_chamber_closeout": chamber.closeout,
+        "thrust_chamber": chamber.total,
     }
-    package_mass = (feed.pump_mass + feed.motor_mass + feed.inverter_mass
-                    + m_batt)
+    objective_mass = (
+        feed.pump_mass
+        + feed.motor_mass
+        + feed.inverter_mass
+        + m_batt_objective
+    )
+    electric_package_exact_mass = (
+        feed.pump_mass
+        + feed.motor_mass
+        + feed.inverter_mass
+        + m_batt_exact
+    )
 
     # --- constraint margins (reporting scalars; ≥0 feasible) ---------------- #
+    outer_residual_max = jnp.max(jnp.abs(resid))
+    outer_status_ok = sol.result == optx.RESULTS.successful
+    finite = (jnp.all(jnp.isfinite(y)) & jnp.all(jnp.isfinite(resid))
+              & jnp.isfinite(Cf) & jnp.isfinite(Isp) & cooling.finite)
+    # The root API is intentionally called with throw=False so infeasible NLP
+    # probes remain differentiable.  Residual closure plus finiteness is the
+    # JIT-safe solver-success predicate carried into feasibility below.
+    outer_tol = jnp.asarray(max(rtol, atol), dtype=jnp.float64) * 10.0
+    solver_status_ok = outer_status_ok & cooling.solver_status_ok
+    solver_converged = (solver_status_ok & finite
+                        & (outer_residual_max <= outer_tol)
+                        & cooling.solver_converged)
+
+    chart_scale = jnp.stack([
+        grid.chart_domain_violation[0] / 46.0,
+        grid.chart_domain_violation[1] / 46.0,
+        grid.chart_domain_violation[2] / 40.0,
+        grid.chart_domain_violation[3] / 40.0,
+    ])
+    property_violation = surfaces.domain_violation(Pc, mission.OF)
+    property_scale = jnp.stack([
+        property_violation[0] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
+        property_violation[1] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
+        property_violation[2] / (surfaces.gamma.yg[-1] - surfaces.gamma.yg[0]),
+        property_violation[3] / (surfaces.gamma.yg[-1] - surfaces.gamma.yg[0]),
+    ])
+
     constraints = {
         "thrust_residual": resid[0],
         "separation_margin": sep_margin,
+        # Retain the exact stationwise extrema for IFT wall constraints: a
+        # broad smooth envelope perturbs their root sensitivities.  The active
+        # stations are fixed-topology and tied only at measure-zero points.
         "coking_margin_min": jnp.min(cooling.coking_margin),
         "land_min": cooling.land_min,
-        "chug_margin_min": jnp.minimum(injector.chug_margin_fuel,
-                                       injector.chug_margin_ox),
+        "chug_margin_min": _smooth_min(jnp.stack([
+            injector.chug_margin_fuel, injector.chug_margin_ox]), 100.0),
         "pintle_transition_margin": injector.transition_margin,
-        "nss_margin_min": jnp.minimum(feed.fuel.nss_margin, feed.ox.nss_margin),
-        "tip_speed_margin_min": jnp.minimum(feed.fuel.tip_speed_margin,
-                                            feed.ox.tip_speed_margin),
+        "nss_margin_min": _smooth_min(jnp.stack([
+            feed.fuel.nss_margin, feed.ox.nss_margin]), 100.0),
+        "tip_speed_margin_min": _smooth_min(jnp.stack([
+            feed.fuel.tip_speed_margin, feed.ox.tip_speed_margin]), 10.0),
         # HARCC aspect-ratio validity cap (Pizzarelli/Carlile/Mirzamoghadam)
         "aspect_ratio_margin": (mission.channel_aspect_ratio_max
                                 - x.channel_height / x.channel_width),
@@ -277,14 +435,77 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
                                - mission.blockage_factor_min),
         "blockage_hi_margin": (mission.blockage_factor_max
                                - injector.blockage_factor),
-        # liner thermal stress (§10.2) — the binding wall criterion; the
-        # pressure term is reported separately and is ~2 orders smaller.
-        "thermal_stress_margin": (mission.liner_sigma_allow
-                                  - jnp.max(cooling.sigma_thermal)),
+        # SP-125 combined liner stress. ``liner_sigma_allow`` is already the
+        # post-FOS allowable; post-processing reconstructs the traditional
+        # material yield as allowable*FOS so both pipelines enforce the same
+        # governing inequality.
+        "structural_stress_margin": (
+            mission.liner_sigma_allow
+            - jnp.max(
+                cooling.sigma_thermal
+                + jnp.abs(cooling.sigma_pressure_profile)
+            )
+        ),
         # allowable gas-side wall temperature (Mirzamoghadam: a primary design
         # criterion).  Required now that t_wall is a variable — a thicker wall
         # lowers T_wc but RAISES T_wg, so both sides must be bounded.
         "wall_temp_margin": mission.liner_T_wg_max - jnp.max(T_wg),
+        # Film system must provide the required flow with its configured
+        # capacity margin (SP-8087 design point commonly sets this to 2x).
+        "film_capacity_margin": (mission.film_system_capacity_fraction
+                                 - mission.film_capacity_margin * x.film_frac),
+        # Both interpolant and chart evaluators clamp only for numerical safety;
+        # their actual valid domains are hard NLP constraints.
+        "property_domain_margin": -_smooth_max(property_scale, 40.0),
+        "chart_domain_margin": -_smooth_max(chart_scale, 40.0),
+        "wall_monotonic_margin": grid.wall_monotonic_margin,
+        # The chamber barrel must have non-negative length.  SP-125 defines the
+        # chamber volume as injector face to throat plane (printed p. 88), so
+        # the shoulder, convergent cone and upstream throat arc already consume
+        # part of L*.A_t; at small L*, high contraction ratio or a shallow
+        # convergent angle they can consume all of it.  Reported as a margin
+        # rather than clamped: clamping would manufacture chamber volume the
+        # design does not have.
+        "chamber_volume_margin": chamber_barrel_length(Rt, mission),
+        # SP-125 (printed p. 336): the thin-shell hoop treatment used to size
+        # the structural jacket is only valid while t/r <= ~1/15.  A jacket
+        # thick enough to violate it is reporting that the alloy or the jacket
+        # pressure is wrong -- e.g. a copper closeout at this Pc needs 5-7 mm
+        # on a 91 mm radius, which is outside the model.
+        "jacket_thin_shell_margin": chamber.closeout_thin_shell_margin,
+        # SP-8087 sec. 2.1.3's third structural job: "hoop support about the
+        # expansion nozzle to resist collapse from hoop compression ... during
+        # operation at sea level, where jet separation occurs during start and
+        # shutdown and the nozzle runs overexpanded".  SP-8120 sec. 2.2 records
+        # the failure.  This is NOT the separation constraint -- separation asks
+        # whether the flow detaches, collapse asks whether the shell survives
+        # the external pressure while attached and overexpanded.
+        "nozzle_collapse_margin": collapse.normalized_margin,
+        # --- SP-125 §2.1 requirement screens (items 5 and 6) ---------------- #
+        # These three are inert at the MissionSpec sentinel defaults and only
+        # bind when a raosim.requirements.EngineRequirement supplies a limit.
+        #
+        # All three screen a LOWER BOUND on the true installed quantity, so a
+        # satisfied margin does NOT prove the requirement is met.  That is why
+        # the requirement layer classifies them as partially enforced rather
+        # than enforced, and why the mass one is named for the partial quantity
+        # it actually bounds.  Reporting them as full requirement satisfaction
+        # would be exactly the "fake zero" failure mode the output contract
+        # exists to prevent.
+        "envelope_diameter_margin": envelope_d_margin,
+        "envelope_length_margin": envelope_l_margin,
+        # dry_mass_partial = smooth electric-feed objective + thrust-chamber
+        # structure.  Missing: injector hardware, manifolds, valves, lines,
+        # gimbal, mounts (see docs/HARDWARE_MASS_LEDGER.md `excludes`).
+        "dry_mass_partial_margin": (
+            jnp.asarray(mission.dry_mass_max, dtype=jnp.float64)
+            - (objective_mass + chamber.total)
+        ),
+        "engine_residual_margin": outer_tol - outer_residual_max,
+        "cooling_residual_margin": (jnp.asarray(max(rtol, atol), dtype=jnp.float64)
+                                    * 10.0 - cooling.solver_residual_max),
+        "solver_status_margin": jnp.where(solver_status_ok, 1.0, -1.0),
+        "finite_margin": jnp.where(finite, 1.0, -1.0),
     }
     # reported diagnostics (NOT constraints — the coolant-Mach margin is ~173x,
     # so constraining it would only add a dead Jacobian column, §10.4)
@@ -294,18 +515,30 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "coolant_velocity": cooling.coolant_velocity,
         "sigma_thermal_max": jnp.max(cooling.sigma_thermal),
         "sigma_pressure": cooling.sigma_pressure,
+        "sigma_combined_max": jnp.max(
+            cooling.sigma_thermal
+            + jnp.abs(cooling.sigma_pressure_profile)
+        ),
         "film_capacity_required": (x.film_frac * mission.film_capacity_margin),
+        "film_system_capacity": jnp.asarray(mission.film_system_capacity_fraction),
         "eta_film_cooling": film_cooling_efficiency(
-            mission.cooling_fraction * mdot_f * x.film_frac
-            / jnp.maximum(1.0 - x.film_frac, 1e-6), grid, mission),
+            mdot_film, grid, mission),
     }
 
     return EngineResult(
-        Rt=Rt, mdot=mdot, T_wg=T_wg, eta_cstar=eta_cs, Cf=Cf, Isp=Isp, Me=Me, Pe=Pe,
+        Rt=Rt, mdot=mdot, T_wg=T_wg, eta_cstar=eta_cs, Cf_ideal=Cf_ideal,
+        Cf=Cf, Isp=Isp, Me=Me, Pe=Pe,
         thrust_residual=resid[0], cooling=cooling, injector=injector, feed=feed,
         dp_regen=dp_regen, dp_rise_fuel=dp_rise_f, dp_rise_ox=dp_rise_o,
-        package_mass=package_mass, mass_ledger=ledger, constraints=constraints,
-        diagnostics=diagnostics,
+        objective_mass=objective_mass,
+        electric_package_exact_mass=electric_package_exact_mass,
+        chamber_mass=chamber,
+        envelope=envelope,
+        mass_ledger=ledger,
+        constraints=constraints,
+        diagnostics=diagnostics, solver_residual_max=outer_residual_max,
+        solver_status_ok=solver_status_ok, solver_converged=solver_converged,
+        finite=finite,
     )
 
 
@@ -314,6 +547,9 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
 # --------------------------------------------------------------------------- #
 _SCALARS = {
     "Isp": lambda r: r.Isp,
+    "objective_mass": lambda r: r.objective_mass,
+    # Backward-compatible output name.  New callers should request
+    # ``objective_mass`` so a smooth surrogate cannot be mistaken for hardware.
     "package_mass": lambda r: r.package_mass,
     "P_electric": lambda r: r.feed.P_electric_total,
     "Rt": lambda r: r.Rt,
@@ -323,12 +559,22 @@ _SCALARS = {
     "coking_margin_min": lambda r: r.constraints["coking_margin_min"],
     "separation_margin": lambda r: r.constraints["separation_margin"],
     "T_wc_max": lambda r: jnp.max(r.cooling.T_wc),
+    # Thrust-chamber structural metal (SP-125 eq. 8-32 shell integral).
+    "thrust_chamber_mass": lambda r: r.chamber_mass.total,
+    # Electric feed package + thrust-chamber structure.  Still NOT a complete
+    # engine dry mass: injector hardware, manifolds, valves, lines, gimbal and
+    # mounts are absent, and the injector branch is only resolvable host-side.
+    "dry_mass_partial": lambda r: r.objective_mass + r.chamber_mass.total,
+    # SP-125 §2.1 item 6.  Lower bounds on the installed envelope: the cooled
+    # chamber only, with no flange, injector body or feed hardware.
+    "envelope_diameter_partial": lambda r: r.envelope.diameter,
+    "envelope_length_partial": lambda r: r.envelope.length,
 }
 
 
 def engine_outputs(x_arr: Array, mission: MissionSpec, *,
                    couple_eta_cstar: bool = False,
-                   outputs: tuple[str, ...] = ("Isp", "package_mass")) -> Array:
+                   outputs: tuple[str, ...] = ("Isp", "objective_mass")) -> Array:
     """``f(x_array) -> stacked scalar outputs`` through the coupled solve."""
     for k in outputs:
         if k not in _SCALARS:

@@ -448,6 +448,11 @@ class RaoSolverConfig:
     # walks to a bound.  Default False: the seed secant owns theta_B
     # exactly as before.
     solve_theta_b: bool = False
+    # ``None`` preserves the historical module-level PHYSICS_WEIGHT override
+    # used by ablation studies.  Host workflows should set this explicitly so
+    # independent solves do not communicate through mutable global state.
+    # Appended to retain the positional layout of RaoSolverConfig.
+    physics_weight: float | None = None
 
 
 # Converged-topology ("characteristic") block set.  After the
@@ -3099,6 +3104,11 @@ def _rao_bvp_residual_groups(
             "wall_intersection": np.zeros(0),
         }
 
+    physics_weight = (
+        PHYSICS_WEIGHT
+        if config.physics_weight is None
+        else float(config.physics_weight)
+    )
     return RaoResidualGroups(
         mass=_filter_group(
             "mass",
@@ -3114,18 +3124,19 @@ def _rao_bvp_residual_groups(
         stationarity=_filter_group("stationarity", stat_res, active),
         # Phase 4+: the Rao physics constraints (axisymmetric C+/C-
         # compatibility, algebraic stationarity, left-Mach geometry) are
-        # all unit-scaled.  ``PHYSICS_WEIGHT`` is the unified knob for
-        # the three derivative-form residuals (algebraic + C+/C-);
+        # all unit-scaled.  The config-level physics weight (falling back to
+        # ``PHYSICS_WEIGHT`` for legacy studies) is the unified knob for the
+        # three derivative-form residuals (algebraic + C+/C-);
         # left_mach stays at unit weight because it is geometric and the
         # residual is already normalised by segment chord length.  This
         # keeps physics above the smoothness regularization (0.02) and
         # rampable as a group when the kernel quality improves.
         algebraic_stationarity=_filter_group(
-            "algebraic_stationarity", PHYSICS_WEIGHT * algebraic_stat, active,
+            "algebraic_stationarity", physics_weight * algebraic_stat, active,
         ),
         left_mach=_filter_group("left_mach", left_mach, active),
-        moc_cplus=_filter_group("moc_cplus", PHYSICS_WEIGHT * moc_cplus, active),
-        moc_cminus=_filter_group("moc_cminus", PHYSICS_WEIGHT * moc_cminus, active),
+        moc_cplus=_filter_group("moc_cplus", physics_weight * moc_cplus, active),
+        moc_cminus=_filter_group("moc_cminus", physics_weight * moc_cminus, active),
         ce_geometry=_filter_group("ce_geometry", ce_geometry, active),
         regularization=_filter_group("regularization", 0.02 * regularization, active),
         penalties=_filter_group("penalties", penalties, active),
@@ -3136,7 +3147,7 @@ def _rao_bvp_residual_groups(
         wall_tangency=_filter_group("wall_tangency", wall_blocks["wall_tangency"], active),
         cplus_ce_to_wall=_filter_group(
             "cplus_ce_to_wall",
-            PHYSICS_WEIGHT * wall_blocks["cplus_ce_to_wall"], active,
+            physics_weight * wall_blocks["cplus_ce_to_wall"], active,
         ),
         wall_intersection=_filter_group(
             "wall_intersection", wall_blocks["wall_intersection"], active,
@@ -5620,6 +5631,11 @@ def rao_variational_moc_contour(
     convergent_half_angle_deg: float = 45.0,
     Ru_factor: float = 1.5,
     return_solution: bool = False,
+    *,
+    solver_backend: str = "jax",
+    wall_method: str = "coupled",
+    kernel_d_fraction_max: float | None = None,
+    physics_weight: float | None = None,
 ) -> dict | RaoSolution:
     """
     Generate an auditable Rao variational/MOC contour attempt.
@@ -5634,14 +5650,19 @@ def rao_variational_moc_contour(
         gamma=gamma,
         pa_over_p0=pa_over_p0,
         length_pct=length_pct,
+        throat_upstream_radius_factor=Ru_factor,
         throat_downstream_radius_factor=throat_downstream_radius_factor,
         thetaN_guess_deg=thetaN_guess_deg,
         n_control=n_control,
         n_kernel=n_kernel,
         max_nfev=max_nfev,
         residual_tol=residual_tol,
+        physics_weight=physics_weight,
         starting_line_method=starting_line_method,
         evaluate_moc=evaluate_moc,
+        solver_backend=solver_backend,
+        wall_method=wall_method,
+        kernel_d_fraction_max=kernel_d_fraction_max,
     )
     solution = solve_rao_bvp(config)
     if return_solution:

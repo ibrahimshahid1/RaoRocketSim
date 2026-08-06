@@ -68,6 +68,17 @@ def test_mission_cstar_matches_gas_dynamics_oracle():
     assert m.c_star_ideal() == pytest.approx(oracle, rel=1e-14)
 
 
+def test_mission_uses_distinct_traditional_top_throat_fillet_factors():
+    m = MissionSpec()
+    assert m.throat_ru_factor == pytest.approx(1.5)
+    assert m.throat_rd_factor == pytest.approx(0.382)
+
+
+def test_two_branch_fuel_architecture_rejects_an_untracked_third_bypass():
+    with pytest.raises(ValueError, match="cooling_fraction must therefore equal 1.0"):
+        MissionSpec(cooling_fraction=0.9)
+
+
 def test_phase1_gate_jit_and_jacobians_no_callbacks():
     """A jitted scalar of the design pytree; jacfwd and jacrev both run and
     agree — the plan's Phase-1 completion gate on the schema layer."""

@@ -695,6 +695,39 @@ class FeedLineLedger:
 
 
 @dataclass
+class FuelFlowSplitLedger:
+    """Fuel-flow topology at the common-pump / regen / film boundary.
+
+    The current MDO-equivalent pressure screen keeps one common fuel-pump duty
+    upstream of the split.  The separate film injector/orifice and
+    branch-specific pressure and thermal states are not sized here.
+    """
+
+    total_fuel_mass_flow: float
+    regen_jacket_mass_flow: float
+    film_bypass_mass_flow: float
+    upstream_pump_mass_flow: float
+    closure_residual: float
+    relative_closure_error: float
+    status: str
+    topology: str
+    film_injector_hardware_model: str = "not_modeled"
+
+    def to_dict(self) -> dict:
+        return {
+            "total_fuel_mass_flow_kg_s": self.total_fuel_mass_flow,
+            "regen_jacket_mass_flow_kg_s": self.regen_jacket_mass_flow,
+            "film_bypass_mass_flow_kg_s": self.film_bypass_mass_flow,
+            "upstream_pump_mass_flow_kg_s": self.upstream_pump_mass_flow,
+            "closure_residual_kg_s": self.closure_residual,
+            "relative_closure_error": self.relative_closure_error,
+            "status": self.status,
+            "topology": self.topology,
+            "film_injector_hardware_model": self.film_injector_hardware_model,
+        }
+
+
+@dataclass
 class FeedSystemLedger:
     """Whole-engine feed-pressure closure across both propellants."""
 
@@ -702,12 +735,17 @@ class FeedSystemLedger:
     lines: dict[str, FeedLineLedger]
     governing_required_pressure: float        # Pa  (max across streams)
     notes: list[str] = field(default_factory=list)
+    fuel_flow_split: FuelFlowSplitLedger | None = None
 
     def to_dict(self) -> dict:
         return {
             "architecture": self.architecture,
             "governing_required_pressure_pa": self.governing_required_pressure,
             "lines": {k: v.to_dict() for k, v in self.lines.items()},
+            "fuel_flow_split": (
+                self.fuel_flow_split.to_dict()
+                if self.fuel_flow_split is not None else None
+            ),
             "notes": self.notes,
         }
 
@@ -825,8 +863,8 @@ class InjectorSpecError(ValueError):
 # infeasibility, not a warning.
 _CLOSURE_PASS_TOL = 1.0e-3   # < 0.1% delivered-vs-required flow error
 _CLOSURE_FAIL_TOL = 0.05     # >= 5% flow error fails; between -> warn
-_REGEN_FLOW_PASS_TOL = 0.01  # direct jacket->injector handoff within 1%
-_REGEN_FLOW_FAIL_TOL = 0.05  # >=5% needs a bypass/mixing model
+_REGEN_FLOW_PASS_TOL = 0.01  # jacket + explicit film closes within 1%
+_REGEN_FLOW_FAIL_TOL = 0.05  # >=5% remains an unresolved topology mismatch
 
 
 def _validate_injector_spec(
@@ -3432,14 +3470,16 @@ def evaluate_pintle_injector(
     Besides calling :func:`size_pintle_injector`, this integration boundary:
 
     * fills missing feed identities from the thermochemistry request;
-    * checks that a direct regenerative-cooling-to-injector handoff carries
-      the same fuel mass flow as the engine cycle;
+    * checks that a direct regenerative handoff, or an explicit
+      regen-plus-film split, closes to the engine-cycle fuel flow;
     * hands the calculated jacket outlet temperature/pressure to the fuel
       property resolver only when that continuity check is credible; and
     * appends the coupling gate before recomputing overall feasibility.
 
-    A mismatched coolant flow is not silently interpreted as a bypass circuit:
-    bypassed fuel would need an explicit split and mixing-temperature model.
+    A reduced coolant flow is interpreted as a bypass only when
+    ``CoolingSpec.fuel_film_mass_flow`` explicitly supplies that branch.
+    Film-slot/orifice hardware and its branch-specific pressure/thermal state
+    remain outside this screening model.
     """
     local = copy.deepcopy(spec)
     if not local.fuel.name:
@@ -3464,23 +3504,53 @@ def evaluate_pintle_injector(
         == canonical_coolant_name(local.fuel.name)
     )
 
+    fuel_flow_split = None
     if fuel_is_coolant:
         coolant_mdot = float(
             getattr(cooling, "coolant_mass_flow", 0.0) or 0.0
         )
-        rel_error = abs(coolant_mdot - mdot_fuel) / max(mdot_fuel, 1e-12)
+        film_mdot = float(
+            getattr(cooling, "fuel_film_mass_flow", 0.0) or 0.0
+        )
+        split_mdot = coolant_mdot + film_mdot
+        closure_residual = split_mdot - mdot_fuel
+        rel_error = abs(closure_residual) / max(mdot_fuel, 1e-12)
         if rel_error <= _REGEN_FLOW_PASS_TOL:
             status = "pass"
         elif rel_error < _REGEN_FLOW_FAIL_TOL:
             status = "warn"
         else:
             status = "fail"
-        coupling_note = (
-            f"regen coolant flow {coolant_mdot:.6g} kg/s vs cycle fuel flow "
-            f"{mdot_fuel:.6g} kg/s ({rel_error*100:.2f}% error; "
-            f"fail >= {_REGEN_FLOW_FAIL_TOL*100:.0f}% without a bypass/mixing "
-            "model)"
+        topology = (
+            "common_upstream_pump_then_regen_and_film_split"
+            if film_mdot > 0.0
+            else "direct_regen_jacket_to_injector"
         )
+        fuel_flow_split = FuelFlowSplitLedger(
+            total_fuel_mass_flow=float(mdot_fuel),
+            regen_jacket_mass_flow=coolant_mdot,
+            film_bypass_mass_flow=film_mdot,
+            upstream_pump_mass_flow=float(mdot_fuel),
+            closure_residual=closure_residual,
+            relative_closure_error=rel_error,
+            status=status,
+            topology=topology,
+        )
+        if film_mdot > 0.0:
+            coupling_note = (
+                f"regen jacket flow {coolant_mdot:.6g} + explicit fuel-film "
+                f"bypass {film_mdot:.6g} = {split_mdot:.6g} kg/s vs cycle "
+                f"fuel flow {mdot_fuel:.6g} kg/s ({rel_error*100:.2f}% "
+                "closure error); common fuel-pump and pintle screens retain "
+                "total fuel flow, while film injector hardware is not modeled"
+            )
+        else:
+            coupling_note = (
+                f"regen coolant flow {coolant_mdot:.6g} kg/s vs cycle fuel "
+                f"flow {mdot_fuel:.6g} kg/s ({rel_error*100:.2f}% error; "
+                f"fail >= {_REGEN_FLOW_FAIL_TOL*100:.0f}% without an explicit "
+                "fuel-film branch)"
+            )
         coupling_gate = InjectorGate(
             "regen_fuel_flow_closure", status, coupling_note
         )
@@ -3578,6 +3648,14 @@ def evaluate_pintle_injector(
                 regen_loss_fuel = float(_dp_bar) * 1.0e5
     ledger = feed_system_ledger(
         result, local, Pc=Pc, regen_loss_fuel=regen_loss_fuel)
+    ledger.fuel_flow_split = fuel_flow_split
+    if fuel_flow_split is not None and fuel_flow_split.film_bypass_mass_flow > 0.0:
+        ledger.notes.append(
+            "The fuel line and electric-pump sizing use total fuel flow upstream "
+            "of the explicit regen/film split, matching the current MDO "
+            "equivalent-head convention. Film injector/orifice hardware and "
+            "branch-specific pressure/thermal states are not modeled."
+        )
     result.feed_system = ledger
     result.gates.extend(feed_system_gates(ledger))
     result.notes.extend(ledger.notes)

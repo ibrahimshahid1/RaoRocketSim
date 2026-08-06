@@ -31,7 +31,11 @@ lrekit --engine-mdo         --pc 3e6 --epsilon 8 --film-frac 0.10   # one point
 lrekit --engine-mdo-optimize --isp-min 200                          # optimise
 ```
 
-The traditional nozzle/CAD workflow is untouched and is still the default.
+The traditional nozzle/CAD workflow is still the default.  The MDO bridge now
+validates the solved state before creating artifacts, pins its exact chamber
+thermochemistry, passes explicit efficiency/feed/film/material conventions into
+the host workflow, and augments its JSON reports/CAD metadata with the
+authoritative snapshot handoff.
 
 ---
 
@@ -42,14 +46,16 @@ The traditional nozzle/CAD workflow is untouched and is still the default.
 | `schema.py` | Design variables, bounds, and **every physical constant with its citation** | `DesignVector`, `MissionSpec`, `default_design_space()` |
 | `scaling.py` | Affine map to the unit box (conditioning) | `ScaledSpace` |
 | `properties.py` | C¹ property surfaces over (P_c, O/F) | `load_chamber_surfaces`, `sample_cea_tables` |
-| `grid.py` | Fixed-topology station grid on the **real Rao/TOP contour** | `build_station_grid`, `rao_wall_angles` |
+| `grid.py` | Fixed-topology station grid on the analytic Rao/TOP approximation | `build_station_grid`, `rao_wall_angles` |
 | `cooling.py` | Regen jacket + film cooling; the one **implicit** block | `solve_cooling`, `film_effectiveness` |
 | `injector.py` | Pintle: orifice/TMR/blockage + Son two-branch area | `injector_readouts` |
-| `pump.py` | Electric feed: duty, C¹ efficiency, battery epigraph | `electric_feed` |
+| `pump.py` | Electric feed: duty, C¹ efficiency, separate battery energy/power branches | `electric_feed` |
 | `engine.py` | **The coupled solve** — all blocks, one gradient | `solve_engine`, `engine_outputs` |
 | `nlp.py` | ε-constraint optimiser + Pareto sweep | `solve_min_mass`, `pareto_frontier` |
 | `assembly.py` | The original 4-variable walking skeleton (kept as a gate) | `make_engine_fn` |
-| `postprocess.py` | **Phase 11 bridge** → authoritative contour/CAD/reports + discrepancy report | `to_design_input`, `reevaluate`, `summarise` |
+| `state.py` | Versioned, fixed-shape pure-JAX numerical output pytree | `EngineState`, `solve_engine_state` |
+| `snapshot.py` | Versioned host contract shared by MDO and traditional analyses | `EngineAnalysisSnapshot`, `snapshot_from_mdo`, `snapshot_from_traditional`, `compare_snapshots` |
+| `postprocess.py` | **Phase 11 bridge** → authoritative contour/electric pumps/report-CAD handoff + parity report | `to_design_input`, `reevaluate`, `summarise` |
 
 **Where to start reading:** `engine.py` docstring → `solve_engine` → then whichever
 block interests you. `schema.py` is the reference for every constant.
@@ -130,7 +136,7 @@ reach any constraint or the objective; two such variables were found and fixed
 
 ---
 
-## 4. Constraints (12, all enforced by default)
+## 4. Constraints (17, all enforced by default)
 
 | Constraint | Meaning | Source |
 |---|---|---|
@@ -144,11 +150,17 @@ reach any constraint or the objective; two such variables were found and fixed
 | `pump_tip_speed` | U₂ ≤ 400 m/s | SP-8109 |
 | `aspect_ratio` | channel h/w ≤ 8 | Pizzarelli 2011, Carlile 1992, Mirzamoghadam |
 | `blockage_lo/hi` | BF in 0.30–0.90 | Hwang 2022, Freeberg 2019, Ryu et al. |
-| `thermal_stress` | σ_th ≤ σ_allow | SP-8087; CR-134627 / Porowski basis |
+| `structural_stress` | σ_thermal + \|σ_pressure\| ≤ post-FOS allowable | SP-125 eq. 4-31 convention |
 | `wall_temp` | T_wg ≤ 800 K | Mirzamoghadam allowable gas-side wall temp |
+| `film_capacity` | installed film circuit capacity ≥ 2× design film flow | SP-8087 capacity recommendation plus explicit 60%-of-fuel architecture |
+| `property_domain` | stay inside the sampled property table | interpolation validity |
+| `chart_domain` | stay inside the digitized Rao/TOP chart | SP-8120 chart domain |
+| `wall_monotonic` | divergent wall radius does not reverse | geometry validity |
 
 Reported but deliberately **not** constrained: coolant Mach (≈2 orders of
-margin — a constraint would just add a dead column).
+margin — a constraint would just add a dead column). Numerical root status,
+residual closure, and finiteness are carried in `EngineState` and must also pass
+before an NLP result is reported feasible.
 
 ---
 
@@ -158,13 +170,15 @@ margin — a constraint would just add a dead column).
 ambient term, `c*_delivered = η_c*·c*_ideal` (pinned in one place). SP-125,
 SP-8120, Anderson.
 
-**The contour is the real Rao/TOP parabola.** `grid.py` builds the classical
-thrust-optimised contour — throat downstream arc to the initial wall angle θ_n,
-then the quadratic Bézier to the exit angle θ_e — with θ_n/θ_e read from the
-Rao/NASA charts through the **C¹ tensor-Hermite surfaces** (the same machinery
-as the CEA properties), so the whole contour is differentiable in ε and L%.
-Verified against `nozzle_geometry.bell_nozzle_contour`: angles match the chart
-to 0.00°, exit radius and bell length to 4 decimal places.
+**The bulk-MDO contour is the analytic Rao/TOP approximation, not the exact
+variational Rao solution.** `grid.py` builds the conventional downstream throat
+arc plus quadratic Bézier wall. Its θ_n/θ_e values use a pure-JAX bilinear
+interpolator that matches the repository's SciPy linear chart oracle between
+knots. It is piecewise differentiable, not C¹, and an explicit chart-domain
+constraint prevents clamping from being accepted as extrapolation. The
+authoritative post-optimum contour is produced by `design_nozzle_v2`. The
+planned exact implicit Rao/JAX replacement has its own approval checkpoint in
+`IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
 **Cooling (`cooling.py`) — the only implicit block.**
 - gas side: full **Bartz 1957** h_g, coefficient **0.026 verified verbatim**, with
@@ -202,6 +216,13 @@ The gaseous velocity ratio is retained as a **diagnostic**
 (`film_slot_validity`) and pinned by a test, so the inapplicability stays
 documented.
 
+The current plumbing topology is explicit: the selected film branch bypasses
+the regenerative jacket, and the jacket receives the remaining fuel. SP-8087
+supports combined regenerative/film systems and recommends film-flow capacity
+of twice the estimated requirement; it does **not** require this particular
+bypass topology. The bypass and the installed capacity of 60% of total fuel are
+repository architecture choices and are recorded as such.
+
 **Injector.** Incompressible orifice, TMR, blockage factor, and the **Son 2017
 two-branch minimum area** (tip-opening vs centre-gap) with a consistency
 inequality — never a differentiable `min()`.
@@ -209,7 +230,9 @@ inequality — never a differentiable `min()`.
 **Pump.** Meanline duty, N_s / N_ss / NPSH, a **C¹ η(N_s)** surrogate replacing
 the shipped binned estimator (which is a C0 step and cannot be differentiated),
 calibrated to the SP-125 60–85 % rocket-pump band, plus the **Lee 2021 battery
-epigraph** (power- and energy-limited masses kept separate).
+branches** (power- and energy-limited masses kept separate). The optimizer uses
+a clearly named smooth governing-branch surrogate; the state, snapshot, CLI,
+and NLP result also report the exact installed governing-branch mass.
 
 ---
 
@@ -221,7 +244,7 @@ outer Newton on (Rt, mdot)  ──►  grid ──►  cooling (inner Newton on 
                                      Δp_regen ▼
       pump feed ◄── Δp_rise = Pc(1+χ) + Δp_regen + Δp_line − P_tank
                                               ▼
-                        P_electric, battery, masses, mass ledger
+              P_electric, battery branches, exact mass, smooth objective
 ```
 
 Two nested implicit solves, both differentiated by the IFT. The **hydraulic edge
@@ -256,7 +279,7 @@ Do not "optimise" this back to forward mode without re-running the FD gate.
 # environment (sandbox/CI): jax 0.6.2, optimistix 0.0.11, equinox 0.13.8
 export PYTHONPATH=/path/to/deps:$PWD
 
-# the whole MDO suite (~59 tests)
+# the whole MDO suite
 python -m pytest tests/test_mdo_*.py -q
 
 # single design point, with design margins on
@@ -265,7 +288,18 @@ lrekit --engine-mdo --pc 3e6 --epsilon 8 --film-frac 0.10 --design-margins
 # optimise, then trace the frontier (altitude makes the trade meaningful)
 lrekit --engine-mdo-optimize --isp-min 200
 lrekit --engine-mdo-optimize --isp-sweep 250,320,6 --engine-mdo-ambient 1000
+
+# post-analyse an MDO point with the existing host Rao variational/MOC solver
+# (preliminary numerical analysis only; this path cannot emit manufacturing CAD)
+lrekit --engine-mdo --mdo-export --contour-method rao-bvp --cad none
 ```
+
+`--contour-method rao-bvp` is deliberately rejected in an MDO command unless
+`--mdo-export` is present. It configures the existing host post-analysis and
+forwards the same backend, resolution, iteration, seed, throat-radius, kernel,
+and physics-weight controls as the traditional CLI. It does not replace
+`mdo/grid.py`. The proposed pure-JAX implicit Rao/KKT solver remains
+architecture-only in `IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
 **Check for dead variables after any change:**
 
@@ -288,7 +322,11 @@ for k, s in enumerate(default_design_space()):
 1. **Property surfaces.** Without a CEA table the code uses *constant* γ/T_c —
    correct at the stated O/F, flat in O/F. Run `scripts/sample_cea_surface.py`
    on a host with RocketCEA to make O/F a real lever (it becomes a second coking
-   lever via flame temperature). The wiring and gates already exist.
+   lever via flame temperature). The wiring and gates already exist. The parity
+   re-evaluation pins the exact `EngineState` γ/T_c/R/c* values and complete
+   surface fingerprint into `design_nozzle_v2`; this prevents accidental live
+   CEA/fallback drift, but it is not the independent held-out CEA validation
+   still required for qualification.
 2. **η_fc transition location.** Woodmansee & Hanratty measured Γ_cr ≈ 3× lower
    than Knuth for water; Shine reports Stechman's model errs −20 % … +13 %.
    Those are the film block's honest error bars.
@@ -296,12 +334,34 @@ for k, s in enumerate(default_design_space()):
    a smooth screening fit, not SP-125 Fig. 6-23 (image-only).
 4. **η_c*(TMR).** A screening knob, default off, with an ablation. Do not report
    a coupled result without also reporting `ablation_delta`.
-5. **Low-cycle fatigue.** `thermal_stress` is the constrained-expansion stress,
-   not a cycle count. The Coffin–Manson / CR-134627 / Porowski LCF screens are
-   the §8 constraint-layer deepening.
+5. **Low-cycle fatigue.** `structural_stress` is the combined static screening
+   stress, not a cycle count. The Coffin–Manson / CR-134627 / Porowski LCF
+   screens are the §8 constraint-layer deepening.
 6. **Sea-level Pareto is weak.** Higher ε is overexpanded at sea level, so the
    mass–I_sp trade only becomes interesting with `--engine-mdo-ambient` set for
    altitude/vacuum.
+7. **The optimized mass is not whole-engine dry mass.** The differentiable
+   objective currently contains pumps, motors, inverters, and a smooth battery
+   governing-branch surrogate. The exact installed electric-feed mass is
+   reported separately. Qualified chamber/nozzle and injector hardware-mass
+   models are not available; the output contracts return `None` plus an
+   availability reason for those fields.
+8. **Nonzero-film thermal parity is intentionally unavailable.** The
+   traditional bridge closes and reports the regen/film mass split, but the
+   traditional thermal solver does not apply the MDO wall-film heat-load
+   model and neither pipeline has a separate film-injector hardware/state
+   model. Film-sensitive thermal and main-pintle fields are therefore `None`
+   with a reason; a separate zero-film parity case compares common
+   thermal/structural/injector outputs.
+9. **Missing pump analysis is not feasibility.** If authoritative electric-pump
+   sizing is skipped or fails, the traditional snapshot's whole-engine and
+   physics-feasibility fields are unavailable with a reason. The
+   chamber/nozzle/injector workflow-readiness gate remains separately reported.
+10. **Unsupported output and invalid metadata stay explicit.** State schema,
+    mission/design/coupling identity, and exact property surfaces are checked
+    before reporting. Nested non-finite payloads cannot be marked available, and
+    report/CAD attachment failures are persisted in the authoritative snapshot
+    rather than returned only as transient console warnings.
 
 ---
 

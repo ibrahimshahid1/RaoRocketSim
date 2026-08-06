@@ -2244,6 +2244,7 @@ def structural_screen(
     else:
         hoop_stress = float("inf")
     yield_strength = float(getattr(material, "yield_strength", 0.0) or 0.0)
+    structural_fos = float(getattr(material, "structural_fos", 1.5) or 1.5)
     max_material_temp = float(getattr(material, "max_temperature", 0.0) or 0.0)
     max_heat_flux = float(getattr(material, "max_heat_flux", 0.0) or 0.0)
     wall_temp = float(cooling.get("estimated_wall_temperature") or thermal["adiabatic_wall_temperature"])
@@ -2300,12 +2301,13 @@ def structural_screen(
     result = {
         "hoop_stress": float(hoop_stress),
         "stress_margin": float(stress_margin),
+        "required_structural_fos": structural_fos,
         "temperature_margin": float(temperature_margin),
         "heat_flux_margin": float(heat_flux_margin),
         "separation_margin": sep_margin,
         "wall_temperature": wall_temp,
         "passed": bool(
-            stress_margin >= 1.5
+            stress_margin >= structural_fos
             and temperature_margin >= 1.0
             and heat_flux_margin >= 1.0
             and sep_margin >= 1.0
@@ -2318,6 +2320,16 @@ def structural_screen(
         result["pressure_stress"] = float(combined["pressure_stress"])
         result["combined_stress"] = float(combined["combined_stress"])
         result["stress_model"] = combined["model"]
+        # Retain the stationwise fields for the versioned analysis snapshot.
+        # These are the same arrays used to select the governing scalar above;
+        # omitting them previously made cross-pipeline profile parity impossible.
+        for key in (
+            "thermal_stress_profile",
+            "pressure_stress_profile",
+            "combined_stress_profile",
+        ):
+            if key in combined:
+                result[key] = np.asarray(combined[key], dtype=float)
         if "governing_index" in combined:
             result["stress_governing_index"] = int(combined["governing_index"])
     return result

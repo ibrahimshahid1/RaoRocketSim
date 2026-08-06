@@ -66,7 +66,7 @@ properties, 2-D wall options) is a host-side follow-up and the 4b ladder.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 import raosim.jax  # noqa: F401  -- enables float64
 import jax.numpy as jnp
@@ -257,15 +257,25 @@ class CoolingMarch:
     T_wc: Array               # (n,) coolant-side ("liquid") wall temp [K]
     area_enh: Array           # (n,) fin area-augmentation (coolant/hot area)
     coking_margin: Array      # (n,) T_coke_limit − T_wc  [K]  (≥0 feasible)
+    coolant_pressure: Array   # (n,) absolute jacket pressure [Pa]
+    gas_pressure: Array       # (n,) static gas pressure [Pa]
+    liner_pressure_differential: Array  # (n,) p_coolant - p_gas [Pa]
     dp_total: Array           # scalar, jacket pressure drop [Pa]
     T_coolant_exit: Array     # scalar, jacket outlet (injector-end) temp [K]
     land_min: Array           # scalar, minimum inter-channel land width [m]
     residual: Array           # (n,) stationwise T_wg residuals [K]
     # --- structural + diagnostic outputs (§10.2 / §10.4) --------------------
     sigma_thermal: Array      # (n,) constrained-expansion thermal stress [Pa]
-    sigma_pressure: Array     # scalar, liner plate bending across a channel [Pa]
+    sigma_pressure: Array     # scalar maximum |pressure stress| [Pa]
+    sigma_pressure_profile: Array  # (n,) SP-125 channel half-span stress [Pa]
     coolant_mach: Array       # scalar, v_cool/a_liquid (Mirzamoghadam ≤ 0.35)
     coolant_velocity: Array   # scalar [m/s]
+    # Root status is part of the discipline output, not an out-of-band log.
+    # This lets the NLP reject a numerically unconverged thermal state.
+    solver_residual_max: Array = field(default_factory=lambda: jnp.asarray(jnp.inf))
+    solver_status_ok: Array = field(default_factory=lambda: jnp.asarray(False))
+    solver_converged: Array = field(default_factory=lambda: jnp.asarray(False))
+    finite: Array = field(default_factory=lambda: jnp.asarray(False))
 
 
 def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
@@ -273,8 +283,10 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
                   mission: MissionSpec, channel_width: Array | None = None,
                   channel_height: Array | None = None,
                   film_frac: Array | None = None,
+                  mdot_film: Array | None = None,
                   film_slot_height: Array | None = None,
-                  t_wall: Array | None = None) -> CoolingMarch:
+                  t_wall: Array | None = None,
+                  coolant_outlet_pressure: Array | None = None) -> CoolingMarch:
     """March the coolant along the jacket (counterflow, upwind FV) at fixed wall
     temperatures; return the circuit fields and the stationwise residual.
 
@@ -297,6 +309,9 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
     f_q = mission.heat_flux_margin
     mdot_cool = mdot_cool * mission.channel_flow_margin
     tw = mission.t_wall if t_wall is None else t_wall
+    p_coolant_out = (
+        Pc if coolant_outlet_pressure is None else coolant_outlet_pressure
+    )
 
     # --- gas side (vectorised over stations) -------------------------------- #
     T_aw = jt.recovery_temperature(grid.mach, gamma, Tc, mission.Pr_gas)
@@ -308,10 +323,11 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
     # phase-change energy balance (see ``film_effectiveness``), so the decay is
     # physical rather than an on/off coverage mask (an earlier mask produced a
     # non-physical wall-temperature cliff at the first unfilmed station).
-    # Film mass flow: the film fraction is of the FUEL flow; the jacket carries
-    # (1−film_frac) of it, so mdot_film = mdot_cool·ff/(1−ff) keeps the split
-    # consistent with the caller's cooling flow.
-    mdot_film = mdot_cool * ff / jnp.maximum(1.0 - ff, 1e-6)
+    # The coupled MDO architecture supplies the diverted film branch explicitly
+    # so it cannot also appear in the regenerative jacket.  The inferred split
+    # below is retained solely for standalone/backward-compatible callers.
+    mdot_film = (mdot_cool * ff / jnp.maximum(1.0 - ff, 1e-6)
+                 if mdot_film is None else mdot_film)
     # h_g for the film balance is evaluated at the *unfilmed* recovery state
     # (the load the film has to absorb).
     h_g_bare = f_q * jt.bartz_hg(
@@ -386,30 +402,47 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
 
     # --- structural (§10.2) -------------------------------------------------- #
     # Constrained-thermal-expansion stress from the through-wall gradient — the
-    # BINDING criterion for a regen liner (the pressure term below is ~2 orders
-    # smaller).  SP-8087; the basis of the CR-134627 / Porowski LCF screens.
+    # BINDING criterion for this regen-liner screen (the pressure term below is
+    # materially smaller).  SP-8087; the basis of the CR-134627 / Porowski LCF
+    # screens.
     dT_wall = jnp.maximum(T_wg - T_wc, 0.0)
     sigma_thermal = (mission.liner_E * mission.liner_alpha * dT_wall
                      / (2.0 * (1.0 - mission.liner_poisson)))
 
-    # --- jacket Δp (uniform f, u ⇒ closed form over total wall length) ------- #
+    # --- jacket Δp and absolute pressure profile ----------------------------- #
     f_darcy = darcy_friction_factor(Re, mission.channel_roughness)
-    L_total = jnp.sum(grid.dseg)
-    dp_total = f_darcy * L_total / Dh * 0.5 * mission.rho_cool * u_cool ** 2
+    dynamic_pressure = 0.5 * mission.rho_cool * u_cool ** 2
+    dp_segment = f_darcy * grid.dseg / Dh * dynamic_pressure
+    dp_total = jnp.sum(dp_segment)
 
-    # Liner plate bending across the channel span (Mirzamoghadam: the wall is
-    # sized on the pressure DIFFERENTIAL across it, not chamber pressure) — the
-    # jacket Δp is the differential the liner actually sees.
-    sigma_pressure = jnp.maximum(dp_total, 0.0) * w * w / (2.0 * tw * tw)
+    # Coolant flows from station n-1 toward station 0.  Station 0 is therefore
+    # the low-pressure jacket outlet feeding the injector; the absolute
+    # pressure rises toward the nozzle exit/inlet by accumulated friction.
+    # SP-125 eqs. 4-27/4-31 use the local coolant-to-gas differential, not the
+    # jacket friction loss itself.
+    coolant_pressure = p_coolant_out + jnp.concatenate((
+        jnp.zeros((1,), dtype=jnp.float64),
+        jnp.cumsum(dp_segment),
+    ))
+    gas_pressure = Pc * jt.isentropic_pressure_ratio(grid.mach, gamma)
+    liner_pressure_differential = coolant_pressure - gas_pressure
+    sigma_pressure_profile = (
+        liner_pressure_differential * (0.5 * w) / tw
+    )
+    sigma_pressure = jnp.max(jnp.abs(sigma_pressure_profile))
     # coolant Mach diagnostic (§10.4; Mirzamoghadam limit 0.35)
     coolant_mach = u_cool / mission.coolant_sound_speed
 
     return CoolingMarch(
         T_coolant=T_coolant, q_flux=q_flux, h_g=h_g,
         h_c=jnp.broadcast_to(h_c, (n,)), T_aw=T_aw, T_wc=T_wc,
-        area_enh=area_enh, coking_margin=coking_margin, dp_total=dp_total,
+        area_enh=area_enh, coking_margin=coking_margin,
+        coolant_pressure=coolant_pressure, gas_pressure=gas_pressure,
+        liner_pressure_differential=liner_pressure_differential,
+        dp_total=dp_total,
         T_coolant_exit=T_coolant[0], land_min=land_min, residual=residual,
         sigma_thermal=sigma_thermal, sigma_pressure=sigma_pressure,
+        sigma_pressure_profile=sigma_pressure_profile,
         coolant_mach=coolant_mach, coolant_velocity=u_cool,
     )
 
@@ -422,8 +455,10 @@ def solve_cooling(grid: StationGrid, *, Pc: Array, gamma: Array, Tc: Array,
                   channel_width: Array | None = None,
                   channel_height: Array | None = None,
                   film_frac: Array | None = None,
+                  mdot_film: Array | None = None,
                   film_slot_height: Array | None = None,
                   t_wall: Array | None = None,
+                  coolant_outlet_pressure: Array | None = None,
                   rtol: float = 1e-12, atol: float = 1e-12,
                   max_steps: int = 64) -> tuple[Array, CoolingMarch]:
     """Solve R(T_wg) = 0 for the (n,) hot-gas-side wall-temperature vector.
@@ -439,21 +474,30 @@ def solve_cooling(grid: StationGrid, *, Pc: Array, gamma: Array, Tc: Array,
     w = mission.channel_width if channel_width is None else channel_width
     h = mission.channel_height if channel_height is None else channel_height
     ff = 0.0 if film_frac is None else film_frac
+    mf = (mdot_cool * ff / jnp.maximum(1.0 - ff, 1e-6)
+          if mdot_film is None else mdot_film)
     sh = (mission.film_slot_height_default if film_slot_height is None
           else film_slot_height)
     tw = mission.t_wall if t_wall is None else t_wall
+    p_out = Pc if coolant_outlet_pressure is None else coolant_outlet_pressure
     T_aw0 = jt.recovery_temperature(grid.mach, gamma, Tc, mission.Pr_gas)
     T_wg_init = 0.35 * T_aw0            # cool-wall seed (regen wall ≪ T_aw)
 
     def fn(T_wg, args):
-        Pc_, gamma_, Tc_, cstar_, mdot_, w_, h_, ff_, sh_, tw_ = args
+        (
+            Pc_, gamma_, Tc_, cstar_, mdot_, w_, h_, ff_, mf_, sh_, tw_,
+            p_out_,
+        ) = args
         return cooling_march(T_wg, grid, Pc=Pc_, gamma=gamma_, Tc=Tc_,
                              c_star_del=cstar_, mdot_cool=mdot_, mission=mission,
                              channel_width=w_, channel_height=h_,
-                             film_frac=ff_, film_slot_height=sh_,
-                             t_wall=tw_).residual
+                             film_frac=ff_, mdot_film=mf_, film_slot_height=sh_,
+                             t_wall=tw_,
+                             coolant_outlet_pressure=p_out_).residual
 
-    args = (Pc, gamma, Tc, c_star_del, mdot_cool, w, h, ff, sh, tw)
+    args = (
+        Pc, gamma, Tc, c_star_del, mdot_cool, w, h, ff, mf, sh, tw, p_out,
+    )
     solver = optx.Newton(rtol=rtol, atol=atol)
     sol = optx.root_find(fn, solver, T_wg_init, args=args,
                          max_steps=max_steps, throw=False)
@@ -461,5 +505,19 @@ def solve_cooling(grid: StationGrid, *, Pc: Array, gamma: Array, Tc: Array,
     march = cooling_march(T_wg, grid, Pc=Pc, gamma=gamma, Tc=Tc,
                           c_star_del=c_star_del, mdot_cool=mdot_cool,
                           mission=mission, channel_width=w, channel_height=h,
-                          film_frac=ff, film_slot_height=sh, t_wall=tw)
+                          film_frac=ff, mdot_film=mf, film_slot_height=sh,
+                          t_wall=tw, coolant_outlet_pressure=p_out)
+    residual_max = jnp.max(jnp.abs(march.residual))
+    status_ok = sol.result == optx.RESULTS.successful
+    finite = (jnp.all(jnp.isfinite(T_wg))
+              & jnp.all(jnp.isfinite(march.residual))
+              & jnp.all(jnp.isfinite(march.q_flux))
+              & jnp.isfinite(march.dp_total))
+    # Status, residual closure, and finiteness are each required.  This is
+    # JIT-safe even though ``throw=False`` is needed for feasibility probes.
+    tol = jnp.asarray(max(rtol, atol), dtype=jnp.float64) * 10.0
+    march = replace(march, solver_residual_max=residual_max,
+                    solver_status_ok=status_ok,
+                    solver_converged=status_ok & finite & (residual_max <= tol),
+                    finite=finite)
     return T_wg, march

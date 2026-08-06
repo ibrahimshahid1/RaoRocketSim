@@ -3,21 +3,26 @@ raosim.mdo.nlp — Phase 8/9: the ε-constraint hard-constrained NLP + Pareto sw
 
 Objective/constraint policy (plan §8):
 
-    min  m_package        s.t.  I_sp ≥ I_sp,min          (the ε-constraint)
+    min  m_objective      s.t.  I_sp ≥ I_sp,min          (the ε-constraint)
                                 every *enforced* discipline margin ≥ 0
+
+``m_objective`` uses a smooth battery governing-branch surrogate so gradients
+remain continuous.  ``NLPResult.exact_electric_package_mass`` separately
+reports the physical installed electric-feed mass using the exact governing
+battery branch.
 
 sweeping ``I_sp,min`` traces the mass–performance frontier.  The engine is
 always thrust-closed internally (the outer Newton), so thrust is NOT a free NLP
-constraint — the design variables are the six of ``DesignVector`` and every
+constraint — the design variables are the ten of ``DesignVector`` and every
 evaluation returns a converged, differentiable engine (``mdo.engine``).
 
 Derivatives (plan §4.3, §12.2 row 8): a *low-dimensional, constraint-rich*
-problem (n_x = 9, 8 constraints), so total derivatives are exact through the two
+problem (n_x = 10, 17 constraints), so total derivatives are exact through the two
 IFT solves and handed to SLSQP with no finite-difference step noise.  The
 constraint Jacobian is assembled by **reverse mode** (``jax.jacrev``) and the
 scalar objective by ``jax.grad``: forward mode (``jacfwd``) through the jit'd
 nested Optimistix root-finds drops the tangent of the geometry-only min-
-aggregated margins (a forward-through-implicit-solve quirk), and at 8×9 reverse
+aggregated margins (a forward-through-implicit-solve quirk), and at 17×10 reverse
 mode is no costlier than forward here anyway.  Optimisation runs in the unit box
 (``ScaledSpace``) so O(1e6) pressures and O(0.1) fractions are conditioned
 together (Martins & Ning 2021 ch. 4).
@@ -60,15 +65,29 @@ Array = jnp.ndarray
 CONSTRAINT_NAMES = (
     "isp_epsilon", "separation", "coking", "land_fit", "chug",
     "pintle_transition", "pump_suction", "pump_tip_speed", "aspect_ratio",
-    "blockage_lo", "blockage_hi", "thermal_stress", "wall_temp",
+    "blockage_lo", "blockage_hi", "structural_stress", "wall_temp",
+    "film_capacity", "property_domain", "chart_domain", "wall_monotonic",
+    # SP-125 §2.1 requirement screens (items 5 and 6).  Inert at the MissionSpec
+    # sentinel defaults; they bind only when a raosim.requirements
+    # .EngineRequirement supplies a real limit.  Each screens a LOWER BOUND on
+    # the installed quantity -- satisfaction is necessary, not sufficient.
+    "envelope_diameter", "envelope_length", "dry_mass_partial",
 )
 #: enforced by default — ALL constraints, including coking, which is now
 #: satisfiable via the film-cooling design variable (see module docstring).
+#: The three requirement screens are safe to leave enforced: at the sentinel
+#: limits their margins are O(1e3 m) and O(1e9 kg), so they never bind and add
+#: only three trivially-satisfied rows to the QP.
 DEFAULT_ENFORCED = CONSTRAINT_NAMES
 
-# per-constraint reference scales (bring each margin to ~O(1) for the QP)
+# per-constraint reference scales (bring each margin to ~O(1) for the QP).
+# The requirement screens are scaled to their natural engineering units --
+# 0.1 m on envelope dimensions, 10 kg on mass -- so a violation of one
+# reference unit reads as -1 in the QP regardless of engine size.
 _C_SCALE = np.array([50.0, 1.0, 300.0, 5.0e-4, 0.2, 5.0e-5, 2.0, 300.0, 8.0,
-                     0.3, 0.3, 1.0e8, 100.0])
+                     0.3, 0.3, 1.0e8, 100.0, 1.0, 0.1, 0.1, 1.0e-4,
+                     0.1, 0.1, 10.0,
+                    ])
 _MASS_REF = 50.0  # kg, objective conditioning
 
 
@@ -87,8 +106,15 @@ def _constraint_vector(r, isp_min: float) -> Array:
         c["aspect_ratio_margin"],
         c["blockage_lo_margin"],
         c["blockage_hi_margin"],
-        c["thermal_stress_margin"],
+        c["structural_stress_margin"],
         c["wall_temp_margin"],
+        c["film_capacity_margin"],
+        c["property_domain_margin"],
+        c["chart_domain_margin"],
+        c["wall_monotonic_margin"],
+        c["envelope_diameter_margin"],
+        c["envelope_length_margin"],
+        c["dry_mass_partial_margin"],
     ])
     return raw / jnp.asarray(_C_SCALE)
 
@@ -107,8 +133,15 @@ def _raw_margins(r, isp_min: float) -> dict:
         "aspect_ratio": float(c["aspect_ratio_margin"]),
         "blockage_lo": float(c["blockage_lo_margin"]),
         "blockage_hi": float(c["blockage_hi_margin"]),
-        "thermal_stress": float(c["thermal_stress_margin"]),
+        "structural_stress": float(c["structural_stress_margin"]),
         "wall_temp": float(c["wall_temp_margin"]),
+        "film_capacity": float(c["film_capacity_margin"]),
+        "property_domain": float(c["property_domain_margin"]),
+        "chart_domain": float(c["chart_domain_margin"]),
+        "wall_monotonic": float(c["wall_monotonic_margin"]),
+        "envelope_diameter": float(c["envelope_diameter_margin"]),
+        "envelope_length": float(c["envelope_length_margin"]),
+        "dry_mass_partial": float(c["dry_mass_partial_margin"]),
     }
 
 
@@ -118,7 +151,8 @@ class NLPResult:
     isp_min: float
     x: np.ndarray                 # physical 6-vector
     design: dict                  # named physical variables
-    package_mass: float
+    objective_mass: float
+    exact_electric_package_mass: float
     Isp: float
     constraints: dict             # named RAW margins (≥0 feasible), ALL reported
     enforced: tuple               # which were hard constraints
@@ -126,6 +160,12 @@ class NLPResult:
     feasible: bool
     n_iter: int
     message: str
+
+    @property
+    def package_mass(self) -> float:
+        """Deprecated alias for the smooth optimization objective."""
+
+        return self.objective_mass
 
 
 def _make_callables(mission, isp_min, couple, enforced_idx):
@@ -139,7 +179,7 @@ def _make_callables(mission, isp_min, couple, enforced_idx):
 
     @jax.jit
     def obj(u):
-        return solve(u).package_mass / _MASS_REF
+        return solve(u).objective_mass / _MASS_REF
 
     @jax.jit
     def con(u):
@@ -148,7 +188,7 @@ def _make_callables(mission, isp_min, couple, enforced_idx):
     # Reverse-mode (jacrev) for the constraint Jacobian: forward-mode (jacfwd)
     # through the jit'd nested Optimistix root-finds drops the tangent of the
     # geometry-only min-aggregated margins (e.g. land_min) — a forward-through-
-    # implicit-solve quirk; jacrev is exact (FD-verified).  At 8 constraints × 9
+    # implicit-solve quirk; jacrev is exact (FD-verified). At 17 constraints × 10
     # variables reverse mode costs no more than forward here anyway.
     return ss, obj, jax.jit(jax.grad(obj)), con, jax.jit(jax.jacrev(con))
 
@@ -157,7 +197,7 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
                    u0: np.ndarray | None = None, couple_eta_cstar: bool = False,
                    enforced: tuple = DEFAULT_ENFORCED,
                    method: str = "SLSQP", maxiter: int = 150) -> NLPResult:
-    """Minimise package mass at a fixed I_sp floor with exact Jacobians."""
+    """Minimise smooth electric-feed objective mass at an I_sp floor."""
     space = default_design_space(mission)
     enforced_idx = tuple(CONSTRAINT_NAMES.index(n) for n in enforced)
     ss, obj, obj_grad, con, con_jac = _make_callables(
@@ -185,11 +225,16 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
     viol = float(max(0.0, -min(scaled_all[i] for i in enforced_idx)))
     names = [s.name for s in space]
     return NLPResult(
-        success=bool(res.success), isp_min=float(isp_min), x=x_phys,
+        success=bool(res.success) and bool(r.solver_converged) and bool(r.finite),
+        isp_min=float(isp_min),
+        x=x_phys,
         design=dict(zip(names, (float(v) for v in x_phys))),
-        package_mass=float(r.package_mass), Isp=float(r.Isp),
+        objective_mass=float(r.objective_mass),
+        exact_electric_package_mass=float(r.electric_package_exact_mass),
+        Isp=float(r.Isp),
         constraints=_raw_margins(r, isp_min), enforced=tuple(enforced),
-        max_violation=viol, feasible=viol < 1e-5,
+        max_violation=viol,
+        feasible=(viol < 1e-5 and bool(r.solver_converged) and bool(r.finite)),
         n_iter=int(getattr(res, "nit", -1)), message=str(res.message),
     )
 

@@ -493,6 +493,352 @@ def resolve_bolted_interface_geometry(
     )
 
 
+# ISO 262 coarse-thread metric series: (nominal d [m], pitch [m]).  A bolted
+# joint has to be built from real fasteners, so the sizer searches this series
+# rather than a continuous diameter -- that is what makes the result orderable
+# hardware rather than a number.
+_METRIC_COARSE_SERIES: tuple[tuple[float, float], ...] = (
+    (3.0e-3, 0.50e-3), (4.0e-3, 0.70e-3), (5.0e-3, 0.80e-3),
+    (6.0e-3, 1.00e-3), (8.0e-3, 1.25e-3), (10.0e-3, 1.50e-3),
+    (12.0e-3, 1.75e-3), (14.0e-3, 2.00e-3), (16.0e-3, 2.00e-3),
+    (20.0e-3, 2.50e-3), (24.0e-3, 3.00e-3),
+)
+# ISO 898-1 property classes, as (name, proof stress, tensile strength) [Pa].
+_BOLT_CLASSES: dict[str, tuple[float, float]] = {
+    "8.8": (640.0e6, 800.0e6),
+    "10.9": (830.0e6, 1040.0e6),
+    "12.9": (970.0e6, 1220.0e6),
+    "A2-70": (450.0e6, 700.0e6),
+}
+# ISO 724 stress area: A_s = pi/4 * (d - 0.938194 * P)^2.
+_ISO724_PITCH_FACTOR = 0.938194
+
+
+def iso_stress_area(diameter: float, pitch: float) -> float:
+    """ISO 724 thread tensile stress area [m^2].
+
+    ``A_s = pi/4 (d - 0.938194 P)^2``.  This is the real area a fastener
+    carries load over, and it replaces the flat 0.75 x nominal-area screening
+    factor once an actual thread is selected.
+    """
+
+    effective = float(diameter) - _ISO724_PITCH_FACTOR * float(pitch)
+    if effective <= 0.0:
+        raise ValueError("thread pitch exceeds the nominal diameter")
+    return math.pi * effective * effective / 4.0
+
+
+@dataclass
+class BoltedInterfaceSizing:
+    """A mass-minimising bolted joint chosen from a real fastener series."""
+
+    resolution: "InterfaceGeometryResolution"
+    bolt_designation: str
+    bolt_class: str
+    bolt_nominal_diameter: float
+    bolt_pitch_thread: float
+    bolt_stress_area: float
+    bolt_allowable_stress: float
+    separation_load: float
+    load_per_bolt: float
+    bolt_utilisation: float
+    faceplate_bending_thickness: float
+    flange_mass: float | None
+    fastener_mass: float | None
+    faceplate_mass: float | None
+    joint_mass: float | None
+    candidates_evaluated: int
+    baseline_joint_mass: float | None
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "model": "mass_minimising_bolted_interface_from_iso_series",
+            "bolt_designation": self.bolt_designation,
+            "bolt_property_class": self.bolt_class,
+            "bolt_nominal_diameter_m": self.bolt_nominal_diameter,
+            "bolt_thread_pitch_m": self.bolt_pitch_thread,
+            "bolt_stress_area_m2": self.bolt_stress_area,
+            "bolt_allowable_stress_pa": self.bolt_allowable_stress,
+            "joint_separation_load_n": self.separation_load,
+            "load_per_bolt_n": self.load_per_bolt,
+            "bolt_utilisation": self.bolt_utilisation,
+            "faceplate_bending_required_thickness_m":
+                self.faceplate_bending_thickness,
+            "flange_mass_kg": self.flange_mass,
+            "fastener_mass_kg": self.fastener_mass,
+            "faceplate_mass_kg": self.faceplate_mass,
+            "joint_mass_kg": self.joint_mass,
+            "baseline_joint_mass_kg": self.baseline_joint_mass,
+            "mass_saved_kg": (
+                None
+                if self.joint_mass is None or self.baseline_joint_mass is None
+                else self.baseline_joint_mass - self.joint_mass
+            ),
+            "candidates_evaluated": self.candidates_evaluated,
+            "resolution": self.resolution.to_dict(),
+            "notes": self.notes,
+        }
+
+
+def _joint_mass(
+    resolution: "InterfaceGeometryResolution",
+    *,
+    flange_density: float | None,
+    bolt_density: float | None,
+) -> tuple[float | None, float | None, float | None]:
+    """(flange ring, fasteners, faceplate) mass for a resolved layout."""
+
+    if flange_density is None or bolt_density is None:
+        return None, None, None
+    from raosim.mass_ledger import flange_bolt_mass_ledger
+
+    ledger = flange_bolt_mass_ledger(
+        resolution,
+        flange_material=_DensityOnly(flange_density, "flange"),
+        bolt_material=_DensityOnly(bolt_density, "bolt"),
+    )
+    ring = next(
+        (i for i in ledger.items if i.component == "chamber flange ring"), None
+    )
+    bolts = next((i for i in ledger.items if "bolt" in i.component), None)
+    ring_mass = ring.mass_kg if ring and ring.available else None
+    bolt_mass = (
+        bolts.mass_kg * bolts.quantity if bolts and bolts.available else None
+    )
+    # The injector faceplate is a disc of the matched outer diameter; its
+    # thickness is driven by the same layout that drives the flange, which is
+    # why it belongs in the joint's mass objective rather than outside it.
+    face_mass = (
+        0.25 * math.pi * resolution.face_outer_diameter ** 2
+        * resolution.face_thickness * flange_density
+    )
+    return ring_mass, bolt_mass, face_mass
+
+
+@dataclass(frozen=True)
+class _DensityOnly:
+    density: float
+    name: str
+
+
+def size_bolted_interface(
+    *,
+    chamber_radius: float,
+    chamber_pressure: float,
+    wall_thickness: float | None = None,
+    material_yield_strength: float | None = None,
+    structural_fos: float = 1.5,
+    bolt_class: str = "12.9",
+    flange_density: float | None = None,
+    bolt_density: float | None = None,
+    joint_separation_factor: float = _DEFAULT_JOINT_SEPARATION_FACTOR,
+    series: tuple[tuple[float, float], ...] = _METRIC_COARSE_SERIES,
+    max_bolt_count: int = 64,
+    min_bolt_diameter: float = 5.0e-3,
+    **resolve_kwargs: Any,
+) -> BoltedInterfaceSizing:
+    """Choose the lightest bolted chamber/injector joint that passes the screens.
+
+    Why this exists
+    ---------------
+    :func:`resolve_bolted_interface_geometry` is a *layout* resolver.  Its
+    defaults size the bolt hole at ``0.06 * chamber_diameter`` and the bolt
+    circle at ``chamber_OD + 6 * hole``, then set the faceplate thickness at
+    ``2 * hole``.  Those are spacing heuristics, not load paths, and on the
+    13 kN baseline they produced a 285 mm flange around a 177 mm chamber and a
+    21.3 mm faceplate -- together about three quarters of the engine's modelled
+    hardware mass, dwarfing the 3.7 kg thrust chamber.
+
+    The binding requirement is far smaller.  The joint carries the pressure
+    separating force ``F = k * Pc * pi * r^2`` (Shigley-style separation
+    screen), and the faceplate carries clamped-plate bending
+    ``sigma ~= 0.75 Pc a^2 / t^2`` (Roark).  For that baseline the plate needs
+    about 5.4 mm, not 21.3 mm; the 21.3 mm came entirely from ``2 * hole`` with
+    an oversized hole.  Shrinking the fastener therefore fixes the flange
+    diameter *and* the faceplate thickness at once.
+
+    Method
+    ------
+    For each nominal diameter in a real ISO 262 coarse-thread series, take the
+    minimum even bolt count that keeps the per-bolt load within the ISO 898-1
+    proof stress divided by ``structural_fos``, resolve the resulting layout
+    through the existing rules, and keep the combination with the lowest
+    flange + fastener + faceplate mass.  Searching a standard series rather
+    than a continuous diameter is what makes the answer orderable hardware.
+
+    Every candidate is still resolved by
+    :func:`resolve_bolted_interface_geometry`, so the edge-distance, pitch and
+    plate-bending rules are enforced exactly as before -- this narrows the
+    layout to the lightest admissible one, it does not bypass any screen.
+
+    Why ``min_bolt_diameter`` exists
+    --------------------------------
+    Mass falls monotonically with fastener size here, because the flange outer
+    diameter is driven by the bolt hole through the edge-distance rule.  Left
+    unbounded the search therefore runs to the smallest thread in the series --
+    on the baseline it picks M3 x 36, which carries the load with 5 % margin but
+    is poor hardware: 36 small fasteners are hard to torque consistently, easy
+    to gall or strip, and expensive to assemble and inspect.  That is a
+    manufacturing and assembly judgement, not a strength one, so it is an
+    explicit parameter with a conventional M5 default rather than a hidden
+    penalty term.  Pass ``min_bolt_diameter=0.0`` to see the unconstrained
+    strength optimum.
+
+    Ranking caveat
+    --------------
+    The faceplate term in the objective is a plain disc of the matched outer
+    diameter.  That is the right *relative* measure for choosing a layout, but
+    it overstates absolute faceplate mass, because the real part has the sleeve
+    bore, bolt holes and annular manifold pockets machined out of it.  The
+    reported hardware mass comes from
+    :func:`raosim.mass_ledger.injector_mass_ledger`, which subtracts all three.
+    """
+
+    r = float(chamber_radius)
+    Pc = float(chamber_pressure)
+    if r <= 0.0 or Pc <= 0.0:
+        raise ValueError("chamber_radius and chamber_pressure must be positive")
+    if bolt_class not in _BOLT_CLASSES:
+        raise ValueError(
+            f"unknown bolt class {bolt_class!r}; "
+            f"choose from {sorted(_BOLT_CLASSES)}"
+        )
+    proof, _ultimate = _BOLT_CLASSES[bolt_class]
+    allowable = proof / max(float(structural_fos), 1e-9)
+    separation_load = joint_separation_factor * Pc * math.pi * r * r
+
+    notes: list[str] = []
+    best: tuple[float, BoltedInterfaceSizing] | None = None
+    evaluated = 0
+
+    for diameter, pitch in series:
+        if diameter < float(min_bolt_diameter):
+            continue
+        area = iso_stress_area(diameter, pitch)
+        capacity = allowable * area
+        count = _round_up_even(separation_load / max(capacity, 1e-12))
+        if count > max_bolt_count:
+            continue
+        try:
+            resolution = resolve_bolted_interface_geometry(
+                chamber_radius=r,
+                chamber_pressure=Pc,
+                wall_thickness=wall_thickness,
+                material_yield_strength=material_yield_strength,
+                structural_fos=structural_fos,
+                bolt_count=count,
+                # The hole follows the fastener, not the chamber diameter.
+                bolt_hole_diameter=diameter + max(0.1 * diameter, 2.0e-4),
+                bolt_diameter=diameter,
+                bolt_allowable_stress=allowable,
+                joint_separation_factor=joint_separation_factor,
+                **resolve_kwargs,
+            )
+        except ValueError:
+            continue
+        evaluated += 1
+        ring_m, bolt_m, face_m = _joint_mass(
+            resolution, flange_density=flange_density, bolt_density=bolt_density
+        )
+        total = (
+            None if None in (ring_m, bolt_m, face_m)
+            else ring_m + bolt_m + face_m
+        )
+        # Without densities the objective degenerates to swept volume, which
+        # still ranks the layouts correctly for a single material.
+        rank = total if total is not None else (
+            0.25 * math.pi * resolution.flange_outer_diameter ** 2
+            * (resolution.flange_length + resolution.face_thickness)
+        )
+        plate_req = 0.0
+        if material_yield_strength is not None:
+            plate_allow = float(material_yield_strength) / structural_fos
+            plate_req = r * math.sqrt(_FACEPLATE_CLAMPED_K * Pc / plate_allow)
+        candidate = BoltedInterfaceSizing(
+            resolution=resolution,
+            bolt_designation=f"M{diameter * 1e3:g}x{pitch * 1e3:g}",
+            bolt_class=bolt_class,
+            bolt_nominal_diameter=diameter,
+            bolt_pitch_thread=pitch,
+            bolt_stress_area=area,
+            bolt_allowable_stress=allowable,
+            separation_load=separation_load,
+            load_per_bolt=separation_load / max(count, 1),
+            bolt_utilisation=(separation_load / max(count, 1)) / max(capacity, 1e-12),
+            faceplate_bending_thickness=plate_req,
+            flange_mass=ring_m,
+            fastener_mass=bolt_m,
+            faceplate_mass=face_m,
+            joint_mass=total,
+            candidates_evaluated=0,
+            baseline_joint_mass=None,
+            notes=[],
+        )
+        if best is None or rank < best[0]:
+            best = (rank, candidate)
+
+    if best is None:
+        raise ValueError(
+            "no fastener in the series could carry the joint separation load "
+            f"of {separation_load:.6g} N within {max_bolt_count} bolts; widen "
+            "the series, raise the bolt class, or lower the chamber pressure"
+        )
+
+    # Baseline = what the pure layout defaults would have produced, so the
+    # report can state what the sizing actually bought.
+    baseline_mass = None
+    try:
+        baseline = resolve_bolted_interface_geometry(
+            chamber_radius=r,
+            chamber_pressure=Pc,
+            wall_thickness=wall_thickness,
+            material_yield_strength=material_yield_strength,
+            structural_fos=structural_fos,
+            joint_separation_factor=joint_separation_factor,
+            **resolve_kwargs,
+        )
+        b_ring, b_bolt, b_face = _joint_mass(
+            baseline, flange_density=flange_density, bolt_density=bolt_density
+        )
+        if None not in (b_ring, b_bolt, b_face):
+            baseline_mass = b_ring + b_bolt + b_face
+    except ValueError:
+        pass
+
+    chosen = best[1]
+    notes.append(
+        f"selected {chosen.bolt_designation} class {bolt_class} x "
+        f"{chosen.resolution.bolt_count} from {evaluated} admissible layouts, "
+        f"minimising flange + fastener + faceplate mass"
+    )
+    notes.append(
+        "bolt sizing uses the ISO 724 stress area against the ISO 898-1 proof "
+        f"stress divided by a factor of safety of {structural_fos:g}; the "
+        "joint still needs gasket/seal compression, preload scatter, thread "
+        "engagement, thermal distortion, fatigue, FEA and test"
+    )
+    return replace_sizing(chosen, evaluated, baseline_mass, notes)
+
+
+def replace_sizing(
+    sizing: BoltedInterfaceSizing,
+    evaluated: int,
+    baseline_mass: float | None,
+    notes: list[str],
+) -> BoltedInterfaceSizing:
+    """Return ``sizing`` with the summary fields filled in."""
+
+    from dataclasses import replace as _replace
+
+    return _replace(
+        sizing,
+        candidates_evaluated=evaluated,
+        baseline_joint_mass=baseline_mass,
+        notes=notes,
+    )
+
+
 def screen_composite_regen_wall(
     *,
     chamber_pressure: float,

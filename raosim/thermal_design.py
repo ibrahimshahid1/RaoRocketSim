@@ -416,15 +416,72 @@ def _resolve_material(material: Any) -> Any:
     return material
 
 
-def _wall_mass(contour: dict, t_hot: float, t_jacket: float,
-               channel_height: float, density: float) -> float:
-    """Liner + jacket metal mass [kg] (thin-shell volume × density)."""
+def _wall_mass(
+    contour: dict,
+    t_hot: float,
+    t_jacket: float,
+    channel_height: float,
+    density: float,
+    *,
+    channel_count: int | None = None,
+    channel_width: float | None = None,
+    land_width=None,
+) -> float:
+    """Liner + channel-land + jacket metal mass [kg].
+
+    Corrected 2026-07-31.  The previous implementation had three defects, all
+    of which biased the channel auto-sizer's ``min_mass`` objective:
+
+    1. **Quadrature.**  It summed ``hypot(gradient(x), gradient(y))``, which
+       gives each end node a full segment and over-counts the meridian by one
+       grid interval -- the failure mode
+       :func:`raosim.regen_profile._nodal_weights_from_segments` was written to
+       avoid.  Trapezoidal nodal weights are used instead, so the weights sum
+       to the true arc length.
+    2. **Shell radius.**  It used the gas-side radius rather than the
+       mid-surface radius, under-counting each shell by ``t/2``.  NASA SP-125
+       eq. 8-32 (``W_c = 2 pi a l_c t_c rho``, printed p. 339) takes ``a`` as
+       the *nominal* radius, i.e. Pappus's centroid theorem.
+    3. **Missing land metal.**  The ribs between coolant channels were absent
+       entirely.  On the 13 kN baseline the lands are about a third of the
+       thrust-chamber mass, so a mass objective that ignored them was ranking
+       channel layouts by the wrong quantity -- and *systematically* so, since
+       narrower channels mean wider lands and therefore more metal.
+
+    When ``channel_count`` and ``channel_width`` are supplied the land term is
+    included; otherwise the result is liner + jacket only, as before, and the
+    caller is responsible for knowing that.  See :mod:`raosim.mass_ledger` for
+    the full ledger this mirrors.
+    """
+
+    from raosim.regen_profile import _nodal_weights_from_segments
+
     x = np.asarray(contour["x"], dtype=float)
     y = np.asarray(contour["y"], dtype=float)
-    ds = np.hypot(np.gradient(x), np.gradient(y))
-    liner = float(np.sum(2.0 * math.pi * y * t_hot * ds))
-    jacket = float(np.sum(2.0 * math.pi * (y + t_hot + channel_height) * t_jacket * ds))
-    return density * (liner + jacket)
+    ds = _nodal_weights_from_segments(np.hypot(np.diff(x), np.diff(y)))
+
+    r_ch_in = y + t_hot
+    r_ch_out = r_ch_in + channel_height
+    liner = float(np.sum(2.0 * math.pi * (y + 0.5 * t_hot) * t_hot * ds))
+    jacket = float(np.sum(
+        2.0 * math.pi * (r_ch_out + 0.5 * t_jacket) * t_jacket * ds
+    ))
+
+    lands = 0.0
+    if channel_count and channel_width and channel_width > 0.0:
+        if land_width is None:
+            r_mid = y + t_hot + 0.5 * channel_height
+            pitch = 2.0 * math.pi * np.maximum(r_mid, 1e-12) / int(channel_count)
+            band = np.maximum(pitch - float(channel_width), 0.0)
+        else:
+            band = np.asarray(land_width, dtype=float)
+            if band.ndim == 0:
+                band = np.full_like(y, float(band))
+        annulus = math.pi * (r_ch_out ** 2 - r_ch_in ** 2)
+        fraction = band / np.maximum(band + float(channel_width), 1e-30)
+        lands = float(np.sum(annulus * fraction * ds))
+
+    return density * (liner + lands + jacket)
 
 
 def wall_feasibility_band(
@@ -722,8 +779,14 @@ def joint_wall_channel_design(
                         "max_liner_pressure_differential_bar": float(
                             np.max(res["liner_pressure_differential"]) / 1e5
                         ),
+                        # Channel count and width are passed so the LAND metal
+                        # is in the objective.  Without them a "min_mass"
+                        # channel search is biased: narrower channels leave
+                        # wider ribs, so ignoring lands makes fine channels look
+                        # free when they are not.
                         "mass_kg": _wall_mass(
-                            contour, float(t_hot), float(t_hot), float(h), rho
+                            contour, float(t_hot), float(t_hot), float(h), rho,
+                            channel_count=int(N), channel_width=float(w),
                         ),
                         "fits": bool(fits), "feasible": bool(feasible),
                     })

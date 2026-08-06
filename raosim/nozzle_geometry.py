@@ -167,6 +167,12 @@ def bell_nozzle_contour(
     rao_moc_max_nfev: int = 200,
     rao_moc_evaluate_moc: bool = True,
     throat_geometry: ThroatGeometrySpec | None = None,
+    *,
+    rao_moc_theta_n_guess_deg: float = 30.0,
+    rao_moc_solver_backend: str = "jax",
+    rao_moc_wall_method: str = "coupled",
+    rao_moc_kernel_d_fraction_max: float | None = None,
+    rao_moc_physics_weight: float | None = None,
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -190,7 +196,9 @@ def bell_nozzle_contour(
                            ('area_ratio' default, or 'hall')
     pa_over_p0 : Rao-variational-only design ambient/stagnation pressure ratio
     rao_moc_n_control, rao_moc_n_kernel, rao_moc_max_nfev,
-    rao_moc_evaluate_moc :
+    rao_moc_evaluate_moc, rao_moc_theta_n_guess_deg,
+    rao_moc_solver_backend, rao_moc_wall_method,
+    rao_moc_kernel_d_fraction_max, rao_moc_physics_weight :
         Rao-variational-MOC-only residual solve controls
 
     Returns
@@ -255,10 +263,16 @@ def bell_nozzle_contour(
             convergent_half_angle_deg=convergent_half_angle_deg,
             Ru_factor=Ru_factor,
             throat_downstream_radius_factor=Rd_factor,
+            thetaN_guess_deg=rao_moc_theta_n_guess_deg,
+            starting_line_method=starting_line_method,
             n_control=rao_moc_n_control,
             n_kernel=rao_moc_n_kernel,
             max_nfev=rao_moc_max_nfev,
             evaluate_moc=rao_moc_evaluate_moc,
+            solver_backend=rao_moc_solver_backend,
+            wall_method=rao_moc_wall_method,
+            kernel_d_fraction_max=rao_moc_kernel_d_fraction_max,
+            physics_weight=rao_moc_physics_weight,
         )
         _shift_contour_x(contour, throat_x)
         contour["throat_geometry"] = spec.to_dict()

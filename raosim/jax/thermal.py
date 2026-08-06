@@ -119,7 +119,15 @@ def throat_wall_temperature(
 # Separation (Schmucker) and ambient thrust coefficient                       #
 # --------------------------------------------------------------------------- #
 def schmucker_separation_margin(epsilon, gamma, Pc, Pa, *, supersonic=True):
-    """Separation margin Pe/p_sep (>1 = attached) — Schmucker criterion
+    """Schmucker attached-flow ratio ``Pe/p_sep`` (>1 = attached).
+
+    This legacy helper deliberately retains the ratio convention used by the
+    JAX nozzle-design API.  The MDO engine converts it to its true design
+    margin with ``Pe/p_sep - MissionSpec.separation_design_margin``.  At zero
+    ambient pressure the ambient-referenced criterion degenerates; return a
+    finite value above one so vacuum is an explicit pass rather than inf/nan.
+
+    Schmucker criterion:
     p_sep/Pa = (1.88·Me − 1)^(−0.64), evaluated at the exit Mach number
     (Östlund 2002 Eq. 30; jnp mirror of separation.schmucker_separation_ratio).
 
@@ -133,7 +141,8 @@ def schmucker_separation_margin(epsilon, gamma, Pc, Pa, *, supersonic=True):
     Pe_over_Pc = isentropic_pressure_ratio(Me, gamma)
     denom = jnp.maximum(1.88 * Me - 1.0, 1e-12)
     p_sep_over_Pc = denom ** (-0.64) * (Pa / Pc)
-    return Pe_over_Pc / p_sep_over_Pc
+    attached_ratio = Pe_over_Pc / jnp.maximum(p_sep_over_Pc, 1e-12)
+    return jnp.where(Pa <= 0.0, 1.0 + Pe_over_Pc, attached_ratio)
 
 
 def ambient_thrust_coefficient(epsilon, gamma, Pc, Pa):

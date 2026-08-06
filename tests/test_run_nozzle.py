@@ -444,6 +444,76 @@ def test_experimental_bvp_failure_blocks_artifacts_without_override(tmp_path):
     assert not (out / "wall.stl").exists()
 
 
+@pytest.mark.parametrize("mode", ("--engine-mdo", "--engine-mdo-optimize"))
+def test_mdo_preliminary_host_contour_rejects_manufacturing_cad(mode, capsys):
+    from raosim.run_nozzle import main
+
+    return_code = main(
+        [
+            "--no-banner",
+            mode,
+            "--mdo-export",
+            "--contour-method",
+            "rao-bvp",
+            "--cad",
+            "step",
+        ]
+    )
+
+    assert return_code == 2
+    output = capsys.readouterr().out
+    assert "preliminary numerical post-analysis" in output
+    assert "cannot emit manufacturing CAD" in output
+
+
+@pytest.mark.parametrize("mode", ("--engine-mdo", "--engine-mdo-optimize"))
+def test_mdo_rao_selector_requires_post_analysis_export(mode, capsys):
+    from raosim.run_nozzle import main
+
+    return_code = main(
+        [
+            "--no-banner",
+            mode,
+            "--contour-method",
+            "rao-bvp",
+        ]
+    )
+
+    assert return_code == 2
+    output = capsys.readouterr().out
+    assert "requires --mdo-export" in output
+    assert "fixed-topology Rao/TOP chart wall" in output
+
+
+def test_mdo_rao_handoff_matches_traditional_cli_solver_controls():
+    from raosim.run_nozzle import _mdo_authoritative_contour_handoff
+
+    method, options = _mdo_authoritative_contour_handoff(
+        SimpleNamespace(
+            contour_method="rao-bvp",
+            n_control=18,
+            n_kernel=20,
+            max_nfev=321,
+            theta_b_guess=34.0,
+            backend="numpy",
+        )
+    )
+
+    assert method == "rao_variational_moc"
+    assert options == {
+        "n_control": 18,
+        "n_kernel": 20,
+        "max_nfev": 321,
+        "evaluate_moc": True,
+        "theta_n_guess_deg": 34.0,
+        "starting_line_method": "kliegel_levine",
+        "solver_backend": "numpy",
+        "wall_method": "bde",
+        "kernel_d_fraction_max": 0.7,
+        "physics_weight": 1.0,
+    }
+
+
 def test_bezier_chart_extrapolation_requires_diagnostic_override(tmp_path):
     blocked = tmp_path / "blocked_chart"
     common = [

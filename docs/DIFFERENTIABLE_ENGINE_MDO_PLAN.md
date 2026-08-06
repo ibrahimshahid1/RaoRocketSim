@@ -5,7 +5,7 @@ version: "0.1 (living document)"
 audience: [propulsion engineers, AI coding agents]
 canonical_pair: latex-report/Differentiable_Engine_MDO_Plan.pdf   # this .md and that .pdf are the same content
 status_legend: { DONE: complete, WIP: in progress, TODO: not started }
-last_updated: 2026-07-22
+last_updated: 2026-07-28
 ---
 
 # Differentiable Engine MDO — Plan & Tracker
@@ -639,9 +639,9 @@ Numerical "done" means:
 | 6 | Differentiable pump/electric model | Head, power, NPSH, geometry, mass match detailed model; C¹ efficiency | **WIP** (2026-07-23: `mdo/pump.py` — **C¹ η(Ns) surrogate replacing the binned `pumps.py` estimator**, meanline duty/Ns/Nss/NPSH + tip-speed & suction screens, Lee-2021 battery epigraph; parity + FD gate green; detailed impeller/inducer geometry + blade stress deferred to the constraint layer) |
 | 7 | Coupled engine solve | All residual blocks converge without manual sequential iteration | **WIP** (2026-07-23: `mdo/engine.py` `solve_engine` — all four blocks in one differentiable eval; cooling Δp→pump-rise hydraulic edge **closed**; optional η_c* fixed point + ablation; `--engine-mdo` CLI; genuinely-implicit parts nested-IFT-solved rather than one monolithic block-sparse Newton, per §4.1's "don't enlarge the system to appear coupled") |
 | 8 | Total derivative API | Directional derivatives of the re-solved engine pass step-size sweeps | **DONE** (2026-07-23: exact forward `jacfwd` + reverse `jacrev` through the two IFT solves; FD-verified in `test_mdo_engine.py` and the NLP constraint-Jacobian gate `test_mdo_nlp.py`) |
-| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **WIP** (2026-07-23: `mdo/nlp.py` ε-constraint min-mass over the unit box with exact JAX Jacobians handed to SLSQP; single-solve reaches feasible KKT `max_violation`<1e-5; `--engine-mdo-optimize` CLI + Pareto sweep. **Coking now ENFORCED** via the film-cooling design variable (9-var); reverse-mode constraint Jacobian; trust-constr/IPOPT optional) |
+| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **WIP** (2026-07-23: `mdo/nlp.py` ε-constraint min-mass over the 10-variable unit box with exact JAX Jacobians handed to SLSQP; single-solve reaches feasible KKT `max_violation`<1e-5; `--engine-mdo-optimize` CLI + Pareto sweep. **Coking now ENFORCED** via the film-cooling design variable; reverse-mode constraint Jacobian; trust-constr/IPOPT optional) |
 | 10 | Multipoint mission model | Shared hardware meets ambient, throttle, power, energy constraints at all points | **TODO** |
-| 11 | Authoritative re-evaluation | CEA/CoolProp/high-fidelity screens confirm the optimum or trigger a correction iteration | **TODO** |
+| 11 | Authoritative re-evaluation | CEA/CoolProp/high-fidelity screens confirm the optimum or trigger a correction iteration | **WIP** (2026-07-28: versioned `EngineState`/`EngineAnalysisSnapshot`, strict state/mission/surface validation, exact solved-chamber-state pinning, real `design_nozzle_v2` + `size_electric_pumps` handoff, all-common-field/profile comparison, and digest-linked report/CAD metadata are implemented with parity gates; independent held-out CEA/CoolProp and higher-fidelity correction iterations remain TODO) |
 
 > **Walking skeleton landed (2026-07-22).** The §12.5 first increment exists:
 > `raosim/mdo/assembly.py` stacks a thin R(y,x) (analytic nozzle + throat
@@ -738,7 +738,8 @@ Numerical "done" means:
 > (frozen η_c*) and, when enabled, makes the outer Newton a real fixed point with
 > a measurable `ablation_delta` (RQ1). Everything else is the explicit chain the
 > physics actually is (§4.1: don't fake-implicit). A single `jax.grad` of Isp or
-> package mass flows through both IFT solves and the explicit injector/pump chain
+> smooth electric-feed objective mass flows through both IFT solves and the
+> explicit injector/pump chain; exact installed mass is reported separately
 > and matches central differences (`tests/test_mdo_engine.py`: convergence,
 > closed-edge flow, standalone-block parity, AD=FD through the closed edge,
 > η_c* ablation, jit). Exposed to users via the **`--engine-mdo` CLI flag**
@@ -750,19 +751,19 @@ Numerical "done" means:
 > refinement, not a correctness requirement, at this state count.
 >
 > **Phase 8/9 ε-constraint NLP + Pareto landed (2026-07-23).** `mdo/nlp.py`
-> minimises electric-package mass s.t. Isp ≥ Isp_min and every enforced margin
-> ≥ 0, over the six design variables in the (now-6-var) unit-box-scaled
-> `DesignVector` — `D_pintle` and `N_rpm` were lifted in this commit (defaulted
-> so the 4-var skeleton path is unchanged). Forward-mode `jacfwd` assembles the
+> minimises smooth electric-feed objective mass s.t. Isp ≥ Isp_min and every
+> enforced margin ≥ 0, while separately reporting exact installed package
+> mass, over the ten design variables in the unit-box-scaled `DesignVector` —
+> `D_pintle`, `N_rpm`, channel width/height, film fraction, and wall thickness
+> are all live design variables (the 4-var skeleton remains as a compatibility
+> gate). Reverse-mode `jacrev` assembles the
 > exact constraint Jacobian through both IFT solves (matched to central
 > differences in `test_mdo_nlp.py`) and is handed to SLSQP; a single solve
 > reaches a feasible KKT point (`max_violation` ~1e-10). `pareto_frontier`
-> ε-sweeps with warm starts. **Coking is REPORTED, not enforced, by default**:
-> with the fixed screening channel geometry the SP-8087 728 K liquid-wall limit
-> is violated everywhere in the box (even at min Pc the wall runs ~885 K), so
-> hard-enforcing it is infeasible everywhere — a structural finding that
-> promoting the channel geometry (N, w, h, t_wall) to design variables is the
-> real fix (`enforced=CONSTRAINT_NAMES` turns it back on once they exist).
+> ε-sweeps with warm starts. **Coking is enforced by default.** Before the
+> film-cooling lever landed, a fixed-geometry diagnostic showed the SP-8087
+> liquid-wall limit was infeasible throughout the old design box. Phase 7b
+> below records the model change that made the constraint feasible.
 > Exposed via **`--engine-mdo-optimize`** (`--isp-min` single solve, `--isp-sweep
 > LO,HI,N` frontier, `--engine-mdo-ambient` for the altitude/vacuum trade, which
 > at sea level is weak because higher ε is overexpanded). The full sweep is

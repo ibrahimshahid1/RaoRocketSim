@@ -13,8 +13,10 @@ from typing import Any
 import numpy as np
 
 from raosim.cea import (
+    PinnedChamberState,
     THERMO_CEA_FROZEN,
     THERMO_CONSTANT_GAMMA,
+    THERMO_PINNED_CHAMBER,
     ThermochemistryResult,
     propellant_from_request,
     resolve_thermochemistry,
@@ -117,12 +119,24 @@ class ThermoSpec:
     oxidizer: str | None = None
     fuel: str | None = None
     mixture_ratio: float | None = None
+    # Legacy lumped Isp efficiency.  When the explicit split below is
+    # omitted, the existing thermochemistry-provider convention is retained.
+    # Supplying eta_cstar and/or eta_CF makes those values authoritative and
+    # eta_Isp is recomputed from the resolved split.
     eta_Isp: float = 0.95
     # Expansion physics is separate from the chamber-state provider.  The
     # variable-cp option requires a configuration-controlled fixed-composition
     # cp(T) JSON table and is currently limited to Bezier geometry.
     expansion_model: str = "constant_gamma"
     frozen_gas_table: Path | None = None
+    # Appended after the legacy fields so positional ThermoSpec callers retain
+    # their historical argument ordering.
+    eta_cstar: float | None = None
+    eta_CF: float | None = None
+    # Host-only immutable state used to align a traditional re-evaluation with
+    # the exact gamma/Tc/R/c-star values retained by a solved MDO EngineState.
+    # This remains preliminary parity evidence, not an independent CEA rerun.
+    pinned_chamber_state: PinnedChamberState | None = None
 
 
 @dataclass
@@ -136,6 +150,27 @@ class MissionAmbientSpec:
         if self.pressure_schedule_pa:
             return float(min(self.pressure_schedule_pa))
         return float(self.Pa)
+
+
+@dataclass
+class HostRaoSolverSpec:
+    """Host-only controls for the experimental Rao variational/MOC analysis.
+
+    These values configure the existing auditable host solve used for
+    post-analysis.  They do not replace the fixed-topology chart/Bézier wall in
+    the differentiable MDO core.
+    """
+
+    n_control: int = 12
+    n_kernel: int = 12
+    max_nfev: int = 200
+    evaluate_moc: bool = True
+    theta_n_guess_deg: float = 30.0
+    starting_line_method: str = "kliegel_levine"
+    solver_backend: str = "jax"
+    wall_method: str = "coupled"
+    kernel_d_fraction_max: float | None = None
+    physics_weight: float | None = None
 
 
 @dataclass
@@ -202,6 +237,16 @@ class CoolingSpec:
     # implemented Zuber CHF is a conservative screening reference.
     boiling_chf: bool = False
     gate_chf: bool = False
+    # Optional fuel branch that leaves the common, upstream fuel-pump stream
+    # and bypasses the regenerative jacket for separate wall-film injection.
+    # For a fuel-as-coolant topology the injector integration enforces
+    #
+    #   coolant_mass_flow + fuel_film_mass_flow = cycle fuel mass flow.
+    #
+    # Zero preserves the historical direct jacket-to-injector topology.  This
+    # field records the split; film-slot/orifice hardware remains outside the
+    # traditional injector model. Appended to preserve positional callers.
+    fuel_film_mass_flow: float = 0.0
 
 
 @dataclass
@@ -236,6 +281,22 @@ class MaterialSpec:
         tuple[float, float, float], ...
     ] = ()
     cyclic_stress_strain_source: str | None = None
+    # Required yield/combined-stress ratio.  Kept explicit so an MDO
+    # post-FOS allowable can be mapped back to yield strength without silently
+    # applying the historical hard-coded 1.5 twice.
+    structural_fos: float = 1.5
+    # --- structural closeout (jacket) ------------------------------------- #
+    # NASA SP-8087 sec. 2.1.3.1: "Hardenable materials often are used for
+    # jacket designs, where, after brazing, the strength can be increased
+    # considerably by agehardening."  A regeneratively cooled wall is normally
+    # a soft high-conductivity liner inside a strong jacket, so the jacket
+    # alloy is a separate field rather than an inherited one.  ``None`` uses
+    # the repository's standard jacket/structure entry.
+    jacket_material: str | None = None
+    # SP-8087 sec. 2.1.3 quotes yield factors of safety of 1.0-1.32 (and
+    # ultimate 1.3-1.8).  The conservative end of the yield band is used to
+    # size the jacket against the SP-125 p.109 outer-shell hoop stress.
+    closeout_structural_fos: float = 1.32
 
     @classmethod
     def from_catalog(cls, name: str) -> "MaterialSpec":
@@ -333,6 +394,10 @@ class DesignInput:
     release_evidence_manifest: Path | None = None
     require_release_evidence: bool = False
     strict_gates: bool = False
+    # Appended so existing positional DesignInput callers retain their ordering.
+    host_rao_solver: HostRaoSolverSpec = field(
+        default_factory=HostRaoSolverSpec
+    )
 
 
 @dataclass
@@ -435,6 +500,7 @@ class SprayRegenIterationPayload:
     fuel_mass_flow: float
     oxidizer_mass_flow: float
     coolant_mass_flow: float
+    fuel_film_mass_flow: float = 0.0
 
     def coupling_summary(self) -> dict[str, Any]:
         regenerative = self.cooling.get("method") == "regenerative"
@@ -456,10 +522,23 @@ class SprayRegenIterationPayload:
             "fuel_mass_flow_kg_s": self.fuel_mass_flow,
             "oxidizer_mass_flow_kg_s": self.oxidizer_mass_flow,
             "coolant_mass_flow_kg_s": self.coolant_mass_flow,
+            "fuel_film_mass_flow_kg_s": self.fuel_film_mass_flow,
             "regen_fuel_relative_flow_error": (
-                abs(self.coolant_mass_flow - self.fuel_mass_flow)
+                abs(
+                    self.coolant_mass_flow
+                    + self.fuel_film_mass_flow
+                    - self.fuel_mass_flow
+                )
                 / max(self.fuel_mass_flow, 1.0e-30)
                 if regenerative else None
+            ),
+            "fuel_flow_topology": (
+                "common_upstream_pump_then_regen_and_film_split"
+                if regenerative and self.fuel_film_mass_flow > 0.0
+                else (
+                    "direct_regen_jacket_to_injector"
+                    if regenerative else None
+                )
             ),
             "outer_loop_scope": (
                 "spray_cycle_regen_wall_feed_and_pump_duty"
@@ -483,6 +562,7 @@ class SprayRegenIterationPayload:
 def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     """Generate a physics-screened nozzle design from the strict v2 schema."""
     _validate_design_input(input)
+    design_ambient_pressure = input.ambient.design_pressure
     require_cea = input.mode == DESIGN_MODE_VALIDATED
 
     thermo = resolve_thermochemistry(
@@ -493,8 +573,11 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         oxidizer=input.thermo.oxidizer,
         fuel=input.thermo.fuel,
         eta_Isp=input.thermo.eta_Isp,
+        eta_cstar=input.thermo.eta_cstar,
+        eta_CF=input.thermo.eta_CF,
         epsilon=input.epsilon,
         require_cea=require_cea,
+        pinned_chamber_state=input.thermo.pinned_chamber_state,
     )
     prop = thermo.propellant
     warnings = list(thermo.warnings)
@@ -592,7 +675,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "pressure-, mixture-ratio-, and duty-informed values."
         )
     performance = compute_engine_performance(
-        input.Pc, input.ambient.Pa, Rt, float(epsilon), prop,
+        input.Pc, design_ambient_pressure, Rt, float(epsilon), prop,
         frozen_gas=frozen_gas,
     )
     if performance.frozen_flow is not None:
@@ -732,6 +815,9 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
                     coolant_mass_flow=float(
                         trial_cooling_input.coolant_mass_flow or 0.0
                     ),
+                    fuel_film_mass_flow=float(
+                        trial_cooling_input.fuel_film_mass_flow or 0.0
+                    ),
                 )
                 return trial_injector.atomization, state
 
@@ -750,7 +836,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             thermo.chamber_state["eta_cstar_coupled"] = prop.eta_cstar
             thermo.chamber_state["c_star_effective"] = prop.c_star_effective
             performance = compute_engine_performance(
-                input.Pc, input.ambient.Pa, Rt, float(epsilon), prop,
+                input.Pc, design_ambient_pressure, Rt, float(epsilon), prop,
                 frozen_gas=frozen_gas,
             )
             final_state = spray_coupling_result.payload
@@ -789,7 +875,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
     gate_report = evaluate_design_gates(
         contour,
         input.Pc,
-        input.ambient.Pa,
+        design_ambient_pressure,
         prop.gamma,
         frozen_expansion=performance.frozen_flow,
         wall_thickness=input.manufacturing.wall_thickness,
@@ -807,7 +893,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
                 message=gate.detail,
             )
     structural = structural_screen(
-        contour, input.Pc, input.ambient.Pa, prop, input.material,
+        contour, input.Pc, design_ambient_pressure, prop, input.material,
         input.manufacturing.wall_thickness, thermal, cooling,
         channel_width=getattr(input.cooling, "channel_width", None),
     )
@@ -821,6 +907,10 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             limit=gate.limit if gate.limit is not None else "status != fail",
             message=gate.detail,
         )
+    hardware_mass = _hardware_mass_section(
+        input, contour, cooling_input, cooling, interface_resolution,
+        injector_result,
+    )
     cad_readiness = _cad_readiness(input, contour, gate_report)
     benchmark_status = _benchmark_status(input.method, contour)
 
@@ -1007,6 +1097,7 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
         ),
         "injector_interface": injector_interface.to_dict(),
         "structural": structural,
+        "hardware_mass": hardware_mass,
         "cad_readiness": cad_readiness,
         "benchmark_status": benchmark_status,
         "model_registry_audit": model_registry_audit,
@@ -1190,6 +1281,22 @@ def _validate_design_input(input: DesignInput) -> None:
             "thermo.expansion_model must be 'constant_gamma' or "
             "'frozen_variable_cp'"
         )
+    if (
+        input.thermo.mode == THERMO_PINNED_CHAMBER
+        and input.thermo.pinned_chamber_state is None
+    ):
+        raise ValueError(
+            "thermo.mode='pinned_chamber_state' requires "
+            "thermo.pinned_chamber_state"
+        )
+    if (
+        input.thermo.mode != THERMO_PINNED_CHAMBER
+        and input.thermo.pinned_chamber_state is not None
+    ):
+        raise ValueError(
+            "thermo.pinned_chamber_state requires "
+            "thermo.mode='pinned_chamber_state'"
+        )
     if input.thermo.expansion_model == "frozen_variable_cp":
         if input.method != "bezier":
             raise ValueError(
@@ -1213,6 +1320,40 @@ def _validate_design_input(input: DesignInput) -> None:
         )
     if input.Pc <= 0.0:
         raise ValueError("Pc must be positive")
+    ambient_pressures = (
+        float(input.ambient.Pa),
+        *(float(value) for value in input.ambient.pressure_schedule_pa),
+    )
+    if any(not math.isfinite(value) or value < 0.0 for value in ambient_pressures):
+        raise ValueError("ambient pressures must be finite and nonnegative")
+    if any(value >= float(input.Pc) for value in ambient_pressures):
+        raise ValueError("ambient pressures must be less than Pc")
+    host_rao = input.host_rao_solver
+    if host_rao.n_control < 8:
+        raise ValueError("host Rao n_control must be at least 8")
+    if host_rao.n_kernel < 2:
+        raise ValueError("host Rao n_kernel must be at least 2")
+    if host_rao.max_nfev < 0:
+        raise ValueError("host Rao max_nfev must be nonnegative")
+    if host_rao.solver_backend not in {"jax", "numpy"}:
+        raise ValueError("host Rao solver_backend must be 'jax' or 'numpy'")
+    if host_rao.wall_method not in {"coupled", "legacy", "bde"}:
+        raise ValueError(
+            "host Rao wall_method must be 'coupled', 'legacy', or 'bde'"
+        )
+    if (
+        host_rao.kernel_d_fraction_max is not None
+        and not 0.0 < float(host_rao.kernel_d_fraction_max) <= 1.0
+    ):
+        raise ValueError("host Rao kernel_d_fraction_max must be in (0, 1]")
+    if (
+        host_rao.physics_weight is not None
+        and (
+            not math.isfinite(float(host_rao.physics_weight))
+            or float(host_rao.physics_weight) <= 0.0
+        )
+    ):
+        raise ValueError("host Rao physics_weight must be finite and positive")
     if input.Rt is not None and input.Rt <= 0.0:
         raise ValueError("Rt must be positive when supplied")
     if input.target_thrust is not None and input.target_thrust <= 0.0:
@@ -1264,8 +1405,14 @@ def _validate_design_input(input: DesignInput) -> None:
                 "validated mode requires explicit chamber inputs: "
                 + ", ".join(missing_chamber_inputs)
             )
-        if input.thermo.mode == THERMO_CONSTANT_GAMMA:
-            raise RuntimeError("validated mode requires CEA thermochemistry")
+        if input.thermo.mode in {
+            THERMO_CONSTANT_GAMMA,
+            THERMO_PINNED_CHAMBER,
+        }:
+            raise RuntimeError(
+                "validated mode requires CEA thermochemistry from an "
+                "independent evaluation"
+            )
     cad = input.manufacturing.cad.lower()
     if cad not in CAD_MODES_V2:
         if cad == CAD_IPT:
@@ -1298,6 +1445,16 @@ def _validate_design_input(input: DesignInput) -> None:
             raise ValueError(f"{name} must be positive when supplied")
     if input.cooling.method not in {"none", "regenerative"}:
         raise ValueError("cooling.method must be 'none' or 'regenerative'")
+    if float(input.cooling.fuel_film_mass_flow or 0.0) < 0.0:
+        raise ValueError("fuel_film_mass_flow must be nonnegative")
+    if (
+        float(input.cooling.fuel_film_mass_flow or 0.0) > 0.0
+        and input.cooling.method != "regenerative"
+    ):
+        raise ValueError(
+            "fuel_film_mass_flow requires regenerative fuel cooling so the "
+            "common upstream fuel stream has an explicit jacket/film split"
+        )
     if input.injector.type not in {"none", "pintle"}:
         raise ValueError("injector.type must be 'none' or 'pintle'")
     input.spray_cstar_coupling.validate()
@@ -1351,6 +1508,18 @@ def _validate_design_input(input: DesignInput) -> None:
             )
         ):
             raise ValueError("regenerative cooling requires coolant_mass_flow > 0")
+        if float(input.cooling.fuel_film_mass_flow or 0.0) > 0.0:
+            _, fuel_name = _thermo_feed_names(input.thermo)
+            if (
+                not input.cooling.coolant
+                or not fuel_name
+                or canonical_coolant_name(input.cooling.coolant)
+                != canonical_coolant_name(fuel_name)
+            ):
+                raise ValueError(
+                    "fuel_film_mass_flow requires the cycle fuel to be the "
+                    "regenerative coolant"
+                )
 
 
 def _thermo_feed_names(thermo: ThermoSpec) -> tuple[str | None, str | None]:
@@ -1429,17 +1598,27 @@ def _cooling_at_cycle_mass_flow(
         and cooling.method == "regenerative"
     ):
         fuel_mass_flow = float(total_mass_flow) / (1.0 + float(mixture_ratio))
+        film_mass_flow = float(cooling.fuel_film_mass_flow or 0.0)
+        jacket_mass_flow = fuel_mass_flow - film_mass_flow
+        if jacket_mass_flow <= 0.0:
+            raise ValueError(
+                "spray/c-star/regen closure requires cycle fuel mass flow to "
+                "exceed fuel_film_mass_flow"
+            )
         supplied = input.cooling.coolant_mass_flow
         if supplied is not None and not math.isclose(
-            float(supplied), fuel_mass_flow, rel_tol=1.0e-9, abs_tol=0.0
+            float(supplied), jacket_mass_flow, rel_tol=1.0e-9, abs_tol=0.0
         ):
             warnings.append(
                 "spray/c-star/regen outer closure derives coolant_mass_flow "
-                f"from the current cycle fuel stream ({fuel_mass_flow:.9g} kg/s); "
+                "from the current cycle fuel stream after the explicit film "
+                f"bypass ({jacket_mass_flow:.9g} kg/s jacket + "
+                f"{film_mass_flow:.9g} kg/s film = "
+                f"{fuel_mass_flow:.9g} kg/s total fuel); "
                 f"the static input value {float(supplied):.9g} kg/s is only an "
                 "initial request and is not reused across iterations."
             )
-        cooling = replace(cooling, coolant_mass_flow=fuel_mass_flow)
+        cooling = replace(cooling, coolant_mass_flow=jacket_mass_flow)
     return cooling, warnings
 
 
@@ -1481,9 +1660,25 @@ def _build_v2_contour(
             throat_geometry=throat_geometry,
         )
     else:
+        host_rao = input.host_rao_solver
         nozzle = bell_nozzle_contour(
             Rt, epsilon, method=input.method,
             length_pct=input.length_pct, gamma=prop.gamma,
+            pa_over_p0=(
+                float(input.ambient.design_pressure) / float(input.Pc)
+            ),
+            starting_line_method=host_rao.starting_line_method,
+            rao_moc_n_control=host_rao.n_control,
+            rao_moc_n_kernel=host_rao.n_kernel,
+            rao_moc_max_nfev=host_rao.max_nfev,
+            rao_moc_evaluate_moc=host_rao.evaluate_moc,
+            rao_moc_theta_n_guess_deg=host_rao.theta_n_guess_deg,
+            rao_moc_solver_backend=host_rao.solver_backend,
+            rao_moc_wall_method=host_rao.wall_method,
+            rao_moc_kernel_d_fraction_max=(
+                host_rao.kernel_d_fraction_max
+            ),
+            rao_moc_physics_weight=host_rao.physics_weight,
             throat_geometry=throat_geometry,
         )
 
@@ -1592,7 +1787,7 @@ def _apply_pintle_interface_resolution(
         bolt_diameter=input.interface.bolt_diameter,
         bolt_allowable_stress=input.interface.bolt_allowable_stress,
         material_yield_strength=input.material.yield_strength,
-        structural_fos=1.5,
+        structural_fos=float(input.material.structural_fos),
         min_feature=min_feature,
         min_tool_diameter=min_tool,
         minimum_face_outer_diameter=min_face_od,
@@ -1707,8 +1902,9 @@ def _add_v2_gate_checks(
     )
     report.add(
         "structural", "hoop_stress_margin",
-        float(structural["stress_margin"]) >= 1.5,
-        value=float(structural["stress_margin"]), limit=">= 1.5",
+        float(structural["stress_margin"]) >= float(input.material.structural_fos),
+        value=float(structural["stress_margin"]),
+        limit=f">= {float(input.material.structural_fos):g}",
         message="Thin-wall hoop stress screening margin is too low.",
     )
     report.add(
@@ -1717,6 +1913,335 @@ def _add_v2_gate_checks(
         value=cad_readiness["requested_cad"], limit="STEP/STL with STEP authoritative",
         message="STEP remains the authoritative CAD artifact; native IPT is deferred.",
     )
+
+
+def _hardware_mass_section(
+    input: DesignInput,
+    contour: dict,
+    cooling_spec: CoolingSpec,
+    cooling: dict,
+    interface_resolution: Any,
+    injector_result: Any,
+) -> dict:
+    """Build the geometry-integrated hardware mass ledger for the report.
+
+    The thrust-chamber entry integrates the same ``RegenWallProfile`` that
+    :mod:`raosim.regen_cad` revolves; the injector entry integrates the same
+    machined layout that :mod:`raosim.injector_cad` cuts.  Anything that cannot
+    be resolved is reported as unavailable with a reason, never as zero -- see
+    :mod:`raosim.mass_ledger`.
+    """
+
+    from raosim.mass_ledger import (
+        MassLedger,
+        combine_ledgers,
+        flange_bolt_mass_ledger,
+        injector_mass_ledger,
+        thrust_chamber_mass_ledger,
+    )
+    from raosim.regen_profile import RegenWallProfile
+
+    ledgers: list[MassLedger] = []
+    notes: list[str] = []
+
+    material = input.material
+    if getattr(material, "density", None) is None:
+        try:
+            material = MaterialSpec.from_catalog(material.name)
+        except Exception:
+            notes.append(
+                f"material '{getattr(material, 'name', material)}' has no "
+                "density and is not in the raosim.materials catalog; hardware "
+                "mass cannot be computed"
+            )
+
+    # ---- thrust chamber -------------------------------------------------- #
+    t_hot = input.manufacturing.wall_thickness
+    n_ch = getattr(cooling_spec, "channel_count", None)
+    w_ch = getattr(cooling_spec, "channel_width", None)
+    h_ch = getattr(cooling_spec, "channel_height", None)
+    regenerative = str(getattr(cooling_spec, "method", "none")) == "regenerative"
+    if regenerative and all(
+        v is not None and float(v) > 0.0 for v in (t_hot, n_ch, w_ch, h_ch)
+    ):
+        # Reuse the solved land-width profile when the coupled cooling analysis
+        # produced one, so the mass integral and the fin/heat-transfer model
+        # describe the same rib.
+        land = cooling.get("land_width")
+        t_jacket, jacket_note, jacket_material = _closeout_thickness(
+            contour, cooling, input, t_hot=float(t_hot),
+            channel_height=float(h_ch),
+        )
+        notes.append(jacket_note)
+        profile = RegenWallProfile.uniform(
+            contour,
+            channel_count=int(n_ch),
+            channel_width=float(w_ch),
+            channel_height=float(h_ch),
+            t_hot=float(t_hot),
+            land_width=land,
+            t_jacket=t_jacket,
+            helix_turns=float(cooling.get("helix_turns", 0.0) or 0.0),
+        )
+        ledgers.append(thrust_chamber_mass_ledger(
+            profile,
+            liner_material=material,
+            closeout_material=jacket_material,
+            joint_allowance=_joint_allowance(input.manufacturing),
+        ))
+    else:
+        notes.append(
+            "thrust-chamber mass needs a regenerative wall with a positive "
+            "wall thickness and channel count/width/height"
+        )
+
+    # ---- bolted chamber/injector interface ------------------------------- #
+    # The flange and fasteners are structure, not a hot wall, so they are
+    # priced in the jacket/structure alloy rather than the copper liner --
+    # SP-8087 sec. 2.1.3.1 on jacket and reinforcement materials.
+    structural_material = None
+    try:
+        structural_material = MaterialSpec.from_catalog(
+            getattr(input.material, "jacket_material", None) or "Inconel 718"
+        )
+    except Exception:
+        structural_material = material
+    if interface_resolution is not None:
+        ledgers.append(flange_bolt_mass_ledger(
+            interface_resolution, flange_material=structural_material,
+        ))
+    else:
+        notes.append(
+            "no bolted chamber/injector interface was resolved, so flange and "
+            "fastener mass is absent from this ledger"
+        )
+
+    # ---- injector -------------------------------------------------------- #
+    if injector_result is not None and input.injector.type == "pintle":
+        try:
+            from raosim.injector_cad import resolve_machined_pintle_layout
+
+            layout = resolve_machined_pintle_layout(
+                injector_result, spec=input.injector
+            )
+            ledgers.append(injector_mass_ledger(
+                layout, body_material=structural_material,
+            ))
+        except Exception as exc:  # layout screens raise on infeasible geometry
+            notes.append(
+                f"injector hardware mass unavailable: the machined pintle "
+                f"layout could not be resolved ({exc})"
+            )
+    else:
+        notes.append(
+            "injector hardware mass is only modelled for the pintle injector"
+        )
+
+    if not ledgers:
+        return {
+            "status": "unavailable",
+            "complete": False,
+            "total_mass_kg": None,
+            "unavailable_reason": "; ".join(notes),
+            "notes": notes,
+        }
+
+    combined = combine_ledgers(ledgers, scope="engine_hardware")
+    out = combined.to_dict()
+    out["status"] = "resolved" if combined.complete else "partial"
+    out["notes"] = notes
+    # The bolted joint is the single largest mass item in this ledger, and its
+    # layout defaults are spacing heuristics rather than load paths.  Report
+    # what a mass-minimising fastener selection would give, so the gap is
+    # visible without silently changing the resolved geometry.
+    out["joint_sizing_opportunity"] = _joint_sizing_opportunity(
+        input, contour, structural_material
+    )
+    out["excludes"] = [
+        "propellant valves, lines, manifolds and their brackets",
+        "gimbal, thrust take-out structure and engine mounts",
+        "igniter hardware, seals, gaskets and instrumentation",
+        "the electric feed system (see the electric-pump hardware BOM)",
+    ]
+    return out
+
+
+# Fallback closeout thickness as a multiple of the hot-gas wall, used only when
+# the coolant pressure profile is unavailable.  Matches
+# ``MissionSpec.closeout_thickness_ratio``.
+_CLOSEOUT_THICKNESS_RATIO = 2.0
+# Manufacturing floor and thin-shell limit, matching the MDO MissionSpec
+# defaults so both pipelines size the same jacket.
+_CLOSEOUT_THICKNESS_MIN = 5.0e-4
+_CLOSEOUT_THIN_SHELL_RATIO_MAX = 1.0 / 15.0
+
+
+def _closeout_thickness(
+    contour: dict,
+    cooling: dict,
+    input: DesignInput,
+    *,
+    t_hot: float,
+    channel_height: float,
+) -> tuple[Any, str, Any]:
+    """Structural jacket thickness from the SP-125 outer-shell hoop screen.
+
+    NASA SP-125, printed p. 109, on the coaxial-shell chamber: *"the outer
+    shell is subjected only to the hoop stress induced by the coolant
+    pressure"*, so per station
+
+        t_j = FoS * p_coolant * r_outer / sigma_yield
+
+    floored at a manufacturing minimum.  A tapered jacket is normal practice --
+    NASA SP-8087 sec. 2.1.3.1: *"The brazed jacket can be tapered for optimum
+    strength and weight"* -- so the thickness follows the local pressure and
+    radius.  SP-8087 sec. 2.1.3 gives the factors of safety in use (yield
+    1.0-1.32, ultimate 1.3-1.8); the conservative end of the yield band is
+    taken.
+
+    Returns ``(thickness, note, jacket_material)``.  ``thickness`` is a
+    per-station array when the coolant pressure profile is available and a
+    scalar fallback otherwise, so the caller never silently loses the
+    distinction.
+    """
+
+    jacket_name = getattr(input.material, "jacket_material", None) or "Inconel 718"
+    try:
+        jacket = MaterialSpec.from_catalog(jacket_name)
+    except Exception:
+        return (
+            t_hot * _CLOSEOUT_THICKNESS_RATIO,
+            (
+                f"jacket material '{jacket_name}' is not in the raosim.materials "
+                f"catalog; the closeout fell back to "
+                f"{_CLOSEOUT_THICKNESS_RATIO:g} x the hot-gas wall, which is an "
+                "assumption rather than a hoop-sized jacket"
+            ),
+            None,
+        )
+
+    p_cool = cooling.get("coolant_pressure")
+    radius = np.asarray(contour["y"], dtype=float)
+    r_outer = radius + t_hot + channel_height
+    p_arr = np.asarray(p_cool, dtype=float) if p_cool is not None else None
+    if p_arr is None or p_arr.ndim == 0 or p_arr.shape != radius.shape:
+        # A scalar jacket pressure still supports the hoop screen; only the
+        # taper is lost.
+        p_scalar = (
+            float(p_arr) if p_arr is not None and p_arr.ndim == 0
+            else _finite_positive_or_none(cooling.get("coolant_outlet_pressure"))
+        )
+        if p_scalar is None:
+            return (
+                t_hot * _CLOSEOUT_THICKNESS_RATIO,
+                (
+                    "no jacket pressure was solved, so the closeout fell back "
+                    f"to {_CLOSEOUT_THICKNESS_RATIO:g} x the hot-gas wall; that "
+                    "is an assumption, not an SP-125 hoop-sized jacket"
+                ),
+                jacket,
+            )
+        p_arr = np.full_like(radius, p_scalar)
+        taper = "uniform (only a scalar jacket pressure was available)"
+    else:
+        taper = "tapered per station (SP-8087 sec. 2.1.3.1)"
+
+    fos = float(getattr(input.material, "closeout_structural_fos", 1.32))
+    sigma = float(jacket.yield_strength)
+    t_req = fos * p_arr * r_outer / max(sigma, 1.0)
+    t_j = np.maximum(t_req, _CLOSEOUT_THICKNESS_MIN)
+    ratio_max = float(np.max(t_j / np.maximum(r_outer, 1e-12)))
+    note = (
+        f"structural closeout sized by the SP-125 p.109 outer-shell hoop "
+        f"screen t = {fos:g} x p_coolant x r_outer / {sigma/1e6:.0f} MPa "
+        f"({jacket_name}), {taper}, floored at "
+        f"{_CLOSEOUT_THICKNESS_MIN*1e3:g} mm: "
+        f"{float(np.min(t_j))*1e3:.3f}-{float(np.max(t_j))*1e3:.3f} mm"
+    )
+    if ratio_max > _CLOSEOUT_THIN_SHELL_RATIO_MAX:
+        note += (
+            f"; WARNING max t/r = {ratio_max:.4f} exceeds SP-125's thin-shell "
+            f"validity limit of {_CLOSEOUT_THIN_SHELL_RATIO_MAX:.4f} (printed "
+            "p. 336), so the hoop formula is outside its own model -- the "
+            "jacket alloy or the jacket pressure needs to change"
+        )
+    return t_j, note, jacket
+
+
+def _joint_sizing_opportunity(
+    input: DesignInput, contour: dict, structural_material: Any,
+) -> dict:
+    """What a mass-minimising bolted joint would give, versus the layout default.
+
+    The resolved interface uses spacing heuristics -- a bolt hole at
+    ``0.06 x chamber diameter``, a bolt circle at ``chamber OD + 6 x hole``, a
+    faceplate at ``2 x hole``.  Those are not load paths, and on the 13 kN
+    baseline they made the flange and faceplate about three quarters of the
+    engine's modelled hardware mass.  This reports the alternative rather than
+    imposing it, because changing the resolved joint changes exported CAD.
+    """
+
+    from raosim.interface import size_bolted_interface
+
+    density = getattr(structural_material, "density", None)
+    yield_strength = getattr(structural_material, "yield_strength", None)
+    try:
+        sizing = size_bolted_interface(
+            chamber_radius=float(contour["chamber"]["Rc"]),
+            chamber_pressure=float(input.Pc),
+            wall_thickness=input.manufacturing.wall_thickness,
+            material_yield_strength=yield_strength,
+            structural_fos=float(
+                getattr(structural_material, "structural_fos", 1.5)
+            ),
+            flange_density=density,
+            bolt_density=density,
+        )
+    except Exception as exc:
+        return {
+            "status": "unavailable",
+            "reason": f"bolted-joint sizing did not converge: {exc}",
+        }
+    payload = sizing.to_dict()
+    payload["status"] = "advisory"
+    payload["applied_to_exported_geometry"] = False
+    payload["note"] = (
+        "advisory only -- the exported flange, bolt pattern and faceplate "
+        "still come from resolve_bolted_interface_geometry.  Pass the selected "
+        "bolt count, hole diameter and faceplate thickness through "
+        "InterfaceSpec to adopt this joint."
+    )
+    return payload
+
+
+def _finite_positive_or_none(value) -> float | None:
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return None
+    return v if math.isfinite(v) and v > 0.0 else None
+
+
+def _joint_allowance(manufacturing: ManufacturingSpec) -> float:
+    """Weld/braze mass allowance, after the SP-125 eq. 5-16 weld-land idea.
+
+    Returns 1.0 (no allowance) unless the caller populated
+    ``ManufacturingSpec.weld_allowance`` / ``braze_allowance``.  Those fields
+    are fractional build-ups, so 0.05 means +5% metal.
+    """
+
+    total = 0.0
+    for value in (
+        getattr(manufacturing, "weld_allowance", None),
+        getattr(manufacturing, "braze_allowance", None),
+    ):
+        try:
+            v = float(value)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(v) and v > 0.0:
+            total += v
+    return 1.0 + total
 
 
 def _cad_readiness(
@@ -1880,7 +2405,11 @@ def _write_artifacts(
 
     report_path = out / "design_report.json"
     report_path.write_text(
-        json.dumps(gate_report.to_dict(), indent=2) + "\n",
+        json.dumps(
+            _json_ready(gate_report.to_dict()),
+            indent=2,
+            allow_nan=False,
+        ) + "\n",
         encoding="utf-8",
     )
     files["design_report"] = report_path
@@ -1996,7 +2525,11 @@ def _write_v2_artifacts(
     }
     report_path = out / "design_report_v2.json"
     report_path.write_text(
-        json.dumps(_json_ready(report_payload), indent=2) + "\n",
+        json.dumps(
+            _json_ready(report_payload),
+            indent=2,
+            allow_nan=False,
+        ) + "\n",
         encoding="utf-8",
     )
     files["design_report"] = report_path
@@ -2025,7 +2558,11 @@ def _v2_metadata(
             "physical_release_readiness"
         ]["blocked"],
         "configuration_id": input.configuration_id,
-        "authoritative_cad": "STEP",
+        "authoritative_cad": (
+            "STEP"
+            if manufacturing.cad.lower() in {CAD_STEP, CAD_BOTH}
+            else None
+        ),
         "native_ipt": "deferred",
         "thermo_mode": input.thermo.mode,
         "thermo_source": report_sections["thermochemistry"]["source"],
@@ -2075,6 +2612,11 @@ def _dedupe(values: list[str]) -> list[str]:
 
 
 def _json_ready(value: Any) -> Any:
+    if isinstance(value, float) and not np.isfinite(value):
+        # JSON has no standard NaN/Infinity tokens.  Infinite internal
+        # sentinels (for example a deliberately disabled screening limit)
+        # remain meaningful in memory but are emitted as JSON null.
+        return None
     if is_dataclass(value):
         return _json_ready(asdict(value))
     if isinstance(value, dict):
@@ -2084,7 +2626,7 @@ def _json_ready(value: Any) -> Any:
     if isinstance(value, Path):
         return str(value)
     if isinstance(value, np.ndarray):
-        return value.tolist()
+        return _json_ready(value.tolist())
     if isinstance(value, np.generic):
-        return value.item()
+        return _json_ready(value.item())
     return value

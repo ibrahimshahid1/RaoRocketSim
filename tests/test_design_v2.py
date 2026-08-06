@@ -9,6 +9,7 @@ import pytest
 from raosim.design import (
     CoolingSpec,
     DesignInput,
+    HostRaoSolverSpec,
     InterfaceSpec,
     ManufacturingSpec,
     MaterialSpec,
@@ -86,6 +87,27 @@ def _prelim_input(**kwargs):
     return base
 
 
+def _install_fake_rocketcea(monkeypatch):
+    class FakeCEA:
+        def __init__(self, **_kwargs):
+            pass
+
+        def get_Chamber_MolWt_gamma(self, Pc, MR):
+            return 22.0, 1.21
+
+        def get_Tcomb(self, Pc, MR):
+            return 3600.0
+
+        def get_Cstar(self, Pc, MR):
+            return 1750.0
+
+    rocketcea_mod = types.ModuleType("rocketcea")
+    cea_units_mod = types.ModuleType("rocketcea.cea_obj_w_units")
+    cea_units_mod.CEA_Obj = FakeCEA
+    monkeypatch.setitem(sys.modules, "rocketcea", rocketcea_mod)
+    monkeypatch.setitem(sys.modules, "rocketcea.cea_obj_w_units", cea_units_mod)
+
+
 def test_preliminary_v2_constant_gamma_runs():
     result = design_nozzle_v2(_prelim_input())
 
@@ -96,6 +118,100 @@ def test_preliminary_v2_constant_gamma_runs():
     assert result.hardware_qualified is False
     assert result.report_sections["physical_release_readiness"]["blocked"] is True
     assert result.report_sections["model_registry_audit"]["passed"] is True
+
+
+def test_v2_explicit_efficiency_split_survives_constant_gamma():
+    database_propellant = get_propellant("LOX/RP-1")
+    database_efficiencies = (
+        float(database_propellant.eta_cstar),
+        float(database_propellant.eta_CF),
+    )
+    request = _prelim_input(
+        thermo=ThermoSpec(
+            mode="constant_gamma",
+            propellant_name="LOX/RP-1",
+            eta_Isp=0.50,  # Explicit split below is authoritative.
+            eta_cstar=0.91,
+            eta_CF=0.87,
+        )
+    )
+
+    result = design_nozzle_v2(request)
+    performance = result.performance
+
+    assert result.propellant.eta_cstar == pytest.approx(0.91)
+    assert result.propellant.eta_CF == pytest.approx(0.87)
+    assert result.propellant.eta_Isp == pytest.approx(0.91 * 0.87)
+    assert performance.eta_cstar == pytest.approx(0.91)
+    assert performance.eta_CF == pytest.approx(0.87)
+    assert performance.eta_Isp == pytest.approx(0.91 * 0.87)
+    assert performance.c_star_effective == pytest.approx(
+        performance.c_star * 0.91
+    )
+    assert performance.Cf_actual == pytest.approx(
+        performance.Cf_ideal * 0.87
+    )
+    assert result.thermochemistry.chamber_state["eta_cstar"] == pytest.approx(
+        0.91
+    )
+    assert result.thermochemistry.chamber_state["eta_CF"] == pytest.approx(
+        0.87
+    )
+    # Resolving one design must not mutate the shared database entry.
+    assert database_propellant.eta_cstar == pytest.approx(
+        database_efficiencies[0]
+    )
+    assert database_propellant.eta_CF == pytest.approx(
+        database_efficiencies[1]
+    )
+
+
+@pytest.mark.parametrize(
+    ("efficiency_kwargs", "expected_eta_cstar", "expected_eta_cf"),
+    (
+        ({"eta_Isp": 0.83}, 1.0, 0.83),
+        (
+            {"eta_Isp": 0.50, "eta_cstar": 0.92, "eta_CF": 0.88},
+            0.92,
+            0.88,
+        ),
+    ),
+)
+def test_v2_cea_preserves_legacy_or_explicit_efficiency_convention(
+    monkeypatch,
+    efficiency_kwargs,
+    expected_eta_cstar,
+    expected_eta_cf,
+):
+    _install_fake_rocketcea(monkeypatch)
+    request = _prelim_input(
+        thermo=ThermoSpec(
+            mode="cea_frozen",
+            propellant_name="LOX/RP-1",
+            oxidizer="LOX",
+            fuel="RP-1",
+            mixture_ratio=2.6,
+            **efficiency_kwargs,
+        )
+    )
+
+    result = design_nozzle_v2(request)
+    performance = result.performance
+
+    assert result.propellant.c_star == pytest.approx(1750.0)
+    assert result.propellant.eta_cstar == pytest.approx(expected_eta_cstar)
+    assert result.propellant.eta_CF == pytest.approx(expected_eta_cf)
+    assert performance.eta_cstar == pytest.approx(expected_eta_cstar)
+    assert performance.eta_CF == pytest.approx(expected_eta_cf)
+    assert performance.eta_Isp == pytest.approx(
+        expected_eta_cstar * expected_eta_cf
+    )
+    assert performance.c_star_effective == pytest.approx(
+        1750.0 * expected_eta_cstar
+    )
+    assert performance.Cf_actual == pytest.approx(
+        performance.Cf_ideal * expected_eta_cf
+    )
 
 
 def test_v2_frozen_variable_cp_bezier_uses_profile_and_fails_validation_gate(
@@ -194,6 +310,121 @@ def test_v2_frozen_variable_cp_rejects_constant_gamma_characteristic_methods(
     )
     with pytest.raises(ValueError, match="compatible only with bezier"):
         design_nozzle_v2(request)
+
+
+def test_v2_characteristic_contour_receives_design_ambient_ratio(monkeypatch):
+    import raosim.design as design_module
+
+    captured = {}
+    original = design_module.bell_nozzle_contour
+
+    def capture_then_build_bezier(*args, **kwargs):
+        captured["pa_over_p0"] = kwargs["pa_over_p0"]
+        kwargs["method"] = "bezier"
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(
+        design_module, "bell_nozzle_contour", capture_then_build_bezier
+    )
+    request = _prelim_input(
+        Pc=2.0e6,
+        method="rao_variational_moc",
+        ambient=MissionAmbientSpec(Pa=80_000.0),
+    )
+    design_module._build_v2_contour(
+        request,
+        Rt=0.020,
+        epsilon=8.0,
+        prop=get_propellant("LOX/RP-1"),
+    )
+
+    assert captured["pa_over_p0"] == pytest.approx(0.04)
+
+
+def test_v2_characteristic_contour_receives_host_solver_controls(monkeypatch):
+    import raosim.design as design_module
+
+    captured = {}
+    original = design_module.bell_nozzle_contour
+
+    def capture_then_build_bezier(*args, **kwargs):
+        captured.update(kwargs)
+        kwargs["method"] = "bezier"
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(
+        design_module, "bell_nozzle_contour", capture_then_build_bezier
+    )
+    request = _prelim_input(
+        method="rao_variational_moc",
+        host_rao_solver=HostRaoSolverSpec(
+            n_control=18,
+            n_kernel=20,
+            max_nfev=321,
+            evaluate_moc=False,
+            theta_n_guess_deg=33.0,
+            starting_line_method="area_ratio",
+            solver_backend="numpy",
+            wall_method="bde",
+            kernel_d_fraction_max=0.7,
+            physics_weight=1.0,
+        ),
+    )
+
+    design_module._build_v2_contour(
+        request,
+        Rt=0.020,
+        epsilon=8.0,
+        prop=get_propellant("LOX/RP-1"),
+    )
+
+    assert captured["rao_moc_n_control"] == 18
+    assert captured["rao_moc_n_kernel"] == 20
+    assert captured["rao_moc_max_nfev"] == 321
+    assert captured["rao_moc_evaluate_moc"] is False
+    assert captured["rao_moc_theta_n_guess_deg"] == pytest.approx(33.0)
+    assert captured["starting_line_method"] == "area_ratio"
+    assert captured["rao_moc_solver_backend"] == "numpy"
+    assert captured["rao_moc_wall_method"] == "bde"
+    assert captured["rao_moc_kernel_d_fraction_max"] == pytest.approx(0.7)
+    assert captured["rao_moc_physics_weight"] == pytest.approx(1.0)
+
+
+def test_v2_uses_scheduled_design_ambient_consistently():
+    request = _prelim_input(
+        ambient=MissionAmbientSpec(
+            Pa=101_325.0,
+            altitude_schedule_m=[0.0, 10_000.0],
+            pressure_schedule_pa=[101_325.0, 26_500.0],
+        )
+    )
+
+    result = design_nozzle_v2(request)
+
+    assert request.ambient.design_pressure == pytest.approx(26_500.0)
+    assert result.performance.Pa == pytest.approx(26_500.0)
+    from raosim.mdo.snapshot import snapshot_from_traditional
+
+    snapshot = snapshot_from_traditional(result)
+    assert snapshot.performance["ambient_pressure_pa"].value == pytest.approx(
+        26_500.0
+    )
+    assert snapshot.provenance["input_conventions"].value[
+        "ambient_pressure_pa"
+    ] == pytest.approx(26_500.0)
+
+
+@pytest.mark.parametrize(
+    "ambient",
+    (
+        MissionAmbientSpec(Pa=-1.0),
+        MissionAmbientSpec(Pa=8.0e6),
+        MissionAmbientSpec(Pa=101_325.0, pressure_schedule_pa=[-1.0]),
+    ),
+)
+def test_v2_rejects_invalid_ambient_pressures(ambient):
+    with pytest.raises(ValueError, match="ambient pressures"):
+        design_nozzle_v2(_prelim_input(ambient=ambient))
 
 
 def test_v2_frozen_variable_cp_requires_explicit_consistent_property_evidence(
@@ -554,6 +785,73 @@ def test_v2_spray_regen_rejects_unmodelled_independent_coolant_split():
         design_nozzle_v2(request)
 
 
+def test_v2_rejects_fuel_film_branch_without_fuel_regen_topology():
+    request = _prelim_input(
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="water",
+            channel_count=12,
+            channel_width=1.0e-3,
+            channel_height=1.0e-3,
+            coolant_mass_flow=1.0,
+            fuel_film_mass_flow=0.1,
+        )
+    )
+
+    with pytest.raises(ValueError, match="cycle fuel"):
+        design_nozzle_v2(request)
+
+
+def test_v2_rejects_negative_fuel_film_flow():
+    request = _prelim_input(
+        cooling=CoolingSpec(fuel_film_mass_flow=-0.1)
+    )
+
+    with pytest.raises(ValueError, match="nonnegative"):
+        design_nozzle_v2(request)
+
+
+def test_v2_explicit_film_split_reaches_feed_ledger_without_false_failure():
+    baseline = design_nozzle_v2(_prelim_input(Rt=0.10))
+    mixture_ratio = float(baseline.propellant.OF)
+    total_fuel = baseline.performance.m_dot / (1.0 + mixture_ratio)
+    film_flow = 0.15 * total_fuel
+    jacket_flow = total_fuel - film_flow
+    request = _prelim_input(
+        Rt=0.10,
+        cooling=CoolingSpec(
+            method="regenerative",
+            coolant="RP-1",
+            channel_count=80,
+            channel_width=6.0e-4,
+            channel_height=2.5e-3,
+            coolant_mass_flow=jacket_flow,
+            fuel_film_mass_flow=film_flow,
+            coolant_property_backend="constant",
+        ),
+        injector=InjectorSpec(type="pintle", allow_infeasible=True),
+        manufacturing=ManufacturingSpec(wall_thickness=1.0e-3),
+    )
+
+    result = design_nozzle_v2(request)
+    injector = result.report_sections["injector"]
+    closure = next(
+        gate for gate in injector["gates"]
+        if gate["name"] == "regen_fuel_flow_closure"
+    )
+    split = injector["feed_system"]["fuel_flow_split"]
+    fuel_line = injector["feed_system"]["lines"]["fuel"]
+
+    assert closure["status"] == "pass"
+    assert split["total_fuel_mass_flow_kg_s"] == pytest.approx(total_fuel)
+    assert split["regen_jacket_mass_flow_kg_s"] == pytest.approx(jacket_flow)
+    assert split["film_bypass_mass_flow_kg_s"] == pytest.approx(film_flow)
+    assert split["closure_residual_kg_s"] == pytest.approx(0.0, abs=1e-12)
+    assert fuel_line["volumetric_flow_m3_s"] == pytest.approx(
+        total_fuel / injector["feed"]["fuel"]["density_kg_m3"]
+    )
+
+
 def test_v2_blocks_unbenchmarked_bezier_chart_extrapolation():
     result = design_nozzle_v2(_prelim_input(epsilon=60.0))
     benchmark = result.report_sections["benchmark_status"]
@@ -804,25 +1102,26 @@ def test_v2_step_writes_metadata_and_ipt_is_deferred(tmp_path):
         design_nozzle_v2(ipt_request)
 
 
+def test_v2_cad_none_reports_no_authoritative_cad_artifact(tmp_path):
+    request = _prelim_input(
+        manufacturing=ManufacturingSpec(
+            wall_thickness=0.002,
+            cad="none",
+            output_dir=tmp_path,
+        )
+    )
+
+    result = design_nozzle_v2(request)
+    report = json.loads(
+        result.files["design_report"].read_text(encoding="utf-8")
+    )
+
+    assert "step" not in result.files
+    assert report["metadata"]["authoritative_cad"] is None
+
+
 def test_mocked_rocketcea_feeds_validated_thermochemistry(monkeypatch):
-    class FakeCEA:
-        def __init__(self, **_kwargs):
-            pass
-
-        def get_Chamber_MolWt_gamma(self, Pc, MR):
-            return 22.0, 1.21
-
-        def get_Tcomb(self, Pc, MR):
-            return 3600.0
-
-        def get_Cstar(self, Pc, MR):
-            return 1750.0
-
-    rocketcea_mod = types.ModuleType("rocketcea")
-    cea_units_mod = types.ModuleType("rocketcea.cea_obj_w_units")
-    cea_units_mod.CEA_Obj = FakeCEA
-    monkeypatch.setitem(sys.modules, "rocketcea", rocketcea_mod)
-    monkeypatch.setitem(sys.modules, "rocketcea.cea_obj_w_units", cea_units_mod)
+    _install_fake_rocketcea(monkeypatch)
 
     # A physically survivable regen-cooled copper engine.  Both the
     # throat heat flux (full Bartz, ~58 MW/m² at 70 bar) and the cooling

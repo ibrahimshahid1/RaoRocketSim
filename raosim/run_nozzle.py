@@ -1352,7 +1352,6 @@ def _solve(args):
             )
         return _TrustedTopSolution(contour, args._performance.Cf_ideal)
 
-    rv.PHYSICS_WEIGHT = 1.0
     cfg = RaoSolverConfig(
         Rt=args.rt, epsilon=args.epsilon, gamma=args.gamma,
         pa_over_p0=args.pa_over_p0, length_pct=args.length_pct,
@@ -1363,6 +1362,7 @@ def _solve(args):
         throat_upstream_radius_factor=args.ru_factor,
         throat_downstream_radius_factor=args.rd_factor,
         kernel_d_fraction_max=0.7,
+        physics_weight=1.0,
         thetaN_guess_deg=args.theta_b_guess,
     )
     return rv.solve_rao_bvp(cfg)
@@ -1645,7 +1645,7 @@ def _interactive_engine_mdo(args, *, optimise: bool) -> None:
     args.target_thrust = _prompt("Target thrust [N]",
                                  args.target_thrust or 13000.0)
     args.mixture_ratio = _prompt("Mixture ratio O/F",
-                                 args.mixture_ratio or 2.3)
+                                 args.mixture_ratio or 2.27)
     args.burn_time = _prompt("Burn time [s]", args.burn_time or 120.0)
     args.engine_mdo_ambient = _prompt(
         "Ambient pressure [Pa]  (101325 = sea level, ~1000 = high altitude)",
@@ -1720,6 +1720,47 @@ def _select_mode_interactively(args) -> str:
     return "traditional"
 
 
+def _mdo_contour_request_error(args) -> str | None:
+    """Validate the host-only exact-contour selector for MDO workflows."""
+
+    if args.contour_method != "rao-bvp":
+        return None
+    if not getattr(args, "mdo_export", False):
+        return (
+            "--contour-method rao-bvp is a post-analysis selector for MDO and "
+            "requires --mdo-export; the differentiable MDO core remains on its "
+            "fixed-topology Rao/TOP chart wall."
+        )
+    if args.cad != "none":
+        return (
+            "--contour-method rao-bvp is a preliminary numerical "
+            "post-analysis and cannot emit manufacturing CAD; use --cad none "
+            "or retain the default Bezier authoritative handoff."
+        )
+    return None
+
+
+def _mdo_authoritative_contour_handoff(
+    args,
+) -> tuple[str, dict[str, object] | None]:
+    """Resolve the host contour method and traditional-CLI-equivalent options."""
+
+    if args.contour_method != "rao-bvp":
+        return "bezier", None
+    return "rao_variational_moc", {
+        "n_control": int(args.n_control),
+        "n_kernel": int(args.n_kernel),
+        "max_nfev": int(args.max_nfev),
+        "evaluate_moc": True,
+        "theta_n_guess_deg": float(args.theta_b_guess),
+        "starting_line_method": "kliegel_levine",
+        "solver_backend": str(args.backend),
+        "wall_method": "bde",
+        "kernel_d_fraction_max": 0.7,
+        "physics_weight": 1.0,
+    }
+
+
 def _run_engine_mdo(args) -> int:
     """Whole-engine differentiable MDO evaluation (``raosim.mdo.engine``).
 
@@ -1733,6 +1774,11 @@ def _run_engine_mdo(args) -> int:
     lazily so ordinary CLI runs never pay for it.
     """
     import dataclasses
+    contour_request_error = _mdo_contour_request_error(args)
+    if contour_request_error is not None:
+        print(f"  {contour_request_error}")
+        return 2
+
     import jax
     jax.config.update("jax_enable_x64", True)
     import jax.numpy as jnp
@@ -1740,7 +1786,11 @@ def _run_engine_mdo(args) -> int:
     from raosim.mdo.engine import solve_engine, ablation_delta
 
     thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
-    of = args.mixture_ratio if args.mixture_ratio is not None else 2.3
+    of = (
+        args.mixture_ratio
+        if args.mixture_ratio is not None
+        else MissionSpec().OF
+    )
     chi_f = (args.fuel_injector_dp_fraction
              if args.fuel_injector_dp_fraction is not None else 0.20)
     chi_o = (args.oxidizer_injector_dp_fraction
@@ -1776,6 +1826,15 @@ def _run_engine_mdo(args) -> int:
     x = DesignVector(Pc=jnp.asarray(float(args.pc)),
                      eps=jnp.asarray(float(args.epsilon)),
                      dp_f_frac=jnp.asarray(chi_f), dp_o_frac=jnp.asarray(chi_o),
+                     # These CLI controls are design variables in the MDO
+                     # block, not merely architecture defaults on MissionSpec.
+                     # Preserve thrust-scaled defaults when a flag is absent.
+                     D_pintle=jnp.asarray(float(
+                         args.pintle_diameter if args.pintle_diameter is not None
+                         else mission.pintle_diameter)),
+                     N_rpm=jnp.asarray(float(
+                         args.pump_rpm if args.pump_rpm is not None
+                         else mission.pump_speed_rpm)),
                      channel_width=jnp.asarray(float(cw)),
                      channel_height=jnp.asarray(float(ch)),
                      film_frac=jnp.asarray(float(film)),
@@ -1801,11 +1860,12 @@ def _run_engine_mdo(args) -> int:
     print(f"          film_frac={F(x.film_frac):.3f}  "
           f"channel={F(x.channel_width)*1e3:.2f}x{F(x.channel_height)*1e3:.2f} mm"
           f"  film slot={mission.film_slot_height_default*1e3:.2f} mm")
-    print(f" eta_c* : {F(r.eta_cstar):.4f}  "
+    print(f" eta_c* : {F(r.eta_cstar):.4f}  eta_CF={mission.eta_CF:.4f}  "
           f"({'coupled spray-TMR surrogate' if couple else 'frozen (default)'})")
     print(" -- performance ------------------------------------------------")
     print(f"    Rt = {F(r.Rt)*1e3:7.2f} mm     mdot = {F(r.mdot):6.3f} kg/s")
-    print(f"    Cf = {F(r.Cf):7.3f}        Isp  = {F(r.Isp):6.1f} s")
+    print(f"    Cf = {F(r.Cf):7.3f} (ideal {F(r.Cf_ideal):.3f})  "
+          f"Isp  = {F(r.Isp):6.1f} s")
     print(f"    Me = {F(r.Me):7.2f}        Pe   = {F(r.Pe)/1e3:6.1f} kPa   "
           f"(thrust resid {F(r.thrust_residual):+.1e})")
     print(" -- cooling  →  feed hydraulic edge (closed §5 loop) ------------")
@@ -1831,8 +1891,18 @@ def _run_engine_mdo(args) -> int:
           f"/{F(r.feed.battery.power_limited_mass):.1f} kg")
     print(" -- mass ledger [kg] -------------------------------------------")
     for k, v in r.mass_ledger.items():
-        print(f"    {k:30s} {F(v):8.2f}")
-    print(f"    {'PACKAGE TOTAL':30s} {F(r.package_mass):8.2f}")
+        if k.endswith("_placeholder"):
+            print(f"    {k.removesuffix('_placeholder'):30s} {'unavailable':>12s}")
+        else:
+            print(f"    {k:30s} {F(v):8.2f}")
+    print(
+        f"    {'ELECTRIC PACKAGE EXACT':30s} "
+        f"{F(r.electric_package_exact_mass):8.2f}"
+    )
+    print(
+        f"    {'OBJECTIVE MASS (smooth)':30s} "
+        f"{F(r.objective_mass):8.2f}"
+    )
     print(" -- constraint margins (>= 0 feasible) -------------------------")
     for k, v in r.constraints.items():
         print(f"    {k:30s} {F(v):+.4g}"
@@ -1841,16 +1911,44 @@ def _run_engine_mdo(args) -> int:
         from raosim.mdo.postprocess import reevaluate, summarise
         print(" -- authoritative re-evaluation (Phase 11) --------------------")
         dd = {k: float(v) for k, v in x.as_dict().items()}
-        rv = reevaluate(dd, mission,
-                        mdot_cool=float(mission.cooling_fraction
-                                        * F(r.mdot) / (1.0 + mission.OF)
-                                        * (1.0 - F(x.film_frac))),
-                        mdo_summary={"Isp": F(r.Isp), "Rt": F(r.Rt),
-                                     "eps": F(x.eps)})
+        # Native IPT is not an authoritative v2 output; STEP is the source
+        # geometry for both ``ipt`` and ``both`` requests.
+        authoritative_cad = (
+            "step" if args.cad in {"step", "ipt", "both"} else "none"
+        )
+        (
+            authoritative_contour,
+            host_rao_solver_options,
+        ) = _mdo_authoritative_contour_handoff(args)
+        rv = reevaluate(
+            dd,
+            mission,
+            mdo_result=r,
+            mdo_summary={
+                "Isp": F(r.Isp),
+                "Rt": F(r.Rt),
+                "eps": F(x.eps),
+                "mdot": F(r.mdot),
+                "thrust": F(mission.thrust),
+            },
+            optimizer_metadata={
+                "workflow": "single_design_evaluation",
+                "couple_eta_cstar": couple,
+                "authoritative_contour_requested": authoritative_contour,
+            },
+            output_dir=args.out,
+            cad=authoritative_cad,
+            contour_method=authoritative_contour,
+            host_rao_solver_options=host_rao_solver_options,
+        )
         print(summarise(rv))
         c = rv.result.contour
-        print(f"    authoritative Rao contour: {len(c['x'])} points, "
+        print(
+            f"    authoritative host contour ({c.get('method', 'unknown')}): "
+            f"{len(c['x'])} points, "
               f"Rt={c['Rt']*1e3:.2f} mm, exit r={max(c['y'])*1e3:.2f} mm")
+        print("    authoritative snapshot/report: "
+              f"{rv.metadata['authoritative_snapshot_report']}")
     if not couple:
         d = F(ablation_delta(x, mission, "Isp"))
         print(" -- RQ1 ablation -----------------------------------------------")
@@ -1866,18 +1964,28 @@ def _run_engine_mdo_optimize(args) -> int:
     Selected by ``--engine-mdo-optimize``: the user supplies the mission
     requirements (thrust, O/F, burn time, ambient) and an Isp target, and the
     optimiser solves for the DESIGN (Pc, eps, injector Δp fractions, D_pintle,
-    pump rpm) that minimises electric-package mass s.t. Isp ≥ floor and every
-    enforced discipline margin ≥ 0, with exact JAX Jacobians (SLSQP).
+    pump rpm) that minimises a smooth electric-feed objective mass s.t. Isp ≥
+    floor and every enforced discipline margin ≥ 0, with exact JAX Jacobians
+    (SLSQP).  The exact installed electric-package mass is reported separately.
     ``--isp-sweep LO,HI,N`` traces the mass–Isp Pareto frontier; ``--isp-min``
     does a single min-mass solve.  jax is imported lazily.
     """
+    contour_request_error = _mdo_contour_request_error(args)
+    if contour_request_error is not None:
+        print(f"  {contour_request_error}")
+        return 2
+
     import jax
     jax.config.update("jax_enable_x64", True)
     from raosim.mdo.schema import MissionSpec
     from raosim.mdo.nlp import solve_min_mass, pareto_frontier, DEFAULT_ENFORCED
 
     thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
-    of = args.mixture_ratio if args.mixture_ratio is not None else 2.3
+    of = (
+        args.mixture_ratio
+        if args.mixture_ratio is not None
+        else MissionSpec().OF
+    )
     overrides = {"thrust": float(thrust), "OF": float(of)}
     if args.pump_rpm is not None:
         overrides["pump_speed_rpm"] = float(args.pump_rpm)
@@ -1901,6 +2009,10 @@ def _run_engine_mdo_optimize(args) -> int:
     else:
         mission = MissionSpec.for_thrust(_thrust, **overrides)
     couple = bool(args.engine_mdo_couple_cstar)
+    (
+        authoritative_contour,
+        host_rao_solver_options,
+    ) = _mdo_authoritative_contour_handoff(args)
 
     print("=" * 78)
     print(" Whole-engine ε-constraint MDO  (raosim.mdo.nlp, Phase 8/9)")
@@ -1909,7 +2021,8 @@ def _run_engine_mdo_optimize(args) -> int:
     print(f" mission : F={mission.thrust/1e3:.1f} kN  O/F={mission.OF:.2f}  "
           f"Pa={mission.Pa/1e3:.1f} kPa  burn={mission.burn_time:.0f} s   "
           f"eta_c*={'coupled' if couple else 'frozen'}")
-    print(" objective: min electric-package mass    enforced margins ≥ 0: "
+    print(" objective: min smooth electric-feed mass; exact mass also reported  "
+          "enforced margins ≥ 0: "
           f"{', '.join(DEFAULT_ENFORCED)}")
     if args.design_margins:
         print(" margins: SP-8087/Mirzamoghadam DESIGN MARGINS ON (heat flux "
@@ -1922,7 +2035,8 @@ def _run_engine_mdo_optimize(args) -> int:
 
     def _fmt(r):
         d = r.design
-        return (f" Isp>={r.isp_min:6.1f} | mass={r.package_mass:7.2f} kg  "
+        return (f" Isp>={r.isp_min:6.1f} | objective={r.objective_mass:7.2f} kg "
+                f"exact={r.exact_electric_package_mass:7.2f} kg  "
                 f"Isp={r.Isp:6.1f} s | Pc={d['Pc']/1e6:4.2f}MPa eps={d['eps']:5.2f} "
                 f"film={d['film_frac']:.3f} t_w={d['t_wall']*1e3:.2f}mm "
                 f"N={d['N_rpm']/1e3:4.1f}k | feas={r.feasible!s:5} "
@@ -1938,8 +2052,68 @@ def _run_engine_mdo_optimize(args) -> int:
             return 2
         print(f" Pareto frontier over Isp floors {grid[0]:.0f}..{grid[-1]:.0f} "
               f"({len(grid)} pts; warm-started):")
-        for r in pareto_frontier(mission, grid, couple_eta_cstar=couple):
+        frontier = pareto_frontier(
+            mission, grid, couple_eta_cstar=couple
+        )
+        for index, r in enumerate(frontier):
             print(_fmt(r))
+            if args.mdo_export and r.feasible:
+                from raosim.mdo.postprocess import reevaluate, summarise
+
+                authoritative_cad = (
+                    "step"
+                    if args.cad in {"step", "ipt", "both"}
+                    else "none"
+                )
+                point_out = args.out / f"pareto_{index:03d}"
+                rv = reevaluate(
+                    r.design,
+                    mission,
+                    mdo_summary={
+                        "Isp": r.Isp,
+                        "eps": r.design["eps"],
+                        "thrust": mission.thrust,
+                    },
+                    optimizer_metadata={
+                        "workflow": "epsilon_constraint_pareto_point",
+                        "pareto_index": index,
+                        "pareto_count": len(frontier),
+                        "method": "SLSQP",
+                        "success": r.success,
+                        "feasible": r.feasible,
+                        "iterations": r.n_iter,
+                        "message": r.message,
+                        "isp_min_s": r.isp_min,
+                        "max_violation": r.max_violation,
+                        "constraints": dict(r.constraints),
+                        "enforced": list(r.enforced),
+                        "design": dict(r.design),
+                        "objective_mass_kg": r.objective_mass,
+                        "exact_electric_package_mass_kg": (
+                            r.exact_electric_package_mass
+                        ),
+                        "specific_impulse_s": r.Isp,
+                        "couple_eta_cstar": couple,
+                        "authoritative_contour_requested": (
+                            authoritative_contour
+                        ),
+                    },
+                    couple_eta_cstar=couple,
+                    output_dir=point_out,
+                    cad=authoritative_cad,
+                    contour_method=authoritative_contour,
+                    host_rao_solver_options=host_rao_solver_options,
+                )
+                print(summarise(rv))
+                print(
+                    "    authoritative snapshot/report: "
+                    f"{rv.metadata['authoritative_snapshot_report']}"
+                )
+            elif args.mdo_export:
+                print(
+                    "    authoritative re-evaluation skipped: Pareto point "
+                    "is not MDO-feasible"
+                )
     else:
         isp_min = args.isp_min if args.isp_min is not None else 230.0
         r = solve_min_mass(mission, float(isp_min), couple_eta_cstar=couple)
@@ -1947,9 +2121,48 @@ def _run_engine_mdo_optimize(args) -> int:
         if args.mdo_export:
             from raosim.mdo.postprocess import reevaluate, summarise
             print(" -- authoritative re-evaluation (Phase 11) ----------------")
-            rv = reevaluate(r.design, mission,
-                            mdo_summary={"Isp": r.Isp, "eps": r.design["eps"]})
+            authoritative_cad = (
+                "step" if args.cad in {"step", "ipt", "both"} else "none"
+            )
+            rv = reevaluate(
+                r.design,
+                mission,
+                mdo_summary={
+                    "Isp": r.Isp,
+                    "eps": r.design["eps"],
+                    "thrust": mission.thrust,
+                },
+                optimizer_metadata={
+                    "workflow": "epsilon_constraint_optimization",
+                    "method": "SLSQP",
+                    "success": r.success,
+                    "feasible": r.feasible,
+                    "iterations": r.n_iter,
+                    "message": r.message,
+                    "isp_min_s": r.isp_min,
+                    "max_violation": r.max_violation,
+                    "constraints": dict(r.constraints),
+                    "enforced": list(r.enforced),
+                    "design": dict(r.design),
+                    "objective_mass_kg": r.objective_mass,
+                    "exact_electric_package_mass_kg": (
+                        r.exact_electric_package_mass
+                    ),
+                    "specific_impulse_s": r.Isp,
+                    "couple_eta_cstar": couple,
+                    "authoritative_contour_requested": (
+                        authoritative_contour
+                    ),
+                },
+                couple_eta_cstar=couple,
+                output_dir=args.out,
+                cad=authoritative_cad,
+                contour_method=authoritative_contour,
+                host_rao_solver_options=host_rao_solver_options,
+            )
             print(summarise(rv))
+            print("    authoritative snapshot/report: "
+                  f"{rv.metadata['authoritative_snapshot_report']}")
         print(f"  solver: {r.message}  "
               f"(iters={r.n_iter}, max_violation={r.max_violation:.1e})")
     print("=" * 78)
@@ -2716,10 +2929,12 @@ def main(argv: list[str] | None = None) -> int:
                          "validated physics)")
     ap.add_argument("--engine-mdo-optimize", action="store_true",
                     help="run the ε-constraint hard-constrained MDO "
-                         "(raosim.mdo.nlp): minimise electric-package mass s.t. "
+                         "(raosim.mdo.nlp): minimise smooth electric-feed "
+                         "objective mass s.t. "
                          "Isp ≥ --isp-min and every enforced discipline margin "
                          "≥ 0, solving for Pc/eps/injector-Δp/D_pintle/pump-rpm "
-                         "with exact JAX Jacobians (SLSQP). Use --isp-sweep to "
+                         "with exact JAX Jacobians (SLSQP), while reporting "
+                         "exact installed mass separately. Use --isp-sweep to "
                          "trace the mass–Isp Pareto frontier. Set the mission "
                          "with --target-thrust/--mixture-ratio/--burn-time/"
                          "--engine-mdo-ambient")
@@ -2748,9 +2963,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--mdo-export", action="store_true",
                     help="with --engine-mdo/-optimize: hand the MDO design to "
                          "the authoritative LREKit pipeline (design_nozzle_v2) "
-                         "for the real Rao contour + reports, and print the "
-                         "Phase-11 discrepancy report (screening vs "
-                         "authoritative)")
+                         "for host reports and the Phase-11 discrepancy report. "
+                         "The default is the established Bezier/TOP path; "
+                         "--contour-method rao-bvp selects the preliminary "
+                         "rao_variational_moc numerical analysis and requires "
+                         "--cad none.")
     ap.add_argument("--design-margins", action="store_true",
                     help="with --engine-mdo/-optimize: apply the SP-8087 / "
                          "Mirzamoghadam hot-channel DESIGN MARGINS (+10%% heat "
@@ -4925,6 +5142,7 @@ def main(argv: list[str] | None = None) -> int:
                         coolant_mass_flow=(
                             fuel_mdot if args.regen else 0.0
                         ),
+                        fuel_film_mass_flow=0.0,
                     )
                     return trial_injector.atomization, state
 

@@ -110,9 +110,10 @@ def params_from_config(config, physics_weight: float | None = None) -> StaticPar
 
     Host-side (NumPy) — call once per solve.  ``config.kernel_bd`` must be
     populated (the public ``solve_rao_bvp`` path always populates it).
-    ``physics_weight`` defaults to the *current* module value of
-    ``rao_variational.PHYSICS_WEIGHT`` so monkeypatched studies (the
-    weight-ramp tests) see the same weight on both backends.
+    An explicit function argument takes precedence, followed by
+    ``config.physics_weight``.  If neither is supplied, the *current* module
+    value of ``rao_variational.PHYSICS_WEIGHT`` is retained so monkeypatched
+    weight-ramp studies still see the same weight on both backends.
     """
     import raosim.rao_variational as rv
 
@@ -154,7 +155,13 @@ def params_from_config(config, physics_weight: float | None = None) -> StaticPar
         n_wall=int(config.n_wall) if config.couple_wall else 0,
         gamma=float(config.gamma),
         physics_weight=float(
-            physics_weight if physics_weight is not None else rv.PHYSICS_WEIGHT
+            physics_weight
+            if physics_weight is not None
+            else (
+                config.physics_weight
+                if getattr(config, "physics_weight", None) is not None
+                else rv.PHYSICS_WEIGHT
+            )
         ),
         L_target=float(L),
         Re=float(Re),

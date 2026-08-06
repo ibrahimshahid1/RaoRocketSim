@@ -252,9 +252,10 @@ def test_design_margins_default_nominal_and_are_conservative():
 
 def test_thermal_stress_dominates_pressure_and_t_wall_matters():
     """§10.2 — the binding wall criterion is the THERMAL gradient, not pressure
-    (the audit's original hoop-stress recommendation was wrong): plate bending
-    across the channel is orders below the constrained-expansion stress.  Also
-    pins that t_wall actually moves the solution."""
+    (the audit's original shell-radius hoop-stress recommendation was wrong):
+    the SP-125 channel-half-span pressure term remains well below the
+    constrained-expansion stress even after using the correct local
+    coolant-minus-gas pressure.  Also pins that t_wall moves the solution."""
     m, g, case = _grid_and_case()
     kw = dict(Pc=jnp.asarray(case["Pc"]), gamma=jnp.asarray(case["gamma"]),
               Tc=jnp.asarray(case["Tc"]),
@@ -262,8 +263,23 @@ def test_thermal_stress_dominates_pressure_and_t_wall_matters():
               mdot_cool=jnp.asarray(case["mdot_cool"]), mission=m)
     _, thin = solve_cooling(g, t_wall=jnp.asarray(5.0e-4), **kw)
     _, thick = solve_cooling(g, t_wall=jnp.asarray(1.5e-3), **kw)
-    # thermal stress ≫ pressure bending
-    assert float(jnp.max(thin.sigma_thermal)) > 50.0 * float(thin.sigma_pressure)
+    np.testing.assert_allclose(
+        np.asarray(thin.liner_pressure_differential),
+        np.asarray(thin.coolant_pressure - thin.gas_pressure),
+        rtol=1e-12,
+    )
+    np.testing.assert_allclose(
+        np.asarray(thin.sigma_pressure_profile),
+        np.asarray(
+            thin.liner_pressure_differential
+            * (0.5 * m.channel_width)
+            / 5.0e-4
+        ),
+        rtol=1e-12,
+    )
+    # Thermal stress remains governing; the former 50x threshold was tied to
+    # the incorrect use of jacket friction loss as the pressure differential.
+    assert float(jnp.max(thin.sigma_thermal)) > 20.0 * float(thin.sigma_pressure)
     # a thicker wall raises the through-wall ΔT (more thermal stress) and lowers
     # the coolant-side wall temperature (helps coking) — the real design trade
     assert float(jnp.max(thick.sigma_thermal)) > float(jnp.max(thin.sigma_thermal))

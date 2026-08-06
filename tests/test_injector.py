@@ -654,8 +654,9 @@ class TestIntegratedCoupling:
         method = "regenerative"
         coolant = "rp1"
 
-        def __init__(self, mdot):
+        def __init__(self, mdot, film_mdot=0.0):
             self.coolant_mass_flow = mdot
+            self.fuel_film_mass_flow = film_mdot
 
     def test_regen_flow_mismatch_fails_and_does_not_use_outlet_state(self):
         r = evaluate_pintle_injector(
@@ -702,6 +703,54 @@ class TestIntegratedCoupling:
         assert _gate(r, "regen_fuel_flow_closure").status == "pass"
         assert r.feed["fuel"].temperature == pytest.approx(410.0)
         assert r.feed["fuel"].pressure == pytest.approx(8.4e6)
+
+    def test_explicit_film_split_closes_and_keeps_total_pump_flow(self):
+        film_mdot = 0.2 * MDOT_F
+        jacket_mdot = MDOT_F - film_mdot
+        spec = _spec()
+        spec.fuel.inlet_temperature = None
+        spec.feed_system.fuel.tank_pressure = 1.0e5
+        r = evaluate_pintle_injector(
+            spec,
+            mdot_fuel=MDOT_F,
+            mdot_oxidizer=MDOT_O,
+            Pc=PC,
+            mixture_ratio=MR,
+            chamber_radius=0.0339,
+            chamber_length=0.10,
+            gamma=1.24,
+            Tc=3571.0,
+            R_gas=379.6,
+            cooling=self._Cooling(jacket_mdot, film_mdot),
+            cooling_result={"coolant_pressure_drop": 2.0e5},
+        )
+
+        gate = _gate(r, "regen_fuel_flow_closure")
+        split = r.feed_system.fuel_flow_split
+        fuel_line = r.feed_system.lines["fuel"]
+
+        assert gate.status == "pass"
+        assert split is not None
+        assert split.total_fuel_mass_flow == pytest.approx(MDOT_F)
+        assert split.regen_jacket_mass_flow == pytest.approx(jacket_mdot)
+        assert split.film_bypass_mass_flow == pytest.approx(film_mdot)
+        assert split.upstream_pump_mass_flow == pytest.approx(MDOT_F)
+        assert split.closure_residual == pytest.approx(0.0, abs=1e-14)
+        assert fuel_line.volumetric_flow == pytest.approx(
+            MDOT_F / r.feed["fuel"].density
+        )
+        assert fuel_line.volumetric_flow > (
+            jacket_mdot / r.feed["fuel"].density
+        )
+        assert fuel_line.ideal_pump_power is not None
+        assert "film injector hardware is not modeled" in gate.detail
+        assert r.feed_system.to_dict()["fuel_flow_split"][
+            "topology"
+        ] == "common_upstream_pump_then_regen_and_film_split"
+        assert any(
+            "electric-pump sizing use total fuel flow" in note
+            for note in r.feed_system.notes
+        )
 
     def test_regen_pressure_drop_charged_to_feed_ledger(self):
         r = evaluate_pintle_injector(

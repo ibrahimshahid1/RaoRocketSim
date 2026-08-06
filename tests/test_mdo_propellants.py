@@ -70,6 +70,28 @@ def test_mission_for_propellant_drives_the_constants():
     assert lh2.l_star < rp1.l_star          # SP-125: 35 in vs 45 in
 
 
+def test_mdo_inputs_and_efficiency_split_match_traditional_propellants():
+    """The MDO defaults/factory do not drift from repository performance data."""
+    from raosim.propellants import get_propellant as get_traditional
+
+    base = MissionSpec()
+    traditional = get_traditional("LOX/RP-1")
+    assert base.OF == pytest.approx(traditional.OF)
+    assert base.R_gas == pytest.approx(traditional.R_gas)
+    assert base.Tc == pytest.approx(traditional.Tc)
+    assert base.eta_cstar == pytest.approx(traditional.eta_cstar)
+    assert base.eta_CF == pytest.approx(traditional.eta_CF)
+
+    for name in ("lox/rp-1", "lox/lch4", "lox/lh2", "n2o4/mmh"):
+        mdo = get_propellant(name)
+        legacy = get_traditional(mdo.name)
+        mission = MissionSpec.for_propellant(name, 13.0e3)
+        assert mission.eta_cstar == pytest.approx(legacy.eta_cstar)
+        assert mission.eta_CF == pytest.approx(legacy.eta_CF)
+        assert mdo.eta_cstar == pytest.approx(legacy.eta_cstar)
+        assert mdo.eta_CF == pytest.approx(legacy.eta_CF)
+
+
 def test_hydrogen_has_no_binding_coking_screen():
     """No carbon ⇒ no coking limit; the screen is set beyond any attainable
     wall temperature so the gas-side material constraint governs."""
@@ -77,6 +99,12 @@ def test_hydrogen_has_no_binding_coking_screen():
     assert lh2.rp1_coking_wall_temp_K > 5.0e3
     rp1 = MissionSpec.for_propellant("lox/rp-1", 13.0e3)
     assert rp1.rp1_coking_wall_temp_K == pytest.approx(728.0)
+
+
+def test_film_capacity_is_explicitly_sized_for_sp8087_reserve():
+    m = MissionSpec()
+    assert m.film_capacity_margin == pytest.approx(2.0)
+    assert m.film_system_capacity_fraction == pytest.approx(0.60)
 
 
 def test_explicit_overrides_win():

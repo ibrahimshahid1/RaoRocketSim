@@ -48,6 +48,10 @@ class PropellantSpec:
     Tc: float
     R_gas: float                    # J/(kg K)
     OF_default: float
+    # Preserve the traditional repository split: combustion losses apply to
+    # c*, nozzle losses to Cf.  Do not silently replace these with eta_Isp.
+    eta_cstar: float
+    eta_CF: float
     # chamber sizing
     l_star: float                   # m (SP-125 Table 4-1 unless estimated)
     # densities
@@ -84,7 +88,8 @@ def _R(Mw_kg_per_mol: float) -> float:
 PROPELLANTS: dict[str, PropellantSpec] = {
     "lox/rp-1": PropellantSpec(
         name="LOX/RP-1",
-        gamma=1.24, Tc=3571.0, R_gas=_R(0.0219), OF_default=2.3,
+        gamma=1.24, Tc=3571.0, R_gas=_R(0.0219), OF_default=2.27,
+        eta_cstar=0.975, eta_CF=0.985,
         l_star=45.0 * _IN,                     # SP-125 Tab 4-1: 40–50 in
         rho_fuel=810.0, rho_ox=1141.0,
         coolant_name="RP-1",
@@ -97,6 +102,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
     "lox/lch4": PropellantSpec(
         name="LOX/LCH4",
         gamma=1.20, Tc=3533.0, R_gas=_R(0.0203), OF_default=3.5,
+        eta_cstar=0.975, eta_CF=0.985,
         l_star=40.0 * _IN,                     # ESTIMATE (post-dates SP-125)
         rho_fuel=422.0, rho_ox=1141.0,
         coolant_name="methane",
@@ -111,6 +117,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
     "lox/lh2": PropellantSpec(
         name="LOX/LH2",
         gamma=1.26, Tc=2999.0, R_gas=_R(0.0089), OF_default=4.83,
+        eta_cstar=0.99, eta_CF=0.99,
         l_star=35.0 * _IN,                     # SP-125 Tab 4-1: 30–40 in (LH2 inj)
         rho_fuel=71.0, rho_ox=1141.0,
         coolant_name="hydrogen",
@@ -124,6 +131,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
     "n2o4/mmh": PropellantSpec(
         name="N2O4/MMH",
         gamma=1.23, Tc=3122.0, R_gas=_R(0.0215), OF_default=2.17,
+        eta_cstar=0.97, eta_CF=0.985,
         l_star=32.0 * _IN,                     # SP-125: N2O4/hydrazine-base 30–35 in
         rho_fuel=875.0, rho_ox=1442.0,
         coolant_name="MMH",
@@ -137,6 +145,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
     "n2o/ethanol": PropellantSpec(
         name="N2O/Ethanol",
         gamma=1.22, Tc=2950.0, R_gas=_R(0.0264), OF_default=5.5,
+        eta_cstar=0.94, eta_CF=0.98,
         l_star=40.0 * _IN,                     # ESTIMATE (not in SP-125 Tab 4-1)
         rho_fuel=789.0, rho_ox=1220.0,
         coolant_name="ethanol",
