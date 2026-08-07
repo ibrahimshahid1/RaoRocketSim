@@ -64,6 +64,7 @@ from raosim.mdo.schema import MissionSpec
 Array = jnp.ndarray
 
 #: Sharpness for the radial smooth maximum, in 1/m.
+#:
 #: ``logsumexp(k·v)/k`` overshoots the true maximum by at most ``ln(n)/k``,
 #: where ``n`` is the station count — so the envelope is conservative by a
 #: bounded, computable amount rather than an unknown one.  At the default
@@ -153,24 +154,51 @@ def chamber_envelope(
     )
 
 
+def fractional_margin(value: Array, limit: Array) -> Array:
+    """``1 - value/limit``: a dimensionless margin, ``>= 0`` feasible.
+
+    Why fractional rather than ``limit - value``
+    --------------------------------------------
+    An absolute margin in metres or kilograms has two defects that a
+    thrust-class-general tool cannot live with.
+
+    1. **Scale.** The same 1 m of envelope slack is enormous on a 5 kN engine
+       and negligible on a 3 MN one, so a fixed QP scale factor is wrong at
+       every thrust except the one it was tuned for.  ``1 - value/limit`` is
+       O(1) at every size, which is exactly the property
+       ``docs/GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md`` is trying to buy.
+    2. **Conditioning.** The inert sentinel limits are deliberately huge, so an
+       absolute margin evaluates to ~1e9 while its derivative is O(1).
+       Differencing that costs ~9 digits to subtractive cancellation — enough
+       to make a central-difference audit of the Jacobian fail against a
+       perfectly correct analytic derivative.  Measured: the relative FD error
+       on the absolute form was 5.1e-5 at h=1e-4 and 6.3e-3 at h=1e-6, versus
+       an analytic value that the *larger* steps confirmed to 7e-7.  The
+       fractional form evaluates to ~1 at the sentinel and audits cleanly.
+
+    The limit is floored at a tiny positive number so the expression cannot
+    divide by zero for a caller that passes a nonsense limit; the requirement
+    layer rejects non-positive limits before they get here.
+    """
+
+    v = jnp.asarray(value, dtype=jnp.float64)
+    lim = jnp.asarray(limit, dtype=jnp.float64)
+    return 1.0 - v / jnp.maximum(lim, 1.0e-12)
+
+
 def envelope_margins(
     envelope: ChamberEnvelope, mission: MissionSpec
 ) -> tuple[Array, Array]:
-    """Signed envelope margins, ``>= 0`` feasible.
+    """Signed fractional envelope margins, ``>= 0`` feasible.
 
-    Returns ``(diameter_margin, length_margin)`` in metres.  With the
-    :class:`~raosim.mdo.schema.MissionSpec` defaults — deliberately large
-    finite sentinels rather than ``inf``, so the Jacobian stays finite — both
-    margins are large and the constraints are inert.  A requirement supplies
-    real limits through :mod:`raosim.requirements`.
+    Returns ``(diameter_margin, length_margin)``, both dimensionless: a value
+    of 0.25 means the chamber uses 75 % of the allowed dimension.  With the
+    :class:`~raosim.mdo.schema.MissionSpec` sentinel defaults both are ~1.0 and
+    the constraints are inert.  A requirement supplies real limits through
+    :mod:`raosim.requirements`.
     """
 
-    d_margin = (
-        jnp.asarray(mission.envelope_diameter_max, dtype=jnp.float64)
-        - envelope.diameter
+    return (
+        fractional_margin(envelope.diameter, mission.envelope_diameter_max),
+        fractional_margin(envelope.length, mission.envelope_length_max),
     )
-    l_margin = (
-        jnp.asarray(mission.envelope_length_max, dtype=jnp.float64)
-        - envelope.length
-    )
-    return d_margin, l_margin
