@@ -1958,6 +1958,97 @@ def _run_engine_mdo(args) -> int:
     return 0
 
 
+def _parse_thrust_condition(raw: str):
+    """CLI spelling of a thrust condition -> the requirements-layer form."""
+
+    text = str(raw).strip().lower()
+    if text.startswith("altitude"):
+        _, _, value = text.partition(":")
+        if not value:
+            raise ValueError(
+                "--thrust-condition altitude needs a height, e.g. "
+                "'altitude:12000'"
+            )
+        return ("altitude", float(value))
+    return text
+
+
+def _run_requirements(args) -> int:
+    """Requirement-driven design (``raosim.requirements``, Layer 0).
+
+    The user states SP-125 §2.1 targets; the optimiser chooses the design
+    variables.  The coverage table is printed *before* the numbers, because a
+    performance figure produced against a partially screened requirement means
+    something weaker than it looks and the reader needs to know that first.
+    """
+
+    from raosim.requirements import EngineRequirement, solve_requirement
+
+    throttle = None
+    if args.throttle_range:
+        lo, _, hi = str(args.throttle_range).partition(",")
+        throttle = (float(lo), float(hi))
+
+    try:
+        req = EngineRequirement(
+            thrust=float(args.target_thrust if args.target_thrust is not None
+                         else 13.0e3),
+            thrust_condition=_parse_thrust_condition(args.thrust_condition),
+            isp_min=args.isp_min,
+            isp_basis=args.isp_basis,
+            flight_duration=float(
+                args.flight_duration if args.flight_duration is not None
+                else args.burn_time),
+            qualification_duration=args.qualification_duration,
+            of=args.mixture_ratio,
+            burnout_mass_max=args.burnout_mass_max,
+            envelope_diameter_max=args.envelope_diameter_max,
+            envelope_length_max=args.envelope_length_max,
+            propellant=(getattr(args, "mdo_propellant", None) or "LOX/RP-1"),
+            throttle_range=throttle,
+            reusable_cycles=args.reusable_cycles,
+        )
+    except (ValueError, NotImplementedError) as exc:
+        print(f"  requirement rejected: {exc}")
+        return 2
+
+    print("=" * 78)
+    print(" Requirement-driven design  (raosim.requirements, SP-125 §2.1)")
+    print("=" * 78)
+
+    result = solve_requirement(
+        req, couple_eta_cstar=bool(args.engine_mdo_couple_cstar))
+    print(result.summary())
+
+    n = result.nlp
+    d = n.constraints
+    print()
+    print(" design chosen by the optimiser:")
+    for key, fmt, scale, unit in (
+        ("Pc", "%8.3f", 1e-6, "MPa"), ("eps", "%8.3f", 1.0, "-"),
+        ("film_frac", "%8.3f", 1.0, "-"), ("t_wall", "%8.3f", 1e3, "mm"),
+        ("channel_width", "%8.3f", 1e3, "mm"),
+        ("channel_height", "%8.3f", 1e3, "mm"),
+        ("D_pintle", "%8.3f", 1e3, "mm"), ("N_rpm", "%8.1f", 1e-3, "krpm"),
+    ):
+        print(f"   {key:<16}" + fmt % (n.design[key] * scale) + f" {unit}")
+
+    # Fractional margins read as "fraction of the allowance left"; print the
+    # physical side too, so the requirement and the hardware are both legible.
+    print()
+    print(" requirement utilisation (screened quantities; lower bounds):")
+    for name, limit in (("envelope_diameter", req.envelope_diameter_max),
+                        ("envelope_length", req.envelope_length_max),
+                        ("dry_mass_partial", req.burnout_mass_max)):
+        if limit is None:
+            continue
+        used = (1.0 - d[name]) * limit
+        print(f"   {name:<20} {used:9.4f} of {limit:9.4f}"
+              f"   ({100.0 * (1.0 - d[name]):5.1f} % used)")
+    print("=" * 78)
+    return 0 if n.feasible else 1
+
+
 def _run_engine_mdo_optimize(args) -> int:
     """ε-constraint hard-constrained whole-engine MDO (``raosim.mdo.nlp``).
 
@@ -2938,6 +3029,64 @@ def main(argv: list[str] | None = None) -> int:
                          "trace the mass–Isp Pareto frontier. Set the mission "
                          "with --target-thrust/--mixture-ratio/--burn-time/"
                          "--engine-mdo-ambient")
+    ap.add_argument("--requirements", action="store_true",
+                    help="requirement-driven design (raosim.requirements, "
+                         "Layer 0): state performance TARGETS in NASA SP-125 "
+                         "§2.1 terms and let the MDO choose Pc/eps/L*/channel "
+                         "geometry/pintle/pump. Set the ask with "
+                         "--target-thrust/--thrust-condition/--isp-min/"
+                         "--flight-duration/--envelope-*-max/"
+                         "--burnout-mass-max/--mdo-propellant. Every "
+                         "requirement that is only partially screened, or not "
+                         "screened at all, is reported as such")
+    ap.add_argument("--thrust-condition", default="sea_level",
+                    metavar="COND",
+                    help="with --requirements: the back-pressure the thrust "
+                         "target is quoted at — 'sea_level', 'vacuum', or "
+                         "'altitude:<metres>'. SP-125 §2.1 quotes booster "
+                         "thrust at sea level and upper-stage thrust in "
+                         "vacuum, so this is part of the requirement, not "
+                         "metadata (default: sea_level)")
+    ap.add_argument("--isp-basis", choices=("thrust_chamber", "engine_system"),
+                    default="thrust_chamber",
+                    help="with --requirements: whether --isp-min refers to the "
+                         "thrust chamber or the complete engine system "
+                         "(SP-125 §2.1 requires this be stated). Only "
+                         "thrust_chamber is screenable today")
+    ap.add_argument("--flight-duration", type=float, default=None,
+                    metavar="S",
+                    help="with --requirements: rated flight duration [s]; "
+                         "sizes the electric-feed energy (default: --burn-time)")
+    ap.add_argument("--qualification-duration", type=float, default=None,
+                    metavar="S",
+                    help="with --requirements: cumulative demonstrated "
+                         "duration [s]. SP-125 §2.1 says this governs most "
+                         "design considerations, but no cumulative-life model "
+                         "exists yet, so it is reported as unsupported")
+    ap.add_argument("--envelope-diameter-max", type=float, default=None,
+                    metavar="M",
+                    help="with --requirements: maximum engine diameter [m] "
+                         "(SP-125 §2.1 item 6). Screens the cooled chamber "
+                         "only — the flange is host-side, so this is a lower "
+                         "bound on the installed envelope")
+    ap.add_argument("--envelope-length-max", type=float, default=None,
+                    metavar="M",
+                    help="with --requirements: maximum engine length [m], "
+                         "injector face to nozzle exit")
+    ap.add_argument("--burnout-mass-max", type=float, default=None,
+                    metavar="KG",
+                    help="with --requirements: engine mass at burnout [kg] "
+                         "(SP-125 §2.1 item 5). Screens dry_mass_partial, a "
+                         "lower bound: injector hardware, manifolds, valves, "
+                         "lines, gimbal and mounts are not in it")
+    ap.add_argument("--throttle-range", default=None, metavar="LO,HI",
+                    help="with --requirements: required throttle range as a "
+                         "thrust fraction (e.g. 0.6,1.0). Carried and "
+                         "reported; not screenable at a single design point")
+    ap.add_argument("--reusable-cycles", type=int, default=None, metavar="N",
+                    help="with --requirements: required reuse cycles. Carried "
+                         "and reported; structural_stress is a static screen, "
+                         "not a cycle count")
     ap.add_argument("--isp-min", type=float, default=None,
                     help="with --engine-mdo-optimize: the Isp floor [s] "
                          "(ε-constraint) for a single min-mass solve")
@@ -3008,6 +3157,8 @@ def main(argv: list[str] | None = None) -> int:
             return _run_engine_mdo_optimize(args)
         bare = True          # traditional path keeps its starter defaults
         args.interactive = True
+    if getattr(args, "requirements", False):
+        return _run_requirements(args)
     if getattr(args, "engine_mdo_optimize", False):
         return _run_engine_mdo_optimize(args)
     if getattr(args, "engine_mdo", False):

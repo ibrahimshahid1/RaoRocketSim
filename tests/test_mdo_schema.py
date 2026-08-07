@@ -24,9 +24,12 @@ def test_design_vector_pytree_roundtrip():
     x = DesignVector(Pc=jnp.asarray(3.0e6), eps=jnp.asarray(8.0),
                      dp_f_frac=jnp.asarray(0.2), dp_o_frac=jnp.asarray(0.2))
     leaves, treedef = jax.tree_util.tree_flatten(x)
-    assert len(leaves) == 10
+    assert len(leaves) == 11          # 10 hardware vars + O/F
     x2 = jax.tree_util.tree_unflatten(treedef, leaves)
     assert float(x2.eps) == 8.0
+    # ``of_is_variable`` is pytree AUX, not a leaf, so it survives the
+    # roundtrip without ever entering the traced graph.
+    assert x2.of_is_variable is False
     assert float(x2.D_pintle) == pytest.approx(0.020)     # defaulted
     assert float(x2.N_rpm) == pytest.approx(30000.0)      # defaulted
     assert float(x2.film_frac) == pytest.approx(0.0)      # defaulted (pure regen)
@@ -44,7 +47,13 @@ def test_design_vector_pytree_roundtrip():
     assert float(x4.film_frac) == pytest.approx(0.0)
     assert DesignVector.names() == (
         "Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
-        "channel_width", "channel_height", "film_frac", "t_wall")
+        "channel_width", "channel_height", "film_frac", "t_wall", "OF")
+    # A short array leaves O/F non-variable, so the solver reads the mission's
+    # fixed value instead of the class sentinel.  That is the only safe
+    # behaviour: the sentinel is -1 precisely so a caller who marks it variable
+    # without supplying it fails loudly rather than mis-splitting the flow.
+    assert x4.of_is_variable is False
+    assert float(x4.OF) < 0.0
 
 
 def test_scaled_space_roundtrip_and_membership():

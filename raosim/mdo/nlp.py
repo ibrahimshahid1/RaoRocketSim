@@ -81,12 +81,13 @@ CONSTRAINT_NAMES = (
 DEFAULT_ENFORCED = CONSTRAINT_NAMES
 
 # per-constraint reference scales (bring each margin to ~O(1) for the QP).
-# The requirement screens are scaled to their natural engineering units --
-# 0.1 m on envelope dimensions, 10 kg on mass -- so a violation of one
-# reference unit reads as -1 in the QP regardless of engine size.
+# The three requirement screens arrive already dimensionless -- they are
+# FRACTIONAL margins (1 - value/limit), which is O(1) at every thrust class by
+# construction -- so their scale is exactly 1.  See
+# raosim.mdo.envelope.fractional_margin for why the absolute form was rejected.
 _C_SCALE = np.array([50.0, 1.0, 300.0, 5.0e-4, 0.2, 5.0e-5, 2.0, 300.0, 8.0,
                      0.3, 0.3, 1.0e8, 100.0, 1.0, 0.1, 0.1, 1.0e-4,
-                     0.1, 0.1, 10.0,
+                     1.0, 1.0, 1.0,
                     ])
 _MASS_REF = 50.0  # kg, objective conditioning
 

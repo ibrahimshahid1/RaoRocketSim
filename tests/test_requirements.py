@@ -183,6 +183,41 @@ def test_pinned_of_is_enforced_but_flagged_as_removing_a_lever():
     assert resolve_requirement(_req(of=2.4)).mission.OF == pytest.approx(2.4)
 
 
+def test_pinned_of_survives_cea_surfaces_being_available():
+    """A pin must not be silently overridden once a table exists.
+
+    ``of_design_space`` promotes O/F to a design variable as soon as
+    ``cea_table_path`` is set; without the pin flag the optimiser would discard
+    the value the user explicitly asked for.
+    """
+    from raosim.mdo.schema import default_design_space
+
+    r = resolve_requirement(_req(
+        of=2.4, mission_overrides={"cea_table_path": "builds/fake_table.npz"}))
+    assert r.mission.of_is_pinned is True
+    assert "OF" not in [s.name for s in default_design_space(r.mission)]
+    assert r.mission.OF == pytest.approx(2.4)
+
+
+def test_unpinned_of_becomes_a_design_variable_once_surfaces_exist(tmp_path):
+    from raosim.mdo.properties import save_tables
+    from raosim.mdo.schema import default_design_space
+
+    Pc = np.linspace(1.5e6, 6.0e6, 5)
+    OF = np.linspace(1.8, 3.0, 5)
+    P, O = np.meshgrid(Pc, OF, indexing="ij")
+    path = tmp_path / "t.npz"
+    save_tables(str(path), {"Pc_grid": Pc, "OF_grid": OF,
+                            "gamma": 1.24 + 0.0 * P, "Tc": 3500.0 - 100.0 * O,
+                            "R_gas": 380.0 + 0.0 * P},
+                oxidizer="LOX", fuel="RP-1")
+    r = resolve_requirement(_req(mission_overrides={
+        "cea_table_path": str(path)}))
+    assert r.mission.of_is_pinned is False
+    assert "OF" in [s.name for s in default_design_space(r.mission)]
+    assert _cov(r, "of").coverage is Coverage.ENFORCED
+
+
 def test_fully_screened_is_false_when_anything_is_partial():
     assert not resolve_requirement(_req(burnout_mass_max=30.0)).fully_screened
 

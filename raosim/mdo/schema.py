@@ -78,6 +78,18 @@ class MissionSpec:
     # (flame temperature is a second coking lever).  When empty, the constants
     # above are used as flat surfaces — correct at the stated O/F, flat in O/F.
     cea_table_path: str = ""
+    #: Feed architecture this mission describes.  Selects the chamber-pressure
+    #: window in :mod:`raosim.mdo.bounds` -- Yang 2004 gives a different
+    #: ceiling and a different limiting mechanism for each cycle.  Only
+    #: ``electric_pump`` is implemented in the traced core;
+    #: :func:`raosim.requirements.resolve_requirement` refuses the others.
+    feed_architecture: str = "electric_pump"
+    #: Pin O/F at :attr:`OF` even when surfaces are loaded.  Set by
+    #: :func:`raosim.requirements.resolve_requirement` when the user states a
+    #: mixture ratio explicitly.  Without this a pinned requirement would be
+    #: silently overridden the moment a CEA table appeared, which is the
+    #: opposite of what "pinned" means.
+    of_is_pinned: bool = False
     # OPTIONAL spray→c* feedback edge (Phase 7, default OFF).  Plan §5 flags this
     # as the strongest coupling but the *weakest physics* — a one-way correlation,
     # not energy-closed — and asks for an ablation (η_cstar frozen) to bound how
@@ -506,6 +518,7 @@ class MissionSpec:
         a missing constraint.
         """
         from raosim.mdo.propellants import get_propellant
+        from raosim.physics import default_coolant_inlet_temperature
 
         p = get_propellant(propellant)
         # None (cannot coke) → a screen that can never bind; the gas-side
@@ -526,6 +539,20 @@ class MissionSpec:
             coolant_sound_speed=p.coolant_sound_speed,
             p_vapor_fuel=p.p_vapor_fuel, p_vapor_ox=p.p_vapor_ox,
             rp1_coking_wall_temp_K=coke,
+            # Jacket inlet temperature from the SAME central resolver the
+            # traditional pipeline uses (``raosim.physics
+            # .default_coolant_inlet_temperature``): 120 K for methane, 25 K
+            # for hydrogen, 300 K otherwise.
+            #
+            # Without this the MDO ran every propellant at the class default of
+            # 320 K -- an RP-1 number.  That put methane in at T/T_c = 1.68
+            # instead of 0.63 and hydrogen at 9.7 instead of 0.75, i.e. a
+            # different fluid state entirely, with the coolant enthalpy rise
+            # starting from the wrong place and the wall-temperature and coking
+            # margins computed off it.  Exactly the R0 failure mode: a central
+            # convention that one pipeline used and the other did not.
+            coolant_temperature=default_coolant_inlet_temperature(
+                p.coolant_name),
         )
         derived.update(overrides)
         return cls.for_thrust(thrust, Pc_ref=Pc_ref, **derived)
@@ -618,9 +645,21 @@ class MissionSpec:
         architecture-scaled ones (pintle diameter, pump speed) bracket the
         values derived by :meth:`for_thrust`.
         """
+        from raosim.mdo.bounds import (
+            chamber_pressure_bounds, expansion_ratio_bounds,
+            expansion_ratio_reference,
+        )
+
+        pc = chamber_pressure_bounds(self.feed_architecture)
+        eps_lo, eps_hi = expansion_ratio_bounds(self)
         return (
-            VariableSpec("Pc", 1.5e6, 6.0e6, 3.0e6),
-            VariableSpec("eps", 3.0, 40.0, 8.0),
+            # Pc from the CYCLE (Yang 2004), not from the 13 kN kerolox
+            # baseline; eps from the Rao chart's own tabulated box, the same
+            # data ``chart_domain_margin`` screens against.
+            VariableSpec("Pc", pc.lower, pc.upper,
+                         min(max(3.0e6, pc.lower), pc.upper)),
+            VariableSpec("eps", eps_lo, eps_hi,
+                         expansion_ratio_reference(self)),
             VariableSpec("dp_f_frac", 0.12, 0.45, 0.2),
             VariableSpec("dp_o_frac", 0.12, 0.45, 0.2),
             # bracket the BF-sized pintle by ±2x
@@ -637,7 +676,35 @@ class MissionSpec:
             # direction even when the coking constraint requires film.
             VariableSpec("film_frac", 0.0, 0.30, 0.10),
             VariableSpec("t_wall", 4.0e-4, 2.0e-3, 8.0e-4),
-        )
+        ) + self.of_design_space()
+
+    def of_design_space(self) -> tuple["VariableSpec", ...]:
+        """The O/F variable spec — empty unless CEA surfaces make it real.
+
+        With constant gamma/T_c/R the property surfaces are flat in O/F, so an
+        O/F design variable would change the propellant mass split without
+        changing combustion at all.  That is not a conservative approximation,
+        it is a wrong model, and the honest response is to not offer the lever:
+        the returned tuple is empty and the design space stays 10-dimensional.
+
+        Once ``cea_table_path`` points at a sampled table, O/F becomes a real
+        variable bounded by the **sampled domain**.  Bounding it there rather
+        than at some physical band is deliberate: outside the sampled box the
+        C1 surfaces are extrapolating, and ``property_domain_margin`` would
+        already be screening the design as inadmissible.  Two mechanisms
+        disagreeing about the same limit is how the two pipelines drifted apart
+        before, so the bound and the constraint are taken from one source.
+        """
+
+        if not self.cea_table_path or self.of_is_pinned:
+            return ()
+        from raosim.mdo.properties import load_chamber_surfaces
+
+        surfaces = load_chamber_surfaces(self.cea_table_path)
+        lo = float(surfaces.gamma.yg[0])
+        hi = float(surfaces.gamma.yg[-1])
+        ref = min(max(float(self.OF), lo), hi)
+        return (VariableSpec("OF", lo, hi, ref),)
 
     def c_star_ideal(self) -> float:
         """Ideal c* from the constant-property chamber state (SP-125 form,
@@ -682,6 +749,34 @@ class DesignVector:
     # THERMAL gradient / low-cycle fatigue, not pressure (§10.2: pressure
     # bending across the channel is ~0.2 MPa vs ~27 MPa thermal).
     t_wall: Array = 8.0e-4          # m
+    # Mixture ratio.  SP-125 §2.1 (printed p. 31) lists it among the nine
+    # requirement parameters, but §2.1's own derivation makes it an OUTPUT:
+    # the optimum balances energy release against molecular weight, then moves
+    # off that optimum for cooling -- "The temperatures resulting from
+    # stoichiometric or near-stoichiometric mixture ratios ... may impose
+    # severe demands on the chamber-wall cooling system.  A lower temperature,
+    # therefore, may be desired and obtained by selecting a suitable ratio."
+    # That is precisely the trade this optimiser already resolves with film
+    # fraction, so O/F belongs on the design vector.
+    #
+    # It is only a *real* variable when C1 property surfaces are loaded: with
+    # constant gamma/Tc/R the thermochemistry is FLAT in O/F, so moving it
+    # would change the propellant mass split without changing combustion --
+    # physically wrong.  ``of_is_variable`` (static pytree aux, never traced)
+    # records which regime this vector is in; ``default_design_space`` only
+    # emits an O/F spec when ``MissionSpec.cea_table_path`` is set.
+    #
+    # The class default is a deliberately INVALID sentinel, not a plausible
+    # number.  A plausible default (say RP-1's 2.27) would be silently wrong on
+    # every other propellant if a caller ever marked O/F variable without
+    # supplying it; -1 propagates to a negative mass-flow split and trips the
+    # ``finite`` guard, turning a silent physics error into a loud infeasible.
+    OF: Array = -1.0                # oxidizer/fuel mass ratio [-] (sentinel)
+
+    #: Static (non-traced) flag: is ``OF`` a live design variable, or should
+    #: the solver read the mission's fixed value?  Carried as pytree *aux* so
+    #: it can never become a design-dependent branch inside the traced graph.
+    of_is_variable: bool = False
 
     # NOTE — the film-injector slot height S is deliberately **not** a design
     # variable.  Stechman (1969) *derives* it ("the slot height S is determined
@@ -694,15 +789,20 @@ class DesignVector:
     # reported by ``cooling.film_slot_validity``.  (It genuinely matters for a
     # *gaseous* film, where S enters Hatch & Papell's correlation directly.)
     _FIELDS = ("Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
-               "channel_width", "channel_height", "film_frac", "t_wall")
+               "channel_width", "channel_height", "film_frac", "t_wall",
+               "OF")
 
     # -- pytree protocol ---------------------------------------------------- #
     def tree_flatten(self):
-        return tuple(getattr(self, f) for f in self._FIELDS), None
+        # ``of_is_variable`` is AUX, not a child: it is a configuration fact,
+        # not a number to differentiate, and keeping it static is what stops
+        # the O/F regime from becoming a traced branch (plan §0.1).
+        return (tuple(getattr(self, f) for f in self._FIELDS),
+                self.of_is_variable)
 
     @classmethod
     def tree_unflatten(cls, aux, children):
-        return cls(*children)
+        return cls(*children, of_is_variable=bool(aux))
 
     # -- vector packing ------------------------------------------------------ #
     def to_array(self) -> Array:
@@ -710,16 +810,28 @@ class DesignVector:
                           for f in self._FIELDS])
 
     @classmethod
-    def from_array(cls, x: Array) -> "DesignVector":
-        """Build from 4–10 ordered values.
+    def from_array(cls, x: Array, *,
+                   of_is_variable: bool | None = None) -> "DesignVector":
+        """Build from 4–11 ordered values.
 
-        Omitted trailing values retain their dataclass defaults for compatibility
-        with the early four-/six-variable skeletons.  The current whole-engine
-        NLP always supplies all ten fields.
+        Omitted trailing values retain their dataclass defaults for
+        compatibility with the early four-/six-variable skeletons.
+
+        The eleventh slot is ``OF``, and its presence is what distinguishes the
+        two regimes.  A 10-long array (no CEA surfaces) leaves ``OF`` at the
+        class default *and* marks it non-variable, so
+        :func:`raosim.mdo.engine.solve_engine` reads the mission's fixed value
+        instead — which is the only safe behaviour, because the class default
+        is an RP-1 number and would silently mis-split the propellant flow on
+        any other combination.  Pass ``of_is_variable=`` to override the
+        length-based inference.
         """
         x = jnp.asarray(x)
         n = int(x.shape[0])
-        return cls(*(x[i] for i in range(n)))
+        if of_is_variable is None:
+            of_is_variable = n >= len(cls._FIELDS)
+        return cls(*(x[i] for i in range(n)),
+                   of_is_variable=bool(of_is_variable))
 
     @classmethod
     def names(cls) -> tuple[str, ...]:
@@ -779,7 +891,7 @@ def default_design_space(mission: "MissionSpec | None" = None
         # SP-8087-era liners run ~0.5–1.5 mm (Mirzamoghadam quotes 0.61–0.94 mm
         # for a tube wall); bracket that with machining floors.
         VariableSpec("t_wall", 4.0e-4, 2.0e-3, 8.0e-4),
-    )
+    ) + MissionSpec().of_design_space()
 
 
 def bounds_arrays(space: tuple[VariableSpec, ...]) -> tuple[Array, Array]:

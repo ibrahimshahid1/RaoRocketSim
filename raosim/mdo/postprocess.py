@@ -72,6 +72,21 @@ def _propellant_mapping(
     return combination, oxidizer, fuel, str(coolant_name)
 
 
+def _effective_of(design: Mapping[str, Any], mission: MissionSpec) -> float:
+    """Mixture ratio the MDO design actually used.
+
+    Once ``OF`` is a design variable (which it becomes as soon as CEA surfaces
+    are loaded -- see ``MissionSpec.of_design_space``) the optimum's O/F is in
+    the design dict, and ``mission.OF`` is only the *seed*.  Re-deriving the
+    propellant split from the mission would silently hand the authoritative
+    workflow a different engine from the one that was optimised, which is
+    exactly the class of drift the output contract exists to catch.
+    """
+
+    value = design.get("OF")
+    return float(value) if value is not None else float(mission.OF)
+
+
 def _mdo_mass_flow(design: Mapping[str, Any], mission: MissionSpec) -> float:
     """Reproduce the MDO thrust/c-star closure without a hard-coded Cf."""
 
@@ -174,7 +189,7 @@ def to_design_input(
 
     if mdot_total is None:
         mdot_total = _mdo_mass_flow(d, mission)
-    mdot_fuel = float(mdot_total) / (1.0 + float(mission.OF))
+    mdot_fuel = float(mdot_total) / (1.0 + _effective_of(d, mission))
     if mdot_cool is None:
         # Explicit architecture assumption in the MDO: the selected fraction
         # is diverted from the jacket to a separate fuel-film path.
@@ -236,7 +251,7 @@ def to_design_input(
         propellant_name=combination,
         oxidizer=oxidizer,
         fuel=fuel,
-        mixture_ratio=float(mission.OF),
+        mixture_ratio=_effective_of(d, mission),
         eta_Isp=eta_cstar_effective * eta_cf,
         eta_cstar=eta_cstar_effective,
         eta_CF=eta_cf,

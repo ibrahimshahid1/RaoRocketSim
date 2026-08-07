@@ -58,7 +58,7 @@ from raosim.mdo.cooling import (
 from raosim.mdo.injector import injector_readouts, InjectorReadout
 from raosim.mdo.mass import chamber_mass, ChamberMassBreakdown
 from raosim.mdo.envelope import (
-    chamber_envelope, envelope_margins, ChamberEnvelope,
+    chamber_envelope, envelope_margins, fractional_margin, ChamberEnvelope,
 )
 from raosim.mdo.pump import electric_feed, ElectricFeed
 from raosim.mdo.structures import nozzle_collapse_screen, NozzleCollapseScreen
@@ -91,9 +91,28 @@ def eta_cstar_coupled(TMR: Array, mission: MissionSpec) -> Array:
     return mission.eta_cstar_max * jnp.exp(-0.5 * z * z)
 
 
-def _split(mdot: Array, mission: MissionSpec) -> tuple[Array, Array]:
-    mdot_f = mdot / (1.0 + mission.OF)
-    mdot_o = mdot * mission.OF / (1.0 + mission.OF)
+def _resolve_of(x: DesignVector, mission: MissionSpec) -> Array:
+    """Effective mixture ratio for this solve.
+
+    ``x.of_is_variable`` is static pytree aux, so this is a *Python* branch
+    resolved at trace time -- it never becomes a design-dependent switch inside
+    the graph (plan §0.1).  When O/F is not a live variable the mission's fixed
+    value is authoritative: ``DesignVector.OF``'s class default is an RP-1
+    number and would silently mis-split the propellant flow on any other
+    combination.
+    """
+
+    return (jnp.asarray(x.OF, dtype=jnp.float64) if x.of_is_variable
+            else jnp.asarray(mission.OF, dtype=jnp.float64))
+
+
+def _split(mdot: Array, mission: MissionSpec,
+           OF: Array | None = None) -> tuple[Array, Array]:
+    """Propellant mass-flow split at the effective mixture ratio."""
+
+    of = jnp.asarray(mission.OF if OF is None else OF, dtype=jnp.float64)
+    mdot_f = mdot / (1.0 + of)
+    mdot_o = mdot * of / (1.0 + of)
     return mdot_f, mdot_o
 
 
@@ -102,7 +121,7 @@ def _eta_cstar(mdot: Array, x: DesignVector, mission: MissionSpec,
     if not couple:
         base = jnp.asarray(mission.eta_cstar, dtype=jnp.float64)
     else:
-        mdot_f, mdot_o = _split(mdot, mission)
+        mdot_f, mdot_o = _split(mdot, mission, _resolve_of(x, mission))
         inj = injector_readouts(Pc=x.Pc, chi_f=x.dp_f_frac, chi_o=x.dp_o_frac,
                                 D_pintle=x.D_pintle, mdot_fuel=mdot_f,
                                 mdot_ox=mdot_o, mission=mission)
@@ -125,9 +144,10 @@ def engine_residual(y: Array, x: DesignVector, mission: MissionSpec,
     Rt = y[0] * scales.Rt_ref
     mdot = y[1] * scales.mdot_ref
     Pc, eps = x.Pc, x.eps
+    of = _resolve_of(x, mission)
 
-    gamma = surfaces.gamma(Pc, mission.OF)
-    cstar_ideal = surfaces.c_star_ideal(Pc, mission.OF)
+    gamma = surfaces.gamma(Pc, of)
+    cstar_ideal = surfaces.c_star_ideal(Pc, of)
     eta_cs = _eta_cstar(mdot, x, mission, surfaces, couple)
     cstar_del = eta_cs * cstar_ideal
 
@@ -141,11 +161,12 @@ def engine_residual(y: Array, x: DesignVector, mission: MissionSpec,
 
 def _initial_state(x: DesignVector, mission: MissionSpec,
                    surfaces: ChamberSurfaces, scales: StateScales) -> Array:
-    gamma = surfaces.gamma(x.Pc, mission.OF)
+    of = _resolve_of(x, mission)
+    gamma = surfaces.gamma(x.Pc, of)
     Cf = mission.eta_CF * jt.ambient_thrust_coefficient(
         x.eps, gamma, x.Pc, mission.Pa)
     Rt = jnp.sqrt(mission.thrust / (Cf * x.Pc * jnp.pi))
-    cstar_del = mission.eta_cstar * surfaces.c_star_ideal(x.Pc, mission.OF)
+    cstar_del = mission.eta_cstar * surfaces.c_star_ideal(x.Pc, of)
     mdot = x.Pc * jnp.pi * Rt * Rt / cstar_del
     return jnp.stack([Rt / scales.Rt_ref, mdot / scales.mdot_ref])
 
@@ -163,6 +184,10 @@ class EngineResult:
     Cf_ideal: Array
     Cf: Array
     Isp: Array
+    #: Mixture ratio this solve actually used.  When O/F is a design variable
+    #: this is the optimiser's value, NOT ``mission.OF`` -- the host bridge must
+    #: read it from here or it will re-derive a stale split.
+    OF: Array
     Me: Array
     Pe: Array
     thrust_residual: Array
@@ -248,11 +273,12 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     Rt = y[0] * scales.Rt_ref
     mdot = y[1] * scales.mdot_ref
     Pc, eps = x.Pc, x.eps
+    of = _resolve_of(x, mission)
 
-    gamma = surfaces.gamma(Pc, mission.OF)
-    Tc = surfaces.Tc(Pc, mission.OF)
+    gamma = surfaces.gamma(Pc, of)
+    Tc = surfaces.Tc(Pc, of)
     eta_cs = _eta_cstar(mdot, x, mission, surfaces, couple_eta_cstar)
-    cstar_del = eta_cs * surfaces.c_star_ideal(Pc, mission.OF)
+    cstar_del = eta_cs * surfaces.c_star_ideal(Pc, of)
 
     # --- performance ------------------------------------------------------- #
     Cf_ideal = jt.ambient_thrust_coefficient(eps, gamma, Pc, mission.Pa)
@@ -270,7 +296,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         sep_raw_margin - mission.separation_design_margin,
     )
 
-    mdot_f, mdot_o = _split(mdot, mission)
+    mdot_f, mdot_o = _split(mdot, mission, of)
 
     # --- cooling (inner IFT solve on the stationwise wall temperatures) ----- #
     grid = build_station_grid(Rt, eps, mission, topo, gamma=gamma)
@@ -402,7 +428,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         grid.chart_domain_violation[2] / 40.0,
         grid.chart_domain_violation[3] / 40.0,
     ])
-    property_violation = surfaces.domain_violation(Pc, mission.OF)
+    property_violation = surfaces.domain_violation(Pc, of)
     property_scale = jnp.stack([
         property_violation[0] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
         property_violation[1] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
@@ -482,8 +508,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # the external pressure while attached and overexpanded.
         "nozzle_collapse_margin": collapse.normalized_margin,
         # --- SP-125 §2.1 requirement screens (items 5 and 6) ---------------- #
-        # These three are inert at the MissionSpec sentinel defaults and only
-        # bind when a raosim.requirements.EngineRequirement supplies a limit.
+        # FRACTIONAL margins (1 - value/limit), dimensionless and O(1) at every
+        # thrust class -- see raosim.mdo.envelope.fractional_margin for why the
+        # absolute form is unusable here.  Inert at the MissionSpec sentinel
+        # defaults; they bind only when a requirement supplies a real limit.
         #
         # All three screen a LOWER BOUND on the true installed quantity, so a
         # satisfied margin does NOT prove the requirement is met.  That is why
@@ -497,9 +525,8 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # dry_mass_partial = smooth electric-feed objective + thrust-chamber
         # structure.  Missing: injector hardware, manifolds, valves, lines,
         # gimbal, mounts (see docs/HARDWARE_MASS_LEDGER.md `excludes`).
-        "dry_mass_partial_margin": (
-            jnp.asarray(mission.dry_mass_max, dtype=jnp.float64)
-            - (objective_mass + chamber.total)
+        "dry_mass_partial_margin": fractional_margin(
+            objective_mass + chamber.total, mission.dry_mass_max
         ),
         "engine_residual_margin": outer_tol - outer_residual_max,
         "cooling_residual_margin": (jnp.asarray(max(rtol, atol), dtype=jnp.float64)
@@ -523,11 +550,19 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "film_system_capacity": jnp.asarray(mission.film_system_capacity_fraction),
         "eta_film_cooling": film_cooling_efficiency(
             mdot_film, grid, mission),
+        # Physical counterparts of the three fractional requirement margins,
+        # kept here so a report can print metres and kilograms while the NLP
+        # consumes the dimensionless form.  All three are LOWER BOUNDS on the
+        # installed quantity (no flange, injector body or feed hardware).
+        "envelope_diameter_partial": envelope.diameter,
+        "envelope_length_partial": envelope.length,
+        "dry_mass_partial": objective_mass + chamber.total,
     }
 
     return EngineResult(
         Rt=Rt, mdot=mdot, T_wg=T_wg, eta_cstar=eta_cs, Cf_ideal=Cf_ideal,
         Cf=Cf, Isp=Isp, Me=Me, Pe=Pe,
+        OF=of,
         thrust_residual=resid[0], cooling=cooling, injector=injector, feed=feed,
         dp_regen=dp_regen, dp_rise_fuel=dp_rise_f, dp_rise_ox=dp_rise_o,
         objective_mass=objective_mass,
@@ -555,6 +590,7 @@ _SCALARS = {
     "Rt": lambda r: r.Rt,
     "mdot": lambda r: r.mdot,
     "eta_cstar": lambda r: r.eta_cstar,
+    "OF": lambda r: r.OF,
     "dp_regen": lambda r: r.dp_regen,
     "coking_margin_min": lambda r: r.constraints["coking_margin_min"],
     "separation_margin": lambda r: r.constraints["separation_margin"],

@@ -378,16 +378,116 @@ place where it would be easy to cheat:
 
 ## 6. Order of work
 
-| # | item | needs new sources? |
-|---|---|---|
-| 1 | Sample the CEA property surfaces; make O/F a design variable | no — data generation |
-| 2 | Derive `Pc`/`ε` bounds from (cycle, propellant, ambient, envelope) | no — Yang 2004 + SP-8120, both in corpus |
-| 3 | `EngineRequirement` + requirement→constraint mapping | no — SP-125 §2.1, in corpus |
-| 4 | Add `pressure_fed` as the second `FeedArchitecture` | no — SP-125 Ch. V, in corpus |
-| 5 | Alpha-set acceptance tests (A-1…A-4) | LF2/LH2 properties only |
-| 6 | Gas-generator and staged-combustion architectures | **yes** — SP-8110 turbines, SP-8081 gas generators |
-| 7 | Non-regen cooling for pressure-fed upper stages | **yes** — SP-8124 self-cooled chambers |
-| 8 | Ox-vs-fuel pump efficiency split; derived tip-speed limit | no — SP-8109, in corpus |
+| # | item | status | needs new sources? |
+|---|---|---|---|
+| 1 | Sample the CEA property surfaces; make O/F a design variable | **code done** — sampler run is host-side and outstanding | no — data generation |
+| 2 | Derive `Pc`/`ε` bounds from architecture | **done** | no — Yang 2004 + the Rao chart, both in repo |
+| 3 | `EngineRequirement` + requirement→constraint mapping | **done** | no — SP-125 §2.1, in corpus |
+| 3b | Methane/hydrogen coolant-side HTD screen | **criterion coded, reported unavailable** | no — Nasuti & Pizzarelli 2021, acquired |
+| 4 | Add `pressure_fed` as the second `FeedArchitecture` | not started | no — SP-125 Ch. V + SP-8124, both acquired |
+| 5 | Alpha-set acceptance tests (A-1…A-4) | not started | LF2/LH2 properties only |
+| 6 | Gas-generator and staged-combustion architectures | not started | no — SP-8110 and SP-8081 now acquired |
+| 7 | Non-regen cooling for pressure-fed upper stages | not started | no — SP-8124 acquired |
+| 8 | Ox-vs-fuel pump efficiency split; derived tip-speed limit | not started | no — SP-8109, in corpus |
+| 9 | **CoolProp-sampled coolant property surface** | new, see below | no — Bell 2014 + Huber 2009 acquired |
 
-Items 1–5 require nothing that is not already on disk. That is the sequence to
-run before asking for anything new.
+---
+
+## 7. Increment of 2026-08-06 — items 1, 2, 3 and 3b
+
+### Item 3 — the requirements layer (`raosim/requirements.py`)
+
+`EngineRequirement` states the ask in SP-125 §2.1 terms; `resolve_requirement`
+maps it to a `MissionSpec` plus a constraint selection; the CLI surfaces it as
+`--requirements`. Three new fractional margins
+(`envelope_diameter`, `envelope_length`, `dry_mass_partial`) join the NLP.
+
+The governing rule is `RequirementCoverage`: every requirement is classified
+`ENFORCED`, `PARTIALLY_ENFORCED` or `UNSUPPORTED`, with the reason and the
+enumerated missing pieces. `RequirementResult.requirements_met` is
+**three-valued** — `None` when the optimum is feasible but some requirement is
+only partially screened, because a satisfied lower-bound margin does not prove
+the requirement is met.
+
+Margins are **fractional** (`1 - value/limit`), not absolute. The absolute form
+was tried first and the existing Jacobian-vs-finite-difference test rejected it
+at 5.1e-5 against a 1e-5 tolerance; a step sweep showed the analytic derivative
+was right and the inert `1e9` sentinel was costing ~8 digits to subtractive
+cancellation. The same conditioning defect would have hit the QP, and an
+absolute margin in metres is the wrong scale at every thrust but one — which
+defeats the purpose here. See `raosim.mdo.envelope.fractional_margin`.
+
+### Item 1 — O/F as a design variable
+
+O/F enters the design vector **only when CEA surfaces are loaded**. With
+constant γ/T_c/R the thermochemistry is flat in O/F, so an O/F lever would move
+the propellant split without moving combustion — a wrong model, not a coarse
+one. `DesignVector.of_is_variable` is static pytree *aux*, so the regime never
+becomes a traced branch, and the class default is an invalid `-1` sentinel so a
+mis-marked vector fails loudly instead of silently mis-splitting the flow.
+
+Bounds come from the sampled CEA grid — the same data `property_domain_margin`
+screens against, so the bound and the constraint cannot disagree. A
+requirement-pinned O/F sets `MissionSpec.of_is_pinned` and survives surfaces
+arriving.
+
+**Consequence worth knowing:** until the sampler has been run, *no* requirement
+set is ever fully screened, because O/F is on SP-125's list and is only
+partially covered. That is pinned as its own test.
+
+### Item 2 — bounds from the architecture (`raosim/mdo/bounds.py`)
+
+Two defects removed.
+
+`Pc` was `[1.5, 6.0] MPa` from the 13 kN kerolox baseline, applied to every
+propellant and cycle. It is now keyed to the feed architecture, with Yang 2004's
+ceiling *and its limiting mechanism* recorded per cycle: pressure-fed 1.8 MPa
+(tank mass; SP-125 Ch. V's 100–400 psia, cross-checked against the worked A-4
+engine at 100 psia stagnation from a 165 psia tank), expander 10 MPa (heat
+transfer), gas generator 15 MPa (performance optimum), staged combustion 25 MPa
+(hardware). The electric-pump window is flagged `literature=False` because it is
+a repository thermal-feasibility finding, not a published cycle limit.
+
+`ε` was `[3, 40]`. The Rao chart the analytic wall interpolates is tabulated
+over **ε ∈ [4, 50]** — so the old box was wrong in *both* directions: its lower
+end admitted designs the chart cannot evaluate, and its upper end capped the
+optimiser 20 % below what the model supports. It now reads the chart grid
+directly, so extending the chart widens the design space automatically.
+Separation is deliberately *not* folded into the bound — it is already
+`separation_margin`, and two sources of truth for one limit is the R0 failure
+mode.
+
+### Item 3b — the methane/hydrogen coolant gap
+
+Coking is a hydrocarbon mechanism and `propellants.py` correctly reports no
+coking limit for hydrogen — but nothing replaced it, so LOX/LCH4 and LOX/LH2
+designs were unconstrained on the coolant side while reading as feasible.
+
+`raosim/mdo/coolant_htd.py` implements Nasuti & Pizzarelli (2021) Eq. (9),
+`q_w/(G f_w)·(β/c_p)_b > K` with `K = 0.187`, unit-checked and differentiable.
+
+It is **not yet a live constraint**, and deliberately so. `(β/c_p)_b` peaks
+sharply at the pseudo-critical (Widom) temperature, and that peak *is* the
+mechanism; the cooling march carries the coolant as four constants and has no β
+at all, so a constant-property evaluation would be flat exactly where the
+criterion bites. The screen therefore returns NaN with `available=False` and a
+reason, and `resolve_requirement` reports `coolant_wall_limit` as UNSUPPORTED
+for methane and hydrogen while leaving RP-1 clean.
+
+### Item 9 (new) — CoolProp-sampled coolant property surface
+
+Named by item 3b. Structurally identical to the CEA chamber surfaces: sample
+ρ, c_p, **β**, k, μ over (T, p) into a C¹ surface and replace the four
+`MissionSpec` constants in the cooling march. Both sources are already on disk —
+Bell et al. 2014 for the cryogens, Huber et al. 2009 for RP-1, which CoolProp
+does not carry. This closes item 3b, and it is also the honest prerequisite for
+R5b, since the current thermal correlations are being fed constants.
+
+### Verification
+
+131 tests across `test_requirements`, `test_mdo_bounds`, `test_mdo_coolant_htd`,
+`test_mdo_envelope`, `test_mdo_of_variable`, `test_mdo_schema`,
+`test_mdo_propellants`, `test_mdo_engine`, `test_mdo_cooling`, `test_mdo_nlp`.
+The O/F column is confirmed alive by the MDO_GUIDE dead-variable check, and the
+constraint Jacobian still matches central differences at the original 1e-5
+tolerance.

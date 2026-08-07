@@ -427,6 +427,11 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
     }
     if req.of is not None:
         overrides["OF"] = OF
+        # Pinning must survive the arrival of CEA surfaces.  Without this flag
+        # ``of_design_space`` would promote O/F to a design variable the moment
+        # a table was loaded, and the optimiser would quietly discard the value
+        # the user asked for.
+        overrides["of_is_pinned"] = True
     if req.envelope_diameter_max is not None:
         overrides["envelope_diameter_max"] = float(req.envelope_diameter_max)
     if req.envelope_length_max is not None:
@@ -452,9 +457,11 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
     elif mission.cea_table_path:
         cov.append(RequirementCoverage(
             "of", Coverage.ENFORCED, sp125_item=4,
-            constraint="propellant default (CEA surfaces loaded)",
-            reason=("γ/T_c/R vary with O/F, so the cooling-vs-performance "
-                    "trade SP-125 describes is resolvable"),
+            constraint="design variable, bounded by the sampled CEA domain",
+            reason=("γ/T_c/R vary with O/F, so O/F is a live design variable "
+                    "and the optimiser resolves the cooling-vs-performance "
+                    "trade SP-125 §2.1 describes rather than being handed a "
+                    "fixed value"),
         ))
     else:
         cov.append(RequirementCoverage(
@@ -497,6 +504,28 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
             reason=("screens the cooled thrust chamber only, which is a LOWER "
                     "BOUND on the installed envelope"),
             missing=missing,
+        ))
+
+    # --- coolant-side wall mechanism ----------------------------------------- #
+    # Not an SP-125 §2.1 requirement, but a *feasibility* statement the user
+    # must see: for methane and hydrogen the governing coolant-side limit is
+    # supercritical heat-transfer deterioration, not coking, and the cooling
+    # march cannot evaluate it with constant properties.  Reporting nothing
+    # here would let an unmodelled failure mode read as a clean design.
+    from raosim.mdo.coolant_htd import htd_availability
+
+    htd_ok, htd_reason = htd_availability(
+        prop.coolant_name,
+        # The traced cooling march carries the coolant as four constants; there
+        # is no isobaric expansion coefficient anywhere in it.
+        has_real_fluid_properties=False,
+    )
+    if not htd_ok:
+        cov.append(RequirementCoverage(
+            "coolant_wall_limit", Coverage.UNSUPPORTED,
+            reason=htd_reason,
+            missing=("CoolProp-sampled coolant property surface over (T, p)",
+                     "isobaric thermal expansion coefficient beta"),
         ))
 
     # --- operability: carried, not screened ---------------------------------- #
