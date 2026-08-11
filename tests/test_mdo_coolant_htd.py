@@ -20,7 +20,8 @@ import raosim.jax  # noqa: F401  -- float64
 import jax.numpy as jnp
 
 from raosim.mdo.coolant_htd import (
-    HTD_THRESHOLD, htd_availability, htd_group, htd_margin, screen,
+    HTD_THRESHOLD, ModelCoverageError, htd_availability, htd_group,
+    htd_margin, require_htd_coverage, screen,
 )
 
 
@@ -189,3 +190,18 @@ def test_current_mission_defaults_cannot_evaluate_the_screen():
             coolant, has_real_fluid_properties=False)
         assert available is False, combo
         assert reason
+
+
+def test_authoritative_preflight_rejects_missing_htd_coverage():
+    with pytest.raises(
+        ModelCoverageError, match="authoritative MDO model-coverage preflight"
+    ):
+        require_htd_coverage("methane")
+
+
+def test_screening_override_keeps_htd_status_unknown():
+    available, reason = require_htd_coverage(
+        "methane", allow_incomplete_physics=True
+    )
+    assert available is False
+    assert "beta" in reason

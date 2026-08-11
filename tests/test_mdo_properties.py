@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+import shutil
 
 jax = pytest.importorskip("jax")
 import jax.numpy as jnp  # noqa: E402
@@ -15,6 +16,8 @@ from raosim.mdo.properties import (  # noqa: E402
     PropertySurface2D,
     constant_chamber_surfaces,
     fritsch_carlson_slopes,
+    load_chamber_surfaces,
+    save_tables,
 )
 
 
@@ -133,3 +136,71 @@ def test_constant_surfaces_reproduce_constants_and_cstar():
     assert cstar == pytest.approx(
         characteristic_velocity(1.24, 346.0, 3550.0), rel=1e-12)
     assert isinstance(cs, ChamberSurfaces)
+
+
+def _write_table(path, *, oxidizer="LOX", fuel="RP-1", flat=False):
+    Pc = np.linspace(1.0e6, 6.0e6, 5)
+    OF = np.linspace(1.5, 3.5, 5)
+    P, O = np.meshgrid(Pc, OF, indexing="ij")
+    save_tables(
+        str(path),
+        {
+            "Pc_grid": Pc,
+            "OF_grid": OF,
+            "gamma": 1.24 + 1.0e-9 * P,
+            "Tc": 3500.0 + 0.0 * P if flat else 3500.0 - 100.0 * O,
+            "R_gas": 380.0 + 0.0 * P,
+        },
+        oxidizer=oxidizer,
+        fuel=fuel,
+    )
+    return path
+
+
+def test_sampled_domain_margin_is_exact_on_the_boundary(tmp_path):
+    s = load_chamber_surfaces(str(_write_table(tmp_path / "table.npz")))
+    assert float(s.domain_margin(1.0e6, 2.0)) == 0.0
+    assert float(s.domain_margin(3.0e6, 1.5)) == 0.0
+    assert float(s.domain_margin(3.0e6, 2.0)) > 0.0
+    assert float(s.domain_margin(0.9e6, 2.0)) < 0.0
+
+
+def test_constant_surface_axes_are_not_claimed_as_physical_bounds():
+    s = constant_chamber_surfaces(gamma=1.24, Tc=3550.0, R_gas=346.0)
+    assert float(s.domain_margin(1.0e12, 100.0)) == pytest.approx(1.0)
+
+
+def test_property_table_propellant_identity_is_enforced(tmp_path):
+    path = _write_table(
+        tmp_path / "methane.npz", oxidizer="LOX", fuel="LCH4"
+    )
+    with pytest.raises(ValueError, match="propellant identity mismatch"):
+        load_chamber_surfaces(str(path), expected_propellant="LOX/RP-1")
+
+
+def test_property_table_content_hash_detects_tampering(tmp_path):
+    path = _write_table(tmp_path / "tampered.npz")
+    with np.load(path, allow_pickle=False) as stored:
+        data = {name: np.asarray(stored[name]) for name in stored.files}
+    data["Tc"] = np.asarray(data["Tc"], dtype=float).copy()
+    data["Tc"][0, 0] += 1.0
+    np.savez(path, **data)
+    with pytest.raises(ValueError, match="SHA-256 mismatch"):
+        load_chamber_surfaces(str(path))
+
+
+def test_property_table_identity_is_content_not_path(tmp_path):
+    original = _write_table(tmp_path / "original.npz")
+    copied = tmp_path / "renamed.npz"
+    shutil.copyfile(original, copied)
+    left = load_chamber_surfaces(str(original))
+    right = load_chamber_surfaces(str(copied))
+    assert left.content_sha256 == right.content_sha256
+    assert left.source_path != right.source_path
+
+
+def test_flat_table_cannot_grant_of_optimization_coverage(tmp_path):
+    path = _write_table(tmp_path / "flat.npz", flat=True)
+    # gamma still varies with Pc but no field varies along O/F.
+    with pytest.raises(ValueError, match="meaningful O/F dependence"):
+        load_chamber_surfaces(str(path), require_of_dependence=True)

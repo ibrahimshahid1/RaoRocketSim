@@ -18,9 +18,9 @@ Contract rules
   zero is never used as an availability sentinel.
 * Human-readable names are module-level tuples, not JAX leaves.
 
-Use ``jax.jit(lambda a: solve_engine_state(DesignVector.from_array(a), mission))``
-with ``mission`` captured by the closure.  Passing a ``MissionSpec`` as a traced
-argument is neither required nor supported.
+Use an explicit :class:`~raosim.mdo.schema.DesignLayout` and
+``DesignVector.from_active_array`` inside a jitted closure.  Passing a
+``MissionSpec`` as a traced argument is neither required nor supported.
 """
 
 from __future__ import annotations
@@ -52,10 +52,15 @@ from raosim.mdo.grid import (
 )
 from raosim.mdo.properties import ChamberSurfaces
 from raosim.mdo.schema import DesignVector, MissionSpec
+from raosim.mdo.constraints import (
+    ENGINE_CONSTRAINT_NAMES,
+    ENGINE_CONSTRAINT_SPECS,
+    constraint_metadata,
+)
 
 Array = jax.Array
 
-ENGINE_STATE_SCHEMA_VERSION = 1
+ENGINE_STATE_SCHEMA_VERSION = 2
 
 
 def _digest_words(digest: bytes) -> tuple[int, ...]:
@@ -87,8 +92,10 @@ def surface_fingerprint_words(surfaces: ChamberSurfaces) -> tuple[int, ...]:
     and ``Zy``.  Hashing only aggregate moments of ``Z`` allowed different
     grids or derivative fields to collide.  This host-side fingerprint covers
     the exact canonical float64 bytes, shapes, surface names, and bundle
-    provenance.  The resulting eight words are embedded as ordinary numerical
-    constants in the pure-JAX state.
+    content metadata.  File paths/provenance are intentionally excluded: two
+    byte-identical tables copied to different paths are the same physical
+    evaluator identity.  The resulting eight words are embedded as ordinary
+    numerical constants in the pure-JAX state.
 
     ``surfaces`` is a static host object (normally captured by the jitted solve
     closure), never a traced argument.
@@ -115,8 +122,13 @@ def surface_fingerprint_words(surfaces: ChamberSurfaces) -> tuple[int, ...]:
             )
             digest.update(b"\0")
             digest.update(array.tobytes(order="C"))
-    digest.update(b"provenance\0")
-    digest.update(str(surfaces.provenance).encode("utf-8"))
+    for name in (
+        "domain_policy", "oxidizer", "fuel", "thermochemistry_mode",
+        "of_convention", "units_json", "schema_version",
+        "interpolator_version", "content_sha256",
+    ):
+        digest.update(name.encode("utf-8") + b"\0")
+        digest.update(str(getattr(surfaces, name, "")).encode("utf-8") + b"\0")
     return _digest_words(digest.digest())
 
 
@@ -137,7 +149,14 @@ def surface_signature(surfaces: ChamberSurfaces) -> Array:
     )
     metadata = {
         "version": 1,
-        "provenance": str(surfaces.provenance),
+        "identity": {
+            name: str(getattr(surfaces, name, ""))
+            for name in (
+                "domain_policy", "oxidizer", "fuel", "thermochemistry_mode",
+                "of_convention", "units_json", "schema_version",
+                "interpolator_version", "content_sha256",
+            )
+        },
         "surfaces": [
             {
                 "label": label,
@@ -197,36 +216,6 @@ def surface_signature(surfaces: ChamberSurfaces) -> Array:
     return lanes
 
 
-# Stable ordering for the numerical constraint vector.  Additions require a
-# schema-version bump unless they are appended with a backwards-compatible
-# reader policy.
-ENGINE_CONSTRAINT_NAMES = (
-    "thrust_residual",
-    "separation_margin",
-    "coking_margin_min",
-    "land_min",
-    "chug_margin_min",
-    "pintle_transition_margin",
-    "nss_margin_min",
-    "tip_speed_margin_min",
-    "aspect_ratio_margin",
-    "blockage_lo_margin",
-    "blockage_hi_margin",
-    "structural_stress_margin",
-    "wall_temp_margin",
-    "film_capacity_margin",
-    "property_domain_margin",
-    "chart_domain_margin",
-    "wall_monotonic_margin",
-    "chamber_volume_margin",
-    "jacket_thin_shell_margin",
-    "nozzle_collapse_margin",
-    "engine_residual_margin",
-    "cooling_residual_margin",
-    "solver_status_margin",
-    "finite_margin",
-)
-
 MASS_FIELD_NAMES = (
     "pump_mass",
     "motor_mass",
@@ -239,6 +228,8 @@ MASS_FIELD_NAMES = (
     "battery_objective_mass",
     "electric_feed_package_exact_mass",
     "electric_feed_package_objective_mass",
+    "dry_mass_partial_exact_mass",
+    "dry_mass_partial_objective_mass",
     "thrust_chamber_liner_mass",
     "thrust_chamber_land_mass",
     "thrust_chamber_closeout_mass",
@@ -414,8 +405,14 @@ class MassState(NamedTuple):
 
 class ConstraintState(NamedTuple):
     values: Array
+    applicable: Array
+    available: Array
+    reason_codes: Array
+    required: Array
     finite: Array
     inequality_values: Array
+    all_required_available: Array
+    all_required_nonnegative: Array
     all_inequalities_nonnegative: Array
 
 
@@ -447,7 +444,13 @@ class InputConventionState(NamedTuple):
     couple_eta_cstar: Array
     ambient_pressure: Array
     burn_time: Array
+    # Effective O/F is authoritative after solving.  ``mission_OF`` preserves
+    # the fixed value/optimizer seed for identity validation; the explicit
+    # boolean records the active DesignLayout without overloading either
+    # numerical value.
     OF: Array
+    mission_OF: Array
+    of_is_variable: Array
     eta_cstar_nominal: Array
     eta_CF: Array
     throat_ru_factor: Array
@@ -542,7 +545,7 @@ def engine_state_from_result(
     topo: GridTopology = GridTopology(),
     couple_eta_cstar: bool = False,
 ) -> EngineState:
-    """Convert a solved discipline result to the version-1 numerical contract.
+    """Convert a solved discipline result to the version-2 numerical contract.
 
     This function is pure array algebra and may run inside ``jit``. ``result``
     must have been produced with the same ``mission``, ``surfaces``, ``topo``,
@@ -551,10 +554,11 @@ def engine_state_from_result(
     surfaces = surfaces if surfaces is not None else chamber_surfaces_for(mission)
     Pc = jnp.asarray(x.Pc, dtype=jnp.float64)
     eps = jnp.asarray(x.eps, dtype=jnp.float64)
-    gamma = surfaces.gamma(Pc, mission.OF)
-    R_gas = surfaces.R_gas(Pc, mission.OF)
-    Tc = surfaces.Tc(Pc, mission.OF)
-    cstar_ideal = surfaces.c_star_ideal(Pc, mission.OF)
+    effective_of = jnp.asarray(result.OF, dtype=jnp.float64)
+    gamma = surfaces.gamma(Pc, effective_of)
+    R_gas = surfaces.R_gas(Pc, effective_of)
+    Tc = surfaces.Tc(Pc, effective_of)
+    cstar_ideal = surfaces.c_star_ideal(Pc, effective_of)
     cstar_delivered = result.eta_cstar * cstar_ideal
 
     Rt = result.Rt
@@ -567,7 +571,7 @@ def engine_state_from_result(
     Ve_ideal = Isp_ideal * mission.g0
     Ve_delivered = result.Isp * mission.g0
 
-    mdot_fuel = result.mdot / (1.0 + mission.OF)
+    mdot_fuel = result.mdot / (1.0 + effective_of)
     mdot_oxidizer = result.mdot - mdot_fuel
     mdot_film = mdot_fuel * x.film_frac
     mdot_fuel_core = mdot_fuel - mdot_film
@@ -577,7 +581,7 @@ def engine_state_from_result(
     performance = PerformanceState(
         Pc=Pc,
         Pa=jnp.asarray(mission.Pa, dtype=jnp.float64),
-        OF=jnp.asarray(mission.OF, dtype=jnp.float64),
+        OF=effective_of,
         gamma=gamma,
         R_gas=R_gas,
         Tc=Tc,
@@ -732,7 +736,9 @@ def engine_state_from_result(
         batt_governing,
         batt_objective,
         package_exact,
-        result.objective_mass,
+        result.electric_package_objective_mass,
+        result.dry_mass_partial_exact_mass,
+        result.dry_mass_partial_objective_mass,
         chamber.liner,
         chamber.lands,
         chamber.closeout,
@@ -745,21 +751,49 @@ def engine_state_from_result(
         nan,
     ])
     mass_availability = jnp.asarray(
-        [True] * 15 + [False, False], dtype=jnp.bool_)
+        [True] * 17 + [False, False], dtype=jnp.bool_)
     masses = MassState(values=mass_values, availability=mass_availability)
 
     constraint_values = jnp.stack([
         jnp.asarray(result.constraints[name], dtype=jnp.float64)
         for name in ENGINE_CONSTRAINT_NAMES
     ])
+    applicable_np, available_np, required_np, reasons_np = constraint_metadata(
+        mission, surfaces
+    )
+    applicable = jnp.asarray(applicable_np, dtype=jnp.bool_)
+    available = jnp.asarray(available_np, dtype=jnp.bool_)
+    required = jnp.asarray(required_np, dtype=jnp.bool_)
+    reason_codes = jnp.asarray(reasons_np, dtype=jnp.int32)
     # The first item is an equality residual. The remaining entries are
     # conventionally margins >= 0.
     inequality_values = constraint_values[1:]
+    active_required = applicable & required
+    known_required = active_required & available
+    required_finite = jnp.all(
+        jnp.where(known_required, jnp.isfinite(constraint_values), True)
+    )
+    all_required_available = jnp.all(~active_required | available)
+    all_required_nonnegative = jnp.all(
+        jnp.where(known_required, constraint_values >= 0.0, True)
+    )
     constraints = ConstraintState(
         values=constraint_values,
-        finite=jnp.all(jnp.isfinite(constraint_values)),
+        applicable=applicable,
+        available=available,
+        reason_codes=reason_codes,
+        required=required,
+        finite=required_finite,
         inequality_values=inequality_values,
-        all_inequalities_nonnegative=jnp.all(inequality_values >= 0.0),
+        all_required_available=all_required_available,
+        all_required_nonnegative=all_required_nonnegative,
+        # Compatibility boolean: only a complete pass is true.  An unavailable
+        # required model (for example methane/hydrogen HTD) is never laundered
+        # into feasibility.
+        all_inequalities_nonnegative=(
+            all_required_available & required_finite
+            & all_required_nonnegative
+        ),
     )
 
     scales = StateScales.from_mission(mission)
@@ -806,7 +840,11 @@ def engine_state_from_result(
         couple_eta_cstar=jnp.asarray(couple_eta_cstar, dtype=jnp.bool_),
         ambient_pressure=jnp.asarray(mission.Pa, dtype=jnp.float64),
         burn_time=jnp.asarray(mission.burn_time, dtype=jnp.float64),
-        OF=jnp.asarray(mission.OF, dtype=jnp.float64),
+        OF=effective_of,
+        mission_OF=jnp.asarray(mission.OF, dtype=jnp.float64),
+        of_is_variable=jnp.asarray(
+            x.layout.of_is_variable, dtype=jnp.bool_
+        ),
         eta_cstar_nominal=jnp.asarray(mission.eta_cstar, dtype=jnp.float64),
         eta_CF=jnp.asarray(mission.eta_CF, dtype=jnp.float64),
         throat_ru_factor=jnp.asarray(
@@ -921,7 +959,7 @@ def engine_state_from_result(
     return EngineState(
         schema_version=jnp.asarray(
             ENGINE_STATE_SCHEMA_VERSION, dtype=jnp.int32),
-        design_vector=x.to_array(),
+        design_vector=x.to_contract_array(effective_of=effective_of),
         input_conventions=input_conventions,
         performance=performance,
         geometry=geometry,

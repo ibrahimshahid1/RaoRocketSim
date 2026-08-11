@@ -35,14 +35,17 @@ the property the "requirements in, parameterized parts out" workflow needs.
 ## Physical basis
 
 Every entry is a solid-of-revolution or prismatic volume times a catalog
-density. That is the relation NASA SP-125 uses for preliminary shell mass:
+density. The volume relations below are geometric calculations. NASA SP-125
+corroborates the thin cylindrical-shell relation in its **propellant-tank**
+design chapter; it is not cited as a thrust-chamber structural or mass model:
 
 ```
 W_c = 2 π a l_c t_c ρ            (SP-125 eq. 8-32, printed p. 339)
 ```
 
-*Design of Liquid Propellant Rocket Engines*, Huzel & Huang, NASA SP-125, 1971
-(`propulsion_texts/19710019929.pdf`, ch. VIII). Here `a` is the **nominal
+*Design of Liquid Propellant Rocket Engines*, Huzel & Huang, NASA SP-125, 1967
+(`propulsion_texts/19710019929.pdf`, Ch. VIII, “Design of Propellant Tanks,”
+§8.1.2.3, source-PDF p. 348 / printed p. 339). Here `a` is the **nominal
 (mid-surface)** radius, so a shell of thickness `t` standing off a gas-side
 radius `r` contributes `2π(r + t/2)·t` per unit meridional arc — Pappus's
 centroid theorem. Per station:

@@ -13,8 +13,10 @@ class, which is exactly the defect
 ``docs/GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md`` §2 is about.  Neither
 limit is actually set by thrust or by kerosene:
 
-* **Chamber pressure is set by the engine cycle.**  Yang et al. (2004) derive a
-  different ceiling for each, and the mechanism differs in each case too.
+* **Chamber-pressure guidance depends on the engine cycle.**  Parsley and
+  Zhang (2004) describe different limiting or optimizing mechanisms for the
+  common pump-fed cycles.  Their approximate optima and onset-of-limitation
+  values are not universal hard-validity endpoints.
 * **Expansion ratio is set by the model's own validity domain.**  The analytic
   TOP wall comes from the Rao/NASA chart, which is tabulated over a specific
   box; outside it ``rao_chart_domain_violation`` already declares the design
@@ -30,11 +32,12 @@ the same limit is how the two pipelines drifted apart before R0.
 
 Sources
 -------
-Yang, V. et al., *Thermodynamic Power Cycles for Pump-Fed Liquid Rocket
-Engines*, 2004 —
+Parsley, R. C. and Zhang, B., *Thermodynamic Power Cycles for Pump-Fed Liquid
+Rocket Engines*, 2004, Chapter 18, DOI
+10.2514/5.9781600866760.0621.0648 —
 ``propulsion_texts/fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf``.
 
-Huzel & Huang, *Design of Liquid Propellant Rocket Engines*, NASA SP-125, 1971,
+Huzel & Huang, *Design of Liquid Propellant Rocket Engines*, NASA SP-125, 1967,
 ch. V and ch. III — ``propulsion_texts/19710019929.pdf``.
 
 NASA MSFC, *Liquid Propulsion: Propellant Feed System Design*, 2010 —
@@ -50,23 +53,38 @@ if TYPE_CHECKING:  # pragma: no cover
 
 __all__ = [
     "ArchitecturePressureLimit",
+    "ArchitecturePressureWindow",
     "PRESSURE_LIMITS",
     "chamber_pressure_bounds",
+    "chamber_pressure_search_window",
+    "chamber_pressure_hard_domain",
     "expansion_ratio_bounds",
 ]
 
 
 class ArchitecturePressureLimit(NamedTuple):
-    """Chamber-pressure window for one feed architecture, with its basis."""
+    """Numerical search window for one feed architecture, with its basis.
+
+    ``hard_validity`` is intentionally explicit.  A value can be sourced from
+    literature and still be a performance optimum, approximate scaling limit,
+    or initialization recommendation rather than a physical validity bound.
+    """
 
     lower: float          # Pa
     upper: float          # Pa
     mechanism: str        # what sets the ceiling
     source: str           # where the number comes from
     literature: bool      # False => repository finding, not a published limit
+    hard_validity: bool = False
 
 
-#: Ceilings are *architecture* properties, not thrust or propellant properties.
+# Clearer public spelling; retain the old type name for compatibility.
+ArchitecturePressureWindow = ArchitecturePressureLimit
+
+
+#: Search guidance is architecture-dependent, but these endpoints are not
+#: universal hard domains.  Live component constraints and validated property
+#: surfaces determine admissibility.
 #:
 #: Only ``electric_pump`` is implemented in ``raosim.mdo`` today; the rest are
 #: carried so that adding a cycle picks up its own ceiling rather than
@@ -100,7 +118,7 @@ PRESSURE_LIMITS: dict[str, ArchitecturePressureLimit] = {
         source="repository finding (TEST_PROMPT.md), not a published limit",
         literature=False,
     ),
-    # Yang 2004 sec. I: "Chamber pressure for a gas generator cycle is selected
+    # Parsley & Zhang 2004 sec. I: "Chamber pressure for a gas generator cycle is selected
     # to optimize total engine performance ... This performance optimum
     # generally occurs at 10-15 MPa of chamber pressure, depending on
     # propellant selection, with an overboard flow generally less than 4 % of
@@ -108,10 +126,11 @@ PRESSURE_LIMITS: dict[str, ArchitecturePressureLimit] = {
     "gas_generator": ArchitecturePressureLimit(
         lower=3.0e6, upper=15.0e6,
         mechanism="total-engine performance optimum including overboard flow",
-        source="Yang et al. 2004 sec. I",
+        source=("Parsley & Zhang 2004, Chapter 18 sec. I, PDF p. 3, "
+                "DOI 10.2514/5.9781600866760.0621.0648"),
         literature=True,
     ),
-    # Yang 2004 sec. I: "The energy available for the expander cycle is limited
+    # Parsley & Zhang 2004 sec. I: "The energy available for the expander cycle is limited
     # by the thrust chamber and nozzle heat transfer, which limits potential
     # chamber pressure to ~10 MPa."  Note also sec. II's propellant
     # restriction: expander fuels are "limited to hydrogen, methane, or
@@ -120,16 +139,18 @@ PRESSURE_LIMITS: dict[str, ArchitecturePressureLimit] = {
     "expander": ArchitecturePressureLimit(
         lower=2.0e6, upper=10.0e6,
         mechanism="thrust chamber and nozzle heat transfer available to the turbine",
-        source="Yang et al. 2004 sec. I and sec. II",
+        source=("Parsley & Zhang 2004, Chapter 18 sec. I, PDF p. 3, "
+                "DOI 10.2514/5.9781600866760.0621.0648"),
         literature=True,
     ),
-    # Yang 2004 sec. I: "The performance of a staged combustion cycle generally
+    # Parsley & Zhang 2004 sec. I: "The performance of a staged combustion cycle generally
     # begins to become hardware limited between 20 and 25 MPa chamber
     # pressure."
     "staged_combustion": ArchitecturePressureLimit(
         lower=5.0e6, upper=25.0e6,
         mechanism="pump discharge pressure and turbine temperature hardware limits",
-        source="Yang et al. 2004 sec. I",
+        source=("Parsley & Zhang 2004, Chapter 18 sec. I, PDF p. 3, "
+                "DOI 10.2514/5.9781600866760.0621.0648"),
         literature=True,
     ),
 }
@@ -138,7 +159,10 @@ PRESSURE_LIMITS: dict[str, ArchitecturePressureLimit] = {
 def chamber_pressure_bounds(
     feed_architecture: str = "electric_pump",
 ) -> ArchitecturePressureLimit:
-    """Chamber-pressure window for a feed architecture.
+    """Compatibility alias for :func:`chamber_pressure_search_window`.
+
+    The returned endpoints condition the numerical search; they are not a
+    declaration that pressures outside them are physically invalid.
 
     Raises
     ------
@@ -148,6 +172,14 @@ def chamber_pressure_bounds(
         exists to remove.
     """
 
+    return chamber_pressure_search_window(feed_architecture)
+
+
+def chamber_pressure_search_window(
+    feed_architecture: str = "electric_pump",
+) -> ArchitecturePressureWindow:
+    """Evidence-labelled numerical search guidance for an architecture."""
+
     key = str(feed_architecture).strip().lower()
     if key not in PRESSURE_LIMITS:
         raise KeyError(
@@ -155,6 +187,23 @@ def chamber_pressure_bounds(
             f"known: {sorted(PRESSURE_LIMITS)}"
         )
     return PRESSURE_LIMITS[key]
+
+
+def chamber_pressure_hard_domain(
+    feed_architecture: str = "electric_pump",
+) -> tuple[float, float] | None:
+    """Return a true architecture hard domain, if one is actually encoded.
+
+    None of the present architecture windows qualifies.  In particular, the
+    historical 1.5--6 MPa electric-pump box is a repository search window, not
+    a universal physical domain.  Sampled property tables and live thermal,
+    structural, pump, and power constraints provide hard limits elsewhere.
+    """
+
+    window = chamber_pressure_search_window(feed_architecture)
+    if not window.hard_validity:
+        return None
+    return window.lower, window.upper
 
 
 def expansion_ratio_bounds(mission: "MissionSpec | None" = None

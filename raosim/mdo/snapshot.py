@@ -33,7 +33,8 @@ import numpy as np
 
 
 CONTRACT_NAME = "raosim.engine-analysis-snapshot"
-CONTRACT_VERSION = "1.0.0"
+SNAPSHOT_CONTRACT_VERSION = "2.0.0"
+CONTRACT_VERSION = SNAPSHOT_CONTRACT_VERSION
 FILM_INJECTOR_UNAVAILABLE_REASON = (
     "a separate film injector/orifice and branch state are not modeled; the "
     "retained main-pintle screening calculation uses total fuel and is not a "
@@ -118,6 +119,8 @@ SNAPSHOT_FIELD_MANIFEST: dict[str, tuple[str, ...]] = {
         "battery_power_installed_mass_kg", "battery_selected_mass_kg",
         "battery_objective_mass_kg", "electric_package_mass_kg",
         "electric_package_objective_mass_kg",
+        "dry_mass_partial_exact_mass_kg",
+        "dry_mass_partial_objective_mass_kg",
         "thrust_chamber_liner_mass_kg", "thrust_chamber_land_mass_kg",
         "thrust_chamber_closeout_mass_kg", "thrust_chamber_mass_kg",
         "injector_mass_kg", "total_engine_package_mass_kg",
@@ -125,7 +128,8 @@ SNAPSHOT_FIELD_MANIFEST: dict[str, tuple[str, ...]] = {
         "raw_mass_ledger",
     ),
     "constraints_gates": (
-        "all_constraints_feasible", "physics_feasible",
+        "all_constraints_feasible", "optimizer_constraints_feasible",
+        "numerical_validity", "physics_feasible", "requirements_feasible",
         "workflow_readiness_feasible", "constraint_margins", "diagnostics",
         "outer_thrust_residual", "cooling_residual_max_abs_k",
         "authoritative_design_gates",
@@ -328,6 +332,63 @@ def maybe(value: Any, reason: str) -> SnapshotValue:
         return available(value)
     except ValueError as exc:
         return unavailable(f"{reason}; resolved value was invalid: {exc}")
+
+
+def _tri_state_value(
+    status: str,
+    *,
+    unknown_reason: str,
+) -> SnapshotValue:
+    """Represent pass/fail/unknown without coercing unknown to ``False``."""
+
+    if status == "pass":
+        return available(True)
+    if status == "fail":
+        return available(False)
+    if status == "unknown":
+        return unavailable(unknown_reason)
+    raise ValueError(f"unsupported feasibility status {status!r}")
+
+
+def _constraint_margin_payload(
+    specs: Any,
+    values: np.ndarray,
+    applicable: np.ndarray,
+    availability: np.ndarray,
+    required: np.ndarray,
+    reason_codes: np.ndarray,
+    mission: Any,
+) -> dict[str, Any]:
+    """Build JSON-safe row records for the shared constraint manifest."""
+
+    from raosim.mdo.constraints import reason_text
+
+    payload: dict[str, Any] = {}
+    for index, spec in enumerate(specs):
+        row_value = float(values[index])
+        row_reason = reason_text(int(reason_codes[index]), spec, mission)
+        if bool(applicable[index]) and bool(availability[index]):
+            if np.isfinite(row_value):
+                value: float | None = row_value
+            else:
+                value = None
+                row_reason = "constraint margin is non-finite"
+        else:
+            value = None
+        payload[str(spec.engine_key)] = {
+            "name": spec.name,
+            "kind": spec.kind,
+            "optimizer_role": spec.optimizer_role,
+            "category": spec.category,
+            "units": spec.units,
+            "source_id": spec.source_id,
+            "value": value,
+            "applicable": bool(applicable[index]),
+            "available": bool(availability[index]),
+            "required": bool(required[index]),
+            "reason": row_reason or None,
+        }
+    return payload
 
 
 @dataclass(frozen=True)
@@ -589,7 +650,7 @@ def _looks_like_engine_state(value: Any) -> bool:
 
 
 def _validate_engine_state_schema(state: Any) -> None:
-    """Reject states whose numerical field semantics are not version 1."""
+    """Reject states whose numerical field semantics are not version 2."""
 
     from raosim.mdo.state import ENGINE_STATE_SCHEMA_VERSION
 
@@ -603,7 +664,8 @@ def _validate_engine_state_schema(state: Any) -> None:
         raise ValueError(
             "unsupported EngineState schema version: "
             f"state={actual}, adapter={ENGINE_STATE_SCHEMA_VERSION}; "
-            "use an explicit state migration before snapshot conversion"
+            "v1 O/F semantics cannot be relabeled or migrated safely; "
+            "re-solve with the original MissionSpec and property surfaces"
         )
 
 
@@ -668,7 +730,7 @@ def _validate_engine_state_mission(
         "thrust": "thrust",
         "ambient_pressure": "Pa",
         "burn_time": "burn_time",
-        "OF": "OF",
+        "mission_OF": "OF",
         "eta_cstar_nominal": "eta_cstar",
         "eta_CF": "eta_CF",
         "throat_ru_factor": "throat_ru_factor",
@@ -780,6 +842,42 @@ def _validate_engine_state_mission(
                 f"{mission_name}: state={state_value:.12g}, "
                 f"mission={mission_value:.12g}"
             )
+    from raosim.mdo.schema import validate_mixture_ratio
+
+    try:
+        effective_of = validate_mixture_ratio(
+            conventions.OF, name="EngineState.input_conventions.OF"
+        )
+    except ValueError as exc:
+        mismatches.append(str(exc))
+    else:
+        performance_of = float(np.asarray(state.performance.OF))
+        contract_of = float(np.asarray(state.design_vector, dtype=float)[-1])
+        if not np.isclose(
+            effective_of, performance_of, rtol=1.0e-12, atol=1.0e-12
+        ):
+            mismatches.append(
+                "effective OF differs between input conventions and performance"
+            )
+        if not np.isclose(
+            effective_of, contract_of, rtol=1.0e-12, atol=1.0e-12
+        ):
+            mismatches.append(
+                "effective OF differs between input conventions and the "
+                "fixed design contract"
+            )
+        if (
+            not bool(np.asarray(conventions.of_is_variable))
+            and not np.isclose(
+                effective_of,
+                float(mission.OF),
+                rtol=1.0e-12,
+                atol=1.0e-12,
+            )
+        ):
+            mismatches.append(
+                "fixed-layout effective OF differs from MissionSpec.OF"
+            )
     pump_speed = float(np.asarray(state.design_vector, dtype=float)[5])
     if not np.isclose(
         float(np.asarray(conventions.pump_speed_rpm)),
@@ -810,9 +908,12 @@ def _snapshot_from_engine_state(
     from raosim.mdo.engine import chamber_surfaces_for
     from raosim.mdo.schema import DesignVector
     from raosim.mdo.state import (
-        ENGINE_CONSTRAINT_NAMES,
         MASS_FIELD_NAMES,
         MASS_UNAVAILABLE_REASONS,
+    )
+    from raosim.mdo.constraints import (
+        ENGINE_CONSTRAINT_SPECS,
+        status_from_rows,
     )
 
     resolved_surfaces = (
@@ -1047,7 +1148,7 @@ def _snapshot_from_engine_state(
         else:
             mass_by_name[name] = unavailable(
                 MASS_UNAVAILABLE_REASONS.get(
-                    name, f"EngineState v1 marks {name} unavailable"
+                    name, f"EngineState v2 marks {name} unavailable"
                 )
             )
     masses = SnapshotSection({
@@ -1076,6 +1177,12 @@ def _snapshot_from_engine_state(
         "electric_package_objective_mass_kg": mass_by_name[
             "electric_feed_package_objective_mass"
         ],
+        "dry_mass_partial_exact_mass_kg": mass_by_name[
+            "dry_mass_partial_exact_mass"
+        ],
+        "dry_mass_partial_objective_mass_kg": mass_by_name[
+            "dry_mass_partial_objective_mass"
+        ],
         "thrust_chamber_liner_mass_kg": mass_by_name[
             "thrust_chamber_liner_mass"
         ],
@@ -1100,32 +1207,118 @@ def _snapshot_from_engine_state(
         }),
     })
     constraint_values = np.asarray(state.constraints.values, dtype=float)
-    margin_dict = dict(
-        zip(ENGINE_CONSTRAINT_NAMES, constraint_values.tolist(), strict=True)
+    constraint_applicable = np.asarray(
+        state.constraints.applicable, dtype=bool
+    )
+    constraint_available = np.asarray(
+        state.constraints.available, dtype=bool
+    )
+    constraint_required = np.asarray(
+        state.constraints.required, dtype=bool
+    )
+    constraint_reasons = np.asarray(
+        state.constraints.reason_codes, dtype=np.int32
+    )
+    optimizer_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.optimizer_role == "hard"
+    )
+    numerical_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category == "numerical"
+    )
+    physics_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category not in {"numerical", "requirement"}
+    )
+    requirement_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category == "requirement"
+    )
+    status_args = (
+        constraint_values,
+        constraint_applicable,
+        constraint_available,
+        constraint_required,
+    )
+    all_status = status_from_rows(*status_args, nonfinite="unknown")
+    optimizer_status = status_from_rows(
+        *status_args, indices=optimizer_indices, nonfinite="unknown"
+    )
+    numerical_status = status_from_rows(
+        *status_args, indices=numerical_indices
+    )
+    physics_status = status_from_rows(
+        *status_args, indices=physics_indices, nonfinite="unknown"
+    )
+    requirement_row_status = status_from_rows(
+        *status_args, indices=requirement_indices, nonfinite="unknown"
+    )
+    # The engine state contains only engine-side limit rows.  It does not carry
+    # the complete ResolvedRequirement (notably the Isp epsilon contract), so a
+    # non-failing subset cannot be promoted to a requirements pass.
+    requirements_status = (
+        "fail" if requirement_row_status == "fail" else "unknown"
+    )
+    margin_dict = _constraint_margin_payload(
+        ENGINE_CONSTRAINT_SPECS,
+        constraint_values,
+        constraint_applicable,
+        constraint_available,
+        constraint_required,
+        constraint_reasons,
+        mission,
     )
     constraints_gates = SnapshotSection({
-        "all_constraints_feasible": available(
-            bool(state.constraints.all_inequalities_nonnegative)
-            and bool(state.constraints.finite)
-            and bool(state.residuals.all_converged)
+        "all_constraints_feasible": _tri_state_value(
+            all_status,
+            unknown_reason=(
+                "one or more applicable required constraint models are "
+                "unavailable"
+            ),
         ),
-        "physics_feasible": available(
-            bool(state.constraints.all_inequalities_nonnegative)
-            and bool(state.constraints.finite)
-            and bool(state.residuals.all_converged)
+        "optimizer_constraints_feasible": _tri_state_value(
+            optimizer_status,
+            unknown_reason=(
+                "one or more applicable optimizer constraint models are "
+                "unavailable"
+            ),
+        ),
+        "numerical_validity": _tri_state_value(
+            numerical_status,
+            unknown_reason=(
+                "one or more mandatory numerical convergence checks are "
+                "unavailable"
+            ),
+        ),
+        "physics_feasible": _tri_state_value(
+            physics_status,
+            unknown_reason=(
+                "one or more applicable physical mechanisms lack validated "
+                "model coverage"
+            ),
+        ),
+        "requirements_feasible": _tri_state_value(
+            requirements_status,
+            unknown_reason=(
+                "the EngineState does not retain the complete resolved "
+                "requirement contract, including the Isp epsilon row"
+            ),
         ),
         "workflow_readiness_feasible": unavailable(
             "the MDO state evaluates physics/numerical constraints, not "
             "authoritative workflow, CAD, release, or readiness gates"
         ),
-        "constraint_margins": maybe(
-            margin_dict,
-            "one or more MDO constraint margins were non-finite",
-        ),
+        "constraint_margins": available(margin_dict),
         "diagnostics": available({
             "state_schema_version": int(state.schema_version),
             "all_residuals_converged": bool(state.residuals.all_converged),
             "finite": bool(state.residuals.finite),
+            "all_constraints_status": all_status,
+            "optimizer_constraints_status": optimizer_status,
+            "numerical_validity_status": numerical_status,
+            "physics_status": physics_status,
+            "requirements_status": requirements_status,
         }),
         "outer_thrust_residual": available(state.residuals.outer[0]),
         "cooling_residual_max_abs_k": available(state.residuals.cooling_max),
@@ -1219,8 +1412,22 @@ def _snapshot_from_engine_result(
     from raosim.mdo.grid import (
         build_station_grid, chamber_barrel_length, chamber_volume,
     )
+    from raosim.mdo.constraints import (
+        ConstraintReasonCode,
+        ENGINE_CONSTRAINT_SPECS,
+        constraint_metadata,
+        status_from_rows,
+    )
+    from raosim.mdo.engine import chamber_surfaces_for
+    from raosim.mdo.schema import validate_mixture_ratio
 
     d = _design_dict(design)
+    of = validate_mixture_ratio(
+        getattr(result, "OF", None), name="legacy EngineResult.OF"
+    )
+    # Provenance is a fixed physical contract even when the incoming fixed-mode
+    # mapping came from a legacy sentinel-bearing DesignVector.
+    d["OF"] = of
     Pc = float(d["Pc"])
     eps = float(d["eps"])
     Rt = float(np.asarray(result.Rt))
@@ -1232,7 +1439,7 @@ def _snapshot_from_engine_result(
     cstar_del = float(result.Isp) * float(mission.g0) / max(cf_del, 1.0e-30)
     cstar_ideal = cstar_del / max(eta_cstar, 1.0e-30)
     thrust = cf_del * Pc * np.pi * Rt * Rt
-    mdot_f = mdot / (1.0 + float(mission.OF))
+    mdot_f = mdot / (1.0 + of)
     mdot_o = mdot - mdot_f
 
     grid = build_station_grid(result.Rt, d["eps"], mission)
@@ -1252,7 +1459,7 @@ def _snapshot_from_engine_result(
         "mass_flow_total_kg_s": available(mdot),
         "mass_flow_fuel_kg_s": available(mdot_f),
         "mass_flow_oxidizer_kg_s": available(mdot_o),
-        "mixture_ratio": available(float(mission.OF)),
+        "mixture_ratio": available(of),
         "cf_ideal": available(cf_ideal),
         "cf_delivered": available(cf_del),
         "c_star_ideal_m_s": available(cstar_ideal),
@@ -1507,6 +1714,30 @@ def _snapshot_from_engine_result(
         + float(feed.inverter_mass)
         + battery_selected
     )
+    electric_package_objective = getattr(
+        result,
+        "electric_package_objective_mass",
+        getattr(result, "objective_mass", result.package_mass),
+    )
+    chamber_mass_value = raw_ledger.get("thrust_chamber")
+    dry_mass_partial_exact = getattr(
+        result,
+        "dry_mass_partial_exact_mass",
+        (
+            electric_package_exact + float(chamber_mass_value)
+            if chamber_mass_value is not None
+            else None
+        ),
+    )
+    dry_mass_partial_objective = getattr(
+        result,
+        "dry_mass_partial_objective_mass",
+        (
+            float(electric_package_objective) + float(chamber_mass_value)
+            if chamber_mass_value is not None
+            else None
+        ),
+    )
     masses = SnapshotSection({
         "pump_mass_kg": available(feed.pump_mass),
         "motor_mass_kg": available(feed.motor_mass),
@@ -1534,7 +1765,15 @@ def _snapshot_from_engine_result(
         ),
         "electric_package_mass_kg": available(electric_package_exact),
         "electric_package_objective_mass_kg": available(
-            getattr(result, "objective_mass", result.package_mass)
+            electric_package_objective
+        ),
+        "dry_mass_partial_exact_mass_kg": maybe(
+            dry_mass_partial_exact,
+            _LEGACY_NO_CHAMBER_MASS,
+        ),
+        "dry_mass_partial_objective_mass_kg": maybe(
+            dry_mass_partial_objective,
+            _LEGACY_NO_CHAMBER_MASS,
         ),
         "thrust_chamber_liner_mass_kg": maybe(
             raw_ledger.get("thrust_chamber_liner"),
@@ -1585,40 +1824,117 @@ def _snapshot_from_engine_result(
         key: _host_value(value)
         for key, value in dict(getattr(result, "diagnostics", {})).items()
     }
-    # ``thrust_residual`` is an equality, not a signed inequality margin.  A
-    # tiny negative converged residual must not make the host snapshot claim
-    # the design is infeasible.
-    inequality_margins = [
-        value for name, value in margins.items() if name != "thrust_residual"
-    ]
-    inequality_margins_finite = bool(inequality_margins) and all(
-        isinstance(value, (int, float))
-        and np.isfinite(float(value))
-        for value in inequality_margins
+    resolved_surfaces = chamber_surfaces_for(mission)
+    (
+        constraint_applicable,
+        constraint_available,
+        constraint_required,
+        constraint_reasons,
+    ) = constraint_metadata(mission, resolved_surfaces)
+    constraint_values = np.asarray([
+        float(margins.get(str(spec.engine_key), np.nan))
+        for spec in ENGINE_CONSTRAINT_SPECS
+    ], dtype=float)
+    missing_rows = np.asarray([
+        str(spec.engine_key) not in margins for spec in ENGINE_CONSTRAINT_SPECS
+    ], dtype=bool)
+    # Compatibility results can predate rows in the current manifest.  A
+    # missing applicable row is unknown model coverage, never an implicit pass.
+    missing_applicable = missing_rows & constraint_applicable
+    constraint_available = constraint_available & ~missing_applicable
+    constraint_reasons = np.where(
+        missing_applicable,
+        int(ConstraintReasonCode.MODEL_UNAVAILABLE),
+        constraint_reasons,
+    ).astype(np.int32)
+    optimizer_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.optimizer_role == "hard"
     )
-    finite_inequality_margins = (
-        [float(value) for value in inequality_margins]
-        if inequality_margins_finite
-        else []
+    numerical_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category == "numerical"
     )
-    physics_feasible = (
-        inequality_margins_finite
-        and all(v >= 0.0 for v in finite_inequality_margins)
-        and bool(getattr(result, "solver_status_ok", False))
-        and bool(getattr(result, "solver_converged", False))
-        and bool(getattr(result, "finite", False))
+    physics_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category not in {"numerical", "requirement"}
+    )
+    requirement_indices = tuple(
+        index for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category == "requirement"
+    )
+    status_args = (
+        constraint_values,
+        constraint_applicable,
+        constraint_available,
+        constraint_required,
+    )
+    all_status = status_from_rows(*status_args, nonfinite="unknown")
+    optimizer_status = status_from_rows(
+        *status_args, indices=optimizer_indices, nonfinite="unknown"
+    )
+    numerical_status = status_from_rows(
+        *status_args, indices=numerical_indices
+    )
+    physics_status = status_from_rows(
+        *status_args, indices=physics_indices, nonfinite="unknown"
+    )
+    requirement_row_status = status_from_rows(
+        *status_args, indices=requirement_indices, nonfinite="unknown"
+    )
+    requirements_status = (
+        "fail" if requirement_row_status == "fail" else "unknown"
+    )
+    margin_payload = _constraint_margin_payload(
+        ENGINE_CONSTRAINT_SPECS,
+        constraint_values,
+        constraint_applicable,
+        constraint_available,
+        constraint_required,
+        constraint_reasons,
+        mission,
     )
     gates = SnapshotSection({
-        "all_constraints_feasible": available(physics_feasible),
-        "physics_feasible": available(physics_feasible),
+        "all_constraints_feasible": _tri_state_value(
+            all_status,
+            unknown_reason=(
+                "one or more applicable required constraint models are "
+                "unavailable"
+            ),
+        ),
+        "optimizer_constraints_feasible": _tri_state_value(
+            optimizer_status,
+            unknown_reason=(
+                "one or more applicable optimizer constraint models are "
+                "unavailable"
+            ),
+        ),
+        "numerical_validity": _tri_state_value(
+            numerical_status,
+            unknown_reason=(
+                "one or more mandatory numerical convergence checks are "
+                "unavailable"
+            ),
+        ),
+        "physics_feasible": _tri_state_value(
+            physics_status,
+            unknown_reason=(
+                "one or more applicable physical mechanisms lack validated "
+                "model coverage"
+            ),
+        ),
+        "requirements_feasible": _tri_state_value(
+            requirements_status,
+            unknown_reason=(
+                "legacy EngineResult does not retain the complete resolved "
+                "requirement contract, including the Isp epsilon row"
+            ),
+        ),
         "workflow_readiness_feasible": unavailable(
             "the MDO result evaluates physics/numerical constraints, not "
             "authoritative workflow, CAD, release, or readiness gates"
         ),
-        "constraint_margins": maybe(
-            margins,
-            "one or more legacy MDO constraint margins were non-finite",
-        ),
+        "constraint_margins": available(margin_payload),
         "diagnostics": available({
             **diagnostics,
             "solver_status_ok": bool(
@@ -1628,6 +1944,11 @@ def _snapshot_from_engine_result(
                 getattr(result, "solver_converged", False)
             ),
             "finite": bool(getattr(result, "finite", False)),
+            "all_constraints_status": all_status,
+            "optimizer_constraints_status": optimizer_status,
+            "numerical_validity_status": numerical_status,
+            "physics_status": physics_status,
+            "requirements_status": requirements_status,
         }),
         "outer_thrust_residual": available(result.thrust_residual),
         "cooling_residual_max_abs_k": available(
@@ -1707,9 +2028,21 @@ def _mdo_coolant_name(mission: Any) -> str:
 
 
 def _material_assumptions(mission: Any) -> dict[str, Any]:
+    """Report the traced wall constants and whether an alloy actually backs them.
+
+    ``liner_material_name is None`` means the class-default constants are in
+    force and no catalog record was applied.  Those defaults are not any one
+    alloy, so the report must not name one: it says ``unattributed`` and marks
+    the selection unresolved rather than implying a material was chosen.
+    """
+
+    liner = getattr(mission, "liner_material_name", None)
+    closeout = getattr(mission, "closeout_material_name", None)
     return {
-        "name": str(getattr(mission, "liner_material_name", "MDO copper-alloy liner")),
+        "name": str(liner) if liner else "unattributed_class_default",
+        "liner_selection_resolved": liner is not None,
         "conductivity_w_m_k": float(mission.k_wall),
+        "density_kg_m3": float(mission.rho_wall),
         "elastic_modulus_pa": float(mission.liner_E),
         "thermal_expansion_1_k": float(mission.liner_alpha),
         "poisson_ratio": float(mission.liner_poisson),
@@ -1721,6 +2054,18 @@ def _material_assumptions(mission: Any) -> dict[str, Any]:
         ),
         "max_gas_side_wall_temperature_k": float(mission.liner_T_wg_max),
         "coolant_side_wall_limit_k": float(mission.rp1_coking_wall_temp_K),
+        # SP-8087 sec. 2.1.3.1: the jacket is a separate, usually hardenable
+        # alloy, so it carries its own selection and its own provenance row.
+        "closeout": {
+            "name": str(closeout) if closeout else "unattributed_class_default",
+            "selection_resolved": closeout is not None,
+            "density_kg_m3": float(mission.rho_closeout)
+            if mission.rho_closeout is not None else float(mission.rho_wall),
+            "yield_strength_pa": float(mission.closeout_sigma_yield),
+            "structural_fos": float(mission.closeout_structural_fos),
+            "elastic_modulus_pa": float(mission.closeout_E),
+            "poisson_ratio": float(mission.closeout_poisson),
+        },
     }
 
 
@@ -1736,7 +2081,8 @@ def _mission_input_conventions(
         "propellant": str(mission.propellant_name),
         "ambient_pressure_pa": float(mission.Pa),
         "burn_time_s": float(mission.burn_time),
-        "mixture_ratio": float(mission.OF),
+        "mixture_ratio": float(design.get("OF", mission.OF)),
+        "mission_mixture_ratio": float(mission.OF),
         "eta_cstar_nominal": float(mission.eta_cstar),
         "eta_cstar_effective": (
             float(effective_eta_cstar)
@@ -2407,21 +2753,46 @@ def snapshot_from_traditional(
     })
 
     battery = getattr(electric_pump_result, "battery", None)
-    motor_mass = _sum_drive_attr(pump_lines, "motor_mass")
-    inverter_mass = _sum_drive_attr(pump_lines, "inverter_mass")
-    pump_mass = _pump_hardware_mass(electric_pump_result)
-    electric_parts = [pump_mass, motor_mass, inverter_mass,
-                      getattr(battery, "mass", None)]
-    electric_mass = (
-        sum(float(v) for v in electric_parts)
-        if all(v is not None for v in electric_parts)
+    pump_rollup = getattr(electric_pump_result, "mass_rollup", None)
+    rollup_reason = (
+        getattr(pump_rollup, "unavailable_reason", None)
+        if pump_rollup is not None
+        else "traditional pump result predates the two-stream mass-rollup contract"
+    )
+    if pump_rollup is not None:
+        # Authoritative completeness comes from the domain rollup.  Do not
+        # reconstruct a total from whichever stream rows happened to resolve.
+        pump_mass = pump_rollup.core_pump_mass_kg
+        motor_mass = pump_rollup.motor_mass_kg
+        inverter_mass = pump_rollup.inverter_mass_kg
+        electric_mass = pump_rollup.complete_package_mass_kg
+        battery_selected_mass = pump_rollup.battery_selected_mass_kg
+    else:
+        # Compatibility only for pre-rollup result objects.
+        motor_mass = _sum_drive_attr(pump_lines, "motor_mass")
+        inverter_mass = _sum_drive_attr(pump_lines, "inverter_mass")
+        pump_mass = _pump_hardware_mass(electric_pump_result)
+        battery_selected_mass = getattr(battery, "mass", None)
+        electric_parts = [
+            pump_mass, motor_mass, inverter_mass, battery_selected_mass
+        ]
+        electric_mass = (
+            sum(float(v) for v in electric_parts)
+            if all(v is not None for v in electric_parts)
+            else None
+        )
+    traditional_chamber_mass = _hardware_mass_subsystem(
+        hardware_mass, "thrust_chamber"
+    )
+    dry_mass_partial_exact = (
+        float(electric_mass) + float(traditional_chamber_mass)
+        if electric_mass is not None and traditional_chamber_mass is not None
         else None
     )
     masses = SnapshotSection({
         "pump_mass_kg": maybe(
             pump_mass,
-            "traditional electric-pump sizing did not provide mass estimates "
-            "for every core hydraulic/mechanical/pressure-boundary BOM item",
+            rollup_reason or "two-stream core pump hardware is incomplete",
         ),
         "motor_mass_kg": maybe(
             motor_mass,
@@ -2472,8 +2843,8 @@ def snapshot_from_traditional(
             "traditional battery sizing was not requested",
         ),
         "battery_selected_mass_kg": maybe(
-            getattr(battery, "mass", None),
-            "traditional battery sizing was not requested",
+            battery_selected_mass,
+            rollup_reason or "traditional battery sizing was not requested",
         ),
         "battery_objective_mass_kg": unavailable(
             "the traditional battery model reports its exact governing branch, "
@@ -2481,11 +2852,21 @@ def snapshot_from_traditional(
         ),
         "electric_package_mass_kg": maybe(
             electric_mass,
-            "not every traditional electric-package mass branch was available; "
-            "the core pump BOM is incomplete",
+            rollup_reason or (
+                "not every traditional electric-package mass branch was available"
+            ),
         ),
         "electric_package_objective_mass_kg": unavailable(
             "the traditional pipeline has no smooth electric-package objective"
+        ),
+        "dry_mass_partial_exact_mass_kg": maybe(
+            dry_mass_partial_exact,
+            "the exact partial subtotal needs both a complete traditional "
+            "electric package and resolved thrust-chamber hardware mass",
+        ),
+        "dry_mass_partial_objective_mass_kg": unavailable(
+            "the traditional pipeline reports as-built/exact masses, not the "
+            "MDO smooth partial-dry objective"
         ),
         "thrust_chamber_liner_mass_kg": maybe(
             _hardware_mass_component(hardware_mass, "hot-gas liner"),
@@ -2504,7 +2885,7 @@ def snapshot_from_traditional(
             ),
         ),
         "thrust_chamber_mass_kg": maybe(
-            _hardware_mass_subsystem(hardware_mass, "thrust_chamber"),
+            traditional_chamber_mass,
             _hardware_mass_reason(hardware_mass, subsystem="thrust_chamber"),
         ),
         "injector_mass_kg": maybe(
@@ -2568,10 +2949,22 @@ def snapshot_from_traditional(
             if electric_pump_result is not None
             else unavailable(whole_engine_feasibility_reason)
         ),
+        "optimizer_constraints_feasible": unavailable(
+            "the traditional design workflow does not execute the MDO "
+            "optimizer constraint manifest"
+        ),
+        "numerical_validity": unavailable(
+            "traditional heterogeneous design gates do not expose the MDO "
+            "residual and solver-status manifest rows"
+        ),
         "physics_feasible": (
             available(physics_feasible)
             if physics_feasible is not None
             else unavailable(whole_engine_feasibility_reason)
+        ),
+        "requirements_feasible": unavailable(
+            "the traditional result does not retain a ResolvedRequirement "
+            "contract, so design-gate success is not a requirement verdict"
         ),
         "workflow_readiness_feasible": available(readiness_feasible),
         "constraint_margins": unavailable(

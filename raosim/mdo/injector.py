@@ -29,8 +29,15 @@ corpus-anchored):
   *consistency inequality* ``transition_margin`` = frac·A_cg − A_tip ≥ 0 — never
   a differentiable ``min()``; which branch governs is an outer-enumeration
   architecture choice;
-* chug screen: min(χ_f, χ_o) ≥ 0.2 as a stationless inequality (SP-8113/SP-194;
-  ``injector.stability_screen``).
+* injector-drop screen: min(χ_f, χ_o) ≥ 0.2 as a stationless conservative
+  design inequality.  The number is the upper endpoint of the 15--20% rule of
+  thumb in Huzel & Huang, *Design of Liquid Propellant Rocket Engines*
+  (1967), NASA SP-125, sec. 4.2, source-PDF p.137 / printed p.128.  Harrje &
+  Reardon (eds.), *Liquid Propellant Rocket Combustion Instability* (1972),
+  NASA SP-194, sec. 6.2.3.1, source-PDF pp.293--294 supports the qualitative
+  stability coupling but warns that increasing one stream's drop alone can be
+  destabilizing.  This row is therefore not a universal chug boundary or a
+  substitute for coupled stability analysis.
 
 Parity oracle: tests/test_mdo_injector.py checks these against the NumPy
 ``movable_pintle`` functions and the ``injector`` orifice/TMR forms to ~1e-9.

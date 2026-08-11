@@ -38,10 +38,12 @@ see :func:`raosim.injector_cad._to_mm_step_solid`).
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from raosim.injector_cad import (
     _cq,
@@ -553,6 +555,118 @@ def build_coaxial_bodies(inj, *, spec=None, layout=None, radial_style=None):
     }
 
 
+@dataclass(frozen=True)
+class BuiltCoaxialPart:
+    """One construction body plus its validated STEP-boundary body."""
+
+    name: str
+    # SI-valued body retained for assembly/interference audits.
+    body: Any
+    # Millimetre-valued body measured here and handed directly to STEP export.
+    export_body: Any
+    volume_m3: float
+    # False only for diagnostic exports whose existing manufacturing gate is
+    # already failed and whose in-memory BREP needs STEP round-trip healing.
+    valid_for_mass: bool = True
+
+
+@dataclass(frozen=True)
+class CoaxialPartSet:
+    """Build-once record shared by mass accounting and neutral-file export."""
+
+    parts: Mapping[str, BuiltCoaxialPart]
+    geometry_id: str
+    layout: Mapping[str, Any]
+    radial_style: str
+
+
+def coaxial_geometry_id(layout: Mapping[str, Any], radial_style: str) -> str:
+    """Bind reports and ledgers to the resolved production CAD dimensions."""
+
+    payload = {
+        "schema": "coaxial_injector_geometry@1",
+        "architecture": layout.get("architecture"),
+        "radial_style": radial_style,
+        "coaxial": layout.get("coaxial"),
+    }
+    encoded = json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), allow_nan=False
+    ).encode("utf-8")
+    return "injector:" + hashlib.sha256(encoded).hexdigest()
+
+
+def build_coaxial_part_set(
+    inj, *, spec=None, layout=None, radial_style=None
+) -> CoaxialPartSet:
+    """Build, validate, and measure each production body exactly once.
+
+    Each body is constructed once in the repository's SI modelling convention,
+    then transformed once to the millimetre-valued OpenCascade body used at the
+    neutral-file boundary.  Volume is measured from that exact export body and
+    converted back to SI.  This also avoids rejecting otherwise valid small
+    metering features merely because OpenCascade's absolute modelling tolerance
+    is ill-scaled in a metre-valued construction body.
+    """
+
+    resolved_layout = layout or resolve_coaxial_layout(inj, spec=spec)
+    resolved_style = _resolved_radial_style(inj, radial_style)
+    bodies = build_coaxial_bodies(
+        inj,
+        spec=spec,
+        layout=resolved_layout,
+        radial_style=resolved_style,
+    )
+    expected = {
+        "pintle_body",
+        "pintle_tip",
+        "injector_body",
+        "orifice_plate",
+        "faceplate",
+    }
+    if set(bodies) != expected:
+        raise RuntimeError(
+            "coaxial builder did not return the complete five-part set: "
+            f"expected {sorted(expected)}, got {sorted(bodies)}"
+        )
+
+    diagnostic_only = any(
+        gate.get("status") == "fail"
+        for gate in resolved_layout.get("manufacturing_gates", [])
+    )
+
+    parts: dict[str, BuiltCoaxialPart] = {}
+    for name, body in bodies.items():
+        export_body = _to_mm_step_solid(body)
+        export_solid = (
+            export_body.val() if hasattr(export_body, "val") else export_body
+        )
+        solids = list(export_solid.Solids())
+        solid_valid = bool(export_solid.isValid())
+        if len(solids) != 1 or (not solid_valid and not diagnostic_only):
+            raise RuntimeError(
+                f"STEP-boundary coaxial part {name!r} is not one valid solid"
+            )
+        volume = float(abs(export_solid.Volume())) * 1.0e-9
+        if not math.isfinite(volume) or volume <= 0.0:
+            raise RuntimeError(
+                f"built coaxial part {name!r} has invalid volume {volume!r} m^3"
+            )
+        parts[name] = BuiltCoaxialPart(
+            name=name,
+            body=body,
+            export_body=export_body,
+            volume_m3=volume,
+            valid_for_mass=solid_valid,
+        )
+
+    return CoaxialPartSet(
+        parts=parts,
+        geometry_id=coaxial_geometry_id(resolved_layout, resolved_style),
+        layout=resolved_layout,
+        radial_style=resolved_style,
+    )
+
+
 # ----------------------------------------------------------------------
 #  Flow-circuit seal audit
 # ----------------------------------------------------------------------
@@ -833,6 +947,14 @@ _COLORS = {
     "faceplate": (0.34, 0.36, 0.68),
 }
 
+# STEP is a boundary-representation interchange format, so export/import can
+# re-fit analytic curves at the receiving OpenCascade tolerance.  A 1e-4
+# relative volume gate (0.01 %) is still orders of magnitude tighter than the
+# legacy 10 % face-only check and the 3--22 % analytic/CAD discrepancies this
+# built-part contract replaces, while remaining stable for small perforated
+# parts such as the replaceable pintle tip.
+_STEP_ROUNDTRIP_VOLUME_REL_TOL = 1.0e-4
+
 
 def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
                               radial_style=None) -> dict:
@@ -858,6 +980,7 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
             "status": "cadquery_unavailable",
             "architecture": layout["architecture"],
             "radial_exit_style": radial_style,
+            "geometry_id": coaxial_geometry_id(layout, radial_style),
             "representation": "report_only",
             "flow_separation_audit": seal,
             "required_extra": "pip install -e .[cad]",
@@ -872,9 +995,10 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
     cq = _cq()
     failure: Exception | None = None
     try:
-        bodies_si = build_coaxial_bodies(
+        part_set = build_coaxial_part_set(
             inj, spec=spec, layout=layout, radial_style=radial_style
         )
+        bodies_si = {name: part.body for name, part in part_set.parts.items()}
         interference = audit_component_interference(bodies_si)
         if not interference["passed"]:
             raise RuntimeError(
@@ -893,7 +1017,11 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
                 "coaxial injector nominal-clearance gate failed: "
                 f"{clearances}"
             )
-        bodies = {n: _to_mm_step_solid(s) for n, s in bodies_si.items()}
+        # These are the exact BREP objects already measured by the part-set
+        # contract; do not rebuild or rescale them before neutral-file export.
+        bodies = {
+            name: part.export_body for name, part in part_set.parts.items()
+        }
 
         inspections: dict[str, Any] = {}
         asm = cq.Assembly(name="pintle_injector_coaxial")
@@ -904,6 +1032,25 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
             if not (insp["single_solid"] and insp["all_solids_valid"]):
                 raise RuntimeError(
                     f"{name} STEP round-trip is not one valid solid: {insp}")
+            expected_mm3 = part_set.parts[name].volume_m3 * 1.0e9
+            roundtrip_mm3 = float(sum(insp["volumes_mm3"]))
+            volume_error = abs(roundtrip_mm3 - expected_mm3) / max(
+                expected_mm3, 1.0e-30
+            )
+            if (
+                part_set.parts[name].valid_for_mass
+                and volume_error > _STEP_ROUNDTRIP_VOLUME_REL_TOL
+            ):
+                raise RuntimeError(
+                    f"{name} STEP round-trip volume changed by "
+                    f"{volume_error:.3e}; built-part mass and artifact no "
+                    "longer describe the same body"
+                )
+            insp["built_part_volume_m3"] = part_set.parts[name].volume_m3
+            insp["roundtrip_volume_relative_error"] = volume_error
+            insp["roundtrip_volume_relative_tolerance"] = (
+                _STEP_ROUNDTRIP_VOLUME_REL_TOL
+            )
             inspections[name] = insp
             files[name] = str(path)
             asm.add(solid, name=name, color=cq.Color(*_COLORS[name]))
@@ -957,6 +1104,20 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
             "architecture": layout["architecture"],
             "radial_exit_style": radial_style,
             "representation": "coaxial_five_part_solids_of_revolution",
+            "geometry_id": part_set.geometry_id,
+            "measured_part_volumes_m3": {
+                name: part.volume_m3 for name, part in part_set.parts.items()
+            },
+            "roundtrip_artifact_part_volumes_m3": {
+                name: float(sum(inspection["volumes_mm3"])) * 1.0e-9
+                for name, inspection in inspections.items()
+            },
+            "cad_linked_mass_eligible": all(
+                part.valid_for_mass for part in part_set.parts.values()
+            ),
+            "mass_ledger_builder": (
+                "raosim.mass_ledger.injector_mass_ledger_from_built_parts"
+            ),
             "files": files.copy(),
             "inspection": inspections,
             "assembly_inspection": assembly_insp,

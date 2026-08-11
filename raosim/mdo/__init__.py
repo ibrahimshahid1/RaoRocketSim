@@ -49,10 +49,12 @@ requires derivatives; authoritative re-evaluation stays host-side.
 """
 
 from raosim.mdo.schema import (  # noqa: F401
+    DesignLayout,
     DesignVector,
     MissionSpec,
     VariableSpec,
     default_design_space,
+    validate_mixture_ratio,
 )
 from raosim.mdo.scaling import ScaledSpace  # noqa: F401
 from raosim.mdo.grid import build_station_grid, GridTopology  # noqa: F401

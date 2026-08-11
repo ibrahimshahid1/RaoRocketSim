@@ -1,8 +1,9 @@
 """raosim.requirements — Layer 0: what the user asks for, not what they design.
 
-The requirement set is not invented here.  NASA SP-125 §2.1, *The Major Rocket
-Engine Design Parameters* (printed p. 31, ``propulsion_texts/19710019929.pdf``,
-PDF p. 40) fixes it:
+The requirement set is not invented here.  Dieter K. Huzel and David H. Huang,
+*Design of Liquid Propellant Rocket Engines* (1967), NASA SP-125, §2.1,
+*The Major Rocket Engine Design Parameters* (printed p. 31,
+``propulsion_texts/19710019929.pdf``, source-PDF p. 40) fixes it:
 
     "To fit the engine system properly into a vehicle system, engine systems
     design and development specifications will have to cover the following
@@ -42,13 +43,17 @@ unavailable quantity stays unavailable rather than becoming a convenient zero
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from enum import Enum
+import math
+from pathlib import Path
 from typing import Any, Mapping
 
 __all__ = [
     "Coverage",
     "EngineRequirement",
+    "MixtureRatioMode",
+    "RequirementAnalysisConfig",
     "RequirementCoverage",
     "RequirementResult",
     "ResolvedRequirement",
@@ -66,6 +71,34 @@ class Coverage(str, Enum):
     ENFORCED = "enforced"
     PARTIALLY_ENFORCED = "partially_enforced"
     UNSUPPORTED = "unsupported"
+
+
+class MixtureRatioMode(str, Enum):
+    """Explicit intent for SP-125's oxidizer/fuel mass ratio parameter."""
+
+    NOMINAL = "nominal"
+    PINNED = "pinned"
+    OPTIMIZE = "optimize"
+
+
+@dataclass(frozen=True)
+class RequirementAnalysisConfig:
+    """Non-requirement analysis choices callers may safely change.
+
+    These settings select model fidelity/geometry representation; they cannot
+    alter thrust, ambient condition, duration, propellant, O/F intent, or a
+    stated mass/envelope limit while coverage still describes the old ask.
+    """
+
+    chamber_property_table: str | Path | None = None
+    length_pct: float = 80.0
+    liner_material: str | None = None
+
+    def __post_init__(self) -> None:
+        if not math.isfinite(float(self.length_pct)) or not (
+            60.0 <= float(self.length_pct) <= 100.0
+        ):
+            raise ValueError("length_pct must be finite and within the 60-100% Rao domain")
 
 
 @dataclass(frozen=True)
@@ -121,7 +154,10 @@ _VACUUM_PA = 1.0
 
 _SUPPORTED_ISP_BASIS = ("thrust_chamber",)
 _SUPPORTED_FEED = ("electric_pump",)
-_SUPPORTED_OBJECTIVE = ("min_mass",)
+_SUPPORTED_OBJECTIVE = (
+    "min_dry_mass_partial",
+    "min_electric_package_mass",
+)
 
 
 @dataclass(frozen=True)
@@ -151,15 +187,19 @@ class EngineRequirement:
         rated flight duration"* and that **those** specifications *"govern most
         engine design considerations"*.  Flight duration sizes the battery;
         cumulative duration governs life.
-    of
-        Item (4).  ``None`` (the default and the recommended value) lets the
-        propellant supply its optimum.  SP-125 derives O/F from a balance of
+    mixture_ratio_mode, mixture_ratio
+        Item (4).  Intent is explicit: ``NOMINAL`` uses the propellant-catalog
+        value, ``PINNED`` requires a finite positive value, and ``OPTIMIZE``
+        requires a validated O/F-dependent chamber-property table.  SP-125
+        derives O/F from a balance of
         energy release against molecular weight, *modified downward for
         cooling*: *"The temperatures resulting from stoichiometric or near-
         stoichiometric mixture ratios... may impose severe demands on the
         chamber-wall cooling system.  A lower temperature, therefore, may be
         desired and obtained by selecting a suitable ratio."*  That is the trade
-        the optimiser should resolve, so pinning O/F removes a real lever.
+        the optimiser should resolve, so pinning O/F removes a real lever
+        (Huzel & Huang 1967, NASA SP-125, §2.1, "Mixture Ratio,"
+        printed pp. 34--35 / source-PDF pp. 43--44).
     burnout_mass_max
         Item (5).
     envelope_diameter_max, envelope_length_max
@@ -188,7 +228,11 @@ class EngineRequirement:
     flight_duration: float = 120.0
     qualification_duration: float | None = None
 
-    # --- (4) mixture ratio: an output unless deliberately pinned ------------ #
+    # --- (4) mixture-ratio intent is explicit -------------------------------- #
+    mixture_ratio_mode: MixtureRatioMode | str = MixtureRatioMode.NOMINAL
+    mixture_ratio: float | None = None
+    # Deprecated numeric alias.  A supplied value is unambiguously PINNED;
+    # ``None`` no longer means either nominal or optimize.
     of: float | None = None
 
     # --- (5)-(6) mass and envelope ------------------------------------------ #
@@ -206,36 +250,80 @@ class EngineRequirement:
     reusable_cycles: int | None = None
 
     # --- what to optimise --------------------------------------------------- #
-    objective: str = "min_mass"
+    objective: str = "min_dry_mass_partial"
 
-    #: Optional passthrough overrides applied last to the derived MissionSpec,
-    #: for cases the requirement vocabulary does not cover (e.g. pinning a
-    #: liner alloy).  Explicit wins, exactly as ``MissionSpec.for_thrust``.
+    analysis_config: RequirementAnalysisConfig = field(
+        default_factory=RequirementAnalysisConfig
+    )
+
+    #: Deprecated compatibility input.  Only the two analysis-owned keys
+    #: ``cea_table_path`` and ``length_pct`` are accepted; requirement-owned or
+    #: arbitrary MissionSpec fields are rejected before resolution.
     mission_overrides: Mapping[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        if not self.thrust > 0.0:
-            raise ValueError("thrust must be positive")
-        if self.isp_min is not None and not self.isp_min > 0.0:
-            raise ValueError("isp_min must be positive when given")
-        if not self.flight_duration > 0.0:
-            raise ValueError("flight_duration must be positive")
-        if (self.qualification_duration is not None
-                and self.qualification_duration < self.flight_duration):
+        from raosim.input_validation import validate_requirement_inputs
+        from raosim.mdo.objectives import coerce_mass_objective
+
+        objective = (
+            "min_dry_mass_partial"
+            if str(self.objective).strip().lower() == "min_mass"
+            else self.objective
+        )
+        object.__setattr__(
+            self, "objective", coerce_mass_objective(objective).value
+        )
+        try:
+            mode = MixtureRatioMode(self.mixture_ratio_mode)
+        except ValueError as exc:
             raise ValueError(
-                "qualification_duration is cumulative demonstrated duration "
-                "and cannot be shorter than one flight duration (SP-125 §2.1: "
-                "'many times the comparatively short rated flight duration')"
+                "mixture_ratio_mode must be nominal, pinned, or optimize"
+            ) from exc
+        ratio = self.mixture_ratio
+        if self.of is not None:
+            if ratio is not None and float(ratio) != float(self.of):
+                raise ValueError("mixture_ratio and deprecated of disagree")
+            if mode is MixtureRatioMode.OPTIMIZE:
+                raise ValueError("a pinned O/F value cannot be combined with OPTIMIZE")
+            mode = MixtureRatioMode.PINNED
+            ratio = self.of
+        if mode is MixtureRatioMode.PINNED:
+            if ratio is None or not math.isfinite(float(ratio)) or float(ratio) <= 0.0:
+                raise ValueError("PINNED mixture-ratio mode requires a finite positive value")
+        elif ratio is not None:
+            raise ValueError(
+                "mixture_ratio is only valid in PINNED mode; use OPTIMIZE without a value"
             )
-        for name in ("burnout_mass_max", "envelope_diameter_max",
-                     "envelope_length_max"):
-            v = getattr(self, name)
-            if v is not None and not v > 0.0:
-                raise ValueError(f"{name} must be positive when given")
-        if self.throttle_range is not None:
-            lo, hi = self.throttle_range
-            if not (0.0 < lo <= hi):
-                raise ValueError("throttle_range must satisfy 0 < lo <= hi")
+        object.__setattr__(self, "mixture_ratio_mode", mode)
+        object.__setattr__(self, "mixture_ratio", None if ratio is None else float(ratio))
+
+        if not isinstance(self.analysis_config, RequirementAnalysisConfig):
+            raise TypeError("analysis_config must be RequirementAnalysisConfig")
+        legacy_keys = set(self.mission_overrides)
+        safe_legacy = {"cea_table_path", "length_pct"}
+        forbidden = sorted(legacy_keys - safe_legacy)
+        if forbidden:
+            raise ValueError(
+                "mission_overrides cannot change requirement-owned or arbitrary "
+                f"MissionSpec fields: {forbidden}; use RequirementAnalysisConfig"
+            )
+        validate_requirement_inputs(
+            thrust=self.thrust,
+            flight_duration=self.flight_duration,
+            qualification_duration=self.qualification_duration,
+            isp_floor=self.isp_min,
+            mixture_ratio=(
+                self.mixture_ratio
+                if self.mixture_ratio_mode is MixtureRatioMode.PINNED
+                else None
+            ),
+            envelope_diameter_max=self.envelope_diameter_max,
+            envelope_length_max=self.envelope_length_max,
+            mass_max=self.burnout_mass_max,
+            throttle_range=self.throttle_range,
+            restart_count=self.restarts,
+            reusable_cycles=self.reusable_cycles,
+        )
         _ambient_pressure(self.thrust_condition)   # validates early
 
 
@@ -260,9 +348,12 @@ def _ambient_pressure(condition: str | tuple[str, float]) -> float:
         )
     from raosim.atmosphere import pressure
 
-    h = float(value)
-    if h < 0.0:
-        raise ValueError("altitude must be non-negative")
+    try:
+        h = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("altitude must be finite and non-negative") from exc
+    if not math.isfinite(h) or h < 0.0:
+        raise ValueError("altitude must be finite and non-negative")
     return max(float(pressure(h)), _VACUUM_PA)
 
 
@@ -278,6 +369,7 @@ class ResolvedRequirement:
     isp_floor: float
     objective: str
     coverage: tuple[RequirementCoverage, ...]
+    required_constraint_names: tuple[str, ...]
 
     @property
     def unsupported(self) -> tuple[RequirementCoverage, ...]:
@@ -301,6 +393,7 @@ class ResolvedRequirement:
             "objective": self.objective,
             "ambient_pressure_Pa": float(self.mission.Pa),
             "fully_screened": self.fully_screened,
+            "required_constraint_names": list(self.required_constraint_names),
             "coverage": [c.as_dict() for c in self.coverage],
         }
 
@@ -354,7 +447,8 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
     if req.objective not in _SUPPORTED_OBJECTIVE:
         raise NotImplementedError(
             f"objective={req.objective!r} is not implemented; supported: "
-            f"{_SUPPORTED_OBJECTIVE}. The ε-constraint driver minimises mass "
+            f"{_SUPPORTED_OBJECTIVE}. The ε-constraint driver minimises the "
+            "explicitly selected resolved mass subtotal "
             "at an Isp floor; a max-Isp driver would swap which of the two is "
             "the epigraph."
         )
@@ -418,35 +512,95 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
         ))
 
     # --- (4) mixture ratio --------------------------------------------------- #
-    OF = float(req.of) if req.of is not None else float(prop.OF_default)
+    mode = MixtureRatioMode(req.mixture_ratio_mode)
+    OF = (
+        float(req.mixture_ratio)
+        if mode is MixtureRatioMode.PINNED
+        else float(prop.OF_default)
+    )
+
+    config_table = req.analysis_config.chamber_property_table
+    legacy_table = req.mission_overrides.get("cea_table_path")
+    if config_table is not None and legacy_table is not None and (
+        str(config_table) != str(legacy_table)
+    ):
+        raise ValueError(
+            "analysis_config.chamber_property_table and deprecated "
+            "mission_overrides['cea_table_path'] disagree"
+        )
+    table_path = config_table if config_table is not None else legacy_table
+    legacy_length = req.mission_overrides.get("length_pct")
+    if legacy_length is not None and req.analysis_config.length_pct != 80.0 and (
+        float(legacy_length) != float(req.analysis_config.length_pct)
+    ):
+        raise ValueError(
+            "analysis_config.length_pct and deprecated mission_overrides "
+            "length_pct disagree"
+        )
+    length_pct = (
+        float(legacy_length) if legacy_length is not None
+        else float(req.analysis_config.length_pct)
+    )
+    if mode is MixtureRatioMode.OPTIMIZE and table_path is None:
+        raise ValueError(
+            "OPTIMIZE mixture-ratio mode requires "
+            "RequirementAnalysisConfig.chamber_property_table"
+        )
 
     # --- assemble the mission ------------------------------------------------ #
     overrides: dict[str, Any] = {
         "Pa": float(Pa),
         "burn_time": float(req.flight_duration),
+        "OF": OF,
+        "of_is_pinned": mode is not MixtureRatioMode.OPTIMIZE,
+        "length_pct": length_pct,
     }
-    if req.of is not None:
-        overrides["OF"] = OF
-        # Pinning must survive the arrival of CEA surfaces.  Without this flag
-        # ``of_design_space`` would promote O/F to a design variable the moment
-        # a table was loaded, and the optimiser would quietly discard the value
-        # the user asked for.
-        overrides["of_is_pinned"] = True
+    if table_path is not None:
+        overrides["cea_table_path"] = str(Path(table_path).expanduser())
+    if req.analysis_config.liner_material is not None:
+        from raosim.materials import get_material
+
+        material = get_material(req.analysis_config.liner_material)
+        if not material.is_liner:
+            raise ValueError(
+                f"{material.name!r} is not catalogued as a combustion-chamber liner"
+            )
+        structural_fos = 1.5
+        overrides.update({
+            "k_wall": float(material.conductivity),
+            "rho_wall": float(material.density),
+            "liner_E": float(material.elastic_modulus),
+            "liner_alpha": float(material.thermal_expansion),
+            "liner_poisson": float(material.poisson_ratio),
+            "liner_sigma_allow": float(material.yield_strength) / structural_fos,
+            "liner_structural_fos": structural_fos,
+            "liner_T_wg_max": float(material.max_temperature),
+        })
     if req.envelope_diameter_max is not None:
         overrides["envelope_diameter_max"] = float(req.envelope_diameter_max)
     if req.envelope_length_max is not None:
         overrides["envelope_length_max"] = float(req.envelope_length_max)
     if req.burnout_mass_max is not None:
         overrides["dry_mass_max"] = float(req.burnout_mass_max)
-    overrides.update(dict(req.mission_overrides))
-
     mission = MissionSpec.for_propellant(
         req.propellant, float(req.thrust), **overrides
     )
 
+    # A nonempty path is not proof of property physics.  Validate the complete
+    # table contract and the stored propellant identity before assigning O/F
+    # coverage.  OPTIMIZE additionally requires finite non-flat O/F dependence.
+    if mission.cea_table_path:
+        from raosim.mdo.properties import load_chamber_surfaces
+
+        load_chamber_surfaces(
+            mission.cea_table_path,
+            expected_propellant=mission.propellant_name,
+            require_of_dependence=mode is MixtureRatioMode.OPTIMIZE,
+        )
+
     # O/F coverage depends on whether the surfaces can actually see it, so it
     # is classified after the mission exists.
-    if req.of is not None:
+    if mode is MixtureRatioMode.PINNED:
         cov.append(RequirementCoverage(
             "of", Coverage.ENFORCED, sp125_item=4,
             constraint="pinned MissionSpec.OF",
@@ -454,7 +608,7 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
                     "output balanced against cooling, so pinning it removes a "
                     "design lever"),
         ))
-    elif mission.cea_table_path:
+    elif mode is MixtureRatioMode.OPTIMIZE:
         cov.append(RequirementCoverage(
             "of", Coverage.ENFORCED, sp125_item=4,
             constraint="design variable, bounded by the sampled CEA domain",
@@ -465,13 +619,10 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
         ))
     else:
         cov.append(RequirementCoverage(
-            "of", Coverage.PARTIALLY_ENFORCED, sp125_item=4,
-            constraint="propellant default (constant properties)",
-            reason=("no CEA table on MissionSpec.cea_table_path, so γ/T_c/R "
-                    "are FLAT IN O/F: the value is correct at the stated O/F "
-                    "but the mixture-ratio trade cannot be resolved"),
-            missing=("scripts/sample_cea_surface.py output",
-                     "O/F as a design variable"),
+            "of", Coverage.ENFORCED, sp125_item=4,
+            constraint="catalog nominal MissionSpec.OF",
+            reason=("NOMINAL intent explicitly selects the propellant catalog "
+                    "O/F and pins it; optimization was not requested"),
         ))
 
     # --- (5) burnout mass ---------------------------------------------------- #
@@ -508,10 +659,10 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
 
     # --- coolant-side wall mechanism ----------------------------------------- #
     # Not an SP-125 §2.1 requirement, but a *feasibility* statement the user
-    # must see: for methane and hydrogen the governing coolant-side limit is
-    # supercritical heat-transfer deterioration, not coking, and the cooling
-    # march cannot evaluate it with constant properties.  Reporting nothing
-    # here would let an unmodelled failure mode read as a clean design.
+    # must see: methane and hydrogen require a supercritical real-fluid wall
+    # screen rather than a carbon-deposition surrogate, and the cooling march
+    # cannot evaluate Nasuti & Pizzarelli's beta/cp term with constants.
+    # Reporting nothing here would let an unmodelled mechanism read as clean.
     from raosim.mdo.coolant_htd import htd_availability
 
     htd_ok, htd_reason = htd_availability(
@@ -552,12 +703,24 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
             missing=("low-cycle-fatigue constraint in the traced core",),
         ))
 
+    from raosim.mdo.constraints import applicable_optimizer_names
+    from raosim.mdo.engine import chamber_surfaces_for
+
+    required_names = applicable_optimizer_names(
+        mission, chamber_surfaces_for(mission)
+    )
+    if req.isp_min is None or req.isp_basis not in _SUPPORTED_ISP_BASIS:
+        required_names = tuple(
+            name for name in required_names if name != "isp_epsilon"
+        )
+
     return ResolvedRequirement(
         requirement=req,
         mission=mission,
         isp_floor=isp_floor,
         objective=req.objective,
         coverage=tuple(cov),
+        required_constraint_names=required_names,
     )
 
 
@@ -584,7 +747,25 @@ class RequirementResult:
         truthy.
         """
 
-        if not self.nlp.feasible:
+        # A failed optimizer or numerical solve establishes neither MET nor a
+        # requirements violation.  The CLI maps this state to SOLVER_FAILED;
+        # the bool/None compatibility API must therefore remain indeterminate.
+        if getattr(self.nlp, "success", True) is not True:
+            return None
+        if getattr(self.nlp, "numerical_status", "pass") != "pass":
+            return None
+        physics_status = getattr(self.nlp, "physics_status", None)
+        if physics_status == "unknown":
+            return None
+        requirements_status = getattr(self.nlp, "requirements_status", None)
+        if requirements_status == "unknown":
+            return None
+        if requirements_status == "fail":
+            return False
+        optimizer_feasible = getattr(
+            self.nlp, "optimizer_feasible", getattr(self.nlp, "feasible", False)
+        )
+        if physics_status == "fail" or not optimizer_feasible:
             return False
         if not self.resolved.fully_screened:
             return None
@@ -592,10 +773,16 @@ class RequirementResult:
 
     def summary(self) -> str:
         r, n = self.resolved, self.nlp
-        verdict = {True: "requirements MET",
-                   False: "requirements NOT met",
-                   None: "feasible against the screened subset only"}[
-            self.requirements_met]
+        if getattr(n, "success", True) is not True:
+            verdict = "SOLVER_FAILED; no requirement verdict issued"
+        elif getattr(n, "numerical_status", "pass") != "pass":
+            verdict = "SOLVER_FAILED; numerical validity did not pass"
+        else:
+            verdict = {
+                True: "requirements MET",
+                False: "requirements NOT met",
+                None: "INDETERMINATE; only a screened subset is covered",
+            }[self.requirements_met]
         return "\n".join([
             r.report(),
             "",
@@ -618,7 +805,14 @@ def solve_requirement(req: EngineRequirement, *,
 
     from raosim.mdo.nlp import solve_min_mass
 
+    if "enforced" in kw:
+        raise TypeError(
+            "solve_requirement constructs its enforced rows from the resolved "
+            "requirement; constraint ablation cannot issue a requirement verdict"
+        )
     resolved = resolve_requirement(req)
     nlp = solve_min_mass(resolved.mission, resolved.isp_floor,
-                         couple_eta_cstar=couple_eta_cstar, **kw)
+                         couple_eta_cstar=couple_eta_cstar,
+                         enforced=resolved.required_constraint_names,
+                         objective=resolved.objective, **kw)
     return RequirementResult(resolved=resolved, nlp=nlp)

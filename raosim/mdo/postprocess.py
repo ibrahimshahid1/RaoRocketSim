@@ -25,7 +25,11 @@ from typing import Any, Mapping
 
 import numpy as np
 
-from raosim.mdo.schema import MissionSpec
+from raosim.mdo.schema import (
+    DesignLayout,
+    MissionSpec,
+    validate_mixture_ratio,
+)
 from raosim.mdo.snapshot import (
     EngineAnalysisSnapshot,
     SnapshotComparison,
@@ -72,19 +76,32 @@ def _propellant_mapping(
     return combination, oxidizer, fuel, str(coolant_name)
 
 
-def _effective_of(design: Mapping[str, Any], mission: MissionSpec) -> float:
+def _effective_of(
+    design: Mapping[str, Any],
+    mission: MissionSpec,
+    *,
+    layout: DesignLayout | None = None,
+    solved_of: Any | None = None,
+) -> float:
     """Mixture ratio the MDO design actually used.
 
-    Once ``OF`` is a design variable (which it becomes as soon as CEA surfaces
-    are loaded -- see ``MissionSpec.of_design_space``) the optimum's O/F is in
-    the design dict, and ``mission.OF`` is only the *seed*.  Re-deriving the
-    propellant split from the mission would silently hand the authoritative
-    workflow a different engine from the one that was optimised, which is
-    exactly the class of drift the output contract exists to catch.
+    A solved result is authoritative when supplied.  Otherwise the explicit
+    layout selects either the live design value or the mission's fixed value.
+    Merely finding an ``OF`` key is never treated as proof that O/F was active;
+    this is what prevents legacy fixed-mode sentinels from leaking into a flow
+    split.
     """
 
-    value = design.get("OF")
-    return float(value) if value is not None else float(mission.OF)
+    if solved_of is not None:
+        return validate_mixture_ratio(solved_of, name="solved EngineResult.OF")
+    resolved_layout = layout or mission.design_layout()
+    if resolved_layout.of_is_variable:
+        if "OF" not in design or design["OF"] is None:
+            raise ValueError(
+                "variable-O/F design is missing its optimized physical OF value"
+            )
+        return validate_mixture_ratio(design["OF"], name="design.OF")
+    return validate_mixture_ratio(mission.OF, name="MissionSpec.OF")
 
 
 def _mdo_mass_flow(design: Mapping[str, Any], mission: MissionSpec) -> float:
@@ -137,6 +154,7 @@ def to_design_input(
     angular_points: int = 64,
     host_rao_solver_options: Mapping[str, Any] | None = None,
     pinned_chamber_state: Any | None = None,
+    effective_of: float | None = None,
 ) -> Any:
     """Build a convention-aligned traditional ``DesignInput``.
 
@@ -180,6 +198,11 @@ def to_design_input(
         eta_CF if eta_CF is not None else getattr(mission, "eta_CF", 1.0)
     )
     film_frac = float(d.get("film_frac", 0.0))
+    resolved_of = _effective_of(
+        d,
+        mission,
+        solved_of=effective_of,
+    )
     eta_cstar_effective = (
         float(eta_cstar)
         if eta_cstar is not None
@@ -189,7 +212,7 @@ def to_design_input(
 
     if mdot_total is None:
         mdot_total = _mdo_mass_flow(d, mission)
-    mdot_fuel = float(mdot_total) / (1.0 + _effective_of(d, mission))
+    mdot_fuel = float(mdot_total) / (1.0 + resolved_of)
     if mdot_cool is None:
         # Explicit architecture assumption in the MDO: the selected fraction
         # is diverted from the jacket to a separate fuel-film path.
@@ -251,7 +274,7 @@ def to_design_input(
         propellant_name=combination,
         oxidizer=oxidizer,
         fuel=fuel,
-        mixture_ratio=_effective_of(d, mission),
+        mixture_ratio=resolved_of,
         eta_Isp=eta_cstar_effective * eta_cf,
         eta_cstar=eta_cstar_effective,
         eta_CF=eta_cf,
@@ -281,8 +304,13 @@ def to_design_input(
         coolant_property_backend="constant",
     )
     material = MaterialSpec(
-        name=material_name
-        or str(getattr(mission, "liner_material_name", "MDO copper-alloy liner")),
+        name=(
+            material_name
+            or getattr(mission, "liner_material_name", None)
+            # No catalog record backs the class-default wall constants, so the
+            # handoff must not name an alloy the MDO never traced.
+            or "unattributed_class_default"
+        ),
         yield_strength=(
             float(mission.liner_sigma_allow)
             * float(mission.liner_structural_fos)
@@ -655,9 +683,14 @@ def _solve_mdo_for_snapshot(
     from raosim.mdo.schema import DesignVector
     from raosim.mdo.state import solve_engine_state
 
-    values = [design[name] for name in DesignVector.names()]
+    layout = mission.design_layout()
+    contract = dict(design)
+    contract["OF"] = _effective_of(contract, mission, layout=layout)
+    values = [contract[name] for name in DesignVector.names()]
     return solve_engine_state(
-        DesignVector.from_array(np.asarray(values, dtype=float)),
+        DesignVector.from_contract_array(
+            np.asarray(values, dtype=float), layout
+        ),
         mission,
         couple_eta_cstar=couple_eta_cstar,
         surfaces=surfaces,
@@ -678,6 +711,20 @@ def _mdo_eta_cstar(mdo_result: Any) -> float:
     ):
         return float(mdo_result.performance.eta_cstar)
     return float(mdo_result.eta_cstar)
+
+
+def _mdo_effective_of(mdo_result: Any) -> float:
+    """Return the authoritative O/F retained by EngineState/EngineResult."""
+
+    if hasattr(mdo_result, "performance") and hasattr(
+        mdo_result.performance, "OF"
+    ):
+        value = mdo_result.performance.OF
+    elif hasattr(mdo_result, "OF"):
+        value = mdo_result.OF
+    else:
+        raise ValueError("MDO result does not retain an authoritative OF")
+    return validate_mixture_ratio(value, name="MDO result.OF")
 
 
 def _pinned_chamber_state_from_mdo(
@@ -854,6 +901,19 @@ def reevaluate(
             mdo_solve_error = f"{type(exc).__name__}: {exc}"
 
     if mdo_result is not None:
+        solved_of = _mdo_effective_of(mdo_result)
+        result_layout_is_variable = bool(
+            np.asarray(mdo_result.input_conventions.of_is_variable)
+        ) if (
+            hasattr(mdo_result, "input_conventions")
+            and hasattr(mdo_result.input_conventions, "of_is_variable")
+        ) else mission.design_layout().of_is_variable
+        # A fixed-layout caller may still own a legacy dict whose OF slot was
+        # an intent sentinel.  Normalize that non-authoritative slot from the
+        # solved result before validating the fixed physical v2 contract.  A
+        # variable-layout value remains caller-owned and mismatch-checked.
+        if not result_layout_is_variable:
+            d["OF"] = solved_of
         _validate_mdo_state_handoff(
             mdo_result,
             d,
@@ -864,6 +924,7 @@ def reevaluate(
         kw.setdefault("mdot_total", _mdo_total_mass_flow(mdo_result))
         kw.setdefault("eta_cstar", _mdo_eta_cstar(mdo_result))
         kw.setdefault("eta_CF", float(mission.eta_CF))
+        kw.setdefault("effective_of", solved_of)
         if "thermo_mode" not in kw and "pinned_chamber_state" not in kw:
             pinned_chamber_state = _pinned_chamber_state_from_mdo(
                 mdo_result,
@@ -873,6 +934,42 @@ def reevaluate(
             if pinned_chamber_state is not None:
                 kw["pinned_chamber_state"] = pinned_chamber_state
     design_input = to_design_input(d, mission, **kw)
+
+    # Remediation item 9: the resolved contract is the authority on every
+    # convention the two pipelines share.  Building it here and crosschecking
+    # the traditional handoff turns an input divergence into an immediate,
+    # named warning instead of an output discrepancy someone has to diagnose
+    # backwards later.  The contract is the input authority; ``to_design_input``
+    # remains the builder until it is switched over to consume it.
+    resolved_inputs = None
+    resolved_inputs_drift: tuple[str, ...] = ()
+    resolved_inputs_error: str | None = None
+    if mdo_result is not None:
+        from raosim.mdo.resolved_inputs import (
+            crosscheck_design_input,
+            resolve_engine_inputs,
+        )
+
+        try:
+            resolved_inputs = resolve_engine_inputs(
+                d,
+                mission,
+                effective_of=float(kw["effective_of"]),
+                of_source=(
+                    "optimized" if result_layout_is_variable
+                    else "mission_nominal"
+                ),
+                total_mass_flow=float(kw["mdot_total"]),
+                eta_cstar_effective=float(kw["eta_cstar"]),
+                contour_method=str(kw.get("contour_method", "bezier")),
+                surfaces=mdo_surfaces,
+            )
+            resolved_inputs_drift = crosscheck_design_input(
+                resolved_inputs, design_input
+            )
+        except Exception as exc:
+            resolved_inputs_error = f"{type(exc).__name__}: {exc}"
+
     result = design_nozzle_v2(design_input)
 
     pump_result = None
@@ -902,6 +999,20 @@ def reevaluate(
         and isinstance(mdo[key], (int, float, np.number))
     }
     warnings = list(result.warnings or ())
+    if resolved_inputs_drift:
+        warnings.append(
+            "The traditional handoff disagrees with the resolved engine-input "
+            "contract on "
+            f"{len(resolved_inputs_drift)} scalar(s), so the two pipelines are "
+            "not analyzing the same engine: "
+            + "; ".join(resolved_inputs_drift)
+        )
+    if resolved_inputs_error:
+        warnings.append(
+            "Resolved engine-input contract unavailable, so the traditional "
+            "handoff could not be crosschecked against it: "
+            + resolved_inputs_error
+        )
     solved_coupling = bool(
         np.asarray(mdo_result.input_conventions.couple_eta_cstar)
     ) if (
@@ -931,6 +1042,27 @@ def reevaluate(
         "traditional_spray_cstar_coupling_rerun",
         False,
     )
+    if resolved_inputs is not None:
+        # Content-addressed identity of the exact inputs both pipelines ran,
+        # so a snapshot can be replayed and a parity claim can be checked
+        # against the inputs rather than assumed.
+        snapshot_optimizer_metadata.setdefault(
+            "resolved_engine_inputs",
+            {
+                "schema_version": resolved_inputs.schema_version,
+                "digest": resolved_inputs.digest(),
+                "mixture_ratio": resolved_inputs.propellant.mixture_ratio,
+                "mixture_ratio_source":
+                    resolved_inputs.propellant.mixture_ratio_source,
+                "liner_material": resolved_inputs.material.liner_name,
+                "closeout_material": resolved_inputs.material.closeout_name,
+                "model_identities": dict(resolved_inputs.model_identities),
+                "unavailable": dict(resolved_inputs.unavailable),
+                "traditional_handoff_crosscheck": (
+                    "agrees" if not resolved_inputs_drift else "disagrees"
+                ),
+            },
+        )
     if solved_coupling:
         warnings.append(
             "The traditional re-evaluation freezes the effective eta_cstar "

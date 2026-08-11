@@ -38,6 +38,7 @@ Nothing here touches CAD or the reporting workflow (plan rule 10).
 from __future__ import annotations
 
 from dataclasses import dataclass
+import warnings
 
 import raosim.jax  # noqa: F401  -- float64
 import jax.numpy as jnp
@@ -62,6 +63,8 @@ from raosim.mdo.envelope import (
 )
 from raosim.mdo.pump import electric_feed, ElectricFeed
 from raosim.mdo.structures import nozzle_collapse_screen, NozzleCollapseScreen
+from raosim.mdo.coolant_htd import htd_is_applicable
+from raosim.mdo.propellants import get_propellant
 
 Array = jnp.ndarray
 
@@ -94,16 +97,12 @@ def eta_cstar_coupled(TMR: Array, mission: MissionSpec) -> Array:
 def _resolve_of(x: DesignVector, mission: MissionSpec) -> Array:
     """Effective mixture ratio for this solve.
 
-    ``x.of_is_variable`` is static pytree aux, so this is a *Python* branch
-    resolved at trace time -- it never becomes a design-dependent switch inside
-    the graph (plan §0.1).  When O/F is not a live variable the mission's fixed
-    value is authoritative: ``DesignVector.OF``'s class default is an RP-1
-    number and would silently mis-split the propellant flow on any other
-    combination.
+    ``x.layout`` is static pytree aux, so its branch is resolved at trace time;
+    design intent is never encoded in the physical O/F scalar.  A fixed layout
+    reads the mission value and a variable layout reads the design value.
     """
 
-    return (jnp.asarray(x.OF, dtype=jnp.float64) if x.of_is_variable
-            else jnp.asarray(mission.OF, dtype=jnp.float64))
+    return x.layout.resolve_of(x.OF, mission.OF)
 
 
 def _split(mdot: Array, mission: MissionSpec,
@@ -199,13 +198,17 @@ class EngineResult:
     dp_regen: Array
     dp_rise_fuel: Array
     dp_rise_ox: Array
-    # Smooth electric-feed objective.  This is deliberately not labelled as a
-    # physical package total: its battery branch is a log-sum-exp surrogate.
-    objective_mass: Array
+    # Explicit smooth objective branches.  The electric branch is not a
+    # physical package total: its battery choice is a log-sum-exp surrogate.
+    # The partial-dry branch adds liner, channel lands, and closeout, but still
+    # excludes injector hardware, manifolds, valves, lines, gimbal, and mounts.
+    electric_package_objective_mass: Array
+    dry_mass_partial_objective_mass: Array
     electric_package_exact_mass: Array
-    # Thrust-chamber structural metal, integrated on the station grid.  Real
-    # hardware mass, not a surrogate -- but conditional on the closeout
-    # thickness assumption documented in :mod:`raosim.mdo.mass`.
+    dry_mass_partial_exact_mass: Array
+    # Thrust-chamber structural metal integrated on the resolved station grid.
+    # This is the differentiable optimizer proxy, not as-built/CAD-linked mass;
+    # the host withholds that claim until a matching geometry_id part is built.
     chamber_mass: ChamberMassBreakdown
     # Smallest enclosing cylinder of the cooled chamber (SP-125 §2.1 item 6).
     # A lower bound on the installed envelope -- no flange, injector body or
@@ -224,10 +227,16 @@ class EngineResult:
     finite: Array
 
     @property
-    def package_mass(self) -> Array:
-        """Deprecated compatibility alias for :attr:`objective_mass`."""
+    def objective_mass(self) -> Array:
+        """Deprecated electric-objective alias; optimizers select explicitly."""
 
-        return self.objective_mass
+        return self.electric_package_objective_mass
+
+    @property
+    def package_mass(self) -> Array:
+        """Deprecated compatibility alias for the electric objective."""
+
+        return self.electric_package_objective_mass
 
 
 def chamber_surfaces_for(mission: MissionSpec) -> ChamberSurfaces:
@@ -241,7 +250,11 @@ def chamber_surfaces_for(mission: MissionSpec) -> ChamberSurfaces:
     """
     if mission.cea_table_path:
         from raosim.mdo.properties import load_chamber_surfaces
-        return load_chamber_surfaces(mission.cea_table_path)
+        return load_chamber_surfaces(
+            mission.cea_table_path,
+            expected_propellant=mission.propellant_name,
+            require_of_dependence=not mission.of_is_pinned,
+        )
     return constant_chamber_surfaces(gamma=mission.gamma, Tc=mission.Tc,
                                      R_gas=mission.R_gas)
 
@@ -343,8 +356,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     m_batt_exact = jnp.maximum(
         m_batt_energy_installed, m_batt_power_installed
     )
-    # Thrust-chamber structure is now integrated from the same station grid the
-    # cooling march uses (SP-125 eq. 8-32 shell mass; see mdo/mass.py), so the
+    # Thrust-chamber structure is integrated geometrically (Pappus/shell
+    # volume) from the same station grid the cooling march uses.  SP-125 eq.
+    # 8-32 is a propellant-tank relation that corroborates the geometry; it is
+    # not a prescribed thrust-chamber mass model (see mdo/mass.py).  Thus the
     # optimizer can trade wall thickness and channel geometry against feed-
     # system mass instead of minimising only the electric package.  The
     # injector remains a hydraulic sizing here -- its hardware mass needs the
@@ -395,7 +410,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "thrust_chamber_closeout": chamber.closeout,
         "thrust_chamber": chamber.total,
     }
-    objective_mass = (
+    electric_package_objective_mass = (
         feed.pump_mass
         + feed.motor_mass
         + feed.inverter_mass
@@ -407,20 +422,29 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         + feed.inverter_mass
         + m_batt_exact
     )
+    dry_mass_partial_objective_mass = (
+        electric_package_objective_mass + chamber.total
+    )
+    dry_mass_partial_exact_mass = electric_package_exact_mass + chamber.total
+    ledger.update({
+        "electric_package_objective_smooth": electric_package_objective_mass,
+        "electric_package_exact": electric_package_exact_mass,
+        "dry_mass_partial_objective_smooth": dry_mass_partial_objective_mass,
+        "dry_mass_partial_exact": dry_mass_partial_exact_mass,
+    })
 
     # --- constraint margins (reporting scalars; ≥0 feasible) ---------------- #
     outer_residual_max = jnp.max(jnp.abs(resid))
     outer_status_ok = sol.result == optx.RESULTS.successful
-    finite = (jnp.all(jnp.isfinite(y)) & jnp.all(jnp.isfinite(resid))
-              & jnp.isfinite(Cf) & jnp.isfinite(Isp) & cooling.finite)
+    of_valid = jnp.isfinite(of) & (of > 0.0)
+    base_finite = (jnp.all(jnp.isfinite(y)) & jnp.all(jnp.isfinite(resid))
+                   & jnp.isfinite(Cf) & jnp.isfinite(Isp) & cooling.finite
+                   & of_valid)
     # The root API is intentionally called with throw=False so infeasible NLP
     # probes remain differentiable.  Residual closure plus finiteness is the
     # JIT-safe solver-success predicate carried into feasibility below.
     outer_tol = jnp.asarray(max(rtol, atol), dtype=jnp.float64) * 10.0
     solver_status_ok = outer_status_ok & cooling.solver_status_ok
-    solver_converged = (solver_status_ok & finite
-                        & (outer_residual_max <= outer_tol)
-                        & cooling.solver_converged)
 
     chart_scale = jnp.stack([
         grid.chart_domain_violation[0] / 46.0,
@@ -428,13 +452,8 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         grid.chart_domain_violation[2] / 40.0,
         grid.chart_domain_violation[3] / 40.0,
     ])
-    property_violation = surfaces.domain_violation(Pc, of)
-    property_scale = jnp.stack([
-        property_violation[0] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
-        property_violation[1] / (surfaces.gamma.xg[-1] - surfaces.gamma.xg[0]),
-        property_violation[2] / (surfaces.gamma.yg[-1] - surfaces.gamma.yg[0]),
-        property_violation[3] / (surfaces.gamma.yg[-1] - surfaces.gamma.yg[0]),
-    ])
+    coolant_name = get_propellant(mission.propellant_name).coolant_name
+    coking_applicable = not htd_is_applicable(coolant_name)
 
     constraints = {
         "thrust_residual": resid[0],
@@ -442,7 +461,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # Retain the exact stationwise extrema for IFT wall constraints: a
         # broad smooth envelope perturbs their root sensitivities.  The active
         # stations are fixed-topology and tied only at measure-zero points.
-        "coking_margin_min": jnp.min(cooling.coking_margin),
+        "coking_margin_min": (
+            jnp.min(cooling.coking_margin)
+            if coking_applicable else jnp.asarray(1.0, dtype=jnp.float64)
+        ),
         "land_min": cooling.land_min,
         "chug_margin_min": _smooth_min(jnp.stack([
             injector.chug_margin_fuel, injector.chug_margin_ox]), 100.0),
@@ -482,7 +504,12 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
                                  - mission.film_capacity_margin * x.film_frac),
         # Both interpolant and chart evaluators clamp only for numerical safety;
         # their actual valid domains are hard NLP constraints.
-        "property_domain_margin": -_smooth_max(property_scale, 40.0),
+        # A sampled CEA surface has a real validity box.  The constant fallback
+        # has only interpolator-scaffolding axes, so ``domain_margin`` returns an
+        # inert value and the manifest marks this row not applicable.  The exact
+        # normalized min gives exactly zero at a sampled boundary (no log-sum-
+        # exp bias that turns a valid boundary point into a small violation).
+        "property_domain_margin": surfaces.domain_margin(Pc, of),
         "chart_domain_margin": -_smooth_max(chart_scale, 40.0),
         "wall_monotonic_margin": grid.wall_monotonic_margin,
         # The chamber barrel must have non-negative length.  SP-125 defines the
@@ -526,14 +553,36 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # structure.  Missing: injector hardware, manifolds, valves, lines,
         # gimbal, mounts (see docs/HARDWARE_MASS_LEDGER.md `excludes`).
         "dry_mass_partial_margin": fractional_margin(
-            objective_mass + chamber.total, mission.dry_mass_max
+            dry_mass_partial_objective_mass, mission.dry_mass_max
         ),
         "engine_residual_margin": outer_tol - outer_residual_max,
         "cooling_residual_margin": (jnp.asarray(max(rtol, atol), dtype=jnp.float64)
                                     * 10.0 - cooling.solver_residual_max),
         "solver_status_margin": jnp.where(solver_status_ok, 1.0, -1.0),
-        "finite_margin": jnp.where(finite, 1.0, -1.0),
+        # Replaced below after every applicable discipline margin has been
+        # included in the finite check.  The placeholder keeps the dict shape
+        # static while constructing the remaining rows.
+        "finite_margin": jnp.where(base_finite, 1.0, -1.0),
+        # Nasuti & Pizzarelli (2021), Eq. (9), requires the bulk real-fluid
+        # beta/cp(T,p) term.  The current cooling march has no such surface, so
+        # this is deliberately NaN plus an unavailable mask in ConstraintState,
+        # never a fabricated passing number.  RP-1-class coolants mark the row
+        # not applicable and retain their SP-8087 coking constraint instead.
+        "coolant_htd_margin": jnp.asarray(jnp.nan, dtype=jnp.float64),
     }
+    # A finite root state is not enough if a downstream injector/feed/structure
+    # margin became NaN.  The HTD row is deliberately NaN with an unavailable
+    # mask until its real-fluid surface exists, so it is the sole excluded row.
+    discipline_finite = jnp.all(jnp.stack([
+        jnp.isfinite(value)
+        for name, value in constraints.items()
+        if name not in {"finite_margin", "coolant_htd_margin"}
+    ]))
+    finite = base_finite & discipline_finite
+    constraints["finite_margin"] = jnp.where(finite, 1.0, -1.0)
+    solver_converged = (solver_status_ok & finite
+                        & (outer_residual_max <= outer_tol)
+                        & cooling.solver_converged)
     # reported diagnostics (NOT constraints — the coolant-Mach margin is ~173x,
     # so constraining it would only add a dead Jacobian column, §10.4)
     diagnostics = {
@@ -556,7 +605,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # installed quantity (no flange, injector body or feed hardware).
         "envelope_diameter_partial": envelope.diameter,
         "envelope_length_partial": envelope.length,
-        "dry_mass_partial": objective_mass + chamber.total,
+        "dry_mass_partial_objective": dry_mass_partial_objective_mass,
+        "dry_mass_partial_exact": dry_mass_partial_exact_mass,
+        # Deprecated diagnostic alias retained for one compatibility release.
+        "dry_mass_partial": dry_mass_partial_objective_mass,
     }
 
     return EngineResult(
@@ -565,8 +617,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         OF=of,
         thrust_residual=resid[0], cooling=cooling, injector=injector, feed=feed,
         dp_regen=dp_regen, dp_rise_fuel=dp_rise_f, dp_rise_ox=dp_rise_o,
-        objective_mass=objective_mass,
+        electric_package_objective_mass=electric_package_objective_mass,
+        dry_mass_partial_objective_mass=dry_mass_partial_objective_mass,
         electric_package_exact_mass=electric_package_exact_mass,
+        dry_mass_partial_exact_mass=dry_mass_partial_exact_mass,
         chamber_mass=chamber,
         envelope=envelope,
         mass_ledger=ledger,
@@ -583,8 +637,14 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
 _SCALARS = {
     "Isp": lambda r: r.Isp,
     "objective_mass": lambda r: r.objective_mass,
-    # Backward-compatible output name.  New callers should request
-    # ``objective_mass`` so a smooth surrogate cannot be mistaken for hardware.
+    "electric_package_objective_mass": (
+        lambda r: r.electric_package_objective_mass
+    ),
+    "dry_mass_partial_objective_mass": (
+        lambda r: r.dry_mass_partial_objective_mass
+    ),
+    # Backward-compatible electric-only output name. New optimizer callers must
+    # request one of the two explicit objective identities above.
     "package_mass": lambda r: r.package_mass,
     "P_electric": lambda r: r.feed.P_electric_total,
     "Rt": lambda r: r.Rt,
@@ -595,12 +655,13 @@ _SCALARS = {
     "coking_margin_min": lambda r: r.constraints["coking_margin_min"],
     "separation_margin": lambda r: r.constraints["separation_margin"],
     "T_wc_max": lambda r: jnp.max(r.cooling.T_wc),
-    # Thrust-chamber structural metal (SP-125 eq. 8-32 shell integral).
+    # Thrust-chamber structural metal from the geometric Pappus/shell-volume
+    # integration (SP-125 eq. 8-32 only corroborates it for a tank shell).
     "thrust_chamber_mass": lambda r: r.chamber_mass.total,
     # Electric feed package + thrust-chamber structure.  Still NOT a complete
     # engine dry mass: injector hardware, manifolds, valves, lines, gimbal and
     # mounts are absent, and the injector branch is only resolvable host-side.
-    "dry_mass_partial": lambda r: r.objective_mass + r.chamber_mass.total,
+    "dry_mass_partial": lambda r: r.dry_mass_partial_objective_mass,
     # SP-125 §2.1 item 6.  Lower bounds on the installed envelope: the cooled
     # chamber only, with no flange, injector body or feed hardware.
     "envelope_diameter_partial": lambda r: r.envelope.diameter,
@@ -611,12 +672,45 @@ _SCALARS = {
 def engine_outputs(x_arr: Array, mission: MissionSpec, *,
                    couple_eta_cstar: bool = False,
                    outputs: tuple[str, ...] = ("Isp", "objective_mass")) -> Array:
-    """``f(x_array) -> stacked scalar outputs`` through the coupled solve."""
+    """``f(active_x) -> outputs`` through the explicit mission layout."""
     for k in outputs:
         if k not in _SCALARS:
             raise KeyError(f"output '{k}' not in {tuple(_SCALARS)}")
-    r = solve_engine(DesignVector.from_array(x_arr), mission,
-                     couple_eta_cstar=couple_eta_cstar)
+    layout = mission.design_layout()
+    n_values = int(x_arr.shape[0])
+    if n_values == layout.active_size:
+        design = DesignVector.from_active_array(
+            x_arr, layout, fixed_of=mission.OF
+        )
+    elif n_values == len(DesignVector.names()):
+        # Public compatibility boundary for a fixed 11-value state contract.
+        design = DesignVector.from_contract_array(x_arr, layout)
+    elif n_values == 4:
+        # Deprecated walking-skeleton prefix.  Its O/F intent is explicitly
+        # fixed; the array length does not select fixed versus variable mode.
+        warnings.warn(
+            "4-value engine_outputs input is deprecated; pass the explicit "
+            "10/11-value active design vector",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        design = DesignVector(
+            Pc=x_arr[0],
+            eps=x_arr[1],
+            dp_f_frac=x_arr[2],
+            dp_o_frac=x_arr[3],
+            OF=mission.OF,
+        )
+    else:
+        raise ValueError(
+            f"engine_outputs received {n_values} values; expected the "
+            f"{layout.active_size}-value active layout or 11-value contract"
+        )
+    r = solve_engine(
+        design,
+        mission,
+        couple_eta_cstar=couple_eta_cstar,
+    )
     return jnp.stack([_SCALARS[k](r) for k in outputs])
 
 

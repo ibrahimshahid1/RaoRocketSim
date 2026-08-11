@@ -46,6 +46,9 @@ def test_state_is_a_numeric_fixed_shape_pytree(state):
     leaves = jax.tree_util.tree_leaves(state)
     assert leaves
     assert int(state.schema_version) == ENGINE_STATE_SCHEMA_VERSION
+    assert ENGINE_STATE_SCHEMA_VERSION == 2
+    assert state.design_vector.shape == (11,)
+    assert float(state.design_vector[-1]) == pytest.approx(2.27)
     assert all(
         np.issubdtype(np.asarray(leaf).dtype, np.number)
         or np.issubdtype(np.asarray(leaf).dtype, np.bool_)
@@ -103,8 +106,9 @@ def test_mass_branches_and_unavailable_values_are_not_zero_placeholders(state):
         "battery_governing_installed_mass",
         "electric_feed_package_exact_mass",
         "electric_feed_package_objective_mass",
-        # Thrust-chamber structure is integrated on the station grid
-        # (raosim.mdo.mass, SP-125 eq. 8-32), so it is real hardware mass.
+        # Thrust-chamber structure is a geometric Pappus/shell-volume integral
+        # on the station grid (SP-125 eq. 8-32 corroborates the geometry for a
+        # tank shell; it is not a thrust-chamber correlation).
         "thrust_chamber_liner_mass",
         "thrust_chamber_land_mass",
         "thrust_chamber_closeout_mass",
@@ -162,6 +166,8 @@ def test_state_carries_the_numerical_input_convention(state):
     assert float(c.thrust) == pytest.approx(13_000.0)
     assert not bool(c.couple_eta_cstar)
     assert float(c.OF) == pytest.approx(2.27)
+    assert float(c.mission_OF) == pytest.approx(2.27)
+    assert not bool(c.of_is_variable)
     assert float(c.eta_cstar_nominal) == pytest.approx(0.975)
     assert float(c.eta_CF) == pytest.approx(0.985)
     assert float(c.throat_ru_factor) == pytest.approx(1.5)
@@ -171,7 +177,7 @@ def test_state_carries_the_numerical_input_convention(state):
     assert int(c.channel_count) == 192
 
 
-def test_surface_identity_covers_derivative_fields_and_provenance():
+def test_surface_identity_covers_content_but_not_path_provenance():
     surfaces = chamber_surfaces_for(MissionSpec())
     changed_gamma = replace(
         surfaces.gamma,
@@ -187,7 +193,9 @@ def test_surface_identity_covers_derivative_fields_and_provenance():
         reference,
         np.asarray(surface_signature(changed_derivative), dtype=np.uint32),
     )
-    assert not np.array_equal(
+    # A copied byte-identical table is the same model identity.  The path is
+    # retained as provenance, not hashed into the evaluator contract.
+    assert np.array_equal(
         reference,
         np.asarray(surface_signature(changed_provenance), dtype=np.uint32),
     )
@@ -196,8 +204,12 @@ def test_surface_identity_covers_derivative_fields_and_provenance():
 def test_full_state_is_jittable_and_differentiable():
     mission = MissionSpec()
     x0 = _design().to_array()
+    layout = mission.design_layout()
     compiled = jax.jit(
-        lambda a: solve_engine_state(DesignVector.from_array(a), mission))
+        lambda a: solve_engine_state(
+            DesignVector.from_contract_array(a, layout), mission
+        )
+    )
     compiled_state = compiled(x0)
     value = compiled_state.performance.Isp_delivered
     reference_state = solve_engine_state(_design(), mission)

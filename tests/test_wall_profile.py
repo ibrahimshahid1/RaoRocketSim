@@ -51,6 +51,14 @@ def test_wall_profile_is_variable_not_uniform(prop, contour):
         0.02 * float(np.min(np.asarray(contour["y"])))
     )
     assert r["t_hot_min_mm"] >= 0.5 - 1e-6          # honors the mfg floor
+    assert r["land_mass_kg"] > 0.0
+    assert r["optimizer_proxy_mass_kg"] == pytest.approx(
+        r["liner_mass_kg"] + r["land_mass_kg"] + r["jacket_mass_kg"]
+    )
+    assert r["mass_kg"] == pytest.approx(r["optimizer_proxy_mass_kg"])
+    assert r["post_build_mass_kg"] is None
+    assert r["post_build_minus_optimizer_proxy_mass_kg"] is None
+    assert "multi-body" in r["post_build_mass_unavailable_reason"]
 
 
 def test_wall_profile_meets_structural_and_thermal(prop, contour):

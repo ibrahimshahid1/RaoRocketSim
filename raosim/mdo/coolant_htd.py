@@ -2,18 +2,19 @@
 
 The gap this closes
 -------------------
-The repository's only coolant-side wall constraint is the RP-1 **coking** limit
-(SP-8087, 728 K).  Coking is a hydrocarbon phenomenon, and
+The repository's only coolant-side wall constraint is the 728 K RP-1
+**coking** limit (NASA SP-8087, April 1972, sec. 3.1.1.5.4, source-PDF p. 78).
+Coking is a hydrocarbon phenomenon, and
 ``raosim.mdo.propellants`` correctly reports ``coolant_wall_limit_K = None`` for
-hydrogen — but nothing replaces it.  For methane and hydrogen the governing
-coolant-side failure is not coking, it is **heat-transfer deterioration (HTD)**
-at supercritical pressure, and until this module existed a LOX/LCH4 or LOX/LH2
-design came back "feasible" when it was really *unmodelled*.
+hydrogen — but nothing replaces it.  For methane and hydrogen a supercritical
+real-fluid wall-side screen is therefore required; reporting only a carbon-
+deposition/coking screen would call an unevaluated mechanism feasible.
 
 Nasuti & Pizzarelli, *Pseudo-boiling and heat transfer deterioration while
 heating supercritical liquid rocket engine propellants*, J. Supercritical
-Fluids 168:105066 (2021), ``propulsion_texts/nasuti2021.pdf``, states the
-problem exactly:
+Fluids 168:105066 (2021), sec. 2.2, source-PDF p. 6,
+DOI 10.1016/j.supflu.2020.105066, ``propulsion_texts/nasuti2021.pdf``, states
+the problem exactly:
 
     "Heating of liquid propellants used as the coolant in rocket engines may
     lead to undesired phenomena such as pseudo-boiling or heat transfer
@@ -93,23 +94,40 @@ Array = jnp.ndarray
 
 __all__ = [
     "HTD_THRESHOLD",
+    "ModelCoverageError",
     "HTDScreen",
     "htd_availability",
     "htd_group",
+    "htd_is_applicable",
     "htd_margin",
+    "require_htd_coverage",
 ]
 
-#: Nasuti & Pizzarelli (2021) Eq. (9) threshold K.  Quoted there as equal to
-#: the value proposed in their ref. [21].
+#: Francesco Nasuti and Marco Pizzarelli (2021), *Pseudo-boiling and heat
+#: transfer deterioration while heating supercritical liquid rocket engine
+#: propellants*, sec. 2.2, Eq. (9), source-PDF p. 6,
+#: DOI 10.1016/j.supflu.2020.105066.  The threshold is quoted there as equal
+#: to the value proposed in their ref. [21].
 HTD_THRESHOLD = 0.187
 
-#: Coolants for which supercritical HTD is a governing concern.  The paper
-#: singles out fluids with "relatively low critical pressure and temperature —
-#: light hydrocarbons, as for instance methane".  Hydrogen is included because
-#: it is always supercritical in a regen jacket and has no coking limit to fall
-#: back on, so HTD is its only coolant-side wall mechanism.
+#: Coolants for which a supercritical HTD screen is required.  Nasuti &
+#: Pizzarelli (2021), sec. 2 (PDF pp. 2-3), directly identifies light
+#: hydrocarbons such as methane as challenging and shows hydrogen necessarily
+#: crosses the pseudo-critical temperature.  It also notes that hydrogen's high
+#: reduced pressure makes the property evolution smoother.  Including hydrogen
+#: is therefore a conservative model-coverage decision (not a claim that the
+#: paper predicts deterioration for every hydrogen channel): hydrogen cannot
+#: coke, so a coking row cannot substitute for evaluating its real-fluid wall
+#: mechanism.  Propane is an explicit conservative engineering inference from
+#: the paper's light-hydrocarbon discussion and its critical-property table
+#: (sec. 1, source-PDF p. 2), not a claim that the authors validated Eq. (9)
+#: specifically for a propane rocket channel.
 HTD_RELEVANT_COOLANTS = frozenset({"methane", "lch4", "ch4", "lh2", "hydrogen",
                                    "h2", "propane"})
+
+
+class ModelCoverageError(RuntimeError):
+    """An authoritative MDO was requested without a governing physics model."""
 
 
 class HTDScreen(NamedTuple):
@@ -195,8 +213,8 @@ def htd_availability(coolant_name: str,
         )
     if not has_real_fluid_properties:
         return False, (
-            f"{coolant_name!r} is HTD-prone (Nasuti & Pizzarelli 2021: light "
-            "hydrocarbons and hydrogen), but the cooling march carries the "
+            f"{coolant_name!r} requires a supercritical HTD screen (Nasuti & "
+            "Pizzarelli 2021, secs. 2-3), but the cooling march carries the "
             "coolant as constant properties and has no isobaric expansion "
             "coefficient beta. Eq. (9) depends on (beta/cp)_b, which PEAKS at "
             "the pseudo-critical temperature -- a constant-property "
@@ -205,6 +223,34 @@ def htd_availability(coolant_name: str,
             "see raosim.mdo.properties for the analogous chamber surfaces"
         )
     return True, ""
+
+
+def htd_is_applicable(coolant_name: str) -> bool:
+    """Whether this coolant requires the real-fluid HTD row."""
+
+    return _is_relevant(coolant_name)
+
+
+def require_htd_coverage(
+    coolant_name: str,
+    *,
+    has_real_fluid_properties: bool = False,
+    allow_incomplete_physics: bool = False,
+) -> tuple[bool, str]:
+    """Authoritative-optimization preflight for the coolant-side mechanism.
+
+    Screening runs may opt in to incomplete physics, but their downstream
+    feasibility remains ``unknown`` through the constraint availability mask.
+    """
+
+    available, reason = htd_availability(
+        coolant_name, has_real_fluid_properties=has_real_fluid_properties
+    )
+    if not available and not allow_incomplete_physics:
+        raise ModelCoverageError(
+            "authoritative MDO model-coverage preflight failed: " + reason
+        )
+    return available, reason
 
 
 def screen(

@@ -64,7 +64,7 @@ chamber model.
 | # | Document | ID | Supplies | Blocks |
 |---|---|---|---|---|
 | G1 | **NASA SP-8110**, *Liquid Rocket Engine Turbines* (Jan 1974, 158 pp) | ✅ NTRS [19740026132](https://ntrs.nasa.gov/citations/19740026132) | Turbine type selection, admission, velocity-ratio efficiency, blade stress, temperature limits, installation | **Every pump-fed cycle except electric.** There is no turbine model in the repository, so gas-generator and staged-combustion cycles cannot close their power balance at all |
-| G2 | **NASA SP-8081**, *Liquid Propellant Gas Generators* (Mar 1972, 110 pp) | ✅ NTRS [19730018978](https://ntrs.nasa.gov/citations/19730018978) | Bipropellant GG sizing, mixture-ratio and temperature control, turbine-inlet conditioning, stability | The gas-generator cycle specifically — the 10–15 MPa `Pc` band that Yang 2004 identifies as its performance optimum |
+| G2 | **NASA SP-8081**, *Liquid Propellant Gas Generators* (Mar 1972, 110 pp) | ✅ NTRS [19730018978](https://ntrs.nasa.gov/citations/19730018978) | Bipropellant GG sizing, mixture-ratio and temperature control, turbine-inlet conditioning, stability | The gas-generator cycle specifically — the 10–15 MPa `Pc` band that Parsley & Zhang (2004) identify as its performance optimum |
 | G3 | **NASA SP-8124**, *Liquid Rocket Engine Self-Cooled Combustion Chambers* (Sep 1977) | ✅ NTRS [19780013268](https://ntrs.nasa.gov/citations/19780013268) | Five self-cooled types — ablative, radiation-cooled, internally regenerative (Interegen), heat sink, adiabatic wall — and adiabatic-wall temperature control via injector or film-coolant ring | Pressure-fed upper stages, which are usually **not** regeneratively cooled. Both A-3 and A-4 in the SP-125 Alpha validation set are pressurized gas-feed; the repository can only model a regen jacket, so it cannot currently reproduce either |
 
 Pressure-fed itself needs no new source — SP-125 Ch. V (`19710019929.pdf`,
@@ -142,7 +142,7 @@ Recorded so this is not re-litigated.
 | Injectors, general design criteria | **SP-8089** *Liquid Rocket Engine Injectors* = `19760023196`, in corpus (also duplicated in `pintle_injector/`) |
 | Axial-flow pumps | **SP-8125** *Liquid Rocket Engine Axial-Flow Turbopumps* = `19780023221`, in corpus. Axial pumps are already sourced even though not modelled |
 | Centrifugal pumps, inducers, turbopump systems | SP-8109 = `19740020848`, SP-8052 = `19710025474`, SP-8107 = `19750012398`. All in corpus |
-| Cycle selection and hardware limits | Yang et al. 2004, `fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf`. This is the enumeration table for `FeedArchitecture` |
+| Cycle selection and pressure guidance | Randy C. Parsley & Baojiong Zhang, *Thermodynamic Power Cycles for Pump-Fed Liquid Rocket Engines* (2004), §I, source-PDF pp. 2–3, DOI `10.2514/5.9781600866760.0621.0648`, `fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf`. This supplies the pump-fed cycle enumeration and architecture-specific pressure guidance; its optima/onset values are not universal hard limits |
 | Pressure-fed vs pump-fed trade | NASA MSFC *Liquid Propulsion: Propellant Feed System Design* = `fuel_pump_design/20100035254.pdf` |
 | AM copper alloys and channel-wall nozzles | Gradl 2016–2020 = PAPER-0081…0088; `materials_science/` carries GRCop-42/84, NARloy-Z, CuCrZr and Inconel coverage |
 | Nozzle contour and separation | Rao 1958/1999, SP-8120 = `19770009165`, Frey & Hagemann, Hagemann 1998, Schomberg, the dual-bell variational paper. Corpus is strong here |
@@ -179,7 +179,7 @@ Revised order, with the sources each step now has:
 | # | item | source now on disk |
 |---|---|---|
 | 1 | Sample CEA property surfaces; make O/F a design variable | G4, G5, **G6** — the 7-term species fits mean this can be done without a RocketCEA install |
-| 2 | Derive `Pc`/`ε` bounds from (cycle, propellant, ambient, envelope) | Yang 2004 + SP-8120, both already held |
+| 2 | Derive `Pc`/`ε` bounds from (cycle, propellant, ambient, envelope) | Parsley & Zhang 2004 + SP-8120, both already held |
 | 3 | `EngineRequirement` + requirement→constraint mapping | SP-125 §2.1, already held |
 | 4 | Add `pressure_fed` as the second `FeedArchitecture` | SP-125 Ch. V + **G3** for the non-regen chamber |
 | 5 | Alpha-set acceptance tests (A-1…A-4) | **G9** covers A-4's N2O4/N2H4 bulk properties; LF2/LH2 for A-3 still has no property source beyond SP-125's own operating table |

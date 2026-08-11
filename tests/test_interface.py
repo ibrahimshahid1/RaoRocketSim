@@ -15,6 +15,8 @@ from raosim.interface import (
     resolve_bolted_interface_geometry,
     screen_composite_regen_wall,
     screen_injector_chamber_interface,
+    size_bolted_interface,
+    validate_bolted_interface_geometry,
 )
 from raosim.regen_profile import RegenWallProfile
 
@@ -46,6 +48,76 @@ def test_resolve_bolted_interface_geometry_matches_flange_and_face():
     assert resolution.bolt_pitch >= resolution.pitch_requirement - 1e-12
     assert resolution.face_thickness >= resolution.bolt_hole_diameter * 2.0
     assert resolution.auto_sized_fields["flange_od"] == "auto_sized"
+
+
+def test_bolt_pattern_rejects_degenerate_counts_but_allows_three_explicit():
+    with pytest.raises(ValueError, match="bolt_count"):
+        resolve_bolted_interface_geometry(
+            chamber_radius=0.035, bolt_count=2
+        )
+    triangular = resolve_bolted_interface_geometry(
+        chamber_radius=0.035, bolt_count=3
+    )
+    assert triangular.bolt_count == 3
+    automatic = resolve_bolted_interface_geometry(
+        chamber_radius=0.035, default_bolt_count=3
+    )
+    assert automatic.bolt_count >= 4 and automatic.bolt_count % 2 == 0
+
+
+@pytest.mark.parametrize("value", [-1.0, 0.0, float("nan")])
+def test_invalid_joint_separation_factor_is_rejected(value):
+    with pytest.raises(ValueError, match="joint_separation_factor"):
+        resolve_bolted_interface_geometry(
+            chamber_radius=0.035, joint_separation_factor=value
+        )
+    with pytest.raises(ValueError, match="joint_separation_factor"):
+        size_bolted_interface(
+            chamber_radius=0.035,
+            chamber_pressure=3.0e6,
+            joint_separation_factor=value,
+        )
+
+
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [
+        ("chamber_pressure", float("nan")),
+        ("structural_fos", float("inf")),
+        ("edge_distance_factor", 0.0),
+        ("pitch_factor", -1.0),
+        ("material_yield_strength", float("nan")),
+        ("face_thickness", float("inf")),
+    ],
+)
+def test_interface_screen_rejects_nonfinite_or_nonpositive_contract_values(
+    name, value
+):
+    kwargs = {
+        "chamber_pressure": 7.0e6,
+        "chamber_radius": 0.035,
+        name: value,
+    }
+    with pytest.raises(ValueError, match=name):
+        screen_injector_chamber_interface(**kwargs)
+
+
+def test_interface_screen_rejects_degenerate_explicit_bolt_count():
+    with pytest.raises(ValueError, match="bolt_count"):
+        screen_injector_chamber_interface(
+            chamber_pressure=7.0e6,
+            chamber_radius=0.035,
+            bolt_count=2,
+        )
+
+
+def test_cad_contract_rejects_a_mutated_degenerate_resolution():
+    from dataclasses import replace
+
+    valid = resolve_bolted_interface_geometry(chamber_radius=0.035)
+    validate_bolted_interface_geometry(valid)
+    with pytest.raises(ValueError, match="bolt_count"):
+        validate_bolted_interface_geometry(replace(valid, bolt_count=2))
 
 
 def test_bolt_pattern_boundary_roundoff_does_not_fail():

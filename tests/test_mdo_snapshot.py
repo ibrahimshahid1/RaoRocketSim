@@ -206,6 +206,16 @@ def test_engine_state_is_primary_snapshot_path(mission, design_vector):
     assert snap.masses["total_engine_package_mass_kg"].value is None
     assert snap.masses["total_engine_package_mass_kg"].availability_reason
     assert snap.optimizer_metadata["method"] == "SLSQP"
+    assert snap.constraints_gates[
+        "optimizer_constraints_feasible"
+    ].available
+    assert snap.constraints_gates["numerical_validity"].available
+    assert snap.constraints_gates["physics_feasible"].available
+    assert not snap.constraints_gates["requirements_feasible"].available
+    margin_rows = snap.constraints_gates["constraint_margins"].value
+    assert margin_rows["coolant_htd_margin"]["applicable"] is False
+    assert margin_rows["coolant_htd_margin"]["value"] is None
+    assert margin_rows["coking_margin_min"]["available"] is True
     assert snap.provenance["input_conventions"].available
     conventions = snap.provenance["input_conventions"].value
     assert conventions["eta_cstar_nominal"] == pytest.approx(
@@ -256,9 +266,47 @@ def test_engine_state_is_primary_snapshot_path(mission, design_vector):
         )
     with pytest.raises(ValueError, match="unsupported EngineState schema version"):
         snapshot_from_mdo(
-            state._replace(schema_version=np.asarray(2)),
+            state._replace(schema_version=np.asarray(1)),
             mission=mission,
         )
+
+
+def test_snapshot_preserves_unknown_constraint_status(mission, engine_state):
+    from raosim.mdo.constraints import (
+        ConstraintReasonCode,
+        ENGINE_CONSTRAINT_SPECS,
+    )
+
+    coking_index = next(
+        index for index, row in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if row.name == "coking"
+    )
+    availability = np.asarray(engine_state.constraints.available).copy()
+    reason_codes = np.asarray(engine_state.constraints.reason_codes).copy()
+    values = np.ones_like(
+        np.asarray(engine_state.constraints.values), dtype=float
+    )
+    availability[coking_index] = False
+    reason_codes[coking_index] = int(ConstraintReasonCode.MODEL_UNAVAILABLE)
+    incomplete = engine_state._replace(constraints=engine_state.constraints._replace(
+        values=values,
+        available=availability,
+        reason_codes=reason_codes,
+    ))
+    snap = snapshot_from_mdo(incomplete, mission=mission)
+
+    assert not snap.constraints_gates["all_constraints_feasible"].available
+    assert not snap.constraints_gates[
+        "optimizer_constraints_feasible"
+    ].available
+    assert snap.constraints_gates["numerical_validity"].value is True
+    assert not snap.constraints_gates["physics_feasible"].available
+    row = snap.constraints_gates["constraint_margins"].value[
+        "coking_margin_min"
+    ]
+    assert row["available"] is False
+    assert row["value"] is None
+    assert "unavailable" in (row["reason"] or "")
 
 
 def test_custom_surface_state_requires_and_accepts_exact_surface_identity(

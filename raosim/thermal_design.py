@@ -439,49 +439,48 @@ def _wall_mass(
        avoid.  Trapezoidal nodal weights are used instead, so the weights sum
        to the true arc length.
     2. **Shell radius.**  It used the gas-side radius rather than the
-       mid-surface radius, under-counting each shell by ``t/2``.  NASA SP-125
-       eq. 8-32 (``W_c = 2 pi a l_c t_c rho``, printed p. 339) takes ``a`` as
-       the *nominal* radius, i.e. Pappus's centroid theorem.
+       mid-surface radius, under-counting each shell by ``t/2``.  The corrected
+       expression is the Pappus geometric shell volume.  NASA SP-125 eq. 8-32
+       uses the same form for a cylindrical *tank* shell (printed p. 339); it
+       corroborates the geometry but is not a thrust-chamber mass model.
     3. **Missing land metal.**  The ribs between coolant channels were absent
        entirely.  On the 13 kN baseline the lands are about a third of the
        thrust-chamber mass, so a mass objective that ignored them was ranking
        channel layouts by the wrong quantity -- and *systematically* so, since
        narrower channels mean wider lands and therefore more metal.
 
-    When ``channel_count`` and ``channel_width`` are supplied the land term is
-    included; otherwise the result is liner + jacket only, as before, and the
-    caller is responsible for knowing that.  See :mod:`raosim.mass_ledger` for
-    the full ledger this mirrors.
+    ``channel_count`` and ``channel_width`` are required so the optimizer cannot
+    silently omit the channel-land metal.  This function and
+    :mod:`raosim.mass_ledger` call the same regenerative-volume kernel.
     """
-
-    from raosim.regen_profile import _nodal_weights_from_segments
 
     x = np.asarray(contour["x"], dtype=float)
     y = np.asarray(contour["y"], dtype=float)
-    ds = _nodal_weights_from_segments(np.hypot(np.diff(x), np.diff(y)))
+    if channel_count is None or int(channel_count) < 1:
+        raise ValueError("channel_count is required and must be positive")
+    if channel_width is None or float(channel_width) <= 0.0:
+        raise ValueError("channel_width is required and must be positive")
+    if land_width is None:
+        r_mid = y + t_hot + 0.5 * channel_height
+        pitch = 2.0 * math.pi * np.maximum(r_mid, 1e-12) / int(channel_count)
+        band = np.maximum(pitch - float(channel_width), 0.0)
+    else:
+        band = np.asarray(land_width, dtype=float)
+        if band.ndim == 0:
+            band = np.full_like(y, float(band))
 
-    r_ch_in = y + t_hot
-    r_ch_out = r_ch_in + channel_height
-    liner = float(np.sum(2.0 * math.pi * (y + 0.5 * t_hot) * t_hot * ds))
-    jacket = float(np.sum(
-        2.0 * math.pi * (r_ch_out + 0.5 * t_jacket) * t_jacket * ds
-    ))
+    from raosim.regen_volumes import integrate_regen_volumes
 
-    lands = 0.0
-    if channel_count and channel_width and channel_width > 0.0:
-        if land_width is None:
-            r_mid = y + t_hot + 0.5 * channel_height
-            pitch = 2.0 * math.pi * np.maximum(r_mid, 1e-12) / int(channel_count)
-            band = np.maximum(pitch - float(channel_width), 0.0)
-        else:
-            band = np.asarray(land_width, dtype=float)
-            if band.ndim == 0:
-                band = np.full_like(y, float(band))
-        annulus = math.pi * (r_ch_out ** 2 - r_ch_in ** 2)
-        fraction = band / np.maximum(band + float(channel_width), 1e-30)
-        lands = float(np.sum(annulus * fraction * ds))
-
-    return density * (liner + lands + jacket)
+    volumes = integrate_regen_volumes(
+        x=x,
+        r_inner=y,
+        t_hot=t_hot,
+        channel_width=channel_width,
+        channel_height=channel_height,
+        land_width=band,
+        t_jacket=t_jacket,
+    )
+    return float(density) * volumes.total
 
 
 def wall_feasibility_band(
@@ -1267,22 +1266,13 @@ def size_wall_profile(
         jacket_margin = Sy_j / np.maximum(jacket_stress, 1e-9)
         profile = _profile(t_hot, h_arr, t_jacket)
 
-        x_liner_mid, r_liner_mid = normal_offset_contour(
-            x, r_inner, 0.5 * t_hot
-        )
-        _, ds_liner = helix_passage_lengths(x_liner_mid, r_liner_mid)
-        x_jacket_mid, r_jacket_mid = normal_offset_contour(
-            x_jacket_inner, R_jacket, 0.5 * t_jacket
-        )
-        _, ds_jacket = helix_passage_lengths(x_jacket_mid, r_jacket_mid)
-        liner_mass = float(
-            rho * np.sum(2.0 * math.pi * r_liner_mid * t_hot * ds_liner)
-        )
-        jacket_mass = float(
-            rho_j * np.sum(
-                2.0 * math.pi * r_jacket_mid * t_jacket * ds_jacket
-            )
-        )
+        from raosim.regen_volumes import integrate_regen_volumes
+
+        volumes = integrate_regen_volumes(profile)
+        liner_mass = float(rho * volumes.liner)
+        land_mass = float(rho * volumes.lands)
+        jacket_mass = float(rho_j * volumes.closeout)
+        optimizer_proxy_mass = liner_mass + land_mass + jacket_mass
         dp_bar = float(res["coolant_pressure_drop"] / 1e5)
         fits = bool(profile.channels_fit()["fits"])
         feasible = bool(
@@ -1320,8 +1310,16 @@ def size_wall_profile(
             "external_buckling": external_buckling,
             "external_buckling_margin_profile": external_margin,
             "liner_mass_kg": liner_mass,
+            "land_mass_kg": land_mass,
             "jacket_mass_kg": jacket_mass,
-            "mass_kg": liner_mass + jacket_mass,
+            "mass_kg": optimizer_proxy_mass,
+            "optimizer_proxy_mass_kg": optimizer_proxy_mass,
+            "post_build_mass_kg": None,
+            "post_build_minus_optimizer_proxy_mass_kg": None,
+            "post_build_mass_unavailable_reason": (
+                "no matching multi-body regenerative CAD part set was built "
+                "and measured for this optimizer candidate"
+            ),
             "pressure_drop_bar": dp_bar,
             "peak_wall_T": float(np.max(Twg)),
             "coolant_chemistry_margin": float(
@@ -1430,8 +1428,15 @@ def size_wall_profile(
             bool(gate_coolant_chemistry),
         "pressure_drop_bar": best["pressure_drop_bar"],
         "liner_mass_kg": best["liner_mass_kg"],
+        "land_mass_kg": best["land_mass_kg"],
         "jacket_mass_kg": best["jacket_mass_kg"],
         "mass_kg": best["mass_kg"],
+        "optimizer_proxy_mass_kg": best["optimizer_proxy_mass_kg"],
+        "post_build_mass_kg": best["post_build_mass_kg"],
+        "post_build_minus_optimizer_proxy_mass_kg":
+            best["post_build_minus_optimizer_proxy_mass_kg"],
+        "post_build_mass_unavailable_reason":
+            best["post_build_mass_unavailable_reason"],
         "mdot_cool": mdot_cool, "mdot_total": mdot_total,
         "feasible": bool(best["feasible"]),
         "requirement": {

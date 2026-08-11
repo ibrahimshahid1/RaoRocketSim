@@ -148,12 +148,15 @@ carried unchanged into every thrust class and every propellant.
 
 ### What sets them, from literature
 
-**The `Pc` ceiling is set by the engine cycle, not by thrust.** Yang et al.,
+**The useful `Pc` search range depends on the engine cycle, not on thrust
+alone.** Parsley & Zhang,
 *Thermodynamic Power Cycles for Pump-Fed Liquid Rocket Engines*, 2004
 (`fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf`),
-§I:
+§I, source-PDF pp. 2–3, DOI 10.2514/5.9781600866760.0621.0648.  The cited
+values distinguish cycle-performance optima and the onset of hardware limits;
+they are initialization guidance, not universal physical-validity endpoints:
 
-| cycle | chamber-pressure limit | limiting mechanism |
+| cycle | reported pressure guidance | limiting mechanism |
 |---|---|---|
 | expander (open or closed) | ~10 MPa | *"energy available... is limited by the thrust chamber and nozzle heat transfer"* |
 | gas generator | 10–15 MPa optimum | total-engine performance optimum incl. overboard flow (<4 % of total) |
@@ -242,7 +245,9 @@ cooling, electric pump-fed, bell nozzle. Grep for `pressure_fed` across
 
 ### The enumeration is already published
 
-Yang et al. 2004 §I derives all cycle options from **two** configuration
+Parsley & Zhang 2004 §I (source-PDF pp. 2–3,
+DOI 10.2514/5.9781600866760.0621.0648) derive the pump-fed cycle options from
+**two** configuration
 variables:
 
 1. **Turbine energy source** — auxiliary combustion device (gas generator or
@@ -263,10 +268,11 @@ Most candidates are eliminated before any NLP runs:
 
 - **Expander cycles restrict the fuel.** *"The fuel must have a high heat
   capacity and adequate heat-transfer properties, and it must vaporize easily.
-  Generally, fuels are limited to hydrogen, methane, or propane."* (Yang §II.)
+  Generally, fuels are limited to hydrogen, methane, or propane."* (Parsley &
+  Zhang 2004, §II.)
   So LOX/RP-1 + expander is not a candidate, full stop.
 - **Preburner richness is propellant-determined.** For LOX/kerosene at equal
-  turbine temperature and pump discharge pressure, Yang's worked iteration
+  turbine temperature and pump discharge pressure, Parsley & Zhang's worked iteration
   balances the oxidizer-rich cycle at ~23 MPa vs ~12.3 MPa fuel-rich — *"the
   oxygen-rich cycle provides a chamber pressure that is 87 % higher... provides
   the rationale for the selection of the oxidizer-rich cycle as the preferred
@@ -276,7 +282,7 @@ Most candidates are eliminated before any NLP runs:
   required for most cycles is generally less than 20 %... For high-pressure
   kerosene cycles, significantly more than 20 % cooling flow may be required."*
   This couples directly to the existing `film_frac` / jacket split.
-- **Hardware ceilings** (Yang §I.C.4): pump discharge pressure ~50 MPa for
+- **Hardware ceilings** (Parsley & Zhang 2004, §I.C.4): pump discharge pressure ~50 MPa for
   hydrogen, ~100 MPa for kerosene; allowable impeller tip speed ~700 m/s;
   *"maximum number of stages is generally limited to three to avoid pump
   integration concerns such as rotor vibrations, rotor thrust balance, and total
@@ -293,7 +299,7 @@ fuel pumps for the same size and specific speed."* `raosim/mdo/pump.py`
 currently applies one efficiency surrogate to both streams.
 
 **The tip-speed limit should be derived, not fixed.** `raosim/pumps.py` sets
-`material_tip_speed_limit: float = 350.0` with no local citation. Yang 2004 puts
+`material_tip_speed_limit: float = 350.0` with no local citation. Parsley & Zhang (2004) put
 the state-of-the-art allowable at ~700 m/s (*"The allowable tip speed of ~700
 m/s allows acceptable stresses to be maintained for the impeller"*). 350 m/s may
 be defensible for a small additively-manufactured electric-pump impeller, but it
@@ -347,7 +353,7 @@ Layer 0  Requirement mapping        SP-125 §2.1 nine parameters -> objective + 
              v
 Layer 1  Architecture enumeration   feed architecture x injector type x cooling scheme
          (discrete, outer)          x liner/jacket family x channel count x pump stages
-             |                      screened by Yang Fig.1 + propellant compatibility
+             |                      screened by Parsley & Zhang Fig. 1 + propellant compatibility
              |                      before any NLP runs
              v
 Layer 2  Continuous MDO (inner)     existing solver, extended:
@@ -381,7 +387,7 @@ place where it would be easy to cheat:
 | # | item | status | needs new sources? |
 |---|---|---|---|
 | 1 | Sample the CEA property surfaces; make O/F a design variable | **code done** — sampler run is host-side and outstanding | no — data generation |
-| 2 | Derive `Pc`/`ε` bounds from architecture | **done** | no — Yang 2004 + the Rao chart, both in repo |
+| 2 | Derive `Pc`/`ε` bounds from architecture | **done** | no — Parsley & Zhang 2004 + the Rao chart, both in repo |
 | 3 | `EngineRequirement` + requirement→constraint mapping | **done** | no — SP-125 §2.1, in corpus |
 | 3b | Methane/hydrogen coolant-side HTD screen | **criterion coded, reported unavailable** | no — Nasuti & Pizzarelli 2021, acquired |
 | 4 | Add `pressure_fed` as the second `FeedArchitecture` | not started | no — SP-125 Ch. V + SP-8124, both acquired |
@@ -440,13 +446,17 @@ partially covered. That is pinned as its own test.
 Two defects removed.
 
 `Pc` was `[1.5, 6.0] MPa` from the 13 kN kerolox baseline, applied to every
-propellant and cycle. It is now keyed to the feed architecture, with Yang 2004's
-ceiling *and its limiting mechanism* recorded per cycle: pressure-fed 1.8 MPa
-(tank mass; SP-125 Ch. V's 100–400 psia, cross-checked against the worked A-4
-engine at 100 psia stagnation from a 165 psia tank), expander 10 MPa (heat
-transfer), gas generator 15 MPa (performance optimum), staged combustion 25 MPa
-(hardware). The electric-pump window is flagged `literature=False` because it is
-a repository thermal-feasibility finding, not a published cycle limit.
+propellant and cycle. It is now architecture-keyed **recommended search
+guidance**, with Parsley & Zhang 2004's limiting mechanism recorded per cycle:
+pressure-fed 1.8 MPa (tank-mass guidance; SP-125 Ch. V's 100–400 psia,
+cross-checked against the worked A-4 engine at 100 psia stagnation from a
+165 psia tank), expander about 10 MPa (available chamber/nozzle heat transfer),
+gas generator 10–15 MPa (total-engine performance optimum), and staged
+combustion 20–25 MPa (onset of hardware limitation). None is represented as a
+hard physical endpoint. The electric-pump 1.5–6 MPa window is explicitly a
+repository default search window, not a published cycle limit or model-validity
+domain. Hard bounds instead come from validated property/model domains and live
+thermal, pump, cavitation, structural, and power constraints.
 
 `ε` was `[3, 40]`. The Rao chart the analytic wall interpolates is tabulated
 over **ε ∈ [4, 50]** — so the old box was wrong in *both* directions: its lower

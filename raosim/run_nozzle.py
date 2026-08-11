@@ -659,6 +659,83 @@ def _positive_if_supplied(args, parser, names, *, allow_zero=False) -> None:
             parser.error(f"--{name.replace('_', '-')} must be {op}")
 
 
+def _validate_common_engine_args(args, parser) -> None:
+    """Run the workflow-independent scalar validation before dispatch.
+
+    Historically the MDO and requirements branches returned before the
+    traditional runner reached its input checks.  That made the same bad input
+    produce either an argparse error or an uncaught numerical exception solely
+    according to workflow.  Keep the shared mathematical domains in
+    :mod:`raosim.input_validation` and call them before every early return.
+    """
+
+    from raosim.input_validation import (
+        InputValidationError,
+        validate_engine_inputs,
+    )
+
+    is_direct_mdo = bool(
+        getattr(args, "engine_mdo", False)
+        or getattr(args, "engine_mdo_optimize", False)
+    )
+    ambient = getattr(args, "engine_mdo_ambient", None)
+    if is_direct_mdo and ambient is None:
+        ambient = 101325.0
+    altitude = None
+    if getattr(args, "requirements", False):
+        condition = str(getattr(args, "thrust_condition", "")).strip().lower()
+        if condition.startswith("altitude"):
+            try:
+                parsed_condition = _parse_thrust_condition(condition)
+            except ValueError as exc:
+                parser.error(str(exc))
+            altitude = float(parsed_condition[1])
+    try:
+        validate_engine_inputs(
+            chamber_pressure=args.pc,
+            expansion_ratio=args.epsilon,
+            thrust=args.target_thrust,
+            ambient_pressure=ambient if is_direct_mdo else None,
+            ambient_pressure_ratio=args.pa_over_p0,
+            altitude=altitude,
+            mixture_ratio=args.mixture_ratio,
+            burn_duration=args.burn_time,
+            flight_duration=getattr(args, "flight_duration", None),
+            qualification_duration=getattr(
+                args, "qualification_duration", None
+            ),
+            isp_floor=getattr(args, "isp_min", None),
+            envelope_diameter_max=getattr(
+                args, "envelope_diameter_max", None
+            ),
+            envelope_length_max=getattr(args, "envelope_length_max", None),
+            mass_max=getattr(args, "burnout_mass_max", None),
+            film_fraction=getattr(args, "film_frac", None),
+            injector_drop_fractions=(
+                getattr(args, "fuel_injector_dp_fraction", None),
+                getattr(args, "oxidizer_injector_dp_fraction", None),
+            ),
+            positive_dimensions=(
+                ("channel_width", getattr(args, "channel_width", None)),
+                ("channel_height", getattr(args, "channel_height", None)),
+                ("t_wall", getattr(args, "t_wall", None)),
+                ("film_slot_height", getattr(args, "film_slot_height", None)),
+                ("pump_rpm", getattr(args, "pump_rpm", None)),
+                (
+                    "mdo_pc_search_min_pa",
+                    getattr(args, "mdo_pc_search_min_pa", None),
+                ),
+                (
+                    "mdo_pc_search_max_pa",
+                    getattr(args, "mdo_pc_search_max_pa", None),
+                ),
+            ),
+            reusable_cycles=getattr(args, "reusable_cycles", None),
+        )
+    except InputValidationError as exc:
+        parser.error(str(exc))
+
+
 def _validate_pump_args(args, parser) -> None:
     if args.pump_visualize:
         args.electric_pump = True
@@ -1761,6 +1838,105 @@ def _mdo_authoritative_contour_handoff(
     }
 
 
+def _resolve_mdo_of_intent(args, *, optimization_capable: bool):
+    """Resolve CLI mixture-ratio intent without overloading ``None``."""
+
+    from raosim.requirements import MixtureRatioMode
+
+    explicit_mode = getattr(args, "mdo_of_mode", None)
+    mode = MixtureRatioMode(
+        explicit_mode
+        if explicit_mode is not None
+        else (
+            MixtureRatioMode.PINNED.value
+            if args.mixture_ratio is not None
+            else MixtureRatioMode.NOMINAL.value
+        )
+    )
+    ratio = args.mixture_ratio
+    if mode is MixtureRatioMode.NOMINAL and ratio is not None:
+        raise ValueError(
+            "--mdo-of-mode nominal cannot be combined with --mixture-ratio; "
+            "use --mdo-of-mode pinned"
+        )
+    if mode is MixtureRatioMode.PINNED and ratio is None:
+        raise ValueError(
+            "--mdo-of-mode pinned requires --mixture-ratio"
+        )
+    if mode is MixtureRatioMode.OPTIMIZE:
+        if not optimization_capable:
+            raise ValueError(
+                "--mdo-of-mode optimize requires --engine-mdo-optimize or "
+                "--requirements"
+            )
+        if getattr(args, "mdo_chamber_property_table", None) is None:
+            raise ValueError(
+                "--mdo-of-mode optimize requires "
+                "--mdo-chamber-property-table"
+            )
+    return mode, ratio
+
+
+def _mission_from_mdo_args(args, *, optimization_capable: bool):
+    """Build one MissionSpec for direct evaluation and optimization CLIs."""
+
+    from raosim.mdo.schema import MissionSpec
+    from raosim.requirements import MixtureRatioMode
+
+    mode, ratio = _resolve_mdo_of_intent(
+        args, optimization_capable=optimization_capable
+    )
+    thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
+    overrides = {
+        "of_is_pinned": mode is not MixtureRatioMode.OPTIMIZE,
+    }
+    if ratio is not None:
+        overrides["OF"] = float(ratio)
+    if args.pump_rpm is not None:
+        overrides["pump_speed_rpm"] = float(args.pump_rpm)
+    if getattr(args, "engine_mdo_ambient", None) is not None:
+        overrides["Pa"] = float(args.engine_mdo_ambient)
+    if getattr(args, "burn_time", None) is not None:
+        overrides["burn_time"] = float(args.burn_time)
+    if getattr(args, "design_margins", False):
+        overrides.update(
+            heat_flux_margin=1.10,
+            channel_flow_margin=0.90,
+            film_capacity_margin=2.0,
+        )
+    table = getattr(args, "mdo_chamber_property_table", None)
+    if table is not None:
+        overrides["cea_table_path"] = str(Path(table).expanduser())
+    pc_min = getattr(args, "mdo_pc_search_min_pa", None)
+    pc_max = getattr(args, "mdo_pc_search_max_pa", None)
+    if pc_min is not None:
+        overrides["chamber_pressure_search_min_pa"] = float(pc_min)
+    if pc_max is not None:
+        overrides["chamber_pressure_search_max_pa"] = float(pc_max)
+
+    propellant = getattr(args, "mdo_propellant", None)
+    if propellant:
+        mission = MissionSpec.for_propellant(
+            propellant, float(thrust), **overrides
+        )
+    else:
+        mission = MissionSpec.for_thrust(float(thrust), **overrides)
+
+    # ``--material``/``--jacket-material`` must reach the differentiable core,
+    # not only the traditional pipeline.  Before this the MDO kept its flat
+    # class defaults, so selecting GRCop-84 still optimized a NARloy-Z-class
+    # liner.  The mapping is atomic: an unknown or incompletely specified alloy
+    # raises here and the CLI reports invalid input rather than silently
+    # optimizing an unattributed wall.
+    liner_material = getattr(args, "material", None)
+    if liner_material:
+        mission = mission.with_materials(
+            liner=liner_material,
+            closeout=getattr(args, "jacket_material", None) or "Inconel 718",
+        )
+    return mission, mode
+
+
 def _run_engine_mdo(args) -> int:
     """Whole-engine differentiable MDO evaluation (``raosim.mdo.engine``).
 
@@ -1782,41 +1958,46 @@ def _run_engine_mdo(args) -> int:
     import jax
     jax.config.update("jax_enable_x64", True)
     import jax.numpy as jnp
-    from raosim.mdo.schema import MissionSpec, DesignVector
-    from raosim.mdo.engine import solve_engine, ablation_delta
-
-    thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
-    of = (
-        args.mixture_ratio
-        if args.mixture_ratio is not None
-        else MissionSpec().OF
+    from raosim.mdo.schema import DesignVector
+    from raosim.mdo.engine import (
+        ablation_delta,
+        chamber_surfaces_for,
+        solve_engine,
     )
+    from raosim.mdo.constraints import (
+        ENGINE_CONSTRAINT_SPECS,
+        constraint_metadata,
+        reason_text,
+        status_from_rows,
+    )
+    from raosim.mdo.coolant_htd import (
+        ModelCoverageError,
+        require_htd_coverage,
+    )
+    from raosim.mdo.propellants import get_propellant
+    from raosim.input_validation import WorkflowExitCode
+
+    try:
+        mission, _ = _mission_from_mdo_args(
+            args, optimization_capable=False
+        )
+        surfaces = chamber_surfaces_for(mission)
+        coolant_name = get_propellant(mission.propellant_name).coolant_name
+        htd_available, htd_reason = require_htd_coverage(
+            coolant_name,
+            has_real_fluid_properties=False,
+            allow_incomplete_physics=bool(args.allow_incomplete_physics),
+        )
+    except ModelCoverageError as exc:
+        print(f"  model coverage incomplete: {exc}")
+        return int(WorkflowExitCode.INDETERMINATE)
+    except (KeyError, TypeError, ValueError) as exc:
+        print(f"  MDO configuration rejected: {exc}")
+        return int(WorkflowExitCode.INVALID_INPUT)
     chi_f = (args.fuel_injector_dp_fraction
              if args.fuel_injector_dp_fraction is not None else 0.20)
     chi_o = (args.oxidizer_injector_dp_fraction
              if args.oxidizer_injector_dp_fraction is not None else 0.20)
-    overrides = {"thrust": float(thrust), "OF": float(of)}
-    if args.pump_rpm is not None:
-        overrides["pump_speed_rpm"] = float(args.pump_rpm)
-    if getattr(args, "engine_mdo_ambient", None) is not None:
-        overrides["Pa"] = float(args.engine_mdo_ambient)
-    if getattr(args, "burn_time", None) is not None:
-        overrides["burn_time"] = float(args.burn_time)
-    if getattr(args, "design_margins", False):
-        overrides.update(heat_flux_margin=1.10, channel_flow_margin=0.90,
-                         film_capacity_margin=2.0)
-    # Derive the thrust-scaled architecture (channel count, pintle diameter,
-    # pump speed) rather than using the 13 kN-class defaults — otherwise the
-    # design box contains no feasible point at other thrust classes.
-    _thrust = overrides.pop("thrust")
-    _prop = getattr(args, "mdo_propellant", None)
-    if _prop:
-        overrides.pop("OF", None)      # the propellant supplies its own O/F
-        if args.mixture_ratio is not None:
-            overrides["OF"] = float(args.mixture_ratio)
-        mission = MissionSpec.for_propellant(_prop, _thrust, **overrides)
-    else:
-        mission = MissionSpec.for_thrust(_thrust, **overrides)
     film = args.film_frac if args.film_frac is not None else 0.0
     cw = args.channel_width if args.channel_width is not None else 5.0e-4
     ch = args.channel_height if args.channel_height is not None else 1.5e-3
@@ -1839,9 +2020,16 @@ def _run_engine_mdo(args) -> int:
                      channel_height=jnp.asarray(float(ch)),
                      film_frac=jnp.asarray(float(film)),
                      t_wall=jnp.asarray(float(
-                         args.t_wall if args.t_wall is not None else 8.0e-4)))
+                         args.t_wall if args.t_wall is not None else 8.0e-4)),
+                     OF=jnp.asarray(float(mission.OF)),
+                     layout=mission.design_layout())
     couple = bool(getattr(args, "engine_mdo_couple_cstar", False))
-    r = solve_engine(x, mission, couple_eta_cstar=couple)
+    r = solve_engine(
+        x,
+        mission,
+        couple_eta_cstar=couple,
+        surfaces=surfaces,
+    )
     F = float
 
     print("=" * 66)
@@ -1852,7 +2040,7 @@ def _run_engine_mdo(args) -> int:
           + ("none (no coking)" if mission.rp1_coking_wall_temp_K > 5e3
              else f"{mission.rp1_coking_wall_temp_K:.0f} K"))
     print(f" design : Pc={F(x.Pc)/1e6:.2f} MPa  eps={F(x.eps):.1f}  "
-          f"O/F={mission.OF:.2f}  F={mission.thrust/1e3:.1f} kN  "
+          f"O/F={F(r.OF):.2f}  F={mission.thrust/1e3:.1f} kN  "
           f"chi_f={chi_f:.2f} chi_o={chi_o:.2f}")
     if getattr(args, "design_margins", False):
         print("          DESIGN MARGINS ON: heat flux x1.10, channel flow x0.90,"
@@ -1900,13 +2088,46 @@ def _run_engine_mdo(args) -> int:
         f"{F(r.electric_package_exact_mass):8.2f}"
     )
     print(
-        f"    {'OBJECTIVE MASS (smooth)':30s} "
-        f"{F(r.objective_mass):8.2f}"
+        f"    {'ELECTRIC PACKAGE OBJECTIVE':30s} "
+        f"{F(r.electric_package_objective_mass):8.2f}"
+    )
+    print(
+        f"    {'PARTIAL DRY MASS EXACT':30s} "
+        f"{F(r.dry_mass_partial_exact_mass):8.2f}"
+    )
+    print(
+        f"    {'PARTIAL DRY MASS OBJECTIVE':30s} "
+        f"{F(r.dry_mass_partial_objective_mass):8.2f}"
     )
     print(" -- constraint margins (>= 0 feasible) -------------------------")
-    for k, v in r.constraints.items():
-        print(f"    {k:30s} {F(v):+.4g}"
-              f"{'   <-- VIOLATED' if F(v) < 0.0 else ''}")
+    applicable, available, required, reasons = constraint_metadata(
+        mission, surfaces
+    )
+    constraint_values = [
+        F(r.constraints[spec.engine_key])
+        for spec in ENGINE_CONSTRAINT_SPECS
+    ]
+    physics_status = status_from_rows(
+        constraint_values, applicable, available, required,
+        nonfinite="unknown",
+    )
+    for i, (spec, value) in enumerate(
+        zip(ENGINE_CONSTRAINT_SPECS, constraint_values)
+    ):
+        if not applicable[i]:
+            suffix = reason_text(reasons[i], spec, mission)
+            print(f"    {spec.engine_key:30s} {'not applicable':>12s}   {suffix}")
+        elif not available[i]:
+            suffix = reason_text(reasons[i], spec, mission)
+            print(f"    {spec.engine_key:30s} {'unavailable':>12s}   {suffix}")
+        else:
+            print(
+                f"    {spec.engine_key:30s} {value:+.4g}"
+                f"{'   <-- VIOLATED' if value < 0.0 else ''}"
+            )
+    print(f"    physics verdict: {physics_status.upper()}")
+    if not htd_available and htd_reason:
+        print(f"    screening limitation: {htd_reason}")
     if getattr(args, "mdo_export", False):
         from raosim.mdo.postprocess import reevaluate, summarise
         print(" -- authoritative re-evaluation (Phase 11) --------------------")
@@ -1955,7 +2176,13 @@ def _run_engine_mdo(args) -> int:
         print(f"    dIsp(couple eta_c*) = {d:+.2f} s  "
               "(bound on the spray→c* correlation)")
     print("=" * 66)
-    return 0
+    if not bool(r.solver_converged) or not bool(r.finite):
+        return int(WorkflowExitCode.SOLVER_FAILED)
+    if physics_status == "fail":
+        return int(WorkflowExitCode.CANDIDATE_VIOLATES)
+    if physics_status == "unknown":
+        return int(WorkflowExitCode.INDETERMINATE)
+    return int(WorkflowExitCode.MET)
 
 
 def _parse_thrust_condition(raw: str):
@@ -1982,7 +2209,12 @@ def _run_requirements(args) -> int:
     something weaker than it looks and the reader needs to know that first.
     """
 
-    from raosim.requirements import EngineRequirement, solve_requirement
+    from raosim.requirements import (
+        EngineRequirement,
+        RequirementAnalysisConfig,
+        solve_requirement,
+    )
+    from raosim.mdo.coolant_htd import ModelCoverageError
 
     throttle = None
     if args.throttle_range:
@@ -1990,6 +2222,14 @@ def _run_requirements(args) -> int:
         throttle = (float(lo), float(hi))
 
     try:
+        of_mode, mixture_ratio = _resolve_mdo_of_intent(
+            args, optimization_capable=True
+        )
+        analysis_config = RequirementAnalysisConfig(
+            chamber_property_table=args.mdo_chamber_property_table,
+            length_pct=float(args.length_pct),
+            liner_material=args.material,
+        )
         req = EngineRequirement(
             thrust=float(args.target_thrust if args.target_thrust is not None
                          else 13.0e3),
@@ -2000,15 +2240,18 @@ def _run_requirements(args) -> int:
                 args.flight_duration if args.flight_duration is not None
                 else args.burn_time),
             qualification_duration=args.qualification_duration,
-            of=args.mixture_ratio,
+            mixture_ratio_mode=of_mode,
+            mixture_ratio=mixture_ratio,
             burnout_mass_max=args.burnout_mass_max,
             envelope_diameter_max=args.envelope_diameter_max,
             envelope_length_max=args.envelope_length_max,
             propellant=(getattr(args, "mdo_propellant", None) or "LOX/RP-1"),
             throttle_range=throttle,
             reusable_cycles=args.reusable_cycles,
+            objective=args.mdo_mass_objective,
+            analysis_config=analysis_config,
         )
-    except (ValueError, NotImplementedError) as exc:
+    except (KeyError, TypeError, ValueError, NotImplementedError) as exc:
         print(f"  requirement rejected: {exc}")
         return 2
 
@@ -2016,8 +2259,21 @@ def _run_requirements(args) -> int:
     print(" Requirement-driven design  (raosim.requirements, SP-125 §2.1)")
     print("=" * 78)
 
-    result = solve_requirement(
-        req, couple_eta_cstar=bool(args.engine_mdo_couple_cstar))
+    try:
+        result = solve_requirement(
+            req,
+            couple_eta_cstar=bool(args.engine_mdo_couple_cstar),
+            allow_incomplete_physics=bool(args.allow_incomplete_physics),
+        )
+    except ModelCoverageError as exc:
+        print(f"  model coverage incomplete: {exc}")
+        return 3
+    except (KeyError, TypeError, ValueError, NotImplementedError) as exc:
+        print(f"  requirement rejected: {exc}")
+        return 2
+    except Exception as exc:
+        print(f"  requirement solver failed: {type(exc).__name__}: {exc}")
+        return 4
     print(result.summary())
 
     n = result.nlp
@@ -2046,7 +2302,13 @@ def _run_requirements(args) -> int:
         print(f"   {name:<20} {used:9.4f} of {limit:9.4f}"
               f"   ({100.0 * (1.0 - d[name]):5.1f} % used)")
     print("=" * 78)
-    return 0 if n.feasible else 1
+    if not n.success:
+        return 4
+    if result.requirements_met is True:
+        return 0
+    if result.requirements_met is False:
+        return 1
+    return 3
 
 
 def _run_engine_mdo_optimize(args) -> int:
@@ -2055,9 +2317,9 @@ def _run_engine_mdo_optimize(args) -> int:
     Selected by ``--engine-mdo-optimize``: the user supplies the mission
     requirements (thrust, O/F, burn time, ambient) and an Isp target, and the
     optimiser solves for the DESIGN (Pc, eps, injector Δp fractions, D_pintle,
-    pump rpm) that minimises a smooth electric-feed objective mass s.t. Isp ≥
-    floor and every enforced discipline margin ≥ 0, with exact JAX Jacobians
-    (SLSQP).  The exact installed electric-package mass is reported separately.
+    pump rpm) that minimises an explicitly named resolved mass subtotal s.t.
+    Isp ≥ floor and every enforced discipline margin ≥ 0, with exact JAX
+    Jacobians (SLSQP). Exact electric and partial-dry subtotals are reported.
     ``--isp-sweep LO,HI,N`` traces the mass–Isp Pareto frontier; ``--isp-min``
     does a single min-mass solve.  jax is imported lazily.
     """
@@ -2068,37 +2330,17 @@ def _run_engine_mdo_optimize(args) -> int:
 
     import jax
     jax.config.update("jax_enable_x64", True)
-    from raosim.mdo.schema import MissionSpec
     from raosim.mdo.nlp import solve_min_mass, pareto_frontier, DEFAULT_ENFORCED
-
-    thrust = args.target_thrust if args.target_thrust is not None else 13.0e3
-    of = (
-        args.mixture_ratio
-        if args.mixture_ratio is not None
-        else MissionSpec().OF
-    )
-    overrides = {"thrust": float(thrust), "OF": float(of)}
-    if args.pump_rpm is not None:
-        overrides["pump_speed_rpm"] = float(args.pump_rpm)
-    if args.engine_mdo_ambient is not None:
-        overrides["Pa"] = float(args.engine_mdo_ambient)
-    if args.burn_time is not None:
-        overrides["burn_time"] = float(args.burn_time)
-    if args.design_margins:
-        overrides.update(heat_flux_margin=1.10, channel_flow_margin=0.90,
-                         film_capacity_margin=2.0)
-    # Derive the thrust-scaled architecture (channel count, pintle diameter,
-    # pump speed) rather than using the 13 kN-class defaults — otherwise the
-    # design box contains no feasible point at other thrust classes.
-    _thrust = overrides.pop("thrust")
-    _prop = getattr(args, "mdo_propellant", None)
-    if _prop:
-        overrides.pop("OF", None)      # the propellant supplies its own O/F
-        if args.mixture_ratio is not None:
-            overrides["OF"] = float(args.mixture_ratio)
-        mission = MissionSpec.for_propellant(_prop, _thrust, **overrides)
-    else:
-        mission = MissionSpec.for_thrust(_thrust, **overrides)
+    from raosim.mdo.coolant_htd import ModelCoverageError
+    try:
+        mission, of_mode = _mission_from_mdo_args(
+            args, optimization_capable=True
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        print(f"  MDO configuration rejected: {exc}")
+        return 2
+    objective = args.mdo_mass_objective
+    allow_incomplete = bool(args.allow_incomplete_physics)
     couple = bool(args.engine_mdo_couple_cstar)
     (
         authoritative_contour,
@@ -2109,10 +2351,11 @@ def _run_engine_mdo_optimize(args) -> int:
     print(" Whole-engine ε-constraint MDO  (raosim.mdo.nlp, Phase 8/9)")
     print("=" * 78)
     print(f" propellant : {mission.propellant_name}  (L*={mission.l_star:.3f} m)")
-    print(f" mission : F={mission.thrust/1e3:.1f} kN  O/F={mission.OF:.2f}  "
+    print(f" mission : F={mission.thrust/1e3:.1f} kN  O/F seed={mission.OF:.2f}  "
           f"Pa={mission.Pa/1e3:.1f} kPa  burn={mission.burn_time:.0f} s   "
+          f"O/F mode={of_mode.value}  "
           f"eta_c*={'coupled' if couple else 'frozen'}")
-    print(" objective: min smooth electric-feed mass; exact mass also reported  "
+    print(f" objective: {objective}; exact resolved subtotals also reported  "
           "enforced margins ≥ 0: "
           f"{', '.join(DEFAULT_ENFORCED)}")
     if args.design_margins:
@@ -2126,11 +2369,16 @@ def _run_engine_mdo_optimize(args) -> int:
 
     def _fmt(r):
         d = r.design
-        return (f" Isp>={r.isp_min:6.1f} | objective={r.objective_mass:7.2f} kg "
-                f"exact={r.exact_electric_package_mass:7.2f} kg  "
+        exact_selected = (
+            r.exact_dry_mass_partial
+            if r.objective_name == "min_dry_mass_partial"
+            else r.exact_electric_package_mass
+        )
+        return (f" Isp>={r.isp_min:6.1f} | {r.objective_name}="
+                f"{r.objective_mass:7.2f} kg exact={exact_selected:7.2f} kg  "
                 f"Isp={r.Isp:6.1f} s | Pc={d['Pc']/1e6:4.2f}MPa eps={d['eps']:5.2f} "
                 f"film={d['film_frac']:.3f} t_w={d['t_wall']*1e3:.2f}mm "
-                f"N={d['N_rpm']/1e3:4.1f}k | feas={r.feasible!s:5} "
+                f"N={d['N_rpm']/1e3:4.1f}k | physics={r.physics_status:7} "
                 f"cok={r.constraints['coking']:+.0f}")
 
     if args.isp_sweep:
@@ -2143,9 +2391,23 @@ def _run_engine_mdo_optimize(args) -> int:
             return 2
         print(f" Pareto frontier over Isp floors {grid[0]:.0f}..{grid[-1]:.0f} "
               f"({len(grid)} pts; warm-started):")
-        frontier = pareto_frontier(
-            mission, grid, couple_eta_cstar=couple
-        )
+        try:
+            frontier = pareto_frontier(
+                mission,
+                grid,
+                couple_eta_cstar=couple,
+                allow_incomplete_physics=allow_incomplete,
+                objective=objective,
+            )
+        except ModelCoverageError as exc:
+            print(f"  model coverage incomplete: {exc}")
+            return 3
+        except (KeyError, TypeError, ValueError) as exc:
+            print(f"  MDO configuration rejected: {exc}")
+            return 2
+        except Exception as exc:
+            print(f"  MDO solver failed: {type(exc).__name__}: {exc}")
+            return 4
         for index, r in enumerate(frontier):
             print(_fmt(r))
             if args.mdo_export and r.feasible:
@@ -2179,10 +2441,18 @@ def _run_engine_mdo_optimize(args) -> int:
                         "constraints": dict(r.constraints),
                         "enforced": list(r.enforced),
                         "design": dict(r.design),
+                        "objective_name": r.objective_name,
                         "objective_mass_kg": r.objective_mass,
+                        "electric_package_objective_mass_kg": (
+                            r.electric_package_objective_mass
+                        ),
+                        "dry_mass_partial_objective_mass_kg": (
+                            r.dry_mass_partial_objective_mass
+                        ),
                         "exact_electric_package_mass_kg": (
                             r.exact_electric_package_mass
                         ),
+                        "exact_dry_mass_partial_kg": r.exact_dry_mass_partial,
                         "specific_impulse_s": r.Isp,
                         "couple_eta_cstar": couple,
                         "authoritative_contour_requested": (
@@ -2207,7 +2477,23 @@ def _run_engine_mdo_optimize(args) -> int:
                 )
     else:
         isp_min = args.isp_min if args.isp_min is not None else 230.0
-        r = solve_min_mass(mission, float(isp_min), couple_eta_cstar=couple)
+        try:
+            r = solve_min_mass(
+                mission,
+                float(isp_min),
+                couple_eta_cstar=couple,
+                allow_incomplete_physics=allow_incomplete,
+                objective=objective,
+            )
+        except ModelCoverageError as exc:
+            print(f"  model coverage incomplete: {exc}")
+            return 3
+        except (KeyError, TypeError, ValueError) as exc:
+            print(f"  MDO configuration rejected: {exc}")
+            return 2
+        except Exception as exc:
+            print(f"  MDO solver failed: {type(exc).__name__}: {exc}")
+            return 4
         print(_fmt(r))
         if args.mdo_export:
             from raosim.mdo.postprocess import reevaluate, summarise
@@ -2235,10 +2521,18 @@ def _run_engine_mdo_optimize(args) -> int:
                     "constraints": dict(r.constraints),
                     "enforced": list(r.enforced),
                     "design": dict(r.design),
+                    "objective_name": r.objective_name,
                     "objective_mass_kg": r.objective_mass,
+                    "electric_package_objective_mass_kg": (
+                        r.electric_package_objective_mass
+                    ),
+                    "dry_mass_partial_objective_mass_kg": (
+                        r.dry_mass_partial_objective_mass
+                    ),
                     "exact_electric_package_mass_kg": (
                         r.exact_electric_package_mass
                     ),
+                    "exact_dry_mass_partial_kg": r.exact_dry_mass_partial,
                     "specific_impulse_s": r.Isp,
                     "couple_eta_cstar": couple,
                     "authoritative_contour_requested": (
@@ -2257,6 +2551,13 @@ def _run_engine_mdo_optimize(args) -> int:
         print(f"  solver: {r.message}  "
               f"(iters={r.n_iter}, max_violation={r.max_violation:.1e})")
     print("=" * 78)
+    results = frontier if args.isp_sweep else [r]
+    if any(not result.success for result in results):
+        return 4
+    if any(result.physics_status == "unknown" for result in results):
+        return 3
+    if any(not result.optimizer_feasible for result in results):
+        return 1
     return 0
 
 
@@ -3109,6 +3410,49 @@ def main(argv: list[str] | None = None) -> int:
                          "(lox/rp-1, lox/lch4, lox/lh2, n2o4/mmh, n2o/ethanol). "
                          "Drives chamber gases, L*, densities, coolant "
                          "properties and the SP-8087 coolant wall limit.")
+    ap.add_argument(
+        "--mdo-chamber-property-table",
+        type=Path,
+        default=None,
+        metavar="NPZ",
+        help="validated sampled chamber-property table for MDO O/F/Pc physics; "
+             "the file's content hash and stored propellant identity are checked",
+    )
+    ap.add_argument(
+        "--mdo-of-mode",
+        choices=("nominal", "pinned", "optimize"),
+        default=None,
+        help="mixture-ratio intent: nominal uses the propellant catalog, pinned "
+             "requires --mixture-ratio, optimize requires an O/F-dependent "
+             "--mdo-chamber-property-table",
+    )
+    ap.add_argument(
+        "--mdo-mass-objective",
+        choices=("min_dry_mass_partial", "min_electric_package_mass"),
+        default="min_dry_mass_partial",
+        help="explicit differentiable objective; partial dry mass includes the "
+             "electric package, liner, channel lands, and closeout",
+    )
+    ap.add_argument(
+        "--mdo-pc-search-min-pa",
+        type=float,
+        default=None,
+        metavar="PA",
+        help="override the recommended MDO chamber-pressure search-window lower endpoint",
+    )
+    ap.add_argument(
+        "--mdo-pc-search-max-pa",
+        type=float,
+        default=None,
+        metavar="PA",
+        help="override the recommended MDO chamber-pressure search-window upper endpoint",
+    )
+    ap.add_argument(
+        "--allow-incomplete-physics",
+        action="store_true",
+        help="permit an explicit screening run when governing physics coverage "
+             "is unavailable; the physics verdict and exit status remain indeterminate",
+    )
     ap.add_argument("--mdo-export", action="store_true",
                     help="with --engine-mdo/-optimize: hand the MDO design to "
                          "the authoritative LREKit pipeline (design_nozzle_v2) "
@@ -3152,11 +3496,14 @@ def main(argv: list[str] | None = None) -> int:
             print("\naborted")
             return 130
         if mode == "mdo":
+            _validate_common_engine_args(args, ap)
             return _run_engine_mdo(args)
         if mode == "mdo_optimize":
+            _validate_common_engine_args(args, ap)
             return _run_engine_mdo_optimize(args)
         bare = True          # traditional path keeps its starter defaults
         args.interactive = True
+    _validate_common_engine_args(args, ap)
     if getattr(args, "requirements", False):
         return _run_requirements(args)
     if getattr(args, "engine_mdo_optimize", False):
@@ -3402,6 +3749,7 @@ def main(argv: list[str] | None = None) -> int:
         print_tags()
         _interactive(args)
         _apply_wall_sizing_mode(args, ap, cli_argv)
+        _validate_common_engine_args(args, ap)
 
     _ensure_pyplot(show)
 

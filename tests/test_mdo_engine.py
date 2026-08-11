@@ -36,6 +36,22 @@ def _x():
                         dp_f_frac=jnp.asarray(0.2), dp_o_frac=jnp.asarray(0.2))
 
 
+def _active(mission, *, Pc=3.0e6, eps=8.0, dp_f_frac=0.2, dp_o_frac=0.2):
+    """Explicit active design vector for ``engine_outputs``.
+
+    Equivalent to the retired four-value prefix: the named variables are set
+    and every remaining variable keeps its ``DesignVector`` default, but the
+    layout is now stated rather than inferred from the array length.
+    """
+    design = DesignVector(
+        Pc=jnp.asarray(Pc), eps=jnp.asarray(eps),
+        dp_f_frac=jnp.asarray(dp_f_frac), dp_o_frac=jnp.asarray(dp_o_frac),
+        OF=jnp.asarray(mission.OF),
+    )
+    layout = mission.design_layout()
+    return jnp.asarray([getattr(design, name) for name in layout.active_names])
+
+
 def test_engine_converges_and_reports_constraints():
     m = MissionSpec()
     r = solve_engine(_x(), m)
@@ -183,8 +199,7 @@ def test_end_to_end_differentiable_through_closed_edge():
     m = MissionSpec()
 
     def pkg(pc):
-        xa = jnp.array([pc, 8.0, 0.2, 0.2])
-        return engine_outputs(xa, m, outputs=("package_mass",))[0]
+        return engine_outputs(_active(m, Pc=pc), m, outputs=("package_mass",))[0]
 
     x0 = 3.0e6
     ad = float(jax.grad(pkg)(jnp.asarray(x0)))
@@ -196,8 +211,7 @@ def test_end_to_end_differentiable_through_closed_edge():
 
 def test_isp_ad_matches_fd():
     m = MissionSpec()
-    fn = lambda e: engine_outputs(jnp.array([3.0e6, e, 0.2, 0.2]), m,
-                                  outputs=("Isp",))[0]
+    fn = lambda e: engine_outputs(_active(m, eps=e), m, outputs=("Isp",))[0]
     ad = float(jax.grad(fn)(jnp.asarray(8.0)))
     h = 1e-6 * 8.0
     fd = (float(fn(jnp.asarray(8.0 + h))) - float(fn(jnp.asarray(8.0 - h)))) / (2 * h)

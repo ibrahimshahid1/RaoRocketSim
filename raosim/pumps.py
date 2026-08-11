@@ -43,6 +43,13 @@ SCREENING_DEFAULTS = {
 
 
 LITERATURE_SOURCES = {
+    "NASA SP-125": (
+        "Design of Liquid Propellant Rocket Engines (1971), printed p. 182; its "
+        "developed bipropellant turbopump example explicitly contains both "
+        "oxidizer and fuel pumps, each with inducer, impeller, diffuser, and "
+        "volute. Used to corroborate the required two-feed-role BOM contract, "
+        "not to prescribe electric-drive architecture or component masses."
+    ),
     "NASA SP-8109": (
         "Liquid Rocket Engine Centrifugal Flow Turbopumps; used for the "
         "flow/head/inlet-pressure dependency chain, head coefficient, "
@@ -594,6 +601,18 @@ class PumpHardwareBOMItem:
     key_parameters: dict[str, float | int | str | None]
     editable_reference_id: str | None
     source_ids: list[str]
+    unavailable_reason: str | None = None
+
+    @property
+    def available(self) -> bool:
+        value = self.mass_estimate_kg
+        return bool(
+            self.unavailable_reason is None
+            and self.status != "unavailable"
+            and value is not None
+            and math.isfinite(float(value))
+            and float(value) >= 0.0
+        )
 
     def to_dict(self) -> dict:
         return {
@@ -603,9 +622,59 @@ class PumpHardwareBOMItem:
             "quantity": self.quantity,
             "status": self.status,
             "mass_estimate_kg": self.mass_estimate_kg,
+            "available": self.available,
+            "unavailable_reason": self.unavailable_reason,
             "key_parameters": self.key_parameters,
             "editable_reference_id": self.editable_reference_id,
             "source_ids": self.source_ids,
+        }
+
+
+@dataclass
+class PumpMassRollup:
+    """Versioned two-stream electric-feed hardware mass contract."""
+
+    contract_id: str
+    required_roles: tuple[str, ...]
+    per_role_core_mass_kg: dict[str, float | None]
+    core_pump_mass_kg: float | None
+    motor_mass_kg: float | None
+    inverter_mass_kg: float | None
+    battery_energy_limited_mass_kg: float | None
+    battery_power_limited_mass_kg: float | None
+    battery_selected_mass_kg: float | None
+    complete_package_mass_kg: float | None
+    resolved_subtotal_kg: float
+    core_complete: bool
+    complete: bool
+    unavailable_reason: str | None
+
+    def to_dict(self) -> dict:
+        return {
+            "contract_id": self.contract_id,
+            "source_ids": [
+                "NASA SP-125 printed p. 182 (two propellant pump roles)",
+                "NASA SP-8109 (centrifugal pump hardware architecture)",
+            ],
+            "required_roles": list(self.required_roles),
+            "per_role_core_mass_kg": self.per_role_core_mass_kg,
+            "core_pump_mass_kg": self.core_pump_mass_kg,
+            "motor_mass_kg": self.motor_mass_kg,
+            "inverter_mass_kg": self.inverter_mass_kg,
+            "battery_energy_limited_mass_kg": self.battery_energy_limited_mass_kg,
+            "battery_power_limited_mass_kg": self.battery_power_limited_mass_kg,
+            "battery_selected_mass_kg": self.battery_selected_mass_kg,
+            "complete_package_mass_kg": self.complete_package_mass_kg,
+            "resolved_subtotal_kg": self.resolved_subtotal_kg,
+            "resolved_subtotal_is_partial": not self.complete,
+            "core_complete": self.core_complete,
+            "complete": self.complete,
+            "unavailable_reason": self.unavailable_reason,
+            "explicitly_excluded_components": [
+                "pressure/temperature/speed sensors",
+                "external propellant lines and valves",
+                "mount brackets, wiring harness, and connectors",
+            ],
         }
 
 
@@ -797,6 +866,7 @@ class ElectricPumpSizingResult:
     feasibility: PumpFeasibility
     assumptions: dict
     hardware_bom: list[PumpHardwareBOMItem] = field(default_factory=list)
+    mass_rollup: PumpMassRollup | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -807,6 +877,9 @@ class ElectricPumpSizingResult:
             "feasibility": self.feasibility.to_dict(),
             "assumptions": self.assumptions,
             "hardware_bom": [item.to_dict() for item in self.hardware_bom],
+            "mass_rollup": (
+                self.mass_rollup.to_dict() if self.mass_rollup is not None else None
+            ),
             "notes": self.notes,
         }
 
@@ -2333,7 +2406,7 @@ def _system_curve_coupling(
         return PumpSystemCurve(
             role=role,
             model="not_evaluated_missing_tank_pressure",
-            source_ids=["Huzel and Huang SP-125", "NASA SP-8109"],
+            source_ids=["NASA SP-125 (1967)", "NASA SP-8109"],
             points=[],
             supported_throttle_range=None,
             notes=["Tank/inlet pressure is needed before pump curve and system curve can be intersected."],
@@ -2375,7 +2448,7 @@ def _system_curve_coupling(
     return PumpSystemCurve(
         role=role,
         model="fixed_speed_pump_curve_vs_quadratic_feed_system_curve_v1",
-        source_ids=["Huzel and Huang SP-125", "NASA SP-8109"],
+        source_ids=["NASA SP-125 (1967)", "NASA SP-8109"],
         points=points,
         supported_throttle_range=throttle_range,
         notes=[
@@ -2690,9 +2763,10 @@ def _estimate_component_masses(
     # ---- inlet / outlet port stubs --------------------------------------- #
     # Thin-wall stubs at the casing wall thickness, taken two diameters long
     # (the shortest run that still admits a weld/flange land and a straight
-    # settling length upstream of the inducer).  Shell mass follows the same
-    # relation as NASA SP-125 eq. 8-32: mid-surface circumference x wall x
-    # length x density.
+    # settling length upstream of the inducer).  Their mass is the geometric
+    # Pappus shell volume (mid-surface circumference x wall x length x
+    # density).  SP-125 eq. 8-32 uses the same geometry for a cylindrical tank
+    # shell; it corroborates this calculation but is not a pump/chamber model.
     outlet_d = _safe_sqrt(4.0 * float(dif.volute_exit_area) / math.pi) if dif else 0.0
     ports = 0.0
     for diameter in (float(imp.inlet_diameter), float(outlet_d)):
@@ -2727,12 +2801,68 @@ def _hardware_bom(
     spec: PumpSizingSpec,
 ) -> list[PumpHardwareBOMItem]:
     items: list[PumpHardwareBOMItem] = []
-    for role, line in lines.items():
+    required_roles = ("fuel", "oxidizer")
+    unavailable_components = (
+        ("hydraulic", "axial inducer", "NASA SP-8052"),
+        ("hydraulic", "centrifugal impeller", "NASA SP-8109"),
+        ("hydraulic", "diffuser / volute", "NASA SP-8109"),
+        ("mechanical", "shaft and coupling", "NASA SP-8109"),
+        ("electrical", "motor", "Lee et al. 2021"),
+        ("electrical", "inverter/controller", "Lee et al. 2021"),
+        ("mechanical", "bearings", "NASA SP-8109"),
+        ("mechanical", "dynamic shaft seals", "NASA SP-8109"),
+        ("pressure_boundary", "pump casing", "NASA SP-8109"),
+        ("interface", "inlet and outlet ports", "NASA SP-8109"),
+        ("instrumentation", "pressure/temperature/speed sensors", "NASA SP-8109"),
+    )
+    for role in required_roles:
+        line = lines.get(role)
+        if line is None:
+            reason = (
+                f"required {role} pump line is absent from the feed-system ledger"
+            )
+            for subsystem, component, source_id in unavailable_components:
+                items.append(PumpHardwareBOMItem(
+                    role=role,
+                    subsystem=subsystem,
+                    component=component,
+                    quantity=1,
+                    status="unavailable",
+                    mass_estimate_kg=None,
+                    key_parameters={"reason_code": "missing_required_pump_role"},
+                    editable_reference_id=None,
+                    source_ids=[source_id],
+                    unavailable_reason=reason,
+                ))
+            continue
         imp = line.impeller
         ind = line.inducer
         dif = line.diffuser_volute
         drv = line.drive
         if imp is None or ind is None or dif is None or drv is None:
+            missing = [
+                name for name, value in (
+                    ("impeller", imp), ("inducer", ind),
+                    ("diffuser/volute", dif), ("electric drive", drv),
+                ) if value is None
+            ]
+            reason = (
+                f"required {role} pump sizing is incomplete: "
+                + ", ".join(missing)
+            )
+            for subsystem, component, source_id in unavailable_components:
+                items.append(PumpHardwareBOMItem(
+                    role=role,
+                    subsystem=subsystem,
+                    component=component,
+                    quantity=1,
+                    status="unavailable",
+                    mass_estimate_kg=None,
+                    key_parameters={"reason_code": "incomplete_required_pump_role"},
+                    editable_reference_id=None,
+                    source_ids=[source_id],
+                    unavailable_reason=reason,
+                ))
             continue
         masses = _estimate_component_masses(line, spec)
 
@@ -2844,7 +2974,9 @@ def _hardware_bom(
             "stub_length_over_diameter": 2.0,
             "wall_thickness_basis": "casing wall thickness",
         }, mass_key="ports", reference_id=f"{role}.inlet_port",
-           status="screening_sized", source_ids=["NASA SP-125 eq. 8-32"])
+           status="screening_sized", source_ids=[
+               "Pappus shell geometry; corroborated by NASA SP-125 eq. 8-32 tank shell"
+           ])
         add("instrumentation", "pressure/temperature/speed sensors", {
             "minimum_channels": "inlet pressure, outlet pressure, motor temperature, speed pickup",
         }, status="placeholder")
@@ -2867,6 +2999,94 @@ def _hardware_bom(
         source_ids=["Lee et al. 2021"],
     ))
     return items
+
+
+def _pump_mass_rollup(
+    items: list[PumpHardwareBOMItem],
+    battery: BatterySizing,
+) -> PumpMassRollup:
+    """Withhold complete pump/package totals until both streams resolve."""
+
+    roles = ("fuel", "oxidizer")
+    core_subsystems = {"hydraulic", "mechanical", "pressure_boundary", "interface"}
+    per_role: dict[str, float | None] = {}
+    reasons: list[str] = []
+    for role in roles:
+        rows = [
+            item for item in items
+            if item.role == role and item.subsystem in core_subsystems
+        ]
+        if rows and all(item.available for item in rows):
+            per_role[role] = float(sum(float(item.mass_estimate_kg) for item in rows))
+        else:
+            per_role[role] = None
+            reasons.append(f"{role} core pump hardware is incomplete")
+
+    core_complete = all(per_role[role] is not None for role in roles)
+    core_mass = (
+        float(sum(per_role[role] for role in roles if per_role[role] is not None))
+        if core_complete else None
+    )
+
+    def required_electrical_mass(component: str) -> float | None:
+        rows = [
+            item for item in items
+            if item.role in roles and item.component == component
+        ]
+        if {item.role for item in rows} != set(roles) or not all(
+            item.available for item in rows
+        ):
+            reasons.append(f"both-stream {component} mass is incomplete")
+            return None
+        return float(sum(float(item.mass_estimate_kg) for item in rows))
+
+    motor_mass = required_electrical_mass("motor")
+    inverter_mass = required_electrical_mass("inverter/controller")
+    battery_values = (
+        battery.mass_energy_limited,
+        battery.mass_power_limited,
+        battery.mass,
+    )
+    battery_valid = all(
+        _finite(value) and float(value) >= 0.0 for value in battery_values
+    )
+    if not battery_valid:
+        reasons.append("battery energy/power/selected mass is incomplete")
+    battery_energy = float(battery.mass_energy_limited) if battery_valid else None
+    battery_power = float(battery.mass_power_limited) if battery_valid else None
+    battery_selected = float(battery.mass) if battery_valid else None
+
+    complete = bool(
+        core_complete
+        and motor_mass is not None
+        and inverter_mass is not None
+        and battery_selected is not None
+    )
+    package_mass = (
+        float(core_mass + motor_mass + inverter_mass + battery_selected)
+        if complete else None
+    )
+    resolved_subtotal = float(sum(
+        float(item.mass_estimate_kg)
+        for item in items
+        if item.available
+    ))
+    return PumpMassRollup(
+        contract_id="electric_bipropellant_feed_hardware@1",
+        required_roles=roles,
+        per_role_core_mass_kg=per_role,
+        core_pump_mass_kg=core_mass,
+        motor_mass_kg=motor_mass,
+        inverter_mass_kg=inverter_mass,
+        battery_energy_limited_mass_kg=battery_energy,
+        battery_power_limited_mass_kg=battery_power,
+        battery_selected_mass_kg=battery_selected,
+        complete_package_mass_kg=package_mass,
+        resolved_subtotal_kg=resolved_subtotal,
+        core_complete=core_complete,
+        complete=complete,
+        unavailable_reason="; ".join(dict.fromkeys(reasons)) if reasons else None,
+    )
 
 
 def _requirement_message() -> str:
@@ -3613,6 +3833,7 @@ def size_electric_pumps(
         )
     feasibility = _feasibility(ledger, lines, battery, spec)
     hardware_bom = _hardware_bom(lines, battery, spec)
+    mass_rollup = _pump_mass_rollup(hardware_bom, battery)
     assumptions = {
         "burn_time_s": spec.burn_time,
         "pump_rpm": spec.drive.rpm if spec.drive.rpm is not None else "auto",
@@ -3690,5 +3911,6 @@ def size_electric_pumps(
         feasibility=feasibility,
         assumptions=assumptions,
         hardware_bom=hardware_bom,
+        mass_rollup=mass_rollup,
         notes=notes,
     )

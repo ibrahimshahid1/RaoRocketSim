@@ -7,6 +7,69 @@ import os
 
 import pytest
 
+
+def test_coaxial_part_set_builds_validates_and_measures_each_body_once(monkeypatch):
+    from types import SimpleNamespace
+
+    import raosim.injector_coaxial_cad as coaxial
+
+    class FakeSolid:
+        def __init__(self, volume):
+            self._volume = volume
+
+        def Solids(self):
+            return [self]
+
+        def isValid(self):
+            return True
+
+        def Volume(self):
+            return self._volume
+
+    names = (
+        "pintle_body", "pintle_tip", "injector_body",
+        "orifice_plate", "faceplate",
+    )
+    bodies = {name: FakeSolid((index + 1) * 1.0e-6)
+              for index, name in enumerate(names)}
+    calls = []
+
+    def fake_build(*_args, **_kwargs):
+        calls.append(1)
+        return bodies
+
+    monkeypatch.setattr(coaxial, "build_coaxial_bodies", fake_build)
+    exported = {
+        name: FakeSolid(body.Volume() * 1.0e9)
+        for name, body in bodies.items()
+    }
+
+    def fake_scale(body):
+        name = next(name for name, item in bodies.items() if item is body)
+        return exported[name]
+
+    monkeypatch.setattr(
+        coaxial,
+        "_to_mm_step_solid",
+        fake_scale,
+    )
+    inj = SimpleNamespace(slots=SimpleNamespace(geometry="slots"))
+    layout = {
+        "architecture": "coaxial_five_part",
+        "coaxial": {"dimension_m": 0.01},
+    }
+    part_set = coaxial.build_coaxial_part_set(
+        inj, layout=layout, radial_style="slots"
+    )
+    assert len(calls) == 1
+    assert set(part_set.parts) == set(names)
+    assert part_set.geometry_id.startswith("injector:")
+    for name, part in part_set.parts.items():
+        assert part.body is bodies[name]
+        assert part.export_body is exported[name]
+        assert part.volume_m3 == pytest.approx(bodies[name].Volume())
+
+
 from raosim.injector import (
     InjectorSpec,
     MovablePintleSpec,

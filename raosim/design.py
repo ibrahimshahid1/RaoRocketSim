@@ -1925,11 +1925,12 @@ def _hardware_mass_section(
 ) -> dict:
     """Build the geometry-integrated hardware mass ledger for the report.
 
-    The thrust-chamber entry integrates the same ``RegenWallProfile`` that
-    :mod:`raosim.regen_cad` revolves; the injector entry integrates the same
-    machined layout that :mod:`raosim.injector_cad` cuts.  Anything that cannot
-    be resolved is reported as unavailable with a reason, never as zero -- see
-    :mod:`raosim.mass_ledger`.
+    The thrust-chamber entry integrates a resolved ``RegenWallProfile`` and
+    emits an ID that a later :mod:`raosim.regen_cad` report must match.  The
+    injector entry is a labelled analytic screening proxy because production
+    export now uses a different five-part coaxial builder.  Constructing a
+    design report does not itself prove either CAD body was built; anything
+    unresolved is reported as unavailable, never as zero.
     """
 
     from raosim.mass_ledger import (
@@ -2050,6 +2051,15 @@ def _hardware_mass_section(
     out = combined.to_dict()
     out["status"] = "resolved" if combined.complete else "partial"
     out["notes"] = notes
+    out["cad_linked_total_mass_kg"] = None
+    out["cad_linked_total_mass_unavailable_reason"] = (
+        "the design report does not build and measure a matching production "
+        "part set: its default thrust_chamber_wall.step is a uniform-wall "
+        "single body, while the ledger resolves regenerative liner/lands/"
+        "closeout regions, and its injector row is a legacy analytic proxy; "
+        "use matching regen geometry_id reports and the coaxial built-part "
+        "ledger before claiming CAD-linked mass"
+    )
     # The bolted joint is the single largest mass item in this ledger, and its
     # layout defaults are spacing heuristics rather than load paths.  Report
     # what a mass-minimising fastener selection would give, so the gap is
@@ -2223,7 +2233,11 @@ def _finite_positive_or_none(value) -> float | None:
 
 
 def _joint_allowance(manufacturing: ManufacturingSpec) -> float:
-    """Weld/braze mass allowance, after the SP-125 eq. 5-16 weld-land idea.
+    """User-controlled weld/braze mass allowance.
+
+    SP-125 equation 5-16 adds a weld land to a pressurant storage vessel.  It
+    is only an analogy for exposing this multiplier, not a chamber-specific
+    allowance or authority for any non-unit value.
 
     Returns 1.0 (no allowance) unless the caller populated
     ``ManufacturingSpec.weld_allowance`` / ``braze_allowance``.  Those fields

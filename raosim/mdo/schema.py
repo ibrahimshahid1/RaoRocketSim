@@ -26,14 +26,100 @@ blocks deepen.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 import math
-from typing import Iterator, Mapping
+from typing import Any, Iterator, Mapping
+import warnings
 
 import jax
 import jax.numpy as jnp
 
 Array = jnp.ndarray
+
+
+# Huzel & Huang, *Design of Liquid Propellant Rocket Engines* (1967),
+# ``Optimum Mixture Ratio`` (source-PDF p. 29) and ``Mixture Ratio``
+# (source-PDF p. 44), NASA SP-125, define the physical quantity used here as
+# oxidizer weight flow divided by fuel weight flow.  The layout classes below
+# are software-contract machinery around that physical scalar; a layout flag
+# must never be encoded in the scalar itself.
+_DESIGN_BASE_FIELDS = (
+    "Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
+    "channel_width", "channel_height", "film_frac", "t_wall",
+)
+_DESIGN_CONTRACT_FIELDS = _DESIGN_BASE_FIELDS + ("OF",)
+
+
+def validate_mixture_ratio(value: object, *, name: str = "O/F") -> float:
+    """Return a finite, strictly positive host-side mixture ratio.
+
+    The differentiable core performs the equivalent check with JAX arrays and
+    carries a failed value into its numerical-validity gate.  Host adapters use
+    this helper so invalid O/F values fail before a fuel/oxidizer split or a
+    traditional-analysis handoff is attempted.
+    """
+
+    try:
+        resolved = float(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError(f"{name} must be a finite positive number") from exc
+    if not math.isfinite(resolved) or resolved <= 0.0:
+        raise ValueError(f"{name} must be finite and positive; got {resolved!r}")
+    return resolved
+
+
+@dataclass(frozen=True)
+class DesignLayout:
+    """Static description of the active optimizer vector.
+
+    The optimizer owns either the ten hardware variables or those ten plus
+    O/F.  Serialized/state contracts always use :attr:`contract_names`, which
+    has eleven physical values and never contains an intent sentinel.
+    """
+
+    active_names: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        allowed = (_DESIGN_BASE_FIELDS, _DESIGN_CONTRACT_FIELDS)
+        if self.active_names not in allowed:
+            raise ValueError(
+                "DesignLayout active_names must be the ordered 10-variable "
+                "hardware layout or that layout followed by OF"
+            )
+
+    @classmethod
+    def fixed_of(cls) -> "DesignLayout":
+        return cls(_DESIGN_BASE_FIELDS)
+
+    @classmethod
+    def variable_of(cls) -> "DesignLayout":
+        return cls(_DESIGN_CONTRACT_FIELDS)
+
+    @classmethod
+    def for_mission(cls, mission: "MissionSpec") -> "DesignLayout":
+        return (
+            cls.variable_of()
+            if mission.cea_table_path and not mission.of_is_pinned
+            else cls.fixed_of()
+        )
+
+    @property
+    def contract_names(self) -> tuple[str, ...]:
+        return _DESIGN_CONTRACT_FIELDS
+
+    @property
+    def of_is_variable(self) -> bool:
+        return self.active_names == _DESIGN_CONTRACT_FIELDS
+
+    @property
+    def active_size(self) -> int:
+        return len(self.active_names)
+
+    def resolve_of(self, design_of: Array, mission_of: float) -> Array:
+        """Resolve the effective O/F using this explicit static layout."""
+
+        value = design_of if self.of_is_variable else mission_of
+        return jnp.asarray(value, dtype=jnp.float64)
 
 
 # --------------------------------------------------------------------------- #
@@ -53,6 +139,12 @@ class MissionSpec:
     thrust: float = 13.0e3          # N
     #: which combination the constants describe (set by ``for_propellant``)
     propellant_name: str = "LOX/RP-1"
+    #: which alloys the traced wall constants describe (set by
+    #: ``for_material``/``with_materials``).  ``None`` means the class
+    #: defaults are in force and no catalog record backs them -- reported so a
+    #: snapshot cannot imply a material was selected when none was.
+    liner_material_name: str | None = None
+    closeout_material_name: str | None = None
     Pa: float = 101325.0            # Pa ambient
     burn_time: float = 120.0        # s
 
@@ -79,11 +171,17 @@ class MissionSpec:
     # above are used as flat surfaces — correct at the stated O/F, flat in O/F.
     cea_table_path: str = ""
     #: Feed architecture this mission describes.  Selects the chamber-pressure
-    #: window in :mod:`raosim.mdo.bounds` -- Yang 2004 gives a different
-    #: ceiling and a different limiting mechanism for each cycle.  Only
+    #: window in :mod:`raosim.mdo.bounds` -- Parsley & Zhang (2004) give a
+    #: different pressure regime and limiting mechanism for each cycle.  Only
     #: ``electric_pump`` is implemented in the traced core;
     #: :func:`raosim.requirements.resolve_requirement` refuses the others.
     feed_architecture: str = "electric_pump"
+    #: Optional user-selected numerical search window.  These values condition
+    #: the optimizer only; they are not physical-validity claims.  When absent,
+    #: :mod:`raosim.mdo.bounds` supplies its evidence-labelled recommended
+    #: window.  Property-table domains remain separate hard constraints.
+    chamber_pressure_search_min_pa: float | None = None
+    chamber_pressure_search_max_pa: float | None = None
     #: Pin O/F at :attr:`OF` even when surfaces are loaded.  Set by
     #: :func:`raosim.requirements.resolve_requirement` when the user states a
     #: mixture ratio explicitly.  Without this a pinned requirement would be
@@ -317,10 +415,12 @@ class MissionSpec:
 
     # --- thrust-chamber hardware mass (raosim.mass_ledger, differentiable
     #     mirror in mdo/mass.py) -------------------------------------------- #
-    #   Mass is integrated as a solid of revolution over the same station grid
-    #   the cooling model marches, after NASA SP-125 eq. 8-32 (shell mass =
-    #   mid-surface surface area x thickness x density; Huzel & Huang, printed
-    #   p. 339).  ``rho_wall`` must match the liner alloy behind ``k_wall`` --
+    #   Mass is integrated geometrically as a solid of revolution (Pappus) over
+    #   the same station grid the cooling model marches.  NASA SP-125 eq. 8-32
+    #   uses the same mid-surface-area x thickness x density relation for a
+    #   cylindrical propellant TANK; it corroborates this shell-volume geometry
+    #   but does not prescribe a thrust-chamber mass model or wall thickness.
+    #   ``rho_wall`` must match the liner alloy behind ``k_wall`` --
     #   the default pair (320 W/m-K, 9130 kg/m3) is the NARloy-Z / CuCrZr-class
     #   liner the MDO baseline uses (raosim.materials).
     rho_wall: float = 9130.0              # kg/m3 liner density
@@ -432,7 +532,13 @@ class MissionSpec:
     pintle_center_gap_diameter: float = 0.018   # m, Dcg (center-gap outer)
     pintle_rod_diameter: float = 0.010          # m, Dpr (center rod)
     pintle_transition_area_fraction: float = 0.95  # stay below the Son cap
-    injector_dp_stability_min: float = 0.20  # chug rule min(χ_f,χ_o) (SP-194)
+    # Conservative injector-drop design screen.  The 0.20 endpoint is the
+    # 15--20% rule of thumb in Huzel & Huang, NASA SP-125 (1967), sec. 4.2,
+    # source-PDF p.137 / printed p.128.  SP-194 (1972), sec. 6.2.3.1,
+    # source-PDF pp.293--294 supports the stability coupling but cautions that
+    # changing only one stream can destabilize; this is not a universal chug
+    # boundary or a substitute for a coupled stability analysis.
+    injector_dp_stability_min: float = 0.20
     #   Blockage factor BF = N·w/(π D_p) — with TMR, one of "the two master
     #   geometric knobs" of a pintle injector (Hwang et al., IJASS 23, 2022;
     #   Freeberg 2019 makes the spray angle a function of BF and TMR).  Real
@@ -486,6 +592,39 @@ class MissionSpec:
     g0: float = 9.80665
 
     def __post_init__(self) -> None:
+        validate_mixture_ratio(self.OF, name="MissionSpec.OF")
+        search_overrides = (
+            self.chamber_pressure_search_min_pa,
+            self.chamber_pressure_search_max_pa,
+        )
+        if any(value is not None for value in search_overrides):
+            from raosim.mdo.bounds import chamber_pressure_search_window
+
+            recommended = chamber_pressure_search_window(
+                self.feed_architecture
+            )
+            lo = (
+                recommended.lower
+                if self.chamber_pressure_search_min_pa is None
+                else float(self.chamber_pressure_search_min_pa)
+            )
+            hi = (
+                recommended.upper
+                if self.chamber_pressure_search_max_pa is None
+                else float(self.chamber_pressure_search_max_pa)
+            )
+            if not math.isfinite(lo) or lo <= 0.0:
+                raise ValueError(
+                    "chamber_pressure_search_min_pa must be finite and positive"
+                )
+            if not math.isfinite(hi) or hi <= 0.0:
+                raise ValueError(
+                    "chamber_pressure_search_max_pa must be finite and positive"
+                )
+            if not lo < hi:
+                raise ValueError(
+                    "chamber-pressure search window must satisfy min < max"
+                )
         if not math.isclose(
             float(self.cooling_fraction), 1.0, rel_tol=0.0, abs_tol=1.0e-12
         ):
@@ -496,6 +635,11 @@ class MissionSpec:
                 "requires an explicit third bypass branch and closure "
                 "constraint."
             )
+
+    def design_layout(self) -> DesignLayout:
+        """Return the explicit active-variable layout for this mission."""
+
+        return DesignLayout.for_mission(self)
 
     # ----------------------------------------------------------------------- #
     # Thrust-class scaling                                                     #
@@ -511,18 +655,18 @@ class MissionSpec:
         wall limits, the repo's Sutton-sourced table for the gases), then
         applies the thrust scaling of :meth:`for_thrust`.
 
-        Hydrogen has no coking limit — ``coolant_wall_limit_K is None`` — and
-        that is represented by setting the coking screen far above any
-        attainable wall temperature, so the **gas-side material limit**
-        governs instead.  That is the physically correct behaviour rather than
-        a missing constraint.
+        Hydrogen has no coking limit — ``coolant_wall_limit_K is None`` — so
+        its coking row is not applicable.  This does **not** prove the gas-side
+        material limit governs: methane/hydrogen coolant-side HTD requires the
+        separate real-fluid coverage gate in :mod:`raosim.mdo.coolant_htd`.
+        Until that model is available, authoritative feasibility is unknown.
         """
         from raosim.mdo.propellants import get_propellant
         from raosim.physics import default_coolant_inlet_temperature
 
         p = get_propellant(propellant)
-        # None (cannot coke) → a screen that can never bind; the gas-side
-        # ``liner_T_wg_max`` constraint is then the governing wall limit.
+        # None (cannot coke) → a coking screen that can never bind.  The
+        # independent HTD applicability/coverage row remains authoritative.
         coke = (p.coolant_wall_limit_K if p.coolant_wall_limit_K is not None
                 else 1.0e4)
         derived = dict(
@@ -556,6 +700,78 @@ class MissionSpec:
         )
         derived.update(overrides)
         return cls.for_thrust(thrust, Pc_ref=Pc_ref, **derived)
+
+    def with_materials(
+        self,
+        *,
+        liner: Any = None,
+        closeout: Any = None,
+    ) -> "MissionSpec":
+        """Atomically retarget every traced liner/closeout wall property.
+
+        This is the single mapper between the ``raosim.materials`` catalog and
+        the differentiable core.  Either every field the selection owns is
+        resolved from one catalog record, or the call raises and the mission is
+        unchanged -- a partially applied material is an alloy that exists in no
+        catalog and matches no qualification data.
+
+        Omitting a role keeps that role's current selection.  Because the
+        default closeout is a hardenable jacket alloy and the default liner is
+        a high-conductivity copper (SP-8087 sec. 2.1.3.1), the two roles are
+        never inherited from one another.
+        """
+        from dataclasses import replace
+
+        from raosim.mdo.material_map import resolve_material_selection
+
+        liner_choice = liner if liner is not None else self.liner_material_name
+        closeout_choice = (
+            closeout if closeout is not None else self.closeout_material_name
+        )
+        if liner_choice is None or closeout_choice is None:
+            missing = "liner" if liner_choice is None else "structural closeout"
+            raise ValueError(
+                f"with_materials needs an explicit {missing} material: this "
+                "mission still carries unattributed class-default wall "
+                "constants, so there is nothing to inherit"
+            )
+        selection = resolve_material_selection(
+            liner=liner_choice,
+            closeout=closeout_choice,
+            liner_structural_fos=self.liner_structural_fos,
+        )
+        return replace(self, **selection.fields)
+
+    @classmethod
+    def for_material(
+        cls,
+        liner: Any,
+        thrust: float,
+        *,
+        closeout: Any = "Inconel 718",
+        propellant: str | None = None,
+        Pc_ref: float = 3.0e6,
+        **overrides,
+    ) -> "MissionSpec":
+        """Thrust-scaled architecture for a **named liner/closeout pair**.
+
+        The companion of :meth:`for_propellant`: that selects the working
+        fluid, this selects the metal.  Both may be combined --
+        ``for_material("GRCop-84", 13e3, propellant="LOX/LCH4")`` -- and the
+        material mapping is applied last so it owns the wall constants
+        outright.
+
+        The closeout defaults to the repository's standard jacket entry rather
+        than to the liner alloy, because a copper jacket at these pressures
+        needs a thickness that violates the thin-shell assumption the
+        ``jacket_thin_shell_margin`` constraint reports.
+        """
+        base = (
+            cls.for_propellant(propellant, thrust, Pc_ref=Pc_ref, **overrides)
+            if propellant is not None
+            else cls.for_thrust(thrust, Pc_ref=Pc_ref, **overrides)
+        )
+        return base.with_materials(liner=liner, closeout=closeout)
 
     @classmethod
     def for_thrust(cls, thrust: float, *, Pc_ref: float = 3.0e6,
@@ -651,13 +867,25 @@ class MissionSpec:
         )
 
         pc = chamber_pressure_bounds(self.feed_architecture)
+        pc_lo = (
+            pc.lower
+            if self.chamber_pressure_search_min_pa is None
+            else float(self.chamber_pressure_search_min_pa)
+        )
+        pc_hi = (
+            pc.upper
+            if self.chamber_pressure_search_max_pa is None
+            else float(self.chamber_pressure_search_max_pa)
+        )
         eps_lo, eps_hi = expansion_ratio_bounds(self)
         return (
-            # Pc from the CYCLE (Yang 2004), not from the 13 kN kerolox
-            # baseline; eps from the Rao chart's own tabulated box, the same
-            # data ``chart_domain_margin`` screens against.
-            VariableSpec("Pc", pc.lower, pc.upper,
-                         min(max(3.0e6, pc.lower), pc.upper)),
+            # The default Pc search guidance is architecture-dependent
+            # (Parsley & Zhang 2004), and caller overrides can widen/narrow it.
+            # These are optimizer-search endpoints, not cycle hard limits;
+            # live physics and sampled-property domains gate validity.  Epsilon
+            # still comes from the Rao chart's own tabulated box.
+            VariableSpec("Pc", pc_lo, pc_hi,
+                         min(max(3.0e6, pc_lo), pc_hi)),
             VariableSpec("eps", eps_lo, eps_hi,
                          expansion_ratio_reference(self)),
             VariableSpec("dp_f_frac", 0.12, 0.45, 0.2),
@@ -700,7 +928,11 @@ class MissionSpec:
             return ()
         from raosim.mdo.properties import load_chamber_surfaces
 
-        surfaces = load_chamber_surfaces(self.cea_table_path)
+        surfaces = load_chamber_surfaces(
+            self.cea_table_path,
+            expected_propellant=self.propellant_name,
+            require_of_dependence=True,
+        )
         lo = float(surfaces.gamma.yg[0])
         hi = float(surfaces.gamma.yg[-1])
         ref = min(max(float(self.OF), lo), hi)
@@ -725,7 +957,11 @@ class MissionSpec:
 @jax.tree_util.register_pytree_node_class
 @dataclass
 class DesignVector:
-    """Continuous hardware variables x_h (skeleton subset of plan §4.1)."""
+    """Eleven-value physical design contract plus a static active layout.
+
+    :attr:`layout` says whether O/F is active in the optimizer.  :attr:`OF`
+    itself is always a physical value; it never doubles as a layout sentinel.
+    """
 
     Pc: Array          # chamber pressure [Pa]
     eps: Array         # expansion ratio [-]
@@ -766,17 +1002,16 @@ class DesignVector:
     # records which regime this vector is in; ``default_design_space`` only
     # emits an O/F spec when ``MissionSpec.cea_table_path`` is set.
     #
-    # The class default is a deliberately INVALID sentinel, not a plausible
-    # number.  A plausible default (say RP-1's 2.27) would be silently wrong on
-    # every other propellant if a caller ever marked O/F variable without
-    # supplying it; -1 propagates to a negative mass-flow split and trips the
-    # ``finite`` guard, turning a silent physics error into a loud infeasible.
-    OF: Array = -1.0                # oxidizer/fuel mass ratio [-] (sentinel)
+    # Constructor compatibility default for the class-default LOX/RP-1
+    # mission.  Internal code constructs vectors from an explicit layout and
+    # supplies the mission's actual fixed value.  This is a physical value,
+    # never an intent sentinel.
+    OF: Array = 2.27                # oxidizer/fuel mass ratio [-]
 
-    #: Static (non-traced) flag: is ``OF`` a live design variable, or should
-    #: the solver read the mission's fixed value?  Carried as pytree *aux* so
-    #: it can never become a design-dependent branch inside the traced graph.
-    of_is_variable: bool = False
+    #: Static (non-traced) design intent.  It is pytree auxiliary data, so the
+    #: fixed/variable branch is resolved at trace time rather than becoming a
+    #: design-dependent numerical switch.
+    layout: DesignLayout = field(default_factory=DesignLayout.fixed_of)
 
     # NOTE — the film-injector slot height S is deliberately **not** a design
     # variable.  Stechman (1969) *derives* it ("the slot height S is determined
@@ -788,50 +1023,129 @@ class DesignVector:
     # quantity, not an optimiser lever: it lives on ``MissionSpec`` and is
     # reported by ``cooling.film_slot_validity``.  (It genuinely matters for a
     # *gaseous* film, where S enters Hatch & Papell's correlation directly.)
-    _FIELDS = ("Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
-               "channel_width", "channel_height", "film_frac", "t_wall",
-               "OF")
+    _FIELDS = _DESIGN_CONTRACT_FIELDS
+
+    @property
+    def of_is_variable(self) -> bool:
+        """Deprecated compatibility view; use ``layout.of_is_variable``."""
+
+        return self.layout.of_is_variable
 
     # -- pytree protocol ---------------------------------------------------- #
     def tree_flatten(self):
-        # ``of_is_variable`` is AUX, not a child: it is a configuration fact,
+        # ``layout`` is AUX, not a child: it is a configuration fact,
         # not a number to differentiate, and keeping it static is what stops
         # the O/F regime from becoming a traced branch (plan §0.1).
         return (tuple(getattr(self, f) for f in self._FIELDS),
-                self.of_is_variable)
+                self.layout)
 
     @classmethod
     def tree_unflatten(cls, aux, children):
-        return cls(*children, of_is_variable=bool(aux))
+        # ``bool`` accepts treedefs produced by the pre-v2 in-process class;
+        # persisted v1 EngineState values are intentionally not migrated.
+        layout = (
+            DesignLayout.variable_of() if bool(aux)
+            else DesignLayout.fixed_of()
+        ) if isinstance(aux, bool) else aux
+        return cls(*children, layout=layout)
 
     # -- vector packing ------------------------------------------------------ #
+    def to_contract_array(self, *, effective_of: Array | None = None) -> Array:
+        """Return the fixed eleven-value physical state/snapshot contract."""
+
+        of = self.OF if effective_of is None else effective_of
+        values = [getattr(self, f) for f in _DESIGN_BASE_FIELDS] + [of]
+        return jnp.stack([
+            jnp.asarray(value, dtype=jnp.float64) for value in values
+        ])
+
+    def to_active_array(self) -> Array:
+        """Return the explicit 10- or 11-value optimizer vector."""
+
+        return jnp.stack([
+            jnp.asarray(getattr(self, name), dtype=jnp.float64)
+            for name in self.layout.active_names
+        ])
+
     def to_array(self) -> Array:
-        return jnp.stack([jnp.asarray(getattr(self, f), dtype=jnp.float64)
-                          for f in self._FIELDS])
+        """Compatibility alias for the fixed physical contract vector."""
+
+        return self.to_contract_array()
+
+    @classmethod
+    def from_active_array(
+        cls,
+        x: Array,
+        layout: DesignLayout,
+        *,
+        fixed_of: float | Array | None = None,
+    ) -> "DesignVector":
+        """Build from an explicitly described 10- or 11-value active vector."""
+
+        x = jnp.asarray(x)
+        n = int(x.shape[0])
+        if n != layout.active_size:
+            raise ValueError(
+                f"active design vector has length {n}; layout requires "
+                f"{layout.active_size} ({', '.join(layout.active_names)})"
+            )
+        if layout.of_is_variable:
+            return cls(*(x[i] for i in range(n)), layout=layout)
+        if fixed_of is None:
+            raise ValueError("fixed-O/F layout requires fixed_of=")
+        return cls(
+            *(x[i] for i in range(n)),
+            OF=jnp.asarray(fixed_of, dtype=jnp.float64),
+            layout=layout,
+        )
+
+    @classmethod
+    def from_contract_array(
+        cls,
+        x: Array,
+        layout: DesignLayout,
+    ) -> "DesignVector":
+        """Build from the fixed eleven-value physical contract + layout."""
+
+        x = jnp.asarray(x)
+        n = int(x.shape[0])
+        if n != len(_DESIGN_CONTRACT_FIELDS):
+            raise ValueError(
+                "design contract vector must contain exactly 11 physical values"
+            )
+        return cls(*(x[i] for i in range(n)), layout=layout)
 
     @classmethod
     def from_array(cls, x: Array, *,
                    of_is_variable: bool | None = None) -> "DesignVector":
-        """Build from 4–11 ordered values.
+        """Deprecated compatibility adapter for 4–11 ordered values.
 
         Omitted trailing values retain their dataclass defaults for
         compatibility with the early four-/six-variable skeletons.
 
-        The eleventh slot is ``OF``, and its presence is what distinguishes the
-        two regimes.  A 10-long array (no CEA surfaces) leaves ``OF`` at the
-        class default *and* marks it non-variable, so
-        :func:`raosim.mdo.engine.solve_engine` reads the mission's fixed value
-        instead — which is the only safe behaviour, because the class default
-        is an RP-1 number and would silently mis-split the propellant flow on
-        any other combination.  Pass ``of_is_variable=`` to override the
-        length-based inference.
+        Only this deprecated boundary infers layout from length.  Internal MDO
+        code must use :meth:`from_active_array` or :meth:`from_contract_array`.
         """
+        warnings.warn(
+            "DesignVector.from_array() infers design layout from array length; "
+            "use from_active_array(..., layout, fixed_of=...) or "
+            "from_contract_array(..., layout)",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         x = jnp.asarray(x)
         n = int(x.shape[0])
+        if n < 4 or n > len(cls._FIELDS):
+            raise ValueError("legacy design vector length must be between 4 and 11")
         if of_is_variable is None:
             of_is_variable = n >= len(cls._FIELDS)
-        return cls(*(x[i] for i in range(n)),
-                   of_is_variable=bool(of_is_variable))
+        if of_is_variable and n < len(cls._FIELDS):
+            raise ValueError("variable-O/F design vector must include a physical OF")
+        layout = (
+            DesignLayout.variable_of()
+            if of_is_variable else DesignLayout.fixed_of()
+        )
+        return cls(*(x[i] for i in range(n)), layout=layout)
 
     @classmethod
     def names(cls) -> tuple[str, ...]:
@@ -839,6 +1153,13 @@ class DesignVector:
 
     def as_dict(self) -> dict:
         return {f: getattr(self, f) for f in self._FIELDS}
+
+    def as_contract_dict(self, *, effective_of: Array | None = None) -> dict:
+        """Return all eleven physical values, overriding O/F after a solve."""
+
+        out = {name: getattr(self, name) for name in _DESIGN_BASE_FIELDS}
+        out["OF"] = self.OF if effective_of is None else effective_of
+        return out
 
 
 # --------------------------------------------------------------------------- #

@@ -1,8 +1,56 @@
 # Engine-MDO remediation, output contract, and parity review
 
 **Review baseline:** commit `e57c93e` (2026-07-26)  
-**Contract versions:** `EngineState` schema 1; `EngineAnalysisSnapshot` 1.0.0  
+**Contract versions:** `EngineState` schema 2; `EngineAnalysisSnapshot` 2.0.0  
 **Exact implicit Rao status:** architecture proposed, not implemented pending approval
+
+## STATUS (2026-08-10)
+
+Remediation items 1–8, 10, 12, 14–18 are **implemented and verified by
+reproduction**; the fixed-O/F sentinel crash, the discarded optimized O/F, the
+three divergent constraint lists, both requirement-integrity bypasses, the
+fictitious fallback O/F domain, the electric-package-only mass objective, and
+the unreachable HTD gate no longer reproduce. Full suite: 1924 passed.
+
+Remaining work, in the order it should be taken:
+
+| Item | State | Gap |
+|---|---|---|
+| 9 — `ResolvedEngineInputs` | contract landed and load-bearing; builder switch pending | `raosim/mdo/resolved_inputs.py` defines the frozen, versioned (`1.0.0`), content-addressed contract; `resolve_engine_inputs()` builds it; `crosscheck_design_input()` compares 40 shared scalars against the traditional `DesignInput`. Every `reevaluate()` now resolves the contract, crosschecks the handoff, warns by name on any divergence, and records the digest + material selection in snapshot `optimizer_metadata`. Current drift across GRCop-84/NARloy-Z/CuCrZr: **zero**. Remaining: switch `to_design_input()` from *builder* to *consumer* of the contract — now a mechanical, gate-protected step rather than a rewrite on faith. |
+| 11 — injector build-once | partial | `injector_mass_ledger_from_built_parts` measures the exported body, but `design.py` still calls the labelled screening proxy and the export test uses monkeypatched fakes. CadQuery 2.7.0 is present in `.venv-jax`, so the real volume/STEP round-trip test is runnable. |
+| 13 — chamber mass vs CAD | partial | `regen_cad.py` builds disjoint liner/ribs/jacket regions with a `geometry_id`; `design.py` still exports uniform-wall. Disclosed, not hidden. |
+| 19 — `ContourProvider` | not started | `rao_variational` is reachable from the traditional CLI only; no provider interface, no post-solve validation of the MDO optimum. |
+
+An unresolved coolant identity (uncatalogued propellant) now marks both the
+coking and HTD rows applicable-but-unavailable, so it reduces to `unknown`
+rather than silently dropping the governing wall-side gate.
+
+### Material selection is now part of the MDO
+
+Previously `--material` reached only the traditional pipeline while the
+differentiable core kept flat class defaults, so selecting GRCop-84 optimized a
+NARloy-Z-class liner. Those defaults were not even one alloy — NARloy-Z
+conductivity and density against a CuCrZr-class allowable. The error was
+design-changing, not cosmetic:
+
+| liner | `wall_temp_margin` | `structural_stress_margin` |
+|---|---|---|
+| unattributed default | −126.2 (infeasible) | +134.7 MPa |
+| GRCop-84 | **+66.7 (feasible)** | +34.3 MPa |
+| NARloy-Z | −116.2 | +14.5 MPa |
+| OFHC Copper | −218.9 | **−15.6 MPa** |
+
+`raosim/mdo/material_map.py` is now the single typed mapper. It is **atomic**:
+either every field a selection owns resolves from one catalog record, or the
+selection is rejected — there is no partial application and no per-field
+fallback, because a half-applied material is an alloy that exists in no catalog
+and matches no qualification data. Liner and structural closeout are selected
+separately (SP-8087 sec. 2.1.3.1) and are never inherited from one another.
+`MissionSpec.for_material()` / `.with_materials()` are the entry points, and
+`_mission_from_mdo_args` applies them so the CLI flag reaches the traced core.
+A mission carrying class defaults reports `liner_material_name = None` and the
+snapshot says `unattributed_class_default` rather than naming an alloy the MDO
+never traced.
 
 ## 1. Bottom line
 

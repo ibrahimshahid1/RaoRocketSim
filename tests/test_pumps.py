@@ -207,6 +207,40 @@ def test_unsized_line_keeps_honest_not_sized_status(tmp_path):
     written = {Path(p).name for p in pkg["files"].values()}
     assert "fuel_impeller.stl" in written
     assert not any(name.startswith("oxidizer_") for name in written)
+    assert pump.mass_rollup is not None
+    assert not pump.mass_rollup.complete
+    assert pump.mass_rollup.core_pump_mass_kg is None
+    unavailable_oxidizer = [
+        item for item in pump.hardware_bom
+        if item.role == "oxidizer" and not item.available
+    ]
+    assert {item.component for item in unavailable_oxidizer} >= {
+        "axial inducer", "centrifugal impeller", "diffuser / volute",
+        "shaft and coupling", "motor", "inverter/controller", "pump casing",
+    }
+
+
+def test_two_stream_mass_rollup_includes_drives_and_battery():
+    pump = _pump_result()
+    rollup = pump.mass_rollup
+    assert rollup is not None and rollup.complete and rollup.core_complete
+    assert set(rollup.per_role_core_mass_kg) == {"fuel", "oxidizer"}
+    assert all(value > 0.0 for value in rollup.per_role_core_mass_kg.values())
+    assert rollup.core_pump_mass_kg == pytest.approx(
+        sum(rollup.per_role_core_mass_kg.values())
+    )
+    assert rollup.motor_mass_kg > 0.0
+    assert rollup.inverter_mass_kg > 0.0
+    assert rollup.battery_selected_mass_kg == pytest.approx(pump.battery.mass)
+    assert rollup.complete_package_mass_kg == pytest.approx(
+        rollup.core_pump_mass_kg
+        + rollup.motor_mass_kg
+        + rollup.inverter_mass_kg
+        + rollup.battery_selected_mass_kg
+    )
+    data = pump.to_dict()["mass_rollup"]
+    assert data["contract_id"] == "electric_bipropellant_feed_hardware@1"
+    assert data["complete"]
 
 
 def test_impeller_blade_camber_matches_log_spiral_closed_form():

@@ -23,6 +23,7 @@ from typing import Any
 import numpy as np
 
 from raosim.regen_profile import helix_stretch_factors, normal_offset_contour
+from raosim.regen_volumes import integrate_regen_volumes, regen_geometry_id
 
 _MM = 1000.0
 
@@ -836,6 +837,9 @@ def export_channel_wall_step(
         )
     material_volume = float(body.Volume())
     envelope_volume = float(info["envelope_volume_mm3"])
+    profile_geometry_id = regen_geometry_id(profile)
+    analytic_volumes = integrate_regen_volumes(profile)
+    cad_material_volume_m3 = material_volume * 1.0e-9
     info.update({
         "path": str(path),
         "stl_path": str(stl_path) if stl_path is not None else None,
@@ -844,6 +848,25 @@ def export_channel_wall_step(
         "valid": True,
         "solid_count": 1,
         "material_volume_mm3": material_volume,
+        "material_volume_m3": cad_material_volume_m3,
+        "geometry_id": profile_geometry_id,
+        "geometry_id_scope": (
+            "resolved liner/channel/land/closeout profile only; artifact end "
+            "seals, bond overlap, manifolds/ports, and CAD discretization are "
+            "reported separately"
+        ),
+        "cad_linked_mass_status": (
+            "unavailable_single_body_contains_artifact_specific_features"
+        ),
+        "shared_kernel_volume_m3": analytic_volumes.total,
+        "cad_minus_shared_kernel_volume_m3": (
+            cad_material_volume_m3 - analytic_volumes.total
+        ),
+        "cad_volume_comparison_scope": (
+            "profile metal kernel versus exported single body; end seals, "
+            "bond overlaps, profile down-sampling, and optional plenums/ports "
+            "make a nonzero delta expected"
+        ),
         "coolant_void_volume_mm3": envelope_volume - material_volume,
         "void_fraction": (
             envelope_volume - material_volume
@@ -1092,6 +1115,9 @@ def export_regen_brep(
         raise RuntimeError(f"STEP re-import validation failed: {inspection}")
     body_volume = float(body.Volume())
     removed_volume = envelope_volume - body_volume
+    profile_geometry_id = regen_geometry_id(profile)
+    analytic_volumes = integrate_regen_volumes(profile)
+    cad_material_volume_m3 = body_volume * 1.0e-9
     return {
         "step_path": str(path),
         "stl_path": str(stl_path) if stl_path is not None else None,
@@ -1129,6 +1155,25 @@ def export_regen_brep(
         "outlet_port_diameter_m": float(outlet_diameter) if outlet_diameter else None,
         "envelope_volume_mm3": envelope_volume,
         "solid_volume_mm3": body_volume,
+        "solid_volume_m3": cad_material_volume_m3,
+        "geometry_id": profile_geometry_id,
+        "geometry_id_scope": (
+            "resolved liner/channel/land/closeout profile only; artifact end "
+            "seals, manifolds/ports, and CAD discretization are reported "
+            "separately"
+        ),
+        "cad_linked_mass_status": (
+            "unavailable_single_body_contains_artifact_specific_features"
+        ),
+        "shared_kernel_volume_m3": analytic_volumes.total,
+        "cad_minus_shared_kernel_volume_m3": (
+            cad_material_volume_m3 - analytic_volumes.total
+        ),
+        "cad_volume_comparison_scope": (
+            "profile metal kernel versus exported single body; end seals, "
+            "profile down-sampling, and optional plenums/ports make a nonzero "
+            "delta expected"
+        ),
         "coolant_void_volume_mm3": removed_volume,
         "network_overlaps": overlaps,
         "channel_boolean_kernel": channel_kernel,

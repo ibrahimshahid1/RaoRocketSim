@@ -7,15 +7,19 @@ with a reason rather than emit a zero.
 """
 
 import math
+from copy import deepcopy
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 from raosim.interface import resolve_bolted_interface_geometry
 from raosim.mass_ledger import (
+    MassLedger,
     combine_ledgers,
     flange_bolt_mass_ledger,
     injector_mass_ledger,
+    injector_mass_ledger_from_built_parts,
     thrust_chamber_mass_ledger,
 )
 from raosim.materials import get_material
@@ -120,6 +124,18 @@ def test_two_material_wall_prices_liner_and_closeout_separately(profile):
     assert led.complete
 
 
+def test_regen_ledger_carries_deterministic_profile_geometry_id(profile):
+    from raosim.regen_volumes import regen_geometry_id
+
+    led = thrust_chamber_mass_ledger(profile, liner_material="GRCop-84")
+    expected = regen_geometry_id(profile)
+    assert led.provenance["geometry_id"] == expected
+    assert all(item.key_parameters["geometry_id"] == expected for item in led.items)
+    assert "compatible_region_topology" in led.provenance[
+        "cad_consistency_status"
+    ]
+
+
 def test_missing_density_is_unavailable_not_zero(profile):
     """The whole point of the availability contract."""
 
@@ -208,6 +224,45 @@ def test_unresolved_interface_reports_a_reason(resolution):
     assert led.total_mass is None
     assert all(i.mass_kg is None for i in led.items)
     assert "bolted interface" in led.unavailable_reason
+
+
+def test_impossible_flange_cutouts_are_unavailable_not_zero(resolution):
+    from dataclasses import replace
+
+    bad = replace(
+        resolution,
+        bolt_hole_diameter=resolution.flange_outer_diameter,
+    )
+    led = flange_bolt_mass_ledger(bad, flange_material="Inconel 718")
+    ring = next(i for i in led.items if i.component == "chamber flange ring")
+    assert ring.volume_m3 is None
+    assert ring.mass_kg is None
+    assert ring.status == "unavailable"
+    assert "cutout" in ring.unavailable_reason
+    assert ring.unavailable_reason_code == "cutout_not_less_than_gross_volume"
+
+
+def test_missing_injector_face_thickness_does_not_assume_zero_grip(resolution):
+    incomplete = {
+        "chamber_outer_diameter_m": resolution.chamber_outer_diameter,
+        "flange_outer_diameter_m": resolution.flange_outer_diameter,
+        "flange_length_m": resolution.flange_length,
+        "bolt_count": resolution.bolt_count,
+        "bolt_hole_diameter_m": resolution.bolt_hole_diameter,
+    }
+    led = flange_bolt_mass_ledger(
+        incomplete, flange_material="Inconel 718"
+    )
+    ring = next(i for i in led.items if i.component == "chamber flange ring")
+    bolt = next(i for i in led.items if "bolt" in i.component)
+
+    # The independent flange-ring solid remains resolved, but the fastener
+    # cannot be priced without the complete clamped stack.
+    assert ring.available
+    assert not bolt.available
+    assert bolt.mass_kg is None
+    assert bolt.unavailable_reason_code == "invalid_or_incomplete_fastener_geometry"
+    assert not led.complete
 
 
 # --------------------------------------------------------------------------- #
@@ -307,6 +362,82 @@ def test_layout_without_resolved_section_is_rejected():
         injector_mass_ledger({}, body_material="Inconel 718")
 
 
+def test_missing_manifold_volume_withholds_faceplate_mass(pintle_layout):
+    layout = deepcopy(pintle_layout)
+    layout["roles"]["fuel"].pop("manifold_volume_m3")
+    led = injector_mass_ledger(layout, body_material="Inconel 718")
+    face = next(i for i in led.items if "faceplate" in i.component)
+    assert face.volume_m3 is None
+    assert face.mass_kg is None
+    assert face.status == "unavailable"
+    assert "manifold" in face.unavailable_reason
+    assert face.unavailable_reason_code == "missing_required_cutout_geometry"
+
+
+def test_impossible_injector_cutouts_are_unavailable_not_zero(pintle_layout):
+    layout = deepcopy(pintle_layout)
+    layout["roles"]["fuel"]["manifold_volume_m3"] = 1.0
+    led = injector_mass_ledger(layout, body_material="Inconel 718")
+    face = next(i for i in led.items if "faceplate" in i.component)
+    assert face.volume_m3 is None
+    assert face.mass_kg is None
+    assert "greater than or equal" in face.unavailable_reason
+    assert face.unavailable_reason_code == "cutout_not_less_than_gross_volume"
+
+
+def test_built_part_ledger_prices_the_complete_production_part_set():
+    volumes = {
+        "pintle_body": 1.0e-5,
+        "pintle_tip": 2.0e-6,
+        "injector_body": 3.0e-5,
+        "orifice_plate": 4.0e-6,
+        "faceplate": 2.0e-5,
+    }
+    part_set = SimpleNamespace(
+        geometry_id="injector:test",
+        parts={
+            name: SimpleNamespace(volume_m3=volume)
+            for name, volume in volumes.items()
+        },
+    )
+    led = injector_mass_ledger_from_built_parts(
+        part_set, body_material="Inconel 718"
+    )
+    rho = get_material("Inconel 718").density
+    assert led.complete
+    assert led.total_mass == pytest.approx(sum(volumes.values()) * rho)
+    assert {item.component for item in led.items} == set(volumes)
+    assert all(item.status == "cad_body_measured" for item in led.items)
+    assert led.provenance["geometry_id"] == "injector:test"
+
+
+def test_invalid_built_part_geometry_is_unavailable_not_priced():
+    from types import SimpleNamespace
+
+    names = (
+        "pintle_body", "pintle_tip", "injector_body",
+        "orifice_plate", "faceplate",
+    )
+    parts = {
+        name: SimpleNamespace(
+            volume_m3=(index + 1) * 1.0e-6,
+            valid_for_mass=name != "pintle_tip",
+        )
+        for index, name in enumerate(names)
+    }
+    part_set = SimpleNamespace(parts=parts, geometry_id="injector:diagnostic")
+
+    led = injector_mass_ledger_from_built_parts(
+        part_set, body_material="Inconel 718"
+    )
+    tip = next(item for item in led.items if item.component == "pintle_tip")
+    assert tip.volume_m3 is None
+    assert tip.mass_kg is None
+    assert tip.unavailable_reason_code == "invalid_cad_body_geometry"
+    assert tip.key_parameters["diagnostic_measured_volume_m3"] > 0.0
+    assert not led.complete
+
+
 # --------------------------------------------------------------------------- #
 # combination + availability propagation
 # --------------------------------------------------------------------------- #
@@ -340,6 +471,42 @@ def test_combined_ledger_withholds_the_total_if_any_part_is_unknown(
     assert partial.resolved_mass > 0.0
     assert partial.to_dict()["resolved_mass_is_partial"] is True
     assert partial.by_subsystem()["chamber_interface"] is None
+
+
+def test_engine_contract_marks_an_entire_missing_scope(pintle_layout):
+    partial = combine_ledgers(
+        [injector_mass_ledger(pintle_layout, body_material="Inconel 718")],
+        scope="engine_hardware",
+    )
+    data = partial.to_dict()
+    assert partial.contract_id == "engine.primary_hardware@2"
+    assert set(partial.missing_scopes) == {
+        "thrust_chamber", "chamber_interface"
+    }
+    assert not partial.complete and partial.total_mass is None
+    assert set(data["explicitly_excluded_scopes"]) >= {
+        "electric_feed_system", "gimbal_mounts_and_thrust_takeout"
+    }
+    sentinels = [
+        item for item in partial.items
+        if item.key_parameters.get("reason_code") == "missing_required_scope"
+    ]
+    assert {item.subsystem for item in sentinels} == set(partial.missing_scopes)
+
+
+def test_empty_required_scope_is_not_treated_as_resolved(
+    profile, resolution, pintle_layout
+):
+    combined = combine_ledgers(
+        [
+            thrust_chamber_mass_ledger(profile, liner_material="GRCop-84"),
+            flange_bolt_mass_ledger(resolution, flange_material="Inconel 718"),
+            MassLedger(scope="injector", items=()),
+        ],
+        scope="engine_hardware",
+    )
+    assert combined.missing_scopes == ("injector",)
+    assert not combined.complete
 
 
 # --------------------------------------------------------------------------- #

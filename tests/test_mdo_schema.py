@@ -12,6 +12,7 @@ import jax.numpy as jnp  # noqa: E402
 from raosim.gas_dynamics import characteristic_velocity  # noqa: E402
 from raosim.mdo.scaling import ScaledSpace  # noqa: E402
 from raosim.mdo.schema import (  # noqa: E402
+    DesignLayout,
     DesignVector,
     MissionSpec,
     default_design_space,
@@ -27,9 +28,10 @@ def test_design_vector_pytree_roundtrip():
     assert len(leaves) == 11          # 10 hardware vars + O/F
     x2 = jax.tree_util.tree_unflatten(treedef, leaves)
     assert float(x2.eps) == 8.0
-    # ``of_is_variable`` is pytree AUX, not a leaf, so it survives the
+    # ``layout`` is pytree AUX, not a leaf, so it survives the
     # roundtrip without ever entering the traced graph.
     assert x2.of_is_variable is False
+    assert x2.layout == DesignLayout.fixed_of()
     assert float(x2.D_pintle) == pytest.approx(0.020)     # defaulted
     assert float(x2.N_rpm) == pytest.approx(30000.0)      # defaulted
     assert float(x2.film_frac) == pytest.approx(0.0)      # defaulted (pure regen)
@@ -38,22 +40,39 @@ def test_design_vector_pytree_roundtrip():
         Pc=jnp.asarray(3.0e6), eps=jnp.asarray(8.0), dp_f_frac=jnp.asarray(0.2),
         dp_o_frac=jnp.asarray(0.2), D_pintle=jnp.asarray(0.018),
         N_rpm=jnp.asarray(4.0e4)).to_array()
-    x3 = DesignVector.from_array(arr)
+    x3 = DesignVector.from_contract_array(arr, DesignLayout.fixed_of())
     assert float(x3.Pc) == pytest.approx(3.0e6)
     assert float(x3.N_rpm) == pytest.approx(4.0e4)
     # a 4-long array still builds — defaults fill the rest (skeleton path)
-    x4 = DesignVector.from_array(jnp.asarray([3.0e6, 8.0, 0.2, 0.2]))
+    with pytest.warns(DeprecationWarning):
+        x4 = DesignVector.from_array(jnp.asarray([3.0e6, 8.0, 0.2, 0.2]))
     assert float(x4.D_pintle) == pytest.approx(0.020)
     assert float(x4.film_frac) == pytest.approx(0.0)
     assert DesignVector.names() == (
         "Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
         "channel_width", "channel_height", "film_frac", "t_wall", "OF")
-    # A short array leaves O/F non-variable, so the solver reads the mission's
-    # fixed value instead of the class sentinel.  That is the only safe
-    # behaviour: the sentinel is -1 precisely so a caller who marks it variable
-    # without supplying it fails loudly rather than mis-splitting the flow.
+    # Compatibility construction no longer creates a numerical sentinel.
     assert x4.of_is_variable is False
-    assert float(x4.OF) < 0.0
+    assert float(x4.OF) == pytest.approx(MissionSpec().OF)
+
+
+def test_explicit_layout_separates_active_and_contract_vectors():
+    mission = MissionSpec.for_propellant("LOX/LCH4", 5_000.0)
+    layout = mission.design_layout()
+    active = jnp.asarray([s.ref() for s in default_design_space(mission)])
+    x = DesignVector.from_active_array(active, layout, fixed_of=mission.OF)
+
+    assert layout == DesignLayout.fixed_of()
+    assert x.to_active_array().shape == (10,)
+    assert x.to_contract_array().shape == (11,)
+    assert float(x.to_contract_array()[-1]) == pytest.approx(mission.OF)
+
+    variable_layout = DesignLayout.variable_of()
+    variable = DesignVector.from_active_array(
+        jnp.concatenate([active, jnp.asarray([2.6])]), variable_layout
+    )
+    assert variable.to_active_array().shape == (11,)
+    assert float(variable.to_contract_array()[-1]) == pytest.approx(2.6)
 
 
 def test_scaled_space_roundtrip_and_membership():
@@ -83,9 +102,42 @@ def test_mission_uses_distinct_traditional_top_throat_fillet_factors():
     assert m.throat_rd_factor == pytest.approx(0.382)
 
 
+def test_mission_can_override_recommended_pc_search_window():
+    mission = MissionSpec(
+        chamber_pressure_search_min_pa=2.0e6,
+        chamber_pressure_search_max_pa=8.0e6,
+    )
+    pc = default_design_space(mission)[0]
+    assert pc.name == "Pc"
+    assert pc.lower == pytest.approx(2.0e6)
+    assert pc.upper == pytest.approx(8.0e6)
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"chamber_pressure_search_min_pa": 0.0},
+        {"chamber_pressure_search_max_pa": np.inf},
+        {
+            "chamber_pressure_search_min_pa": 8.0e6,
+            "chamber_pressure_search_max_pa": 2.0e6,
+        },
+    ],
+)
+def test_mission_rejects_invalid_pc_search_window(overrides):
+    with pytest.raises(ValueError, match="search|finite|positive|min < max"):
+        MissionSpec(**overrides)
+
+
 def test_two_branch_fuel_architecture_rejects_an_untracked_third_bypass():
     with pytest.raises(ValueError, match="cooling_fraction must therefore equal 1.0"):
         MissionSpec(cooling_fraction=0.9)
+
+
+@pytest.mark.parametrize("value", [0.0, -1.0, np.nan, np.inf])
+def test_mission_rejects_nonphysical_mixture_ratio(value):
+    with pytest.raises(ValueError, match="finite and positive"):
+        MissionSpec(OF=value)
 
 
 def test_phase1_gate_jit_and_jacobians_no_callbacks():
@@ -93,10 +145,14 @@ def test_phase1_gate_jit_and_jacobians_no_callbacks():
     agree — the plan's Phase-1 completion gate on the schema layer."""
     space = default_design_space()
     S = ScaledSpace.from_specs(space)
+    mission = MissionSpec()
+    layout = mission.design_layout()
 
     @jax.jit
     def evaluate(z):
-        x = DesignVector.from_array(S.to_physical(z))
+        x = DesignVector.from_active_array(
+            S.to_physical(z), layout, fixed_of=mission.OF
+        )
         # algebra spanning all ten fields, smooth in the box
         return (x.Pc / 1e6) ** 0.8 * jnp.sqrt(x.eps) \
             + 10.0 * x.dp_f_frac * x.dp_o_frac \

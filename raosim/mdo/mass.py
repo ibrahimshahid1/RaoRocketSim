@@ -8,14 +8,19 @@ minimising only the electric package and calling the result engine mass.
 
 Physical basis
 --------------
-NASA SP-125 (Huzel & Huang, *Design of Liquid Propellant Rocket Engines*, 1971;
-``propulsion_texts/19710019929.pdf``) sizes preliminary shell mass as surface
-area times thickness times density — e.g. the cylindrical tank section
+The equations below are geometric shell-volume calculations (Pappus's centroid
+theorem), not a thrust-chamber mass correlation.  NASA SP-125 (Huzel & Huang,
+*Design of Liquid Propellant Rocket Engines*, 1967;
+``propulsion_texts/19710019929.pdf``, Ch. VIII, “Design of Propellant Tanks,”
+§8.1.2.3, source-PDF p. 348 / printed p. 339) uses the same surface-times-
+thickness relation for a cylindrical **tank** section:
 
     W_c = 2 π a l_c t_c ρ                                  (eq. 8-32, p. 339)
 
-with ``a`` the *nominal* (mid-surface) radius.  Applying that per station over
-the meridional arc gives, for a regeneratively cooled wall,
+with ``a`` the *nominal* (mid-surface) radius.  That tank equation corroborates
+the geometry but does not prescribe thrust-chamber thickness or mass.  Applying
+the geometric relation per station over the meridional arc gives, for a
+regeneratively cooled wall,
 
     A_liner    = 2 π (r + t_w/2) t_w
     A_land     = π (r_o² − r_i²) · b/(b + w)
@@ -41,14 +46,15 @@ conditional on that assumption.  Making the jacket thickness a solved structural
 variable is tracked as future work; until then the ratio is reported in the
 state's provenance so a reader can see the assumption rather than infer it.
 
-Smoothness
-----------
-Every operation here is a smooth function of ``(Rt, eps, t_wall,
-channel_width, channel_height)``.  There is no ``jnp.where`` on a design-
-dependent predicate, no ``min``/``max`` over stations, and no clamping — so this
-term contributes no new active-set switching to the NLP.  ``jnp.maximum`` guards
-appear only on quantities that are structurally positive (pitch, radii) to keep
-the gradient finite at degenerate inputs.
+Differentiable invalid-domain behavior
+--------------------------------------
+On physically valid geometry the equations are smooth in ``(Rt, eps, t_wall,
+channel_width, channel_height)``.  An infeasible optimizer probe can make a
+computed land width negative.  The shared JAX volume kernel uses the absolute
+land magnitude only as a nonnegative continuation outside that domain, while
+the independent ``land_min`` constraint rejects the point.  This introduces a
+kink only at the invalid/valid boundary and prevents negative material from
+artificially lowering the objective.
 """
 
 from __future__ import annotations
@@ -60,6 +66,7 @@ from jax import Array
 
 from raosim.mdo.grid import StationGrid
 from raosim.mdo.schema import MissionSpec
+from raosim.regen_volumes import integrate_regen_volumes_jax
 
 __all__ = [
     "ChamberMassBreakdown",
@@ -68,7 +75,10 @@ __all__ = [
     "SP8087_STRUCTURAL",
 ]
 
-SP125_SHELL_MASS = "NASA SP-125 eq. 8-32 (shell mass = surface x thickness x rho)"
+SP125_SHELL_MASS = (
+    "geometric shell volume (Pappus); corroborated, not prescribed for thrust "
+    "chambers, by NASA SP-125 eq. 8-32 tank-shell mass"
+)
 SP8087_STRUCTURAL = "NASA SP-8087 sec. 2.1.3 (chamber reinforcement / FoS)"
 
 
@@ -222,17 +232,19 @@ def chamber_mass(
         b = pitch - w
     else:
         b = jnp.full_like(pitch, float(mission.land_width))
-    # ``pitch`` is structurally positive, so this maximum never activates on a
-    # physical design and introduces no design-dependent branch.
-    land_fraction = b / jnp.maximum(b + w, 1.0e-12)
+    volumes = integrate_regen_volumes_jax(
+        r_inner=r,
+        dseg=grid.dseg,
+        t_hot=t_w,
+        channel_width=w,
+        channel_height=h,
+        land_width=b,
+        t_jacket=t_j,
+    )
 
-    a_liner = 2.0 * jnp.pi * (r + 0.5 * t_w) * t_w
-    a_land = jnp.pi * (r_ch_out ** 2 - r_ch_in ** 2) * land_fraction
-    a_closeout = 2.0 * jnp.pi * (r_ch_out + 0.5 * t_j) * t_j
-
-    liner = rho * jnp.sum(a_liner * ds)
-    lands = rho * jnp.sum(a_land * ds)
-    closeout = rho_close * jnp.sum(a_closeout * ds)
+    liner = rho * volumes.liner
+    lands = rho * volumes.lands
+    closeout = rho_close * volumes.closeout
     wetted = jnp.sum(2.0 * jnp.pi * r * ds)
 
     return ChamberMassBreakdown(
@@ -240,7 +252,7 @@ def chamber_mass(
         lands=lands,
         closeout=closeout,
         total=liner + lands + closeout,
-        land_area_fraction=land_fraction,
+        land_area_fraction=volumes.land_area_fraction,
         wetted_area=wetted,
         closeout_thickness=t_j,
         closeout_thin_shell_margin=thin_shell_margin,

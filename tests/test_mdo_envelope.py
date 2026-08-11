@@ -32,8 +32,11 @@ _THRUST = 5.0e3
 @pytest.fixture(scope="module")
 def solved():
     m = MissionSpec.for_thrust(_THRUST)
-    x = DesignVector.from_array(
-        jnp.asarray([s.ref() for s in default_design_space(m)]))
+    x = DesignVector.from_active_array(
+        jnp.asarray([s.ref() for s in default_design_space(m)]),
+        m.design_layout(),
+        fixed_of=m.OF,
+    )
     return m, solve_engine(x, m)
 
 

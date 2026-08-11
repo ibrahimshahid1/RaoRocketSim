@@ -144,14 +144,14 @@ def fastener_callout(
     which is the usual minimum for full nut engagement.
     """
 
-    from raosim.interface import _BOLT_CLASSES
+    from raosim.interface import _BOLT_CLASSES, validate_bolted_interface_geometry
 
     if lubrication not in _NUT_FACTOR:
         raise ValueError(
             f"unknown lubrication {lubrication!r}; "
             f"choose from {sorted(_NUT_FACTOR)}"
         )
-    res = sizing.resolution
+    res = validate_bolted_interface_geometry(sizing.resolution)
     d = float(sizing.bolt_nominal_diameter)
     pitch = float(sizing.bolt_pitch_thread)
     area = float(sizing.bolt_stress_area)
@@ -230,6 +230,9 @@ def build_chamber_flange(
     chamber's outer surface and the two are fused in the assembly.
     """
 
+    from raosim.interface import validate_bolted_interface_geometry
+
+    resolution = validate_bolted_interface_geometry(resolution)
     mm = 1000.0
     r_in = 0.5 * float(resolution.chamber_outer_diameter) * mm
     r_out = 0.5 * float(resolution.flange_outer_diameter) * mm

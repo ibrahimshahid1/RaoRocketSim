@@ -7,13 +7,14 @@ propellant, ambient and thrust class.
 
 Two properties are pinned here.
 
-**One source of truth.**  A bound and the constraint that screens the same
+**One source of truth.**  A hard bound and the constraint that screens the same
 limit must come from the same data.  ``eps`` is bounded by the Rao chart grid
 that ``chart_domain_margin`` uses; extend the chart and the design space widens
 with it, automatically.
 
-**Sourced or labelled.**  Every chamber-pressure window either cites Yang 2004 /
-SP-125, or is flagged ``literature=False`` so it cannot be quoted as sourced.
+**Sourced or labelled.**  Every chamber-pressure search window either cites
+Parsley and Zhang (2004) / SP-125, or is flagged ``literature=False``.  A
+sourced performance optimum is still not mislabeled as a hard-validity domain.
 """
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ from raosim.mdo.bounds import (
     ArchitecturePressureLimit,
     PRESSURE_LIMITS,
     chamber_pressure_bounds,
+    chamber_pressure_hard_domain,
+    chamber_pressure_search_window,
     expansion_ratio_bounds,
     expansion_ratio_reference,
 )
@@ -94,9 +97,9 @@ def test_eps_bounds_do_not_re_encode_separation():
 # --------------------------------------------------------------------------- #
 # Pc: an architecture property, with its basis attached                        #
 # --------------------------------------------------------------------------- #
-def test_pressure_ceilings_differ_by_cycle():
-    """Yang 2004 gives a different ceiling AND a different mechanism for each
-    cycle; a single box cannot be right for all of them."""
+def test_pressure_search_windows_differ_by_cycle():
+    """Parsley & Zhang give different characteristic ranges and mechanisms;
+    a single initialization box cannot be right for every cycle."""
     pf = chamber_pressure_bounds("pressure_fed")
     gg = chamber_pressure_bounds("gas_generator")
     ex = chamber_pressure_bounds("expander")
@@ -110,7 +113,7 @@ def test_pressure_ceilings_differ_by_cycle():
     ("gas_generator", 15.0),       # Yang: 10-15 MPa performance optimum
     ("staged_combustion", 25.0),   # Yang: hardware limited 20-25 MPa
 ])
-def test_yang_ceilings_match_the_monograph(arch, ceiling_mpa):
+def test_parsley_zhang_search_guidance_matches_the_chapter(arch, ceiling_mpa):
     assert chamber_pressure_bounds(arch).upper == pytest.approx(
         ceiling_mpa * 1.0e6)
 
@@ -133,7 +136,14 @@ def test_unsourced_windows_are_labelled_as_such():
     assert "not a published limit" in ep.source
     for name, limit in PRESSURE_LIMITS.items():
         if limit.literature:
-            assert ("Yang" in limit.source or "SP-125" in limit.source), name
+            assert ("Parsley" in limit.source or "SP-125" in limit.source), name
+
+
+def test_search_guidance_is_not_misreported_as_a_hard_domain():
+    for architecture, window in PRESSURE_LIMITS.items():
+        assert window.hard_validity is False, architecture
+        assert chamber_pressure_hard_domain(architecture) is None
+        assert chamber_pressure_search_window(architecture) == window
 
 
 def test_unknown_architecture_raises_rather_than_falling_back():
@@ -152,7 +162,7 @@ def test_all_windows_are_ordered_and_positive():
 # --------------------------------------------------------------------------- #
 # Wiring into the design space                                                 #
 # --------------------------------------------------------------------------- #
-def test_design_space_uses_the_architecture_window():
+def test_design_space_uses_the_architecture_search_window():
     m = MissionSpec.for_thrust(5.0e3)
     spec = {s.name: s for s in m.scaled_design_space()}
     ep = chamber_pressure_bounds(m.feed_architecture)

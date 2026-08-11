@@ -24,7 +24,10 @@ import pytest
 from raosim.requirements import (
     Coverage,
     EngineRequirement,
+    MixtureRatioMode,
+    RequirementAnalysisConfig,
     resolve_requirement,
+    solve_requirement,
 )
 
 _THRUST = 5.0e3
@@ -43,6 +46,28 @@ def _cov(resolved, name):
             return c
     raise AssertionError(f"{name!r} not in coverage: "
                          f"{[c.requirement for c in resolved.coverage]}")
+
+
+def _write_property_table(path, *, oxidizer="LOX", fuel="RP-1", flat=False):
+    from raosim.mdo.properties import save_tables
+
+    Pc = np.linspace(1.5e6, 6.0e6, 5)
+    OF = np.linspace(1.8, 3.0, 5)
+    P, O = np.meshgrid(Pc, OF, indexing="ij")
+    Tc = 3500.0 + 0.0 * P if flat else 3500.0 - 100.0 * O
+    save_tables(
+        str(path),
+        {
+            "Pc_grid": Pc,
+            "OF_grid": OF,
+            "gamma": 1.24 + 0.0 * P,
+            "Tc": Tc,
+            "R_gas": 380.0 + 0.0 * P,
+        },
+        oxidizer=oxidizer,
+        fuel=fuel,
+    )
+    return path
 
 
 # --------------------------------------------------------------------------- #
@@ -83,6 +108,28 @@ def test_duration_is_two_numbers_and_qualification_is_the_longer():
     misuse of the field, not a valid input."""
     with pytest.raises(ValueError, match="cumulative"):
         _req(flight_duration=30.0, qualification_duration=10.0)
+
+
+@pytest.mark.parametrize(
+    "overrides,field",
+    [
+        ({"thrust": np.inf}, "thrust"),
+        ({"flight_duration": np.inf}, "flight_duration"),
+        ({"isp_min": np.nan}, "isp_floor"),
+        ({"qualification_duration": np.inf}, "qualification_duration"),
+        ({"burnout_mass_max": np.inf}, "mass_max"),
+        ({"restarts": -1}, "restart_count"),
+        ({"restarts": 1.5}, "restart_count"),
+        ({"reusable_cycles": 2.5}, "reusable_cycles"),
+        ({"thrust_condition": ("altitude", np.inf)}, "altitude"),
+        ({"thrust_condition": ("altitude", np.nan)}, "altitude"),
+    ],
+)
+def test_requirement_api_rejects_nonfinite_and_nonintegral_values(
+    overrides, field
+):
+    with pytest.raises(ValueError, match=field):
+        _req(**overrides)
 
 
 def test_flight_duration_drives_battery_sizing():
@@ -162,18 +209,24 @@ def test_operability_requirements_are_carried_not_dropped():
         assert c.reason
 
 
-def test_of_is_partial_without_cea_surfaces():
-    """Without a CEA table gamma/Tc/R are flat in O/F, so the cooling-vs-
-    performance mixture-ratio trade SP-125 describes cannot be resolved."""
+def test_nominal_of_is_explicitly_pinned_without_cea_surfaces():
+    """NOMINAL is an explicit intent, not an inferred failed optimization."""
     c = _cov(resolve_requirement(_req()), "of")
-    assert c.coverage is Coverage.PARTIALLY_ENFORCED
-    assert "FLAT IN O/F" in (c.reason or "")
+    assert c.coverage is Coverage.ENFORCED
+    assert "NOMINAL intent" in (c.reason or "")
+    assert resolve_requirement(_req()).mission.of_is_pinned is True
 
 
-def test_of_is_enforced_once_cea_surfaces_are_supplied():
-    r = resolve_requirement(
-        _req(mission_overrides={"cea_table_path": "builds/fake_table.npz"}))
+def test_of_is_enforced_in_explicit_optimize_mode(tmp_path):
+    path = _write_property_table(tmp_path / "lox_rp1.npz")
+    r = resolve_requirement(_req(
+        mixture_ratio_mode=MixtureRatioMode.OPTIMIZE,
+        analysis_config=RequirementAnalysisConfig(
+            chamber_property_table=path
+        ),
+    ))
     assert _cov(r, "of").coverage is Coverage.ENFORCED
+    assert r.mission.of_is_pinned is False
 
 
 def test_pinned_of_is_enforced_but_flagged_as_removing_a_lever():
@@ -183,7 +236,7 @@ def test_pinned_of_is_enforced_but_flagged_as_removing_a_lever():
     assert resolve_requirement(_req(of=2.4)).mission.OF == pytest.approx(2.4)
 
 
-def test_pinned_of_survives_cea_surfaces_being_available():
+def test_pinned_of_survives_cea_surfaces_being_available(tmp_path):
     """A pin must not be silently overridden once a table exists.
 
     ``of_design_space`` promotes O/F to a design variable as soon as
@@ -192,27 +245,29 @@ def test_pinned_of_survives_cea_surfaces_being_available():
     """
     from raosim.mdo.schema import default_design_space
 
+    path = _write_property_table(tmp_path / "lox_rp1.npz")
     r = resolve_requirement(_req(
-        of=2.4, mission_overrides={"cea_table_path": "builds/fake_table.npz"}))
+        mixture_ratio_mode=MixtureRatioMode.PINNED,
+        mixture_ratio=2.4,
+        analysis_config=RequirementAnalysisConfig(
+            chamber_property_table=path
+        ),
+    ))
     assert r.mission.of_is_pinned is True
     assert "OF" not in [s.name for s in default_design_space(r.mission)]
     assert r.mission.OF == pytest.approx(2.4)
 
 
 def test_unpinned_of_becomes_a_design_variable_once_surfaces_exist(tmp_path):
-    from raosim.mdo.properties import save_tables
     from raosim.mdo.schema import default_design_space
 
-    Pc = np.linspace(1.5e6, 6.0e6, 5)
-    OF = np.linspace(1.8, 3.0, 5)
-    P, O = np.meshgrid(Pc, OF, indexing="ij")
-    path = tmp_path / "t.npz"
-    save_tables(str(path), {"Pc_grid": Pc, "OF_grid": OF,
-                            "gamma": 1.24 + 0.0 * P, "Tc": 3500.0 - 100.0 * O,
-                            "R_gas": 380.0 + 0.0 * P},
-                oxidizer="LOX", fuel="RP-1")
-    r = resolve_requirement(_req(mission_overrides={
-        "cea_table_path": str(path)}))
+    path = _write_property_table(tmp_path / "t.npz")
+    r = resolve_requirement(_req(
+        mixture_ratio_mode=MixtureRatioMode.OPTIMIZE,
+        analysis_config=RequirementAnalysisConfig(
+            chamber_property_table=path
+        ),
+    ))
     assert r.mission.of_is_pinned is False
     assert "OF" in [s.name for s in default_design_space(r.mission)]
     assert _cov(r, "of").coverage is Coverage.ENFORCED
@@ -248,8 +303,8 @@ def test_unimplemented_feed_architecture_raises_and_names_the_source(arch):
 
 
 def test_unimplemented_objective_raises():
-    with pytest.raises(NotImplementedError, match="objective"):
-        resolve_requirement(_req(objective="max_isp"))
+    with pytest.raises(ValueError, match="objective"):
+        _req(objective="max_isp")
 
 
 def test_unknown_propellant_lists_the_available_set():
@@ -268,12 +323,86 @@ def test_nonsense_requirements_rejected(kw):
         _req(**kw)
 
 
+@pytest.mark.parametrize("field", [
+    "thrust", "Pa", "burn_time", "OF", "of_is_pinned",
+    "dry_mass_max", "envelope_diameter_max", "envelope_length_max",
+])
+def test_mission_overrides_cannot_replace_requirement_owned_fields(field):
+    """Coverage must describe the values actually handed to the solver."""
+
+    with pytest.raises(ValueError, match="mission_overrides cannot change"):
+        _req(mission_overrides={field: 1.0})
+
+
+def test_resolved_constraint_set_exactly_tracks_active_requirement_rows():
+    resolved = resolve_requirement(_req(
+        burnout_mass_max=40.0,
+        envelope_diameter_max=0.5,
+        envelope_length_max=1.0,
+    ))
+    names = set(resolved.required_constraint_names)
+    assert {
+        "isp_epsilon", "dry_mass_partial", "envelope_diameter",
+        "envelope_length",
+    } <= names
+    # Constant fallback grids are interpolation scaffolding rather than a
+    # physical validity claim, so their property-domain row is inapplicable.
+    assert "property_domain" not in names
+
+
+def test_no_isp_floor_removes_only_the_isp_constraint():
+    with_floor = resolve_requirement(_req()).required_constraint_names
+    without_floor = resolve_requirement(_req(isp_min=None)).required_constraint_names
+    assert "isp_epsilon" in with_floor
+    assert "isp_epsilon" not in without_floor
+    assert set(without_floor) == set(with_floor) - {"isp_epsilon"}
+
+
+def test_requirement_driver_rejects_constraint_ablation():
+    with pytest.raises(TypeError, match="constraint ablation"):
+        solve_requirement(_req(), enforced=("isp_epsilon",), maxiter=1)
+
+
+def test_mixture_ratio_intent_cannot_be_ambiguous():
+    with pytest.raises(ValueError, match="only valid in PINNED"):
+        _req(mixture_ratio=2.4)
+    with pytest.raises(ValueError, match="requires a finite positive"):
+        _req(mixture_ratio_mode=MixtureRatioMode.PINNED)
+    with pytest.raises(ValueError, match="cannot be combined"):
+        _req(mixture_ratio_mode=MixtureRatioMode.OPTIMIZE, of=2.4)
+
+
+def test_flat_property_table_cannot_enable_of_optimization(tmp_path):
+    path = _write_property_table(tmp_path / "flat.npz", flat=True)
+    with pytest.raises(ValueError, match="meaningful O/F dependence"):
+        resolve_requirement(_req(
+            mixture_ratio_mode=MixtureRatioMode.OPTIMIZE,
+            analysis_config=RequirementAnalysisConfig(
+                chamber_property_table=path
+            ),
+        ))
+
+
+def test_wrong_propellant_property_table_is_rejected(tmp_path):
+    path = _write_property_table(
+        tmp_path / "wrong_pair.npz", oxidizer="LOX", fuel="LCH4"
+    )
+    with pytest.raises(ValueError, match="propellant identity mismatch"):
+        resolve_requirement(_req(
+            analysis_config=RequirementAnalysisConfig(
+                chamber_property_table=path
+            ),
+        ))
+
+
 # --------------------------------------------------------------------------- #
 # The verdict must not collapse "screened subset feasible" into "met"          #
 # --------------------------------------------------------------------------- #
 class _FakeNLP:
-    def __init__(self, feasible):
+    def __init__(self, feasible, *, physics_status=None, success=True):
         self.feasible = feasible
+        self.physics_status = physics_status
+        self.success = success
 
 
 def test_verdict_is_none_when_feasible_but_only_partially_screened():
@@ -300,28 +429,43 @@ def test_verdict_is_false_when_infeasible_regardless_of_coverage():
     assert r.requirements_met is False
 
 
+def test_verdict_is_unknown_when_required_physics_is_unavailable():
+    from raosim.requirements import RequirementResult
+
+    r = RequirementResult(
+        resolved=resolve_requirement(_req()),
+        nlp=_FakeNLP(feasible=False, physics_status="unknown"),
+    )
+    assert r.requirements_met is None
+
+
 def test_verdict_is_true_only_when_feasible_and_fully_screened():
     from raosim.requirements import RequirementResult
 
-    # Needs CEA surfaces: without them O/F is only partially screened (see
-    # test_no_requirement_set_is_fully_screened_without_cea_surfaces), so this
-    # is currently the *only* shape of requirement that can reach a plain True.
-    resolved = resolve_requirement(
-        _req(mission_overrides={"cea_table_path": "builds/fake_table.npz"}))
+    # NOMINAL explicitly pins the catalog O/F, so a minimal RP-1 requirement
+    # can be fully screened without claiming that an O/F optimization occurred.
+    resolved = resolve_requirement(_req())
     assert resolved.fully_screened
     r = RequirementResult(resolved=resolved, nlp=_FakeNLP(feasible=True))
     assert r.requirements_met is True
 
 
-def test_no_requirement_set_is_fully_screened_without_cea_surfaces():
-    """A consequence worth pinning rather than discovering later.
+def test_failed_solver_cannot_issue_requirements_met():
+    from raosim.requirements import RequirementResult
 
-    O/F is on SP-125's §2.1 list, and without a sampled CEA table the property
-    surfaces are flat in it — so *every* requirement set is at best partially
-    screened until ``scripts/sample_cea_surface.py`` has been run.  That is the
-    honest state of the tool, and it should fail loudly if someone weakens the
-    O/F coverage rule to make reports look cleaner.
-    """
-    assert not resolve_requirement(_req()).fully_screened
-    assert not resolve_requirement(
-        _req(isp_min=None, thrust_condition="vacuum")).fully_screened
+    resolved = resolve_requirement(_req())
+    assert resolved.fully_screened
+    r = RequirementResult(
+        resolved=resolved,
+        nlp=_FakeNLP(feasible=True, physics_status="pass", success=False),
+    )
+    assert r.requirements_met is None
+
+
+def test_optimize_of_requires_a_valid_property_table():
+    """A path-free OPTIMIZE request must fail, not degrade to nominal O/F."""
+
+    with pytest.raises(ValueError, match="requires.*chamber_property_table"):
+        resolve_requirement(_req(
+            mixture_ratio_mode=MixtureRatioMode.OPTIMIZE
+        ))

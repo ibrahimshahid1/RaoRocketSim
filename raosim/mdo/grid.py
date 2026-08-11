@@ -23,7 +23,7 @@ solved so that the injector-face-to-throat volume equals ``L* · A_t``.
 This replaces the earlier ``chamber_length = L*/CR`` barrel plus a cosine
 blend.  That approximation assumed the *barrel alone* held the whole chamber
 volume, but NASA SP-125 is explicit that it does not (Huzel & Huang, NASA
-SP-125, 1971; ``propulsion_texts/19710019929.pdf``, ch. IV, printed p. 88):
+SP-125, 1967; ``propulsion_texts/19710019929.pdf``, ch. IV, printed p. 88):
 
     "In design practice, it has been arbitrarily defined that the combustion
     chamber volume includes the space between injector face I-I and the nozzle

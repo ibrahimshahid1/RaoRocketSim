@@ -79,14 +79,15 @@ def test_of_absent_from_design_space_without_surfaces():
 
 
 def test_solver_uses_mission_of_when_not_a_variable():
-    """The class default is a -1 sentinel, so if the solver ever read it
-    instead of the mission the flow split would go negative and this test
-    would fail loudly rather than drift quietly."""
+    """A fixed layout resolves O/F from the mission explicitly."""
     from raosim.mdo.engine import solve_engine
 
     m = MissionSpec.for_propellant("LOX/LCH4", _THRUST)      # OF_default 3.5
-    x = DesignVector.from_array(
-        jnp.asarray([s.ref() for s in default_design_space(m)]))
+    x = DesignVector.from_active_array(
+        jnp.asarray([s.ref() for s in default_design_space(m)]),
+        m.design_layout(),
+        fixed_of=m.OF,
+    )
     assert x.of_is_variable is False
     r = solve_engine(x, m)
     assert bool(r.finite)
@@ -94,10 +95,11 @@ def test_solver_uses_mission_of_when_not_a_variable():
     assert float(r.OF) == pytest.approx(3.5)
 
 
-def test_short_array_never_activates_the_sentinel():
-    x = DesignVector.from_array(jnp.asarray([3.0e6, 8.0, 0.2, 0.2]))
+def test_compatibility_short_array_contains_no_numeric_sentinel():
+    with pytest.warns(DeprecationWarning):
+        x = DesignVector.from_array(jnp.asarray([3.0e6, 8.0, 0.2, 0.2]))
     assert x.of_is_variable is False
-    assert float(x.OF) < 0.0        # sentinel, and it must stay unused
+    assert float(x.OF) > 0.0
 
 
 # --------------------------------------------------------------------------- #
@@ -128,7 +130,9 @@ def test_solver_uses_the_design_of_when_it_is_a_variable(synthetic_table):
     m = MissionSpec.for_thrust(_THRUST, cea_table_path=synthetic_table)
     arr = [s.ref() for s in default_design_space(m)]
     arr[-1] = 2.45                                   # deliberately != mission.OF
-    x = DesignVector.from_array(jnp.asarray(arr))
+    x = DesignVector.from_active_array(
+        jnp.asarray(arr), m.design_layout(), fixed_of=m.OF
+    )
     assert x.of_is_variable is True
     r = solve_engine(x, m)
     assert bool(r.finite)
@@ -148,7 +152,11 @@ def test_thermochemistry_actually_responds_to_of(synthetic_table):
         arr = list(base)
         arr[-1] = of
         return float(solve_engine(
-            DesignVector.from_array(jnp.asarray(arr)), m).Isp)
+            DesignVector.from_active_array(
+                jnp.asarray(arr), m.design_layout(), fixed_of=m.OF
+            ),
+            m,
+        ).Isp)
 
     lo, mid, hi = isp_at(2.0), isp_at(2.6), isp_at(2.9)
     assert abs(mid - lo) > 1.0        # seconds — a real response, not roundoff
@@ -188,5 +196,64 @@ def test_host_bridge_reads_the_design_of_not_the_mission(synthetic_table):
 
     m = MissionSpec.for_thrust(_THRUST, cea_table_path=synthetic_table)
     assert _effective_of({"Pc": 3.0e6, "OF": 2.45}, m) == pytest.approx(2.45)
-    # and it falls back cleanly when O/F was not a variable
-    assert _effective_of({"Pc": 3.0e6}, m) == pytest.approx(m.OF)
+    with pytest.raises(ValueError, match="missing its optimized"):
+        _effective_of({"Pc": 3.0e6}, m)
+
+    # A fixed layout ignores a legacy numerical intent sentinel and resolves
+    # the physical value from the mission, preventing division by 1 + (-1).
+    fixed = MissionSpec()
+    assert _effective_of({"Pc": 3.0e6, "OF": -1.0}, fixed) == pytest.approx(
+        fixed.OF
+    )
+
+
+def test_optimized_of_survives_engine_state_and_both_snapshot_adapters(
+    synthetic_table,
+):
+    from raosim.mdo.engine import solve_engine
+    from raosim.mdo.snapshot import snapshot_from_mdo
+    from raosim.mdo.state import solve_engine_state
+
+    m = MissionSpec.for_thrust(_THRUST, cea_table_path=synthetic_table)
+    active = [s.ref() for s in default_design_space(m)]
+    active[-1] = 2.65
+    x = DesignVector.from_active_array(
+        jnp.asarray(active), m.design_layout(), fixed_of=m.OF
+    )
+
+    result = solve_engine(x, m)
+    state = solve_engine_state(x, m)
+    expected_fuel = float(result.mdot) / (1.0 + 2.65)
+
+    assert float(result.OF) == pytest.approx(2.65)
+    assert float(state.performance.OF) == pytest.approx(2.65)
+    assert float(state.performance.mdot_fuel_total) == pytest.approx(
+        expected_fuel, rel=1e-12
+    )
+    assert float(state.design_vector[-1]) == pytest.approx(2.65)
+    assert float(state.input_conventions.OF) == pytest.approx(2.65)
+    assert float(state.input_conventions.mission_OF) == pytest.approx(m.OF)
+    assert bool(state.input_conventions.of_is_variable)
+
+    state_snapshot = snapshot_from_mdo(state, mission=m)
+    legacy_snapshot = snapshot_from_mdo(result, x.as_dict(), m)
+    assert state_snapshot.performance["mixture_ratio"].value == pytest.approx(2.65)
+    assert legacy_snapshot.performance["mixture_ratio"].value == pytest.approx(2.65)
+    assert legacy_snapshot.performance["mass_flow_fuel_kg_s"].value == pytest.approx(
+        expected_fuel, rel=1e-12
+    )
+
+
+@pytest.mark.parametrize("value", [0.0, -1.0, np.nan, np.inf])
+def test_invalid_variable_of_fails_numerical_validity_gate(
+    synthetic_table, value
+):
+    from raosim.mdo.engine import solve_engine
+
+    m = MissionSpec.for_thrust(_THRUST, cea_table_path=synthetic_table)
+    active = [s.ref() for s in default_design_space(m)]
+    active[-1] = value
+    x = DesignVector.from_active_array(
+        jnp.asarray(active), m.design_layout(), fixed_of=m.OF
+    )
+    assert not bool(solve_engine(x, m).finite)

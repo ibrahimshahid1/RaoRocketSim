@@ -109,34 +109,47 @@ N2O/ethanol post-date SP-125/SP-8087, so their L\*/wall limits are flagged
 lrekit --engine-mdo --mdo-propellant n2o4/mmh --target-thrust 5000 --pc 2e6
 ```
 
-**Caveat — cryogenic feed systems are not yet propellant-specific.**  LOX/LCH4
-currently comes back *infeasible* (pump suction, chug, wall temp) and the LH2
-specific-speed sizing asks for ~183 krpm, which is unphysical for a single
-stage — real LH2 pumps are multistage.  Both point at the same missing piece:
-tank pressures, NPSH and pump **stage count** still carry storable-propellant
-defaults.  Verified working today: **LOX/RP-1 and N2O4/MMH**.
+**Caveat — cryogenic coverage is incomplete.** Authoritative LOX/LCH4 and
+LOX/LH2 optimization now stops at model-coverage preflight because the traced
+cooling march lacks the real-fluid coolant surfaces required for the applicable
+HTD screen. `--allow-incomplete-physics` permits an explicit screening run, but
+its physics verdict remains unknown. The LH2 specific-speed sizing can also ask
+for a speed inappropriate for a single stage; tank pressure, NPSH, and pump
+stage count still need propellant-specific resolution.
 
-## 3. The design vector (10 variables)
+## 3. The design layout (10 or 11 active variables)
 
 | Variable | Bounds | Why it is a variable |
 |---|---|---|
-| `Pc` | 1.5–6.0 MPa | chamber pressure |
-| `eps` | 3–40 | expansion ratio |
+| `Pc` | architecture-labelled recommended window; electric-pump default 1.5–6.0 MPa, explicitly overridable | chamber pressure; hard admissibility comes from property/model domains and live limits |
+| `eps` | Rao/TOP table domain (currently 4–50) | expansion ratio |
 | `dp_f_frac`, `dp_o_frac` | 0.12–0.45 | injector Δp / P_c (chug rule ≥ 0.2) |
-| `D_pintle` | 10–40 mm | sets blockage factor (constrained band) |
-| `N_rpm` | 15–60 krpm | pump speed → specific speed → efficiency |
+| `D_pintle` | mission-scaled around the resolved reference pintle | sets blockage factor (constrained band) |
+| `N_rpm` | mission-scaled around the specific-speed reference | pump speed → specific speed → efficiency |
 | `channel_width` | 0.3–1.2 mm | jacket geometry |
 | `channel_height` | 0.8–5.0 mm | jacket geometry (AR ≤ 8 enforced) |
 | `film_frac` | 0–0.30 | fuel diverted to wall film — **the coking lever** |
 | `t_wall` | 0.4–2.0 mm | thin for conductance, thick for structure |
 
-**Every variable is live.** A zero Jacobian column means a variable that cannot
+O/F is the eleventh active variable only for an explicitly variable layout
+backed by a validated O/F-dependent sampled property table. Fixed mode keeps a
+10-value optimizer vector but every state/snapshot stores an 11-value physical
+contract vector containing the real effective O/F; no numerical sentinel is
+used.
+
+**Every active variable is live.** A zero Jacobian column means a variable that cannot
 reach any constraint or the objective; two such variables were found and fixed
 (see §7). Re-check with the snippet in §8 after adding any variable.
 
 ---
 
-## 4. Constraints (17, all enforced by default)
+## 4. One constraint manifest (29 rows)
+
+`raosim.mdo.constraints.CONSTRAINT_MANIFEST` owns the stable row order,
+applicability, availability, required mask, scaling, optimizer role, and source
+identifier. It currently contains 23 differentiable hard rows, five mandatory
+post-solve gates, and one report-only thrust-closure equality. Requirement rows,
+the sampled-property row, and the coking/HTD pair are active only when applicable.
 
 | Constraint | Meaning | Source |
 |---|---|---|
@@ -144,7 +157,7 @@ reach any constraint or the objective; two such variables were found and fixed
 | `separation` | no flow separation | Östlund Eq. 28–30, SP-8120 |
 | `coking` | T_wc ≤ 728 K (RP-1 liquid-wall) | SP-8087 (850 °F), Sellers 1961 |
 | `land_fit` | channels physically fit the circumference | geometry |
-| `chug` | min(χ_f, χ_o) ≥ 0.2 | SP-8113 / SP-194 |
+| `chug` | min(χ_f, χ_o) ≥ 0.2 preliminary screen | SP-125 injector-design rule of thumb (15–20%, source-PDF p. 137 / printed p. 128); SP-194 supplies qualitative chug context |
 | `pintle_transition` | stay on the tip-controlled branch | Son 2017 |
 | `pump_suction` | N_ss ≤ 4 | SP-8052 |
 | `pump_tip_speed` | U₂ ≤ 400 m/s | SP-8109 |
@@ -156,11 +169,17 @@ reach any constraint or the objective; two such variables were found and fixed
 | `property_domain` | stay inside the sampled property table | interpolation validity |
 | `chart_domain` | stay inside the digitized Rao/TOP chart | SP-8120 chart domain |
 | `wall_monotonic` | divergent wall radius does not reverse | geometry validity |
+| `chamber_volume` | the solved barrel satisfies the L* chamber-volume construction | SP-125 chamber definition |
+| `jacket_thin_shell` | the selected shell approximation remains in its declared thin-shell regime | model applicability screen |
+| `nozzle_collapse` | closeout retains the modeled external-pressure/collapse margin | SP-8087 structural load path |
+| `envelope_diameter`, `envelope_length` | active partial-envelope requirement margins | SP-125 §2.1 item 6 |
+| `dry_mass_partial` | active resolved-partial mass requirement margin | SP-125 §2.1 item 5; explicitly not full engine dry mass |
 
 Reported but deliberately **not** constrained: coolant Mach (≈2 orders of
-margin — a constraint would just add a dead column). Numerical root status,
-residual closure, and finiteness are carried in `EngineState` and must also pass
-before an NLP result is reported feasible.
+margin — a constraint would just add a dead column). Engine/cooling residual
+closure, root status, finiteness, and applicable coolant HTD coverage are
+mandatory final gates. An unavailable required model yields an `unknown`
+physics verdict; it never becomes a passing boolean.
 
 ---
 

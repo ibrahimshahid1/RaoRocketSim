@@ -270,7 +270,17 @@ def make_engine_fn(mission: MissionSpec,
             raise KeyError(f"output '{k}' not in {_SCALAR_OUTPUTS}")
 
     def f(x_arr: Array) -> Array:
-        x = DesignVector.from_array(x_arr)
+        if int(x_arr.shape[0]) != 4:
+            raise ValueError("walking-skeleton engine function requires 4 values")
+        # This historical four-variable skeleton has an explicit fixed-O/F
+        # layout; it never infers O/F intent from the array length.
+        x = DesignVector(
+            Pc=x_arr[0],
+            eps=x_arr[1],
+            dp_f_frac=x_arr[2],
+            dp_o_frac=x_arr[3],
+            OF=mission.OF,
+        )
         y, _ = solve_states(x, mission, surfaces, scales)
         out = readouts(y, x, mission, surfaces, scales)
         return jnp.stack([out[k] for k in outputs])

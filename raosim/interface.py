@@ -14,6 +14,12 @@ mechanics:
 * edge distance / pitch screens: common preliminary machine-design heuristics
   (about 1.5 hole diameters to a free edge, about 3 diameters pitch)
 
+NASA SP-125 section 9.3 (printed pp. 362-363) independently emphasizes that
+flange bolts must be spaced closely enough to distribute load around the gasket
+circumference.  It does not prescribe this module's minimum bolt count: the
+three-bolt explicit minimum and even-count automatic policy are CAD/layout
+invariants for a non-degenerate circumferential pattern.
+
 These are deliberately conservative checks to keep the CLI honest about what it
 knows.  Final hardware still needs gasket/seal design, preload scatter, thread
 engagement, flange flexibility, thermal gradients, fatigue, and FEA/test data.
@@ -60,8 +66,43 @@ def _finite_positive(value) -> float | None:
 
 
 def _round_up_even(value: float) -> int:
-    count = int(math.ceil(max(value, 1.0)))
+    count = int(math.ceil(max(value, 4.0)))
     return count if count % 2 == 0 else count + 1
+
+
+def _require_positive(name: str, value: Any) -> float:
+    resolved = _finite_positive(value)
+    if resolved is None:
+        raise ValueError(f"{name} must be finite and positive")
+    return resolved
+
+
+def _optional_positive(name: str, value: Any) -> float | None:
+    if value is None:
+        return None
+    return _require_positive(name, value)
+
+
+def _optional_nonnegative(name: str, value: Any) -> float | None:
+    if value is None:
+        return None
+    resolved = _finite(value)
+    if resolved is None or resolved < 0.0:
+        raise ValueError(f"{name} must be finite and nonnegative")
+    return resolved
+
+
+def _integral_count(name: str, value: Any, *, minimum: int) -> int:
+    if isinstance(value, bool):
+        raise ValueError(f"{name} must be an integer >= {minimum}")
+    try:
+        numeric = float(value)
+        count = int(numeric)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError(f"{name} must be an integer >= {minimum}") from exc
+    if not math.isfinite(numeric) or numeric != count or count < minimum:
+        raise ValueError(f"{name} must be an integer >= {minimum}")
+    return count
 
 
 def _station_array(value, n: int, name: str, *, default: float | None = None) -> np.ndarray:
@@ -291,6 +332,80 @@ class InterfaceGeometryResolution:
         }
 
 
+def validate_bolted_interface_geometry(
+    resolution: InterfaceGeometryResolution,
+) -> InterfaceGeometryResolution:
+    """Validate the shared sizing/CAD bolted-interface geometry contract."""
+
+    positive_fields = (
+        "chamber_radius",
+        "chamber_outer_diameter",
+        "flange_outer_diameter",
+        "flange_length",
+        "face_outer_diameter",
+        "face_thickness",
+        "bolt_circle_diameter",
+        "bolt_hole_diameter",
+        "inner_edge_distance",
+        "outer_edge_distance",
+        "bolt_pitch",
+        "edge_distance_requirement",
+        "pitch_requirement",
+    )
+    values = {
+        name: _require_positive(name, getattr(resolution, name, None))
+        for name in positive_fields
+    }
+    count = _integral_count(
+        "bolt_count", getattr(resolution, "bolt_count", None), minimum=3
+    )
+    _optional_positive(
+        "bolt_diameter", getattr(resolution, "bolt_diameter", None)
+    )
+    if values["flange_outer_diameter"] <= values["chamber_outer_diameter"]:
+        raise ValueError(
+            "flange outer diameter must exceed chamber outer diameter"
+        )
+    scale = max(values["flange_outer_diameter"], 1.0)
+    if not math.isclose(
+        values["face_outer_diameter"],
+        values["flange_outer_diameter"],
+        rel_tol=1.0e-12,
+        abs_tol=1.0e-12 * scale,
+    ):
+        raise ValueError(
+            "injector face and chamber flange outer diameters must match"
+        )
+    computed_inner = (
+        0.5
+        * (values["bolt_circle_diameter"] - values["chamber_outer_diameter"])
+        - 0.5 * values["bolt_hole_diameter"]
+    )
+    computed_outer = (
+        0.5
+        * (values["flange_outer_diameter"] - values["bolt_circle_diameter"])
+        - 0.5 * values["bolt_hole_diameter"]
+    )
+    computed_pitch = math.pi * values["bolt_circle_diameter"] / count
+    tolerance = 1.0e-12
+    if computed_inner < values["edge_distance_requirement"] - tolerance:
+        raise ValueError("bolt circle violates the chamber-side edge distance")
+    if computed_outer < values["edge_distance_requirement"] - tolerance:
+        raise ValueError("bolt circle violates the flange outer-edge distance")
+    if computed_pitch < values["pitch_requirement"] - tolerance:
+        raise ValueError("bolt pattern violates the circumferential pitch rule")
+    for name, computed in (
+        ("inner_edge_distance", computed_inner),
+        ("outer_edge_distance", computed_outer),
+        ("bolt_pitch", computed_pitch),
+    ):
+        if not math.isclose(
+            values[name], computed, rel_tol=1.0e-10, abs_tol=1.0e-12
+        ):
+            raise ValueError(f"stored {name} disagrees with the bolt geometry")
+    return resolution
+
+
 def resolve_bolted_interface_geometry(
     *,
     chamber_radius: float,
@@ -327,24 +442,46 @@ def resolve_bolted_interface_geometry(
     detailed joint check remains :func:`screen_injector_chamber_interface`.
     """
 
-    r = float(chamber_radius)
-    if r <= 0.0 or not math.isfinite(r):
-        raise ValueError("chamber_radius must be positive")
-    if structural_fos <= 0.0:
-        raise ValueError("structural_fos must be positive")
-    if edge_distance_factor <= 0.0 or pitch_factor <= 0.0:
-        raise ValueError("edge and pitch factors must be positive")
-
-    wall = _finite_positive(wall_thickness) or 0.0
-    feature = max(_finite_positive(min_feature) or 3.0e-4, 1.0e-9)
-    tool = max(_finite_positive(min_tool_diameter) or feature, feature)
+    r = _require_positive("chamber_radius", chamber_radius)
+    Pc = _optional_positive("chamber_pressure", chamber_pressure)
+    structural_fos = _require_positive("structural_fos", structural_fos)
+    edge_distance_factor = _require_positive(
+        "edge_distance_factor", edge_distance_factor
+    )
+    pitch_factor = _require_positive("pitch_factor", pitch_factor)
+    joint_separation_factor = _require_positive(
+        "joint_separation_factor", joint_separation_factor
+    )
+    wall_value = _optional_positive("wall_thickness", wall_thickness)
+    wall = wall_value or 0.0
+    feature_value = _optional_positive("min_feature", min_feature)
+    feature = max(feature_value or 3.0e-4, 1.0e-9)
+    tool_value = _optional_positive("min_tool_diameter", min_tool_diameter)
+    tool = max(tool_value or feature, feature)
+    minimum_face_outer_diameter = _optional_nonnegative(
+        "minimum_face_outer_diameter", minimum_face_outer_diameter
+    )
+    minimum_face_thickness = _optional_nonnegative(
+        "minimum_face_thickness", minimum_face_thickness
+    )
+    minimum_bolt_circle_diameter = _optional_nonnegative(
+        "minimum_bolt_circle_diameter", minimum_bolt_circle_diameter
+    )
+    minimum_bolt_hole_diameter = _optional_nonnegative(
+        "minimum_bolt_hole_diameter", minimum_bolt_hole_diameter
+    )
+    bolt_allow = _optional_positive("bolt_allowable_stress", bolt_allowable_stress)
+    yield_strength = _optional_positive(
+        "material_yield_strength", material_yield_strength
+    )
+    supplied_bolt_diameter = _optional_positive("bolt_diameter", bolt_diameter)
     chamber_d = 2.0 * r
     chamber_od = chamber_d + 2.0 * wall
     auto: dict[str, str] = {}
     notes: list[str] = []
 
     def resolved(name: str, supplied, minimum: float, default: float | None = None) -> float:
-        supplied_value = _finite_positive(supplied)
+        supplied_value = _optional_positive(name, supplied)
         target = max(float(minimum), float(default if default is not None else minimum))
         if supplied_value is None:
             auto[name] = "auto_sized"
@@ -375,17 +512,20 @@ def resolve_bolted_interface_geometry(
         bolt_hole_default,
     )
 
-    requested_count = bolt_count if bolt_count is not None else default_bolt_count
-    count = int(max(requested_count, 1))
+    if bolt_count is None:
+        default_count = _integral_count(
+            "default_bolt_count", default_bolt_count, minimum=3
+        )
+        count = _round_up_even(default_count)
+    else:
+        count = _integral_count("bolt_count", bolt_count, minimum=3)
     if bolt_count is None:
         auto["bolt_count"] = "auto_sized"
 
-    bolt_allow = _finite_positive(bolt_allowable_stress)
-    if bolt_allow is None and material_yield_strength is not None:
-        bolt_allow = float(material_yield_strength) / structural_fos
-    Pc = _finite_positive(chamber_pressure)
+    if bolt_allow is None and yield_strength is not None:
+        bolt_allow = yield_strength / structural_fos
     if Pc is not None and bolt_allow is not None and bolt_allow > 0.0:
-        inferred_bolt = _finite_positive(bolt_diameter) or 0.9 * hole
+        inferred_bolt = supplied_bolt_diameter or 0.9 * hole
         tensile_area = (
             _THREAD_TENSILE_AREA_FACTOR
             * math.pi * inferred_bolt * inferred_bolt / 4.0
@@ -438,7 +578,6 @@ def resolve_bolted_interface_geometry(
         flange_od_resolved = matched_od
 
     plate_req = 0.0
-    yield_strength = _finite_positive(material_yield_strength)
     if Pc is not None and yield_strength is not None:
         allowable = yield_strength / structural_fos
         if allowable > 0.0:
@@ -472,7 +611,7 @@ def resolve_bolted_interface_geometry(
         "preload scatter, thread engagement, thermal distortion, FEA, and test."
     )
 
-    return InterfaceGeometryResolution(
+    resolution = InterfaceGeometryResolution(
         chamber_radius=r,
         chamber_outer_diameter=chamber_od,
         flange_outer_diameter=flange_od_resolved,
@@ -482,7 +621,7 @@ def resolve_bolted_interface_geometry(
         bolt_count=count,
         bolt_circle_diameter=bcd,
         bolt_hole_diameter=hole,
-        bolt_diameter=_finite_positive(bolt_diameter),
+        bolt_diameter=supplied_bolt_diameter,
         inner_edge_distance=inner_edge,
         outer_edge_distance=outer_edge,
         bolt_pitch=pitch,
@@ -491,6 +630,7 @@ def resolve_bolted_interface_geometry(
         auto_sized_fields=auto,
         notes=notes,
     )
+    return validate_bolted_interface_geometry(resolution)
 
 
 # ISO 262 coarse-thread metric series: (nominal d [m], pitch [m]).  A bolted
@@ -695,17 +835,31 @@ def size_bolted_interface(
     :func:`raosim.mass_ledger.injector_mass_ledger`, which subtracts all three.
     """
 
-    r = float(chamber_radius)
-    Pc = float(chamber_pressure)
-    if r <= 0.0 or Pc <= 0.0:
-        raise ValueError("chamber_radius and chamber_pressure must be positive")
+    r = _require_positive("chamber_radius", chamber_radius)
+    Pc = _require_positive("chamber_pressure", chamber_pressure)
+    structural_fos = _require_positive("structural_fos", structural_fos)
+    joint_separation_factor = _require_positive(
+        "joint_separation_factor", joint_separation_factor
+    )
+    _optional_positive("wall_thickness", wall_thickness)
+    _optional_positive("material_yield_strength", material_yield_strength)
+    _optional_positive("flange_density", flange_density)
+    _optional_positive("bolt_density", bolt_density)
+    max_bolt_count = _integral_count(
+        "max_bolt_count", max_bolt_count, minimum=4
+    )
+    min_bolt_diameter = _optional_nonnegative(
+        "min_bolt_diameter", min_bolt_diameter
+    )
+    if min_bolt_diameter is None:
+        min_bolt_diameter = 0.0
     if bolt_class not in _BOLT_CLASSES:
         raise ValueError(
             f"unknown bolt class {bolt_class!r}; "
             f"choose from {sorted(_BOLT_CLASSES)}"
         )
     proof, _ultimate = _BOLT_CLASSES[bolt_class]
-    allowable = proof / max(float(structural_fos), 1e-9)
+    allowable = proof / structural_fos
     separation_load = joint_separation_factor * Pc * math.pi * r * r
 
     notes: list[str] = []
@@ -713,6 +867,8 @@ def size_bolted_interface(
     evaluated = 0
 
     for diameter, pitch in series:
+        diameter = _require_positive("series bolt diameter", diameter)
+        pitch = _require_positive("series thread pitch", pitch)
         if diameter < float(min_bolt_diameter):
             continue
         area = iso_stress_area(diameter, pitch)
@@ -735,6 +891,7 @@ def size_bolted_interface(
                 joint_separation_factor=joint_separation_factor,
                 **resolve_kwargs,
             )
+            validate_bolted_interface_geometry(resolution)
         except ValueError:
             continue
         evaluated += 1
@@ -1071,12 +1228,56 @@ def screen_injector_chamber_interface(
     produce information gates instead of invented pass/fail results.
     """
 
-    Pc = float(chamber_pressure)
-    r = float(chamber_radius)
-    if Pc <= 0.0 or r <= 0.0:
-        raise ValueError("chamber_pressure and chamber_radius must be positive")
-    if structural_fos <= 0.0 or joint_separation_factor <= 0.0:
-        raise ValueError("safety/separation factors must be positive")
+    # Apply the same finite-positive contract used by the resolver and CAD
+    # path.  In particular, comparisons such as ``nan <= 0`` are false and
+    # must never let an invalid joint screen appear feasible.
+    Pc = _require_positive("chamber_pressure", chamber_pressure)
+    r = _require_positive("chamber_radius", chamber_radius)
+    structural_fos = _require_positive("structural_fos", structural_fos)
+    joint_separation_factor = _require_positive(
+        "joint_separation_factor", joint_separation_factor
+    )
+    edge_distance_factor = _require_positive(
+        "edge_distance_factor", edge_distance_factor
+    )
+    pitch_factor = _require_positive("pitch_factor", pitch_factor)
+
+    wall_thickness = _optional_positive("wall_thickness", wall_thickness)
+    face_outer_diameter = _optional_positive(
+        "face_outer_diameter", face_outer_diameter
+    )
+    face_thickness = _optional_positive("face_thickness", face_thickness)
+    flange_outer_diameter = _optional_positive(
+        "flange_outer_diameter", flange_outer_diameter
+    )
+    flange_length = _optional_positive("flange_length", flange_length)
+    bolt_circle_diameter = _optional_positive(
+        "bolt_circle_diameter", bolt_circle_diameter
+    )
+    bolt_hole_diameter = _optional_positive(
+        "bolt_hole_diameter", bolt_hole_diameter
+    )
+    bolt_diameter = _optional_positive("bolt_diameter", bolt_diameter)
+    material_yield_strength = _optional_positive(
+        "material_yield_strength", material_yield_strength
+    )
+    material_elastic_modulus = _optional_positive(
+        "material_elastic_modulus", material_elastic_modulus
+    )
+    bolt_allowable_stress = _optional_positive(
+        "bolt_allowable_stress", bolt_allowable_stress
+    )
+    if bolt_count is not None:
+        bolt_count = _integral_count("bolt_count", bolt_count, minimum=3)
+    if material_poisson_ratio is not None:
+        material_poisson_ratio = _finite(material_poisson_ratio)
+        if (
+            material_poisson_ratio is None
+            or not -1.0 < material_poisson_ratio < 0.5
+        ):
+            raise ValueError(
+                "material_poisson_ratio must be finite and between -1 and 0.5"
+            )
 
     chamber_d = 2.0 * r
     face_od = _finite(face_outer_diameter)
@@ -1116,7 +1317,7 @@ def screen_injector_chamber_interface(
         # Clearance holes are larger than the bolt major diameter.  0.9 is a
         # screening estimate only; expose the inferred value in the ledger.
         inferred_bolt_d = 0.9 * float(bolt_hole_diameter)
-    if bolt_count is not None and bolt_count > 0:
+    if bolt_count is not None:
         required_total_clamp = joint_separation_factor * separating_force
         required_per_bolt = required_total_clamp / int(bolt_count)
         if inferred_bolt_d is not None and inferred_bolt_d > 0.0:
@@ -1137,7 +1338,6 @@ def screen_injector_chamber_interface(
         bolt_circle_diameter is not None
         and bolt_hole_diameter is not None
         and bolt_count is not None
-        and bolt_count > 0
     ):
         bcd = float(bolt_circle_diameter)
         hole = float(bolt_hole_diameter)
@@ -1231,12 +1431,6 @@ def screen_injector_chamber_interface(
             "bolt_joint_separation", "info",
             "bolt pattern not supplied; pressure separating force is reported only",
             value=separating_force,
-        ))
-    elif bolt_count <= 0:
-        gates.append(InterfaceGate(
-            "bolt_joint_separation", "fail",
-            "bolt_count must be positive when supplied",
-            value=float(bolt_count), limit="> 0",
         ))
     elif bolt_stress is None:
         gates.append(InterfaceGate(

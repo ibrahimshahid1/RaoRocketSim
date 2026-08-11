@@ -81,6 +81,62 @@ def test_current_runner_rejects_legacy_single_injector_pressure_drop(tmp_path):
     assert "--injector-pressure-drop is deprecated" in proc.stderr
 
 
+@pytest.mark.parametrize(
+    "flag,value,field",
+    [
+        ("--target-thrust", "-1", "thrust must be finite and positive"),
+        ("--pc", "-1", "chamber_pressure must be finite and positive"),
+        ("--mixture-ratio", "0", "mixture_ratio must be finite and positive"),
+    ],
+)
+def test_mdo_dispatch_uses_shared_input_validation(flag, value, field):
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_nozzle.py",
+            "--no-banner",
+            "--engine-mdo",
+            flag,
+            value,
+        ],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        env={
+            "PYTHONPATH": str(REPO),
+            "PATH": __import__("os").environ.get("PATH", ""),
+        },
+        timeout=120,
+    )
+    assert proc.returncode == 2
+    assert field in proc.stderr
+    assert "Traceback" not in proc.stderr
+
+
+def test_requirements_dispatch_rejects_negative_altitude_before_solver():
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_nozzle.py",
+            "--no-banner",
+            "--requirements",
+            "--thrust-condition",
+            "altitude:-1",
+        ],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        env={
+            "PYTHONPATH": str(REPO),
+            "PATH": __import__("os").environ.get("PATH", ""),
+        },
+        timeout=120,
+    )
+    assert proc.returncode == 2
+    assert "altitude must be finite and nonnegative" in proc.stderr
+    assert "Traceback" not in proc.stderr
+
+
 def test_cli_release_hard_gate_requires_evidence_manifest(tmp_path):
     proc = subprocess.run(
         [sys.executable, "scripts/run_nozzle.py", "--no-banner",
@@ -512,6 +568,60 @@ def test_mdo_rao_handoff_matches_traditional_cli_solver_controls():
         "kernel_d_fraction_max": 0.7,
         "physics_weight": 1.0,
     }
+
+
+@pytest.mark.parametrize(
+    "mode,ratio,optimization_capable,table,error",
+    [
+        ("nominal", 2.27, False, None, "cannot be combined"),
+        ("pinned", None, False, None, "requires --mixture-ratio"),
+        ("optimize", None, False, Path("properties.npz"),
+         "requires --engine-mdo-optimize or --requirements"),
+        ("optimize", None, True, None,
+         "requires --mdo-chamber-property-table"),
+    ],
+)
+def test_mdo_mixture_ratio_intent_rejects_ambiguous_configuration(
+    mode, ratio, optimization_capable, table, error
+):
+    from raosim.run_nozzle import _resolve_mdo_of_intent
+
+    args = SimpleNamespace(
+        mdo_of_mode=mode,
+        mixture_ratio=ratio,
+        mdo_chamber_property_table=table,
+    )
+    with pytest.raises(ValueError, match=error):
+        _resolve_mdo_of_intent(
+            args, optimization_capable=optimization_capable
+        )
+
+
+def test_mdo_mixture_ratio_implicit_modes_are_backward_compatible():
+    from raosim.requirements import MixtureRatioMode
+    from raosim.run_nozzle import _resolve_mdo_of_intent
+
+    nominal, nominal_ratio = _resolve_mdo_of_intent(
+        SimpleNamespace(
+            mdo_of_mode=None,
+            mixture_ratio=None,
+            mdo_chamber_property_table=None,
+        ),
+        optimization_capable=False,
+    )
+    pinned, pinned_ratio = _resolve_mdo_of_intent(
+        SimpleNamespace(
+            mdo_of_mode=None,
+            mixture_ratio=2.65,
+            mdo_chamber_property_table=None,
+        ),
+        optimization_capable=False,
+    )
+
+    assert nominal is MixtureRatioMode.NOMINAL
+    assert nominal_ratio is None
+    assert pinned is MixtureRatioMode.PINNED
+    assert pinned_ratio == pytest.approx(2.65)
 
 
 def test_bezier_chart_extrapolation_requires_diagnostic_override(tmp_path):
