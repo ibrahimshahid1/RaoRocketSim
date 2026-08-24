@@ -4,7 +4,7 @@ subtitle: Formulation, Literature Basis, and Implementation Tracker for LREKit
 version: "0.1 (living document)"
 audience: [propulsion engineers, AI coding agents]
 status_legend: { DONE: complete, WIP: in progress, TODO: not started }
-last_updated: 2026-08-22
+last_updated: 2026-08-24
 ---
 
 # Differentiable Engine MDO — Plan & Tracker
@@ -142,9 +142,12 @@ inferred from filenames). One load-bearing attribution was corrected.
   $\mathrm{d}(BD)/\mathrm{d}\theta_B$ matching finite differences to
   $1.1\times10^{-8}$; `raosim/jax/theta_b_solve.py` also makes $\theta_B$ a live
   BVP unknown. The typed `raosim/mdo/nozzle.py` adapter now carries the analytic
-  TOP path and an explicit provider-failure final gate. Phase 3 remains WIP
-  because the variational provider and J6 v2 total design/wall-node derivatives
-  are still explicitly deferred in `raosim/jax/sensitivities.py`.
+  TOP path and an explicit provider-failure final gate. The opt-in host
+  `raosim/mdo/contour_validation.py` contract also now performs post-solve
+  variational comparison without changing the default analytic path. Phase 3
+  remains WIP because real B3 promotion is blocked on forward-MOC compatibility
+  and the exact inner-loop provider plus J6 v2 total design/wall-node
+  derivatives remain deferred in `raosim/jax/sensitivities.py`.
 
 ### 2.2 Verified source identities
 
@@ -524,6 +527,30 @@ points in $(\varepsilon,L_\%,\gamma)$:
 3. **Optimality** — smallest eigenvalue $\lambda_{\min}(H_\mathrm{red})$ of the
    reduced Hessian of the Rao Lagrangian $\to 0$ (loss of local optimality).
 
+**Implementation checkpoint (2026-08-24).** B5 now has a typed,
+context-pinned declared-domain schema over externally supplied
+$\varepsilon\times L_\%$ axes. Its evidence is intentionally narrower than all
+three diagnostics above: each sample records a NumPy D-attachment geometry root,
+kernel-resolution evidence, and Rao Eq. (5) evaluability/validity. The accepted
+H2 host run completed across the 13 chart $\varepsilon$ values by the five
+chart-length values at fixed $\gamma=1.4$ and $P_a/P_0=0.01$, using the
+8/12/16/24 kernel ladder. Its 65 knots contain 40 `converged_valid` and 25
+`not_converged` classifications, with every other class zero. The canonical
+artifact is
+`raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
+(SHA-256 `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`).
+That kernel-refinement evidence cannot establish universal full-BVP or full
+mesh convergence, so B5 remains partial beyond this slice.
+
+B3's opt-in host validator consumes a matching B5 domain and adds numerical BVP,
+forward-MOC, Eq. (5), direct full-C-D-E performance, and explicit
+TOP-versus-variational discrepancy gates. Its implementation and typed contract
+have landed, but qualification has not: real 12×12 coupled and 24×24/32×32 BDE
+probes return `UNKNOWN` at forward-MOC compatibility. The BDE neighbor-Mach
+maxima are 0.11810 and 0.13748 against the repository-policy limit 0.10; the
+coupled run did not record its exact maximum. See
+`RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
+
 **Continuation.** Map the smooth solution through folds by pseudo-arclength
 continuation (Keller 1977): augment $R(u,p)=0$ (parameter $p$) with
 
@@ -545,8 +572,10 @@ wall first becomes weakly determined.
 > before any physical interpretation.
 
 **Optimizer discipline.** A branch failure is a scientific result: never silently
-replace a failed Rao solution with a Bézier contour — mark the candidate
-infeasible.
+replace a failed Rao solution with a Bézier contour. A demonstrated invalid Rao
+region or policy-exceeding eligible discrepancy is `FAIL`; missing domain,
+numerical, or MOC evidence is `UNKNOWN`. Neither can be promoted as a validated
+exact contour.
 
 ---
 
@@ -607,7 +636,8 @@ raosim/mdo/
     scaling.py       variable / residual / constraint scaling
     properties.py    differentiable thermo + fluid surfaces (C^1)
     grid.py          fixed-topology chamber/nozzle station grid
-    nozzle.py        typed contour adapter + performance (analytic TOP; implicit pending)
+    nozzle.py        typed contour adapter + performance (analytic TOP default)
+    contour_validation.py  opt-in host TOP-vs-variational post-solve gate
     cooling.py       thermal-hydraulic residuals (4a: 1-D+fin, 4b: quasi-2-D)
     injector.py      pintle geometry, flow, spray constraints (branch-split)
     pump.py          pump / inducer / motor / battery model
@@ -647,7 +677,7 @@ Numerical "done" means:
 | 0 | Canonical 13 kN LOX/RP-1 architecture + complete mass boundary | Sequential LREKit design closes thrust, flow, feed pressure, mass ledger | **DONE** |
 | 1 | Pure JAX data schema + explicit algebra | `jit`, `jacfwd`, `jacrev` work with no host callbacks | **DONE** (2026-07-22: `mdo/schema.py` + `mdo/scaling.py`; gate in `tests/test_mdo_schema.py`) |
 | 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **PARTIAL — chamber CEA DONE for four catalog pairs** (2026-08-22: C¹ Fritsch–Carlson/tensor-Hermite chamber surfaces plus a hash/schema-first, every-cell held-out RocketCEA value-and-gradient gate; versioned tables for LOX/RP-1, LOX/LCH4, LOX/LH2, and N2O4/MMH are packaged and selected with the fail-closed `catalog` sentinel. N2O/Ethanol remains blocked on oxidizer inlet-state/card selection. Coolant $(T,p)$/CoolProp surfaces remain unwired, so applicable real-fluid HTD coverage is still unavailable) |
-| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity and exact $\theta_B$ sensitivity; `theta_b_solve.py` makes $\theta_B$ live. The typed `mdo/nozzle.py` adapter and analytic TOP provider/failure gate landed 2026-08-22; the variational provider and J6 v2 total design/wall-node derivatives remain deferred) |
+| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity and exact $\theta_B$ sensitivity; `theta_b_solve.py` makes $\theta_B$ live. The typed analytic TOP provider/failure gate landed 2026-08-22. The opt-in host B3 post-solve validator and B5 declared-domain contract landed 2026-08-24, and the first fixed H2 slice contains 40 `converged_valid`/25 `not_converged` knots. B3 real probes nevertheless remain `UNKNOWN` at forward-MOC compatibility; B5 is partial outside that slice. No inner-loop variational provider is promoted, and J6 v2 total design/wall-node derivatives remain deferred) |
 | 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-08-22: the stationwise thermal-hydraulic march and static combined-stress screen are wired; the source-labelled `liner_buckling` final gate has NumPy parity and JIT/AD tests. It remains a preliminary rib-supported long-plate screen, not SP-125 eq. 4-29 or a qualification calculation. Hard inner-loop buckling enforcement is deferred pending valid-box-corner root robustness and SP-8068 authority; LCF cycle life is explicitly unavailable as `life.cycles_to_failure`) |
 | 4b | Quasi-2-D regen (final discipline) | Reproduces Pizzarelli HARCC wall-temp/$\Delta p$ trends within tolerance | **TODO** |
 | 5 | Differentiable pintle/feed model | Areas, TMR, geometry, pressure ledger match NumPy within tol; branches split | **WIP** (2026-07-23: injector block `mdo/injector.py` — orifice/TMR/BF/spray + Son-2017 two-branch min-area + chug screen; parity ≤1e-9 + AD/FD gate green; feed-pressure ledger coupling lands with Phases 6/7) |
@@ -857,7 +887,7 @@ coupling them**, not writing physics from scratch.
 |---|---|---|
 | 1 | `design.py` dataclasses (`DesignInput`, spec types) | `schema.py`, `scaling.py`: variable/bounds/mission pytrees; `jit`/`jacfwd` smoke test, no host callbacks |
 | 2 | `cea.py` (`cea_propellant`, `resolve_thermochemistry`), `coolants.py`, `frozen_flow.py` | `properties.py`: sample offline → C¹ monotone splines over $(P_c,O/F)$ and $(T,p)$; constrain optimizer to tabulated box |
-| 3 | *already JAX*: `jax/primitives.py` (`area_mach_relation`, `thrust_coefficient`), `jax/sensitivities.py` (`cf_de_jax`) | `nozzle.py`: analytic TOP path done; implicit path calls `solve_rao_bvp_jax` (host-only) |
+| 3 | *already JAX*: `jax/primitives.py` (`area_mach_relation`, `thrust_coefficient`), `jax/sensitivities.py` (`cf_de_jax`) | `nozzle.py`: analytic TOP provider done; `contour_validation.py`: opt-in host post-solve BVP comparison done but not qualified; exact inner-loop provider/total wall sensitivities deferred |
 | 4a | `jax/thermal.py` (`bartz_hg`, `recovery_temperature`, `sieder_tate_hc`, `throat_wall_temperature`); oracle `thermal_design.py:size_cooling_channels` | `cooling.py`: march wall temperature on a fixed-topology station grid; fin efficiency carries aspect-ratio trend |
 | 4b | Pizzarelli quasi-2-D structure; `thermal_design.py` oracle | `cooling.py` (deepen): 2-D wall/coolant energy per station — the expensive swap, *after* skeleton |
 | 5 | `injector.py` (`couple_atomization_to_performance`, `FeedSystemLedger`, `StabilityScreen`, `ManifoldDistribution`) | `injector.py`: orifice/TMR algebra JAX-trivial; movable-pintle branch-split as two subproblems w/ consistency inequalities |
@@ -866,7 +896,7 @@ coupling them**, not writing physics from scratch.
 | 8 | `jax/api.py`, `jax/sensitivities.py` | `derivatives.py`: forward/direct for full constraint Jacobian; adjoint for scalar objective |
 | 9 | `jax/design_opt.py` (`constrained_nozzle_design` seed) | `nlp.py`: hand exact Jacobians to SciPy `trust-constr`/SLSQP, then IPOPT |
 | 10 | `separation.py`, `altitude_performance.py`, `trajectory.py` | `multipoint.py`: shared $x_h$, per-point $x_k,y_k$; separation + $\eta$ surfaces evaluated at *every* operating point |
-| 11 | `cea.py`, `frozen_flow.py`, existing screens | `postprocess.py`: re-run optima on authoritative backends; discrepancy-correction loop |
+| 11 | `cea.py`, `frozen_flow.py`, existing screens | `postprocess.py`: re-run optima on authoritative backends; optional typed B3 contour validation; discrepancy-correction loop |
 
 ### 12.3 The coupled-solve core (Phase 7)
 
@@ -918,15 +948,20 @@ independently.
    take *one* end-to-end gradient. That gradient existing is the real unlock;
    everything after deepens a block behind a stable interface.
 
-> **Reality checks.** JAX BVP solves are *host-only* (~5–15 min); the
-> implicit-contour path and full coupled solves run on your machine, not
-> in-session, while the analytic-contour skeleton is fast and testable anywhere.
+> **Reality checks.** JAX BVP solves are *host-only*. On the documented Apple M3
+> Pro/macOS host, the observed 12×12 coupled probe took 16.2 s cold and 12.5 s on
+> immediate repeat, while the 24×24 and 32×32 BDE probes took 10.93 s and
+> 14.96 s. The dense 65-knot H2 generation took approximately 68 minutes with
+> the accepted policy. These observations are not benchmark guarantees.
+> The implicit-contour path and full coupled solves run on your machine, while
+> the analytic-contour skeleton is fast and testable anywhere.
 > Keep the NumPy oracle for every block so CI gates parity without the slow
 > solves. **J3b landed 2026-06-12 and is no longer an open blocker.** The
-> implicit-contour path still needs the variational provider and the J6 v2 total
-> design/wall-node derivatives deferred in `jax/sensitivities.py`; the typed
-> adapter and analytic TOP provider/failure gate have landed, and the
-> analytic-contour skeleton and Paper-1 Pareto do not wait on the remaining work.
+> opt-in host B3 implementation and first fixed B5/H2 domain exist, but real B3
+> promotion is blocked on forward-MOC compatibility. An exact inner-loop
+> variational provider and the J6 v2 total design/wall-node
+> derivatives deferred in `jax/sensitivities.py` remain open; the analytic-
+> contour skeleton and Paper-1 Pareto do not wait on them.
 
 ---
 
@@ -934,9 +969,11 @@ independently.
 
 1. **Contour fidelity (decided).** TOP-Bézier for bulk Pareto; implicit
    variational only for existence-boundary and exact-vs-TOP studies. J3b has
-   landed; the typed analytic adapter also exists. Promotion of the implicit
-   path still depends on a variational provider plus J6 v2 total
-   design/wall-node derivatives.
+   landed; the typed analytic adapter and opt-in host validation contract also
+   exist. The first fixed B5/H2 slice is complete, but B5 remains partial beyond
+   it and promotion of the host comparison is blocked by forward-MOC
+   compatibility. Promotion to an exact inner-loop provider additionally depends
+   on J6 v2 total design/wall-node derivatives.
 2. **Thermal fidelity ladder (decided).** 4a before 4b; do not gate first coupled
    solves on quasi-2-D.
 3. **c\* convention (decided).** $c^{*}_\mathrm{delivered}=\eta_{c^{*}}c^{*}_\mathrm{ideal}$,

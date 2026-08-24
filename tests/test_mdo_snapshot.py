@@ -376,6 +376,149 @@ def test_custom_surface_state_is_pinned_into_the_host_reevaluation(
         assert reev.comparison.scalars[path].status == "within_tolerance"
 
 
+def test_direct_reevaluate_derives_one_variational_validation_identity(
+    monkeypatch, mission, design_vector, engine_state
+):
+    import raosim.mdo.contour_validation as validation_module
+    from raosim.mdo.contour_validation import (
+        VARIATIONAL_VALIDATOR_MODEL_ID,
+        ContourDiscrepancyTolerances,
+        VariationalPostSolveConfig,
+        VariationalValidationReason,
+        unavailable_variational_validation,
+    )
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    domain_hash = "c" * 64
+
+    class SyntheticDomain:
+        artifact_sha256 = domain_hash
+
+    domain = SyntheticDomain()
+    reads = 0
+
+    def read_domain(cls, path):
+        nonlocal reads
+        reads += 1
+        assert str(path) == "synthetic-domain.json"
+        return domain
+
+    monkeypatch.setattr(
+        RaoConvergenceDomain,
+        "read_json",
+        classmethod(read_domain),
+    )
+    captured = {}
+
+    def typed_unknown(state, mission_arg, config):
+        captured["config"] = config
+        assert config.convergence_domain is domain
+        return unavailable_variational_validation(
+            "synthetic direct-API validation result",
+            reason=VariationalValidationReason.CONVERGENCE_DOMAIN_UNSUPPORTED,
+        )
+
+    monkeypatch.setattr(
+        validation_module,
+        "validate_optimized_top_contour",
+        typed_unknown,
+    )
+    tolerances = ContourDiscrepancyTolerances(0.05, 0.02, 0.02, 0.03)
+    config = VariationalPostSolveConfig(
+        tolerances=tolerances,
+        convergence_domain="synthetic-domain.json",
+    )
+    design = {
+        key: float(value) for key, value in design_vector.as_dict().items()
+    }
+
+    reev = reevaluate(
+        design,
+        mission,
+        mdo_result=engine_state,
+        mdo_summary={"Isp": float(engine_state.performance.Isp_delivered)},
+        size_pumps=False,
+        variational_validation_config=config,
+    )
+
+    assert reads == 1
+    identities = reev.authoritative_snapshot.optimizer_metadata[
+        "resolved_engine_inputs"
+    ]["model_identities"]
+    assert identities["postsolve_contour_validator"] == (
+        VARIATIONAL_VALIDATOR_MODEL_ID
+    )
+    assert identities["rao_convergence_domain_sha256"] == domain_hash
+    assert identities["contour_comparison_policy"] == (
+        captured["config"].comparison_policy_dict()
+    )
+    persisted = reev.authoritative_snapshot.optimizer_metadata[
+        "variational_contour_validation"
+    ]
+    assert persisted["status"] == "unknown"
+
+    mismatch_args = {
+        "design": design,
+        "mission": mission,
+        "mdo_result": engine_state,
+        "mdo_summary": {"Isp": float(engine_state.performance.Isp_delivered)},
+        "size_pumps": False,
+        "variational_validation_config": captured["config"],
+    }
+    with pytest.raises(ValueError, match="validator_id does not match"):
+        reevaluate(
+            **mismatch_args,
+            postsolve_contour_validator_id="wrong-validator",
+        )
+    with pytest.raises(ValueError, match="domain_sha256 does not match"):
+        reevaluate(
+            **mismatch_args,
+            rao_convergence_domain_sha256="d" * 64,
+        )
+    with pytest.raises(ValueError, match="policy does not match"):
+        reevaluate(
+            **mismatch_args,
+            contour_comparison_policy={"policy_id": "wrong-policy"},
+        )
+
+
+def test_direct_reevaluate_missing_variational_domain_persists_unknown(
+    mission, design_vector, engine_state
+):
+    from raosim.mdo.contour_validation import (
+        ContourDiscrepancyTolerances,
+        VariationalPostSolveConfig,
+        VariationalValidationReason,
+        VariationalValidationStatus,
+    )
+
+    design = {
+        key: float(value) for key, value in design_vector.as_dict().items()
+    }
+    reev = reevaluate(
+        design,
+        mission,
+        mdo_result=engine_state,
+        mdo_summary={"Isp": float(engine_state.performance.Isp_delivered)},
+        size_pumps=False,
+        variational_validation_config=VariationalPostSolveConfig(
+            tolerances=ContourDiscrepancyTolerances(0.05, 0.02, 0.02, 0.03),
+        ),
+    )
+
+    outcome = reev.variational_contour_validation
+    assert outcome.status is VariationalValidationStatus.UNKNOWN
+    assert outcome.reason is (
+        VariationalValidationReason.CONVERGENCE_DOMAIN_NOT_SUPPLIED
+    )
+    assert not outcome.available and not outcome.passed
+    persisted = reev.authoritative_snapshot.optimizer_metadata[
+        "variational_contour_validation"
+    ]
+    assert persisted["status"] == "unknown"
+    assert persisted["reason"] == "convergence_domain_not_supplied"
+
+
 def test_nested_nonfinite_available_values_are_rejected_or_marked_unavailable():
     payload = {"outer": {"finite": 1.0, "bad": [2.0, np.nan]}}
     with pytest.raises(ValueError, match=r"\$\.outer\.bad\[1\]"):

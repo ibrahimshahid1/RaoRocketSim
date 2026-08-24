@@ -314,6 +314,9 @@ def resolve_engine_inputs(
     eta_CF: float | None = None,
     contour_method: str = "bezier",
     contour_provider_id: str = ANALYTIC_TOP_PROVIDER_ID,
+    postsolve_contour_validator_id: str | None = None,
+    rao_convergence_domain_sha256: str | None = None,
+    contour_comparison_policy: Mapping[str, Any] | None = None,
     surfaces: Any = None,
     propellant: str | None = None,
     coolant: str | None = None,
@@ -423,6 +426,44 @@ def resolve_engine_inputs(
         "coolant_property_backend": "constant",
         "coolant_identity_basis": coolant_basis,
     }
+    if postsolve_contour_validator_id is not None:
+        validator_id = str(postsolve_contour_validator_id).strip()
+        if not validator_id:
+            raise ValueError(
+                "postsolve_contour_validator_id must be a non-empty identity"
+            )
+        domain_hash = str(rao_convergence_domain_sha256 or "").strip()
+        if len(domain_hash) != 64:
+            raise ValueError(
+                "rao_convergence_domain_sha256 must be a SHA-256 digest when "
+                "post-solve contour validation is selected"
+            )
+        try:
+            int(domain_hash, 16)
+        except ValueError as exc:
+            raise ValueError(
+                "rao_convergence_domain_sha256 must be a SHA-256 digest"
+            ) from exc
+        if contour_comparison_policy is None:
+            raise ValueError(
+                "contour_comparison_policy is required when post-solve "
+                "contour validation is selected"
+            )
+        identities.update(
+            {
+                "postsolve_contour_validator": validator_id,
+                "rao_convergence_domain_sha256": domain_hash,
+                "contour_comparison_policy": dict(contour_comparison_policy),
+            }
+        )
+    elif (
+        rao_convergence_domain_sha256 is not None
+        or contour_comparison_policy is not None
+    ):
+        raise ValueError(
+            "Rao domain/comparison identities require a selected "
+            "postsolve_contour_validator_id"
+        )
     if surfaces is not None:
         identities["property_table_sha256"] = str(
             getattr(surfaces, "content_sha256", "") or ""

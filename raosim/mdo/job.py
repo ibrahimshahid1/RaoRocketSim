@@ -49,7 +49,7 @@ __all__ = [
     "resolve_engine_job",
 ]
 
-ENGINE_JOB_SCHEMA_VERSION = "1.0.0"
+ENGINE_JOB_SCHEMA_VERSION = "1.1.0"
 
 
 class JobValidationError(ValueError):
@@ -350,6 +350,12 @@ class ModelSelection:
     chamber_property_table: str | None = None
     mixture_ratio_mode: str = "nominal"
     contour_provider: str = "rao_top_bezier_fixed_topology"
+    postsolve_contour_validator: str | None = None
+    rao_convergence_domain: str | None = None
+    contour_max_radius_error_over_rt: float | None = None
+    contour_rms_radius_error_over_rt: float | None = None
+    contour_relative_length_error: float | None = None
+    contour_relative_cf_error: float | None = None
     constraint_policy: ConstraintPolicy | str = ConstraintPolicy.ALL_APPLICABLE
     allow_incomplete_physics: bool = False
 
@@ -373,6 +379,85 @@ class ModelSelection:
             resolve_contour_provider(self.contour_provider)
         except (TypeError, ValueError) as exc:
             raise JobValidationError(str(exc)) from exc
+
+        # The variational method is deliberately a once-per-candidate host
+        # validator, not another JAX inner-loop contour provider.  Selection is
+        # nevertheless an exact model identity: a misspelled id, a missing
+        # hash-checked domain artifact, or an unstated discrepancy threshold is
+        # rejected instead of being interpreted as "use TOP only".
+        validator = self.postsolve_contour_validator
+        validation_fields = {
+            "rao_convergence_domain": self.rao_convergence_domain,
+            "contour_max_radius_error_over_rt": (
+                self.contour_max_radius_error_over_rt
+            ),
+            "contour_rms_radius_error_over_rt": (
+                self.contour_rms_radius_error_over_rt
+            ),
+            "contour_relative_length_error": self.contour_relative_length_error,
+            "contour_relative_cf_error": self.contour_relative_cf_error,
+        }
+        if validator is None:
+            supplied = [name for name, value in validation_fields.items()
+                        if value is not None]
+            if supplied:
+                raise JobValidationError(
+                    "post-solve contour-validation settings were supplied "
+                    "without postsolve_contour_validator: "
+                    + ", ".join(supplied)
+                )
+        else:
+            from raosim.mdo.contour_validation import (
+                ContourDiscrepancyTolerances,
+                VARIATIONAL_VALIDATOR_MODEL_ID,
+            )
+            from raosim.mdo.nozzle import ANALYTIC_TOP_PROVIDER_ID
+
+            if validator != VARIATIONAL_VALIDATOR_MODEL_ID:
+                raise JobValidationError(
+                    f"unknown post-solve contour validator {validator!r}; "
+                    f"available: {VARIATIONAL_VALIDATOR_MODEL_ID!r}"
+                )
+            if self.contour_provider != ANALYTIC_TOP_PROVIDER_ID:
+                raise JobValidationError(
+                    f"{validator} compares the optimized analytic TOP wall and "
+                    f"therefore requires contour_provider="
+                    f"{ANALYTIC_TOP_PROVIDER_ID!r}"
+                )
+            if not isinstance(self.rao_convergence_domain, str) or not (
+                self.rao_convergence_domain.strip()
+            ):
+                raise JobValidationError(
+                    f"{validator} requires rao_convergence_domain"
+                )
+            missing = [
+                name for name, value in validation_fields.items()
+                if name != "rao_convergence_domain" and value is None
+            ]
+            if missing:
+                raise JobValidationError(
+                    f"{validator} requires explicit discrepancy thresholds: "
+                    + ", ".join(missing)
+                )
+            try:
+                ContourDiscrepancyTolerances(
+                    max_radius_error_over_rt=(
+                        self.contour_max_radius_error_over_rt
+                    ),
+                    rms_radius_error_over_rt=(
+                        self.contour_rms_radius_error_over_rt
+                    ),
+                    relative_divergent_length_error=(
+                        self.contour_relative_length_error
+                    ),
+                    relative_thrust_coefficient_error=(
+                        self.contour_relative_cf_error
+                    ),
+                )
+            except (TypeError, ValueError) as exc:
+                raise JobValidationError(
+                    f"invalid post-solve contour-validation policy: {exc}"
+                ) from exc
         if (
             self.mixture_ratio_mode == "optimize"
             and not self.chamber_property_table
@@ -487,12 +572,28 @@ class ResolvedEngineJob:
     bounds: Mapping[str, tuple[float, float]]
     enumerations: Mapping[str, tuple[Any, ...]]
     constraint_policy: ConstraintPolicy
+    rao_convergence_domain_sha256: str | None = None
     inputs: Any = None
     notes: tuple[str, ...] = ()
 
     @property
     def job_digest(self) -> str:
-        return self.spec.digest()
+        spec_digest = self.spec.digest()
+        if self.rao_convergence_domain_sha256 is None:
+            return spec_digest
+        payload = {
+            "engine_job_spec_sha256": spec_digest,
+            "rao_convergence_domain_sha256": (
+                self.rao_convergence_domain_sha256
+            ),
+        }
+        return hashlib.sha256(
+            json.dumps(
+                payload,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
 
     def design_vector(self) -> Any:
         """The design point for an ``analyze`` job.
@@ -546,6 +647,9 @@ class ResolvedEngineJob:
             "bounds": {k: list(v) for k, v in self.bounds.items()},
             "enumerations": {k: list(v) for k, v in self.enumerations.items()},
             "constraint_policy": self.constraint_policy.value,
+            "rao_convergence_domain_sha256": (
+                self.rao_convergence_domain_sha256
+            ),
             "resolved_inputs": (
                 self.inputs.to_dict() if self.inputs is not None else None
             ),
@@ -560,6 +664,7 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
 
     requirement = spec.mission.resolved()
     notes: list[str] = []
+    rao_convergence_domain_sha256: str | None = None
 
     mission = MissionSpec.for_propellant(
         spec.architecture.propellant, requirement["thrust"]
@@ -586,6 +691,25 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
             expected_propellant=mission.propellant_name,
             require_of_dependence=not mission.of_is_pinned,
         )
+
+    if spec.models.postsolve_contour_validator is not None:
+        from raosim.rao_existence_scan import RaoConvergenceDomain
+
+        domain_path = str(spec.models.rao_convergence_domain)
+        try:
+            domain = RaoConvergenceDomain.read_json(domain_path)
+        except (OSError, TypeError, ValueError) as exc:
+            raise JobValidationError(
+                "post-solve Rao convergence-domain artifact is invalid: "
+                f"{exc}"
+            ) from exc
+        notes.append(
+            "post-solve contour validation selected: "
+            f"{spec.models.postsolve_contour_validator}; B5 domain "
+            f"sha256={domain.artifact_sha256}. The analytic TOP contour "
+            "remains the differentiable inner-loop geometry."
+        )
+        rao_convergence_domain_sha256 = domain.artifact_sha256
 
     liner = spec.architecture.liner_material
     closeout = spec.architecture.closeout_material
@@ -708,6 +832,7 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
         bounds=bounds,
         enumerations=enumerations,
         constraint_policy=spec.models.constraint_policy,
+        rao_convergence_domain_sha256=rao_convergence_domain_sha256,
         inputs=None,
         notes=tuple(notes),
     )

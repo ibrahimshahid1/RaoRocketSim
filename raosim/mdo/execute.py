@@ -98,6 +98,7 @@ class EngineJobResult:
     inputs: Any = None
     snapshot: Any = None
     reevaluation: Any = None
+    contour_validation: Any = None
     targets: tuple[TargetOutcome, ...] = ()
     statuses: Mapping[str, str] = field(default_factory=dict)
     #: Constraint rows with a demonstrated negative margin, worst first.  A
@@ -121,6 +122,11 @@ class EngineJobResult:
                 for name, margin in self.violated_constraints
             ],
             "targets": [t.to_dict() for t in self.targets],
+            "contour_validation": (
+                self.contour_validation.to_dict()
+                if self.contour_validation is not None
+                else None
+            ),
             "notes": list(self.job.notes),
             "messages": list(self.messages),
         }
@@ -219,6 +225,7 @@ def _verdict(statuses: Mapping[str, str],
         statuses.get("optimizer") == "fail"
         or statuses.get("physics") == "fail"
         or statuses.get("requirements") == "fail"
+        or statuses.get("contour_validation") == "fail"
         or any(t.status == "fail" for t in targets)
     )
     if demonstrated_failure:
@@ -273,6 +280,49 @@ def execute_engine_job(
     mission = job.mission
     surfaces = chamber_surfaces_for(mission)
     contour_provider = resolve_contour_provider(spec.models.contour_provider)
+    variational_validation_config = None
+    variational_domain = None
+    contour_comparison_policy = None
+    if spec.models.postsolve_contour_validator is not None:
+        from raosim.mdo.contour_validation import (
+            ContourDiscrepancyTolerances,
+            VariationalPostSolveConfig,
+        )
+        from raosim.rao_existence_scan import RaoConvergenceDomain
+
+        variational_domain = RaoConvergenceDomain.read_json(
+            str(spec.models.rao_convergence_domain)
+        )
+        if (
+            job.rao_convergence_domain_sha256
+            != variational_domain.artifact_sha256
+        ):
+            raise JobValidationError(
+                "post-solve Rao convergence-domain artifact changed after "
+                "job resolution; refusing a time-of-check/time-of-use identity "
+                "mismatch"
+            )
+        tolerances = ContourDiscrepancyTolerances(
+            max_radius_error_over_rt=float(
+                spec.models.contour_max_radius_error_over_rt
+            ),
+            rms_radius_error_over_rt=float(
+                spec.models.contour_rms_radius_error_over_rt
+            ),
+            relative_divergent_length_error=float(
+                spec.models.contour_relative_length_error
+            ),
+            relative_thrust_coefficient_error=float(
+                spec.models.contour_relative_cf_error
+            ),
+        )
+        variational_validation_config = VariationalPostSolveConfig(
+            tolerances=tolerances,
+            convergence_domain=variational_domain,
+        )
+        contour_comparison_policy = (
+            variational_validation_config.comparison_policy_dict()
+        )
 
     if spec.workflow is Workflow.ANALYZE:
         design_vector = job.design_vector()
@@ -339,6 +389,15 @@ def execute_engine_job(
         total_mass_flow=float(state.performance.mdot_total),
         surfaces=surfaces,
         contour_provider_id=contour_provider.provider_id,
+        postsolve_contour_validator_id=(
+            spec.models.postsolve_contour_validator
+        ),
+        rao_convergence_domain_sha256=(
+            variational_domain.artifact_sha256
+            if variational_domain is not None
+            else None
+        ),
+        contour_comparison_policy=contour_comparison_policy,
     )
     job = job.with_inputs(inputs)
 
@@ -346,8 +405,20 @@ def execute_engine_job(
         design, mission, mdo_result=state, mdo_surfaces=surfaces,
         mdo_summary={"Isp": float(state.performance.Isp_delivered)},
         size_pumps=size_pumps,
+        variational_validation_config=variational_validation_config,
+        contour_provider_id=contour_provider.provider_id,
+        postsolve_contour_validator_id=(
+            spec.models.postsolve_contour_validator
+        ),
+        rao_convergence_domain_sha256=(
+            variational_domain.artifact_sha256
+            if variational_domain is not None
+            else None
+        ),
+        contour_comparison_policy=contour_comparison_policy,
     )
     snapshot = reev.authoritative_snapshot
+    contour_validation = reev.variational_contour_validation
 
     # The two snapshots answer different questions and neither alone is
     # complete: the constraint manifest, physics coverage and inner-root
@@ -376,6 +447,13 @@ def execute_engine_job(
     ):
         statuses[name] = _gate(key)
 
+    if contour_validation is not None:
+        statuses["contour_validation"] = contour_validation.status.value
+        messages.append(
+            "post-solve contour validation "
+            f"{contour_validation.status.value}: {contour_validation.detail}"
+        )
+
     violated = _violated_constraints(reev.mdo_snapshot)
     targets = _evaluate_targets(spec, snapshot)
     verdict, exit_code = _verdict(statuses, targets)
@@ -390,6 +468,7 @@ def execute_engine_job(
         inputs=inputs,
         snapshot=snapshot,
         reevaluation=reev,
+        contour_validation=contour_validation,
         targets=targets,
         statuses=statuses,
         violated_constraints=violated,

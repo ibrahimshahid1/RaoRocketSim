@@ -18,6 +18,7 @@ from raosim.mdo.job import (
     EngineJobSpec,
     JobValidationError,
     MissionRequest,
+    ModelSelection,
     ObjectiveRequest,
     TargetRequest,
     VariableRequest,
@@ -100,6 +101,130 @@ def test_result_serializes_with_both_digests(analyzed):
     assert isinstance(payload["violated_constraints"], list)
 
 
+def test_default_job_never_invokes_the_host_variational_solver(monkeypatch):
+    import raosim.mdo.contour_validation as validation_module
+
+    calls = 0
+
+    def forbidden(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        raise AssertionError("default analytic job invoked the host validator")
+
+    monkeypatch.setattr(
+        validation_module,
+        "validate_optimized_top_contour",
+        forbidden,
+    )
+
+    result = execute_engine_job(_spec())
+
+    assert calls == 0
+    assert result.contour_validation is None
+    assert "contour_validation" not in result.statuses
+
+
+def test_selected_host_validator_runs_once_and_persists_typed_unknown(
+    monkeypatch,
+):
+    import raosim.mdo.contour_validation as validation_module
+    from raosim.mdo.contour_validation import (
+        VARIATIONAL_VALIDATOR_MODEL_ID,
+        VariationalValidationReason,
+        unavailable_variational_validation,
+    )
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    domain_hash = "b" * 64
+
+    class SyntheticDomain:
+        artifact_sha256 = domain_hash
+
+    monkeypatch.setattr(
+        RaoConvergenceDomain,
+        "read_json",
+        classmethod(lambda cls, path: SyntheticDomain()),
+    )
+    calls = 0
+
+    def typed_unknown(state, mission, config):
+        nonlocal calls
+        calls += 1
+        assert config.convergence_domain.artifact_sha256 == domain_hash
+        return unavailable_variational_validation(
+            "synthetic fixed-domain preflight is under-resolved",
+            reason=VariationalValidationReason.CONVERGENCE_DOMAIN_UNSUPPORTED,
+        )
+
+    monkeypatch.setattr(
+        validation_module,
+        "validate_optimized_top_contour",
+        typed_unknown,
+    )
+    models = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain="synthetic-domain.json",
+        contour_max_radius_error_over_rt=0.05,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+
+    result = execute_engine_job(_spec(models=models))
+
+    assert calls == 1
+    assert result.contour_validation is not None
+    assert result.contour_validation.status.value == "unknown"
+    assert result.statuses["contour_validation"] == "unknown"
+    assert result.verdict != "MET"
+    assert result.inputs.model_identities[
+        "postsolve_contour_validator"
+    ] == VARIATIONAL_VALIDATOR_MODEL_ID
+    assert result.inputs.model_identities[
+        "rao_convergence_domain_sha256"
+    ] == domain_hash
+    assert result.job.rao_convergence_domain_sha256 == domain_hash
+    for snapshot in (
+        result.reevaluation.mdo_snapshot,
+        result.reevaluation.authoritative_snapshot,
+    ):
+        persisted = snapshot.optimizer_metadata[
+            "variational_contour_validation"
+        ]
+        assert persisted["status"] == "unknown"
+        assert persisted["reason"] == "convergence_domain_unsupported"
+
+
+def test_domain_identity_change_between_resolution_and_execution_is_refused(
+    monkeypatch,
+):
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    hashes = iter(("d" * 64, "e" * 64))
+
+    class SyntheticDomain:
+        def __init__(self, digest):
+            self.artifact_sha256 = digest
+
+    monkeypatch.setattr(
+        RaoConvergenceDomain,
+        "read_json",
+        classmethod(lambda cls, path: SyntheticDomain(next(hashes))),
+    )
+    models = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain="mutable-domain.json",
+        contour_max_radius_error_over_rt=0.05,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+
+    with pytest.raises(JobValidationError, match="changed after job resolution"):
+        execute_engine_job(_spec(models=models))
+
+
 def test_exit_codes_follow_the_shared_workflow_contract(analyzed):
     assert analyzed.exit_code == {
         "MET": WorkflowExitCode.MET,
@@ -136,6 +261,34 @@ def test_a_demonstrated_failure_outranks_an_unknown():
          "physics": "fail", "requirements": "unknown"}, ()
     )
     assert verdict == "CANDIDATE_VIOLATES"
+
+
+def test_postsolve_contour_gate_preserves_fail_and_unknown_semantics():
+    failed, failed_code = _verdict(
+        {
+            "workflow": "pass",
+            "numerical": "pass",
+            "physics": "pass",
+            "requirements": "pass",
+            "contour_validation": "fail",
+        },
+        (),
+    )
+    assert failed == "CANDIDATE_VIOLATES"
+    assert failed_code == WorkflowExitCode.CANDIDATE_VIOLATES
+
+    unknown, unknown_code = _verdict(
+        {
+            "workflow": "pass",
+            "numerical": "pass",
+            "physics": "pass",
+            "requirements": "pass",
+            "contour_validation": "unknown",
+        },
+        (),
+    )
+    assert unknown == "INDETERMINATE"
+    assert unknown_code == WorkflowExitCode.INDETERMINATE
 
 
 def test_a_missed_target_violates_even_when_every_gate_passes():

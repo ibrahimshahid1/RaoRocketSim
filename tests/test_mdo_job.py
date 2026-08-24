@@ -162,6 +162,105 @@ def test_of_optimization_requires_a_validated_property_table():
         _analyze_job(variables=(VariableRequest("OF", "free"),))
 
 
+def test_postsolve_contour_validation_is_an_exact_explicit_model_selection():
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+
+    with pytest.raises(JobValidationError, match="unknown post-solve"):
+        ModelSelection(
+            postsolve_contour_validator="variational-ish",
+            rao_convergence_domain="domain.json",
+            contour_max_radius_error_over_rt=0.05,
+            contour_rms_radius_error_over_rt=0.02,
+            contour_relative_length_error=0.02,
+            contour_relative_cf_error=0.03,
+        )
+    with pytest.raises(JobValidationError, match="without postsolve"):
+        ModelSelection(rao_convergence_domain="domain.json")
+    with pytest.raises(JobValidationError, match="explicit discrepancy"):
+        ModelSelection(
+            postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+            rao_convergence_domain="domain.json",
+        )
+    with pytest.raises(JobValidationError, match="not bool"):
+        ModelSelection(
+            postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+            rao_convergence_domain="domain.json",
+            contour_max_radius_error_over_rt=True,
+            contour_rms_radius_error_over_rt=0.02,
+            contour_relative_length_error=0.02,
+            contour_relative_cf_error=0.03,
+        )
+    selected = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain="domain.json",
+        contour_max_radius_error_over_rt=0.05,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+    assert selected.postsolve_contour_validator == VARIATIONAL_VALIDATOR_MODEL_ID
+    changed_policy = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain="domain.json",
+        contour_max_radius_error_over_rt=0.06,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+    assert _analyze_job(models=selected).digest() != _analyze_job(
+        models=changed_policy
+    ).digest()
+
+
+def test_job_resolution_eagerly_validates_the_selected_rao_domain(tmp_path):
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+
+    models = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain=str(tmp_path / "missing.json"),
+        contour_max_radius_error_over_rt=0.05,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+    with pytest.raises(JobValidationError, match="artifact is invalid"):
+        resolve_engine_job(_analyze_job(models=models))
+
+
+def test_resolved_job_digest_is_bound_to_the_domain_content_hash(monkeypatch):
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    selected_hash = ["a" * 64]
+
+    class SyntheticDomain:
+        @property
+        def artifact_sha256(self):
+            return selected_hash[0]
+
+    monkeypatch.setattr(
+        RaoConvergenceDomain,
+        "read_json",
+        classmethod(lambda cls, path: SyntheticDomain()),
+    )
+    models = ModelSelection(
+        postsolve_contour_validator=VARIATIONAL_VALIDATOR_MODEL_ID,
+        rao_convergence_domain="domain.json",
+        contour_max_radius_error_over_rt=0.05,
+        contour_rms_radius_error_over_rt=0.02,
+        contour_relative_length_error=0.02,
+        contour_relative_cf_error=0.03,
+    )
+    first = resolve_engine_job(_analyze_job(models=models))
+    selected_hash[0] = "b" * 64
+    second = resolve_engine_job(_analyze_job(models=models))
+
+    assert first.spec.digest() == second.spec.digest()
+    assert first.job_digest != second.job_digest
+    assert first.rao_convergence_domain_sha256 == "a" * 64
+    assert second.rao_convergence_domain_sha256 == "b" * 64
+
+
 def test_duplicate_variable_policies_are_rejected():
     with pytest.raises(JobValidationError, match="only one policy"):
         _analyze_job(variables=(

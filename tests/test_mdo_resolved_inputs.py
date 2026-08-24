@@ -158,6 +158,42 @@ def test_property_table_identity_is_carried_for_parity_proof():
     assert inputs.model_identities["contour_provider"]
 
 
+def test_postsolve_contour_evidence_is_content_addressed_and_cannot_orphan():
+    mission = MissionSpec.for_material("GRCop-84", 13.0e3)
+    policy = {
+        "policy_id": "top-vs-variational-screening-tolerances-v1",
+        "max_radius_error_over_rt": 0.05,
+        "rms_radius_error_over_rt": 0.02,
+        "relative_divergent_length_error": 0.02,
+        "relative_thrust_coefficient_error": 0.03,
+    }
+    inputs = _resolve(
+        mission,
+        postsolve_contour_validator_id="top_vs_rao_variational_postsolve_v1",
+        rao_convergence_domain_sha256="a" * 64,
+        contour_comparison_policy=policy,
+    )
+
+    assert inputs.model_identities["postsolve_contour_validator"] == (
+        "top_vs_rao_variational_postsolve_v1"
+    )
+    assert inputs.model_identities["rao_convergence_domain_sha256"] == "a" * 64
+    assert inputs.model_identities["contour_comparison_policy"] == policy
+
+    with pytest.raises(ValueError, match="require a selected"):
+        _resolve(
+            mission,
+            rao_convergence_domain_sha256="a" * 64,
+        )
+    with pytest.raises(ValueError, match="SHA-256"):
+        _resolve(
+            mission,
+            postsolve_contour_validator_id="top_vs_rao_variational_postsolve_v1",
+            rao_convergence_domain_sha256="not-a-hash",
+            contour_comparison_policy=policy,
+        )
+
+
 @pytest.mark.parametrize("liner", ["GRCop-84", "NARloy-Z", "CuCrZr"])
 def test_traditional_bridge_carries_exactly_the_resolved_conventions(liner):
     """Anti-drift gate for remediation item 9.

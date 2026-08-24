@@ -21,15 +21,22 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Any, Mapping
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from raosim.mdo.contour_validation import (
+        VariationalContourValidationOutcome,
+        VariationalPostSolveConfig,
+    )
 
 from raosim.mdo.schema import (
     DesignLayout,
     MissionSpec,
     validate_mixture_ratio,
 )
+from raosim.mdo.nozzle import ANALYTIC_TOP_PROVIDER_ID
 from raosim.mdo.snapshot import (
     EngineAnalysisSnapshot,
     SnapshotComparison,
@@ -844,6 +851,82 @@ def _authoritative_scalars(result: Any) -> dict[str, float]:
     return out
 
 
+def _resolve_variational_validation_identity(
+    config: VariationalPostSolveConfig,
+    *,
+    validator_id: str | None,
+    domain_sha256: str | None,
+    comparison_policy: Mapping[str, Any] | None,
+) -> tuple[
+    VariationalPostSolveConfig,
+    str | None,
+    str | None,
+    dict[str, Any] | None,
+]:
+    """Derive one canonical B3 identity tuple and reject split-brain inputs."""
+
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    expected_validator = VARIATIONAL_VALIDATOR_MODEL_ID
+    if validator_id is not None and str(validator_id) != expected_validator:
+        raise ValueError(
+            "postsolve_contour_validator_id does not match "
+            "variational_validation_config: "
+            f"{validator_id!r} != {expected_validator!r}"
+        )
+
+    expected_policy = config.comparison_policy_dict()
+    domain = config.convergence_domain
+    if domain is None:
+        if domain_sha256 is not None:
+            raise ValueError(
+                "rao_convergence_domain_sha256 was supplied but "
+                "variational_validation_config has no convergence domain"
+            )
+        if (
+            comparison_policy is not None
+            and dict(comparison_policy) != expected_policy
+        ):
+            raise ValueError(
+                "contour_comparison_policy does not match the thresholds in "
+                "variational_validation_config"
+            )
+        # Missing B5 evidence is a first-class UNKNOWN outcome in the
+        # validator.  Do not manufacture a partial ResolvedEngineInputs
+        # identity (validator+policy without the required artifact hash).
+        return config, None, None, None
+    if isinstance(domain, (str, Path)):
+        domain = RaoConvergenceDomain.read_json(Path(domain))
+        config = replace(config, convergence_domain=domain)
+    expected_hash = str(getattr(domain, "artifact_sha256", ""))
+    try:
+        if len(expected_hash) != 64:
+            raise ValueError
+        int(expected_hash, 16)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "variational_validation_config convergence domain does not carry "
+            "a valid SHA-256 artifact identity"
+        ) from exc
+    if domain_sha256 is not None and str(domain_sha256) != expected_hash:
+        raise ValueError(
+            "rao_convergence_domain_sha256 does not match the hash-verified "
+            "variational_validation_config domain: "
+            f"{domain_sha256!r} != {expected_hash!r}"
+        )
+
+    if (
+        comparison_policy is not None
+        and dict(comparison_policy) != expected_policy
+    ):
+        raise ValueError(
+            "contour_comparison_policy does not match the thresholds in "
+            "variational_validation_config"
+        )
+    return config, expected_validator, expected_hash, expected_policy
+
+
 @dataclass(frozen=True)
 class ReEvaluation:
     """MDO screening result, authoritative result, and versioned comparison."""
@@ -857,6 +940,7 @@ class ReEvaluation:
     mdo_snapshot: EngineAnalysisSnapshot | None = None
     authoritative_snapshot: EngineAnalysisSnapshot | None = None
     comparison: SnapshotComparison | None = None
+    variational_contour_validation: VariationalContourValidationOutcome | None = None
     pump_sizing_error: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -872,6 +956,11 @@ def reevaluate(
     size_pumps: bool = True,
     pump_spec: Any | None = None,
     mdo_surfaces: Any | None = None,
+    variational_validation_config: VariationalPostSolveConfig | None = None,
+    contour_provider_id: str = ANALYTIC_TOP_PROVIDER_ID,
+    postsolve_contour_validator_id: str | None = None,
+    rao_convergence_domain_sha256: str | None = None,
+    contour_comparison_policy: Mapping[str, Any] | None = None,
     **kw: Any,
 ) -> ReEvaluation:
     """Run an MDO optimum through the authoritative workflow and compare it.
@@ -882,7 +971,23 @@ def reevaluate(
     authoritative result or scalar discrepancy report.  When ``mdo_result`` was
     solved with caller-supplied chamber-property surfaces, pass that exact
     object as ``mdo_surfaces=`` so its evaluator fingerprint can be validated.
+    A supplied variational-validation config is also the authority for its
+    validator, domain hash, and four-threshold policy identities; redundant
+    identity arguments must agree exactly.
     """
+
+    if variational_validation_config is not None:
+        (
+            variational_validation_config,
+            postsolve_contour_validator_id,
+            rao_convergence_domain_sha256,
+            contour_comparison_policy,
+        ) = _resolve_variational_validation_identity(
+            variational_validation_config,
+            validator_id=postsolve_contour_validator_id,
+            domain_sha256=rao_convergence_domain_sha256,
+            comparison_policy=contour_comparison_policy,
+        )
 
     from raosim.design import design_nozzle_v2
 
@@ -964,6 +1069,14 @@ def reevaluate(
                 total_mass_flow=float(kw["mdot_total"]),
                 eta_cstar_effective=float(kw["eta_cstar"]),
                 contour_method=str(kw.get("contour_method", "bezier")),
+                contour_provider_id=contour_provider_id,
+                postsolve_contour_validator_id=(
+                    postsolve_contour_validator_id
+                ),
+                rao_convergence_domain_sha256=(
+                    rao_convergence_domain_sha256
+                ),
+                contour_comparison_policy=contour_comparison_policy,
                 surfaces=mdo_surfaces,
             )
             resolved_inputs_drift = crosscheck_design_input(
@@ -1001,6 +1114,30 @@ def reevaluate(
         and isinstance(mdo[key], (int, float, np.number))
     }
     warnings = list(result.warnings or ())
+    variational_contour_validation = None
+    if variational_validation_config is not None:
+        from raosim.mdo.contour_validation import (
+            unavailable_variational_validation,
+            validate_optimized_top_contour,
+        )
+
+        if mdo_result is None:
+            variational_contour_validation = unavailable_variational_validation(
+                "post-solve variational validation was requested, but the "
+                "solved MDO EngineState is unavailable"
+            )
+        else:
+            variational_contour_validation = validate_optimized_top_contour(
+                mdo_result,
+                mission,
+                variational_validation_config,
+            )
+        if not variational_contour_validation.passed:
+            warnings.append(
+                "Variational contour validation "
+                f"{variational_contour_validation.status.value}: "
+                f"{variational_contour_validation.detail}"
+            )
     if resolved_inputs_drift:
         warnings.append(
             "The traditional handoff disagrees with the resolved engine-input "
@@ -1044,6 +1181,14 @@ def reevaluate(
         "traditional_spray_cstar_coupling_rerun",
         False,
     )
+    if variational_contour_validation is not None:
+        # Persist the exact post-solve gate in both snapshots, not merely on
+        # the in-memory ReEvaluation wrapper.  Report/CAD handoffs already
+        # retain optimizer_metadata, so this makes the domain hash, Rao Eq. (5)
+        # verdict, achieved discrepancies, and stated thresholds replayable.
+        snapshot_optimizer_metadata["variational_contour_validation"] = (
+            variational_contour_validation.to_dict()
+        )
     if resolved_inputs is not None:
         # Content-addressed identity of the exact inputs both pipelines ran,
         # so a snapshot can be replayed and a parity claim can be checked
@@ -1189,6 +1334,7 @@ def reevaluate(
         mdo_snapshot=mdo_snapshot,
         authoritative_snapshot=authoritative_snapshot,
         comparison=comparison,
+        variational_contour_validation=variational_contour_validation,
         pump_sizing_error=pump_error,
         metadata={
             "contract_version": authoritative_snapshot.contract_version,
@@ -1199,6 +1345,11 @@ def reevaluate(
                 str(snapshot_report_path)
                 if snapshot_report_path is not None
                 else None
+            ),
+            "variational_contour_validation": (
+                None
+                if variational_contour_validation is None
+                else variational_contour_validation.to_dict()
             ),
         },
     )
@@ -1246,6 +1397,34 @@ def summarise(reev: ReEvaluation) -> str:
             "    authoritative electric-pump sizing: "
             + ("feasible" if reev.electric_pump_result.feasible else "gates failed")
         )
+    if reev.variational_contour_validation is not None:
+        validation = reev.variational_contour_validation
+        lines.append(
+            "    variational contour validation: "
+            f"{validation.status.value} ({validation.reason.value})"
+        )
+        discrepancy = validation.discrepancy
+        if discrepancy is not None:
+            lines.append(
+                "      geometry: max |Δr|/Rt="
+                f"{discrepancy.max_radius_error_over_rt:.4g}/"
+                f"{discrepancy.max_radius_error_over_rt_limit:.4g}, RMS Δr/Rt="
+                f"{discrepancy.rms_radius_error_over_rt:.4g}/"
+                f"{discrepancy.rms_radius_error_over_rt_limit:.4g}, ΔL/L="
+                f"{discrepancy.relative_divergent_length_error:.4g}/"
+                f"{discrepancy.relative_divergent_length_error_limit:.4g}"
+            )
+            lines.append(
+                "      performance: |ΔCf|/Cf="
+                f"{discrepancy.relative_thrust_coefficient_error:.4g}/"
+                f"{discrepancy.relative_thrust_coefficient_error_limit:.4g}; "
+                "adjudication="
+                + (
+                    "eligible"
+                    if discrepancy.adjudication_eligible
+                    else "diagnostic-only"
+                )
+            )
     if reev.warnings:
         lines.append("  pipeline warnings:")
         for warning in reev.warnings[:8]:

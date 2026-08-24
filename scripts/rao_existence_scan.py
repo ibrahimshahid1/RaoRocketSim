@@ -7,6 +7,20 @@ Example:
       --theta-b-center-deg 24 --theta-b-span-deg 12 --theta-b-count 31 \
       --kdf-min 0.05 --kdf-max 0.85 --kdf-count 31 \
       --models smooth,position,fan --plot
+
+Declared B5 domain example (fixed-context D-attachment and kernel evidence
+only; choose an independently justified external grid and resolution policy):
+
+    PYTHONPATH=. python scripts/rao_existence_scan.py \
+      --theta-b-count 9 --kdf-count 9 --models smooth \
+      --resolution-convergence 6,8,12 \
+      --domain-theta-seed-policy rao_chart_centered \
+      --domain-chart-theta-span-deg 40 \
+      --domain-chart-theta-count 21 \
+      --domain-epsilon-values 4,6,8,10 \
+      --domain-length-pct-values 60,70,80,90,100 \
+      --domain-max-epsilon-spacing 2 \
+      --domain-max-length-pct-spacing 10
 """
 
 from __future__ import annotations
@@ -32,6 +46,7 @@ from raosim.rao_existence_scan import (
     refine_from_scan_best,
     resolution_convergence,
     scan_existence,
+    scan_convergence_domain,
     stationarity_derivation_summary,
     write_root_results,
     write_scan_tables,
@@ -99,6 +114,49 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--root-maxfev", type=int, default=80)
     parser.add_argument("--resolution-convergence", type=str, default=None,
                         help="comma-separated n_kernel values; requires or reuses root-refine seed")
+    parser.add_argument(
+        "--domain-epsilon-values",
+        type=str,
+        default=None,
+        help="comma-separated epsilon design axis; enables declared-domain output",
+    )
+    parser.add_argument(
+        "--domain-length-pct-values",
+        type=str,
+        default=None,
+        help="comma-separated length-percent design axis; enables declared-domain output",
+    )
+    parser.add_argument(
+        "--domain-model",
+        choices=("smooth", "fan"),
+        default="smooth",
+    )
+    parser.add_argument(
+        "--domain-theta-seed-policy",
+        choices=("fixed_axis", "rao_chart_centered"),
+        default="fixed_axis",
+    )
+    parser.add_argument(
+        "--domain-chart-theta-span-deg", type=float, default=0.0
+    )
+    parser.add_argument("--domain-chart-theta-count", type=int, default=0)
+    parser.add_argument("--domain-residual-limit", type=float, default=1.0e-6)
+    parser.add_argument(
+        "--domain-theta-resolution-tol-deg", type=float, default=5.0e-2
+    )
+    parser.add_argument(
+        "--domain-kdf-resolution-tol", type=float, default=1.0e-3
+    )
+    parser.add_argument("--domain-max-epsilon-spacing", type=float, default=None)
+    parser.add_argument(
+        "--domain-max-length-pct-spacing", type=float, default=None
+    )
+    parser.add_argument(
+        "--domain-output",
+        type=Path,
+        default=None,
+        help="domain JSON path; default OUTPUT_DIR/convergence_domain.json",
+    )
     parser.add_argument("--print-stationarity-note", action="store_true")
     return parser
 
@@ -193,6 +251,35 @@ def main() -> int:
         max_mach=args.max_mach,
     )
 
+    domain_requested = (
+        args.domain_epsilon_values is not None
+        or args.domain_length_pct_values is not None
+    )
+    if domain_requested:
+        if (
+            args.domain_epsilon_values is None
+            or args.domain_length_pct_values is None
+        ):
+            parser.error(
+                "declared-domain output requires both --domain-epsilon-values "
+                "and --domain-length-pct-values"
+            )
+        if (
+            args.domain_max_epsilon_spacing is None
+            or args.domain_max_length_pct_spacing is None
+        ):
+            parser.error(
+                "declared-domain output requires explicit "
+                "--domain-max-epsilon-spacing and "
+                "--domain-max-length-pct-spacing"
+            )
+        domain_kernel_values = _parse_int_list(args.resolution_convergence)
+        if domain_kernel_values is None or len(domain_kernel_values) < 2:
+            parser.error(
+                "declared-domain output requires at least two increasing "
+                "--resolution-convergence n_kernel values"
+            )
+
     result = scan_existence(config)
     write_scan_tables(result, args.output_dir)
     if args.plot:
@@ -248,6 +335,38 @@ def main() -> int:
                 json.dump(conv_payload, f, indent=2, sort_keys=True)
     if args.compare_solver:
         _write_solver_compare(config, args)
+
+    if domain_requested:
+        domain = scan_convergence_domain(
+            config,
+            epsilon_values=_parse_float_list(args.domain_epsilon_values),
+            length_pct_values=_parse_float_list(args.domain_length_pct_values),
+            model=args.domain_model,
+            n_kernel_values=domain_kernel_values,
+            residual_norm_limit=args.domain_residual_limit,
+            theta_delta_tolerance_deg=args.domain_theta_resolution_tol_deg,
+            kdf_delta_tolerance=args.domain_kdf_resolution_tol,
+            max_epsilon_spacing=args.domain_max_epsilon_spacing,
+            max_length_pct_spacing=args.domain_max_length_pct_spacing,
+            root_maxfev=args.root_maxfev,
+            theta_b_seed_policy=args.domain_theta_seed_policy,
+            theta_b_chart_span_deg=args.domain_chart_theta_span_deg,
+            theta_b_chart_count=args.domain_chart_theta_count,
+        )
+        domain_path = (
+            args.domain_output
+            if args.domain_output is not None
+            else args.output_dir / "convergence_domain.json"
+        )
+        domain.write_json(domain_path)
+        print(
+            "Declared convergence domain "
+            f"{domain.artifact_sha256} written to {domain_path}"
+        )
+        print(
+            "Domain sample classifications: "
+            + json.dumps(domain.classification_counts(), sort_keys=True)
+        )
 
     print(json.dumps(result.summary()["best"], indent=2, sort_keys=True))
     print(f"Wrote scan outputs to {args.output_dir}")

@@ -78,4 +78,5 @@ raosim = [
     "benchmark_data/curves/*.csv",
     "data/cea_tables/catalog_v1.json",
     "data/cea_tables/*.npz",
+    "data/rao_domains/*.json",
 ]

@@ -19,16 +19,26 @@ The three supported D-attachment closures are:
     pre-D state by a centered Prandtl-Meyer fan,
     ``nu_post - nu_pre = theta_post - theta_pre``.  The stored residuals are
     the minimum-norm result over the requested fan-turn grid.
+
+The B5 public artifact is not one of those internal ``theta_B x kdf`` slices.
+``scan_convergence_domain`` sweeps the external ``epsilon x length_pct`` design
+box, uses each internal scan only as a root seed, then records the refined
+``theta_B`` and ``kdf`` as evidence outputs.  Its typed, hash-pinned domain
+classifies residual convergence, kernel refinement, and Rao Eq. (5) validity
+separately.  Numerical failure remains unknown rather than being labelled
+physical non-existence, and lookups never extrapolate beyond the declared box.
 """
 
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
+from bisect import bisect_left
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 import numpy as np
 
@@ -79,6 +89,61 @@ FAILURE_CODES: Mapping[int, str] = {
     5: "nonfinite_residual",
     6: "no_candidate",
 }
+
+CONVERGENCE_DOMAIN_SCHEMA_VERSION = 1
+CONVERGENCE_DOMAIN_SOURCE_MODEL_ID = (
+    "raosim.rao_existence_scan:epsilon-length-fixed-context-d-attachment-domain:v1"
+)
+
+SAMPLE_CONVERGED_VALID = "converged_valid"
+SAMPLE_CONVERGED_INVALID = "converged_invalid"
+SAMPLE_NOT_CONVERGED = "not_converged"
+SAMPLE_NUMERICAL_FAILURE = "numerical_failure"
+SAMPLE_UNEVALUABLE = "unevaluable"
+SAMPLE_UNDER_RESOLVED = "under_resolved"
+SAMPLE_CLASSIFICATIONS = (
+    SAMPLE_CONVERGED_VALID,
+    SAMPLE_CONVERGED_INVALID,
+    SAMPLE_NOT_CONVERGED,
+    SAMPLE_NUMERICAL_FAILURE,
+    SAMPLE_UNEVALUABLE,
+    SAMPLE_UNDER_RESOLVED,
+)
+
+DOMAIN_SUPPORTED = "supported"
+DOMAIN_REFUSED_INVALID_RAO_REGION = "refused_invalid_rao_region"
+DOMAIN_REFUSED_NOT_CONVERGED = "refused_not_converged"
+DOMAIN_UNKNOWN_OUTSIDE = "unknown_outside_domain"
+DOMAIN_UNKNOWN_UNDER_RESOLVED = "unknown_under_resolved"
+DOMAIN_UNKNOWN_SCAN_FAILURE = "unknown_scan_failure"
+DOMAIN_CONTEXT_MISMATCH = "context_mismatch"
+DOMAIN_MODEL_MISMATCH = "model_mismatch"
+DOMAIN_LOOKUP_STATUSES = (
+    DOMAIN_SUPPORTED,
+    DOMAIN_REFUSED_INVALID_RAO_REGION,
+    DOMAIN_REFUSED_NOT_CONVERGED,
+    DOMAIN_UNKNOWN_OUTSIDE,
+    DOMAIN_UNKNOWN_UNDER_RESOLVED,
+    DOMAIN_UNKNOWN_SCAN_FAILURE,
+    DOMAIN_CONTEXT_MISMATCH,
+    DOMAIN_MODEL_MISMATCH,
+)
+
+RESOLUTION_PASSED = "passed"
+RESOLUTION_FAILED = "failed"
+RESOLUTION_NOT_EVALUATED = "not_evaluated"
+RESOLUTION_STATUSES = (
+    RESOLUTION_PASSED,
+    RESOLUTION_FAILED,
+    RESOLUTION_NOT_EVALUATED,
+)
+
+THETA_SEED_FIXED = "fixed_axis"
+THETA_SEED_RAO_CHART = "rao_chart_centered"
+THETA_SEED_POLICIES = (THETA_SEED_FIXED, THETA_SEED_RAO_CHART)
+RAO_CHART_THETA_SEED_SOURCE_ID = (
+    "raosim.nozzle_geometry.lookup_angles:rao-top-chart:v1"
+)
 
 
 @dataclass(frozen=True)
@@ -186,6 +251,9 @@ class ClosureScanResult:
     fan_turn_deg: np.ndarray
     exit_angle_deg: np.ndarray
     exit_mach: np.ndarray
+    rao_eq5_evaluable: np.ndarray
+    rao_eq5_valid: np.ndarray
+    rao_eq5_min_dr_over_r: np.ndarray
     success: np.ndarray
     failure_code: np.ndarray
 
@@ -220,6 +288,11 @@ class ClosureScanResult:
             "fan_turn_deg": float(self.fan_turn_deg[i, j]),
             "exit_angle_deg": float(self.exit_angle_deg[i, j]),
             "exit_mach": float(self.exit_mach[i, j]),
+            "rao_eq5_evaluable": bool(self.rao_eq5_evaluable[i, j]),
+            "rao_eq5_valid": bool(self.rao_eq5_valid[i, j]),
+            "rao_eq5_min_dr_over_r": float(
+                self.rao_eq5_min_dr_over_r[i, j]
+            ),
             "success": bool(self.success[i, j]),
             "failure_code": code,
             "failure_reason": FAILURE_CODES.get(code, "unknown"),
@@ -312,6 +385,1077 @@ class RootRefineResult:
             "exit_angle_deg": float(self.exit_angle_deg),
             "exit_mach": float(self.exit_mach),
         }
+
+
+def _canonical_json_bytes(payload: Mapping[str, Any]) -> bytes:
+    """Return strict, deterministic JSON bytes for an artifact payload."""
+    return json.dumps(
+        payload,
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+
+
+def _payload_sha256(payload: Mapping[str, Any]) -> str:
+    return hashlib.sha256(_canonical_json_bytes(payload)).hexdigest()
+
+
+def _json_safe(value: Any) -> Any:
+    """Normalize NumPy/scalar scan data without non-standard JSON numbers."""
+    if isinstance(value, np.ndarray):
+        return _json_safe(value.tolist())
+    if isinstance(value, Mapping):
+        return {
+            str(key): _json_safe(item)
+            for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))
+        }
+    if isinstance(value, (tuple, list)):
+        return [_json_safe(item) for item in value]
+    if isinstance(value, (bool, np.bool_)):
+        return bool(value)
+    if isinstance(value, (int, np.integer)):
+        return int(value)
+    if isinstance(value, (float, np.floating)):
+        number = float(value)
+        return number if math.isfinite(number) else None
+    if value is None or isinstance(value, str):
+        return value
+    raise TypeError(f"cannot serialize scan value of type {type(value).__name__}")
+
+
+def _optional_finite_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    number = float(value)
+    return number if math.isfinite(number) else None
+
+
+def _require_finite(name: str, value: float) -> float:
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError(f"{name} must be finite")
+    return number
+
+
+def _rao_eq5_source_id() -> str:
+    """Return B4's canonical Rao Eq. (5) authority without duplicating it."""
+    from raosim.rao_variational import RAO_RADIAL_INCREMENT_SOURCE_ID
+
+    return RAO_RADIAL_INCREMENT_SOURCE_ID
+
+
+@dataclass(frozen=True)
+class RaoConvergenceContext:
+    """Fixed design and numerical identity for an ``epsilon x L%`` map.
+
+    ``epsilon`` and ``length_pct`` are deliberately absent because they are
+    the two public lookup axes.  Every other quantity that changes the scan is
+    pinned here.  A lookup requires an expected context and fails closed on an
+    exact mismatch; support from one design/mesh context cannot leak to
+    another one.
+    """
+
+    Rt_reference: float
+    gamma: float
+    pa_over_p0: float
+    throat_downstream_radius_factor: float
+    throat_upstream_radius_factor: float
+    starting_line_method: str
+    n_kernel_finest: int
+    n_kernel_ladder: tuple[int, ...]
+    n_de_points: int
+    max_de_steps: int
+    root_maxfev: int
+    theta_b_seed_policy: str
+    theta_b_seed_axis_deg: tuple[float, ...]
+    theta_b_chart_span_deg: float
+    theta_b_chart_count: int
+    theta_b_chart_source_id: str
+    kdf_seed_axis: tuple[float, ...]
+    stop_at: str
+    scan_mode: str
+    third_residual: str
+    residual_weights: tuple[float, float, float]
+    max_mach: float
+    closure_model: str
+    backend: str = "numpy_host"
+    rt_scale_invariant: bool = True
+
+    def __post_init__(self) -> None:
+        for name in (
+            "Rt_reference",
+            "gamma",
+            "pa_over_p0",
+            "throat_downstream_radius_factor",
+            "throat_upstream_radius_factor",
+            "max_mach",
+        ):
+            _require_finite(name, getattr(self, name))
+        if self.Rt_reference <= 0.0:
+            raise ValueError("Rt_reference must be positive")
+        if self.gamma <= 1.0:
+            raise ValueError("gamma must be > 1")
+        if self.throat_downstream_radius_factor <= 0.0:
+            raise ValueError("throat_downstream_radius_factor must be positive")
+        if self.throat_upstream_radius_factor <= 0.0:
+            raise ValueError("throat_upstream_radius_factor must be positive")
+        if self.n_kernel_finest < 5:
+            raise ValueError("n_kernel_finest must be >= 5")
+        if not self.n_kernel_ladder:
+            raise ValueError("n_kernel_ladder must be non-empty")
+        if tuple(sorted(set(self.n_kernel_ladder))) != self.n_kernel_ladder:
+            raise ValueError("n_kernel_ladder must be strictly increasing")
+        if any(value < 5 for value in self.n_kernel_ladder):
+            raise ValueError("all n_kernel_ladder values must be >= 5")
+        if self.n_kernel_ladder[-1] != self.n_kernel_finest:
+            raise ValueError("n_kernel_ladder must end at n_kernel_finest")
+        if self.n_de_points < 2:
+            raise ValueError("n_de_points must be >= 2")
+        if self.max_de_steps < 1:
+            raise ValueError("max_de_steps must be positive")
+        if self.root_maxfev < 1:
+            raise ValueError("root_maxfev must be positive")
+        _require_finite(
+            "theta_b_chart_span_deg", self.theta_b_chart_span_deg
+        )
+        if self.theta_b_seed_policy not in THETA_SEED_POLICIES:
+            raise ValueError(
+                f"theta_b_seed_policy must be one of {THETA_SEED_POLICIES}"
+            )
+        if self.theta_b_seed_policy == THETA_SEED_FIXED:
+            if not self.theta_b_seed_axis_deg:
+                raise ValueError(
+                    "fixed_axis theta seed policy requires an explicit axis"
+                )
+            if self.theta_b_chart_count != 0 or self.theta_b_chart_span_deg != 0.0:
+                raise ValueError(
+                    "fixed_axis theta seed policy cannot carry chart controls"
+                )
+            if self.theta_b_chart_source_id:
+                raise ValueError(
+                    "fixed_axis theta seed policy cannot carry a chart source"
+                )
+        else:
+            if self.theta_b_seed_axis_deg:
+                raise ValueError(
+                    "chart-centered theta seed policy cannot carry one fixed axis"
+                )
+            if self.theta_b_chart_count < 2:
+                raise ValueError("theta_b_chart_count must be >= 2")
+            if self.theta_b_chart_span_deg <= 0.0:
+                raise ValueError("theta_b_chart_span_deg must be positive")
+            if (
+                self.theta_b_chart_source_id
+                != RAO_CHART_THETA_SEED_SOURCE_ID
+            ):
+                raise ValueError("unknown Rao chart theta seed source")
+        for name, axis in (
+            ("theta_b_seed_axis_deg", self.theta_b_seed_axis_deg),
+            ("kdf_seed_axis", self.kdf_seed_axis),
+        ):
+            if name == "theta_b_seed_axis_deg" and not axis:
+                continue
+            if not axis:
+                raise ValueError(f"{name} must be non-empty")
+            for index, value in enumerate(axis):
+                _require_finite(f"{name}[{index}]", value)
+            if any(right <= left for left, right in zip(axis[:-1], axis[1:])):
+                raise ValueError(
+                    f"{name} must be strictly increasing with no duplicates"
+                )
+        if self.stop_at not in STOP_MODES:
+            raise ValueError(f"stop_at must be one of {STOP_MODES}")
+        if self.scan_mode not in SCAN_MODES:
+            raise ValueError(f"scan_mode must be one of {SCAN_MODES}")
+        if self.third_residual not in THIRD_COMPONENTS:
+            raise ValueError(
+                f"third_residual must be one of {THIRD_COMPONENTS}"
+            )
+        if self.closure_model not in MODELS:
+            raise ValueError(f"closure_model must be one of {MODELS}")
+        if len(self.residual_weights) != 3:
+            raise ValueError("residual_weights must contain three values")
+        for index, value in enumerate(self.residual_weights):
+            _require_finite(f"residual_weights[{index}]", value)
+        if not self.starting_line_method:
+            raise ValueError("starting_line_method must be non-empty")
+        if self.backend != "numpy_host":
+            raise ValueError("the declared B5 domain backend must be numpy_host")
+        if not self.rt_scale_invariant:
+            raise ValueError(
+                "schema v1 is defined only for the nondimensional, Rt-scale-invariant scan"
+            )
+
+    @classmethod
+    def from_scan_config(
+        cls,
+        config: ExistenceScanConfig,
+        *,
+        closure_model: str,
+        n_kernel_finest: int | None = None,
+        n_kernel_ladder: Sequence[int] | None = None,
+        root_maxfev: int = 80,
+        theta_b_seed_policy: str = THETA_SEED_FIXED,
+        theta_b_chart_span_deg: float = 0.0,
+        theta_b_chart_count: int = 0,
+    ) -> "RaoConvergenceContext":
+        return cls(
+            Rt_reference=float(config.Rt),
+            gamma=float(config.gamma),
+            pa_over_p0=float(config.pa_over_p0),
+            throat_downstream_radius_factor=float(
+                config.throat_downstream_radius_factor
+            ),
+            throat_upstream_radius_factor=float(
+                config.throat_upstream_radius_factor
+            ),
+            starting_line_method=str(config.starting_line_method),
+            n_kernel_finest=int(
+                config.n_kernel
+                if n_kernel_finest is None
+                else n_kernel_finest
+            ),
+            n_kernel_ladder=tuple(
+                int(value)
+                for value in (
+                    (config.n_kernel,)
+                    if n_kernel_ladder is None
+                    else n_kernel_ladder
+                )
+            ),
+            n_de_points=int(config.n_de_points),
+            max_de_steps=int(config.max_de_steps),
+            root_maxfev=int(root_maxfev),
+            theta_b_seed_policy=str(theta_b_seed_policy),
+            theta_b_seed_axis_deg=(
+                tuple(float(value) for value in config.theta_axis)
+                if theta_b_seed_policy == THETA_SEED_FIXED
+                else ()
+            ),
+            theta_b_chart_span_deg=float(theta_b_chart_span_deg),
+            theta_b_chart_count=int(theta_b_chart_count),
+            theta_b_chart_source_id=(
+                RAO_CHART_THETA_SEED_SOURCE_ID
+                if theta_b_seed_policy == THETA_SEED_RAO_CHART
+                else ""
+            ),
+            kdf_seed_axis=tuple(float(value) for value in config.kdf_axis),
+            stop_at=str(config.stop_at),
+            scan_mode=str(config.scan_mode),
+            third_residual=str(config.third_residual),
+            residual_weights=tuple(
+                float(value) for value in config.residual_weights
+            ),
+            max_mach=float(config.max_mach),
+            closure_model=str(closure_model),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "Rt_reference": float(self.Rt_reference),
+            "backend": self.backend,
+            "closure_model": self.closure_model,
+            "gamma": float(self.gamma),
+            "max_de_steps": int(self.max_de_steps),
+            "max_mach": float(self.max_mach),
+            "n_de_points": int(self.n_de_points),
+            "n_kernel_finest": int(self.n_kernel_finest),
+            "n_kernel_ladder": [int(value) for value in self.n_kernel_ladder],
+            "pa_over_p0": float(self.pa_over_p0),
+            "residual_weights": [float(v) for v in self.residual_weights],
+            "rt_scale_invariant": bool(self.rt_scale_invariant),
+            "root_maxfev": int(self.root_maxfev),
+            "scan_mode": self.scan_mode,
+            "starting_line_method": self.starting_line_method,
+            "stop_at": self.stop_at,
+            "third_residual": self.third_residual,
+            "theta_b_chart_count": int(self.theta_b_chart_count),
+            "theta_b_chart_source_id": self.theta_b_chart_source_id,
+            "theta_b_chart_span_deg": float(self.theta_b_chart_span_deg),
+            "theta_b_seed_axis_deg": list(self.theta_b_seed_axis_deg),
+            "theta_b_seed_policy": self.theta_b_seed_policy,
+            "throat_downstream_radius_factor": float(
+                self.throat_downstream_radius_factor
+            ),
+            "throat_upstream_radius_factor": float(
+                self.throat_upstream_radius_factor
+            ),
+            "kdf_seed_axis": list(self.kdf_seed_axis),
+        }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "RaoConvergenceContext":
+        return cls(
+            Rt_reference=float(payload["Rt_reference"]),
+            gamma=float(payload["gamma"]),
+            pa_over_p0=float(payload["pa_over_p0"]),
+            throat_downstream_radius_factor=float(
+                payload["throat_downstream_radius_factor"]
+            ),
+            throat_upstream_radius_factor=float(
+                payload["throat_upstream_radius_factor"]
+            ),
+            starting_line_method=str(payload["starting_line_method"]),
+            n_kernel_finest=int(payload["n_kernel_finest"]),
+            n_kernel_ladder=tuple(
+                int(value) for value in payload["n_kernel_ladder"]
+            ),
+            n_de_points=int(payload["n_de_points"]),
+            max_de_steps=int(payload["max_de_steps"]),
+            root_maxfev=int(payload["root_maxfev"]),
+            theta_b_seed_policy=str(payload["theta_b_seed_policy"]),
+            theta_b_seed_axis_deg=tuple(
+                float(value) for value in payload["theta_b_seed_axis_deg"]
+            ),
+            theta_b_chart_span_deg=float(payload["theta_b_chart_span_deg"]),
+            theta_b_chart_count=int(payload["theta_b_chart_count"]),
+            theta_b_chart_source_id=str(payload["theta_b_chart_source_id"]),
+            kdf_seed_axis=tuple(
+                float(value) for value in payload["kdf_seed_axis"]
+            ),
+            stop_at=str(payload["stop_at"]),
+            scan_mode=str(payload["scan_mode"]),
+            third_residual=str(payload["third_residual"]),
+            residual_weights=tuple(
+                float(value) for value in payload["residual_weights"]
+            ),
+            max_mach=float(payload["max_mach"]),
+            closure_model=str(payload["closure_model"]),
+            backend=str(payload.get("backend", "")),
+            rt_scale_invariant=bool(payload.get("rt_scale_invariant", False)),
+        )
+
+    @property
+    def identity_sha256(self) -> str:
+        payload = self.to_dict()
+        # The equations, normalized residuals, theta_B/kdf roots, and Eq. (5)
+        # dR/R verdict are invariant under a uniform Rt scale.  Rt_reference is
+        # retained as provenance but cannot make an otherwise identical query
+        # miss the domain.
+        payload.pop("Rt_reference")
+        return _payload_sha256(payload)
+
+
+@dataclass(frozen=True)
+class RaoKernelResolutionEvidence:
+    """Kernel-refinement evidence attached to one design-grid sample."""
+
+    n_kernel: tuple[int, ...]
+    root_success: tuple[bool, ...]
+    theta_b_deg: tuple[float | None, ...]
+    kdf: tuple[float | None, ...]
+    residual_norm_geometry: tuple[float | None, ...]
+    status: str
+    reason: str
+    theta_delta_tolerance_deg: float
+    kdf_delta_tolerance: float
+
+    def __post_init__(self) -> None:
+        count = len(self.n_kernel)
+        if not (
+            len(self.root_success)
+            == len(self.theta_b_deg)
+            == len(self.kdf)
+            == len(self.residual_norm_geometry)
+            == count
+        ):
+            raise ValueError("kernel-resolution evidence arrays must align")
+        if any(int(value) < 5 for value in self.n_kernel):
+            raise ValueError("all n_kernel values must be >= 5")
+        if tuple(sorted(set(self.n_kernel))) != self.n_kernel:
+            raise ValueError("n_kernel values must be strictly increasing")
+        if self.status not in RESOLUTION_STATUSES:
+            raise ValueError(f"unknown resolution status {self.status!r}")
+        if not self.reason:
+            raise ValueError("resolution evidence requires a reason")
+        for name in ("theta_delta_tolerance_deg", "kdf_delta_tolerance"):
+            value = _require_finite(name, getattr(self, name))
+            if value < 0.0:
+                raise ValueError(f"{name} must be non-negative")
+        for name, values in (
+            ("theta_b_deg", self.theta_b_deg),
+            ("kdf", self.kdf),
+            ("residual_norm_geometry", self.residual_norm_geometry),
+        ):
+            for index, value in enumerate(values):
+                if value is not None:
+                    _require_finite(f"{name}[{index}]", value)
+        if self.status == RESOLUTION_PASSED:
+            if count < 2 or not all(self.root_success):
+                raise ValueError(
+                    "passed kernel resolution requires every rung to converge"
+                )
+            final_values = (
+                self.theta_b_deg[-2],
+                self.theta_b_deg[-1],
+                self.kdf[-2],
+                self.kdf[-1],
+                self.residual_norm_geometry[-1],
+            )
+            if any(value is None for value in final_values):
+                raise ValueError(
+                    "passed kernel resolution requires finite final-rung evidence"
+                )
+            if (
+                abs(self.theta_b_deg[-1] - self.theta_b_deg[-2])
+                > self.theta_delta_tolerance_deg
+                or abs(self.kdf[-1] - self.kdf[-2])
+                > self.kdf_delta_tolerance
+            ):
+                raise ValueError(
+                    "passed kernel resolution exceeds its declared final-rung tolerances"
+                )
+
+    @classmethod
+    def not_evaluated(
+        cls,
+        *,
+        theta_delta_tolerance_deg: float,
+        kdf_delta_tolerance: float,
+    ) -> "RaoKernelResolutionEvidence":
+        return cls(
+            n_kernel=(),
+            root_success=(),
+            theta_b_deg=(),
+            kdf=(),
+            residual_norm_geometry=(),
+            status=RESOLUTION_NOT_EVALUATED,
+            reason="kernel refinement was not evaluated",
+            theta_delta_tolerance_deg=float(theta_delta_tolerance_deg),
+            kdf_delta_tolerance=float(kdf_delta_tolerance),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kdf": list(self.kdf),
+            "kdf_delta_tolerance": float(self.kdf_delta_tolerance),
+            "n_kernel": [int(value) for value in self.n_kernel],
+            "reason": self.reason,
+            "residual_norm_geometry": list(self.residual_norm_geometry),
+            "root_success": [bool(value) for value in self.root_success],
+            "status": self.status,
+            "theta_b_deg": list(self.theta_b_deg),
+            "theta_delta_tolerance_deg": float(
+                self.theta_delta_tolerance_deg
+            ),
+        }
+
+    @classmethod
+    def from_dict(
+        cls, payload: Mapping[str, Any]
+    ) -> "RaoKernelResolutionEvidence":
+        return cls(
+            n_kernel=tuple(int(value) for value in payload["n_kernel"]),
+            root_success=tuple(
+                bool(value) for value in payload["root_success"]
+            ),
+            theta_b_deg=tuple(
+                _optional_finite_float(value)
+                for value in payload["theta_b_deg"]
+            ),
+            kdf=tuple(
+                _optional_finite_float(value) for value in payload["kdf"]
+            ),
+            residual_norm_geometry=tuple(
+                _optional_finite_float(value)
+                for value in payload["residual_norm_geometry"]
+            ),
+            status=str(payload["status"]),
+            reason=str(payload["reason"]),
+            theta_delta_tolerance_deg=float(
+                payload["theta_delta_tolerance_deg"]
+            ),
+            kdf_delta_tolerance=float(payload["kdf_delta_tolerance"]),
+        )
+
+
+@dataclass(frozen=True)
+class RaoConvergenceSample:
+    """One fixed-design convergence and Rao-validity classification."""
+
+    epsilon: float
+    length_pct: float
+    classification: str
+    reason: str
+    theta_b_deg: float | None
+    kdf: float | None
+    residual_norm_geometry: float | None
+    rao_eq5_evaluable: bool
+    rao_eq5_valid: bool
+    rao_eq5_min_dr_over_r: float | None
+    resolution: RaoKernelResolutionEvidence
+    source_scan_sha256: str
+
+    def __post_init__(self) -> None:
+        if _require_finite("epsilon", self.epsilon) <= 1.0:
+            raise ValueError("sample epsilon must be > 1")
+        _require_finite("length_pct", self.length_pct)
+        if self.classification not in SAMPLE_CLASSIFICATIONS:
+            raise ValueError(
+                f"unknown sample classification {self.classification!r}"
+            )
+        if not self.reason:
+            raise ValueError("sample classification requires a reason")
+        for name in (
+            "theta_b_deg",
+            "kdf",
+            "residual_norm_geometry",
+            "rao_eq5_min_dr_over_r",
+        ):
+            value = getattr(self, name)
+            if value is not None:
+                _require_finite(name, value)
+        if len(self.source_scan_sha256) != 64:
+            raise ValueError("source_scan_sha256 must be a SHA-256 hex digest")
+        try:
+            int(self.source_scan_sha256, 16)
+        except ValueError as exc:
+            raise ValueError(
+                "source_scan_sha256 must be a SHA-256 hex digest"
+            ) from exc
+        if self.classification == SAMPLE_CONVERGED_VALID:
+            if not (self.rao_eq5_evaluable and self.rao_eq5_valid):
+                raise ValueError(
+                    "converged_valid requires an evaluable, valid Rao Eq. (5) result"
+                )
+            if self.resolution.status != RESOLUTION_PASSED:
+                raise ValueError(
+                    "converged_valid requires passed kernel-resolution evidence"
+                )
+        if self.classification == SAMPLE_CONVERGED_INVALID:
+            if not self.rao_eq5_evaluable or self.rao_eq5_valid:
+                raise ValueError(
+                    "converged_invalid requires an evaluable, invalid Rao Eq. (5) result"
+                )
+            if self.resolution.status != RESOLUTION_PASSED:
+                raise ValueError(
+                    "converged_invalid requires passed kernel-resolution evidence"
+                )
+        if (
+            self.classification == SAMPLE_UNDER_RESOLVED
+            and self.resolution.status == RESOLUTION_PASSED
+        ):
+            raise ValueError(
+                "under_resolved requires failed or unevaluated kernel evidence"
+            )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "classification": self.classification,
+            "epsilon": float(self.epsilon),
+            "kdf": self.kdf,
+            "length_pct": float(self.length_pct),
+            "rao_eq5_evaluable": bool(self.rao_eq5_evaluable),
+            "rao_eq5_min_dr_over_r": self.rao_eq5_min_dr_over_r,
+            "rao_eq5_valid": bool(self.rao_eq5_valid),
+            "reason": self.reason,
+            "residual_norm_geometry": self.residual_norm_geometry,
+            "resolution": self.resolution.to_dict(),
+            "source_scan_sha256": self.source_scan_sha256,
+            "theta_b_deg": self.theta_b_deg,
+        }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "RaoConvergenceSample":
+        return cls(
+            epsilon=float(payload["epsilon"]),
+            length_pct=float(payload["length_pct"]),
+            classification=str(payload["classification"]),
+            reason=str(payload["reason"]),
+            theta_b_deg=_optional_finite_float(payload.get("theta_b_deg")),
+            kdf=_optional_finite_float(payload.get("kdf")),
+            residual_norm_geometry=_optional_finite_float(
+                payload.get("residual_norm_geometry")
+            ),
+            rao_eq5_evaluable=bool(payload["rao_eq5_evaluable"]),
+            rao_eq5_valid=bool(payload["rao_eq5_valid"]),
+            rao_eq5_min_dr_over_r=_optional_finite_float(
+                payload.get("rao_eq5_min_dr_over_r")
+            ),
+            resolution=RaoKernelResolutionEvidence.from_dict(
+                payload["resolution"]
+            ),
+            source_scan_sha256=str(payload["source_scan_sha256"]),
+        )
+
+
+@dataclass(frozen=True)
+class RaoDomainLookup:
+    """Fail-closed result of one declared-domain lookup."""
+
+    status: str
+    reason: str
+    epsilon: float
+    length_pct: float
+    epsilon_bracket: tuple[float, float] | None
+    length_pct_bracket: tuple[float, float] | None
+    sample_classifications: tuple[str, ...]
+    domain_sha256: str
+    source_model_id: str
+    context_sha256: str
+
+    def __post_init__(self) -> None:
+        if self.status not in DOMAIN_LOOKUP_STATUSES:
+            raise ValueError(f"unknown lookup status {self.status!r}")
+        if not self.reason:
+            raise ValueError("domain lookup requires a reason")
+
+    @property
+    def supported(self) -> bool:
+        return self.status == DOMAIN_SUPPORTED
+
+    def require_supported(self) -> "RaoDomainLookup":
+        if not self.supported:
+            raise RaoConvergenceDomainError(self)
+        return self
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "context_sha256": self.context_sha256,
+            "domain_sha256": self.domain_sha256,
+            "epsilon": _optional_finite_float(self.epsilon),
+            "epsilon_bracket": (
+                list(self.epsilon_bracket)
+                if self.epsilon_bracket is not None
+                else None
+            ),
+            "length_pct": _optional_finite_float(self.length_pct),
+            "length_pct_bracket": (
+                list(self.length_pct_bracket)
+                if self.length_pct_bracket is not None
+                else None
+            ),
+            "reason": self.reason,
+            "sample_classifications": list(self.sample_classifications),
+            "source_model_id": self.source_model_id,
+            "status": self.status,
+            "supported": self.supported,
+        }
+
+
+class RaoConvergenceDomainError(RuntimeError):
+    """Typed refusal for a query outside a certified convergence cell."""
+
+    def __init__(self, lookup: RaoDomainLookup):
+        self.lookup = lookup
+        super().__init__(
+            f"Rao convergence-domain refusal [{lookup.status}]: "
+            f"{lookup.reason}"
+        )
+
+
+def _strict_axis(name: str, values: Sequence[float]) -> tuple[float, ...]:
+    axis = tuple(
+        _require_finite(f"{name}[{i}]", value)
+        for i, value in enumerate(values)
+    )
+    if len(axis) < 2:
+        raise ValueError(f"{name} must contain at least two points")
+    if any(right <= left for left, right in zip(axis[:-1], axis[1:])):
+        raise ValueError(f"{name} must be strictly increasing with no duplicates")
+    return axis
+
+
+def _axis_bracket(axis: tuple[float, ...], value: float) -> tuple[int, int] | None:
+    if value < axis[0] or value > axis[-1]:
+        return None
+    position = bisect_left(axis, value)
+    if position < len(axis) and axis[position] == value:
+        return position, position
+    if position == 0 or position == len(axis):
+        return None
+    return position - 1, position
+
+
+@dataclass(frozen=True)
+class RaoConvergenceDomain:
+    """Versioned ``epsilon x length_pct`` provider-support declaration.
+
+    This object is a conservative classifier, not a proof that a physical
+    optimum does or does not exist between samples.  Numerical failures remain
+    unknown.  An interpolated query is supported only when every bracketing
+    sample is kernel-resolved, residual-converged, and Rao-Eq.-(5) valid.
+    """
+
+    context: RaoConvergenceContext
+    epsilon_axis: tuple[float, ...]
+    length_pct_axis: tuple[float, ...]
+    samples: tuple[tuple[RaoConvergenceSample, ...], ...]
+    residual_norm_limit: float
+    theta_delta_tolerance_deg: float
+    kdf_delta_tolerance: float
+    max_epsilon_spacing: float
+    max_length_pct_spacing: float
+    schema_version: int = CONVERGENCE_DOMAIN_SCHEMA_VERSION
+    source_model_id: str = CONVERGENCE_DOMAIN_SOURCE_MODEL_ID
+    validity_source_id: str = field(default_factory=_rao_eq5_source_id)
+
+    def __post_init__(self) -> None:
+        epsilon_axis = _strict_axis("epsilon_axis", self.epsilon_axis)
+        length_axis = _strict_axis("length_pct_axis", self.length_pct_axis)
+        object.__setattr__(self, "epsilon_axis", epsilon_axis)
+        object.__setattr__(self, "length_pct_axis", length_axis)
+        if self.schema_version != CONVERGENCE_DOMAIN_SCHEMA_VERSION:
+            raise ValueError(
+                f"unsupported convergence-domain schema {self.schema_version}"
+            )
+        if self.source_model_id != CONVERGENCE_DOMAIN_SOURCE_MODEL_ID:
+            raise ValueError(
+                f"unsupported convergence-domain source {self.source_model_id!r}"
+            )
+        if self.validity_source_id != _rao_eq5_source_id():
+            raise ValueError(
+                "convergence-domain validity source does not match the "
+                "canonical Rao Eq. (5) implementation authority"
+            )
+        for name in (
+            "residual_norm_limit",
+            "theta_delta_tolerance_deg",
+            "kdf_delta_tolerance",
+            "max_epsilon_spacing",
+            "max_length_pct_spacing",
+        ):
+            value = _require_finite(name, getattr(self, name))
+            if value <= 0.0:
+                raise ValueError(f"{name} must be positive")
+        if len(self.samples) != len(epsilon_axis):
+            raise ValueError("sample rows must match epsilon_axis")
+        for i, row in enumerate(self.samples):
+            if len(row) != len(length_axis):
+                raise ValueError("sample columns must match length_pct_axis")
+            for j, sample in enumerate(row):
+                if sample.epsilon != epsilon_axis[i]:
+                    raise ValueError("sample epsilon does not match its axis")
+                if sample.length_pct != length_axis[j]:
+                    raise ValueError("sample length_pct does not match its axis")
+                if (
+                    sample.classification != SAMPLE_NUMERICAL_FAILURE
+                    and sample.resolution.n_kernel
+                    != self.context.n_kernel_ladder
+                ):
+                    raise ValueError(
+                        "sample kernel ladder does not match the domain context"
+                    )
+                if (
+                    sample.resolution.theta_delta_tolerance_deg
+                    != self.theta_delta_tolerance_deg
+                    or sample.resolution.kdf_delta_tolerance
+                    != self.kdf_delta_tolerance
+                ):
+                    raise ValueError(
+                        "sample kernel tolerances do not match the domain policy"
+                    )
+                if sample.classification in {
+                    SAMPLE_CONVERGED_VALID,
+                    SAMPLE_CONVERGED_INVALID,
+                }:
+                    if sample.resolution.status != RESOLUTION_PASSED:
+                        raise ValueError(
+                            "converged samples require passed kernel-resolution evidence"
+                        )
+                    if sample.theta_b_deg is None or sample.kdf is None:
+                        raise ValueError(
+                            "converged samples require finite theta_B and kdf"
+                        )
+                    if (
+                        sample.residual_norm_geometry is None
+                        or sample.residual_norm_geometry
+                        > self.residual_norm_limit
+                    ):
+                        raise ValueError(
+                            "converged sample exceeds the domain residual limit"
+                        )
+                    if not sample.rao_eq5_evaluable:
+                        raise ValueError(
+                            "converged sample requires an evaluable Rao Eq. (5) verdict"
+                        )
+                    if (
+                        sample.classification == SAMPLE_CONVERGED_VALID
+                    ) != sample.rao_eq5_valid:
+                        raise ValueError(
+                            "converged sample classification disagrees with Rao Eq. (5)"
+                        )
+                if (
+                    sample.classification == SAMPLE_UNDER_RESOLVED
+                    and sample.resolution.status == RESOLUTION_PASSED
+                ):
+                    raise ValueError(
+                        "under-resolved samples cannot carry passed resolution evidence"
+                    )
+
+    @property
+    def epsilon_bounds(self) -> tuple[float, float]:
+        return self.epsilon_axis[0], self.epsilon_axis[-1]
+
+    @property
+    def length_pct_bounds(self) -> tuple[float, float]:
+        return self.length_pct_axis[0], self.length_pct_axis[-1]
+
+    def classification_counts(self) -> dict[str, int]:
+        counts = {name: 0 for name in SAMPLE_CLASSIFICATIONS}
+        for row in self.samples:
+            for sample in row:
+                counts[sample.classification] += 1
+        return counts
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "axes": {
+                "epsilon": list(self.epsilon_axis),
+                "length_pct": list(self.length_pct_axis),
+            },
+            "bounds": {
+                "epsilon": list(self.epsilon_bounds),
+                "length_pct": list(self.length_pct_bounds),
+            },
+            "classification_counts": self.classification_counts(),
+            "context": self.context.to_dict(),
+            "policies": {
+                "max_epsilon_spacing": float(self.max_epsilon_spacing),
+                "max_length_pct_spacing": float(
+                    self.max_length_pct_spacing
+                ),
+                "kdf_delta_tolerance": float(self.kdf_delta_tolerance),
+                "residual_norm_limit": float(self.residual_norm_limit),
+                "theta_delta_tolerance_deg": float(
+                    self.theta_delta_tolerance_deg
+                ),
+            },
+            "samples": [
+                [sample.to_dict() for sample in row] for row in self.samples
+            ],
+            "schema_version": int(self.schema_version),
+            "source_model_id": self.source_model_id,
+            "validity_source_id": self.validity_source_id,
+        }
+
+    @property
+    def artifact_sha256(self) -> str:
+        return _payload_sha256(self._payload())
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = self._payload()
+        payload["artifact_sha256"] = self.artifact_sha256
+        return payload
+
+    def to_json(self, *, indent: int | None = 2) -> str:
+        return json.dumps(
+            self.to_dict(),
+            allow_nan=False,
+            ensure_ascii=True,
+            indent=indent,
+            sort_keys=True,
+        ) + ("\n" if indent is not None else "")
+
+    def write_json(self, path: str | Path) -> None:
+        output_path = Path(path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(self.to_json(), encoding="utf-8")
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "RaoConvergenceDomain":
+        expected_hash = str(payload.get("artifact_sha256", ""))
+        if len(expected_hash) != 64:
+            raise ValueError("convergence-domain artifact SHA-256 is missing")
+        unhashed = {
+            key: value
+            for key, value in payload.items()
+            if key != "artifact_sha256"
+        }
+        actual_hash = _payload_sha256(unhashed)
+        if actual_hash != expected_hash:
+            raise ValueError(
+                "convergence-domain artifact SHA-256 mismatch: "
+                f"expected {expected_hash}, computed {actual_hash}"
+            )
+        axes = payload["axes"]
+        policies = payload["policies"]
+        domain = cls(
+            context=RaoConvergenceContext.from_dict(payload["context"]),
+            epsilon_axis=tuple(float(value) for value in axes["epsilon"]),
+            length_pct_axis=tuple(
+                float(value) for value in axes["length_pct"]
+            ),
+            samples=tuple(
+                tuple(RaoConvergenceSample.from_dict(sample) for sample in row)
+                for row in payload["samples"]
+            ),
+            residual_norm_limit=float(policies["residual_norm_limit"]),
+            theta_delta_tolerance_deg=float(
+                policies["theta_delta_tolerance_deg"]
+            ),
+            kdf_delta_tolerance=float(policies["kdf_delta_tolerance"]),
+            max_epsilon_spacing=float(policies["max_epsilon_spacing"]),
+            max_length_pct_spacing=float(
+                policies["max_length_pct_spacing"]
+            ),
+            schema_version=int(payload["schema_version"]),
+            source_model_id=str(payload["source_model_id"]),
+            validity_source_id=str(payload["validity_source_id"]),
+        )
+        if domain.artifact_sha256 != expected_hash:
+            raise ValueError("convergence-domain canonical reconstruction mismatch")
+        return domain
+
+    @classmethod
+    def read_json(cls, path: str | Path) -> "RaoConvergenceDomain":
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        if not isinstance(payload, Mapping):
+            raise ValueError("convergence-domain JSON root must be an object")
+        return cls.from_dict(payload)
+
+    def _lookup_result(
+        self,
+        status: str,
+        reason: str,
+        epsilon: float,
+        length_pct: float,
+        epsilon_bracket: tuple[float, float] | None,
+        length_pct_bracket: tuple[float, float] | None,
+        classifications: Iterable[str] = (),
+    ) -> RaoDomainLookup:
+        return RaoDomainLookup(
+            status=status,
+            reason=reason,
+            epsilon=float(epsilon),
+            length_pct=float(length_pct),
+            epsilon_bracket=epsilon_bracket,
+            length_pct_bracket=length_pct_bracket,
+            sample_classifications=tuple(classifications),
+            domain_sha256=self.artifact_sha256,
+            source_model_id=self.source_model_id,
+            context_sha256=self.context.identity_sha256,
+        )
+
+    def lookup(
+        self,
+        epsilon: float,
+        length_pct: float,
+        *,
+        expected_context: RaoConvergenceContext,
+    ) -> RaoDomainLookup:
+        """Classify a provider request without extrapolation or fallback."""
+        epsilon = float(epsilon)
+        length_pct = float(length_pct)
+        if expected_context.closure_model != self.context.closure_model:
+            return self._lookup_result(
+                DOMAIN_MODEL_MISMATCH,
+                "requested closure model does not match the domain artifact",
+                epsilon,
+                length_pct,
+                None,
+                None,
+            )
+        if expected_context.identity_sha256 != self.context.identity_sha256:
+            return self._lookup_result(
+                DOMAIN_CONTEXT_MISMATCH,
+                "requested fixed design/mesh context does not match the domain artifact",
+                epsilon,
+                length_pct,
+                None,
+                None,
+            )
+        if not math.isfinite(epsilon) or not math.isfinite(length_pct):
+            return self._lookup_result(
+                DOMAIN_UNKNOWN_OUTSIDE,
+                "non-finite design coordinates are outside the declared domain",
+                epsilon,
+                length_pct,
+                None,
+                None,
+            )
+        epsilon_indices = _axis_bracket(self.epsilon_axis, epsilon)
+        length_indices = _axis_bracket(self.length_pct_axis, length_pct)
+        if epsilon_indices is None or length_indices is None:
+            return self._lookup_result(
+                DOMAIN_UNKNOWN_OUTSIDE,
+                "design coordinates are outside the declared epsilon/length bounds",
+                epsilon,
+                length_pct,
+                None,
+                None,
+            )
+        ei0, ei1 = epsilon_indices
+        li0, li1 = length_indices
+        epsilon_bracket = (self.epsilon_axis[ei0], self.epsilon_axis[ei1])
+        length_bracket = (
+            self.length_pct_axis[li0],
+            self.length_pct_axis[li1],
+        )
+        if (
+            self.epsilon_axis[ei1] - self.epsilon_axis[ei0]
+            > self.max_epsilon_spacing
+            or self.length_pct_axis[li1] - self.length_pct_axis[li0]
+            > self.max_length_pct_spacing
+        ):
+            return self._lookup_result(
+                DOMAIN_UNKNOWN_UNDER_RESOLVED,
+                "local design-grid spacing exceeds the declared resolution policy",
+                epsilon,
+                length_pct,
+                epsilon_bracket,
+                length_bracket,
+            )
+        corners = tuple(
+            self.samples[i][j]
+            for i in sorted(set(epsilon_indices))
+            for j in sorted(set(length_indices))
+        )
+        classifications = tuple(sample.classification for sample in corners)
+        classification_set = set(classifications)
+        if SAMPLE_UNDER_RESOLVED in classification_set:
+            status = DOMAIN_UNKNOWN_UNDER_RESOLVED
+            reason = "one or more bracketing samples lack converged mesh evidence"
+        elif classification_set.intersection(
+            {SAMPLE_NUMERICAL_FAILURE, SAMPLE_UNEVALUABLE}
+        ):
+            status = DOMAIN_UNKNOWN_SCAN_FAILURE
+            reason = (
+                "one or more bracketing samples are numerically failed or unevaluable; "
+                "this is not evidence of physical non-existence"
+            )
+        elif classification_set == {SAMPLE_CONVERGED_VALID}:
+            status = DOMAIN_SUPPORTED
+            reason = (
+                "all bracketing samples are residual-converged, kernel-resolved, "
+                "and Rao Eq. (5) valid"
+            )
+        elif classification_set == {SAMPLE_CONVERGED_INVALID}:
+            status = DOMAIN_REFUSED_INVALID_RAO_REGION
+            reason = "all bracketing samples are below the Rao Eq. (5) boundary"
+        elif classification_set == {SAMPLE_NOT_CONVERGED}:
+            status = DOMAIN_REFUSED_NOT_CONVERGED
+            reason = (
+                "all bracketing samples exceed the declared closure-residual limit"
+            )
+        else:
+            status = DOMAIN_UNKNOWN_UNDER_RESOLVED
+            reason = (
+                "bracketing classifications disagree; the local boundary is "
+                "under-resolved"
+            )
+        return self._lookup_result(
+            status,
+            reason,
+            epsilon,
+            length_pct,
+            epsilon_bracket,
+            length_bracket,
+            classifications,
+        )
+
+    def require_supported(
+        self,
+        epsilon: float,
+        length_pct: float,
+        *,
+        expected_context: RaoConvergenceContext,
+    ) -> RaoDomainLookup:
+        return self.lookup(
+            epsilon, length_pct, expected_context=expected_context
+        ).require_supported()
 
 
 def target_length(Rt: float, epsilon: float, length_pct: float) -> float:
@@ -635,6 +1779,13 @@ def _evaluate_candidate(
     if not result.success or result.E is None:
         return {"success": False, "failure_code": result.failure_code}
 
+    # B4's Eq. (5) verdict is evaluated on the same DE nodes that produced the
+    # scan cell.  Import locally so this NumPy scan module stays independent of
+    # the variational solver during module import.
+    from raosim.rao_variational import rao_radial_increment_validity
+
+    rao_validity = rao_radial_increment_validity(result.nodes)
+
     E = result.E
     radius_res = (float(E.r) - config.target_radius) / max(config.target_radius, 1e-12)
     length_res = (float(E.x) - config.target_length) / max(config.target_length, 1e-12)
@@ -702,6 +1853,13 @@ def _evaluate_candidate(
         "exit_r": float(E.r),
         "exit_angle_deg": float(math.degrees(E.theta)),
         "exit_mach": float(E.M),
+        "rao_eq5_evaluable": bool(rao_validity.available),
+        "rao_eq5_valid": bool(rao_validity.valid),
+        "rao_eq5_min_dr_over_r": (
+            float(rao_validity.minimum_predicted_dR_over_R)
+            if rao_validity.minimum_predicted_dR_over_R is not None
+            else float("nan")
+        ),
     }
 
 
@@ -971,6 +2129,9 @@ def _empty_closure_arrays(model: str, theta_axis: np.ndarray, kdf_axis: np.ndarr
         fan_turn_deg=nan.copy(),
         exit_angle_deg=nan.copy(),
         exit_mach=nan.copy(),
+        rao_eq5_evaluable=np.zeros(shape, dtype=bool),
+        rao_eq5_valid=np.zeros(shape, dtype=bool),
+        rao_eq5_min_dr_over_r=nan.copy(),
         success=np.zeros(shape, dtype=bool),
         failure_code=np.full(shape, 6, dtype=int),
     )
@@ -1065,11 +2226,444 @@ def scan_existence(config: ExistenceScanConfig) -> ExistenceScanResult:
                 closure.fan_turn_deg[i, j] = best_turn
                 closure.exit_angle_deg[i, j] = best.get("exit_angle_deg", np.nan)
                 closure.exit_mach[i, j] = best.get("exit_mach", np.nan)
+                closure.rao_eq5_evaluable[i, j] = bool(
+                    best.get("rao_eq5_evaluable", False)
+                )
+                closure.rao_eq5_valid[i, j] = bool(
+                    best.get("rao_eq5_valid", False)
+                )
+                closure.rao_eq5_min_dr_over_r[i, j] = best.get(
+                    "rao_eq5_min_dr_over_r", np.nan
+                )
                 closure.success[i, j] = bool(best.get("success", False))
                 closure.failure_code[i, j] = int(best.get("failure_code", 0))
 
     out.closures = closures
     return out
+
+
+def _scan_source_sha256(
+    result: ExistenceScanResult,
+    *,
+    model: str,
+) -> str:
+    """Hash the exact fixed-design scan evidence used by one domain sample."""
+    closure = result.closures[model]
+    config_payload = {
+        name: _json_safe(getattr(result.config, name))
+        for name in result.config.__dataclass_fields__
+    }
+    closure_payload = {
+        name: _json_safe(getattr(closure, name))
+        for name in closure.__dataclass_fields__
+    }
+    return _payload_sha256(
+        {
+            "closure": closure_payload,
+            "config": config_payload,
+            "evidence_model_id": (
+                "raosim.rao_existence_scan:fixed-design-scan-evidence:v1"
+            ),
+            "model": model,
+        }
+    )
+
+
+def _failed_scan_attempt_sha256(
+    config: ExistenceScanConfig,
+    *,
+    model: str,
+    error: Exception,
+) -> str:
+    """Hash a failed scan attempt without pretending a scan result exists."""
+    config_payload = {
+        name: _json_safe(getattr(config, name))
+        for name in config.__dataclass_fields__
+    }
+    return _payload_sha256(
+        {
+            "attempt_model_id": (
+                "raosim.rao_existence_scan:failed-scan-attempt:v1"
+            ),
+            "config": config_payload,
+            "error_message": str(error),
+            "error_type": type(error).__name__,
+            "model": model,
+        }
+    )
+
+
+def _kernel_resolution_evidence(
+    rows: Iterable[RootRefineResult],
+    *,
+    n_kernel_finest: int,
+    theta_delta_tolerance_deg: float,
+    kdf_delta_tolerance: float,
+) -> RaoKernelResolutionEvidence:
+    rows = tuple(rows)
+    n_kernel = tuple(int(row.n_kernel) for row in rows)
+    successes = tuple(bool(row.success) for row in rows)
+    theta_values = tuple(
+        _optional_finite_float(row.theta_B_deg) for row in rows
+    )
+    kdf_values = tuple(_optional_finite_float(row.kdf) for row in rows)
+    residual_values = tuple(
+        _optional_finite_float(row.residual_norm_geometry) for row in rows
+    )
+
+    if len(rows) < 2:
+        status = RESOLUTION_NOT_EVALUATED
+        reason = (
+            "at least two increasing n_kernel levels are required to declare "
+            "kernel resolution"
+        )
+    elif n_kernel[-1] != int(n_kernel_finest):
+        status = RESOLUTION_FAILED
+        reason = "the final refinement row does not match n_kernel_finest"
+    elif not all(successes):
+        status = RESOLUTION_FAILED
+        reason = "one or more kernel-refinement roots did not converge"
+    elif any(
+        value is None
+        for value in (
+            theta_values[-2],
+            theta_values[-1],
+            kdf_values[-2],
+            kdf_values[-1],
+            residual_values[-1],
+        )
+    ):
+        status = RESOLUTION_FAILED
+        reason = "final kernel-refinement evidence contains non-finite values"
+    else:
+        theta_delta = abs(theta_values[-1] - theta_values[-2])
+        kdf_delta = abs(kdf_values[-1] - kdf_values[-2])
+        if (
+            theta_delta <= theta_delta_tolerance_deg
+            and kdf_delta <= kdf_delta_tolerance
+        ):
+            status = RESOLUTION_PASSED
+            reason = (
+                "the final two kernel refinements converge within the declared "
+                "theta_B and kdf tolerances"
+            )
+        else:
+            status = RESOLUTION_FAILED
+            reason = (
+                "the final two kernel refinements exceed the declared theta_B "
+                "or kdf tolerance"
+            )
+
+    return RaoKernelResolutionEvidence(
+        n_kernel=n_kernel,
+        root_success=successes,
+        theta_b_deg=theta_values,
+        kdf=kdf_values,
+        residual_norm_geometry=residual_values,
+        status=status,
+        reason=reason,
+        theta_delta_tolerance_deg=float(theta_delta_tolerance_deg),
+        kdf_delta_tolerance=float(kdf_delta_tolerance),
+    )
+
+
+def _unevaluated_resolution(
+    reason: str,
+    *,
+    theta_delta_tolerance_deg: float,
+    kdf_delta_tolerance: float,
+) -> RaoKernelResolutionEvidence:
+    return RaoKernelResolutionEvidence(
+        n_kernel=(),
+        root_success=(),
+        theta_b_deg=(),
+        kdf=(),
+        residual_norm_geometry=(),
+        status=RESOLUTION_NOT_EVALUATED,
+        reason=reason,
+        theta_delta_tolerance_deg=float(theta_delta_tolerance_deg),
+        kdf_delta_tolerance=float(kdf_delta_tolerance),
+    )
+
+
+def scan_convergence_domain(
+    base_config: ExistenceScanConfig,
+    *,
+    epsilon_values: Sequence[float],
+    length_pct_values: Sequence[float],
+    model: str = MODEL_SMOOTH,
+    n_kernel_values: Sequence[int] = (),
+    residual_norm_limit: float = 1.0e-6,
+    theta_delta_tolerance_deg: float = 5.0e-2,
+    kdf_delta_tolerance: float = 1.0e-3,
+    max_epsilon_spacing: float,
+    max_length_pct_spacing: float,
+    root_maxfev: int = 80,
+    theta_b_seed_policy: str = THETA_SEED_FIXED,
+    theta_b_chart_span_deg: float = 0.0,
+    theta_b_chart_count: int = 0,
+) -> RaoConvergenceDomain:
+    """Build a declared provider domain over ``epsilon x length_pct``.
+
+    Each external design point first uses :func:`scan_existence` for a root
+    seed, then refines the fixed-end geometry across ``n_kernel_values``.  The
+    final root is independently evaluated for closure residual and Rao 1999
+    Eq. (5) validity.  Fewer than two kernel levels deliberately produce an
+    under-resolved artifact rather than implied support.
+
+    The scan is nondimensional in ``Rt``: a uniformly scaled throat changes
+    dimensional coordinates and mass flux but not the normalized roots,
+    residuals, or Eq. (5) ``dR/R`` verdict.  ``Rt`` is therefore retained as
+    reference provenance in :class:`RaoConvergenceContext` but is excluded
+    from context matching.
+    """
+    epsilon_axis = _strict_axis("epsilon_values", epsilon_values)
+    length_axis = _strict_axis("length_pct_values", length_pct_values)
+    if any(value <= 1.0 for value in epsilon_axis):
+        raise ValueError("all epsilon values must be > 1")
+    if any(value <= 0.0 for value in length_axis):
+        raise ValueError("all length_pct values must be positive")
+    if model not in (MODEL_SMOOTH, MODEL_FAN):
+        raise ValueError(
+            "declared-domain root refinement supports smooth and fan closures"
+        )
+    residual_limit = _require_finite(
+        "residual_norm_limit", residual_norm_limit
+    )
+    if residual_limit <= 0.0:
+        raise ValueError("residual_norm_limit must be positive")
+    for name, value in (
+        ("theta_delta_tolerance_deg", theta_delta_tolerance_deg),
+        ("kdf_delta_tolerance", kdf_delta_tolerance),
+        ("max_epsilon_spacing", max_epsilon_spacing),
+        ("max_length_pct_spacing", max_length_pct_spacing),
+    ):
+        checked = _require_finite(name, value)
+        if checked <= 0.0:
+            raise ValueError(f"{name} must be positive")
+    if int(root_maxfev) < 1:
+        raise ValueError("root_maxfev must be positive")
+    if theta_b_seed_policy not in THETA_SEED_POLICIES:
+        raise ValueError(
+            f"theta_b_seed_policy must be one of {THETA_SEED_POLICIES}"
+        )
+    if theta_b_seed_policy == THETA_SEED_RAO_CHART:
+        if int(theta_b_chart_count) < 2:
+            raise ValueError(
+                "chart-centered theta seeding requires theta_b_chart_count >= 2"
+            )
+        if (
+            not math.isfinite(float(theta_b_chart_span_deg))
+            or float(theta_b_chart_span_deg) <= 0.0
+        ):
+            raise ValueError(
+                "chart-centered theta seeding requires a positive finite span"
+            )
+    elif theta_b_chart_count != 0 or theta_b_chart_span_deg != 0.0:
+        raise ValueError(
+            "chart theta controls require theta_b_seed_policy='rao_chart_centered'"
+        )
+
+    kernel_levels = tuple(int(value) for value in n_kernel_values)
+    if not kernel_levels:
+        kernel_levels = (int(base_config.n_kernel),)
+    if tuple(sorted(set(kernel_levels))) != kernel_levels:
+        raise ValueError("n_kernel_values must be strictly increasing")
+    if any(value < 5 for value in kernel_levels):
+        raise ValueError("all n_kernel_values must be >= 5")
+    finest = kernel_levels[-1]
+    context = RaoConvergenceContext.from_scan_config(
+        base_config,
+        closure_model=model,
+        n_kernel_finest=finest,
+        n_kernel_ladder=kernel_levels,
+        root_maxfev=int(root_maxfev),
+        theta_b_seed_policy=theta_b_seed_policy,
+        theta_b_chart_span_deg=float(theta_b_chart_span_deg),
+        theta_b_chart_count=int(theta_b_chart_count),
+    )
+
+    sample_rows: list[tuple[RaoConvergenceSample, ...]] = []
+    for epsilon in epsilon_axis:
+        row_samples: list[RaoConvergenceSample] = []
+        for length_pct in length_axis:
+            theta_seed_axis = base_config.theta_b_values_deg
+            if theta_b_seed_policy == THETA_SEED_RAO_CHART:
+                from raosim.nozzle_geometry import lookup_angles
+
+                theta_center_deg, _ = lookup_angles(
+                    float(epsilon), float(length_pct)
+                )
+                theta_seed_axis = np.linspace(
+                    float(theta_center_deg)
+                    - 0.5 * float(theta_b_chart_span_deg),
+                    float(theta_center_deg)
+                    + 0.5 * float(theta_b_chart_span_deg),
+                    int(theta_b_chart_count),
+                )
+            config = replace(
+                base_config,
+                epsilon=float(epsilon),
+                length_pct=float(length_pct),
+                # Seed on the inexpensive first rung; the refinement ladder
+                # below owns promotion to the declared finest kernel mesh.
+                n_kernel=kernel_levels[0],
+                models=(model,),
+                theta_b_values_deg=theta_seed_axis,
+            )
+            resolution = _unevaluated_resolution(
+                "root refinement did not start",
+                theta_delta_tolerance_deg=theta_delta_tolerance_deg,
+                kdf_delta_tolerance=kdf_delta_tolerance,
+            )
+            theta_star = kdf_star = residual = minimum_dr = None
+            eq5_evaluable = False
+            eq5_valid = False
+            classification = SAMPLE_NUMERICAL_FAILURE
+            reason = "existence scan did not produce an evaluable root seed"
+
+            try:
+                scan_result = scan_existence(config)
+                source_hash = _scan_source_sha256(scan_result, model=model)
+            except Exception as exc:
+                source_hash = _failed_scan_attempt_sha256(
+                    config, model=model, error=exc
+                )
+                reason = (
+                    "existence scan raised "
+                    f"{type(exc).__name__}: {exc}; this numerical failure is "
+                    "not evidence of physical non-existence"
+                )
+                row_samples.append(
+                    RaoConvergenceSample(
+                        epsilon=float(epsilon),
+                        length_pct=float(length_pct),
+                        classification=classification,
+                        reason=reason,
+                        theta_b_deg=None,
+                        kdf=None,
+                        residual_norm_geometry=None,
+                        rao_eq5_evaluable=False,
+                        rao_eq5_valid=False,
+                        rao_eq5_min_dr_over_r=None,
+                        resolution=resolution,
+                        source_scan_sha256=source_hash,
+                    )
+                )
+                continue
+
+            try:
+                seed = refine_from_scan_best(
+                    scan_result, model=model, maxfev=int(root_maxfev)
+                )
+            except Exception as exc:
+                reason = (
+                    "geometry-root refinement raised "
+                    f"{type(exc).__name__}: {exc}"
+                )
+            else:
+                try:
+                    resolution_rows = resolution_convergence(
+                        config,
+                        n_kernel_values=kernel_levels,
+                        model=model,
+                        theta_B_seed_deg=float(seed.theta_B_deg),
+                        kdf_seed=float(seed.kdf),
+                        fan_turn_deg=float(seed.fan_turn_deg),
+                        maxfev=int(root_maxfev),
+                    )
+                    resolution = _kernel_resolution_evidence(
+                        resolution_rows,
+                        n_kernel_finest=finest,
+                        theta_delta_tolerance_deg=theta_delta_tolerance_deg,
+                        kdf_delta_tolerance=kdf_delta_tolerance,
+                    )
+                    final_root = resolution_rows[-1] if resolution_rows else seed
+                    theta_star = _optional_finite_float(final_root.theta_B_deg)
+                    kdf_star = _optional_finite_float(final_root.kdf)
+                    residual = _optional_finite_float(
+                        final_root.residual_norm_geometry
+                    )
+                    final_config = replace(config, n_kernel=int(final_root.n_kernel))
+                    evaluation = evaluate_closure_point(
+                        final_config,
+                        model=model,
+                        theta_B_deg=float(final_root.theta_B_deg),
+                        kdf=float(final_root.kdf),
+                        fan_turn_deg=float(final_root.fan_turn_deg),
+                    )
+                    eq5_evaluable = bool(
+                        evaluation.get("rao_eq5_evaluable", False)
+                    )
+                    eq5_valid = bool(evaluation.get("rao_eq5_valid", False))
+                    minimum_dr = _optional_finite_float(
+                        evaluation.get("rao_eq5_min_dr_over_r")
+                    )
+                except Exception as exc:
+                    classification = SAMPLE_NUMERICAL_FAILURE
+                    reason = (
+                        "resolution/final-root evaluation raised "
+                        f"{type(exc).__name__}: {exc}"
+                    )
+                else:
+                    if (
+                        not final_root.success
+                        or residual is None
+                        or residual > residual_limit
+                    ):
+                        classification = SAMPLE_NOT_CONVERGED
+                        reason = (
+                            "geometry root did not satisfy the declared closure-"
+                            f"residual limit {residual_limit:.17g}"
+                        )
+                    elif not eq5_evaluable:
+                        classification = SAMPLE_UNEVALUABLE
+                        reason = "Rao Eq. (5) was unevaluable at the converged root"
+                    elif resolution.status != RESOLUTION_PASSED:
+                        classification = SAMPLE_UNDER_RESOLVED
+                        reason = resolution.reason
+                    elif eq5_valid:
+                        classification = SAMPLE_CONVERGED_VALID
+                        reason = (
+                            "geometry root, kernel refinement, and Rao Eq. (5) "
+                            "all pass"
+                        )
+                    else:
+                        classification = SAMPLE_CONVERGED_INVALID
+                        reason = (
+                            "geometry root and kernel refinement pass, but Rao "
+                            "Eq. (5) is below its valid-region boundary"
+                        )
+
+            row_samples.append(
+                RaoConvergenceSample(
+                    epsilon=float(epsilon),
+                    length_pct=float(length_pct),
+                    classification=classification,
+                    reason=reason,
+                    theta_b_deg=theta_star,
+                    kdf=kdf_star,
+                    residual_norm_geometry=residual,
+                    rao_eq5_evaluable=eq5_evaluable,
+                    rao_eq5_valid=eq5_valid,
+                    rao_eq5_min_dr_over_r=minimum_dr,
+                    resolution=resolution,
+                    source_scan_sha256=source_hash,
+                )
+            )
+        sample_rows.append(tuple(row_samples))
+
+    return RaoConvergenceDomain(
+        context=context,
+        epsilon_axis=epsilon_axis,
+        length_pct_axis=length_axis,
+        samples=tuple(sample_rows),
+        residual_norm_limit=residual_limit,
+        theta_delta_tolerance_deg=float(theta_delta_tolerance_deg),
+        kdf_delta_tolerance=float(kdf_delta_tolerance),
+        max_epsilon_spacing=float(max_epsilon_spacing),
+        max_length_pct_spacing=float(max_length_pct_spacing),
+    )
 
 
 def write_scan_tables(result: ExistenceScanResult, output_dir: str | Path) -> None:
@@ -1092,6 +2686,8 @@ def write_scan_tables(result: ExistenceScanResult, output_dir: str | Path) -> No
                 "D_M_pre", "D_M_post", "D_M_jump",
                 "D_theta_pre_deg", "D_theta_post_deg", "D_theta_jump_deg",
                 "fan_turn_deg", "exit_angle_deg", "exit_mach",
+                "rao_eq5_evaluable", "rao_eq5_valid",
+                "rao_eq5_min_dr_over_r",
                 "success", "failure_code", "failure_reason",
             ])
             for i, theta_deg in enumerate(closure.theta_b_deg):
@@ -1119,6 +2715,9 @@ def write_scan_tables(result: ExistenceScanResult, output_dir: str | Path) -> No
                         float(closure.fan_turn_deg[i, j]),
                         float(closure.exit_angle_deg[i, j]),
                         float(closure.exit_mach[i, j]),
+                        bool(closure.rao_eq5_evaluable[i, j]),
+                        bool(closure.rao_eq5_valid[i, j]),
+                        float(closure.rao_eq5_min_dr_over_r[i, j]),
                         bool(closure.success[i, j]),
                         code,
                         FAILURE_CODES.get(code, "unknown"),
@@ -1178,8 +2777,19 @@ def plot_scan_heatmaps(result: ExistenceScanResult, output_dir: str | Path) -> N
 
 
 __all__ = [
+    "CONVERGENCE_DOMAIN_SCHEMA_VERSION",
+    "CONVERGENCE_DOMAIN_SOURCE_MODEL_ID",
     "ClosureScanResult",
     "DEIntegrationResult",
+    "DOMAIN_CONTEXT_MISMATCH",
+    "DOMAIN_LOOKUP_STATUSES",
+    "DOMAIN_MODEL_MISMATCH",
+    "DOMAIN_REFUSED_INVALID_RAO_REGION",
+    "DOMAIN_REFUSED_NOT_CONVERGED",
+    "DOMAIN_SUPPORTED",
+    "DOMAIN_UNKNOWN_OUTSIDE",
+    "DOMAIN_UNKNOWN_SCAN_FAILURE",
+    "DOMAIN_UNKNOWN_UNDER_RESOLVED",
     "ExistenceScanConfig",
     "ExistenceScanResult",
     "FAILURE_CODES",
@@ -1187,6 +2797,17 @@ __all__ = [
     "MODEL_POSITION",
     "MODEL_SMOOTH",
     "MODELS",
+    "RaoConvergenceContext",
+    "RaoConvergenceDomain",
+    "RaoConvergenceDomainError",
+    "RaoConvergenceSample",
+    "RaoDomainLookup",
+    "RaoKernelResolutionEvidence",
+    "RAO_CHART_THETA_SEED_SOURCE_ID",
+    "RESOLUTION_FAILED",
+    "RESOLUTION_NOT_EVALUATED",
+    "RESOLUTION_PASSED",
+    "RESOLUTION_STATUSES",
     "RootRefineResult",
     "SCAN_DIAGNOSTIC",
     "SCAN_GEOMETRY",
@@ -1195,6 +2816,16 @@ __all__ = [
     "STOP_LENGTH",
     "STOP_MASS",
     "STOP_RADIUS",
+    "THETA_SEED_FIXED",
+    "THETA_SEED_POLICIES",
+    "THETA_SEED_RAO_CHART",
+    "SAMPLE_CLASSIFICATIONS",
+    "SAMPLE_CONVERGED_INVALID",
+    "SAMPLE_CONVERGED_VALID",
+    "SAMPLE_NOT_CONVERGED",
+    "SAMPLE_NUMERICAL_FAILURE",
+    "SAMPLE_UNDER_RESOLVED",
+    "SAMPLE_UNEVALUABLE",
     "evaluate_closure_point",
     "integrate_de",
     "plot_scan_heatmaps",
@@ -1202,6 +2833,7 @@ __all__ = [
     "refine_from_scan_best",
     "refine_geometry_root",
     "resolution_convergence",
+    "scan_convergence_domain",
     "scan_existence",
     "sigma_E_rad",
     "stationarity_derivation_summary",

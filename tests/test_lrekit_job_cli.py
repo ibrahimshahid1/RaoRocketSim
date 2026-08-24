@@ -69,6 +69,46 @@ def test_validate_can_emit_the_resolved_job_for_replay(job_file, tmp_path,
     assert payload["fixed_variables"]["Pc"] == pytest.approx(3.0e6)
 
 
+def test_cli_job_document_threads_exact_postsolve_contour_selection(
+    tmp_path, capsys, monkeypatch,
+):
+    from raosim.mdo.contour_validation import VARIATIONAL_VALIDATOR_MODEL_ID
+    from raosim.rao_existence_scan import RaoConvergenceDomain
+
+    domain_hash = "c" * 64
+
+    class SyntheticDomain:
+        artifact_sha256 = domain_hash
+
+    monkeypatch.setattr(
+        RaoConvergenceDomain,
+        "read_json",
+        classmethod(lambda cls, path: SyntheticDomain()),
+    )
+    path = tmp_path / "postsolve.yaml"
+    path.write_text(
+        _JOB
+        + textwrap.dedent(
+            f"""
+            models:
+              postsolve_contour_validator: {VARIATIONAL_VALIDATOR_MODEL_ID}
+              rao_convergence_domain: fixed-slice-domain.json
+              contour_max_radius_error_over_rt: 0.05
+              contour_rms_radius_error_over_rt: 0.02
+              contour_relative_length_error: 0.02
+              contour_relative_cf_error: 0.03
+            """
+        )
+    )
+
+    code = job_main(["validate", str(path)])
+    output = capsys.readouterr().out
+
+    assert code == WorkflowExitCode.MET
+    assert VARIATIONAL_VALIDATOR_MODEL_ID in output
+    assert f"sha256={domain_hash}" in output
+
+
 def test_a_missing_unit_reaches_the_cli_as_invalid_input(tmp_path, capsys):
     """The unit rule has to survive all the way to an exit code."""
     path = tmp_path / "bad.yaml"

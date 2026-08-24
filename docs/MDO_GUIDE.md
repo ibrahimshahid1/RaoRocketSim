@@ -1,7 +1,7 @@
 ---
 title: LREKit Differentiable Engine-MDO — Reviewer's Guide
 subtitle: What every module does, where each model comes from, and how to run it
-date: 2026-07-24
+date: 2026-08-24
 audience: whoever is reviewing or extending raosim/mdo/
 ---
 
@@ -19,9 +19,12 @@ claim-by-claim source verification).
 
 `raosim/mdo/` turns the existing sequential LREKit models into **one coupled,
 end-to-end differentiable engine** and drives it with a gradient-based
-constrained optimiser. Everything is JAX; every converged state is
-differentiated by the implicit function theorem (never by unrolling a solver);
-every block keeps a NumPy oracle and a parity test.
+constrained optimiser. The inner numerical engine is JAX; its converged
+implicit states are differentiated by the implicit function theorem rather than
+by unrolling a solver, and each inner block keeps a NumPy oracle and parity
+test. Host contracts such as snapshots, authoritative postprocessing, and the
+opt-in variational contour validator intentionally remain outside that traced
+inner loop.
 
 Run it two ways from the existing CLI:
 
@@ -47,6 +50,8 @@ authoritative snapshot handoff.
 | `scaling.py` | Affine map to the unit box (conditioning) | `ScaledSpace` |
 | `properties.py` | C¹ property surfaces over (P_c, O/F) | `load_chamber_surfaces`, `sample_cea_tables` |
 | `grid.py` | Fixed-topology station grid on the analytic Rao/TOP approximation | `build_station_grid`, `rao_wall_angles` |
+| `nozzle.py` | Typed analytic TOP provider and provider-failure contract | `ContourProvider`, `resolve_contour_provider` |
+| `contour_validation.py` | Opt-in host TOP-versus-variational post-solve adjudication; not an inner-loop provider | `VariationalPostSolveConfig`, `validate_optimized_top_contour` |
 | `cooling.py` | Regen jacket + film cooling; the one **implicit** block | `solve_cooling`, `film_effectiveness` |
 | `injector.py` | Pintle: orifice/TMR/blockage + Son two-branch area | `injector_readouts` |
 | `pump.py` | Electric feed: duty, C¹ efficiency, separate battery energy/power branches | `electric_feed` |
@@ -201,9 +206,15 @@ constraint prevents clamping from being accepted as extrapolation. The
 typed `mdo/nozzle.py` provider seam preserves that analytic construction and
 makes provider failure an explicit final gate. The authoritative post-optimum
 contour is produced by `design_nozzle_v2`; its variational solver now refuses a
-Rao Eq. (5)-invalid or unevaluable contour. Promoting that solver through the
-MDO provider with a TOP-vs-variational discrepancy check remains planned. The
-exact implicit Rao/JAX replacement has its own approval checkpoint in
+Rao Eq. (5)-invalid or unevaluable contour. The separate
+`mdo/contour_validation.py` contract has now landed: when `reevaluate()` receives
+an explicit `VariationalPostSolveConfig`, it preflights a B5 convergence domain,
+runs the host BVP/forward MOC, requires Eq. (5) and direct full-C-D-E
+performance, and then applies caller-supplied TOP-versus-variational discrepancy
+tolerances. With no config, the default analytic path does not launch a
+variational solve. This is not yet B3 qualification: real coupled and BDE probes
+return `UNKNOWN` because the forward-MOC compatibility gate fails. The exact
+implicit Rao/JAX replacement has its own approval checkpoint in
 `IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
 **Cooling (`cooling.py`) — the only implicit block.**
@@ -327,6 +338,16 @@ and physics-weight controls as the traditional CLI. It does not replace
 `mdo/grid.py`. The proposed pure-JAX implicit Rao/KKT solver remains
 architecture-only in `IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
+That CLI contour selection is distinct from the typed B3 comparison validator.
+The latter is opt-in through `EngineJobSpec.models` (validator identity, B5
+domain path, and all four discrepancy thresholds) or directly through
+`reevaluate(..., variational_validation_config=...)`. It cannot pass without a
+matching B5 declared-domain artifact. The first fixed-context artifact is
+`raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
+(canonical SHA-256
+`a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`);
+it must not be used outside its declared context.
+
 **Check for dead variables after any change:**
 
 ```python
@@ -397,6 +418,19 @@ for k, s in enumerate(default_design_space()):
     before reporting. Nested non-finite payloads cannot be marked available, and
     report/CAD attachment failures are persisted in the authoritative snapshot
     rather than returned only as transient console warnings.
+11. **Exact-Rao post-solve promotion is still blocked.** The B5
+    $\varepsilon\times L_\%$ schema and B3 typed validator are implemented, but
+    the completed 8/12/16/24-ladder H2 map at fixed $\gamma=1.4$ and
+    $P_a/P_0=0.01$ remains only one D-attachment/Eq. (5) slice: 40 of 65 knots
+    are `converged_valid` and 25 are `not_converged`. It records kernel-
+    refinement evidence, not proof of full mesh or full-BVP convergence, so B5
+    is still partial outside that context.
+    Real 24×24 and 32×32 BDE probes pass numerical BVP, Eq. (5), and full-C-D-E
+    availability, yet return `UNKNOWN`: neighbor-Mach smoothness is 0.11810 and
+    0.13748 versus the repository-policy limit 0.10. A 12×12 coupled probe also
+    fails forward-MOC compatibility, without a recorded exact maximum. These
+    tolerances are repository screening policy, not literature qualification
+    limits; see `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 
 ---
 

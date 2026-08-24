@@ -1,0 +1,3330 @@
+{
+  "artifact_sha256": "a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19",
+  "axes": {
+    "epsilon": [
+      4.0,
+      5.0,
+      6.0,
+      8.0,
+      10.0,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0,
+      50.0
+    ],
+    "length_pct": [
+      60.0,
+      70.0,
+      80.0,
+      90.0,
+      100.0
+    ]
+  },
+  "bounds": {
+    "epsilon": [
+      4.0,
+      50.0
+    ],
+    "length_pct": [
+      60.0,
+      100.0
+    ]
+  },
+  "classification_counts": {
+    "converged_invalid": 0,
+    "converged_valid": 40,
+    "not_converged": 25,
+    "numerical_failure": 0,
+    "under_resolved": 0,
+    "unevaluable": 0
+  },
+  "context": {
+    "Rt_reference": 0.02,
+    "backend": "numpy_host",
+    "closure_model": "smooth",
+    "gamma": 1.4,
+    "kdf_seed_axis": [
+      0.005,
+      0.042291666666666665,
+      0.07958333333333334,
+      0.116875,
+      0.15416666666666667,
+      0.19145833333333334,
+      0.22875,
+      0.2660416666666667,
+      0.30333333333333334,
+      0.340625,
+      0.3779166666666667,
+      0.41520833333333335,
+      0.4525,
+      0.4897916666666667,
+      0.5270833333333333,
+      0.564375,
+      0.6016666666666667,
+      0.6389583333333334,
+      0.67625,
+      0.7135416666666666,
+      0.7508333333333334,
+      0.7881250000000001,
+      0.8254166666666667,
+      0.8627083333333333,
+      0.9
+    ],
+    "max_de_steps": 240,
+    "max_mach": 12.0,
+    "n_de_points": 24,
+    "n_kernel_finest": 24,
+    "n_kernel_ladder": [
+      8,
+      12,
+      16,
+      24
+    ],
+    "pa_over_p0": 0.01,
+    "residual_weights": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "root_maxfev": 80,
+    "rt_scale_invariant": true,
+    "scan_mode": "geometry",
+    "starting_line_method": "kliegel_levine",
+    "stop_at": "mass",
+    "theta_b_chart_count": 21,
+    "theta_b_chart_source_id": "raosim.nozzle_geometry.lookup_angles:rao-top-chart:v1",
+    "theta_b_chart_span_deg": 40.0,
+    "theta_b_seed_axis_deg": [],
+    "theta_b_seed_policy": "rao_chart_centered",
+    "third_residual": "auto",
+    "throat_downstream_radius_factor": 0.382,
+    "throat_upstream_radius_factor": 1.5
+  },
+  "policies": {
+    "kdf_delta_tolerance": 0.0005,
+    "max_epsilon_spacing": 5.0,
+    "max_length_pct_spacing": 10.0,
+    "residual_norm_limit": 1e-06,
+    "theta_delta_tolerance_deg": 0.05
+  },
+  "samples": [
+    [
+      {
+        "classification": "converged_valid",
+        "epsilon": 4.0,
+        "kdf": 0.02314543116759522,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0032213996950487852,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.902169044427827e-10,
+        "resolution": {
+          "kdf": [
+            0.022737761370595747,
+            0.023064633270654535,
+            0.023103584244282323,
+            0.02314543116759522
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.329511434658629e-11,
+            3.0218891573583216e-10,
+            1.820727732135075e-12,
+            4.902169044427827e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            29.47863393747862,
+            29.454915449885778,
+            29.441777814770422,
+            29.43674294376376
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "b4b5029fb8b0a8f59eab06219e65e8bffd920686d0e13e6462b6ef237f975fb8",
+        "theta_b_deg": 29.43674294376376
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 4.0,
+        "kdf": 0.08486225288515035,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.005401639074093715,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 8.386715916562291e-10,
+        "resolution": {
+          "kdf": [
+            0.08429357511006512,
+            0.08467679568815074,
+            0.08480963300540245,
+            0.08486225288515035
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.870662502021367e-11,
+            1.5245275969589185e-10,
+            3.033368468486095e-11,
+            8.386715916562291e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            24.865432241796977,
+            24.87261716142754,
+            24.87574054189465,
+            24.878365562330494
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "2debc9bbca932e25e0b9811db7ca72642908bdb79e7c214d610f3e87b610f473",
+        "theta_b_deg": 24.878365562330494
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 4.0,
+        "kdf": 0.1545264035290892,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006411457936768938,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.719961359461347e-11,
+        "resolution": {
+          "kdf": [
+            0.15420300440063667,
+            0.154442647234394,
+            0.1544835582534358,
+            0.1545264035290892
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            7.84127935912754e-11,
+            4.373296005427836e-10,
+            2.4472215639224442e-09,
+            4.719961359461347e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            22.009761748341443,
+            22.02556237930763,
+            22.03266575222307,
+            22.03895692341642
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "cfe929e5ee2de6672beed6688c3b60a90df7f99f232ca67c182fc1feefa32b68",
+        "theta_b_deg": 22.03895692341642
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 4.0,
+        "kdf": 0.22961413066499495,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.011769314608615135,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.37280411526484e-10,
+        "resolution": {
+          "kdf": [
+            0.22895663957944576,
+            0.22940826977541884,
+            0.22944028530095098,
+            0.22961413066499495
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.536364282556916e-11,
+            7.311791111169711e-10,
+            1.0535043484672762e-13,
+            2.37280411526484e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            19.923656237597886,
+            19.94463008590059,
+            19.955618305780717,
+            19.962409324476692
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "b6878eb311f7c9cde0c6079af4f792d6f5ce8d78564977c17fd4d0bd6a755371",
+        "theta_b_deg": 19.962409324476692
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 4.0,
+        "kdf": 0.30466373000537206,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.00040645926680030447,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.1526750907334792e-11,
+        "resolution": {
+          "kdf": [
+            0.3044947974182731,
+            0.30463998177935164,
+            0.30469153332914395,
+            0.30466373000537206
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.472387489256096e-11,
+            9.352500429650828e-12,
+            1.009738207258041e-11,
+            2.1526750907334792e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            18.298026774630486,
+            18.32453242077807,
+            18.337178946487967,
+            18.346909688761677
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "f94a7052f8040d4548391fcd5e4beccbcf55dc2dc6c442511063aea531a372da",
+        "theta_b_deg": 18.346909688761677
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 5.0,
+        "kdf": 0.017243160286803866,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.001978300498516629,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.0005796014454788537,
+        "resolution": {
+          "kdf": [
+            0.017138425676208494,
+            0.017138425676208494,
+            0.01723851230695552,
+            0.017243160286803866
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.0008553402630387976,
+            0.0007318955779497714,
+            0.0006211027805088838,
+            0.0005796014454788537
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.768330895125793,
+            30.768330895125793,
+            30.75180529733712,
+            30.755871675675543
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "1af4bbdc897525250db5f494a5d1c76712dcbe4b45a5f117c4ffac99d8a0d3df",
+        "theta_b_deg": 30.755871675675543
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 5.0,
+        "kdf": 0.08591915732533992,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006491174626543828,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.1350119435655616e-11,
+        "resolution": {
+          "kdf": [
+            0.08549969609418832,
+            0.0857937457860601,
+            0.0858735345847239,
+            0.08591915732533992
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.2535400896496505e-09,
+            3.5488973992243365e-10,
+            7.112500019421533e-11,
+            4.1350119435655616e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            25.683534273062172,
+            25.69190130583754,
+            25.694793306035056,
+            25.697655636103782
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "4f5f2767b116fe9a311478c3f785352d6366992f01636eb2f46ec23fbfb8e07b",
+        "theta_b_deg": 25.697655636103782
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 5.0,
+        "kdf": 0.16314192577204017,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.003869170788061531,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 9.301162119434963e-10,
+        "resolution": {
+          "kdf": [
+            0.16251431276247325,
+            0.1629299885956245,
+            0.16303245246752956,
+            0.16314192577204017
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.2361923416961843e-10,
+            5.436836171554623e-10,
+            1.6817139666070462e-10,
+            9.301162119434963e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            22.805457979912408,
+            22.82300533638998,
+            22.831423924216985,
+            22.835685387333854
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "600fc592f5e54344fe3f86e145a11d579174b3add97de8e8350f0a59a25296f2",
+        "theta_b_deg": 22.835685387333854
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 5.0,
+        "kdf": 0.24292470815796716,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.009163868936305946,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 5.047115222966919e-10,
+        "resolution": {
+          "kdf": [
+            0.24233341505107012,
+            0.24269597735279033,
+            0.24284785379559262,
+            0.24292470815796716
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.892834471162054e-12,
+            8.301755290261273e-10,
+            2.2771169862614677e-10,
+            5.047115222966919e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            20.714314361296847,
+            20.73705101866883,
+            20.74710731951614,
+            20.754180260870235
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "5a362c63c425697fc02e9641cda7bf5795e48d9a7e22c653bac9024d379a4f39",
+        "theta_b_deg": 20.754180260870235
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 5.0,
+        "kdf": 0.32077348489749474,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.013197350105946795,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.8516457826224498e-10,
+        "resolution": {
+          "kdf": [
+            0.32028636423187695,
+            0.3206164190389008,
+            0.3207097900613424,
+            0.32077348489749474
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.2901785921948576e-11,
+            2.9441634448797996e-10,
+            2.2280661385264869e-13,
+            1.8516457826224498e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            19.132468296666694,
+            19.159354658476573,
+            19.171470445972112,
+            19.18066936043611
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "f8dfdfbd1d8fbcfd98229ce049ae6aa7e0f674a231c179cf6147c910ea79839b",
+        "theta_b_deg": 19.18066936043611
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 6.0,
+        "kdf": 0.020444775123781466,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0009130670384341148,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.008754720336755882,
+        "resolution": {
+          "kdf": [
+            0.02059339370498397,
+            0.020790916533497336,
+            0.02049438558523332,
+            0.020444775123781466
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.009321812294184786,
+            0.00896547446339733,
+            0.00881550000573592,
+            0.008754720336755882
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.68233018639288,
+            30.658007670365265,
+            30.687035903874026,
+            30.69741814187621
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "21c880f0727ec70bd13636d371f3011e397fb4e94b39b53e90c9681282e93a74",
+        "theta_b_deg": 30.69741814187621
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 6.0,
+        "kdf": 0.08388291471501357,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0021229591680104144,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.280105161092172e-10,
+        "resolution": {
+          "kdf": [
+            0.08340181848423207,
+            0.08373092184332362,
+            0.08380522558883349,
+            0.08388291471501357
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.677197373983297e-12,
+            2.1483653906926433e-10,
+            1.7308700858477628e-09,
+            4.280105161092172e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            26.432012009651714,
+            26.444949490279843,
+            26.44910876186256,
+            26.44576936257092
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "f1dd973996c0d136b73fc434e5963fef9047ecc65b8a7990b9e75f7cc07dc007",
+        "theta_b_deg": 26.44576936257092
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 6.0,
+        "kdf": 0.16526909150871957,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008428875163831933,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.426641347624106e-10,
+        "resolution": {
+          "kdf": [
+            0.16481787933714476,
+            0.16514454146354393,
+            0.16520571870362993,
+            0.16526909150871957
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.517779911266084e-10,
+            3.9487372549224655e-10,
+            9.056222619435793e-10,
+            2.426641347624106e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            23.47411219893175,
+            23.49280632347104,
+            23.500742451600672,
+            23.505125076829646
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "e4650d585d29e1f01d158ed2dfb7f00717616534ba1df504cf6ed66c266ff4c6",
+        "theta_b_deg": 23.505125076829646
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 6.0,
+        "kdf": 0.24776028655072857,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.010977924910263634,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 6.708766020157701e-10,
+        "resolution": {
+          "kdf": [
+            0.24731019372675847,
+            0.24761855484782466,
+            0.24769897574466257,
+            0.24776028655072857
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.0559477640109241e-09,
+            6.211238724846176e-10,
+            1.5886317463729178e-13,
+            6.708766020157701e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            21.397704128418884,
+            21.421444428232423,
+            21.431537498103175,
+            21.43848925910962
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "27b61525f91eb50c526b401baba33bf211d7103857db9b30161c3ef4d4d63dcb",
+        "theta_b_deg": 21.43848925910962
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 6.0,
+        "kdf": 0.32788006894221655,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.01201360646542218,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.741286173564048e-10,
+        "resolution": {
+          "kdf": [
+            0.3274408796799264,
+            0.32773600543983683,
+            0.32784045484704044,
+            0.32788006894221655
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            8.582747437324122e-12,
+            1.675438182412928e-09,
+            5.6746947768583364e-11,
+            2.741286173564048e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            19.840866690530973,
+            19.868263418229255,
+            19.880033206347637,
+            19.888873448373896
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "e82847aa37b008268f8dcca6720eff80ed4c1b670f3c4a6812242a705e0a9bc8",
+        "theta_b_deg": 19.888873448373896
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 8.0,
+        "kdf": 0.19145833333333334,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0059533776111610195,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.11855578703596707,
+        "resolution": {
+          "kdf": [
+            0.19145833333333334,
+            0.19145833333333334,
+            0.19145833333333334,
+            0.19145833333333334
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.11713832153411255,
+            0.11793516389105665,
+            0.11830738492928086,
+            0.11855578703596707
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            22.5,
+            22.5,
+            22.5,
+            22.5
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "b55cd3acc2833ace8180c585f9406179bca244e95c04e40e7342de46be2a973c",
+        "theta_b_deg": 22.5
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 8.0,
+        "kdf": 0.07486843828189153,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.007252123682217819,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.4424683255333962e-09,
+        "resolution": {
+          "kdf": [
+            0.07440025354646046,
+            0.07473334351281097,
+            0.07480211971394275,
+            0.07486843828189153
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.1597469276808405e-09,
+            1.4753868067279341e-09,
+            5.061407483962834e-13,
+            1.4424683255333962e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            27.69332418566792,
+            27.705826508418234,
+            27.705778724511983,
+            27.696418803635233
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "598caa45a7ba2d1ec3a2330894e037ac21a640e46b6ffc5297f03e3bbd979516",
+        "theta_b_deg": 27.696418803635233
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 8.0,
+        "kdf": 0.16109842844421815,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.010570820664044946,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.298005893890622e-10,
+        "resolution": {
+          "kdf": [
+            0.1606661850800085,
+            0.16095405284265246,
+            0.16105515051991676,
+            0.16109842844421815
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.24067563998019e-09,
+            6.561643741741461e-15,
+            1.2769422675048714e-09,
+            1.298005893890622e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            24.597280393511756,
+            24.617146951510026,
+            24.62462843669831,
+            24.628702943788408
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "fdf39aaa3a71b9cf0b814aeb3bfdd17a7280a23795f69b1731e716a65de40751",
+        "theta_b_deg": 24.628702943788408
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 8.0,
+        "kdf": 0.2470737347237851,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006615551275523158,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.1632917912297233e-10,
+        "resolution": {
+          "kdf": [
+            0.24667780690218774,
+            0.24694742815606846,
+            0.24701781536895118,
+            0.2470737347237851
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.249153814234696e-12,
+            1.0143838987818591e-10,
+            3.93709703447177e-11,
+            1.1632917912297233e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            22.520829971516154,
+            22.54521276625339,
+            22.55478149455927,
+            22.561166705291452
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "d6da45df07d76b9fe04195515a53034a383e915c5680aecfc3f7f7f9ba5d5804",
+        "theta_b_deg": 22.561166705291452
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 8.0,
+        "kdf": 0.3297122966908107,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0012348836026289825,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 5.611225365751636e-10,
+        "resolution": {
+          "kdf": [
+            0.32933113191223223,
+            0.3295896494297304,
+            0.3296592020449073,
+            0.3297122966908107
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.2514581665077126e-10,
+            2.1445859403973136e-14,
+            1.4738572855085974e-14,
+            5.611225365751636e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            20.988422127365407,
+            21.015961864778244,
+            21.02713448023128,
+            21.035242758056583
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "262614960a1a8eb2380e255697480902b6b67cedafd4878e6c454ef38b2bc94c",
+        "theta_b_deg": 21.035242758056583
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 10.0,
+        "kdf": 0.035392295356043255,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.005771265417242027,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.04031044705301912,
+        "resolution": {
+          "kdf": [
+            0.035392295356043255,
+            0.03530501142402401,
+            0.035392295356043255,
+            0.035392295356043255
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.0405047099375371,
+            0.040307487132109146,
+            0.04031863457179203,
+            0.04031044705301912
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.225802817184938,
+            30.240932540389558,
+            30.225802817184938,
+            30.225802817184938
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "3f79fdac9c511f799e5f8c5acd560bcadaaac2e8810958500d4e19defe3d87a1",
+        "theta_b_deg": 30.225802817184938
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 10.0,
+        "kdf": 0.06301617760701546,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008928437079906922,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.678036533582514e-10,
+        "resolution": {
+          "kdf": [
+            0.06252017890310753,
+            0.06285593805258888,
+            0.06294145468373177,
+            0.06301617760701546
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.575881059070057e-10,
+            4.783265649087396e-09,
+            3.5130631320008407e-10,
+            4.678036533582514e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.797666752862877,
+            28.808820304262888,
+            28.793454097712477,
+            28.787831258783562
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "4e814bedfc2fa1c62b48568659e866f441528933e6a2d798153090a6d18e6103",
+        "theta_b_deg": 28.787831258783562
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 10.0,
+        "kdf": 0.15241229798111994,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008411487397499627,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 7.966003686007487e-10,
+        "resolution": {
+          "kdf": [
+            0.15198303650370995,
+            0.1522697344986975,
+            0.15235377062639252,
+            0.15241229798111994
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            7.025557851972792e-11,
+            2.4293805539010795e-10,
+            2.0597994515151017e-14,
+            7.966003686007487e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            25.51666456523842,
+            25.536912637029822,
+            25.544012757492553,
+            25.547642670441427
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "de62d2eff4555c5c75147a0049375f1e2f35ca2964eb502845ad12f968c359f2",
+        "theta_b_deg": 25.547642670441427
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 10.0,
+        "kdf": 0.24036663217253504,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.00856751663973454,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.1447478427998482e-13,
+        "resolution": {
+          "kdf": [
+            0.23998187226754736,
+            0.24023471565251736,
+            0.2403079173206484,
+            0.24036663217253504
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.362586970807341e-10,
+            1.0439221509727275e-09,
+            8.275473202292082e-10,
+            1.1447478427998482e-13
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            23.41878989321884,
+            23.443222850699147,
+            23.45230701242521,
+            23.45813620574481
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "97b51dc5307e0bcef61b01e59edb472d2a8d73ca212e2c11b18a89e97b3fc701",
+        "theta_b_deg": 23.45813620574481
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 10.0,
+        "kdf": 0.3244060942693141,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006284619964822659,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 5.020448611914853e-11,
+        "resolution": {
+          "kdf": [
+            0.3240278891692608,
+            0.32428633045272587,
+            0.324353720560496,
+            0.3244060942693141
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.267966907857218e-10,
+            8.54012767238364e-10,
+            1.4096647285763742e-09,
+            5.020448611914853e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            21.892994809287526,
+            21.920202601060755,
+            21.930870814115746,
+            21.93829177732879
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "6962ac79b78a1231cc34913139fdd50dcdf06c7b10c7598828e07c492dffe34c",
+        "theta_b_deg": 21.93829177732879
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 15.0,
+        "kdf": 0.042654087825467146,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0016391028359450804,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.0635197152977672,
+        "resolution": {
+          "kdf": [
+            0.042609495543406525,
+            0.042609495543406525,
+            0.042609495543406525,
+            0.042654087825467146
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.06382529958983837,
+            0.06366715524523367,
+            0.06356527509015875,
+            0.0635197152977672
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.353392762236293,
+            30.353392762236293,
+            30.353392762236293,
+            30.35385630377152
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "a3de93923b7161b69fb920ea0bcc4e980aa287b2727c4484d1d50949d46d05a8",
+        "theta_b_deg": 30.35385630377152
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 15.0,
+        "kdf": 0.05035082306609232,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0026935442724589677,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.013069483171988009,
+        "resolution": {
+          "kdf": [
+            0.0504311840938748,
+            0.05038580053958406,
+            0.05042897099907753,
+            0.05035082306609232
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.013349453425840898,
+            0.013156954720298117,
+            0.013111907833469218,
+            0.013069483171988009
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.146188368048435,
+            30.158431205494807,
+            30.14857582658429,
+            30.155865799493196
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "f08a2f79833651366a002a504fed8520f01216176895c81a8789bd4e3dc51f15",
+        "theta_b_deg": 30.155865799493196
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 15.0,
+        "kdf": 0.12608569686755114,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008094317151902073,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.9326221477101384e-11,
+        "resolution": {
+          "kdf": [
+            0.12566414398097256,
+            0.12595586606357687,
+            0.12606192032446256,
+            0.12608569686755114
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.3816551631790935e-09,
+            1.6405682617879764e-10,
+            8.051997181223638e-10,
+            4.9326221477101384e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            27.299884288100976,
+            27.319967715745207,
+            27.325070633151363,
+            27.316224690080983
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "28bdbd1f2bd959344b03828cfb82abfca9213b32dc25766686468804e60afe4f",
+        "theta_b_deg": 27.316224690080983
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 15.0,
+        "kdf": 0.21666664174894495,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008298105629723482,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.7507878944048347e-14,
+        "resolution": {
+          "kdf": [
+            0.21626466156826357,
+            0.21654139241750409,
+            0.21663519392649352,
+            0.21666664174894495
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.0428415413174023e-09,
+            2.3532336129100735e-10,
+            3.7290449747152176e-11,
+            2.7507878944048347e-14
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            25.093724857053267,
+            25.11770918184261,
+            25.125929155547812,
+            25.13061571718356
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "1fee425fe6eb09676909aceb38c69f2b13ad6734b6b32f938fde76cd3223e0a3",
+        "theta_b_deg": 25.13061571718356
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 15.0,
+        "kdf": 0.3025253730981099,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0032503376491716304,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.0976929418280184e-10,
+        "resolution": {
+          "kdf": [
+            0.3021393702437742,
+            0.30241543657101744,
+            0.30247917195976554,
+            0.3025253730981099
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.1701765169472768e-10,
+            2.327653495448914e-10,
+            2.973595714454288e-10,
+            4.0976929418280184e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            23.546732347515114,
+            23.573057494159688,
+            23.58278321933033,
+            23.588954427631897
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "655b0ecda7bedf098e1442db5ecf79310944704fc871ef01958aaac6798c504e",
+        "theta_b_deg": 23.588954427631897
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 20.0,
+        "kdf": 0.116875,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.013293454975141233,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.11407547234635464,
+        "resolution": {
+          "kdf": [
+            0.116875,
+            0.116875,
+            0.05238868976743704,
+            0.116875
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.11350429188534178,
+            0.11418470769544416,
+            0.08434730214608148,
+            0.11407547234635464
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            27.5,
+            27.5,
+            30.20277560311263,
+            27.5
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "d62015ac55f3654b3cd466c270591eaf980d9714ab2004bef283d553edac71a7",
+        "theta_b_deg": 27.5
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 20.0,
+        "kdf": 0.05442877070595917,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.010042024977177273,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.029913504078192002,
+        "resolution": {
+          "kdf": [
+            0.05442877070595917,
+            0.054350753082490134,
+            0.05442877070595917,
+            0.05442877070595917
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.030098783177186887,
+            0.029935219427423013,
+            0.029888774353459383,
+            0.029913504078192002
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.333886235300344,
+            30.344703199400097,
+            30.333886235300344,
+            30.333886235300344
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "593c3fe3683f3ffeea434feb5a1592da7425ef583103a700d4927374e9d9c917",
+        "theta_b_deg": 30.333886235300344
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 20.0,
+        "kdf": 0.10015311364697096,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.012595474676200322,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 3.398396055258759e-10,
+        "resolution": {
+          "kdf": [
+            0.09973599712031618,
+            0.10003474479438192,
+            0.1000947410027999,
+            0.10015311364697096
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.613587948018448e-10,
+            1.8396046041779027e-10,
+            1.7551808421924438e-08,
+            3.398396055258759e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.68655270281351,
+            28.70581152541081,
+            28.693919964373595,
+            28.689699668747114
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "970db74954e2a8e1dd1a43464103f77412d9b7a1b6adf1267f0cf0d6c22e32e1",
+        "theta_b_deg": 28.689699668747114
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 20.0,
+        "kdf": 0.19235070532969384,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.003419311655088226,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.055432735706852e-09,
+        "resolution": {
+          "kdf": [
+            0.19194741114914352,
+            0.19222992451856416,
+            0.19231018596092483,
+            0.19235070532969384
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.592838660466357e-09,
+            3.0023802757844773e-10,
+            6.198887259021324e-10,
+            1.055432735706852e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            26.313439031789766,
+            26.336887534779365,
+            26.344567912300626,
+            26.343580607512944
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "3ed2aeea5f5424c2254ca025402936514c0a8f0675700c176ed185c4746703c4",
+        "theta_b_deg": 26.343580607512944
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 20.0,
+        "kdf": 0.27907990310947867,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0015030143201133466,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 7.548283830228305e-10,
+        "resolution": {
+          "kdf": [
+            0.27868373056571866,
+            0.2789724121405423,
+            0.2790244024242164,
+            0.27907990310947867
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.776683064446755e-10,
+            6.370168010422649e-11,
+            6.221742647758008e-10,
+            7.548283830228305e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            24.722514860022518,
+            24.74816071376248,
+            24.75723431887926,
+            24.76259133357558
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "0082e41bc359ee05b0cdcd758b9a19e37a1a5d4b3714c77b3eac6f749d3463ad",
+        "theta_b_deg": 24.76259133357558
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 25.0,
+        "kdf": 0.15416666666666667,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.013307472901113919,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.1659089835946561,
+        "resolution": {
+          "kdf": [
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.16121860551651213,
+            0.1649166023323252,
+            0.166078644477209,
+            0.1659089835946561
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            26.5,
+            26.5,
+            26.5,
+            26.5
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "bd4fef4096f7096d420c97ae6561fb65810456a37e05fe73f62f993a6b87c427",
+        "theta_b_deg": 26.5
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 25.0,
+        "kdf": 0.056905233254952156,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006685300591482433,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.0435245265844893,
+        "resolution": {
+          "kdf": [
+            0.056905233254952156,
+            0.056905233254952156,
+            0.056905233254952156,
+            0.056905233254952156
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.043737775623861073,
+            0.04362844718943045,
+            0.04353553132959631,
+            0.0435245265844893
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.49819972932956,
+            30.49819972932956,
+            30.49819972932956,
+            30.49819972932956
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "13e149f484dd7d4c3a2dd1d2ef58dc0e6bb156cef835d317635dae21f663110b",
+        "theta_b_deg": 30.49819972932956
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 25.0,
+        "kdf": 0.07581976700732602,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0006479673224761462,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.7350976045554815e-11,
+        "resolution": {
+          "kdf": [
+            0.0753692423505339,
+            0.0756883565570134,
+            0.07575263883666335,
+            0.07581976700732602
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.9362431045728997e-10,
+            2.0139401333687072e-10,
+            4.0218769229330917e-10,
+            1.7350976045554815e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            29.901026977010975,
+            29.902376678214466,
+            29.89197216331724,
+            29.891347470380158
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "16828a216bec5d4d9b78687a825429f26200947235b7bfffb70c1e2c506b6006",
+        "theta_b_deg": 29.891347470380158
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 25.0,
+        "kdf": 0.16981749091624335,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.010013384864235116,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.530020994631521e-09,
+        "resolution": {
+          "kdf": [
+            0.1694073089572281,
+            0.16969545084612497,
+            0.16984591440136323,
+            0.16981749091624335
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.490933291899882e-09,
+            1.0127783583370384e-09,
+            1.0447749592047075e-09,
+            2.530020994631521e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            27.285386315590777,
+            27.308469524448874,
+            27.314619402799845,
+            27.306228687722186
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "ab066b1b6436adefd9383414ffbe8196dbb5bc8c40c8690c18de6e6f1d955441",
+        "theta_b_deg": 27.306228687722186
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 25.0,
+        "kdf": 0.25710475954135337,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008379328433167774,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 8.038026396129797e-11,
+        "resolution": {
+          "kdf": [
+            0.25671908143050637,
+            0.25699400725040283,
+            0.2570616722805994,
+            0.25710475954135337
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.657184972772694e-10,
+            6.117250515323933e-10,
+            1.5049481155085875e-09,
+            8.038026396129797e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            25.63614319331732,
+            25.66135545033133,
+            25.66988640671285,
+            25.674542255395586
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "1d35de5e32d48d499782c7810d4008d3a2295b9b8739300d757f08cad71e015d",
+        "theta_b_deg": 25.674542255395586
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 30.0,
+        "kdf": 0.15416666666666667,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0037579361568815454,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.15739143277244577,
+        "resolution": {
+          "kdf": [
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.1549832986147649,
+            0.15715952513387438,
+            0.15788246040089324,
+            0.15739143277244577
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            27.0,
+            27.0,
+            27.0,
+            27.0
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "3c8e075258a1b222eb1eae3b9c5cb9c1401005647f188670599bdb286bda6777",
+        "theta_b_deg": 27.0
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 30.0,
+        "kdf": 0.05870447890051225,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.01025261470738799,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.05500740738225281,
+        "resolution": {
+          "kdf": [
+            0.05870447890051225,
+            0.05870447890051225,
+            0.05860578385410821,
+            0.05870447890051225
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.05522350830864929,
+            0.05508369532232151,
+            0.05505242518487375,
+            0.05500740738225281
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.63409578410526,
+            30.63409578410526,
+            30.63262928074497,
+            30.63409578410526
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "0667e79cafebae08bca09a37dd71c090bff6f79c23148ac9e9dd39cac6f7e899",
+        "theta_b_deg": 30.63409578410526
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 30.0,
+        "kdf": 0.06790443746376544,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0003353755026596089,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.010647389572696992,
+        "resolution": {
+          "kdf": [
+            0.06790443746376544,
+            0.06793118781929972,
+            0.06790443746376544,
+            0.06790443746376544
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.010699734560921215,
+            0.010546532270755778,
+            0.01050636740964249,
+            0.010647389572696992
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.437972627925504,
+            30.44283005670384,
+            30.437972627925504,
+            30.437972627925504
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "0b7f60c4216b09c6754c37a3ad59e2930ea5f8cef9bd5d79d94a5cd8aa148651",
+        "theta_b_deg": 30.437972627925504
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 30.0,
+        "kdf": 0.14923175299274696,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.006469242206964334,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.1525804808781653e-10,
+        "resolution": {
+          "kdf": [
+            0.14882652940498386,
+            0.14912018297436117,
+            0.1491816940774547,
+            0.14923175299274696
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.036356702068705e-13,
+            2.882403321594071e-10,
+            4.1901010483482773e-10,
+            1.1525804808781653e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.104997464667758,
+            28.127501270682842,
+            28.123567062239264,
+            28.118184411919053
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "a6014ab2e283f807c691f8a5d2f8b87826294b143527e3e44d563780f8be9fe3",
+        "theta_b_deg": 28.118184411919053
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 30.0,
+        "kdf": 0.23700426569298055,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.004882474616832212,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.1545900285701397e-09,
+        "resolution": {
+          "kdf": [
+            0.2366176154009207,
+            0.2368912925061986,
+            0.23696261949549077,
+            0.23700426569298055
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.6348880643265934e-10,
+            5.833940736864632e-11,
+            1.3829445427374733e-09,
+            1.1545900285701397e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            26.38576143816283,
+            26.41061666470525,
+            26.418691158295164,
+            26.41741007522699
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "136769c0c3a313397bad0a6610630f76b73852595bbda78d94b7b7e5c916ebab",
+        "theta_b_deg": 26.41741007522699
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 35.0,
+        "kdf": 0.07958333333333334,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.000614674921446687,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.15761996784526958,
+        "resolution": {
+          "kdf": [
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.1553464705586073,
+            0.15952202577886754,
+            0.15756712829570865,
+            0.15761996784526958
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            29.5,
+            29.5,
+            29.5,
+            29.5
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "61d0710b9e8d7629da8520484bd131e62d77dc2bdd5872305115533050dcdc6f",
+        "theta_b_deg": 29.5
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 35.0,
+        "kdf": 0.15416666666666667,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.005316414570894281,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.1344927410768967,
+        "resolution": {
+          "kdf": [
+            0.15416666666666667,
+            0.06795404109751027,
+            0.06789496111829464,
+            0.15416666666666667
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.12949012307854937,
+            0.06994080545679011,
+            0.06990180626353627,
+            0.1344927410768967
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            27.5,
+            30.440576569870494,
+            30.43724331445534,
+            27.5
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "1e05bab8e5a33e5a0dab245fdafda4a3cae638e127c120492cb400284cf2b112",
+        "theta_b_deg": 27.5
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 35.0,
+        "kdf": 0.06910804478916117,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.005120783464365372,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.02035763429536122,
+        "resolution": {
+          "kdf": [
+            0.06910804478916117,
+            0.06910804478916117,
+            0.06910804478916117,
+            0.06910804478916117
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.020523861610061304,
+            0.020454431677817696,
+            0.02034612606146138,
+            0.02035763429536122
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.569888864277253,
+            30.569888864277253,
+            30.569888864277253,
+            30.569888864277253
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "c338719105ff878641ea5270be0ac899fb4a2966a40fb54c73028210de34a556",
+        "theta_b_deg": 30.569888864277253
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 35.0,
+        "kdf": 0.13038194549179838,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.007130526936959031,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 2.170492388351002e-10,
+        "resolution": {
+          "kdf": [
+            0.12996727843538894,
+            0.13026703297766482,
+            0.13032705632625466,
+            0.13038194549179838
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            2.4618280134710082e-11,
+            7.390927952076258e-11,
+            1.1234402652538485e-09,
+            2.170492388351002e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.825045207533552,
+            28.847054518747495,
+            28.834409082453217,
+            28.831220179761914
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "015fdda8c9f9a49297f7c56735fdc043de74ef91c7710e971a018962ff0c8477",
+        "theta_b_deg": 28.831220179761914
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 35.0,
+        "kdf": 0.21866663025557567,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.014534690135317,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 7.151605209646527e-10,
+        "resolution": {
+          "kdf": [
+            0.21823459416742796,
+            0.2185153010692848,
+            0.21858899987528202,
+            0.21866663025557567
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.388658582816962e-11,
+            7.238552417378737e-11,
+            5.925584008002797e-10,
+            7.151605209646527e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            27.024245366556205,
+            27.04881905103004,
+            27.056530644152396,
+            27.049725368417292
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "4587ed246033a98237e3e3e32b431bb1ca8b3b026510b4ab84ff75895863a1b9",
+        "theta_b_deg": 27.049725368417292
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 40.0,
+        "kdf": 0.05948845117349898,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.007309798113715535,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.12771638646279554,
+        "resolution": {
+          "kdf": [
+            0.05948845117349898,
+            0.05943718017527152,
+            0.05960037394678509,
+            0.05948845117349898
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.12792044907711864,
+            0.12778876484495666,
+            0.1277454492656309,
+            0.12771638646279554
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.70175353039074,
+            30.70431408212489,
+            30.694741230036655,
+            30.70175353039074
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "c4b8dbf2d530542782777759c9cd3890dbe475f4f6f9e5bfff870b61ad44fad2",
+        "theta_b_deg": 30.70175353039074
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 40.0,
+        "kdf": 0.07958333333333334,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0025546350789328594,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.10464489858004551,
+        "resolution": {
+          "kdf": [
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.1028775797650748,
+            0.10596627320409091,
+            0.10413027656316592,
+            0.10464489858004551
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.0,
+            30.0,
+            30.0,
+            30.0
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "bc0691d875facd65bb66b5e94c5df24a7371883fdd4ea3cf8a5d3f34ae0538fb",
+        "theta_b_deg": 30.0
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 40.0,
+        "kdf": 0.06986219756323209,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.007004113462439606,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.029022973958324927,
+        "resolution": {
+          "kdf": [
+            0.0699275498625314,
+            0.06991053918851046,
+            0.06985409982026954,
+            0.06986219756323209
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.029228931882506633,
+            0.02908906759368551,
+            0.029050769622771533,
+            0.029022973958324927
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.687954232560017,
+            30.68999357156599,
+            30.687545923748367,
+            30.692974086394837
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "efe240095bc44c977369b208843478b3b210f26dd7519d2f873df3e3499759dd",
+        "theta_b_deg": 30.692974086394837
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 40.0,
+        "kdf": 0.11291407473257387,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0029867435864725945,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 9.441352046917378e-12,
+        "resolution": {
+          "kdf": [
+            0.11249420440039615,
+            0.11278341831614813,
+            0.11285400425835762,
+            0.11291407473257387
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            6.432805933094985e-10,
+            7.595906221827231e-10,
+            7.066715009445262e-10,
+            9.441352046917378e-12
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            29.480219377651068,
+            29.492517801549152,
+            29.481354655486808,
+            29.48014295042899
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "65fe66c47cc8cb556fdfd123b63abcb7d6b0b0f3158c10e798d876e0f796a0bd",
+        "theta_b_deg": 29.48014295042899
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 40.0,
+        "kdf": 0.20176085731655155,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.00966426825698212,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.2934452900241897e-10,
+        "resolution": {
+          "kdf": [
+            0.2013658206060008,
+            0.20164847079748915,
+            0.20172045004784744,
+            0.20176085731655155
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.0611033574750355e-10,
+            5.089779901870173e-10,
+            9.957045948550951e-11,
+            1.2934452900241897e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            27.582916782231358,
+            27.607259995781693,
+            27.610130652757967,
+            27.603031244086623
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "c573e3017387164339126a4e5074ea8a7b44d7f9b69c041568309a73e77996e7",
+        "theta_b_deg": 27.603031244086623
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 45.0,
+        "kdf": 0.07958333333333334,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0025546350789328594,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.1440066588607967,
+        "resolution": {
+          "kdf": [
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334,
+            0.07958333333333334
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.14371412214756105,
+            0.144412107419909,
+            0.14389340570545073,
+            0.1440066588607967
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.0,
+            30.0,
+            30.0,
+            30.0
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "058472007a0a6eaedaca6773925a93ef0f18635504043b4ff919aebb8d8d8a43",
+        "theta_b_deg": 30.0
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 45.0,
+        "kdf": 0.15416666666666667,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.010147706544069986,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.13107508774277232,
+        "resolution": {
+          "kdf": [
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667,
+            0.15416666666666667
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.12811713535260197,
+            0.13188027851278597,
+            0.13177456583604794,
+            0.13107508774277232
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            28.0,
+            28.0,
+            28.0,
+            28.0
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "137c181c30e58a319f289f6457594eef502362cfcdb21d170c8dfcd6a9b95199",
+        "theta_b_deg": 28.0
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 45.0,
+        "kdf": 0.07051075882474728,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0039130082828999525,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.036820562493626634,
+        "resolution": {
+          "kdf": [
+            0.19145833333333334,
+            0.19145833333333334,
+            0.07046909329880122,
+            0.07051075882474728
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.08936672868562127,
+            0.0916617474692372,
+            0.03685618178521898,
+            0.036820562493626634
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            27.5,
+            27.5,
+            30.79029855887885,
+            30.79409742499913
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "1f959697bea8bc53eca24bb27b0babe5a4720a28a33ff3275c6f5274df4020f3",
+        "theta_b_deg": 30.79409742499913
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 45.0,
+        "kdf": 0.09636300756509387,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.003644850262285298,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 4.4573907623751283e-10,
+        "resolution": {
+          "kdf": [
+            0.09591034404928188,
+            0.09621990467018898,
+            0.09629690053330289,
+            0.09636300756509387
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.1478820919340301e-10,
+            2.470180692195554e-10,
+            9.141384799618589e-11,
+            4.4573907623751283e-10
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            30.101631592099437,
+            30.103148275732984,
+            30.09416344651341,
+            30.094879729469632
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "ec7d54ea9b97d194c2a5a6dee84fca5751e686e02cfb3563d7353dce3e4ec15f",
+        "theta_b_deg": 30.094879729469632
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 45.0,
+        "kdf": 0.18618957938332434,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.001839412044676517,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.171633546926004e-09,
+        "resolution": {
+          "kdf": [
+            0.18579008204946382,
+            0.1860748565291675,
+            0.18614111699229732,
+            0.18618957938332434
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.5069721578375974e-11,
+            8.705105611718285e-11,
+            1.8093104707488268e-10,
+            1.171633546926004e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.081979451886035,
+            28.106075921170035,
+            28.102751409933962,
+            28.09745785395058
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "4d738e0ba05343bda4636f16f7ed9e9a3e40a7743e008d2538a540ea9a9f0bf9",
+        "theta_b_deg": 28.09745785395058
+      }
+    ],
+    [
+      {
+        "classification": "not_converged",
+        "epsilon": 50.0,
+        "kdf": 0.06900746571287995,
+        "length_pct": 60.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.0017344228247675407,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.14653509108043483,
+        "resolution": {
+          "kdf": [
+            0.06900746571287995,
+            0.06900746571287995,
+            0.06900746571287995,
+            0.06900746571287995
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.14672248000284546,
+            0.1466086030806537,
+            0.14655571687567093,
+            0.14653509108043483
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.564214187850027,
+            30.564214187850027,
+            30.564214187850027,
+            30.564214187850027
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "740552711ca549a0db39fd189edd635175503c30764917f4244c7b64af87b067",
+        "theta_b_deg": 30.564214187850027
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 50.0,
+        "kdf": 0.07019946359927795,
+        "length_pct": 70.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008933478182467211,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.09301152115915598,
+        "resolution": {
+          "kdf": [
+            0.07019946359927795,
+            0.07019946359927795,
+            0.07019946359927795,
+            0.07019946359927795
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.09320938620379983,
+            0.09307788497224848,
+            0.09305572886449417,
+            0.09301152115915598
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.74056109631784,
+            30.74056109631784,
+            30.74056109631784,
+            30.74056109631784
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "0d13b0dee14e3dac94959210aeeea6d35720b880a4a80a74e7642f146f57f94a",
+        "theta_b_deg": 30.74056109631784
+      },
+      {
+        "classification": "not_converged",
+        "epsilon": 50.0,
+        "kdf": 0.07102418629901085,
+        "length_pct": 80.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.008124786383949915,
+        "rao_eq5_valid": true,
+        "reason": "geometry root did not satisfy the declared closure-residual limit 9.9999999999999995e-07",
+        "residual_norm_geometry": 0.04389999061891469,
+        "resolution": {
+          "kdf": [
+            0.07102418629901085,
+            0.07102418629901085,
+            0.07102418629901085,
+            0.07102418629901085
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "one or more kernel-refinement roots did not converge",
+          "residual_norm_geometry": [
+            0.04410356926396957,
+            0.04398157578532714,
+            0.04399730849033806,
+            0.04389999061891469
+          ],
+          "root_success": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "status": "failed",
+          "theta_b_deg": [
+            30.882507371813745,
+            30.882507371813745,
+            30.882507371813745,
+            30.882507371813745
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "2a12129145067a2d28e1a0ddd2ad1797b2581aa5db1884739b508b080743f57f",
+        "theta_b_deg": 30.882507371813745
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 50.0,
+        "kdf": 0.0786139982769891,
+        "length_pct": 90.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.015430135233388941,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 3.531099161081107e-11,
+        "resolution": {
+          "kdf": [
+            0.07788524770496481,
+            0.07836308433247287,
+            0.07850895496490197,
+            0.0786139982769891
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            1.0304658552147235e-10,
+            9.569281984302887e-10,
+            7.652598271792279e-14,
+            3.531099161081107e-11
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            30.782094920308992,
+            30.766792066542884,
+            30.75851590388203,
+            30.75965043450823
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "71b1b1a469e255093060b238720fb74ae2e7ec62591d1096a635832f0ff1fa10",
+        "theta_b_deg": 30.75965043450823
+      },
+      {
+        "classification": "converged_valid",
+        "epsilon": 50.0,
+        "kdf": 0.17166054931548597,
+        "length_pct": 100.0,
+        "rao_eq5_evaluable": true,
+        "rao_eq5_min_dr_over_r": 0.005785546052353245,
+        "rao_eq5_valid": true,
+        "reason": "geometry root, kernel refinement, and Rao Eq. (5) all pass",
+        "residual_norm_geometry": 1.762059719744997e-09,
+        "resolution": {
+          "kdf": [
+            0.17121561780508313,
+            0.1715048783222235,
+            0.17157007979651265,
+            0.17166054931548597
+          ],
+          "kdf_delta_tolerance": 0.0005,
+          "n_kernel": [
+            8,
+            12,
+            16,
+            24
+          ],
+          "reason": "the final two kernel refinements converge within the declared theta_B and kdf tolerances",
+          "residual_norm_geometry": [
+            3.8950286506402873e-10,
+            4.793043384971132e-10,
+            8.872030482205087e-10,
+            1.762059719744997e-09
+          ],
+          "root_success": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "status": "passed",
+          "theta_b_deg": [
+            28.537617031133347,
+            28.561458785597107,
+            28.55257188276858,
+            28.548776208265835
+          ],
+          "theta_delta_tolerance_deg": 0.05
+        },
+        "source_scan_sha256": "5e5fb370f3365a81551ae08709f59797e7e5e7c4fafca4fce67b5d2c3584773e",
+        "theta_b_deg": 28.548776208265835
+      }
+    ]
+  ],
+  "schema_version": 1,
+  "source_model_id": "raosim.rao_existence_scan:epsilon-length-fixed-context-d-attachment-domain:v1",
+  "validity_source_id": "Rao-Beck-Booth-AIAA-99-2584-1999-pdf-page-4-Eqs-2-3-5-6"
+}

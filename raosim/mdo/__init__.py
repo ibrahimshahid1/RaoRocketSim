@@ -67,6 +67,24 @@ from raosim.mdo.nozzle import (  # noqa: F401
     evaluate_contour,
     resolve_contour_provider,
 )
+from raosim.mdo.contour_validation import (  # noqa: F401
+    ContourDiscrepancy,
+    ContourDiscrepancyTolerances,
+    CONTOUR_COMPARISON_POLICY_ID,
+    RaoDomainEvidence,
+    VARIATIONAL_CONTOUR_MODEL_ID,
+    VARIATIONAL_FORMULATION,
+    VARIATIONAL_GAMMA_MODEL_ID,
+    VARIATIONAL_SOLVER_SOURCE_ID,
+    VARIATIONAL_VALIDATOR_MODEL_ID,
+    VARIATIONAL_VALIDATOR_SOURCE_ID,
+    VariationalContourValidationOutcome,
+    VariationalPostSolveConfig,
+    VariationalValidationReason,
+    VariationalValidationStatus,
+    compare_top_and_variational_contours,
+    validate_optimized_top_contour,
+)
 from raosim.mdo.cooling import cooling_march, solve_cooling  # noqa: F401
 from raosim.mdo.injector import injector_readouts  # noqa: F401
 from raosim.mdo.pump import (  # noqa: F401

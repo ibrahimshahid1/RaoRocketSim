@@ -1,12 +1,15 @@
 # Physics fidelity roadmap
 
-**Status head (2026-08-22):** items **§3.1, §4.1, and §5.1 are implemented** as
-scope/validity gates, and §4.3's existing liner-buckling screen is now integrated
-as a mandatory MDO final gate (not as a qualification calculation); everything
-else remains analysis and plan only. See the landed notes in §3–§5. Each item
-states what the code does *today* (verified against the tree, not recalled),
-what the literature in `propulsion_texts/` actually supports, and the smallest
-change that raises fidelity without inventing authority the model does not have.
+**Status head (2026-08-24):** items **§3.1, §4.1, and §5.1 are implemented** as
+scope/validity gates, and §4.3's existing liner-buckling screen is integrated as
+a mandatory MDO final gate (not as a qualification calculation). Section 5.2's
+declared-domain infrastructure and §5.3's opt-in host validator contract have
+also landed. The first fixed-context H2 slice is generated, but B5 remains
+partial beyond it and B3 promotion remains blocked on MOC compatibility. Other
+items remain analysis and plan only. See the landed notes in §3–§5. Each item
+states what the code does *today* (verified against the tree, not recalled), what
+the literature in `propulsion_texts/` actually supports, and the smallest change
+that raises fidelity without inventing authority the model does not have.
 
 The governing rule from the remediation work applies throughout: **a fidelity
 gap must be visible as `unknown`, never absorbed into a passing number.** Every
@@ -24,7 +27,10 @@ process — `_make_point`, `solve_interior_point`, `solve_axis_point`,
 calorically perfect gas along every characteristic. The CEA surfaces added in
 `raosim/mdo/properties.py` give γ(P_c, O/F) at the *chamber*, and the MDO uses
 them, but the value entering the characteristic net is still frozen at a single
-number.
+number. Packaged, held-out-gated chamber tables exist for LOX/RP-1, LOX/LCH4,
+LOX/LH2, and N2O4/MMH only; N2O/Ethanol remains blocked on inlet-state/card
+selection. No coolant $(T,p)$/CoolProp surface or along-expansion gas-property
+surface has been distributed.
 
 The consequence is not small at high area ratio: γ falls as the gas expands and
 cools, so a constant-γ net systematically misplaces the Prandtl–Meyer turning
@@ -50,8 +56,9 @@ node.
 Three stages, each independently useful:
 
 1. **γ(s) along the expansion, frozen composition.** Replace the scalar with a
-   `ThermoProvider` interface exposing `gamma(M)` / `gamma(T, p)` backed by the
-   existing sampled surfaces. Prandtl–Meyer becomes a quadrature
+   `ThermoProvider` interface exposing `gamma(M)` / `gamma(T, p)`. This requires
+   new expansion-state sampling; the existing packaged tables cover chamber
+   $(P_c,O/F)$ only. Prandtl–Meyer becomes a quadrature
    ∫ √(M²−1)/(1+½(γ(M)−1)M²) dM/M rather than the closed form. This is the
    honest first step because `raosim/frozen_flow.py` already exists.
 2. **Equilibrium option** behind the same interface, sampled offline into a
@@ -265,7 +272,18 @@ The solver evaluates Rao 1999 Eq. (5) segment-by-segment, stores the predicted
 dR/R result, and derives `rao_region`, reliability, and `shock_free` from it.
 Contour export refuses both invalid and unevaluable validity results. Eq. (6)
 is retained only as a labelled legacy boundary diagnostic. The path remains
-non-default because the other two promotion gates have not cleared.
+non-default because B3's forward-MOC compatibility gate has not cleared and B5
+has only one fixed-context D-attachment/Eq. (5) slice.
+
+The associated implementation contracts have advanced. B5 now has a typed,
+context-pinned $\varepsilon\times L_\%$ declared-domain object backed at each
+sample by a NumPy D-attachment geometry root, kernel-resolution evidence, and
+Eq. (5). B3 now has an opt-in host post-solve validator that requires that
+domain plus numerical BVP, forward-MOC, Eq. (5), direct full-C-D-E performance,
+and explicit TOP-versus-variational discrepancy policy. It adds no variational
+runtime to the default analytic path. This is implementation progress, not
+release qualification: the first fixed H2 slice exists, but the real B3 probes
+remain `UNKNOWN` at the forward-MOC compatibility gate.
 
 ### What the literature supports
 
@@ -282,12 +300,28 @@ Promotion is not one gate but three, and Rao 1999 defines the first:
 1. **DONE (2026-08-22): implement the valid/invalid boundary.** Eq. (5), not a
    geometric-radius-difference proxy or Eq. (6), now determines validity; an
    invalid or unevaluable result cannot be exported as a contour.
-2. **Convergence domain mapping** across the design box (this is what
-   `rao_existence_scan.py` is for), so the provider can declare where it works.
-3. **Then** add the variational implementation to the selectable
-   `ContourProvider` contract (the analytic TOP provider/failure gate is already
-   landed), initially as post-solve validation with a geometry/performance
-   discrepancy tolerance.
+2. **First fixed map DONE; broader B5 domain PARTIAL:**
+   `rao_existence_scan.py` can build and serialize the declared B5 domain and
+   refuses unsupported, under-resolved,
+   or context-mismatched lookups. The 65-knot fixed $\gamma=1.4$,
+   $P_a/P_0=0.01$ artifact is
+   `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
+   (canonical SHA-256
+   `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`).
+   With the accepted 8/12/16/24 ladder and repository screening policy, it
+   records 40 `converged_valid` and 25 `not_converged` knots, with zero other
+   classes. That slice carries kernel-refinement evidence; it is not a universal
+   full-BVP or full-mesh-convergence claim. Further $\gamma$, ambient, throat-
+   geometry, numerical-context, and full-BVP slices remain separate work.
+3. **Post-solve implementation/contract DONE; promotion BLOCKED:**
+   `mdo/contour_validation.py` is deliberately not a second inner-loop
+   `ContourProvider`. Real 12×12 coupled and 24×24/32×32 BDE probes pass their
+   numerical BVP, Eq. (5), and direct full-C-D-E availability gates but return
+   `UNKNOWN` because forward-MOC neighbor smoothness is incompatible. The BDE
+   neighbor-Mach maxima are 0.11810 and 0.13748 versus the repository-policy
+   limit 0.10; the coupled probe's exact maximum was not recorded. Full B3
+   qualification therefore remains open. See
+   `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 
 ---
 
