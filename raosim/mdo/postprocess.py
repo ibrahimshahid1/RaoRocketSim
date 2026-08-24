@@ -190,53 +190,58 @@ def to_design_input(
     )
     from raosim.throat_geometry import ThroatGeometrySpec
 
+    from raosim.mdo.resolved_inputs import resolve_engine_inputs
+
     d = _as_design_dict(design)
-    combination, oxidizer, fuel, coolant_name = _propellant_mapping(
-        mission, propellant, coolant
-    )
-    eta_cf = float(
-        eta_CF if eta_CF is not None else getattr(mission, "eta_CF", 1.0)
-    )
-    film_frac = float(d.get("film_frac", 0.0))
-    resolved_of = _effective_of(
+
+    # Remediation item 9: every physical value below is read from the one
+    # resolved contract rather than re-derived here.  This function is now the
+    # *consumer*; ``resolve_engine_inputs`` owns the conventions.  The
+    # parameters that remain are analysis configuration (output format, CAD
+    # fidelity, solver options), not physics.
+    resolved = resolve_engine_inputs(
         d,
         mission,
-        solved_of=effective_of,
+        effective_of=_effective_of(d, mission, solved_of=effective_of),
+        of_source=(
+            "optimized" if mission.design_layout().of_is_variable
+            else "mission_nominal"
+        ),
+        total_mass_flow=(
+            float(mdot_total) if mdot_total is not None
+            else _mdo_mass_flow(d, mission)
+        ),
+        eta_cstar_effective=(
+            float(eta_cstar) if eta_cstar is not None else None
+        ),
+        eta_CF=eta_CF,
+        contour_method=contour_method,
+        propellant=propellant,
+        coolant=coolant,
+        regen_mass_flow=mdot_cool,
     )
-    eta_cstar_effective = (
-        float(eta_cstar)
-        if eta_cstar is not None
-        else float(mission.eta_cstar)
-        * (1.0 - float(mission.film_cstar_penalty) * film_frac)
-    )
+    # The regen+film topology check is the contract's invariant, so a caller
+    # supplying an inconsistent jacket flow fails here exactly as before.
+    resolved.assert_flow_closure()
 
-    if mdot_total is None:
-        mdot_total = _mdo_mass_flow(d, mission)
-    mdot_fuel = float(mdot_total) / (1.0 + resolved_of)
-    if mdot_cool is None:
-        # Explicit architecture assumption in the MDO: the selected fraction
-        # is diverted from the jacket to a separate fuel-film path.
-        mdot_cool = (
-            float(mission.cooling_fraction)
-            * mdot_fuel
-            * (1.0 - film_frac)
-        )
-    mdot_film = mdot_fuel * film_frac
-    if not math.isclose(
-        float(mdot_cool) + mdot_film,
-        mdot_fuel,
-        rel_tol=1.0e-9,
-        abs_tol=1.0e-12,
-    ):
-        raise ValueError(
-            "the authoritative regen+film topology requires jacket flow + "
-            "film flow = total fuel flow; MissionSpec.cooling_fraction values "
-            "below 1 need an explicit third fuel-bypass branch before parity "
-            "post-processing"
-        )
+    combination = resolved.propellant.combination
+    # The contract records "unspecified" for an unparseable pair; the
+    # traditional specs have always received ``None`` there, so preserve that
+    # rather than handing them a literal placeholder identity.
+    _paired = "/" in combination
+    oxidizer = resolved.propellant.oxidizer if _paired else None
+    fuel = resolved.propellant.fuel if _paired else None
+    coolant_name = resolved.propellant.coolant
+    eta_cf = resolved.performance.eta_CF
+    eta_cstar_effective = resolved.performance.eta_cstar_effective
+    resolved_of = resolved.propellant.mixture_ratio
+    mdot_total = resolved.total_mass_flow
+    mdot_fuel = resolved.fuel_mass_flow
+    mdot_cool = resolved.thermal.regen_mass_flow
+    mdot_film = resolved.thermal.film_mass_flow
 
-    Pc = float(d["Pc"])
-    fuel_outlet_pressure = Pc * (1.0 + float(d["dp_f_frac"]))
+    Pc = resolved.chamber_pressure
+    fuel_outlet_pressure = Pc * (1.0 + resolved.injector.fuel_dp_fraction)
     # The MDO currently uses constant liquid feed properties even when a
     # screening thermal march predicts a very hot jacket outlet.  Make that
     # approximation explicit in the authoritative handoff by completing the
@@ -245,11 +250,11 @@ def to_design_input(
     # A full tuple prevents a backend/version-dependent partial override.
     fuel_base = resolve_feed_state(
         PropellantFeedSpec(role="fuel", name=fuel),
-        default_pressure=float(mission.P_tank_fuel),
+        default_pressure=resolved.feed.fuel_tank_pressure,
     )
     oxidizer_base = resolve_feed_state(
         PropellantFeedSpec(role="oxidizer", name=oxidizer),
-        default_pressure=float(mission.P_tank_ox),
+        default_pressure=resolved.feed.oxidizer_tank_pressure,
     )
     if (
         pinned_chamber_state is not None
@@ -283,25 +288,25 @@ def to_design_input(
     cooling_spec = CoolingSpec(
         method="regenerative",
         coolant=coolant_name,
-        channel_count=int(mission.n_channels),
-        channel_width=float(d["channel_width"]),
-        channel_height=float(d["channel_height"]),
-        channel_roughness=float(mission.channel_roughness),
+        channel_count=resolved.thermal.channel_count,
+        channel_width=resolved.thermal.channel_width,
+        channel_height=resolved.thermal.channel_height,
+        channel_roughness=resolved.thermal.channel_roughness,
         coolant_mass_flow=float(mdot_cool),
         fuel_film_mass_flow=float(mdot_film),
-        coolant_cp=float(mission.cp_cool),
-        coolant_inlet_temperature=float(mission.coolant_temperature),
+        coolant_cp=resolved.thermal.coolant_cp,
+        coolant_inlet_temperature=resolved.thermal.coolant_inlet_temperature,
         # jacket -> fuel injector boundary, independent of jacket dP
         coolant_outlet_pressure=fuel_outlet_pressure,
         injector_pressure_drop=0.0,
-        max_wall_temperature=float(mission.liner_T_wg_max),
-        coolant_density=float(mission.rho_cool),
-        coolant_viscosity=float(mission.mu_cool),
-        coolant_conductivity=float(mission.k_cool),
-        coolant_wall_temperature_limit=float(
-            mission.rp1_coking_wall_temp_K
+        max_wall_temperature=resolved.material.liner_max_gas_side_wall_temp,
+        coolant_density=resolved.thermal.coolant_density,
+        coolant_viscosity=resolved.thermal.coolant_viscosity,
+        coolant_conductivity=resolved.thermal.coolant_conductivity,
+        coolant_wall_temperature_limit=(
+            resolved.thermal.coolant_wall_temperature_limit
         ),
-        coolant_property_backend="constant",
+        coolant_property_backend=resolved.thermal.coolant_property_backend,
     )
     material = MaterialSpec(
         name=(
@@ -311,20 +316,17 @@ def to_design_input(
             # handoff must not name an alloy the MDO never traced.
             or "unattributed_class_default"
         ),
-        yield_strength=(
-            float(mission.liner_sigma_allow)
-            * float(mission.liner_structural_fos)
-        ),
-        conductivity=float(mission.k_wall),
-        max_temperature=float(mission.liner_T_wg_max),
+        yield_strength=resolved.material.liner_yield_strength,
+        conductivity=resolved.material.liner_conductivity,
+        max_temperature=resolved.material.liner_max_gas_side_wall_temp,
         # The MDO has no independent material heat-flux allowable.  Infinity
         # explicitly disables that unmatched gate; thermal limits still act
         # through wall temperature and combined stress.
         max_heat_flux=float(getattr(mission, "liner_heat_flux_max", math.inf)),
-        elastic_modulus=float(mission.liner_E),
-        thermal_expansion=float(mission.liner_alpha),
-        poisson_ratio=float(mission.liner_poisson),
-        structural_fos=float(mission.liner_structural_fos),
+        elastic_modulus=resolved.material.liner_elastic_modulus,
+        thermal_expansion=resolved.material.liner_thermal_expansion,
+        poisson_ratio=resolved.material.liner_poisson_ratio,
+        structural_fos=resolved.material.liner_structural_fos,
         # ``rho_wall`` is the density the MDO's own station-grid mass integral
         # uses (raosim.mdo.mass).  Handing it across means the authoritative
         # re-evaluation prices the *same* metal, so a chamber-mass difference
@@ -338,7 +340,7 @@ def to_design_input(
         category="copper_alloy_screening",
     )
     manufacturing = ManufacturingSpec(
-        wall_thickness=float(d["t_wall"]),
+        wall_thickness=resolved.thermal.wall_thickness,
         cad=str(cad),
         output_dir=(Path(output_dir) if output_dir is not None else None),
         csv_points=int(csv_points),
@@ -347,14 +349,14 @@ def to_design_input(
     feed = FeedSystemSpec(
         architecture="pump_fed",
         fuel=FeedLineSpec(
-            line_loss=float(mission.line_dp_allowance),
-            tank_pressure=float(mission.P_tank_fuel),
-            pump_efficiency=float(mission.eta_pump),
+            line_loss=resolved.feed.line_pressure_loss,
+            tank_pressure=resolved.feed.fuel_tank_pressure,
+            pump_efficiency=resolved.feed.pump_efficiency,
         ),
         oxidizer=FeedLineSpec(
-            line_loss=float(mission.line_dp_allowance),
-            tank_pressure=float(mission.P_tank_ox),
-            pump_efficiency=float(mission.eta_pump),
+            line_loss=resolved.feed.line_pressure_loss,
+            tank_pressure=resolved.feed.oxidizer_tank_pressure,
+            pump_efficiency=resolved.feed.pump_efficiency,
         ),
     )
     injector = InjectorSpec(
@@ -365,10 +367,10 @@ def to_design_input(
         # the slots and blockage-factor geometry being compared.
         architecture="fixed_discrete",
         sizing="auto",
-        fuel_dp_fraction=float(d["dp_f_frac"]),
-        oxidizer_dp_fraction=float(d["dp_o_frac"]),
-        fuel_cd=float(mission.injector_cd_fuel),
-        oxidizer_cd=float(mission.injector_cd_ox),
+        fuel_dp_fraction=resolved.injector.fuel_dp_fraction,
+        oxidizer_dp_fraction=resolved.injector.oxidizer_dp_fraction,
+        fuel_cd=resolved.injector.fuel_cd,
+        oxidizer_cd=resolved.injector.oxidizer_cd,
         fuel=PropellantFeedSpec(
             role="fuel",
             name=fuel,
@@ -379,10 +381,10 @@ def to_design_input(
             # the MDO parity convention remain explicit below.
             inlet_temperature=None,
             phase="liquid",
-            density=float(mission.rho_fuel),
-            viscosity=float(mission.mu_cool),
+            density=resolved.propellant.fuel_density,
+            viscosity=resolved.thermal.coolant_viscosity,
             surface_tension=float(fuel_base.surface_tension),
-            vapor_pressure=float(mission.p_vapor_fuel),
+            vapor_pressure=resolved.propellant.fuel_vapor_pressure,
             property_source=(
                 "constant-liquid parity input: MDO MissionSpec "
                 "density/viscosity/vapor pressure; traditional documented "
@@ -394,10 +396,10 @@ def to_design_input(
             name=oxidizer,
             inlet_temperature=float(oxidizer_base.temperature),
             phase="liquid",
-            density=float(mission.rho_ox),
+            density=resolved.propellant.oxidizer_density,
             viscosity=float(oxidizer_base.viscosity),
             surface_tension=float(oxidizer_base.surface_tension),
-            vapor_pressure=float(mission.p_vapor_ox),
+            vapor_pressure=resolved.propellant.oxidizer_vapor_pressure,
             property_source=(
                 "constant-liquid parity input: MDO MissionSpec density/vapor "
                 "pressure; traditional documented storage-state viscosity/"
@@ -406,34 +408,34 @@ def to_design_input(
         ),
         allow_infeasible=True,
         geometry=PintleGeometrySpec(
-            pintle_diameter=float(d["D_pintle"]),
-            slot_count=int(mission.pintle_slot_count),
-            slot_aspect_ratio=float(mission.pintle_slot_aspect_ratio),
-            deflector_angle=float(mission.pintle_deflector_angle_deg),
+            pintle_diameter=resolved.injector.pintle_diameter,
+            slot_count=resolved.injector.slot_count,
+            slot_aspect_ratio=resolved.injector.slot_aspect_ratio,
+            deflector_angle=resolved.injector.deflector_angle_deg,
             radial_stream="fuel",
             radial_exit_style="slots",
         ),
         feed_system=feed,
     )
     throat = ThroatGeometrySpec(
-        upstream_radius_ratio=float(getattr(mission, "throat_ru_factor", 1.5)),
-        downstream_radius_ratio=float(
-            getattr(mission, "throat_rd_factor", 0.382)
+        upstream_radius_ratio=resolved.contour.throat_upstream_radius_ratio,
+        downstream_radius_ratio=(
+            resolved.contour.throat_downstream_radius_ratio
         ),
-        convergent_half_angle_deg=float(mission.converging_half_angle_deg),
+        convergent_half_angle_deg=resolved.contour.convergent_half_angle_deg,
     )
     return DesignInput(
         thermo=thermo,
         Pc=Pc,
-        target_thrust=float(mission.thrust),
-        epsilon=float(d["eps"]),
-        method=str(contour_method),
+        target_thrust=resolved.target_thrust,
+        epsilon=resolved.contour.epsilon,
+        method=resolved.contour.method,
         mode=mode or DESIGN_MODE_PRELIMINARY,
-        length_pct=float(mission.length_pct),
-        contraction_ratio=float(mission.contraction_ratio),
-        L_star=float(mission.l_star),
+        length_pct=resolved.contour.length_pct,
+        contraction_ratio=resolved.contour.contraction_ratio,
+        L_star=resolved.contour.l_star,
         throat_geometry=throat,
-        ambient=MissionAmbientSpec(Pa=float(mission.Pa)),
+        ambient=MissionAmbientSpec(Pa=resolved.ambient_pressure),
         cooling=cooling_spec,
         material=material,
         manufacturing=manufacturing,

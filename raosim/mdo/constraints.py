@@ -76,6 +76,7 @@ class ConstraintReasonCode(IntEnum):
     MODEL_UNAVAILABLE = 2
     REQUIREMENT_INACTIVE = 3
     COOLANT_UNRESOLVED = 4
+    CONTOUR_PROVIDER_FAILED = 5
 
 
 # Ordered once, consumed everywhere.  The row scales are conditioning
@@ -104,8 +105,13 @@ CONSTRAINT_MANIFEST: tuple[ConstraintSpec, ...] = (
                    "feed", 2.0, None, "NASA-SP-8052"),
     ConstraintSpec("pump_tip_speed", "tip_speed_margin_min", "inequality",
                    "hard", "feed", 300.0, "m/s", "NASA-SP-8109"),
+    # AR <= 8 is a MANUFACTURING bound, not a model-validity bound: Wadel 1997
+    # cut analytic designs "from 40 down to the limit of 8" only when milling
+    # constraints were imposed, and Carlile 1992 tested 8 and 15.
     ConstraintSpec("aspect_ratio", "aspect_ratio_margin", "inequality",
-                   "hard", "thermal", 8.0, None, None),
+                   "hard", "manufacturing", 8.0, None,
+                   "Wadel-1997-milled-channel-fabrication-constraints;"
+                   "Carlile-1992-AIAA-92-3154;Mirzamoghadam-1991-AIAA-91-1982"),
     ConstraintSpec("blockage_lo", "blockage_lo_margin", "inequality", "hard",
                    "injector", 0.3, None, None),
     ConstraintSpec("blockage_hi", "blockage_hi_margin", "inequality", "hard",
@@ -140,6 +146,26 @@ CONSTRAINT_MANIFEST: tuple[ConstraintSpec, ...] = (
     ConstraintSpec("dry_mass_partial", "dry_mass_partial_margin", "inequality",
                    "hard", "requirement", 1.0, None,
                    "NASA-SP-125-sec-2.1-item-5", "dry_mass_requirement"),
+    # The provider outcome is a mandatory post-solve availability gate rather
+    # than a differentiable hard row.  A future contour implementation may
+    # report a failed candidate with a fixed-shape carrier grid; this gate
+    # prevents that carrier from being accepted as successful geometry.
+    ConstraintSpec(
+        "contour_provider", "contour_provider_margin", "availability_gate",
+        "final_gate", "geometry", 1.0, None, None,
+    ),
+    # The differentiable port is a mandatory post-solve screen, but not yet an
+    # SLSQP row.  Adding the extra hard row changes the active-set path enough
+    # to hit a pre-existing non-finite implicit-root derivative at a valid box
+    # corner (tests/test_mdo_nlp.py Phase-9 gate).  Hard enforcement is deferred
+    # until that corner is robust and NASA SP-8068 qualifies the classical
+    # plate coefficient; a negative final margin still cannot pass verification.
+    ConstraintSpec(
+        "liner_buckling", "liner_buckling_margin", "inequality", "final_gate",
+        "structures", 1.0, None,
+        "NASA-SP-8087-sec-2.1.1.4;"
+        "classical-long-plate-relation-screening-assumption",
+    ),
     ConstraintSpec("engine_residual", "engine_residual_margin", "inequality",
                    "final_gate", "numerical", 1.0e-11, None, None),
     ConstraintSpec("cooling_residual", "cooling_residual_margin", "inequality",
@@ -208,9 +234,27 @@ def constraint_metadata(
     required: list[bool] = []
     reasons: list[int] = []
     from raosim.mdo.coolant_htd import htd_is_applicable
+    from raosim.mdo.propellants import WallSideMechanism, wall_side_mechanism_for
 
     coolant_name, coolant_resolved = _resolve_coolant(mission)
-    htd_applicable = htd_is_applicable(coolant_name) if coolant_resolved else False
+    # Prefer the propellant's *declared* wall-side mechanism.  Falling back to
+    # the coolant-name list is unsafe on its own: "LNG", "ethane" and
+    # "subcooled methane" all miss it and would be handed the coking limit
+    # instead of the supercritical HTD criterion.  Catalog entries all declare
+    # a mechanism, so the name list is now only a legacy backstop.
+    declared = (
+        wall_side_mechanism_for(getattr(mission, "propellant_name", ""))
+        if coolant_resolved else None
+    )
+    if declared is WallSideMechanism.UNKNOWN:
+        # Neither mechanism demonstrated: treat exactly like an unresolved
+        # coolant so feasibility reduces to unknown rather than to a pass.
+        coolant_resolved = False
+        htd_applicable = False
+    elif declared is not None:
+        htd_applicable = declared is WallSideMechanism.SUPERCRITICAL_HTD
+    else:
+        htd_applicable = htd_is_applicable(coolant_name) if coolant_resolved else False
     sampled_domain = getattr(surfaces, "domain_policy", "sampled_bounded") == (
         "sampled_bounded"
     )
@@ -312,6 +356,11 @@ def reason_text(code: int, spec: ConstraintSpec, mission: object) -> str:
             f"propellant {getattr(mission, 'propellant_name', None)!r} is not in "
             "the catalog, so no coolant identity resolves and neither the coking "
             "limit nor the HTD criterion can be shown to govern this wall"
+        )
+    if reason == ConstraintReasonCode.CONTOUR_PROVIDER_FAILED:
+        return (
+            "the selected contour provider reported this candidate unavailable "
+            "or infeasible; its fixed-shape grid is only a numerical carrier"
         )
     return ""
 

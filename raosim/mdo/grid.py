@@ -51,6 +51,7 @@ Region layout (n = n_chamber + n_conv + n_div + 1 stations, throat shared):
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import partial
 
 import raosim.jax  # noqa: F401  -- x64
 import jax
@@ -323,6 +324,14 @@ class GridTopology:
         return self.n_chamber + self.n_conv
 
 
+@partial(
+    jax.tree_util.register_dataclass,
+    data_fields=[
+        "x", "r", "area_ratio", "mach", "dseg",
+        "chart_domain_violation", "wall_monotonic_margin",
+    ],
+    meta_fields=["throat_index"],
+)
 @dataclass(frozen=True)
 class StationGrid:
     """Per-station geometry + inviscid state (all shapes static)."""

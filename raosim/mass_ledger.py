@@ -93,6 +93,7 @@ __all__ = [
     "flange_bolt_mass_ledger",
     "injector_mass_ledger",
     "injector_mass_ledger_from_built_parts",
+    "injector_mass_ledger_unavailable",
     "combine_ledgers",
     "SP125_SHELL_MASS",
     "SP125_WELD_LAND_ALLOWANCE",
@@ -1325,6 +1326,64 @@ def injector_mass_ledger(
     )
 
 
+_PRODUCTION_INJECTOR_PART_NAMES = (
+    "pintle_body",
+    "pintle_tip",
+    "injector_body",
+    "orifice_plate",
+    "faceplate",
+)
+
+
+def injector_mass_ledger_unavailable(
+    *,
+    reason: str,
+    reason_code: str,
+    geometry_id: str | None = None,
+    scope: str = "injector",
+) -> MassLedger:
+    """Return explicit unavailable rows when production CAD was not built.
+
+    This is the only honest fallback for the five-part injector mass contract:
+    the legacy analytic ledger remains available as a separately labelled
+    screening tool, but it cannot stand in for missing built bodies.
+    """
+
+    return MassLedger(
+        scope=scope,
+        items=tuple(
+            MassItem(
+                subsystem="injector",
+                component=name,
+                quantity=1,
+                material=None,
+                volume_m3=None,
+                density_kg_m3=None,
+                mass_kg=None,
+                status="unavailable",
+                method="production five-part CAD body measurement",
+                source_ids=(),
+                key_parameters={
+                    "geometry_id": geometry_id,
+                    "production_architecture": "coaxial_five_part",
+                },
+                unavailable_reason=reason,
+                unavailable_reason_code=reason_code,
+            )
+            for name in _PRODUCTION_INJECTOR_PART_NAMES
+        ),
+        warnings=(reason,),
+        provenance={
+            "geometry_source": (
+                "raosim.injector_coaxial_cad.build_coaxial_part_set"
+            ),
+            "geometry_id": geometry_id,
+            "cad_consistency_status": "production_cad_bodies_unavailable",
+            "production_architecture": "coaxial_five_part",
+        },
+    )
+
+
 def injector_mass_ledger_from_built_parts(
     part_set: Any,
     *,
@@ -1339,16 +1398,11 @@ def injector_mass_ledger_from_built_parts(
     :func:`raosim.injector_coaxial_cad.build_coaxial_part_set`.  The function is
     intentionally duck-typed so a volume-only record can be audited without
     importing CadQuery.  Unlike :func:`injector_mass_ledger`, every resolved
-    item here is measured from the same in-memory body later handed to export.
+    item here is measured from the production STEP-boundary body.  A matching
+    exporter can receive that same in-memory body without rebuilding it.
     """
 
-    expected = (
-        "pintle_body",
-        "pintle_tip",
-        "injector_body",
-        "orifice_plate",
-        "faceplate",
-    )
+    expected = _PRODUCTION_INJECTOR_PART_NAMES
     parts = getattr(part_set, "parts", None)
     if not isinstance(parts, Mapping):
         raise ValueError("part_set.parts must be a mapping of production CAD parts")
@@ -1414,7 +1468,10 @@ def injector_mass_ledger_from_built_parts(
             density_kg_m3=density,
             mass_kg=(volume * density) if reason is None else None,
             status="cad_body_measured" if reason is None else "unavailable",
-            method="OpenCascade volume of the in-memory body passed to export",
+            method=(
+                "OpenCascade volume of the in-memory production "
+                "STEP-boundary body"
+            ),
             source_ids=(),
             key_parameters={
                 "geometry_id": geometry_id,
@@ -1439,7 +1496,12 @@ def injector_mass_ledger_from_built_parts(
                 "raosim.injector_coaxial_cad.build_coaxial_part_set"
             ),
             "geometry_id": geometry_id,
-            "cad_consistency_status": "same_in_memory_bodies_measured_and_exported",
+            "cad_consistency_status": "in_memory_production_bodies_measured",
+            "cad_consistency": (
+                "the ledger measured the production STEP-boundary bodies; a "
+                "matching export audit with this geometry_id is still required "
+                "before claiming artifact linkage"
+            ),
             "production_architecture": "coaxial_five_part",
         },
     )

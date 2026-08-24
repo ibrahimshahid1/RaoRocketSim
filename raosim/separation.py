@@ -121,6 +121,34 @@ def schmucker_separation_ratio(Me: float, Pa_over_Pc: float) -> float:
 
 _METHODS = ("summerfield", "kalt_badal", "schmucker", "schilling")
 
+#: Every correlation here predicts the *onset* of separation as a wall-to-
+#: ambient pressure ratio.  That is a free-shock-separation (FSS) description
+#: and it cannot represent restricted shock separation (RSS).
+#:
+#: Frey & Hagemann, "Restricted Shock Separation in Rocket Nozzles"
+#: (J. Propulsion & Power 16(3), 2000) show a second, distinct topology in
+#: which an internal cap-shock deflects flow toward the wall and, when that
+#: momentum exceeds the separation shock's, the flow **reattaches**.  Their
+#: paper states RSS "also occurs in full-scale, thrust-optimized rocket
+#: nozzles" and that nozzle design "seems to have a major influence on the type
+#: of flow separation" -- and a thrust-optimized (Rao/TOP) contour is exactly
+#: what this repository generates.
+#:
+#: The consequence is not a fidelity nicety.  Side loads are driven by the
+#: change in separation pattern, i.e. by the FSS<->RSS transition, which an
+#: onset pressure ratio cannot detect at all.  So these correlations are scoped
+#: FSS-only and side loads remain unavailable rather than estimated.
+SEPARATION_PATTERN_SCOPE = "free_shock_separation_only"
+RSS_UNAVAILABLE_REASON = (
+    "restricted shock separation (RSS) is not modelled: these correlations "
+    "predict an onset pressure ratio, which is a free-shock description. Frey "
+    "& Hagemann (JPP 16(3), 2000) report RSS in full-scale thrust-optimized "
+    "nozzles -- the contour family this repository produces -- and RSS "
+    "involves reattachment rather than a single onset. Side loads arise from "
+    "the FSS/RSS transition and are therefore also unavailable."
+)
+SEPARATION_SOURCE_ID = "Frey-Hagemann-2000-JPP-16-3-restricted-shock-separation"
+
 
 def check_separation(
     contour: dict,
@@ -252,6 +280,14 @@ def check_separation(
             'frozen_variable_cp_q1d'
             if frozen_expansion is not None else 'constant_gamma'
         ),
+        # Scope, so a caller cannot read an unqualified "not separated" as a
+        # complete separation verdict for a thrust-optimized contour.
+        'separation_pattern_scope': SEPARATION_PATTERN_SCOPE,
+        'restricted_shock_separation': 'not_modelled',
+        'restricted_shock_separation_reason': RSS_UNAVAILABLE_REASON,
+        'side_load_n': None,
+        'side_load_unavailable_reason': RSS_UNAVAILABLE_REASON,
+        'scope_source_id': SEPARATION_SOURCE_ID,
     }
 
 

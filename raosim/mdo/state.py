@@ -45,14 +45,15 @@ from raosim.mdo.engine import (
 )
 from raosim.mdo.grid import (
     GridTopology,
-    build_station_grid,
     chamber_barrel_length,
     chamber_volume,
     wetted_area,
 )
+from raosim.mdo.nozzle import ContourProviderSelection
 from raosim.mdo.properties import ChamberSurfaces
 from raosim.mdo.schema import DesignVector, MissionSpec
 from raosim.mdo.constraints import (
+    ConstraintReasonCode,
     ENGINE_CONSTRAINT_NAMES,
     ENGINE_CONSTRAINT_SPECS,
     constraint_metadata,
@@ -615,7 +616,14 @@ def engine_state_from_result(
         mdot_core_total=mdot_core,
     )
 
-    grid = build_station_grid(Rt, eps, mission, topo, gamma=gamma)
+    # Reuse the exact provider result consumed by cooling, structures and mass.
+    # Rebuilding here would erase a provider failure and silently manufacture
+    # the default analytic contour in the public state contract.
+    contour_outcome = result.contour_outcome
+    grid = contour_outcome.grid
+    contour_accepted = (
+        contour_outcome.available & ~contour_outcome.infeasible
+    )
     r_chamber = Rt * jnp.sqrt(mission.contraction_ratio)
     L_conv = ((r_chamber - Rt)
               / jnp.tan(jnp.deg2rad(mission.converging_half_angle_deg)))
@@ -627,7 +635,7 @@ def engine_state_from_result(
         area_ratio=grid.area_ratio,
         mach=grid.mach,
         dseg=grid.dseg,
-        station_valid=jnp.ones_like(grid.x, dtype=jnp.bool_),
+        station_valid=jnp.broadcast_to(contour_accepted, grid.x.shape),
         throat_index=jnp.asarray(grid.throat_index, dtype=jnp.int32),
         Ru_input=mission.throat_ru_factor * Rt,
         Rd_applied=mission.throat_rd_factor * Rt,
@@ -645,7 +653,7 @@ def engine_state_from_result(
         chart_domain_violation=grid.chart_domain_violation,
         wall_monotonic_margin=grid.wall_monotonic_margin,
         upstream_model=jnp.asarray(1, dtype=jnp.int32),
-        divergent_model=jnp.asarray(1, dtype=jnp.int32),
+        divergent_model=contour_outcome.provider_model_code,
     )
 
     cool = result.cooling
@@ -765,6 +773,12 @@ def engine_state_from_result(
     available = jnp.asarray(available_np, dtype=jnp.bool_)
     required = jnp.asarray(required_np, dtype=jnp.bool_)
     reason_codes = jnp.asarray(reasons_np, dtype=jnp.int32)
+    contour_index = ENGINE_CONSTRAINT_NAMES.index("contour_provider_margin")
+    reason_codes = reason_codes.at[contour_index].set(jnp.where(
+        contour_accepted,
+        reason_codes[contour_index],
+        int(ConstraintReasonCode.CONTOUR_PROVIDER_FAILED),
+    ))
     # The first item is an equality residual. The remaining entries are
     # conventionally margins >= 0.
     inequality_values = constraint_values[1:]
@@ -981,6 +995,7 @@ def solve_engine_state(
     couple_eta_cstar: bool = False,
     surfaces: ChamberSurfaces | None = None,
     topo: GridTopology = GridTopology(),
+    contour_provider: ContourProviderSelection = None,
     rtol: float = 1e-12,
     atol: float = 1e-12,
     max_steps: int = 64,
@@ -993,6 +1008,7 @@ def solve_engine_state(
         couple_eta_cstar=couple_eta_cstar,
         surfaces=surfaces,
         topo=topo,
+        contour_provider=contour_provider,
         rtol=rtol,
         atol=atol,
         max_steps=max_steps,

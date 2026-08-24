@@ -165,10 +165,11 @@ class MissionSpec:
     # non-separating contour when the exit is within about 20% of separation.
     separation_design_margin: float = 1.20
     # Phase-2: path to a saved CEA property table (.npz) produced host-side by
-    # ``scripts/sample_cea_surface.py``.  When set, γ/T_c/R (and hence c*) come
-    # from C¹ surfaces over (P_c, O/F) and **O/F becomes a real design lever**
-    # (flame temperature is a second coking lever).  When empty, the constants
-    # above are used as flat surfaces — correct at the stated O/F, flat in O/F.
+    # ``scripts/sample_cea_surface.py``, or the explicit ``catalog`` sentinel
+    # selecting the hash-pinned packaged table for ``propellant_name``.  When
+    # set, γ/T_c/R (and hence c*) come from C¹ surfaces over (P_c, O/F) and
+    # **O/F becomes a real design lever** (flame temperature is a second coking
+    # lever).  When empty, the constants above remain the default flat surfaces.
     cea_table_path: str = ""
     #: Feed architecture this mission describes.  Selects the chamber-pressure
     #: window in :mod:`raosim.mdo.bounds` -- Parsley & Zhang (2004) give a

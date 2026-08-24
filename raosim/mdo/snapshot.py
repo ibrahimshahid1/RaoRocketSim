@@ -1442,7 +1442,15 @@ def _snapshot_from_engine_result(
     mdot_f = mdot / (1.0 + of)
     mdot_o = mdot - mdot_f
 
-    grid = build_station_grid(result.Rt, d["eps"], mission)
+    contour_outcome = getattr(result, "contour_outcome", None)
+    # Current EngineResult instances retain the exact provider grid.  Rebuild
+    # only for compatibility objects that predate the adapter; rebuilding a
+    # current failed outcome would silently substitute the analytic contour.
+    grid = (
+        contour_outcome.grid
+        if contour_outcome is not None
+        else build_station_grid(result.Rt, d["eps"], mission)
+    )
     gx = np.asarray(grid.x, dtype=float)
     gr = np.asarray(grid.r, dtype=float)
     gar = np.asarray(grid.area_ratio, dtype=float)
@@ -1831,6 +1839,20 @@ def _snapshot_from_engine_result(
         constraint_required,
         constraint_reasons,
     ) = constraint_metadata(mission, resolved_surfaces)
+    if contour_outcome is not None:
+        contour_accepted = (
+            bool(np.asarray(contour_outcome.available))
+            and not bool(np.asarray(contour_outcome.infeasible))
+        )
+        if not contour_accepted:
+            contour_index = next(
+                index
+                for index, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+                if spec.engine_key == "contour_provider_margin"
+            )
+            constraint_reasons[contour_index] = int(
+                ConstraintReasonCode.CONTOUR_PROVIDER_FAILED
+            )
     constraint_values = np.asarray([
         float(margins.get(str(spec.engine_key), np.nan))
         for spec in ENGINE_CONSTRAINT_SPECS

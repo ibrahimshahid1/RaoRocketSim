@@ -951,15 +951,26 @@ def test_hardware_mass_ledger_closes_on_both_paths_and_is_geometry_traceable(
     )
 
     hardware = reev.result.report_sections["hardware_mass"]
-    assert hardware["status"] == "resolved"
-    assert hardware["complete"] is True
-    assert hardware["total_mass_kg"] > 0.0
+    from raosim.injector_cad import cadquery_available
+
+    cad_available = cadquery_available()
+    assert hardware["status"] == ("resolved" if cad_available else "partial")
+    assert hardware["complete"] is cad_available
+    if cad_available:
+        assert hardware["total_mass_kg"] > 0.0
+    else:
+        assert hardware["total_mass_kg"] is None
     # Every subsystem the "requirements in, parts out" workflow exports must
     # be priced: chamber wall, bolted interface, injector.
     assert set(hardware["by_subsystem_kg"]) == {
         "thrust_chamber", "chamber_interface", "injector",
     }
-    assert all(v > 0.0 for v in hardware["by_subsystem_kg"].values())
+    assert hardware["by_subsystem_kg"]["thrust_chamber"] > 0.0
+    assert hardware["by_subsystem_kg"]["chamber_interface"] > 0.0
+    if cad_available:
+        assert hardware["by_subsystem_kg"]["injector"] > 0.0
+    else:
+        assert hardware["by_subsystem_kg"]["injector"] is None
     # The closeout assumption must be stated, not silently applied.
     assert any("closeout" in note for note in hardware["notes"])
     # Nothing may claim to be qualified hardware.
@@ -978,7 +989,7 @@ def test_hardware_mass_ledger_closes_on_both_paths_and_is_geometry_traceable(
     assert snap.masses["thrust_chamber_mass_kg"].value == pytest.approx(
         sum(snap.masses[k].value for k in branches), rel=1e-12
     )
-    assert snap.masses["injector_mass_kg"].available
+    assert snap.masses["injector_mass_kg"].available is cad_available
 
     # Both paths must be comparable now -- that is the whole point of closing
     # the gap -- and both must price the SAME alloy, so any residual delta is

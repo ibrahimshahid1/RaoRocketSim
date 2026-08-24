@@ -50,8 +50,11 @@ from raosim.jax.primitives import isentropic_pressure_ratio, mach_from_area_rati
 from raosim.mdo.assembly import StateScales
 from raosim.mdo.properties import ChamberSurfaces, constant_chamber_surfaces
 from raosim.mdo.schema import DesignVector, MissionSpec
-from raosim.mdo.grid import (
-    build_station_grid, chamber_barrel_length, GridTopology,
+from raosim.mdo.grid import chamber_barrel_length, GridTopology
+from raosim.mdo.nozzle import (
+    ContourOutcome,
+    ContourProviderSelection,
+    evaluate_contour,
 )
 from raosim.mdo.cooling import (
     solve_cooling, CoolingMarch, film_cooling_efficiency,
@@ -62,7 +65,10 @@ from raosim.mdo.envelope import (
     chamber_envelope, envelope_margins, fractional_margin, ChamberEnvelope,
 )
 from raosim.mdo.pump import electric_feed, ElectricFeed
-from raosim.mdo.structures import nozzle_collapse_screen, NozzleCollapseScreen
+from raosim.mdo.structures import (
+    nozzle_collapse_screen,
+    rib_supported_liner_buckling_screen,
+)
 from raosim.mdo.coolant_htd import htd_is_applicable
 from raosim.mdo.propellants import get_propellant
 
@@ -190,6 +196,9 @@ class EngineResult:
     Me: Array
     Pe: Array
     thrust_residual: Array
+    # Typed provider outcome.  A failed provider retains a fixed-shape carrier
+    # grid but cannot be accepted merely because that carrier is finite.
+    contour_outcome: ContourOutcome
     # blocks
     cooling: CoolingMarch
     injector: InjectorReadout
@@ -263,6 +272,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
                  couple_eta_cstar: bool = False,
                  surfaces: ChamberSurfaces | None = None,
                  topo: GridTopology = GridTopology(),
+                 contour_provider: ContourProviderSelection = None,
                  rtol: float = 1e-12, atol: float = 1e-12,
                  max_steps: int = 64) -> EngineResult:
     """Solve the coupled engine at design point ``x`` and assemble every block.
@@ -312,7 +322,10 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     mdot_f, mdot_o = _split(mdot, mission, of)
 
     # --- cooling (inner IFT solve on the stationwise wall temperatures) ----- #
-    grid = build_station_grid(Rt, eps, mission, topo, gamma=gamma)
+    contour_outcome = evaluate_contour(
+        Rt, eps, mission, topo, gamma=gamma, provider=contour_provider
+    )
+    grid = contour_outcome.grid
     # Defined architecture: ``film_frac`` is a fuel branch that bypasses the
     # regenerative jacket.  Only the remainder reaches that jacket; sending
     # total fuel through it double-counts film and overstates heat capacity.
@@ -385,6 +398,18 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         shell_thickness=chamber.closeout_thickness,
         shell_length=(mission.length_pct / 100.0)
         * (Rt * jnp.sqrt(x.eps) - Rt) / jnp.tan(jnp.deg2rad(15.0)),
+    )
+    # Local liner collapse is distinct from the closeout/nozzle-shell screen
+    # above.  The coolant-over-gas differential compresses the liner between
+    # adjacent ribs; mirror the traditional pipeline's long-plate screen using
+    # the same resolved pressure profile, contour radius and channel width.
+    liner_buckling = rib_supported_liner_buckling_screen(
+        pressure_differential=cooling.liner_pressure_differential,
+        inner_radius=grid.r,
+        wall_thickness=x.t_wall,
+        unsupported_span=x.channel_width,
+        elastic_modulus=mission.liner_E,
+        poisson_ratio=mission.liner_poisson,
     )
     # SP-125 §2.1 item 6: the smallest enclosing cylinder of the cooled thrust
     # chamber.  A LOWER BOUND on the installed envelope -- it has no flange,
@@ -494,6 +519,15 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
                 + jnp.abs(cooling.sigma_pressure_profile)
             )
         ),
+        # Classical rib-bay plate screen, kept separate from SP-125 eq. 4-29.
+        # The stationwise fractional form 1 - applied/critical has exactly the
+        # same zero/sign as the traditional critical/applied >= 1 gate and is
+        # an interpretable O(1) distance from the modeled collapse boundary.
+        "liner_buckling_margin": jnp.min(
+            1.0
+            - liner_buckling.compressive_stress_profile
+            / jnp.maximum(liner_buckling.critical_stress_profile, 1.0e-9)
+        ),
         # allowable gas-side wall temperature (Mirzamoghadam: a primary design
         # criterion).  Required now that t_wall is a variable — a thicker wall
         # lowers T_wc but RAISES T_wg, so both sides must be bounded.
@@ -534,6 +568,14 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         # whether the flow detaches, collapse asks whether the shell survives
         # the external pressure while attached and overexpanded.
         "nozzle_collapse_margin": collapse.normalized_margin,
+        # A contour provider reports failure explicitly.  Its fixed-shape
+        # carrier grid lets this evaluation complete, but never turns provider
+        # failure into an implicit TOP/Bézier fallback or a NaN sentinel.
+        "contour_provider_margin": jnp.where(
+            contour_outcome.available & ~contour_outcome.infeasible,
+            1.0,
+            -1.0,
+        ),
         # --- SP-125 §2.1 requirement screens (items 5 and 6) ---------------- #
         # FRACTIONAL margins (1 - value/limit), dimensionless and O(1) at every
         # thrust class -- see raosim.mdo.envelope.fractional_margin for why the
@@ -595,6 +637,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
             cooling.sigma_thermal
             + jnp.abs(cooling.sigma_pressure_profile)
         ),
+        "liner_buckling_safety_ratio_min": liner_buckling.margin,
         "film_capacity_required": (x.film_frac * mission.film_capacity_margin),
         "film_system_capacity": jnp.asarray(mission.film_system_capacity_fraction),
         "eta_film_cooling": film_cooling_efficiency(
@@ -609,13 +652,18 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "dry_mass_partial_exact": dry_mass_partial_exact_mass,
         # Deprecated diagnostic alias retained for one compatibility release.
         "dry_mass_partial": dry_mass_partial_objective_mass,
+        "contour_provider_available": contour_outcome.available,
+        "contour_provider_infeasible": contour_outcome.infeasible,
+        "contour_provider_reason_code": contour_outcome.reason_code,
+        "contour_provider_model_code": contour_outcome.provider_model_code,
     }
 
     return EngineResult(
         Rt=Rt, mdot=mdot, T_wg=T_wg, eta_cstar=eta_cs, Cf_ideal=Cf_ideal,
         Cf=Cf, Isp=Isp, Me=Me, Pe=Pe,
         OF=of,
-        thrust_residual=resid[0], cooling=cooling, injector=injector, feed=feed,
+        thrust_residual=resid[0], contour_outcome=contour_outcome,
+        cooling=cooling, injector=injector, feed=feed,
         dp_regen=dp_regen, dp_rise_fuel=dp_rise_f, dp_rise_ox=dp_rise_o,
         electric_package_objective_mass=electric_package_objective_mass,
         dry_mass_partial_objective_mass=dry_mass_partial_objective_mass,
@@ -671,6 +719,7 @@ _SCALARS = {
 
 def engine_outputs(x_arr: Array, mission: MissionSpec, *,
                    couple_eta_cstar: bool = False,
+                   contour_provider: ContourProviderSelection = None,
                    outputs: tuple[str, ...] = ("Isp", "objective_mass")) -> Array:
     """``f(active_x) -> outputs`` through the explicit mission layout."""
     for k in outputs:
@@ -710,14 +759,22 @@ def engine_outputs(x_arr: Array, mission: MissionSpec, *,
         design,
         mission,
         couple_eta_cstar=couple_eta_cstar,
+        contour_provider=contour_provider,
     )
     return jnp.stack([_SCALARS[k](r) for k in outputs])
 
 
 def ablation_delta(x: DesignVector, mission: MissionSpec,
-                   key: str = "Isp") -> Array:
+                   key: str = "Isp", *,
+                   contour_provider: ContourProviderSelection = None) -> Array:
     """RQ1 probe: (coupled − frozen) for a scalar output, bounding how much of
     the result rests on the η_c* correlation (plan §5)."""
-    on = solve_engine(x, mission, couple_eta_cstar=True)
-    off = solve_engine(x, mission, couple_eta_cstar=False)
+    on = solve_engine(
+        x, mission, couple_eta_cstar=True,
+        contour_provider=contour_provider,
+    )
+    off = solve_engine(
+        x, mission, couple_eta_cstar=False,
+        contour_provider=contour_provider,
+    )
     return _SCALARS[key](on) - _SCALARS[key](off)

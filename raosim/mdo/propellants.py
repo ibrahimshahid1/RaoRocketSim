@@ -32,10 +32,36 @@ engineering estimates, not literature values.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import math
+from dataclasses import dataclass, replace
+from enum import Enum
+from typing import Any, Mapping
 
 _IN = 0.0254   # m per inch
 _R_UNIVERSAL = 8314.462618   # J/(kmol K)
+
+
+class WallSideMechanism(str, Enum):
+    """Which coolant-side wall mechanism governs, stated rather than guessed.
+
+    This exists because inferring the mechanism from a coolant *name* is
+    unsafe.  ``HTD_RELEVANT_COOLANTS`` is a fixed spelling list, so ``"LNG"``,
+    ``"ethane"`` and ``"subcooled methane"`` all fall through it and would be
+    handed the hydrocarbon coking limit instead of the supercritical
+    heat-transfer-deterioration criterion -- silently, and for a fluid where
+    the coking limit is not the governing physics.
+
+    A registered propellant must therefore declare its mechanism.  ``UNKNOWN``
+    is a legitimate answer and reduces feasibility to ``unknown``; it is never
+    a pass.
+    """
+
+    #: Hydrocarbon liquid-side deposition limit (SP-8087 sec. 3.1.1.5.4).
+    COKING = "coking"
+    #: Supercritical deterioration (Nasuti & Pizzarelli 2021, Eq. 9).
+    SUPERCRITICAL_HTD = "supercritical_htd"
+    #: Neither mechanism has been demonstrated for this fluid.
+    UNKNOWN = "unknown"
 
 
 @dataclass(frozen=True)
@@ -76,6 +102,16 @@ class PropellantSpec:
     #: True when l_star / wall limit are engineering estimates, not literature.
     estimated: bool = False
     notes: str = ""
+    #: Which coolant-side mechanism governs.  ``None`` means the legacy
+    #: name-based inference is still in force; every catalog entry declares it
+    #: explicitly and :func:`register_propellant` requires it.
+    wall_side_mechanism: WallSideMechanism | None = None
+    #: ``"catalog"`` for repository-validated entries, ``"user_registered"``
+    #: for anything supplied at runtime.  A report must be able to say which.
+    provenance: str = "catalog"
+    #: Free-form evidence for a user-registered combination: where L*, the
+    #: efficiencies, the wall limit and the material compatibility come from.
+    evidence: Mapping[str, str] | None = None
 
 
 # --------------------------------------------------------------------------- #
@@ -97,6 +133,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
         film_latent_heat=2.5e5, cp_cool_vapor=2.5e3, film_mu_vapor=1.0e-5,
         coolant_sound_speed=1300.0, p_vapor_fuel=3.0e3, p_vapor_ox=1.0e5,
         coolant_wall_limit_K=728.0,            # SP-8087: 850 °F
+        wall_side_mechanism=WallSideMechanism.COKING,
         notes="SP-8087 coking onset 800–900 °F (700–756 K); design limit 850 °F.",
     ),
     "lox/lch4": PropellantSpec(
@@ -110,6 +147,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
         film_latent_heat=5.1e5, cp_cool_vapor=2.2e3, film_mu_vapor=1.1e-5,
         coolant_sound_speed=1400.0, p_vapor_fuel=1.0e5, p_vapor_ox=1.0e5,
         coolant_wall_limit_K=950.0,            # ESTIMATE — CH4 cokes far less
+        wall_side_mechanism=WallSideMechanism.SUPERCRITICAL_HTD,
         estimated=True,
         notes="L* and wall limit are ENGINEERING ESTIMATES: methane post-dates "
               "SP-125/SP-8087, which carry no LOX/LCH4 entry.",
@@ -125,6 +163,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
         film_latent_heat=4.46e5, cp_cool_vapor=1.4e4, film_mu_vapor=8.8e-6,
         coolant_sound_speed=1100.0, p_vapor_fuel=1.0e5, p_vapor_ox=1.0e5,
         coolant_wall_limit_K=None,             # no carbon -> cannot coke
+        wall_side_mechanism=WallSideMechanism.SUPERCRITICAL_HTD,
         notes="No coking limit (no carbon); the gas-side material wall-temp "
               "constraint governs instead.",
     ),
@@ -139,6 +178,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
         film_latent_heat=8.75e5, cp_cool_vapor=2.0e3, film_mu_vapor=1.0e-5,
         coolant_sound_speed=1400.0, p_vapor_fuel=6.6e3, p_vapor_ox=9.6e4,
         coolant_wall_limit_K=589.0,            # SP-8087 hydrazine family: 600 °F
+        wall_side_mechanism=WallSideMechanism.COKING,
         notes="SP-8087: Aerozine-50 detonated against walls above 600 °F "
               "(589 K); the hydrazine-family limit is applied here.",
     ),
@@ -153,6 +193,7 @@ PROPELLANTS: dict[str, PropellantSpec] = {
         film_latent_heat=8.4e5, cp_cool_vapor=1.9e3, film_mu_vapor=1.0e-5,
         coolant_sound_speed=1160.0, p_vapor_fuel=5.8e3, p_vapor_ox=5.1e6,
         coolant_wall_limit_K=589.0,            # SP-8087 alcohols: 600 °F
+        wall_side_mechanism=WallSideMechanism.COKING,
         estimated=True,
         notes="L* is an ESTIMATE (no SP-125 entry).  Wall limit uses the "
               "SP-8087 alcohol figure (furfuryl alcohol, 600 °F).",
@@ -173,12 +214,160 @@ def get_propellant(name: str) -> PropellantSpec:
     """Look up a combination by name (case/alias tolerant)."""
     key = str(name).strip().lower().replace(" ", "")
     key = _ALIASES.get(key, key)
-    if key not in PROPELLANTS:
-        raise KeyError(
-            f"unknown propellant {name!r}; available: "
-            + ", ".join(sorted(PROPELLANTS)))
-    return PROPELLANTS[key]
+    if key in PROPELLANTS:
+        return PROPELLANTS[key]
+    if key in _REGISTERED:
+        return _REGISTERED[key]
+    raise KeyError(
+        f"unknown propellant {name!r}; available: "
+        + ", ".join(sorted(PROPELLANTS))
+        + (f"; registered: {', '.join(sorted(_REGISTERED))}"
+           if _REGISTERED else "")
+        + ". Register a custom combination with "
+          "raosim.mdo.propellants.register_propellant().")
 
 
 def available() -> tuple[str, ...]:
     return tuple(sorted(PROPELLANTS))
+
+
+# --------------------------------------------------------------------------- #
+# Runtime registration of a custom combination                                 #
+# --------------------------------------------------------------------------- #
+class PropellantCoverageError(ValueError):
+    """A custom propellant is incompletely or unsafely specified."""
+
+
+#: Registered at runtime.  Kept separate from ``PROPELLANTS`` so a report can
+#: always distinguish a repository-validated entry from a user-supplied one.
+_REGISTERED: dict[str, PropellantSpec] = {}
+
+#: Numeric fields a custom combination must supply.  There is no partial
+#: registration: the same rule as the material mapper, for the same reason --
+#: a half-specified propellant is a fluid that exists in no table and matches
+#: no test data.
+_REQUIRED_POSITIVE: tuple[str, ...] = (
+    "gamma", "Tc", "R_gas", "OF_default", "eta_cstar", "eta_CF", "l_star",
+    "rho_fuel", "rho_ox", "rho_cool", "cp_cool", "k_cool", "mu_cool",
+    "film_latent_heat", "cp_cool_vapor", "film_mu_vapor",
+    "coolant_sound_speed", "p_vapor_fuel", "p_vapor_ox",
+)
+
+#: Evidence a custom combination must cite before it is usable.
+_REQUIRED_EVIDENCE: tuple[str, ...] = (
+    "chamber_gas", "l_star_basis", "efficiency_basis",
+    "coolant_properties", "wall_limit_basis", "material_compatibility",
+)
+
+
+def register_propellant(
+    spec: PropellantSpec,
+    *,
+    evidence: Mapping[str, str] | None = None,
+    replace_existing: bool = False,
+) -> PropellantSpec:
+    """Register a custom combination for this process, or raise.
+
+    Registration is deliberately demanding.  A propellant selects the chamber
+    gas, the chamber sizing, the coolant, the wall-side failure mechanism and
+    the material compatibility all at once; accepting a partially specified one
+    would let a design be optimized against a fluid nobody has characterized.
+
+    ``wall_side_mechanism`` must be stated.  It cannot be inferred from the
+    coolant name -- ``"LNG"``, ``"ethane"`` and ``"subcooled methane"`` all
+    miss the built-in supercritical name list and would otherwise be handed the
+    hydrocarbon coking limit, which is not their governing physics.  Declaring
+    :attr:`WallSideMechanism.UNKNOWN` is allowed and honest; it makes coverage
+    ``unknown`` rather than granting a pass.
+    """
+
+    if not isinstance(spec, PropellantSpec):
+        raise PropellantCoverageError("spec must be a PropellantSpec")
+
+    name = str(spec.name).strip()
+    if "/" not in name:
+        raise PropellantCoverageError(
+            f"propellant name must be OXIDIZER/FUEL; got {spec.name!r}"
+        )
+
+    for field_name in _REQUIRED_POSITIVE:
+        value = getattr(spec, field_name, None)
+        if value is None:
+            raise PropellantCoverageError(
+                f"{name}: {field_name} is required; a custom propellant may "
+                "not inherit a catalog default for it"
+            )
+        number = float(value)
+        if not math.isfinite(number) or number <= 0.0:
+            raise PropellantCoverageError(
+                f"{name}: {field_name} must be finite and positive; got {value!r}"
+            )
+    if not str(spec.coolant_name).strip():
+        raise PropellantCoverageError(f"{name}: coolant_name is required")
+
+    mechanism = spec.wall_side_mechanism
+    if mechanism is None:
+        raise PropellantCoverageError(
+            f"{name}: wall_side_mechanism must be declared explicitly "
+            f"({', '.join(m.value for m in WallSideMechanism)}). It cannot be "
+            "inferred from the coolant name without risking the wrong "
+            "wall-side physics."
+        )
+    mechanism = WallSideMechanism(mechanism)
+    if mechanism is WallSideMechanism.COKING:
+        limit = spec.coolant_wall_limit_K
+        if limit is None or not math.isfinite(float(limit)) or float(limit) <= 0:
+            raise PropellantCoverageError(
+                f"{name}: mechanism 'coking' requires a finite positive "
+                "coolant_wall_limit_K -- the limit IS the constraint"
+            )
+
+    supplied = dict(evidence or spec.evidence or {})
+    missing = [key for key in _REQUIRED_EVIDENCE if not supplied.get(key)]
+    if missing:
+        raise PropellantCoverageError(
+            f"{name}: missing evidence for {', '.join(missing)}. A custom "
+            "propellant must cite where its chamber gas, L*, efficiencies, "
+            "coolant properties, wall limit and material compatibility come "
+            "from; unsourced numbers must not silently become a design basis."
+        )
+
+    key = name.lower().replace(" ", "")
+    if key in PROPELLANTS:
+        raise PropellantCoverageError(
+            f"{name}: shadows the validated catalog entry {key!r}; choose a "
+            "distinct name rather than overriding repository-validated data"
+        )
+    if key in _REGISTERED and not replace_existing:
+        raise PropellantCoverageError(
+            f"{name}: already registered; pass replace_existing=True to change it"
+        )
+
+    stored = replace(
+        spec,
+        wall_side_mechanism=mechanism,
+        provenance="user_registered",
+        evidence=dict(supplied),
+        estimated=True,
+    )
+    _REGISTERED[key] = stored
+    return stored
+
+
+def unregister_propellant(name: str) -> None:
+    """Remove a runtime registration (tests and interactive sessions)."""
+
+    _REGISTERED.pop(str(name).strip().lower().replace(" ", ""), None)
+
+
+def registered_propellants() -> tuple[str, ...]:
+    return tuple(sorted(_REGISTERED))
+
+
+def wall_side_mechanism_for(name: str) -> WallSideMechanism | None:
+    """Declared mechanism for a combination, or ``None`` if it has none."""
+
+    try:
+        return get_propellant(name).wall_side_mechanism
+    except KeyError:
+        return None

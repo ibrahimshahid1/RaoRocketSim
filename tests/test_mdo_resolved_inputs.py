@@ -100,8 +100,12 @@ def test_material_selection_is_carried_and_unresolved_defaults_are_flagged():
     assert "liner_material" in unattributed.unavailable
 
 
-def test_unresolvable_coolant_is_recorded_not_guessed():
-    """A custom OXIDIZER/FUEL pair must not have a coolant invented for it.
+def test_uncatalogued_coolant_identity_is_inferred_but_labelled_as_such():
+    """Fuel-as-coolant is the architecture, not a guess at an unknown fluid.
+
+    The inference must still be recorded, so nothing downstream can mistake it
+    for a catalog-backed identity. Which wall-side mechanism governs stays
+    ``unknown`` separately, through the constraint manifest.
 
     ``solve_engine`` rejects an uncatalogued propellant outright, so the
     resolver is exercised directly here: it is the layer that would have to
@@ -119,10 +123,18 @@ def test_unresolvable_coolant_is_recorded_not_guessed():
         total_mass_flow=float(r.mdot),
         surfaces=surfaces,
     )
-    assert inputs.propellant.coolant == ""
     assert inputs.propellant.oxidizer == "LOX"
     assert inputs.propellant.fuel == "Unobtainium"
-    assert "coolant" in inputs.unavailable
+    assert inputs.propellant.coolant == "Unobtainium"
+    assert "coolant_identity" in inputs.unavailable
+    assert inputs.model_identities["coolant_identity_basis"] == (
+        "inferred_from_regenerative_architecture"
+    )
+
+    catalogued = _resolve(MissionSpec.for_material("GRCop-84", 13.0e3))
+    assert catalogued.propellant.coolant == "RP-1"
+    assert catalogued.model_identities["coolant_identity_basis"] == "catalog"
+    assert "coolant_identity" not in catalogued.unavailable
 
 
 def test_efficiency_convention_is_stated_once():
@@ -150,10 +162,16 @@ def test_property_table_identity_is_carried_for_parity_proof():
 def test_traditional_bridge_carries_exactly_the_resolved_conventions(liner):
     """Anti-drift gate for remediation item 9.
 
-    ``to_design_input`` must not reconstruct any crosschecked scalar from a
-    default: every one has to equal the independently resolved contract value.
-    An empty drift tuple is what makes switching the bridge over to consume
-    the contract a verifiable step rather than an act of faith.
+    Note what this does and does not prove now that the switch is done.
+    ``to_design_input`` *consumes* the contract, so for a correctly wired
+    field this compares a value with itself. It is therefore no longer
+    evidence of two independent derivations agreeing -- that was its role
+    during the switch, and it held (zero drift) at that point.
+
+    What it still catches, and why it stays: a mis-wired field (oxidizer tank
+    pressure landing on the fuel line reads the wrong contract slot and
+    diverges), and any future reintroduction of a direct ``mission.``/design
+    read in place of a contract read. Both are live failure modes.
     """
     from raosim.mdo.postprocess import to_design_input
     from raosim.mdo.resolved_inputs import crosscheck_design_input
@@ -196,6 +214,39 @@ def test_crosscheck_actually_detects_a_planted_divergence():
 
     drift = crosscheck_design_input(resolved, design_input)
     assert any("liner_conductivity" in row for row in drift)
+
+
+def test_bridge_derives_physics_only_from_the_contract():
+    """``to_design_input`` must stay a consumer, not drift back to a builder.
+
+    Once the contract is resolved, no physical value may be re-read from the
+    mission or the raw design dict -- that is precisely how two definitions of
+    one convention reappear. The single tolerated read is the thermochemistry
+    *backend* selection, which is analysis configuration rather than a
+    physical input and is recorded in ``model_identities``.
+    """
+    import inspect
+    import re
+
+    from raosim.mdo import postprocess
+
+    source = inspect.getsource(postprocess.to_design_input)
+    _, _, body = source.partition("resolved.assert_flow_closure()")
+    assert body, "the contract-resolution anchor moved; update this guard"
+
+    offenders = [
+        line.strip()
+        for line in body.splitlines()
+        if re.search(r"\bmission\.|d\[\"", line)
+    ]
+    allowed = {
+        'else ("cea_frozen" if mission.cea_table_path else "constant_gamma")'
+    }
+    unexpected = [line for line in offenders if line not in allowed]
+    assert not unexpected, (
+        "to_design_input re-derives physics instead of reading the resolved "
+        "contract:\n  " + "\n  ".join(unexpected)
+    )
 
 
 def test_parity_run_crosschecks_the_handoff_and_records_the_identity():

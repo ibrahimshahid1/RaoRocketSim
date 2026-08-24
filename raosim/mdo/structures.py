@@ -19,6 +19,14 @@ Until now the repository screened none of them at the MDO level:
 3. **Throat bending/buckling support** — this module (reported; see the caveat
    in :func:`throat_support_margin`).
 
+The hot-gas liner has a separate, local failure mode: coolant-over-gas
+pressure puts the liner in circumferential compression between adjacent ribs.
+The repository's traditional pipeline already screens that rib bay as a
+simply-supported long plate.  :func:`rib_supported_liner_buckling_screen` is
+the pure-JAX mirror of that screening relation; it is deliberately not labeled
+as SP-125 equation 4-29, which is the distinct longitudinal inelastic-buckling
+case.
+
 SP-8120, *Liquid Rocket Engine Nozzles* (1977;
 ``propulsion_texts/19770009165.pdf``) §2.2 records the consequence of missing
 (2): *"Nozzle structural failures often are due to inaccurate predictions of the
@@ -52,7 +60,9 @@ from raosim.mdo.grid import StationGrid
 from raosim.mdo.schema import MissionSpec
 
 __all__ = [
+    "LinerBucklingScreen",
     "NozzleCollapseScreen",
+    "rib_supported_liner_buckling_screen",
     "nozzle_collapse_screen",
     "SP8007_EXTERNAL_PRESSURE",
     "SP8087_REINFORCEMENT",
@@ -81,6 +91,74 @@ class NozzleCollapseScreen(NamedTuple):
     margin: Array               # scalar governing margin [Pa]
     normalized_margin: Array    # scalar margin / max(dp) [-], scale-free
     equivalent_radius: Array    # (n,) r/cos(wall angle) [m]
+
+
+class LinerBucklingScreen(NamedTuple):
+    """Rib-bay liner compression screen, matching the NumPy oracle."""
+
+    compressive_stress_profile: Array  # (n,) |dp| r / t [Pa]
+    critical_stress_profile: Array     # (n,) knocked-down plate stress [Pa]
+    margin_profile: Array              # (n,) critical / applied stress [-]
+    margin: Array                      # scalar minimum safety ratio [-]
+
+
+def rib_supported_liner_buckling_screen(
+    *,
+    pressure_differential: Array,
+    inner_radius: Array,
+    wall_thickness: Array,
+    unsupported_span: Array,
+    elastic_modulus: Array,
+    poisson_ratio: Array,
+    plate_coefficient: Array = 4.0,
+    knockdown: Array = 0.65,
+) -> LinerBucklingScreen:
+    """Differentiate the traditional rib-supported liner buckling screen.
+
+    The local coolant-over-gas pressure puts the inner shell into
+    circumferential compression ``|dp| r / t``.  Between adjacent channel ribs
+    the liner is screened as a simply supported long plate under in-plane
+    compression,
+
+    ``sigma_cr = knockdown k pi^2 E / [12 (1 - nu^2)] (t / b)^2``.
+
+    Here ``b`` is the unsupported channel span.  NASA SP-8087 section 2.1.1.4
+    states that coolant pressure collapses an inner channel wall that is not
+    continuously attached to the outer wall and requires it to remain
+    structurally stable at operating temperature.  The plate mapping itself
+    remains a classical screening assumption pending an imperfection-sensitive
+    shell/panel analysis.  This is not SP-125 equation 4-29 and must not be
+    presented as a qualification calculation.
+    """
+
+    dp = jnp.abs(jnp.asarray(pressure_differential, dtype=jnp.float64))
+    radius = jnp.maximum(
+        jnp.asarray(inner_radius, dtype=jnp.float64), 1.0e-12
+    )
+    thickness = jnp.maximum(
+        jnp.asarray(wall_thickness, dtype=jnp.float64), 1.0e-12
+    )
+    span = jnp.maximum(
+        jnp.asarray(unsupported_span, dtype=jnp.float64), 1.0e-12
+    )
+    modulus = jnp.asarray(elastic_modulus, dtype=jnp.float64)
+    poisson = jnp.asarray(poisson_ratio, dtype=jnp.float64)
+    coefficient = (
+        jnp.maximum(jnp.asarray(knockdown, dtype=jnp.float64), 0.0)
+        * jnp.asarray(plate_coefficient, dtype=jnp.float64)
+        * jnp.pi ** 2
+        * modulus
+        / jnp.maximum(12.0 * (1.0 - poisson ** 2), 1.0e-12)
+    )
+    compressive = dp * radius / thickness
+    critical = coefficient * (thickness / span) ** 2
+    margin_profile = critical / jnp.maximum(compressive, 1.0e-9)
+    return LinerBucklingScreen(
+        compressive_stress_profile=compressive,
+        critical_stress_profile=critical,
+        margin_profile=margin_profile,
+        margin=jnp.min(margin_profile),
+    )
 
 
 def _local_wall_angle(x: Array, r: Array) -> Array:

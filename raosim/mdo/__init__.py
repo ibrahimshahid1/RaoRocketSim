@@ -58,6 +58,15 @@ from raosim.mdo.schema import (  # noqa: F401
 )
 from raosim.mdo.scaling import ScaledSpace  # noqa: F401
 from raosim.mdo.grid import build_station_grid, GridTopology  # noqa: F401
+from raosim.mdo.nozzle import (  # noqa: F401
+    ANALYTIC_TOP_PROVIDER_ID,
+    AnalyticTOPContourProvider,
+    ContourOutcome,
+    ContourOutcomeReason,
+    ContourProvider,
+    evaluate_contour,
+    resolve_contour_provider,
+)
 from raosim.mdo.cooling import cooling_march, solve_cooling  # noqa: F401
 from raosim.mdo.injector import injector_readouts  # noqa: F401
 from raosim.mdo.pump import (  # noqa: F401

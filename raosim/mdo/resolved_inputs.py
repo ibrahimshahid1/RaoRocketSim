@@ -25,6 +25,8 @@ import math
 from dataclasses import asdict, dataclass, field
 from typing import Any, Mapping
 
+from raosim.mdo.nozzle import ANALYTIC_TOP_PROVIDER_ID
+
 __all__ = [
     "RESOLVED_INPUTS_SCHEMA_VERSION",
     "InjectorInputs",
@@ -41,7 +43,7 @@ __all__ = [
 
 #: Bumped whenever the meaning of a field changes.  A stored resolved-input
 #: record from an older version must be re-resolved, never relabelled.
-RESOLVED_INPUTS_SCHEMA_VERSION = "1.0.0"
+RESOLVED_INPUTS_SCHEMA_VERSION = "1.1.0"
 
 
 def _finite(name: str, value: Any) -> float:
@@ -74,11 +76,15 @@ class PropellantInputs:
     mixture_ratio_source: str          # "mission_nominal" | "optimized" | "pinned"
     fuel_density: float
     oxidizer_density: float
+    fuel_vapor_pressure: float
+    oxidizer_vapor_pressure: float
 
     def __post_init__(self) -> None:
         _positive("mixture_ratio", self.mixture_ratio)
         _positive("fuel_density", self.fuel_density)
         _positive("oxidizer_density", self.oxidizer_density)
+        _positive("fuel_vapor_pressure", self.fuel_vapor_pressure)
+        _positive("oxidizer_vapor_pressure", self.oxidizer_vapor_pressure)
 
 
 @dataclass(frozen=True)
@@ -119,12 +125,14 @@ class ContourInputs:
     throat_downstream_radius_ratio: float
     convergent_half_angle_deg: float
     method: str
-    provider_id: str = "rao_top_bezier_fixed_topology"
+    provider_id: str = ANALYTIC_TOP_PROVIDER_ID
 
     def __post_init__(self) -> None:
         _positive("epsilon", self.epsilon)
         _positive("contraction_ratio", self.contraction_ratio)
         _positive("l_star", self.l_star)
+        if not str(self.provider_id).strip():
+            raise ValueError("provider_id must be a non-empty contour identity")
 
 
 @dataclass(frozen=True)
@@ -303,8 +311,13 @@ def resolve_engine_inputs(
     of_source: str,
     total_mass_flow: float,
     eta_cstar_effective: float | None = None,
+    eta_CF: float | None = None,
     contour_method: str = "bezier",
+    contour_provider_id: str = ANALYTIC_TOP_PROVIDER_ID,
     surfaces: Any = None,
+    propellant: str | None = None,
+    coolant: str | None = None,
+    regen_mass_flow: float | None = None,
 ) -> ResolvedEngineInputs:
     """Resolve one host-side input contract from a solved MDO design point.
 
@@ -312,23 +325,50 @@ def resolve_engine_inputs(
     layout resolver -- this function does not re-derive mixture ratio, because
     re-deriving it in a second place is exactly how the optimized value was
     lost before.
+
+    The optional overrides exist so that a caller which legitimately supplies
+    an identity or a flow (rather than inheriting the mission's) still gets a
+    contract describing what will *actually* be analyzed.  A contract that
+    ignored an override would be worse than none: it would assert agreement
+    that does not hold.
     """
 
     from raosim.mdo.propellants import get_propellant
 
     d = dict(design)
     of = _positive("effective_of", effective_of)
-    combination = str(mission.propellant_name)
-    try:
-        spec = get_propellant(combination)
-        oxidizer, fuel = spec.name.split("/", 1)
-        coolant = str(spec.coolant_name)
-    except (KeyError, ValueError):
-        # A custom OXIDIZER/FUEL pair supplied with its own validated table is
-        # legitimate; an unresolvable coolant is recorded, never guessed.
-        parts = combination.split("/", 1)
-        oxidizer, fuel = (parts + ["unspecified"])[:2]
-        coolant = ""
+    combination = str(propellant or mission.propellant_name)
+    oxidizer = fuel = None
+    if "/" in combination:
+        oxidizer, fuel = (part.strip() for part in combination.split("/", 1))
+
+    unavailable: dict[str, str] = {}
+    coolant_basis = "catalog"
+    resolved_coolant = coolant
+    if resolved_coolant is None:
+        try:
+            resolved_coolant = str(get_propellant(combination).coolant_name)
+        except (KeyError, ValueError, AttributeError):
+            # A custom OXIDIZER/FUEL pair with its own validated table is
+            # legitimate.  Fuel-as-coolant is the regenerative architecture,
+            # not a guess at an unknown fluid -- but it is recorded as an
+            # architectural inference so nothing downstream can mistake it for
+            # catalog-backed identity.  Whether the coking or HTD mechanism
+            # governs stays `unknown` via the constraint manifest.
+            resolved_coolant = fuel
+            coolant_basis = "inferred_from_regenerative_architecture"
+            unavailable["coolant_identity"] = (
+                f"propellant {combination!r} is not in the catalog; the "
+                "coolant was taken to be the fuel because the architecture is "
+                "regenerative, which is not a catalog-backed fluid identity"
+            )
+    else:
+        coolant_basis = "caller_supplied"
+    if not resolved_coolant:
+        raise ValueError(
+            "could not infer a coolant identity from propellant "
+            f"{combination!r}; pass coolant="
+        )
 
     film_frac = float(d.get("film_frac", 0.0))
     if eta_cstar_effective is None:
@@ -338,14 +378,10 @@ def resolve_engine_inputs(
     mdot_total = _positive("total_mass_flow", total_mass_flow)
     mdot_fuel = mdot_total / (1.0 + of)
     mdot_film = mdot_fuel * film_frac
-    mdot_regen = float(mission.cooling_fraction) * mdot_fuel * (1.0 - film_frac)
-
-    unavailable: dict[str, str] = {}
-    if not coolant:
-        unavailable["coolant"] = (
-            f"propellant {combination!r} is not in the catalog, so no coolant "
-            "identity resolves"
-        )
+    mdot_regen = (
+        float(regen_mass_flow) if regen_mass_flow is not None
+        else float(mission.cooling_fraction) * mdot_fuel * (1.0 - film_frac)
+    )
 
     rho_closeout = getattr(mission, "rho_closeout", None)
     material = MaterialInputs(
@@ -373,14 +409,19 @@ def resolve_engine_inputs(
             "class defaults and correspond to no single alloy"
         )
 
+    provider_id = str(contour_provider_id).strip()
+    if not provider_id:
+        raise ValueError("contour_provider_id must be a non-empty identity")
+
     identities: dict[str, Any] = {
         "resolved_inputs_schema": RESOLVED_INPUTS_SCHEMA_VERSION,
-        "contour_provider": "rao_top_bezier_fixed_topology",
+        "contour_provider": provider_id,
         "thermochemistry": (
             "mdo_cea_surface" if mission.cea_table_path
             else "mdo_constant_property"
         ),
         "coolant_property_backend": "constant",
+        "coolant_identity_basis": coolant_basis,
     }
     if surfaces is not None:
         identities["property_table_sha256"] = str(
@@ -399,18 +440,20 @@ def resolve_engine_inputs(
         total_mass_flow=mdot_total,
         propellant=PropellantInputs(
             combination=combination,
-            oxidizer=oxidizer,
-            fuel=fuel,
-            coolant=coolant,
+            oxidizer=oxidizer or "unspecified",
+            fuel=fuel or "unspecified",
+            coolant=str(resolved_coolant),
             mixture_ratio=of,
             mixture_ratio_source=str(of_source),
             fuel_density=float(mission.rho_fuel),
             oxidizer_density=float(mission.rho_ox),
+            fuel_vapor_pressure=float(mission.p_vapor_fuel),
+            oxidizer_vapor_pressure=float(mission.p_vapor_ox),
         ),
         performance=PerformanceConventions(
             eta_cstar_nominal=float(mission.eta_cstar),
             eta_cstar_effective=float(eta_cstar_effective),
-            eta_CF=float(mission.eta_CF),
+            eta_CF=float(eta_CF if eta_CF is not None else mission.eta_CF),
         ),
         contour=ContourInputs(
             epsilon=float(d["eps"]),
@@ -425,6 +468,7 @@ def resolve_engine_inputs(
             ),
             convergent_half_angle_deg=float(mission.converging_half_angle_deg),
             method=str(contour_method),
+            provider_id=provider_id,
         ),
         material=material,
         thermal=ThermalInputs(
@@ -515,6 +559,10 @@ _DESIGN_INPUT_CROSSCHECKS: tuple[tuple[str, str], ...] = (
      "injector.feed_system.oxidizer.tank_pressure"),
     ("feed.pump_efficiency", "injector.feed_system.fuel.pump_efficiency"),
     ("feed.line_pressure_loss", "injector.feed_system.fuel.line_loss"),
+    ("propellant.fuel_density", "injector.fuel.density"),
+    ("propellant.oxidizer_density", "injector.oxidizer.density"),
+    ("propellant.fuel_vapor_pressure", "injector.fuel.vapor_pressure"),
+    ("propellant.oxidizer_vapor_pressure", "injector.oxidizer.vapor_pressure"),
 )
 
 

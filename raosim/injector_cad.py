@@ -1324,7 +1324,8 @@ def _to_mm_step_solid(shape):
 
 
 def export_machined_pintle_cad(
-    inj, out_dir, *, spec=None, fmt="step", radial_style=None
+    inj, out_dir, *, spec=None, fmt="step", radial_style=None,
+    part_set=None, build_part_set=True, part_set_unavailable_reason=None,
 ) -> dict:
     """Export the machined pintle package.
 
@@ -1338,7 +1339,14 @@ def export_machined_pintle_cad(
     from raosim.injector_coaxial_cad import export_coaxial_pintle_cad
 
     return export_coaxial_pintle_cad(
-        inj, out_dir, spec=spec, fmt=fmt, radial_style=radial_style
+        inj,
+        out_dir,
+        spec=spec,
+        fmt=fmt,
+        radial_style=radial_style,
+        part_set=part_set,
+        build_part_set=build_part_set,
+        part_set_unavailable_reason=part_set_unavailable_reason,
     )
 
 

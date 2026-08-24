@@ -956,8 +956,17 @@ _COLORS = {
 _STEP_ROUNDTRIP_VOLUME_REL_TOL = 1.0e-4
 
 
-def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
-                              radial_style=None) -> dict:
+def export_coaxial_pintle_cad(
+    inj,
+    out_dir,
+    *,
+    spec=None,
+    fmt="step",
+    radial_style=None,
+    part_set: CoaxialPartSet | None = None,
+    build_part_set: bool = True,
+    part_set_unavailable_reason: str | None = None,
+) -> dict:
     """Export the five coaxial STEP bodies + a named assembly + a report.
 
     Bodies are built in SI metres and scaled to millimetres at the STEP
@@ -971,6 +980,7 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
     radial_style = _resolved_radial_style(inj, radial_style)
     layout = resolve_coaxial_layout(inj, spec=spec)
     seal = analytic_flow_separation(layout)
+    expected_geometry_id = coaxial_geometry_id(layout, radial_style)
 
     if fmt != "step":
         notes.append(f"coaxial mode is STEP-only; ignoring requested format {fmt!r}")
@@ -995,9 +1005,39 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
     cq = _cq()
     failure: Exception | None = None
     try:
-        part_set = build_coaxial_part_set(
-            inj, spec=spec, layout=layout, radial_style=radial_style
-        )
+        if part_set is None:
+            if not build_part_set:
+                raise RuntimeError(
+                    part_set_unavailable_reason
+                    or "the production injector part set was unavailable after "
+                    "the caller's build-once attempt"
+                )
+            part_set = build_coaxial_part_set(
+                inj, spec=spec, layout=layout, radial_style=radial_style
+            )
+            part_set_source = "built_once_by_exporter"
+        else:
+            if part_set.geometry_id != expected_geometry_id:
+                raise RuntimeError(
+                    "supplied injector part-set geometry_id does not match the "
+                    f"resolved export layout: {part_set.geometry_id!r} != "
+                    f"{expected_geometry_id!r}"
+                )
+            if str(part_set.radial_style) != radial_style:
+                raise RuntimeError(
+                    "supplied injector part-set radial style does not match "
+                    f"the export request: {part_set.radial_style!r} != "
+                    f"{radial_style!r}"
+                )
+            part_set_source = "caller_supplied_build_once_record"
+        expected_parts = set(_COLORS)
+        supplied_parts = set(part_set.parts)
+        if supplied_parts != expected_parts:
+            raise RuntimeError(
+                "production injector part set must contain exactly the five "
+                f"exported bodies: expected {sorted(expected_parts)}, got "
+                f"{sorted(supplied_parts)}"
+            )
         bodies_si = {name: part.body for name, part in part_set.parts.items()}
         interference = audit_component_interference(bodies_si)
         if not interference["passed"]:
@@ -1105,6 +1145,7 @@ def export_coaxial_pintle_cad(inj, out_dir, *, spec=None, fmt="step",
             "radial_exit_style": radial_style,
             "representation": "coaxial_five_part_solids_of_revolution",
             "geometry_id": part_set.geometry_id,
+            "part_set_source": part_set_source,
             "measured_part_volumes_m3": {
                 name: part.volume_m3 for name, part in part_set.parts.items()
             },

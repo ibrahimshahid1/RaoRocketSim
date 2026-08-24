@@ -3,9 +3,8 @@ title: Differentiable Multidisciplinary Design Optimization of an Electric-Pump-
 subtitle: Formulation, Literature Basis, and Implementation Tracker for LREKit
 version: "0.1 (living document)"
 audience: [propulsion engineers, AI coding agents]
-canonical_pair: latex-report/Differentiable_Engine_MDO_Plan.pdf   # this .md and that .pdf are the same content
 status_legend: { DONE: complete, WIP: in progress, TODO: not started }
-last_updated: 2026-07-28
+last_updated: 2026-08-22
 ---
 
 # Differentiable Engine MDO — Plan & Tracker
@@ -13,10 +12,11 @@ last_updated: 2026-07-28
 > **What this document is.** A single source of truth for the differentiable
 > engine-MDO workstream in this repository: the mathematical formulation, the
 > governing physics of each discipline, the literature each modeling choice
-> rests on, and a phase/gate table to track build progress. It is a faithful
-> Markdown mirror of `latex-report/Differentiable_Engine_MDO_Plan.pdf`
-> (edit both, or regenerate one from the other). Math is kept as LaTeX; the two
-> figures are Mermaid so agents can parse them as text.
+> rests on, and a phase/gate table to track build progress. This Markdown is the
+> maintained source of truth. `latex-report/Differentiable_Engine_MDO_Plan.pdf`
+> and its `.tex` source are historical 2026-07-22 snapshots, not current mirrors;
+> regenerate them before distributing either as equivalent to this plan. Math is
+> kept as LaTeX; the two figures are Mermaid so agents can parse them as text.
 
 ---
 
@@ -135,11 +135,16 @@ inferred from filenames). One load-bearing attribution was corrected.
   contour. Smooth, cheap, endpoint-exact, adequate for value-of-coupling
   questions.
 - *Existence-boundary and exact-vs-TOP studies:* use the implicit
-  variational/MOC boundary-value contour as a solved state. Total derivatives to
-  the **manufacturable wall** here still require the differentiable kernel/BDE
-  march (the "**J3b**" item); until it lands, the kernel $BD$ is a frozen
-  artifact and wall-coordinate sensitivities are unavailable. Keep it on the
-  critical path only for runs that need it.
+  variational/MOC boundary-value contour as a solved state. The **J3b**
+  differentiable throat-arc kernel march landed 2026-06-12:
+  `raosim/jax/moc_kernel.py` reproduces `build_kernel` at BD bit parity (measured
+  max $|\Delta M|=4.8\times10^{-10}$ over 120 nodes), with
+  $\mathrm{d}(BD)/\mathrm{d}\theta_B$ matching finite differences to
+  $1.1\times10^{-8}$; `raosim/jax/theta_b_solve.py` also makes $\theta_B$ a live
+  BVP unknown. The typed `raosim/mdo/nozzle.py` adapter now carries the analytic
+  TOP path and an explicit provider-failure final gate. Phase 3 remains WIP
+  because the variational provider and J6 v2 total design/wall-node derivatives
+  are still explicitly deferred in `raosim/jax/sensitivities.py`.
 
 ### 2.2 Verified source identities
 
@@ -363,10 +368,15 @@ close the $B$–$D$–$E$ topology, with Lagrange multipliers enforcing mass/len
 Residual block: $R_\mathrm{Rao}(u_\mathrm{Rao};\varepsilon,L_\%,\gamma,R_d/R_t)=0$.
 
 **Valid region / the "cliff" (Rao 1999).** A shock-free optimum control surface
-exists only inside the *valid region*; on its boundary the right characteristic
-through $D$ reaches a caustic/envelope and the construction fails. This boundary
-— not a Bézier artifact — is the object of RQ3/RQ4 and is tracked by the three
-diagnostics of §7.
+exists only while the simultaneous solution of Rao's Eqs. (2) and (3) yields a
+positive radial increment $\mathrm{d}R$ along the control surface. The boundary
+occurs at $\mathrm{d}R=0$; when no positive increment is available, further
+computation is impossible and point $D$ is in the invalid region. This is Rao,
+Beck & Booth (1999), *Nozzle Optimization for Space-Based Vehicles*, "Optimum
+Thrust Boundary," AIAA Paper 99-2584, source-PDF p. 4
+(`propulsion_texts/propulsion_texts_for_agents/markdown/rao1999.md`, line 119).
+The boundary — not a Bézier artifact — is the object of RQ3/RQ4 and is tracked
+by the three diagnostics of §7.
 
 ### 6.2 Regenerative cooling
 
@@ -505,8 +515,12 @@ points in $(\varepsilon,L_\%,\gamma)$:
 
 1. **Numerical solvability** — smallest singular value $\sigma_{\min}(R_u)$ of the
    Rao residual Jacobian $\to 0$ (branch fold / loss of local solvability).
-2. **Physical validity** — the Rao 1999 valid-region boundary: a characteristic
-   caustic/envelope condition on the flow field, *independent* of discretization.
+2. **Physical validity** — the Rao 1999 valid-region boundary: the simultaneous
+   solution of Eqs. (2) and (3) must yield a positive radial increment
+   $\mathrm{d}R$; $\mathrm{d}R=0$ marks the boundary and a non-positive increment
+   prevents continuation of the control surface (Rao, Beck & Booth 1999,
+   *Nozzle Optimization for Space-Based Vehicles*, "Optimum Thrust Boundary,"
+   AIAA Paper 99-2584, source-PDF p. 4; corpus line 119).
 3. **Optimality** — smallest eigenvalue $\lambda_{\min}(H_\mathrm{red})$ of the
    reduced Hessian of the Rao Lagrangian $\to 0$ (loss of local optimality).
 
@@ -583,8 +597,9 @@ admitted only for initialization/feasibility restoration.
 
 ## 10. Repository architecture
 
-The reporting/CAD workflow (`design_nozzle_v2`) is untouched. The MDO gets a
-separate pure-numerical layer; CAD stays downstream of optimization.
+The reporting/CAD workflow (`design_nozzle_v2`) stays downstream of optimization.
+G1 now builds its five injector bodies once and reuses them for mass and STEP
+export; the MDO remains a separate pure-numerical layer.
 
 ```
 raosim/mdo/
@@ -592,7 +607,7 @@ raosim/mdo/
     scaling.py       variable / residual / constraint scaling
     properties.py    differentiable thermo + fluid surfaces (C^1)
     grid.py          fixed-topology chamber/nozzle station grid
-    nozzle.py        Rao adapter + performance (TOP-Bezier | implicit)
+    nozzle.py        typed contour adapter + performance (analytic TOP; implicit pending)
     cooling.py       thermal-hydraulic residuals (4a: 1-D+fin, 4b: quasi-2-D)
     injector.py      pintle geometry, flow, spray constraints (branch-split)
     pump.py          pump / inducer / motor / battery model
@@ -631,17 +646,17 @@ Numerical "done" means:
 |---|---|---|---|
 | 0 | Canonical 13 kN LOX/RP-1 architecture + complete mass boundary | Sequential LREKit design closes thrust, flow, feed pressure, mass ledger | **DONE** |
 | 1 | Pure JAX data schema + explicit algebra | `jit`, `jacfwd`, `jacrev` work with no host callbacks | **DONE** (2026-07-22: `mdo/schema.py` + `mdo/scaling.py`; gate in `tests/test_mdo_schema.py`) |
-| 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **WIP** (2026-07-22: C¹ Fritsch–Carlson/tensor-Hermite machinery in `mdo/properties.py` + `scripts/sample_cea_surface.py`; interpolant/gradient/monotonicity/SciPy-parity gates green in `tests/test_mdo_properties.py`; *held-out CEA comparison awaits a host RocketCEA sampling run*) |
-| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour (*implicit-fidelity path; needs J3b for wall coords*) | **WIP** |
-| 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-07-23: thermal-hydraulic residual + parity + AD/FD gate landed in `mdo/grid.py` + `mdo/cooling.py`; **structural closures (LCF/buckling/stress) deferred to the §8 constraint layer**) |
+| 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **PARTIAL — chamber CEA DONE for four catalog pairs** (2026-08-22: C¹ Fritsch–Carlson/tensor-Hermite chamber surfaces plus a hash/schema-first, every-cell held-out RocketCEA value-and-gradient gate; versioned tables for LOX/RP-1, LOX/LCH4, LOX/LH2, and N2O4/MMH are packaged and selected with the fail-closed `catalog` sentinel. N2O/Ethanol remains blocked on oxidizer inlet-state/card selection. Coolant $(T,p)$/CoolProp surfaces remain unwired, so applicable real-fluid HTD coverage is still unavailable) |
+| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity and exact $\theta_B$ sensitivity; `theta_b_solve.py` makes $\theta_B$ live. The typed `mdo/nozzle.py` adapter and analytic TOP provider/failure gate landed 2026-08-22; the variational provider and J6 v2 total design/wall-node derivatives remain deferred) |
+| 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-08-22: the stationwise thermal-hydraulic march and static combined-stress screen are wired; the source-labelled `liner_buckling` final gate has NumPy parity and JIT/AD tests. It remains a preliminary rib-supported long-plate screen, not SP-125 eq. 4-29 or a qualification calculation. Hard inner-loop buckling enforcement is deferred pending valid-box-corner root robustness and SP-8068 authority; LCF cycle life is explicitly unavailable as `life.cycles_to_failure`) |
 | 4b | Quasi-2-D regen (final discipline) | Reproduces Pizzarelli HARCC wall-temp/$\Delta p$ trends within tolerance | **TODO** |
 | 5 | Differentiable pintle/feed model | Areas, TMR, geometry, pressure ledger match NumPy within tol; branches split | **WIP** (2026-07-23: injector block `mdo/injector.py` — orifice/TMR/BF/spray + Son-2017 two-branch min-area + chug screen; parity ≤1e-9 + AD/FD gate green; feed-pressure ledger coupling lands with Phases 6/7) |
 | 6 | Differentiable pump/electric model | Head, power, NPSH, geometry, mass match detailed model; C¹ efficiency | **WIP** (2026-07-23: `mdo/pump.py` — **C¹ η(Ns) surrogate replacing the binned `pumps.py` estimator**, meanline duty/Ns/Nss/NPSH + tip-speed & suction screens, Lee-2021 battery epigraph; parity + FD gate green; detailed impeller/inducer geometry + blade stress deferred to the constraint layer) |
 | 7 | Coupled engine solve | All residual blocks converge without manual sequential iteration | **WIP** (2026-07-23: `mdo/engine.py` `solve_engine` — all four blocks in one differentiable eval; cooling Δp→pump-rise hydraulic edge **closed**; optional η_c* fixed point + ablation; `--engine-mdo` CLI; genuinely-implicit parts nested-IFT-solved rather than one monolithic block-sparse Newton, per §4.1's "don't enlarge the system to appear coupled") |
 | 8 | Total derivative API | Directional derivatives of the re-solved engine pass step-size sweeps | **DONE** (2026-07-23: exact forward `jacfwd` + reverse `jacrev` through the two IFT solves; FD-verified in `test_mdo_engine.py` and the NLP constraint-Jacobian gate `test_mdo_nlp.py`) |
-| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **WIP** (2026-07-23: `mdo/nlp.py` ε-constraint min-mass over the 10-variable unit box with exact JAX Jacobians handed to SLSQP; single-solve reaches feasible KKT `max_violation`<1e-5; `--engine-mdo-optimize` CLI + Pareto sweep. **Coking now ENFORCED** via the film-cooling design variable; reverse-mode constraint Jacobian; trust-constr/IPOPT optional) |
+| 9 | Hard-constrained NLP | Scaled feasibility + KKT pass; no penalty-only "solution" | **WIP** (`mdo/nlp.py` supplies exact reverse-mode JAX Jacobians to the 10-variable ε-constraint SLSQP; a single solve reaches scaled `max_violation` < $10^{-5}$, with coking and static stress hard-enforced. `liner_buckling` is instead a mandatory `final_gate`: a negative margin fails the post-solve physics verdict, but it is absent from `DEFAULT_ENFORCED` until the valid-box-corner root is robust. `life.cycles_to_failure` is catalogued unavailable and refused as a target/objective. Remaining Phase-9 gate: independently compute and report KKT stationarity rather than treating SciPy success plus feasibility as a KKT pass) |
 | 10 | Multipoint mission model | Shared hardware meets ambient, throttle, power, energy constraints at all points | **TODO** |
-| 11 | Authoritative re-evaluation | CEA/CoolProp/high-fidelity screens confirm the optimum or trigger a correction iteration | **WIP** (2026-07-28: versioned `EngineState`/`EngineAnalysisSnapshot`, strict state/mission/surface validation, exact solved-chamber-state pinning, real `design_nozzle_v2` + `size_electric_pumps` handoff, all-common-field/profile comparison, and digest-linked report/CAD metadata are implemented with parity gates; independent held-out CEA/CoolProp and higher-fidelity correction iterations remain TODO) |
+| 11 | Authoritative re-evaluation | CEA/CoolProp/high-fidelity screens confirm the optimum or trigger a correction iteration | **WIP** (the versioned snapshot, strict handoff validation, solved-chamber-state pinning, traditional-design/pump handoff, common-field/profile comparison, and digest-linked report/CAD metadata are implemented with parity gates. Still TODO: independent held-out CEA/CoolProp re-evaluation; post-optimum quasi-2-D/conjugate thermal checks; field-specific parity tolerances and reconciliation; and discrepancy-correction/trust-region iterations) |
 
 > **Walking skeleton landed (2026-07-22).** The §12.5 first increment exists:
 > `raosim/mdo/assembly.py` stacks a thin R(y,x) (analytic nozzle + throat
@@ -751,9 +766,11 @@ Numerical "done" means:
 > refinement, not a correctness requirement, at this state count.
 >
 > **Phase 8/9 ε-constraint NLP + Pareto landed (2026-07-23).** `mdo/nlp.py`
-> minimises smooth electric-feed objective mass s.t. Isp ≥ Isp_min and every
-> enforced margin ≥ 0, while separately reporting exact installed package
-> mass, over the ten design variables in the unit-box-scaled `DesignVector` —
+> defaults to the smooth partial-dry objective (electric feed plus screening
+> liner/land/closeout mass), or can minimize the electric-feed objective alone,
+> s.t. Isp ≥ Isp_min and every enforced margin ≥ 0. It separately reports exact
+> installed electric and resolved-partial subtotals over the ten design
+> variables in the unit-box-scaled `DesignVector` —
 > `D_pintle`, `N_rpm`, channel width/height, film fraction, and wall thickness
 > are all live design variables (the 4-var skeleton remains as a compatibility
 > gate). Reverse-mode `jacrev` assembles the
@@ -905,17 +922,21 @@ independently.
 > implicit-contour path and full coupled solves run on your machine, not
 > in-session, while the analytic-contour skeleton is fast and testable anywhere.
 > Keep the NumPy oracle for every block so CI gates parity without the slow
-> solves. The honest long pole remains **J3b** (the differentiable kernel/BDE
-> march), but it gates *only* wall-coordinate sensitivities on the implicit path
-> — the skeleton and the Paper-1 Pareto do not wait on it.
+> solves. **J3b landed 2026-06-12 and is no longer an open blocker.** The
+> implicit-contour path still needs the variational provider and the J6 v2 total
+> design/wall-node derivatives deferred in `jax/sensitivities.py`; the typed
+> adapter and analytic TOP provider/failure gate have landed, and the
+> analytic-contour skeleton and Paper-1 Pareto do not wait on the remaining work.
 
 ---
 
 ## 13. Open risks and decision log
 
 1. **Contour fidelity (decided).** TOP-Bézier for bulk Pareto; implicit
-   variational only for existence-boundary and exact-vs-TOP studies. J3b gates
-   *only* wall-coordinate sensitivities on the implicit path.
+   variational only for existence-boundary and exact-vs-TOP studies. J3b has
+   landed; the typed analytic adapter also exists. Promotion of the implicit
+   path still depends on a variational provider plus J6 v2 total
+   design/wall-node derivatives.
 2. **Thermal fidelity ladder (decided).** 4a before 4b; do not gate first coupled
    solves on quasi-2-D.
 3. **c\* convention (decided).** $c^{*}_\mathrm{delivered}=\eta_{c^{*}}c^{*}_\mathrm{ideal}$,

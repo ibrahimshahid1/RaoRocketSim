@@ -60,10 +60,14 @@ from raosim.mdo.schema import DesignVector, MissionSpec, default_design_space
 from raosim.mdo.scaling import ScaledSpace
 from raosim.mdo.engine import chamber_surfaces_for, solve_engine
 from raosim.mdo.constraints import (
+    ENGINE_CONSTRAINT_SPECS,
     OPTIMIZER_CONSTRAINT_NAMES,
     OPTIMIZER_CONSTRAINT_SCALES,
     OPTIMIZER_CONSTRAINT_SPECS,
+    constraint_metadata,
+    status_from_rows,
 )
+from raosim.mdo.nozzle import ContourProviderSelection
 from raosim.mdo.coolant_htd import require_htd_coverage
 from raosim.mdo.objectives import (
     DEFAULT_MASS_OBJECTIVE,
@@ -102,13 +106,22 @@ def _constraint_vector(r, isp_min: float) -> Array:
 
 
 def _raw_margins(r, isp_min: float) -> dict:
-    return {
+    margins = {
         spec.name: float(
             r.Isp - isp_min if spec.engine_key is None
             else r.constraints[spec.engine_key]
         )
         for spec in OPTIMIZER_CONSTRAINT_SPECS
     }
+    # Final gates are mandatory post-solve checks rather than SLSQP rows.  Keep
+    # every one in the result so an optimizer-successful but physically or
+    # numerically invalid candidate cannot disappear behind the hard-row
+    # summary.  Report-only diagnostics (currently thrust closure) remain
+    # outside this margin mapping because they are not feasibility rows.
+    for spec in ENGINE_CONSTRAINT_SPECS:
+        if spec.optimizer_role == "final_gate":
+            margins[spec.name] = float(r.constraints[spec.engine_key])
+    return margins
 
 
 @dataclass(frozen=True)
@@ -151,6 +164,7 @@ def _make_callables(
     enforced_idx,
     objective=DEFAULT_MASS_OBJECTIVE,
     surfaces=None,
+    contour_provider: ContourProviderSelection = None,
 ):
     objective = coerce_mass_objective(objective)
     if surfaces is None:
@@ -171,6 +185,7 @@ def _make_callables(
             mission,
             couple_eta_cstar=couple,
             surfaces=surfaces,
+            contour_provider=contour_provider,
         )
 
     @jax.jit
@@ -195,6 +210,7 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
                    method: str = "SLSQP", maxiter: int = 150,
                    allow_incomplete_physics: bool = False,
                    objective: MassObjective | str = DEFAULT_MASS_OBJECTIVE,
+                   contour_provider: ContourProviderSelection = None,
                    ) -> NLPResult:
     """Minimise mass subject to every manifest hard row.
 
@@ -208,7 +224,7 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
     # meaningful O/F dependence before a path string can grant model coverage.
     surfaces = chamber_surfaces_for(mission)
     coolant = get_propellant(mission.propellant_name).coolant_name
-    htd_available, _ = require_htd_coverage(
+    require_htd_coverage(
         coolant,
         has_real_fluid_properties=False,
         allow_incomplete_physics=allow_incomplete_physics,
@@ -225,6 +241,7 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         enforced_idx,
         selected_objective,
         surfaces,
+        contour_provider,
     )
     if u0 is None:
         ref = jnp.asarray([s.ref() for s in space], dtype=jnp.float64)
@@ -252,22 +269,37 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         mission,
         couple_eta_cstar=couple_eta_cstar,
         surfaces=surfaces,
+        contour_provider=contour_provider,
     )
     scaled_all = np.asarray(_constraint_vector(r, isp_min))
     viol = float(max(0.0, -min(scaled_all[i] for i in enforced_idx)))
     optimizer_status = "pass" if viol < 1e-5 else "fail"
-    numerical_status = (
-        "pass" if bool(r.solver_converged) and bool(r.finite) else "fail"
+    engine_values = np.asarray([
+        float(r.constraints[spec.engine_key])
+        for spec in ENGINE_CONSTRAINT_SPECS
+    ])
+    applicable, available, required, _ = constraint_metadata(mission, surfaces)
+    numerical_indices = tuple(
+        i
+        for i, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category == "numerical"
+    )
+    engine_physics_indices = tuple(
+        i
+        for i, spec in enumerate(ENGINE_CONSTRAINT_SPECS)
+        if spec.category not in {"requirement", "numerical"}
+    )
+    numerical_status = status_from_rows(
+        engine_values,
+        applicable,
+        available,
+        required,
+        indices=numerical_indices,
     )
     requirement_indices = tuple(
         i
         for i, spec in enumerate(OPTIMIZER_CONSTRAINT_SPECS)
         if spec.category == "requirement"
-    )
-    physical_indices = tuple(
-        i
-        for i, spec in enumerate(OPTIMIZER_CONSTRAINT_SPECS)
-        if spec.category not in {"requirement", "numerical"}
     )
     requirement_rows_finite = all(
         np.isfinite(scaled_all[i]) for i in requirement_indices
@@ -278,19 +310,31 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         requirements_status = "fail"
     else:
         requirements_status = "pass"
-    physical_row_failed = any(
-        np.isfinite(scaled_all[i]) and scaled_all[i] < -1.0e-5
-        for i in physical_indices
+    # Preserve the optimizer's documented 1e-5 scaled feasibility tolerance
+    # for hard rows: SLSQP routinely returns active constraints a few ulps
+    # below zero.  Mandatory final gates receive no such relaxation; they are
+    # post-solve validity checks and therefore fail on any demonstrated
+    # negative margin.
+    physics_values = engine_values.copy()
+    for i, spec in enumerate(ENGINE_CONSTRAINT_SPECS):
+        if (
+            spec.optimizer_role == "hard"
+            and spec.category not in {"requirement", "numerical"}
+            and np.isfinite(physics_values[i])
+            and -1.0e-5 * spec.scale <= physics_values[i] < 0.0
+        ):
+            physics_values[i] = 0.0
+    physics_status = status_from_rows(
+        physics_values,
+        applicable,
+        available,
+        required,
+        indices=engine_physics_indices,
+        nonfinite="unknown",
     )
-    if physical_row_failed:
-        physics_status = "fail"
-    elif numerical_status != "pass" or any(
-        not np.isfinite(scaled_all[i]) for i in physical_indices
-    ):
-        # A failed numerical evaluation cannot establish a physical pass/fail.
+    if physics_status == "pass" and numerical_status != "pass":
+        # A failed numerical evaluation cannot establish a physical pass.
         physics_status = "unknown"
-    else:
-        physics_status = "pass" if htd_available else "unknown"
     workflow_ok = bool(res.success) and numerical_status == "pass"
     workflow_status = "pass" if workflow_ok else "fail"
     optimizer_feasible = optimizer_status == "pass"
@@ -340,6 +384,7 @@ def pareto_frontier(mission: MissionSpec, isp_grid, *,
                     enforced: tuple = DEFAULT_ENFORCED,
                     allow_incomplete_physics: bool = False,
                     objective: MassObjective | str = DEFAULT_MASS_OBJECTIVE,
+                    contour_provider: ContourProviderSelection = None,
                     maxiter: int = 150) -> list[NLPResult]:
     """ε-constraint sweep: min mass at each I_sp floor, warm-started along the
     frontier.  Returns results in ascending I_sp order."""
@@ -352,7 +397,8 @@ def pareto_frontier(mission: MissionSpec, isp_grid, *,
                            couple_eta_cstar=couple_eta_cstar,
                            enforced=enforced, maxiter=maxiter,
                            allow_incomplete_physics=allow_incomplete_physics,
-                           objective=objective)
+                           objective=objective,
+                           contour_provider=contour_provider)
         out.append(r)
         if r.success:
             u0 = np.asarray(ss.to_unit(jnp.asarray(r.x)))

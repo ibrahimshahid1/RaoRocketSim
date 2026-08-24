@@ -657,6 +657,67 @@ class TestPackage:
         assert package["cad_audit"]["flow_connectivity_audit"]["passed"]
         assert package["cad_audit"]["hardware_qualified"] is False
 
+    def test_real_built_parts_drive_mass_and_step_roundtrip_once(
+        self, tmp_path, monkeypatch
+    ):
+        """G1 gate: real CQ bodies are measured, then exported without rebuild."""
+
+        from raosim.injector_cad import (
+            cadquery_available,
+            export_machined_pintle_cad,
+        )
+
+        if not cadquery_available():
+            pytest.skip("CadQuery not installed")
+
+        import cadquery as cq
+        import raosim.injector_coaxial_cad as coaxial
+        from raosim.mass_ledger import injector_mass_ledger_from_built_parts
+
+        inj, spec = _inj()
+        part_set = coaxial.build_coaxial_part_set(inj, spec=spec)
+        ledger = injector_mass_ledger_from_built_parts(
+            part_set, body_material="Inconel 718"
+        )
+        assert ledger.complete
+        assert ledger.provenance["geometry_id"] == part_set.geometry_id
+
+        def forbidden_rebuild(*_args, **_kwargs):
+            raise AssertionError("export rebuilt a supplied production part set")
+
+        monkeypatch.setattr(
+            coaxial, "build_coaxial_part_set", forbidden_rebuild
+        )
+        exported = export_machined_pintle_cad(
+            inj,
+            tmp_path,
+            spec=spec,
+            part_set=part_set,
+            build_part_set=False,
+        )
+        audit = exported["layout"]["cad_export"]
+        assert audit["geometry_id"] == part_set.geometry_id
+        assert audit["part_set_source"] == "caller_supplied_build_once_record"
+
+        by_name = {item.component: item for item in ledger.items}
+        for name, built in part_set.parts.items():
+            item = by_name[name]
+            assert item.status == "cad_body_measured"
+            assert item.volume_m3 == pytest.approx(built.volume_m3, rel=0.0)
+            assert audit["measured_part_volumes_m3"][name] == pytest.approx(
+                built.volume_m3, rel=0.0
+            )
+
+            step = cq.importers.importStep(str(tmp_path / f"{name}.step"))
+            solids = [
+                solid for shape in step.vals() for solid in shape.Solids()
+            ]
+            assert len(solids) == 1 and solids[0].isValid()
+            roundtrip_volume_m3 = float(solids[0].Volume()) * 1.0e-9
+            assert roundtrip_volume_m3 == pytest.approx(
+                built.volume_m3, rel=1.0e-4
+            )
+
     def test_machined_cad_gate_failure_is_not_returned_as_success(
         self, tmp_path, monkeypatch
     ):

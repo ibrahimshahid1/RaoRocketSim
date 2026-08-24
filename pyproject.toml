@@ -76,4 +76,6 @@ include = ["raosim*", "lrekit*"]
 raosim = [
     "benchmark_data/cases/*.json",
     "benchmark_data/curves/*.csv",
+    "data/cea_tables/catalog_v1.json",
+    "data/cea_tables/*.npz",
 ]

@@ -3414,9 +3414,10 @@ def main(argv: list[str] | None = None) -> int:
         "--mdo-chamber-property-table",
         type=Path,
         default=None,
-        metavar="NPZ",
+        metavar="NPZ|catalog",
         help="validated sampled chamber-property table for MDO O/F/Pc physics; "
-             "the file's content hash and stored propellant identity are checked",
+             "use 'catalog' for the selected propellant's packaged validated "
+             "table; content hash and stored propellant identity are checked",
     )
     ap.add_argument(
         "--mdo-of-mode",

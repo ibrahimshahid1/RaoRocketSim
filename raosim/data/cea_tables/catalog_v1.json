@@ -1,0 +1,186 @@
+{
+  "manifest_schema_version": 1,
+  "catalog_version": "2026-08-22",
+  "table_format": "raosim.chamber-property-table.v1",
+  "tables": [
+    {
+      "propellant": "LOX/RP-1",
+      "pair": {
+        "oxidizer": "LOX",
+        "fuel": "RP-1"
+      },
+      "resource": "lox_rp1_frozen_v1.npz",
+      "domain": {
+        "Pc_Pa": {
+          "min": 1500000.0,
+          "max": 6000000.0
+        },
+        "OF": {
+          "min": 1.6,
+          "max": 3.4
+        }
+      },
+      "grid": {
+        "Pc_nodes": 17,
+        "OF_nodes": 21
+      },
+      "table": {
+        "schema_version": 1,
+        "interpolator_version": "tensor-pchip-hermite-v1",
+        "thermochemistry_mode": "frozen",
+        "content_sha256": "a65fd05ca3a9a5254879037a96bddb5bd6854e7c5bef434b9a87fffa780e8fdd",
+        "file_sha256": "e2ec0d9d80bea7efaf60f6562aa25c9a5e86432890aa012cfa701a9f13baf2a0"
+      },
+      "rocketcea": {
+        "version": "1.2.3",
+        "oxidizer_card": "LOX",
+        "fuel_card": "RP1"
+      },
+      "validation": {
+        "status": "passed",
+        "gate": "phase_2_heldout_cea_values_and_gradients",
+        "complete_cell_coverage": true,
+        "cells_checked": 320,
+        "selection_seed": 20260817,
+        "finite_difference_fraction": 0.2,
+        "worst_tolerance_ratio": 0.361153078
+      }
+    },
+    {
+      "propellant": "LOX/LCH4",
+      "pair": {
+        "oxidizer": "LOX",
+        "fuel": "LCH4"
+      },
+      "resource": "lox_lch4_frozen_v1.npz",
+      "domain": {
+        "Pc_Pa": {
+          "min": 1500000.0,
+          "max": 6000000.0
+        },
+        "OF": {
+          "min": 2.2,
+          "max": 4.4
+        }
+      },
+      "grid": {
+        "Pc_nodes": 17,
+        "OF_nodes": 21
+      },
+      "table": {
+        "schema_version": 1,
+        "interpolator_version": "tensor-pchip-hermite-v1",
+        "thermochemistry_mode": "frozen",
+        "content_sha256": "2d4ea43783bc99ac1eed43aacdedb82d33f9dcf4167e5c933c0ccb62b065192e",
+        "file_sha256": "4e165647ab9bad1f6c60b04335979a7a8272108e0eb305568dda98bc87ab4b00"
+      },
+      "rocketcea": {
+        "version": "1.2.3",
+        "oxidizer_card": "LOX",
+        "fuel_card": "CH4"
+      },
+      "validation": {
+        "status": "passed",
+        "gate": "phase_2_heldout_cea_values_and_gradients",
+        "complete_cell_coverage": true,
+        "cells_checked": 320,
+        "selection_seed": 20260817,
+        "finite_difference_fraction": 0.2,
+        "worst_tolerance_ratio": 0.231320492
+      }
+    },
+    {
+      "propellant": "LOX/LH2",
+      "pair": {
+        "oxidizer": "LOX",
+        "fuel": "LH2"
+      },
+      "resource": "lox_lh2_frozen_v1.npz",
+      "domain": {
+        "Pc_Pa": {
+          "min": 1500000.0,
+          "max": 6000000.0
+        },
+        "OF": {
+          "min": 3.5,
+          "max": 8.0
+        }
+      },
+      "grid": {
+        "Pc_nodes": 17,
+        "OF_nodes": 25
+      },
+      "table": {
+        "schema_version": 1,
+        "interpolator_version": "tensor-pchip-hermite-v1",
+        "thermochemistry_mode": "frozen",
+        "content_sha256": "33ffca0b8693dc651efaa696fea296c3c1a5fd03d8428ecfcc0ef1db6fce709c",
+        "file_sha256": "dad91135d4437f56c38642b46f5723a629dc0613f65ac4fce76d2dec4caf1d45"
+      },
+      "rocketcea": {
+        "version": "1.2.3",
+        "oxidizer_card": "LOX",
+        "fuel_card": "LH2"
+      },
+      "validation": {
+        "status": "passed",
+        "gate": "phase_2_heldout_cea_values_and_gradients",
+        "complete_cell_coverage": true,
+        "cells_checked": 384,
+        "selection_seed": 20260817,
+        "finite_difference_fraction": 0.2,
+        "worst_tolerance_ratio": 0.123881851
+      }
+    },
+    {
+      "propellant": "N2O4/MMH",
+      "pair": {
+        "oxidizer": "N2O4",
+        "fuel": "MMH"
+      },
+      "resource": "n2o4_mmh_frozen_v1.npz",
+      "domain": {
+        "Pc_Pa": {
+          "min": 1500000.0,
+          "max": 6000000.0
+        },
+        "OF": {
+          "min": 1.3,
+          "max": 2.8
+        }
+      },
+      "grid": {
+        "Pc_nodes": 17,
+        "OF_nodes": 21
+      },
+      "table": {
+        "schema_version": 1,
+        "interpolator_version": "tensor-pchip-hermite-v1",
+        "thermochemistry_mode": "frozen",
+        "content_sha256": "e039f44befc96484f74b76ad0696fea8e4e849517c79e3325c6c237612ffa9b7",
+        "file_sha256": "ac826e56236e9cce4243d1da07635199e71c55f3c75a1e5936096d4ccf08bbb9"
+      },
+      "rocketcea": {
+        "version": "1.2.3",
+        "oxidizer_card": "N2O4",
+        "fuel_card": "MMH"
+      },
+      "validation": {
+        "status": "passed",
+        "gate": "phase_2_heldout_cea_values_and_gradients",
+        "complete_cell_coverage": true,
+        "cells_checked": 320,
+        "selection_seed": 20260817,
+        "finite_difference_fraction": 0.2,
+        "worst_tolerance_ratio": 0.436533661
+      }
+    }
+  ],
+  "blocked_pairs": [
+    {
+      "propellant": "N2O/Ethanol",
+      "status": "blocked_state_selection",
+      "reason": "RocketCEA's N2O card is the 298.15 K gas-enthalpy state while N2O_nbp is a distinct 184.4 K liquid state; select and document the oxidizer inlet state before certifying a production table."
+    }
+  ]
+}

@@ -716,6 +716,9 @@ def export_pintle_package(
     cad_format: str = "step",     # "step" | "stl" | "dxf"
     movable_sleeve: bool = False,
     radial_style: str | None = None,  # None -> solved hydraulic exit geometry
+    built_part_set: Any | None = None,
+    build_part_set: bool = True,
+    part_set_unavailable_reason: str | None = None,
 ) -> dict[str, Any]:
     """Write the full ``pintle/`` deliverable folder for a solved injector.
 
@@ -804,7 +807,11 @@ def export_pintle_package(
             # export_machined_pintle_cad -> raosim.injector_coaxial_cad).
             cad_files = export_machined_pintle_cad(
                 inj, out_dir, spec=spec, fmt=cad_format,
-                radial_style=radial_style)
+                radial_style=radial_style,
+                part_set=built_part_set,
+                build_part_set=build_part_set,
+                part_set_unavailable_reason=part_set_unavailable_reason,
+            )
             files.update(cad_files.get("files", {}))
             notes.extend(cad_files.get("notes", []))
             cad_audit = (

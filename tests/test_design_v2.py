@@ -605,6 +605,91 @@ def test_v2_backend_evaluates_requested_pintle():
     ] == pytest.approx(expected_length)
 
 
+def test_v2_injector_mass_and_machined_step_share_one_real_part_set(
+    tmp_path, monkeypatch
+):
+    from raosim.injector_cad import cadquery_available
+
+    if not cadquery_available():
+        pytest.skip("CadQuery not installed")
+
+    import raosim.injector_coaxial_cad as coaxial
+
+    real_build = coaxial.build_coaxial_part_set
+    calls = []
+
+    def counted_real_build(*args, **kwargs):
+        calls.append(1)
+        return real_build(*args, **kwargs)
+
+    monkeypatch.setattr(
+        coaxial, "build_coaxial_part_set", counted_real_build
+    )
+    result = design_nozzle_v2(_prelim_input(
+        injector=InjectorSpec(type="pintle", cad="machined"),
+        manufacturing=ManufacturingSpec(
+            output_dir=tmp_path,
+            cad="none",
+        ),
+    ))
+
+    assert len(calls) == 1
+    hardware = result.report_sections["hardware_mass"]
+    injector_provenance = hardware["provenance"]["injector"]
+    geometry_id = injector_provenance["geometry_id"]
+    assert injector_provenance["cad_consistency_status"] == (
+        "same_in_memory_bodies_measured_and_exported"
+    )
+    injector_items = [
+        item for item in hardware["items"]
+        if item["subsystem"] == "injector"
+    ]
+    assert len(injector_items) == 5
+    assert all(item["status"] == "cad_body_measured" for item in injector_items)
+    assert all(
+        item["key_parameters"]["geometry_id"] == geometry_id
+        for item in injector_items
+    )
+
+    report = json.loads(
+        (tmp_path / "pintle" / "injector_manufacturing_report.json").read_text()
+    )
+    cad = report["cad_export"]
+    assert cad["geometry_id"] == geometry_id
+    assert cad["part_set_source"] == "caller_supplied_build_once_record"
+    for item in injector_items:
+        name = item["component"]
+        assert cad["measured_part_volumes_m3"][name] == pytest.approx(
+            item["volume_m3"], rel=0.0
+        )
+
+
+def test_v2_without_cadquery_withholds_injector_mass_instead_of_proxy(
+    monkeypatch,
+):
+    import raosim.injector_cad as injector_cad
+
+    monkeypatch.setattr(injector_cad, "cadquery_available", lambda: False)
+    result = design_nozzle_v2(_prelim_input(
+        injector=InjectorSpec(type="pintle", cad="none"),
+    ))
+    hardware = result.report_sections["hardware_mass"]
+    injector_items = [
+        item for item in hardware["items"]
+        if item["subsystem"] == "injector"
+    ]
+
+    assert len(injector_items) == 5
+    assert hardware["complete"] is False
+    assert hardware["total_mass_kg"] is None
+    assert all(item["status"] == "unavailable" for item in injector_items)
+    assert all(item["mass_kg"] is None for item in injector_items)
+    assert all(
+        item["unavailable_reason_code"] == "cadquery_unavailable"
+        for item in injector_items
+    )
+
+
 def test_v2_explicit_pintle_cad_failure_is_a_hard_failure(
     tmp_path, monkeypatch
 ):

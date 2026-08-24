@@ -2,28 +2,233 @@
 
 **Review baseline:** commit `e57c93e` (2026-07-26)  
 **Contract versions:** `EngineState` schema 2; `EngineAnalysisSnapshot` 2.0.0  
-**Exact implicit Rao status:** architecture proposed, not implemented pending approval
+**Exact implicit Rao status:** typed provider seam and traditional Eq. (5)
+validity/refusal gate implemented; variational MDO provider still pending
 
-## STATUS (2026-08-10)
+## STATUS (2026-08-22)
 
 Remediation items 1–8, 10, 12, 14–18 are **implemented and verified by
 reproduction**; the fixed-O/F sentinel crash, the discarded optimized O/F, the
 three divergent constraint lists, both requirement-integrity bypasses, the
 fictitious fallback O/F domain, the electric-package-only mass objective, and
-the unreachable HTD gate no longer reproduce. Full suite: 1924 passed.
+the unreachable HTD gate no longer reproduce. Definitive 2026-08-22 non-slow
+suite: 2,106 passed, 26 deselected.
 
-Remaining work, in the order it should be taken:
+Current status of the remediation items that were open at the review baseline:
 
 | Item | State | Gap |
 |---|---|---|
-| 9 — `ResolvedEngineInputs` | contract landed and load-bearing; builder switch pending | `raosim/mdo/resolved_inputs.py` defines the frozen, versioned (`1.0.0`), content-addressed contract; `resolve_engine_inputs()` builds it; `crosscheck_design_input()` compares 40 shared scalars against the traditional `DesignInput`. Every `reevaluate()` now resolves the contract, crosschecks the handoff, warns by name on any divergence, and records the digest + material selection in snapshot `optimizer_metadata`. Current drift across GRCop-84/NARloy-Z/CuCrZr: **zero**. Remaining: switch `to_design_input()` from *builder* to *consumer* of the contract — now a mechanical, gate-protected step rather than a rewrite on faith. |
-| 11 — injector build-once | partial | `injector_mass_ledger_from_built_parts` measures the exported body, but `design.py` still calls the labelled screening proxy and the export test uses monkeypatched fakes. CadQuery 2.7.0 is present in `.venv-jax`, so the real volume/STEP round-trip test is runnable. |
+| 9 — `ResolvedEngineInputs` | **done** | `raosim/mdo/resolved_inputs.py` defines the frozen, versioned (`1.1.0`), content-addressed contract. `to_design_input()` is now a **consumer**: after the contract is resolved, exactly one direct mission read remains (the thermochemistry *backend* selection, which is analysis config and is recorded in `model_identities`), enforced by a source-level guard test. Every `reevaluate()` resolves the contract, crosschecks the handoff, warns by name on divergence, and records the digest + material selection in snapshot `optimizer_metadata`. Drift measured at the moment of switch-over, across GRCop-84/NARloy-Z/CuCrZr: **zero**. |
+| 11 — injector build-once | **done** | `design_nozzle_v2` builds the real five-part CadQuery injector once, measures the ledger from those exact bodies, and passes the same in-memory parts to export. Geometry identity and per-part volume checks bind the mass rows to the STEP artifacts; a real round-trip test imports one valid solid per file and checks volume. CAD unavailability produces five unavailable rows, never the old analytic proxy. |
 | 13 — chamber mass vs CAD | partial | `regen_cad.py` builds disjoint liner/ribs/jacket regions with a `geometry_id`; `design.py` still exports uniform-wall. Disclosed, not hidden. |
-| 19 — `ContourProvider` | not started | `rao_variational` is reachable from the traditional CLI only; no provider interface, no post-solve validation of the MDO optimum. |
+| 19 — `ContourProvider` | partial | `raosim/mdo/nozzle.py` now defines the typed contract, a bit-identical analytic TOP provider, and a provider-failure final gate threaded through solve/state/snapshot/job/NLP. `rao_variational` also refuses Eq. (5)-invalid or unevaluable contours. The variational provider and post-solve TOP-vs-variational discrepancy tolerance remain open. |
 
 An unresolved coolant identity (uncatalogued propellant) now marks both the
 coking and HTD rows applicable-but-unavailable, so it reduces to `unknown`
 rather than silently dropping the governing wall-side gate.
+
+### Unified engine job (`EngineJobSpec`) — foundation landed
+
+`raosim/mdo/job.py` is the one versioned input every front end compiles into,
+and `raosim/units.py` parses engineering notation into a canonical SI store.
+
+The sequencing decision is enforced structurally: `ResolvedEngineJob`
+**contains** a `ResolvedEngineInputs` (`.with_inputs()`), it does not sit beside
+one. Verified end to end — job → design vector → solve → resolved inputs →
+attached, with one definition of the material reachable through both.
+
+Decisions worth keeping:
+
+- **Units are never guessed.** A bare number for a dimensional field is
+  rejected. The failure being prevented is not a parse error but a silent
+  1000× design error — the same class as the pintle metres-as-millimetres
+  defect. A wrong dimension names the actual one (`'kN' is a force unit, but a
+  pressure was expected`).
+- **Design intent is explicit**, never inferred from whether a value is
+  present. `derived` is restricted to variables with a documented closed-form
+  resolver so it cannot become a synonym for `free`.
+- **Unstated `analyze` variables are named as defaults**, not silently
+  presented as choices.
+- **Bounds outside the validated model domain are clipped with a note**, since
+  the models are not valid outside it.
+- **Multipoint is refused, not silently single-point** — a throttle envelope
+  must not come back as a one-point answer wearing an envelope's label.
+- **O/F is a lever only with a validated property table**; `mixture_ratio_mode
+  = optimize` without one is rejected.
+- **Ablation cannot present itself as `physics_feasible`** — it yields
+  `custom_screen_feasible`.
+
+### Metric registry (`raosim/mdo/metrics.py`) — unified with the manifest
+
+Selectable objectives and targets are registered, not arbitrary state fields.
+Two structural rules keep it from becoming a third competing definition:
+
+- **Constraint metrics are derived from `CONSTRAINT_MANIFEST`**, never
+  re-listed — a constraint is a metric plus a relation, so the manifest stays
+  the single authority on names, scales, applicability and optimizer role.
+- **Every reportable metric is validated against `SNAPSHOT_FIELD_MANIFEST`** at
+  import. A metric pointing at a nonexistent snapshot field raises rather than
+  shipping.
+
+59 metrics: 2 objective-capable, 18 target-capable, 10 registered-but-
+unavailable. The two advertised objectives are exactly the two implementations
+the executor can run, and both are minimization-only. Constraints are neither
+objective- nor target-capable, because
+re-targeting an enforced physical limit would silently weaken it.
+
+Quantities the repository cannot model are registered **with a reason** rather
+than omitted — omission reads as "not considered," a reason can be explained by
+a catalog command. `masses.engine_dry_mass`, `performance.engine_system_isp`,
+`life.qualified_reusable_cycles`, `stability.combustion`, `cost.recurring` and
+`reliability.probability` all carry one. Requesting `min masses.engine_dry_mass`
+fails loudly instead of silently optimizing a partial subtotal under a
+whole-engine name.
+
+`ObjectiveRequest` and `TargetRequest` validate against the registry, and a
+target's units come from the registered dimension rather than the caller.
+
+### `execute_engine_job` — one entry point, four-valued verdicts
+
+`raosim/mdo/execute.py` runs a job end to end so a user never has to know which
+pipeline produced an answer:
+
+```
+resolve job -> solve (evaluate or optimize) -> EngineState v2
+            -> resolved inputs -> authoritative traditional parity pass
+            -> snapshot -> targets -> verdict
+```
+
+Verdicts map to the shared exit codes: `MET` 0, `CANDIDATE_VIOLATES` 1,
+`INDETERMINATE` 3, `SOLVER_FAILED` 4. The reduction order is deliberate — a
+failed nonconvex solve is reported as a solver failure, never as a violated
+requirement, and any `unknown` blocks `MET`.
+
+Gates are read per-question from the pipeline that actually evaluated them: the
+constraint manifest, physics coverage and inner-root validity come from the MDO
+snapshot, artifact/workflow readiness from the authoritative pass. Reading a
+gate from the pipeline that never evaluated it returns `None`, which would
+collapse into a blanket "unknown" and hide a real violation.
+
+A violation names itself. On the 13 kN reference point the executor reports
+`CANDIDATE_VIOLATES` with `coking −149.6 K` and `chug −0.0069`, worst first,
+rather than an unexplained failure.
+
+### CLI surface — the workflow is reachable
+
+`lrekit/job_cli.py` adds three verbs; anything else falls through to the
+existing CLI unchanged, so no current invocation changes meaning.
+
+```bash
+lrekit validate JOB.yaml --resolved-out job.resolved.json
+lrekit run JOB.yaml --out result.json
+lrekit catalog variables|targets|objectives|constraints|propellants|materials|unavailable
+```
+
+This exists because reachability is not a nicety: O/F optimization was
+implemented long before it was reachable from a command line, which meant in
+practice it was not usable.
+
+The verdict is the process exit code (`MET` 0, `CANDIDATE_VIOLATES` 1,
+`INVALID_INPUT` 2, `INDETERMINATE` 3, `SOLVER_FAILED` 4), and the input rules
+survive the whole way out: `thrust: 13` exits 2 with *"a bare number (13) is
+ambiguous for a force; write the unit explicitly"*, and a misspelled job key is
+rejected rather than ignored. `lrekit catalog unavailable` prints why each
+unmodellable quantity is not on offer.
+
+### Discrete enumeration — "compare compatible materials"
+
+`execute_engine_job_set` expands list-valued discrete selections into one
+continuous problem each, so a discrete choice never enters the gradient
+vector. This is the payoff of the atomic material mapper: at the 13 kN
+reference point the four catalog liners now give genuinely different physics.
+
+| liner | violated constraints |
+|---|---|
+| GRCop-84 | coking, chug |
+| NARloy-Z | coking, wall_temp, chug |
+| CuCrZr | wall_temp, coking, chug |
+| OFHC Copper | **structural_stress**, wall_temp, coking, chug |
+
+OFHC Copper is the weakest catalog liner (70 MPa yield) and is the only one to
+fail structurally; GRCop-84 (186 MPa, 1000 K) fails fewest. Before the mapper
+all four produced identical numbers.
+
+Ranking covers **only** candidates whose verdict is `MET`. A candidate with
+unknown coverage is not "slightly worse" than one that met its requirements —
+ordering it by objective value would present unknown physics as a near miss.
+Every candidate stays reportable through `unranked` regardless.
+
+### Guided wizard and artifact orchestrator
+
+`lrekit guided` asks only the SP-125 §2.1 requirements and the architecture
+choices a user owns. A test asserts it never asks for `Pc`, `eps`, channel
+geometry, pintle diameter or pump speed — those belong to the optimizer, and
+asking for them is how a guided flow turns into a form for solver internals.
+Prompting is injected, so the interview is testable with scripted answers and
+cannot hang a non-interactive run. Unit slips are re-prompted during the
+interview rather than surfacing later as a 1000× error. A **coverage preview
+runs before solving**, so a methane user learns their physics verdict will be
+`UNKNOWN` before waiting on a solve.
+
+`raosim/mdo/build.py` enumerates **27 expected parts**; each is built-and-hashed
+or unavailable-with-reason. Valves, lines, bearings, seals, gimbal, mounts,
+igniter, film ring and harness are all present-as-unavailable, never absent —
+omission is how a partial assembly starts looking complete. Enforced:
+
+* an unavailable part **cannot** carry a mass or volume;
+* an artifact for a part outside the manifest is rejected;
+* fidelity is **achieved**, not requested (an electrical envelope stays L1
+  however it is asked for), and the ceiling is set by the least-complete part;
+* a non-`MET` verdict marks CAD diagnostic rather than release-looking;
+* `L5` (qualified hardware) is never awarded by a solver.
+
+The reported subtotal is labelled a partial measured mass with its missing
+subsystems named, never engine dry mass.
+
+`pareto` is explicitly refused rather than returning a single point.
+
+Physics fidelity beyond this contract layer is analyzed in
+`docs/PHYSICS_FIDELITY_ROADMAP.md` (plan only, nothing implemented).
+
+### Custom propellants, and a latent wall-side-mechanism defect
+
+`solve_engine` rejected any uncatalogued propellant, so §5's custom-propellant
+workflow was unreachable. Closing it exposed something worse than the missing
+feature.
+
+The coolant-side mechanism was inferred from a **coolant name string** against
+a fixed list (`HTD_RELEVANT_COOLANTS`). That list contains `methane`, but not:
+
+```
+methane            -> True
+LNG                -> False     <-- LNG *is* methane
+subcooled methane  -> False
+ethane             -> False
+```
+
+Any of those would have been handed the hydrocarbon **coking** limit instead of
+the supercritical HTD criterion — silently, for fluids whose governing physics
+is deterioration. That is reachable today by spelling, and would have been
+routine once users could register their own fluids.
+
+The fix is declaration, not inference. `PropellantSpec.wall_side_mechanism`
+(`coking` / `supercritical_htd` / `unknown`) is now stated explicitly on all
+five catalog entries, and `constraint_metadata` prefers it; the name list
+survives only as a legacy backstop. Catalog behaviour is unchanged, verified by
+test.
+
+`register_propellant()` is deliberately demanding — the same completeness rule
+as the material mapper, for the same reason. It requires every thermophysical
+property finite and positive, an explicit mechanism (a `coking` declaration
+must carry the wall limit that *is* the constraint), and cited evidence for
+chamber gas, L\*, efficiencies, coolant properties, wall limit and material
+compatibility. It cannot shadow a validated catalog entry, and everything it
+stores is marked `provenance="user_registered"`, `estimated=True` so a report
+can always tell repository-validated data from user-supplied data.
+`UNKNOWN` is an allowed, honest answer that reduces coverage to `unknown`.
+
+A job document carries its own `custom_propellants` block, so
+`lrekit run job.yaml` is self-contained and replayable.
 
 ### Material selection is now part of the MDO
 
@@ -201,18 +406,22 @@ structure. Unsupported numerical fields therefore use `NaN` together with a
 fixed-shape Boolean availability vector. The host adapter converts that pair to
 `None` plus a stable reason.
 
-The differentiable optimizer minimizes the explicitly named
-`electric_feed_package_objective_mass`: the battery governing branch is a
-smooth log-sum-exp surrogate.  The state and host snapshot separately report
-`electric_feed_package_exact_mass`, formed with the exact maximum of the
-installed energy- and power-limited battery branches.  CLI and optimizer
-metadata preserve both names; the surrogate is never presented as a physical
-“package total.”
+The differentiable optimizer exposes two explicitly bounded objectives. The
+default `dry_mass_partial_objective_mass` adds the differentiable liner, channel
+land, and closeout screening masses to
+`electric_feed_package_objective_mass`; the latter can also be selected alone.
+Both use a smooth log-sum-exp battery governing branch. The state and host
+snapshot separately report exact installed electric and partial subtotals using
+the exact maximum of the energy- and power-limited battery branches. CLI and
+optimizer metadata preserve every identity; no surrogate is presented as a
+physical whole-engine total.
 
-The current MDO does **not** have qualified thrust-chamber/nozzle or injector
-hardware-mass models. Those state entries are unavailable, and total engine dry
-mass is consequently unavailable. The optimized objective is an
-electric-feed-package screening mass, not total engine mass.
+The MDO thrust-chamber subtotal is therefore available as a differentiable
+screen, but it is not CAD-linked or qualified, and the MDO injector hardware
+mass remains unavailable. Total engine dry mass is consequently unavailable.
+In the traditional handoff, the five-part injector is now measured from the
+exact CadQuery bodies passed to STEP export; this closes the G1 artifact/mass
+link but does not silently promote that value into the differentiable objective.
 
 ## 5. Layer 2: host `EngineAnalysisSnapshot`
 

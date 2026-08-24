@@ -1,15 +1,18 @@
-"""Tests for the Rao smooth-flow validity inequality and diagnostic plots.
+"""Tests for Rao 1999's radial-increment validity gate and diagnostic plots.
 
-The inequality follows Rao 1958 / Rao-Beck-Booth 1999 (AIAA 99-2584):
+Rao-Beck-Booth 1999 (AIAA 99-2584), PDF page 4, obtains Eq. (5) by
+eliminating the velocity increment between Eqs. (2) and (3):
 
-    b(s) = 1 - (dα/dθ) [tan(θ-α) + tan(α)] / [tan(θ-α) - tan(α)] ≥ 0
+    dR/R = {dθ[tan(θ-α)-tan(α)] - dα[tan(θ-α)+tan(α)]}
+            / {sin(α)tan(α)sin(θ)/sin(θ+α)}.
 
-with α = arcsin(1/M).  When ``b`` becomes negative the smooth-flow
-Rao-optimum construction is inapplicable.
+The boundary is dR=0 and DE construction requires positive dR.  Eq. (6)'s
+``b`` function remains a legacy diagnostic; its sign alone is not the gate.
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
 import math
 from types import SimpleNamespace
 
@@ -23,8 +26,11 @@ import pytest
 from raosim.moc import FlowNode
 from raosim.plotting import plot_characteristic_net, plot_flowfield_mach
 from raosim.rao_variational import (
+    ControlSurface,
     ContourReliability,
+    RaoInvalidRegionError,
     RaoSolverConfig,
+    rao_radial_increment_validity,
     rao_valid_region,
     solve_rao_bvp,
 )
@@ -41,11 +47,12 @@ def _make_smooth_ce_nodes() -> list[FlowNode]:
 
 
 def _make_short_nozzle_ce_nodes() -> list[FlowNode]:
-    """Large M jump across small theta turn -- violates the Rao inequality.
+    """Synthetic Eq. (5) sign crossing with positive geometric ``diff(r)``.
 
-    With theta near 2*alpha the denominator (tan(theta-alpha) - tan(alpha))
-    shrinks while (dalpha/dtheta) is large, driving b strongly negative.
-    This is the discontinuous-exit regime Rao 1958 explicitly excludes.
+    Segment 0 has positive predicted dR but negative legacy Eq. (6) ``b``;
+    segment 1 has negative predicted dR but positive ``b``.  It therefore
+    pins the distinction between Rao's complete Eq. (5) and either the
+    b-function or a simple geometric radius difference.
     """
     nodes = [
         FlowNode(x=0.000, r=0.0250, M=2.0, theta=math.radians(60.0)),
@@ -55,10 +62,69 @@ def _make_short_nozzle_ce_nodes() -> list[FlowNode]:
     return nodes
 
 
-def test_valid_region_returns_inf_for_too_few_nodes():
+def _make_boundary_ce_nodes() -> list[FlowNode]:
+    """Two nodes whose midpoint-discrete Eq. (5) left side is exactly zero."""
+    theta = math.radians(45.0)
+    alpha = math.radians(20.0)
+    dtheta = math.radians(-2.0)
+    difference = math.tan(theta - alpha) - math.tan(alpha)
+    summation = math.tan(theta - alpha) + math.tan(alpha)
+    dalpha = dtheta * difference / summation
+    theta0, theta1 = theta - 0.5 * dtheta, theta + 0.5 * dtheta
+    alpha0, alpha1 = alpha - 0.5 * dalpha, alpha + 0.5 * dalpha
+    return [
+        FlowNode(x=0.000, r=0.030, M=1.0 / math.sin(alpha0), theta=theta0),
+        FlowNode(x=0.010, r=0.031, M=1.0 / math.sin(alpha1), theta=theta1),
+    ]
+
+
+def test_radial_increment_is_not_vacuously_valid_for_too_few_nodes():
+    result = rao_radial_increment_validity([])
+    assert result.available is False
+    assert result.valid is False
+    assert result.status == "unevaluable"
+    with pytest.raises(RaoInvalidRegionError, match="could not be evaluated"):
+        result.require_valid()
+
+    # Historical callers retain the old tuple shape and empty-input sentinel.
     min_b, vals = rao_valid_region([])
     assert math.isinf(min_b)
     assert vals == []
+
+
+@pytest.mark.parametrize(
+    ("mach", "reason_pattern"),
+    [
+        ([1.0, 1.5], "strictly supersonic.*M > 1"),
+        ([math.nan, 1.5], "non-finite input.*M0=nan"),
+        ([2.0, math.inf], "non-finite input.*M1=inf"),
+    ],
+)
+def test_eq5_control_surface_refuses_unusable_mach_without_substitution(
+    mach, reason_pattern
+):
+    surface = ControlSurface(
+        r=np.array([0.025, 0.030]),
+        M=np.asarray(mach, dtype=float),
+        theta=np.radians([25.0, 20.0]),
+        phi=np.radians([60.0, 55.0]),
+        x=np.array([0.0, 0.01]),
+    )
+
+    result = rao_radial_increment_validity(surface)
+
+    assert result.available is False
+    assert result.valid is False
+    assert result.status == "unevaluable"
+    assert result.unevaluable_segment_indices == (0,)
+    assert result.unevaluable_reasons
+    assert math.isnan(result.predicted_dR_over_R[0])
+    assert result.to_dict()["predicted_dR_over_R"] == [None]
+    assert result.to_dict()["unevaluable_reasons"] == list(
+        result.unevaluable_reasons
+    )
+    with pytest.raises(RaoInvalidRegionError, match=reason_pattern):
+        result.require_valid()
 
 
 def test_nasa_reference_matched_reliability_level_exists():
@@ -100,21 +166,91 @@ def test_nasa_reference_gate_separates_verified_port_from_fixture_authority():
     assert solution.reliability != ContourReliability.NASA_REFERENCE_MATCHED
 
 
-def test_valid_region_quiet_on_smooth_expansion():
+def test_eq5_prediction_matches_direct_equations_2_and_3_elimination():
     nodes = _make_smooth_ce_nodes()
+    result = rao_radial_increment_validity(nodes)
+    p0, p1 = nodes[:2]
+    alpha0 = math.asin(1.0 / p0.M)
+    alpha1 = math.asin(1.0 / p1.M)
+    alpha = 0.5 * (alpha0 + alpha1)
+    theta = 0.5 * (p0.theta + p1.theta)
+    dtheta = p1.theta - p0.theta
+    dalpha = alpha1 - alpha0
+    lhs = (
+        dtheta * (math.tan(theta - alpha) - math.tan(alpha))
+        - dalpha * (math.tan(theta - alpha) + math.tan(alpha))
+    )
+    coefficient = (
+        math.sin(alpha)
+        * math.tan(alpha)
+        * math.sin(theta)
+        / math.sin(theta + alpha)
+    )
+    predicted = lhs / coefficient
+    r_mid = 0.5 * (p0.r + p1.r)
+    # Rao p.4 Eq. (5) is the equality left after eliminating dV*/V* between
+    # Eq. (2) and the left-Mach compatibility equation, Eq. (3).
+    dlog_velocity_eq2 = (
+        dtheta * math.tan(theta - alpha)
+        - dalpha * (math.tan(theta - alpha) + math.tan(alpha))
+    )
+    dlog_velocity_eq3 = dtheta * math.tan(alpha) + predicted * coefficient
+
+    assert result.equation_5_lhs[0] == pytest.approx(lhs)
+    assert result.equation_5_radial_coefficient[0] == pytest.approx(coefficient)
+    assert result.predicted_dR_over_R[0] == pytest.approx(predicted)
+    assert result.predicted_dR_m[0] == pytest.approx(r_mid * predicted)
+    assert dlog_velocity_eq2 == pytest.approx(dlog_velocity_eq3)
+    assert result.predicted_dR_m[0] != pytest.approx(p1.r - p0.r)
+    assert result.to_dict()["units"]["predicted_dR"] == "m"
+    assert result.to_dict()["units"]["predicted_dR_over_R"] == "1"
+
+
+def test_radial_increment_positive_on_smooth_expansion():
+    nodes = _make_smooth_ce_nodes()
+    result = rao_radial_increment_validity(nodes)
+
+    assert result.available is True
+    assert result.valid is True
+    assert result.strictly_positive is True
+    assert result.status == "positive_radial_increment"
+    assert min(result.predicted_dR_over_R) > 0.0
+
+    # Eq. (6) remains available for historical diagnostics.
     min_b, vals = rao_valid_region(nodes)
     assert vals, "expected per-segment b values"
-    assert min_b > 0.0, f"smooth Rao expansion should satisfy b > 0, got {min_b}"
+    assert min_b > 0.0
 
 
-def test_valid_region_fires_on_pathological_case():
+def test_eq5_sign_crossing_overrides_b_and_geometric_radius_diagnostics():
     nodes = _make_short_nozzle_ce_nodes()
-    min_b, vals = rao_valid_region(nodes)
-    assert vals
-    assert min_b < 0.0, (
-        "low-Mach sharp-turn expansion should violate the Rao smooth-flow "
-        f"inequality; got min_b={min_b}"
-    )
+    result = rao_radial_increment_validity(nodes)
+
+    assert result.predicted_dR_over_R[0] > 0.0
+    assert result.predicted_dR_over_R[1] < 0.0
+    assert result.boundary_function_eq6[0] < 0.0
+    assert result.boundary_function_eq6[1] > 0.0
+    assert np.all(np.diff([node.r for node in nodes]) > 0.0)
+    assert result.invalid_segment_indices == (1,)
+    assert result.valid is False
+    assert result.status == "below_boundary"
+    with pytest.raises(
+        RaoInvalidRegionError,
+        match="No discontinuous-exit-flow.*fallback",
+    ):
+        result.require_valid(context="synthetic provider")
+
+
+def test_exact_zero_increment_is_the_tolerance_boundary():
+    result = rao_radial_increment_validity(_make_boundary_ce_nodes(), tol=1e-10)
+
+    assert result.predicted_dR_over_R[0] == pytest.approx(0.0, abs=1e-14)
+    assert result.predicted_dR_m[0] == pytest.approx(0.0, abs=1e-14)
+    assert result.available is True
+    assert result.valid is True
+    assert result.strictly_positive is False
+    assert result.on_boundary is True
+    assert result.status == "boundary_within_tolerance"
 
 
 def test_solve_rao_bvp_populates_rao_region_diagnostics():
@@ -131,17 +267,46 @@ def test_solve_rao_bvp_populates_rao_region_diagnostics():
     )
     solution = solve_rao_bvp(cfg)
     diag = solution.construction_diagnostics
+    validity = solution.rao_validity
+
+    assert validity is not None
+    assert validity.available is True
+    assert validity.valid is True
     assert "rao_region" in diag
     assert "boundary_min" in diag
+    assert diag["boundary_min_kind"] == (
+        "legacy_eq6_boundary_function_diagnostic_only"
+    )
+    assert diag["boundary_min_dR_over_R"] == pytest.approx(
+        validity.minimum_predicted_dR_over_R
+    )
+    radial_diag = diag["rao_radial_increment_validity"]
+    assert radial_diag["valid"] is True
+    assert radial_diag["boundary"] == {"dR_m": 0.0, "dR_over_R": 0.0}
+    assert radial_diag["legacy_boundary_function_is_verdict"] is False
+    assert radial_diag["geometric_delta_r_is_verdict"] is False
+    assert radial_diag["def_fallback_implemented"] is False
     assert "requires_discontinuous_exit_flow_model" in diag
     assert diag["rao_region"] in {
         "valid_shock_free_region",
         "invalid_short_nozzle_region",
     }
+    assert solution.shock_free == (
+        solution.residuals.characteristic_crossings == 0 and validity.valid
+    )
+
+    contour = solution.to_contour_dict(
+        Rt=cfg.Rt,
+        epsilon=cfg.epsilon,
+        length_pct=cfg.length_pct,
+        pa_over_p0=cfg.pa_over_p0,
+    )
+    assert contour["rao_radial_increment_validity"]["status"] == (
+        "positive_radial_increment"
+    )
 
 
-def test_invalid_region_downgrades_reliability():
-    """If b<0 along CE, the reliability tier must not claim residual-solved."""
+def test_provider_refuses_invalid_or_unevaluable_result_with_typed_error():
     cfg = RaoSolverConfig(
         Rt=0.020,
         epsilon=10.0,
@@ -154,31 +319,48 @@ def test_invalid_region_downgrades_reliability():
         evaluate_moc=False,
     )
     solution = solve_rao_bvp(cfg)
+    refused_states = (
+        rao_radial_increment_validity(_make_short_nozzle_ce_nodes()),
+        rao_radial_increment_validity([]),
+    )
+    for validity in refused_states:
+        flagged_solution = replace(
+            solution,
+            rao_validity=validity,
+            shock_free=False,
+            reliability=ContourReliability.GEOMETRIC_APPROXIMATION,
+        )
+        with pytest.raises(
+            RaoInvalidRegionError,
+            match="Rao contour export refused.*No discontinuous-exit-flow",
+        ):
+            flagged_solution.to_contour_dict(
+                Rt=cfg.Rt,
+                epsilon=cfg.epsilon,
+                length_pct=cfg.length_pct,
+                pa_over_p0=cfg.pa_over_p0,
+            )
 
-    if solution.construction_diagnostics["rao_region"] == "invalid_short_nozzle_region":
-        assert solution.reliability == ContourReliability.GEOMETRIC_APPROXIMATION
-        assert any("smooth-flow" in w.lower() or "discontinuous" in w.lower()
-                   for w in solution.warnings)
+    missing_validity_solution = replace(solution, rao_validity=None)
+    with pytest.raises(
+        RaoInvalidRegionError,
+        match="Rao contour export refused.*validity was not evaluated",
+    ):
+        missing_validity_solution.to_contour_dict(
+            Rt=cfg.Rt,
+            epsilon=cfg.epsilon,
+            length_pct=cfg.length_pct,
+            pa_over_p0=cfg.pa_over_p0,
+        )
 
 
-def test_phase5_invalid_region_test_vector():
-    """
-    Phase 5 reliability cliff: pass an explicit pathological CE polyline
-    through ``rao_valid_region`` and assert the inequality fires.  The
-    plan §2.E identifies very short / over-expanded designs as the
-    canonical invalid region; this test pins the gate against the
-    synthetic short-nozzle CE polyline from ``_make_short_nozzle_ce_nodes``.
-    """
+def test_legacy_eq6_wrapper_remains_diagnostic_only():
     nodes = _make_short_nozzle_ce_nodes()
     min_b, b_values = rao_valid_region(nodes)
 
-    assert min_b < 0.0, (
-        "Pathological short-nozzle CE should violate the Rao validity "
-        f"inequality, but min boundary value was {min_b:.3g}."
-    )
-    assert any(b < 0.0 for b in b_values), (
-        "At least one BD segment should report a negative boundary value."
-    )
+    assert min_b < 0.0
+    assert any(b < 0.0 for b in b_values)
+    assert any(b > 0.0 for b in b_values)
 
 
 # ---------------------------------------------------------------------

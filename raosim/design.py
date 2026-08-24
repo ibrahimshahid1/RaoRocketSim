@@ -907,9 +907,12 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             limit=gate.limit if gate.limit is not None else "status != fail",
             message=gate.detail,
         )
+    injector_part_build = _build_injector_part_set(
+        input, injector_result
+    )
     hardware_mass = _hardware_mass_section(
         input, contour, cooling_input, cooling, interface_resolution,
-        injector_result,
+        injector_result, injector_part_build,
     )
     cad_readiness = _cad_readiness(input, contour, gate_report)
     benchmark_status = _benchmark_status(input.method, contour)
@@ -1129,8 +1132,14 @@ def design_nozzle_v2(input: DesignInput) -> ValidatedDesignResult:
             "Design gates failed: " + "; ".join(gate_report.warnings)
         )
 
-    files = _write_v2_artifacts(input, contour, gate_report, report_sections,
-                                injector_result=injector_result)
+    files = _write_v2_artifacts(
+        input,
+        contour,
+        gate_report,
+        report_sections,
+        injector_result=injector_result,
+        injector_part_build=injector_part_build,
+    )
     return ValidatedDesignResult(
         input=input,
         thermochemistry=thermo,
@@ -1915,6 +1924,110 @@ def _add_v2_gate_checks(
     )
 
 
+@dataclass(frozen=True)
+class _InjectorPartBuild:
+    """One attempted production injector build shared by mass and export."""
+
+    part_set: Any | None
+    geometry_id: str | None
+    unavailable_reason: str | None
+    unavailable_reason_code: str | None
+
+
+def _build_injector_part_set(
+    input: DesignInput,
+    injector_result: Any | None,
+) -> _InjectorPartBuild | None:
+    """Build the production five-part injector once, or state why it cannot.
+
+    No analytic mass substitutes for this outcome.  When CadQuery is present,
+    the returned BREP objects are passed unchanged to both the mass ledger and
+    the optional machined STEP exporter.
+    """
+
+    if injector_result is None or input.injector.type != "pintle":
+        return None
+
+    from raosim.injector_export import pintle_reference_geometry
+
+    try:
+        reference = pintle_reference_geometry(
+            injector_result, spec=input.injector
+        )
+    except Exception as exc:
+        reason = (
+            "production injector geometry could not be resolved: "
+            f"{type(exc).__name__}: {exc}"
+        )
+        return _InjectorPartBuild(
+            None, None, reason, "production_injector_geometry_unresolved"
+        )
+    if reference.get("architecture") == "son_continuous_movable":
+        reason = (
+            "production five-part CAD is not implemented for the continuous "
+            "movable-pintle architecture; injector mass is unavailable"
+        )
+        return _InjectorPartBuild(
+            None, None, reason, "production_injector_cad_unimplemented"
+        )
+
+    try:
+        from raosim.injector_coaxial_cad import (
+            build_coaxial_part_set,
+            coaxial_geometry_id,
+            resolve_coaxial_layout,
+        )
+
+        layout = resolve_coaxial_layout(
+            injector_result, spec=input.injector
+        )
+        radial_style = str(injector_result.slots.geometry).lower()
+        geometry_id = coaxial_geometry_id(layout, radial_style)
+    except Exception as exc:
+        reason = (
+            "production coaxial injector layout could not be resolved: "
+            f"{type(exc).__name__}: {exc}"
+        )
+        return _InjectorPartBuild(
+            None, None, reason, "production_injector_layout_unresolved"
+        )
+
+    from raosim.injector_cad import cadquery_available
+
+    if not cadquery_available():
+        reason = (
+            "CadQuery/OpenCascade is unavailable, so the production five-part "
+            "injector bodies were not built and injector mass is unavailable"
+        )
+        return _InjectorPartBuild(
+            None, geometry_id, reason, "cadquery_unavailable"
+        )
+
+    try:
+        part_set = build_coaxial_part_set(
+            injector_result,
+            spec=input.injector,
+            layout=layout,
+            radial_style=radial_style,
+        )
+    except Exception as exc:
+        reason = (
+            "production five-part injector CAD build failed: "
+            f"{type(exc).__name__}: {exc}"
+        )
+        return _InjectorPartBuild(
+            None, geometry_id, reason, "production_injector_cad_build_failed"
+        )
+
+    if part_set.geometry_id != geometry_id:
+        raise RuntimeError(
+            "production injector geometry identity changed between layout "
+            f"resolution and build: {geometry_id!r} != "
+            f"{part_set.geometry_id!r}"
+        )
+    return _InjectorPartBuild(part_set, geometry_id, None, None)
+
+
 def _hardware_mass_section(
     input: DesignInput,
     contour: dict,
@@ -1922,22 +2035,24 @@ def _hardware_mass_section(
     cooling: dict,
     interface_resolution: Any,
     injector_result: Any,
+    injector_part_build: _InjectorPartBuild | None,
 ) -> dict:
     """Build the geometry-integrated hardware mass ledger for the report.
 
     The thrust-chamber entry integrates a resolved ``RegenWallProfile`` and
     emits an ID that a later :mod:`raosim.regen_cad` report must match.  The
-    injector entry is a labelled analytic screening proxy because production
-    export now uses a different five-part coaxial builder.  Constructing a
-    design report does not itself prove either CAD body was built; anything
-    unresolved is reported as unavailable, never as zero.
+    injector entry is measured from the production five-part coaxial BREP set
+    shared with STEP export. Constructing a design report does not itself prove
+    the thrust-chamber CAD body was built; anything unresolved is reported as
+    unavailable, never as zero or as an analytic injector substitute.
     """
 
     from raosim.mass_ledger import (
         MassLedger,
         combine_ledgers,
         flange_bolt_mass_ledger,
-        injector_mass_ledger,
+        injector_mass_ledger_from_built_parts,
+        injector_mass_ledger_unavailable,
         thrust_chamber_mass_ledger,
     )
     from raosim.regen_profile import RegenWallProfile
@@ -2019,20 +2134,40 @@ def _hardware_mass_section(
 
     # ---- injector -------------------------------------------------------- #
     if injector_result is not None and input.injector.type == "pintle":
-        try:
-            from raosim.injector_cad import resolve_machined_pintle_layout
-
-            layout = resolve_machined_pintle_layout(
-                injector_result, spec=input.injector
+        if (
+            injector_part_build is not None
+            and injector_part_build.part_set is not None
+        ):
+            injector_ledger = injector_mass_ledger_from_built_parts(
+                injector_part_build.part_set,
+                body_material=structural_material,
             )
-            ledgers.append(injector_mass_ledger(
-                layout, body_material=structural_material,
-            ))
-        except Exception as exc:  # layout screens raise on infeasible geometry
+            ledgers.append(injector_ledger)
             notes.append(
-                f"injector hardware mass unavailable: the machined pintle "
-                f"layout could not be resolved ({exc})"
+                "injector mass is measured from the production five-part CAD "
+                f"bodies with geometry_id {injector_part_build.geometry_id}"
             )
+        else:
+            reason = (
+                injector_part_build.unavailable_reason
+                if injector_part_build is not None
+                else "the production injector CAD build was not attempted"
+            )
+            reason_code = (
+                injector_part_build.unavailable_reason_code
+                if injector_part_build is not None
+                else "production_injector_cad_not_attempted"
+            )
+            geometry_id = (
+                injector_part_build.geometry_id
+                if injector_part_build is not None else None
+            )
+            ledgers.append(injector_mass_ledger_unavailable(
+                reason=str(reason),
+                reason_code=str(reason_code),
+                geometry_id=geometry_id,
+            ))
+            notes.append(str(reason))
     else:
         notes.append(
             "injector hardware mass is only modelled for the pintle injector"
@@ -2056,9 +2191,10 @@ def _hardware_mass_section(
         "the design report does not build and measure a matching production "
         "part set: its default thrust_chamber_wall.step is a uniform-wall "
         "single body, while the ledger resolves regenerative liner/lands/"
-        "closeout regions, and its injector row is a legacy analytic proxy; "
-        "use matching regen geometry_id reports and the coaxial built-part "
-        "ledger before claiming CAD-linked mass"
+        "closeout regions. The injector branch is CAD-linked only when its "
+        "five-part ledger provenance carries the same geometry_id as the "
+        "machined STEP report; use matching regen geometry_id reports before "
+        "claiming a CAD-linked engine total"
     )
     # The bolted joint is the single largest mass item in this ledger, and its
     # layout defaults are spacing heuristics rather than load paths.  Report
@@ -2436,6 +2572,7 @@ def _write_v2_artifacts(
     gate_report: DesignGateReport,
     report_sections: dict[str, Any],
     injector_result: Any | None = None,
+    injector_part_build: _InjectorPartBuild | None = None,
 ) -> dict[str, Path]:
     if input.manufacturing.output_dir is None:
         return {}
@@ -2463,10 +2600,62 @@ def _write_v2_artifacts(
             pkg = export_pintle_package(
                 injector_result, pintle_dir, spec=input.injector,
                 cad=getattr(input.injector, "cad", "none"),
-                cad_format=getattr(input.injector, "cad_format", "step"))
+                cad_format=getattr(input.injector, "cad_format", "step"),
+                built_part_set=(
+                    injector_part_build.part_set
+                    if injector_part_build is not None else None
+                ),
+                build_part_set=False,
+                part_set_unavailable_reason=(
+                    injector_part_build.unavailable_reason
+                    if injector_part_build is not None else None
+                ),
+            )
             files["pintle_dir"] = Path(pkg["dir"])
             for key, path in pkg["files"].items():
                 files[f"pintle_{key}"] = Path(path)
+            cad_audit = pkg.get("cad_audit")
+            if (
+                isinstance(cad_audit, dict)
+                and cad_audit.get("status") == "step_written"
+            ):
+                hardware = report_sections.get("hardware_mass", {})
+                injector_provenance = (
+                    hardware.get("provenance", {}).get("injector", {})
+                )
+                ledger_geometry_id = injector_provenance.get("geometry_id")
+                artifact_geometry_id = cad_audit.get("geometry_id")
+                if ledger_geometry_id != artifact_geometry_id:
+                    raise RuntimeError(
+                        "injector mass/export geometry_id mismatch: "
+                        f"{ledger_geometry_id!r} != {artifact_geometry_id!r}"
+                    )
+                measured = cad_audit.get("measured_part_volumes_m3", {})
+                for item in hardware.get("items", []):
+                    if (
+                        item.get("subsystem") != "injector"
+                        or item.get("status") != "cad_body_measured"
+                    ):
+                        continue
+                    name = item.get("component")
+                    if (
+                        name not in measured
+                        or float(measured[name]) != float(item["volume_m3"])
+                    ):
+                        raise RuntimeError(
+                            "injector mass/export built-volume mismatch for "
+                            f"{name!r}"
+                        )
+                injector_provenance.update({
+                    "cad_consistency_status": (
+                        "same_in_memory_bodies_measured_and_exported"
+                    ),
+                    "cad_consistency": (
+                        "the mass ledger and STEP round-trip report share the "
+                        "same build-once bodies, volumes, and geometry_id"
+                    ),
+                    "step_roundtrip_verified": True,
+                })
         except Exception as exc:           # pragma: no cover - defensive
             import traceback
             pintle_dir.mkdir(parents=True, exist_ok=True)

@@ -143,11 +143,11 @@ reach any constraint or the objective; two such variables were found and fixed
 
 ---
 
-## 4. One constraint manifest (29 rows)
+## 4. One constraint manifest (31 rows)
 
 `raosim.mdo.constraints.CONSTRAINT_MANIFEST` owns the stable row order,
 applicability, availability, required mask, scaling, optimizer role, and source
-identifier. It currently contains 23 differentiable hard rows, five mandatory
+identifier. It currently contains 23 differentiable hard rows, seven mandatory
 post-solve gates, and one report-only thrust-closure equality. Requirement rows,
 the sampled-property row, and the coking/HTD pair are active only when applicable.
 
@@ -172,14 +172,17 @@ the sampled-property row, and the coking/HTD pair are active only when applicabl
 | `chamber_volume` | the solved barrel satisfies the L* chamber-volume construction | SP-125 chamber definition |
 | `jacket_thin_shell` | the selected shell approximation remains in its declared thin-shell regime | model applicability screen |
 | `nozzle_collapse` | closeout retains the modeled external-pressure/collapse margin | SP-8087 structural load path |
+| `contour_provider` | selected contour provider returned an available, feasible result | provider availability contract |
+| `liner_buckling` | preliminary rib-supported liner external-pressure screen | SP-8087 failure mode; classical long-plate screening assumption |
 | `envelope_diameter`, `envelope_length` | active partial-envelope requirement margins | SP-125 §2.1 item 6 |
 | `dry_mass_partial` | active resolved-partial mass requirement margin | SP-125 §2.1 item 5; explicitly not full engine dry mass |
 
 Reported but deliberately **not** constrained: coolant Mach (≈2 orders of
 margin — a constraint would just add a dead column). Engine/cooling residual
-closure, root status, finiteness, and applicable coolant HTD coverage are
-mandatory final gates. An unavailable required model yields an `unknown`
-physics verdict; it never becomes a passing boolean.
+closure, root status, finiteness, provider availability, liner buckling, and
+applicable coolant HTD coverage are mandatory final gates. An unavailable
+required model yields an `unknown` physics verdict; it never becomes a passing
+boolean.
 
 ---
 
@@ -195,8 +198,12 @@ arc plus quadratic Bézier wall. Its θ_n/θ_e values use a pure-JAX bilinear
 interpolator that matches the repository's SciPy linear chart oracle between
 knots. It is piecewise differentiable, not C¹, and an explicit chart-domain
 constraint prevents clamping from being accepted as extrapolation. The
-authoritative post-optimum contour is produced by `design_nozzle_v2`. The
-planned exact implicit Rao/JAX replacement has its own approval checkpoint in
+typed `mdo/nozzle.py` provider seam preserves that analytic construction and
+makes provider failure an explicit final gate. The authoritative post-optimum
+contour is produced by `design_nozzle_v2`; its variational solver now refuses a
+Rao Eq. (5)-invalid or unevaluable contour. Promoting that solver through the
+MDO provider with a TOP-vs-variational discrepancy check remains planned. The
+exact implicit Rao/JAX replacement has its own approval checkpoint in
 `IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
 **Cooling (`cooling.py`) — the only implicit block.**
@@ -338,14 +345,16 @@ for k, s in enumerate(default_design_space()):
 
 ## 9. What is still soft (read before trusting a number)
 
-1. **Property surfaces.** Without a CEA table the code uses *constant* γ/T_c —
-   correct at the stated O/F, flat in O/F. Run `scripts/sample_cea_surface.py`
-   on a host with RocketCEA to make O/F a real lever (it becomes a second coking
-   lever via flame temperature). The wiring and gates already exist. The parity
-   re-evaluation pins the exact `EngineState` γ/T_c/R/c* values and complete
-   surface fingerprint into `design_nozzle_v2`; this prevents accidental live
-   CEA/fallback drift, but it is not the independent held-out CEA validation
-   still required for qualification.
+1. **Property surfaces.** The exact `catalog` selection loads packaged,
+   hash-pinned, every-cell held-out-gated RocketCEA surfaces for LOX/RP-1,
+   LOX/LCH4, LOX/LH2, and N2O4/MMH. Empty-table mode deliberately remains the
+   constant γ/T_c model and is flat in O/F; explicit table paths remain
+   supported. N2O/Ethanol is refused by `catalog` until its oxidizer inlet
+   state/card is selected. The parity re-evaluation pins the exact
+   `EngineState` γ/T_c/R/c* values and complete surface fingerprint into
+   `design_nozzle_v2`; this prevents accidental live CEA/fallback drift. A
+   separate live re-evaluation at the final optimum is still required by the
+   authoritative Phase-11 correction/qualification lane.
 2. **η_fc transition location.** Woodmansee & Hanratty measured Γ_cr ≈ 3× lower
    than Knuth for water; Shine reports Stechman's model errs −20 % … +13 %.
    Those are the film block's honest error bars.
@@ -354,17 +363,24 @@ for k, s in enumerate(default_design_space()):
 4. **η_c*(TMR).** A screening knob, default off, with an ablation. Do not report
    a coupled result without also reporting `ablation_delta`.
 5. **Low-cycle fatigue.** `structural_stress` is the combined static screening
-   stress, not a cycle count. The Coffin–Manson / CR-134627 / Porowski LCF
-   screens are the §8 constraint-layer deepening.
+   stress, not a cycle count. The traditional pipeline has a sourced
+   Coffin–Manson/Basquin screen, but the MDO lacks a defined duty cycle and
+   stabilized elastic-plastic strain-range closure. Consequently
+   `life.cycles_to_failure` is explicitly unavailable and cannot be selected as
+   an objective or target.
 6. **Sea-level Pareto is weak.** Higher ε is overexpanded at sea level, so the
    mass–I_sp trade only becomes interesting with `--engine-mdo-ambient` set for
    altitude/vacuum.
-7. **The optimized mass is not whole-engine dry mass.** The differentiable
-   objective currently contains pumps, motors, inverters, and a smooth battery
-   governing-branch surrogate. The exact installed electric-feed mass is
-   reported separately. Qualified chamber/nozzle and injector hardware-mass
-   models are not available; the output contracts return `None` plus an
-   availability reason for those fields.
+7. **The optimized mass is not whole-engine dry mass.** The default
+   differentiable objective contains pumps, motors, inverters, a smooth battery
+   governing-branch surrogate, and screening liner/land/closeout chamber masses.
+   Exact installed electric and resolved-partial subtotals are reported
+   separately. The traditional handoff now measures its five injector parts
+   from the exact CadQuery bodies that are exported, with a shared geometry
+   identity and STEP round-trip gate. MDO injector mass and chamber/nozzle
+   CAD-linked qualification remain unavailable, so the full engine total stays
+   `None` plus an availability reason and the objective remains a partial
+   screening subtotal.
 8. **Nonzero-film thermal parity is intentionally unavailable.** The
    traditional bridge closes and reports the regen/film mass split, but the
    traditional thermal solver does not apply the MDO wall-film heat-load

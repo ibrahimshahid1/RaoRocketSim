@@ -165,7 +165,169 @@ class ContourReliability(str, Enum):
 
 
 class RaoInvalidRegionError(RuntimeError):
-    """Raised when requested inputs are outside the smooth-flow Rao region."""
+    """Raised when Rao's control surface cannot advance with positive ``dR``."""
+
+
+RAO_RADIAL_INCREMENT_SOURCE_ID = (
+    "Rao-Beck-Booth-AIAA-99-2584-1999-pdf-page-4-Eqs-2-3-5-6"
+)
+
+
+@dataclass(frozen=True)
+class RaoRadialIncrementValidity:
+    """Auditable Rao-1999 control-surface radial-increment verdict.
+
+    Rao, Beck, and Booth obtain their Eq. (5) by eliminating the velocity
+    increment between Eqs. (2) and (3).  With midpoint values of ``theta``,
+    Mach angle ``alpha``, and radius ``R`` on each discrete DE segment, this
+    implementation evaluates
+
+    ``lhs = dtheta*[tan(theta-alpha)-tan(alpha)]``
+    ``      - dalpha*[tan(theta-alpha)+tan(alpha)]``
+
+    and
+
+    ``coefficient = sin(alpha)*tan(alpha)*sin(theta)/sin(theta+alpha)``
+
+    so Eq. (5) predicts ``dR/R = lhs/coefficient``.  ``predicted_dR_m``
+    uses the segment-midpoint radius and therefore has metres as its unit in
+    this SI solver.  It is *not* the geometric ``np.diff(r)`` of an already
+    constructed control surface.
+
+    The exact physical boundary is ``dR = 0``.  A result is valid when every
+    segment is evaluable and every predicted ``dR/R >= -tolerance``; the
+    tolerance is solely a dimensionless numerical band around that boundary.
+    Eq. (6)'s ``b`` value is retained in ``boundary_function_eq6`` as a legacy
+    diagnostic.  Its sign alone is not the verdict because Eq. (5)'s other
+    signed factors cannot be discarded for an arbitrary discrete DE
+    orientation.
+
+    Source: G. V. R. Rao, J. E. Beck, and T. Booth, "Nozzle Optimization for
+    Space-Based Vehicles," AIAA 99-2584 (1999), ``rao1999.pdf``, PDF page 4,
+    Eqs. (2), (3), (5), and (6), section "OPTIMUM THRUST BOUNDARY."
+    """
+
+    segment_indices: tuple[int, ...]
+    segment_midpoint_radius_m: tuple[float, ...]
+    equation_5_lhs: tuple[float, ...]
+    equation_5_radial_coefficient: tuple[float, ...]
+    predicted_dR_over_R: tuple[float, ...]
+    predicted_dR_m: tuple[float, ...]
+    boundary_function_eq6: tuple[float, ...]
+    tolerance_dR_over_R: float
+    unevaluable_segment_indices: tuple[int, ...]
+    invalid_segment_indices: tuple[int, ...]
+    minimum_predicted_dR_over_R: float | None
+    minimum_predicted_dR_m: float | None
+    available: bool
+    valid: bool
+    strictly_positive: bool
+    on_boundary: bool
+    unevaluable_reasons: tuple[str, ...] = ()
+    source_id: str = RAO_RADIAL_INCREMENT_SOURCE_ID
+
+    @property
+    def status(self) -> str:
+        if not self.available:
+            return "unevaluable"
+        if not self.valid:
+            return "below_boundary"
+        if self.on_boundary:
+            return "boundary_within_tolerance"
+        return "positive_radial_increment"
+
+    def require_valid(
+        self,
+        *,
+        context: str = "Rao control-surface construction",
+    ) -> None:
+        """Raise a typed refusal if Eq. (5) is unavailable or below boundary."""
+        if self.valid:
+            return
+        if not self.available:
+            if self.unevaluable_reasons:
+                detail = (
+                    "Eq. (5) could not be evaluated: "
+                    + "; ".join(self.unevaluable_reasons)
+                )
+            else:
+                detail = (
+                    "Eq. (5) could not be evaluated on segment(s) "
+                    f"{list(self.unevaluable_segment_indices)}"
+                )
+        else:
+            detail = (
+                "minimum predicted dR/R "
+                f"{self.minimum_predicted_dR_over_R:.6g} is below the "
+                f"{-self.tolerance_dR_over_R:.6g} numerical boundary"
+            )
+        raise RaoInvalidRegionError(
+            f"{context} refused: {detail}. Rao 1999 PDF page 4, Eq. (5) "
+            "requires a positive radial increment to continue the control "
+            "surface. No discontinuous-exit-flow (DEF) fallback is implemented."
+        )
+
+    def to_dict(self) -> dict:
+        """Return a JSON-friendly, units-explicit provider diagnostic."""
+
+        def _finite_or_none(value: float | None) -> float | None:
+            if value is None or not math.isfinite(value):
+                return None
+            return float(value)
+
+        def _series(values: tuple[float, ...]) -> list[float | None]:
+            return [_finite_or_none(value) for value in values]
+
+        return {
+            "source_id": self.source_id,
+            "source": (
+                "Rao, Beck & Booth, Nozzle Optimization for Space-Based "
+                "Vehicles, AIAA 99-2584 (1999), PDF p.4, Eqs. (2),(3),(5),(6)"
+            ),
+            "criterion": (
+                "Eq. (5) predicted radial increment; all segments require "
+                "dR/R >= -tolerance"
+            ),
+            "boundary": {"dR_m": 0.0, "dR_over_R": 0.0},
+            "units": {
+                "segment_midpoint_radius": "m",
+                "predicted_dR": "m",
+                "predicted_dR_over_R": "1",
+                "equation_5_lhs": "1",
+                "equation_5_radial_coefficient": "1",
+                "boundary_function_eq6": "1",
+                "tolerance_dR_over_R": "1",
+            },
+            "segment_indices": list(self.segment_indices),
+            "segment_midpoint_radius_m": _series(self.segment_midpoint_radius_m),
+            "equation_5_lhs": _series(self.equation_5_lhs),
+            "equation_5_radial_coefficient": _series(
+                self.equation_5_radial_coefficient
+            ),
+            "predicted_dR_over_R": _series(self.predicted_dR_over_R),
+            "predicted_dR_m": _series(self.predicted_dR_m),
+            "boundary_function_eq6": _series(self.boundary_function_eq6),
+            "legacy_boundary_function_is_verdict": False,
+            "geometric_delta_r_is_verdict": False,
+            "tolerance_dR_over_R": float(self.tolerance_dR_over_R),
+            "unevaluable_segment_indices": list(
+                self.unevaluable_segment_indices
+            ),
+            "unevaluable_reasons": list(self.unevaluable_reasons),
+            "invalid_segment_indices": list(self.invalid_segment_indices),
+            "minimum_predicted_dR_over_R": _finite_or_none(
+                self.minimum_predicted_dR_over_R
+            ),
+            "minimum_predicted_dR_m": _finite_or_none(
+                self.minimum_predicted_dR_m
+            ),
+            "available": bool(self.available),
+            "valid": bool(self.valid),
+            "strictly_positive": bool(self.strictly_positive),
+            "on_boundary": bool(self.on_boundary),
+            "status": self.status,
+            "def_fallback_implemented": False,
+        }
 
 
 class RaoEndpointMismatchError(RuntimeError):
@@ -453,6 +615,10 @@ class RaoSolverConfig:
     # independent solves do not communicate through mutable global state.
     # Appended to retain the positional layout of RaoSolverConfig.
     physics_weight: float | None = None
+    # Dimensionless numerical band around Rao 1999 Eq. (5)'s exact dR=0
+    # boundary.  This is deliberately independent of the much looser BVP
+    # residual tolerance.  Appended to preserve positional compatibility.
+    rao_radial_increment_tol: float = 1.0e-9
 
 
 # Converged-topology ("characteristic") block set.  After the
@@ -813,12 +979,24 @@ class RaoSolution:
     # BDE wall path from the solved CE/kdf.  None for other wall
     # methods.  ``topology`` above stays the nasa_moc SEED topology.
     topology_solved: object | None = None
+    # Rao 1999 p.4 Eq. (5) validity of the solved control surface.  Kept as a
+    # typed object so provider/export paths cannot silently discard the dR>0
+    # gate. ``None`` may exist on historical hand-built fixtures, but such a
+    # fixture is not eligible for contour export.
+    rao_validity: RaoRadialIncrementValidity | None = None
 
     def to_contour_dict(self, *, Rt: float, epsilon: float, length_pct: float,
                         pa_over_p0: float, Ru_factor: float = 1.5,
                         Rd_factor: float = 0.382,
                         convergent_half_angle_deg: float = 45.0) -> dict:
         """Return compatibility dict shaped like ``bell_nozzle_contour``."""
+        if self.rao_validity is None:
+            raise RaoInvalidRegionError(
+                "Rao contour export refused: Rao 1999 Eq. (5) radial-increment "
+                "validity was not evaluated. A contour cannot be promoted from "
+                "an absent validity result."
+            )
+        self.rao_validity.require_valid(context="Rao contour export")
         Re = math.sqrt(epsilon) * Rt
         Ru = Ru_factor * Rt
         Rd = Rd_factor * Rt
@@ -927,6 +1105,9 @@ class RaoSolution:
             },
             "optimization_converged": self.converged,
             "shock_free": self.shock_free,
+            "rao_radial_increment_validity": (
+                None if self.rao_validity is None else self.rao_validity.to_dict()
+            ),
             "residuals": self.residuals.__dict__,
             "control_surface": self.control_surface,
             "characteristic_net": self.characteristic_net,
@@ -2371,8 +2552,18 @@ def _ce_smoothness_regularization(ce: ControlSurface, gamma: float) -> np.ndarra
     return np.concatenate([np.diff(kp, n=2), np.diff(km, n=2)]) / scale
 
 
-def _control_surface_flow_nodes(ce: ControlSurface) -> list[FlowNode]:
-    """Reconstruct an unscaled CE polyline and expose it as flow nodes."""
+def _control_surface_flow_nodes(
+    ce: ControlSurface,
+    *,
+    preserve_mach: bool = False,
+) -> list[FlowNode]:
+    """Reconstruct an unscaled CE polyline and expose it as flow nodes.
+
+    Most legacy residual callers retain the historical 1.001 numerical floor.
+    Validity evaluators pass ``preserve_mach=True`` because replacing a
+    non-supersonic or non-finite state would manufacture applicability of the
+    Mach-angle relation instead of reporting it as unevaluable.
+    """
     n = len(ce.r)
     if n == 0:
         return []
@@ -2392,7 +2583,7 @@ def _control_surface_flow_nodes(ce: ControlSurface) -> list[FlowNode]:
         FlowNode(
             x=float(xi),
             r=float(ri),
-            M=max(float(Mi), 1.001),
+            M=(float(Mi) if preserve_mach else max(float(Mi), 1.001)),
             theta=float(thetai),
         )
         for xi, ri, Mi, thetai in zip(x, ce.r, ce.M, ce.theta)
@@ -2783,79 +2974,229 @@ def _initial_wall_guess(
     return WallSurface(x=x, r=r, M=M, theta=theta)
 
 
+def rao_radial_increment_validity(
+    ce_or_nodes,
+    *,
+    tol: float = 1.0e-9,
+) -> RaoRadialIncrementValidity:
+    """Evaluate Rao 1999's per-segment radial-increment existence criterion.
+
+    Rao 1999 Eqs. (2) and (3) are the two finite-difference compatibility
+    equations used to advance the control surface DE.  Eliminating their
+    common velocity increment gives Eq. (5), evaluated here directly:
+
+        dR/R = {dtheta[tan(theta-alpha)-tan(alpha)]
+                - dalpha[tan(theta-alpha)+tan(alpha)]}
+               / {sin(alpha)tan(alpha)sin(theta)/sin(theta+alpha)}.
+
+    ``alpha = asin(1/M)`` is the Mach angle.  Rao states that simultaneous
+    solution of Eqs. (2) and (3) cannot continue unless ``dR`` is positive;
+    Eq. (5)'s zero is the boundary.  Midpoint quadrature supplies the local
+    ``theta``, ``alpha``, and ``R`` for each discrete segment.  The returned
+    Eq. (6) boundary-function values are legacy diagnostics only.
+
+    Source: G. V. R. Rao, J. E. Beck, T. Booth, "Nozzle Optimization for
+    Space-Based Vehicles", AIAA 99-2584 (1999), source PDF page 4,
+    Eqs. (2), (3), (5), and (6), ``propulsion_texts/rao1999.pdf``.
+
+    ``tol`` is a dimensionless numerical band on ``dR/R`` around the exact
+    ``dR=0`` boundary.  It is deliberately not a BVP residual tolerance.
+    """
+    if not math.isfinite(tol) or tol < 0.0:
+        raise ValueError("tol must be a finite, non-negative dR/R tolerance")
+    if hasattr(ce_or_nodes, "M") and hasattr(ce_or_nodes, "theta"):
+        nodes = _control_surface_flow_nodes(
+            ce_or_nodes,
+            preserve_mach=True,
+        )
+    else:
+        nodes = list(ce_or_nodes)
+
+    segment_indices = tuple(range(max(0, len(nodes) - 1)))
+    radii: list[float] = []
+    lhs_values: list[float] = []
+    coefficients: list[float] = []
+    normalized_increments: list[float] = []
+    dimensional_increments: list[float] = []
+    boundary_values: list[float] = []
+    unevaluable: list[int] = []
+    unevaluable_reasons: list[str] = []
+
+    def _input_float(value) -> float:
+        try:
+            return float(value)
+        except (TypeError, ValueError, OverflowError):
+            return math.nan
+
+    for index, (p0, p1) in enumerate(zip(nodes[:-1], nodes[1:])):
+        r0 = _input_float(p0.r)
+        r1 = _input_float(p1.r)
+        r_mid = 0.5 * (r0 + r1)
+        radii.append(r_mid)
+        lhs = coefficient = predicted = predicted_m = math.nan
+        boundary_b = math.nan
+        unevaluable_reason: str | None = None
+
+        M0 = _input_float(p0.M)
+        M1 = _input_float(p1.M)
+        theta0 = _input_float(p0.theta)
+        theta1 = _input_float(p1.theta)
+        named_inputs = (
+            ("r0", r0),
+            ("r1", r1),
+            ("M0", M0),
+            ("M1", M1),
+            ("theta0", theta0),
+            ("theta1", theta1),
+        )
+        nonfinite = [
+            f"{name}={value!r}"
+            for name, value in named_inputs
+            if not math.isfinite(value)
+        ]
+        if nonfinite:
+            unevaluable_reason = (
+                f"segment {index}: Eq. (5) requires finite radius, Mach, and "
+                "flow-angle inputs; non-finite input(s): " + ", ".join(nonfinite)
+            )
+        elif r_mid <= 0.0:
+            unevaluable_reason = (
+                f"segment {index}: Eq. (5) requires a positive midpoint "
+                f"radius; got {r_mid!r} m"
+            )
+        elif M0 <= 1.0 or M1 <= 1.0:
+            unevaluable_reason = (
+                f"segment {index}: Mach angle alpha=asin(1/M) requires "
+                "strictly supersonic endpoint Mach numbers M > 1; got "
+                f"M0={M0!r}, M1={M1!r}. Values were not clamped or "
+                "substituted."
+            )
+        else:
+            alpha0 = math.asin(1.0 / M0)
+            alpha1 = math.asin(1.0 / M1)
+            alpha = 0.5 * (alpha0 + alpha1)
+            theta = 0.5 * (theta0 + theta1)
+            dtheta = theta1 - theta0
+            dalpha = alpha1 - alpha0
+            tan_theta_minus_alpha = math.tan(theta - alpha)
+            tan_alpha = math.tan(alpha)
+            difference = tan_theta_minus_alpha - tan_alpha
+            summation = tan_theta_minus_alpha + tan_alpha
+
+            lhs = dtheta * difference - dalpha * summation
+            sin_theta_plus_alpha = math.sin(theta + alpha)
+            if abs(sin_theta_plus_alpha) > 1.0e-14:
+                coefficient = (
+                    math.sin(alpha)
+                    * tan_alpha
+                    * math.sin(theta)
+                    / sin_theta_plus_alpha
+                )
+            if abs(dtheta) > 1.0e-12:
+                if abs(difference) <= 1.0e-12:
+                    # Preserve the historical singular Eq. (6) signal.  It
+                    # remains a diagnostic and does not decide Eq. (5).
+                    boundary_b = -math.inf
+                else:
+                    boundary_b = 1.0 - (dalpha / dtheta) * (
+                        summation / difference
+                    )
+            if math.isfinite(coefficient) and abs(coefficient) > 1.0e-14:
+                predicted = lhs / coefficient
+                predicted_m = r_mid * predicted
+
+        evaluable = (
+            math.isfinite(lhs)
+            and math.isfinite(coefficient)
+            and math.isfinite(predicted)
+            and math.isfinite(predicted_m)
+        )
+        if not evaluable:
+            unevaluable.append(index)
+            if unevaluable_reason is None:
+                unevaluable_reason = (
+                    f"segment {index}: Eq. (5) is singular or produced a "
+                    "non-finite radial increment for the supplied finite "
+                    "supersonic state"
+                )
+            unevaluable_reasons.append(unevaluable_reason)
+
+        lhs_values.append(lhs)
+        coefficients.append(coefficient)
+        normalized_increments.append(predicted)
+        dimensional_increments.append(predicted_m)
+        boundary_values.append(boundary_b)
+
+    finite_normalized = [
+        value for value in normalized_increments if math.isfinite(value)
+    ]
+    finite_dimensional = [
+        value for value in dimensional_increments if math.isfinite(value)
+    ]
+    available = bool(segment_indices) and not unevaluable
+    if not segment_indices:
+        unevaluable_reasons.append(
+            "Eq. (5) requires at least two control-surface nodes and one "
+            "segment; fewer than two nodes were supplied"
+        )
+    invalid = tuple(
+        index for index, value in enumerate(normalized_increments)
+        if math.isfinite(value) and value < -tol
+    )
+    valid = available and not invalid
+    strictly_positive = valid and all(value > tol for value in finite_normalized)
+    on_boundary = valid and any(
+        abs(value) <= tol for value in finite_normalized
+    )
+
+    return RaoRadialIncrementValidity(
+        segment_indices=segment_indices,
+        segment_midpoint_radius_m=tuple(radii),
+        equation_5_lhs=tuple(lhs_values),
+        equation_5_radial_coefficient=tuple(coefficients),
+        predicted_dR_over_R=tuple(normalized_increments),
+        predicted_dR_m=tuple(dimensional_increments),
+        boundary_function_eq6=tuple(boundary_values),
+        tolerance_dR_over_R=float(tol),
+        unevaluable_segment_indices=tuple(unevaluable),
+        invalid_segment_indices=invalid,
+        minimum_predicted_dR_over_R=(
+            min(finite_normalized) if finite_normalized else None
+        ),
+        minimum_predicted_dR_m=(
+            min(finite_dimensional) if finite_dimensional else None
+        ),
+        available=available,
+        valid=valid,
+        strictly_positive=strictly_positive,
+        on_boundary=on_boundary,
+        unevaluable_reasons=tuple(unevaluable_reasons),
+    )
+
+
 def rao_valid_region(
     ce_or_nodes,
     *,
     tol: float = 0.0,
 ) -> tuple[float, list[float]]:
+    """Return legacy Rao-1999 Eq. (6) ``b`` diagnostics.
+
+    This compatibility wrapper intentionally does *not* make the validity
+    decision.  Use :func:`rao_radial_increment_validity`, whose verdict is the
+    predicted Eq. (5) radial increment obtained from Eqs. (2) and (3).  The
+    Eq. (6) function is retained for historical plots and callers only.
+
+    Inputs with fewer than two nodes retain the legacy ``(+inf, [])`` result;
+    the typed radial-increment object correctly marks that case unevaluable.
     """
-    Evaluate the Rao smooth-flow validity inequality along the control surface.
-
-    Rao's optimum-thrust nozzle assumes a continuous, monotonic supersonic
-    expansion across the control surface DE.  The classical condition for the
-    optimum to exist as a smooth (shock-free) flow is
-
-        b(s) = 1 - (dα/dθ) · [tan(θ - α) + tan(α)] / [tan(θ - α) - tan(α)]  ≥ 0
-
-    where α = μ = arcsin(1/M) is the Mach angle and θ is the local flow
-    angle along DE.  When ``b`` becomes negative the smooth-flow Rao
-    construction is inapplicable and the optimum contour degenerates into
-    a discontinuous (over-expanded) exit.
-
-    References
-    ----------
-    - Rao, "Exhaust Nozzle Contour for Optimum Thrust", Jet Propulsion 1958
-    - Rao, Beck, Booth, "Rao Variational Optimum Bell Nozzle: A Design
-      Compendium", AIAA 99-2584 (1999)  -- propulsion_texts/rao1999.pdf
-    - Östlund, *Flow processes in rocket engine nozzles ...*, KTH 2002
-      (propulsion_texts/fulltext01.pdf, §3)
-
-    Parameters
-    ----------
-    ce_or_nodes : ControlSurface | Sequence[FlowNode]
-        Discrete control-surface nodes from D toward E.
-    tol : float
-        Slack on the inequality.  Pass ``residual_tol`` to allow numerical
-        noise; values of ``b`` below ``-tol`` flag the input as outside the
-        valid region.
-
-    Returns
-    -------
-    (min_b, list_b) : tuple[float, list[float]]
-        The minimum ``b`` value and the per-segment list.  If the input has
-        fewer than two nodes ``min_b`` is ``+inf`` (vacuously valid) and
-        ``list_b`` is empty.
-    """
-    if hasattr(ce_or_nodes, "M") and hasattr(ce_or_nodes, "theta"):
-        nodes = _control_surface_flow_nodes(ce_or_nodes)
-    else:
-        nodes = list(ce_or_nodes)
-    if len(nodes) < 2:
-        return float("inf"), []
-
-    bvalues: list[float] = []
-    for p0, p1 in zip(nodes[:-1], nodes[1:]):
-        dth = float(p1.theta - p0.theta)
-        if abs(dth) < 1e-10:
-            continue
-        M0 = max(float(p0.M), 1.0 + 1e-9)
-        M1 = max(float(p1.M), 1.0 + 1e-9)
-        a0 = math.asin(1.0 / M0)
-        a1 = math.asin(1.0 / M1)
-        a = 0.5 * (a0 + a1)
-        th = 0.5 * (float(p0.theta) + float(p1.theta))
-        num = math.tan(th - a) + math.tan(a)
-        den = math.tan(th - a) - math.tan(a)
-        if abs(den) < 1e-12:
-            bvalues.append(-math.inf)
-        else:
-            bvalues.append(1.0 - (a1 - a0) / dth * (num / den))
-
+    result = rao_radial_increment_validity(ce_or_nodes, tol=max(0.0, tol))
+    bvalues = [
+        value for value in result.boundary_function_eq6
+        if not math.isnan(value)
+    ]
     if not bvalues:
         return float("inf"), []
-    min_b = min(bvalues)
-    _ = tol  # informational; caller compares min_b against -tol
-    return min_b, bvalues
+    return min(bvalues), bvalues
 
 
 def _ce_geometry_residuals(
@@ -5251,9 +5592,24 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         and crossings == 0
     )
 
+    rao_validity = rao_radial_increment_validity(
+        ce,
+        tol=config.rao_radial_increment_tol,
+    )
     boundary_min, _b_values = rao_valid_region(ce)
-    valid_region_ok = boundary_min >= -config.residual_tol
+    valid_region_ok = rao_validity.valid
+    # ``boundary_min`` is the historical Eq. (6) b-function diagnostic.
+    # The Eq. (5) radial-increment object below is the actual validity gate.
     construction_diagnostics["boundary_min"] = float(boundary_min)
+    construction_diagnostics["boundary_min_kind"] = (
+        "legacy_eq6_boundary_function_diagnostic_only"
+    )
+    construction_diagnostics["boundary_min_dR_over_R"] = (
+        rao_validity.minimum_predicted_dR_over_R
+    )
+    construction_diagnostics["rao_radial_increment_validity"] = (
+        rao_validity.to_dict()
+    )
     construction_diagnostics["rao_region"] = (
         "valid_shock_free_region" if valid_region_ok
         else "invalid_short_nozzle_region"
@@ -5376,7 +5732,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     }
 
     ce.converged = bool(bvp_ok)
-    shock_free = crossings == 0
+    # A crossing-free characteristic net is not a shock-free Rao solution if
+    # Eqs. (2)/(3)/(5) cannot advance DE with positive radial increments.
+    shock_free = crossings == 0 and valid_region_ok
 
     # Phase 7 BENCHMARK_VALIDATED promotion: only fires once reviewed
     # exact-variational release criteria have flipped
@@ -5429,11 +5787,22 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             "treat this as a benchmarked Rao contour."
         )
     if not valid_region_ok:
+        if rao_validity.available:
+            radial_detail = (
+                "minimum predicted dR/R "
+                f"{rao_validity.minimum_predicted_dR_over_R:.3g}"
+            )
+        else:
+            radial_detail = (
+                "Eq. (5) unavailable on segment(s) "
+                f"{list(rao_validity.unevaluable_segment_indices)}"
+            )
         warnings.append(
-            "Requested (epsilon, length_pct) lies outside the smooth-flow "
-            f"Rao region (min boundary value {boundary_min:.3g}); the "
-            "optimum-thrust contour is discontinuous and the variational "
-            "construction is not applicable."
+            "Rao 1999 PDF page 4 radial-increment validity failed "
+            f"({radial_detail}); Eqs. (2), (3), and (5) cannot continue "
+            "the control surface with positive dR. Shock-free contour export "
+            "is refused because no discontinuous-exit-flow fallback is "
+            "implemented."
         )
     if not thrust_sanity_ok and not thrust_sanity_applicable:
         warnings.append(
@@ -5544,6 +5913,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         warnings=_dedupe_strings(warnings),
         topology=topology_seed,
         topology_solved=topology_solved,
+        rao_validity=rao_validity,
     )
 
 
