@@ -199,6 +199,15 @@ def test_march_reaches_wall_and_matches_oracle_node_count(
     assert int(march.bd_axis_idx) + 1 == len(oracle_kernel.rrcs[-1])
 
 
+@pytest.mark.parametrize("bad", [0.0, -1.0, float("nan"), float("inf")])
+def test_march_rejects_invalid_dtheta_limit(start_line, bad):
+    with pytest.raises(ValueError, match="dtheta_limit"):
+        march_kernel(
+            start_line, THETA_B, RT, RD, GAMMA,
+            n_rows=1, dtheta_limit=bad,
+        )
+
+
 def test_march_bd_bit_parity_with_oracle(march, oracle_kernel):
     """The J3b acceptance gate: the differentiable BD IS the oracle BD
     (measured max |ΔM| 4.8e-10 / |Δx| 3.7e-10 at the reference)."""

@@ -48,11 +48,19 @@ def test_the_interview_produces_a_job_that_validates():
 def test_a_complete_design_point_selects_the_analyze_workflow():
     document = run_guided(
         ask=_scripted("3", "13 kN", "sea_level", "120 s", "LOX/RP-1",
-                      "GRCop-84", "Inconel 718", "", "y"),
+                      "GRCop-84", "Inconel 718", "", "3 MPa", "8", "0.2", "0.2",
+                      "20 mm", "30 krpm", "0.5 mm", "1.5 mm", "0.1", "0.8 mm", "y"),
         out=lambda _: None,
     )
     assert document["workflow"] == "analyze"
     assert "objective" not in document
+    from lrekit.job_cli import _build_spec
+    from raosim.mdo.job import resolve_engine_job
+
+    resolved = resolve_engine_job(_build_spec(document))
+    assert len(resolved.fixed_variables) == 10
+    assert resolved.fixed_variables["Pc"] == 3e6
+    assert not any("were not stated" in note for note in resolved.notes)
 
 
 def test_a_bad_unit_is_corrected_in_the_interview_not_discovered_later():

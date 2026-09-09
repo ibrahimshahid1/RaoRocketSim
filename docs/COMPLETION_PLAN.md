@@ -5,7 +5,7 @@ version: "1.0"
 audience: [ibrahim, AI coding agents]
 status_legend: { DONE: complete, WIP: in progress, TODO: not started, BLOCKED: waiting on host/literature }
 created: 2026-08-17
-last_updated: 2026-08-24
+last_updated: 2026-08-26
 supersedes_nothing: true
 companions:
   - docs/DIFFERENTIABLE_ENGINE_MDO_PLAN.md      # formulation + phase tracker
@@ -68,9 +68,9 @@ currently described; several appear in two places (noted).
 | **A5** | Commit the accumulated working tree | — | **DONE** (2026-08-24 milestone commit; tests completed 2026-08-22) | A |
 | **B1** | Held-out CEA property-surface gate (Phase 2) | Plan §11 row 2 | **DONE** for four catalog pairs; N2O/Ethanol blocked on state choice | B |
 | **B2** | Typed `mdo/nozzle.py` adapter and failure gate | Plan §10, §12.2 | **DONE** (2026-08-22) | B |
-| **B3** | `ContourProvider` + post-solve contour validation | Remediation 19; Roadmap §5.3 | implementation/contract landed; **qualification blocked** on real MOC compatibility | B |
+| **B3** | `ContourProvider` + post-solve contour validation | Remediation 19; Roadmap §5.3 | implementation/contract landed; **qualification blocked** on real MOC resolution/topology audits | B |
 | **B4** | Rao valid/invalid boundary enforced on variational contour export | Roadmap §5.1 | **DONE** (2026-08-22) | B |
-| **B5** | Convergence-domain map across the design box | Roadmap §5.2 | **PARTIAL** — first fixed D-attachment/Eq. (5) slice generated; broader contexts/full BVP remain | B |
+| **B5** | Convergence-domain map across the design box | Roadmap §5.2 | **PARTIAL** — fixed 0.25°/2% schema-v2 slice generated and pinned; broader contexts/full-BVP evidence remain | B |
 | **C1** | `mdo/multipoint.py` — shared hardware, per-point controls (Phase 10) | Plan §11 row 10 | TODO | C |
 | **C2** | Separation/property/efficiency surfaces at *every* point | Plan §13.5 | TODO | C |
 | **C3** | Battery epigraph summed across operating points | Plan §6.4 | partial | C |
@@ -149,7 +149,7 @@ J6 v2 design totals are still deferred (`raosim/jax/sensitivities.py:24`). The
 typed `mdo/nozzle.py` adapter has since landed for the analytic TOP path, and an
 opt-in host post-solve variational validator now implements the comparison
 contract. That validator is not an inner-loop provider, and real promotion
-remains blocked on forward-MOC compatibility. Keep those passages and §11 rows
+remains blocked on distinct MOC resolution/topology audits. Keep those passages and §11 rows
 3, 4a, 9, 11 synchronized with the verified tree.
 
 Then either regenerate `latex-report/Differentiable_Engine_MDO_Plan.pdf` from
@@ -284,21 +284,27 @@ is fixed by roadmap §5 and is not negotiable:
    invalid region and an unevaluable validity result instead of returning a
    contour. Rao 1999 line 28: below the minimum length "a solution that is
    shock-free is not possible by these methods."
-2. **B5 — first fixed slice DONE; general domain remains partial.**
+2. **B5 — schema v2 and the corrected fixed slice landed.**
    `raosim/rao_existence_scan.py` now emits a typed, context-pinned declared
    domain over externally supplied $\varepsilon\times L_\%$ axes. Each cell
    carries a NumPy D-attachment geometry-root result, kernel-resolution evidence,
    and a Rao Eq. (5) verdict; lookup fails closed outside the sampled/contextual
-   support. H2 produced
+   support. The historical H2 run produced
    `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
    at canonical SHA-256
    `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`.
-   Across the 65 chart knots, 40 are `converged_valid` and 25 are
+   Across the 65 chart knots, 40 were `converged_valid` and 25 were
    `not_converged`; every other class is zero. Across the 48 cell midpoints,
    lookup returns 23 `supported`, 11 `refused_not_converged`, and 14
-   `unknown_under_resolved`. This is one fixed $\gamma=1.4$, $P_a/P_0=0.01$
-   NumPy D-attachment/root/kernel/Eq. (5) slice. Its kernel-refinement evidence
-   is not evidence of universal full-BVP or full mesh convergence.
+   `unknown_under_resolved`. Version 1 omitted the inherited 0.5° angular-step
+   and 5% mass-flow policies from its identity, so schema v2 rejects it
+   fail-closed. The corrected fixed $\gamma=1.4$, $P_a/P_0=0.01$ slice is
+   `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v2.json`
+   at canonical SHA-256
+   `2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9`.
+   It records explicit 0.25°/2% policy and reproduces the same 40/25 knot and
+   23/11/14 midpoint classifications. Its kernel-refinement evidence does not
+   prove universal full-BVP or full-mesh convergence.
 3. **B3 — implementation/contract landed; qualification blocked.**
    `mdo/contour_validation.py` provides an opt-in, typed host post-solve
    validator and `mdo/postprocess.py` calls it only when explicitly configured.
@@ -306,16 +312,23 @@ is fixed by roadmap §5 and is not negotiable:
    runtime. The validator preflights the B5 domain, requires the numerical BVP,
    forward-MOC closure, Rao Eq. (5), and direct full-C-D-E performance, then
    applies explicit caller-supplied TOP-versus-variational discrepancy
-   tolerances. Real coupled and BDE probes reached the numerical BVP/Eq. (5)/
-   full-C-D-E stages but returned `UNKNOWN` because forward-MOC compatibility
-   failed. The 24×24 and 32×32 BDE neighbor-Mach smoothness values were 0.11810
-   and 0.13748, above the repository-policy limit 0.10; the 12×12 coupled probe
-   also failed this gate, but its exact maximum was not recorded. These are not
-   B3 qualification passes and do not make discrepancy adjudication eligible.
+   tolerances. Historical coupled and BDE probes reached the numerical BVP/
+   Eq. (5)/full-C-D-E stages but returned `UNKNOWN` at distinct numerical/topology
+   audits. The 24×24 and 32×32 BDE raw neighbor-Mach increments were 0.11813
+   and 0.13752, above the repository-policy limit 0.10; at the refined 0.25°
+   kernel spacing they fell to 0.06999 and 0.06705. The 12×12 coupled path does
+   not compute that BDE screen and instead failed a characteristic-crossing
+   audit. These are not B3 qualification passes and do not make discrepancy
+   adjudication eligible. The raw-increment hard gate has been retired; raw
+   $\Delta M$ remains a mesh diagnostic, not a Rao/NASA physical shock
+   criterion. The 24×24/32×32 BDE profile now passes the typed
+   common-coordinate physical-grid comparison; the coupled crossing audit and
+   qualification outside that fixed reference context remain open.
 
-**Remaining promotion gate:** demonstrate forward-MOC-compatible real solves
-before interpreting TOP-versus-variational discrepancies. B5 remains partial
-beyond the completed fixed slice; unsupported contexts remain `UNKNOWN` or are
+**Remaining promotion gate:** extend the verified explicit-policy B5-v2
+evidence to every context that will be claimed, then demonstrate resolved and
+topologically admissible real MOC solves before interpreting
+TOP-versus-variational discrepancies. Unsupported contexts remain `UNKNOWN` or are
 refused. No TOP fallback may be relabelled as a variational result. Measured
 host observations, artifact identity, and policy scope are recorded in
 `docs/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
@@ -528,13 +541,15 @@ session earns its cost:
 - **H1 (Track B, DONE 2026-08-22):** generated and held-out-gated the four
   certifiable catalog pairs, then repeated the feasibility survey. See
   `docs/CEA_H1_HOST_EVIDENCE_2026-08-22.md`.
-- **H2 (Track B/E, DONE for the first fixed slice):** generated the 65-knot
+- **H2 (Track B/E, corrected v2 fixed slice complete):** generated the 65-knot
   $\varepsilon\times L_\%$ D-attachment/Eq. (5) domain at fixed $\gamma=1.4$
-  and $P_a/P_0=0.01$ with the accepted 8/12/16/24 ladder and explicit lookup-
+  and $P_a/P_0=0.01$ with the 8/12/16/24 ladder and explicit lookup-
   spacing policy. The result is 40 `converged_valid` and 25 `not_converged`
   knots.
-  It supports B5/E1 only in its declared context; later $\gamma$, ambient, and
-  full-BVP convergence slices are separate evidence.
+  The historical v1 identity omitted the inherited 0.5°/5% kernel policy, so
+  schema v2 rejects it. The replacement v2 artifact explicitly records
+  0.25°/2% and is hash-pinned; later $\gamma$, ambient, and full-BVP
+  convergence slices remain separate evidence.
 - **H3 (Track C):** multipoint NLP convergence on a ≥3-point throttle job.
 - **H4 (Track D):** quasi-2-D and Betti verification passes at the frontier's
   end points, plus the full parity re-run.

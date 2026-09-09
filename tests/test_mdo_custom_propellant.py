@@ -242,3 +242,11 @@ def test_a_job_document_can_carry_its_own_propellant(tmp_path, cleanup):
     assert get_propellant("LOX/LNG").provenance == "user_registered"
     # And the document survives a JSON round trip.
     assert json.loads(json.dumps(document, default=str))
+    # The compiled/saved job, not just the original caller's document, retains
+    # the custom definition and changes identity when that definition changes.
+    replay_document = job.spec.to_document()
+    assert replay_document["custom_propellants"][0]["evidence"] == _EVIDENCE
+    unregister_propellant("LOX/LNG")
+    replay = resolve_engine_job(_build_spec(json.loads(json.dumps(replay_document))))
+    assert replay.job_digest == job.job_digest
+    assert replay.mission.propellant_name == "LOX/LNG"

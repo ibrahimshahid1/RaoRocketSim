@@ -23,6 +23,7 @@ import jax.numpy as jnp  # noqa: E402
 import raosim.rao_variational as rv  # noqa: E402
 from raosim.jax import assembly  # noqa: E402
 from raosim.jax.theta_b_solve import (  # noqa: E402
+    _n_rows_bound,
     least_squares_jax_theta_b,
     make_residual_theta_b,
 )
@@ -45,6 +46,19 @@ def seeded():
     u0 = rv._pack_bvp(ce0, -0.5, 0.01, log_C0)
     assert kernel.reached_wall, "seed kernel must be a real march"
     return solve_config, kernel, np.asarray(u0, dtype=float)
+
+
+def test_static_row_bound_tracks_dtheta_limit():
+    theta_b_max = math.radians(30.0)
+    coarse = _n_rows_bound(theta_b_max, math.radians(0.5))
+    refined = _n_rows_bound(theta_b_max, math.radians(0.25))
+    assert refined > coarse
+
+
+@pytest.mark.parametrize("bad", [0.0, -1.0, float("nan"), float("inf")])
+def test_static_row_bound_rejects_invalid_dtheta_limit(bad):
+    with pytest.raises(ValueError, match="dtheta_limit"):
+        _n_rows_bound(math.radians(30.0), bad)
 
 
 def test_residual_parity_at_seed_theta_b(seeded):

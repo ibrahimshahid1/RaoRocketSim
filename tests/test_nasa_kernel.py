@@ -86,17 +86,19 @@ def test_kernel_bd_endpoints_span_full_radial_cross_section():
 def test_kernel_mass_flow_consistent_across_rrcs():
     """Every successfully marched RRC's wall-side mass flow must agree
     with TT''s wall-side mass flow to within the build's ``mdot_tol``
-    (default 5 %).  This is NASA's built-in sanity check (line 1085)."""
+    (default 2 %).  This is the visible JHU/NASA implementation diagnostic
+    (line 1085), not a physical acceptance law."""
     Rt = 0.020
     Rd = 0.382 * Rt
     kernel = build_kernel(Rt, Rd, math.radians(30.0), gamma=1.4, n_kernel=24,
-                          mdot_tol=0.05)
+                          mdot_tol=0.02)
+    assert kernel.massflow_rel_tol == pytest.approx(0.02)
     mdot_throat = float(kernel.massflow[0][0])
     if mdot_throat <= 0:
         pytest.skip("TT' mass is zero (degenerate kernel)")
     for j, mass in enumerate(kernel.massflow):
         err = abs(float(mass[0]) - mdot_throat) / mdot_throat
-        assert err <= 0.05, f"RRC {j} mass err {err:.2%} > 5%"
+        assert err <= 0.02, f"RRC {j} mass err {err:.2%} > 2%"
 
 
 def test_calc_massflow_along_rrc_matches_trapezoidal_integration():
@@ -148,6 +150,50 @@ def test_build_kernel_rejects_bad_inputs():
     with pytest.raises(ValueError):
         build_kernel(Rt=0.020, Rd=0.020, theta_B=math.radians(20.0),
                      gamma=1.4, n_kernel=2)
+    for bad in (0.0, -1.0, float("nan"), float("inf")):
+        with pytest.raises(ValueError, match="dtheta_limit"):
+            build_kernel(
+                Rt=0.020, Rd=0.020, theta_B=math.radians(20.0),
+                gamma=1.4, dtheta_limit=bad,
+            )
+        with pytest.raises(ValueError, match="mdot_tol"):
+            build_kernel(
+                Rt=0.020, Rd=0.020, theta_B=math.radians(20.0),
+                gamma=1.4, mdot_tol=bad,
+            )
+    with pytest.raises(ValueError, match="not bool"):
+        build_kernel(
+            Rt=0.020, Rd=0.020, theta_B=math.radians(20.0),
+            gamma=1.4, dtheta_limit=True,
+        )
+    with pytest.raises(ValueError, match=r"\(0, 1\]"):
+        build_kernel(
+            Rt=0.020, Rd=0.020, theta_B=math.radians(20.0),
+            gamma=1.4, mdot_tol=1.01,
+        )
+
+
+def test_dtheta_limit_refines_kernel_and_is_recorded():
+    """A smaller DTHETAB limit adds adaptive rows; it is mesh provenance."""
+    kwargs = dict(
+        Rt=0.020,
+        Rd=0.382 * 0.020,
+        theta_B=math.radians(25.5659),
+        gamma=1.4,
+        n_kernel=24,
+        starting_line_method="kliegel_levine",
+        Ru=1.5 * 0.020,
+    )
+    coarse = build_kernel(**kwargs, dtheta_limit=math.radians(0.5))
+    refined = build_kernel(**kwargs, dtheta_limit=math.radians(0.25))
+
+    assert coarse.reached_wall and refined.reached_wall
+    assert refined.dtheta_limit_rad == pytest.approx(math.radians(0.25))
+    assert len(refined.rrcs) > len(coarse.rrcs)
+    wall_theta = [row[0].theta for row in refined.rrcs]
+    assert max(map(abs, (
+        b - a for a, b in zip(wall_theta[:-1], wall_theta[1:])
+    ))) <= math.radians(0.25) + 1e-12
 
 
 def test_rao_kernel_error_class_exists():
@@ -185,7 +231,7 @@ def test_source_dtheta_row_march_reaches_wall_without_mass_relaxation():
         gamma=1.4,
         n_kernel=101,
         starting_line_method="sauer_modified",
-        mdot_tol=0.05,
+        mdot_tol=0.02,
     )
 
     assert kernel.fallback_used is False
@@ -199,7 +245,7 @@ def test_source_dtheta_row_march_reaches_wall_without_mass_relaxation():
     )
     mdot0 = float(kernel.massflow[0][0])
     for mass in kernel.massflow:
-        assert abs(float(mass[0]) - mdot0) / mdot0 <= 0.05
+        assert abs(float(mass[0]) - mdot0) / mdot0 <= 0.02
 
 
 def test_corrected_kl_row_march_incompatibility_stays_visible():
@@ -211,7 +257,7 @@ def test_corrected_kl_row_march_incompatibility_stays_visible():
         gamma=1.4,
         n_kernel=101,
         starting_line_method="kliegel_levine",
-        mdot_tol=0.05,
+        mdot_tol=0.02,
     )
 
     assert kernel.fallback_used is True
@@ -227,7 +273,7 @@ def test_calc_bde_region_builds_wall_to_de_seed_rows():
         gamma=1.4,
         n_kernel=101,
         starting_line_method="sauer_modified",
-        mdot_tol=0.05,
+        mdot_tol=0.02,
     )
     topology = calc_lrc_de(
         kernel,
@@ -281,7 +327,7 @@ def test_build_source_contour_from_kernel_reports_uncropped_status():
         gamma=1.4,
         n_kernel=101,
         starting_line_method="sauer_modified",
-        mdot_tol=0.05,
+        mdot_tol=0.02,
     )
     contour = build_source_contour_from_kernel(
         kernel,

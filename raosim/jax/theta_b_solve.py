@@ -25,7 +25,7 @@ kernel's BD at bit parity (tests/test_jax_moc_kernel.py).
 θ_B window: the march's pre-clamp wall grid (raw landings + fixed
 dθ-limit special steps) is θ_B-independent, so d(residual)/dθ_B is
 exact and smooth while θ_B stays within its current grid interval;
-crossing a 0.25° boundary changes the clamp-row index (a small
+crossing a dθ-limit-dependent grid boundary changes the clamp-row index (a small
 discontinuity).  Solver bounds default to ± half a special step around
 the seed; per-ladder-rung re-assembly re-centres the window exactly
 like ``kernel_bd`` re-seeding today.
@@ -45,10 +45,24 @@ import optimistix as optx
 
 from raosim.jax import assembly
 from raosim.jax.api import LM_ATOL, LM_RTOL, SEED_NUDGE, _logit
-from raosim.jax.moc_kernel import KernelRow, march_kernel
+from raosim.jax.moc_kernel import (
+    DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
+    KernelRow,
+    march_kernel,
+)
 from raosim.jax.primitives import mach_angle, prandtl_meyer
 
 _CE_M_FLOOR = assembly._CE_M_FLOOR
+
+
+def _validated_dtheta_limit(dtheta_limit: float) -> float:
+    """Return a concrete, positive kernel step limit in radians."""
+    if isinstance(dtheta_limit, bool):
+        raise ValueError("dtheta_limit must be numeric, not bool")
+    value = float(dtheta_limit)
+    if not math.isfinite(value) or value <= 0.0:
+        raise ValueError("dtheta_limit must be finite and positive (radians)")
+    return value
 
 
 def start_line_from_kernel(kernel) -> KernelRow:
@@ -68,6 +82,10 @@ def start_line_from_kernel(kernel) -> KernelRow:
 def _n_rows_bound(theta_b_max: float, dtheta_limit: float) -> int:
     """Static row bound: special steps advance dθ_limit/2 per row; raw
     rows advance faster, so the special-only count is an upper bound."""
+    theta_b_max = float(theta_b_max)
+    dtheta_limit = _validated_dtheta_limit(dtheta_limit)
+    if not math.isfinite(theta_b_max) or theta_b_max <= 0.0:
+        raise ValueError("theta_b_max must be finite and positive (radians)")
     return int(math.ceil(theta_b_max / (0.5 * dtheta_limit))) + 8
 
 
@@ -76,7 +94,7 @@ def make_residual_theta_b(
     kernel,
     *,
     theta_b_max: float,
-    dtheta_limit: float = math.radians(0.5),
+    dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
     n_corr: int = 40,
     physics_weight: float | None = None,
 ):
@@ -85,8 +103,10 @@ def make_residual_theta_b(
     ``kernel`` is the seed ``MOCKernel`` (provides TT' and the default
     march parameters); ``config.kernel_bd`` must still be populated (it
     seeds the static scale fallbacks and keeps ``params_from_config``
-    semantics identical to the frozen-BD path).
+    semantics identical to the frozen-BD path).  ``dtheta_limit`` is the
+    static throat-arc mesh step in **radians**.
     """
+    dtheta_limit = _validated_dtheta_limit(dtheta_limit)
     sp = assembly.params_from_config(config, physics_weight=physics_weight)
     sl = start_line_from_kernel(kernel)
     n_rows = _n_rows_bound(float(theta_b_max), float(dtheta_limit))
@@ -124,7 +144,7 @@ def least_squares_jax_theta_b(
     *,
     theta_b_seed: float | None = None,
     theta_b_halfwidth: float | None = None,
-    dtheta_limit: float = math.radians(0.5),
+    dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
     max_steps: int | None = None,
     physics_weight: float | None = None,
 ):
@@ -140,10 +160,15 @@ def least_squares_jax_theta_b(
     caller re-centres per ladder rung / outer iteration if θ_B walks
     to a bound (exactly like kernel_bd re-seeding today).
     """
+    dtheta_limit = _validated_dtheta_limit(dtheta_limit)
     tb0 = float(theta_b_seed if theta_b_seed is not None
                 else kernel.theta_B)
     half = float(theta_b_halfwidth if theta_b_halfwidth is not None
                  else 0.25 * dtheta_limit)
+    if not math.isfinite(tb0) or tb0 <= 0.0:
+        raise ValueError("theta_b_seed must be finite and positive (radians)")
+    if not math.isfinite(half) or half <= 0.0:
+        raise ValueError("theta_b_halfwidth must be finite and positive")
     fn, n_rows = make_residual_theta_b(
         config, kernel, theta_b_max=tb0 + 2.0 * half,
         dtheta_limit=dtheta_limit, physics_weight=physics_weight,

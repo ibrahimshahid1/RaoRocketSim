@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+import raosim.rao_existence_scan as scan_module
 from raosim.gas_dynamics import prandtl_meyer
 from raosim.nasa_moc import MOCNode
 from raosim.rao_existence_scan import (
@@ -16,10 +17,48 @@ from raosim.rao_existence_scan import (
     MODEL_POSITION,
     MODEL_SMOOTH,
     SCAN_STATIONARITY,
+    evaluate_closure_point,
     prandtl_meyer_fan_post_state,
     refine_from_scan_best,
     scan_existence,
 )
+
+
+def test_kernel_march_controls_are_threaded_to_both_build_paths(monkeypatch):
+    original = scan_module.build_kernel
+    calls = []
+
+    def recording_build_kernel(*args, **kwargs):
+        calls.append(kwargs)
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(scan_module, "build_kernel", recording_build_kernel)
+    config = ExistenceScanConfig(
+        Rt=0.020,
+        epsilon=10.0,
+        theta_b_values_deg=np.array([25.0]),
+        kdf_values=np.array([0.15]),
+        models=(MODEL_SMOOTH,),
+        n_kernel=8,
+        n_de_points=6,
+        kernel_dtheta_limit_deg=0.375,
+        kernel_massflow_rel_tol=0.015,
+    )
+
+    scan_existence(config)
+    evaluate_closure_point(
+        config,
+        model=MODEL_SMOOTH,
+        theta_B_deg=25.0,
+        kdf=0.15,
+    )
+
+    assert len(calls) == 2
+    assert all(
+        call["dtheta_limit"] == pytest.approx(math.radians(0.375))
+        for call in calls
+    )
+    assert all(call["mdot_tol"] == pytest.approx(0.015) for call in calls)
 
 
 def test_prandtl_meyer_fan_relation_is_explicit():
@@ -154,6 +193,10 @@ def test_existence_scan_cli_runs_without_pythonpath(tmp_path):
             "smooth",
             "--n-kernel",
             "8",
+            "--kernel-dtheta-limit-deg",
+            "0.375",
+            "--kernel-massflow-rel-tol",
+            "0.015",
             "--n-de-points",
             "6",
             "--output-dir",
@@ -171,5 +214,7 @@ def test_existence_scan_cli_runs_without_pythonpath(tmp_path):
     assert (tmp_path / "smooth_scan.csv").exists()
     summary = json.loads((tmp_path / "summary.json").read_text())
     assert summary["config"]["n_kernel"] == 8
+    assert summary["config"]["kernel_dtheta_limit_deg"] == 0.375
+    assert summary["config"]["kernel_massflow_rel_tol"] == 0.015
     assert summary["config"]["n_de_points"] == 6
     assert summary["config"]["scan_mode"] == "geometry"

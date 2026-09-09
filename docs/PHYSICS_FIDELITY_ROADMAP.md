@@ -1,12 +1,14 @@
 # Physics fidelity roadmap
 
-**Status head (2026-08-24):** items **§3.1, §4.1, and §5.1 are implemented** as
+**Status head (2026-08-26):** items **§3.1, §4.1, and §5.1 are implemented** as
 scope/validity gates, and §4.3's existing liner-buckling screen is integrated as
 a mandatory MDO final gate (not as a qualification calculation). Section 5.2's
 declared-domain infrastructure and §5.3's opt-in host validator contract have
-also landed. The first fixed-context H2 slice is generated, but B5 remains
-partial beyond it and B3 promotion remains blocked on MOC compatibility. Other
-items remain analysis and plan only. See the landed notes in §3–§5. Each item
+also landed. Schema v2 rejects the historical fixed-context H2 slice because
+v1 omitted two kernel-march policies; the corrected 0.25°/2% slice is now
+generated and hash-pinned. B3 promotion remains blocked on MOC
+resolution/topology qualification. Other items remain analysis and plan only.
+See the landed notes in §3–§5. Each item
 states what the code does *today* (verified against the tree, not recalled), what
 the literature in `propulsion_texts/` actually supports, and the smallest change
 that raises fidelity without inventing authority the model does not have.
@@ -272,7 +274,7 @@ The solver evaluates Rao 1999 Eq. (5) segment-by-segment, stores the predicted
 dR/R result, and derives `rao_region`, reliability, and `shock_free` from it.
 Contour export refuses both invalid and unevaluable validity results. Eq. (6)
 is retained only as a labelled legacy boundary diagnostic. The path remains
-non-default because B3's forward-MOC compatibility gate has not cleared and B5
+non-default because B3's MOC resolution/topology qualification has not cleared and B5
 has only one fixed-context D-attachment/Eq. (5) slice.
 
 The associated implementation contracts have advanced. B5 now has a typed,
@@ -282,8 +284,9 @@ Eq. (5). B3 now has an opt-in host post-solve validator that requires that
 domain plus numerical BVP, forward-MOC, Eq. (5), direct full-C-D-E performance,
 and explicit TOP-versus-variational discrepancy policy. It adds no variational
 runtime to the default analytic path. This is implementation progress, not
-release qualification: the first fixed H2 slice exists, but the real B3 probes
-remain `UNKNOWN` at the forward-MOC compatibility gate.
+release qualification: the corrected fixed H2 slice is only one context, and
+the real B3 probes remain `UNKNOWN` at distinct MOC
+resolution/topology audits.
 
 ### What the literature supports
 
@@ -300,27 +303,39 @@ Promotion is not one gate but three, and Rao 1999 defines the first:
 1. **DONE (2026-08-22): implement the valid/invalid boundary.** Eq. (5), not a
    geometric-radius-difference proxy or Eq. (6), now determines validity; an
    invalid or unevaluable result cannot be exported as a contour.
-2. **First fixed map DONE; broader B5 domain PARTIAL:**
+2. **Schema v2 and the corrected first fixed map DONE:**
    `rao_existence_scan.py` can build and serialize the declared B5 domain and
    refuses unsupported, under-resolved,
    or context-mismatched lookups. The 65-knot fixed $\gamma=1.4$,
-   $P_a/P_0=0.01$ artifact is
+   $P_a/P_0=0.01$ v1 artifact is
    `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
    (canonical SHA-256
    `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`).
-   With the accepted 8/12/16/24 ladder and repository screening policy, it
-   records 40 `converged_valid` and 25 `not_converged` knots, with zero other
-   classes. That slice carries kernel-refinement evidence; it is not a universal
-   full-BVP or full-mesh-convergence claim. Further $\gamma$, ambient, throat-
-   geometry, numerical-context, and full-BVP slices remain separate work.
+   With the 8/12/16/24 ladder and historical screening policy, it recorded 40
+   `converged_valid` and 25 `not_converged` knots, with zero other classes. Its
+   identity omitted the inherited 0.5° angular limit and 5% mass-flow
+   diagnostic, so schema v2 rejects it fail-closed. The replacement is
+   `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v2.json`
+   (canonical SHA-256
+   `2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9`)
+   with explicit 0.25°/2% policy. It carries kernel-refinement evidence; it is
+   not a universal full-BVP or full-mesh-convergence claim.
+   Further $\gamma$, ambient, throat-geometry, numerical-context, and full-BVP
+   slices remain separate work.
 3. **Post-solve implementation/contract DONE; promotion BLOCKED:**
    `mdo/contour_validation.py` is deliberately not a second inner-loop
-   `ContourProvider`. Real 12×12 coupled and 24×24/32×32 BDE probes pass their
-   numerical BVP, Eq. (5), and direct full-C-D-E availability gates but return
-   `UNKNOWN` because forward-MOC neighbor smoothness is incompatible. The BDE
-   neighbor-Mach maxima are 0.11810 and 0.13748 versus the repository-policy
-   limit 0.10; the coupled probe's exact maximum was not recorded. Full B3
-   qualification therefore remains open. See
+   `ContourProvider`. Historical 12×12 coupled and 24×24/32×32 BDE probes passed
+   their numerical BVP, Eq. (5), and direct full-C-D-E availability gates but
+   returned `UNKNOWN` at distinct numerical/topology audits. The BDE raw neighbor-Mach
+   maxima are 0.11813 and 0.13752 versus the repository-policy limit 0.10; with
+   kernel angular spacing refined to 0.25° they fall to 0.06999 and 0.06705.
+   The coupled path does not compute this BDE screen and instead fails a
+   characteristic-crossing audit. Full B3 qualification therefore remains
+   open. The raw-increment hard gate has been retired; raw $\Delta M$ is a
+   resolution diagnostic rather than Rao's physical valid-region criterion.
+   The 24×24/32×32 BDE profile now passes its typed common-coordinate
+   physical-grid comparison (maximum $\Delta M=0.0019034$); broader contexts
+   and the separate coupled crossing audit remain open. See
    `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 
 ---

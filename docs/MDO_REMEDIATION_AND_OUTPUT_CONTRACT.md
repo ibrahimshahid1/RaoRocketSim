@@ -6,7 +6,7 @@
 validity/refusal gate, B5 declared-domain infrastructure, and opt-in host
 post-solve validator implemented; no exact-Rao inner-loop provider is promoted
 
-## STATUS (updated 2026-08-24)
+## STATUS (updated 2026-08-26)
 
 Remediation items 1–8, 10, 12, 14–18 are **implemented and verified by
 reproduction**; the fixed-O/F sentinel crash, the discarded optimized O/F, the
@@ -22,7 +22,7 @@ Current status of the remediation items that were open at the review baseline:
 | 9 — `ResolvedEngineInputs` | **done** | `raosim/mdo/resolved_inputs.py` defines the frozen, versioned (`1.1.0`), content-addressed contract. `to_design_input()` is now a **consumer**: after the contract is resolved, exactly one direct mission read remains (the thermochemistry *backend* selection, which is analysis config and is recorded in `model_identities`), enforced by a source-level guard test. Every `reevaluate()` resolves the contract, crosschecks the handoff, warns by name on divergence, and records the digest + material selection in snapshot `optimizer_metadata`. Drift measured at the moment of switch-over, across GRCop-84/NARloy-Z/CuCrZr: **zero**. |
 | 11 — injector build-once | **done** | `design_nozzle_v2` builds the real five-part CadQuery injector once, measures the ledger from those exact bodies, and passes the same in-memory parts to export. Geometry identity and per-part volume checks bind the mass rows to the STEP artifacts; a real round-trip test imports one valid solid per file and checks volume. CAD unavailability produces five unavailable rows, never the old analytic proxy. |
 | 13 — chamber mass vs CAD | partial | `regen_cad.py` builds disjoint liner/ribs/jacket regions with a `geometry_id`; `design.py` still exports uniform-wall. Disclosed, not hidden. |
-| 19 — `ContourProvider` | partial — implementation landed, qualification blocked | `raosim/mdo/nozzle.py` defines the typed analytic TOP contract and provider-failure final gate, and `rao_variational` refuses Eq. (5)-invalid or unevaluable contours. `raosim/mdo/contour_validation.py` now adds a typed, opt-in host post-solve BVP/Eq. (5)/forward-MOC/full-C-D-E/TOP-discrepancy validator; omitting its config leaves the default analytic path at zero added variational runtime. The 12×12 coupled and 24×24/32×32 BDE probes still return `UNKNOWN` because forward-MOC compatibility fails, so full B3 qualification and any inner-loop variational provider remain open. Discrepancy tolerances are explicit caller-supplied repository policy, not literature limits. |
+| 19 — `ContourProvider` | partial — implementation landed, qualification blocked | `raosim/mdo/nozzle.py` defines the typed analytic TOP contract and provider-failure final gate, and `rao_variational` refuses Eq. (5)-invalid or unevaluable contours. `raosim/mdo/contour_validation.py` now adds a typed, opt-in host post-solve BVP/Eq. (5)/forward-MOC/full-C-D-E/TOP-discrepancy validator; omitting its config leaves the default analytic path at zero added variational runtime. Historical 24×24/32×32 BDE probes failed the former raw-neighbor hard screen, now retained as a diagnostic only; the 12×12 coupled probe instead fails a separate crossing audit and does not compute that screen. Full B3 qualification and any inner-loop variational provider therefore remain open. Discrepancy tolerances are explicit caller-supplied repository policy, not literature limits. |
 
 An unresolved coolant identity (uncatalogued propellant) now marks both the
 coking and HTD rows applicable-but-unavailable, so it reduces to `unknown`
@@ -33,23 +33,32 @@ rather than silently dropping the governing wall-side gate.
 B5's declared-domain schema is now implemented over externally declared
 $\varepsilon\times L_\%$ axes. It retains the exact scan context and per-cell
 NumPy D-attachment root, kernel-resolution, and Rao Eq. (5) evidence, and fails
-closed for unsupported or mismatched lookups. The accepted production H2 run is
-complete at fixed $\gamma=1.4$ and $P_a/P_0=0.01$ with an 8/12/16/24 kernel
-ladder. The 101,932-byte artifact is
+closed for unsupported or mismatched lookups. The historical H2 run completed
+at fixed $\gamma=1.4$ and $P_a/P_0=0.01$ with an 8/12/16/24 kernel ladder. Its
+101,932-byte artifact is
 `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`,
 canonical SHA-256
 `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`.
 Its 65 knots contain 40 `converged_valid` and 25 `not_converged` results, with
-zero other classes. Its kernel-refinement evidence cannot establish universal
-full-BVP or full mesh convergence, so B5 remains partial beyond this slice.
+zero other classes. Version 1 omitted the inherited 0.5° kernel step and 5%
+mass-flow diagnostic from its numerical identity, so schema v2 rejects it
+fail-closed. The regenerated 0.25°/2% `_v2.json` artifact has canonical SHA-256
+`2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9`
+and preserves the 40/25 classification grid. Its kernel-refinement evidence still cannot establish
+universal full-BVP or full-mesh convergence.
 
-B3 consumes that evidence only as an opt-in post-solve validator. Real probes
-pass the numerical BVP, Eq. (5), and direct full-C-D-E availability stages, but
-the 24×24 and 32×32 BDE neighbor-Mach maxima are 0.11810 and 0.13748 against the
-repository screening limit 0.10; the 12×12 coupled probe also fails the same
-forward-MOC compatibility gate without a recorded exact maximum. All three are
-`UNKNOWN`, not qualification passes. The measured host record and the accepted
-H2 policy are in `docs/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
+B3 consumes that evidence only as an opt-in post-solve validator. Historical
+probes passed the numerical BVP, Eq. (5), and direct full-C-D-E availability
+stages. The 24×24 and 32×32 BDE raw neighbor-Mach maxima were 0.11813 and
+0.13752 against the former hard screen 0.10; at 0.25° kernel spacing they fell to 0.06999 and
+0.06705, respectively. The 12×12 coupled probe does not compute that BDE screen
+and instead fails a separate characteristic-crossing audit. All three are
+historical `UNKNOWN` outcomes, not qualification passes. Raw $\Delta M$ is now retained as a diagnostic;
+it is not a Rao/NASA physical shock criterion. The refined 24×24/32×32 BDE pair
+now passes the typed common-coordinate physical-grid comparison; the coupled
+crossing audit remains separate and fail-closed. The measured host record and the
+accepted H2 policy are in
+`docs/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 
 ### Unified engine job (`EngineJobSpec`) — foundation landed
 
@@ -725,7 +734,7 @@ approval checkpoint.
 5. Complete the traditional pump BOM mass model before comparing total pump or
    electric-package mass.
 6. Extend the fixed-slice B5 evidence to every candidate context that will be
-   claimed, resolve the forward-MOC compatibility failure in real B3 probes,
+   claimed, resolve the distinct MOC resolution/topology failures in real B3 probes,
    and approve/revise the exact Rao/JAX architecture before replacing the
    analytic TOP grid.
 7. Validate optimized candidates with higher-fidelity thermochemistry,

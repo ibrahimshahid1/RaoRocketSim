@@ -90,9 +90,8 @@ _TEMPERATURE_AFFINE: dict[str, tuple[float, float]] = {
     "R": (5.0 / 9.0, 0.0),
 }
 
-# Case-insensitive lookup that still resolves the SI prefix collisions that
-# actually matter here (``mm`` vs ``MM``, ``mbar`` vs ``Mbar``): match the
-# exact spelling first, then fall back to a case-folded match.
+# Unit symbols are case-sensitive: an unsupported prefix must not become a
+# different magnitude merely because case-folding found a familiar symbol.
 _NUMBER = r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?"
 _QUANTITY_RE = re.compile(rf"^\s*({_NUMBER})\s*([^\s].*?)?\s*$")
 
@@ -123,11 +122,7 @@ def canonical_unit(dimension: str) -> str:
 
 
 def _resolve_unit(token: str, table: Mapping[str, float]) -> str | None:
-    if token in table:
-        return token
-    folded = token.casefold()
-    matches = [key for key in table if key.casefold() == folded]
-    return matches[0] if len(matches) == 1 else None
+    return token if token in table else None
 
 
 def parse_quantity(
@@ -194,6 +189,8 @@ def parse_quantity(
             )
         scale, offset = _TEMPERATURE_AFFINE[key]
         kelvin = magnitude * scale + offset
+        if not math.isfinite(kelvin):
+            raise UnitError(f"{field}: converted value must be finite")
         if kelvin < 0.0:
             raise UnitError(
                 f"{field}: {raw!r} is below absolute zero ({kelvin:.3f} K)"
@@ -214,7 +211,10 @@ def parse_quantity(
             f"{field}: unknown {dimension} unit {token!r}; expected one of "
             f"{', '.join(k for k in table if k)}"
         )
-    return Quantity(magnitude * table[key], si_unit, dimension, raw)
+    converted = magnitude * table[key]
+    if not math.isfinite(converted):
+        raise UnitError(f"{field}: converted value must be finite")
+    return Quantity(converted, si_unit, dimension, raw)
 
 
 def format_quantity(value: float, dimension: str) -> str:

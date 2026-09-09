@@ -33,6 +33,8 @@ from raosim.rao_existence_scan import (
 from raosim.rao_variational import (
     ContourReliability,
     ControlSurface,
+    RaoFieldConvergenceEvidence,
+    RaoFieldConvergenceTolerances,
     RaoRadialIncrementValidity,
     RaoResidualReport,
     RaoSolution,
@@ -121,6 +123,8 @@ def _domain(*, classification: str = SAMPLE_CONVERGED_VALID):
             throat_downstream_radius_factor=0.382,
             throat_upstream_radius_factor=1.5,
             starting_line_method="kliegel_levine",
+            kernel_dtheta_limit_deg=0.25,
+            kernel_massflow_rel_tol=0.02,
             n_kernel_finest=12,
             n_kernel_ladder=(8, 12),
             root_maxfev=80,
@@ -235,6 +239,34 @@ def _solution(
     )
 
 
+def _field_resolution_evidence(
+    *,
+    passes: bool = True,
+    applicable: bool = True,
+    tolerances: RaoFieldConvergenceTolerances | None = None,
+) -> RaoFieldConvergenceEvidence:
+    policy = tolerances or RaoFieldConvergenceTolerances()
+    return RaoFieldConvergenceEvidence(
+        applicable=applicable,
+        passes=passes and applicable,
+        reason=(
+            "synthetic common-coordinate fields satisfy the policy"
+            if passes and applicable
+            else "synthetic common-coordinate field evidence is unavailable"
+            if not applicable
+            else "synthetic common-coordinate fields exceed the policy"
+        ),
+        coarse_context={"n_control": 24, "n_kernel": 24},
+        fine_context={"n_control": 32, "n_kernel": 32},
+        metrics={"mach_max_abs": 0.001 if passes else 0.02},
+        tolerances=policy,
+    )
+
+
+def _passing_resolution_comparator(*args, tolerances, **kwargs):
+    return _field_resolution_evidence(tolerances=tolerances)
+
+
 def test_tolerance_policy_is_explicit_and_validated():
     with pytest.raises(ValueError, match="finite and non-negative"):
         ContourDiscrepancyTolerances(-1.0, 0.0, 0.0, 0.0)
@@ -261,6 +293,61 @@ def test_tolerance_policy_is_explicit_and_validated():
         VariationalPostSolveConfig(
             tolerances=policy,
             formulation="legacy",
+        )
+    with pytest.raises(ValueError, match="kernel_dtheta_limit_deg"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_dtheta_limit_deg=0.0,
+        )
+    with pytest.raises(ValueError, match="kernel_dtheta_limit_deg"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_dtheta_limit_deg=float("nan"),
+        )
+    with pytest.raises(ValueError, match="kernel_massflow_rel_tol"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_massflow_rel_tol=0.0,
+        )
+    with pytest.raises(ValueError, match="kernel_massflow_rel_tol"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_massflow_rel_tol=float("inf"),
+        )
+    with pytest.raises(ValueError, match="not bool"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_dtheta_limit_deg=True,
+        )
+    with pytest.raises(ValueError, match="not bool"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            kernel_massflow_rel_tol=True,
+        )
+    numeric_policy = VariationalPostSolveConfig(
+        tolerances=policy,
+        kernel_dtheta_limit_deg="0.25",
+        kernel_massflow_rel_tol="0.02",
+    )
+    assert numeric_policy.kernel_dtheta_limit_deg == 0.25
+    assert numeric_policy.kernel_massflow_rel_tol == 0.02
+    assert numeric_policy.n_control == 24
+    assert numeric_policy.n_kernel == 24
+    assert numeric_policy.wall_method == "bde"
+    assert numeric_policy.resolution_refinement_n_control == 32
+    assert numeric_policy.resolution_refinement_n_kernel == 32
+    assert (
+        numeric_policy.resolved_refinement_kernel_dtheta_limit_deg == 0.25
+    )
+    with pytest.raises(ValueError, match="must exceed the base mesh count"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            resolution_refinement_n_kernel=24,
+        )
+    with pytest.raises(ValueError, match="both be specified or both be None"):
+        VariationalPostSolveConfig(
+            tolerances=policy,
+            resolution_refinement_n_control=None,
         )
 
 
@@ -351,6 +438,8 @@ def test_missing_domain_is_typed_unknown_and_skips_variational_solve():
     assert outcome.solved_state["postsolve_validator_source_id"] == (
         VARIATIONAL_VALIDATOR_SOURCE_ID
     )
+    assert outcome.solved_state["variational_kernel_dtheta_limit_deg"] == 0.25
+    assert outcome.solved_state["variational_kernel_massflow_rel_tol"] == 0.02
 
 
 def test_invalid_solved_state_is_unknown_not_a_top_fallback():
@@ -453,6 +542,43 @@ def test_shared_context_mismatch_is_unknown_and_skips_solver():
     assert outcome.domain.lookup_status == "context_mismatch"
 
 
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("kernel_dtheta_limit_deg", 0.5),
+        ("kernel_massflow_rel_tol", 0.05),
+    ),
+)
+def test_kernel_march_policy_mismatch_is_unknown_and_skips_solver(
+    field, value
+):
+    called = False
+
+    def solver(_):
+        nonlocal called
+        called = True
+        raise AssertionError("context mismatch must skip the BVP")
+
+    config = VariationalPostSolveConfig(
+        tolerances=_tolerances(),
+        convergence_domain=_domain(),
+        **{field: value},
+    )
+    outcome = validate_optimized_top_contour(
+        _state(),
+        _mission(),
+        config,
+        solver=solver,
+    )
+
+    assert not called
+    assert outcome.status is VariationalValidationStatus.UNKNOWN
+    assert outcome.reason is (
+        VariationalValidationReason.CONVERGENCE_DOMAIN_CONTEXT_MISMATCH
+    )
+    assert outcome.domain.lookup_status == "context_mismatch"
+
+
 def test_unconverged_attempt_with_negative_eq5_remains_unknown():
     outcome = validate_optimized_top_contour(
         _state(),
@@ -493,11 +619,12 @@ def test_full_cde_is_required_before_postsolve_eq5_adjudication():
     assert outcome.physical_moc_closed is True
 
 
-def test_moc_only_failure_retains_nonadjudicating_discrepancy_report():
-    solution = _solution(converged=False, bvp_converged=True)
-    solution.construction_diagnostics["moc_compatibility_preserved"] = False
+def test_raw_neighbor_increment_diagnostic_is_not_a_moc_hard_gate():
+    solution = _solution(converged=True, bvp_converged=True)
+    solution.construction_diagnostics["moc_compatibility_preserved"] = True
     solution.construction_diagnostics["net_report"] = {
         "measured_neighbor_smoothness_passes": False,
+        "measured_neighbor_smoothness_is_physical_gate": False,
     }
     outcome = validate_optimized_top_contour(
         _state(),
@@ -507,20 +634,82 @@ def test_moc_only_failure_retains_nonadjudicating_discrepancy_report():
             convergence_domain=_domain(),
         ),
         solver=lambda _: solution,
+        resolution_comparator=_passing_resolution_comparator,
+    )
+
+    assert outcome.status is VariationalValidationStatus.PASS
+    assert outcome.reason is VariationalValidationReason.WITHIN_TOLERANCES
+    assert outcome.numerical_converged is True
+    assert outcome.physical_moc_closed is True
+    assert outcome.discrepancy is not None
+    assert outcome.discrepancy.adjudication_eligible
+    assert outcome.discrepancy.passes
+    assert outcome.resolution_convergence is not None
+    assert outcome.resolution_convergence.passes
+
+
+def test_b3_fails_closed_when_resolution_study_is_not_configured():
+    outcome = validate_optimized_top_contour(
+        _state(),
+        _mission(),
+        VariationalPostSolveConfig(
+            tolerances=_tolerances(),
+            convergence_domain=_domain(),
+            resolution_refinement_n_control=None,
+            resolution_refinement_n_kernel=None,
+        ),
+        solver=lambda _: _solution(),
     )
 
     assert outcome.status is VariationalValidationStatus.UNKNOWN
     assert outcome.reason is (
-        VariationalValidationReason.MOC_OR_PHYSICAL_CLOSURE_FAILED
+        VariationalValidationReason.RESOLUTION_CONVERGENCE_NOT_CONFIGURED
     )
-    assert outcome.numerical_converged is True
-    assert outcome.physical_moc_closed is False
-    assert outcome.discrepancy is not None
-    assert not outcome.discrepancy.adjudication_eligible
-    assert "measured_neighbor_smoothness_passes" in (
-        outcome.discrepancy.adjudication_ineligibility_reason
+    assert outcome.discrepancy is None
+
+
+def test_b3_fails_closed_on_under_resolved_common_coordinate_fields():
+    outcome = validate_optimized_top_contour(
+        _state(),
+        _mission(),
+        VariationalPostSolveConfig(
+            tolerances=_tolerances(),
+            convergence_domain=_domain(),
+        ),
+        solver=lambda _: _solution(),
+        resolution_comparator=lambda *args, tolerances, **kwargs: (
+            _field_resolution_evidence(
+                passes=False,
+                tolerances=tolerances,
+            )
+        ),
     )
-    assert not outcome.discrepancy.passes
+
+    assert outcome.status is VariationalValidationStatus.UNKNOWN
+    assert outcome.reason is VariationalValidationReason.RESOLUTION_UNDER_RESOLVED
+    assert outcome.resolution_convergence is not None
+    assert not outcome.resolution_convergence.passes
+    assert outcome.to_dict()["resolution_convergence"]["passes"] is False
+
+
+def test_coupled_wall_crossing_audit_is_separate_from_bde_resolution_gate():
+    outcome = validate_optimized_top_contour(
+        _state(),
+        _mission(),
+        VariationalPostSolveConfig(
+            tolerances=_tolerances(),
+            convergence_domain=_domain(),
+            wall_method="coupled",
+        ),
+        solver=lambda _: _solution(),
+    )
+
+    assert outcome.status is VariationalValidationStatus.UNKNOWN
+    assert outcome.reason is (
+        VariationalValidationReason.RESOLUTION_CONVERGENCE_UNAVAILABLE
+    )
+    assert "coupled" in outcome.detail
+    assert "BDE" in outcome.detail
 
 
 def test_non_smoothness_moc_failure_refuses_discrepancy_comparison():
@@ -545,7 +734,7 @@ def test_non_smoothness_moc_failure_refuses_discrepancy_comparison():
         VariationalValidationReason.MOC_OR_PHYSICAL_CLOSURE_FAILED
     )
     assert outcome.discrepancy is None
-    assert "not limited to forward-net smoothness" in outcome.detail
+    assert "forward net closes" in outcome.detail
 
 
 def test_converged_negative_eq5_is_a_demonstrated_failure():
@@ -601,8 +790,11 @@ def test_pass_uses_outer_policy_even_when_internal_cf_sanity_flag_is_false():
             convergence_domain=_domain(),
             wall_method="bde",
             physics_weight=1.0,
+            kernel_dtheta_limit_deg=0.25,
+            kernel_massflow_rel_tol=0.02,
         ),
         solver=solver,
+        resolution_comparator=_passing_resolution_comparator,
     )
 
     assert outcome.status is VariationalValidationStatus.PASS
@@ -611,9 +803,12 @@ def test_pass_uses_outer_policy_even_when_internal_cf_sanity_flag_is_false():
     assert captured.wall_method == "bde"
     assert captured.formulation == VARIATIONAL_FORMULATION
     assert captured.physics_weight == 1.0
+    assert captured.kernel_dtheta_limit_deg == pytest.approx(0.25)
+    assert captured.kernel_massflow_rel_tol == pytest.approx(0.02)
     assert captured.jax_constraint_weight_ladder == (1.0, 10.0, 30.0, 100.0)
     payload = outcome.to_dict()
-    assert payload["domain"]["schema_version"] == 1
+    assert payload["domain"]["schema_version"] == 2
+    assert payload["resolution_convergence"]["passes"] is True
     assert len(payload["domain"]["artifact_sha256"]) == 64
     assert payload["discrepancy"]["variational_performance_basis"] == (
         DIRECT_FULL_CDE_CF_BASIS
@@ -629,6 +824,7 @@ def test_exceeded_outer_discrepancy_flags_candidate():
             convergence_domain=_domain(),
         ),
         solver=lambda _: _solution(cf=1.4, exit_radius=2.2),
+        resolution_comparator=_passing_resolution_comparator,
     )
 
     assert outcome.status is VariationalValidationStatus.FAIL

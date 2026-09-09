@@ -171,6 +171,8 @@ class HostRaoSolverSpec:
     wall_method: str = "coupled"
     kernel_d_fraction_max: float | None = None
     physics_weight: float | None = None
+    kernel_dtheta_limit_deg: float = 0.5
+    kernel_massflow_rel_tol: float = 0.02
 
 
 @dataclass
@@ -180,9 +182,10 @@ class CoolingSpec:
     channel_count: int | None = None
     channel_width: float | None = None
     channel_height: float | None = None
-    # Arithmetic mean internal roughness [m]. Zero retains the ideal
-    # smooth-wall screening branch; positive values use Swamee-Jain for
-    # turbulent Darcy loss.
+    # Effective hydraulic roughness k_s [m], not measured surface Ra. A
+    # process-specific relation is needed to infer k_s from metrology. Zero
+    # retains the smooth-wall screening branch; positive values use
+    # Swamee-Jain for turbulent Darcy loss through local k_s / D_h.
     channel_roughness: float = 0.0
     coolant_mass_flow: float | None = None
     # None → the COOLANT_PROPERTIES table value for the named coolant
@@ -1350,6 +1353,17 @@ def _validate_design_input(input: DesignInput) -> None:
         raise ValueError(
             "host Rao wall_method must be 'coupled', 'legacy', or 'bde'"
         )
+    for name in ("kernel_dtheta_limit_deg", "kernel_massflow_rel_tol"):
+        raw = getattr(host_rao, name)
+        if isinstance(raw, bool):
+            raise ValueError(f"host Rao {name} must be numeric, not bool")
+        value = float(raw)
+        if not math.isfinite(value) or value <= 0.0:
+            raise ValueError(f"host Rao {name} must be finite and positive")
+        if name == "kernel_massflow_rel_tol" and value > 1.0:
+            raise ValueError(
+                "host Rao kernel_massflow_rel_tol must be no greater than one"
+            )
     if (
         host_rao.kernel_d_fraction_max is not None
         and not 0.0 < float(host_rao.kernel_d_fraction_max) <= 1.0
@@ -1688,6 +1702,12 @@ def _build_v2_contour(
                 host_rao.kernel_d_fraction_max
             ),
             rao_moc_physics_weight=host_rao.physics_weight,
+            rao_moc_kernel_dtheta_limit_deg=(
+                host_rao.kernel_dtheta_limit_deg
+            ),
+            rao_moc_kernel_massflow_rel_tol=(
+                host_rao.kernel_massflow_rel_tol
+            ),
             throat_geometry=throat_geometry,
         )
 

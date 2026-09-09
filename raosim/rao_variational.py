@@ -32,6 +32,7 @@ import math
 from dataclasses import dataclass, field, replace
 from enum import Enum
 from pathlib import Path
+from typing import Any, Mapping
 import numpy as np
 
 try:
@@ -452,6 +453,107 @@ def summarize_group(name: str, arr: np.ndarray) -> dict:
     }
 
 
+RAO_MOC_NUMERICAL_POLICY_ID = "raosim.rao_moc_numerical_policy:v2"
+
+
+@dataclass(frozen=True)
+class RaoMOCNumericalPolicy:
+    """Explicit repository policy for finite-mesh Rao/MOC diagnostics.
+
+    None of these finite thresholds is a Rao shock criterion.  They make the
+    implementation's numerical screening reproducible while physical
+    admissibility remains governed by characteristic compatibility/topology,
+    conservation, wall tangency, and Rao's positive-dR condition.
+    """
+
+    neighbor_mach_diagnostic_limit: float = 0.10
+    neighbor_theta_diagnostic_limit_deg: float = 2.0
+    neighbor_pressure_ratio_diagnostic_limit: float = 0.02
+    mach_line_direction_tol_deg: float = 0.05
+    wall_tangency_tol_deg: float = 0.25
+    crossing_endpoint_fraction_of_median_edge: float = 1.0e-3
+    cell_area_relative_tol: float = 1.0e-12
+    cell_area_absolute_tol_m2: float = 1.0e-18
+    axial_mass_cut_count: int = 7
+    axial_mass_radial_sample_count: int = 500
+    axial_mass_min_coverage: float = 0.98
+    axial_mass_min_valid_cut_count: int = 4
+    axial_mass_relative_tol: float = 5.0e-3
+    topology_closure_distance_over_rt: float = 1.0e-5
+    topology_mass_residual_tol_factor: float = 10.0
+    bde_axis_band_fraction_tol: float = 0.10
+    export_polyline_turn_tol_deg: float = 0.25
+    full_cde_d_projection_over_rt_tol: float = 5.0e-3
+    full_cde_d_mach_jump_tol: float = 2.0e-2
+    full_cde_d_theta_jump_tol_deg: float = 0.5
+    full_cde_mass_mismatch_rel_tol: float = 2.0e-2
+    full_control_surface_cf_relative_tol: float = 5.0e-2
+    partial_surface_cf_relative_tol: float = 2.0e-2
+
+    def __post_init__(self) -> None:
+        positive_float_fields = (
+            "neighbor_mach_diagnostic_limit",
+            "neighbor_theta_diagnostic_limit_deg",
+            "neighbor_pressure_ratio_diagnostic_limit",
+            "mach_line_direction_tol_deg",
+            "wall_tangency_tol_deg",
+            "crossing_endpoint_fraction_of_median_edge",
+            "cell_area_relative_tol",
+            "cell_area_absolute_tol_m2",
+            "axial_mass_min_coverage",
+            "axial_mass_relative_tol",
+            "topology_closure_distance_over_rt",
+            "topology_mass_residual_tol_factor",
+            "bde_axis_band_fraction_tol",
+            "export_polyline_turn_tol_deg",
+            "full_cde_d_projection_over_rt_tol",
+            "full_cde_d_mach_jump_tol",
+            "full_cde_d_theta_jump_tol_deg",
+            "full_cde_mass_mismatch_rel_tol",
+            "full_control_surface_cf_relative_tol",
+            "partial_surface_cf_relative_tol",
+        )
+        for name in positive_float_fields:
+            raw = getattr(self, name)
+            if isinstance(raw, (bool, np.bool_)):
+                raise ValueError(f"{name} must be numeric, not bool")
+            value = float(raw)
+            if not math.isfinite(value) or value <= 0.0:
+                raise ValueError(f"{name} must be finite and positive")
+            object.__setattr__(self, name, value)
+        if self.axial_mass_min_coverage > 1.0:
+            raise ValueError("axial_mass_min_coverage must be <= 1")
+        for name in (
+            "axial_mass_cut_count",
+            "axial_mass_radial_sample_count",
+            "axial_mass_min_valid_cut_count",
+        ):
+            raw = getattr(self, name)
+            if isinstance(raw, (bool, np.bool_)):
+                raise ValueError(f"{name} must be an integer, not bool")
+            numeric = float(raw)
+            if not math.isfinite(numeric) or not numeric.is_integer():
+                raise ValueError(f"{name} must be an integer")
+            value = int(numeric)
+            if value < 1:
+                raise ValueError(f"{name} must be positive")
+            object.__setattr__(self, name, value)
+        if self.axial_mass_min_valid_cut_count > self.axial_mass_cut_count:
+            raise ValueError(
+                "axial_mass_min_valid_cut_count cannot exceed axial_mass_cut_count"
+            )
+
+    def to_dict(self) -> dict:
+        return {
+            "policy_id": RAO_MOC_NUMERICAL_POLICY_ID,
+            "classification": "repository_numerical_policy_not_physical_criterion",
+            **{
+                name: getattr(self, name)
+                for name in self.__dataclass_fields__
+            },
+        }
+
+
 @dataclass
 class RaoSolverConfig:
     """Configuration for the finite-dimensional Rao variational/MOC solve."""
@@ -619,6 +721,42 @@ class RaoSolverConfig:
     # boundary.  This is deliberately independent of the much looser BVP
     # residual tolerance.  Appended to preserve positional compatibility.
     rao_radial_increment_tol: float = 1.0e-9
+    # Numerical throat-arc resolution control from Rice/JHU §3.2.8.  The
+    # public configuration is unit-explicit; low-level MOC routines receive
+    # radians.  0.5 deg is retained here as the backwards-compatible solver
+    # default, while validation profiles set 0.25 deg explicitly and record it
+    # in their identities.  This is a mesh policy, not a shock criterion.
+    kernel_dtheta_limit_deg: float = 0.5
+    # Maximum relative mass-flow drift accepted while marching successive
+    # kernel RRCs.  Rice/JHU and the visible NASA-derived C++ use 2 percent.
+    # It is an implementation diagnostic rather than a physical law.
+    kernel_massflow_rel_tol: float = 2.0e-2
+    moc_numerical_policy: RaoMOCNumericalPolicy = field(
+        default_factory=RaoMOCNumericalPolicy
+    )
+
+    def __post_init__(self) -> None:
+        for name in ("kernel_dtheta_limit_deg", "kernel_massflow_rel_tol"):
+            value = getattr(self, name)
+            if isinstance(value, bool):
+                raise ValueError(f"{name} must be numeric, not bool")
+            numeric = float(value)
+            if not math.isfinite(numeric) or numeric <= 0.0:
+                raise ValueError(f"{name} must be finite and positive")
+            if name == "kernel_massflow_rel_tol" and numeric > 1.0:
+                raise ValueError(
+                    "kernel_massflow_rel_tol must be no greater than one"
+                )
+            setattr(self, name, numeric)
+        if not isinstance(self.moc_numerical_policy, RaoMOCNumericalPolicy):
+            raise TypeError(
+                "moc_numerical_policy must be a RaoMOCNumericalPolicy"
+            )
+
+    @property
+    def kernel_dtheta_limit_rad(self) -> float:
+        """Kernel wall-angle increment limit in low-level MOC units."""
+        return math.radians(self.kernel_dtheta_limit_deg)
 
 
 # Converged-topology ("characteristic") block set.  After the
@@ -725,14 +863,12 @@ BENCHMARK_VALIDATED_RESIDUAL_TOL: float = 1e-4
 BENCHMARK_VALIDATED_EPSILON_RANGE: tuple[float, float] = (6.0, 50.0)
 BENCHMARK_VALIDATED_LENGTH_PCT_RANGE: tuple[float, float] = (70.0, 90.0)
 
-# Rao 1958 Table 3 reports Cf to four decimals, while the accompanying
-# Table-2 contour coordinates are rounded to two decimals.  A 5 % full-CDE
-# sanity band allows the finite-angle loss visible in Rao's published
-# Nozzle-B result (96.93 % of one-dimensional thrust).  It is deliberately a
-# low-order integral check, not a validation
-# promotion; the strict Nozzle-B literature benchmark below uses a tighter
-# absolute published-data tolerance.
-FULL_CONTROL_SURFACE_CF_REL_TOL: float = 5.0e-2
+# Backward-compatible public alias. Runtime solves read the typed policy field;
+# keeping the alias derived from it prevents the historical name from becoming
+# a second, silently divergent source of truth.
+FULL_CONTROL_SURFACE_CF_REL_TOL: float = (
+    RaoMOCNumericalPolicy().full_control_surface_cf_relative_tol
+)
 
 
 def is_within_benchmarked_chart_grid(epsilon: float, length_pct: float) -> bool:
@@ -839,6 +975,10 @@ class MOCNetCompatibilityReport:
     intersection_max: float = 0.0
     wall_tangency_max: float = 0.0
     crossing_samples: list[dict] = field(default_factory=list)
+    crossing_basis: str = "all_nonshared_characteristic_segment_intersections"
+    local_fold_crossings: int = 0
+    local_fold_crossing_samples: list[dict] = field(default_factory=list)
+    wall_tangency_tol_deg: float = 0.25
 
     def to_dict(self) -> dict:
         return {
@@ -855,8 +995,19 @@ class MOCNetCompatibilityReport:
             "wall_boundary_dr_max": self.wall_boundary_dr_max,
             "wall_tangency_rms": self.wall_tangency_rms,
             "wall_tangency_max": self.wall_tangency_max,
+            "wall_tangency_tol_deg": self.wall_tangency_tol_deg,
             "crossings": self.crossings,
             "crossing_samples": list(self.crossing_samples),
+            "crossing_basis": self.crossing_basis,
+            "local_fold_crossings": self.local_fold_crossings,
+            "local_fold_crossing_samples": list(
+                self.local_fold_crossing_samples
+            ),
+            "local_fold_crossings_are_gate": False,
+            "crossing_audit_status": (
+                "all-pairs gate retained fail-closed; coupled axis-link "
+                "interpretation is not yet qualified"
+            ),
             "bad_rows": list(self.bad_rows),
             "passes": self.passes,
         }
@@ -1129,6 +1280,441 @@ class RaoSolution:
             "exit_radius_built": float(wall_r[-1]),
         }
         return contour
+
+
+RAO_COMMON_COORDINATE_CONVERGENCE_POLICY_ID = (
+    "raosim.rao_common_coordinate_field_convergence:v1"
+)
+
+
+@dataclass(frozen=True)
+class RaoFieldConvergenceTolerances:
+    """Explicit repository policy for comparing two nonnested Rao meshes.
+
+    The values are engineering verification tolerances, not limits published by
+    Rao, Rice, JHU, or NASA.  They are collected here so a validation result
+    cannot hide the numerical policy that produced it.  The default B3
+    profile accepts at least 90% bidirectional physical-strip overlap, then
+    applies maximum-error limits on that overlap; the wall is compared
+    independently over its common axial interval.  The 90% and 0.2%-of-Rt
+    wall values accommodate the different nonnested strip boundaries observed
+    in the 24x24/32x32 reference while remaining explicit project policy.
+    """
+
+    mach_max_abs: float = 5.0e-3
+    theta_max_abs_deg: float = 5.0e-2
+    pressure_ratio_max_abs: float = 1.0e-3
+    wall_radius_max_over_rt: float = 2.0e-3
+    theta_n_max_abs_deg: float = 5.0e-2
+    theta_e_max_abs_deg: float = 5.0e-2
+    kernel_d_fraction_max_abs: float = 5.0e-4
+    thrust_coefficient_max_relative: float = 1.0e-3
+    minimum_field_coverage: float = 0.90
+    wall_sample_count: int = 257
+
+    def __post_init__(self) -> None:
+        for name in (
+            "mach_max_abs",
+            "theta_max_abs_deg",
+            "pressure_ratio_max_abs",
+            "wall_radius_max_over_rt",
+            "theta_n_max_abs_deg",
+            "theta_e_max_abs_deg",
+            "kernel_d_fraction_max_abs",
+            "thrust_coefficient_max_relative",
+            "minimum_field_coverage",
+        ):
+            raw = getattr(self, name)
+            if isinstance(raw, (bool, np.bool_)):
+                raise ValueError(f"{name} must be numeric, not bool")
+            value = float(raw)
+            if not math.isfinite(value) or value < 0.0:
+                raise ValueError(f"{name} must be finite and non-negative")
+            object.__setattr__(self, name, value)
+        if self.minimum_field_coverage > 1.0:
+            raise ValueError("minimum_field_coverage must be <= 1")
+        if isinstance(self.wall_sample_count, (bool, np.bool_)):
+            raise ValueError("wall_sample_count must be an integer, not bool")
+        count_value = float(self.wall_sample_count)
+        if not math.isfinite(count_value) or not count_value.is_integer():
+            raise ValueError("wall_sample_count must be an integer")
+        count = int(count_value)
+        if count < 3:
+            raise ValueError("wall_sample_count must be at least 3")
+        object.__setattr__(self, "wall_sample_count", count)
+
+    def to_dict(self) -> dict:
+        return {
+            "policy_id": RAO_COMMON_COORDINATE_CONVERGENCE_POLICY_ID,
+            "classification": "repository_numerical_convergence_policy",
+            **{
+                name: getattr(self, name)
+                for name in self.__dataclass_fields__
+            },
+        }
+
+
+@dataclass(frozen=True)
+class RaoFieldConvergenceEvidence:
+    """Common-coordinate comparison of two independently marched solutions."""
+
+    applicable: bool
+    passes: bool
+    reason: str
+    coarse_context: dict
+    fine_context: dict
+    metrics: dict
+    tolerances: RaoFieldConvergenceTolerances
+
+    def to_dict(self) -> dict:
+        return {
+            "applicable": bool(self.applicable),
+            "passes": bool(self.passes),
+            "reason": self.reason,
+            "coarse_context": dict(self.coarse_context),
+            "fine_context": dict(self.fine_context),
+            "metrics": dict(self.metrics),
+            "tolerances": self.tolerances.to_dict(),
+        }
+
+
+def _solution_mesh_context(solution: RaoSolution) -> dict:
+    context = solution.construction_diagnostics.get("solver_mesh_context", {})
+    return dict(context) if isinstance(context, dict) else {}
+
+
+def _physical_bde_field_arrays(
+    solution: RaoSolution,
+    *,
+    Rt: float,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    """Return deduplicated ``(x/Rt,r/Rt), M, theta`` on the physical mesh."""
+    artifacts = solution.construction_diagnostics.get("bde_artifacts", {})
+    if not isinstance(artifacts, dict):
+        return None
+    bde = artifacts.get("bde_region")
+    if bde is None:
+        return None
+    # ``grid_rows`` is the wall-cropped physical B-D-E strip.  Do not merge
+    # the adaptive throat kernel or the auxiliary continuation here: a generic
+    # Delaunay triangulation across those distinct topologies creates
+    # nonphysical cross-seam simplices and O(0.1) interpolation outliers.  The
+    # raw seed ``rows`` is retained only as a compatibility fallback for older
+    # in-memory fixtures.
+    rows = list(
+        getattr(bde, "grid_rows", ())
+        or getattr(bde, "rows", ())
+        or ()
+    )
+    nodes = [node for row in rows for node in row]
+    if len(nodes) < 3:
+        return None
+    points = np.asarray(
+        [(float(node.x) / Rt, float(node.r) / Rt) for node in nodes],
+        dtype=float,
+    )
+    mach = np.asarray([float(node.M) for node in nodes], dtype=float)
+    theta = np.asarray([float(node.theta) for node in nodes], dtype=float)
+    finite = np.all(np.isfinite(points), axis=1) & np.isfinite(mach) & np.isfinite(theta)
+    points, mach, theta = points[finite], mach[finite], theta[finite]
+    if len(points) < 3:
+        return None
+    key = np.round(points, decimals=12)
+    unique, inverse = np.unique(key, axis=0, return_inverse=True)
+    count = np.bincount(inverse).astype(float)
+    x = np.bincount(inverse, weights=points[:, 0]) / count
+    r = np.bincount(inverse, weights=points[:, 1]) / count
+    mach_avg = np.bincount(inverse, weights=mach) / count
+    theta_avg = np.bincount(inverse, weights=theta) / count
+    return np.column_stack([x, r]), mach_avg, theta_avg
+
+
+def _error_summary(values: np.ndarray) -> tuple[float, float, float]:
+    values = np.asarray(values, dtype=float)
+    if not values.size:
+        return float("inf"), float("inf"), float("inf")
+    absolute = np.abs(values)
+    return (
+        float(np.max(absolute)),
+        float(np.sqrt(np.mean(absolute**2))),
+        float(np.percentile(absolute, 99)),
+    )
+
+
+def compare_rao_solutions_common_coordinates(
+    coarse: RaoSolution,
+    fine: RaoSolution,
+    *,
+    Rt: float,
+    gamma: float,
+    tolerances: RaoFieldConvergenceTolerances | None = None,
+) -> RaoFieldConvergenceEvidence:
+    """Compare nonnested BDE solutions at shared physical coordinates.
+
+    Both directions are evaluated: the fine interpolant at coarse nodes and
+    the coarse interpolant at fine nodes.  This makes the evidence insensitive
+    to adaptive RAW/SPECIAL-row indexing and prevents either mesh from silently
+    defining the only comparison coordinates.
+    """
+    policy = tolerances or RaoFieldConvergenceTolerances()
+    coarse_context = _solution_mesh_context(coarse)
+    fine_context = _solution_mesh_context(fine)
+    if isinstance(Rt, (bool, np.bool_)):
+        raise ValueError("Rt must be numeric, not bool")
+    Rt = float(Rt)
+    if not math.isfinite(Rt) or Rt <= 0.0:
+        raise ValueError("Rt must be finite and positive")
+    if isinstance(gamma, (bool, np.bool_)):
+        raise ValueError("gamma must be numeric, not bool")
+    gamma = float(gamma)
+    if not math.isfinite(gamma) or gamma <= 1.0:
+        raise ValueError("gamma must be finite and greater than one")
+    physical_keys = ("Rt_m", "epsilon", "gamma", "pa_over_p0", "length_pct")
+    required_mesh_keys = (
+        "n_control",
+        "n_kernel",
+        "wall_method",
+        "kernel_dtheta_limit_deg",
+        "kernel_massflow_rel_tol",
+    )
+    missing_context = [
+        f"{side}.{name}"
+        for side, context in (("coarse", coarse_context), ("fine", fine_context))
+        for name in physical_keys + required_mesh_keys
+        if name not in context
+    ]
+    if missing_context:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason=(
+                "solution mesh provenance is incomplete: "
+                + ", ".join(missing_context)
+            ),
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+    mismatch = [
+        name
+        for name in physical_keys
+        if not math.isclose(
+            float(coarse_context[name]),
+            float(fine_context[name]),
+            rel_tol=1.0e-12,
+            abs_tol=1.0e-14,
+        )
+    ]
+    if mismatch:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason=(
+                "solutions do not share the same physical design context: "
+                + ", ".join(mismatch)
+            ),
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+    argument_mismatch: list[str] = []
+    if not math.isclose(
+        float(coarse_context["Rt_m"]), Rt,
+        rel_tol=1.0e-12, abs_tol=1.0e-14,
+    ):
+        argument_mismatch.append("Rt")
+    if not math.isclose(
+        float(coarse_context["gamma"]), gamma,
+        rel_tol=1.0e-12, abs_tol=1.0e-14,
+    ):
+        argument_mismatch.append("gamma")
+    if argument_mismatch:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason=(
+                "comparison arguments do not match solution provenance: "
+                + ", ".join(argument_mismatch)
+            ),
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+    mesh_reasons: list[str] = []
+    if coarse_context["wall_method"] != "bde" or fine_context["wall_method"] != "bde":
+        mesh_reasons.append("both wall_method values must be 'bde'")
+    for name in ("n_control", "n_kernel"):
+        if int(fine_context[name]) <= int(coarse_context[name]):
+            mesh_reasons.append(f"fine {name} must exceed coarse {name}")
+    if float(fine_context["kernel_dtheta_limit_deg"]) > float(
+        coarse_context["kernel_dtheta_limit_deg"]
+    ):
+        mesh_reasons.append("fine kernel dtheta limit cannot be coarser")
+    if not math.isclose(
+        float(coarse_context["kernel_massflow_rel_tol"]),
+        float(fine_context["kernel_massflow_rel_tol"]),
+        rel_tol=0.0,
+        abs_tol=1.0e-15,
+    ):
+        mesh_reasons.append("kernel mass-flow policies differ")
+    if mesh_reasons:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason="invalid refinement pairing: " + "; ".join(mesh_reasons),
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+    coarse_field = _physical_bde_field_arrays(coarse, Rt=Rt)
+    fine_field = _physical_bde_field_arrays(fine, Rt=Rt)
+    if coarse_field is None or fine_field is None:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason=(
+                "common-coordinate comparison requires complete in-memory BDE "
+                "physical-grid artifacts for both solutions"
+            ),
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+
+    try:
+        from scipy.interpolate import LinearNDInterpolator
+
+        coarse_xy, coarse_M, coarse_theta = coarse_field
+        fine_xy, fine_M, fine_theta = fine_field
+        coarse_p = np.asarray(
+            isentropic_pressure_ratio(coarse_M, gamma), dtype=float
+        )
+        fine_p = np.asarray(
+            isentropic_pressure_ratio(fine_M, gamma), dtype=float
+        )
+        coarse_interpolants = tuple(
+            LinearNDInterpolator(coarse_xy, values, fill_value=np.nan)
+            for values in (coarse_M, coarse_theta, coarse_p)
+        )
+        fine_interpolants = tuple(
+            LinearNDInterpolator(fine_xy, values, fill_value=np.nan)
+            for values in (fine_M, fine_theta, fine_p)
+        )
+    except Exception as exc:
+        return RaoFieldConvergenceEvidence(
+            applicable=False,
+            passes=False,
+            reason=f"field triangulation failed: {type(exc).__name__}: {exc}",
+            coarse_context=coarse_context,
+            fine_context=fine_context,
+            metrics={},
+            tolerances=policy,
+        )
+
+    coarse_truth = (coarse_M, coarse_theta, coarse_p)
+    fine_truth = (fine_M, fine_theta, fine_p)
+    differences: list[list[np.ndarray]] = [[], [], []]
+    coverage_values: list[float] = []
+    comparison_count = 0
+    for target_xy, truth, interpolants in (
+        (coarse_xy, coarse_truth, fine_interpolants),
+        (fine_xy, fine_truth, coarse_interpolants),
+    ):
+        predicted = [np.asarray(interp(target_xy), dtype=float) for interp in interpolants]
+        finite = np.logical_and.reduce([np.isfinite(values) for values in predicted])
+        coverage_values.append(float(np.mean(finite)))
+        comparison_count += int(np.sum(finite))
+        for index in range(3):
+            differences[index].append(predicted[index][finite] - truth[index][finite])
+
+    combined = [
+        np.concatenate(values) if values else np.zeros(0)
+        for values in differences
+    ]
+    mach_max, mach_rms, mach_p99 = _error_summary(combined[0])
+    theta_max_rad, theta_rms_rad, theta_p99_rad = _error_summary(combined[1])
+    pressure_max, pressure_rms, pressure_p99 = _error_summary(combined[2])
+
+    coarse_wall = np.asarray(coarse.wall_raw, dtype=float)
+    fine_wall = np.asarray(fine.wall_raw, dtype=float)
+    wall_error = np.zeros(0)
+    if coarse_wall.shape[0] >= 2 and fine_wall.shape[0] >= 2:
+        coarse_order = np.argsort(coarse_wall[:, 0])
+        fine_order = np.argsort(fine_wall[:, 0])
+        cx, unique_c = np.unique(coarse_wall[coarse_order, 0], return_index=True)
+        cr = coarse_wall[coarse_order, 1][unique_c]
+        fx, unique_f = np.unique(fine_wall[fine_order, 0], return_index=True)
+        fr = fine_wall[fine_order, 1][unique_f]
+        lo, hi = max(float(cx[0]), float(fx[0])), min(float(cx[-1]), float(fx[-1]))
+        if hi > lo:
+            x_common = np.linspace(lo, hi, policy.wall_sample_count)
+            wall_error = (
+                np.interp(x_common, fx, fr) - np.interp(x_common, cx, cr)
+            ) / Rt
+    wall_max, wall_rms, wall_p99 = _error_summary(wall_error)
+
+    kdf_coarse = float(coarse.control_surface.kernel_d_fraction)
+    kdf_fine = float(fine.control_surface.kernel_d_fraction)
+    cf_denominator = max(abs(float(fine.thrust_coefficient)), 1.0e-12)
+    metrics = {
+        "comparison_coordinate_count": int(comparison_count),
+        "coarse_node_count": int(len(coarse_xy)),
+        "fine_node_count": int(len(fine_xy)),
+        "coarse_in_fine_coverage": float(coverage_values[0]),
+        "fine_in_coarse_coverage": float(coverage_values[1]),
+        "minimum_field_coverage": float(min(coverage_values)),
+        "mach_max_abs": mach_max,
+        "mach_rms_abs": mach_rms,
+        "mach_p99_abs": mach_p99,
+        "theta_max_abs_deg": math.degrees(theta_max_rad),
+        "theta_rms_abs_deg": math.degrees(theta_rms_rad),
+        "theta_p99_abs_deg": math.degrees(theta_p99_rad),
+        "pressure_ratio_max_abs": pressure_max,
+        "pressure_ratio_rms_abs": pressure_rms,
+        "pressure_ratio_p99_abs": pressure_p99,
+        "wall_radius_max_over_rt": wall_max,
+        "wall_radius_rms_over_rt": wall_rms,
+        "wall_radius_p99_over_rt": wall_p99,
+        "theta_n_abs_delta_deg": abs(math.degrees(fine.theta_N - coarse.theta_N)),
+        "theta_e_abs_delta_deg": abs(math.degrees(fine.theta_E - coarse.theta_E)),
+        "kernel_d_fraction_abs_delta": abs(kdf_fine - kdf_coarse),
+        "thrust_coefficient_relative_delta": abs(
+            float(fine.thrust_coefficient) - float(coarse.thrust_coefficient)
+        ) / cf_denominator,
+    }
+    passes = bool(
+        metrics["minimum_field_coverage"] >= policy.minimum_field_coverage
+        and metrics["mach_max_abs"] <= policy.mach_max_abs
+        and metrics["theta_max_abs_deg"] <= policy.theta_max_abs_deg
+        and metrics["pressure_ratio_max_abs"] <= policy.pressure_ratio_max_abs
+        and metrics["wall_radius_max_over_rt"] <= policy.wall_radius_max_over_rt
+        and metrics["theta_n_abs_delta_deg"] <= policy.theta_n_max_abs_deg
+        and metrics["theta_e_abs_delta_deg"] <= policy.theta_e_max_abs_deg
+        and metrics["kernel_d_fraction_abs_delta"]
+        <= policy.kernel_d_fraction_max_abs
+        and metrics["thrust_coefficient_relative_delta"]
+        <= policy.thrust_coefficient_max_relative
+    )
+    return RaoFieldConvergenceEvidence(
+        applicable=True,
+        passes=passes,
+        reason=(
+            "all common-coordinate field, wall, and global-output deltas satisfy "
+            "the declared repository convergence policy"
+            if passes
+            else "one or more common-coordinate convergence metrics exceed the "
+            "declared repository policy"
+        ),
+        coarse_context=coarse_context,
+        fine_context=fine_context,
+        metrics=metrics,
+        tolerances=policy,
+    )
 
 
 def _design_angles_rad(epsilon: float, length_pct: float,
@@ -2185,6 +2771,8 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
                 starting_line_method=config.starting_line_method,
                 L_target=Ln,
                 Ru=config.throat_upstream_radius_factor * Rt,
+                dtheta_limit=config.kernel_dtheta_limit_rad,
+                mdot_tol=config.kernel_massflow_rel_tol,
                 end_condition="fixed_end",
                 # Seed-quality bracket only: each outer iteration costs a
                 # kernel march; ~8 bisections localise theta_B to ~0.2 deg,
@@ -2202,6 +2790,8 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
             Rt, Rd, theta_b_seed, config.gamma, config.n_kernel,
             starting_line_method=config.starting_line_method,
             Ru=config.throat_upstream_radius_factor * Rt,
+            dtheta_limit=config.kernel_dtheta_limit_rad,
+            mdot_tol=config.kernel_massflow_rel_tol,
         )
         # Honest theta_B provenance for downstream reporting: a frozen
         # override is a *commanded* angle; a guess-angle kernel (secant
@@ -3571,11 +4161,39 @@ def _build_residual_report(
     )
 
 
+_BDE_PHYSICAL_TOPOLOGY_GATE_KEYS = (
+    "bde_physical_mesh_complete",
+    "mass_closure_passes",
+    "seam_closure_passes",
+    "wall_geometry_passes",
+    "measured_crossing_passes",
+    "measured_wall_tangency_passes",
+    "measured_compatibility_passes",
+    "measured_mach_line_direction_passes",
+    "measured_cell_orientation_passes",
+    "axis_condition_passes",
+    "axial_mass_conservation_passes",
+)
+
+
+def _bde_physical_topology_gate_passes(report: Mapping[str, Any]) -> bool:
+    """Apply physical/topological BDE gates, excluding raw edge increments."""
+    required = all(
+        bool(report.get(name, False))
+        for name in _BDE_PHYSICAL_TOPOLOGY_GATE_KEYS
+    )
+    auxiliary_ok = (
+        not bool(report.get("bde_auxiliary_continuation_caustic", False))
+        or bool(report.get("bde_auxiliary_caustic_downstream_of_exit", False))
+    )
+    return bool(required and auxiliary_ok)
+
+
 def _wall_from_bde_region(
     ce: ControlSurface,
     kernel,
     config: RaoSolverConfig,
-) -> tuple[np.ndarray, dict]:
+) -> tuple[np.ndarray, dict, object | None]:
     """Build the wall from the *solved* CE via NASA's BDE-region march.
 
     This is the physically consistent wall for the characteristic
@@ -3662,8 +4280,9 @@ def _wall_from_bde_region(
     measured_mesh = _bde_measured_topology_report(
         bfe,
         config.gamma,
+        Rt=config.Rt,
+        policy=config.moc_numerical_policy,
         compatibility_tol=config.residual_tol,
-        wall_tangency_tol=math.radians(0.25),
     )
     topology_report.update(measured_mesh)
 
@@ -3702,6 +4321,7 @@ def _wall_from_bde_region(
     })
     topology_report.update(_bde_axial_mass_cut_report(
         kernel, bfe, config.gamma,
+        policy=config.moc_numerical_policy,
     ))
     try:
         from raosim.moc_topology import build_topology as _build_topology
@@ -3717,8 +4337,16 @@ def _wall_from_bde_region(
             np.hypot(np.diff(wall[:, 0]), np.diff(wall[:, 1]))
             if wall.shape[0] >= 2 else np.zeros(0)
         )
-        closure_distance_tol = max(1e-5 * config.Rt, 1e-10)
-        mass_rel_tol = max(10.0 * config.residual_tol, 1e-6)
+        closure_distance_tol = max(
+            config.moc_numerical_policy.topology_closure_distance_over_rt
+            * config.Rt,
+            1e-10,
+        )
+        mass_rel_tol = max(
+            config.moc_numerical_policy.topology_mass_residual_tol_factor
+            * config.residual_tol,
+            1e-6,
+        )
         distance_keys = [
             "BD_starts_at_B", "BD_ends_at_D", "DE_starts_at_D",
             "DE_ends_at_E", "wall_starts_at_B", "wall_ends_at_E",
@@ -3752,7 +4380,7 @@ def _wall_from_bde_region(
         axis_band_fraction = (
             _bde_axis_band_fraction(bfe) if n_negative_r > 0 else 0.0
         )
-        axis_band_tol = 0.10
+        axis_band_tol = config.moc_numerical_policy.bde_axis_band_fraction_tol
         truncation_confined = axis_band_fraction <= axis_band_tol
         auxiliary_rows = getattr(bfe, "full_grid_rows", ()) or ()
         auxiliary_frontier_x = min(
@@ -3788,20 +4416,8 @@ def _wall_from_bde_region(
             "bde_auxiliary_frontier_min_x_m": float(auxiliary_frontier_x),
             "bde_auxiliary_caustic_downstream_of_exit": caustic_downstream,
         })
-        topology_report["passes"] = bool(
-            physical_mesh_complete
-            and mass_ok
-            and seams_ok
-            and wall_ok
-            and topology_report["measured_crossing_passes"]
-            and topology_report["measured_wall_tangency_passes"]
-            and topology_report["measured_compatibility_passes"]
-            and topology_report["measured_mach_line_direction_passes"]
-            and topology_report["measured_cell_orientation_passes"]
-            and topology_report["measured_neighbor_smoothness_passes"]
-            and topology_report["axis_condition_passes"]
-            and topology_report["axial_mass_conservation_passes"]
-            and (not auxiliary_caustic or caustic_downstream)
+        topology_report["passes"] = _bde_physical_topology_gate_passes(
+            topology_report
         )
     except Exception as exc:  # topology lift is reporting, not the wall
         diagnostics["warnings"].append(
@@ -3831,6 +4447,7 @@ def _wall_from_bde_region(
             else None
         ),
         "moc_compatibility_preserved": bool(topology_report["passes"]),
+        "rao_moc_numerical_policy": config.moc_numerical_policy.to_dict(),
     })
     # In-memory artifacts for diagram rendering (not serialized to summary.json,
     # which is built key-by-key).  Lets the CLI draw the actual solved BDE
@@ -3855,6 +4472,15 @@ def _wall_from_bde_region(
         diagnostics["warnings"].append(
             "BDE topology audit did not pass; wall construction is not "
             "MOC-promotable."
+        )
+    if not topology_report.get(
+        "neighbor_state_increment_diagnostic_passes", True
+    ):
+        diagnostics["warnings"].append(
+            "One or more raw neighboring-state increments exceed the "
+            "repository diagnostic limits. This is recorded as possible "
+            "under-resolution and is not interpreted as a shock; use "
+            "common-coordinate refinement evidence for resolution acceptance."
         )
     return raw_wall, diagnostics, topo_full
 
@@ -4094,7 +4720,9 @@ def solve_wall_from_ce_coupled(
         strip_success
         and abs(endpoint_dx) / max(L, 1e-12) <= 1e-3
         and abs(endpoint_dr) / max(Re, 1e-12) <= 1e-3
-        and wall_tangency_rms < math.radians(0.25)
+        and wall_tangency_rms < math.radians(
+            config.moc_numerical_policy.wall_tangency_tol_deg
+        )
         and int(np.sum(np.diff(x_wall) <= 0.0)) == 0
         and int(np.sum(np.diff(r_wall) < -1e-10)) == 0
     )
@@ -4111,6 +4739,9 @@ def solve_wall_from_ce_coupled(
         "endpoint_dx": endpoint_dx,
         "endpoint_dr": endpoint_dr,
         "wall_tangency_rms": wall_tangency_rms,
+        "wall_tangency_tol_deg": float(
+            config.moc_numerical_policy.wall_tangency_tol_deg
+        ),
         "wall_tangency_residual_rms": float(np.sqrt(np.mean(tangency_vals**2))),
         "cminus_rms": float(np.sqrt(np.mean(np.asarray(cminus_vals) ** 2))),
         "slope_rms": float(np.sqrt(np.mean(np.asarray(slope_vals) ** 2))),
@@ -4417,8 +5048,10 @@ def moc_net_compatibility_report(
     x_scale: float,
     r_scale: float,
     tol: float,
+    policy: RaoMOCNumericalPolicy | None = None,
 ) -> MOCNetCompatibilityReport:
     """Build a detailed compatibility report for a forward MOC net."""
+    numerical_policy = policy or RaoMOCNumericalPolicy()
     links = characteristic_net_links(rows)
     compat = characteristic_net_compatibility_residuals(rows, gamma)
     cplus = compat["cplus"]
@@ -4462,7 +5095,9 @@ def moc_net_compatibility_report(
             wall_dr.append(boundary_dr)
             wall_t = (row.wall.theta - wall.theta(row.wall.x)) / math.radians(1.0)
             wall_tangency.append(wall_t)
-            row_residuals.extend([abs(boundary_dr), abs(wall_t)])
+            row_residuals.append(abs(boundary_dr))
+            if abs(wall_t) > numerical_policy.wall_tangency_tol_deg:
+                bad_rows.add(row_idx)
 
         if row_residuals and max(row_residuals) > tol:
             bad_rows.add(row_idx)
@@ -4494,6 +5129,14 @@ def moc_net_compatibility_report(
     crossing_count, crossing_samples = _characteristic_crossing_report(
         rows, sample_limit=8
     )
+    # The 12x12 coupled probe's all-pairs failures are dominated by long
+    # straight chords to the symmetry axis intersecting links from earlier
+    # target rows.  Record a same-target-row fold count to isolate that
+    # mechanism, but retain the conservative historical all-pairs gate until
+    # the axis treatment is independently qualified.
+    local_fold_crossings, local_fold_samples = _link_crossing_report(
+        characteristic_net_segments(rows), sample_limit=8, max_row_gap=0
+    )
     cplus_max = _maxabs(cplus)
     cminus_max = _maxabs(cminus)
     intersection_arr = np.asarray(intersection, dtype=float)
@@ -4507,7 +5150,7 @@ def moc_net_compatibility_report(
         and cminus_max <= tol
         and _maxabs(intersection_arr) <= tol
         and _maxabs(wall_boundary) <= tol
-        and _maxabs(wall_t_arr) <= tol
+        and _maxabs(wall_t_arr) <= numerical_policy.wall_tangency_tol_deg
         and crossing_count == 0
         and not bad_rows
     )
@@ -4527,6 +5170,12 @@ def moc_net_compatibility_report(
         wall_tangency_max=_maxabs(wall_t_arr),
         crossings=crossing_count,
         crossing_samples=crossing_samples,
+        crossing_basis="all_nonshared_characteristic_segment_intersections",
+        local_fold_crossings=local_fold_crossings,
+        local_fold_crossing_samples=local_fold_samples,
+        wall_tangency_tol_deg=float(
+            numerical_policy.wall_tangency_tol_deg
+        ),
         bad_rows=sorted(bad_rows),
         passes=bool(passes),
     )
@@ -4621,12 +5270,12 @@ def _link_crossing_report(
 
     ``max_row_gap`` restricts the pairwise check to links whose stored
     ``row`` indices differ by at most that many.  A folded MOC cell is a
-    *local* event between neighbouring characteristics, so ``max_row_gap=1``
-    isolates true adjacent-cell folds; distant-row "crossings" are the
-    harmless near-axis convergence of the field (many rows collapsing onto
-    the singular axis in the same (x, r) box) and should not be flagged.
-    ``None`` (the default) compares every pair — used by the raw
-    characteristic-net audit and the fold unit tests.
+    *local* event between neighbouring characteristics, so a small row gap
+    isolates that mechanism from distant-row intersections.  In the coupled
+    net, some distant intersections involve long axis-reaching chords; their
+    physical interpretation is not yet qualified, so the conservative
+    all-pairs gate still uses ``None`` while the local statistic is reported
+    separately.
     """
     crossings = 0
     samples: list[dict] = []
@@ -4684,7 +5333,13 @@ def _characteristic_crossing_report(
     *,
     sample_limit: int = 0,
 ) -> tuple[int, list[dict]]:
-    """Count true characteristic crossings and retain a bounded sample."""
+    """Count all nonshared straight-segment intersections and retain a sample.
+
+    This preserves the conservative coupled-net gate.  A separate local-fold
+    statistic in :func:`moc_net_compatibility_report` diagnoses same-target-row
+    crossings without prematurely declaring the long-axis-link mechanism
+    physically harmless.
+    """
     return _link_crossing_report(
         characteristic_net_segments(rows),
         sample_limit=sample_limit,
@@ -4802,8 +5457,7 @@ def _bde_axial_mass_cut_report(
     bfe,
     gamma: float,
     *,
-    n_cuts: int = 7,
-    relative_tol: float = 5e-3,
+    policy: RaoMOCNumericalPolicy,
 ) -> dict:
     """Mass conservation on vertical cuts through the physical nozzle.
 
@@ -4814,6 +5468,8 @@ def _bde_axial_mass_cut_report(
     from scipy.interpolate import LinearNDInterpolator
     from raosim.nasa_moc import calc_massflow_along_rrc
 
+    n_cuts = policy.axial_mass_cut_count
+    relative_tol = policy.axial_mass_relative_tol
     wall = list(bfe.wall_contour)
     flow_rows = getattr(bfe, "full_grid_rows", ()) or bfe.grid_rows
     nodes = [node for rrc in kernel.rrcs for node in rrc]
@@ -4858,13 +5514,15 @@ def _bde_axial_mass_cut_report(
     coverage = np.zeros(n_cuts, dtype=float)
     for k, x_value in enumerate(cut_x):
         radius = float(np.interp(x_value, wall_x, wall_r))
-        radial = np.linspace(0.0, radius, 500)
+        radial = np.linspace(
+            0.0, radius, policy.axial_mass_radial_sample_count
+        )
         values = np.asarray(interpolator(np.column_stack([
             np.full_like(radial, x_value), radial,
         ])), dtype=float)
         finite = np.isfinite(values)
         coverage[k] = float(np.mean(finite))
-        if coverage[k] < 0.98:
+        if coverage[k] < policy.axial_mass_min_coverage:
             continue
         if not np.all(finite):
             values = np.interp(radial, radial[finite], values[finite])
@@ -4882,10 +5540,20 @@ def _bde_axial_mass_cut_report(
         if np.any(valid) and math.isfinite(throat_mass) and abs(throat_mass) > 1e-15
         else float("inf")
     )
-    passes = bool(np.sum(valid) >= 4 and max_error <= relative_tol)
+    passes = bool(
+        np.sum(valid) >= policy.axial_mass_min_valid_cut_count
+        and max_error <= relative_tol
+    )
     return {
         "axial_mass_cut_count": int(n_cuts),
         "axial_mass_cut_valid_count": int(np.sum(valid)),
+        "axial_mass_cut_radial_sample_count": int(
+            policy.axial_mass_radial_sample_count
+        ),
+        "axial_mass_cut_min_coverage": float(policy.axial_mass_min_coverage),
+        "axial_mass_cut_min_valid_count": int(
+            policy.axial_mass_min_valid_cut_count
+        ),
         "axial_mass_cut_x_m": cut_x.tolist(),
         "axial_mass_cut_coverage": coverage.tolist(),
         "axial_mass_cut_rel_errors": [
@@ -4902,8 +5570,9 @@ def _bde_measured_topology_report(
     bfe,
     gamma: float,
     *,
+    Rt: float,
+    policy: RaoMOCNumericalPolicy,
     compatibility_tol: float,
-    wall_tangency_tol: float,
 ) -> dict:
     """Measure the physical B-D-E strip and its characteristic equations.
 
@@ -4922,8 +5591,13 @@ def _bde_measured_topology_report(
         )
         for link in links
     ]
+    link_length = np.asarray(link_lengths, dtype=float)
     endpoint_tol = (
-        max(1e-10, 1e-3 * float(np.median(link_lengths)))
+        max(
+            1e-10,
+            policy.crossing_endpoint_fraction_of_median_edge
+            * float(np.median(link_lengths)),
+        )
         if link_lengths else 1e-10
     )
     # Adjacent-row checks catch both ordinary cross-family folds and one
@@ -4979,15 +5653,27 @@ def _bde_measured_topology_report(
         )
         for link in links
     ], dtype=float)
-    smoothness_limits = {
-        "mach": 0.10,
-        "theta_deg": 2.0,
-        "pressure_ratio": 0.02,
+    increment_diagnostic_limits = {
+        "mach": policy.neighbor_mach_diagnostic_limit,
+        "theta_deg": policy.neighbor_theta_diagnostic_limit_deg,
+        "pressure_ratio": policy.neighbor_pressure_ratio_diagnostic_limit,
     }
-    smoothness_passes = bool(
-        _maxabs(neighbor_mach) <= smoothness_limits["mach"]
-        and _maxabs(neighbor_theta) <= smoothness_limits["theta_deg"]
-        and _maxabs(neighbor_pressure) <= smoothness_limits["pressure_ratio"]
+    increment_diagnostic_passes = bool(
+        _maxabs(neighbor_mach) <= increment_diagnostic_limits["mach"]
+        and _maxabs(neighbor_theta) <= increment_diagnostic_limits["theta_deg"]
+        and _maxabs(neighbor_pressure)
+        <= increment_diagnostic_limits["pressure_ratio"]
+    )
+    safe_length = np.maximum(link_length, np.finfo(float).tiny)
+    dimensionless_mach_gradient = (
+        float(Rt) * neighbor_mach / safe_length
+        if neighbor_mach.size else np.zeros(0)
+    )
+    worst_mach_index = (
+        int(np.argmax(neighbor_mach)) if neighbor_mach.size else None
+    )
+    worst_mach_link = (
+        links[worst_mach_index] if worst_mach_index is not None else None
     )
 
     raw_areas: list[float] = []
@@ -5009,14 +5695,17 @@ def _bde_measured_topology_report(
     median_area = (
         float(np.median(np.abs(oriented_area))) if oriented_area.size else 0.0
     )
-    area_tol = max(1e-12 * median_area, 1e-18)
+    area_tol = max(
+        policy.cell_area_relative_tol * median_area,
+        policy.cell_area_absolute_tol_m2,
+    )
     invalid_cells = int(np.sum(oriented_area <= area_tol))
 
     compatibility_passes = bool(
         _maxabs(cminus) <= compatibility_tol
         and _maxabs(cplus) <= compatibility_tol
     )
-    direction_tol = math.radians(0.05)
+    direction_tol = math.radians(policy.mach_line_direction_tol_deg)
     direction_passes = bool(_maxabs(direction) <= direction_tol)
     cell_orientation_passes = invalid_cells == 0
     tangency = _bde_wall_tangency_errors(bfe.wall_contour)
@@ -5026,7 +5715,7 @@ def _bde_measured_topology_report(
     tangency_passes = (
         tangency.size > 0
         and math.isfinite(tangency_max)
-        and tangency_max <= wall_tangency_tol
+        and tangency_max <= math.radians(policy.wall_tangency_tol_deg)
     )
     return {
         "measured_mesh_link_count": int(len(links)),
@@ -5044,7 +5733,7 @@ def _bde_measured_topology_report(
         if math.isfinite(tangency_rms) else float("inf"),
         "wall_tangency_max_deg": float(math.degrees(tangency_max))
         if math.isfinite(tangency_max) else float("inf"),
-        "wall_tangency_tol_deg": float(math.degrees(wall_tangency_tol)),
+        "wall_tangency_tol_deg": float(policy.wall_tangency_tol_deg),
         "measured_crossing_passes": bool(crossing_passes),
         "measured_wall_tangency_passes": bool(tangency_passes),
         "cplus_rms": _rms(cplus),
@@ -5063,11 +5752,33 @@ def _bde_measured_topology_report(
             float(np.min(oriented_area)) if oriented_area.size else 0.0
         ),
         "measured_cell_orientation_passes": cell_orientation_passes,
+        "measured_cell_area_tol_m2": float(area_tol),
+        "measured_cell_area_relative_tol": float(
+            policy.cell_area_relative_tol
+        ),
+        "measured_mesh_edge_length_p99_m": (
+            float(np.percentile(link_length, 99)) if link_length.size else 0.0
+        ),
+        "measured_mesh_edge_length_max_m": _maxabs(link_length),
         "neighbor_mach_p99": (
             float(np.percentile(neighbor_mach, 99))
             if neighbor_mach.size else 0.0
         ),
         "neighbor_mach_max": _maxabs(neighbor_mach),
+        "neighbor_mach_worst_edge_length_m": (
+            float(link_length[worst_mach_index])
+            if worst_mach_index is not None else 0.0
+        ),
+        "neighbor_mach_worst_edge": (
+            _link_sample(worst_mach_link) if worst_mach_link is not None else None
+        ),
+        "neighbor_mach_gradient_rt_scaled_p99": (
+            float(np.percentile(dimensionless_mach_gradient, 99))
+            if dimensionless_mach_gradient.size else 0.0
+        ),
+        "neighbor_mach_gradient_rt_scaled_max": _maxabs(
+            dimensionless_mach_gradient
+        ),
         "neighbor_theta_p99_deg": (
             float(np.percentile(neighbor_theta, 99))
             if neighbor_theta.size else 0.0
@@ -5078,10 +5789,25 @@ def _bde_measured_topology_report(
             if neighbor_pressure.size else 0.0
         ),
         "neighbor_pressure_ratio_max": _maxabs(neighbor_pressure),
-        "neighbor_mach_limit": smoothness_limits["mach"],
-        "neighbor_theta_limit_deg": smoothness_limits["theta_deg"],
-        "neighbor_pressure_ratio_limit": smoothness_limits["pressure_ratio"],
-        "measured_neighbor_smoothness_passes": smoothness_passes,
+        "neighbor_mach_limit": increment_diagnostic_limits["mach"],
+        "neighbor_theta_limit_deg": increment_diagnostic_limits["theta_deg"],
+        "neighbor_pressure_ratio_limit": (
+            increment_diagnostic_limits["pressure_ratio"]
+        ),
+        "neighbor_state_increment_diagnostic_passes": (
+            increment_diagnostic_passes
+        ),
+        "neighbor_state_increment_diagnostics_are_gate": False,
+        "numerical_policy": policy.to_dict(),
+        # Backward-compatible diagnostic key.  It is deliberately not included
+        # in the physical topology gate; common-coordinate refinement owns the
+        # numerical-resolution verdict.
+        "measured_neighbor_smoothness_passes": increment_diagnostic_passes,
+        "measured_neighbor_smoothness_is_physical_gate": False,
+        "measured_neighbor_smoothness_interpretation": (
+            "repository finite-edge diagnostic; failure indicates possible "
+            "under-resolution, not a shock or flow discontinuity"
+        ),
     }
 
 
@@ -5090,12 +5816,17 @@ def characteristic_crossing_samples(
     *,
     limit: int = 8,
 ) -> list[dict]:
-    """Return a small sample of true C+/C- characteristic crossings."""
+    """Sample the retained all-pairs straight-segment crossing audit.
+
+    A reported intersection is fail-closed numerical evidence.  In
+    particular, long axis-reaching chords in the coupled-wall net have not
+    yet been qualified as local physical characteristic folds.
+    """
     return _characteristic_crossing_report(rows, sample_limit=max(0, limit))[1]
 
 
 def check_characteristic_crossing(rows: list[CharRow]) -> int:
-    """Count crossings between true C+/C- characteristic segments."""
+    """Count intersections in the retained all-pairs segment audit."""
     return _characteristic_crossing_report(rows, sample_limit=0)[0]
 
 
@@ -5231,6 +5962,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
 
             result = least_squares_jax_theta_b(
                 solve_config, kernel_obj, u0, lower, upper,
+                dtheta_limit=config.kernel_dtheta_limit_rad,
             )
             theta_b_star = float(result.theta_b)
             if kernel_obj is not None:
@@ -5250,6 +5982,8 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     theta_b_star, config.gamma, config.n_kernel,
                     starting_line_method=config.starting_line_method,
                     Ru=config.throat_upstream_radius_factor * config.Rt,
+                    dtheta_limit=config.kernel_dtheta_limit_rad,
+                    mdot_tol=config.kernel_massflow_rel_tol,
                 )
                 kernel_obj.theta_b_provenance = "bvp_solved"
                 kernel_bd_seed = [
@@ -5414,6 +6148,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     x_scale=max(L_target - Nx, 1e-12),
                     r_scale=max(Re, 1e-12),
                     tol=config.residual_tol,
+                    policy=config.moc_numerical_policy,
                 )
                 crossings = int(net_report.crossings)
                 construction_diagnostics["net_report"] = net_report.to_dict()
@@ -5442,12 +6177,42 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         }
         raw_wall = np.array([[Nx, Ny], [L_target, Re]], dtype=float)
 
+    construction_diagnostics.setdefault(
+        "rao_moc_numerical_policy", config.moc_numerical_policy.to_dict()
+    )
+    construction_diagnostics["kernel_mesh_policy"] = {
+        "kernel_dtheta_limit_deg": float(config.kernel_dtheta_limit_deg),
+        "kernel_massflow_rel_tol": float(config.kernel_massflow_rel_tol),
+        "classification": "numerical_mesh_and_march_policy_not_physical_criterion",
+        "source": (
+            "Rice/JHU RTDC-TPS-481 §§3.2.6-3.2.8: nominal DTHETAB Max "
+            "0.25-0.5 deg and 2 percent initial-region mass-flow diagnostic"
+        ),
+    }
+    construction_diagnostics["solver_mesh_context"] = {
+        "Rt_m": float(config.Rt),
+        "epsilon": float(config.epsilon),
+        "gamma": float(config.gamma),
+        "pa_over_p0": float(config.pa_over_p0),
+        "length_pct": float(config.length_pct),
+        "n_control": int(config.n_control),
+        "n_kernel": int(config.n_kernel),
+        "wall_method": str(config.wall_method),
+        "starting_line_method": str(config.starting_line_method),
+        "kernel_dtheta_limit_deg": float(config.kernel_dtheta_limit_deg),
+        "kernel_massflow_rel_tol": float(config.kernel_massflow_rel_tol),
+        "rao_moc_numerical_policy_id": RAO_MOC_NUMERICAL_POLICY_ID,
+    }
+
     try:
         export_wall, export_diag = resample_wall_for_export(
             raw_wall,
             start=(Nx, Ny),
             end=(L_target, Re),
             residual_tol=config.residual_tol,
+            max_polyline_turn_deg=(
+                config.moc_numerical_policy.export_polyline_turn_tol_deg
+            ),
         )
     except RaoEndpointMismatchError as exc:
         # Raw wall misses the target endpoints beyond the export limit.
@@ -5496,6 +6261,21 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 gamma=config.gamma,
                 Rt=config.Rt,
                 pa_over_p0=config.pa_over_p0,
+                d_projection_tol_over_rt=(
+                    config.moc_numerical_policy
+                    .full_cde_d_projection_over_rt_tol
+                ),
+                d_mach_jump_tol=(
+                    config.moc_numerical_policy.full_cde_d_mach_jump_tol
+                ),
+                d_theta_jump_tol=math.radians(
+                    config.moc_numerical_policy
+                    .full_cde_d_theta_jump_tol_deg
+                ),
+                mass_residual_rel_tol=(
+                    config.moc_numerical_policy
+                    .full_cde_mass_mismatch_rel_tol
+                ),
             )
         except Exception as exc:
             warnings.append(
@@ -5563,14 +6343,16 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         thrust_sanity_applicable
         and cf > 0.0
         and math.isfinite(cf_rel_error)
-        and abs(cf_rel_error) <= FULL_CONTROL_SURFACE_CF_REL_TOL
+        and abs(cf_rel_error)
+        <= config.moc_numerical_policy.full_control_surface_cf_relative_tol
     )
     segment_mass_scaled_cf_applicable = partial_control_surface
     segment_mass_scaled_cf_ok = (
         partial_control_surface
         and cf > 0.0
         and math.isfinite(mass_scaled_cf_rel_error)
-        and abs(mass_scaled_cf_rel_error) <= 2.0e-2
+        and abs(mass_scaled_cf_rel_error)
+        <= config.moc_numerical_policy.partial_surface_cf_relative_tol
     )
     thrust_sanity_ok = full_surface_cf_ok
     bvp_ok = (
@@ -5588,7 +6370,8 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         no_postprocessing
         and construction_diagnostics.get("moc_compatibility_preserved", False)
         and wall_tangency_rms is not None
-        and wall_tangency_rms < math.radians(0.25)
+        and wall_tangency_rms
+        < math.radians(config.moc_numerical_policy.wall_tangency_tol_deg)
         and crossings == 0
     )
 
@@ -5661,7 +6444,12 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
             if partial_control_surface
             else None
         ),
-        "full_cde_relative_tolerance": FULL_CONTROL_SURFACE_CF_REL_TOL,
+        "full_cde_relative_tolerance": float(
+            config.moc_numerical_policy.full_control_surface_cf_relative_tol
+        ),
+        "full_cde_relative_tolerance_basis": (
+            "repository numerical screening policy; not a Rao/NASA physical limit"
+        ),
         "cde_mass_flux": (
             None if full_thrust is None else float(full_thrust.mass_flux_cde)
         ),
@@ -6006,6 +6794,8 @@ def rao_variational_moc_contour(
     wall_method: str = "coupled",
     kernel_d_fraction_max: float | None = None,
     physics_weight: float | None = None,
+    kernel_dtheta_limit_deg: float = 0.5,
+    kernel_massflow_rel_tol: float = 2.0e-2,
 ) -> dict | RaoSolution:
     """
     Generate an auditable Rao variational/MOC contour attempt.
@@ -6033,6 +6823,8 @@ def rao_variational_moc_contour(
         solver_backend=solver_backend,
         wall_method=wall_method,
         kernel_d_fraction_max=kernel_d_fraction_max,
+        kernel_dtheta_limit_deg=kernel_dtheta_limit_deg,
+        kernel_massflow_rel_tol=kernel_massflow_rel_tol,
     )
     solution = solve_rao_bvp(config)
     if return_solution:

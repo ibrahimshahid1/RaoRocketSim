@@ -368,6 +368,8 @@ def test_v2_characteristic_contour_receives_host_solver_controls(monkeypatch):
             wall_method="bde",
             kernel_d_fraction_max=0.7,
             physics_weight=1.0,
+            kernel_dtheta_limit_deg=0.25,
+            kernel_massflow_rel_tol=0.03,
         ),
     )
 
@@ -388,6 +390,8 @@ def test_v2_characteristic_contour_receives_host_solver_controls(monkeypatch):
     assert captured["rao_moc_wall_method"] == "bde"
     assert captured["rao_moc_kernel_d_fraction_max"] == pytest.approx(0.7)
     assert captured["rao_moc_physics_weight"] == pytest.approx(1.0)
+    assert captured["rao_moc_kernel_dtheta_limit_deg"] == pytest.approx(0.25)
+    assert captured["rao_moc_kernel_massflow_rel_tol"] == pytest.approx(0.03)
 
 
 def test_v2_uses_scheduled_design_ambient_consistently():

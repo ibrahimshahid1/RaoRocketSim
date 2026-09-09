@@ -145,6 +145,8 @@ def test_to_design_input_maps_shared_conventions(mission, design_vector):
             "wall_method": "bde",
             "kernel_d_fraction_max": 0.7,
             "physics_weight": 1.0,
+            "kernel_dtheta_limit_deg": 0.25,
+            "kernel_massflow_rel_tol": 0.02,
         },
     )
     assert configured.host_rao_solver.n_control == 18
@@ -156,6 +158,12 @@ def test_to_design_input_maps_shared_conventions(mission, design_vector):
         0.7
     )
     assert configured.host_rao_solver.physics_weight == pytest.approx(1.0)
+    assert configured.host_rao_solver.kernel_dtheta_limit_deg == pytest.approx(
+        0.25
+    )
+    assert configured.host_rao_solver.kernel_massflow_rel_tol == pytest.approx(
+        0.02
+    )
 
     cea_backed = to_design_input(
         d,

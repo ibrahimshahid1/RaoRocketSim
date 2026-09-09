@@ -552,6 +552,8 @@ def test_mdo_rao_handoff_matches_traditional_cli_solver_controls():
             max_nfev=321,
             theta_b_guess=34.0,
             backend="numpy",
+            kernel_dtheta_limit_deg=0.25,
+            kernel_massflow_rel_tol=0.02,
         )
     )
 
@@ -567,6 +569,8 @@ def test_mdo_rao_handoff_matches_traditional_cli_solver_controls():
         "wall_method": "bde",
         "kernel_d_fraction_max": 0.7,
         "physics_weight": 1.0,
+        "kernel_dtheta_limit_deg": 0.25,
+        "kernel_massflow_rel_tol": 0.02,
     }
 
 

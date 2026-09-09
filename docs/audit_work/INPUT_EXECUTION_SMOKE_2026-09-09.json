@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-09",
+  "entry_point": "python -m lrekit run JOB.json --out result.json",
+  "test_kind": "real numerical CLI run, not hardware validation",
+  "artifact_directory": "/var/folders/06/dmk214l115lgb_3jfp6m1x4r0000gn/T/lrekit-integrity-2g3wkyh7",
+  "verdict": "CANDIDATE_VIOLATES",
+  "exit_code": 1,
+  "package_status": "complete",
+  "input_integrity": "pass",
+  "requirement_coverage": "unknown",
+  "model_consistency": "unknown",
+  "resolved_ambient_pressure_Pa": 26435.887460311165,
+  "resolved_burn_duration_s": 30.0,
+  "reports_verified": 5,
+  "model_difference_count": 17,
+  "missing_comparison_count": 79
+}

@@ -144,7 +144,7 @@ def test_bounds_beyond_the_validated_domain_are_clipped_with_a_note():
     lo, hi = job.bounds["Pc"]
     assert lo == pytest.approx(2.0e6)
     assert hi == pytest.approx(6.0e6)
-    assert any("beyond the validated model domain" in n for n in job.notes)
+    assert any("beyond the configured search domain" in n for n in job.notes)
 
 
 def test_optimize_requires_an_objective_and_analyze_forbids_one():
@@ -296,12 +296,8 @@ def test_altitude_condition_requires_an_altitude():
 
 
 def test_ablation_policy_cannot_present_itself_as_physics_feasible():
-    spec = _analyze_job(
-        models=ModelSelection(constraint_policy=ConstraintPolicy.CUSTOM_ABLATION)
-    )
-    job = resolve_engine_job(spec)
-    assert job.constraint_policy is ConstraintPolicy.CUSTOM_ABLATION
-    assert any("custom_screen_feasible" in n for n in job.notes)
+    with pytest.raises(JobValidationError, match="no constraint-selection mask"):
+        ModelSelection(constraint_policy=ConstraintPolicy.CUSTOM_ABLATION)
 
 
 def test_missing_material_selection_is_reported_not_assumed():

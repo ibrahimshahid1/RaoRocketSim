@@ -17,7 +17,8 @@ boolean is how an unknown becomes a pass.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
+import math
 from typing import Any, Mapping
 
 from raosim.input_validation import WorkflowExitCode
@@ -26,6 +27,8 @@ from raosim.mdo.job import (
     JobValidationError,
     ResolvedEngineJob,
     TargetRelation,
+    VariableMode,
+    VariableRequest,
     Workflow,
     resolve_engine_job,
 )
@@ -54,6 +57,10 @@ _ADVERTISED_OBJECTIVES = frozenset(
     for metric in METRIC_REGISTRY.values()
     if metric.available and metric.objective_capable
 )
+_REQUIRED_STATUS_KEYS = frozenset({
+    "workflow", "optimizer", "numerical", "physics", "requirements",
+    "workflow_readiness", "input_integrity", "requirement_coverage", "model_consistency",
+})
 if frozenset(_OBJECTIVE_IMPLEMENTATIONS) != _ADVERTISED_OBJECTIVES:
     raise RuntimeError(
         "objective registry/execution mismatch: advertised="
@@ -106,12 +113,16 @@ class EngineJobResult:
     #: rows and their margins is the difference between a report and a result.
     violated_constraints: tuple[tuple[str, float], ...] = ()
     messages: tuple[str, ...] = ()
+    requirement_coverage: tuple[Mapping[str, Any], ...] = ()
+    model_consistency: Mapping[str, Any] = field(default_factory=dict)
+    output_directory: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "verdict": self.verdict,
             "exit_code": self.exit_code,
             "job_digest": self.job.job_digest,
+            "resolved_job": self.job.to_dict(),
             "resolved_inputs_digest": (
                 self.inputs.digest() if self.inputs is not None else None
             ),
@@ -122,6 +133,14 @@ class EngineJobResult:
                 for name, margin in self.violated_constraints
             ],
             "targets": [t.to_dict() for t in self.targets],
+            "requirement_coverage": [dict(row) for row in self.requirement_coverage],
+            "model_consistency": dict(self.model_consistency),
+            "comparison": (
+                self.reevaluation.comparison.to_dict()
+                if self.reevaluation is not None
+                and self.reevaluation.comparison is not None else None
+            ),
+            "output_directory": self.output_directory,
             "contour_validation": (
                 self.contour_validation.to_dict()
                 if self.contour_validation is not None
@@ -149,7 +168,12 @@ def _snapshot_value(snapshot: Any, metric_id: str) -> tuple[float | None, str | 
         reason = getattr(entry, "availability_reason", None)
         return None, reason or f"{metric_id} is unavailable in this analysis"
     try:
-        return float(value), None
+        if isinstance(value, bool):
+            raise ValueError("boolean is not a measured scalar")
+        scalar = float(value)
+        if not math.isfinite(scalar):
+            return None, f"{metric_id} is nonfinite"
+        return scalar, None
     except (TypeError, ValueError):
         return None, f"{metric_id} is not a scalar"
 
@@ -219,19 +243,18 @@ def _verdict(statuses: Mapping[str, str],
     requirement is impossible.
     """
 
-    if statuses.get("workflow") == "fail" or statuses.get("numerical") == "fail":
+    if any(statuses.get(name) == "fail" for name in
+           ("workflow", "numerical", "input_integrity", "report_publication")):
         return "SOLVER_FAILED", int(WorkflowExitCode.SOLVER_FAILED)
     demonstrated_failure = (
-        statuses.get("optimizer") == "fail"
-        or statuses.get("physics") == "fail"
-        or statuses.get("requirements") == "fail"
-        or statuses.get("contour_validation") == "fail"
+        any(value == "fail" for value in statuses.values())
         or any(t.status == "fail" for t in targets)
     )
     if demonstrated_failure:
         return "CANDIDATE_VIOLATES", int(WorkflowExitCode.CANDIDATE_VIOLATES)
     if (
-        any(v == "unknown" for v in statuses.values())
+        not _REQUIRED_STATUS_KEYS.issubset(statuses)
+        or any(v not in {"pass", "not_applicable"} for v in statuses.values())
         or any(t.status == "unknown" for t in targets)
     ):
         return "INDETERMINATE", int(WorkflowExitCode.INDETERMINATE)
@@ -241,13 +264,59 @@ def _verdict(statuses: Mapping[str, str],
 def _isp_floor(spec: EngineJobSpec) -> float:
     """The Isp requirement the optimizer enforces, if one was stated."""
 
-    for target in spec.targets:
-        if (
-            target.metric == "performance.isp_delivered"
-            and target.relation is TargetRelation.AT_LEAST
-        ):
-            return float(target.value)
-    return 0.0
+    return max((float(target.value) for target in spec.targets
+                if target.metric == "performance.isp_delivered"
+                and target.relation in {TargetRelation.AT_LEAST,
+                                        TargetRelation.RANGE,
+                                        TargetRelation.EQUAL_TO}), default=0.0)
+
+
+def _requirement_coverage(job: ResolvedEngineJob,
+                          targets: tuple[TargetOutcome, ...]) -> tuple[Mapping[str, Any], ...]:
+    if not targets and job.effective_targets:
+        targets = _evaluate_targets(replace(job.spec, targets=job.effective_targets), None)
+    rows = [dict(row) for row in job.requirement_coverage]
+    for row in rows:
+        row["status"] = "pass" if row["status"] == "supported" else "unknown"
+    for index, target in enumerate(targets):
+        rows.append({
+            "input": f"effective_targets.{index}", "metric": target.metric,
+            "consumer": "authoritative snapshot target evaluation",
+            "enforcement": (
+                "optimizer lower bound and postsolve check"
+                if job.spec.workflow is Workflow.OPTIMIZE
+                and target.metric == "performance.isp_delivered"
+                and target.relation in {"at_least", "range", "equal_to"}
+                else "postsolve check"
+            ),
+            **target.to_dict(),
+        })
+    return tuple(rows)
+
+
+def _model_consistency(comparison: Any) -> dict[str, Any]:
+    """Expose diagnostic parity without inventing physical acceptance limits."""
+    if comparison is None:
+        return {"status": "unknown", "reason": "model comparison unavailable"}
+    rows = {**comparison.scalars,
+            **{f"profiles.{key}": value for key, value in comparison.profiles.items()}}
+    different = sorted(key for key, row in rows.items() if row.status == "different")
+    unavailable = sorted(key for key, row in rows.items() if row.status == "not_comparable")
+    invalid = sorted(key for key, row in rows.items()
+                     if row.status not in {"different", "not_comparable", "within_tolerance"})
+    return {
+        "status": "unknown" if different or unavailable or invalid or not rows else "pass",
+        "different_fields": different,
+        "not_comparable_fields": unavailable,
+        "unrecognized_status_fields": invalid,
+        "reason": (
+            "Snapshot tolerances are numerical diagnostics, not validated "
+            "per-quantity physical acceptance limits. Differences and missing "
+            "comparisons require adjudication; agreement is not test evidence."
+        ),
+        "acceptance_policy": "diagnostic_only",
+        "abs_tol": comparison.abs_tol, "rel_tol": comparison.rel_tol,
+    }
 
 
 def execute_engine_job(
@@ -255,7 +324,57 @@ def execute_engine_job(
     *,
     size_pumps: bool = False,
 ) -> EngineJobResult:
-    """Resolve, solve, parity-check and judge one engine job."""
+    """Resolve, solve, parity-check and publish one honest run record."""
+    job = resolve_engine_job(spec)
+    if job.enumerations:
+        raise JobValidationError(
+            "enumerated variables require execute_engine_job_set; "
+            "a single execution cannot omit unselected alternatives"
+        )
+    if spec.workflow is Workflow.PARETO:
+        raise JobValidationError("workflow 'pareto' is not wired through this service")
+    from raosim.mdo.run_record import RunRecord
+
+    record = RunRecord.start(job)
+    progress: dict[str, Any] = {}
+    try:
+        result = _execute_resolved_engine_job(job, size_pumps=size_pumps, progress=progress)
+    except JobValidationError:
+        if record is not None:
+            record.mark_failed("job validation failed during execution")
+        raise
+    except Exception as exc:
+        result = EngineJobResult(
+            job=progress.get("job", job), verdict="SOLVER_FAILED",
+            exit_code=int(WorkflowExitCode.SOLVER_FAILED), design=progress.get("design", {}),
+            inputs=progress.get("inputs"), state=progress.get("state"),
+            statuses={"workflow": "fail", "requirement_coverage": "unknown"},
+            requirement_coverage=_requirement_coverage(job, ()),
+            messages=(f"{type(exc).__name__}: {exc}",),
+        )
+    if record is not None:
+        result = replace(result, output_directory=str(record.directory))
+        try:
+            record.finish(result)
+        except Exception as exc:
+            message = f"report publication failed: {type(exc).__name__}: {exc}"
+            result = replace(
+                result, verdict="SOLVER_FAILED",
+                exit_code=int(WorkflowExitCode.SOLVER_FAILED),
+                statuses={**result.statuses, "report_publication": "fail"},
+                messages=(*result.messages, message),
+            )
+            record.mark_failed(message, result=result)
+    return result
+
+
+def _execute_resolved_engine_job(
+    job: ResolvedEngineJob, *, size_pumps: bool = False,
+    progress: dict[str, Any] | None = None,
+) -> EngineJobResult:
+    spec = job.spec
+    if progress is None:
+        progress = {}
 
     import jax.numpy as jnp
 
@@ -266,7 +385,7 @@ def execute_engine_job(
     from raosim.mdo.schema import DesignVector
     from raosim.mdo.state import solve_engine_state
 
-    job = resolve_engine_job(spec)
+    target_spec = replace(spec, targets=job.effective_targets)
     messages: list[str] = []
     statuses: dict[str, str] = {}
 
@@ -346,10 +465,12 @@ def execute_engine_job(
             )
         nlp = solve_min_mass(
             mission,
-            _isp_floor(spec),
+            _isp_floor(target_spec),
             objective=objective,
             allow_incomplete_physics=spec.models.allow_incomplete_physics,
             contour_provider=contour_provider,
+            fixed_variables=job.fixed_variables,
+            bounds=job.bounds,
         )
         statuses["workflow"] = "pass" if nlp.success else "fail"
         statuses["optimizer"] = nlp.optimizer_status
@@ -362,6 +483,7 @@ def execute_engine_job(
                 design=dict(nlp.design),
                 statuses=statuses,
                 messages=tuple(messages),
+                requirement_coverage=_requirement_coverage(job, ()),
             )
         layout = mission.design_layout()
         design_vector = DesignVector.from_active_array(
@@ -370,6 +492,7 @@ def execute_engine_job(
             fixed_of=None if layout.of_is_variable else float(mission.OF),
         )
 
+    progress["design"] = {k: float(v) for k, v in design_vector.as_dict().items()}
     state = solve_engine_state(
         design_vector,
         mission,
@@ -377,6 +500,7 @@ def execute_engine_job(
         contour_provider=contour_provider,
     )
     design = {k: float(v) for k, v in design_vector.as_dict().items()}
+    progress["state"] = state
 
     inputs = resolve_engine_inputs(
         design_vector.as_contract_dict(effective_of=state.performance.OF),
@@ -384,9 +508,11 @@ def execute_engine_job(
         effective_of=float(state.performance.OF),
         of_source=(
             "optimized" if mission.design_layout().of_is_variable
+            else "pinned" if spec.models.mixture_ratio_mode == "pinned"
             else "mission_nominal"
         ),
         total_mass_flow=float(state.performance.mdot_total),
+        eta_cstar_effective=float(state.performance.eta_cstar),
         surfaces=surfaces,
         contour_provider_id=contour_provider.provider_id,
         postsolve_contour_validator_id=(
@@ -400,9 +526,11 @@ def execute_engine_job(
         contour_comparison_policy=contour_comparison_policy,
     )
     job = job.with_inputs(inputs)
+    progress.update(inputs=inputs, job=job)
 
     reev = reevaluate(
         design, mission, mdo_result=state, mdo_surfaces=surfaces,
+        resolved_input_contract=inputs,
         mdo_summary={"Isp": float(state.performance.Isp_delivered)},
         size_pumps=size_pumps,
         variational_validation_config=variational_validation_config,
@@ -427,16 +555,23 @@ def execute_engine_job(
     # pipeline that never evaluated it yields ``None``, which would collapse
     # into a blanket "unknown" and hide a real violation.
     def _gate(key: str) -> str:
+        observed = []
         for source in (reev.mdo_snapshot, snapshot):
             if source is None:
                 continue
             entry = source.constraints_gates.get(key)
             value = getattr(entry, "value", None) if entry is not None else None
-            if isinstance(value, str):
-                return value
-            if value is not None:
-                return "pass" if value else "fail"
-        return "unknown"
+            if isinstance(value, str) and value in {"pass", "fail", "unknown", "not_applicable"}:
+                observed.append(value)
+            elif isinstance(value, bool):
+                observed.append("pass" if value else "fail")
+            elif value is not None:
+                observed.append("unknown")
+        if "fail" in observed:
+            return "fail"
+        if not observed or "unknown" in observed:
+            return "unknown"
+        return "pass" if "pass" in observed else "not_applicable"
 
     for key, name in (
         ("optimizer_constraints_feasible", "optimizer"),
@@ -455,9 +590,26 @@ def execute_engine_job(
         )
 
     violated = _violated_constraints(reev.mdo_snapshot)
-    targets = _evaluate_targets(spec, snapshot)
+    targets = _evaluate_targets(target_spec, snapshot)
+    coverage = _requirement_coverage(job, targets)
+    statuses["requirement_coverage"] = (
+        "unknown" if any(row["status"] == "unknown" for row in coverage) else "pass"
+    )
+    integrity = reev.metadata.get("input_integrity", {})
+    statuses["input_integrity"] = integrity.get("status", "unknown")
+    if statuses["input_integrity"] != "pass":
+        messages.append(f"resolved input integrity: {integrity or 'crosscheck unavailable'}")
+    consistency = _model_consistency(reev.comparison)
+    statuses["model_consistency"] = consistency["status"]
+    if consistency["status"] != "pass":
+        messages.append(consistency["reason"])
+    if spec.objective is not None:
+        objective_value, reason = _snapshot_value(snapshot, spec.objective.metric)
+        statuses["objective"] = "pass" if objective_value is not None else "unknown"
+        if reason is not None:
+            messages.append(f"objective unavailable: {reason}")
     verdict, exit_code = _verdict(statuses, targets)
-    messages.extend(str(w) for w in snapshot.warnings)
+    messages.extend(str(w) for w in reev.warnings)
 
     return EngineJobResult(
         job=job,
@@ -473,6 +625,8 @@ def execute_engine_job(
         statuses=statuses,
         violated_constraints=violated,
         messages=tuple(messages),
+        requirement_coverage=coverage,
+        model_consistency=consistency,
     )
 
 
@@ -499,10 +653,27 @@ class EngineJobSetResult:
     def best(self) -> EngineJobResult | None:
         return self.ranked[0] if self.ranked else None
 
+    @property
+    def verdict(self) -> str:
+        verdicts = {result.verdict for result in self.results}
+        if "MET" in verdicts:
+            return "MET"
+        if "SOLVER_FAILED" in verdicts:
+            return "SOLVER_FAILED"
+        if verdicts == {"CANDIDATE_VIOLATES"}:
+            return "CANDIDATE_VIOLATES"
+        return "INDETERMINATE"
+
+    @property
+    def exit_code(self) -> int:
+        return int(WorkflowExitCode[self.verdict])
+
     def to_dict(self) -> dict[str, Any]:
         def label(result: EngineJobResult) -> dict[str, Any]:
             architecture = result.job.spec.architecture
             return {
+                "job_digest": result.job.job_digest,
+                "fixed_variables": dict(result.job.fixed_variables),
                 "propellant": architecture.propellant,
                 "liner_material": architecture.liner_material,
                 "closeout_material": architecture.closeout_material,
@@ -512,6 +683,9 @@ class EngineJobSetResult:
             }
 
         return {
+            "verdict": self.verdict,
+            "exit_code": self.exit_code,
+            "results": [result.to_dict() for result in self.results],
             "objective_metric": self.objective_metric,
             "ranked": [label(r) for r in self.ranked],
             "unranked": [label(r) for r in self.unranked],
@@ -537,6 +711,8 @@ def expand_architectures(spec: EngineJobSpec) -> tuple[EngineJobSpec, ...]:
 
     import itertools
     from dataclasses import replace as _replace
+    from raosim.mdo.job import VARIABLE_DIMENSIONS
+    from raosim.units import canonical_unit
 
     architecture = spec.architecture
     axes = {
@@ -548,10 +724,23 @@ def expand_architectures(spec: EngineJobSpec) -> tuple[EngineJobSpec, ...]:
         dict(zip(axes, values))
         for values in itertools.product(*axes.values())
     ]
-    return tuple(
-        _replace(spec, architecture=_replace(architecture, **choice))
-        for choice in combinations
-    )
+    enumerated = [variable for variable in spec.variables
+                  if variable.mode is VariableMode.ENUMERATE]
+    expanded = []
+    for choice in combinations:
+        for values in itertools.product(*(variable.values for variable in enumerated)):
+            selected = dict(zip((variable.name for variable in enumerated), values))
+            variables = tuple(
+                VariableRequest(variable.name, "fixed",
+                                f"{selected[variable.name]:.17g} "
+                                f"{canonical_unit(VARIABLE_DIMENSIONS[variable.name])}")
+                if variable.name in selected else variable
+                for variable in spec.variables
+            )
+            expanded.append(_replace(
+                spec, architecture=_replace(architecture, **choice), variables=variables,
+            ))
+    return tuple(expanded)
 
 
 def execute_engine_job_set(
@@ -563,7 +752,10 @@ def execute_engine_job_set(
 
     objective_metric = spec.objective.metric if spec.objective else None
     results: list[EngineJobResult] = []
-    for candidate in expand_architectures(spec):
+    candidates = expand_architectures(spec)
+    for candidate in candidates:
+        resolve_engine_job(candidate)
+    for candidate in candidates:
         try:
             results.append(execute_engine_job(candidate, size_pumps=size_pumps))
         except JobValidationError:

@@ -38,15 +38,18 @@ __all__ = [
     "FeedInputs",
     "ThermalInputs",
     "crosscheck_design_input",
+    "resolve_channel_roughness_input",
     "resolve_engine_inputs",
 ]
 
 #: Bumped whenever the meaning of a field changes.  A stored resolved-input
 #: record from an older version must be re-resolved, never relabelled.
-RESOLVED_INPUTS_SCHEMA_VERSION = "1.1.0"
+RESOLVED_INPUTS_SCHEMA_VERSION = "1.2.0"
 
 
 def _finite(name: str, value: Any) -> float:
+    if isinstance(value, bool):
+        raise ValueError(f"{name} must be a finite number, not bool")
     out = float(value)
     if not math.isfinite(out):
         raise ValueError(f"{name} must be finite; got {value!r}")
@@ -58,6 +61,33 @@ def _positive(name: str, value: Any) -> float:
     if out <= 0.0:
         raise ValueError(f"{name} must be positive; got {out!r}")
     return out
+
+
+def resolve_channel_roughness_input(mission: Any) -> tuple[str, float]:
+    """Validate and identify roughness without assuming a channel diameter.
+
+    The legacy mission scalar is dimensionless ``k_s / D_h``; the canonical
+    scalar is effective hydraulic roughness ``k_s`` in metres. Neither is a
+    surface-metrology Ra value. A diameter-dependent legacy conversion must
+    use the actual evaluated design geometry, never the mission's nominal
+    width/height when those dimensions are being optimized.
+    """
+    relative = _finite("channel_roughness (legacy relative)",
+                       mission.channel_roughness)
+    if relative < 0.0:
+        raise ValueError("channel_roughness (legacy relative) must be non-negative")
+    absolute = getattr(mission, "channel_hydraulic_roughness_m", None)
+    if absolute is None:
+        return "legacy_relative", relative
+    absolute = _finite("channel_hydraulic_roughness_m", absolute)
+    if absolute < 0.0:
+        raise ValueError("channel_hydraulic_roughness_m must be non-negative")
+    if relative != 0.0:
+        raise ValueError(
+            "ambiguous channel roughness: specify channel_hydraulic_roughness_m "
+            "or nonzero legacy channel_roughness, not both"
+        )
+    return "absolute_hydraulic_m", absolute
 
 
 @dataclass(frozen=True)
@@ -181,7 +211,7 @@ class ThermalInputs:
     channel_count: int
     channel_width: float
     channel_height: float
-    channel_roughness: float
+    channel_hydraulic_roughness_m: float
     wall_thickness: float
     regen_mass_flow: float
     film_mass_flow: float
@@ -192,11 +222,33 @@ class ThermalInputs:
     coolant_conductivity: float
     coolant_cp: float
     coolant_property_backend: str = "constant"
+    channel_roughness_input_basis: str = "absolute_hydraulic_m"
+    channel_roughness_legacy_relative: float | None = None
 
     def __post_init__(self) -> None:
         _positive("channel_width", self.channel_width)
         _positive("channel_height", self.channel_height)
         _positive("wall_thickness", self.wall_thickness)
+        roughness = _finite("channel_hydraulic_roughness_m",
+                            self.channel_hydraulic_roughness_m)
+        if roughness < 0.0:
+            raise ValueError("channel_hydraulic_roughness_m must be non-negative")
+        if self.channel_roughness_input_basis == "legacy_relative":
+            relative = _finite("channel_roughness_legacy_relative",
+                               self.channel_roughness_legacy_relative)
+            if relative < 0.0:
+                raise ValueError("channel_roughness_legacy_relative must be non-negative")
+            dh = 2.0 * self.channel_width * self.channel_height / (
+                self.channel_width + self.channel_height
+            )
+            if not math.isclose(roughness, relative * dh,
+                                rel_tol=1e-12, abs_tol=0.0):
+                raise ValueError("legacy roughness conversion disagrees with resolved geometry")
+        elif self.channel_roughness_input_basis == "absolute_hydraulic_m":
+            if self.channel_roughness_legacy_relative is not None:
+                raise ValueError("absolute hydraulic roughness cannot carry a legacy value")
+        else:
+            raise ValueError("unknown channel_roughness_input_basis")
         if self.regen_mass_flow < 0.0 or self.film_mass_flow < 0.0:
             raise ValueError("regen and film mass flows must be non-negative")
 
@@ -472,6 +524,17 @@ def resolve_engine_inputs(
             getattr(surfaces, "domain_policy", "") or ""
         )
 
+    roughness_basis, roughness_input = resolve_channel_roughness_input(mission)
+    channel_width = _positive("channel_width", d["channel_width"])
+    channel_height = _positive("channel_height", d["channel_height"])
+    channel_dh = 2.0 * channel_width * channel_height / (
+        channel_width + channel_height
+    )
+    hydraulic_roughness_m = (
+        roughness_input * channel_dh
+        if roughness_basis == "legacy_relative" else roughness_input
+    )
+
     return ResolvedEngineInputs(
         schema_version=RESOLVED_INPUTS_SCHEMA_VERSION,
         target_thrust=float(mission.thrust),
@@ -514,9 +577,13 @@ def resolve_engine_inputs(
         material=material,
         thermal=ThermalInputs(
             channel_count=int(mission.n_channels),
-            channel_width=float(d["channel_width"]),
-            channel_height=float(d["channel_height"]),
-            channel_roughness=float(mission.channel_roughness),
+            channel_width=channel_width,
+            channel_height=channel_height,
+            channel_hydraulic_roughness_m=hydraulic_roughness_m,
+            channel_roughness_input_basis=roughness_basis,
+            channel_roughness_legacy_relative=(
+                roughness_input if roughness_basis == "legacy_relative" else None
+            ),
             wall_thickness=float(d["t_wall"]),
             regen_mass_flow=mdot_regen,
             film_mass_flow=mdot_film,
@@ -582,7 +649,7 @@ _DESIGN_INPUT_CROSSCHECKS: tuple[tuple[str, str], ...] = (
     ("thermal.channel_count", "cooling.channel_count"),
     ("thermal.channel_width", "cooling.channel_width"),
     ("thermal.channel_height", "cooling.channel_height"),
-    ("thermal.channel_roughness", "cooling.channel_roughness"),
+    ("thermal.channel_hydraulic_roughness_m", "cooling.channel_roughness"),
     ("thermal.regen_mass_flow", "cooling.coolant_mass_flow"),
     ("thermal.film_mass_flow", "cooling.fuel_film_mass_flow"),
     ("thermal.coolant_inlet_temperature", "cooling.coolant_inlet_temperature"),

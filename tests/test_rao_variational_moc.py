@@ -7,10 +7,13 @@ import pytest
 from raosim.nozzle_geometry import bell_nozzle_contour
 from raosim.rao_variational import (
     ContourReliability,
+    MOCNetLink,
     RAO_RESIDUAL_ABLATIONS,
     RaoEndpointMismatchError,
     RaoResidualReport,
     RaoSolverConfig,
+    _BDE_PHYSICAL_TOPOLOGY_GATE_KEYS,
+    _bde_physical_topology_gate_passes,
     _ce_interp_node,
     _bde_wall_tangency_errors,
     _link_crossing_report,
@@ -42,6 +45,23 @@ from raosim.rao_residuals import residual_Cminus_axisym, residual_Cplus_axisym
 from raosim.wall_model import SplineWall
 from raosim.chamber_geometry import chamber_contour, full_engine_contour
 from raosim.throat_geometry import ThroatGeometrySpec
+
+
+def test_bde_physical_gate_explicitly_excludes_raw_state_increments():
+    report = {name: True for name in _BDE_PHYSICAL_TOPOLOGY_GATE_KEYS}
+    report.update({
+        "bde_auxiliary_continuation_caustic": False,
+        "bde_auxiliary_caustic_downstream_of_exit": False,
+        "neighbor_state_increment_diagnostic_passes": False,
+        "measured_neighbor_smoothness_passes": False,
+    })
+
+    assert _bde_physical_topology_gate_passes(report)
+    report["neighbor_state_increment_diagnostic_passes"] = True
+    report["measured_neighbor_smoothness_passes"] = True
+    assert _bde_physical_topology_gate_passes(report)
+    report["measured_compatibility_passes"] = False
+    assert not _bde_physical_topology_gate_passes(report)
 
 
 @pytest.mark.smoke
@@ -121,6 +141,8 @@ def test_rao_variational_wrapper_forwards_complete_host_config(monkeypatch):
         wall_method="bde",
         kernel_d_fraction_max=0.7,
         physics_weight=1.0,
+        kernel_dtheta_limit_deg=0.25,
+        kernel_massflow_rel_tol=0.03,
         return_solution=True,
     )
 
@@ -138,6 +160,8 @@ def test_rao_variational_wrapper_forwards_complete_host_config(monkeypatch):
     assert config.wall_method == "bde"
     assert config.kernel_d_fraction_max == pytest.approx(0.7)
     assert config.physics_weight == pytest.approx(1.0)
+    assert config.kernel_dtheta_limit_deg == pytest.approx(0.25)
+    assert config.kernel_massflow_rel_tol == pytest.approx(0.03)
 
 
 def test_nozzle_geometry_forwards_host_rao_controls(monkeypatch):
@@ -173,6 +197,8 @@ def test_nozzle_geometry_forwards_host_rao_controls(monkeypatch):
         rao_moc_wall_method="bde",
         rao_moc_kernel_d_fraction_max=0.7,
         rao_moc_physics_weight=1.0,
+        rao_moc_kernel_dtheta_limit_deg=0.25,
+        rao_moc_kernel_massflow_rel_tol=0.03,
     )
 
     assert captured["Ru_factor"] == pytest.approx(1.8)
@@ -187,6 +213,8 @@ def test_nozzle_geometry_forwards_host_rao_controls(monkeypatch):
     assert captured["wall_method"] == "bde"
     assert captured["kernel_d_fraction_max"] == pytest.approx(0.7)
     assert captured["physics_weight"] == pytest.approx(1.0)
+    assert captured["kernel_dtheta_limit_deg"] == pytest.approx(0.25)
+    assert captured["kernel_massflow_rel_tol"] == pytest.approx(0.03)
 
 
 def test_zero_length_throat_arc_collapses_to_one_station():
@@ -309,6 +337,37 @@ def test_characteristic_crossing_samples_identify_crossed_links():
     assert samples[0]["intersection"] is not None
     assert samples[0]["segment_1"]["family"] in {"cplus", "cminus"}
     assert samples[0]["segment_2"]["family"] in {"cplus", "cminus"}
+
+
+def test_cross_row_axis_chord_mechanism_is_diagnostic_but_still_fails_closed():
+    gamma = 1.4
+    link_1 = MOCNetLink(
+        row=1,
+        family="cplus",
+        role="interior",
+        parent=_make_point(0.0, 0.0, 0.0, 2.0, gamma),
+        child=_make_point(1.0, 1.0, 0.0, 2.0, gamma),
+        parent_index=0,
+        child_index=0,
+    )
+    link_2 = MOCNetLink(
+        row=2,
+        family="cminus",
+        role="axis",
+        parent=_make_point(0.0, 1.0, 0.0, 2.0, gamma),
+        child=_make_point(1.0, 0.0, 0.0, 2.0, gamma),
+        parent_index=0,
+        child_index=0,
+    )
+
+    all_pair, _ = _link_crossing_report([link_1, link_2])
+    local_fold, _ = _link_crossing_report(
+        [link_1, link_2],
+        max_row_gap=0,
+    )
+
+    assert all_pair == 1
+    assert local_fold == 0
 
 
 def test_bde_mesh_crossing_audit_detects_folded_rows():
@@ -580,6 +639,14 @@ def test_bde_topology_audit_is_the_moc_gate_basis():
     assert report["measured_mach_line_direction_passes"] is True
     assert report["measured_cell_orientation_passes"] is True
     assert report["measured_invalid_cell_count"] == 0
+    assert report["measured_neighbor_smoothness_is_physical_gate"] is False
+    assert report["neighbor_state_increment_diagnostics_are_gate"] is False
+    assert report["measured_mesh_edge_length_max_m"] > 0.0
+    assert report["neighbor_mach_worst_edge_length_m"] > 0.0
+    assert report["neighbor_mach_gradient_rt_scaled_max"] >= 0.0
+    assert report["numerical_policy"]["classification"] == (
+        "repository_numerical_policy_not_physical_criterion"
+    )
     assert report["axis_condition_passes"] is True
     # This is an intentionally unsolved, coarse seed (max_nfev=0), so the
     # newly enforced compatibility gate correctly prevents MOC promotion.
@@ -863,6 +930,12 @@ def test_moc_net_report_passes_on_self_generated_net():
     assert report.cminus_rms < 2e-2
     assert report.intersection_rms < 1e-5
     assert report.crossings == 0
+    assert report.crossing_basis == (
+        "all_nonshared_characteristic_segment_intersections"
+    )
+    assert report.local_fold_crossings == 0
+    assert report.wall_tangency_tol_deg == pytest.approx(0.25)
+    assert report.to_dict()["local_fold_crossings_are_gate"] is False
     assert report.bad_rows == []
 
 

@@ -97,11 +97,12 @@ def test_nasa_wall_match(case):
 
 @pytest.mark.parametrize("case", ["M3.5Perf"])
 def test_nasa_kernel_mass_consistency(case):
-    """Full-BD mass equals the TT' throat mass within NASA's own 5% drift."""
+    """Full-BD mass satisfies the visible-source 2 % implementation check."""
     kernel, *_ = run_python_port_for_case(case)
     m0 = float(calc_massflow_along_rrc(kernel.rrcs[0], GAMMA)[0])
     mN = float(calc_massflow_along_rrc(kernel.bd, GAMMA)[0])
-    assert mN == pytest.approx(m0, rel=5e-2)
+    assert kernel.massflow_rel_tol == pytest.approx(2e-2)
+    assert mN == pytest.approx(m0, rel=2e-2)
 
 
 # --------------------------------------------------------------------------- #

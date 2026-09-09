@@ -1,7 +1,7 @@
 ---
 title: LREKit Differentiable Engine-MDO — Reviewer's Guide
 subtitle: What every module does, where each model comes from, and how to run it
-date: 2026-08-24
+date: 2026-08-26
 audience: whoever is reviewing or extending raosim/mdo/
 ---
 
@@ -212,8 +212,11 @@ an explicit `VariationalPostSolveConfig`, it preflights a B5 convergence domain,
 runs the host BVP/forward MOC, requires Eq. (5) and direct full-C-D-E
 performance, and then applies caller-supplied TOP-versus-variational discrepancy
 tolerances. With no config, the default analytic path does not launch a
-variational solve. This is not yet B3 qualification: real coupled and BDE probes
-return `UNKNOWN` because the forward-MOC compatibility gate fails. The exact
+variational solve. This is not yet B3 qualification: historical coupled and BDE
+probes returned `UNKNOWN` at distinct downstream numerical/topology audits. The
+BDE probes failed the former raw neighbor-state-increment hard screen; that
+quantity is now diagnostic only. The coupled probe failed a separate
+characteristic-crossing audit and does not compute the BDE screen. The exact
 implicit Rao/JAX replacement has its own approval checkpoint in
 `IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md`.
 
@@ -342,11 +345,18 @@ That CLI contour selection is distinct from the typed B3 comparison validator.
 The latter is opt-in through `EngineJobSpec.models` (validator identity, B5
 domain path, and all four discrepancy thresholds) or directly through
 `reevaluate(..., variational_validation_config=...)`. It cannot pass without a
-matching B5 declared-domain artifact. The first fixed-context artifact is
+matching B5 declared-domain artifact. The historical first fixed-context artifact is
 `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
 (canonical SHA-256
 `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`);
-it must not be used outside its declared context.
+schema v2 rejects it because v1 omitted the kernel angular-spacing and
+mass-flow policies. It must not be used as current B5 evidence. The current
+replacement is
+`raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v2.json`
+(canonical SHA-256
+`2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9`),
+with the explicit B3 validation profile
+`kernel_dtheta_limit_deg=0.25` and `kernel_massflow_rel_tol=0.02`.
 
 **Check for dead variables after any change:**
 
@@ -420,15 +430,23 @@ for k, s in enumerate(default_design_space()):
     rather than returned only as transient console warnings.
 11. **Exact-Rao post-solve promotion is still blocked.** The B5
     $\varepsilon\times L_\%$ schema and B3 typed validator are implemented, but
-    the completed 8/12/16/24-ladder H2 map at fixed $\gamma=1.4$ and
-    $P_a/P_0=0.01$ remains only one D-attachment/Eq. (5) slice: 40 of 65 knots
-    are `converged_valid` and 25 are `not_converged`. It records kernel-
-    refinement evidence, not proof of full mesh or full-BVP convergence, so B5
-    is still partial outside that context.
-    Real 24×24 and 32×32 BDE probes pass numerical BVP, Eq. (5), and full-C-D-E
-    availability, yet return `UNKNOWN`: neighbor-Mach smoothness is 0.11810 and
-    0.13748 versus the repository-policy limit 0.10. A 12×12 coupled probe also
-    fails forward-MOC compatibility, without a recorded exact maximum. These
+    the historical 8/12/16/24-ladder H2 map at fixed $\gamma=1.4$ and
+    $P_a/P_0=0.01$ contains 40 of 65 `converged_valid` knots and 25
+    `not_converged` knots, but its v1 identity omitted the inherited 0.5°/5%
+    kernel policies. Schema v2 rejects it fail-closed. The regenerated
+    0.25°/2% v2 artifact preserves the same 40/25 classification grid and
+    records the complete numerical identity. It still supplies kernel-
+    refinement evidence rather than proof of full mesh or full-BVP convergence.
+    Historical 24×24 and 32×32 BDE probes passed numerical BVP, Eq. (5),
+    full-C-D-E, and every other BDE/MOC audit, yet returned `UNKNOWN` under the
+    former hard screen: raw neighbor $\max|\Delta M|$ was 0.11813 and 0.13752
+    versus the repository diagnostic limit
+    0.10. At the explicitly refined 0.25° kernel spacing these values fall to
+    0.06999 and 0.06705. A 12×12 coupled probe does not compute this BDE screen;
+    it fails a separate characteristic-crossing audit. Raw state increments
+    remain diagnostics. The refined 24×24/32×32 BDE pair now passes B3's typed,
+    spacing-aware common-coordinate physical-grid comparison; this one fixed
+    reference does not qualify other design contexts. These
     tolerances are repository screening policy, not literature qualification
     limits; see `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 

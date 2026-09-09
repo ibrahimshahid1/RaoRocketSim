@@ -182,7 +182,7 @@ def test_rao_geometry_kernel_marches_with_upstream_radius(mode):
     )
     # Phase 12.4: the march must now reach the commanded wall angle.
     # (Historic behaviour: the mass-integral's dr <= 1e-15 guard zeroed
-    # folded-RRC segments and tripped the 5% sanity check at theta_w ~
+    # folded-RRC segments and tripped the mass-flow check at theta_w ~
     # 24.1-24.4 deg, masquerading as a unit-process cap.)
     assert k.reached_wall, "kernel march no longer reaches theta_B"
     assert math.degrees(k.bd[0].theta) == pytest.approx(30.0, abs=1e-3)
@@ -208,8 +208,8 @@ def test_folded_rrc_mass_integral_keeps_march_alive():
     The C++ integrates straight through such segments
     (fabs(mdot_a)*fabs(da), MOC_GridCalc_BDE.cpp:3217-3228); an earlier
     port revision zeroed them (dr <= 1e-15 guard), dropped ~13% of the
-    row mass on the first folded RRC, and tripped build_kernel's 5%
-    sanity check.  This pins the fixed behaviour.
+    row mass on the first folded RRC, and tripped ``build_kernel``'s
+    mass-flow diagnostic.  This pins the fixed behaviour.
     """
     from raosim.nasa_moc import calc_massflow_along_rrc
 
@@ -237,7 +237,7 @@ def test_folded_rrc_mass_integral_keeps_march_alive():
     assert (np.diff(mf) <= 1e-15).all()
 
     # (c) total BD mass matches the start-line mass to well inside the
-    #     5% sanity tolerance (observed: ~0.13% at this resolution).
+    #     visible-source 2% diagnostic (observed: ~0.13% here).
     mdot_tt = float(k.massflow[0][0])
     mdot_bd = float(mf[0])
     assert abs(mdot_bd - mdot_tt) / mdot_tt < 5e-3

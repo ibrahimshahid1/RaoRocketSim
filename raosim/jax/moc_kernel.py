@@ -76,6 +76,7 @@ processes at their 1e-10 fixed points — both pinned in
 
 from __future__ import annotations
 
+import math
 from typing import NamedTuple
 
 import raosim.jax  # noqa: F401  (enables x64 before any array is built)
@@ -91,6 +92,7 @@ from raosim.jax.primitives import (
 )
 
 _NU_FLOOR = 1e-8
+DEFAULT_KERNEL_DTHETA_LIMIT_RAD = math.radians(0.5)
 
 
 class KernelRow(NamedTuple):
@@ -726,7 +728,7 @@ def march_kernel(
     gamma,
     n_rows: int,
     n_corr: int = 40,
-    dtheta_limit: float = 0.5 * 3.141592653589793 / 180.0,
+    dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
 ) -> KernelMarch:
     """March the throat-arc kernel with NASA's exact row policy in
     static padded arrays (see the module docstring).
@@ -742,7 +744,9 @@ def march_kernel(
     the wall reaches ``theta_B`` (the clamped special α lands B there
     exactly); the scan carry at the end IS the BD row.
 
-    ``n_rows`` is a static upper bound on the row count — pick
+    ``dtheta_limit`` is a static numerical mesh policy in **radians**;
+    it is not a physical shock/smoothness criterion.  ``n_rows`` is a
+    static upper bound on the row count — pick
     ``ceil(theta_B/(dtheta_limit/2)) + margin`` (raw rows advance
     faster, so this always suffices; frozen rows no-op).
 
@@ -755,6 +759,11 @@ def march_kernel(
     """
     if n_rows < 1:
         raise ValueError("n_rows must be >= 1")
+    if isinstance(dtheta_limit, bool):
+        raise ValueError("dtheta_limit must be numeric, not bool")
+    dtheta_limit = float(dtheta_limit)
+    if not math.isfinite(dtheta_limit) or dtheta_limit <= 0.0:
+        raise ValueError("dtheta_limit must be finite and positive (radians)")
 
     n0 = start_line.x.shape[0]
     W = n0 + n_rows

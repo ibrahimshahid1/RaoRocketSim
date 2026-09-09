@@ -71,16 +71,18 @@ def test_an_unavailable_part_cannot_carry_a_mass_or_volume():
         )
 
 
-def test_a_built_part_is_hashed_and_records_its_artifact(artifact):
+def test_a_path_only_artifact_is_hashed_but_cannot_earn_fidelity(artifact):
     manifest = build_engine_parts(
         _FakeResult(), artifacts={"thrust_chamber.liner": str(artifact)}
     )
-    built = [p for p in manifest.parts if p.status == "built"]
-    assert len(built) == 1
-    record = built[0]
+    assert not any(p.status == "built" for p in manifest.parts)
+    record = next(p for p in manifest.parts if p.part_id == "thrust_chamber.liner")
     assert record.part_id == "thrust_chamber.liner"
     assert record.artifacts == (str(artifact),)
     assert len(record.artifact_sha256[str(artifact)]) == 64
+    assert "unverified artifact" in record.unavailable_reason
+    assert record.achieved_fidelity == BuildFidelity.L0_NUMERICAL_ONLY
+    assert manifest.achieved_fidelity == BuildFidelity.L0_NUMERICAL_ONLY
     assert not manifest.complete
 
 
@@ -111,8 +113,10 @@ def test_fidelity_is_achieved_not_requested(artifact):
         artifacts={"electrical.motor": str(artifact)},
     )
     record = next(p for p in manifest.parts if p.part_id == "electrical.motor")
-    # The motor is an envelope only; it cannot reach L4 however it is asked for.
-    assert record.achieved_fidelity == BuildFidelity.L1_RESOLVED_ANALYTICAL_GEOMETRY
+    # A file cannot even establish the modelled envelope without producer
+    # evidence; the supported ceiling is separate from the achieved level.
+    assert record.achieved_fidelity == BuildFidelity.L0_NUMERICAL_ONLY
+    assert record.supported_fidelity == BuildFidelity.L1_RESOLVED_ANALYTICAL_GEOMETRY
     assert manifest.achieved_fidelity < manifest.requested_fidelity
     assert any("ceiling is set by" in n for n in manifest.notes)
 

@@ -30,8 +30,17 @@ JOB_VERBS: frozenset[str] = frozenset({"guided", "run", "validate", "catalog"})
 
 _CATALOG_TOPICS = (
     "variables", "targets", "objectives", "constraints", "propellants",
-    "materials", "unavailable",
+    "materials", "unavailable", "capabilities",
 )
+
+
+def _unique_mapping(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate job key {key!r}; inputs cannot overwrite one another")
+        result[key] = value
+    return result
 
 
 def _load_job_document(path: Path) -> Mapping[str, Any]:
@@ -44,9 +53,21 @@ def _load_job_document(path: Path) -> Mapping[str, Any]:
                 "reading a YAML job needs PyYAML; install it or supply the "
                 "job as JSON"
             ) from exc
-        loaded = yaml.safe_load(text)
+        class UniqueLoader(yaml.SafeLoader):
+            pass
+
+        def mapping(loader, node):
+            loader.flatten_mapping(node)
+            return _unique_mapping((loader.construct_object(key), loader.construct_object(value))
+                                   for key, value in node.value)
+
+        UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, mapping)
+        try:
+            loaded = yaml.load(text, Loader=UniqueLoader)
+        except yaml.YAMLError as exc:
+            raise ValueError(f"invalid YAML: {exc}") from exc
     else:
-        loaded = json.loads(text)
+        loaded = json.loads(text, object_pairs_hook=_unique_mapping)
     if not isinstance(loaded, Mapping):
         raise ValueError(
             f"{path} must contain a mapping at the top level, got "
@@ -84,27 +105,17 @@ def _build_spec(document: Mapping[str, Any]):
     if "mission" not in document:
         raise ValueError("a job document requires a 'mission' section")
 
-    # Custom combinations are registered before the job resolves, so a job
-    # document is self-contained and replayable.  Registration validates
-    # completeness and requires an explicit wall-side mechanism; it cannot
-    # shadow a repository-validated entry.
-    for entry in (document.get("custom_propellants") or ()):
-        from raosim.mdo.propellants import (
-            PropellantSpec,
-            WallSideMechanism,
-            register_propellant,
-        )
-
-        payload = dict(entry)
-        evidence = payload.pop("evidence", None)
-        mechanism = payload.pop("wall_side_mechanism", None)
-        if mechanism is not None:
-            payload["wall_side_mechanism"] = WallSideMechanism(mechanism)
-        register_propellant(
-            PropellantSpec(**payload),
-            evidence=evidence,
-            replace_existing=True,
-        )
+    from raosim.mdo.capabilities import require_capability
+    from raosim.mdo.job import ENGINE_JOB_SCHEMA_VERSION
+    require_capability("schema_version", document.get("schema_version", ENGINE_JOB_SCHEMA_VERSION))
+    for key in ("mission", "architecture", "models", "variables", "objective", "output_policy"):
+        value = document.get(key)
+        if value is not None and not isinstance(value, Mapping):
+            raise ValueError(f"{key} must be a mapping")
+    for key in ("targets", "operating_points", "custom_propellants"):
+        value = document.get(key)
+        if value is not None and not isinstance(value, (list, tuple)):
+            raise ValueError(f"{key} must be a sequence")
 
     variables = tuple(
         VariableRequest(name=name, **spec)
@@ -128,7 +139,18 @@ def _build_spec(document: Mapping[str, Any]):
         objective=ObjectiveRequest(**objective) if objective else None,
         operating_points=points,
         output_policy=OutputPolicy(**(document.get("output_policy") or {})),
+        schema_version=document.get("schema_version", ENGINE_JOB_SCHEMA_VERSION),
+        custom_propellants=tuple(document.get("custom_propellants") or ()),
     )
+
+
+def _path_arguments(argv: Sequence[str], flag: str) -> tuple[Path, Path | None]:
+    if len(argv) == 1 and not argv[0].startswith("--"):
+        return Path(argv[0]).expanduser(), None
+    if (len(argv) == 3 and not argv[0].startswith("--")
+            and argv[1] == flag and not argv[2].startswith("--")):
+        return Path(argv[0]).expanduser(), Path(argv[2]).expanduser()
+    raise ValueError(f"expected JOB.yaml [{flag} FILE]; unknown or incomplete arguments")
 
 
 def _print_resolved(job: Any) -> None:
@@ -163,37 +185,35 @@ def _cmd_validate(argv: Sequence[str]) -> int:
     if not argv:
         print("usage: lrekit validate JOB.yaml [--resolved-out FILE]")
         return int(WorkflowExitCode.INVALID_INPUT)
-    path = Path(argv[0]).expanduser()
-    out: Path | None = None
-    if "--resolved-out" in argv:
-        out = Path(argv[argv.index("--resolved-out") + 1]).expanduser()
+    path, out = _path_arguments(argv, "--resolved-out")
 
     try:
         spec = _build_spec(_load_job_document(path))
-        job = resolve_engine_job(spec)
+        from raosim.mdo.execute import expand_architectures
+
+        jobs = tuple(resolve_engine_job(candidate) for candidate in expand_architectures(spec))
     except (ValueError, TypeError, KeyError, OSError) as exc:
         print(f"job rejected: {exc}")
         return int(WorkflowExitCode.INVALID_INPUT)
 
     print(f"job {path} is valid")
-    _print_resolved(job)
+    for job in jobs:
+        _print_resolved(job)
     if out is not None:
-        out.write_text(json.dumps(job.to_dict(), indent=2, default=str))
+        payload = jobs[0].to_dict() if len(jobs) == 1 else {"candidates": [job.to_dict() for job in jobs]}
+        out.write_text(json.dumps(payload, indent=2, allow_nan=False))
         print(f"  resolved job written to {out}")
     return int(WorkflowExitCode.MET)
 
 
 def _cmd_run(argv: Sequence[str]) -> int:
     from raosim.input_validation import WorkflowExitCode
-    from raosim.mdo.execute import execute_engine_job
+    from raosim.mdo.execute import execute_engine_job, execute_engine_job_set, expand_architectures
 
     if not argv:
         print("usage: lrekit run JOB.yaml [--out FILE]")
         return int(WorkflowExitCode.INVALID_INPUT)
-    path = Path(argv[0]).expanduser()
-    out: Path | None = None
-    if "--out" in argv:
-        out = Path(argv[argv.index("--out") + 1]).expanduser()
+    path, out = _path_arguments(argv, "--out")
 
     try:
         spec = _build_spec(_load_job_document(path))
@@ -202,7 +222,18 @@ def _cmd_run(argv: Sequence[str]) -> int:
         return int(WorkflowExitCode.INVALID_INPUT)
 
     try:
-        result = execute_engine_job(spec)
+        candidates = expand_architectures(spec)
+        if len(candidates) > 1:
+            result_set = execute_engine_job_set(spec)
+            print(f"verdict: {result_set.verdict}")
+            for result in result_set.results:
+                print(f"  {result.job.job_digest}: {result.verdict}")
+                if result.output_directory:
+                    print(f"    report directory: {result.output_directory}")
+            if out is not None:
+                out.write_text(json.dumps(result_set.to_dict(), indent=2, allow_nan=False))
+            return result_set.exit_code
+        result = execute_engine_job(candidates[0])
     except Exception as exc:  # solver/config failures are reported, not raised
         from raosim.mdo.job import JobValidationError
 
@@ -230,8 +261,12 @@ def _cmd_run(argv: Sequence[str]) -> int:
             print(f"      {target.reason}")
     for note in result.job.notes:
         print(f"  note: {note}")
+    for message in result.messages:
+        print(f"  {message}")
+    if result.output_directory is not None:
+        print(f"  report directory  {result.output_directory}")
     if out is not None:
-        out.write_text(json.dumps(result.to_dict(), indent=2, default=str))
+        out.write_text(json.dumps(result.to_dict(), indent=2, allow_nan=False))
         print(f"  result written to {out}")
     return int(result.exit_code)
 
@@ -241,9 +276,20 @@ def _cmd_guided(argv: Sequence[str]) -> int:
     from lrekit.guided import GuidedAbort, run_guided
 
     save: Path | None = None
-    if "--save" in argv:
-        save = Path(argv[argv.index("--save") + 1]).expanduser()
-    should_run = "--run" in argv
+    should_run = False
+    index = 0
+    while index < len(argv):
+        argument = argv[index]
+        if argument == "--run" and not should_run:
+            should_run = True
+        elif argument == "--save" and save is None and index + 1 < len(argv) and not argv[index + 1].startswith("--"):
+            index += 1
+            save = Path(argv[index]).expanduser()
+        else:
+            raise ValueError(f"unknown, duplicate or incomplete guided argument: {argument}")
+        index += 1
+    if should_run and save is None:
+        raise ValueError("--run needs --save so the executed job is on disk and replayable")
 
     try:
         document = run_guided(ask=input, out=print)
@@ -275,7 +321,7 @@ def _cmd_catalog(argv: Sequence[str]) -> int:
     from raosim.input_validation import WorkflowExitCode
 
     topic = argv[0] if argv else ""
-    if topic not in _CATALOG_TOPICS:
+    if topic not in _CATALOG_TOPICS or len(argv) != 1:
         print("usage: lrekit catalog {" + "|".join(_CATALOG_TOPICS) + "}")
         return int(WorkflowExitCode.INVALID_INPUT)
 
@@ -289,8 +335,15 @@ def _cmd_catalog(argv: Sequence[str]) -> int:
         print("design variables (mode: "
               + "|".join(m.value for m in VariableMode) + ")")
         for name, dim in sorted(VARIABLE_DIMENSIONS.items()):
-            mark = "  [derivable]" if name in DERIVABLE_VARIABLES else ""
+            mark = "  [derived resolver unavailable]" if name in DERIVABLE_VARIABLES else ""
             print(f"  {name:16s} {dim}{mark}")
+        return int(WorkflowExitCode.MET)
+
+    if topic == "capabilities":
+        from raosim.mdo.capabilities import JOB_CAPABILITIES
+
+        for row in JOB_CAPABILITIES:
+            print(f"  {row.kind:16s} {row.id}: {row.scope}")
         return int(WorkflowExitCode.MET)
 
     if topic in {"targets", "objectives", "unavailable"}:
@@ -349,9 +402,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not args or args[0] not in JOB_VERBS:
         raise LookupError("not a job verb")
     verb, rest = args[0], args[1:]
-    return {
-        "guided": _cmd_guided,
-        "run": _cmd_run,
-        "validate": _cmd_validate,
-        "catalog": _cmd_catalog,
-    }[verb](rest)
+    try:
+        return {
+            "guided": _cmd_guided,
+            "run": _cmd_run,
+            "validate": _cmd_validate,
+            "catalog": _cmd_catalog,
+        }[verb](rest)
+    except (ValueError, TypeError, KeyError, OSError) as exc:
+        from raosim.input_validation import WorkflowExitCode
+
+        print(f"job rejected: {exc}")
+        return int(WorkflowExitCode.INVALID_INPUT)

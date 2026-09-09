@@ -48,15 +48,18 @@ reported optimum (plan §8, §11 Phase-9 gate).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Mapping
 
 import numpy as np
 
 import raosim.jax  # noqa: F401  -- float64
 import jax
 import jax.numpy as jnp
-from scipy.optimize import minimize
+from scipy.optimize import OptimizeResult, minimize
 
-from raosim.mdo.schema import DesignVector, MissionSpec, default_design_space
+from raosim.mdo.schema import (
+    DesignVector, MissionSpec, VariableSpec, default_design_space,
+)
 from raosim.mdo.scaling import ScaledSpace
 from raosim.mdo.engine import chamber_surfaces_for, solve_engine
 from raosim.mdo.constraints import (
@@ -95,6 +98,123 @@ _C_SCALE = OPTIMIZER_CONSTRAINT_SCALES
 _MASS_REF = 50.0  # kg, objective conditioning
 
 
+@dataclass(frozen=True)
+class _OptimizationSpace:
+    """Reduced optimizer coordinates and their full physical reconstruction.
+
+    A fixed design value is substituted before every physics evaluation; it
+    is never represented by a zero-width affine scaling or a soft constraint.
+    The engine and persisted results retain the established 10/11-coordinate
+    physical layout, regardless of how many coordinates the caller frees.
+    """
+
+    physical_specs: tuple[VariableSpec, ...]
+    free_specs: tuple[VariableSpec, ...]
+    fixed_values: tuple[tuple[str, float], ...]
+
+    @classmethod
+    def for_mission(
+        cls,
+        mission: MissionSpec,
+        fixed_variables: Mapping[str, float] | None = None,
+        bounds: Mapping[str, tuple[float, float]] | None = None,
+    ) -> "_OptimizationSpace":
+        physical_specs = default_design_space(mission)
+        physical_names = {spec.name for spec in physical_specs}
+        fixed = dict(fixed_variables or {})
+        requested_bounds = dict(bounds or {})
+        unknown = (set(fixed) | set(requested_bounds)) - set(DesignVector.names())
+        if unknown:
+            raise ValueError(f"unknown design-variable policies: {sorted(unknown)}")
+
+        # A mission with no active O/F lever owns its physical mixture ratio.
+        # Accept an identical explicit pin, but never silently replace it or
+        # turn flat thermochemistry into an artificial optimization lever.
+        if "OF" not in physical_names:
+            if "OF" in requested_bounds:
+                raise ValueError("OF bounds require an active O/F-dependent model")
+            if "OF" in fixed:
+                if isinstance(fixed["OF"], (bool, np.bool_)):
+                    raise ValueError("fixed OF must be a number, not bool")
+                value = float(fixed.pop("OF"))
+                if not np.isfinite(value) or value != float(mission.OF):
+                    raise ValueError("fixed OF must agree with the mission's fixed OF")
+
+        overlap = set(fixed) & set(requested_bounds)
+        if overlap:
+            raise ValueError(
+                f"variables cannot be both fixed and bounded: {sorted(overlap)}"
+            )
+        for name, raw in fixed.items():
+            if isinstance(raw, (bool, np.bool_)):
+                raise ValueError(f"fixed {name} must be a number, not bool")
+            value = float(raw)
+            if not np.isfinite(value):
+                raise ValueError(f"fixed {name} must be finite")
+            if name == "film_frac":
+                valid = 0.0 <= value < 1.0
+            elif name == "eps":
+                valid = value > 1.0
+            else:
+                valid = value > 0.0
+            if not valid:
+                raise ValueError(f"fixed {name} is outside its physical range")
+            fixed[name] = value
+
+        free_specs = []
+        for spec in physical_specs:
+            if spec.name in fixed:
+                continue
+            lo, hi = float(spec.lower), float(spec.upper)
+            if spec.name in requested_bounds:
+                try:
+                    requested_lo, requested_hi = requested_bounds[spec.name]
+                    if any(isinstance(value, (bool, np.bool_)) for value in (requested_lo, requested_hi)):
+                        raise ValueError("boolean bound")
+                    requested_lo = float(requested_lo)
+                    requested_hi = float(requested_hi)
+                except (TypeError, ValueError, OverflowError) as exc:
+                    raise ValueError(
+                        f"{spec.name} bounds must be a pair of finite numbers"
+                    ) from exc
+                if (
+                    not np.isfinite([requested_lo, requested_hi]).all()
+                    or requested_lo >= requested_hi
+                ):
+                    raise ValueError(
+                        f"{spec.name} bounds must be finite and strictly increasing"
+                    )
+                # Resolved jobs already perform this intersection and report
+                # it. Apply the same contract to direct solve_min_mass calls.
+                lo, hi = max(lo, requested_lo), min(hi, requested_hi)
+            if not lo < hi:
+                raise ValueError(
+                    f"{spec.name} bounds do not intersect the mission search space"
+                )
+            free_specs.append(VariableSpec(
+                spec.name, lo, hi, min(max(float(spec.ref()), lo), hi)
+            ))
+        return cls(physical_specs, tuple(free_specs), tuple(fixed.items()))
+
+    @property
+    def free_indices(self) -> tuple[int, ...]:
+        names = tuple(spec.name for spec in self.physical_specs)
+        return tuple(names.index(spec.name) for spec in self.free_specs)
+
+    def reconstruct(self, free_values: Array) -> Array:
+        """Rebuild the full physical vector without differentiating pins."""
+
+        fixed = dict(self.fixed_values)
+        values = jnp.asarray([
+            fixed.get(spec.name, spec.ref()) for spec in self.physical_specs
+        ], dtype=jnp.float64)
+        indices = jnp.asarray(self.free_indices, dtype=int)
+        return values.at[indices].set(free_values)
+
+    def select_free(self, physical_values: Array) -> Array:
+        return jnp.asarray(physical_values)[jnp.asarray(self.free_indices, dtype=int)]
+
+
 def _constraint_vector(r, isp_min: float) -> Array:
     """Full scaled inequality vector g(x) ≥ 0 from a solved EngineResult."""
     raw = jnp.stack([
@@ -128,7 +248,7 @@ def _raw_margins(r, isp_min: float) -> dict:
 class NLPResult:
     success: bool
     isp_min: float
-    x: np.ndarray                 # physical active optimizer vector (10/11)
+    x: np.ndarray                 # full physical mission vector (10/11), incl pins
     design: dict                  # fixed 11-value physical contract
     objective_name: str
     objective_mass: float
@@ -165,6 +285,8 @@ def _make_callables(
     objective=DEFAULT_MASS_OBJECTIVE,
     surfaces=None,
     contour_provider: ContourProviderSelection = None,
+    *,
+    optimization_space: _OptimizationSpace | None = None,
 ):
     objective = coerce_mass_objective(objective)
     if surfaces is None:
@@ -172,15 +294,19 @@ def _make_callables(
         # performs the same schema, propellant-identity, and domain validation
         # as the public solve.
         surfaces = chamber_surfaces_for(mission)
-    space = default_design_space(mission)
+    policy_space = (
+        _OptimizationSpace.for_mission(mission)
+        if optimization_space is None else optimization_space
+    )
     layout = mission.design_layout()
-    ss = ScaledSpace.from_specs(space)
+    ss = ScaledSpace.from_specs(policy_space.free_specs)
     idx = jnp.asarray(enforced_idx, dtype=int)
 
     def solve(u):
         return solve_engine(
             DesignVector.from_active_array(
-                ss.to_physical(u), layout, fixed_of=mission.OF
+                policy_space.reconstruct(ss.to_physical(u)),
+                layout, fixed_of=mission.OF
             ),
             mission,
             couple_eta_cstar=couple,
@@ -211,6 +337,8 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
                    allow_incomplete_physics: bool = False,
                    objective: MassObjective | str = DEFAULT_MASS_OBJECTIVE,
                    contour_provider: ContourProviderSelection = None,
+                   fixed_variables: Mapping[str, float] | None = None,
+                   bounds: Mapping[str, tuple[float, float]] | None = None,
                    ) -> NLPResult:
     """Minimise mass subject to every manifest hard row.
 
@@ -218,8 +346,17 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
     unavailable.  ``allow_incomplete_physics=True`` is an explicit screening
     mode; it may optimize the covered rows, but ``physics_status`` remains
     ``"unknown"`` and the compatibility ``feasible`` boolean remains false.
+
+    ``fixed_variables`` substitutes physical values throughout the solve.
+    ``bounds`` narrows the remaining variables' mission search windows. ``u0``
+    contains only the remaining free coordinates in their reduced unit box;
+    ``NLPResult.x`` still contains all physical mission coordinates for replay.
+    An all-fixed request evaluates that design and its gates without an NLP.
     """
     selected_objective = coerce_mass_objective(objective)
+    if isinstance(isp_min, (bool, np.bool_)) or not np.isfinite(isp_min) or isp_min < 0:
+        raise ValueError("isp_min must be a finite nonnegative number, not bool")
+    policy_space = _OptimizationSpace.for_mission(mission, fixed_variables, bounds)
     # Loading here validates table schema, content identity, propellant pair and
     # meaningful O/F dependence before a path string can grant model coverage.
     surfaces = chamber_surfaces_for(mission)
@@ -229,7 +366,7 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         has_real_fluid_properties=False,
         allow_incomplete_physics=allow_incomplete_physics,
     )
-    space = default_design_space(mission)
+    space = policy_space.free_specs
     unknown = sorted(set(enforced) - set(CONSTRAINT_NAMES))
     if unknown:
         raise ValueError(f"unknown enforced constraint names: {unknown}")
@@ -242,24 +379,39 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         selected_objective,
         surfaces,
         contour_provider,
+        optimization_space=policy_space,
     )
     if u0 is None:
         ref = jnp.asarray([s.ref() for s in space], dtype=jnp.float64)
         u0 = np.asarray(ss.to_unit(ref))
-    u0 = np.clip(np.asarray(u0, dtype=float), 0.0, 1.0)
+    u0 = np.asarray(u0, dtype=float)
+    if u0.shape != (len(space),) or not np.isfinite(u0).all():
+        raise ValueError(
+            f"u0 must contain {len(space)} finite free-variable unit coordinates"
+        )
+    u0 = np.clip(u0, 0.0, 1.0)
 
     f = lambda u: float(obj(jnp.asarray(u)))
     fg = lambda u: np.asarray(obj_grad(jnp.asarray(u)), dtype=float)
     cf = lambda u: np.asarray(con(jnp.asarray(u)), dtype=float)
     cj = lambda u: np.asarray(con_jac(jnp.asarray(u)), dtype=float)
 
-    res = minimize(f, u0, jac=fg, method=method,
-                   bounds=[(0.0, 1.0)] * len(space),
-                   constraints=[{"type": "ineq", "fun": cf, "jac": cj}],
-                   options={"maxiter": maxiter, "ftol": 1e-9})
+    if space:
+        res = minimize(f, u0, jac=fg, method=method,
+                       bounds=[(0.0, 1.0)] * len(space),
+                       constraints=(
+                           [{"type": "ineq", "fun": cf, "jac": cj}]
+                           if enforced_idx else []
+                       ),
+                       options={"maxiter": maxiter, "ftol": 1e-9})
+    else:
+        res = OptimizeResult(
+            x=u0, success=True, nit=0,
+            message="All design variables fixed; evaluated without optimization",
+        )
 
     u = np.clip(res.x, 0.0, 1.0)
-    x_phys = np.asarray(ss.to_physical(jnp.asarray(u)))
+    x_phys = np.asarray(policy_space.reconstruct(ss.to_physical(jnp.asarray(u))))
     layout = mission.design_layout()
     design_vector = DesignVector.from_active_array(
         jnp.asarray(x_phys), layout, fixed_of=mission.OF
@@ -272,7 +424,11 @@ def solve_min_mass(mission: MissionSpec, isp_min: float, *,
         contour_provider=contour_provider,
     )
     scaled_all = np.asarray(_constraint_vector(r, isp_min))
-    viol = float(max(0.0, -min(scaled_all[i] for i in enforced_idx)))
+    enforced_values = scaled_all[list(enforced_idx)]
+    viol = (
+        float(max(0.0, -np.min(enforced_values, initial=0.0)))
+        if np.isfinite(enforced_values).all() else float("inf")
+    )
     optimizer_status = "pass" if viol < 1e-5 else "fail"
     engine_values = np.asarray([
         float(r.constraints[spec.engine_key])
@@ -385,11 +541,13 @@ def pareto_frontier(mission: MissionSpec, isp_grid, *,
                     allow_incomplete_physics: bool = False,
                     objective: MassObjective | str = DEFAULT_MASS_OBJECTIVE,
                     contour_provider: ContourProviderSelection = None,
+                    fixed_variables: Mapping[str, float] | None = None,
+                    bounds: Mapping[str, tuple[float, float]] | None = None,
                     maxiter: int = 150) -> list[NLPResult]:
     """ε-constraint sweep: min mass at each I_sp floor, warm-started along the
     frontier.  Returns results in ascending I_sp order."""
-    space = default_design_space(mission)
-    ss = ScaledSpace.from_specs(space)
+    policy_space = _OptimizationSpace.for_mission(mission, fixed_variables, bounds)
+    ss = ScaledSpace.from_specs(policy_space.free_specs)
     out: list[NLPResult] = []
     u0 = None
     for isp_min in isp_grid:
@@ -398,8 +556,9 @@ def pareto_frontier(mission: MissionSpec, isp_grid, *,
                            enforced=enforced, maxiter=maxiter,
                            allow_incomplete_physics=allow_incomplete_physics,
                            objective=objective,
-                           contour_provider=contour_provider)
+                           contour_provider=contour_provider,
+                           fixed_variables=fixed_variables, bounds=bounds)
         out.append(r)
         if r.success:
-            u0 = np.asarray(ss.to_unit(jnp.asarray(r.x)))
+            u0 = np.asarray(ss.to_unit(policy_space.select_free(r.x)))
     return out

@@ -229,6 +229,9 @@ def build_topology(
             ),
             "kernel_reached_wall": bool(kernel.reached_wall),
             "kernel_fallback_used": bool(kernel.fallback_used),
+            "kernel_dtheta_limit_deg": float(
+                math.degrees(kernel.dtheta_limit_rad)),
+            "kernel_massflow_rel_tol": float(kernel.massflow_rel_tol),
         },
     )
 
@@ -246,6 +249,8 @@ def build_reference_topology(
     starting_line_method: str = "kliegel_levine",
     Ru_factor: float = 1.5,
     max_iter: int = 30,
+    kernel_dtheta_limit_deg: float = 0.5,
+    kernel_massflow_rel_tol: float = 0.02,
 ) -> RaoTopology:
     """One-call fixed-(L, epsilon) construction -> full-form topology.
 
@@ -260,7 +265,30 @@ def build_reference_topology(
 
     The exit-station length convention matches ``solve_rao_bvp``
     (``rao_variational._target_length``).
+
+    ``kernel_dtheta_limit_deg`` is the user-facing throat-arc mesh policy
+    in degrees.  It is converted once here because the lower-level NASA
+    march uses radians.  The historical default remains 0.5 degrees.
+    ``kernel_massflow_rel_tol`` is the visible-source 2 % RRC mass-flow
+    implementation diagnostic; it is not a physical acceptance law.
     """
+    if isinstance(kernel_dtheta_limit_deg, bool):
+        raise ValueError(
+            "kernel_dtheta_limit_deg must be numeric, not bool")
+    kernel_dtheta_limit_deg = float(kernel_dtheta_limit_deg)
+    if (not math.isfinite(kernel_dtheta_limit_deg)
+            or kernel_dtheta_limit_deg <= 0.0):
+        raise ValueError(
+            "kernel_dtheta_limit_deg must be finite and positive")
+    if isinstance(kernel_massflow_rel_tol, bool):
+        raise ValueError(
+            "kernel_massflow_rel_tol must be numeric, not bool")
+    kernel_massflow_rel_tol = float(kernel_massflow_rel_tol)
+    if (not math.isfinite(kernel_massflow_rel_tol)
+            or not 0.0 < kernel_massflow_rel_tol <= 1.0):
+        raise ValueError(
+            "kernel_massflow_rel_tol must be finite and lie in (0, 1]")
+
     from raosim.rao_variational import _target_length
 
     Ln = _target_length(Rt, epsilon, length_pct)
@@ -271,5 +299,7 @@ def build_reference_topology(
         starting_line_method=starting_line_method,
         L_target=Ln, Ru=Ru_factor * Rt,
         end_condition="fixed_end", max_iter=max_iter,
+        dtheta_limit=math.radians(kernel_dtheta_limit_deg),
+        mdot_tol=kernel_massflow_rel_tol,
     )
     return build_topology(kernel, nasa_topo)

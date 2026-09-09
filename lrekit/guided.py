@@ -5,11 +5,8 @@ requirements -- thrust and the condition it is quoted at, duration, propellant,
 mixture-ratio intent, mass and envelope limits -- plus the architecture and
 output choices a user genuinely owns.
 
-It deliberately does **not** ask for chamber pressure, expansion ratio, channel
-geometry, pintle diameter or pump speed.  Those are design decisions the
-optimizer owns; asking a user to supply them is how a "guided" flow turns into
-a form for the solver's internal state.  Advanced users state them through a
-job document instead.
+Mission-target mode leaves design variables to the optimizer. Partial and
+complete-design modes explicitly collect the values the user elects to pin.
 
 Prompting is injected rather than calling ``input`` directly, so the whole flow
 is testable with scripted answers and cannot hang a non-interactive run.
@@ -122,7 +119,7 @@ class GuidedSession:
             choices=(
                 "mission targets - let the optimizer select the design",
                 "partial design - fix what you know, optimize the rest",
-                "complete design point - analyze and generate artifacts",
+                "complete design point - analyze and report",
             ),
         ))
         workflow = "analyze" if mode.startswith("complete") else "optimize"
@@ -161,15 +158,12 @@ class GuidedSession:
 
         objective = None
         if workflow == "optimize":
+            from raosim.mdo.metrics import objective_capable_metrics
+
             objective = self._ask_one(Question(
                 "objective", "Primary objective",
                 default="masses.dry_mass_partial",
-                choices=(
-                    "masses.dry_mass_partial",
-                    "masses.electric_package",
-                    "feed.electric_power_total",
-                    "performance.isp_delivered",
-                ),
+                choices=tuple(metric.id for metric in objective_capable_metrics()),
             ))
 
         document: dict[str, Any] = {
@@ -196,6 +190,29 @@ class GuidedSession:
             )
             document["objective"] = {"metric": objective,
                                      "direction": direction}
+        if mode.startswith(("partial", "complete")):
+            from raosim.mdo.job import VARIABLE_DIMENSIONS, VariableRequest
+
+            self.out("Enter the design values you are supplying. Dimensional values need units.")
+            variables = {}
+            for name, dimension in VARIABLE_DIMENSIONS.items():
+                if name == "OF":
+                    continue  # nominal catalog O/F is declared in the preview
+                while True:
+                    value = self._ask_one(Question(
+                        name, f"Fixed {name}", dimension=dimension,
+                        optional=mode.startswith("partial"),
+                    ))
+                    if value is None:
+                        break
+                    try:
+                        VariableRequest(name, "fixed", value)
+                    except ValueError as exc:
+                        self.out(f"    {exc}")
+                        continue
+                    variables[name] = {"mode": "fixed", "value": value}
+                    break
+            document["variables"] = variables
         self.answers = document
         return document
 
@@ -258,10 +275,18 @@ def run_guided(
     session = GuidedSession(ask=ask, out=out)
     document = session.run()
 
+    # The preview and saved job must obey exactly the same contract as run.
+    from lrekit.job_cli import _build_spec
+    from raosim.mdo.job import resolve_engine_job
+
+    resolved = resolve_engine_job(_build_spec(document))
+
     out("")
     out("Coverage preview")
     for line in session.preview(document):
         out(f"  - {line}")
+    for note in resolved.notes:
+        out(f"  - {note}")
     out("")
 
     if confirm:

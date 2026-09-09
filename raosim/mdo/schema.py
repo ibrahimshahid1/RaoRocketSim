@@ -592,8 +592,27 @@ class MissionSpec:
 
     g0: float = 9.80665
 
+    # Absolute hydraulic sand-grain roughness, in metres. Appended to preserve
+    # positional construction of the legacy MissionSpec. The older
+    # channel_roughness field remains relative roughness (ks / Dh).
+    channel_hydraulic_roughness_m: float | None = None
+
     def __post_init__(self) -> None:
         validate_mixture_ratio(self.OF, name="MissionSpec.OF")
+        for name in ("channel_roughness", "channel_hydraulic_roughness_m"):
+            value = getattr(self, name)
+            if value is None and name == "channel_hydraulic_roughness_m":
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{name} must be a finite nonnegative number")
+            if not math.isfinite(value) or value < 0.0:
+                raise ValueError(f"{name} must be a finite nonnegative number")
+        if (self.channel_hydraulic_roughness_m is not None
+                and self.channel_roughness != 0.0):
+            raise ValueError(
+                "specify either absolute channel_hydraulic_roughness_m or "
+                "legacy relative channel_roughness, not both"
+            )
         search_overrides = (
             self.chamber_pressure_search_min_pa,
             self.chamber_pressure_search_max_pa,

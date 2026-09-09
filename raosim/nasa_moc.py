@@ -58,6 +58,17 @@ from raosim.moc import (
 )
 
 
+# Rice's JHU/NASA implementation exposes this as the user-controlled
+# ``DTHETAB Max`` mesh policy and uses 0.5 degrees as its historical
+# default.  Low-level marching APIs use radians; higher-level configuration
+# should convert from its unit-explicit ``*_deg`` field exactly once.
+DEFAULT_KERNEL_DTHETA_LIMIT_RAD = math.radians(0.5)
+# Visible JHU/NASA ``CalcRRCsAlongArc`` terminates when an RRC differs
+# from the throat-line mass flow by more than 2 %.  This is a numerical
+# implementation diagnostic, not a conservation law or physical limit.
+DEFAULT_KERNEL_MASSFLOW_REL_TOL = 0.02
+
+
 # ----------------------------------------------------------------------
 #  Node / topology dataclasses
 # ----------------------------------------------------------------------
@@ -136,6 +147,13 @@ class MOCKernel:
     # low-quality); ``"kernel_build_angle"`` = constructed directly via
     # build_kernel outside the seeding path.
     theta_b_provenance: str = "kernel_build_angle"
+    # Appended so the historical positional layout through
+    # ``theta_b_provenance`` remains intact. Numerical throat-arc mesh policy
+    # used to build ``rrcs`` (radians); this is provenance, not a Rao
+    # shock/smoothness criterion.
+    dtheta_limit_rad: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD
+    # Relative RRC/throat mass-flow diagnostic used during the march.
+    massflow_rel_tol: float = DEFAULT_KERNEL_MASSFLOW_REL_TOL
 
     @property
     def bd(self) -> list[MOCNode]:
@@ -1456,8 +1474,8 @@ def build_kernel(
     n_kernel: int = 24,
     starting_line_method: str = "kliegel_levine",
     max_rrcs: int = 500,
-    mdot_tol: float = 0.05,
-    dtheta_limit: float = 0.5 * math.pi / 180.0,
+    mdot_tol: float = DEFAULT_KERNEL_MASSFLOW_REL_TOL,
+    dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
     Ru: float | None = None,
 ) -> MOCKernel:
     """
@@ -1484,11 +1502,17 @@ def build_kernel(
     3. The marching loop stops when the new wall point reaches
        ``theta_B`` (``wall.x >= xArcMax``) or when a unit process fails
        (kernel boundary reached).
-    4. NASA's mass-flow sanity check (line 1085): each new RRC's
+    4. ``dtheta_limit`` is the maximum RAW wall-angle increment, in
+       **radians**.  When it is exceeded, the source-shaped march inserts
+       a SPECIAL row at half that increment.  The historical 0.5-degree
+       default is a numerical mesh policy, not a physical smoothness or
+       shock criterion.
+    5. The visible JHU/NASA mass-flow sanity check (line 1085): each new RRC's
        wall-side mass flow must match TT''s wall-side mass flow to
-       within ``mdot_tol`` (default 5 %).  Violations stop the march and
-       leave the kernel visibly partial instead of manufacturing a full
-       NASA-reference claim.
+       within ``mdot_tol`` (default 2 %).  This is a numerical
+       implementation diagnostic, not a physical acceptance law.
+       Violations stop the march and leave the kernel visibly partial
+       instead of manufacturing a full NASA-reference claim.
 
     The last RRC in ``rrcs`` is the kernel's *final* characteristic.
     NASA's Rao construction (Rice 2003 §3.4) calls this curve BD when
@@ -1504,6 +1528,16 @@ def build_kernel(
         raise ValueError("theta_B must be positive")
     if Rd <= 0.0:
         raise ValueError("Rd must be positive")
+    if isinstance(dtheta_limit, bool):
+        raise ValueError("dtheta_limit must be numeric, not bool")
+    dtheta_limit = float(dtheta_limit)
+    if not math.isfinite(dtheta_limit) or dtheta_limit <= 0.0:
+        raise ValueError("dtheta_limit must be finite and positive (radians)")
+    if isinstance(mdot_tol, bool):
+        raise ValueError("mdot_tol must be numeric, not bool")
+    mdot_tol = float(mdot_tol)
+    if not math.isfinite(mdot_tol) or not 0.0 < mdot_tol <= 1.0:
+        raise ValueError("mdot_tol must be finite and lie in (0, 1]")
 
     arc = ArcWall(Rt, Rd, theta_B)
 
@@ -1632,7 +1666,9 @@ def build_kernel(
     kernel = MOCKernel(rrcs=rrcs, theta_B=float(theta_B),
                        Rt=float(Rt), Rd=float(Rd), gamma=float(gamma),
                        fallback_used=bool(fallback_used),
-                       reached_wall=bool(reached_wall))
+                       reached_wall=bool(reached_wall),
+                       dtheta_limit_rad=dtheta_limit,
+                       massflow_rel_tol=mdot_tol)
     kernel.massflow = massflow
     return kernel
 
@@ -3051,6 +3087,8 @@ def set_theta_b(
     L_target: float | None = None,
     Ru: float | None = None,
     end_condition: str = "fixed_end",
+    dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
+    mdot_tol: float = DEFAULT_KERNEL_MASSFLOW_REL_TOL,
 ) -> tuple[RaoTopology, MOCKernel]:
     """
     NASA ``SetThetaB`` outer loop on the initial wall expansion angle.
@@ -3069,10 +3107,24 @@ def set_theta_b(
     With ``end_condition="rao_free"`` the legacy behaviour is kept:
     inner = Rao free-exit stationarity, outer = exit-radius mismatch.
 
+    ``dtheta_limit`` is the throat-arc kernel step limit in **radians**.
+    It is threaded unchanged through every kernel rebuilt by the outer
+    solve.  ``mdot_tol`` is the relative RRC mass-flow implementation
+    diagnostic (the visible-source default is 2 %, not a physical law).
     Returns ``(topology, kernel)``.  ``kernel.bd`` is the converged BD.
     """
     if not 0.0 < length_pct <= 100.0:
         raise ValueError("length_pct must be in (0, 100]")
+    if isinstance(dtheta_limit, bool):
+        raise ValueError("dtheta_limit must be numeric, not bool")
+    dtheta_limit = float(dtheta_limit)
+    if not math.isfinite(dtheta_limit) or dtheta_limit <= 0.0:
+        raise ValueError("dtheta_limit must be finite and positive (radians)")
+    if isinstance(mdot_tol, bool):
+        raise ValueError("mdot_tol must be numeric, not bool")
+    mdot_tol = float(mdot_tol)
+    if not math.isfinite(mdot_tol) or not 0.0 < mdot_tol <= 1.0:
+        raise ValueError("mdot_tol must be finite and lie in (0, 1]")
     Rd = 0.382 * Rt
     Re = math.sqrt(epsilon) * Rt
     if L_target is None:
@@ -3086,6 +3138,8 @@ def set_theta_b(
             Rt, Rd, theta_B_rad, gamma, n_kernel,
             starting_line_method=starting_line_method,
             Ru=Ru,
+            dtheta_limit=dtheta_limit,
+            mdot_tol=mdot_tol,
         )
         topology = calc_lrc_de(
             kernel,
@@ -3291,8 +3345,30 @@ def full_control_surface_thrust(
     gamma: float,
     Rt: float,
     pa_over_p0: float = 0.0,
+    d_projection_tol_over_rt: float = FULL_CONTROL_D_PROJECTION_TOL_OVER_RT,
+    d_mach_jump_tol: float = FULL_CONTROL_D_MACH_JUMP_TOL,
+    d_theta_jump_tol: float = FULL_CONTROL_D_THETA_JUMP_TOL,
+    mass_residual_rel_tol: float = FULL_CONTROL_MASS_RESIDUAL_REL_TOL,
 ) -> FullControlSurfaceResult:
-    """Integrate thrust and mass on the complete Rao C-D-E surface."""
+    """Integrate thrust and mass on the complete Rao C-D-E surface.
+
+    The four tolerances are implementation/repository reconstruction policy,
+    not physical limits published by Rao or NASA.  Angular inputs are in
+    radians, matching the low-level MOC state.
+    """
+    controls = {
+        "d_projection_tol_over_rt": d_projection_tol_over_rt,
+        "d_mach_jump_tol": d_mach_jump_tol,
+        "d_theta_jump_tol": d_theta_jump_tol,
+        "mass_residual_rel_tol": mass_residual_rel_tol,
+    }
+    for name, raw in controls.items():
+        if isinstance(raw, bool):
+            raise ValueError(f"{name} must be numeric, not bool")
+        value = float(raw)
+        if not math.isfinite(value) or value <= 0.0:
+            raise ValueError(f"{name} must be finite and positive")
+        controls[name] = value
     de = tuple(_flow_node_seq(de_nodes))
     if len(de) < 2:
         raise ValueError("DE must contain at least two nodes")
@@ -3321,11 +3397,13 @@ def full_control_surface_thrust(
         and diag["monotone_axis_to_d_radius"]
         and math.isfinite(cf_cde)
         and cf_cde > 0.0
-        and projection_rel <= FULL_CONTROL_D_PROJECTION_TOL_OVER_RT
-        and abs(float(diag["d_state_mach_jump"])) <= FULL_CONTROL_D_MACH_JUMP_TOL
-        and abs(float(diag["d_state_theta_jump"])) <= FULL_CONTROL_D_THETA_JUMP_TOL
+        and projection_rel <= controls["d_projection_tol_over_rt"]
+        and abs(float(diag["d_state_mach_jump"]))
+        <= controls["d_mach_jump_tol"]
+        and abs(float(diag["d_state_theta_jump"]))
+        <= controls["d_theta_jump_tol"]
         and math.isfinite(mass_residual_rel)
-        and abs(mass_residual_rel) <= FULL_CONTROL_MASS_RESIDUAL_REL_TOL
+        and abs(mass_residual_rel) <= controls["mass_residual_rel_tol"]
     )
     return FullControlSurfaceResult(
         CD=tuple(cd), CDE=cde,
@@ -3337,10 +3415,10 @@ def full_control_surface_thrust(
         d_projection_distance=float(diag["d_projection_distance"]),
         d_state_mach_jump=float(diag["d_state_mach_jump"]),
         d_state_theta_jump=float(diag["d_state_theta_jump"]),
-        d_projection_tol_over_rt=FULL_CONTROL_D_PROJECTION_TOL_OVER_RT,
-        d_mach_jump_tol=FULL_CONTROL_D_MACH_JUMP_TOL,
-        d_theta_jump_tol=FULL_CONTROL_D_THETA_JUMP_TOL,
-        mass_residual_rel_tol=FULL_CONTROL_MASS_RESIDUAL_REL_TOL,
+        d_projection_tol_over_rt=controls["d_projection_tol_over_rt"],
+        d_mach_jump_tol=controls["d_mach_jump_tol"],
+        d_theta_jump_tol=controls["d_theta_jump_tol"],
+        mass_residual_rel_tol=controls["mass_residual_rel_tol"],
         complete=complete,
     )
 

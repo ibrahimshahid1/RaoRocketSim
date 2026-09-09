@@ -52,6 +52,25 @@ def test_field_set_and_types(reference_topology):
     assert 24.0 < math.degrees(topo.theta_B) < 27.0
     assert topo.diagnostics["kernel_reached_wall"]
     assert topo.diagnostics["bfe_wall_contour_complete"]
+    assert topo.diagnostics["kernel_dtheta_limit_deg"] == pytest.approx(0.5)
+    assert topo.diagnostics["kernel_massflow_rel_tol"] == pytest.approx(0.02)
+
+
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [
+        ("kernel_dtheta_limit_deg", 0.0),
+        ("kernel_dtheta_limit_deg", float("nan")),
+        ("kernel_massflow_rel_tol", 0.0),
+        ("kernel_massflow_rel_tol", float("inf")),
+    ],
+)
+def test_reference_topology_rejects_invalid_kernel_policy(name, value):
+    kwargs = {name: value}
+    with pytest.raises(ValueError, match=name):
+        build_reference_topology(
+            RT, EPSILON, LENGTH_PCT, GAMMA, 0.01, **kwargs,
+        )
 
 
 def test_closure_seams(reference_topology):

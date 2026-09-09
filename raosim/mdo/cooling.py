@@ -76,6 +76,7 @@ from jax import lax
 from raosim.jax import thermal as jt
 from raosim.mdo.grid import StationGrid
 from raosim.mdo.schema import MissionSpec
+from raosim.mdo.resolved_inputs import resolve_channel_roughness_input
 
 Array = jnp.ndarray
 
@@ -224,18 +225,19 @@ def film_slot_validity(film_frac: Array, slot_height: Array, grid: StationGrid,
             "gaseous_correlation_applicable": VR >= 0.45}
 
 
-def darcy_friction_factor(Re: Array, rel_roughness: float = 0.0) -> Array:
+def darcy_friction_factor(Re: Array, rel_roughness: Array | float = 0.0) -> Array:
     """64/Re laminar + smooth Blasius (or rough Swamee–Jain) turbulent, blended
     across Re≈2300 with a narrow smoothstep so the residual stays C¹ (the NumPy
     original switches discretely; the blend width is far below any physical
     fidelity claim).  White, *Fluid Mechanics* §6."""
     Re = jnp.maximum(Re, 1.0)
     f_lam = 64.0 / Re
-    if rel_roughness > 0.0:
-        f_turb = 0.25 / (jnp.log10(rel_roughness / 3.7
-                                   + 5.74 / Re ** 0.9)) ** 2
-    else:
-        f_turb = 0.3164 / Re ** 0.25
+    # Elementwise selection also permits k_s / D_h to depend on traced channel
+    # dimensions. A Python ``if`` on that ratio would fail under JAX AD/JIT.
+    rel_roughness = jnp.asarray(rel_roughness)
+    f_rough = 0.25 / (jnp.log10(rel_roughness / 3.7
+                              + 5.74 / Re ** 0.9)) ** 2
+    f_turb = jnp.where(rel_roughness > 0.0, f_rough, 0.3164 / Re ** 0.25)
     w = jnp.clip((Re - 2100.0) / 400.0, 0.0, 1.0)
     s = w * w * (3.0 - 2.0 * w)  # smoothstep
     return (1.0 - s) * f_lam + s * f_turb
@@ -270,6 +272,10 @@ class CoolingMarch:
     sigma_pressure_profile: Array  # (n,) SP-125 channel half-span stress [Pa]
     coolant_mach: Array       # scalar, v_cool/a_liquid (Mirzamoghadam ≤ 0.35)
     coolant_velocity: Array   # scalar [m/s]
+    hydraulic_diameter: Array  # (n,) actual channel D_h [m]
+    hydraulic_roughness_m: Array  # (n,) effective hydraulic k_s [m], not Ra
+    relative_roughness: Array  # (n,) k_s / D_h
+    darcy_factor: Array        # (n,) dimensionless Darcy friction factor
     # Root status is part of the discipline output, not an out-of-band log.
     # This lets the NLP reject a numerically unconverged thermal state.
     solver_residual_max: Array = field(default_factory=lambda: jnp.asarray(jnp.inf))
@@ -410,7 +416,19 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
                      / (2.0 * (1.0 - mission.liner_poisson)))
 
     # --- jacket Δp and absolute pressure profile ----------------------------- #
-    f_darcy = darcy_friction_factor(Re, mission.channel_roughness)
+    roughness_basis, roughness_input = resolve_channel_roughness_input(mission)
+    hydraulic_roughness_m = (
+        roughness_input * Dh
+        if roughness_basis == "legacy_relative" else jnp.asarray(roughness_input)
+    )
+    # D_h currently is uniform for each MDO design, but is recomputed from the
+    # evaluated width/height (including design-variable overrides). Preserve a
+    # legacy relative input as relative; an absolute input varies as 1 / D_h.
+    relative_roughness = (
+        jnp.asarray(roughness_input)
+        if roughness_basis == "legacy_relative" else hydraulic_roughness_m / Dh
+    )
+    f_darcy = darcy_friction_factor(Re, relative_roughness)
     dynamic_pressure = 0.5 * mission.rho_cool * u_cool ** 2
     dp_segment = f_darcy * grid.dseg / Dh * dynamic_pressure
     dp_total = jnp.sum(dp_segment)
@@ -444,6 +462,10 @@ def cooling_march(T_wg: Array, grid: StationGrid, *, Pc: Array, gamma: Array,
         sigma_thermal=sigma_thermal, sigma_pressure=sigma_pressure,
         sigma_pressure_profile=sigma_pressure_profile,
         coolant_mach=coolant_mach, coolant_velocity=u_cool,
+        hydraulic_diameter=jnp.broadcast_to(Dh, (n,)),
+        hydraulic_roughness_m=jnp.broadcast_to(hydraulic_roughness_m, (n,)),
+        relative_roughness=jnp.broadcast_to(relative_roughness, (n,)),
+        darcy_factor=jnp.broadcast_to(f_darcy, (n,)),
     )
 
 

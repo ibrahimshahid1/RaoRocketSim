@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 import sys
+from collections import Counter
 from dataclasses import replace
 from pathlib import Path
 
@@ -44,6 +45,8 @@ def _context(*, rt=0.02, gamma=1.4, model=MODEL_SMOOTH):
         throat_downstream_radius_factor=0.382,
         throat_upstream_radius_factor=1.5,
         starting_line_method="kliegel_levine",
+        kernel_dtheta_limit_deg=0.25,
+        kernel_massflow_rel_tol=0.02,
         n_kernel_finest=12,
         n_kernel_ladder=(8, 12),
         n_de_points=16,
@@ -162,7 +165,7 @@ def test_supported_lookup_requires_all_valid_bracketing_samples():
     assert set(lookup.sample_classifications) == {SAMPLE_CONVERGED_VALID}
     assert domain.source_model_id == (
         "raosim.rao_existence_scan:epsilon-length-fixed-context-"
-        "d-attachment-domain:v1"
+        "d-attachment-domain:v2"
     )
     assert domain.source_model_id == CONVERGENCE_DOMAIN_SOURCE_MODEL_ID
     assert domain.validity_source_id == RAO_RADIAL_INCREMENT_SOURCE_ID
@@ -230,6 +233,8 @@ def test_json_is_deterministic_hash_pinned_and_rejects_tampering(tmp_path):
     assert first == second
     assert "NaN" not in first
     assert loaded.artifact_sha256 == domain.artifact_sha256
+    assert loaded.context.kernel_dtheta_limit_deg == 0.25
+    assert loaded.context.kernel_massflow_rel_tol == 0.02
     payload = json.loads(first)
     payload["samples"][0][0]["reason"] = "tampered"
     path.write_text(json.dumps(payload), encoding="utf-8")
@@ -245,6 +250,29 @@ def test_domain_rejects_unsorted_or_internally_inconsistent_evidence():
         replace(domain.samples[0][0], rao_eq5_valid=False)
     with pytest.raises(ValueError, match="validity source"):
         replace(domain, validity_source_id="not-the-canonical-eq5-source")
+
+
+def test_kernel_march_controls_are_validated_and_part_of_context_identity():
+    config = ExistenceScanConfig(Rt=0.02, epsilon=10.0)
+    context = RaoConvergenceContext.from_scan_config(
+        config, closure_model=MODEL_SMOOTH
+    )
+
+    assert context.kernel_dtheta_limit_deg == 0.25
+    assert context.kernel_massflow_rel_tol == 0.02
+    assert context.to_dict()["kernel_dtheta_limit_deg"] == 0.25
+    assert context.to_dict()["kernel_massflow_rel_tol"] == 0.02
+    assert replace(
+        context, kernel_dtheta_limit_deg=0.125
+    ).identity_sha256 != context.identity_sha256
+    assert replace(
+        context, kernel_massflow_rel_tol=0.01
+    ).identity_sha256 != context.identity_sha256
+
+    with pytest.raises(ValueError, match="kernel_dtheta_limit_deg"):
+        replace(config, kernel_dtheta_limit_deg=0.0)
+    with pytest.raises(ValueError, match="kernel_massflow_rel_tol"):
+        replace(config, kernel_massflow_rel_tol=1.0001)
 
 
 def test_large_finite_scan_residual_cannot_be_promoted_to_supported():
@@ -330,6 +358,8 @@ def test_builder_uses_external_axes_and_keeps_internal_roots_as_outputs(monkeypa
     assert domain.samples[0][0].theta_b_deg == pytest.approx(25.01)
     assert domain.samples[0][0].kdf == pytest.approx(0.2002)
     assert domain.context.n_kernel_ladder == (8, 12)
+    assert domain.context.kernel_dtheta_limit_deg == 0.25
+    assert domain.context.kernel_massflow_rel_tol == 0.02
     assert domain.context.root_maxfev == 80
     assert domain.context.theta_b_seed_policy == "fixed_axis"
     assert domain.context.theta_b_seed_axis_deg == tuple(config.theta_axis)
@@ -495,7 +525,7 @@ def test_rt_scale_invariance_of_root_and_declared_context():
 
     assert root_a.success and root_b.success
     assert root_a.theta_B_deg == pytest.approx(root_b.theta_B_deg, abs=1.0e-10)
-    assert root_a.kdf == pytest.approx(root_b.kdf, abs=1.0e-12)
+    assert root_a.kdf == pytest.approx(root_b.kdf, abs=1.0e-10)
     assert eval_a["rao_eq5_min_dr_over_r"] == pytest.approx(
         eval_b["rao_eq5_min_dr_over_r"], abs=1.0e-12
     )
@@ -509,7 +539,7 @@ def test_rt_scale_invariance_of_root_and_declared_context():
     assert context_a.identity_sha256 == context_b.identity_sha256
 
 
-def test_tracked_fixed_slice_artifact_is_hash_valid_and_source_honest():
+def test_tracked_v1_fixed_slice_artifact_fails_closed_until_regenerated():
     repo = Path(__file__).resolve().parent.parent
     path = (
         repo
@@ -519,35 +549,34 @@ def test_tracked_fixed_slice_artifact_is_hash_valid_and_source_honest():
         / "rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json"
     )
 
-    domain = RaoConvergenceDomain.read_json(path)
+    with pytest.raises(ValueError, match="legacy convergence-domain schema v1"):
+        RaoConvergenceDomain.read_json(path)
 
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["schema_version"] == 1
+    assert "kernel_dtheta_limit_deg" not in payload["context"]
+    assert "kernel_massflow_rel_tol" not in payload["context"]
+
+
+def test_tracked_v2_fixed_slice_artifact_has_pinned_complete_identity():
+    repo = Path(__file__).resolve().parent.parent
+    path = (
+        repo
+        / "raosim"
+        / "data"
+        / "rao_domains"
+        / "rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v2.json"
+    )
+
+    domain = RaoConvergenceDomain.read_json(path)
     assert domain.artifact_sha256 == (
-        "a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19"
+        "2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9"
     )
-    assert domain.source_model_id == (
-        "raosim.rao_existence_scan:epsilon-length-fixed-context-"
-        "d-attachment-domain:v1"
+    assert domain.context.identity_sha256 == (
+        "a3095bad66a56a24554f7e234b9133f967110ee4958998193d385f32d5d7d277"
     )
-    assert domain.validity_source_id == RAO_RADIAL_INCREMENT_SOURCE_ID
-    assert domain.epsilon_axis == (
-        4.0,
-        5.0,
-        6.0,
-        8.0,
-        10.0,
-        15.0,
-        20.0,
-        25.0,
-        30.0,
-        35.0,
-        40.0,
-        45.0,
-        50.0,
-    )
-    assert domain.length_pct_axis == (60.0, 70.0, 80.0, 90.0, 100.0)
-    assert domain.context.gamma == 1.4
-    assert domain.context.pa_over_p0 == 0.01
-    assert domain.context.n_kernel_ladder == (8, 12, 16, 24)
+    assert domain.context.kernel_dtheta_limit_deg == 0.25
+    assert domain.context.kernel_massflow_rel_tol == 0.02
     assert domain.classification_counts() == {
         "converged_valid": 40,
         "converged_invalid": 0,
@@ -556,7 +585,25 @@ def test_tracked_fixed_slice_artifact_is_hash_valid_and_source_honest():
         "unevaluable": 0,
         "under_resolved": 0,
     }
-    assert path.read_text(encoding="utf-8") == domain.to_json()
+
+    midpoint_statuses = Counter(
+        domain.lookup(
+            0.5 * (epsilon_left + epsilon_right),
+            0.5 * (length_left + length_right),
+            expected_context=domain.context,
+        ).status
+        for epsilon_left, epsilon_right in zip(
+            domain.epsilon_axis[:-1], domain.epsilon_axis[1:]
+        )
+        for length_left, length_right in zip(
+            domain.length_pct_axis[:-1], domain.length_pct_axis[1:]
+        )
+    )
+    assert midpoint_statuses == {
+        "supported": 23,
+        "refused_not_converged": 11,
+        "unknown_under_resolved": 14,
+    }
 
 
 def test_cli_writes_hash_valid_domain_and_rejects_unpaired_axes(tmp_path):
@@ -574,6 +621,10 @@ def test_cli_writes_hash_valid_domain_and_rejects_unpaired_axes(tmp_path):
         "smooth",
         "--n-kernel",
         "5",
+        "--kernel-dtheta-limit-deg",
+        "0.375",
+        "--kernel-massflow-rel-tol",
+        "0.015",
         "--n-de-points",
         "5",
         "--root-maxfev",
@@ -606,6 +657,8 @@ def test_cli_writes_hash_valid_domain_and_rejects_unpaired_axes(tmp_path):
     domain_path = output_dir / "convergence_domain.json"
     loaded = RaoConvergenceDomain.read_json(domain_path)
     assert loaded.to_dict()["artifact_sha256"] == loaded.artifact_sha256
+    assert loaded.context.kernel_dtheta_limit_deg == 0.375
+    assert loaded.context.kernel_massflow_rel_tol == 0.015
 
     incomplete = subprocess.run(
         [

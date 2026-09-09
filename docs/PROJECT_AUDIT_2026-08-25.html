@@ -1,0 +1,1212 @@
+<title>LREKit Technical Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+:root {
+  --ground:#eaedf0; --surface:#fbfcfd; --surface-2:#f1f4f6;
+  --ink:#151b22; --ink-2:#3c4753; --muted:#697683;
+  --rule:#c9d2da; --rule-soft:#dee4ea;
+  --accent:#0e4d68; --accent-ink:#0e4d68; --accent-soft:#d9e7ee;
+  --pass:#26623f; --partial:#7d5b12; --block:#8f3122;
+  --pass-bg:#dcebe1; --partial-bg:#f2e9d1; --block-bg:#f5e0db;
+  --shadow:0 1px 2px rgba(21,27,34,.06), 0 8px 24px -16px rgba(21,27,34,.28);
+  --sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#0e131a; --surface:#161d25; --surface-2:#1b232c;
+    --ink:#dbe2e9; --ink-2:#a9b5c1; --muted:#7b8996;
+    --rule:#2a3540; --rule-soft:#1f2831;
+    --accent:#6ab8d6; --accent-ink:#8ccbe4; --accent-soft:#123240;
+    --pass:#74c493; --partial:#d6b358; --block:#e08772;
+    --pass-bg:#152b1f; --partial-bg:#2b2615; --block-bg:#2e1c17;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#0e131a; --surface:#161d25; --surface-2:#1b232c;
+  --ink:#dbe2e9; --ink-2:#a9b5c1; --muted:#7b8996;
+  --rule:#2a3540; --rule-soft:#1f2831;
+  --accent:#6ab8d6; --accent-ink:#8ccbe4; --accent-soft:#123240;
+  --pass:#74c493; --partial:#d6b358; --block:#e08772;
+  --pass-bg:#152b1f; --partial-bg:#2b2615; --block-bg:#2e1c17;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.8);
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.66;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+/* ---------- shell ---------- */
+.shell { max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px) 96px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 1120px) {
+  .grid { grid-template-columns: 232px minmax(0,1fr); gap: 56px; align-items: start; }
+}
+
+/* ---------- masthead ---------- */
+.mast {
+  border-bottom: 1.5px solid var(--ink);
+  padding: clamp(40px,7vw,76px) 0 26px;
+  margin-bottom: 40px;
+}
+.mast .eyebrow {
+  font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  margin: 0 0 18px;
+}
+.mast h1 {
+  font-family: var(--sans); font-weight: 600;
+  font-size: clamp(34px, 6.2vw, 62px); line-height: 1.02;
+  letter-spacing: -.026em; margin: 0 0 14px; text-wrap: balance;
+}
+.mast h1 .sub { display: block; color: var(--muted); font-weight: 500; font-size: .46em; letter-spacing: -.01em; margin-top: 14px; }
+.mast .lede { font-size: 19px; line-height: 1.55; color: var(--ink-2); max-width: 62ch; margin: 0 0 30px; }
+.mast-meta {
+  display: grid; gap: 2px 34px; grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.75; color: var(--ink-2);
+  border-top: 1px solid var(--rule-soft); padding-top: 18px;
+}
+.mast-meta b { color: var(--muted); font-weight: 500; display: block; font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; }
+.mast-meta span { display: block; word-break: break-word; }
+
+/* ---------- toc ---------- */
+.toc { display: none; }
+@media (min-width: 1120px) {
+  .toc {
+    display: block; position: sticky; top: 24px; max-height: calc(100vh - 48px);
+    overflow-y: auto; font-family: var(--sans); font-size: 12.8px; line-height: 1.35;
+    padding-right: 8px;
+  }
+  .toc h2 {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; margin: 0 0 14px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .toc a {
+    display: grid; grid-template-columns: 22px 1fr; gap: 6px;
+    padding: 5px 8px 5px 4px; border-radius: 3px;
+    color: var(--ink-2); text-decoration: none; border-left: 2px solid transparent;
+  }
+  .toc a:hover { background: var(--surface-2); color: var(--ink); }
+  .toc a .n { font-family: var(--mono); font-size: 10.5px; color: var(--muted); padding-top: 1.5px; }
+  .toc a.on { border-left-color: var(--accent); background: var(--accent-soft); color: var(--ink); font-weight: 500; }
+  .toc a.on .n { color: var(--accent-ink); }
+}
+
+/* ---------- sections ---------- */
+main { min-width: 0; }
+section { margin: 0 0 60px; scroll-margin-top: 20px; }
+section > h2 {
+  font-family: var(--sans); font-weight: 600; font-size: clamp(23px,3.1vw,31px);
+  line-height: 1.15; letter-spacing: -.02em; margin: 0 0 6px; text-wrap: balance;
+  display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline;
+}
+section > h2 .n {
+  font-family: var(--mono); font-size: .5em; font-weight: 500; color: var(--accent-ink);
+  letter-spacing: .04em; padding-top: .1em;
+}
+.h-rule { height: 1.5px; background: var(--ink); margin: 0 0 26px; }
+h3 {
+  font-family: var(--sans); font-weight: 600; font-size: 17.5px; letter-spacing: -.008em;
+  margin: 34px 0 10px; color: var(--ink); text-wrap: balance;
+}
+h4 {
+  font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--muted); margin: 28px 0 8px;
+}
+p { margin: 0 0 14px; max-width: 70ch; }
+ul, ol { margin: 0 0 16px; padding-left: 1.35em; max-width: 70ch; }
+li { margin-bottom: 7px; }
+li > ul, li > ol { margin-top: 7px; }
+strong { font-weight: 600; }
+code, .m {
+  font-family: var(--mono); font-size: .86em; background: var(--surface-2);
+  padding: .1em .34em; border-radius: 3px; border: 1px solid var(--rule-soft);
+  word-break: break-word;
+}
+blockquote {
+  margin: 18px 0; padding: 2px 0 2px 20px; border-left: 3px solid var(--rule);
+  color: var(--ink-2); font-style: italic; max-width: 66ch;
+}
+
+/* ---------- callout ---------- */
+.note {
+  background: var(--surface); border: 1px solid var(--rule-soft); border-left: 3px solid var(--accent);
+  border-radius: 3px; padding: 16px 20px; margin: 20px 0; box-shadow: var(--shadow);
+}
+.note p:last-child { margin-bottom: 0; }
+.note .lbl {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent-ink); font-weight: 600; display: block; margin-bottom: 7px;
+}
+.note.warn { border-left-color: var(--block); }
+.note.warn .lbl { color: var(--block); }
+
+/* ---------- tables ---------- */
+.tw { overflow-x: auto; margin: 20px 0 24px; border: 1px solid var(--rule-soft); border-radius: 3px; background: var(--surface); box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; font-family: var(--sans); font-size: 13.6px; line-height: 1.5; }
+thead th {
+  text-align: left; font-weight: 600; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); padding: 11px 14px; border-bottom: 1.5px solid var(--rule);
+  white-space: nowrap; background: var(--surface-2);
+}
+td { padding: 11px 14px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; color: var(--ink-2); }
+tbody tr:last-child td { border-bottom: none; }
+td:first-child { color: var(--ink); font-weight: 500; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12.6px; white-space: nowrap; }
+table code { font-size: .92em; }
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-block; font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: .07em; text-transform: uppercase; padding: 2.5px 7px; border-radius: 3px;
+  white-space: nowrap; border: 1px solid transparent;
+}
+.chip.pass { background: var(--pass-bg); color: var(--pass); border-color: var(--pass); }
+.chip.part { background: var(--partial-bg); color: var(--partial); border-color: var(--partial); }
+.chip.block { background: var(--block-bg); color: var(--block); border-color: var(--block); }
+.chip.plan { background: var(--surface-2); color: var(--muted); border-color: var(--rule); }
+
+/* ---------- pipeline block ---------- */
+pre.flow {
+  font-family: var(--mono); font-size: 12.1px; line-height: 1.62; overflow-x: auto;
+  background: var(--surface); border: 1px solid var(--rule-soft); border-radius: 3px;
+  padding: 18px 20px; margin: 20px 0 24px; color: var(--ink-2); box-shadow: var(--shadow);
+}
+pre.flow b { color: var(--accent-ink); font-weight: 600; }
+
+/* ---------- definition list for gaps ---------- */
+.gap { border-top: 1px solid var(--rule-soft); padding: 20px 0 4px; }
+.gap:first-of-type { border-top: 1.5px solid var(--rule); }
+.gap h3 { margin-top: 0; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; }
+.gap h3 .n { font-family: var(--mono); font-size: .72em; color: var(--accent-ink); font-weight: 500; }
+.gap dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; max-width: 76ch; }
+.gap dt {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--muted); padding-top: 5px;
+}
+.gap dd { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+@media (max-width: 640px) {
+  .gap dl { grid-template-columns: 1fr; gap: 2px; }
+  .gap dt { padding-top: 12px; }
+}
+
+/* ---------- fact sheet ---------- */
+.facts { display: grid; gap: 0; border-top: 1.5px solid var(--rule); }
+.fact { display: grid; grid-template-columns: 210px 1fr; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--rule-soft); }
+.fact dt {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--accent-ink); font-weight: 500; padding-top: 3px;
+}
+.fact dd { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.6; }
+@media (max-width: 720px) {
+  .fact { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* ---------- statements ---------- */
+.claims { list-style: none; padding: 0; margin: 0; counter-reset: c; max-width: none; display: flex; flex-direction: column; gap: 0; }
+.claims li {
+  counter-increment: c; display: grid; grid-template-columns: 34px 1fr; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid var(--rule-soft); margin: 0; max-width: 78ch;
+}
+.claims li::before {
+  content: counter(c,decimal-leading-zero); font-family: var(--mono); font-size: 11.5px;
+  color: var(--accent-ink); font-weight: 500; padding-top: 5px; letter-spacing: .04em;
+}
+
+/* ---------- closing descriptions ---------- */
+.desc { background: var(--surface); border: 1px solid var(--rule-soft); border-radius: 3px; padding: 22px 26px; margin: 18px 0; box-shadow: var(--shadow); }
+.desc h3 { margin-top: 0; }
+.desc p:last-child { margin-bottom: 0; }
+.desc.one p { font-family: var(--sans); font-size: 18px; line-height: 1.5; font-weight: 400; letter-spacing: -.005em; }
+
+footer {
+  border-top: 1.5px solid var(--ink); margin-top: 20px; padding-top: 20px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.8;
+}
+</style>
+
+<div class="shell">
+
+<div class="mast">
+  <p class="eyebrow">Deep technical project audit · 2026-08-25</p>
+  <h1>LREKit<span class="sub">Liquid rocket engine design toolkit — implementation, maturity, and intended system</span></h1>
+  <p class="lede">A factual audit of the <span class="m">RaoRocketSim</span> repository: what is built, what it does today, what is under active implementation, what the completed system is meant to be, and what evidence supports each of those claims.</p>
+  <div class="mast-meta">
+    <span><b>Repository</b>github.com/ibrahimshahid1/RaoRocketSim</span>
+    <span><b>Audited commit</b>f763fe1 · 2026-08-24 · tree clean</span>
+    <span><b>Method</b>Source, docs, artifacts, git history + independent execution</span>
+    <span><b>Author</b>Ibrahim Shahid · sole contributor · 72 commits</span>
+  </div>
+</div>
+
+<div class="grid">
+
+<nav class="toc" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s0"><span class="n">00</span><span>Executed checks</span></a></li>
+    <li><a href="#s1"><span class="n">01</span><span>Identifying the project</span></a></li>
+    <li><a href="#s2"><span class="n">02</span><span>Technical workflow</span></a></li>
+    <li><a href="#s3"><span class="n">03</span><span>What it can do today</span></a></li>
+    <li><a href="#s4"><span class="n">04</span><span>What was actually built</span></a></li>
+    <li><a href="#s5"><span class="n">05</span><span>Technical depth</span></a></li>
+    <li><a href="#s6"><span class="n">06</span><span>Technical maturity</span></a></li>
+    <li><a href="#s7"><span class="n">07</span><span>Intended system &amp; “done”</span></a></li>
+    <li><a href="#s8"><span class="n">08</span><span>Where the chain stops</span></a></li>
+    <li><a href="#s9"><span class="n">09</span><span>Gaps to the endpoint</span></a></li>
+    <li><a href="#s10"><span class="n">10</span><span>Validation and evidence</span></a></li>
+    <li><a href="#s11"><span class="n">11</span><span>Decisions and evolution</span></a></li>
+    <li><a href="#s12"><span class="n">12</span><span>Limitations</span></a></li>
+    <li><a href="#s13"><span class="n">13</span><span>Technical ambition</span></a></li>
+    <li><a href="#s14"><span class="n">14</span><span>Project scale</span></a></li>
+    <li><a href="#s15"><span class="n">15</span><span>Dependencies vs. own work</span></a></li>
+    <li><a href="#s16"><span class="n">16</span><span>Evidence for letters</span></a></li>
+    <li><a href="#s17"><span class="n">17</span><span>Factual characterizations</span></a></li>
+    <li><a href="#s18"><span class="n">18</span><span>Canonical fact sheet</span></a></li>
+    <li><a href="#s19"><span class="n">19</span><span>Concise descriptions</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ============ 0 ============ -->
+<section id="s0">
+  <h2><span class="n">00</span><span>What was independently executed</span></h2>
+  <div class="h-rule"></div>
+  <p>Everything marked <em>verified</em> in this report was run by the auditor on this host during this session, not read from a status file.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Check</th><th>Invocation</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Non-slow suite</td><td><code>pytest -q -m "not slow"</code></td><td><span class="chip pass">pass</span> 2148 passed, 26 deselected, 3 warnings, 1420 s</td></tr>
+      <tr><td>Slow suite</td><td><code>pytest -q -m slow</code></td><td><span class="chip pass">pass</span> 26 passed, 2148 deselected, 636 s</td></tr>
+      <tr><td>Collected total</td><td><code>pytest --collect-only</code></td><td>2174 tests across 120 modules</td></tr>
+      <tr><td>Full engine pipeline</td><td><code>run_nozzle @…13kn_copper_316l_full_engine.args</code></td><td><span class="chip pass">pass</span> completed; wrote 55 artifacts (STL, STEP, CSV, PNG, JSON)</td></tr>
+      <tr><td>STEP re-import</td><td><code>cadquery.importers.importStep</code></td><td><span class="chip pass">pass</span> <code>wall.step</code> 1 valid solid, 848.583 cm³; injector assembly 5 valid solids, 3088.368 cm³</td></tr>
+      <tr><td>MDO single point</td><td><code>--engine-mdo --pc 3e6 --epsilon 8 --film-frac 0.10</code></td><td><span class="chip pass">ran</span> full report, 31 margins, RQ1 ablation; physics verdict FAIL at that user-chosen point</td></tr>
+      <tr><td>MDO optimizer <em>(API)</em></td><td><code>solve_min_mass(MissionSpec(), 190.0)</code></td><td><span class="chip pass">feasible</span> max_violation 4.9e-11, Isp 224.77 s, objective 35.81 kg</td></tr>
+      <tr><td>MDO optimizer <em>(CLI)</em></td><td><code>--engine-mdo-optimize --isp-min 190</code></td><td><span class="chip block">fails</span> isolated to the CLI’s 10 s <code>--burn-time</code> default — see §12</td></tr>
+      <tr><td>Rao variational BVP</td><td><code>--contour-method rao-bvp --backend jax --max-nfev 400</code></td><td><span class="chip part">converged, refused</span> max_scaled 1.450e-04; export blocked on MOC closure (correct)</td></tr>
+      <tr><td>Published benchmark</td><td><code>run_benchmark("rao1958_nozzle_b","rao")</code></td><td><span class="chip pass">pass 7/7</span> contour RMS 0.00888 Rt (tol 0.015); C<sub>F</sub> 1.5769 vs published 1.5829</td></tr>
+      <tr><td>Requirements layer</td><td><code>--requirements --target-thrust 5000 --isp-min 200</code></td><td><span class="chip pass">ran</span> max_violation 1.66e-11; verdict INDETERMINATE with itemized SP-125 coverage</td></tr>
+      <tr><td>Model registry audit</td><td><code>audit_model_registry(".")</code></td><td><span class="chip pass">pass</span> 61 entries, 17 subsystems, 0 missing sources, 0 incomplete</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="n">01</span><span>Identifying the project</span></h2>
+  <div class="h-rule"></div>
+
+  <h3>What kind of project this is</h3>
+  <p>LREKit is a <strong>hybrid</strong> of four things genuinely present in the tree, not four labels applied to one thing:</p>
+  <ol>
+    <li><strong>Engineering design software.</strong> A parameterized liquid-rocket-engine preliminary design tool that takes an operating point and emits sized geometry, a mass ledger, and manufacturable-format CAD.</li>
+    <li><strong>A simulation/modeling codebase.</strong> Quasi-1-D gas dynamics, an axisymmetric method-of-characteristics (MOC) solver, a finite-dimensional Rao variational boundary-value problem, a 1-D+fin regenerative-cooling march, a Lagrangian spray parcel solver.</li>
+    <li><strong>A differentiable-optimization research project.</strong> A JAX/Optimistix multidisciplinary-feasible (MDF) engine model whose converged implicit states are differentiated through the implicit function theorem, driven by SLSQP with exact reverse-mode Jacobians.</li>
+    <li><strong>A computational research investigation.</strong> A study of the <em>Rao nozzle existence boundary</em> — the region of (expansion ratio, length, γ, ambient ratio) space where no shock-free thrust-optimum contour exists — and whether whole-engine optima migrate toward it.</li>
+  </ol>
+  <p>It is <strong>not</strong> a wrapper around an external solver. Every numerical kernel — the MOC unit processes, the variational BVP residual assembly, the cooling march, the pintle hydraulics, the pump meanline, the B-rep construction — is implemented in this repository. JAX, Optimistix, SciPy, CadQuery/OpenCascade, CoolProp, and RocketCEA provide autodiff, root-finding, linear algebra, geometry Booleans, and fluid/thermochemistry backends; they provide none of the engineering models.</p>
+
+  <h3>What problem it addresses</h3>
+  <p>Preliminary liquid-rocket-engine design is a <em>coupled</em> problem conventionally solved sequentially: pick chamber pressure and expansion ratio, size a contour, check cooling, size an injector, size the feed system, iterate by hand. Each discipline uses low-order screens, and the coupling — the cooling-jacket pressure drop that sets the pump rise, the film-cooling flow that buys wall temperature at the cost of c*, the wall thickness that trades conductance against structure — is resolved by iteration rather than simultaneous solution.</p>
+  <p>LREKit does two distinct things about that. The <strong>traditional path</strong> (<code>raosim/design.py:design_nozzle_v2</code>) runs the sequential chain but instruments it: every model carries a provenance record, every screen carries an applicability scope, and a gap that cannot be computed is reported as <code>unavailable</code> with a reason rather than defaulted. The <strong>MDO path</strong> (<code>raosim/mdo/</code>) turns the same physics into one differentiable residual system, solves the whole engine at once, and hands exact total derivatives to a gradient optimizer under 31 named constraints.</p>
+
+  <h3>What goes in, what comes out</h3>
+  <p><strong>Inputs (traditional).</strong> Chamber pressure, ambient pressure, throat radius <em>or</em> target thrust, expansion ratio, bell length percentage, propellant pair (or explicit oxidizer/fuel + O/F), contour method, chamber <span class="m">L*</span>/contraction ratio, wall and jacket materials, coolant and channel geometry, injector architecture and discharge coefficients, feed architecture with tank pressures and line losses, electric drive and battery constants, CAD options. The CLI exposes <strong>328 distinct flags</strong>.</p>
+  <p><strong>Inputs (MDO).</strong> A <code>MissionSpec</code> (thrust, propellant, ambient, burn time, materials) plus a 10-variable (11 with O/F) design vector: <code>Pc</code>, <code>eps</code>, <code>dp_f_frac</code>, <code>dp_o_frac</code>, <code>D_pintle</code>, <code>N_rpm</code>, <code>channel_width</code>, <code>channel_height</code>, <code>film_frac</code>, <code>t_wall</code>.</p>
+  <p><strong>Outputs.</strong> A contour CSV; profile, cooling, separation, structural, injector, and spray diagnostic PNGs; watertight STL; unit-declared neutral B-rep STEP for nozzle wall, jacket, regen channels, five-part machined pintle injector, and pump package; a pintle dimension table and machining-gate report; a pump BOM and reference geometry; and a <code>summary.json</code> with 39 top-level sections (226 KB on the 13 kN sample) carrying the reliability record, model-provenance audit, physical-release readiness, and every screen’s result.</p>
+
+  <h3>Major components</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Layer</th><th>Location</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>Requirements (Layer 0)</td><td><code>raosim/requirements.py</code></td><td>SP-125 §2.1 requirement set → constraint rows, with coverage verdicts</td></tr>
+      <tr><td>Job / CLI</td><td><code>run_nozzle.py</code> (6641 ln), <code>lrekit/job_cli.py</code>, <code>lrekit/guided.py</code></td><td>328-flag CLI, job verbs (<code>guided</code>/<code>run</code>/<code>validate</code>/<code>catalog</code>), interactive interview</td></tr>
+      <tr><td>Sequential orchestrator</td><td><code>design.py:562 design_nozzle_v2</code></td><td>the traditional design chain and its gates</td></tr>
+      <tr><td>Contour solvers</td><td><code>rao_variational.py</code> (6179), <code>moc.py</code>, <code>nasa_moc.py</code> (3472), <code>conical.py</code>, <code>chamber_geometry.py</code></td><td>Rao/TOP Bézier, direct MOC wall optimization, Rao variational BVP, NASA/JHU port</td></tr>
+      <tr><td>Thermofluids</td><td><code>physics.py</code> (2343), <code>thermofluids.py</code>, <code>thermal_design.py</code> (1460), <code>regen_*.py</code></td><td>Bartz, Sieder–Tate, fin efficiency, Darcy, coolant properties, structural + fatigue screens</td></tr>
+      <tr><td>Injector</td><td><code>injector.py</code> (4349), <code>movable_pintle.py</code>, <code>spray/</code> (14 files)</td><td>pintle hydraulics, Son-2017 movable branch, Lagrangian spray parcel solver</td></tr>
+      <tr><td>Feed system</td><td><code>pumps.py</code> (3916)</td><td>centrifugal meanline, inducer/NPSH, electric drive, battery</td></tr>
+      <tr><td>Mass</td><td><code>mass_ledger.py</code> (1507)</td><td>configuration-controlled hardware mass, CAD-linked where geometry exists</td></tr>
+      <tr><td>CAD</td><td><code>regen_cad.py</code>, <code>injector_coaxial_cad.py</code>, <code>pump_cad_brep.py</code> (1552), <code>engine_cad.py</code>, <code>export.py</code></td><td>STL + B-rep STEP with re-import validity gates</td></tr>
+      <tr><td>Differentiable core</td><td><code>raosim/jax/</code> (13 files, 3380 ln)</td><td>JAX primitives, MOC kernel, thermal, IFT wrappers, sensitivities</td></tr>
+      <tr><td>MDO layer</td><td><code>raosim/mdo/</code> (30 files, 18 745 ln)</td><td>schema, property surfaces, grid, cooling, injector, pump, coupled solve, NLP, snapshot, postprocess</td></tr>
+      <tr><td>Provenance</td><td><code>model_registry.py</code>, <code>validation.py</code>, <code>release_readiness.py</code></td><td>61-entry model registry, reliability labels, release-evidence gates</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>What distinguishes it from a simpler implementation</h3>
+  <p>A minimal “Rao nozzle tool” is a few hundred lines: interpolate θ<sub>n</sub>/θ<sub>e</sub> off the Rao chart, fit a quadratic Bézier, compute C<sub>F</sub> from isentropic relations, plot. That path exists here and is deliberately the <em>default</em>, labeled the trusted baseline. What sits around it:</p>
+  <ul>
+    <li>A <strong>second, independent contour construction</strong> that solves Rao’s variational problem as a boundary-value problem — stationarity, characteristic compatibility, mass and length closure, D-state continuity — and reproduces Rao’s own 1958 published Nozzle B coordinates to 0.0089 R<sub>t</sub> RMS.</li>
+    <li><strong>Two backends</strong> for that solve (SciPy oracle, JAX/Optimistix Levenberg–Marquardt) with parity at ~1e-10, so gradients can be trusted against a non-differentiable reference.</li>
+    <li>A <strong>port of NASA/JHU’s <code>MOC_Grid_BDE</code> C++ code</strong> with bit-parity of the throat-arc kernel march (max |ΔM| ≈ 5e-10 over 120 nodes).</li>
+    <li>A <strong>coupled MDO layer</strong> where the cooling-jacket Δp actually feeds the pump rise, and a single <code>jax.grad</code> flows through two nested implicit solves.</li>
+    <li>A <strong>refusal architecture.</strong> Ten engine outputs are registered <em>unavailable with a stated reason</em> rather than estimated. Contour export is blocked when MOC closure fails. The multipoint job path <em>raises</em> rather than returning a single-point answer labeled as a throttle envelope.</li>
+    <li><strong>Manufacturable-format output.</strong> The injector export builds five solids once, measures each body’s volume from the OpenCascade kernel, writes STEP, re-imports, and compares — so the reported injector mass is measured from the geometry that was exported, keyed by a <code>geometry_id</code> content hash.</li>
+  </ul>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="n">02</span><span>The technical workflow as it exists today</span></h2>
+  <div class="h-rule"></div>
+
+  <h3>2.1 &nbsp;Traditional design chain (the default path)</h3>
+<pre class="flow">CLI flags / .args file / job YAML
+  → <b>input_validation</b>            bounds, unit, consistency checks
+  → <b>cea / propellants</b>           γ, T_c, R, c*_ideal, densities
+        (built-in constant-γ table | RocketCEA snapshot | strict frozen cp(T) table)
+  → <b>throat sizing</b>               Rt from F/(C_F·Pc), or Rt given directly
+  → <b>contour construction</b>        one of four methods (§2.2)
+  → <b>chamber_geometry</b>            L*, contraction ratio, shoulder fillet (auto or scalar),
+                                convergent cone, Ru/Rd throat arcs (Ru from Hall Cd target)
+  → <b>wall_pressure</b>               quasi-1-D wall pressure along the contour
+  → <b>separation</b>                  Summerfield / Kalt–Badal / Schmucker onset screens
+                                (declares free-shock-only topology scope)
+  → <b>boundary_layer_displacement</b>  δ* computed and REPORTED — <b>not fed back</b>
+  → <b>regen_profile / thermal_design</b>  station-wise wall + channel sizing
+  → <b>regenerative_cooling_analysis</b>   Bartz h_g (σ factor) → series wall circuit
+                                (land fin efficiency tanh(mH)/mH) → Sieder–Tate h_c
+                                (+ Shah–London laminar branch) → Darcy Δp march
+  → <b>structural_screen</b>           SP-125 eq. 4-31 combined stress, buckling, Coffin–Manson
+  → <b>injector</b>                    pintle orifice sizing, TMR, blockage factor, spray angle,
+                                chug screen, atomization; feed-pressure ledger
+  → <b>pumps</b>                       meanline duty, Ns/Nss/NPSH, inducer, tip speed,
+                                motor / inverter / battery sizing
+  → <b>mass_ledger</b>                 hardware masses, CAD-linked where geometry was built
+  → <b>export / *_cad.py</b>           STL + B-rep STEP, re-import validity gates
+  → <b>release_readiness</b>           physical-release evidence manifest check
+  → summary.json + artifact set</pre>
+  <p>Manual intervention required: the user supplies <code>Pc</code>, ε, <span class="m">L*</span>, contraction ratio, channel geometry, wall thickness, pintle diameter, pump RPM, and roughly thirty other coupled decisions. Iteration between disciplines is the user’s job on this path — precisely the gap the MDO and requirements layers address.</p>
+  <p>Key assumptions entering: calorically perfect constant-γ expansion (or fixed-composition variable-c<sub>p</sub> on the Bézier path only); inviscid characteristic net; flat-plate boundary-layer displacement; empirical separation onset; one-dimensional coolant march with a land-fin correction; screening structural allowables.</p>
+
+  <h3>2.2 &nbsp;The four contour methods</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Method</th><th>Construction</th><th>Status in code</th></tr></thead>
+    <tbody>
+      <tr><td><code>bezier</code> <em>(default)</em></td><td>Upstream + downstream throat arcs, then a quadratic Bézier bell anchored to Rao-chart θ<sub>n</sub>/θ<sub>e</sub> interpolated on the digitized chart</td><td><span class="chip pass">promoted</span> <code>preliminary_top_geometry</code>, <code>benchmark_validated</code>; deterministic and endpoint-exact</td></tr>
+      <tr><td>conical</td><td>Straight-cone reference</td><td>reference / comparison only</td></tr>
+      <tr><td><code>moc</code></td><td>Axisymmetric characteristic march coupled to a monotone spline wall under SLSQP / Nelder–Mead</td><td><span class="chip part">experimental</span> <code>experimental_moc_geometry</code></td></tr>
+      <tr><td><code>rao-bvp</code></td><td>Rao variational/MOC BVP: NASA-topology seed → control-surface unknowns → stationarity + characteristic compatibility + mass/length closure + D-state continuity</td><td><span class="chip part">experimental</span> exports only when every gate passes</td></tr>
+    </tbody>
+  </table></div>
+  <p>The <code>rao-bvp</code> residual assembly (<code>rao_variational.py:3354</code>) stacks fifteen named residual groups — mass, length, transversality, stationarity, algebraic stationarity, left-Mach geometry, C+ and C− axisymmetric compatibility, CE geometry, smoothness regularization, penalties, and four coupled-wall blocks — each individually scaled and individually switchable, with a configurable <code>physics_weight</code> on the derivative-form groups. That structure is what makes the solve auditable: a failing design says <em>which</em> physical closure failed.</p>
+
+  <h3>2.3 &nbsp;The differentiable MDO chain</h3>
+<pre class="flow"><b>MissionSpec.for_thrust(F) / .for_propellant(name, F)</b>
+    architecture derived from physics, not hard-coded:
+    At = F/(C_F·Pc); chamber length from L*/CR; channel count ∝ circumference at
+    fixed manufacturable pitch; D_pintle sized to mid-band blockage factor;
+    pump speed from specific speed ω = Ns(g0H)^¾/√Q  (bigger engines run slower)
+  → default_design_space() → ScaledSpace unit-box affine scaling
+  → <b>solve_engine(x, mission)</b>:
+        OUTER Optimistix Newton root on (Rt, mdot)                  [IFT-differentiated]
+          → <b>mdo.properties</b>  C¹ Fritsch–Carlson / tensor-Hermite chamber surfaces
+                            γ(Pc,O/F), T_c, c*_ideal — hash-pinned packaged CEA tables
+          → <b>mdo.nozzle</b>      typed ContourProvider (analytic TOP) → station grid
+          → <b>mdo.cooling</b>     INNER Newton root on stationwise T_wg vector    [IFT]
+                            Bartz h_g (0.026, σ factor) → land-fin series circuit →
+                            Sieder–Tate h_c → counterflow upwind finite-volume march;
+                            liquid-film phase-change model, η_fc derived from
+                            Knuth's critical flow-per-circumference
+          → <b>mdo.injector</b>    orifice metering, TMR, blockage, Son-2017 two-branch
+                            minimum area (never a differentiable min())
+          → <b>CLOSE THE HYDRAULIC EDGE</b>:
+                Δp_rise = Pc(1+χ) + Δp_regen + Δp_line − P_tank
+          → <b>mdo.pump</b>        meanline duty, C¹ η(Ns) surrogate, Nss/tip-speed screens,
+                            Lee-2021 battery epigraph (energy- and power-limited
+                            branches kept separate — no max() in the core)
+          → <b>mdo.mass</b>        Pappus/shell chamber mass from the same station grid
+          → <b>mdo.constraints</b> 31 rows: 23 hard, 7 mandatory final gates, 1 report-only
+  → <b>mdo.nlp.solve_min_mass</b>  jacrev exact constraint Jacobian → SLSQP ε-constraint solve
+  → <b>mdo.nlp.pareto_frontier</b> warm-started ε-sweep
+  → <b>mdo.state / snapshot</b>    versioned fixed-shape output contract
+  → <b>mdo.postprocess.reevaluate</b> → design_nozzle_v2 with pinned chamber thermochemistry
+                            → authoritative contour, pump sizing, report, CAD
+  → <b>compare_snapshots</b>       common-scalar and profile parity between pipelines</pre>
+  <div class="note">
+    <span class="lbl">Verified on this host</span>
+    <p><code>solve_engine</code> at Pc 3 MPa / ε 8 / film 10 % converges the outer state to residual 1e-11 and the cooling residual to 9.2e-12, closes the jacket→pump edge (Δp<sub>regen</sub> 1.03 bar → fuel pump rise 33.03 bar), and reports all 31 margins. <code>solve_min_mass</code> at <code>MissionSpec()</code> and Isp floor 190 s reaches <code>max_violation</code> 4.9e-11 with <code>film_frac</code> = 0.183 active — the optimum is genuinely thermal-limited, as intended.</p>
+  </div>
+
+  <h3>2.4 &nbsp;Where the two pipelines meet</h3>
+  <p><code>mdo/snapshot.py</code> (3703 lines) defines one versioned host contract that both the MDO solve and the traditional <code>design_nozzle_v2</code> run map into, with a field manifest, normalized profiles, and <code>compare_snapshots</code> for common-field parity. <code>mdo/postprocess.reevaluate</code> pins the MDO’s exact solved γ/T<sub>c</sub>/R/c* and property-surface fingerprint into the traditional workflow so the authoritative re-evaluation cannot silently drift onto different thermochemistry.</p>
+
+  <h3>2.5 &nbsp;The research workflow (Rao existence boundary)</h3>
+  <p><code>rao_existence_scan.py</code> (2843 lines) is deliberately kept out of the JAX stack — pure NumPy, sandbox-runnable. It samples (θ<sub>B</sub>, <code>kernel_d_fraction</code>) pairs, builds the NASA-style kernel, marches the DE characteristic from point D under three named D-attachment closures (<code>smooth</code>, <code>position</code>, <code>fan</code>), and records exit residuals plus Rao’s Eq. (5) radial-increment validity per segment.</p>
+  <p>The generated artifact <code>rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json</code> (101 932 bytes, SHA-256 <code>a85de663…</code>) is a 65-knot (13 ε × 5 L%) map at fixed γ = 1.4, P<sub>a</sub>/P<sub>0</sub> = 0.01, R<sub>t</sub> = 0.020 m: <strong>40 knots <code>converged_valid</code>, 25 <code>not_converged</code></strong>, zero <code>converged_invalid</code>/<code>numerical_failure</code>/<code>under_resolved</code>/<code>unevaluable</code>. Fail-closed lookup over 48 cell midpoints returns 23 <code>supported</code>, 11 <code>refused_not_converged</code>, 14 <code>unknown_under_resolved</code>.</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="n">03</span><span>What it can actually do today</span></h2>
+  <div class="h-rule"></div>
+
+  <h3><span class="chip pass">A</span>&ensp;Implemented and demonstrated</h3>
+  <ul>
+    <li><strong>Rao/TOP Bézier contour generation</strong> with interpolated chart angles, a chart-domain gate, and endpoint-exact construction. Verified by execution.</li>
+    <li><strong>Full traditional engine sizing</strong> from an operating point through contour, chamber, regen wall, thermal, structural, pintle injector, and electric pump to a 55-artifact package. Verified end-to-end.</li>
+    <li><strong>B-rep CAD export with independent re-import validation.</strong> Verified: generated STEP files re-import as valid solids with expected solid counts and volumes. Machining gates (radial cut-through, corner radius, minimum tool diameter, faceplate pocket depth, bolt land, bolt-manifold clearance, inlet velocity) evaluate and report pass/warn per feature.</li>
+    <li><strong>The Rao variational/MOC BVP solve</strong> on both backends, reaching <code>max_scaled</code> ≈ 1.4e-4 with converged mass/length closure. Verified.</li>
+    <li><strong>Strict published-data benchmark against Rao 1958 Nozzle B</strong>: geometry, contour RMS, direct-integration C<sub>F</sub>, and design exit Mach all inside declared tolerances. Verified.</li>
+    <li><strong>Coupled differentiable engine solve</strong> with exact total derivatives through two nested IFT solves, matched to re-solved central differences. Verified.</li>
+    <li><strong>ε-constraint NLP reaching a feasible KKT-scale point</strong> with coking hard-enforced via film cooling. Verified through the Python API.</li>
+    <li><strong>The requirements layer</strong>: SP-125 §2.1 items mapped to constraint rows with <code>enforced</code>/<code>partially_enforced</code> classification, explicit “missing components” lists, and three verdict states including <code>INDETERMINATE</code>. Verified via CLI.</li>
+    <li><strong>The model-provenance registry</strong>: 61 entries, 17 subsystems, machine-audited for local source routing and heuristic labeling. Verified: audit passes.</li>
+    <li><strong>A 224-file Markdown mirror of 190 unique PDFs (12 047 source pages)</strong> with a per-paper extraction manifest and confidence flags — the citation substrate the docs route claims through.</li>
+    <li><strong>Packaging</strong>: <code>lrekit</code> 0.1.1 wheel and sdist built; four console entry points; CI running the non-slow suite on Python 3.12; a trusted-publishing release workflow; a <code>v0.1.0</code> tag.</li>
+  </ul>
+
+  <h3><span class="chip part">B</span>&ensp;Implemented but preliminary or approximate</h3>
+  <ul>
+    <li><strong>All thermal, structural, and life models are screens.</strong> Bartz + Sieder–Tate + fin is a 1-D+fin circuit, not conjugate heat transfer. SP-125 eq. 4-31 combined stress is static. The liner buckling model is explicitly labeled a rib-supported long-plate screening assumption, not SP-125 eq. 4-29 or a qualification calculation.</li>
+    <li><strong>Separation is empirical onset only</strong> — and the code says so: <code>separation_pattern_scope == "free_shock_separation_only"</code>, <code>restricted_shock_separation == "not_modelled"</code>, citing Frey &amp; Hagemann for why an onset pressure ratio cannot represent RSS in exactly the contour family this tool generates.</li>
+    <li><strong>The pump efficiency surface</strong> is a smooth log-Gaussian η(N<sub>s</sub>) surrogate calibrated to the SP-125 60–85 % band. The band is literature-verified; the peaked <em>shape</em> is a screening fit, and the code says so.</li>
+    <li><strong>Chamber property surfaces cover four propellant pairs</strong> (LOX/RP-1, LOX/LCH4, LOX/LH2, N2O4/MMH) at the chamber only. Coolant (T,p)/CoolProp surfaces are unwired, so real-fluid coolant HTD coverage for cryogens is registered unavailable and authoritative LOX/LCH4 and LOX/LH2 optimization stops at model-coverage preflight.</li>
+    <li><strong>The film-cooling model</strong> correctly rejects the classical gaseous ε = C(X/VR)<sup>−0.8</sup>Re<sup>0.2</sup> correlations (an RP-1 film runs at VR ≈ 10⁻³, three orders below their calibration band) and implements a liquid phase-change model instead, with η<sub>fc</sub> derived from Knuth’s critical flow-per-circumference rather than fitted. Its own error bars are stated: Woodmansee &amp; Hanratty measured Γ<sub>cr</sub> ≈ 3× lower than Knuth; Stechman’s model errs −20 %…+13 %.</li>
+    <li><strong>The Lagrangian spray solver</strong> is explicitly one-way: the carrier is prescribed and does not consume parcel source terms; droplet temperature and carrier energy are not solved.</li>
+    <li><strong>Pump and injector CAD</strong> is reference geometry for layout and trade review. The legacy triangle-mesh pump path self-labels <code>schematic_only</code>.</li>
+  </ul>
+
+  <h3><span class="chip part">C</span>&ensp;Partially implemented</h3>
+  <ul>
+    <li><strong>Boundary-layer displacement is computed and never fed back.</strong> <code>physics.boundary_layer_displacement</code> is called once in <code>design.py:716</code>, the result is reported, and the wall is not moved. Throat Reynolds number is not computed anywhere for the nozzle. No CLI flag exposes a viscous correction; <code>INTEGRATION_PROGRAM_2026-08-22.md</code> §0 documents this precisely, quoting the SP-8120 procedure the tool is missing.</li>
+    <li><strong>The B3 post-solve contour validator</strong> has a landed typed contract but no qualification. All three real probes (12×12 coupled, 24×24 BDE, 32×32 BDE) return <code>UNKNOWN</code>: the BVP converges, Rao Eq. (5) passes, full C-D-E performance is available, but forward-MOC neighbor-Mach smoothness measures 0.11810 and 0.13748 against a repository-policy limit of 0.10.</li>
+    <li><strong>The B5 convergence-domain map</strong> exists for exactly one fixed physical slice. 25 of its 65 knots did not converge. It is kernel-refinement evidence, not proof of full mesh or full-BVP convergence.</li>
+    <li><strong>J6 v2 total design derivatives</strong> remain deferred (<code>jax/sensitivities.py:24</code>). Sensitivities reach the control surface, not manufacturable wall coordinates.</li>
+    <li><strong>Chamber mass from disjoint liner/ribs/jacket CAD</strong> is partial; MDO injector mass and chamber/nozzle CAD-linked qualification remain unavailable, so whole-engine dry mass stays <code>None</code> plus a reason.</li>
+    <li><strong>The requirements layer’s three-layer design is one-third built.</strong> Requirement mapping (layer 3) is implemented and CLI-reachable; O/F as a variable (part of layer 2) is implemented; architecture enumeration as an outer discrete loop and multi-start (layer 1) do not exist — <code>grep</code> finds no multi-start or architecture-enumeration code anywhere.</li>
+  </ul>
+
+  <h3><span class="chip part">D</span>&ensp;Currently under active implementation</h3>
+  <p>Evidence from the last four commits (2026-08-06 → 2026-08-24) and the dated status heads:</p>
+  <ul>
+    <li><strong>Track B, contour and property closure.</strong> B2 (typed <code>mdo/nozzle.py</code> adapter) and B4 (Rao valid/invalid boundary on export) landed 2026-08-22; B3 and B5 landed as contracts 2026-08-24 and are in the qualification stage now.</li>
+    <li><strong>Track G, hardware mass and CAD.</strong> G1 (real CadQuery volume/STEP round-trip for the injector) landed 2026-08-22, verified in this audit. G2 is in progress.</li>
+    <li><strong>Honesty/scope gates.</strong> The most recent commits added <code>manufacturing_limits.py</code> (milled-channel practice limits from Wadel 1997), the separation topology scope declaration, and the <code>mdo/metrics.py</code> unavailable-metric registry — all shipped as gates before the corresponding models.</li>
+    <li><strong>Fidelity roadmap items §3.1, §4.1, §5.1</strong> landed as scope/validity gates per the roadmap’s 2026-08-24 status head; remaining items are analysis-only.</li>
+  </ul>
+
+  <h3><span class="chip plan">E</span>&ensp;Planned or documented but not implemented</h3>
+  <p>From <code>COMPLETION_PLAN.md</code>’s deduplicated backlog (Tracks A–G), explicitly TODO with no implementation in the tree:</p>
+  <ul>
+    <li><code>mdo/multipoint.py</code> (Phase 10) — the largest single item; <code>mdo/job.py:542</code> currently <em>raises</em> on more than one operating point.</li>
+    <li><code>mdo/continuation.py</code> — pseudo-arclength continuation (Keller 1977) for tracking through folds.</li>
+    <li>σ<sub>min</sub>(R<sub>u</sub>) and λ<sub>min</sub>(H<sub>red</sub>) diagnostics with a mesh-convergence gate.</li>
+    <li>Quasi-2-D cooling (Phase 4b) as a post-optimum check; Betti-style conjugate coupling validation.</li>
+    <li>Independent held-out CEA/CoolProp re-evaluation of the final optimum; discrepancy-correction/trust-region loop.</li>
+    <li>Boundary-layer displacement iteration; variable-γ frozen MOC; FSS/RSS topology classifier; equilibrium chemistry; compressible integral BL; PNS validation layer; Rao adjoint (J6 v2).</li>
+    <li>Traditional pump BOM mass model; configuration-controlled chamber/nozzle + injector mass models.</li>
+    <li>A <code>ResolvedEngineConfiguration</code> object binding solved state → exported geometry → mass ledger → BOM by content hash (identified as the highest-leverage missing item).</li>
+    <li>Igniter model <span class="chip block">blocked</span> (no source in the corpus). Combustion-response function for stability <span class="chip block">half-blocked</span> (SP-8113 gives the damping half, not the response half).</li>
+    <li>L4 datum/feature-control scaffolding and tolerance-stack input contract <span class="chip block">blocked on standards</span>.</li>
+    <li>Side-load estimate — deliberately staying unavailable.</li>
+  </ul>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="n">04</span><span>What was actually built</span></h2>
+  <div class="h-rule"></div>
+  <p>Single-author repository: 72 commits, all by Ibrahim Shahid, 2026-02-22 → 2026-08-24 (plus one 2025-06-22 file upload). Ten of the 72 are GitHub merge commits from five early feature branches. There is no evidence of any other human contributor in the artifacts.</p>
+
+  <h4>Numerical method implementation</h4>
+  <ul>
+    <li>Implemented Rao’s 1958 optimum-thrust variational problem as a finite-dimensional BVP: control-surface unknowns, stationarity residuals from the thrust/mass-flow integrands with Lagrange multipliers λ₂/λ₃, transversality at the exit, axisymmetric C+/C− compatibility, mass and length closure, and continuity with an upstream characteristic kernel.</li>
+    <li>Implemented an axisymmetric MOC solver (interior, axis, wall unit processes) and a Kliegel–Levine/Sauer transonic starting-line kernel.</li>
+    <li>Ported NASA/JHU’s <code>MOC_Grid_BDE</code> C++ throat-arc kernel and Rao B-D-E topology routines to stagnation-normalized Python (<code>build_kernel</code>, <code>calc_massflow_along_rrc</code>, <code>nasa_deriv</code>/<code>nasa_runge_kutta</code>, <code>find_point_e</code>, <code>calc_lrc_de</code>, <code>set_theta_b</code>).</li>
+    <li>Reimplemented that kernel march in JAX with a padded grow-by-one row policy reproducing NASA’s exact decision/width/pairing logic at bit parity (max |ΔM| ≈ 5e-10) while keeping static shapes, so d(BD)/dθ<sub>B</sub> is exact to ~1e-8 versus finite differences.</li>
+  </ul>
+
+  <h4>Model derivation and correction</h4>
+  <ul>
+    <li>Corrected the characteristic compatibility invariants across the whole codebase (commit <code>c9261ae</code>): enforced C+: d(θ−ν) = −S ds and C−: d(θ+ν) = +S ds with S = sinθ·sinμ/r, removing a spurious cosμ/cos(θ±μ) factor mirrored through <code>rao_residuals</code>, <code>moc</code>, and both JAX implementations.</li>
+    <li>Identified and fixed the length-constraint formulation (commit <code>44953ee</code>): Rao’s constraint is the exit station L = z<sub>C</sub> + ∫cot(φ)dr, whereas the legacy Σdx double-counted x<sub>D</sub> against the x<sub>E</sub> pin, making the two constraints contradictory and driving <code>kernel_d_fraction</code> to the throat plane. The code comment records the observed symptom (kdf → 0.02 drift) and why it was invisible before the kernel fix.</li>
+    <li>Removed a degenerate optimization basin (commit <code>3fa01b0</code>) by making left-Mach geometry exact by construction — reconstructing <code>ce.x</code> from dx/dr = 1/tan(θ+μ) and dropping x from the packed unknown vector (4n → 3n), so the solver could no longer satisfy geometry by moving x.</li>
+    <li>Zeroed the CE Mach-monotonicity penalty under the characteristic formulation after determining the control surface crosses streamlines, so M need not be monotone along it, and that the penalty was strong enough to displace the correct solution branch.</li>
+    <li>Fixed the folded-RRC mass integral (commit <code>1be73e2</code>) with a regularized product form so mass stays finite and monotone when dr = 0.</li>
+    <li>Replaced the binned <code>pumps.py:_estimate_pump_efficiency</code> (a C0 step in Q, undifferentiable at bin edges) with a C¹ η(N<sub>s</sub>) surrogate, demonstrating the property in a test where finite differences converge to the analytic gradient at a point where the binned estimator’s FD diverges.</li>
+    <li>Corrected the film-cooling model from a gaseous-coolant correlation family to a liquid phase-change model, retaining the gaseous VR as a pinned diagnostic so the inapplicability stays documented.</li>
+    <li>Corrected the separation criteria to Östlund’s Eq. 29/30 forms and relabeled the criterion attribution.</li>
+    <li>Corrected the load-bearing literature attribution in the MDO plan (Rao 1958 vs Rao 1999) after reading the source PDFs rather than inferring from filenames.</li>
+  </ul>
+
+  <h4>System architecture and integration</h4>
+  <ul>
+    <li>Designed and built the <code>raosim/mdo/</code> layer (30 modules) as a pure-numerical differentiable core with an explicit rule set: never substitute a Bézier contour for a failed Rao solve; pin the c* convention in one place; differentiate converged states via the IFT, never through solver iterations; keep discrete variables discrete in an outer enumeration; no <code>max()</code> in the differentiable core; every JAX block keeps a NumPy oracle with a ~1e-10 parity test; CAD generation is post-optimum only.</li>
+    <li>Closed the §5 hydraulic edge — replacing a <code>regen_dp_allowance = 0</code> placeholder with the actual cooling-jacket Δp feeding the pump rise — and verified a single gradient flows through it.</li>
+    <li>Built a versioned snapshot contract shared by both pipelines, with strict handoff validation, solved-chamber-state pinning, and digest-linked report/CAD metadata.</li>
+    <li>Built the 31-row constraint manifest as a single owned object carrying row order, applicability, availability, scaling, optimizer role, and source identifier per row.</li>
+    <li>Built a 61-entry model-provenance registry with a machine audit that fails when a declared local source is absent, a published entry has no local source route, or a repository-created heuristic is not labeled as one.</li>
+    <li>Built the requirements layer mapping SP-125 §2.1’s nine design parameters onto constraint rows with coverage classification.</li>
+    <li>Built a job/CLI layer (<code>guided</code>, <code>run</code>, <code>validate</code>, <code>catalog</code>) as an additive translator over the existing 328-flag CLI, motivated in its own docstring by the observation that O/F optimization was implemented long before it was reachable from a command line.</li>
+  </ul>
+
+  <h4>Geometry and CAD</h4>
+  <ul>
+    <li>Rebuilt the pintle injector CAD from a two-ring-manifold machined scheme to the coaxial five-part TRW/Nardi architecture after determining the old scheme could not realize a pintle’s flow topology — an outer-radius ring manifold can neither feed the central bore nor stay sealed from it. The replacement carries a flow-separation audit asserting the circuits stay sealed until chamber exit.</li>
+    <li>Built B-rep constructors for nozzle wall, regen channels with manifolds and ports, pump impeller/inducer/diffuser/volute with log-spiral camber blades, engine assembly, and flange interfaces — each with export → re-import → <code>isValid</code> / solid-count / volume gates.</li>
+    <li>Implemented CAD-linked mass: the injector exporter builds each solid once, measures its volume from OpenCascade, and keys the ledger to a <code>geometry_id</code> content hash, with a STEP round-trip volume comparison.</li>
+  </ul>
+
+  <h4>Data and provenance infrastructure</h4>
+  <ul>
+    <li>Assembled a 255-PDF literature corpus and converted 190 unique PDFs (12 047 pages) into a 224-file Markdown mirror with a per-paper extraction manifest, confidence flags, page-level traceability markers, and an index — so claims cite line numbers into extracted text rather than filenames.</li>
+    <li>Built seven benchmark case manifests with source PDF SHA-256 hashes, per-metric tolerances and modes, and explicit <code>expected_physics_gaps</code>, plus eight digitized reference curves.</li>
+    <li>Sampled and packaged four hash-pinned CEA property tables with an every-cell held-out value-and-gradient gate against RocketCEA.</li>
+  </ul>
+
+  <h4>Debugging and investigation</h4>
+  <ul>
+    <li>Investigated the provenance of NASA’s checked-in <code>TT'.out</code> reference fixture, traced the upstream commit timeline, and concluded the generating executable is not present in the local tree or the public history — then demoted that fixture from promotion authority to a historical overlay and made the visible source-port workflow the canonical reference track.</li>
+    <li>Diagnosed why coking was infeasible throughout the old design box: an empirical probe established the wall is <strong>coolant-enthalpy-limited, not film-coefficient-limited</strong> (T<sub>wc</sub> tracks coolant exit temperature; the full channel-geometry box moved it only 1241 → 1124 K), which identified film cooling — not channel geometry — as the lever. Adding <code>film_frac</code> made the constraint satisfiable at 7.7 % film and turned the Pareto front genuinely thermal-limited.</li>
+    <li>Found and fixed two defects in the cooling march while completing it: an off-by-one/double-counted segment in the march quadrature, and a silent <code>land</code> clamp hiding the channel-fit constraint (now exposed as <code>land_min</code>).</li>
+    <li>Found that <code>jacfwd</code> silently drops the tangent of a geometry-only <code>jnp.min</code> margin through jitted nested Optimistix root-finds, verified it against finite differences, and switched the constraint Jacobian to reverse mode with a documented warning not to revert.</li>
+    <li>Found two dead design variables (zero Jacobian column <em>and</em> zero objective gradient) and removed or fixed them: <code>film_slot_height</code> (physically inert for a liquid film) removed; <code>D_pintle</code> made live by constraining blockage factor. The guide ships the re-check snippet.</li>
+    <li>Found that <code>jax/primitives.py:mach_from_area_ratio</code> seeded its subsonic branch with a scalar, breaking array inputs, and fixed it to a shape-matched seed with scalar results bit-identical.</li>
+    <li>Found that a 130 kN run had <em>no feasible point in the box</em> with hand-tuned 13 kN defaults, and derived the whole architecture from physics instead.</li>
+  </ul>
+
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="n">05</span><span>Technical depth</span></h2>
+  <div class="h-rule"></div>
+
+  <h3>5.1 &nbsp;Solving Rao’s variational problem as a BVP rather than reading his chart</h3>
+  <p><strong>The problem.</strong> Rao’s 1958 optimum-thrust contour is the solution of a constrained variational problem: maximize thrust at fixed mass flow with the control surface forced to be a characteristic surface, via Lagrange multipliers. Rao states the optimality condition “is implicit in the solution” of the governing equations. Standard practice — including the default path here — replaces that with the Rao/TOP parabola: a chart of θ<sub>n</sub> and θ<sub>e</sub> fitted to the family of exact solutions.</p>
+  <p><strong>Why it is nontrivial.</strong> The exact solve is a coupled two-point BVP over a control surface whose geometry, flow state, and multipliers are simultaneously unknown, closed by mass flow, length, transversality, and continuity with an upstream characteristic kernel. It has degenerate basins (the x-freedom removed in <code>3fa01b0</code>), contradictory constraint pairs when the length convention is wrong (fixed in <code>44953ee</code>), and regions where no shock-free solution exists at all.</p>
+  <p><strong>How it is addressed.</strong> Fifteen named residual groups, each independently scaled and switchable, over a packed unknown vector; a NASA-topology seed from the ported kernel; two solver backends with parity tests; a constraint-weight ladder; and export gates that refuse geometry failing MOC closure, endpoint tangency, or Rao’s Eq. (5) validity.</p>
+  <p><strong>How complete.</strong> Genuinely solved for the strict benchmark case: Rao 1958 Nozzle B reproduces at 0.0089 R<sub>t</sub> contour RMS with C<sub>F</sub> 1.5769 against Rao’s published 1.5829. Not solved as a promotable general path: <code>BENCHMARK_VALIDATED_AT_RELEASE = False</code>, MOC-net compatibility blocks export on the general case run in this audit, and the B3 validator returns <code>UNKNOWN</code> on all three real probes.</p>
+
+  <h3>5.2 &nbsp;Exact total derivatives through a coupled engine with nested implicit solves</h3>
+  <p><strong>The problem.</strong> To hand a gradient optimizer exact derivatives of engine performance and constraints, the derivatives must flow through two nested root-finds — an outer Newton on (R<sub>t</sub>, ṁ) and an inner Newton on a stationwise wall-temperature vector — plus an explicit injector/pump/battery chain.</p>
+  <p><strong>Why it is nontrivial.</strong> Differentiating through solver iterations (unrolling) is numerically poor and memory-expensive; the correct approach is the implicit function theorem on the converged state. Doing that inside JAX requires the residual to be a pure function with static shapes, no host callbacks, and no non-smooth branches — which rules out <code>max()</code>, binned lookups, integer relaxation, and CAD Booleans, all of which appear naturally in this physics.</p>
+  <p><strong>How it is addressed.</strong> Every implicit state is closed with <code>optx.root_find</code> and IFT-differentiated. The battery’s two limiting branches are kept as separate epigraph quantities instead of a <code>max()</code>. The movable-pintle minimum area is kept as two exposed branches with a consistency inequality instead of a <code>min()</code>. Discrete counts (channels, slots, stages, blades, materials, bus voltage class) stay in an outer enumeration. The pump efficiency step function was replaced with a C¹ surrogate. Every JAX block keeps a NumPy oracle at ~1e-10 parity, and inner residuals are converged ≥100× tighter than optimizer feasibility.</p>
+  <p><strong>How complete.</strong> Working and gated: AD versus re-solved central differences matches to &lt;1e-4 (plan gate) and in practice ~1e-5 on the skeleton; forward and reverse agree; jit-safe. One documented sharp edge: forward mode drops a geometry-only <code>jnp.min</code> tangent through the jitted nested root-finds, so the constraint Jacobian is reverse-mode.</p>
+
+  <h3>5.3 &nbsp;The Rao existence boundary as a computed object</h3>
+  <p><strong>The problem.</strong> Rao 1999 (AIAA 99-2584) Eqs. (2), (3), and (5) give a per-segment radial-increment criterion: the simultaneous solution of the two finite-difference compatibility equations cannot continue unless dR is positive, and Eq. (5)’s zero is the boundary. This is a <em>physical</em> existence statement, distinct from numerical non-convergence and distinct from optimality.</p>
+  <p><strong>Why it is nontrivial.</strong> Three different failure modes look identical from outside a solver: the physical boundary (no shock-free solution exists), numerical solvability (σ<sub>min</sub> of the residual Jacobian), and optimality (λ<sub>min</sub> of the reduced Hessian). Conflating them produces false conclusions in either direction. The plan explicitly names this as the failure to avoid.</p>
+  <p><strong>How it is addressed.</strong> <code>rao_radial_increment_validity</code> evaluates Eq. (5) directly by midpoint quadrature, returning per-segment predicted dR/R, the limiting segment, evaluability, and a specific reason for each unevaluable segment — refusing to clamp or substitute when M ≤ 1 or the radius is non-positive. Eq. (6) is retained only as a labeled legacy diagnostic. Contour export refuses invalid or unevaluable results.</p>
+  <p><strong>How complete.</strong> Diagnostic 1 (physical validity) is done. Diagnostics 2 and 3 (σ<sub>min</sub>, λ<sub>min</sub> with a mesh-convergence gate) are not implemented. The domain map covers one fixed slice with 40/65 knots converged. Continuation through folds is not implemented.</p>
+
+  <h3>5.4 &nbsp;Making a low-order screen’s error bar visible instead of absorbing it</h3>
+  <p><strong>The problem.</strong> Gradient optimization against low-order screens drives designs into exactly the regions where those screens are least accurate. This is the plan’s own stated risk.</p>
+  <p><strong>Why it is nontrivial.</strong> The mitigations — constraining designs to a screen’s calibration envelope, adding discrepancy margins, trust-region correction — all require knowing where the envelope is, which is a literature question, not a coding one.</p>
+  <p><strong>How it is addressed today, mostly by gates rather than models:</strong> a chart-domain constraint preventing clamping from being read as extrapolation; a property-domain constraint keeping the optimizer inside the sampled table; a <code>film_slot_validity</code> diagnostic pinned by a test that keeps the gaseous-correlation inapplicability documented; a separation-topology scope field; milled-channel practice limits from Wadel 1997; a coolant-HTD applicability screen returning <code>unknown</code> for cryogens; and ten registered-unavailable outputs.</p>
+  <p><strong>How complete.</strong> The gates are shipped. The higher-fidelity verification layers that would quantify the deltas (quasi-2-D cooling, conjugate coupling, held-out CEA/CoolProp re-evaluation, trust-region correction) are all TODO.</p>
+
+  <h3>5.5 &nbsp;Hardware geometry that the mass number actually comes from</h3>
+  <p><strong>The problem.</strong> A mass ledger built from profile integrals and a CAD package built from the same parameters can silently disagree, and the optimizer will happily minimize the integral.</p>
+  <p><strong>How it is addressed.</strong> For the injector: <em>build once</em> — the exporter constructs the five solids, measures each body’s volume from OpenCascade, writes STEP, re-imports, compares volumes, and stamps a <code>geometry_id</code> hash. <code>cad_linked_mass_eligible</code> gates whether the ledger may use those numbers. Verified in this audit: measured vs round-tripped volumes agree to ~1e-9 relative on four of five parts and ~3e-5 on the injector body.</p>
+  <p><strong>How complete.</strong> Done for the injector (plan item G1). Chamber mass from disjoint liner/ribs/jacket CAD is partial; the pump BOM mass model and configuration-controlled chamber/nozzle mass models are TODO; consequently whole-engine dry mass is <code>None</code> with a reason rather than a number.</p>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="n">06</span><span>Technical maturity</span></h2>
+  <div class="h-rule"></div>
+  <p>The right question for this project: <em>how far can its outputs be carried, and by whom?</em></p>
+
+  <h4>As engineering-design software</h4>
+  <p>Its outputs are a credible starting point for detailed engineering — a solid model you can open in a CAD system, a channel layout passing millability checks, a mass breakdown, and a documented list of what has <em>not</em> been checked. They are not a basis for fabrication. Every contour is stamped <code>hardware_qualified = False</code>; the physical-release gate on the 13 kN sample blocked with 17 missing external-evidence requirements (CFD, CHT, FEA, drawings, proof test, cold flow, hot fire). The tool is explicit that it can <em>record</em> that evidence and cannot <em>create</em> it.</p>
+
+  <h4>As a simulation/modeling codebase</h4>
+  <p>The verification is unusually strong for a single-author research tool and the physical validation is thin — and the code says so in those words. Verified today: 2174 tests green; NumPy↔JAX parity at ~1e-10 across blocks; AD-vs-FD gates; a bit-parity port of a NASA reference kernel; one strict published-geometry benchmark passing on seven metrics. Absent: any CFD comparison, any conjugate heat-transfer comparison, any FEA, any experimental data. The credible regime is inviscid, calorically-perfect, attached axisymmetric flow at moderate area ratio for geometry, and screening-level for everything thermal, structural, and combustion-related.</p>
+
+  <h4>As a differentiable-MDO research artifact</h4>
+  <p>The machinery works and is gated. A single solve reaches a feasible point with scaled <code>max_violation</code> ~1e-11 and exact reverse-mode Jacobians. What is missing to make it a <em>research result</em> rather than a working machine: multipoint (Phase 10), independent higher-fidelity verification of the optimum (Phase 11 D1–D4), and the KKT stationarity computation the plan’s own Phase-9 gate still asks for — the current code treats SciPy success plus feasibility as a KKT pass.</p>
+
+  <h4>As a tool another person could use</h4>
+  <p>Partly. It installs, has four console entry points, a guided interview, job verbs, a catalog, argument files, and 7600 words of README. But a user must still supply ~40 coupled decisions on the traditional path, the requirements layer covers only a screened subset of what it would need to answer “give me 5 kN at 250 s under 30 kg,” and — as this audit found — the documented optimizer CLI invocation fails on its own default burn time.</p>
+
+  <h4>As a research investigation into the Rao boundary</h4>
+  <p>Early. Diagnostic 1 is a computed object; the domain map is one slice with 40/65 knots; diagnostics 2 and 3 and continuation do not exist; RQ3 and RQ4 have not been run. The prior-art caveat is already recorded in the plan: Rao 1999 Fig. 7 shows length-limited vacuum optima sitting <em>on</em> the valid boundary, so the novelty claim would have to be engine-level masking, not the existence of the effect.</p>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="n">07</span><span>Intended system, current build, and “done”</span></h2>
+  <div class="h-rule"></div>
+
+  <h3><span class="chip pass">A</span>&ensp;What exists now, as pieces of the eventual system</h3>
+  <ul>
+    <li>The <strong>physics layer</strong> — contour, thermal, structural, injector, spray, feed — is the layer the eventual system consumes rather than replaces.</li>
+    <li>The <strong>differentiable core</strong> is architecturally the right shape for the endpoint: <code>solve_engine(x, mission)</code> is a pure function, exactly what a <code>vmap</code>-over-operating-points multipoint layer needs.</li>
+    <li>The <strong>output contract</strong> (<code>state.py</code> → <code>snapshot.py</code> → <code>postprocess.py</code>) is the seam through which higher-fidelity verification layers would report deltas, and it already carries the comparison machinery.</li>
+    <li>The <strong>constraint manifest</strong> is a single owned object with per-row applicability and availability, so new constraints and gates attach at one place.</li>
+    <li>The <strong>CAD layer with re-import gates and geometry IDs</strong> is the substrate for the configuration-controlled dataset the endpoint requires.</li>
+    <li>The <strong>provenance layer</strong> is the substrate for every claim the endpoint would make.</li>
+  </ul>
+  <p>None of these read as throwaway experiments. Each is a load-bearing piece of the target.</p>
+
+  <h3><span class="chip part">B</span>&ensp;What is being built right now</h3>
+  <p><strong>Contour closure (Track B).</strong> B3’s promotion gate is forward-MOC compatibility on real solves: neighbor-Mach smoothness is 0.118 and 0.137 against a 0.10 repository-policy limit. Until that passes, TOP-versus-variational discrepancies are not adjudication-eligible, and the analytic TOP provider remains the only promoted inner-loop contour. B5 needs slices at other γ, ambient ratio, throat geometry, and closure model, plus a fuller mesh-convergence study.</p>
+  <p><strong>Hardware mass and CAD (Track G).</strong> G1 landed. G2 (chamber mass from disjoint liner/ribs/jacket CAD), G3 (configuration-controlled chamber/nozzle + injector mass models), and G4 (traditional pump BOM) are what stand between the current partial subtotal and a real dry mass. The plan promotes this above multipoint on the explicit reasoning that “a design tool that optimizes a partial mass subtotal is not a design tool.”</p>
+  <p><strong>Scope and honesty gates.</strong> Shipping continuously and ahead of their corresponding models, by rule.</p>
+
+  <h3><span class="chip plan">C</span>&ensp;What remains to reach the intended system</h3>
+  <ol>
+    <li><strong>Multipoint (Phase 10).</strong> Shared hardware x<sub>h</sub>, per-point controls x<sub>k</sub> and states y<sub>k</sub>, one stacked NLP, with separation/property/pump-efficiency surfaces evaluated at every point and the battery epigraph summed across points. The <code>job.py</code> guard comes out last.</li>
+    <li><strong>Whole-engine dry mass.</strong> Every reported mass measured from built geometry or <code>None</code> with a reason — requiring G2–G4 plus the valves/lines/brackets/gimbal models specified in <code>PLAN_VALVES_LINES_BRACKETS_GIMBAL.md</code>.</li>
+    <li><strong>Post-optimum verification with signed deltas (Phase 11).</strong> Quasi-2-D cooling on the candidate optimum reporting T<sub>wg,land</sub> − T<sub>wg,1D</sub>; a Betti-style conjugate pass; independent held-out CEA/CoolProp re-evaluation; field-specific parity tolerances and an adjudication rule written down <em>before</em> it is needed; and a discrepancy-correction/trust-region loop when they disagree.</li>
+    <li><strong>A resolved-configuration object.</strong> A frozen <code>ResolvedEngineConfiguration</code> with a content hash over the solved state, consumed rather than re-derived by thermal, structures, mass, every CAD builder, BOM, and assembly, with <code>build_engine_parts</code> refusing to assemble parts carrying different hashes. This is what makes “the analyzed wall and the exported wall are the same wall” checkable rather than asserted.</li>
+    <li><strong>The fidelity ladder (Track F).</strong> Boundary-layer displacement iteration with a throat-Reynolds validity gate; variable-γ frozen MOC via a <code>ThermoProvider</code> interface; an equilibrium option behind the same interface; an FSS/RSS topology classifier; a compressible integral BL; a PNS validation layer; the Rao adjoint / start-line→wall map.</li>
+    <li><strong>The Rao cliff track (Track E).</strong> σ<sub>min</sub> and λ<sub>min</sub> diagnostics with mesh convergence; pseudo-arclength continuation; then RQ3 and RQ4 as runs on the finished tool.</li>
+    <li><strong>The experiment-to-model return path.</strong> Absent from every plan until <code>INTEGRATION_PROGRAM</code> identified it. Without it, predicted combustion efficiency is not derivable from the corpus — SP-8089’s own Table II records the pintle’s status as “no correlations for level of mixing and spray size.”</li>
+  </ol>
+
+  <h3>What “done” concretely looks like</h3>
+  <div class="note">
+    <span class="lbl">From COMPLETION_PLAN.md §13</span>
+    <p>The tool is complete when, for an arbitrary propellant and thrust class within its declared domain: every reported mass is measured from built geometry or is <code>None</code> plus a reason; every constraint states its applicability scope and its source; the optimum is verified by at least one independent higher-fidelity layer per discipline, with signed deltas reported; multipoint throttle envelopes are honored rather than refused; the contour provider declares where it is valid and refuses where Rao says no shock-free solution exists; and no number in any report is a screening surrogate without saying so.</p>
+  </div>
+  <p>Concretely, the user-facing workflow at that endpoint: a user states requirements — “5 kN at sea level, Isp ≥ 250 s, under 30 kg, 300 mm envelope, 60–100 % throttle, 20 reuses, LOX/RP-1” — and the tool enumerates discrete architectures in an outer loop, solves the continuous MDO at every operating point in the throttle envelope simultaneously, verifies the candidate optimum against quasi-2-D cooling and conjugate thermal checks and authoritative CEA/CoolProp, reports every disagreement as a signed delta, and emits a configuration-hashed parts package — contour, chamber, jacket, injector, pumps, drives, battery — where every mass came from a measured body and every screen states its scope. RQ1–RQ4 are then run <em>on</em> that tool, inheriting its error bars.</p>
+
+  <h3>Alignment between what exists and what “done” requires</h3>
+  <p>Aligned. The existing components are architecturally relevant rather than exploratory: <code>solve_engine</code>’s purity makes multipoint a <code>vmap</code> plus a shared-variable layer, not a rewrite; the snapshot/postprocess seam is where verification layers attach and already carries <code>compare_snapshots</code>; the manifest’s per-row applicability already supports constraints active only at some operating points; the unavailable-metric registry is already the mechanism by which “verified by a higher-fidelity layer or <code>None</code>” would be enforced; and the <code>ContourProvider</code> seam exists specifically so an exact-variational provider can replace the analytic TOP one without touching the solve.</p>
+  <p>One architectural tension worth naming: nothing currently binds the solved state to the exported geometry to the mass ledger to the BOM, and <code>INTEGRATION_PROGRAM</code> §2.1 calls the missing <code>ResolvedEngineConfiguration</code> “a precondition for items 4, 7, and 8 being meaningful.” That is an addition, not a redesign — the geometry IDs and snapshot digests are already partial implementations — but it should land before the mass and verification tracks, not after.</p>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+  <h2><span class="n">08</span><span>Where the functioning chain stops</span></h2>
+  <div class="h-rule"></div>
+<pre class="flow">requirements → thermochemistry → contour → coupled engine model →
+optimization → verification → resolved configuration → CAD/parts →
+fabrication → test → model calibration → design iteration</pre>
+  <div class="tw"><table>
+    <thead><tr><th>Stage</th><th>State today</th></tr></thead>
+    <tbody>
+      <tr><td>Requirements</td><td><span class="chip part">partial</span> mapping layer implemented and CLI-reachable; architecture enumeration and multi-start absent; coverage is a screened subset, and the tool says so</td></tr>
+      <tr><td>Thermochemistry</td><td><span class="chip part">four pairs</span> chamber only; frozen constant-γ through the expansion; no equilibrium; no coolant real-fluid surfaces</td></tr>
+      <tr><td>Contour</td><td><span class="chip pass">implemented</span> TOP Bézier promoted; variational BVP works and benchmarks against Rao 1958, but is not promoted and cannot yet be validated against forward MOC</td></tr>
+      <tr><td>Coupled engine model</td><td><span class="chip pass">implemented</span> one differentiable solve, one genuinely closed feedback edge, one optional two-way loop with an ablation</td></tr>
+      <tr><td>Optimization</td><td><span class="chip pass">implemented</span> exact Jacobians, feasible KKT-scale point; single-point only; independent KKT stationarity not yet computed</td></tr>
+      <tr><td>Verification</td><td><span class="chip block">not reached</span> no higher-fidelity layer runs on the optimum today</td></tr>
+      <tr><td>Resolved configuration</td><td><span class="chip block">not reached</span> geometry IDs and snapshot digests exist; the binding object does not</td></tr>
+      <tr><td>CAD / parts</td><td><span class="chip pass">implemented</span> for the modeled subsystems, with valid B-rep and machining gates; not a released drawing package</td></tr>
+      <tr><td>Fabrication</td><td><span class="chip block">not reached</span></td></tr>
+      <tr><td>Test</td><td><span class="chip block">not reached</span></td></tr>
+      <tr><td>Model calibration from test</td><td><span class="chip block">not reached</span> and not yet planned anywhere except <code>INTEGRATION_PROGRAM</code> §2.5</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">
+    <span class="lbl">Where it stops</span>
+    <p>The functioning chain stops at a <strong>verified-by-construction single-point optimized design with exported, kernel-validated B-rep geometry and a partial mass ledger</strong>, blocked from physical release by 17 named missing external-evidence requirements. The intended chain ends at a fabricated, hot-fired article whose test data flows back into the model.</p>
+  </div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section id="s9">
+  <h2><span class="n">09</span><span>Gaps between the current project and its endpoint</span></h2>
+  <div class="h-rule"></div>
+
+  <div class="gap">
+    <h3><span class="n">01</span><span>Multipoint operation</span></h3>
+    <dl>
+      <dt>Missing</dt><dd><code>mdo/multipoint.py</code> — shared hardware, per-point controls and states, one stacked NLP.</dd>
+      <dt>Why</dt><dd>Every throttle, altitude, and duty-cycle requirement is currently unanswerable. The tool refuses rather than pretending, but refusing is not the endpoint.</dd>
+      <dt>Status</dt><dd><span class="chip plan">planned</span> Track C / plan Phase 10, not started.</dd>
+      <dt>Where</dt><dd>Inside the project.</dd>
+      <dt>Closure</dt><dd>A ≥3-point job converging with all margins reported per point, a deep-throttle case exercising both the separation screen and the off-BEP pump surface without silent extrapolation, and the <code>job.py:542</code> guard removed.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">02</span><span>Whole-engine dry mass</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>Configuration-controlled chamber/nozzle and injector mass models, a traditional pump BOM, and mass models for valves, lines, brackets, and the gimbal.</dd>
+      <dt>Why</dt><dd>The differentiable objective is a partial subtotal. An optimizer minimizing a subtotal is optimizing the wrong thing — the plan promotes this above multipoint for exactly that reason.</dd>
+      <dt>Status</dt><dd><span class="chip part">active</span> G1 landed and verified; G2 partial; G3/G4 planned.</dd>
+      <dt>Where</dt><dd>Inside the project, plus fabrication data for the valve/line/fitting classes.</dd>
+      <dt>Closure</dt><dd><code>masses.engine_dry_mass</code> moving off the unavailable registry with every component traced to a measured body or a sourced model.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">03</span><span>Verification of the optimum at higher fidelity</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>Quasi-2-D cooling on the candidate optimum, a conjugate coupling pass, independent held-out CEA/CoolProp re-evaluation, field-specific parity tolerances with an adjudication rule, and a discrepancy-correction loop.</dd>
+      <dt>Why</dt><dd>Nothing currently checks whether the gradient optimizer walked into the region where its screens are least accurate — the plan’s own headline risk.</dd>
+      <dt>Status</dt><dd><span class="chip plan">planned</span> Track D, not started. <code>physics.regenerative_cooling_2d</code> already returns the land-midpoint hot spot the 1-D circuit averages away, so D1 is a wiring job, not a modeling job.</dd>
+      <dt>Where</dt><dd>Inside the project for D1/D2; on the authoritative backends for D3.</dd>
+      <dt>Closure</dt><dd>A signed T<sub>wg,land</sub> − T<sub>wg,1D</sub> delta and a Δp delta reported on a candidate optimum, with the optimum flagged when the spread exceeds the wall-temperature constraint margin.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">04</span><span>Rao contour promotion (B3)</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>Forward-MOC compatibility on real variational solves.</dd>
+      <dt>Why</dt><dd>Without it, no TOP-versus-variational discrepancy is adjudication-eligible, the exact-Rao inner-loop provider cannot be promoted, and the existence-boundary research cannot use the exact contour as its physical reference.</dd>
+      <dt>Status</dt><dd><span class="chip part">active</span> typed contract landed 2026-08-24; the gate is the named next step.</dd>
+      <dt>Where</dt><dd>Inside the project — a numerics problem (neighbor-Mach smoothness 0.118 / 0.137 vs a 0.10 policy limit).</dd>
+      <dt>Closure</dt><dd>A real BDE probe returning a typed pass with recorded discrepancies against a declared tolerance policy.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">05</span><span>Convergence-domain coverage (B5)</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>Slices at other γ, P<sub>a</sub>/P<sub>0</sub>, throat geometry, closure model, and numerical context; a fuller mesh-convergence study; convergence at the 25 currently-<code>not_converged</code> knots.</dd>
+      <dt>Why</dt><dd>The fail-closed lookup refuses outside its declared context, so the map’s coverage bounds where an exact-Rao path could ever be used.</dd>
+      <dt>Status</dt><dd><span class="chip part">partial</span> one slice generated, hashed, and packaged.</dd>
+      <dt>Where</dt><dd>Inside the project; sandbox-runnable NumPy, so it does not compete for host time. Cost is known: the 65-knot slice took ~68 minutes on this host.</dd>
+      <dt>Closure</dt><dd>A multi-γ, multi-ambient family of slices with a stated interpolation policy and a mesh-convergence study beyond kernel-resolution evidence.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">06</span><span>Viscous correction and its validity gate</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>The δ* → wall feedback loop, and a throat-Reynolds gate returning <code>unknown</code> in SP-8120’s small-nozzle regime.</dd>
+      <dt>Why</dt><dd>Every contour, C<sub>F</sub>, and separation result is inviscid. SP-8120 states the missing procedure verbatim and also states where it breaks down (throat Re &lt; 100).</dd>
+      <dt>Status</dt><dd><span class="chip plan">planned</span> F1, with F1a — the cheaper Reynolds gate — newly separated out as independently shippable.</dd>
+      <dt>Where</dt><dd>Inside the project for the displacement loop; higher-fidelity CFD for validation.</dd>
+      <dt>Closure</dt><dd>A <code>--boundary-layer-correction {off,displacement}</code> flag that reports the correction magnitude and refuses with <code>unknown</code> when the throat Reynolds number puts the design outside the method’s domain.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">07</span><span>The resolved-configuration binding</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>A frozen object with a content hash over the solved state, consumed by every downstream consumer, with assembly refusing mismatched hashes.</dd>
+      <dt>Why</dt><dd>It makes “the analyzed wall is the exported wall” checkable, and is a precondition for the mass, CAD, and test-return tracks being meaningful.</dd>
+      <dt>Status</dt><dd><span class="chip plan">specified</span> <code>INTEGRATION_PROGRAM</code> §2.1, not started. No literature dependency.</dd>
+      <dt>Where</dt><dd>Inside the project; ASME Y14.41 (already in the corpus) is the reference for an L4 configuration-controlled digital dataset.</dd>
+      <dt>Closure</dt><dd>Every artifact stamping the same hash, and <code>build_engine_parts</code> raising on a mismatch.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">08</span><span>Combustion efficiency, ignition, and stability</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>A predictive η<sub>c*</sub>, any igniter model, and a combustion-response function.</dd>
+      <dt>Why</dt><dd><code>--eta-cstar</code> is an input, so delivered c* is not a prediction. There is no igniter model at all — only a port diameter and depth cut through the pintle.</dd>
+      <dt>Status</dt><dd><span class="chip block">blocked</span> ignition has no source in the corpus. Stability is half-blocked: SP-8113 supplies calculable acoustic damping; no source supplies a pintle combustion-response function. η<sub>c*</sub> prediction depends on the test-return path, not the reverse — SP-8089 Table II records “no correlations for level of mixing and spray size” for the pintle element family.</dd>
+      <dt>Where</dt><dd>Literature acquisition, then experimental measurement.</dd>
+      <dt>Closure</dt><dd>Near term: registering combustion stability as unavailable with that reason and gating delivered c* as non-predictive when η<sub>c*</sub> was supplied. Long term: a calibrated configuration-specific decomposition fitted from test data.</dd>
+    </dl>
+  </div>
+
+  <div class="gap">
+    <h3><span class="n">09</span><span>Experiment-to-model return path</span></h3>
+    <dl>
+      <dt>Missing</dt><dd>Everything. Absent from every plan until 2026-08-22.</dd>
+      <dt>Why</dt><dd>It closes the loop the whole tool aims at, and gaps 8 and 3 both depend on it.</dd>
+      <dt>Status</dt><dd><span class="chip plan">newly identified</span> as a genuinely new workstream.</dd>
+      <dt>Where</dt><dd>Fabrication and hot-fire testing, plus a data-ingestion contract inside the project.</dd>
+      <dt>Closure</dt><dd>A measured hot-fire c* and wall-temperature history ingested against a configuration hash and used to calibrate the model that predicted them.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <h2><span class="n">10</span><span>Validation and evidence</span></h2>
+  <div class="h-rule"></div>
+  <div class="tw"><table>
+    <thead><tr><th>Mechanism</th><th>Validates</th><th>Does not validate</th><th>Strength</th></tr></thead>
+    <tbody>
+      <tr><td>2174 tests, all green <em>(verified)</em></td><td>equations, units, identities, trends, failure behavior, refusal paths</td><td>any physical correctness</td><td>Strong for software correctness. Raw counts are inflated by parametrization: <code>test_jax_primitives.py</code> alone is 460 cases from 11 test functions swept over 6 γ values and Mach ranges.</td></tr>
+      <tr><td>NumPy↔JAX parity ~1e-10</td><td>that the differentiable implementation computes the same function as the audited reference</td><td>that either is physically right</td><td>Strong, and load-bearing: it is what makes gradients trustworthy</td></tr>
+      <tr><td>AD vs re-solved central FD (&lt;1e-4 gate)</td><td>that total derivatives through the IFT solves are exact, not approximations of an unrolled solver</td><td>model fidelity</td><td>Strong for the specific claim</td></tr>
+      <tr><td>NASA <code>MOC_Grid_BDE</code> bit-parity port</td><td>that the throat-arc kernel reproduces an independent published implementation (max |ΔM| ≈ 5e-10 over 120 nodes)</td><td>that either implementation matches experiment</td><td>Strong for the port; the reference is itself a code, not data</td></tr>
+      <tr><td><strong>Rao 1958 Nozzle B benchmark</strong> <em>(verified 7/7)</em></td><td>that the variational solver reproduces published optimum-thrust geometry and C<sub>F</sub> for one case</td><td>any other point in (ε, L%, γ, P<sub>a</sub>/P<sub>0</sub>) space; any viscous or real-gas effect</td><td><strong>The strongest physical-validation evidence in the repository.</strong> It is one case.</td></tr>
+      <tr><td>Held-out CEA property-surface gate</td><td>that the packaged C¹ surfaces reproduce RocketCEA at points not used in the fit (every cell, value and gradient)</td><td>that RocketCEA’s chamber model matches a real chamber</td><td>Strong for the surface fit; four propellant pairs only</td></tr>
+      <tr><td>STEP export → re-import → volume <em>(verified)</em></td><td>that generated geometry is topologically valid B-rep and survives a kernel round trip</td><td>that the geometry is manufacturable as drawn, or correct as engineering</td><td>Strong for the specific claim</td></tr>
+      <tr><td>Model registry audit <em>(verified 61/61)</em></td><td>that every declared model has a reachable local source and every repository heuristic is labeled</td><td>that any model is correct or applicable</td><td>Moderate — a bookkeeping gate, and valuable as one</td></tr>
+      <tr><td>Benchmark manifests with source SHA-256</td><td>that reference values were taken from a specific document revision</td><td>the underlying data quality</td><td>Strong for provenance</td></tr>
+      <tr><td>Schomberg LEA TOP, Vulcain/S1, Radhakrishnan pintle</td><td>geometry (strict) and trends (report-only)</td><td>most of the physics, deliberately — these carry <code>expected_physics_gaps</code></td><td>Honest but limited; several are explicitly report-only until BL physics exists</td></tr>
+      <tr><td>Physical-release evidence gate <em>(verified: blocked, 17)</em></td><td>that the tool refuses to imply hardware readiness</td><td>anything about the design</td><td>Strong as a refusal mechanism</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Outputs with little or no independent validation</h3>
+  <ul>
+    <li><strong>Every thermal result.</strong> No conjugate heat-transfer comparison, no experimental wall temperature. The 1-D+fin circuit’s central approximation — averaging away the land-midpoint hot spot — is known and quantifiable with code that already exists (<code>regenerative_cooling_2d</code>) and has not been run against an optimum.</li>
+    <li><strong>Every structural and life result.</strong> No FEA, no cyclic plasticity, no creep, no material allowables from qualification data. LCF is registered unavailable rather than reported.</li>
+    <li><strong>Every separation and side-load result.</strong> Empirical onset only; restricted shock separation not modeled; side load registered unavailable.</li>
+    <li><strong>Every pump result.</strong> No measured pump map, no cavitation test, no rotordynamics.</li>
+    <li><strong>Every injector performance result.</strong> No cold flow, no hot fire. The spray solver’s coupling to the cycle is opt-in and gated precisely because it is not validated.</li>
+    <li><strong>The variational contour outside the single Rao 1958 case.</strong> The general path run in this audit converged numerically and was refused at export.</li>
+  </ul>
+
+  <h3>Validation needed now vs. later</h3>
+  <p><em>Needed now,</em> for components that already function and produce numbers people could act on: an independent CFD comparison for C<sub>F</sub>, wall pressure, exit Mach, and flow angle on the promoted Bézier contour; the quasi-2-D land hot-spot delta on a candidate optimum; and a held-out re-evaluation of a final optimum on the authoritative backends.</p>
+  <p><em>Only relevant once the corresponding subsystem exists:</em> multipoint constraint satisfaction, side-load prediction, cycle-life qualification, combustion-stability verdicts, and anything requiring hot-fire data.</p>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <h2><span class="n">11</span><span>Important technical decisions and project evolution</span></h2>
+  <div class="h-rule"></div>
+
+  <h4>Feb–Apr 2026 — prototype to package</h4>
+  <p>The project starts as <code>Rocket_nozzle_sim_phase2.py</code>, a single interactive script that solves ε from Pc/Pa, optimizes θ<sub>n</sub>/θ<sub>e</sub>, and plots a reduced-length bell. Within weeks it becomes a package (<code>raosim</code>) with a CLI, tests, and assets. The April commits are mostly correctness work on the MOC path: intersection-based exit-plane sampling, corrected exit thrust integration, a refactor of <code>optimize_wall</code> from an ad-hoc routine to a SciPy constrained optimizer, and criterion-based MOC tests.</p>
+
+  <h4>Apr 16 — the first architectural correction</h4>
+  <p>“Fix MOC and implement Rao backward MOC,” then “Use quadratic Bézier for bell contour.” The quadratic Bézier becomes the trusted default and stays it — a decision that holds through everything after.</p>
+
+  <h4>May 2026 — the variational path and the NASA reference</h4>
+  <p>“Fixing Rao Variational Method,” then “Add coupled wall solver,” then “Added in NASA code for MOC generation.” Bringing in NASA/JHU’s C++ source is the pivot that makes the rest possible: it supplies an independent oracle for the kernel march, which is what later makes bit-parity a meaningful gate.</p>
+
+  <h4>Jun 15 2026 — the densest technical day in the history</h4>
+  <p>31 commits that month, most on this date. A cluster of corrections that materially changed what the solver computes:</p>
+  <ul>
+    <li><em>Characteristic invariants corrected.</em> A spurious cosμ/cos(θ±μ) factor had been mirrored through four modules; removing it changed the physics of every characteristic march.</li>
+    <li><em>Left-Mach geometry made exact by construction.</em> Removing x from the unknown vector eliminated a degenerate basin where the solver satisfied geometry by moving x rather than by getting the flow right.</li>
+    <li><em>Length constraint corrected to Rao’s exit-station form.</em> The legacy Σdx double-counted x<sub>D</sub> against the x<sub>E</sub> pin; the two constraints were contradictory, and the solver resolved the contradiction by driving <code>kernel_d_fraction</code> to the throat plane. The code comment records that this was invisible before the kernel fix because the degenerate BD held D at x ≈ 0.</li>
+    <li><em>CE Mach-monotonicity penalty zeroed</em> under the characteristic formulation, after determining the control surface crosses streamlines so M need not be monotone along it, and that the penalty was displacing the correct branch.</li>
+    <li><em>Folded-RRC mass integral regularized</em> so mass stays finite when dr = 0.</li>
+    <li><em>Design angles de-circularized:</em> reported θ<sub>n</sub>/θ<sub>e</sub> became solver outputs with provenance metadata, and Rao chart angles became comparison data — the <code>err_*</code> columns explicitly redefined as exact-vs-parabola deltas rather than errors.</li>
+    <li><em>J4 gate closed</em>, moving <code>max_scaled</code> from 8 to 1.157e-3, and the BDE wall oracle-validated against NASA <code>wall.out</code> at RMS 1.8e-4 against a 1e-3 gate.</li>
+    <li><em>JAX differentiable core added</em>, with an LM solver, a differentiable MOC kernel, and a sensitivities API.</li>
+  </ul>
+  <p>The pattern across that day is consistent: each change is a <em>correction to a formulation</em>, each is accompanied by a test that pins the corrected behavior, and each records the symptom that revealed it.</p>
+
+  <h4>Jun 28–Jul 2026 — packaging, injector, and pumps</h4>
+  <p>Package renamed to LREKit; PyPI release workflow; pintle injector integrated into the v2 workflow with a feed-system ledger; shoulder radius moved from a 0.25 placeholder to a geometric auto-sizing derivation; Cd target → Ru derivation via Hall’s transonic relation; a shared pump bus. The injector CAD is then rebuilt from a machined two-ring scheme to the coaxial five-part TRW/Nardi architecture after the old scheme was found topologically incapable of a pintle’s flow.</p>
+
+  <h4>Jul 2026 — the MDO layer, in phases, in one month</h4>
+  <p>The walking skeleton lands 2026-07-22; the Phase 4a cooling block, Phase 5 injector block, Phase 6 pump block, and Phase 7 coupled solve all land 2026-07-23; Phase 7b (film cooling) and Phase 8/9 (the NLP) the same day. Two decisions in that burst are load-bearing:</p>
+  <ul>
+    <li><em>The coupling is nested-IFT, not a monolithic block-sparse Newton</em>, on the explicit reasoning that enlarging the nonlinear system to <em>look</em> coupled is dishonest when the physics is a one-way chain.</li>
+    <li><em>Film cooling was added because an empirical probe proved the wall is coolant-enthalpy-limited</em>, not because it is a standard feature. Before that probe, coking was infeasible throughout the design box and the natural (wrong) response would have been to relax the constraint.</li>
+  </ul>
+
+  <h4>Aug 2026 — mass, requirements, generalization, and honesty gates</h4>
+  <p>The hardware mass ledger; the requirements layer (SP-125 §2.1); propellant and thrust generalization via <code>MissionSpec.for_thrust</code>/<code>for_propellant</code> (forced by the discovery that a 130 kN run had no feasible point in the hand-tuned 13 kN box); bounds and HTD screens; the O/F variable; input validation; then the 2026-08-22/24 pair of commits landing the CEA held-out gate, the typed contour provider, the Rao Eq. (5) export refusal, the B3 validator contract, and the B5 domain map.</p>
+
+  <div class="note">
+    <span class="lbl">A recurring decision pattern</span>
+    <p>When a gap is found, the gate ships before or with the model: LCF became “unavailable” rather than being reported as static stress; side load became “unavailable” rather than correlated; liner buckling became a mandatory final gate rather than an inner-loop constraint while its root robustness is unproven; separation gained a topology-scope field rather than a new model; and cryogenic HTD coverage became a preflight refusal rather than an extrapolation. This is codified as a rule — <em>“a fidelity gap must be visible as <code>unknown</code>, never absorbed into a passing number”</em> — and it is followed.</p>
+  </div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section id="s12">
+  <h2><span class="n">12</span><span>Failures, limitations, and unresolved problems</span></h2>
+  <div class="h-rule"></div>
+
+  <h3>Major limitations</h3>
+  <p>Things that change what the current implementation can claim.</p>
+
+  <div class="note warn">
+    <span class="lbl">1 · Found in this audit</span>
+    <p><strong>The documented MDO optimizer CLI invocation fails on its own default burn time.</strong> <code>lrekit --engine-mdo-optimize --isp-min 200</code> — the example in <code>MDO_GUIDE.md</code> §8 — aborts with an Equinox/Lineax “linear solver received non-finite input” error propagated out of a <code>jax.pure_callback</code>. The cause is isolated: <code>--burn-time</code> defaults to 10.0 s in the CLI, whereas <code>MissionSpec</code>’s own default is 120 s and <code>tests/test_mdo_nlp.py</code> uses the latter.</p>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>burn_time</th><th><code>solve_min_mass(MissionSpec.for_thrust(13e3, of_is_pinned=True, burn_time=…), 190.0)</code></th></tr></thead>
+    <tbody>
+      <tr><td class="num">10 s <em>(CLI default)</em></td><td><span class="chip block">fails</span> XlaRuntimeError — non-finite linear solve</td></tr>
+      <tr><td class="num">30 s</td><td><span class="chip pass">ok</span> feasible, max_violation 8.7e-11, Isp 224.8</td></tr>
+      <tr><td class="num">60 s</td><td><span class="chip pass">ok</span> feasible, max_violation 1.0e-10, Isp 224.8</td></tr>
+      <tr><td class="num">120 s <em>(module default)</em></td><td><span class="chip pass">ok</span> feasible, max_violation 1.0e-12, Isp 224.8</td></tr>
+    </tbody>
+  </table></div>
+  <p>The failure is caught and reported as “MDO solver failed” rather than crashing, and the test suite does not cover it because the fixture uses the module default. At a 10 s burn the battery becomes power-limited rather than energy-limited, which is the plausible mechanism. <strong>Effect on claims:</strong> the optimizer is reachable and correct from the Python API, and currently unreachable from its own documented command line at default settings.</p>
+
+  <ol start="2">
+    <li><strong>Rao contour promotion is blocked and the fallback is the approximation the exact solve was meant to replace.</strong> All B3 real probes return <code>UNKNOWN</code>. The bulk MDO contour is the analytic Rao/TOP Bézier — a validated approximation to the optimum, not the optimum. The plan is explicit that this is acceptable for Pareto sweeps and not for existence-boundary work, which is exactly the research question.</li>
+    <li><strong>Whole-engine dry mass does not exist.</strong> The differentiable objective is <code>dry_mass_partial</code>: pumps, motors, inverters, a smooth battery governing-branch surrogate, and screening liner/land/closeout chamber masses. Injector hardware, manifolds, valves, lines, gimbal, and mounts are absent. <code>masses.engine_dry_mass</code> is registered unavailable. Any mass requirement is therefore checked against a <strong>lower bound</strong>, and the requirements layer says so in those words.</li>
+    <li><strong>All contour and performance results are inviscid.</strong> δ* is computed once and reported, never fed back. Throat Reynolds number is not computed for the nozzle. There is no CLI flag for a viscous correction.</li>
+    <li><strong>Nozzle expansion is constant-γ.</strong> The CEA surfaces give γ at the chamber; the value entering the characteristic net is a single frozen number. At high area ratio this systematically misplaces the Prandtl–Meyer turning and therefore the wall angles. The frozen variable-c<sub>p</sub> path exists but is Bézier-only and not physically validated.</li>
+    <li><strong>Multipoint operation is refused, not approximated.</strong> Correct behavior, and a hard limit on what the tool can answer.</li>
+    <li><strong>No physical validation of any thermal, structural, separation, injector, or pump result.</strong> Enumerated in §10.</li>
+    <li><strong>Cryogenic coverage is incomplete.</strong> Authoritative LOX/LCH4 and LOX/LH2 optimization stops at model-coverage preflight for lack of real-fluid coolant surfaces. <code>--allow-incomplete-physics</code> permits a screening run whose physics verdict stays <code>unknown</code>. LOX/LCH4 and N2O/Ethanol L*/wall-limit constants are flagged <code>estimated=True</code>.</li>
+    <li><strong>Phase 9’s own gate is not met.</strong> The code treats SciPy success plus feasibility as a KKT pass; independently computing and reporting KKT stationarity remains open by the plan’s own accounting.</li>
+  </ol>
+
+  <h3>Secondary limitations</h3>
+  <ul>
+    <li><strong>Stale documentation row.</strong> <code>ROADMAP_REQUIREMENTS_TO_PARTS.md</code> §Status lists “R3 requirements layer — not started,” but <code>raosim/requirements.py</code> landed 2026-08-06 → 2026-08-10 (after that doc’s 2026-07-31 update) and is CLI-reachable via <code>--requirements</code>. R3’s <em>full</em> three-layer scope is genuinely partial — layer 1 (architecture enumeration, multi-start) does not exist — but “not started” is wrong.</li>
+    <li><strong>The tool cannot distinguish “no feasible design exists” from “the optimizer failed.”</strong> At 5 kN / sea level / Isp ≥ 250 s the requirements run reports <code>SOLVER_FAILED</code> with “Positive directional derivative for linesearch.” That is honest, but a genuinely infeasible requirement set and a converged-to-a-bad-point optimizer produce the same message. No multi-start exists to help distinguish them.</li>
+    <li><strong><code>--eta-cstar</code> is an input presented alongside “delivered” performance.</strong> Not currently gated as non-predictive.</li>
+    <li><strong>Report/README test counts are historical records</strong> (“1246 passed … July 11, 2026”). The current number is 2174. The README labels this explicitly as a completed-run record rather than a promise, which is the right treatment.</li>
+    <li><strong>Chamber <span class="m">L*</span> / contraction-ratio placeholders warn rather than refuse</strong> on a hardware-oriented run.</li>
+    <li><strong>Legacy surface area.</strong> <code>Rocket_nozzle_sim_phase2.py</code> (the original prototype) is retained and unwired; <code>main.py</code> remains packaged as a legacy entry point. Both are labeled. Module-level dead code is otherwise minimal — every <code>raosim</code> module checked is imported by at least one other source file and covered by at least one test.</li>
+    <li><strong>The pump legacy triangle-mesh CAD path self-labels <code>schematic_only</code></strong> and coexists with the B-rep path.</li>
+  </ul>
+
+  <h3>Expected incompleteness</h3>
+  <p>Absent because development has not reached it, not because it is broken: multipoint; Phase 11 verification layers; the resolved-configuration object; the fidelity ladder (F1–F7); continuation and the σ<sub>min</sub>/λ<sub>min</sub> diagnostics; the valves/lines/brackets/gimbal mass models; RQ1–RQ4 results. These are specified with acceptance gates and are the current work queue, not defects.</p>
+  <p>Genuinely blocked rather than merely unbuilt: the igniter model (no source in the corpus), the combustion-response half of a stability screen (SP-8113 supplies damping only), and the L4 datum/tolerance-stack scaffolding (blocked on standards).</p>
+</section>
+
+<!-- ============ 13 ============ -->
+<section id="s13">
+  <h2><span class="n">13</span><span>Actual technical ambition</span></h2>
+  <div class="h-rule"></div>
+  <p>The technical capability the project is trying to create: <strong>a design tool that takes engine requirements and returns a fabricable, mass-accounted, multipoint-feasible engine definition in which every number is either measured from the geometry that was exported or explicitly refused.</strong> The research questions (RQ1–RQ4) are then run on top of that tool, inheriting its error bars — a sequencing decision the plan states explicitly and defends: <em>“tool completeness leads; the research questions are run on the finished tool rather than racing ahead of it.”</em></p>
+  <p>Why the existing components are built the way they are:</p>
+  <ul>
+    <li>The <strong>differentiable core</strong> exists because the coupling — jacket Δp → pump rise, film fraction → wall temperature → c*, wall thickness → conductance vs structure — is what a sequential process resolves by hand and a gradient method resolves at once. Exact total derivatives through the converged state are the engineering claim.</li>
+    <li>The <strong>contour work</strong> exists because the physical claim is about the Rao existence boundary, and you cannot study a boundary using a parabola fitted to solutions that stop existing there.</li>
+    <li>The <strong>provenance and refusal layers</strong> exist because a design tool whose screens quietly extrapolate produces designs that fail in ways the tool cannot see. The registries, gates, and unavailable-metrics list are how the error bar stays visible through a chain of twelve models.</li>
+    <li>The <strong>CAD and mass work</strong> exists because the endpoint is a fabricable article, and a mass that does not come from the exported body is not a mass.</li>
+  </ul>
+  <p>What becomes possible when the chain is complete: a requirement statement in, a configuration-hashed parts package out, with per-discipline signed deltas from independent higher-fidelity checks and throttle-envelope feasibility proven rather than assumed — and then a genuine answer to whether whole-engine optima migrate toward Rao’s cliff, or whether separation and thermal limits mask it first.</p>
+  <p>How much of that ambition is in the repository today: the physics layer, the differentiable core, the optimizer, the output contract, the CAD, and the provenance infrastructure are built. The verification layer, the multipoint layer, the whole-engine mass, and the configuration binding are not. The current architecture supports all four as additions rather than redesigns.</p>
+  <div class="note">
+    <span class="lbl">One divergence worth naming</span>
+    <p>The stated end state is “a general-purpose design tool that can also answer RQ1–RQ4.” The single most-developed and most-corrected subsystem in the repository is the Rao variational solver — which the general-purpose tool does not currently use, since the bulk MDO contour is the analytic TOP approximation and the exact path is not promoted. That is not incoherent: the plan’s rule 9 says fidelity is switched by the question, and the exact path is reserved for existence-boundary and exact-vs-TOP studies. But it does mean a large share of the deepest work serves the research half rather than the tool half, and the tool half is what the completion plan says leads.</p>
+  </div>
+</section>
+
+<!-- ============ 14 ============ -->
+<section id="s14">
+  <h2><span class="n">14</span><span>Project scale</span></h2>
+  <div class="h-rule"></div>
+  <div class="tw"><table>
+    <thead><tr><th>Measure</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Commits</td><td>72, sole author, 2026-02-22 → 2026-08-24 (29 distinct commit days; 31 of them in June 2026)</td></tr>
+      <tr><td>Tracked Python</td><td><strong>133 720 lines</strong> across ~270 files</td></tr>
+      <tr><td><code>raosim</code> package</td><td>127 files, 95 420 lines</td></tr>
+      <tr><td><code>raosim/mdo</code></td><td>30 files, 18 745 lines</td></tr>
+      <tr><td><code>raosim/jax</code></td><td>13 files, 3380 lines</td></tr>
+      <tr><td><code>raosim/spray</code></td><td>14 files, 6018 lines</td></tr>
+      <tr><td><code>raosim/openfoam</code></td><td>3 files, 2565 lines</td></tr>
+      <tr><td>Tests</td><td>120 modules, 32 386 lines, <strong>2174 collected</strong> (2148 non-slow + 26 slow) — all passing, verified today</td></tr>
+      <tr><td>Test distribution</td><td>jax 527 (460 of which are parametrized sweeps in one file), mdo 349, injector 144, spray 120, rao 115, regen 68, requirements 64</td></tr>
+      <tr><td>Scripts</td><td>18 files, 3579 lines (diagnostics, scans, comparisons, sizing studies)</td></tr>
+      <tr><td>CLI surface</td><td><strong>328 distinct flags</strong>, plus 4 job verbs and an interactive interview</td></tr>
+      <tr><td>Contour methods</td><td>4 (Bézier/TOP, conical, direct MOC, Rao variational BVP)</td></tr>
+      <tr><td>MDO design variables</td><td>10 active (11 with O/F)</td></tr>
+      <tr><td>Constraint manifest</td><td><strong>31 rows</strong> — 23 differentiable hard, 7 mandatory final gates, 1 report-only</td></tr>
+      <tr><td>Model provenance registry</td><td><strong>61 entries</strong> across 17 subsystems; audit passes</td></tr>
+      <tr><td>Registered-unavailable outputs</td><td>10, each with a stated reason</td></tr>
+      <tr><td>Propellants / materials</td><td>5 / 8</td></tr>
+      <tr><td>Packaged CEA property tables</td><td>4 pairs, hash-pinned, every-cell held-out gated</td></tr>
+      <tr><td>Benchmark cases / curves</td><td>7 manifests (source SHA-256 pinned) / 8 digitized reference curves</td></tr>
+      <tr><td>Rao domain artifact</td><td>65 knots (13 ε × 5 L%), 40 <code>converged_valid</code> / 25 <code>not_converged</code>, 101 932 bytes, SHA-256 pinned</td></tr>
+      <tr><td>Documentation</td><td>49 markdown files, ~123 500 words, plus a 7600-word README</td></tr>
+      <tr><td>LaTeX reports</td><td>4 compiled PDFs (reference manual, MDO plan, TVC actuator sizing, report)</td></tr>
+      <tr><td>Literature corpus</td><td>255 PDFs; 224-file Markdown mirror of 190 unique PDFs spanning 12 047 source pages, with per-paper extraction diagnostics</td></tr>
+      <tr><td>Vendored external source</td><td>NASA/JHU <code>Three-Dimensional-Nozzle-Design-Code</code> (MOC_Grid_BDE + STT2001 + 3D_MOC), under NASA Open Source Agreement</td></tr>
+      <tr><td>Generated build outputs</td><td>512 entries under <code>builds/</code></td></tr>
+      <tr><td>Release state</td><td><code>lrekit</code> 0.1.1 wheel + sdist built; <code>v0.1.0</code> tag; 4 console entry points; GitHub Actions test + trusted-publishing workflows; PyPI publication pending a license decision</td></tr>
+    </tbody>
+  </table></div>
+  <p>Line counts measure size, not depth. The three largest files — <code>run_nozzle.py</code> (6641), <code>rao_variational.py</code> (6179), <code>injector.py</code> (4349) — differ sharply in character: the first is a CLI surface, the second is the dense numerical core, the third is hydraulics plus extensive provenance and gating.</p>
+</section>
+
+<!-- ============ 15 ============ -->
+<section id="s15">
+  <h2><span class="n">15</span><span>External dependencies vs. project work</span></h2>
+  <div class="h-rule"></div>
+  <div class="tw"><table>
+    <thead><tr><th>Dependency</th><th>What it does</th><th>What the project supplies</th></tr></thead>
+    <tbody>
+      <tr><td>JAX 0.6.2</td><td>forward/reverse automatic differentiation, jit, float64 arrays</td><td>every residual, every physical model, the static-shape discipline the models are written under, the choice of what is implicit vs explicit, the parity oracles</td></tr>
+      <tr><td>Optimistix 0.0.11 / Equinox / Lineax</td><td>Newton and Levenberg–Marquardt root-finders, implicit-diff plumbing</td><td>the residual systems being solved, the state scaling, the nesting structure (outer (R<sub>t</sub>, ṁ), inner T<sub>wg</sub> vector), convergence tolerances 100× tighter than optimizer feasibility</td></tr>
+      <tr><td>SciPy</td><td>SLSQP, secant/brentq, splines, linear algebra</td><td>the NLP formulation — 10 variables, 23 enforced constraints, the ε-constraint sweep — and the exact Jacobian handed to SLSQP, which SciPy would otherwise finite-difference</td></tr>
+      <tr><td>NumPy</td><td>array primitives</td><td>the oracle implementations of every JAX block, and the entire NumPy-only existence-scan research track</td></tr>
+      <tr><td>CadQuery 2.7 / OpenCascade</td><td>B-rep Booleans, sweeps, lofts, STEP I/O</td><td>every dimension, every feature, the coaxial five-part architecture, the blade camber math (<code>pumps.impeller_blade_camber</code> — physics owns it, CAD sweeps it), the machining gates, the export→re-import→volume validation, the geometry-ID hashing</td></tr>
+      <tr><td>CoolProp 7.2</td><td>real-fluid property lookups</td><td>the coolant property interface, applicability screens, and the explicit decision <em>not</em> to autodiff it — with the consequence (no cryogenic HTD coverage) registered as unavailable rather than papered over</td></tr>
+      <tr><td>RocketCEA 1.2.3</td><td>chamber equilibrium thermochemistry</td><td>the offline sampling scheme, the C¹ Fritsch–Carlson/tensor-Hermite surface construction, the schema/hash identity contract, the every-cell held-out value-and-gradient gate, and the rule that CEA is never called inside a traced loop</td></tr>
+      <tr><td>Matplotlib</td><td>rendering</td><td>every diagnostic figure’s content and the MOC/BDE construction diagrams</td></tr>
+      <tr><td>NASA/JHU <code>MOC_Grid_BDE</code></td><td>an independent reference implementation of the Rao B-D-E kernel and topology</td><td>the stagnation-normalized Python port, the JAX reimplementation with the exact row policy, the bit-parity gates, and the provenance investigation that demoted the <code>TT'.out</code> fixture from promotion authority</td></tr>
+    </tbody>
+  </table></div>
+  <p>The pattern is consistent across rows: the external tool performs a general-purpose numerical or geometric operation; the project supplies the physics being operated on, the structure of the problem handed to it, and the criteria by which the answer is accepted or refused.</p>
+</section>
+
+<!-- ============ 16 ============ -->
+<section id="s16">
+  <h2><span class="n">16</span><span>Evidence useful for future letters and applications</span></h2>
+  <div class="h-rule"></div>
+  <p><em>Factual items only; no prose written here.</em></p>
+
+  <h3>Technical independence</h3>
+  <ul>
+    <li>Sole author of 72 commits over ~6 months, spanning a rewrite from a single interactive script to a 133 000-line package with a 2174-test suite, CI, and a built distribution.</li>
+    <li>Wrote the governing planning documents that direct the implementation — <code>DIFFERENTIABLE_ENGINE_MDO_PLAN.md</code> (formulation, physics, literature basis, 12-phase tracker with acceptance gates), <code>COMPLETION_PLAN.md</code> (7-track deduplicated backlog with dependency graph), <code>PHYSICS_FIDELITY_ROADMAP.md</code>, <code>INTEGRATION_PROGRAM_2026-08-22.md</code> — including a hard-rules section constraining implementers (no unrolled solver differentiation, no relaxed integers, no <code>max()</code> in the differentiable core, no silent Bézier substitution for a failed Rao solve, NumPy oracle plus parity test for every JAX block).</li>
+    <li>Identified that three of eight required workstreams (resolved-configuration object; injector/ignition/stability; experiment-to-model return path) were represented in <em>none</em> of the four existing plans, and specified them.</li>
+    <li>Extended the project from “nozzle contour tool” to whole-engine design tool: chamber, regen cooling, structures, pintle injector, spray, electric feed system, mass ledger, CAD, requirements layer.</li>
+  </ul>
+
+  <h3>Technical depth</h3>
+  <ul>
+    <li>Implemented Rao’s 1958 constrained variational problem as a boundary-value problem with fifteen separately-scaled residual groups, two solver backends at ~1e-10 parity, and export gates keyed to Rao’s own Eq. (5) existence criterion from AIAA 99-2584.</li>
+    <li>Achieved bit-parity (max |ΔM| ≈ 5e-10 over 120 nodes) between a JAX reimplementation and a NumPy port of NASA/JHU’s C++ throat-arc kernel march, with exact d(BD)/dθ<sub>B</sub> verified against finite differences to ~1e-8 — requiring reproduction of NASA’s exact row-decision, row-width, and C+ pairing policy under static-shape constraints.</li>
+    <li>Built an MDF differentiable engine model with two nested implicit solves differentiated by the implicit function theorem, exact reverse-mode constraint Jacobians, and a documented forward-mode failure mode.</li>
+    <li>Reproduced Rao 1958’s published Nozzle B to 0.0089 R<sub>t</sub> contour RMS with direct-integration C<sub>F</sub> 1.5769 against Rao’s 1.5829.</li>
+    <li>Built C¹ shape-preserving property surfaces with an every-cell held-out value-and-gradient gate against RocketCEA, hash-pinned and schema-versioned, for four propellant pairs.</li>
+    <li>Built a coaxial five-part machined pintle injector B-rep package with a flow-separation audit, machining gates, STEP round-trip volume verification, and geometry-ID-keyed mass.</li>
+    <li>Built and audited a 61-entry model-provenance registry and a 31-row constraint manifest with per-row applicability, availability, scaling, optimizer role, and source identifier.</li>
+  </ul>
+
+  <h3>Persistence and debugging</h3>
+  <ul>
+    <li>Diagnosed a spurious cosμ/cos(θ±μ) factor in the characteristic compatibility invariants mirrored through four modules, and corrected it across the codebase.</li>
+    <li>Diagnosed that the length-constraint formulation double-counted the start station, making two constraints contradictory and driving <code>kernel_d_fraction</code> to the throat plane — a drift invisible before an earlier kernel fix.</li>
+    <li>Diagnosed a degenerate optimization basin created by carrying x as a free unknown, and eliminated it by reconstructing x from dx/dr = 1/tan(θ+μ).</li>
+    <li>Diagnosed that a Mach-monotonicity penalty was strong enough to displace the correct solution branch, on the physical grounds that the control surface crosses streamlines. <em>(Attributed in code: “identified by ibrahim.”)</em></li>
+    <li>Established by empirical probe that the coking constraint was infeasible because the wall is coolant-enthalpy-limited rather than film-coefficient-limited (measured T<sub>wc</sub> 1241 → 1124 K across the entire channel-geometry box), which identified film cooling as the correct lever and made the constraint satisfiable at 7.7 % film.</li>
+    <li>Found that <code>jacfwd</code> silently drops a <code>jnp.min</code> tangent through jitted nested Optimistix root-finds, verified against finite differences, and switched the constraint Jacobian to reverse mode with a warning against reverting.</li>
+    <li>Found two dead design variables by Jacobian-column and objective-gradient inspection and removed or fixed them; shipped the re-check procedure in the reviewer’s guide.</li>
+    <li>Found and fixed an off-by-one/double-counted segment in the cooling march quadrature and a silent clamp hiding the channel-fit constraint.</li>
+    <li>Found that a 130 kN run had no feasible point in the box hand-tuned for 13 kN, and replaced the hard-coded architecture with physics-derived scaling (throat from thrust closure, chamber length from L*/CR, channels from circumference at fixed pitch, pintle from blockage band, pump speed from specific speed).</li>
+    <li>Traced the upstream git history of NASA’s checked-in <code>TT'.out</code> reference fixture and established that the generating executable is not present in the local tree or the public repository — then demoted it from promotion authority.</li>
+  </ul>
+
+  <h3>Research or engineering judgment</h3>
+  <ul>
+    <li>Corrected a load-bearing literature attribution after reading source PDFs rather than inferring from filenames (the “contour must remain an implicit solved state” claim is physically correct but was attributed to the wrong source; Rao 1958 does not require re-solving the contour at every MDO iterate, and the Rao/TOP parabola is a validated approximation to the same optimum).</li>
+    <li>Rejected the classical gaseous film-cooling correlation family for a liquid RP-1 film after computing that its velocity ratio (~10⁻³) sits three orders below the correlations’ 0.45–33.3 calibration band, and implemented a liquid phase-change model instead — retaining the gaseous VR as a pinned diagnostic so the inapplicability stays documented.</li>
+    <li>Rejected reporting side load, cycles to failure, whole-engine dry mass, combustion stability, engine-system Isp, and five other quantities, registering each as unavailable with a specific technical reason rather than supplying a correlation.</li>
+    <li>Rejected a monolithic block-sparse Newton for the engine coupling on the grounds that enlarging the nonlinear system to <em>appear</em> coupled misrepresents a one-way physical chain.</li>
+    <li>Refused to promote the variational contour: <code>BENCHMARK_VALIDATED_AT_RELEASE = False</code>, and real B3 probes report <code>UNKNOWN</code> rather than a pass, because forward-MOC compatibility fails at 0.118/0.137 against a 0.10 policy limit.</li>
+    <li>Made the multipoint job path <em>raise</em> rather than return a single-point answer labeled as a throttle envelope.</li>
+    <li>Recorded a prior-art caveat against the project’s own novelty claim: Rao 1999 Fig. 7 already shows length-limited vacuum optima on the valid boundary, so the claim must be engine-level masking rather than the existence of the effect.</li>
+    <li>Distinguished repository policy from literature authority throughout — the 0.10 neighbor-Mach limit, the domain-map residual and spacing thresholds, and the contour discrepancy tolerances are each labeled repository screening choices, not qualification limits.</li>
+    <li>Replaced a binned pump-efficiency estimator with a C¹ surrogate and demonstrated the property with a test showing finite differences converge to the analytic gradient at a point where the binned version’s FD diverges.</li>
+  </ul>
+
+  <h3>Initiative</h3>
+  <ul>
+    <li>Built the literature infrastructure the technical claims rest on: 255-PDF corpus, 224-file Markdown mirror of 190 unique PDFs / 12 047 pages with per-paper extraction diagnostics, benchmark manifests with source SHA-256 hashes, and a claim-by-claim source-verification audit.</li>
+    <li>Built a job/CLI layer as an additive translator after observing that O/F optimization had been implemented long before it was reachable from a command line — “which meant in practice it was not usable.”</li>
+    <li>Designed the larger architecture and is implementing it incrementally against dated acceptance gates, rather than treating the currently-completed subset as the whole project.</li>
+  </ul>
+
+  <h3>Collaboration and mentorship</h3>
+  <p>No human collaborator, mentor, or co-contributor is visible anywhere in the artifacts: all 72 commits, the planning documents, the correction commits, and the acceptance criteria are the author’s.</p>
+
+  <h3>Tangible outputs</h3>
+  <ul>
+    <li>A Python package (<code>lrekit</code> 0.1.1) with wheel and sdist built, four console entry points, CI, and a trusted-publishing release workflow.</li>
+    <li>2174 passing tests across 120 modules; a 61-entry audited model registry; a 31-row constraint manifest.</li>
+    <li>Four compiled LaTeX documents including a full mathematical/physical reference manual and the MDO plan.</li>
+    <li>Generated engineering artifacts: valid B-rep STEP for nozzle wall, jacket, regen channels with manifolds, a five-part machined pintle injector, and a pump package; watertight STL; machining-gate reports; dimension tables; a pump BOM; a 226 KB structured design summary.</li>
+    <li>Research artifacts: a hash-pinned 65-knot Rao convergence-domain map; existence-scan CSVs and heatmaps; NASA reference-comparison station data and metrics; MOC construction diagrams.</li>
+    <li>~123 500 words of technical documentation with dated status heads and acceptance gates.</li>
+  </ul>
+</section>
+
+<!-- ============ 17 ============ -->
+<section id="s17">
+  <h2><span class="n">17</span><span>Factual characterizations for later use</span></h2>
+  <div class="h-rule"></div>
+  <ol class="claims">
+    <li>Built LREKit, a 133 000-line Python liquid-rocket-engine preliminary-design toolkit that takes an operating point and produces sized nozzle, chamber, regenerative-cooling, pintle-injector, and electric-pump-feed geometry, a mass ledger, and valid B-rep STEP/STL CAD, with 2174 passing tests and a 61-entry audited model-provenance registry.</li>
+    <li>Implemented Rao’s 1958 optimum-thrust nozzle problem as a finite-dimensional boundary-value problem — fifteen scaled residual groups over stationarity, characteristic compatibility, mass/length closure, and D-state continuity — and reproduced Rao’s own published Nozzle B geometry to 0.0089 R<sub>t</sub> contour RMS with a direct-integration thrust coefficient of 1.5769 against his 1.5829.</li>
+    <li>Ported NASA/JHU’s <code>MOC_Grid_BDE</code> C++ throat-arc kernel to Python and reimplemented it in JAX at bit parity (max |ΔM| ≈ 5e-10 over 120 nodes) with exact θ<sub>B</sub> sensitivity verified against finite differences, which required reproducing NASA’s exact row-decision and characteristic-pairing policy under static-shape constraints.</li>
+    <li>Built a multidisciplinary-feasible differentiable engine model (<code>raosim/mdo/</code>, 30 modules) in which nozzle performance, 1-D+fin regenerative cooling, pintle injector hydraulics, and electric pump feed solve as one system with the cooling-jacket pressure drop genuinely feeding the pump rise; converged implicit states are differentiated through the implicit function theorem, and exact reverse-mode Jacobians drive an SLSQP ε-constraint optimizer over 10 design variables under 23 enforced constraints.</li>
+    <li>Established by empirical probe that the regen wall in this design class is coolant-enthalpy-limited rather than film-coefficient-limited, which identified film cooling as the correct lever for the SP-8087 coking constraint and turned a constraint that had been infeasible throughout the design box into an active, satisfiable one at 7.7 % film flow.</li>
+    <li>Designed a refusal architecture enforced in code rather than documented: ten engine outputs are registered unavailable with specific technical reasons rather than estimated, contour export is blocked when method-of-characteristics closure fails, multipoint jobs raise rather than returning a single-point answer, and cryogenic optimization stops at model-coverage preflight for lack of real-fluid coolant surfaces.</li>
+    <li>Currently implementing the contour-provider and hardware-mass tracks — the typed post-solve Rao validator and a hash-pinned 65-knot convergence-domain map landed 2026-08-24 with promotion explicitly blocked on a forward-MOC compatibility gate that real probes fail at 0.118 and 0.137 against a 0.10 policy limit.</li>
+    <li>The current implementation is a single-design-point tool whose remaining major components — multipoint throttle envelopes, whole-engine dry mass from built geometry, post-optimum verification at higher fidelity, and a configuration-hashed resolved-engine object — are specified with acceptance gates in a 7-track completion plan and are architecturally additions rather than redesigns.</li>
+    <li>Built the literature infrastructure the technical claims rest on: a 255-PDF corpus converted to a 224-file Markdown mirror spanning 12 047 source pages with per-paper extraction diagnostics, seven benchmark case manifests pinned by source-document SHA-256, and a claim-by-claim source verification that corrected a load-bearing attribution and reclassified a film-cooling correlation family as inapplicable to liquid coolants.</li>
+    <li>Verification is strong and physical validation is thin, by design and by the project’s own account: NumPy↔JAX parity at ~1e-10, autodiff-versus-finite-difference gates, a bit-parity reference port, and one strict published-geometry benchmark — with no CFD, conjugate heat-transfer, FEA, cold-flow, or hot-fire evidence, and every contour stamped <code>hardware_qualified = False</code>.</li>
+  </ol>
+</section>
+
+<!-- ============ 18 ============ -->
+<section id="s18">
+  <h2><span class="n">18</span><span>Canonical project fact sheet</span></h2>
+  <div class="h-rule"></div>
+  <dl class="facts">
+    <div class="fact"><dt>Project</dt><dd>LREKit (packaged name) / RaoRocketSim (repository name)</dd></div>
+    <div class="fact"><dt>Project type</dt><dd>Hybrid: engineering-design software + simulation/modeling codebase + differentiable-optimization research + computational research investigation, with generated CAD as a first-class output.</dd></div>
+    <div class="fact"><dt>Primary objective</dt><dd>Take liquid-rocket-engine requirements and return a fabricable, mass-accounted, multipoint-feasible engine definition in which every number is either measured from the exported geometry or explicitly refused; then use that tool to study whether whole-engine optima interact with the Rao nozzle existence boundary.</dd></div>
+    <div class="fact"><dt>Current state</dt><dd>Working single-design-point tool. Two parallel pipelines (sequential <code>design_nozzle_v2</code> and differentiable <code>raosim/mdo/</code>) sharing one versioned output contract. 2174 tests passing (verified 2026-08-25). Alpha release built, PyPI publication pending a license decision.</dd></div>
+    <div class="fact"><dt>What currently exists</dt><dd>Four contour methods (Rao/TOP Bézier promoted; conical; direct MOC; Rao variational BVP experimental); chamber/throat geometry with derived shoulder fillet and Hall-based Ru; Bartz + Sieder–Tate + fin regen cooling with a counterflow finite-volume march; SP-125 structural and Coffin–Manson fatigue screens; pintle injector hydraulics with a Son-2017 movable branch and a Lagrangian spray parcel solver; centrifugal pump meanline with electric drive and battery sizing; a configuration-controlled mass ledger with CAD-linked injector mass; B-rep STEP + STL export with re-import validity and machining gates; a coupled differentiable engine solve with exact total derivatives; a 31-row constraint manifest; an SLSQP ε-constraint NLP with Pareto sweeps; a requirements layer mapping SP-125 §2.1; a 61-entry model registry; a 10-entry unavailable-output registry; a NASA/JHU reference port at kernel bit parity; four hash-pinned CEA property surfaces; seven benchmark manifests; a 65-knot Rao convergence-domain map.</dd></div>
+    <div class="fact"><dt>Under implementation</dt><dd>Track B (contour and property closure): B3 post-solve variational validator blocked on forward-MOC compatibility; B5 domain map partial beyond one fixed slice. Track G (hardware mass and CAD): injector build-once landed and verified; chamber mass from disjoint liner/ribs/jacket CAD partial. Ongoing scope/validity gates from the fidelity roadmap (§3.1, §4.1, §5.1 landed).</dd></div>
+    <div class="fact"><dt>Intended completed system</dt><dd>Requirements in → discrete architecture enumeration in an outer loop → simultaneous continuous MDO across every operating point in a throttle envelope → post-optimum verification by an independent higher-fidelity layer per discipline reporting signed deltas → a configuration-hashed parts package where every mass came from a measured body → optional fabrication and hot-fire with test data returning to calibrate the model.</dd></div>
+    <div class="fact"><dt>Definition of “done”</dt><dd>For an arbitrary propellant and thrust class in the declared domain: every reported mass measured from built geometry or <code>None</code> + reason; every constraint stating its applicability scope and source; the optimum verified by ≥1 independent higher-fidelity layer per discipline with signed deltas; multipoint throttle envelopes honored rather than refused; the contour provider declaring where it is valid and refusing where Rao says no shock-free solution exists; and no number in any report a screening surrogate without saying so. RQ1–RQ4 then run on that tool.</dd></div>
+    <div class="fact"><dt>Inputs</dt><dd><strong>Traditional:</strong> 328 CLI flags / <code>.args</code> files / job YAML covering operating point, propellant, contour method, chamber and throat geometry, materials, coolant and channel geometry, injector architecture, feed architecture, electric drive and battery constants, CAD and export options. <strong>MDO:</strong> a <code>MissionSpec</code> plus a 10- or 11-variable design vector (<code>Pc</code>, <code>eps</code>, <code>dp_f_frac</code>, <code>dp_o_frac</code>, <code>D_pintle</code>, <code>N_rpm</code>, <code>channel_width</code>, <code>channel_height</code>, <code>film_frac</code>, <code>t_wall</code>, [<code>OF</code>]).</dd></div>
+    <div class="fact"><dt>Core process</dt><dd>MDO path: outer Optimistix Newton on (R<sub>t</sub>, ṁ) → C¹ chamber property surfaces → typed contour provider → station grid → inner Newton on the stationwise wall-temperature vector (both IFT-differentiated) → injector hydraulics → hydraulic edge Δp<sub>rise</sub> = Pc(1+χ) + Δp<sub>regen</sub> + Δp<sub>line</sub> − P<sub>tank</sub> → pump/electric feed with separate battery energy/power branches → geometric chamber mass → 31 constraint margins → jacrev exact Jacobian → SLSQP → versioned snapshot → authoritative re-evaluation through <code>design_nozzle_v2</code> with pinned thermochemistry → report and CAD.</dd></div>
+    <div class="fact"><dt>Outputs</dt><dd><code>contour.csv</code>; profile/cooling/separation/structural/injector/spray PNGs; watertight STL; unit-declared neutral B-rep STEP (wall, jacket, regen with manifolds, five-part machined pintle, pump package, engine assembly); pintle dimension table and machining-gate report; pump BOM and reference geometry; a 39-section <code>summary.json</code> (~226 KB); MDO constraint-margin tables, Pareto frontiers, and snapshot comparisons; research artifacts (existence-scan CSVs, heatmaps, convergence-domain JSON, NASA comparison metrics).</dd></div>
+    <div class="fact"><dt>Major components</dt><dd><code>design.py</code> (sequential orchestrator); <code>rao_variational.py</code> (variational BVP); <code>nasa_moc.py</code> + <code>moc.py</code>; <code>physics.py</code> + <code>thermal_design.py</code> + <code>regen_*</code>; <code>injector.py</code> + <code>spray/</code>; <code>pumps.py</code>; <code>mass_ledger.py</code>; <code>*_cad.py</code>; <code>raosim/jax/</code>; <code>raosim/mdo/</code>; <code>requirements.py</code>; <code>model_registry.py</code>; <code>run_nozzle.py</code> + <code>lrekit/</code>.</dd></div>
+    <div class="fact"><dt>Key methods</dt><dd>Method of characteristics (axisymmetric, Kliegel–Levine/Sauer transonic start line); Rao variational optimum-thrust formulation with Lagrange multipliers; implicit function theorem differentiation of converged states; JAX autodiff with jit and static shapes; Optimistix Newton and Levenberg–Marquardt; SLSQP ε-constraint multi-objective optimization; Fritsch–Carlson C¹ shape-preserving interpolation; Bartz with the σ property factor; Sieder–Tate with a Shah–London laminar branch; land-fin efficiency; counterflow upwind finite volume; Knuth critical-flow liquid-film phase-change model; Son-2017 movable-pintle two-branch area; Lee-2021 battery epigraph; specific-speed pump meanline with SP-8052/SP-8109 screens; SP-125 eq. 4-31 combined stress and Coffin–Manson strain-life; WAVE/KH breakup and Spalding evaporation; B-rep solid modeling via OpenCascade with round-trip validation.</dd></div>
+    <div class="fact"><dt>Major contributions</dt><dd>The variational BVP formulation and residual architecture; the NASA kernel port and its JAX bit-parity reimplementation; the MDO layer’s design and invariant rule set; four load-bearing formulation corrections (characteristic invariants, length constraint, x-degeneracy, Mach-monotonicity penalty); the coolant-enthalpy-limited diagnosis and the film-cooling lever; the coaxial five-part injector CAD architecture; the provenance, refusal, and gate infrastructure; the requirements layer; the literature corpus and benchmark manifests; and the planning documents specifying the whole program with acceptance gates.</dd></div>
+    <div class="fact"><dt>Strongest capabilities</dt><dd>Rao 1958 Nozzle B reproduction at 0.0089 R<sub>t</sub> RMS and C<sub>F</sub> 1.5769 vs 1.5829; NASA kernel bit parity at 5e-10; exact total derivatives through two nested implicit solves matched to re-solved central differences; a feasible KKT-scale optimum at <code>max_violation</code> ~1e-11 with a genuinely thermal-limited active constraint; full 13 kN engine package generation with kernel-validated B-rep CAD; a 2174-test suite passing in 34 minutes.</dd></div>
+    <div class="fact"><dt>Major limitations</dt><dd>Whole-engine dry mass does not exist (partial subtotal only); the exact-Rao contour is not promoted and the MDO uses the TOP approximation; all flow is inviscid and constant-γ; multipoint is refused; no CFD/CHT/FEA/cold-flow/hot-fire validation of any result; cryogenic coolant coverage incomplete; the documented <code>--engine-mdo-optimize</code> CLI invocation fails on its own 10 s default burn time (Python API works).</dd></div>
+    <div class="fact"><dt>Unfinished components</dt><dd><code>mdo/multipoint.py</code>; Phase 11 verification layers; the <code>ResolvedEngineConfiguration</code> binding object; whole-engine mass models (valves, lines, brackets, gimbal, pump BOM, chamber/nozzle configuration control); the fidelity ladder (BL displacement loop, variable-γ MOC, equilibrium chemistry, FSS/RSS classifier, PNS layer, Rao adjoint); <code>mdo/continuation.py</code> and the σ<sub>min</sub>/λ<sub>min</sub> diagnostics; igniter and combustion-stability models (blocked); the experiment-to-model return path.</dd></div>
+    <div class="fact"><dt>Validation performed</dt><dd>2174 passing tests; NumPy↔JAX parity at ~1e-10; AD vs re-solved central FD &lt; 1e-4; NASA <code>MOC_Grid_BDE</code> kernel bit parity 5e-10 and BDE wall vs NASA <code>wall.out</code> at 1.8e-4 RMS; Rao 1958 Nozzle B strict benchmark 7/7 metrics; every-cell held-out CEA value-and-gradient gate on four propellant pairs; STEP export→re-import→volume gates; model registry audit 61/61; benchmark manifests pinned by source SHA-256; Schomberg LEA TOP strict geometry with report-only pressure; Vulcain/S1 report-only separation trend.</dd></div>
+    <div class="fact"><dt>Development frontier</dt><dd>B3 forward-MOC compatibility (0.118/0.137 vs a 0.10 policy limit); B5 domain-map coverage beyond one γ = 1.4 / P<sub>a</sub>/P<sub>0</sub> = 0.01 slice with 40/65 knots converged; Track G chamber mass from disjoint CAD.</dd></div>
+    <div class="fact"><dt>Intended endpoint</dt><dd>A requirements-driven, multipoint, verification-backed engine design tool producing a configuration-hashed fabricable parts package, on top of which RQ1–RQ4 (value of simultaneous optimization; exact gradients vs conventional; interaction with the Rao existence boundary; frozen vs equilibrium migration) are answered.</dd></div>
+    <div class="fact"><dt>Next technical steps</dt><dd>(1) the <code>ResolvedEngineConfiguration</code> object, a precondition for the mass, CAD, and test-return tracks; (2) Track G completion so the optimizer minimizes a real dry mass; (3) <code>mdo/multipoint.py</code> and removal of the <code>job.py</code> guard; (4) D1 quasi-2-D cooling as a post-optimum signed delta (the model already exists and is unwired); (5) B3’s forward-MOC gate; (6) fix the <code>--burn-time</code> failure in the optimizer CLI path and add a regression test at the CLI default.</dd></div>
+    <div class="fact"><dt>Tangible artifacts</dt><dd><code>lrekit</code> 0.1.1 wheel + sdist; <code>v0.1.0</code> tag; CI and trusted-publishing workflows; 4 compiled LaTeX documents; 512 generated build outputs including full engine packages with valid B-rep STEP; a hash-pinned 65-knot Rao convergence-domain artifact; existence-scan datasets and heatmaps; NASA comparison station data; ~123 500 words of dated technical documentation; a 224-file / 12 047-page literature mirror with extraction diagnostics.</dd></div>
+    <div class="fact"><dt>Quantitative context</dt><dd>72 commits, sole author, Feb–Aug 2026. 133 720 tracked Python lines. 2174 tests in 120 modules. 328 CLI flags. 31 constraint rows (23 hard / 7 final gates / 1 report-only). 10–11 design variables. 61 model-registry entries across 17 subsystems. 10 registered-unavailable outputs. 5 propellants, 8 materials, 4 packaged property tables. 7 benchmark cases, 8 reference curves. 49 documentation files. 255 PDFs in the literature corpus.</dd></div>
+  </dl>
+</section>
+
+<!-- ============ 19 ============ -->
+<section id="s19">
+  <h2><span class="n">19</span><span>Concise descriptions</span></h2>
+  <div class="h-rule"></div>
+
+  <div class="desc one">
+    <h3>One sentence</h3>
+    <p>LREKit is a liquid-rocket-engine preliminary-design toolkit under active development — currently a single-design-point tool that sizes nozzle, chamber, regenerative-cooling, pintle-injector, and electric-pump-feed hardware and exports validated B-rep CAD, with a coupled differentiable (JAX) engine model whose exact total derivatives drive a constrained optimizer, built toward a requirements-driven multipoint system whose every reported number is either measured from the exported geometry or explicitly refused.</p>
+  </div>
+
+  <div class="desc">
+    <h3>Three sentences</h3>
+    <p>LREKit is intended to become a design tool that takes engine requirements — thrust, specific impulse, mass, envelope, throttle range — and returns a fabricable, mass-accounted, multipoint-feasible engine definition, and then to serve as the platform for studying whether whole-engine optima interact with the Rao nozzle existence boundary.</p>
+    <p>What is built today is the physics and optimization core of that system: four contour construction methods including a variational Rao boundary-value solver that reproduces Rao’s own published geometry to 0.0089 throat radii, a NASA/JHU method-of-characteristics kernel port at bit parity, a coupled differentiable engine model with two nested implicit-function-theorem solves feeding exact Jacobians to an SLSQP optimizer under 31 named constraints, B-rep CAD with kernel round-trip validation and geometry-linked mass, and a provenance layer in which ten engine outputs are registered unavailable with reasons rather than estimated.</p>
+    <p>What remains between that and the intended system is multipoint operation (currently refused rather than approximated), whole-engine dry mass, post-optimum verification at higher fidelity with signed deltas, a configuration-hashed object binding the solved state to the exported geometry, and the physical validation — CFD, conjugate heat transfer, FEA, cold flow, hot fire — that none of the current results have.</p>
+  </div>
+
+  <div class="desc">
+    <h3>Technical paragraph</h3>
+    <p>LREKit is a 133 000-line Python toolkit for liquid-rocket-engine preliminary design, developed by a single author over six months. It runs two parallel pipelines against one versioned output contract: a sequential orchestrator that sizes a contour, chamber, regenerative jacket, pintle injector, and electric pump feed and exports B-rep STEP and STL geometry; and a multidisciplinary-feasible differentiable layer in which nozzle performance, a 1-D+fin cooling march, injector hydraulics, and the pump/battery chain solve as one system, with converged implicit states differentiated by the implicit function theorem and exact reverse-mode Jacobians handed to an SLSQP ε-constraint optimizer over ten design variables and 23 enforced constraints. The most developed component is the nozzle work: an axisymmetric method-of-characteristics solver, a stagnation-normalized port of NASA/JHU’s <code>MOC_Grid_BDE</code> kernel reimplemented in JAX at bit parity, and Rao’s 1958 variational optimum-thrust problem posed as a boundary-value problem with fifteen scaled residual groups, which reproduces Rao’s published Nozzle B contour to 0.0089 throat radii. Verification is extensive — 2174 passing tests, NumPy↔JAX parity at 1e-10, autodiff-versus-finite-difference gates, held-out property-surface gates, CAD round-trip volume checks — and physical validation is absent, a distinction the codebase enforces by registering ten engine outputs as unavailable with reasons and by stamping every contour <code>hardware_qualified = False</code>. Active work is closing the contour-provider and hardware-mass tracks; the intended system adds multipoint throttle envelopes, whole-engine dry mass measured from built geometry, post-optimum verification reporting signed deltas per discipline, and a configuration-hashed object binding the analyzed engine to the exported one.</p>
+  </div>
+</section>
+
+<footer>
+  Audit performed 2026-08-25 against commit f763fe1 · All “verified” results were executed on the audit host (Apple M3 Pro, macOS 15.7.5, Python 3.12.13, JAX 0.6.2, NumPy 2.4.6, SciPy 1.17.1, CadQuery 2.7.0, RocketCEA 1.2.3)<br>
+  Technical source document — not application, portfolio, or recommendation prose.
+</footer>
+
+</main>
+</div>
+</div>
+
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var visible = new Set();
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { visible.add(e.target.id); } else { visible.delete(e.target.id); }
+    });
+    var order = Object.keys(map);
+    var active = order.find(function (id) { return visible.has(id); });
+    links.forEach(function (a) { a.classList.remove('on'); });
+    if (active && map[active]) { map[active].classList.add('on'); }
+  }, { rootMargin: '-8% 0px -70% 0px', threshold: 0 });
+  Object.keys(map).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) obs.observe(el);
+  });
+})();
+</script>

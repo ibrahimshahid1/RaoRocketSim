@@ -1441,6 +1441,12 @@ def _solve(args):
         kernel_d_fraction_max=0.7,
         physics_weight=1.0,
         thetaN_guess_deg=args.theta_b_guess,
+        kernel_dtheta_limit_deg=getattr(
+            args, "kernel_dtheta_limit_deg", 0.25
+        ),
+        kernel_massflow_rel_tol=getattr(
+            args, "kernel_massflow_rel_tol", 0.02
+        ),
     )
     return rv.solve_rao_bvp(cfg)
 
@@ -1835,6 +1841,12 @@ def _mdo_authoritative_contour_handoff(
         "wall_method": "bde",
         "kernel_d_fraction_max": 0.7,
         "physics_weight": 1.0,
+        "kernel_dtheta_limit_deg": float(
+            getattr(args, "kernel_dtheta_limit_deg", 0.25)
+        ),
+        "kernel_massflow_rel_tol": float(
+            getattr(args, "kernel_massflow_rel_tol", 0.02)
+        ),
     }
 
 
@@ -2705,6 +2717,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-nfev", type=int, default=4000,
                     help="LM iteration budget; 0 = seed contour only (instant)")
     ap.add_argument("--theta-b-guess", type=float, default=30.0)
+    ap.add_argument(
+        "--kernel-dtheta-limit-deg", type=float, default=0.25,
+        help=(
+            "kernel DTHETAB Max mesh policy [deg]; numerical, not a shock limit"
+        ),
+    )
+    ap.add_argument(
+        "--kernel-massflow-rel-tol", type=float, default=0.02,
+        help="kernel RRC relative mass-flow diagnostic tolerance",
+    )
     ap.add_argument("--allow-unconverged", action="store_true")
     ap.add_argument(
         "--release-evidence-manifest", type=Path, default=None,
@@ -4164,11 +4186,17 @@ def main(argv: list[str] | None = None) -> int:
     moc_compatibility_preserved = bool(
         sol.construction_diagnostics.get("moc_compatibility_preserved", False)
     )
+    moc_policy = sol.construction_diagnostics.get("rao_moc_numerical_policy")
+    if not isinstance(moc_policy, dict):
+        moc_policy = {}
+    wall_tangency_tol_deg = float(
+        moc_policy.get("wall_tangency_tol_deg", 0.25)
+    )
     moc_gate = bool(
         no_postprocessing
         and moc_compatibility_preserved
         and wall_tangency_rms is not None
-        and wall_tangency_rms < math.radians(0.25)
+        and wall_tangency_rms < math.radians(wall_tangency_tol_deg)
         and r.characteristic_crossings == 0
     )
     boundary_min = sol.construction_diagnostics.get("boundary_min")
@@ -4223,8 +4251,6 @@ def main(argv: list[str] | None = None) -> int:
                     moc_notes.append("Mach-line direction mismatch")
                 if not net_report.get("axis_condition_passes", True):
                     moc_notes.append("axis regularity")
-                if not net_report.get("measured_neighbor_smoothness_passes", True):
-                    moc_notes.append("neighbor-state smoothness")
                 if not net_report.get("axial_mass_conservation_passes", True):
                     mass_error = net_report.get("axial_mass_cut_max_rel_error")
                     if isinstance(mass_error, (int, float)):
@@ -4245,7 +4271,7 @@ def main(argv: list[str] | None = None) -> int:
                 moc_notes.append("net compatibility")
         if wall_tangency_rms is None:
             moc_notes.append("wall tangency unavailable")
-        elif wall_tangency_rms >= math.radians(0.25):
+        elif wall_tangency_rms >= math.radians(wall_tangency_tol_deg):
             moc_notes.append(
                 f"wall tangency {math.degrees(wall_tangency_rms):.2f} deg"
             )
@@ -4320,6 +4346,7 @@ def main(argv: list[str] | None = None) -> int:
         "optimization_converged": bool(sol.converged),
         "reliability": sol.reliability.value,
         "promotion_blockers": promotion_blockers,
+        "rao_moc_numerical_policy": moc_policy,
         "moc_compatibility_preserved": moc_compatibility_preserved,
         "wall_tangency_rms_deg": wall_tangency_rms_deg,
         "characteristic_crossings": int(r.characteristic_crossings),
@@ -4343,13 +4370,26 @@ def main(argv: list[str] | None = None) -> int:
                 "measured_invalid_cell_count",
                 "measured_min_oriented_cell_area_m2",
                 "measured_cell_orientation_passes",
+                "measured_cell_area_tol_m2",
+                "measured_cell_area_relative_tol",
+                "measured_mesh_edge_length_p99_m",
+                "measured_mesh_edge_length_max_m",
                 "neighbor_mach_p99",
                 "neighbor_mach_max",
+                "neighbor_mach_worst_edge_length_m",
+                "neighbor_mach_worst_edge",
+                "neighbor_mach_gradient_rt_scaled_p99",
+                "neighbor_mach_gradient_rt_scaled_max",
                 "neighbor_theta_p99_deg",
                 "neighbor_theta_max_deg",
                 "neighbor_pressure_ratio_p99",
                 "neighbor_pressure_ratio_max",
+                "neighbor_state_increment_diagnostic_passes",
+                "neighbor_state_increment_diagnostics_are_gate",
                 "measured_neighbor_smoothness_passes",
+                "measured_neighbor_smoothness_is_physical_gate",
+                "measured_neighbor_smoothness_interpretation",
+                "numerical_policy",
                 "axis_node_count",
                 "axis_max_abs_r_m",
                 "axis_max_abs_theta_deg",

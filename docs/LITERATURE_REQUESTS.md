@@ -1,5 +1,10 @@
 # Literature requests — what the repository needs and why
 
+> **Source-status review, September 6:** use the [reconciled literature audit](audit_work/LREKIT_LITERATURE_AUDIT_2026-09-05.md)
+> for current acquisition status and applicability. This historical request list
+> includes sources now held outside the agent index. Six NASA identifiers have
+> been corrected here; the remaining links are not thereby newly verified.
+
 Every entry below is a **gap I actually hit** while implementing, not a general
 reading list. Each says what the source supplies, which module needs it, and
 what the repository is doing in its absence. Ordered by how much it blocks.
@@ -27,9 +32,9 @@ sizing, line sizing or joint design, and I would be inventing correlations.
 | 1 | **NASA SP-8094**, *Liquid Rocket Valve Components* (Aug 1973, 150 pp) | [19740019163](https://ntrs.nasa.gov/citations/19740019163) | Poppet/ball/butterfly/gate configurations, seat and seal design, flow coefficients, actuation force build-up, materials. Tables of components on operational vehicles. | Valve geometry, valve mass, `Cv`/`Kv` pressure drop |
 | 2 | **NASA SP-8097**, *Liquid Rocket Valve Assemblies* (Nov 1973, 154 pp) | [19740008129](https://ntrs.nasa.gov/citations/19740008129) | Valve *selection* parameters, design integration, assembly and functional test. SP-8094's companion — the pair is the documented design sequence (select assembly type, then design components). | Which valve type a given duty needs |
 | 3 | **NASA SP-8090**, *Liquid Rocket Actuators and Operators* (May 1973, 158 pp) | [19730013807](https://ntrs.nasa.gov/citations/19730013807) | Pneumatic/hydraulic/electromechanical actuator sizing, response, stall torque, power. | Valve actuator mass and power; also feeds gimbal actuators |
-| 4 | **NASA SP-8080**, *Liquid Rocket Pressure Regulators, Relief Valves, Check Valves, Burst Disks, and Explosive Valves* (Mar 1973, 123 pp) | [19730013806](https://ntrs.nasa.gov/citations/19730013806) | Regulator droop and lockup, relief cracking/reseat, burst-disk sizing. | Tank pressurisation branch, relief sizing |
+| 4 | **NASA SP-8080**, *Liquid Rocket Pressure Regulators, Relief Valves, Check Valves, Burst Disks, and Explosive Valves* (Mar 1973, 123 pp) | [19740002611](https://ntrs.nasa.gov/citations/19740002611) | Regulator droop and lockup, relief cracking/reseat, burst-disk sizing. | Tank pressurisation branch, relief sizing |
 | 5 | **NASA SP-8123**, *Liquid Rocket Lines, Bellows, Flexible Hoses, and Filters* (Apr 1977) | [19780008146](https://ntrs.nasa.gov/citations/19780008146) | Line sizing and routing, bellows spring rate and cycle life, flex-hose selection, filter sizing. **The gimbal flex-joint source.** | Line mass and Δp; gimballed line loads |
-| 6 | **NASA SP-8119**, *Liquid Rocket Disconnects, Couplings, Fittings, Fixed Joints, and Seals* (Sep 1976) | [19770009166](https://ntrs.nasa.gov/citations/19770009166) | Fitting and fixed-joint types, seal selection, leakage criteria. | Joint and seal mass; the seals my flange ledger currently excludes |
+| 6 | **NASA SP-8119**, *Liquid Rocket Disconnects, Couplings, Fittings, Fixed Joints, and Seals* (Sep 1976) | [19770017247](https://ntrs.nasa.gov/citations/19770017247) | Fitting and fixed-joint types, seal selection, leakage criteria. | Joint and seal mass; the seals my flange ledger currently excludes |
 
 **Current state without these:** `valves`, `lines`, `brackets` and `gimbal` do
 not exist in the repository at all. The mass ledger lists them under `excludes`,
@@ -58,9 +63,9 @@ what stops the pump BOM from being a real machine rather than a hydraulic sketch
 
 | # | Document | NTRS | What it gives us | Blocks |
 |---|---|---|---|---|
-| 13 | **NASA SP-8048**, *Liquid Rocket Engine Turbopump Bearings* (Mar 1971, 85 pp) | [19710018568](https://ntrs.nasa.gov/citations/19710018568) | DN limits, cryogenic bearing life, cooling, preload. | `pumps.py` bearings are a `0.12 × shaft` mass placeholder tagged `placeholder_screen` |
-| 14 | **NASA SP-8101**, *Liquid Rocket Engine Turbopump Shafts and Couplings* (Sep 1972, 130 pp) | [19730012577](https://ntrs.nasa.gov/citations/19730012577) | Critical speed, shaft sizing, coupling selection. | Shaft mass is a plain cylinder; there is no rotordynamic critical-speed check at 30–60 krpm, which is where an electric-pump engine actually lives |
-| 15 | **NASA SP-8121**, *Liquid Rocket Engine Turbopump Rotating-Shaft Seals* (Feb 1978) | [19780012205](https://ntrs.nasa.gov/citations/19780012205) | Face/lift-off seal design, leakage, purge. | Seals are a `0.08 × shaft` placeholder; LOX-side sealing is a real design driver |
+| 13 | **NASA SP-8048**, *Liquid Rocket Engine Turbopump Bearings* (Mar 1971, 85 pp) | [19710018535](https://ntrs.nasa.gov/citations/19710018535) | DN limits, cryogenic bearing life, cooling, preload. | `pumps.py` bearings are a `0.12 × shaft` mass placeholder tagged `placeholder_screen` |
+| 14 | **NASA SP-8101**, *Liquid Rocket Engine Turbopump Shafts and Couplings* (Sep 1972, 130 pp) | [19740006328](https://ntrs.nasa.gov/citations/19740006328) | Critical speed, shaft sizing, coupling selection. | Shaft mass is a plain cylinder; there is no rotordynamic critical-speed check at 30–60 krpm, which is where an electric-pump engine actually lives |
+| 15 | **NASA SP-8121**, *Liquid Rocket Engine Turbopump Rotating-Shaft Seals* (Feb 1978) | [19780022641](https://ntrs.nasa.gov/citations/19780022641) | Face/lift-off seal design, leakage, purge. | Seals are a `0.08 × shaft` placeholder; LOX-side sealing is a real design driver |
 | 16 | **NASA SP-8100**, *Liquid Rocket Engine Turbopump Gears* (Mar 1974, 117 pp) | [19740014507](https://ntrs.nasa.gov/citations/19740014507) | Gear sizing if a reduction stage is ever added. | Lower priority — only if direct-drive is abandoned |
 
 ---
@@ -72,7 +77,7 @@ what stops the pump BOM from being a real machine rather than a hydraulic sketch
 | 17 | **NASA SP-8112**, *Pressurization Systems for Liquid Rockets* (Oct 1975) | [19770009165](https://ntrs.nasa.gov/citations/19760010113) | Pressurant mass, heat transfer to ullage, regulator sizing. | Tank-side boundary; `MissionSpec.P_tank_*` is currently a free input with no system behind it |
 | 18 | **NASA SP-8088**, *Liquid Rocket Metal Tanks and Tank Components* (May 1974, 165 pp) | [19740018454](https://ntrs.nasa.gov/citations/19740018454) | Tank wall, ends, baffles, expulsion. | Only if the tool ever sizes tanks; SP-125 ch. VIII already covers the basics |
 | 19 | **NASA SP-8055**, *Prevention of Coupled Structure-Propulsion Instability (POGO)* (Oct 1970, 51 pp) | [19710015337](https://ntrs.nasa.gov/citations/19710015337) | Feed-line compliance, pump gain, structural coupling. | Line and bracket **stiffness** requirements — brackets are not sized by strength, they are sized by frequency |
-| 20 | **NASA SP-8030**, *Transient Loads from Thrust Excitation* (Feb 1969, 28 pp) | [19690023005](https://ntrs.nasa.gov/citations/19690023005) | Ignition/shutdown transient loads. | Gimbal and mount load cases; steady thrust is not the sizing case |
+| 20 | **NASA SP-8030**, *Transient Loads from Thrust Excitation* (Feb 1969, 28 pp) | [19710014805](https://ntrs.nasa.gov/citations/19710014805) | Ignition/shutdown transient loads. | Gimbal and mount load cases; steady thrust is not the sizing case |
 | 21 | **NASA SP-8072**, *Acoustic Loads Generated by the Propulsion System* (Jun 1971, 54 pp) | [19710023719](https://ntrs.nasa.gov/citations/19710023719) | Near-field acoustic environment. | Bracket and line random-vibration fatigue |
 
 ---

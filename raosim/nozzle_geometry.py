@@ -173,6 +173,8 @@ def bell_nozzle_contour(
     rao_moc_wall_method: str = "coupled",
     rao_moc_kernel_d_fraction_max: float | None = None,
     rao_moc_physics_weight: float | None = None,
+    rao_moc_kernel_dtheta_limit_deg: float = 0.5,
+    rao_moc_kernel_massflow_rel_tol: float = 0.02,
 ) -> dict:
     """
     Generate a Rao TOP bell nozzle contour.
@@ -198,7 +200,8 @@ def bell_nozzle_contour(
     rao_moc_n_control, rao_moc_n_kernel, rao_moc_max_nfev,
     rao_moc_evaluate_moc, rao_moc_theta_n_guess_deg,
     rao_moc_solver_backend, rao_moc_wall_method,
-    rao_moc_kernel_d_fraction_max, rao_moc_physics_weight :
+    rao_moc_kernel_d_fraction_max, rao_moc_physics_weight,
+    rao_moc_kernel_dtheta_limit_deg, rao_moc_kernel_massflow_rel_tol :
         Rao-variational-MOC-only residual solve controls
 
     Returns
@@ -273,6 +276,8 @@ def bell_nozzle_contour(
             wall_method=rao_moc_wall_method,
             kernel_d_fraction_max=rao_moc_kernel_d_fraction_max,
             physics_weight=rao_moc_physics_weight,
+            kernel_dtheta_limit_deg=rao_moc_kernel_dtheta_limit_deg,
+            kernel_massflow_rel_tol=rao_moc_kernel_massflow_rel_tol,
         )
         _shift_contour_x(contour, throat_x)
         contour["throat_geometry"] = spec.to_dict()

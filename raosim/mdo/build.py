@@ -248,10 +248,11 @@ def build_engine_parts(
 ) -> EngineBuildManifest:
     """Assemble the expected-part manifest for one solved job.
 
-    ``artifacts`` maps ``part_id`` to an existing file produced by the CAD
-    exporters.  Parts without an artifact are recorded as unavailable with the
-    reason their manifest entry states, so the ceiling on what this repository
-    can build is visible rather than implied.
+    ``artifacts`` maps ``part_id`` to a file the caller declares. A path and
+    content hash establish presence only: they do not verify CAD validity,
+    units, part identity or configuration identity. This legacy path-only
+    interface records such files as unverified and awards no geometry fidelity.
+    A future producer validation handoff must establish those claims explicitly.
     """
 
     supplied = dict(artifacts or {})
@@ -294,19 +295,20 @@ def build_engine_parts(
                 unavailable_reason=f"declared artifact {path} does not exist",
             ))
             continue
-        achieved = min(
-            spec.supported_fidelity,
-            max(requested_fidelity, BuildFidelity.L2_VALID_REFERENCE_CAD),
-        )
         records.append(PartRecord(
             part_id=spec.part_id,
             subsystem=spec.subsystem,
             quantity=spec.quantity,
-            status="built",
-            achieved_fidelity=BuildFidelity(achieved),
+            status="unavailable",
+            achieved_fidelity=BuildFidelity.L0_NUMERICAL_ONLY,
             supported_fidelity=spec.supported_fidelity,
             artifacts=(str(path),),
             artifact_sha256={str(path): _sha256(path)},
+            unavailable_reason=(
+                "unverified artifact: path and hash do not establish CAD "
+                "validity, units or binding to this part and configuration; "
+                "a producer validation record is unavailable"
+            ),
         ))
 
     unknown = set(supplied) - {s.part_id for s in ENGINE_PART_MANIFEST}
@@ -318,9 +320,8 @@ def build_engine_parts(
             "the contract does not enumerate."
         )
 
-    built = [r for r in records if r.status == "built"]
     achieved_overall = (
-        min(r.achieved_fidelity for r in built) if built
+        min(r.achieved_fidelity for r in records) if records
         else BuildFidelity.L0_NUMERICAL_ONLY
     )
     if requested_fidelity > achieved_overall:

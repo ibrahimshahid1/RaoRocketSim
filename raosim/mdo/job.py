@@ -23,7 +23,8 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, field
+import math
+from dataclasses import asdict, dataclass, field, fields
 from enum import Enum
 from typing import Any, Literal, Mapping, Sequence
 
@@ -121,9 +122,13 @@ ENUMERABLE_SELECTIONS: frozenset[str] = frozenset(
 
 def _quantity(value: Any, *, name: str, dimension: str) -> float:
     try:
-        return parse_quantity(value, dimension=dimension, field=name).value
+        resolved = parse_quantity(value, dimension=dimension, field=name).value
     except UnitError as exc:
         raise JobValidationError(str(exc)) from exc
+    # Unit conversion can overflow even when the written magnitude is finite.
+    if not math.isfinite(resolved):
+        raise JobValidationError(f"{name}: converted value must be finite")
+    return resolved
 
 
 @dataclass(frozen=True)
@@ -149,6 +154,28 @@ class VariableRequest:
             )
         dim = VARIABLE_DIMENSIONS[self.name]
         mode = self.mode
+        if not isinstance(self.values, (list, tuple)):
+            raise JobValidationError(f"{self.name}: values must be a sequence")
+        supplied = {
+            "value": self.value is not None,
+            "lower": self.lower is not None,
+            "upper": self.upper is not None,
+            "values": bool(self.values),
+        }
+        accepted = {
+            VariableMode.FIXED: {"value"},
+            VariableMode.BOUNDED: {"lower", "upper"},
+            VariableMode.FREE: set(),
+            VariableMode.DERIVED: set(),
+            VariableMode.ENUMERATE: {"values"},
+        }[mode]
+        unused = [key for key, present in supplied.items()
+                  if present and key not in accepted]
+        if unused:
+            raise JobValidationError(
+                f"{self.name}: mode {mode.value!r} does not consume "
+                + ", ".join(unused)
+            )
 
         if mode is VariableMode.FIXED:
             if self.value is None:
@@ -187,6 +214,15 @@ class VariableRequest:
             object.__setattr__(self, "values", tuple(
                 _quantity(v, name=self.name, dimension=dim) for v in self.values
             ))
+            if len(set(self.values)) != len(self.values):
+                raise JobValidationError(f"{self.name}: enumeration values must be distinct")
+        values = ((self.value,) if mode is VariableMode.FIXED else
+                  self.values if mode is VariableMode.ENUMERATE else ())
+        for value in values:
+            valid = (0.0 <= value < 1.0 if self.name == "film_frac" else
+                     value > 1.0 if self.name == "eps" else value > 0.0)
+            if not valid:
+                raise JobValidationError(f"{self.name}: value is outside its physical range")
 
 
 @dataclass(frozen=True)
@@ -232,6 +268,10 @@ class TargetRequest:
             object.__setattr__(self, "value", lo)
             object.__setattr__(self, "upper_value", hi)
         else:
+            if self.upper_value is not None:
+                raise JobValidationError(
+                    f"{self.metric}: upper_value is only consumed by 'range'"
+                )
             if self.value is None:
                 raise JobValidationError(
                     f"{self.metric}: relation {self.relation.value!r} needs a value"
@@ -281,9 +321,11 @@ class MissionRequest:
     """The SP-125 sec. 2.1 requirement set, in engineering notation."""
 
     thrust: Any
-    thrust_condition: str = "sea_level"
+    # None retains omitted/default provenance so an explicit operating point
+    # can supply these values without overriding a conflicting user request.
+    thrust_condition: str | None = None
     altitude: Any = None
-    burn_duration: Any = "120 s"
+    burn_duration: Any = None
     qualification_duration: Any = None
     isp_min: Any = None
     dry_mass_max: Any = None
@@ -291,25 +333,40 @@ class MissionRequest:
     envelope_length_max: Any = None
 
     def resolved(self) -> dict[str, Any]:
+        condition = self.thrust_condition if self.thrust_condition is not None else "sea_level"
         out: dict[str, Any] = {
             "thrust": _quantity(self.thrust, name="thrust", dimension="force"),
-            "thrust_condition": str(self.thrust_condition),
+            "thrust_condition": condition,
             "burn_duration": _quantity(
-                self.burn_duration, name="burn_duration", dimension="time"
+                self.burn_duration if self.burn_duration is not None else "120 s",
+                name="burn_duration", dimension="time"
             ),
         }
-        if self.thrust_condition not in ("sea_level", "vacuum", "altitude"):
+        if condition not in ("sea_level", "vacuum", "altitude"):
             raise JobValidationError(
                 "thrust_condition must be 'sea_level', 'vacuum' or 'altitude'; "
                 f"got {self.thrust_condition!r}"
             )
-        if self.thrust_condition == "altitude":
+        if condition == "altitude":
             if self.altitude is None:
                 raise JobValidationError(
                     "thrust_condition 'altitude' requires an altitude"
                 )
             out["altitude"] = _quantity(
                 self.altitude, name="altitude", dimension="length"
+            )
+            # The existing simplified atmosphere reproduces its stated lapse
+            # layers through 32 km. Beyond that it does not implement the next
+            # ISA lapse segment, and its high-altitude tail is approximate.
+            if not 0.0 <= out["altitude"] <= 32000.0:
+                raise JobValidationError(
+                    "altitude must be in [0, 32000] m for the selected "
+                    "raosim.atmosphere simplified ISA model; supply a single "
+                    "operating point with explicit ambient_pressure otherwise"
+                )
+        elif self.altitude is not None:
+            raise JobValidationError(
+                "altitude is only consumed when thrust_condition is 'altitude'"
             )
         optional = (
             ("qualification_duration", "time"),
@@ -322,6 +379,9 @@ class MissionRequest:
             raw = getattr(self, name)
             if raw is not None:
                 out[name] = _quantity(raw, name=name, dimension=dim)
+        for name, value in out.items():
+            if name not in {"thrust_condition", "altitude"} and value <= 0.0:
+                raise JobValidationError(f"{name} must be positive")
         qual = out.get("qualification_duration")
         if qual is not None and qual < out["burn_duration"]:
             raise JobValidationError(
@@ -341,6 +401,27 @@ class ArchitectureSelection:
     cooling: str = "regenerative"
     liner_material: str | None = None
     closeout_material: str | None = None
+
+    def __post_init__(self) -> None:
+        from raosim.mdo.capabilities import require_capability
+
+        for name in ("propellant", "liner_material", "closeout_material"):
+            value = getattr(self, name)
+            if value is None and name != "propellant":
+                continue
+            choices = value if isinstance(value, (list, tuple)) else (value,)
+            if not choices or any(not isinstance(item, str) or not item.strip() for item in choices):
+                raise JobValidationError(f"{name} requires a name or a nonempty sequence of names")
+        for name in ("feed", "injector", "cooling"):
+            try:
+                require_capability(name, getattr(self, name))
+            except ValueError as exc:
+                raise JobValidationError(str(exc)) from exc
+        if self.closeout_material is not None and self.liner_material is None:
+            raise JobValidationError(
+                "closeout_material requires liner_material so both selected "
+                "materials can reach the wall model"
+            )
 
 
 @dataclass(frozen=True)
@@ -363,6 +444,18 @@ class ModelSelection:
         object.__setattr__(
             self, "constraint_policy", ConstraintPolicy(self.constraint_policy)
         )
+        if not isinstance(self.allow_incomplete_physics, bool):
+            raise JobValidationError("allow_incomplete_physics must be a boolean")
+        if self.constraint_policy is ConstraintPolicy.CUSTOM_ABLATION:
+            raise JobValidationError(
+                "custom_ablation is not implemented: no constraint-selection "
+                "mask is available; use all_applicable"
+            )
+        if self.chamber_property_table is not None and (
+            not isinstance(self.chamber_property_table, str)
+            or not self.chamber_property_table.strip()
+        ):
+            raise JobValidationError("chamber_property_table must be a nonempty path")
         if self.mixture_ratio_mode not in ("nominal", "pinned", "optimize"):
             raise JobValidationError(
                 "mixture_ratio_mode must be 'nominal', 'pinned' or 'optimize'; "
@@ -483,6 +576,30 @@ class OperatingPointSpec:
     thrust_fraction: float = 1.0
     duration: Any = None
 
+    def __post_init__(self) -> None:
+        if not isinstance(self.id, str) or not self.id.strip():
+            raise JobValidationError("operating point id must be a nonempty string")
+        pressure = _quantity(
+            self.ambient_pressure, name=f"{self.id}.ambient_pressure",
+            dimension="pressure",
+        )
+        if pressure < 0.0:
+            raise JobValidationError("ambient_pressure must be nonnegative and absolute")
+        fraction = _quantity(
+            self.thrust_fraction, name=f"{self.id}.thrust_fraction",
+            dimension="dimensionless",
+        )
+        if fraction != 1.0:
+            raise JobValidationError(
+                "thrust_fraction other than 1 is not implemented: the solver "
+                "sizes one design point and cannot evaluate throttled operation "
+                "of the same hardware"
+            )
+        if self.duration is not None:
+            duration = _quantity(self.duration, name=f"{self.id}.duration", dimension="time")
+            if duration <= 0.0:
+                raise JobValidationError("operating point duration must be positive")
+
 
 @dataclass(frozen=True)
 class OutputPolicy:
@@ -494,6 +611,39 @@ class OutputPolicy:
     reports: tuple[str, ...] = ()
     output_dir: str | None = None
     allow_partial_package: bool = False
+
+    def __post_init__(self) -> None:
+        from raosim.mdo.capabilities import require_capability
+
+        if not isinstance(self.allow_partial_package, bool):
+            raise JobValidationError("allow_partial_package must be a boolean")
+        for kind, value in (("parts", self.parts), ("cad_fidelity", self.cad_fidelity)):
+            try:
+                require_capability(kind, value)
+            except ValueError as exc:
+                raise JobValidationError(str(exc)) from exc
+        if not isinstance(self.cad_formats, (list, tuple)):
+            raise JobValidationError("cad_formats must be a sequence of format names")
+        if self.cad_formats:
+            raise JobValidationError(
+                "cad_formats are not implemented by the unified job execution "
+                "service; no CAD request will be silently omitted"
+            )
+        if not isinstance(self.reports, (list, tuple)):
+            raise JobValidationError("reports must be a sequence of report names")
+        for report in self.reports:
+            try:
+                require_capability("report", report)
+            except ValueError as exc:
+                raise JobValidationError(str(exc)) from exc
+        if self.output_dir is not None and (
+            not isinstance(self.output_dir, str) or not self.output_dir.strip()
+        ):
+            raise JobValidationError("output_dir must be a nonempty directory path")
+        if self.reports and self.output_dir is None:
+            raise JobValidationError("requested reports require output_dir")
+        object.__setattr__(self, "reports", tuple(self.reports))
+        object.__setattr__(self, "cad_formats", tuple(self.cad_formats))
 
 
 @dataclass(frozen=True)
@@ -512,9 +662,22 @@ class EngineJobSpec:
     operating_points: tuple[OperatingPointSpec, ...] = ()
     output_policy: OutputPolicy = field(default_factory=OutputPolicy)
     schema_version: str = ENGINE_JOB_SCHEMA_VERSION
+    # Retain custom catalog definitions in the submitted job and its digest,
+    # so replay does not depend on an earlier process's registry mutation.
+    custom_propellants: tuple[Mapping[str, Any], ...] = ()
 
     def __post_init__(self) -> None:
+        from raosim.mdo.capabilities import require_capability
+
+        try:
+            require_capability("schema_version", self.schema_version)
+        except ValueError as exc:
+            raise JobValidationError(str(exc)) from exc
         object.__setattr__(self, "workflow", Workflow(self.workflow))
+        if (not isinstance(self.custom_propellants, (list, tuple))
+                or any(not isinstance(item, Mapping) for item in self.custom_propellants)):
+            raise JobValidationError("custom_propellants must be a sequence of definitions")
+        object.__setattr__(self, "custom_propellants", tuple(dict(item) for item in self.custom_propellants))
         names = [v.name for v in self.variables]
         duplicates = {n for n in names if names.count(n) > 1}
         if duplicates:
@@ -534,10 +697,16 @@ class EngineJobSpec:
             )
         of_mode = self.models.mixture_ratio_mode
         of_var = next((v for v in self.variables if v.name == "OF"), None)
-        if of_var is not None and of_mode != "optimize":
+        if of_var is not None and of_mode == "nominal":
             raise JobValidationError(
                 "an OF variable policy requires models.mixture_ratio_mode="
                 f"'optimize'; got {of_mode!r}"
+            )
+        if of_mode == "pinned" and (
+            of_var is None or of_var.mode is not VariableMode.FIXED
+        ):
+            raise JobValidationError(
+                "mixture_ratio_mode 'pinned' requires a fixed OF variable value"
             )
         if len(self.operating_points) > 1:
             raise JobValidationError(
@@ -550,6 +719,31 @@ class EngineJobSpec:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    def to_document(self) -> dict[str, Any]:
+        """A replayable CLI document, restoring units to normalized scalars."""
+        from raosim.units import canonical_unit
+
+        def quantity(value: Any, dimension: str) -> Any:
+            if value is None:
+                return None
+            unit = canonical_unit(dimension)
+            return f"{float(value):.17g} {unit}" if unit else float(value)
+
+        document = self.to_dict()
+        document["variables"] = {}
+        for variable in self.variables:
+            payload = asdict(variable)
+            payload.pop("name")
+            dimension = VARIABLE_DIMENSIONS[variable.name]
+            for key in ("value", "lower", "upper"):
+                payload[key] = quantity(payload[key], dimension)
+            payload["values"] = [quantity(value, dimension) for value in variable.values]
+            document["variables"][variable.name] = payload
+        for target in document["targets"]:
+            for key in ("value", "upper_value"):
+                target[key] = quantity(target[key], target["dimension"])
+        return document
 
     def digest(self) -> str:
         payload = json.dumps(self.to_dict(), sort_keys=True, default=str)
@@ -572,6 +766,8 @@ class ResolvedEngineJob:
     bounds: Mapping[str, tuple[float, float]]
     enumerations: Mapping[str, tuple[Any, ...]]
     constraint_policy: ConstraintPolicy
+    effective_targets: tuple[TargetRequest, ...] = ()
+    requirement_coverage: tuple[Mapping[str, Any], ...] = ()
     rao_convergence_domain_sha256: str | None = None
     inputs: Any = None
     notes: tuple[str, ...] = ()
@@ -647,6 +843,13 @@ class ResolvedEngineJob:
             "bounds": {k: list(v) for k, v in self.bounds.items()},
             "enumerations": {k: list(v) for k, v in self.enumerations.items()},
             "constraint_policy": self.constraint_policy.value,
+            "effective_targets": [asdict(target) for target in self.effective_targets],
+            "requirement_coverage": [dict(row) for row in self.requirement_coverage],
+            "resolved_operating_conditions": {
+                "thrust_N": self.mission.thrust,
+                "ambient_pressure_Pa": self.mission.Pa,
+                "burn_duration_s": self.mission.burn_time,
+            },
             "rao_convergence_domain_sha256": (
                 self.rao_convergence_domain_sha256
             ),
@@ -659,12 +862,80 @@ class ResolvedEngineJob:
 
 def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
     """Validate a job and resolve it into a runnable, replayable form."""
+    try:
+        return _resolve_engine_job(spec)
+    except JobValidationError:
+        raise
+    except (ValueError, TypeError, KeyError, OSError) as exc:
+        raise JobValidationError(str(exc)) from exc
+
+
+def _resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
+    for entry in spec.custom_propellants:
+        from raosim.mdo.propellants import PropellantSpec, WallSideMechanism, register_propellant
+
+        payload = dict(entry)
+        evidence = payload.pop("evidence", None)
+        mechanism = payload.pop("wall_side_mechanism", None)
+        if mechanism is not None:
+            payload["wall_side_mechanism"] = WallSideMechanism(mechanism)
+        register_propellant(PropellantSpec(**payload), evidence=evidence, replace_existing=True)
 
     from raosim.mdo.schema import MissionSpec, default_design_space
 
-    requirement = spec.mission.resolved()
+    from dataclasses import replace as _replace
+
+    request = spec.mission
+    if spec.operating_points and request.burn_duration is None:
+        point_duration = spec.operating_points[0].duration
+        if point_duration is not None:
+            request = _replace(request, burn_duration=point_duration)
+    requirement = request.resolved()
     notes: list[str] = []
+    coverage: list[Mapping[str, Any]] = []
+    effective_targets = list(spec.targets)
     rao_convergence_domain_sha256: str | None = None
+
+    # This mapping is deliberately total over the request schema, including
+    # currently unavailable requirements. Adding a field without declaring its
+    # consumer must fail resolution rather than dropping a new user request.
+    mission_consumers = {
+        "thrust": "mission.thrust",
+        "thrust_condition": "mission.Pa",
+        "altitude": "raosim.atmosphere.pressure -> mission.Pa",
+        "burn_duration": "mission.burn_time",
+        "qualification_duration": "qualification test evidence",
+        "isp_min": "performance.isp_delivered target",
+        "dry_mass_max": "masses.engine_dry_mass",
+        "envelope_diameter_max": "geometry.installed_envelope",
+        "envelope_length_max": "geometry.installed_envelope",
+    }
+    if set(mission_consumers) != {item.name for item in fields(MissionRequest)}:
+        raise JobValidationError("MissionRequest fields lack a total input-consumer mapping")
+    for name, value in requirement.items():
+        row: dict[str, Any] = {
+            "input": f"mission.{name}", "value": value,
+            "consumer": mission_consumers[name], "status": "supported",
+        }
+        if name in {"dry_mass_max", "envelope_diameter_max", "envelope_length_max"}:
+            from raosim.mdo.metrics import METRIC_REGISTRY
+
+            metric = METRIC_REGISTRY[mission_consumers[name]]
+            raise JobValidationError(
+                f"mission.{name} is unavailable: {metric.unavailable_reason}"
+            )
+        if name == "qualification_duration":
+            row.update(status="unavailable", reason=(
+                "qualification_duration requires configuration-bound test evidence; "
+                "a steady design calculation cannot establish qualified duration"
+            ))
+            notes.append(str(row["reason"]))
+        if name == "isp_min":
+            effective_targets.append(TargetRequest(
+                "performance.isp_delivered", TargetRelation.AT_LEAST,
+                f"{value:.17g} s",
+            ))
+        coverage.append(row)
 
     mission = MissionSpec.for_propellant(
         spec.architecture.propellant, requirement["thrust"]
@@ -672,11 +943,68 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
     overrides: dict[str, Any] = {"burn_time": requirement["burn_duration"]}
     if requirement["thrust_condition"] == "vacuum":
         overrides["Pa"] = 0.0
+    elif requirement["thrust_condition"] == "altitude":
+        from raosim.atmosphere import pressure
+
+        overrides["Pa"] = pressure(requirement["altitude"])
+        notes.append(
+            "ambient pressure resolved from raosim.atmosphere.pressure "
+            "(simplified ISA, accepted altitude range 0–32000 m): "
+            f"{requirement['altitude']:g} m -> {overrides['Pa']:.9g} Pa"
+        )
+    if spec.operating_points:
+        point = spec.operating_points[0]
+        ambient = _quantity(point.ambient_pressure, name=f"{point.id}.ambient_pressure",
+                            dimension="pressure")
+        if spec.mission.thrust_condition is not None and not math.isclose(
+            ambient, overrides.get("Pa", mission.Pa), rel_tol=1e-9, abs_tol=1e-6
+        ):
+            raise JobValidationError(
+                "operating point ambient_pressure conflicts with mission "
+                "thrust_condition; one job cannot size different reference conditions"
+            )
+        overrides["Pa"] = ambient
+        notes.append(
+            f"operating point {point.id!r} explicitly selects the single design "
+            f"ambient pressure ({ambient:g} Pa); this takes precedence over "
+            "an omitted ambient condition and does not establish off-design coverage"
+        )
+        for name, value in (("id", point.id), ("ambient_pressure", ambient),
+                            ("thrust_fraction", 1.0)):
+            coverage.append({"input": f"operating_points.{point.id}.{name}",
+                             "value": value, "status": "supported",
+                             "consumer": "single design operating point"})
+        if point.duration is not None:
+            duration = _quantity(point.duration, name=f"{point.id}.duration", dimension="time")
+            if duration != requirement["burn_duration"]:
+                raise JobValidationError(
+                    "operating point duration conflicts with mission burn_duration; "
+                    "set both to the intended single design-point duration"
+                )
+            coverage.append({"input": f"operating_points.{point.id}.duration",
+                             "value": duration, "status": "supported",
+                             "consumer": "mission.burn_time"})
+            overrides["burn_time"] = duration
+    selected_condition = (spec.operating_points[0].id if spec.operating_points
+                          else requirement["thrust_condition"])
+    for target in effective_targets:
+        if target.condition is not None and target.condition != selected_condition:
+            raise JobValidationError(
+                f"target {target.metric}: condition {target.condition!r} is not "
+                f"the selected single operating condition {selected_condition!r}"
+            )
     if spec.models.chamber_property_table:
         overrides["cea_table_path"] = str(spec.models.chamber_property_table)
     overrides["of_is_pinned"] = spec.models.mixture_ratio_mode != "optimize"
-    from dataclasses import replace as _replace
-
+    if spec.models.mixture_ratio_mode == "pinned":
+        overrides["OF"] = float(next(v.value for v in spec.variables if v.name == "OF"))
+        if overrides["OF"] <= 0.0:
+            raise JobValidationError("pinned OF must be positive")
+        if not spec.models.chamber_property_table and not math.isclose(overrides["OF"], mission.OF):
+            raise JobValidationError(
+                "a nonnominal pinned OF requires a validated chamber_property_table; "
+                "catalog gas properties describe only the nominal mixture ratio"
+            )
     mission = _replace(mission, **overrides)
 
     # Validate model selection during job resolution, including nominal or
@@ -724,7 +1052,8 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
         )
 
     space = {v.name: v for v in default_design_space(mission)}
-    policies = {v.name: v for v in spec.variables}
+    policies = {v.name: v for v in spec.variables
+                if not (v.name == "OF" and spec.models.mixture_ratio_mode == "pinned")}
 
     fixed: dict[str, float] = {}
     bounds: dict[str, tuple[float, float]] = {}
@@ -756,25 +1085,25 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
             if lo < float(var.lower) or hi > float(var.upper):
                 notes.append(
                     f"{name}: requested bounds [{lo:g}, {hi:g}] extend beyond "
-                    f"the validated model domain [{float(var.lower):g}, "
+                    f"the configured search domain [{float(var.lower):g}, "
                     f"{float(var.upper):g}]; the search is clipped to the "
-                    "domain because outside it the models are not valid"
+                    "domain; these search bounds do not establish physical validation"
                 )
                 lo = max(lo, float(var.lower))
                 hi = min(hi, float(var.upper))
                 if not lo < hi:
                     raise JobValidationError(
                         f"{name}: requested bounds do not intersect the "
-                        "validated model domain"
+                        "configured search domain"
                     )
             active.append(name)
             bounds[name] = (lo, hi)
         elif policy.mode is VariableMode.ENUMERATE:
             enumerations[name] = policy.values
         elif policy.mode is VariableMode.DERIVED:
-            notes.append(
-                f"{name}: resolved by its documented closed-form relation "
-                "rather than optimized"
+            raise JobValidationError(
+                f"{name}: derived mode has no implemented job-level resolver; "
+                "state a fixed value or choose free/bounded optimization"
             )
 
     unknown = set(policies) - set(space)
@@ -832,6 +1161,8 @@ def resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
         bounds=bounds,
         enumerations=enumerations,
         constraint_policy=spec.models.constraint_policy,
+        effective_targets=tuple(effective_targets),
+        requirement_coverage=tuple(coverage),
         rao_convergence_domain_sha256=rao_convergence_domain_sha256,
         inputs=None,
         notes=tuple(notes),

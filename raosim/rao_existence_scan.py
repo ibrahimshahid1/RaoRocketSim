@@ -90,9 +90,9 @@ FAILURE_CODES: Mapping[int, str] = {
     6: "no_candidate",
 }
 
-CONVERGENCE_DOMAIN_SCHEMA_VERSION = 1
+CONVERGENCE_DOMAIN_SCHEMA_VERSION = 2
 CONVERGENCE_DOMAIN_SOURCE_MODEL_ID = (
-    "raosim.rao_existence_scan:epsilon-length-fixed-context-d-attachment-domain:v1"
+    "raosim.rao_existence_scan:epsilon-length-fixed-context-d-attachment-domain:v2"
 )
 
 SAMPLE_CONVERGED_VALID = "converged_valid"
@@ -183,6 +183,31 @@ class ExistenceScanConfig:
     fan_turn_count: int = 13
     max_mach: float = 12.0
     max_de_steps: int = 240
+    # Appended to preserve the historical positional configuration layout.
+    kernel_dtheta_limit_deg: float = 0.25
+    kernel_massflow_rel_tol: float = 0.02
+
+    def __post_init__(self) -> None:
+        if isinstance(self.kernel_dtheta_limit_deg, bool):
+            raise ValueError("kernel_dtheta_limit_deg must be numeric, not bool")
+        dtheta = float(self.kernel_dtheta_limit_deg)
+        if not math.isfinite(dtheta) or dtheta <= 0.0:
+            raise ValueError(
+                "kernel_dtheta_limit_deg must be positive and finite"
+            )
+        object.__setattr__(self, "kernel_dtheta_limit_deg", dtheta)
+        if isinstance(self.kernel_massflow_rel_tol, bool):
+            raise ValueError("kernel_massflow_rel_tol must be numeric, not bool")
+        massflow_tol = float(self.kernel_massflow_rel_tol)
+        if (
+            not math.isfinite(massflow_tol)
+            or massflow_tol <= 0.0
+            or massflow_tol > 1.0
+        ):
+            raise ValueError(
+                "kernel_massflow_rel_tol must be finite and lie in (0, 1]"
+            )
+        object.__setattr__(self, "kernel_massflow_rel_tol", massflow_tol)
 
     @property
     def target_radius(self) -> float:
@@ -319,6 +344,12 @@ class ExistenceScanResult:
                 "target_length": self.config.target_length,
                 "starting_line_method": self.config.starting_line_method,
                 "n_kernel": self.config.n_kernel,
+                "kernel_dtheta_limit_deg": (
+                    self.config.kernel_dtheta_limit_deg
+                ),
+                "kernel_massflow_rel_tol": (
+                    self.config.kernel_massflow_rel_tol
+                ),
                 "n_de_points": self.config.n_de_points,
                 "max_de_steps": self.config.max_de_steps,
                 "stop_at": self.config.stop_at,
@@ -463,6 +494,8 @@ class RaoConvergenceContext:
     throat_downstream_radius_factor: float
     throat_upstream_radius_factor: float
     starting_line_method: str
+    kernel_dtheta_limit_deg: float
+    kernel_massflow_rel_tol: float
     n_kernel_finest: int
     n_kernel_ladder: tuple[int, ...]
     n_de_points: int
@@ -485,11 +518,19 @@ class RaoConvergenceContext:
 
     def __post_init__(self) -> None:
         for name in (
+            "kernel_dtheta_limit_deg",
+            "kernel_massflow_rel_tol",
+        ):
+            if isinstance(getattr(self, name), bool):
+                raise ValueError(f"{name} must be numeric, not bool")
+        for name in (
             "Rt_reference",
             "gamma",
             "pa_over_p0",
             "throat_downstream_radius_factor",
             "throat_upstream_radius_factor",
+            "kernel_dtheta_limit_deg",
+            "kernel_massflow_rel_tol",
             "max_mach",
         ):
             _require_finite(name, getattr(self, name))
@@ -501,6 +542,10 @@ class RaoConvergenceContext:
             raise ValueError("throat_downstream_radius_factor must be positive")
         if self.throat_upstream_radius_factor <= 0.0:
             raise ValueError("throat_upstream_radius_factor must be positive")
+        if self.kernel_dtheta_limit_deg <= 0.0:
+            raise ValueError("kernel_dtheta_limit_deg must be positive")
+        if not 0.0 < self.kernel_massflow_rel_tol <= 1.0:
+            raise ValueError("kernel_massflow_rel_tol must lie in (0, 1]")
         if self.n_kernel_finest < 5:
             raise ValueError("n_kernel_finest must be >= 5")
         if not self.n_kernel_ladder:
@@ -585,7 +630,7 @@ class RaoConvergenceContext:
             raise ValueError("the declared B5 domain backend must be numpy_host")
         if not self.rt_scale_invariant:
             raise ValueError(
-                "schema v1 is defined only for the nondimensional, Rt-scale-invariant scan"
+                "schema v2 is defined only for the nondimensional, Rt-scale-invariant scan"
             )
 
     @classmethod
@@ -612,6 +657,8 @@ class RaoConvergenceContext:
                 config.throat_upstream_radius_factor
             ),
             starting_line_method=str(config.starting_line_method),
+            kernel_dtheta_limit_deg=float(config.kernel_dtheta_limit_deg),
+            kernel_massflow_rel_tol=float(config.kernel_massflow_rel_tol),
             n_kernel_finest=int(
                 config.n_kernel
                 if n_kernel_finest is None
@@ -661,6 +708,12 @@ class RaoConvergenceContext:
             "max_de_steps": int(self.max_de_steps),
             "max_mach": float(self.max_mach),
             "n_de_points": int(self.n_de_points),
+            "kernel_dtheta_limit_deg": float(
+                self.kernel_dtheta_limit_deg
+            ),
+            "kernel_massflow_rel_tol": float(
+                self.kernel_massflow_rel_tol
+            ),
             "n_kernel_finest": int(self.n_kernel_finest),
             "n_kernel_ladder": [int(value) for value in self.n_kernel_ladder],
             "pa_over_p0": float(self.pa_over_p0),
@@ -698,6 +751,12 @@ class RaoConvergenceContext:
                 payload["throat_upstream_radius_factor"]
             ),
             starting_line_method=str(payload["starting_line_method"]),
+            kernel_dtheta_limit_deg=float(
+                payload["kernel_dtheta_limit_deg"]
+            ),
+            kernel_massflow_rel_tol=float(
+                payload["kernel_massflow_rel_tol"]
+            ),
             n_kernel_finest=int(payload["n_kernel_finest"]),
             n_kernel_ladder=tuple(
                 int(value) for value in payload["n_kernel_ladder"]
@@ -1270,6 +1329,18 @@ class RaoConvergenceDomain:
                 "convergence-domain artifact SHA-256 mismatch: "
                 f"expected {expected_hash}, computed {actual_hash}"
             )
+        schema_version = int(payload.get("schema_version", -1))
+        if schema_version == 1:
+            raise ValueError(
+                "legacy convergence-domain schema v1 is not loadable: its "
+                "numerical identity omitted kernel_dtheta_limit_deg and "
+                "kernel_massflow_rel_tol; regenerate a schema-v2 artifact "
+                "with explicit kernel-march controls"
+            )
+        if schema_version != CONVERGENCE_DOMAIN_SCHEMA_VERSION:
+            raise ValueError(
+                f"unsupported convergence-domain schema {schema_version}"
+            )
         axes = payload["axes"]
         policies = payload["policies"]
         domain = cls(
@@ -1291,7 +1362,7 @@ class RaoConvergenceDomain:
             max_length_pct_spacing=float(
                 policies["max_length_pct_spacing"]
             ),
-            schema_version=int(payload["schema_version"]),
+            schema_version=schema_version,
             source_model_id=str(payload["source_model_id"]),
             validity_source_id=str(payload["validity_source_id"]),
         )
@@ -1889,6 +1960,8 @@ def evaluate_closure_point(
         config.gamma,
         config.n_kernel,
         starting_line_method=config.starting_line_method,
+        mdot_tol=config.kernel_massflow_rel_tol,
+        dtheta_limit=math.radians(config.kernel_dtheta_limit_deg),
         Ru=config.throat_upstream_radius_factor * config.Rt,
     )
     kernel_bd = tuple(node.to_flow_node() for node in kernel.bd)
@@ -1912,6 +1985,12 @@ def evaluate_closure_point(
         "kdf": float(kdf),
         "fan_turn_deg": float(turn),
         "n_kernel": int(config.n_kernel),
+        "kernel_dtheta_limit_deg": float(
+            config.kernel_dtheta_limit_deg
+        ),
+        "kernel_massflow_rel_tol": float(
+            config.kernel_massflow_rel_tol
+        ),
     })
     return out
 
@@ -2169,6 +2248,10 @@ def scan_existence(config: ExistenceScanConfig) -> ExistenceScanResult:
                 config.gamma,
                 config.n_kernel,
                 starting_line_method=config.starting_line_method,
+                mdot_tol=config.kernel_massflow_rel_tol,
+                dtheta_limit=math.radians(
+                    config.kernel_dtheta_limit_deg
+                ),
                 Ru=config.throat_upstream_radius_factor * config.Rt,
             )
             kernel_bd = tuple(node.to_flow_node() for node in kernel.bd)

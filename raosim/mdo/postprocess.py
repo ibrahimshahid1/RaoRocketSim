@@ -298,7 +298,7 @@ def to_design_input(
         channel_count=resolved.thermal.channel_count,
         channel_width=resolved.thermal.channel_width,
         channel_height=resolved.thermal.channel_height,
-        channel_roughness=resolved.thermal.channel_roughness,
+        channel_roughness=resolved.thermal.channel_hydraulic_roughness_m,
         coolant_mass_flow=float(mdot_cool),
         fuel_film_mass_flow=float(mdot_film),
         coolant_cp=resolved.thermal.coolant_cp,
@@ -961,6 +961,7 @@ def reevaluate(
     postsolve_contour_validator_id: str | None = None,
     rao_convergence_domain_sha256: str | None = None,
     contour_comparison_policy: Mapping[str, Any] | None = None,
+    resolved_input_contract: Any | None = None,
     **kw: Any,
 ) -> ReEvaluation:
     """Run an MDO optimum through the authoritative workflow and compare it.
@@ -1058,7 +1059,7 @@ def reevaluate(
         )
 
         try:
-            resolved_inputs = resolve_engine_inputs(
+            resolved_inputs = resolved_input_contract or resolve_engine_inputs(
                 d,
                 mission,
                 effective_of=float(kw["effective_of"]),
@@ -1160,6 +1161,16 @@ def reevaluate(
         and hasattr(mdo_result.input_conventions, "couple_eta_cstar")
     ) else bool(couple_eta_cstar)
     snapshot_optimizer_metadata = dict(optimizer_metadata or {})
+    input_integrity = {
+        "status": (
+            "fail" if resolved_inputs_drift else
+            "unknown" if resolved_inputs_error or resolved_inputs is None else
+            "pass"
+        ),
+        "differences": list(resolved_inputs_drift),
+        "error": resolved_inputs_error,
+    }
+    snapshot_optimizer_metadata["input_integrity"] = input_integrity
     snapshot_optimizer_metadata.setdefault(
         "eta_cstar_handoff",
         "frozen_from_solved_mdo_state",
@@ -1338,6 +1349,7 @@ def reevaluate(
         pump_sizing_error=pump_error,
         metadata={
             "contract_version": authoritative_snapshot.contract_version,
+            "input_integrity": input_integrity,
             "optimizer_metadata": snapshot_optimizer_metadata,
             "design_input": design_input,
             "mdo_snapshot_error": mdo_solve_error,

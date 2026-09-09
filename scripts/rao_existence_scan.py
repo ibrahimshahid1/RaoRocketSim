@@ -13,6 +13,8 @@ only; choose an independently justified external grid and resolution policy):
 
     PYTHONPATH=. python scripts/rao_existence_scan.py \
       --theta-b-count 9 --kdf-count 9 --models smooth \
+      --kernel-dtheta-limit-deg 0.25 \
+      --kernel-massflow-rel-tol 0.02 \
       --resolution-convergence 6,8,12 \
       --domain-theta-seed-policy rao_chart_centered \
       --domain-chart-theta-span-deg 40 \
@@ -90,6 +92,24 @@ def build_parser() -> argparse.ArgumentParser:
                         help="geometry: radius+length; stationarity: radius+length+sigma_E; diagnostic: report only")
     parser.add_argument("--third-residual", choices=THIRD_COMPONENTS, default="auto")
     parser.add_argument("--n-kernel", type=int, default=16)
+    parser.add_argument(
+        "--kernel-dtheta-limit-deg",
+        type=float,
+        default=0.25,
+        help=(
+            "maximum wall-angle change used by adaptive NASA kernel "
+            "marching, in degrees; part of the B5 numerical identity"
+        ),
+    )
+    parser.add_argument(
+        "--kernel-massflow-rel-tol",
+        type=float,
+        default=0.02,
+        help=(
+            "relative kernel mass-flow termination tolerance; 0.02 matches "
+            "the visible JHU/NASA implementation and is part of B5 identity"
+        ),
+    )
     parser.add_argument("--n-de-points", type=int, default=24)
     parser.add_argument("--position-theta-span-deg", type=float, default=10.0)
     parser.add_argument("--position-theta-count", type=int, default=9)
@@ -187,6 +207,8 @@ def _write_solver_compare(config: ExistenceScanConfig, args: argparse.Namespace)
         throat_upstream_radius_factor=config.throat_upstream_radius_factor,
         n_control=max(8, config.n_de_points),
         n_kernel=config.n_kernel,
+        kernel_dtheta_limit_deg=config.kernel_dtheta_limit_deg,
+        kernel_massflow_rel_tol=config.kernel_massflow_rel_tol,
         max_nfev=args.solver_max_nfev,
         evaluate_moc=False,
         solver_backend=args.solver_backend,
@@ -239,6 +261,8 @@ def main() -> int:
         scan_mode=args.scan_mode,
         third_residual=args.third_residual,
         n_kernel=args.n_kernel,
+        kernel_dtheta_limit_deg=args.kernel_dtheta_limit_deg,
+        kernel_massflow_rel_tol=args.kernel_massflow_rel_tol,
         n_de_points=args.n_de_points,
         position_theta_span_deg=args.position_theta_span_deg,
         position_theta_count=args.position_theta_count,

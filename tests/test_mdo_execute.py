@@ -317,9 +317,10 @@ def test_an_unknown_target_is_indeterminate_not_met():
 
 
 def test_all_pass_is_met():
+    from raosim.mdo.execute import _REQUIRED_STATUS_KEYS
+
     verdict, code = _verdict(
-        {"workflow": "pass", "numerical": "pass", "physics": "pass",
-         "requirements": "pass", "optimizer": "pass"}, ()
+        {name: "pass" for name in _REQUIRED_STATUS_KEYS}, ()
     )
     assert verdict == "MET"
     assert code == WorkflowExitCode.MET

@@ -1,5 +1,9 @@
 # LREKit
 
+For the current path from performance requirements to machinable, testable parts,
+start with the [September readiness review and delivery plan](docs/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md).
+It consolidates repository findings, the implementation backlog, and literature gaps.
+
 LREKit is a Python research and preliminary-design toolkit for liquid rocket
 engine simulation and CAD export. It currently covers nozzle, throat, chamber,
 regenerative-cooling, and pintle-injector workflows, pairing a practical Rao

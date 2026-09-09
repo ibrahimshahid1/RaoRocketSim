@@ -4,7 +4,7 @@ subtitle: Formulation, Literature Basis, and Implementation Tracker for LREKit
 version: "0.1 (living document)"
 audience: [propulsion engineers, AI coding agents]
 status_legend: { DONE: complete, WIP: in progress, TODO: not started }
-last_updated: 2026-08-24
+last_updated: 2026-08-26
 ---
 
 # Differentiable Engine MDO — Plan & Tracker
@@ -145,7 +145,8 @@ inferred from filenames). One load-bearing attribution was corrected.
   TOP path and an explicit provider-failure final gate. The opt-in host
   `raosim/mdo/contour_validation.py` contract also now performs post-solve
   variational comparison without changing the default analytic path. Phase 3
-  remains WIP because real B3 promotion is blocked on forward-MOC compatibility
+  remains WIP because real B3 promotion is blocked on MOC resolution/topology
+  qualification
   and the exact inner-loop provider plus J6 v2 total design/wall-node
   derivatives remain deferred in `raosim/jax/sensitivities.py`.
 
@@ -527,11 +528,11 @@ points in $(\varepsilon,L_\%,\gamma)$:
 3. **Optimality** — smallest eigenvalue $\lambda_{\min}(H_\mathrm{red})$ of the
    reduced Hessian of the Rao Lagrangian $\to 0$ (loss of local optimality).
 
-**Implementation checkpoint (2026-08-24).** B5 now has a typed,
+**Implementation checkpoint (updated 2026-08-26).** B5 now has a typed,
 context-pinned declared-domain schema over externally supplied
 $\varepsilon\times L_\%$ axes. Its evidence is intentionally narrower than all
 three diagnostics above: each sample records a NumPy D-attachment geometry root,
-kernel-resolution evidence, and Rao Eq. (5) evaluability/validity. The accepted
+kernel-resolution evidence, and Rao Eq. (5) evaluability/validity. The historical
 H2 host run completed across the 13 chart $\varepsilon$ values by the five
 chart-length values at fixed $\gamma=1.4$ and $P_a/P_0=0.01$, using the
 8/12/16/24 kernel ladder. Its 65 knots contain 40 `converged_valid` and 25
@@ -539,16 +540,25 @@ chart-length values at fixed $\gamma=1.4$ and $P_a/P_0=0.01$, using the
 artifact is
 `raosim/data/rao_domains/rao_d_attachment_fixed_slice_gamma1p4_pa0p01_eps_length_v1.json`
 (SHA-256 `a85de663fffced5559e92760fe933a7edd0ca269fc227aae5908c0eccbf87b19`).
-That kernel-refinement evidence cannot establish universal full-BVP or full
-mesh convergence, so B5 remains partial beyond this slice.
+Version 1 omitted the inherited 0.5° angular limit and 5% mass-flow diagnostic
+from its identity, so schema v2 rejects it fail-closed. The regenerated
+`_v2.json` explicitly records 0.25°/2%, has canonical SHA-256
+`2b2d1f4017f88d230cd6857dbc1e1a859ac5d3f611aa14a60f9e413d2c5949a9`,
+and reproduces the 40/25 classification grid. Its kernel-refinement evidence
+cannot establish universal full-BVP or full-mesh convergence.
 
 B3's opt-in host validator consumes a matching B5 domain and adds numerical BVP,
 forward-MOC, Eq. (5), direct full-C-D-E performance, and explicit
 TOP-versus-variational discrepancy gates. Its implementation and typed contract
-have landed, but qualification has not: real 12×12 coupled and 24×24/32×32 BDE
-probes return `UNKNOWN` at forward-MOC compatibility. The BDE neighbor-Mach
-maxima are 0.11810 and 0.13748 against the repository-policy limit 0.10; the
-coupled run did not record its exact maximum. See
+have landed, but qualification has not: historical 12×12 coupled and
+24×24/32×32 BDE probes returned `UNKNOWN` at distinct numerical/topology audits. The BDE raw
+neighbor-Mach maxima are 0.11813 and 0.13752 against the repository-policy limit
+0.10; at 0.25° kernel spacing they fall to 0.06999 and 0.06705. The coupled run
+does not compute this BDE screen and instead fails a characteristic-crossing
+audit. The raw-increment hard gate has been retired; raw $\Delta M$ remains a
+mesh diagnostic, not a Rao/NASA physical shock criterion. The reference
+24×24/32×32 BDE pair now passes the typed common-coordinate physical-grid
+comparison (maximum $\Delta M=0.0019034$); broader contexts remain unqualified. See
 `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
 
 **Continuation.** Map the smooth solution through folds by pseudo-arclength
@@ -677,7 +687,7 @@ Numerical "done" means:
 | 0 | Canonical 13 kN LOX/RP-1 architecture + complete mass boundary | Sequential LREKit design closes thrust, flow, feed pressure, mass ledger | **DONE** |
 | 1 | Pure JAX data schema + explicit algebra | `jit`, `jacfwd`, `jacrev` work with no host callbacks | **DONE** (2026-07-22: `mdo/schema.py` + `mdo/scaling.py`; gate in `tests/test_mdo_schema.py`) |
 | 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **PARTIAL — chamber CEA DONE for four catalog pairs** (2026-08-22: C¹ Fritsch–Carlson/tensor-Hermite chamber surfaces plus a hash/schema-first, every-cell held-out RocketCEA value-and-gradient gate; versioned tables for LOX/RP-1, LOX/LCH4, LOX/LH2, and N2O4/MMH are packaged and selected with the fail-closed `catalog` sentinel. N2O/Ethanol remains blocked on oxidizer inlet-state/card selection. Coolant $(T,p)$/CoolProp surfaces remain unwired, so applicable real-fluid HTD coverage is still unavailable) |
-| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity and exact $\theta_B$ sensitivity; `theta_b_solve.py` makes $\theta_B$ live. The typed analytic TOP provider/failure gate landed 2026-08-22. The opt-in host B3 post-solve validator and B5 declared-domain contract landed 2026-08-24, and the first fixed H2 slice contains 40 `converged_valid`/25 `not_converged` knots. B3 real probes nevertheless remain `UNKNOWN` at forward-MOC compatibility; B5 is partial outside that slice. No inner-loop variational provider is promoted, and J6 v2 total design/wall-node derivatives remain deferred) |
+| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity and exact $\theta_B$ sensitivity; `theta_b_solve.py` makes $\theta_B$ live. The typed analytic TOP provider/failure gate landed 2026-08-22. The opt-in host B3 post-solve validator and B5 declared-domain contract landed 2026-08-24; the corrected 40/25 fixed H2 schema-v2 slice now records explicit 0.25°/2% policy. The 24×24/32×32 BDE common-coordinate convergence evidence passes at the reference context, while broader-context qualification and the separate coupled crossing audit remain open. No inner-loop variational provider is promoted, and J6 v2 total design/wall-node derivatives remain deferred) |
 | 4a | 1-D+fin regen residual | Energy, $\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-08-22: the stationwise thermal-hydraulic march and static combined-stress screen are wired; the source-labelled `liner_buckling` final gate has NumPy parity and JIT/AD tests. It remains a preliminary rib-supported long-plate screen, not SP-125 eq. 4-29 or a qualification calculation. Hard inner-loop buckling enforcement is deferred pending valid-box-corner root robustness and SP-8068 authority; LCF cycle life is explicitly unavailable as `life.cycles_to_failure`) |
 | 4b | Quasi-2-D regen (final discipline) | Reproduces Pizzarelli HARCC wall-temp/$\Delta p$ trends within tolerance | **TODO** |
 | 5 | Differentiable pintle/feed model | Areas, TMR, geometry, pressure ledger match NumPy within tol; branches split | **WIP** (2026-07-23: injector block `mdo/injector.py` — orifice/TMR/BF/spray + Son-2017 two-branch min-area + chug screen; parity ≤1e-9 + AD/FD gate green; feed-pressure ledger coupling lands with Phases 6/7) |
@@ -951,14 +961,15 @@ independently.
 > **Reality checks.** JAX BVP solves are *host-only*. On the documented Apple M3
 > Pro/macOS host, the observed 12×12 coupled probe took 16.2 s cold and 12.5 s on
 > immediate repeat, while the 24×24 and 32×32 BDE probes took 10.93 s and
-> 14.96 s. The dense 65-knot H2 generation took approximately 68 minutes with
-> the accepted policy. These observations are not benchmark guarantees.
+> 14.96 s. The historical dense 65-knot H2 generation took approximately 68
+> minutes. These observations are not benchmark guarantees.
 > The implicit-contour path and full coupled solves run on your machine, while
 > the analytic-contour skeleton is fast and testable anywhere.
 > Keep the NumPy oracle for every block so CI gates parity without the slow
 > solves. **J3b landed 2026-06-12 and is no longer an open blocker.** The
-> opt-in host B3 implementation and first fixed B5/H2 domain exist, but real B3
-> promotion is blocked on forward-MOC compatibility. An exact inner-loop
+> opt-in host B3 implementation and corrected fixed B5/H2 schema-v2 domain
+> exist, but real B3
+> promotion is blocked on MOC resolution/topology qualification. An exact inner-loop
 > variational provider and the J6 v2 total design/wall-node
 > derivatives deferred in `jax/sensitivities.py` remain open; the analytic-
 > contour skeleton and Paper-1 Pareto do not wait on them.
@@ -970,9 +981,9 @@ independently.
 1. **Contour fidelity (decided).** TOP-Bézier for bulk Pareto; implicit
    variational only for existence-boundary and exact-vs-TOP studies. J3b has
    landed; the typed analytic adapter and opt-in host validation contract also
-   exist. The first fixed B5/H2 slice is complete, but B5 remains partial beyond
-   it and promotion of the host comparison is blocked by forward-MOC
-   compatibility. Promotion to an exact inner-loop provider additionally depends
+   exist. The corrected fixed B5/H2 slice records explicit 0.25°/2% policy,
+   while promotion of the host comparison remains blocked by broader MOC
+   resolution/topology qualification. Promotion to an exact inner-loop provider additionally depends
    on J6 v2 total design/wall-node derivatives.
 2. **Thermal fidelity ladder (decided).** 4a before 4b; do not gate first coupled
    solves on quasi-2-D.

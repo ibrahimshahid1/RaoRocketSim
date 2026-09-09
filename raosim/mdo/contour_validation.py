@@ -11,6 +11,7 @@ The contract is fail closed:
 
 * a convergence-domain artifact must cover the exact solve context;
 * the variational solve must satisfy its numerical and MOC closure gates;
+* an independently refined BDE solve must agree at common physical coordinates;
 * Rao 1999 Eq. (5) must be evaluable and valid;
 * performance must come from the direct complete C-D-E surface integral; and
 * every geometry/performance discrepancy must be finite.
@@ -22,7 +23,7 @@ path substitutes the analytic TOP wall for the variational result.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from enum import Enum
 import math
 from pathlib import Path
@@ -36,10 +37,14 @@ from raosim.mdo.nozzle import (
 )
 from raosim.rao_variational import (
     RAO_RADIAL_INCREMENT_SOURCE_ID,
+    RaoFieldConvergenceEvidence,
+    RaoFieldConvergenceTolerances,
     RaoInvalidRegionError,
+    RaoMOCNumericalPolicy,
     RaoRadialIncrementValidity,
     RaoSolution,
     RaoSolverConfig,
+    compare_rao_solutions_common_coordinates,
     solve_rao_bvp,
 )
 
@@ -79,6 +84,12 @@ class VariationalValidationReason(str, Enum):
     VARIATIONAL_SOLVE_EXCEPTION = "variational_solve_exception"
     VARIATIONAL_NOT_CONVERGED = "variational_not_converged"
     MOC_OR_PHYSICAL_CLOSURE_FAILED = "moc_or_physical_closure_failed"
+    RESOLUTION_CONVERGENCE_NOT_CONFIGURED = (
+        "resolution_convergence_not_configured"
+    )
+    RESOLUTION_REFINEMENT_FAILED = "resolution_refinement_failed"
+    RESOLUTION_CONVERGENCE_UNAVAILABLE = "resolution_convergence_unavailable"
+    RESOLUTION_UNDER_RESOLVED = "resolution_under_resolved"
     FULL_CDE_THRUST_UNAVAILABLE = "full_cde_thrust_unavailable"
     CONTOUR_EXPORT_REFUSED = "contour_export_refused"
     NONFINITE_OR_MALFORMED_GEOMETRY = "nonfinite_or_malformed_geometry"
@@ -160,13 +171,17 @@ class VariationalPostSolveConfig:
     tolerances: ContourDiscrepancyTolerances
     convergence_domain: RaoConvergenceDomainSource = None
     comparison_points: int = 257
-    n_control: int = 12
-    n_kernel: int = 12
+    # The opt-in B3 validation profile deliberately matches the two physical
+    # BDE meshes used for the nonnested convergence study.  The lighter 12x12
+    # coupled-wall path remains available as an explicit diagnostic choice;
+    # it is not the default adjudication mesh.
+    n_control: int = 24
+    n_kernel: int = 24
     max_nfev: int = 200
     residual_tol: float = 2.0e-3
     starting_line_method: str = "kliegel_levine"
     solver_backend: str = "jax"
-    wall_method: str = "coupled"
+    wall_method: str = "bde"
     formulation: str = VARIATIONAL_FORMULATION
     physics_weight: float = 1.0
     jax_constraint_weight_ladder: tuple[float, ...] | None = (
@@ -179,6 +194,28 @@ class VariationalPostSolveConfig:
     kernel_d_fraction_max: float | None = None
     solve_theta_b: bool = False
     rao_radial_increment_tol: float = 1.0e-9
+    # New numerical-policy and resolution-study controls are appended to
+    # preserve the historical positional layout through
+    # ``rao_radial_increment_tol``.
+    # Rice's JHU/NASA implementation describes 0.25--0.5 degrees as a nominal
+    # user-selectable refinement range; this is mesh policy, not a shock limit.
+    kernel_dtheta_limit_deg: float = 0.25
+    # The visible JHU implementation terminates a kernel march above 2%
+    # mass-flow mismatch. This is an implementation diagnostic, not a Rao
+    # physical-validity threshold.
+    kernel_massflow_rel_tol: float = 0.02
+    moc_numerical_policy: RaoMOCNumericalPolicy = field(
+        default_factory=RaoMOCNumericalPolicy
+    )
+    # A B3 pass requires a second, independently marched solution.  Keeping
+    # these controls typed prevents the 24x24/32x32 evidence from being
+    # inferred from filenames, node ordering, or an undocumented convention.
+    resolution_refinement_n_control: int | None = 32
+    resolution_refinement_n_kernel: int | None = 32
+    resolution_refinement_kernel_dtheta_limit_deg: float | None = None
+    resolution_tolerances: RaoFieldConvergenceTolerances = field(
+        default_factory=RaoFieldConvergenceTolerances
+    )
 
     def comparison_policy_dict(self) -> dict[str, Any]:
         """Return the canonical identity of the four-threshold B3 policy."""
@@ -189,12 +226,58 @@ class VariationalPostSolveConfig:
         }
 
     def __post_init__(self) -> None:
-        if int(self.comparison_points) < 3:
+        if isinstance(self.comparison_points, (bool, np.bool_)):
+            raise ValueError("comparison_points must be an integer, not bool")
+        comparison_points = float(self.comparison_points)
+        if not comparison_points.is_integer() or int(comparison_points) < 3:
             raise ValueError("comparison_points must be at least 3")
-        if int(self.n_control) < 8:
+        object.__setattr__(self, "comparison_points", int(comparison_points))
+        if isinstance(self.n_control, (bool, np.bool_)):
+            raise ValueError("n_control must be an integer, not bool")
+        n_control = float(self.n_control)
+        if not n_control.is_integer() or int(n_control) < 8:
             raise ValueError("n_control must be at least 8")
-        if int(self.n_kernel) < 2:
+        object.__setattr__(self, "n_control", int(n_control))
+        if isinstance(self.n_kernel, (bool, np.bool_)):
+            raise ValueError("n_kernel must be an integer, not bool")
+        n_kernel = float(self.n_kernel)
+        if not n_kernel.is_integer() or int(n_kernel) < 2:
             raise ValueError("n_kernel must be at least 2")
+        object.__setattr__(self, "n_kernel", int(n_kernel))
+        if isinstance(self.kernel_dtheta_limit_deg, bool):
+            raise ValueError(
+                "kernel_dtheta_limit_deg must be numeric, not bool"
+            )
+        kernel_dtheta_limit_deg = float(self.kernel_dtheta_limit_deg)
+        if (
+            not math.isfinite(kernel_dtheta_limit_deg)
+            or kernel_dtheta_limit_deg <= 0.0
+        ):
+            raise ValueError(
+                "kernel_dtheta_limit_deg must be finite and positive"
+            )
+        object.__setattr__(
+            self, "kernel_dtheta_limit_deg", kernel_dtheta_limit_deg
+        )
+        if isinstance(self.kernel_massflow_rel_tol, bool):
+            raise ValueError(
+                "kernel_massflow_rel_tol must be numeric, not bool"
+            )
+        kernel_massflow_rel_tol = float(self.kernel_massflow_rel_tol)
+        if (
+            not math.isfinite(kernel_massflow_rel_tol)
+            or not 0.0 < kernel_massflow_rel_tol <= 1.0
+        ):
+            raise ValueError(
+                "kernel_massflow_rel_tol must be finite and lie in (0, 1]"
+            )
+        object.__setattr__(
+            self, "kernel_massflow_rel_tol", kernel_massflow_rel_tol
+        )
+        if not isinstance(self.moc_numerical_policy, RaoMOCNumericalPolicy):
+            raise TypeError(
+                "moc_numerical_policy must be a RaoMOCNumericalPolicy"
+            )
         if int(self.max_nfev) < 1:
             raise ValueError("max_nfev must be positive")
         if not math.isfinite(float(self.residual_tol)) or self.residual_tol <= 0:
@@ -245,6 +328,91 @@ class VariationalPostSolveConfig:
             raise ValueError(
                 "rao_radial_increment_tol must be finite and non-negative"
             )
+        refinement_counts = (
+            self.resolution_refinement_n_control,
+            self.resolution_refinement_n_kernel,
+        )
+        if any(value is None for value in refinement_counts) and not all(
+            value is None for value in refinement_counts
+        ):
+            raise ValueError(
+                "resolution refinement n_control and n_kernel must both be "
+                "specified or both be None"
+            )
+        if all(value is not None for value in refinement_counts):
+            canonical: list[int] = []
+            for name, raw, base in (
+                (
+                    "resolution_refinement_n_control",
+                    self.resolution_refinement_n_control,
+                    self.n_control,
+                ),
+                (
+                    "resolution_refinement_n_kernel",
+                    self.resolution_refinement_n_kernel,
+                    self.n_kernel,
+                ),
+            ):
+                if isinstance(raw, (bool, np.bool_)):
+                    raise ValueError(f"{name} must be an integer, not bool")
+                numeric = float(raw)
+                if not math.isfinite(numeric) or not numeric.is_integer():
+                    raise ValueError(f"{name} must be an integer")
+                value = int(numeric)
+                if value <= int(base):
+                    raise ValueError(f"{name} must exceed the base mesh count")
+                canonical.append(value)
+            object.__setattr__(
+                self, "resolution_refinement_n_control", canonical[0]
+            )
+            object.__setattr__(
+                self, "resolution_refinement_n_kernel", canonical[1]
+            )
+        refined_dtheta = self.resolution_refinement_kernel_dtheta_limit_deg
+        if refined_dtheta is not None and not self.resolution_study_configured:
+            raise ValueError(
+                "resolution_refinement_kernel_dtheta_limit_deg requires "
+                "configured refinement mesh counts"
+            )
+        if refined_dtheta is not None:
+            if isinstance(refined_dtheta, (bool, np.bool_)):
+                raise ValueError(
+                    "resolution_refinement_kernel_dtheta_limit_deg must be "
+                    "numeric, not bool"
+                )
+            refined_dtheta = float(refined_dtheta)
+            if (
+                not math.isfinite(refined_dtheta)
+                or refined_dtheta <= 0.0
+                or refined_dtheta > self.kernel_dtheta_limit_deg
+            ):
+                raise ValueError(
+                    "resolution_refinement_kernel_dtheta_limit_deg must be "
+                    "finite, positive, and no greater than the base limit"
+                )
+            object.__setattr__(
+                self,
+                "resolution_refinement_kernel_dtheta_limit_deg",
+                refined_dtheta,
+            )
+        if not isinstance(
+            self.resolution_tolerances, RaoFieldConvergenceTolerances
+        ):
+            raise TypeError(
+                "resolution_tolerances must be RaoFieldConvergenceTolerances"
+            )
+
+    @property
+    def resolution_study_configured(self) -> bool:
+        return (
+            self.resolution_refinement_n_control is not None
+            and self.resolution_refinement_n_kernel is not None
+        )
+
+    @property
+    def resolved_refinement_kernel_dtheta_limit_deg(self) -> float:
+        value = self.resolution_refinement_kernel_dtheta_limit_deg
+        return self.kernel_dtheta_limit_deg if value is None else float(value)
 
 
 @dataclass(frozen=True)
@@ -382,6 +550,7 @@ class VariationalContourValidationOutcome:
     solved_state: Mapping[str, Any] | None = None
     domain: RaoDomainEvidence | None = None
     rao_validity: RaoRadialIncrementValidity | None = None
+    resolution_convergence: RaoFieldConvergenceEvidence | None = None
     discrepancy: ContourDiscrepancy | None = None
     numerical_converged: bool | None = None
     physical_moc_closed: bool | None = None
@@ -410,6 +579,11 @@ class VariationalContourValidationOutcome:
             "rao_eq5_source_id": RAO_RADIAL_INCREMENT_SOURCE_ID,
             "rao_validity": (
                 None if self.rao_validity is None else self.rao_validity.to_dict()
+            ),
+            "resolution_convergence": (
+                None
+                if self.resolution_convergence is None
+                else self.resolution_convergence.to_dict()
             ),
             "discrepancy": (
                 None if self.discrepancy is None else self.discrepancy.to_dict()
@@ -594,6 +768,7 @@ def _base_outcome(
     available: bool = False,
     domain: RaoDomainEvidence | None = None,
     solution: RaoSolution | None = None,
+    resolution_convergence: RaoFieldConvergenceEvidence | None = None,
     discrepancy: ContourDiscrepancy | None = None,
 ) -> VariationalContourValidationOutcome:
     residual = None
@@ -621,6 +796,7 @@ def _base_outcome(
         solved_state=solved_state,
         domain=domain,
         rao_validity=None if solution is None else solution.rao_validity,
+        resolution_convergence=resolution_convergence,
         discrepancy=discrepancy,
         numerical_converged=(
             None
@@ -697,6 +873,12 @@ def _lookup_domain(
             solver_config.throat_upstream_radius_factor
         ),
         starting_line_method=str(solver_config.starting_line_method),
+        kernel_dtheta_limit_deg=float(
+            solver_config.kernel_dtheta_limit_deg
+        ),
+        kernel_massflow_rel_tol=float(
+            solver_config.kernel_massflow_rel_tol
+        ),
         closure_model=MODEL_SMOOTH,
         rt_scale_invariant=True,
     )
@@ -745,26 +927,8 @@ def _moc_ineligibility_reason(solution: RaoSolution) -> str:
         return "MOC closure gate(s) failed: " + ", ".join(failed)
     return (
         "the BVP residual closed, but the forward MOC "
-        "closure/tangency/crossing/smoothness gate did not"
+        "closure/tangency/topology gate did not"
     )
-
-
-def _moc_smoothness_only_failure(solution: RaoSolution) -> bool:
-    """Whether a closed BVP missed only the declared MOC smoothness gate."""
-
-    report = solution.construction_diagnostics.get("net_report", {})
-    if not isinstance(report, Mapping):
-        return False
-    failed = {
-        str(name)
-        for name, value in report.items()
-        if (
-            str(name).endswith("_passes")
-            and isinstance(value, (bool, np.bool_))
-            and not bool(value)
-        )
-    }
-    return failed == {"measured_neighbor_smoothness_passes"}
 
 
 def validate_optimized_top_contour(
@@ -773,6 +937,9 @@ def validate_optimized_top_contour(
     config: VariationalPostSolveConfig,
     *,
     solver: Callable[[RaoSolverConfig], RaoSolution] = solve_rao_bvp,
+    resolution_comparator: Callable[..., RaoFieldConvergenceEvidence] = (
+        compare_rao_solutions_common_coordinates
+    ),
 ) -> VariationalContourValidationOutcome:
     """Run the B3 validator at the exact solved MDO candidate.
 
@@ -872,6 +1039,13 @@ def validate_optimized_top_contour(
         ),
         "variational_n_control": int(config.n_control),
         "variational_n_kernel": int(config.n_kernel),
+        "variational_kernel_dtheta_limit_deg": float(
+            config.kernel_dtheta_limit_deg
+        ),
+        "variational_kernel_massflow_rel_tol": float(
+            config.kernel_massflow_rel_tol
+        ),
+        "rao_moc_numerical_policy": config.moc_numerical_policy.to_dict(),
         "variational_max_nfev": int(config.max_nfev),
         "variational_residual_tol": float(config.residual_tol),
         "variational_starting_line_method": config.starting_line_method,
@@ -885,6 +1059,22 @@ def validate_optimized_top_contour(
         ),
         "variational_solve_theta_b": bool(config.solve_theta_b),
         "rao_radial_increment_tol": float(config.rao_radial_increment_tol),
+        "resolution_refinement_n_control": (
+            None
+            if config.resolution_refinement_n_control is None
+            else int(config.resolution_refinement_n_control)
+        ),
+        "resolution_refinement_n_kernel": (
+            None
+            if config.resolution_refinement_n_kernel is None
+            else int(config.resolution_refinement_n_kernel)
+        ),
+        "resolution_refinement_kernel_dtheta_limit_deg": (
+            None
+            if not config.resolution_study_configured
+            else float(config.resolved_refinement_kernel_dtheta_limit_deg)
+        ),
+        "resolution_convergence_policy": config.resolution_tolerances.to_dict(),
         "comparison_points": int(config.comparison_points),
         "discrepancy_tolerances": config.tolerances.to_dict(),
     }
@@ -918,6 +1108,9 @@ def validate_optimized_top_contour(
         throat_downstream_radius_factor=rd_factor,
         n_control=int(config.n_control),
         n_kernel=int(config.n_kernel),
+        kernel_dtheta_limit_deg=float(config.kernel_dtheta_limit_deg),
+        kernel_massflow_rel_tol=float(config.kernel_massflow_rel_tol),
+        moc_numerical_policy=config.moc_numerical_policy,
         max_nfev=int(config.max_nfev),
         residual_tol=float(config.residual_tol),
         starting_line_method=str(config.starting_line_method),
@@ -1024,13 +1217,13 @@ def validate_optimized_top_contour(
         )
     moc_closed = bool(solution.converged)
     moc_ineligibility = None if moc_closed else _moc_ineligibility_reason(solution)
-    if not moc_closed and not _moc_smoothness_only_failure(solution):
+    if not moc_closed:
         return _base_outcome(
             status=VariationalValidationStatus.UNKNOWN,
             reason=VariationalValidationReason.MOC_OR_PHYSICAL_CLOSURE_FAILED,
             detail=(
-                f"{moc_ineligibility}; a discrepancy report is refused because "
-                "the failed gate is not limited to forward-net smoothness"
+                f"{moc_ineligibility}; a discrepancy report is refused until "
+                "the forward net closes"
             ),
             solved_state=solved_state,
             solution=solution,
@@ -1096,19 +1289,6 @@ def validate_optimized_top_contour(
             domain=domain_evidence,
         )
     if not validity.valid:
-        if not moc_closed:
-            return _base_outcome(
-                status=VariationalValidationStatus.UNKNOWN,
-                reason=VariationalValidationReason.MOC_OR_PHYSICAL_CLOSURE_FAILED,
-                detail=(
-                    f"{moc_ineligibility}; the negative Eq. (5) result from "
-                    "this non-closed MOC attempt is diagnostic, not an "
-                    "adjudication"
-                ),
-                solved_state=solved_state,
-                solution=solution,
-                domain=domain_evidence,
-            )
         return _base_outcome(
             status=VariationalValidationStatus.FAIL,
             reason=VariationalValidationReason.INVALID_RAO_REGION,
@@ -1154,6 +1334,184 @@ def validate_optimized_top_contour(
             solution=solution,
             domain=domain_evidence,
         )
+
+    # The raw finite-edge state increments remain useful diagnostics, but a
+    # B3 pass is based on an independently marched physical field.  This gate
+    # is deliberately BDE-specific: the coupled-wall crossing audit is a
+    # different topology question and must not be re-labelled as mesh
+    # convergence evidence.
+    if config.wall_method != "bde":
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_CONVERGENCE_UNAVAILABLE,
+            detail=(
+                "common-coordinate resolution evidence currently requires "
+                "the physical BDE kernel/region artifacts; coupled and legacy "
+                "wall audits remain separate"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    if not config.resolution_study_configured:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=(
+                VariationalValidationReason.RESOLUTION_CONVERGENCE_NOT_CONFIGURED
+            ),
+            detail=(
+                "a B3 pass requires explicit refined n_control and n_kernel "
+                "rungs for a common-coordinate convergence comparison"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+
+    refined_solver_config = replace(
+        solver_config,
+        n_control=int(config.resolution_refinement_n_control),
+        n_kernel=int(config.resolution_refinement_n_kernel),
+        kernel_dtheta_limit_deg=float(
+            config.resolved_refinement_kernel_dtheta_limit_deg
+        ),
+    )
+    try:
+        refined_solution = solver(refined_solver_config)
+    except Exception as exc:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_REFINEMENT_FAILED,
+            detail=(
+                "refined variational solve raised "
+                f"{type(exc).__name__}: {exc}"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    if not isinstance(refined_solution, RaoSolution):
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_REFINEMENT_FAILED,
+            detail=(
+                "refined variational solver returned "
+                f"{type(refined_solution).__name__}, not RaoSolution"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    refined_validity = refined_solution.rao_validity
+    refined_thrust = refined_solution.construction_diagnostics.get(
+        "thrust_sanity", {}
+    )
+    refined_full_cde = bool(
+        refined_thrust.get("gate_basis") == DIRECT_FULL_CDE_CF_BASIS
+        and refined_thrust.get("cde_reconstruction_complete") is True
+        and refined_thrust.get("surface_scope") == "full_control_surface_cde"
+    )
+    refined_gate_failures: list[str] = []
+    if not bool(refined_solution.control_surface.converged):
+        refined_gate_failures.append("BVP residual convergence")
+    if not bool(refined_solution.converged):
+        refined_gate_failures.append("forward MOC/physical closure")
+    if (
+        refined_validity is None
+        or not refined_validity.available
+        or not refined_validity.valid
+    ):
+        refined_gate_failures.append("Rao Eq. (5) validity")
+    if not refined_full_cde:
+        refined_gate_failures.append("direct full-C-D-E thrust availability")
+    try:
+        refined_cf = _host_float(
+            refined_thrust.get("cf_surface"),
+            "refined direct full-CDE thrust coefficient",
+            positive=True,
+        )
+        if not math.isclose(
+            refined_cf,
+            _host_float(
+                refined_solution.thrust_coefficient,
+                "refined RaoSolution.thrust_coefficient",
+                positive=True,
+            ),
+            rel_tol=1.0e-12,
+            abs_tol=1.0e-12,
+        ):
+            refined_gate_failures.append("full-C-D-E thrust identity")
+    except (TypeError, ValueError):
+        refined_gate_failures.append("finite full-C-D-E thrust coefficient")
+    if refined_gate_failures:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_REFINEMENT_FAILED,
+            detail=(
+                "refined variational solution failed prerequisite gate(s): "
+                + ", ".join(dict.fromkeys(refined_gate_failures))
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    try:
+        resolution_evidence = resolution_comparator(
+            solution,
+            refined_solution,
+            Rt=Rt,
+            gamma=gamma,
+            tolerances=config.resolution_tolerances,
+        )
+    except Exception as exc:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_CONVERGENCE_UNAVAILABLE,
+            detail=(
+                "common-coordinate convergence comparison raised "
+                f"{type(exc).__name__}: {exc}"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    if not isinstance(resolution_evidence, RaoFieldConvergenceEvidence):
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_CONVERGENCE_UNAVAILABLE,
+            detail=(
+                "resolution comparator returned "
+                f"{type(resolution_evidence).__name__}, not "
+                "RaoFieldConvergenceEvidence"
+            ),
+            solved_state=solved_state,
+            solution=solution,
+            domain=domain_evidence,
+        )
+    solved_state["resolution_convergence"] = resolution_evidence.to_dict()
+    solution.construction_diagnostics["resolution_convergence"] = (
+        resolution_evidence.to_dict()
+    )
+    if not resolution_evidence.applicable:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_CONVERGENCE_UNAVAILABLE,
+            detail=resolution_evidence.reason,
+            solved_state=solved_state,
+            solution=solution,
+            resolution_convergence=resolution_evidence,
+            domain=domain_evidence,
+        )
+    if not resolution_evidence.passes:
+        return _base_outcome(
+            status=VariationalValidationStatus.UNKNOWN,
+            reason=VariationalValidationReason.RESOLUTION_UNDER_RESOLVED,
+            detail=resolution_evidence.reason,
+            solved_state=solved_state,
+            solution=solution,
+            resolution_convergence=resolution_evidence,
+            domain=domain_evidence,
+        )
     try:
         discrepancy = compare_top_and_variational_contours(
             analytic_x=analytic_x,
@@ -1181,21 +1539,8 @@ def validate_optimized_top_contour(
             detail=f"contour comparison unavailable: {type(exc).__name__}: {exc}",
             solved_state=solved_state,
             solution=solution,
+            resolution_convergence=resolution_evidence,
             domain=domain_evidence,
-        )
-
-    if not moc_closed:
-        return _base_outcome(
-            status=VariationalValidationStatus.UNKNOWN,
-            reason=VariationalValidationReason.MOC_OR_PHYSICAL_CLOSURE_FAILED,
-            detail=(
-                f"{moc_ineligibility}; geometry/performance discrepancies are "
-                "reported for diagnosis but are not adjudication-eligible"
-            ),
-            solved_state=solved_state,
-            solution=solution,
-            domain=domain_evidence,
-            discrepancy=discrepancy,
         )
 
     if not discrepancy.passes:
@@ -1208,6 +1553,7 @@ def validate_optimized_top_contour(
             ),
             solved_state=solved_state,
             solution=solution,
+            resolution_convergence=resolution_evidence,
             domain=domain_evidence,
             discrepancy=discrepancy,
             available=True,
@@ -1221,6 +1567,7 @@ def validate_optimized_top_contour(
         ),
         solved_state=solved_state,
         solution=solution,
+        resolution_convergence=resolution_evidence,
         domain=domain_evidence,
         discrepancy=discrepancy,
         available=True,
