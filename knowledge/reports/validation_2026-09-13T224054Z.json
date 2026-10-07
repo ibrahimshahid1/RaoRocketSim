@@ -1,0 +1,63 @@
+{
+ "summary": {
+  "generated_at": "2026-09-13T22:40:54.762796+00:00",
+  "n_issues": 2,
+  "issues_by_check": {
+   "markdown_without_manifest_row": 2
+  },
+  "stats": {
+   "equation_variables": {
+    "ambiguous": 0,
+    "unresolved": 0,
+    "total": 0
+   },
+   "constants_by_basis": {
+    "IMPLEMENTATION_CHOICE": 351,
+    "UNKNOWN_BASIS": 223,
+    "LITERATURE_DERIVED": 189,
+    "PROJECT_DERIVED": 41,
+    "REPOSITORY_HEURISTIC": 175,
+    "EMPIRICALLY_CALIBRATED": 2
+   },
+   "components_without_scientific_link": 214,
+   "graph": {
+    "nodes": 4177,
+    "edges": 5059,
+    "edges_without_provenance": 0,
+    "top_degree": [
+     [
+      "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+      128
+     ],
+     [
+      "MODEL_NOZZLE_MOC",
+      97
+     ],
+     [
+      "DOC_NTRS_19710019929",
+      86
+     ],
+     [
+      "SW_RAOSIM_PHYSICS_PY_REGENERATIVE_COOLING_ANALYSIS",
+      81
+     ],
+     [
+      "SUB_NOZZLE_CONTOUR",
+      71
+     ]
+    ]
+   },
+   "duplicate_chunk_texts": 410
+  }
+ },
+ "issues": [
+  {
+   "check": "markdown_without_manifest_row",
+   "path": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md"
+  },
+  {
+   "check": "markdown_without_manifest_row",
+   "path": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/PINTLE_LITERATURE_CATALOG.md"
+  }
+ ]
+}

@@ -27,3 +27,8 @@ pdfs/
 dist/
 build/
 *.egg-info/
+
+# Knowledge system: rebuildable derived artifacts (run `knowledge/kg.sh rebuild`)
+knowledge/vector_index/
+knowledge/.work/
+knowledge/graph/graph.graphml

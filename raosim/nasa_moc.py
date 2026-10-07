@@ -703,9 +703,12 @@ def _make_throat_initial_line(
             theta = 0.0
             x_final = x_init
         else:
-            M = 1.0 + 1e-3
-            theta = 0.0
-            x_final = x_init
+            raise ValueError(
+                "starting_line_method must be one of 'kliegel_levine', "
+                "'nasa_visible_kliegel_levine', 'source_visible_kliegel_levine' "
+                f"or 'sauer_modified'; got {starting_line_method!r} (the "
+                "previous silent fallback produced a flat M=1.001 line)"
+            )
         wall_first.append((x_final, r, M, theta))
 
     # Reverse to axis-first ordering for downstream solve_* unit processes.
@@ -1077,11 +1080,44 @@ def _calc_special_wall_point(
     """Port NASA ``CalcSpecialWallPoint`` for small arc-angle increments."""
     if len(prev_wall_first) < 2:
         return None
-    p1 = prev_wall_first[1]
-    p2 = prev_wall_first[0]
     theta3 = float(alpha)
     x3 = arc.Rd * math.sin(theta3)
     r3 = arc.Rt + arc.Rd * (1.0 - math.cos(theta3))
+    return _calc_special_wall_point_at(
+        prev_wall_first, x3, r3, theta3, gamma,
+        conv_tol=conv_tol, max_iter=max_iter,
+    )
+
+
+def _calc_special_wall_point_at(
+    prev_wall_first: list[CharPoint],
+    x3: float,
+    r3: float,
+    theta3: float,
+    gamma: float,
+    *,
+    conv_tol: float = 1e-10,
+    max_iter: int = 50,
+) -> CharPoint | None:
+    """NASA ``CalcSpecialWallPoint`` algebra for a *prescribed* wall point.
+
+    The C++ (MOC_GridCalc_BDE.cpp 2360-2454) fixes the new wall point's
+    geometry first and solves only its state: the C- through ``(x3, r3)``
+    is traced back to a foot point 4 interpolated on the previous RRC
+    between the previous wall point ``p2`` and its first interior
+    neighbour ``p1``, and the dθ-form C- compatibility gives ``M3`` at the
+    prescribed wall angle ``theta3``.  Factoring the geometry out lets the
+    same unit process serve the throat arc (:func:`_calc_special_wall_point`)
+    and a general bell wall (:mod:`raosim.moc_bounded`), where the target
+    is the point at which the wall turns by ``DTHETAB/2`` or the exit lip.
+    """
+    if len(prev_wall_first) < 2:
+        return None
+    p1 = prev_wall_first[1]
+    p2 = prev_wall_first[0]
+    x3 = float(x3)
+    r3 = float(r3)
+    theta3 = float(theta3)
 
     M1 = max(float(p1.M), 1.000001)
     M2 = max(float(p2.M), 1.000001)
@@ -1490,8 +1526,11 @@ def build_kernel(
     interior points (``CalcInteriorMeshPoints``), and the symmetry-axis
     closure (``CalcAxialMeshPoint``):
 
-    1. ``_make_throat_initial_line`` lays TT' at the throat plane
-       (x = 0).  ``kliegel_levine`` uses the corrected KL evaluator;
+    1. ``_make_throat_initial_line`` lays TT' from the throat-plane wall
+       point (x = 0, r = Rt) down to the axis, each point stepped
+       downstream along the previous point's RRC slope (the axis point
+       lands at x/Rt ~ 0.5 for Ru/Rt = 1.5).  ``kliegel_levine`` uses the
+       corrected KL evaluator;
        ``nasa_visible_kliegel_levine`` / ``source_visible_kliegel_levine``
        preserve the visible C++ expression, and ``sauer_modified`` uses
        the source-compatible Sauer starting line.
@@ -3083,7 +3122,7 @@ def set_theta_b(
     n_de_points: int = 24,
     max_iter: int = 25,
     abs_tol: float = 1e-6,
-    starting_line_method: str = "hall",
+    starting_line_method: str = "kliegel_levine",
     L_target: float | None = None,
     Ru: float | None = None,
     end_condition: str = "fixed_end",

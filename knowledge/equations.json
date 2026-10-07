@@ -1,0 +1,2733 @@
+{
+ "meta": {
+  "generated_at": "2026-09-20T22:53:05.300341+00:00",
+  "n": 37
+ },
+ "records": [
+  {
+   "id": "EQ_CAD_04_FB8E0FEB",
+   "type": "Equation",
+   "label": "bspline_knot_count",
+   "equation_number": "",
+   "form": "m+1 = n+d+2 knots (with d+1 repetitions at the start and at the end)",
+   "description": "Number of knots in the nodal sequence of a clamped B-spline curve with n+1 control points and degree d, when the first and last knots are repeated d+1 times.",
+   "variables": [
+    {
+     "symbol": "m+1",
+     "meaning": "number of knots in the nodal sequence U",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "n+1",
+     "meaning": "number of control points (indexed 0 to n)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d",
+     "meaning": "polynomial degree of the curve",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "m+1 number of knots in the nodal sequence U n+1 number of control points (indexed 0 to n) d polynomial degree of the curve",
+   "concepts_text": "bspline_knot_count Number of knots in the nodal sequence of a clamped B-spline curve with n+1 control points and degree d, when the first and last knots are repeated d+1 times.",
+   "assumptions": [
+    "nodal sequence has d+1 repeated knots at the start and at the end (clamped/interpolating end conditions)"
+   ],
+   "validity": [],
+   "document_id": "DOC_CAD_04",
+   "page": 42,
+   "reported_page": 42,
+   "chunk_id": "DOC_CAD_04#c00030",
+   "quote": "_m_ +1= _n_ + _d_ +2 knots (with _d_ +1 repetitions at the start and",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Slide-deck rendering; the relation is stated in prose on the slide 'Control points, degree and nodal sequence'.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_CAD_KERNEL_TOPOLOGY",
+   "provenance_id": "PROV_EQ_CAD_04_FB8E0FEB",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "cad",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_DOI_10_1080_13647830_2021_1937702_FDF0974B",
+   "type": "Equation",
+   "label": "Eq. 16 - LOX droplet evaporation rate (convection/diffusion controlled model)",
+   "equation_number": "16",
+   "form": "m˙_d = k_c A_d ρ ln(1 + B_m)",
+   "description": "Rate of droplet evaporation for LOX droplets in GCH4, from the convection/diffusion controlled model based on classical hydrodynamical models [59,60]; molecules detach from the droplet surface into the bulk gas and vapour diffuses from the surface into the gaseous phase.",
+   "variables": [
+    {
+     "symbol": "m˙_d",
+     "meaning": "Droplet evaporation rate",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k_c",
+     "meaning": "mass transfer coefficient (text); nomenclature lists it as 'Mass fraction coefficient'",
+     "units": "m/s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_d",
+     "meaning": "droplet surface area",
+     "units": "m^2",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ",
+     "meaning": "Density (per nomenclature; not further specified next to the equation)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "B_m",
+     "meaning": "Spalding mass number based on the vapour mass fraction at the surface and in the bulk gas",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "m˙_d Droplet evaporation rate k_c mass transfer coefficient (text); nomenclature lists it as 'Mass fraction coefficient' A_d droplet surface area ρ Density (per nomenclature; not further specified next to the equation) B_m Spalding mass number based on the vapour mass fraction at the surface and in the bulk gas",
+   "concepts_text": "Eq. 16 - LOX droplet evaporation rate (convection/diffusion controlled model) Rate of droplet evaporation for LOX droplets in GCH4, from the convection/diffusion controlled model based on classical hydrodynamical models [59,60]; molecules detach from the droplet surface into the bulk gas and vapour diffuses from the surface into the gaseous phase.",
+   "assumptions": [
+    "the total density of the mixture of gas and droplet vapour is constant in the vicinity of the droplet surface"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 13,
+   "reported_page": 13,
+   "chunk_id": "DOC_DOI_10_1080_13647830_2021_1937702#c00020",
+   "quote": "where _kc_ is mass transfer coefficient (m/s), _Ad_ is droplet surface area (m <sup>2</sup> ), and _Bm_ is the",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "The equation line itself renders as '_m_ ˙ _d_ = _kcAd_ _ρln(_ 1 + _Bm)_ (16)' (only 40 chars, so the immediately following variable-definition line is used as the anchor quote). This is a Spalding-type mass-transfer rate expression, NOT the d^2 = d0^2 - K t law; the document never writes a d-squared law or an evaporation constant K.",
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_D2_EVAPORATION",
+   "provenance_id": "PROV_EQ_DOI_10_1080_13647830_2021_1937702_FDF0974B",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_DOI_10_2514_2_5354_658F1672",
+   "type": "Equation",
+   "label": "critical_pressure_ratio_definition",
+   "equation_number": "unnumbered (Sec. II.A)",
+   "form": "_p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2",
+   "description": "Definition of the critical pressure ratio characterizing turbulent boundary-layer separation from the nozzle wall in strongly overexpanding nozzles: ratio of the nozzle wall pressure just before separation (p_sep) to the wall pressure just after separation (p_p), also written p1/p2.",
+   "variables": [
+    {
+     "symbol": "_p_ cr",
+     "meaning": "critical pressure ratio across the separation point",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_p_ sep",
+     "meaning": "nozzle wall pressure just before separation",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_pp_",
+     "meaning": "nozzle wall pressure just after separation (plateau)",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "_p_ 1/ _p_ 2",
+     "meaning": "alternative notation for the same wall-pressure ratio across separation",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "_p_ cr critical pressure ratio across the separation point _p_ sep nozzle wall pressure just before separation _pp_ nozzle wall pressure just after separation (plateau) _p_ 1/ _p_ 2 alternative notation for the same wall-pressure ratio across separation",
+   "concepts_text": "critical_pressure_ratio_definition Definition of the critical pressure ratio characterizing turbulent boundary-layer separation from the nozzle wall in strongly overexpanding nozzles: ratio of the nozzle wall pressure just before separation (p_sep) to the wall pressure just after separation (p_p), also written p1/p2.",
+   "assumptions": [
+    "turbulent boundary-layer separation from the nozzle wall in a strongly overexpanding nozzle",
+    "separation phenomenon split into (1) turbulent boundary-layer separation and (2) separated-zone flow with minor wall pressure gradient (Ref. 3)"
+   ],
+   "validity": [
+    "p_cr is equal for separated flows before an obstacle and for separated nozzle flows",
+    "for turbulent flows p_cr shows slight dependence on Reynolds number but depends strongly on Mach number",
+    "p_cr is also a function of wall temperature, gas composition, and nozzle wall roughness"
+   ],
+   "document_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_2_5354#c00006",
+   "quote": "This pressure ratio is referred to as the critical pressure ratio _p_ cr = _p_ sep/ _pp_ = _p_ 1/ _p_ 2. The second phenomenon is",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "medium",
+   "extraction_note": "The paper contains no numbered equations; this inline definition is the only equation-like relation. OCR renders subscripts as '_p_ cr', '_pp_', '_p_ 1/ _p_ 2'. The preceding sentence describes the ratio as 'wall pressure just after the separation, p_p, to the nozzle wall pressure just before separation, p_sep' while the formula is written p_sep/p_p; this internal ordering inconsistency is in the source and was not repaired.",
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_ALTITUDE_ATTACHED_THRUST",
+   "provenance_id": "PROV_EQ_DOI_10_2514_2_5354_658F1672",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "altitude",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_082529F7",
+   "type": "Equation",
+   "label": "Rao optimum control-surface characteristic direction",
+   "equation_number": "11",
+   "form": "phi = theta + alpha along DE",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "phi",
+     "meaning": "control-surface inclination to the nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PHI"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "Mach angle",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "phi control-surface inclination to the nozzle axis theta flow direction angle to nozzle axis alpha Mach angle",
+   "concepts_text": "Rao optimum control-surface characteristic direction ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00013",
+   "quote": "This above relation shows that the control surface coincides with the last left characteristic in the nozzle flow, and the conditions along this line are obtained by introducing this relation into Equations [8, 9].",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 3, equation [11]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_082529F7",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_1BE77D02",
+   "type": "Equation",
+   "label": "Rao second stationarity invariant",
+   "equation_number": "13",
+   "form": "y*rho*W^2*sin(theta)^2*tan(alpha) = -lambda_3 along DE",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "y",
+     "meaning": "radial coordinate",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "W",
+     "meaning": "flow velocity",
+     "units": "m/s",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "Mach angle",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "lambda_3",
+     "meaning": "constant Lagrangian multiplier for fixed length",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "y radial coordinate rho density W flow velocity theta flow direction angle to nozzle axis alpha Mach angle lambda_3 constant Lagrangian multiplier for fixed length",
+   "concepts_text": "Rao second stationarity invariant ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00016",
+   "quote": "along DE are the necessary conditions for the integral [5] to be a maximum. Substituting Equations [11, 12, 13] into Equation [10], the following condition results",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 3, equation [13]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_1BE77D02",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_3E537078",
+   "type": "Equation",
+   "label": "Rao exit transversality condition",
+   "equation_number": "14",
+   "form": "sin(2*theta) = (p-p_a)/(0.5*rho*W^2)*cot(alpha) at E",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p",
+     "meaning": "local pressure",
+     "units": "Pa",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_a",
+     "meaning": "ambient pressure",
+     "units": "Pa",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PA"
+     ]
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "W",
+     "meaning": "flow velocity",
+     "units": "m/s",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "Mach angle",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "theta flow direction angle to nozzle axis p local pressure p_a ambient pressure rho density W flow velocity alpha Mach angle",
+   "concepts_text": "Rao exit transversality condition ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00016",
+   "quote": "along DE are the necessary conditions for the integral [5] to be a maximum. Substituting Equations [11, 12, 13] into Equation [10], the following condition results",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 3, equation [14]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_3E537078",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+   "type": "Equation",
+   "label": "Rao nozzle length closure",
+   "equation_number": "3",
+   "form": "length = x_C + integral_C^E cot(phi) dy",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "x_C",
+     "meaning": "axial coordinate of C",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "phi",
+     "meaning": "control-surface inclination to the nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PHI"
+     ]
+    },
+    {
+     "symbol": "y",
+     "meaning": "radial coordinate",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "x_C axial coordinate of C phi control-surface inclination to the nozzle axis y radial coordinate",
+   "concepts_text": "Rao nozzle length closure ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "reported_page": 2,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00010",
+   "quote": "Hence the length of the diverging portion of the nozzle is",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 2, equation [3]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_7F5A3DE9",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_801D1C3E",
+   "type": "Equation",
+   "label": "Rao control-surface mass flow",
+   "equation_number": "1",
+   "form": "mass flow = integral_C^E rho*W*sin(phi-theta)/sin(phi) * 2*pi*y dy",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "W",
+     "meaning": "flow velocity",
+     "units": "m/s",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "phi",
+     "meaning": "control-surface inclination to the nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PHI"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y",
+     "meaning": "radial coordinate",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "rho density W flow velocity phi control-surface inclination to the nozzle axis theta flow direction angle to nozzle axis y radial coordinate",
+   "concepts_text": "Rao control-surface mass flow ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "reported_page": 2,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00008",
+   "quote": "By integrating along CE one obtains the mass flow crossing the control surface",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 2, equation [1]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_801D1C3E",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_B52B8DD0",
+   "type": "Equation",
+   "label": "Rao left-characteristic compatibility",
+   "equation_number": "15",
+   "form": "d(theta)/dy - sqrt(M^2-1)/(M*(1+(gamma-1)*M^2/2))*dM/dy + sin(alpha)*sin(theta)/(y*sin(theta+alpha)) = 0",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y",
+     "meaning": "radial coordinate",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "M",
+     "meaning": "Mach number",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_MACH",
+      "QTY_MASS_COMP"
+     ]
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "ratio of specific heats",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "Mach angle",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "theta flow direction angle to nozzle axis y radial coordinate M Mach number gamma ratio of specific heats alpha Mach angle",
+   "concepts_text": "Rao left-characteristic compatibility ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00016",
+   "quote": "This relation is the compatibility condition between the Mach number and the flow direction along a left characteristic.",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 3, equation [15]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_B52B8DD0",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_BEF48217",
+   "type": "Equation",
+   "label": "Rao first stationarity invariant",
+   "equation_number": "12",
+   "form": "W*cos(theta-alpha)/cos(alpha) = -lambda_2 along DE",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "W",
+     "meaning": "flow velocity",
+     "units": "m/s",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "Mach angle",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "lambda_2",
+     "meaning": "constant Lagrangian multiplier for mass conservation",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "W flow velocity theta flow direction angle to nozzle axis alpha Mach angle lambda_2 constant Lagrangian multiplier for mass conservation",
+   "concepts_text": "Rao first stationarity invariant ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "reported_page": 3,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00013",
+   "quote": "This above relation shows that the control surface coincides with the last left characteristic in the nozzle flow, and the conditions along this line are obtained by introducing this relation into Equations [8, 9].",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 3, equation [12]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_BEF48217",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_EAD5203E",
+   "type": "Equation",
+   "label": "Rao zero-ambient exit condition",
+   "equation_number": "16",
+   "form": "sin(2*theta_E) = 2/(gamma*M_E^2)*cot(alpha_E)",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "gamma",
+     "meaning": "ratio of specific heats",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "variables_text": "gamma ratio of specific heats",
+   "concepts_text": "Rao zero-ambient exit condition ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 4,
+   "reported_page": 4,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00018",
+   "quote": "For zero ambient pressure, Equation [14] reduces to",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 4, equation [16]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_EAD5203E",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "source_state": "CURRENT",
+   "id": "EQ_DOI_10_2514_8_7324_F1B6F455",
+   "type": "Equation",
+   "label": "Rao control-surface thrust",
+   "equation_number": "2",
+   "form": "thrust = integral_C^E [(p-p_a) + rho*W^2*sin(phi-theta)*cos(theta)/sin(phi)] * 2*pi*y dy",
+   "description": "",
+   "variables": [
+    {
+     "symbol": "p",
+     "meaning": "local pressure",
+     "units": "Pa",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_a",
+     "meaning": "ambient pressure",
+     "units": "Pa",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PA"
+     ]
+    },
+    {
+     "symbol": "rho",
+     "meaning": "density",
+     "units": "kg/m^3",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "W",
+     "meaning": "flow velocity",
+     "units": "m/s",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "phi",
+     "meaning": "control-surface inclination to the nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PHI"
+     ]
+    },
+    {
+     "symbol": "theta",
+     "meaning": "flow direction angle to nozzle axis",
+     "units": "rad",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y",
+     "meaning": "radial coordinate",
+     "units": "m",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "p local pressure p_a ambient pressure rho density W flow velocity phi control-surface inclination to the nozzle axis theta flow direction angle to nozzle axis y radial coordinate",
+   "concepts_text": "Rao control-surface thrust ",
+   "assumptions": [
+    "axisymmetric inviscid isentropic nozzle flow; prescribed initial-expansion contour",
+    "constant ratio of specific heats for the displayed Mach-number form"
+   ],
+   "validity": [],
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "reported_page": 2,
+   "chunk_id": "DOC_DOI_10_2514_8_7324#c00008",
+   "quote": "Similarly, thrust on the nozzle can be obtained by integrating pressure differential and momentum flux across CE",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "Transcribed from visual inspection of original PDF page 2, equation [2]. ASCII names spell out the original Greek glyphs. The prose quote anchors location; Markdown equations are damaged. This source review is not an independent verification or a validation of LREKit code.",
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "provenance_id": "PROV_EQ_DOI_10_2514_8_7324_F1B6F455",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "nozzle",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+   "type": "Equation",
+   "label": "Eq. (7.42) turbulent boundary-layer thickness growth",
+   "equation_number": "7.42",
+   "form": "δ ∝ x^(6/7) (proportionality stated in prose; full Eq. (7.42) with coefficient and Re_x exponent NOT RENDERED)",
+   "description": "Solution of Kármán's momentum law (7.33) with the power-law friction fit (7.38) and one-seventh-power momentum thickness (7.40); turbulent thickness grows as x^(6/7) versus laminar x^(1/2).",
+   "variables": [
+    {
+     "symbol": "δ",
+     "meaning": "turbulent boundary layer thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_TW"
+     ]
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance from leading edge",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "δ turbulent boundary layer thickness x distance from leading edge",
+   "concepts_text": "Eq. (7.42) turbulent boundary-layer thickness growth Solution of Kármán's momentum law (7.33) with the power-law friction fit (7.38) and one-seventh-power momentum thickness (7.40); turbulent thickness grows as x^(6/7) versus laminar x^(1/2).",
+   "assumptions": [
+    "δ = 0 at x = 0 (leading edge)",
+    "one-seventh-power profile (7.39)",
+    "power-law skin-friction fit (7.38)"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "reported_page": 841,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "quote": "Thus the thickness of a turbulent boundary layer increases as _x_ <sup>6/7</sup>, far more",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Only the x^(6/7) scaling is recoverable from the prose.",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+   "type": "Equation",
+   "label": "Eq. (7.5) Kármán momentum integral relation for flat-plate flow",
+   "equation_number": "7.5",
+   "form": "NOT RENDERED IN MARKDOWN. Kármán momentum integral relation relating wall shear to the streamwise growth of momentum thickness for U = constant.",
+   "description": "Momentum integral relation obtained by equating the derivative of the momentum-thickness drag expression to the integrated wall shear; basis of both laminar and turbulent flat-plate estimates.",
+   "variables": [
+    {
+     "symbol": "θ",
+     "meaning": "momentum thickness",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "τ_w",
+     "meaning": "wall shear stress",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "U",
+     "meaning": "external velocity (constant)",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "θ momentum thickness τ_w wall shear stress U external velocity (constant)",
+   "concepts_text": "Eq. (7.5) Kármán momentum integral relation for flat-plate flow Momentum integral relation obtained by equating the derivative of the momentum-thickness drag expression to the integrated wall shear; basis of both laminar and turbulent flat-plate estimates.",
+   "assumptions": [
+    "U = constant"
+   ],
+   "validity": [
+    "valid for either laminar or turbulent flat-plate flow"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 826,
+   "reported_page": 826,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01103",
+   "quote": "_momentum integral relation_ for flat-plate boundary layer flow:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation not rendered; validity statement survives in prose.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+   "type": "Equation",
+   "label": "Eq. (7.46) turbulent flat-plate displacement thickness",
+   "equation_number": "7.46",
+   "form": "NOT RENDERED IN MARKDOWN. Source introduces Eq. (7.46) as the displacement thickness delta* obtained by substituting the one-seventh-power turbulent profile (7.39) into the displacement-thickness definition (7.12). Coefficient and Re_x exponent not recoverable from this rendering.",
+   "description": "Turbulent flat-plate displacement-thickness estimate from the one-seventh-power law and the delta* definition; part of the basic results of turbulent flat-plate theory (Sec. 7.4).",
+   "variables": [
+    {
+     "symbol": "δ*",
+     "meaning": "displacement thickness of the boundary layer",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "x",
+     "meaning": "distance along the flat plate from the leading edge",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Re_x",
+     "meaning": "local Reynolds number Ux/ν",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "δ* displacement thickness of the boundary layer x distance along the flat plate from the leading edge Re_x local Reynolds number Ux/ν",
+   "concepts_text": "Eq. (7.46) turbulent flat-plate displacement thickness Turbulent flat-plate displacement-thickness estimate from the one-seventh-power law and the delta* definition; part of the basic results of turbulent flat-plate theory (Sec. 7.4).",
+   "assumptions": [
+    "one-seventh-power turbulent velocity profile (Eq. 7.39)",
+    "smooth sharp flat plate, turbulent flow from the leading edge",
+    "delta = 0 at x = 0"
+   ],
+   "validity": [
+    "turbulent flow formula applies for Re_x greater than approximately 10^6 (p. 822)"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 842,
+   "reported_page": 842,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01125",
+   "quote": "The displacement thickness can be estimated from the one-seventh-power",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "All displayed equations in this Markdown were images and did not convert; only the introductory sentence survives. The equation form is described, not transcribed.",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+   "type": "Equation",
+   "label": "Eq. (7.12) displacement thickness in terms of velocity profile",
+   "equation_number": "7.12",
+   "form": "NOT RENDERED IN MARKDOWN. Source: cancel ρ and b from Eq. (7.11), evaluate the left integral, add and subtract U in the right integrand; result shows δ*/δ depends only on the dimensionless profile shape u/U.",
+   "description": "Definition of the displacement thickness as an integral of (1 - u/U) across the boundary layer; ratio δ*/δ depends only on the profile shape.",
+   "variables": [
+    {
+     "symbol": "δ*",
+     "meaning": "displacement thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "δ",
+     "meaning": "boundary layer thickness (99 percent of U)",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_TW"
+     ]
+    },
+    {
+     "symbol": "u/U",
+     "meaning": "dimensionless velocity profile",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "δ* displacement thickness δ boundary layer thickness (99 percent of U) u/U dimensionless velocity profile",
+   "concepts_text": "Eq. (7.12) displacement thickness in terms of velocity profile Definition of the displacement thickness as an integral of (1 - u/U) across the boundary layer; ratio δ*/δ depends only on the profile shape.",
+   "assumptions": [
+    "incompressible flat-plate boundary layer with U = constant"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "reported_page": 828,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01105",
+   "quote": "Thus the ratio of _δ_ <sup>*</sup> / _δ_ varies only with the dimensionless velocity profile",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Integral form not rendered; described from surrounding prose only.",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+   "type": "Equation",
+   "label": "Eq. (7.40) momentum thickness from one-seventh-power law",
+   "equation_number": "7.40",
+   "form": "NOT RENDERED IN MARKDOWN. Momentum thickness θ evaluated from the definition (7.28) using the one-seventh-power profile.",
+   "description": "Momentum thickness in terms of δ for the one-seventh-power turbulent profile.",
+   "variables": [
+    {
+     "symbol": "θ",
+     "meaning": "momentum thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "δ",
+     "meaning": "boundary layer thickness",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_TW"
+     ]
+    }
+   ],
+   "variables_text": "θ momentum thickness δ boundary layer thickness",
+   "concepts_text": "Eq. (7.40) momentum thickness from one-seventh-power law Momentum thickness in terms of δ for the one-seventh-power turbulent profile.",
+   "assumptions": [
+    "one-seventh-power profile (7.39)"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "reported_page": 841,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "quote": "the time. With this simple approximation, the momentum thickness (7.28) can",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation not rendered.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+   "type": "Equation",
+   "label": "White Eq. (9.46) maximum (choked) isentropic mass flow",
+   "equation_number": "9.46",
+   "form": "m_dot_max ∝ A* p0 / T0^(1/2)  [display equation NOT rendered in Markdown; form reconstructed only from the source's prose statement of proportionality; derived by the source from Eqs. (9.32) and (9.33)]",
+   "description": "Maximum mass flow through a duct/nozzle for isentropic flow of a perfect gas, occurring when the throat is sonic (choked). Eq. (9.46b) is the k = 1.4 numerical form.",
+   "variables": [
+    {
+     "symbol": "m_dot_max",
+     "meaning": "maximum (choked) mass flow",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A*",
+     "meaning": "sonic (critical) throat area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "p0",
+     "meaning": "stagnation pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "T0",
+     "meaning": "stagnation temperature",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio of the gas",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    }
+   ],
+   "variables_text": "m_dot_max maximum (choked) mass flow A* sonic (critical) throat area p0 stagnation pressure T0 stagnation temperature k specific-heat ratio of the gas",
+   "concepts_text": "White Eq. (9.46) maximum (choked) isentropic mass flow Maximum mass flow through a duct/nozzle for isentropic flow of a perfect gas, occurring when the throat is sonic (choked). Eq. (9.46b) is the k = 1.4 numerical form.",
+   "assumptions": [
+    "isentropic flow through a duct",
+    "perfect gas",
+    "throat at the critical or sonic condition (choked)",
+    "one-dimensional flow approximation"
+   ],
+   "validity": [
+    "gives the maximum mass flow only, i.e. at the choking condition (sonic exit)"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "reported_page": 1101,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01490",
+   "quote": "For isentropic flow through a duct, the maximum mass flow possible is",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "All displayed equations in this Markdown were lost in conversion (rendered as images in the PDF). Only the prose 'proportional to the throat area and stagnation pressure and inversely proportional to the square root of the stagnation temperature' (p. 1101) survives; the explicit k-dependent coefficient cannot be verified from this rendering.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+   "type": "Equation",
+   "label": "White Eqs. (9.26)-(9.28) adiabatic T/T0 and isentropic p/p0, ρ/ρ0 vs Mach number",
+   "equation_number": "9.26-9.28",
+   "form": "T0/T = f(Ma, k) from the energy equation; p/p0 and ρ/ρ0 = powers of the temperature ratio via Eq. (9.9)  [display equations NOT rendered in Markdown]",
+   "description": "Stagnation-to-static ratios of a perfect gas as functions of Mach number and k; plotted in Fig. 9.3 and tabulated in Table B.1 for k = 1.4.",
+   "variables": [
+    {
+     "symbol": "Ma",
+     "meaning": "Mach number",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    },
+    {
+     "symbol": "T/T0",
+     "meaning": "static-to-stagnation temperature ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p/p0",
+     "meaning": "static-to-stagnation pressure ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ/ρ0",
+     "meaning": "static-to-stagnation density ratio",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "Ma Mach number k specific-heat ratio T/T0 static-to-stagnation temperature ratio p/p0 static-to-stagnation pressure ratio ρ/ρ0 static-to-stagnation density ratio",
+   "concepts_text": "White Eqs. (9.26)-(9.28) adiabatic T/T0 and isentropic p/p0, ρ/ρ0 vs Mach number Stagnation-to-static ratios of a perfect gas as functions of Mach number and k; plotted in Fig. 9.3 and tabulated in Table B.1 for k = 1.4.",
+   "assumptions": [
+    "perfect gas",
+    "Eqs. (9.26)-(9.27): adiabatic flow only",
+    "Eq. (9.28): isentropic flow"
+   ],
+   "validity": [
+    "Eqs. (9.26) and (9.27) require only adiabatic flow and hold even with friction losses or shock waves",
+    "pressure and density ratios (9.28) require the flow to also be isentropic"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1091,
+   "reported_page": 1091,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01474",
+   "quote": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation bodies missing from the Markdown; only the prose describing them survives.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+   "type": "Equation",
+   "label": "White Eq. (6.117) compressible flowmeter (orifice/nozzle/venturi) mass flow with expansion factor Y",
+   "equation_number": "6.117",
+   "form": "Eq. (6.104) rewritten in terms of mass flow and upstream density ρ1, multiplied by the dimensionless expansion factor Y  [display equation NOT rendered in Markdown]",
+   "description": "Compressibility correction for Bernoulli obstruction meters (orifice, flow nozzle, venturi) when the fluid is a gas and p2/p1 is not near unity; Y is read from Fig. 6.45 as a function of pressure ratio, β and meter type.",
+   "variables": [
+    {
+     "symbol": "Y",
+     "meaning": "dimensionless expansion factor, function of p2/p1, β and meter type",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ1",
+     "meaning": "upstream gas density",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p2/p1",
+     "meaning": "downstream-to-upstream pressure ratio",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "β",
+     "meaning": "meter diameter ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "Y dimensionless expansion factor, function of p2/p1, β and meter type ρ1 upstream gas density p2/p1 downstream-to-upstream pressure ratio β meter diameter ratio",
+   "concepts_text": "White Eq. (6.117) compressible flowmeter (orifice/nozzle/venturi) mass flow with expansion factor Y Compressibility correction for Bernoulli obstruction meters (orifice, flow nozzle, venturi) when the fluid is a gas and p2/p1 is not near unity; Y is read from Fig. 6.45 as a function of pressure ratio, β and meter type.",
+   "assumptions": [
+    "gas flow through an obstruction meter",
+    "empirical Y from Fig. 6.45"
+   ],
+   "validity": [
+    "needed when the fluid is a gas and the pressure ratio p2/p1 is not near unity"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 750,
+   "reported_page": 750,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01008",
+   "quote": "The dimensionless _expansion factor Y_ is a function of pressure ratio, _β_, and",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "This is the source's only treatment of compressible flow through an orifice proper; it is an empirical correction chart, not the isentropic/choked relation. Equation body missing from Markdown.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+   "type": "Equation",
+   "label": "White Eq. (9.47) local (subsonic, non-choked) mass flow function",
+   "equation_number": "9.47",
+   "form": "dimensionless mass flow function of local p/p0 and local area A at position x  [display equation NOT rendered in Markdown; body not recoverable from this rendering]",
+   "description": "Modification of Eq. (9.46) that predicts the actual (nonmaximum) mass flow at any section where the local area A and local pressure p are known; rises rapidly as p/p0 falls and levels out at the maximum of Eqs. (9.46). A short table of values for k = 1.4 follows in the source.",
+   "variables": [
+    {
+     "symbol": "p",
+     "meaning": "local static pressure at position x",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p0",
+     "meaning": "stagnation pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_P0"
+     ]
+    },
+    {
+     "symbol": "A",
+     "meaning": "local duct area at position x",
+     "units": "",
+     "role": "input",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_SOUND",
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    },
+    {
+     "symbol": "m_dot",
+     "meaning": "actual (nonmaximum) mass flow",
+     "units": "",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    }
+   ],
+   "variables_text": "p local static pressure at position x p0 stagnation pressure A local duct area at position x k specific-heat ratio m_dot actual (nonmaximum) mass flow",
+   "concepts_text": "White Eq. (9.47) local (subsonic, non-choked) mass flow function Modification of Eq. (9.46) that predicts the actual (nonmaximum) mass flow at any section where the local area A and local pressure p are known; rises rapidly as p/p0 falls and levels out at the maximum of Eqs. (9.46). A short table of values for k = 1.4 follows in the source.",
+   "assumptions": [
+    "isentropic flow",
+    "perfect gas",
+    "stagnation conditions known"
+   ],
+   "validity": [
+    "handy if stagnation conditions are known and the flow is not choked",
+    "p and A are the local values at position x"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "reported_page": 1101,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01491",
+   "quote": "Equation (9.47) is handy if stagnation conditions are known and the flow is",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation body absent from Markdown (image not converted). Used in Example 9.5 part (a) with pe/p0 = 90/120 = 0.75 to get 0.128 kg/s, but the algebraic form and the tabulated k = 1.4 values are not present in this rendering.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+   "type": "Equation",
+   "label": "White Eq. (9.32) critical (sonic) property ratios",
+   "equation_number": "9.32",
+   "form": "p*, ρ*, a*, T* = fixed ratios of p0, ρ0, a0, T0 obtained from Eqs. (9.26)-(9.28) at Ma = 1.0 (numerical values for k = 1.4 given in source)  [display equation NOT rendered in Markdown]",
+   "description": "Critical (sonic) properties as ratios of stagnation properties; used in Example 9.5 to compute the critical throat pressure p* that decides whether a converging nozzle is choked.",
+   "variables": [
+    {
+     "symbol": "p*",
+     "meaning": "critical (sonic) pressure",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ*",
+     "meaning": "critical density",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "a*",
+     "meaning": "critical sound speed",
+     "units": "",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "T*",
+     "meaning": "critical temperature",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p0, ρ0, a0, T0",
+     "meaning": "stagnation properties",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    }
+   ],
+   "variables_text": "p* critical (sonic) pressure ρ* critical density a* critical sound speed T* critical temperature p0, ρ0, a0, T0 stagnation properties k specific-heat ratio",
+   "concepts_text": "White Eq. (9.32) critical (sonic) property ratios Critical (sonic) properties as ratios of stagnation properties; used in Example 9.5 to compute the critical throat pressure p* that decides whether a converging nozzle is choked.",
+   "assumptions": [
+    "perfect gas",
+    "Ma = 1.0 at the critical point"
+   ],
+   "validity": [
+    "in all isentropic flow, all critical properties are constant; in adiabatic nonisentropic flow a* and T* are constant but p* and ρ* may vary"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1092,
+   "reported_page": 1092,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01477",
+   "quote": "asterisks: _p_ <sup>*</sup>, ρ <sup>*</sup>, _a_ <sup>*</sup>, and _T_ <sup>*</sup> . They are certain ratios of the stagnation properties as",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Numerical k = 1.4 ratios are in a dropped equation image. Example 9.5 shows the resulting critical pressure is 63.4 kPa for p0 = 120 kPa (p. 1121-1122), which is the only numerical trace of Eq. (9.32) in this rendering.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+   "type": "Equation",
+   "label": "Eq. (7.39) one-seventh-power turbulent profile",
+   "equation_number": "7.39",
+   "form": "NOT RENDERED IN MARKDOWN. Prandtl's one-seventh-power law approximation to the turbulent flat-plate velocity profile u/U (dashed line in Fig. 7.5).",
+   "description": "Power-law profile approximation used in place of the logarithmic law to evaluate momentum and displacement thicknesses.",
+   "variables": [
+    {
+     "symbol": "u/U",
+     "meaning": "dimensionless velocity profile",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y/δ",
+     "meaning": "dimensionless wall-normal coordinate",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "u/U dimensionless velocity profile y/δ dimensionless wall-normal coordinate",
+   "concepts_text": "Eq. (7.39) one-seventh-power turbulent profile Power-law profile approximation used in place of the logarithmic law to evaluate momentum and displacement thicknesses.",
+   "assumptions": [
+    "excellent fit to low-Reynolds-number turbulent data available to Prandtl"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "reported_page": 841,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Explicit expression not rendered; the source names it the one-seventh-power law.",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+   "type": "Equation",
+   "label": "Eq. (7.34) logarithmic-law profile across turbulent boundary layer",
+   "equation_number": "7.34",
+   "form": "NOT RENDERED IN MARKDOWN. Logarithmic law (6.28) assumed to hold across the whole boundary layer with κ = 0.41 and B = 5.0.",
+   "description": "Log-law velocity profile used to derive the turbulent flat-plate skin friction law (7.37) by evaluating at y = δ, u = U.",
+   "variables": [
+    {
+     "symbol": "κ",
+     "meaning": "Kármán constant",
+     "units": "dimensionless",
+     "role": "constant",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "B",
+     "meaning": "log-law additive constant",
+     "units": "dimensionless",
+     "role": "constant",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "δ",
+     "meaning": "boundary layer thickness",
+     "units": "length",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_TW"
+     ]
+    }
+   ],
+   "variables_text": "κ Kármán constant B log-law additive constant δ boundary layer thickness",
+   "concepts_text": "Eq. (7.34) logarithmic-law profile across turbulent boundary layer Log-law velocity profile used to derive the turbulent flat-plate skin friction law (7.37) by evaluating at y = δ, u = U.",
+   "assumptions": [
+    "logarithmic law holds all the way across the boundary layer"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "reported_page": 840,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01123",
+   "quote": "with, as usual, _κ_ = 0.41 and _B_ = 5.0. At the outer edge of the boundary layer,",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation not rendered; constants survive in prose.",
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+   "type": "Equation",
+   "label": "Eq. (7.38) power-law skin-friction approximation",
+   "equation_number": "7.38",
+   "form": "NOT RENDERED IN MARKDOWN. Power-law fit (Prandtl) to the tabulated values of the log skin-friction law (7.37), used as the left-hand side of Eq. (7.33).",
+   "description": "Power-law approximation to the turbulent flat-plate skin friction coefficient versus Reynolds number.",
+   "variables": [
+    {
+     "symbol": "c_f",
+     "meaning": "skin friction coefficient",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF"
+     ]
+    }
+   ],
+   "variables_text": "c_f skin friction coefficient",
+   "concepts_text": "Eq. (7.38) power-law skin-friction approximation Power-law approximation to the turbulent flat-plate skin friction coefficient versus Reynolds number.",
+   "assumptions": [],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "reported_page": 840,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01123",
+   "quote": "law (7.37) and simply fit the numbers in the table to a power-law approximation:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation and the table it fits are not rendered.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+   "type": "Equation",
+   "label": "White Eq. (9.44)/(9.45) area ratio A/A* vs Mach number",
+   "equation_number": "9.44",
+   "form": "A/A* = (ρ*/ρ)(V*/V) with both right-hand terms functions of Ma only for isentropic flow; Eq. (9.45) is the k = 1.4 numerical form  [display equation NOT rendered in Markdown]",
+   "description": "Continuity relation converted to an algebraic expression in area and Mach number by equating the local mass flow to the mass flow under sonic conditions (Eq. 9.41), then using Eqs. (9.28), (9.26) and (9.32).",
+   "variables": [
+    {
+     "symbol": "A",
+     "meaning": "local duct area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_SOUND",
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "A*",
+     "meaning": "sonic (critical) throat area",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "Ma",
+     "meaning": "local Mach number",
+     "units": "",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    },
+    {
+     "symbol": "k",
+     "meaning": "specific-heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_GAMMA",
+      "QTY_KCOND"
+     ]
+    }
+   ],
+   "variables_text": "A local duct area A* sonic (critical) throat area Ma local Mach number k specific-heat ratio",
+   "concepts_text": "White Eq. (9.44)/(9.45) area ratio A/A* vs Mach number Continuity relation converted to an algebraic expression in area and Mach number by equating the local mass flow to the mass flow under sonic conditions (Eq. 9.41), then using Eqs. (9.28), (9.26) and (9.32).",
+   "assumptions": [
+    "isentropic flow",
+    "perfect gas",
+    "one-dimensional flow",
+    "no shock waves in the duct"
+   ],
+   "validity": [
+    "two solutions (one subsonic, one supersonic) exist for a given A/A*; selection requires further information such as a known pressure or temperature",
+    "the source's EES inversion works for any real-gas k between 1.0 and 1.67"
+   ],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1098,
+   "reported_page": 1098,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01486",
+   "quote": "Both the terms on the right are functions only of Mach number for isentropic",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation body absent from Markdown (image). Referenced quote is the last line before the page-1099 marker.",
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+   "type": "Equation",
+   "label": "Eq. (7.37) turbulent flat-plate skin friction law",
+   "equation_number": "7.37",
+   "form": "NOT RENDERED IN MARKDOWN. Implicit log-law relation between c_f and Re_δ obtained from Eq. (7.35) with identities from the c_f definition (7.10).",
+   "description": "Complicated implicit skin friction law for turbulent flat-plate flow; solved for a few values then replaced by power-law fit (7.38).",
+   "variables": [
+    {
+     "symbol": "c_f",
+     "meaning": "skin friction coefficient",
+     "units": "dimensionless",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_CF"
+     ]
+    }
+   ],
+   "variables_text": "c_f skin friction coefficient",
+   "concepts_text": "Eq. (7.37) turbulent flat-plate skin friction law Complicated implicit skin friction law for turbulent flat-plate flow; solved for a few values then replaced by power-law fit (7.38).",
+   "assumptions": [
+    "log-law profile across the layer with κ = 0.41, B = 5.0"
+   ],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "reported_page": 840,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01123",
+   "quote": "Therefore Eq. (7.35) is a _skin friction law_ for turbulent flat-plate flow:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation not rendered.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+   "type": "Equation",
+   "label": "Eq. (7.11) displacement of outer streamlines (conservation of mass)",
+   "equation_number": "7.11",
+   "form": "NOT RENDERED IN MARKDOWN. Mass-conservation balance between inlet and outlet of Fig. 7.4 defining the outward streamline deflection δ*(x).",
+   "description": "Outer streamlines deflect outward a distance δ*(x) to conserve mass; this defines the displacement thickness.",
+   "variables": [
+    {
+     "symbol": "δ*(x)",
+     "meaning": "outward deflection of outer streamlines = displacement thickness",
+     "units": "length",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ",
+     "meaning": "fluid density",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "b",
+     "meaning": "plate width into the paper",
+     "units": "length",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "δ*(x) outward deflection of outer streamlines = displacement thickness ρ fluid density b plate width into the paper",
+   "concepts_text": "Eq. (7.11) displacement of outer streamlines (conservation of mass) Outer streamlines deflect outward a distance δ*(x) to conserve mass; this defines the displacement thickness.",
+   "assumptions": [],
+   "validity": [],
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "reported_page": 828,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01105",
+   "quote": "must deflect outward a distance _δ_ <sup>*</sup> ( _x_ ) to satisfy conservation of mass between the",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation not rendered; only the prose definition survives.",
+   "model_ids": [],
+   "model_link_basis": "",
+   "extracted_for_model": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "provenance_id": "PROV_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "flow",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_16E1DC3A",
+   "type": "Equation",
+   "label": "SP-125 Eq. 4-7",
+   "equation_number": "4-7",
+   "form": "_<u>R</u>_ _<u>t</u>_ _<u>(Vc-1)</u>_ <u>+</u> _<u>R(sec</u>_ <u>a</u> <u>-1)</u> Ln (4-7) <u>tan a</u>",
+   "description": "Length of a conical nozzle section from the throat to a given area ratio, with a circular-arc throat of radius R and cone half-angle a. The book applies the same equation to the convergent cone (with the contraction ratio in place of the expansion ratio) in the sample calculation on PDF p. 104.",
+   "variables": [
+    {
+     "symbol": "Ln",
+     "meaning": "length of conical nozzle (or convergent cone) section",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Rt",
+     "meaning": "throat radius",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RT"
+     ]
+    },
+    {
+     "symbol": "R",
+     "meaning": "radius of the circular-arc throat contour (0.5 to 1.5 Rt)",
+     "units": "in",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_MR",
+      "QTY_RGAS"
+     ]
+    },
+    {
+     "symbol": "a",
+     "meaning": "cone half angle (divergent 12-18 deg; convergent 20-45 deg)",
+     "units": "deg",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_SOUND",
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "eps (rendered 'c')",
+     "meaning": "area ratio (expansion ratio for the divergent cone; contraction ratio when applied to the convergent cone)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "Ln length of conical nozzle (or convergent cone) section Rt throat radius R radius of the circular-arc throat contour (0.5 to 1.5 Rt) a cone half angle (divergent 12-18 deg; convergent 20-45 deg) eps (rendered 'c') area ratio (expansion ratio for the divergent cone; contraction ratio when applied to the convergent cone)",
+   "concepts_text": "SP-125 Eq. 4-7 Length of a conical nozzle section from the throat to a given area ratio, with a circular-arc throat of radius R and cone half-angle a. The book applies the same equation to the convergent cone (with the contraction ratio in place of the expansion ratio) in the sample calculation on PDF p. 104.",
+   "assumptions": [
+    "conical nozzle contour with circular-arc throat"
+   ],
+   "validity": [
+    "throat arc radius R from 0.5 to 1.5 times throat radius",
+    "convergent cone half angle 20 to 45 deg",
+    "divergent cone half angle approximately 12 to 18 deg"
+   ],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 99,
+   "reported_page": 99,
+   "chunk_id": "DOC_NTRS_19710019929#c00232",
+   "quote": "_<u>R</u>_ _<u>t</u>_ _<u>(Vc-1)</u>_ <u>+</u> _<u>R(sec</u>_ <u>a</u> <u>-1)</u> Ln (4-7) <u>tan a</u>",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "OCR is garbled: the radical sign renders as 'V' and the area-ratio epsilon as 'c'. The numerator reads Rt(sqrt(eps)-1) + R(sec a - 1) over tan a. Structure is confirmed by the worked instance on PDF p. 104: '12.45 (v1.6 -1) + 18.68 (sec 20 deg - 1) / tan 20 deg = 12.4 in' with Rt = 12.45 in, R = 1.5 Rt = 18.68 in, eps_c = 1.6, a = 20 deg.",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_16E1DC3A",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_6BD96C7B",
+   "type": "Equation",
+   "label": "SP-125 sample calculation (4-2): chamber volume Vc = At x L* for A-1 stage engine",
+   "equation_number": "sample calculation 4-2 (applies eq. 4-4)",
+   "form": "Vc = 487 x 45 = 21915 cu in",
+   "description": "Numeric application of eq. (4-4) rearranged as Vc = At x L*, with At = 487 in^2 (from eq. 1-33) and a chosen L* of 45 in for LO2/RP-1.",
+   "variables": [
+    {
+     "symbol": "Vc",
+     "meaning": "chamber volume",
+     "units": "cu in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "throat area (487 in^2 for the A-1 stage engine)",
+     "units": "in^2",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "L*",
+     "meaning": "combustion chamber characteristic length (45 in chosen for LO2/RP-1)",
+     "units": "in",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_LSTAR"
+     ]
+    }
+   ],
+   "variables_text": "Vc chamber volume At throat area (487 in^2 for the A-1 stage engine) L* combustion chamber characteristic length (45 in chosen for LO2/RP-1)",
+   "concepts_text": "SP-125 sample calculation (4-2): chamber volume Vc = At x L* for A-1 stage engine Numeric application of eq. (4-4) rearranged as Vc = At x L*, with At = 487 in^2 (from eq. 1-33) and a chosen L* of 45 in for LO2/RP-1.",
+   "assumptions": [
+    "L* of 45 in selected for LO2/RP-1 application"
+   ],
+   "validity": [],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 104,
+   "reported_page": 104,
+   "chunk_id": "DOC_NTRS_19710019929#c00247",
+   "quote": "Use a combustion chamber L* of 45 in for\nL0 2 /RP-1 application. Substitute into equation\n(4-4):\n\n\nChamber volume: _V_ c = 487 x 45 = 21915 cu in",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "'L0 2' is OCR of LO2. This is the direct numeric instance of the registry relation Vc = Lstar*At.",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_LSTAR_VOLUME",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_6BD96C7B",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_7A8070BC",
+   "type": "Equation",
+   "label": "SP-125 Eq. 4-6",
+   "equation_number": "4-6",
+   "form": "Total area = 2LcY _TTfcAt_ + csc _e«(c_   - _l)Ae_",
+   "description": "Approximate total surface area of the cylindrical combustion chamber walls (cylinder plus convergent cone), excluding the injector face, in terms of cylinder length, contraction ratio, throat area and convergent half angle.",
+   "variables": [
+    {
+     "symbol": "Lc",
+     "meaning": "length of cylindrical chamber section",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eps_c (rendered 'fc'/'(c')",
+     "meaning": "chamber contraction area ratio Ac/At",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "throat area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "theta (rendered 'e')",
+     "meaning": "half angle of the convergent cone",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "Lc length of cylindrical chamber section eps_c (rendered 'fc'/'(c') chamber contraction area ratio Ac/At At throat area theta (rendered 'e') half angle of the convergent cone",
+   "concepts_text": "SP-125 Eq. 4-6 Approximate total surface area of the cylindrical combustion chamber walls (cylinder plus convergent cone), excluding the injector face, in terms of cylinder length, contraction ratio, throat area and convergent half angle.",
+   "assumptions": [
+    "cylindrical chamber with straight convergent cone; injector face excluded"
+   ],
+   "validity": [],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "reported_page": 98,
+   "chunk_id": "DOC_NTRS_19710019929#c00229",
+   "quote": "chamber walls excluding injector face can be approximated by the following expression: Total area = 2LcY _TTfcAt_ + csc _e«(c_   - _l)Ae_ (4-6)",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "OCR heavily garbled. Readable elements: a cylinder term 2 Lc sqrt(pi eps_c At) and a convergent-cone term csc(theta) (eps_c - 1) At, with theta the convergent half angle. Transcribed verbatim; not repaired.",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_7A8070BC",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_98E8ACF4",
+   "type": "Equation",
+   "label": "SP-125 Eq. 1-14",
+   "equation_number": "1-14",
+   "form": "_(Pc_ )in/(Pc)ns = _y-1_ _,_ (lt y Mj 2)/(lt- -M/»)' (y-l) (1-14) 2",
+   "description": "Ratio of injector-end total pressure to nozzle-stagnation total pressure across the combustion chamber, expressed in terms of the nozzle-inlet flow Mach number Mi and specific heat ratio gamma (Rayleigh-type chamber loss), neglecting injection velocity.",
+   "variables": [
+    {
+     "symbol": "(Pc)inj",
+     "meaning": "chamber total pressure at injector end",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "(Pc)ns",
+     "meaning": "nozzle stagnation (total) pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Mi",
+     "meaning": "flow Mach number at the nozzle inlet",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y (gamma)",
+     "meaning": "specific heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "(Pc)inj chamber total pressure at injector end (Pc)ns nozzle stagnation (total) pressure Mi flow Mach number at the nozzle inlet y (gamma) specific heat ratio",
+   "concepts_text": "SP-125 Eq. 1-14 Ratio of injector-end total pressure to nozzle-stagnation total pressure across the combustion chamber, expressed in terms of the nozzle-inlet flow Mach number Mi and specific heat ratio gamma (Rayleigh-type chamber loss), neglecting injection velocity.",
+   "assumptions": [
+    "Vinj = 0 and (Pc)inj = Pinj (injection velocity neglected)"
+   ],
+   "validity": [],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 15,
+   "reported_page": 15,
+   "chunk_id": "DOC_NTRS_19710019929#c00027",
+   "quote": "the total pressure ratio _(Pc)in/(Pc)ns_ can also be expressed in terms of flow Mach number _M_ j at the nozzle inlet and of the specific heat ratio y:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "Equation OCR is garbled (exponent and denominator structure unreadable). The prose defining it is clean. This is the quantitative basis for the 'contraction ratio -> chamber pressure loss' factor; it is NOT a shoulder-radius relation.",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_98E8ACF4",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_B679AC9F",
+   "type": "Equation",
+   "label": "SP-125 eq. (4-3): required combustion chamber volume from stay time",
+   "equation_number": "4-3",
+   "form": "Vc = Wtc V ts",
+   "description": "Theoretical required combustion chamber volume as the product of propellant mass flow rate, average specific volume of the chamber gases, and propellant stay time.",
+   "variables": [
+    {
+     "symbol": "Vc",
+     "meaning": "chamber volume",
+     "units": "ft^3",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Wtc",
+     "meaning": "propellant mass flow rate (rendered 'IV tc' in Markdown; W-dot sub tc in the PDF)",
+     "units": "lb/sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V",
+     "meaning": "average specific volume",
+     "units": "ft^3/lb",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ts",
+     "meaning": "propellant stay time",
+     "units": "sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "Vc chamber volume Wtc propellant mass flow rate (rendered 'IV tc' in Markdown; W-dot sub tc in the PDF) V average specific volume ts propellant stay time",
+   "concepts_text": "SP-125 eq. (4-3): required combustion chamber volume from stay time Theoretical required combustion chamber volume as the product of propellant mass flow rate, average specific volume of the chamber gases, and propellant stay time.",
+   "assumptions": [
+    "Stay time is that needed for efficient combustion (complete mixing and combustion before entering the nozzle)"
+   ],
+   "validity": [],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "reported_page": 95,
+   "chunk_id": "DOC_NTRS_19710019929#c00224",
+   "quote": "_V_ c = chamber volume, ft 3\nIV tc = propellant mass flow rate, lb/ sec\n_V_ = average specific volume, ft 3 _lIb_",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "medium",
+   "extraction_note": "The equation body is not rendered in the Markdown (only the 'where:' variable list survives). Form transcribed from a render of PDF page 95 of this same document (book p. 86), which shows Vc = W-dot_tc V t_s (4-3). 'IV tc' is an OCR artefact of W-dot sub tc.",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_LSTAR_VOLUME",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_B679AC9F",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19710019929_D5935CFC",
+   "type": "Equation",
+   "label": "SP-125 eq. (4-4): characteristic length L* definition",
+   "equation_number": "4-4",
+   "form": "L* = Vc / At = Wtc V ts / At",
+   "description": "Characteristic length L* ('L-star') defined as the ratio of combustion chamber volume to nozzle throat area; used to specify propellant stay time. Rearranged, Vc = L* At, which is how the book applies it in design layout (see sample calculation 4-2).",
+   "variables": [
+    {
+     "symbol": "L*",
+     "meaning": "characteristic chamber length",
+     "units": "in (book usage; ft consistent with Vc in ft^3 and At in ft^2)",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_LSTAR"
+     ]
+    },
+    {
+     "symbol": "Vc",
+     "meaning": "combustion chamber volume",
+     "units": "ft^3 (cu in in sample calculation)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "nozzle throat area",
+     "units": "in^2 in sample calculation",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "Wtc",
+     "meaning": "propellant mass flow rate",
+     "units": "lb/sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V",
+     "meaning": "average specific volume",
+     "units": "ft^3/lb",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ts",
+     "meaning": "propellant stay time",
+     "units": "sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "L* characteristic chamber length Vc combustion chamber volume At nozzle throat area Wtc propellant mass flow rate V average specific volume ts propellant stay time",
+   "concepts_text": "SP-125 eq. (4-4): characteristic length L* definition Characteristic length L* ('L-star') defined as the ratio of combustion chamber volume to nozzle throat area; used to specify propellant stay time. Rearranged, Vc = L* At, which is how the book applies it in design layout (see sample calculation 4-2).",
+   "assumptions": [
+    "At is in nearly direct proportion to the product of Wtc and V, so L* is essentially a function of ts"
+   ],
+   "validity": [
+    "Minimum required L* under a given set of operating conditions (propellants, mixture ratio, chamber pressure, injector design, chamber geometry) can only be evaluated by actual firings of experimental thrust chambers",
+    "L* values of 15 to 120 inches for stay times of 0.002-0.040 second have been used in various thrust chamber designs"
+   ],
+   "document_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "reported_page": 95,
+   "chunk_id": "DOC_NTRS_19710019929#c00224",
+   "quote": "specify the propellant stay time in the combustion chamber. L* is defined as the ratio of\nchamber volume to nozzle throat area, and can be\nexpressed by the following equation:",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "high",
+   "extraction_note": "The equation image is dropped by the Markdown conversion; the relation L* = Vc/At is stated verbatim in words in the Markdown, and the render of PDF page 95 shows L* = Vc/At = W-dot_tc V t_s / At (4-4). The second equality is from the PDF render only.",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "model_link_basis": "registry_extraction:SUPPORTED",
+   "extracted_for_model": "MODEL_CHAMBER_LSTAR_VOLUME",
+   "provenance_id": "PROV_EQ_NTRS_19710019929_D5935CFC",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "chamber",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19760023196_2A22408D",
+   "type": "Equation",
+   "label": "chug_injection_pressure_drop_ratio_minimum",
+   "equation_number": "",
+   "form": "minimum values of AP inj /Pcn = 5 to 20 percent (element-type dependent; concentric-tube ~5 percent, unlike-impinging 10 to 15 percent, like-impinging 15 to 25 percent)",
+   "description": "Minimum injector pressure-drop-to-chamber-pressure ratio found necessary to prevent chug (feed-system-coupled, 50-250 Hz) instability; the only quantitative stability relation stated in the monograph. Expressed in prose, not as a numbered equation.",
+   "variables": [
+    {
+     "symbol": "AP inj",
+     "meaning": "injector (injection element) pressure drop, OCR rendering of delta-P_inj",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pcn / Pch",
+     "meaning": "chamber pressure, OCR renders it inconsistently as Pcn and Pch",
+     "units": "pressure",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "variables_text": "AP inj injector (injection element) pressure drop, OCR rendering of delta-P_inj Pcn / Pch chamber pressure, OCR renders it inconsistently as Pcn and Pch",
+   "concepts_text": "chug_injection_pressure_drop_ratio_minimum Minimum injector pressure-drop-to-chamber-pressure ratio found necessary to prevent chug (feed-system-coupled, 50-250 Hz) instability; the only quantitative stability relation stated in the monograph. Expressed in prose, not as a numbered equation.",
+   "assumptions": [
+    "Derived from feed-system analytical models and engine experience, not from a chamber transfer function"
+   ],
+   "validity": [
+    "Applies to chug (feed-system-coupled) instability prevention only; value depends on element type"
+   ],
+   "document_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "reported_page": 44,
+   "chunk_id": "DOC_NTRS_19760023196#c00070",
+   "quote": "The required pressure drop for the fuel and oxidizer injection elements to prevent chug instability has been found to vary with the element type, minimum values ofAP inj /Pcn Of 5 to 20 percent generally being found.",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "medium",
+   "extraction_note": "OCR garbles the symbols: 'AP inj /Pcn' and 'AP inj /Pch' stand for delta-P_inj/P_ch; the '*' in the element-specific sentence is an unreadable relational symbol (likely approx or >=). No n-tau or sensitive-frequency equation appears anywhere in this document.",
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_N_TAU_STABILITY",
+   "provenance_id": "PROV_EQ_NTRS_19760023196_2A22408D",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19760023196_BE05E0AF",
+   "type": "Equation",
+   "label": "SP-8089 eq. (5) pintle slot optimum-mixing correlation",
+   "equation_number": "(5)",
+   "form": "OCUpV? Sk >)5)   [OCR-garbled; source states it is a correlation among A, S, ℓ and C for oxidizer injected through slots in the pintle]",
+   "description": "Optimum-mixing ('diameter ratio' equivalent) correlation for a pintle element with oxidizer injected radially through slots in the pintle, adapted from ref. 10 (Carter & Bell, TRW, AFRPL-TR-69-231). Defines the relation among fuel annulus width A, oxidizer slot width S, oxidizer slot length ℓ and a cross-influence term C.",
+   "variables": [
+    {
+     "symbol": "A",
+     "meaning": "width of the fuel slot (annulus)",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_SOUND",
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "S",
+     "meaning": "width of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ℓ",
+     "meaning": "length of oxidizer slot",
+     "units": "in.",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C",
+     "meaning": "cross-influence term (defined in ref. 10)",
+     "units": "in.",
+     "role": "parameter",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_SOUND",
+      "QTY_CSTAR"
+     ]
+    }
+   ],
+   "variables_text": "A width of the fuel slot (annulus) S width of oxidizer slot ℓ length of oxidizer slot C cross-influence term (defined in ref. 10)",
+   "concepts_text": "SP-8089 eq. (5) pintle slot optimum-mixing correlation Optimum-mixing ('diameter ratio' equivalent) correlation for a pintle element with oxidizer injected radially through slots in the pintle, adapted from ref. 10 (Carter & Bell, TRW, AFRPL-TR-69-231). Defines the relation among fuel annulus width A, oxidizer slot width S, oxidizer slot length ℓ and a cross-influence term C.",
+   "assumptions": [
+    "Liquid/liquid propellants; oxidizer injected through slots in the pintle (LEM-descent-type geometry, fig. 4)"
+   ],
+   "validity": [
+    "Stated to apply to liquid/liquid designs; the same expression is stated to apply also to gas/liquid designs per ref. 38"
+   ],
+   "document_id": "DOC_NTRS_19760023196",
+   "page": 33,
+   "reported_page": 33,
+   "chunk_id": "DOC_NTRS_19760023196#c00051",
+   "quote": "For liquid/liquid applications, the correlation for oxidizer injected through slots in the pintle is expressed as (adptd. from ref. 10)",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "The equation body is unreadable in the OCR ('OCUpV? Sk >)5)'). Only the surrounding variable list survives: A = width of the fuel slot (annulus), in.; S = width of oxidizer slot, in.; ℓ = length of oxidizer slot, in.; C = cross-influence term (defined in ref. 10), in. Do not reconstruct the functional form from other literature.",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE",
+   "provenance_id": "PROV_EQ_NTRS_19760023196_BE05E0AF",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "id": "EQ_NTRS_19760023196_D7D2D8F1",
+   "type": "Equation",
+   "label": "SP-8089 eq. (6) gas/liquid optimum-mixing impingement angle",
+   "equation_number": "(6)",
+   "form": "cos(90°1 - 8) = 0.2 ~eK =: [—K   [OCR-garbled; readable structure: cos(90° − θ) = 0.2 × (V/V)(d/d)(ρ/ρ) with unreadable exponents]",
+   "description": "Relates the impingement angle θ that produces optimum mixing for gas/liquid unlike-impinging elements to the flow conditions (velocity, diameter and density ratios of the liquid and gas jets).",
+   "variables": [
+    {
+     "symbol": "θ",
+     "meaning": "jet impingement angle producing optimum mixing",
+     "units": "deg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V",
+     "meaning": "injection velocity of a stream (ratio between streams)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d",
+     "meaning": "orifice/jet diameter (ratio between streams)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ρ",
+     "meaning": "density (ratio between streams)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    }
+   ],
+   "variables_text": "θ jet impingement angle producing optimum mixing V injection velocity of a stream (ratio between streams) d orifice/jet diameter (ratio between streams) ρ density (ratio between streams)",
+   "concepts_text": "SP-8089 eq. (6) gas/liquid optimum-mixing impingement angle Relates the impingement angle θ that produces optimum mixing for gas/liquid unlike-impinging elements to the flow conditions (velocity, diameter and density ratios of the liquid and gas jets).",
+   "assumptions": [
+    "Gas/liquid propellants"
+   ],
+   "validity": [
+    "Two opposed liquid jets penetrating into a central gaseous jet; similar expressions for other configurations are in refs. 12 and 20"
+   ],
+   "document_id": "DOC_NTRS_19760023196",
+   "page": 35,
+   "reported_page": 35,
+   "chunk_id": "DOC_NTRS_19760023196#c00054",
+   "quote": "This expression defines the optimum mixing for two opposed liquid jets penctrating into a central gaseous jet.",
+   "grounded": "GROUNDED",
+   "match": "exact",
+   "confidence": "low",
+   "extraction_note": "OCR garbled the right-hand side; the visible fragments 'Vv d p / Vv, od, py' indicate ratios of velocity V, diameter d and density ρ between the two streams with a leading constant 0.2, but exponents and subscripts are not recoverable. The symbol θ is rendered as '8' or '@' in the OCR.",
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "model_link_basis": "registry_extraction:PARTIALLY_SUPPORTED",
+   "extracted_for_model": "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE",
+   "provenance_id": "PROV_EQ_NTRS_19760023196_D7D2D8F1",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "injector",
+   "equivalent_to": [],
+   "competing_with": [],
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-09-19T01:04:12.394495+00:00",
+   "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  }
+ ]
+}

@@ -1,23 +1,37 @@
 """
-rao_optimizer.py – Rao constrained optimization for bell nozzle contour.
+rao_optimizer.py – direct wall-shape optimization on the forward MOC net.
 
 Layer 2: finds the wall contour that maximizes thrust, subject to
-geometric and regularity constraints, using the coupled MOC flow solver.
+geometric and regularity constraints, using the forward bounded MOC
+analysis of each candidate wall (:func:`raosim.moc.solve_flowfield` →
+:func:`raosim.moc_bounded.march_bounded_net`).
 
-Uses SplineWall + coupled march_coupled_net (no frozen kernel).
+Uses SplineWall candidates (monotone cubic Hermite through control radii).
 θ_n is a design variable seeded from NASA SP-8120 lookup tables.
-No scipy dependency.
+No scipy dependency (SLSQP when available, Nelder–Mead otherwise).
+
+STATUS (2026-09-21): the forward net is now a genuine bounded
+characteristic net (NASA/JHU RRC topology, oracle-matched on the M3.5
+perfect nozzle: exit M 3.5009 ± 0.0017, stream thrust within 0.02 % of
+NASA's ``summary.out``).  A candidate wall whose compression waves
+coalesce (an internal shock — typical of parabolic/Bézier bells, see
+Hagemann et al. 1998, Frey & Hagemann 2000) stops the march with
+``stop_reason == "rrc_coalescence"``; such a candidate is penalised
+by how far the wall was reached rather than scored on a fabricated
+exit plane.  This optimizer is not reachable from any CLI/MDO path and
+its optimum has not been benchmarked against Rao's contour — treat it
+as experimental (``experimental_moc_geometry``).
 
 References:
   - Rao, G.V.R., "Exhaust Nozzle Contour for Optimum Thrust," 1958
   - NASA SP-8120, "Liquid Rocket Engine Nozzles," 1976
 
-Approximation note:
-  The coupled optimizer inherits the starting-line approximation selected
-  in raosim.moc.solve_flowfield. The default is the historical
-  quasi-1D area-ratio initialization for backward compatibility; use
-  starting_line_method='sauer_modified' for the compact transonic
-  correction or 'kliegel_levine' for the full third-order series.
+Starting line: ``starting_line_method`` is passed to
+:func:`raosim.moc.solve_flowfield` (default ``'kliegel_levine'`` — the
+axis-to-wall Kliegel–Levine data line; ``'nasa_visible_kliegel_levine'``
+keeps the NASA C++ expression).  The old ``'area_ratio'`` /
+``'sauer_modified'`` options are refused by ``solve_flowfield`` because
+neither is a transonic data line.
 """
 
 from __future__ import annotations
@@ -116,7 +130,7 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                   n_control: int = 5,
                   n_char: int = 30,
                   max_iter: int = 200,
-                  starting_line_method: str = 'area_ratio',
+                  starting_line_method: str = 'kliegel_levine',
                   enforce_pressure_monotonic: bool = False,
                   Ru_factor: float = 1.5,
                   Rd_factor: float = 0.382) -> dict:
@@ -167,6 +181,15 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
                 throat_downstream_radius_factor=Rd_factor,
             )
             metrics = result['exit_metrics']
+
+            if not result['complete']:
+                # The bounded net stopped before the wall reached the
+                # exit (compression coalescence / invalid cell).  The
+                # exit plane is then not a solution — never score it.
+                net = result['net']
+                reached = (net.wall_x[-1] if net.wall_x else wall.x_start)
+                frac = (reached - wall.x_start) / max(wall.x_end - wall.x_start, 1e-12)
+                return 1e3 * (1.0 + max(0.0, 1.0 - frac))
 
             thrust_term = -metrics['F_dimensional']
 
@@ -293,6 +316,9 @@ def optimize_wall(Rt: float, epsilon: float, gamma: float = 1.4,
         'converged': bool(converged),
         'control_points': control_r_opt,
         'optimizer': optimizer,
+        'net': final['net'],
+        'net_complete': bool(final['complete']),
+        'net_stop_reason': final['stop_reason'],
     }
 
 
@@ -303,7 +329,7 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
                     Ru_factor: float = 1.5,
                     Rd_factor: float = 0.382,
                     max_iter: int = 200,
-                    starting_line_method: str = 'area_ratio') -> dict:
+                    starting_line_method: str = 'kliegel_levine') -> dict:
     """
     Generate optimized bell nozzle contour via coupled MOC + optimization.
 
@@ -393,5 +419,15 @@ def moc_bell_nozzle(Rt: float, epsilon: float, gamma: float = 1.4,
         'exit_thrust_normalization_basis': metrics['normalization_basis'],
         'optimization_converged': opt['converged'],
         'starting_line_method': starting_line_method,
+        # Forward bounded-net status of the exported wall.  When False the
+        # exit metrics above are partial (the march stopped before the
+        # exit, e.g. on a compression coalescence) and must not be
+        # reported as nozzle performance.
+        'moc_net_complete': bool(opt['net_complete']),
+        'moc_net_stop_reason': opt['net_stop_reason'],
     }
+    if not opt['net_complete']:
+        for key in ('exit_theta_max', 'exit_theta_rms', 'exit_M_uniformity',
+                    'exit_M_mean', 'exit_Cf'):
+            contour[key] = float('nan')
     return add_contour_reliability_metadata(contour, 'moc', gamma)

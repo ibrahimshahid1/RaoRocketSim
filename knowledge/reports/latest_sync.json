@@ -1,0 +1,1855 @@
+{
+ "generated_at": "2026-09-20T22:58:09.663672+00:00",
+ "pdf_count": 280,
+ "manifest_rows": 286,
+ "synchronized": [
+  {
+   "pdf": "propulsion_texts/10.1002_fld.1650130505.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1002_fld.1650130505.md",
+   "sha256": "ad90a746e7ca7491b7549f8acd8b8e518b822f21531e191f0b06c42e506c6f39",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_978-3-030-14788-4.md",
+   "sha256": "3e2dd0d8ad6708aa56e5c658644b7d3b5c5e594c83b1a8b4f2d027cedf1cbd17",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_s00170-015-7201-4.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s00170-015-7201-4.md",
+   "sha256": "373fb906c1b2d48118af453fe935a37e619e20786b129668938a168114b71302",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_s00170-016-8467-x.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s00170-016-8467-x.md",
+   "sha256": "7e05a60fc999f1c1fc56b680d66fc6d25d353c53fd02aaae0b0a5d4efd6dd10b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_s00170-018-2033-7.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s00170-018-2033-7.md",
+   "sha256": "17d654c47f97fb0e19a4ae8c4ae73fa5bc96f9f10ec82c9a7743d326c1806ef8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s42405-020-00325-z.md",
+   "sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1007_s42405-022-00561-5.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s42405-022-00561-5.md",
+   "sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1016@j.ijfatigue.2020.105649 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1016@j.ijfatigue.2020.105649 (1).md",
+   "sha256": "deccc89ae09a500f8d464d7e4504d67ed5ec2d5c89b8ab99c0fe028a459cb5e1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1016@j.ijfatigue.2020.105649.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1016@j.ijfatigue.2020.105649 (1).md",
+   "sha256": "deccc89ae09a500f8d464d7e4504d67ed5ec2d5c89b8ab99c0fe028a459cb5e1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1016_0010-4485(95)00005-4.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1016_0010-4485(95)00005-4.md",
+   "sha256": "d32c455a058b0d81d127cf09f9c7102e813997ff3aa88472ba1e595bab149075",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.2814127.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.2814127.md",
+   "sha256": "d0e2c0efb1b4ba68e48f40361c8ce7df5cbc063d55ae7bad313941298defaa84",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.2817294.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.2817294.md",
+   "sha256": "cbdd73c15c2abfb7befa036a55cf87e533e492bb5d92d87f00c2d4782f69c916",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3254633.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3254633.md",
+   "sha256": "6b21ec7d397afd4cc1468b4a34c8853812cf3b8fa1a7695931af70724350fd76",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3616734.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3616734.md",
+   "sha256": "adb77348cbbb3cb16e6c5d38dd158de879daf89d74995ea9a5500176fbaa2fa6",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3657314.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3657314.md",
+   "sha256": "0f2825df887cd177fc79cb80e13c5e2eede843f04e098796612f09cbcef5b7af",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3657315.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3657315.md",
+   "sha256": "da3b029f3f093fab72727f1acab11e39cbc839a5d47cdaf5ad898e506016b47b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3662532.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3662532.md",
+   "sha256": "433b858a9686809b75a22323f8035bd31721a08bd1d40d4d6646c5c8ecd81b52",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3662656.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3662656.md",
+   "sha256": "f85c1e41d6865014db64947d90ef65e132692e2fb42243594f9c148c30430ebe",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3672726.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3672726.md",
+   "sha256": "dd177e28731ba681bb437c2f355c5f88f1e7de27efc58d48c87df2daab49811a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_1.3678503.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_1.3678503.md",
+   "sha256": "4c4f57edb19192eac7aca19bf4ca3adbbde6f629f1cfd740f2b6066ee0292bfa",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_90-GT-198.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_90-GT-198.md",
+   "sha256": "fac2c714d7d8a359a0d1268538daf556c07812ab51db1e0112094556ac288fcb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1115_94-GT-426.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1115_94-GT-426.md",
+   "sha256": "418b57369d0c9369c8c5994e913798099036cefc780ec92d4d86a8adaa1bd012",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.1243_PIME_PROC_1963_177_061_02.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1243_PIME_PROC_1963_177_061_02.md",
+   "sha256": "be52bb533a16d2446db44e6b7bc8ca0a67a7a24a5942fa5e293bba3e06077035",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.2514_1.35074.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.2514_1.35074.md",
+   "sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.2514_1.B34714.md",
+   "sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/10.2514_4.866197.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.2514_4.866197.md",
+   "sha256": "2c717c34a18ac06e47677ae189a5c8bb3a617be53d76af4baca2cbdeda0992b8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/125_1.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/125_1.md",
+   "sha256": "d800ac300ec8df15efa5ba6f4bff8b01443e8e2e315b2e3e2bb0bd0f0ba0b4d8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19670010557.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19670010557.md",
+   "sha256": "8efe831e2e3ac9f775962d078ac171fef664f69d3cc3e348b2ebfe6b54d0dc10",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19680021046.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19680021046.md",
+   "sha256": "23b03953cc59444008e00640efb0301324741b7502937b2846d995059c78356a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19680021132.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19680021132.md",
+   "sha256": "f01212ec8191957cf67b1484fb00cba368be3de0026a9f5e2b4ad3b1718d2337",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19690023975.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19690023975.md",
+   "sha256": "25d5ce1c14e592059b04e61af1a847947785a3a3f8ae7d48f5cea5a78636c421",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19710019929 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929 (1).md",
+   "sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929 (1).md",
+   "sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19710023317.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710023317.md",
+   "sha256": "6d6c1cb0b4bd8dbcff0e86f17fcc79c13f9e0311fa6ac3c70c756a9c6ca82c44",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19720000070.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19720000070.md",
+   "sha256": "a6a10b94d5f56e063d6e92550e322dbe4731b257e1e75c38071ab34171745049",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19720005326.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19720005326.md",
+   "sha256": "7d2379ed0b9b02059b8ae5a32846801dd032b081874c7f26bd34a3df5de5267e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19720008558.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19720008558.md",
+   "sha256": "0e72f96593d4afe18953510a34c764b81e2753ff156f96964212acd8904e27c3",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19720026079.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19720026079.md",
+   "sha256": "87983a2fe2fd9e900494438023e8fabf6dcc3c1ce36874efb48a01dfaed969ac",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19730011150.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730011150.md",
+   "sha256": "e3cafa6b5225e492b2e96d10b0395a5da8c2e7e1b4ae64e0dd4df2b9b270a15c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19730018978.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730018978.md",
+   "sha256": "5111fed2c8ad3fc8527174159398ce8fbda83ccc494667954a840d90a2330702",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19730022965 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730022965 (1).md",
+   "sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19730022965.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730022965 (1).md",
+   "sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19740017697.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19740017697.md",
+   "sha256": "4fe887639104b7e80910e4643209ac8d7f24de75b15a26959f71ef2452769077",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19740023307.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19740023307.md",
+   "sha256": "06770b52f8b3c91a6a7379f055cfa46aa6e9176fc9bdd84607781d598b0ef574",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19740026132.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19740026132.md",
+   "sha256": "8e9b2d92b3fb2b02b5f656b5a5a65faba3304e304f41aa7eb7f720cc1faee368",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19750020175.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19750020175.md",
+   "sha256": "9d39defe59ece29e239869cf60f6de34fd3384a912f46888e68aed39b3553eaa",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19760023196.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19760023196.md",
+   "sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19770009165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19770009165.md",
+   "sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19780005428.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19780005428.md",
+   "sha256": "f5d702dd42c8e6a5087094b3d06cfb0d0f5973ef789bf94828fe4ac113e162d8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19780013268.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19780013268.md",
+   "sha256": "ebf03d4bf87eec638e2a2ed36c8d93bbf80f0e1cf73acdbcfcc7005e1660f716",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19830011760.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19830011760.md",
+   "sha256": "383aa66d56920c241fc09b122c1fdd60cffb919008b77965c40c668090a684d4",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19830016278.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19830016278.md",
+   "sha256": "d3f0b2761591e70054c2f868f883a1b61c2bafc69dc63186dad8049e57638ebf",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19890068390.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19890068390.md",
+   "sha256": "abcb2711122db9d81a3fef65499d0a3854ba1b14e9004467cd89fd69e7f3af56",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19900015790.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19900015790.md",
+   "sha256": "0f016f1ebcd7a537d530684d7b78aab0ec46714516000b69db591d4e0aea2d89",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19950013764.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19950013764.md",
+   "sha256": "6241ca2eece86c36edf82bc400039bc83f137223ebf1db7e3eb0186e6b23d097",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19960044559.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19960044559.md",
+   "sha256": "09bc8a8d215daa8d7902c194e812a67466074f8154c81fb4c94f95a42b435a1a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/19970004933.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19970004933.md",
+   "sha256": "2f6019b87d44d349532124351934de5d1593e382577ae43eaab6cbd5695bb028",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/20020085330.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20020085330.md",
+   "sha256": "0ab4154b0fdeac29581f8d047a4cb6836c138c0b41da8f28990ef7d3e2756765",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/20030067852.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20030067852.md",
+   "sha256": "7dd5dcdd9505e2f8ee9598a2c566b279958ef0de245433dce7bedc741fd35bbc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/20090037061.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20090037061.md",
+   "sha256": "3574b4975ea6422c7a8961a0b167c79b8f9371e65a065f44a974e8216ab4a22c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/20100034924.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20100034924.md",
+   "sha256": "cb47d461c94b7b978e53b1918a83003e3284ea7540a6a11788e4b98543204966",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/20130014182.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20130014182.md",
+   "sha256": "efd037e725d82f9f4f0c3414d2c5b629e5a6bce4b5f229137095276d516ff789",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/3-540-13917-6_196.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/3-540-13917-6_196.md",
+   "sha256": "7623a33ec042cb16681166b07962056cf5072e2f0087746b8e10bd1fcab0f313",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/52d4ca845732d962c5e49697f8b99533_lecture_4_5.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/52d4ca845732d962c5e49697f8b99533_lecture_4_5.md",
+   "sha256": "dac8cb6dc6c07ac1fb1c7d95f8c6d408110e10384175e14dc7d4f7c27ec00151",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/5f36b7c4ded79bb3e90754d0f81682f7a68014be.md",
+   "sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/978-3-7091-4745-0_18.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/978-3-7091-4745-0_18.md",
+   "sha256": "82f09d79b688188ea4e5dd9023b3605a62538a688fc0ac3631ccdc45564a967e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/ASME Y14_24-2012 - Types and Applications of Engineering -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791834879 -- c6e2f1b2f38c3a9e360896a3466bf381 -- Anna\u2019s Archive.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/ASME Y14_24-2012 - Types and Applications of Engineering -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791834879 -- c6e2f1b2f38c3a9e360896a3466bf381 -- Anna\u2019s Archive.md",
+   "sha256": "97330300f1e881dc815a50217e55d82af399e62ade33deda935033881ab92e03",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/ASME Y14_41-2003 - DIGITAL PRODUCT DEFINITION DATA PRACTICES -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791828106 -- c3f09533a7b49746adeef2ee40f3251c -- Anna\u2019s Archive.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/ASME Y14_41-2003 - DIGITAL PRODUCT DEFINITION DATA PRACTICES -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791828106 -- c3f09533a7b49746adeef2ee40f3251c -- Anna\u2019s Archive.md",
+   "sha256": "a143ca864cb9ae1dc8b5c25840d809917bd56dc162700c34ddb122d84b7422d7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/ASME Y14_5-2018_ Dimensioning and Tolerancing_ 8_2 -- The American Society of Mechanical Engineers -- 1, 2019 -- Multiple_ Distributed through -- isbn13 9780791872192 -- e57c38f7fcfdb4cd0b9e81a9ed26f615 -- Anna\u2019s Archive.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/ASME Y14_5-2018_ Dimensioning and Tolerancing_ 8_2 -- The American Society of Mechanical Engineers -- 1, 2019 -- Multiple_ Distributed through -- isbn13 9780791872192 -- e57c38f7fcfdb4cd0b9e81a9ed26f615 -- Anna\u2019s Archive.md",
+   "sha256": "2ce0c6825ce1bcea4b916d9eb86a774525232c3330262625ad0400e881ed7dc0",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/CAD_04.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/CAD_04.md",
+   "sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/Dimensioning and Tolerancing - Engineering Drawing and -- ASTM International -- An international standard, New York, NY, 2019 -- Multiple_ Distributed -- isbn13 9780791872192 -- 4aa3b19a55380a03dd52555b4fbace5b -- Anna\u2019s Archive.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Dimensioning and Tolerancing - Engineering Drawing and -- ASTM International -- An international standard, New York, NY, 2019 -- Multiple_ Distributed -- isbn13 9780791872192 -- 4aa3b19a55380a03dd52555b4fbace5b -- Anna\u2019s Archive.md",
+   "sha256": "db0cff90e46f350dc8042e12d4a38f74381f52748d63e2800ff75b93438b33ab",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/FP_EUCASS-043 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/FP_EUCASS-043 (1).md",
+   "sha256": "e1fe29a40ed639f12d120b1f2a2cd8e3496be56e75d4e3fceacf7136118ce292",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/FP_EUCASS-043.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/FP_EUCASS-043 (1).md",
+   "sha256": "e1fe29a40ed639f12d120b1f2a2cd8e3496be56e75d4e3fceacf7136118ce292",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).md",
+   "sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/L-05_BSplines_NURBS.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/L-05_BSplines_NURBS.md",
+   "sha256": "fb451022bc43bd4314eebe0235e088ad24b8aee29e08619e9b358fc67df18cc1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/PaperLREenginemassandsizing.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/PaperLREenginemassandsizing.md",
+   "sha256": "eeadfb994b65aba1ebcabc208388e48d599e7ebe32a70bdf1a206439d90ace38",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/RaoRecentDevinRockNozConfig.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/RaoRecentDevinRockNozConfig.md",
+   "sha256": "35a1a2a02d5e029a3bf3f3b9c6fc6280fcce533861915922ea4280cc4a3e65a8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/Statement+of+the+problem+of+designing+a+liquid+rocket+engine+dual+bell+nozzle+of+the+maximum+thrust+using+the+direct+method+of+the+calculus+of+variations.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Statement+of+the+problem+of+designing+a+liquid+rocket+engine+dual+bell+nozzle+of+the+maximum+thrust+using+the+direct+method+of+the+calculus+of+variations.md",
+   "sha256": "d1b2f5780bec47b05b80c48458c7debf0833e74ec8cf98507e066edd86956a27",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/Vandenberg_Corrected_Properties.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Vandenberg_Corrected_Properties.md",
+   "sha256": "73b34becda4f5fcd14bf9a1284de7173f94a9d09774612a059a4a84525194045",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/Young_Thesis.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Young_Thesis.md",
+   "sha256": "0132adf6527dfc43ddde36a5853c0950c434e2209d9ecb588d2ac7a19eab4ebb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/atefi2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/atefi2019.md",
+   "sha256": "ef71daa4f75f8ca515c068ee4a79bbcbf0355d123d30f1a2a83950067ddb665a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/bell2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/bell2014.md",
+   "sha256": "bf1894e8832585eede97bc689cb71fcd8c4f9b08879e750866ac57ab7f9ee600",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/betti2014 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/betti2014 (1).md",
+   "sha256": "c8ff4b1477b8d07ffe922513af718b303e43ed4e8d6fb9a7f544f8fa3367cf7b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/betti2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/betti2014 (1).md",
+   "sha256": "c8ff4b1477b8d07ffe922513af718b303e43ed4e8d6fb9a7f544f8fa3367cf7b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/bose1978.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/bose1978.md",
+   "sha256": "24f554da63dd0dc1b51d7d149311bd43b2882e57e60ca7f5aecb42d3283dd66f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/carlile1992.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/carlile1992.md",
+   "sha256": "1532427b372b06dd4213e1082a10fea9b0a84e3db01910b4a44e041fb2ba2576",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/eucass1p171.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/eucass1p171.md",
+   "sha256": "2fe936408ed941e265a1fb5b7ad105c2e557a39bcbfe59aa2283a9d530786258",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/frey2000.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/frey2000.md",
+   "sha256": "4ec2d8ef0f7f4f7fac7e6bfdd27ac56d758b460fa7d699dcb1323a14a844f734",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/1-s2.0-S1270963817320953-main.md",
+   "sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/191-Article Text-322-1-10-20240202.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/191-Article Text-322-1-10-20240202.md",
+   "sha256": "a2e8cd9f09008b7ece04069d3abdec1b3d4cf7c943c1409c3e7efab05fe2f35c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19710025474 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19710025474 (1).md",
+   "sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19710025474.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19710025474 (1).md",
+   "sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19720000634.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19720000634.md",
+   "sha256": "721ea330364d455c6b15c3add808fee77e59a81740f83dd178eefa7e7fb442f7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19730015803.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19730015803.md",
+   "sha256": "7f5a356d63453ea7f5d460ed4ce88495d542afa8b9ddb6ed7e901281c23f99ec",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19740020848.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19740020848.md",
+   "sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19750012398 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19750012398 (1).md",
+   "sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19750012398.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19750012398 (1).md",
+   "sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/19780023221.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19780023221.md",
+   "sha256": "756334f7d774a3811d859a770ae8cc67b63887279ed30165a85fef02981a07bf",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/20020050420.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/20020050420.md",
+   "sha256": "53c631216d64bcf0ed7a24614d6045d88fae5466b6c4b9359497818ab7e16012",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/20100035254.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/20100035254.md",
+   "sha256": "57639b0bb32d6ced57b3be88d70a6d90555dabdd3fb589c388b0bae82b23f03b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/20180003628.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/20180003628.md",
+   "sha256": "4af0549b85cd1b100f00d0b65bef9c9cabab73c438faac57a9aecf6dae02f63b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/ATDE-71-ATDE250338.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/ATDE-71-ATDE250338.md",
+   "sha256": "ede8253324df87420b3fca76e2063ca7e81b721e391a966a0de1d2b310469aab",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/BF03404670.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/BF03404670.md",
+   "sha256": "53fccf67ea30a02d69734cc40a49fc8e54463aeeb42fb5e0674131682a32c3df",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Influence of Blade Outlet Angle and Blade Thickness on Performance and Internal Flow Conditions of Mini Centrifugal Pump.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Influence of Blade Outlet Angle and Blade Thickness on Performance and Internal Flow Conditions of Mini Centrifugal Pump.md",
+   "sha256": "9530b3052437dc069603f09c072128f8ff90d341a3939d9b8e1c09ad57c71729",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Investigation-of-the-Effect-of-the-Stages-Number-the-Impeller-Outlet-Width-and-the-Impeller.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Investigation-of-the-Effect-of-the-Stages-Number-the-Impeller-Outlet-Width-and-the-Impeller.md",
+   "sha256": "2931491b2df30877c862ef0e90109190d0ac82e37f3bbf67cb4c35f8a6acd0cf",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Li_2024_IOP_Conf._Ser.__Mater._Sci._Eng._1301_012030 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Li_2024_IOP_Conf._Ser.__Mater._Sci._Eng._1301_012030 (1).md",
+   "sha256": "c66a6cc5f17d0ea2d02fd75ae6dd1c600f27b3ef0cd91d93cb5f4601fa68248b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Li_2024_IOP_Conf._Ser.__Mater._Sci._Eng._1301_012030.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Li_2024_IOP_Conf._Ser.__Mater._Sci._Eng._1301_012030.md",
+   "sha256": "e0d954a3cc353990ab1698b982f3d555555bee8a5d59412753a79e477b49ce3e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Liu_2021_IOP_Conf._Ser.__Earth_Environ._Sci._781_042016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Liu_2021_IOP_Conf._Ser.__Earth_Environ._Sci._781_042016.md",
+   "sha256": "5223de6847478f864e74453566e97677783b2258f9d2a8b5a3b2316760db7c36",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Mishra_2015_IOP_Conf._Ser.__Mater._Sci._Eng._101_012180.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Mishra_2015_IOP_Conf._Ser.__Mater._Sci._Eng._101_012180.md",
+   "sha256": "10204c9c51f10c9da6d2fb97163acfa2198a41103bd257a129be1e723f8a900c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/TOMEJ-2-75.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/TOMEJ-2-75.md",
+   "sha256": "017f2a7d020bc969d961422d0a7d2a43c0502d88bd33036c243bdab64e7abb61",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/Zhou_2022_J._Phys.__Conf._Ser._2369_012066.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/Zhou_2022_J._Phys.__Conf._Ser._2369_012066.md",
+   "sha256": "d7889466947c26de0f9b0c39c7bb0f3e7847f5a31c9872a33d9cf61e94cf0eeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/aerospace-06-00036.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/aerospace-06-00036.md",
+   "sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/barson1992.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/barson1992.md",
+   "sha256": "e69ecdeed216cae777c57601221420b73d54fda9dabc6f0cdcf5260a949ce053",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/bellary2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/bellary2014.md",
+   "sha256": "e67cb06aad1f4ef4ae599f32a19c640072a3ce95a8f8ec9e49e9645dd6a37770",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/chen1992.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/chen1992.md",
+   "sha256": "262f34c9dff9ea753147c009192a0caa94c7dca8d9a8344981dd37328a573eed",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/costanzo2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/costanzo2017.md",
+   "sha256": "bbdf4f7dfff269bad02bf5833c8c4644d7ae43e37786b5fb7b3c3eca20b019b1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/electronics-12-03527.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/electronics-12-03527.md",
+   "sha256": "9f8ff888b001f01de3d4c557876aba4d8ab552585beee6b27bd96b70540d187d",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/energies-11-02588.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/energies-11-02588.md",
+   "sha256": "20131c6f07161ab49123331a5f36b9fda59dfea46e064a947157aca2de7b6ae5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/hong-et-al-2012-study-on-inducer-and-impeller-of-a-centrifugal-pump-for-a-rocket-engine-turbopump.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/hong-et-al-2012-study-on-inducer-and-impeller-of-a-centrifugal-pump-for-a-rocket-engine-turbopump.md",
+   "sha256": "7d25d3126e9def8b5bbc191adfb404e21458bc44abf3736b4fc0b99539ddf2ee",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/hong2012.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/hong2012.md",
+   "sha256": "50f7ecd57a39a3ec45b764a55c88b9ef80644e5a2043593d32009782721a2725",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/hu2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/hu2021.md",
+   "sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/jaiswal2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/jaiswal2021.md",
+   "sha256": "b285a2d813a63cfdd8dbdafbeeea36ba384210ef1c31a5576f7c3f929350de1e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/li2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/li2014.md",
+   "sha256": "f264bb8166cb7e166ceac36874156dbbdebba5ada51f04b0765cfbb54a79c8c7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/lin1993.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/lin1993.md",
+   "sha256": "6989a3daf9c865e15f87c1557e581add327b839e9b460dd22785187050cec922",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/reis2019 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/reis2019 (1).md",
+   "sha256": "7b34c624ed2dd5709b8c8dcf00d7e480634d797036686fa23bf60056ac18d936",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/reis2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/reis2019 (1).md",
+   "sha256": "7b34c624ed2dd5709b8c8dcf00d7e480634d797036686fa23bf60056ac18d936",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/s11630-013-0601-6.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/s11630-013-0601-6.md",
+   "sha256": "1c98cad2f5cb1cbdeca777a37466f26e0e60916c7da39f572da10ef289b14111",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/s41598-025-18499-5.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/s41598-025-18499-5.md",
+   "sha256": "bd43b1e8dbab3bf1fbdece828281e91bf53731e0fbf02256a80c5083c6c44e53",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/s42405-020-00325-z.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/s42405-020-00325-z.md",
+   "sha256": "3f1cf575730fdedffd7f374470a792cbb78e8d489bb3ca166a093bf5d20c8aca",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/scharlemann2005.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/scharlemann2005.md",
+   "sha256": "8e0066cc054aa1ea44b45c0dd43515625e73ea1b8f47b23a7f2cb67e106956dc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/scharlemann2006 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/scharlemann2006 (1).md",
+   "sha256": "34d86bb2dd61d7aa985b00d87c7f12a2d25878df0abb1fca765a3176c478a2e1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/scharlemann2006.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/scharlemann2006 (1).md",
+   "sha256": "34d86bb2dd61d7aa985b00d87c7f12a2d25878df0abb1fca765a3176c478a2e1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/tani2008.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/tani2008.md",
+   "sha256": "1f3fa6556697080b02e18c329b90ca0bcfb5210a1463916dec091a8360af9572",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.md",
+   "sha256": "e379f117a28847c3bb63fb32f6fd34f6d372b2158e6dc88456cfb435bfe1a24e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fuel_pump_design/yang2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/yang2019.md",
+   "sha256": "224c305ca1a8635b1b4bd693169f352366b7cda9f0cdb4f3806e29dc779047fc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/fulltext01.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fulltext01.md",
+   "sha256": "a0bc22fdbe5808452370b593569bea8bf249a4f79cbca61fd5d5e6838084465b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/garcia2020.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/garcia2020.md",
+   "sha256": "dfc3157632bce1f7becf33920edfc33da04fbbca5b0371625dc3f25f1fb96f7c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2016.md",
+   "sha256": "81f6b2ed0770c40d8fb821464d808bcb6df49946d688bcfaea1c38f9a46d1c64",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2017.md",
+   "sha256": "eeeb8a82ec83a5aedba13c7a4b65a8369f5af31cdc9fcb660416b87d254cc1a9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2018 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2018 (1).md",
+   "sha256": "ade5ee2684d53b2cc82d8f68823e96eb727b2ef416185a3b72b1b2abbb23fff8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2018.md",
+   "sha256": "d230ac59edabcb2aa135b8c8d9b2d636070d3417fcea88c8c6d0f26b1996c991",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2019 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2019 (1).md",
+   "sha256": "9d9d95a8cd541e99ab2c914fc428668cb53fdb5ee0a0ff5d281773cdbf92d039",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2019 (2).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2019 (1).md",
+   "sha256": "9d9d95a8cd541e99ab2c914fc428668cb53fdb5ee0a0ff5d281773cdbf92d039",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2019.md",
+   "sha256": "ffd6db5179ad0947f0b382278b576e6a245bc0d7ef9bc3a0f4c092266c4419b8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/gradl2020.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2020.md",
+   "sha256": "658f9927ff22732fb730216a07c51bb195dc6fc32676b0972e17640f3b0c07b1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/hagemann1998.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/hagemann1998.md",
+   "sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/handout4.1.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/handout4.1.md",
+   "sha256": "eb0d80b61099f6291dac9b83ac1873f98ee2283d1bd3ee01f6250eec1e917c44",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/huber2009.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/huber2009.md",
+   "sha256": "d68f3c1f36470039c5a6f0501e3d9143ac8f94b6a45136e9e1d62144b5ade53c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/kang2011.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kang2011.md",
+   "sha256": "719af26af5c0955221969bfc57ee4459c1150a4112fef699559426727c7aabe5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/kerstens2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kerstens2021.md",
+   "sha256": "0ec39cb093799f9445b55adbb52783197e81fc7602b5bb655ab71aa1ebb3f9a7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/kim2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kim2014.md",
+   "sha256": "5495490c32f5ba90c7977649febe4e54c49f40e5c13dbb6ebf5b33c9d2594509",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/kuhl1998.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/kuhl1998.md",
+   "sha256": "4be181a431b6637495b0f06a39a90f7f34ba9fe94ae1a067b1215e1bd96d1975",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/leccese2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/leccese2018.md",
+   "sha256": "a2eef7ceb290cf670f759dbf0e268e6281a5020dfc9db110d783dcca2fe701d6",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/life-prediction-of-the-thrust-chamber-wall-of-a-reusable-rocket--1995.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/life-prediction-of-the-thrust-chamber-wall-of-a-reusable-rocket--1995.md",
+   "sha256": "cf949c64685d920afa2aa8089d2268718b07ac29104f186306a5457fffe332eb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/liquid-film-cooling-in-rocket-engines-r5yu3j35ky.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/liquid-film-cooling-in-rocket-engines-r5yu3j35ky.md",
+   "sha256": "cb4c4da541bf92c015080b31e66ac084a5e7e62015ea761ab3fe7c21cf29b34b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/masuoka2011.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/masuoka2011.md",
+   "sha256": "83529aea0e3eece29f950336182f12a0522855c0e24403c80037e5b35ab2e64c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19740017910 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19740017910 (1).md",
+   "sha256": "66a3cfda03abd14895a5a53b9f3cb90b0a88033bd7ecaf03c7a83d5ec7b5b3b5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19740017910.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19740017910 (1).md",
+   "sha256": "66a3cfda03abd14895a5a53b9f3cb90b0a88033bd7ecaf03c7a83d5ec7b5b3b5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19750021165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19750021165.md",
+   "sha256": "7ab916d7d5b7095bacde4fb41265db62d9103e300fe261d5cd35cf4eb5815f70",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19870007469 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19870007469 (1).md",
+   "sha256": "60ca93443bade050fde157c044f87f55c214b14fb9fa32be53ccb2b1a41a9aeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19870007469.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19870007469 (1).md",
+   "sha256": "60ca93443bade050fde157c044f87f55c214b14fb9fa32be53ccb2b1a41a9aeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19950011631.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19950011631.md",
+   "sha256": "3553aa0ab4966d18e9a6a112a35b8534a655cb270c1fbd2dc2931852e8503a76",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/19970002915.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19970002915.md",
+   "sha256": "5cfc72f4fff0ae454a9803128eadeeb554e7258ef880db22c764265fce82de7f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20020070630.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20020070630.md",
+   "sha256": "9be16e69abd6f6ca5d62610e3ac289a54fe8eaabf333a3f92f694b66c7dd4289",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20050123582.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20050123582.md",
+   "sha256": "b2e309fe10458e0e770381fbbd07f3e9e46c6e1aa5fecacf100e4eda07440226",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20060005216.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20060005216.md",
+   "sha256": "5e43e7f6d40d7d97cec0df88761073e2f270782f18cfa703e4b37bebdf226eb5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20070026245.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20070026245.md",
+   "sha256": "38b9a69c80d8fc64bcc25a42d6a0a139af0be2996d6bd7b9b3d2bdf22a03381c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20120008551 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20120008551 (1).md",
+   "sha256": "28a68c616e3ec6b8f7fb30e2937924ccbb65f63256303c026113aa08a6494741",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20120008551.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20120008551 (1).md",
+   "sha256": "28a68c616e3ec6b8f7fb30e2937924ccbb65f63256303c026113aa08a6494741",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/20170004516.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/20170004516.md",
+   "sha256": "9d389b44f78c95863bb2829ff8ca019f6c78a6cc1cda25e29ba0f09b0e370f58",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/Precipitate Size in GRCop-42 and GRCop-84 Cu-Cr-Nb Alloy Gas Atomized Powder and L-PBF Additive Manufactured Material.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/Precipitate Size in GRCop-42 and GRCop-84 Cu-Cr-Nb Alloy Gas Atomized Powder and L-PBF Additive Manufactured Material.md",
+   "sha256": "816b512e82fc6a5198c174a0145098f785962670d439bd0b6a90296047be3d4c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/bhat2016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/bhat2016.md",
+   "sha256": "41efe00c9aa538426adaac4510ebeacee43409205e0592cb88e3240d854095e6",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/coddet2013.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/coddet2013.md",
+   "sha256": "6d49a4581ead7d2190c596fc72d4fd5f923bd78d5c674452099edcb4b48adc40",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ellis2008.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ellis2008.md",
+   "sha256": "c494407687dc8e374f187f2d00ea575c6706987ad80b2e1388a5139ed7255431",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ellis2015.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ellis2015.md",
+   "sha256": "86e898e00fda74c6416e03fd59d792d0770e66eb07932e6e0747f6ba8ac66279",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/hayes2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/hayes2018.md",
+   "sha256": "8fbc5d72cc38f1b3e8cf7f0748127696c19c7d7114b0883a17677ffe34ce4b88",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/hickman2003.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/hickman2003.md",
+   "sha256": "c0aa9076171f73554e3c04b3ece83b657d3d5f2573098e60781a11b75f4d38e9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ogbuji2004.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ogbuji2004.md",
+   "sha256": "18a45e76cfe8182bc0a172241de803ac4683ba4e7cac265ae3084b2ff45dc4f0",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/russell2007.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/russell2007.md",
+   "sha256": "b095a0507446698250ddc5345078f56f8feac881d9d194be26882e97be3efcd9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/s10853-008-2802-z.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/s10853-008-2802-z.md",
+   "sha256": "84c6a3315d8ba67137d225dab6961a5565fec031ef7340bed3e860629f55532f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/s11837-025-07787-0.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/s11837-025-07787-0.md",
+   "sha256": "60fc73f96b011bb99611e28f1901fd5264cd8363d4dbcadf4820ae96fbad79f9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/shukla2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/shukla2014.md",
+   "sha256": "99cbf0b9fff993e87b2c92e7c50ab7125316260cb427ef3bc9438fd77d8ef966",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/singh1997.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/singh1997.md",
+   "sha256": "7e9b37562221f4f6901d648ea468525b7f5c662333a2018a3513d1bb87fef6f4",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/walley2010.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/walley2010.md",
+   "sha256": "5a19f3ee049274874044d19206cea3d3065ef4cdcd94e6a37a065dad6ad8a742",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/walter1999.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/walter1999.md",
+   "sha256": "1640695cebe3d350ab9d2458937fe29b236d02de5897a232c647c6d6a630310c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/miller1974.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/miller1974.md",
+   "sha256": "8173f77862a965e9983101fe82e0cdebce217c441db88db2839749393327976a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/mirzamoghadam1991.md",
+   "sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/naraghi2004 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/naraghi2004 (1).md",
+   "sha256": "4f629a634e5959923865716641982ab8442bc8ea9fcc1151c1ecf8abd9c2d72c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/naraghi2004.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/naraghi2004 (1).md",
+   "sha256": "4f629a634e5959923865716641982ab8442bc8ea9fcc1151c1ecf8abd9c2d72c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/nasuti2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/nasuti2021.md",
+   "sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/nozzle_geometries.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/nozzle_geometries.md",
+   "sha256": "31f842896ec7ad9aa24b4b0f2baa7ef483b1ebb7467c30fca25ce28357d34f06",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/park2013.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/park2013.md",
+   "sha256": "801bb58b2fadb3f6576875fe08d7ca7fe394fb1b82b07ae3e3c3a533143cc03b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/perakis2021 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/perakis2021 (1).md",
+   "sha256": "051e927dfe674789f178d11541a5827210ca8c62948d6f9baa15c4f07d993912",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/perakis2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/perakis2021 (1).md",
+   "sha256": "051e927dfe674789f178d11541a5827210ca8c62948d6f9baa15c4f07d993912",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/1-s2.0-S0094576522000741-main.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/1-s2.0-S0094576522000741-main.md",
+   "sha256": "b40d5fa1c78af47d4814dbe2a92a9cc00b6db05ebc7b2d15385ee0f0ef3c53b4",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/1-s2.0-S0094576524001103-main.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/1-s2.0-S0094576524001103-main.md",
+   "sha256": "e2d51ae489344ccf75c5707eb342e1197e413d09d5f2edb3bd861ef1635aca57",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19700005097.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19700005097.md",
+   "sha256": "c0c044f6b16aaeaabbd7327eb5269027085d595b6d1c382b3e7b979380516df1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19710019929 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929 (1).md",
+   "sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19710025474 (1).md",
+   "sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19720026079.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19720026079.md",
+   "sha256": "87983a2fe2fd9e900494438023e8fabf6dcc3c1ce36874efb48a01dfaed969ac",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19730011150.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730011150.md",
+   "sha256": "e3cafa6b5225e492b2e96d10b0395a5da8c2e7e1b4ae64e0dd4df2b9b270a15c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19730022965 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730022965 (1).md",
+   "sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19730022965.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19730022965 (1).md",
+   "sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19740020848.md",
+   "sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19750012398 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19750012398 (1).md",
+   "sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19750012398 (1).md",
+   "sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19760023196 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19760023196.md",
+   "sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19760023196.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19760023196.md",
+   "sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19770009165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19770009165.md",
+   "sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19780023221.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/fuel_pump_design/19780023221.md",
+   "sha256": "756334f7d774a3811d859a770ae8cc67b63887279ed30165a85fef02981a07bf",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/19940018570.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19940018570.md",
+   "sha256": "1edef5f6edf625a213e7475da4111b95f481546276ab9811ab3dd3cfd7a33402",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/20150002584.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/20150002584.md",
+   "sha256": "eb69f57cabffaf2154360f31c97c5118e29bb15d74138df3ee9a1c8dd300aaf5",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/20150016316.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/20150016316.md",
+   "sha256": "48eb3bb2d8aed4792a76c418504a98b08f147633426c2103ab01166844fe0ff2",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/20150021468.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/20150021468.md",
+   "sha256": "6bd123788367d9321f9ca1411d58aae90447a1904bbce41508f32afe49f626e1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/A_Design_Tool_for_Liquid_Rocket_Engine_Injectors.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/A_Design_Tool_for_Liquid_Rocket_Engine_Injectors.md",
+   "sha256": "afd833028e7e887be62522f1828333d4e84cfc1e079473d02768156a2dde637a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/Characterization-of-pintle-engine-performance-for-GO2-kerosene-propellants.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Characterization-of-pintle-engine-performance-for-GO2-kerosene-propellants.md",
+   "sha256": "72ef556ebedc40523a98f0248c20c2796b9a829d1c56b3444a34107f2b90ed54",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/Ma8uFpj30pN7K%2BP3wB2syoyllyK6k68jQ0r8DxEM8jQ%3D.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Ma8uFpj30pN7K%2BP3wB2syoyllyK6k68jQ0r8DxEM8jQ%3D.md",
+   "sha256": "4a021c2484a9395d98d1af1b701401e8cbfe74607852584420c4c29bcf9f149c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Tesi_dottorato_Cavalieri.md",
+   "sha256": "f26b86d388aab022b9aa7148904f74e2a14886bffb72374b4d840aaa7d0d07ee",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/aerospace-09-00494-v2.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/aerospace-09-00494-v2.md",
+   "sha256": "948984b188b74fbe852daab7ce191a0113ec33bd70a32085afa127828b9b453e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/ahn2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/ahn2014.md",
+   "sha256": "eb5166864025fff0024f864c1000e5b53afb82df568fc89db3c39089db9d6b3f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/applsci-15-02696.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/applsci-15-02696.md",
+   "sha256": "e334635308ac223688c9496cea569fa2098a5b1dc153e2e359650b7da2a5ebb1",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/austin2002.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/austin2002.md",
+   "sha256": "16794c134d81fdaf7abce57c797cd0a9e64c7b27b59c66e9a2cd10d938910fa3",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/austin2005.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/austin2005.md",
+   "sha256": "fda3de7fb60c705299b30942d00caea6e05d5b9e0726ab69299bbb8deead8c04",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/dressler2000.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/dressler2000.md",
+   "sha256": "429db1b89310cbf4f34ff89eaf9e935e2b21967fccfcfc77d292a06afa3aedec",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/erkal2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/erkal2019.md",
+   "sha256": "2a70e99bfefd4a645fa5e72a3f4d971022aaf6324454e7a2882026348d01286c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/freeberg2019.md",
+   "sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/gavitt2001.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/gavitt2001.md",
+   "sha256": "8b2d44d2d501e942c677acc6db2b5765f35f7f38271206c9445b9e3ae14aaca9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/gromski2010.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/gromski2010.md",
+   "sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/kang2022.md",
+   "sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/melcher2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/melcher2014.md",
+   "sha256": "44a0b4b1d7dea70f69f4b1eb1726ca7fd508d3fdc20357805ddb84df8210ff7a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/mueller2000.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/mueller2000.md",
+   "sha256": "b41b138c5f7e5a8506c51cbba0d4c19a333ee739319ee486aabcb44d810fda99",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/nardi2015.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/nardi2015.md",
+   "sha256": "fda6f188447376c62d6be016581e73e34df2b3d44a110074da608e8fc4264d65",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/ninish2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/ninish2018.md",
+   "sha256": "e4fa1d121e4b28905197004361249b67f02025b80ac106cabc1096ce7befcba3",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2018 (1).md",
+   "sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/radhakrishnan2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2018.md",
+   "sha256": "49d2ee8c1f992b4662eac2dd1f8d4a357e72f11dfc3b571b6e2ff1dd31ed11e9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/radhakrishnan2020 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2020 (1).md",
+   "sha256": "fa94afb46beb04a3661b700de72e5cda9e8216263cb7af7059eebaf4daec8e9b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/radhakrishnan2020.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2020 (1).md",
+   "sha256": "fa94afb46beb04a3661b700de72e5cda9e8216263cb7af7059eebaf4daec8e9b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/s11630-015-0753-7.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/s11630-015-0753-7.md",
+   "sha256": "53ea8b034d69e7eae3ec3851bb63301ef6ffe2604fa47c0ac9db9d0b5d078095",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/s11630-016-0838-y.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/s11630-016-0838-y.md",
+   "sha256": "984e39fdd00cf2d6327984b7b9a6dfbacdcabdb444c00d0db175a5acbdc745ef",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/s41598-024-64027-2.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/s41598-024-64027-2.md",
+   "sha256": "ae6aea7c7315f685d0f8d18b2c0a446867d7cae0e20cda2ebef68ad9194cd54e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/s42405-022-00489-w.md",
+   "sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/sakaki2015 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/sakaki2015 (1).md",
+   "sha256": "2fb2ba8dafc60da2fe3fcc97ceb1e139a7d393c8078b69c5d1f0b49df329ea90",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/sakaki2015.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/sakaki2015 (1).md",
+   "sha256": "2fb2ba8dafc60da2fe3fcc97ceb1e139a7d393c8078b69c5d1f0b49df329ea90",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/sakaki2016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/sakaki2016.md",
+   "sha256": "dcd323f398315b4c0b89f88b0d3eedfbafec604d283bbcc0835199eed5ea9db2",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/sakaki2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/sakaki2017.md",
+   "sha256": "6a447ef28db511fd4e6b35df812edf274a07fe8a11c28e4d582efbd322208206",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/sakaki2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/sakaki2018.md",
+   "sha256": "5d4cd47d63703550f01e75b6c46462bc4d1edec6318ac0677cffb83632c1d489",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/son2016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/son2016.md",
+   "sha256": "de7646768ac2e3148bb60f8bf2d50e087fb2af987b4edaa59f0ab6eb83a3250c",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/son2017 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/son2017 (1).md",
+   "sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/son2017 (2).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/son2017 (2).md",
+   "sha256": "d85aead0c65391d04f33bb7da2ca1138f2058e9c158f117e4fc164729d0c0d7f",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/son2017 (1).md",
+   "sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/song2021 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/song2021 (1).md",
+   "sha256": "f2cfe20eab73e6c74a2e9b7d69dad15082dc06504a8f2598d5037f271637fce9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/song2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/song2021 (1).md",
+   "sha256": "f2cfe20eab73e6c74a2e9b7d69dad15082dc06504a8f2598d5037f271637fce9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/thermal-performance-study-of-mmhnto-rocket-thrust-chamber-a223.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/thermal-performance-study-of-mmhnto-rocket-thrust-chamber-a223.md",
+   "sha256": "89e5079e309fcc2375927536afb12ee0bc463b0d12c772b66033d4c6fc9c7e26",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pintle_injector/tokudome2010.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/tokudome2010.md",
+   "sha256": "33167aa3ebc558002dd74d5c548d3abd6de1f3c34ed7ac2fa37cf2f832a1e34b",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2011 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2011 (1).md",
+   "sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2011 (1).md",
+   "sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2013.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2013.md",
+   "sha256": "a475c8ca4b5916a9d5e616a9ce2d94a0051b68af9e8f10e2aa9b5e2907e68285",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2014.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2014.md",
+   "sha256": "1257bc2d708d8884da1618baf425f718bf3c8de29bcb64592414da7a8f373882",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2015 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2015 (1).md",
+   "sha256": "2fac046b62a1d0056564b6bd9d9b73a6512047165b60393222f3bb4eb44c6eef",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2015.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2015 (1).md",
+   "sha256": "2fac046b62a1d0056564b6bd9d9b73a6512047165b60393222f3bb4eb44c6eef",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/pizzarelli2020.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pizzarelli2020.md",
+   "sha256": "a0cb7adffe5155479bcd2bba95c6cd3a61649e8f9fa1632e8a8ee012bdd46cf9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/porowski1985.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/porowski1985.md",
+   "sha256": "acf5b2b0facf0f726139da6ae880eec64df482ee935dc9e2225187629cb63ccf",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/prmeyer.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/prmeyer.md",
+   "sha256": "b0f7081fda333623d7bea32a8d43d23830c72ceec418114c5f6f593c03bcbd26",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/rao1958.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/rao1958.md",
+   "sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/rao1999.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/rao1999.md",
+   "sha256": "6cb9f624f75076ae764b8c1064777d7f345eea2d584212db6ef0427b56edd1f9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/s12666-010-0089-7.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/s12666-010-0089-7.md",
+   "sha256": "55e33a14ade64532ac04f76868d53822b02f1c6a2e126416e4bf33b25a346a99",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/schomberg2016.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/schomberg2016.md",
+   "sha256": "7803ca2d10a059603c9c2d366115c27be2601148ccc9d68f41b8c42b0d971b3a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/schomberg2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/schomberg2018.md",
+   "sha256": "61cea1150d556eab6d50b1e4d6e5e2759ac4136e924671d7b70ecc7021b57dea",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/shine2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/shine2018.md",
+   "sha256": "010e525acb15556a2e03109011bc3f2128644b769b96d87cd440f485c441143d",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/song2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/song2017.md",
+   "sha256": "0a2b306a94f4437b721998dd3648ac103143e9650e00f588c9c32b12998dccda",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/stechman1969.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/stechman1969.md",
+   "sha256": "484c2f78be8cd93beb8052305fd086be952f932f37f58cc635bdf554ae84a3fc",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/swafford1985.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/swafford1985.md",
+   "sha256": "c1f385692c55ab7ad086b105b5c353a4e76e1d844a0b83d0ab3a7d59f9b099ca",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/technical-notes-1957.md",
+   "sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/thiede2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/thiede2017.md",
+   "sha256": "b9821f7341cc25a14ded3acaecbe5144a6f76bd33479415e642d65be6288d226",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/wadel1997.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/wadel1997.md",
+   "sha256": "67d7069012df35a47d33dbef89a05e59288d9c223b143223ed3198ec9380a9da",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/wang2006.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/wang2006.md",
+   "sha256": "c551a526d552fa07286702da23dd466edcfe0dcdc83abd0dcd087d7d7a6280b9",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/whitfield1978.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/whitfield1978.md",
+   "sha256": "68c1d4024aef4ae2ae3180a12af25b0f05f6a6c29ced7c3a5fd0e75b8645053a",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/whitfield1981.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/whitfield1981.md",
+   "sha256": "50a7e2a228037df8b6b6c930cb9a96294bc97e624e1cf2a3c4e80c4a9e7be7cd",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/whitfield1982.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/whitfield1982.md",
+   "sha256": "c86691b8b0c742ea0b5eefbc03968775759b7db22ed3e0402c97743f98f813d8",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.md",
+   "sha256": "63e7e0a347ea9fda94ec58bc147cf1e45f334b06383e9d7b7604932f82bfe3af",
+   "evidence": "manifest_archive_member"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.md",
+   "sha256": "d178282905f409036e954b833068bc076674d49b0f2e0b4cc17a6ff1ce95e422",
+   "evidence": "manifest_archive_member"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.md",
+   "sha256": "8585e7476132d6268a766b52c801cdb674e6bfade6108468cc797133a322db51",
+   "evidence": "manifest_archive_member"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.md",
+   "sha256": "b8918d2d8c7834738c043b73e8c57b0afacc59c56c02e8882582a37f850abc1d",
+   "evidence": "manifest_archive_member"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.md",
+   "sha256": "e0591704cd2f971d2a59a3b7b6786d2261adc9b63a22d2f3eeb757f0ef8a985e",
+   "evidence": "manifest_archive_member"
+  },
+  {
+   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.md",
+   "sha256": "c4af6396fc1e9841f7811819d275806a11831d3944cd672608110d42b2b4aa5d",
+   "evidence": "manifest_archive_member"
+  }
+ ],
+ "missing_markdown": [],
+ "stale_markdown": [],
+ "orphan_markdown": [
+  {
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md",
+   "reason": "no source PDF at the mirrored path and no manifest row",
+   "manifest_row": false
+  },
+  {
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
+   "reason": "no source PDF at the mirrored path and no manifest row",
+   "manifest_row": false
+  }
+ ],
+ "weak_mapping": [],
+ "duplicate_payloads": {
+  "deccc89ae09a500f8d464d7e4504d67ed5ec2d5c89b8ab99c0fe028a459cb5e1": [
+   "propulsion_texts/10.1016@j.ijfatigue.2020.105649 (1).pdf",
+   "propulsion_texts/10.1016@j.ijfatigue.2020.105649.pdf"
+  ],
+  "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87": [
+   "propulsion_texts/19710019929 (1).pdf",
+   "propulsion_texts/19710019929.pdf",
+   "propulsion_texts/pintle_injector/19710019929 (1).pdf"
+  ],
+  "87983a2fe2fd9e900494438023e8fabf6dcc3c1ce36874efb48a01dfaed969ac": [
+   "propulsion_texts/19720026079.pdf",
+   "propulsion_texts/pintle_injector/19720026079.pdf"
+  ],
+  "e3cafa6b5225e492b2e96d10b0395a5da8c2e7e1b4ae64e0dd4df2b9b270a15c": [
+   "propulsion_texts/19730011150.pdf",
+   "propulsion_texts/pintle_injector/19730011150.pdf"
+  ],
+  "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb": [
+   "propulsion_texts/19730022965 (1).pdf",
+   "propulsion_texts/19730022965.pdf",
+   "propulsion_texts/pintle_injector/19730022965 (1).pdf",
+   "propulsion_texts/pintle_injector/19730022965.pdf"
+  ],
+  "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44": [
+   "propulsion_texts/19760023196.pdf",
+   "propulsion_texts/pintle_injector/19760023196 (1).pdf",
+   "propulsion_texts/pintle_injector/19760023196.pdf"
+  ],
+  "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f": [
+   "propulsion_texts/19770009165.pdf",
+   "propulsion_texts/pintle_injector/19770009165.pdf"
+  ],
+  "e1fe29a40ed639f12d120b1f2a2cd8e3496be56e75d4e3fceacf7136118ce292": [
+   "propulsion_texts/FP_EUCASS-043 (1).pdf",
+   "propulsion_texts/FP_EUCASS-043.pdf"
+  ],
+  "c8ff4b1477b8d07ffe922513af718b303e43ed4e8d6fb9a7f544f8fa3367cf7b": [
+   "propulsion_texts/betti2014 (1).pdf",
+   "propulsion_texts/betti2014.pdf"
+  ],
+  "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18": [
+   "propulsion_texts/fuel_pump_design/19710025474 (1).pdf",
+   "propulsion_texts/fuel_pump_design/19710025474.pdf",
+   "propulsion_texts/pintle_injector/19710025474.pdf"
+  ],
+  "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5": [
+   "propulsion_texts/fuel_pump_design/19740020848.pdf",
+   "propulsion_texts/pintle_injector/19740020848.pdf"
+  ],
+  "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea": [
+   "propulsion_texts/fuel_pump_design/19750012398 (1).pdf",
+   "propulsion_texts/fuel_pump_design/19750012398.pdf",
+   "propulsion_texts/pintle_injector/19750012398 (1).pdf",
+   "propulsion_texts/pintle_injector/19750012398.pdf"
+  ],
+  "756334f7d774a3811d859a770ae8cc67b63887279ed30165a85fef02981a07bf": [
+   "propulsion_texts/fuel_pump_design/19780023221.pdf",
+   "propulsion_texts/pintle_injector/19780023221.pdf"
+  ],
+  "7b34c624ed2dd5709b8c8dcf00d7e480634d797036686fa23bf60056ac18d936": [
+   "propulsion_texts/fuel_pump_design/reis2019 (1).pdf",
+   "propulsion_texts/fuel_pump_design/reis2019.pdf"
+  ],
+  "34d86bb2dd61d7aa985b00d87c7f12a2d25878df0abb1fca765a3176c478a2e1": [
+   "propulsion_texts/fuel_pump_design/scharlemann2006 (1).pdf",
+   "propulsion_texts/fuel_pump_design/scharlemann2006.pdf"
+  ],
+  "9d9d95a8cd541e99ab2c914fc428668cb53fdb5ee0a0ff5d281773cdbf92d039": [
+   "propulsion_texts/gradl2019 (1).pdf",
+   "propulsion_texts/gradl2019 (2).pdf"
+  ],
+  "66a3cfda03abd14895a5a53b9f3cb90b0a88033bd7ecaf03c7a83d5ec7b5b3b5": [
+   "propulsion_texts/materials_science/19740017910 (1).pdf",
+   "propulsion_texts/materials_science/19740017910.pdf"
+  ],
+  "60ca93443bade050fde157c044f87f55c214b14fb9fa32be53ccb2b1a41a9aeb": [
+   "propulsion_texts/materials_science/19870007469 (1).pdf",
+   "propulsion_texts/materials_science/19870007469.pdf"
+  ],
+  "28a68c616e3ec6b8f7fb30e2937924ccbb65f63256303c026113aa08a6494741": [
+   "propulsion_texts/materials_science/20120008551 (1).pdf",
+   "propulsion_texts/materials_science/20120008551.pdf"
+  ],
+  "4f629a634e5959923865716641982ab8442bc8ea9fcc1151c1ecf8abd9c2d72c": [
+   "propulsion_texts/naraghi2004 (1).pdf",
+   "propulsion_texts/naraghi2004.pdf"
+  ],
+  "051e927dfe674789f178d11541a5827210ca8c62948d6f9baa15c4f07d993912": [
+   "propulsion_texts/perakis2021 (1).pdf",
+   "propulsion_texts/perakis2021.pdf"
+  ],
+  "fa94afb46beb04a3661b700de72e5cda9e8216263cb7af7059eebaf4daec8e9b": [
+   "propulsion_texts/pintle_injector/radhakrishnan2020 (1).pdf",
+   "propulsion_texts/pintle_injector/radhakrishnan2020.pdf"
+  ],
+  "2fb2ba8dafc60da2fe3fcc97ceb1e139a7d393c8078b69c5d1f0b49df329ea90": [
+   "propulsion_texts/pintle_injector/sakaki2015 (1).pdf",
+   "propulsion_texts/pintle_injector/sakaki2015.pdf"
+  ],
+  "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7": [
+   "propulsion_texts/pintle_injector/son2017 (1).pdf",
+   "propulsion_texts/pintle_injector/son2017.pdf"
+  ],
+  "f2cfe20eab73e6c74a2e9b7d69dad15082dc06504a8f2598d5037f271637fce9": [
+   "propulsion_texts/pintle_injector/song2021 (1).pdf",
+   "propulsion_texts/pintle_injector/song2021.pdf"
+  ],
+  "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356": [
+   "propulsion_texts/pizzarelli2011 (1).pdf",
+   "propulsion_texts/pizzarelli2011.pdf"
+  ],
+  "2fac046b62a1d0056564b6bd9d9b73a6512047165b60393222f3bb4eb44c6eef": [
+   "propulsion_texts/pizzarelli2015 (1).pdf",
+   "propulsion_texts/pizzarelli2015.pdf"
+  ]
+ }
+}

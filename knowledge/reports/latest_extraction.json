@@ -1,0 +1,69 @@
+{
+ "grounded": 324,
+ "page_shifted": 0,
+ "ungrounded": [],
+ "per_doc": {
+  "DOC_CAD_04": {
+   "grounded": 6,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1080_13647830_2021_1937702": {
+   "grounded": 12,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_2_5354": {
+   "grounded": 35,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_8_7324": {
+   "grounded": 17,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI": {
+   "grounded": 86,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_NTRS_19710019929": {
+   "grounded": 50,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_NTRS_19760023196": {
+   "grounded": 118,
+   "page_shifted": 0,
+   "ungrounded": 0
+  }
+ },
+ "model_support": {
+  "MODEL_ALTITUDE_ATTACHED_THRUST": "PARTIALLY_SUPPORTED",
+  "MODEL_CAD_KERNEL_TOPOLOGY": "NOT_FOUND_IN_SOURCE",
+  "MODEL_CHAMBER_LSTAR_VOLUME": "SUPPORTED",
+  "MODEL_CHAMBER_SHOULDER_FILL_FRACTION": "PARTIALLY_SUPPORTED",
+  "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_D2_EVAPORATION": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_N_TAU_STABILITY": "PARTIALLY_SUPPORTED",
+  "MODEL_NOZZLE_RAO_VARIATIONAL_BVP": "SUPPORTED"
+ },
+ "n_equations": 37,
+ "n_claims": 179,
+ "n_validity": 34,
+ "n_constants": 44,
+ "n_assumptions": 30,
+ "n_ungrounded": 0,
+ "banked_result_hashes": [
+  "a82d051bc4ebbfdbb0d300af62efa4d35bee9246e064bc063eb0e46e4f3b2dfc"
+ ],
+ "count_basis": "unique stored source objects; rejected anchors deduplicated across attempts",
+ "method": {
+  "extraction": "Structured result journal -> kg.ground verbatim-anchor check -> stores",
+  "rules": "verbatim quote + page marker; source notation; no invented validity; honest supports_model"
+ }
+}

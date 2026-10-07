@@ -1,0 +1,1183 @@
+{
+ "meta": {
+  "generated_at": "2026-09-20T22:58:12.587939+00:00",
+  "source": "raosim/mdo/constraints.py CONSTRAINT_MANIFEST",
+  "n": 31,
+  "method": "source_text_parse"
+ },
+ "records": [
+  {
+   "id": "CST_ASPECT_RATIO",
+   "type": "Constraint",
+   "name": "aspect_ratio",
+   "engine_key": "aspect_ratio_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "manufacturing",
+   "units": null,
+   "scale": "8.0",
+   "applicability": "always",
+   "order": 9,
+   "source_id_text": "Wadel-1997-milled-channel-fabrication-constraints;\"\n                   \"Carlile-1992-AIAA-92-3154;Mirzamoghadam-1991-AIAA-91-1982",
+   "source_resolution": [
+    {
+     "key": "Wadel-1997-milled-channel-fabrication-constraints",
+     "state": "doi_mapped:10.2514/6.1997-2913",
+     "document_id": "DOC_DOI_10_2514_6_1997_2913"
+    },
+    {
+     "key": "\"\n                   \"Carlile-1992-AIAA-92-3154",
+     "state": "UNRESOLVED_SOURCE_KEY",
+     "document_id": ""
+    },
+    {
+     "key": "Mirzamoghadam-1991-AIAA-91-1982",
+     "state": "doi_mapped:10.2514/6.1991-1982",
+     "document_id": "DOC_DOI_10_2514_6_1991_1982"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_DOI_10_2514_6_1991_1982",
+    "DOC_DOI_10_2514_6_1997_2913"
+   ],
+   "basis_state": "OK",
+   "subsystem": "manufacturing",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 111,
+   "detail": "manufacturing inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "aspect_ratio_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_ASPECT_RATIO",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_BLOCKAGE_HI",
+   "type": "Constraint",
+   "name": "blockage_hi",
+   "engine_key": "blockage_hi_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "injector",
+   "units": null,
+   "scale": "0.3",
+   "applicability": "always",
+   "order": 11,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "injector",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 117,
+   "detail": "injector inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "blockage_hi_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_BLOCKAGE_HI",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_BLOCKAGE_LO",
+   "type": "Constraint",
+   "name": "blockage_lo",
+   "engine_key": "blockage_lo_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "injector",
+   "units": null,
+   "scale": "0.3",
+   "applicability": "always",
+   "order": 10,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "injector",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 115,
+   "detail": "injector inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "blockage_lo_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_BLOCKAGE_LO",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_CHAMBER_VOLUME",
+   "type": "Constraint",
+   "name": "chamber_volume",
+   "engine_key": "chamber_volume_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "geometry",
+   "units": "m",
+   "scale": "0.05",
+   "applicability": "always",
+   "order": 18,
+   "source_id_text": "NASA-SP-125-sec-4.1",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-4.1",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "nozzle_contour",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 133,
+   "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "chamber_volume_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHAMBER_VOLUME",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_CHART_DOMAIN",
+   "type": "Constraint",
+   "name": "chart_domain",
+   "engine_key": "chart_domain_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "geometry",
+   "units": null,
+   "scale": "0.1",
+   "applicability": "always",
+   "order": 16,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "nozzle_contour",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 129,
+   "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "chart_domain_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHART_DOMAIN",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_CHUG",
+   "type": "Constraint",
+   "name": "chug",
+   "engine_key": "chug_margin_min",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "injector",
+   "units": null,
+   "scale": "0.2",
+   "applicability": "always",
+   "order": 5,
+   "source_id_text": "NASA-SP-125-1967-sec-4.2-PDF137-printed128;\"\n                   \"NASA-SP-194-1972-sec-6.2.3.1-PDF293-294",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-1967-sec-4.2-PDF137-printed128",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    },
+    {
+     "key": "\"\n                   \"NASA-SP-194-1972-sec-6.2.3.1-PDF293-294",
+     "state": "UNRESOLVED_SOURCE_KEY",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "injector",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 98,
+   "detail": "injector inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "chug_margin_min",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_CHUG",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_COKING",
+   "type": "Constraint",
+   "name": "coking",
+   "engine_key": "coking_margin_min",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "thermal",
+   "units": "K",
+   "scale": "300.0",
+   "applicability": "coking_coolant",
+   "order": 3,
+   "source_id_text": "NASA-SP-8087-1972-sec-3.1.1.5.4-PDF78",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8087-1972-sec-3.1.1.5.4-PDF78",
+     "state": "report_key_mapped:title 'LIQUID ROCKET ENGINE FLUID-COOLED COMBUSTION CHAMBERS' = SP-8087 title; constraints.py docstring names it (repository assertion)",
+     "document_id": "DOC_NTRS_19730022965"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19730022965"
+   ],
+   "basis_state": "OK",
+   "subsystem": "cooling",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 92,
+   "detail": "thermal inequality row; optimizer_role=hard; applicability=coking_coolant",
+   "quantity": "coking_margin_min",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_COKING",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_CONTOUR_PROVIDER",
+   "type": "Constraint",
+   "name": "contour_provider",
+   "engine_key": "contour_provider_margin",
+   "kind": "applicability_gate",
+   "is_requirement": false,
+   "manifest_kind": "availability_gate",
+   "optimizer_role": "final_gate",
+   "category": "geometry",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "",
+   "order": 24,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "nozzle_contour",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 154,
+   "detail": "geometry availability_gate row; optimizer_role=final_gate; applicability=",
+   "quantity": "contour_provider_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_CONTOUR_PROVIDER",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_COOLANT_HTD",
+   "type": "Constraint",
+   "name": "coolant_htd",
+   "engine_key": "coolant_htd_margin",
+   "kind": "applicability_gate",
+   "is_requirement": false,
+   "manifest_kind": "availability_gate",
+   "optimizer_role": "final_gate",
+   "category": "thermal",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "htd_coolant",
+   "order": 30,
+   "source_id_text": "Nasuti-Pizzarelli-2021-sec-2.2-Eq9-PDF6",
+   "source_resolution": [
+    {
+     "key": "Nasuti-Pizzarelli-2021-sec-2.2-Eq9-PDF6",
+     "state": "doi_mapped:10.1016/j.supflu.2020.105066",
+     "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_DOI_10_1016_J_SUPFLU_2020_105066"
+   ],
+   "basis_state": "OK",
+   "subsystem": "cooling",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 177,
+   "detail": "thermal availability_gate row; optimizer_role=final_gate; applicability=htd_coolant",
+   "quantity": "coolant_htd_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_COOLANT_HTD",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_COOLING_RESIDUAL",
+   "type": "Constraint",
+   "name": "cooling_residual",
+   "engine_key": "cooling_residual_margin",
+   "kind": "postsolve_gate",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "final_gate",
+   "category": "numerical",
+   "units": "K",
+   "scale": "1.0e-11",
+   "applicability": "always",
+   "order": 27,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "mdo",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 171,
+   "detail": "numerical inequality row; optimizer_role=final_gate; applicability=always",
+   "quantity": "cooling_residual_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_COOLING_RESIDUAL",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_DRY_MASS_PARTIAL",
+   "type": "Constraint",
+   "name": "dry_mass_partial",
+   "engine_key": "dry_mass_partial_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": true,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "requirement",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "dry_mass_requirement",
+   "order": 23,
+   "source_id_text": "NASA-SP-125-sec-2.1-item-5",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-2.1-item-5",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "requirements",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 146,
+   "detail": "requirement inequality row; optimizer_role=hard; applicability=dry_mass_requirement",
+   "quantity": "dry_mass_partial_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_DRY_MASS_PARTIAL",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_ENGINE_RESIDUAL",
+   "type": "Constraint",
+   "name": "engine_residual",
+   "engine_key": "engine_residual_margin",
+   "kind": "postsolve_gate",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "final_gate",
+   "category": "numerical",
+   "units": null,
+   "scale": "1.0e-11",
+   "applicability": "always",
+   "order": 26,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "mdo",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 169,
+   "detail": "numerical inequality row; optimizer_role=final_gate; applicability=always",
+   "quantity": "engine_residual_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENGINE_RESIDUAL",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_ENVELOPE_DIAMETER",
+   "type": "Constraint",
+   "name": "envelope_diameter",
+   "engine_key": "envelope_diameter_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": true,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "requirement",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "envelope_diameter_requirement",
+   "order": 21,
+   "source_id_text": "NASA-SP-125-sec-2.1-item-6",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-2.1-item-6",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "requirements",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 140,
+   "detail": "requirement inequality row; optimizer_role=hard; applicability=envelope_diameter_requirement",
+   "quantity": "envelope_diameter_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENVELOPE_DIAMETER",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_ENVELOPE_LENGTH",
+   "type": "Constraint",
+   "name": "envelope_length",
+   "engine_key": "envelope_length_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": true,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "requirement",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "envelope_length_requirement",
+   "order": 22,
+   "source_id_text": "NASA-SP-125-sec-2.1-item-6",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-2.1-item-6",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "requirements",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 143,
+   "detail": "requirement inequality row; optimizer_role=hard; applicability=envelope_length_requirement",
+   "quantity": "envelope_length_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_ENVELOPE_LENGTH",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_FILM_CAPACITY",
+   "type": "Constraint",
+   "name": "film_capacity",
+   "engine_key": "film_capacity_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "thermal",
+   "units": null,
+   "scale": "0.1",
+   "applicability": "always",
+   "order": 14,
+   "source_id_text": "NASA-SP-8087",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8087",
+     "state": "report_key_mapped:title 'LIQUID ROCKET ENGINE FLUID-COOLED COMBUSTION CHAMBERS' = SP-8087 title; constraints.py docstring names it (repository assertion)",
+     "document_id": "DOC_NTRS_19730022965"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19730022965"
+   ],
+   "basis_state": "OK",
+   "subsystem": "cooling",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 124,
+   "detail": "thermal inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "film_capacity_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_FILM_CAPACITY",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_FINITE",
+   "type": "Constraint",
+   "name": "finite",
+   "engine_key": "finite_margin",
+   "kind": "applicability_gate",
+   "is_requirement": false,
+   "manifest_kind": "availability_gate",
+   "optimizer_role": "final_gate",
+   "category": "numerical",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "always",
+   "order": 29,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "mdo",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 175,
+   "detail": "numerical availability_gate row; optimizer_role=final_gate; applicability=always",
+   "quantity": "finite_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_FINITE",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_ISP_EPSILON",
+   "type": "Constraint",
+   "name": "isp_epsilon",
+   "engine_key": null,
+   "kind": "optimizer_constraint",
+   "is_requirement": true,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "requirement",
+   "units": "s",
+   "scale": "50.0",
+   "applicability": "isp_floor",
+   "order": 0,
+   "source_id_text": "NASA-SP-125-sec-2.1-item-2",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-2.1-item-2",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "requirements",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 85,
+   "detail": "requirement inequality row; optimizer_role=hard; applicability=isp_floor",
+   "quantity": "isp_epsilon",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_ISP_EPSILON",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_JACKET_THIN_SHELL",
+   "type": "Constraint",
+   "name": "jacket_thin_shell",
+   "engine_key": "jacket_thin_shell_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "structures",
+   "units": null,
+   "scale": "0.05",
+   "applicability": "always",
+   "order": 19,
+   "source_id_text": "NASA-SP-125-p336",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-p336",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "structures",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 135,
+   "detail": "structures inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "jacket_thin_shell_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_JACKET_THIN_SHELL",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_LAND_FIT",
+   "type": "Constraint",
+   "name": "land_fit",
+   "engine_key": "land_min",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "geometry",
+   "units": "m",
+   "scale": "5.0e-4",
+   "applicability": "always",
+   "order": 4,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "nozzle_contour",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 96,
+   "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "land_min",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_LAND_FIT",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_LINER_BUCKLING",
+   "type": "Constraint",
+   "name": "liner_buckling",
+   "engine_key": "liner_buckling_margin",
+   "kind": "postsolve_gate",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "final_gate",
+   "category": "structures",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "",
+   "order": 25,
+   "source_id_text": "NASA-SP-8087-sec-2.1.1.4;\"\n        \"classical-long-plate-relation-screening-assumption",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8087-sec-2.1.1.4",
+     "state": "report_key_mapped:title 'LIQUID ROCKET ENGINE FLUID-COOLED COMBUSTION CHAMBERS' = SP-8087 title; constraints.py docstring names it (repository assertion)",
+     "document_id": "DOC_NTRS_19730022965"
+    },
+    {
+     "key": "\"\n        \"classical-long-plate-relation-screening-assumption",
+     "state": "UNRESOLVED_SOURCE_KEY",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19730022965"
+   ],
+   "basis_state": "OK",
+   "subsystem": "structures",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 164,
+   "detail": "structures inequality row; optimizer_role=final_gate; applicability=",
+   "quantity": "liner_buckling_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_LINER_BUCKLING",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_NOZZLE_COLLAPSE",
+   "type": "Constraint",
+   "name": "nozzle_collapse",
+   "engine_key": "nozzle_collapse_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "structures",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "always",
+   "order": 20,
+   "source_id_text": "NASA-SP-8087-sec-2.1.3",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8087-sec-2.1.3",
+     "state": "report_key_mapped:title 'LIQUID ROCKET ENGINE FLUID-COOLED COMBUSTION CHAMBERS' = SP-8087 title; constraints.py docstring names it (repository assertion)",
+     "document_id": "DOC_NTRS_19730022965"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19730022965"
+   ],
+   "basis_state": "OK",
+   "subsystem": "structures",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 138,
+   "detail": "structures inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "nozzle_collapse_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_NOZZLE_COLLAPSE",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_PINTLE_TRANSITION",
+   "type": "Constraint",
+   "name": "pintle_transition",
+   "engine_key": "pintle_transition_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "injector",
+   "units": "m^2",
+   "scale": "5.0e-5",
+   "applicability": "always",
+   "order": 6,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "injector",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 102,
+   "detail": "injector inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "pintle_transition_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_PINTLE_TRANSITION",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_PROPERTY_DOMAIN",
+   "type": "Constraint",
+   "name": "property_domain",
+   "engine_key": "property_domain_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "properties",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "sampled_property_surface",
+   "order": 15,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "thermochemistry",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 126,
+   "detail": "properties inequality row; optimizer_role=hard; applicability=sampled_property_surface",
+   "quantity": "property_domain_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_PROPERTY_DOMAIN",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_PUMP_SUCTION",
+   "type": "Constraint",
+   "name": "pump_suction",
+   "engine_key": "nss_margin_min",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "feed",
+   "units": null,
+   "scale": "2.0",
+   "applicability": "always",
+   "order": 7,
+   "source_id_text": "NASA-SP-8052",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8052",
+     "state": "report_key_mapped:first pages print 'SP-8052' (turbopump inducers monograph)",
+     "document_id": "DOC_NTRS_19710025474"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710025474"
+   ],
+   "basis_state": "OK",
+   "subsystem": "pump",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 104,
+   "detail": "feed inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "nss_margin_min",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_PUMP_SUCTION",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_PUMP_TIP_SPEED",
+   "type": "Constraint",
+   "name": "pump_tip_speed",
+   "engine_key": "tip_speed_margin_min",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "feed",
+   "units": "m/s",
+   "scale": "300.0",
+   "applicability": "always",
+   "order": 8,
+   "source_id_text": "NASA-SP-8109",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8109",
+     "state": "report_key_mapped:first pages print 'SP-8109'; title 'LIQUID ROCKET ENGINE CENTRIFUGAL FLOW TURBOPUMPS'",
+     "document_id": "DOC_NTRS_19740020848"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19740020848"
+   ],
+   "basis_state": "OK",
+   "subsystem": "pump",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 106,
+   "detail": "feed inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "tip_speed_margin_min",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_PUMP_TIP_SPEED",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_SEPARATION",
+   "type": "Constraint",
+   "name": "separation",
+   "engine_key": "separation_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "aerodynamics",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "always",
+   "order": 2,
+   "source_id_text": "NASA-SP-8120",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-8120",
+     "state": "report_key_mapped:title 'Liquid Rocket Engine Nozzles' = SP-8120 title; same file is the registry's nozzle local_source (repository assertion)",
+     "document_id": "DOC_NTRS_19770009165"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19770009165"
+   ],
+   "basis_state": "OK",
+   "subsystem": "performance",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 90,
+   "detail": "aerodynamics inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "separation_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_SEPARATION",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_SOLVER_STATUS",
+   "type": "Constraint",
+   "name": "solver_status",
+   "engine_key": "solver_status_margin",
+   "kind": "applicability_gate",
+   "is_requirement": false,
+   "manifest_kind": "availability_gate",
+   "optimizer_role": "final_gate",
+   "category": "numerical",
+   "units": null,
+   "scale": "1.0",
+   "applicability": "always",
+   "order": 28,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "mdo",
+   "enforced_by": "raosim/mdo/nlp.py (mandatory post-solve gate, no relaxation)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 173,
+   "detail": "numerical availability_gate row; optimizer_role=final_gate; applicability=always",
+   "quantity": "solver_status_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_SOLVER_STATUS",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_STRUCTURAL_STRESS",
+   "type": "Constraint",
+   "name": "structural_stress",
+   "engine_key": "structural_stress_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "structures",
+   "units": "Pa",
+   "scale": "1.0e8",
+   "applicability": "always",
+   "order": 12,
+   "source_id_text": "NASA-SP-125",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "structures",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 119,
+   "detail": "structures inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "structural_stress_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_STRUCTURAL_STRESS",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_THRUST_CLOSURE",
+   "type": "Constraint",
+   "name": "thrust_closure",
+   "engine_key": "thrust_residual",
+   "kind": "diagnostic",
+   "is_requirement": false,
+   "manifest_kind": "equality",
+   "optimizer_role": "report_only",
+   "category": "numerical",
+   "units": null,
+   "scale": "1.0e-10",
+   "applicability": "always",
+   "order": 1,
+   "source_id_text": "NASA-SP-125-sec-2.1-item-1",
+   "source_resolution": [
+    {
+     "key": "NASA-SP-125-sec-2.1-item-1",
+     "state": "report_key_mapped:first pages print 'NASA SP-125'; title 'DESIGN OF LIQUID PROPELLANT ROCKET ENGINES'",
+     "document_id": "DOC_NTRS_19710019929"
+    }
+   ],
+   "source_document_ids": [
+    "DOC_NTRS_19710019929"
+   ],
+   "basis_state": "OK",
+   "subsystem": "mdo",
+   "enforced_by": "reported only",
+   "file": "raosim/mdo/constraints.py",
+   "line": 87,
+   "detail": "numerical equality row; optimizer_role=report_only; applicability=always",
+   "quantity": "thrust_residual",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_THRUST_CLOSURE",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_WALL_MONOTONIC",
+   "type": "Constraint",
+   "name": "wall_monotonic",
+   "engine_key": "wall_monotonic_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "geometry",
+   "units": "m",
+   "scale": "1.0e-4",
+   "applicability": "always",
+   "order": 17,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "nozzle_contour",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 131,
+   "detail": "geometry inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "wall_monotonic_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_WALL_MONOTONIC",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  },
+  {
+   "id": "CST_WALL_TEMP",
+   "type": "Constraint",
+   "name": "wall_temp",
+   "engine_key": "wall_temp_margin",
+   "kind": "optimizer_constraint",
+   "is_requirement": false,
+   "manifest_kind": "inequality",
+   "optimizer_role": "hard",
+   "category": "thermal",
+   "units": "K",
+   "scale": "100.0",
+   "applicability": "always",
+   "order": 13,
+   "source_id_text": null,
+   "source_resolution": [
+    {
+     "key": null,
+     "state": "SCIENTIFIC_BASIS_UNKNOWN",
+     "document_id": ""
+    }
+   ],
+   "source_document_ids": [],
+   "basis_state": "SCIENTIFIC_BASIS_UNKNOWN",
+   "subsystem": "cooling",
+   "enforced_by": "raosim/mdo/nlp.py (SLSQP hard rows)",
+   "file": "raosim/mdo/constraints.py",
+   "line": 122,
+   "detail": "thermal inequality row; optimizer_role=hard; applicability=always",
+   "quantity": "wall_temp_margin",
+   "model_ids": [],
+   "quantity_ids": [],
+   "provenance_id": "PROV_CONSTRAINT_MANIFEST_WALL_TEMP",
+   "harvest_method": "source_text_parse",
+   "harvested_at": "2026-09-20T22:58:12.587939+00:00"
+  }
+ ]
+}

@@ -194,8 +194,9 @@ def bell_nozzle_contour(
                   'moc' (MOC + Rao optimization),
                   'rao' (legacy experimental variational path), or
                   'rao_variational_moc' (auditable residual/MOC path)
-    starting_line_method : MOC-only starting-line approximation
-                           ('area_ratio' default, or 'hall')
+    starting_line_method : MOC-only transonic data line passed to
+                           raosim.moc.solve_flowfield ('kliegel_levine'
+                           default, or 'nasa_visible_kliegel_levine')
     pa_over_p0 : Rao-variational-only design ambient/stagnation pressure ratio
     rao_moc_n_control, rao_moc_n_kernel, rao_moc_max_nfev,
     rao_moc_evaluate_moc, rao_moc_theta_n_guess_deg,

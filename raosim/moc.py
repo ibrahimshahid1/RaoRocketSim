@@ -1,14 +1,19 @@
 """
-moc.py – Axisymmetric Method of Characteristics flow solver.
+moc.py – Axisymmetric Method of Characteristics unit processes and the
+forward flow-field analysis entry point.
 
-Layer 1 of the Rao nozzle design: given a starting line and wall
-geometry, march the characteristic net with coupled wall feedback.
+Layer 1 of the Rao nozzle design.  This module owns the three Anderson-form
+unit processes (interior / axis / wall point) and the transonic start-line
+helpers; the bounded characteristic net itself is marched by
+:func:`raosim.moc_bounded.march_bounded_net`, which
+:func:`solve_flowfield` drives.
 
-Architecture:
-  Each row contains: axis point + interior points + wall point.
-  The wall point at row k becomes a parent for row k+1.
-  This is the correct MOC nozzle construction: wall turning and
-  characteristic interactions are built simultaneously.
+History (see ``docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``):
+the original :func:`march_coupled_net` marched zig-zag "fronts" in which
+the computed axis and wall points were never parents of any later point,
+so the net was only the shrinking Cauchy triangle of its starting line —
+it never reached the exit and its exit plane was a two-point
+interpolation.  It is retained, deprecated, for the audit trail only.
 
 Three primitive solvers:
   1. solve_interior_point: two adjacent parents → intersection
@@ -20,19 +25,22 @@ Axisymmetric compatibility equations, with nodes ordered downstream:
   Along C- (slope θ−μ): d(θ + ν) = +S ds
   S = sin(θ) sin(μ) / r
   (S=0 for planar flow)
+  (Anderson MCF 3rd ed. eqs 11.52/11.53; oracle-validated 2026-06-11
+  against the NASA M3.5Perf net, see tests/test_characteristic_pairing.py)
 
 References:
   - Anderson, Modern Compressible Flow, 3rd ed., Ch. 11
-  - Zucrow & Hoffman, Gas Dynamics, Vol. 2, Ch. 16
+  - Rice, T., NASA/JHU 3-D nozzle design code manual (20030067852)
   - NASA SP-8120, Liquid Rocket Engine Nozzles
 
-Starting-line approximation limits:
-  - method='area_ratio' uses a quasi-1D area-Mach estimate along the
-    throat arc and tends to under-represent curvature-driven transonic
-    effects near M≈1.
-  - method='sauer_modified' uses the compact modified-Sauer polynomial
-    correction for curved-throat transonic flow.  The historical name
-    'hall' remains a deprecated alias.
+Starting lines:
+  - :func:`solve_flowfield` starts from the axis-to-wall Kliegel–Levine
+    data line of :func:`raosim.nasa_moc._make_throat_initial_line`
+    (default ``'kliegel_levine'``; ``'nasa_visible_kliegel_levine'`` keeps
+    the NASA C++ expression for oracle parity).
+  - :func:`approximate_starting_line` samples the DOWNSTREAM THROAT ARC
+    (the wall T→N), not a data line.  It is kept for the transonic-kernel
+    tests and the deprecated march; do not use it as MOC initial data.
 """
 
 from __future__ import annotations
@@ -95,6 +103,12 @@ class CharRow:
     axis: CharPoint | None
     interior: list[CharPoint] = field(default_factory=list)
     wall: CharPoint | None = None
+    # Optional explicit parent map, one entry per ``all_points()`` position:
+    # ``{"cplus": (row, index) | None, "cminus": (row, index) | None}`` in
+    # ``all_points()`` indexing of the parent row.  Populated by
+    # :meth:`raosim.moc_bounded.BoundedNet.to_char_rows`; ``None`` on rows
+    # produced by the deprecated front march (whose topology is implicit).
+    parents: list[dict | None] | None = None
 
     def all_points(self) -> list[CharPoint]:
         pts = []
@@ -118,14 +132,31 @@ def _make_point(x: float, r: float, theta: float, M: float,
     )
 
 
+class UpstreamIntersection(RuntimeError):
+    """The C⁻/C⁺ intersection landed upstream of both parents (a crossing)."""
+
+
 def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
                          gamma: float, axisymmetric: bool = True,
-                         tol: float = 1e-8, max_iter: int = 10) -> CharPoint:
+                         tol: float = 1e-8, max_iter: int = 10,
+                         on_upstream: str = "keep") -> CharPoint:
     """
     Interior unit process: C⁻ from p_minus (above) ∩ C⁺ from p_plus (below).
 
     Predictor-corrector with axisymmetric source terms.
+
+    ``on_upstream`` governs a converged intersection that lies upstream of
+    both parents (like-characteristic crossing): ``"keep"`` (default)
+    returns the point exactly as solved so the caller can audit it (the
+    NASA remaining-mesh port checks the signed cell area); ``"raise"``
+    raises :class:`UpstreamIntersection`; ``"clamp"`` reproduces the
+    pre-2026-09 behaviour of moving ``x3`` downstream and resetting ``r3``
+    without re-solving the compatibility equations — that point satisfies
+    neither the intersection nor the compatibility relations and is kept
+    only for regression comparison.
     """
+    if on_upstream not in {"keep", "raise", "clamp"}:
+        raise ValueError("on_upstream must be 'keep', 'raise' or 'clamp'")
     # CORRECTED 2026-06-11 invariant pairing (Anderson MCF §11.4; Z&H
     # Vol. 2 Ch. 17; oracle-validated — see rao_residuals._source_axisym):
     #   along C− (slope θ−μ, from p_minus above):  d(θ+ν) = +S ds
@@ -188,11 +219,15 @@ def solve_interior_point(p_minus: CharPoint, p_plus: CharPoint,
         if abs(theta3 - theta3_old) < tol:
             break
 
-    # Ensure downstream progression (guard against degenerate configurations)
     x_min_parent = min(p_minus.x, p_plus.x)
     if x3 < x_min_parent:
-        x3 = x_min_parent + 1e-8 * max(abs(x_min_parent), 1e-6)
-        r3 = 0.5 * (p_minus.r + p_plus.r)
+        if on_upstream == "raise":
+            raise UpstreamIntersection(
+                f"intersection x={x3:.6g} lies upstream of both parents "
+                f"(min x={x_min_parent:.6g})")
+        if on_upstream == "clamp":
+            x3 = x_min_parent + 1e-8 * max(abs(x_min_parent), 1e-6)
+            r3 = 0.5 * (p_minus.r + p_plus.r)
 
     return CharPoint(
         x=x3, r=r3, theta=theta3, M=M3,
@@ -467,19 +502,30 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
                       gamma: float, axisymmetric: bool = True,
                       max_rows: int = 500) -> list[CharRow]:
     """
-    March the characteristic net with coupled wall feedback.
+    DEPRECATED front march — NOT a bounded characteristic net.
 
-    Each row contains:
-      - axis point (symmetry BC: θ=0, r=0)
-      - interior points (adjacent-pair intersections)
-      - wall point (tangency BC: θ = wall angle)
+    Each "row" is a zig-zag front built only from the previous front's
+    interior points: the axis point (from ``prev[1]``) and the wall point
+    (from ``prev[-2]``) are appended but are NEVER parents of any later
+    point, so boundary reflections never re-enter the interior, the front
+    shrinks by one point per row and the march dies after ``len(start)``
+    rows — typically at ~30 % of the nozzle length.  With the throat-arc
+    "starting line" of :func:`approximate_starting_line` every interior
+    point also lies outside the wall and every wall hit clamps to the arc
+    end.  Confirmed 2026-09-21; see
+    ``docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``.
 
-    The wall point at row k is a parent for row k+1.
-    Row k+1 has one fewer interior point than row k (net shrinks).
-
-    Terminates when the row has only axis + wall (no interior),
-    or when the wall exit is reached.
+    Use :func:`raosim.moc_bounded.march_bounded_net` (via
+    :func:`solve_flowfield`).  Kept only so historical diagnostics can be
+    reproduced; emits :class:`DeprecationWarning`.
     """
+    import warnings as _warnings
+    _warnings.warn(
+        "march_coupled_net is a shrinking front march whose axis/wall "
+        "points are never parents (not a bounded MOC net); use "
+        "raosim.moc_bounded.march_bounded_net / moc.solve_flowfield",
+        DeprecationWarning, stacklevel=2,
+    )
     if len(starting_line) < 3:
         raise ValueError("Need at least 3 starting-line points")
 
@@ -513,7 +559,8 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
         for j in range(parent_start, len(prev_pts) - 2):
             # p_minus = upper (j+1), p_plus = lower (j): correct C⁻/C⁺ pairing
             pt = solve_interior_point(prev_pts[j + 1], prev_pts[j],
-                                      gamma, axisymmetric)
+                                      gamma, axisymmetric,
+                                      on_upstream="clamp")
             interior.append(pt)
             new_pts.append(pt)
 
@@ -535,144 +582,55 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
 def sample_exit_plane(rows: list[CharRow], x_exit: float,
                       gamma: float, n_samples: int = 30) -> list[dict]:
     """
-    Build an exit-plane profile by intersecting late-row characteristic
-    segments with x = x_exit.
+    Exit-plane profile by cropping every characteristic row at ``x = x_exit``.
 
-    For each adjacent pair in the last few converged rows, points are
-    ordered with the same convention as solve_interior_point:
-      - p_minus: upper (larger radius)
-      - p_plus:  lower (smaller radius)
-    The geometric segment between each pair is intersected with the
-    exit station, and (theta, nu, M) are linearly interpolated.
+    Each row's ``all_points()`` polyline (one right-running characteristic
+    when the rows come from :func:`raosim.moc_bounded.march_bounded_net`)
+    is linearly interpolated to the exit station exactly as NASA's
+    ``CropNozzleToLength`` does (MOC_GridCalc_BDE.cpp 1341-1429); the
+    samples are the crossings sorted by radius, with an ``r = 0`` sample
+    extrapolated when the innermost crossing is off-axis.  ``n_samples``
+    > 0 resamples the crossings onto a uniform radial grid (legacy
+    signature); ``n_samples <= 0`` returns the raw crossings.  Rows that do
+    not reach ``x_exit`` contribute nothing — no anchor points are
+    fabricated.
     """
-    _ = gamma
+    from raosim.moc_bounded import crop_polyline_to_x
 
-    valid_rows = [row for row in rows if row.axis is not None and row.wall is not None]
-    if not valid_rows:
-        return [{'r': 0.0, 'theta': 0.0, 'M': 1.0, 'nu': 0.0}]
-
-    tail_rows = valid_rows[-min(len(valid_rows), 8):]
-    wall_pts = [row.wall for row in valid_rows if row.wall is not None and math.isfinite(row.wall.M)]
-    axis_pts = [row.axis for row in valid_rows if row.axis is not None and math.isfinite(row.axis.M)]
-
-    if not wall_pts:
-        return [{'r': 0.0, 'theta': 0.0, 'M': 1.0, 'nu': 0.0}]
-
-    near_wall = min(wall_pts, key=lambda p: abs(p.x - x_exit))
-    Re = max(1e-10, max(p.r for p in wall_pts))
-
-    def _interp_at_x(points: list[CharPoint], fallback: CharPoint) -> CharPoint:
-        if not points:
-            return fallback
-        pts = sorted(points, key=lambda p: p.x)
-        if len(pts) == 1:
-            return pts[0]
-        for a, b in zip(pts[:-1], pts[1:]):
-            if (a.x <= x_exit <= b.x) or (b.x <= x_exit <= a.x):
-                dx = b.x - a.x
-                if abs(dx) < 1e-12:
-                    return a
-                t = (x_exit - a.x) / dx
-                return CharPoint(
-                    x=x_exit,
-                    r=a.r + t * (b.r - a.r),
-                    theta=a.theta + t * (b.theta - a.theta),
-                    M=max(1.0, a.M + t * (b.M - a.M)),
-                    nu=a.nu + t * (b.nu - a.nu),
-                    mu=a.mu + t * (b.mu - a.mu),
-                    compat_plus=0.0,
-                    compat_minus=0.0,
-                )
-        return min(pts, key=lambda p: abs(p.x - x_exit))
-
-    axis_ref = _interp_at_x(
-        axis_pts,
-        CharPoint(
-            x=x_exit, r=0.0, theta=0.0, M=max(1.0, near_wall.M * 0.8),
-            nu=0.0, mu=math.pi / 2.0, compat_plus=0.0, compat_minus=0.0,
-        ),
-    )
-    wall_ref = _interp_at_x(wall_pts, near_wall)
-    wall_theta_ref = max(wall_pts, key=lambda p: p.r)
-
-    intersections: list[dict] = []
-    tol = 1e-10
-
-    for row in tail_rows:
+    samples: list[dict] = []
+    for row in rows:
         pts = row.all_points()
         if len(pts) < 2:
             continue
-        for i in range(len(pts) - 1):
-            p_plus = pts[i]
-            p_minus = pts[i + 1]
-            x0, x1 = p_plus.x, p_minus.x
-            if not (min(x0, x1) - tol <= x_exit <= max(x0, x1) + tol):
-                continue
-            dx = x1 - x0
-            if abs(dx) < 1e-14:
-                continue
-            t = (x_exit - x0) / dx
-            if t < -tol or t > 1.0 + tol:
-                continue
-            r = p_plus.r + t * (p_minus.r - p_plus.r)
-            if r < -tol or r > Re + tol:
-                continue
-            intersections.append({
-                'r': min(max(r, 0.0), Re),
-                'theta': p_plus.theta + t * (p_minus.theta - p_plus.theta),
-                'M': max(1.0, p_plus.M + t * (p_minus.M - p_plus.M)),
-                'nu': p_plus.nu + t * (p_minus.nu - p_plus.nu),
-            })
-
-    intersections.append({
-        'r': 0.0,
-        'theta': 0.0,
-        'M': max(1.0, axis_ref.M),
-        'nu': axis_ref.nu,
-    })
-    intersections.append({
-        'r': Re,
-        'theta': wall_theta_ref.theta,
-        'M': max(1.0, wall_ref.M),
-        'nu': wall_ref.nu,
-    })
-
-    intersections.sort(key=lambda s: s['r'])
+        samples.extend(crop_polyline_to_x(pts, x_exit, gamma))
+    samples = [s for s in samples if math.isfinite(s['M']) and s['r'] >= -1e-12]
+    samples.sort(key=lambda s: s['r'])
     merged: list[dict] = []
-    for s in intersections:
-        if merged and abs(s['r'] - merged[-1]['r']) < 1e-8:
-            merged[-1] = s
+    for smp in samples:
+        if merged and abs(smp['r'] - merged[-1]['r']) < 1e-12:
+            merged[-1] = smp
         else:
-            merged.append(s)
-
-    if len(merged) < 2:
+            merged.append(smp)
+    if not merged:
+        return []
+    if merged[0]['r'] > 1e-12:
+        if len(merged) >= 2:
+            a0, b0 = merged[0], merged[1]
+            dr = b0['r'] - a0['r']
+            M0 = a0['M'] - (b0['M'] - a0['M']) * a0['r'] / dr if dr > 0 else a0['M']
+        else:
+            M0 = merged[0]['M']
+        M0 = max(1.0, M0)
+        merged.insert(0, {'r': 0.0, 'theta': 0.0, 'M': M0,
+                          'nu': prandtl_meyer(M0, gamma)})
+    if n_samples <= 0 or len(merged) < 2:
         return merged
-
-    if n_samples <= 0:
-        return merged
-
-    if len(merged) == 2 and n_samples >= 2:
-        r_new = np.linspace(0.0, Re, n_samples)
-        r_pair = [merged[0]['r'], merged[1]['r']]
-        theta_pair = [merged[0]['theta'], merged[1]['theta']]
-        M_pair = [merged[0]['M'], merged[1]['M']]
-        nu_pair = [merged[0]['nu'], merged[1]['nu']]
-        return [
-            {
-                'r': float(r),
-                'theta': float(np.interp(r, r_pair, theta_pair)),
-                'M': float(max(1.0, np.interp(r, r_pair, M_pair))),
-                'nu': float(np.interp(r, r_pair, nu_pair)),
-            }
-            for r in r_new
-        ]
 
     r_src = np.array([p['r'] for p in merged])
     theta_src = np.array([p['theta'] for p in merged])
     M_src = np.array([p['M'] for p in merged])
     nu_src = np.array([p['nu'] for p in merged])
-
-    r_new = np.linspace(0.0, Re, n_samples)
+    r_new = np.linspace(0.0, float(r_src[-1]), n_samples)
     return [
         {
             'r': float(r),
@@ -808,61 +766,125 @@ def compute_exit_thrust(samples: list[dict], gamma: float,
     }
 
 
+_FLOWFIELD_STARTING_LINE_METHODS = (
+    'kliegel_levine',
+    'nasa_visible_kliegel_levine',
+    'source_visible_kliegel_levine',
+)
+
+
 def solve_flowfield(Rt: float, epsilon: float, gamma: float,
                     wall, n_char: int = 40,
                     starting_line_method: str = 'kliegel_levine',
                     throat_upstream_radius_factor: float = 1.5,
-                    throat_downstream_radius_factor: float = 0.382) -> dict:
+                    throat_downstream_radius_factor: float = 0.382,
+                    *,
+                    dtheta_limit_deg: float = 0.5,
+                    mass_tol: float = 0.02,
+                    on_invalid: str = 'refine') -> dict:
     """
-    Full MOC forward solve with coupled wall marching.
+    Full forward MOC analysis of a given bell wall (bounded net).
 
-    Layer 1 interface for the Layer 2 optimizer.
+    Layer 1 interface for the Layer 2 optimizer.  The wall ``wall`` is
+    the bell N→E (e.g. :class:`raosim.wall_model.SplineWall`) starting at
+    the end of the downstream throat arc; the arc T→N of radius
+    ``Rd = throat_downstream_radius_factor·Rt`` is reconstructed here and
+    marched with the NASA arc unit processes, so the kernel rows equal
+    :func:`raosim.nasa_moc.build_kernel`.
 
     Parameters
     ----------
     Rt      : throat radius [m]
-    epsilon : expansion ratio Ae/At
+    epsilon : expansion ratio Ae/At (exit radius is taken from the wall)
     gamma   : ratio of specific heats
-    wall    : SplineWall instance with r(x), theta(x), intersect_char()
-    n_char  : points on initial characteristic line
-    starting_line_method : method passed to approximate_starting_line
-                           ('area_ratio' default, or 'hall')
-    throat_upstream_radius_factor : Ru/Rt used by the transonic start-line
-                           expansion (default 1.5, shared Rao/SP-8120 throat)
-    throat_downstream_radius_factor : Rd/Rt locating the downstream arc on
-                           which the start-line samples are constructed
+    wall    : bell wall with r(x), dr_dx(x), theta(x), x_start, x_end;
+              ``wall.x_start`` must equal ``Rd·sin(theta_n)`` with
+              ``theta_n = wall.theta(wall.x_start)``
+    n_char  : points on the transonic data line (axis → throat-plane wall)
+    starting_line_method : ``'kliegel_levine'`` (default, corrected KL
+              series), ``'nasa_visible_kliegel_levine'`` /
+              ``'source_visible_kliegel_levine'`` (NASA C++ expression,
+              oracle parity).  The old ``'area_ratio'`` / ``'hall'`` /
+              ``'sauer_modified'`` options are refused: none of them is an
+              axis-to-wall transonic data line.
+    throat_upstream_radius_factor : Ru/Rt driving the Kliegel–Levine
+              expansion (the series is parameterised by the convergent-side
+              curvature; SP-8120 recommends Ru/Rt ≥ 0.6, ≈ 1.0)
+    throat_downstream_radius_factor : Rd/Rt of the arc T→N
+    dtheta_limit_deg : NASA ``DTHETAB`` wall-turning limit per RRC
+    mass_tol : per-RRC mass-flow abort (NASA 2 %)
+    on_invalid : ``'refine'`` | ``'reject'`` | ``'stop'`` (see
+              :func:`raosim.moc_bounded.march_bounded_net`)
 
     Returns
     -------
-    dict with rows, exit_samples, exit_metrics, starting_line
+    dict with ``rows`` (legacy :class:`CharRow` view carrying the explicit
+    parent map), ``net`` (:class:`raosim.moc_bounded.BoundedNet`),
+    ``exit_samples``, ``exit_metrics`` (``Cf`` normalised by ``Pc·At``,
+    plus ``mdot_exit_over_start``), ``starting_line``, ``complete`` and
+    ``stop_reason``.  ``complete`` is False when the march stopped before
+    the wall reached the exit — the exit metrics are then partial and must
+    not be reported as nozzle performance.
     """
+    from raosim.moc_bounded import (
+        CompositeWall, crop_to_exit_plane, exit_plane_mass_flow,
+        march_bounded_net,
+    )
+    from raosim.nasa_moc import ArcWall, _make_throat_initial_line
+
     if throat_upstream_radius_factor <= 0.0:
         raise ValueError("throat_upstream_radius_factor must be positive")
     if throat_downstream_radius_factor <= 0.0:
         raise ValueError("throat_downstream_radius_factor must be positive")
-    # Hall/Kliegel-Levine transonic theory is parameterized by the
-    # convergent-side curvature.  The previous direct-MOC path silently used
-    # the 0.382 Rt downstream fillet, even though the NASA/JHU source passes
-    # rUp and the rest of this repository's shared throat uses Ru=1.5 Rt.
+    if starting_line_method not in _FLOWFIELD_STARTING_LINE_METHODS:
+        raise ValueError(
+            "starting_line_method must be one of "
+            f"{_FLOWFIELD_STARTING_LINE_METHODS!r}, got "
+            f"{starting_line_method!r} — the forward net needs an "
+            "axis-to-wall transonic data line"
+        )
+    if n_char < 3:
+        raise ValueError("n_char must be at least 3")
+    # Hall/Kliegel-Levine transonic theory is parameterised by the
+    # convergent-side curvature (C++ CalcInitialThroatLine(rUp, ...)).
     Ru = throat_upstream_radius_factor * Rt
     Rd = throat_downstream_radius_factor * Rt
-    Re = math.sqrt(epsilon) * Rt
-    theta_n = wall.theta(wall.x_start)
+    theta_n = float(wall.theta(wall.x_start))
+    if theta_n <= 0.0:
+        raise ValueError("wall must start with a positive expansion angle")
 
-    starting_line = approximate_starting_line(
-        Rt, Rd, theta_n, gamma, n_char, method=starting_line_method,
-        transonic_curvature_radius=Ru,
+    arc = ArcWall(Rt, Rd, theta_n)
+    composite = CompositeWall(arc, wall)
+
+    starting_line = _make_throat_initial_line(
+        Rt, Ru, theta_n, gamma, n_char, starting_line_method,
     )
-    rows = march_coupled_net(starting_line, wall, gamma, axisymmetric=True)
+    net = march_bounded_net(
+        starting_line, composite, gamma, arc=arc,
+        dtheta_limit=math.radians(dtheta_limit_deg),
+        mass_tol=mass_tol, on_invalid=on_invalid,
+        x_exit=float(wall.x_end),
+    )
+    rows = net.to_char_rows()
 
-    exit_samples = sample_exit_plane(rows, wall.x_end, gamma)
+    exit_samples = crop_to_exit_plane(net, wall.x_end)
     exit_metrics = compute_exit_thrust(
         exit_samples, gamma, throat_radius=Rt
     )
+    mdot_exit = exit_plane_mass_flow(exit_samples, gamma)
+    exit_metrics['mdot_exit_over_start'] = (
+        mdot_exit / net.massflow[0] if net.massflow and net.massflow[0] > 0
+        else float('nan')
+    )
+    exit_metrics['complete'] = bool(net.complete)
+    _ = epsilon  # exit radius comes from the wall; kept for API stability
 
     return {
         'rows': rows,
+        'net': net,
         'exit_samples': exit_samples,
         'exit_metrics': exit_metrics,
         'starting_line': starting_line,
+        'complete': bool(net.complete),
+        'stop_reason': net.stop_reason,
     }

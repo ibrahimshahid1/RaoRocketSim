@@ -1,0 +1,1636 @@
+{
+ "meta": {
+  "n": 72
+ },
+ "records": [
+  {
+   "qid": "QTY_AE",
+   "type": "PhysicalQuantity",
+   "canonical": "nozzle exit area",
+   "dimension": "L^2",
+   "si_unit": "m^2",
+   "symbols": [
+    "A_e"
+   ],
+   "code_symbols": [
+    "a_e",
+    "exit_area"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_AT",
+   "type": "PhysicalQuantity",
+   "canonical": "throat area",
+   "dimension": "L^2",
+   "si_unit": "m^2",
+   "symbols": [
+    "A_t",
+    "A*"
+   ],
+   "code_symbols": [
+    "a_t",
+    "at",
+    "throat_area"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "throat"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_BF",
+   "type": "PhysicalQuantity",
+   "canonical": "pintle blockage factor",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "BF"
+   ],
+   "code_symbols": [
+    "blockage_factor",
+    "bf"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "injector"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_BUCKLE",
+   "type": "PhysicalQuantity",
+   "canonical": "buckling margin",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "MS_b"
+   ],
+   "code_symbols": [
+    "buckling_margin"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CD",
+   "type": "PhysicalQuantity",
+   "canonical": "discharge coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "C_d",
+    "Cd"
+   ],
+   "code_symbols": [
+    "cd",
+    "c_d",
+    "discharge_coefficient"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "injector",
+    "feed_system"
+   ],
+   "note": "Geometry- and Reynolds-dependent; a literature value for one orifice geometry is not transferable.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CF",
+   "type": "PhysicalQuantity",
+   "canonical": "thrust coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "C_F",
+    "CF"
+   ],
+   "code_symbols": [
+    "cf",
+    "thrust_coefficient"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "performance",
+    "nozzle_contour"
+   ],
+   "note": "Distinct from discharge coefficient C_d and from skin-friction coefficient C_f.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CHF",
+   "type": "PhysicalQuantity",
+   "canonical": "critical heat flux",
+   "dimension": "M T^-3",
+   "si_unit": "W/m^2",
+   "symbols": [
+    "q_CHF"
+   ],
+   "code_symbols": [
+    "chf",
+    "q_chf"
+   ],
+   "aliases": [
+    "burnout heat flux"
+   ],
+   "subsystems": [
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CP",
+   "type": "PhysicalQuantity",
+   "canonical": "specific heat at constant pressure",
+   "dimension": "L^2 T^-2 Θ^-1",
+   "si_unit": "J/kg/K",
+   "symbols": [
+    "c_p"
+   ],
+   "code_symbols": [
+    "cp",
+    "c_p"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "thermochemistry",
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CR",
+   "type": "PhysicalQuantity",
+   "canonical": "contraction ratio",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "ε_c",
+    "A_c/A_t"
+   ],
+   "code_symbols": [
+    "contraction_ratio",
+    "cr"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "chamber"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CSTAR",
+   "type": "PhysicalQuantity",
+   "canonical": "characteristic velocity",
+   "dimension": "L T^-1",
+   "si_unit": "m/s",
+   "symbols": [
+    "c*",
+    "c_star"
+   ],
+   "code_symbols": [
+    "cstar",
+    "c_star"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "performance",
+    "thermochemistry"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_DP",
+   "type": "PhysicalQuantity",
+   "canonical": "pressure drop",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "Δp",
+    "ΔP",
+    "dP"
+   ],
+   "code_symbols": [
+    "dp",
+    "delta_p",
+    "pressure_drop"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "injector",
+    "cooling",
+    "feed_system"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_DP_PUMP",
+   "type": "PhysicalQuantity",
+   "canonical": "pump pressure rise",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "Δp_pump"
+   ],
+   "code_symbols": [
+    "delta_p_pump",
+    "pump_dp"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump",
+    "feed_system"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_EBATT",
+   "type": "PhysicalQuantity",
+   "canonical": "battery energy",
+   "dimension": "M L^2 T^-2",
+   "si_unit": "J",
+   "symbols": [
+    "E_b"
+   ],
+   "code_symbols": [
+    "battery_energy"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "electric_drive"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_EPS",
+   "type": "PhysicalQuantity",
+   "canonical": "expansion ratio",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "ε",
+    "A_e/A_t",
+    "AR"
+   ],
+   "code_symbols": [
+    "eps",
+    "epsilon",
+    "area_ratio",
+    "expansion_ratio"
+   ],
+   "aliases": [
+    "area ratio"
+   ],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_ETA_CF",
+   "type": "PhysicalQuantity",
+   "canonical": "thrust-coefficient efficiency",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "η_CF"
+   ],
+   "code_symbols": [
+    "eta_cf"
+   ],
+   "aliases": [
+    "nozzle efficiency"
+   ],
+   "subsystems": [
+    "performance",
+    "nozzle_contour"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_ETA_CSTAR",
+   "type": "PhysicalQuantity",
+   "canonical": "c-star efficiency",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "η_c*"
+   ],
+   "code_symbols": [
+    "eta_cstar",
+    "eta_c_star"
+   ],
+   "aliases": [
+    "combustion efficiency"
+   ],
+   "subsystems": [
+    "performance",
+    "injector"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_ETA_PUMP",
+   "type": "PhysicalQuantity",
+   "canonical": "pump efficiency",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "η_p"
+   ],
+   "code_symbols": [
+    "eta_pump"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_FIN_EFF",
+   "type": "PhysicalQuantity",
+   "canonical": "fin efficiency",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "η_f"
+   ],
+   "code_symbols": [
+    "fin_efficiency",
+    "eta_fin"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_FOS",
+   "type": "PhysicalQuantity",
+   "canonical": "factor of safety",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "FS",
+    "FoS"
+   ],
+   "code_symbols": [
+    "fos",
+    "factor_of_safety",
+    "safety_factor"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_GAMMA",
+   "type": "PhysicalQuantity",
+   "canonical": "specific-heat ratio",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "γ",
+    "k"
+   ],
+   "code_symbols": [
+    "gamma",
+    "g"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "gas_dynamics",
+    "thermochemistry"
+   ],
+   "note": "Sources using k for gamma conflict with k for thermal conductivity. Never merge on the glyph.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_HC",
+   "type": "PhysicalQuantity",
+   "canonical": "coolant-side heat-transfer coefficient",
+   "dimension": "M T^-3 Θ^-1",
+   "si_unit": "W/m^2/K",
+   "symbols": [
+    "h_c",
+    "h_co"
+   ],
+   "code_symbols": [
+    "h_c",
+    "hc"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_HEAD",
+   "type": "PhysicalQuantity",
+   "canonical": "pump head rise",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "H"
+   ],
+   "code_symbols": [
+    "head",
+    "head_m"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_HG",
+   "type": "PhysicalQuantity",
+   "canonical": "gas-side heat-transfer coefficient",
+   "dimension": "M T^-3 Θ^-1",
+   "si_unit": "W/m^2/K",
+   "symbols": [
+    "h_g"
+   ],
+   "code_symbols": [
+    "h_g",
+    "hg"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_ISP",
+   "type": "PhysicalQuantity",
+   "canonical": "specific impulse",
+   "dimension": "T",
+   "si_unit": "s",
+   "symbols": [
+    "Isp",
+    "I_sp",
+    "I_s"
+   ],
+   "code_symbols": [
+    "isp",
+    "isp_s",
+    "I_sp"
+   ],
+   "aliases": [
+    "specific impulse (mass basis)"
+   ],
+   "subsystems": [
+    "performance"
+   ],
+   "note": "Reported in seconds here (I = F/(mdot*g0)); some sources report N.s/kg.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_KCOND",
+   "type": "PhysicalQuantity",
+   "canonical": "thermal conductivity",
+   "dimension": "M L T^-3 Θ^-1",
+   "si_unit": "W/m/K",
+   "symbols": [
+    "k",
+    "λ"
+   ],
+   "code_symbols": [
+    "k_cond",
+    "conductivity",
+    "k_w"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer",
+    "materials"
+   ],
+   "note": "Symbol k collides with the specific-heat ratio in older propulsion texts.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_LSTAR",
+   "type": "PhysicalQuantity",
+   "canonical": "characteristic chamber length",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "L*"
+   ],
+   "code_symbols": [
+    "l_star",
+    "lstar"
+   ],
+   "aliases": [
+    "L-star"
+   ],
+   "subsystems": [
+    "chamber"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MACH",
+   "type": "PhysicalQuantity",
+   "canonical": "Mach number",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "M",
+    "Ma"
+   ],
+   "code_symbols": [
+    "mach",
+    "m_number"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "Symbol M also denotes molar mass and moment; disambiguate by dimension.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MASS_COMP",
+   "type": "PhysicalQuantity",
+   "canonical": "component mass",
+   "dimension": "M",
+   "si_unit": "kg",
+   "symbols": [
+    "m"
+   ],
+   "code_symbols": [
+    "mass_kg",
+    "component_mass"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "mass"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MASS_DRY",
+   "type": "PhysicalQuantity",
+   "canonical": "engine dry mass",
+   "dimension": "M",
+   "si_unit": "kg",
+   "symbols": [
+    "m_dry"
+   ],
+   "code_symbols": [
+    "dry_mass",
+    "engine_dry_mass"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "mass"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MDOT",
+   "type": "PhysicalQuantity",
+   "canonical": "total mass flow rate",
+   "dimension": "M T^-1",
+   "si_unit": "kg/s",
+   "symbols": [
+    "ṁ",
+    "m_dot",
+    "w"
+   ],
+   "code_symbols": [
+    "mdot",
+    "m_dot",
+    "mdot_total"
+   ],
+   "aliases": [
+    "propellant flow rate"
+   ],
+   "subsystems": [
+    "performance",
+    "feed_system"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MDOT_FUEL",
+   "type": "PhysicalQuantity",
+   "canonical": "fuel mass flow rate",
+   "dimension": "M T^-1",
+   "si_unit": "kg/s",
+   "symbols": [
+    "ṁ_f",
+    "w_f"
+   ],
+   "code_symbols": [
+    "mdot_fuel",
+    "mdot_f"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "performance",
+    "injector",
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MDOT_OX",
+   "type": "PhysicalQuantity",
+   "canonical": "oxidizer mass flow rate",
+   "dimension": "M T^-1",
+   "si_unit": "kg/s",
+   "symbols": [
+    "ṁ_o",
+    "w_o"
+   ],
+   "code_symbols": [
+    "mdot_ox",
+    "mdot_o"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "performance",
+    "injector"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MR",
+   "type": "PhysicalQuantity",
+   "canonical": "mixture ratio",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "O/F",
+    "r",
+    "MR"
+   ],
+   "code_symbols": [
+    "of_ratio",
+    "mixture_ratio",
+    "OF"
+   ],
+   "aliases": [
+    "oxidizer-to-fuel ratio"
+   ],
+   "subsystems": [
+    "performance",
+    "thermochemistry"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MU",
+   "type": "PhysicalQuantity",
+   "canonical": "dynamic viscosity",
+   "dimension": "M L^-1 T^-1",
+   "si_unit": "Pa.s",
+   "symbols": [
+    "μ"
+   ],
+   "code_symbols": [
+    "mu",
+    "viscosity"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_NFATIGUE",
+   "type": "PhysicalQuantity",
+   "canonical": "cycles to failure",
+   "dimension": "1",
+   "si_unit": "cycles",
+   "symbols": [
+    "N_f"
+   ],
+   "code_symbols": [
+    "n_cycles",
+    "fatigue_life"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_NPSH",
+   "type": "PhysicalQuantity",
+   "canonical": "net positive suction head",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "NPSH",
+    "NPSHr",
+    "NPSHa"
+   ],
+   "code_symbols": [
+    "npsh",
+    "npsh_r",
+    "npsh_a"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "Required (NPSHr) and available (NPSHa) are different quantities.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_NS",
+   "type": "PhysicalQuantity",
+   "canonical": "specific speed",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "N_s",
+    "Ns",
+    "ω_s"
+   ],
+   "code_symbols": [
+    "ns",
+    "specific_speed"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "Dimensional in US practice (rpm.gpm^0.5/ft^0.75) and dimensionless in SI practice; the two differ by a fixed factor. Record which convention the source uses.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_NU",
+   "type": "PhysicalQuantity",
+   "canonical": "Nusselt number",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "Nu"
+   ],
+   "code_symbols": [
+    "nu",
+    "nusselt"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_OMEGA",
+   "type": "PhysicalQuantity",
+   "canonical": "rotational speed",
+   "dimension": "T^-1",
+   "si_unit": "rad/s",
+   "symbols": [
+    "ω",
+    "N"
+   ],
+   "code_symbols": [
+    "omega",
+    "rpm",
+    "shaft_speed"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "N is rpm in pump practice and a count elsewhere; record units explicitly.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_P0",
+   "type": "PhysicalQuantity",
+   "canonical": "stagnation pressure",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "p_0",
+    "P_t",
+    "p_t"
+   ],
+   "code_symbols": [
+    "p0",
+    "p_stag"
+   ],
+   "aliases": [
+    "total pressure"
+   ],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PA",
+   "type": "PhysicalQuantity",
+   "canonical": "ambient pressure",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "p_a",
+    "P_amb",
+    "p_∞"
+   ],
+   "code_symbols": [
+    "pa",
+    "p_ambient",
+    "p_amb"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "performance",
+    "performance"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PC",
+   "type": "PhysicalQuantity",
+   "canonical": "chamber pressure",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "Pc",
+    "p_c",
+    "P_c",
+    "p_0"
+   ],
+   "code_symbols": [
+    "pc",
+    "p_c",
+    "chamber_pressure"
+   ],
+   "aliases": [
+    "combustion chamber stagnation pressure"
+   ],
+   "subsystems": [
+    "performance",
+    "chamber"
+   ],
+   "note": "Several sources use p_c for static chamber pressure and p_0 for stagnation; check the source.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PE",
+   "type": "PhysicalQuantity",
+   "canonical": "nozzle exit pressure",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "p_e",
+    "P_e"
+   ],
+   "code_symbols": [
+    "pe",
+    "p_exit",
+    "p_e"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour",
+    "performance"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PHI",
+   "type": "PhysicalQuantity",
+   "canonical": "flow coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "φ"
+   ],
+   "code_symbols": [
+    "phi",
+    "flow_coefficient"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PMOTOR",
+   "type": "PhysicalQuantity",
+   "canonical": "motor power",
+   "dimension": "M L^2 T^-3",
+   "si_unit": "W",
+   "symbols": [
+    "P_m"
+   ],
+   "code_symbols": [
+    "motor_power"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "electric_drive"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PR",
+   "type": "PhysicalQuantity",
+   "canonical": "Prandtl number",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "Pr"
+   ],
+   "code_symbols": [
+    "pr",
+    "prandtl"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PSHAFT",
+   "type": "PhysicalQuantity",
+   "canonical": "shaft power",
+   "dimension": "M L^2 T^-3",
+   "si_unit": "W",
+   "symbols": [
+    "P_s"
+   ],
+   "code_symbols": [
+    "shaft_power"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump",
+    "electric_drive"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_PSI",
+   "type": "PhysicalQuantity",
+   "canonical": "head coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "ψ"
+   ],
+   "code_symbols": [
+    "psi",
+    "head_coefficient"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_QFLUX",
+   "type": "PhysicalQuantity",
+   "canonical": "heat flux",
+   "dimension": "M T^-3",
+   "si_unit": "W/m^2",
+   "symbols": [
+    "q",
+    "q''",
+    "q̇"
+   ],
+   "code_symbols": [
+    "q",
+    "heat_flux",
+    "q_flux"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling",
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_RE",
+   "type": "PhysicalQuantity",
+   "canonical": "Reynolds number",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "Re"
+   ],
+   "code_symbols": [
+    "re",
+    "reynolds"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "heat_transfer",
+    "gas_dynamics"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_RE_EXIT",
+   "type": "PhysicalQuantity",
+   "canonical": "nozzle exit radius",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "r_e",
+    "R_e"
+   ],
+   "code_symbols": [
+    "r_e",
+    "exit_radius"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "Do not confuse the symbol R_e (exit radius) with Re (Reynolds number).",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_RGAS",
+   "type": "PhysicalQuantity",
+   "canonical": "specific gas constant",
+   "dimension": "L^2 T^-2 Θ^-1",
+   "si_unit": "J/kg/K",
+   "symbols": [
+    "R",
+    "R_s"
+   ],
+   "code_symbols": [
+    "r_gas",
+    "rgas"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "thermochemistry"
+   ],
+   "note": "Distinct from the universal gas constant R_u and from radius R.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_RHO",
+   "type": "PhysicalQuantity",
+   "canonical": "density",
+   "dimension": "M L^-3",
+   "si_unit": "kg/m^3",
+   "symbols": [
+    "ρ"
+   ],
+   "code_symbols": [
+    "rho",
+    "density"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "gas_dynamics",
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_RT",
+   "type": "PhysicalQuantity",
+   "canonical": "throat radius",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "r_t",
+    "R_t"
+   ],
+   "code_symbols": [
+    "r_t",
+    "rt",
+    "throat_radius"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "throat"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SIGMA",
+   "type": "PhysicalQuantity",
+   "canonical": "stress",
+   "dimension": "M L^-1 T^-2",
+   "si_unit": "Pa",
+   "symbols": [
+    "σ"
+   ],
+   "code_symbols": [
+    "sigma",
+    "stress"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SIGMA_CAV",
+   "type": "PhysicalQuantity",
+   "canonical": "cavitation number",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "σ"
+   ],
+   "code_symbols": [
+    "cavitation_number",
+    "sigma_cav"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "Symbol sigma also denotes stress.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SKIP",
+   "type": "PhysicalQuantity",
+   "canonical": "pintle skip distance",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "L_s"
+   ],
+   "code_symbols": [
+    "skip_distance"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "injector"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SMD",
+   "type": "PhysicalQuantity",
+   "canonical": "Sauter mean diameter",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "SMD",
+    "D_32"
+   ],
+   "code_symbols": [
+    "smd",
+    "d32"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "spray"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SOUND",
+   "type": "PhysicalQuantity",
+   "canonical": "speed of sound",
+   "dimension": "L T^-1",
+   "si_unit": "m/s",
+   "symbols": [
+    "a",
+    "c"
+   ],
+   "code_symbols": [
+    "a_sound",
+    "sound_speed"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_STRAIN",
+   "type": "PhysicalQuantity",
+   "canonical": "strain",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "ε"
+   ],
+   "code_symbols": [
+    "strain"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures"
+   ],
+   "note": "Symbol epsilon also denotes expansion ratio and emissivity.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TAW",
+   "type": "PhysicalQuantity",
+   "canonical": "adiabatic wall temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_aw"
+   ],
+   "code_symbols": [
+    "t_aw",
+    "taw"
+   ],
+   "aliases": [
+    "recovery temperature"
+   ],
+   "subsystems": [
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TC",
+   "type": "PhysicalQuantity",
+   "canonical": "chamber temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_c",
+    "T_0"
+   ],
+   "code_symbols": [
+    "tc",
+    "t_c",
+    "chamber_temperature"
+   ],
+   "aliases": [
+    "combustion temperature"
+   ],
+   "subsystems": [
+    "thermochemistry",
+    "chamber"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TCOOL",
+   "type": "PhysicalQuantity",
+   "canonical": "bulk coolant temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_b",
+    "T_co"
+   ],
+   "code_symbols": [
+    "t_coolant",
+    "t_bulk"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_THETA_B",
+   "type": "PhysicalQuantity",
+   "canonical": "flow angle at the control-surface attachment point B",
+   "dimension": "1",
+   "si_unit": "rad",
+   "symbols": [
+    "θ_B"
+   ],
+   "code_symbols": [
+    "theta_b"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "Rao variational construction; see the Rao control-surface literature.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_THETA_E",
+   "type": "PhysicalQuantity",
+   "canonical": "nozzle exit wall angle",
+   "dimension": "1",
+   "si_unit": "rad",
+   "symbols": [
+    "θ_e"
+   ],
+   "code_symbols": [
+    "theta_e"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_THETA_N",
+   "type": "PhysicalQuantity",
+   "canonical": "initial wall angle at nozzle attachment",
+   "dimension": "1",
+   "si_unit": "rad",
+   "symbols": [
+    "θ_n",
+    "θ_i"
+   ],
+   "code_symbols": [
+    "theta_n",
+    "theta_i"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_THRUST",
+   "type": "PhysicalQuantity",
+   "canonical": "thrust",
+   "dimension": "M L T^-2",
+   "si_unit": "N",
+   "symbols": [
+    "F",
+    "F_t",
+    "T"
+   ],
+   "code_symbols": [
+    "thrust",
+    "thrust_n",
+    "F"
+   ],
+   "aliases": [
+    "engine thrust"
+   ],
+   "subsystems": [
+    "performance"
+   ],
+   "note": "Symbol T also denotes temperature; never merge on the glyph alone.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TMR",
+   "type": "PhysicalQuantity",
+   "canonical": "total momentum ratio",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "TMR"
+   ],
+   "code_symbols": [
+    "tmr",
+    "momentum_ratio"
+   ],
+   "aliases": [
+    "momentum ratio"
+   ],
+   "subsystems": [
+    "injector"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TW",
+   "type": "PhysicalQuantity",
+   "canonical": "wall thickness",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "t_w",
+    "δ"
+   ],
+   "code_symbols": [
+    "t_wall",
+    "wall_thickness"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "structures",
+    "cooling"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TWC",
+   "type": "PhysicalQuantity",
+   "canonical": "coolant-side wall temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_wc",
+    "T_w,c"
+   ],
+   "code_symbols": [
+    "t_wc",
+    "twc"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling",
+    "heat_transfer"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_TWG",
+   "type": "PhysicalQuantity",
+   "canonical": "gas-side wall temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_wg",
+    "T_w,g"
+   ],
+   "code_symbols": [
+    "t_wg",
+    "twg",
+    "wall_temp_gas"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "cooling",
+    "heat_transfer",
+    "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_UTIP",
+   "type": "PhysicalQuantity",
+   "canonical": "impeller tip speed",
+   "dimension": "L T^-1",
+   "si_unit": "m/s",
+   "symbols": [
+    "U_2",
+    "u_t"
+   ],
+   "code_symbols": [
+    "u_tip",
+    "tip_speed"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  }
+ ]
+}

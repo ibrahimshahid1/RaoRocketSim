@@ -1,0 +1,2621 @@
+{
+ "summary": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 8,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 2,
+   "NOT_CHECKED": 50
+  },
+  "pending_source_reviews": 42,
+  "needs_source_routing": 8,
+  "pending_verifications": 216,
+  "documents_with_extracted_objects": 7,
+  "canonical_documents_without_extracted_objects": 241
+ },
+ "model_reviews": [
+  {
+   "target": "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D",
+   "registry_id": "performance.frozen_variable_cp_quasi1d",
+   "subsystem": "performance",
+   "doc_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "equation_ref": "PDF pp. 669-685, Sections 17.3-17.6: high-temperature nozzle flow, frozen composition/mixture cp, and frozen sound speed",
+   "relation": "h0-h(T)=u^2/2; p/p0=exp[int(T0->T,cp/T dT)/R]; u*=sqrt(gamma(T*)*R*T*); A/A*=G*/G; c*=p0/G*; Cf=G*ue/p0+epsilon*(pe-pa)/p0",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/5f36b7c4ded79bb3e90754d0f81682f7a68014be.md",
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "page_count": 776
+  },
+  {
+   "target": "MODEL_SPRAY_DETERMINISTIC_PARCEL_MARCH",
+   "registry_id": "spray.deterministic_parcel_march",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "equation_ref": "Thesis Eqs. 3.5-3.12 and Radhakrishnan 2021 Eq. 16",
+   "relation": "du_p/dt=a_drag+g; dx_p/dt=u_p with WAVE, DRW, Eq.16 evaporation, exact represented-mass reservoirs, and segment boundary events",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Tesi_dottorato_Cavalieri.md",
+   "source_sha256": "f26b86d388aab022b9aa7148904f74e2a14886bffb72374b4d840aaa7d0d07ee",
+   "page_count": 183
+  },
+  {
+   "target": "MODEL_SPRAY_PRESCRIBED_ONE_WAY_CARRIER",
+   "registry_id": "spray.prescribed_one_way_carrier",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "equation_ref": "Thesis Eqs. 3.5-3.11 show the carrier source terms and droplet mass/momentum/energy equations omitted by one-way prescription",
+   "relation": "(u_g,rho_g,mu_g,T_g,p_g,k,epsilon)=bilinear_xr(prescribed field); no numerical extrapolation",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Tesi_dottorato_Cavalieri.md",
+   "source_sha256": "f26b86d388aab022b9aa7148904f74e2a14886bffb72374b4d840aaa7d0d07ee",
+   "page_count": 183
+  },
+  {
+   "target": "MODEL_SPRAY_SCHILLER_NAUMANN_DRAG",
+   "registry_id": "spray.schiller_naumann_drag",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "equation_ref": "PDF page 57, thesis Eq. 3.12 and parcel momentum Eq. 3.9",
+   "relation": "Re_p=rho_g*|u_g-u_p|*d/mu_g; Cd=24/Re_p*(1+0.15*Re_p^0.687) to Re_p=1000, then Cd=0.44; a_d=3*Cd*rho_g*|u_rel|*u_rel/(4*rho_l*d)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/Tesi_dottorato_Cavalieri.md",
+   "source_sha256": "f26b86d388aab022b9aa7148904f74e2a14886bffb72374b4d840aaa7d0d07ee",
+   "page_count": 183
+  },
+  {
+   "target": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "registry_id": "pump.electric_drive",
+   "subsystem": "pump",
+   "doc_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "equation_ref": "electric-pump-fed engine package study",
+   "relation": "hydraulic power to shaft/electrical power to energy/current/mass",
+   "basis_class": "PROJECT_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/10.1007_s42405-020-00325-z.md",
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "page_count": 14
+  },
+  {
+   "target": "MODEL_INJECTOR_SPRAY_CSTAR_FIXED_POINT",
+   "registry_id": "injector.spray_cstar_fixed_point",
+   "subsystem": "injector",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "vaporization-to-reacting-spray staged handoff and c-star efficiency context",
+   "relation": "eta_cstar=eta_vaporization*eta_mixing*eta_combustion; mdot=Pc*At/(eta_cstar*cstar)",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_TABLES_7_8",
+   "registry_id": "spray.benchmark_radhakrishnan2021_tables_7_8",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Tables 3, 7, and 8, PDF pages 8, 22, and 25 / printed pages 7, 21, and 24",
+   "relation": "SHA-pinned Table-3 inputs joined to Table-7 VOF outputs and Table-8 WAVE/Lagrangian SMD outputs with column-level origins",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_WATER_AIR",
+   "registry_id": "spray.benchmark_radhakrishnan2021_water_air",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Table 5 and preceding validation prose, PDF pages 15-16 / printed pages 14-15",
+   "relation": "SHA-pinned 2021 Table-5 water-air experiment/author-simulation comparison stored separately from the 2018 rows",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_PRIMARY_GEOMETRY_DISPATCH",
+   "registry_id": "spray.primary_geometry_dispatch",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Figure 2 and Eqs. 1-8 radial-sheet-to-Lagrangian handoff",
+   "relation": "mdot*Delta_t = sum(N_i*rho_l*pi*d_i^3/6); deterministic azimuthal placement and geometry-specific source direction",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_SEEDED_DISCRETE_RANDOM_WALK",
+   "registry_id": "spray.seeded_discrete_random_walk",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Section 2.2, PDF page 11 / printed page 10: discrete random walk and eddy-life time-scale constant 0.15",
+   "relation": "tau_e=C_L*k/epsilon; u'_i~Normal(0,2*k/3); renew fluctuation at eddy expiry with explicit local RNG seed",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_SPALDING_EVAPORATION_EQ16",
+   "registry_id": "spray.spalding_evaporation_eq16",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Eq. 16, PDF page 13 / printed page 12; convection-diffusion evaporation context",
+   "relation": "dm/dt=-n*(Sh*D/d)*(pi*d^2)*rho_g*ln(1+Bm); Bm=(Y_s-Y_inf)/(1-Y_s); Sh=2 or 2+0.6*Re^0.5*Sc^(1/3)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_VOF_TO_LAGRANGIAN_HANDOFF",
+   "registry_id": "spray.vof_to_lagrangian_handoff",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Modelling-2 VOF sheet to WAVE/Lagrangian sequence, Figures 3-4 and Tables 7-8",
+   "relation": "h_full,U_sheet,mdot_liq,J_liq and carrier(x,r) are accepted only after mass/momentum, stationarity, mesh, timestep, domain and averaging gates pass",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2021",
+   "registry_id": "spray.wave_kh_radhakrishnan_2021",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Equations 1-8, PDF pages 9-11 / printed pages 8-10",
+   "relation": "2021 variant: Lambda/h=9.02*(1+0.45*Oh^0.5)*(1+0.45*Ta^0.7)/(1+0.87*We_g^1.67)^0.6; tau=3.726*B1*h/(Lambda*Omega)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_SPRAY_WEIGHTED_SMD_ROSIN_RAMMLER",
+   "registry_id": "spray.weighted_smd_rosin_rammler",
+   "subsystem": "spray",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "equation_ref": "Equation 9 and paragraph following Table 7, PDF pages 11 and 22 / printed pages 10 and 21",
+   "relation": "d32=sum(N_i*d_i^3)/sum(N_i*d_i^2); RR mass survival=exp[-(d/dbar)^n]; mass percentiles weight N_i*d_i^3",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2021.md",
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP",
+   "registry_id": "injector.son2017_movable_continuous_gap",
+   "subsystem": "injector",
+   "doc_id": "DOC_DOI_10_2514_1_B36301",
+   "equation_ref": "Eqs. 1-3 and Table 2, printed pages 859-861",
+   "relation": "R_f=D_post/2-t_post; A_tip=pi/sin(theta_pt)*[R_f^2-(R_f-L_open*sin(theta_pt)*cos(theta_pt))^2] (theta_pt->0: A_tip=2*pi*R_f*L_open); A_cg=pi/4*(D_cg^2-D_pr^2); A_eff=min(A_tip,A_cg)",
+   "basis_class": "EMPIRICALLY_CALIBRATED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/son2017.md",
+   "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "page_count": 12
+  },
+  {
+   "target": "MODEL_THERMAL_RADIATION",
+   "registry_id": "thermal.radiation",
+   "subsystem": "thermal",
+   "doc_id": "DOC_DOI_10_2514_1_B36589",
+   "equation_ref": "rocket thrust-chamber radiative heat-transfer treatment",
+   "relation": "grey-gas/wall emissivity screening contribution",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/leccese2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/leccese2018.md",
+   "source_sha256": "a2eef7ceb290cf670f759dbf0e268e6281a5020dfc9db110d783dcca2fe701d6",
+   "page_count": 9
+  },
+  {
+   "target": "MODEL_SEPARATION_EMPIRICAL_ONSET",
+   "registry_id": "separation.empirical_onset",
+   "subsystem": "separation",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "equation_ref": "overexpanded-nozzle separation review",
+   "relation": "Kalt-Badal/Schmucker empirical pressure-ratio criteria",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/hagemann1998.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/hagemann1998.md",
+   "source_sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+   "page_count": 15
+  },
+  {
+   "target": "MODEL_REGEN_BOOLEAN_BREP",
+   "registry_id": "regen.boolean_brep",
+   "subsystem": "cad",
+   "doc_id": "DOC_DOI_10_2514_6_2018_4625",
+   "equation_ref": "additively manufactured channel-wall design context",
+   "relation": "revolved envelopes plus patterned passage subtraction and optional manifolds/ports",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/gradl2018.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/gradl2018.md",
+   "source_sha256": "d230ac59edabcb2aa135b8c8d9b2d636070d3417fcea88c8c6d0f26b1996c991",
+   "page_count": 34
+  },
+  {
+   "target": "MODEL_THERMAL_FIN_EFFICIENCY",
+   "registry_id": "thermal.fin_efficiency",
+   "subsystem": "thermal",
+   "doc_id": "DOC_DOI_10_2514_6_2019_3938",
+   "equation_ref": "regen channel-fin treatment",
+   "relation": "eta_f=tanh(mH)/(mH), m=sqrt(2h/(k*t_land))",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/atefi2019.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/atefi2019.md",
+   "source_sha256": "ef71daa4f75f8ca515c068ee4a79bbcbf0355d123d30f1a2a83950067ddb665a",
+   "page_count": 13
+  },
+  {
+   "target": "MODEL_THERMAL_BARTZ",
+   "registry_id": "thermal.bartz",
+   "subsystem": "thermal",
+   "doc_id": "DOC_DOI_10_2514_8_12572",
+   "equation_ref": "Bartz 1957 heat-transfer correlation",
+   "relation": "Bartz correlation with throat-diameter and property correction sigma",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/technical-notes-1957.md",
+   "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+   "page_count": 5
+  },
+  {
+   "target": "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH",
+   "registry_id": "performance.isentropic_area_mach",
+   "subsystem": "performance",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "equation_ref": "compressible-flow/nozzle chapters",
+   "relation": "A/Astar=f(M,gamma); p/p0 and T/T0 are isentropic functions",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).md",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "page_count": 1538
+  },
+  {
+   "target": "MODEL_THERMAL_DARCY_PRESSURE_LOSS",
+   "registry_id": "thermal.darcy_pressure_loss",
+   "subsystem": "thermal",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "equation_ref": "internal-flow pressure-loss chapters",
+   "relation": "dP=f*(L/Dh)*rho*v^2/2 plus local losses",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).md",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "page_count": 1538
+  },
+  {
+   "target": "MODEL_THERMAL_RECTANGULAR_LAMINAR_NUSSELT",
+   "registry_id": "thermal.rectangular_laminar_nusselt",
+   "subsystem": "thermal",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "equation_ref": "noncircular-duct section and Ref. 34 routing to Shah & London",
+   "relation": "Shah-London all-walls-uniform-heat-flux rectangular-duct polynomial",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).md",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "page_count": 1538
+  },
+  {
+   "target": "MODEL_TRAJECTORY_VERTICAL_POINT_MASS",
+   "registry_id": "trajectory.vertical_point_mass",
+   "subsystem": "trajectory",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "equation_ref": "continuum drag background; point-mass mechanics is elementary",
+   "relation": "m*dv/dt=T-D-mg with mass depletion and vertical kinematics",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).md",
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "page_count": 1538
+  },
+  {
+   "target": "MODEL_INTERFACE_PRESSURE_BOLT_PLATE",
+   "registry_id": "interface.pressure_bolt_plate",
+   "subsystem": "interface",
+   "doc_id": "DOC_NTRS_19710019929",
+   "equation_ref": "NASA SP-125 structural/joint design context",
+   "relation": "pressure force, thin-wall hoop, clamped-plate bending, bolt screens",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929.md",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "target": "MODEL_STRUCTURE_SP125_LINER_STRESS",
+   "registry_id": "structure.sp125_liner_stress",
+   "subsystem": "structure",
+   "doc_id": "DOC_NTRS_19710019929",
+   "equation_ref": "SP-125 Eqs. 4-29, 4-31, and 4-32",
+   "relation": "pressure, thermal, and constraint terms from SP-125 screening equations",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929.md",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "target": "MODEL_STRUCTURE_STRAIN_LIFE",
+   "registry_id": "structure.strain_life",
+   "subsystem": "structure",
+   "doc_id": "DOC_NTRS_19710019929",
+   "equation_ref": "SP-125 cyclic-life discussion",
+   "relation": "Coffin-Manson/Basquin total-strain relation",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929.md",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "target": "MODEL_THERMAL_SIEDER_TATE",
+   "registry_id": "thermal.sieder_tate",
+   "subsystem": "thermal",
+   "doc_id": "DOC_NTRS_19710019929",
+   "equation_ref": "NASA SP-125 regenerative-cooling analysis context",
+   "relation": "Nu=0.027*Re^0.8*Pr^(1/3)*(mu_b/mu_w)^0.14",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929.md",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "target": "MODEL_THERMOCHEMISTRY_ROCKETCEA_SNAPSHOT",
+   "registry_id": "thermochemistry.rocketcea_snapshot",
+   "subsystem": "thermochemistry",
+   "doc_id": "DOC_NTRS_19710019929",
+   "equation_ref": "SP-125 equilibrium-performance context; RocketCEA is external authority",
+   "relation": "RocketCEA chamber gamma, molecular weight, temperature, and cstar snapshot",
+   "basis_class": "IMPLEMENTATION_CHOICE",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19710019929.md",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "target": "MODEL_PUMP_INDUCER_NPSH",
+   "registry_id": "pump.inducer_npsh",
+   "subsystem": "pump",
+   "doc_id": "DOC_NTRS_19710025474",
+   "equation_ref": "NASA SP-8052 inducer design criteria",
+   "relation": "continuity, incidence/solidity, suction-specific-speed and NPSH screens",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19710025474.md",
+   "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+   "page_count": 116
+  },
+  {
+   "target": "MODEL_MATERIALS_NARLOY_GRCOP",
+   "registry_id": "materials.narloy_grcop",
+   "subsystem": "materials",
+   "doc_id": "DOC_NTRS_19740017910",
+   "equation_ref": "NARloy-Z property data; GRCop sources separately cataloged",
+   "relation": "interpolated representative conductivity/strength/fatigue properties",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/materials_science/19740017910.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/19740017910.md",
+   "source_sha256": "66a3cfda03abd14895a5a53b9f3cb90b0a88033bd7ecaf03c7a83d5ec7b5b3b5",
+   "page_count": 49
+  },
+  {
+   "target": "MODEL_PUMP_ANNULAR_EYE_FREE_AREA",
+   "registry_id": "pump.annular_eye_free_area",
+   "subsystem": "pump",
+   "doc_id": "DOC_NTRS_19740020848",
+   "equation_ref": "NASA SP-8109 impeller inlet/discharge velocity and free-area criteria",
+   "relation": "Q=pi*(R1^2-Rh^2)*(1-B1)*phi1*omega*R1; B=Z*t/(2*pi*r*sin(beta))",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19740020848.md",
+   "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "page_count": 124
+  },
+  {
+   "target": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
+   "registry_id": "pump.meanline_coefficients",
+   "subsystem": "pump",
+   "doc_id": "DOC_NTRS_19740020848",
+   "equation_ref": "NASA SP-8109 centrifugal-pump meanline design",
+   "relation": "psi=gH/U2^2; phi2=Cm2/U2; Q=b2*(pi*D2-Z*t/sin(beta2))*Cm2",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19740020848.md",
+   "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "page_count": 124
+  },
+  {
+   "target": "MODEL_PUMP_SPLIT_CASING_JOINT",
+   "registry_id": "pump.split_casing_joint",
+   "subsystem": "pump",
+   "doc_id": "DOC_NTRS_19740020848",
+   "equation_ref": "NASA SP-8109 volute/casing practice plus standard pressure-separation balance",
+   "relation": "Fsep=p*Aprojected; Fclamp=1.5*Fsep; sigma_b=Fclamp/(N*At)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/19740020848.md",
+   "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "page_count": 124
+  },
+  {
+   "target": "MODEL_INJECTOR_THROTTLE_AREA_SCHEDULE",
+   "registry_id": "injector.throttle_area_schedule",
+   "subsystem": "injector",
+   "doc_id": "DOC_NTRS_19760023196",
+   "equation_ref": "orifice pressure-drop basis; actuator schedule is repository-derived",
+   "relation": "solve A(f) at commanded dP/Pc for each throttle point",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19760023196.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19760023196.md",
+   "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "page_count": 130
+  },
+  {
+   "target": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+   "registry_id": "nozzle.rao_top_bezier",
+   "subsystem": "nozzle",
+   "doc_id": "DOC_NTRS_19770009165",
+   "equation_ref": "Rao/TOP chart figures and bell-contour guidance",
+   "relation": "Rao angle charts plus equivalent-cone length and quadratic Bezier",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19770009165.md",
+   "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "page_count": 126
+  },
+  {
+   "target": "MODEL_PERFORMANCE_IDEAL_THRUST_COEFFICIENT",
+   "registry_id": "performance.ideal_thrust_coefficient",
+   "subsystem": "performance",
+   "doc_id": "DOC_NTRS_19770009165",
+   "equation_ref": "NASA SP-8120 performance and expansion design",
+   "relation": "Cf=momentum term+epsilon*(pe-pa)/Pc",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19770009165.md",
+   "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "page_count": 126
+  },
+  {
+   "target": "MODEL_THROAT_HALL_DISCHARGE_COEFFICIENT",
+   "registry_id": "throat.hall_discharge_coefficient",
+   "subsystem": "throat",
+   "doc_id": "DOC_NTRS_19770009165",
+   "equation_ref": "NASA SP-8120 section 2.1.1.1",
+   "relation": "Cd~=1-(gamma+1)/(96*(Ru/Rt)^2)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/19770009165.md",
+   "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "page_count": 126
+  },
+  {
+   "target": "MODEL_NOZZLE_MOC",
+   "registry_id": "nozzle.moc",
+   "subsystem": "nozzle",
+   "doc_id": "DOC_NTRS_20030067852",
+   "equation_ref": "NASA/JHU nozzle design-code report",
+   "relation": "axisymmetric compatibility and MOC unit processes",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/20030067852.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/20030067852.md",
+   "source_sha256": "7dd5dcdd9505e2f8ee9598a2c566b279958ef0de245433dce7bedc741fd35bbc",
+   "page_count": 42
+  },
+  {
+   "target": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2018_WATER_AIR",
+   "registry_id": "spray.benchmark_radhakrishnan2018_water_air",
+   "subsystem": "spray",
+   "doc_id": "DOC_RADHAKRISHNAN2018",
+   "equation_ref": "Tables 1-3, Figure 12, and adjacent uncertainty paragraph",
+   "relation": "SHA-pinned 2018 geometry/BC/VOF/WAVE rows with experimental spray-half-angle and SMD targets kept origin-separated",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2018 (1).md",
+   "source_sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+   "page_count": 16
+  },
+  {
+   "target": "MODEL_SPRAY_OPENFOAM13_EXTERNAL_GAP_VOF",
+   "registry_id": "spray.openfoam13_external_gap_vof",
+   "subsystem": "spray",
+   "doc_id": "DOC_RADHAKRISHNAN2018",
+   "equation_ref": "Section 2.3 and Figures 1-4, PDF pages 4-6 / printed pages 446-448; OpenFOAM v13 patch 20260624 dictionaries",
+   "relation": "mdot_wedge=mdot_360*theta/(2*pi); U_r=mdot_360/(rho*2*pi*r_tip*L_open); incompressibleVoF(alpha.water,U,p_rgh)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2018 (1).md",
+   "source_sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+   "page_count": 16
+  },
+  {
+   "target": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2018",
+   "registry_id": "spray.wave_kh_radhakrishnan_2018",
+   "subsystem": "spray",
+   "doc_id": "DOC_RADHAKRISHNAN2018",
+   "equation_ref": "Equations 2-7, PDF pages 8-9 / printed pages 450-451",
+   "relation": "2018 printed variant: Lambda/r=9.02*(1+0.45*Oh^0.5)*(1+0.4*Ta^0.7)/(1+0.87*We_g^1.67)^0.6; tau=3.726*B1*r/(Lambda*Omega)",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "PENDING",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/radhakrishnan2018 (1).md",
+   "source_sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+   "page_count": 16
+  }
+ ],
+ "source_routing": [
+  {
+   "target": "MODEL_INJECTOR_AUTO_PINTLE_DIAMETER",
+   "registry_id": "injector.auto_pintle_diameter",
+   "subsystem": "injector",
+   "doc_id": "",
+   "equation_ref": "",
+   "relation": "Dp = 0.30*Dc when Dp is omitted",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "NO_LOCAL_SOURCE_ROUTE",
+   "local_source": ""
+  },
+  {
+   "target": "MODEL_INJECTOR_HINZE_STABLE_DROP",
+   "registry_id": "injector.hinze_stable_drop",
+   "subsystem": "injector",
+   "doc_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "equation_ref": "cataloged Hinze/Reitz screen; primary Hinze paper absent locally",
+   "relation": "d = We_crit*sigma/(rho_g*u_rel^2), We_crit=13",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "REPOSITORY_BASIS_REVIEW",
+   "local_source": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md"
+  },
+  {
+   "target": "MODEL_INJECTOR_PRIMARY_BREAKUP_15DH",
+   "registry_id": "injector.primary_breakup_15dh",
+   "subsystem": "injector",
+   "doc_id": "",
+   "equation_ref": "",
+   "relation": "Lb = 15*Dh",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "NO_LOCAL_SOURCE_ROUTE",
+   "local_source": ""
+  },
+  {
+   "target": "MODEL_PUMP_AUTO_EFFICIENCY_FLOW_HEAD",
+   "registry_id": "pump.auto_efficiency_flow_head",
+   "subsystem": "pump",
+   "doc_id": "",
+   "equation_ref": "",
+   "relation": "piecewise eta(Q) with high-head deductions",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "NO_LOCAL_SOURCE_ROUTE",
+   "local_source": ""
+  },
+  {
+   "target": "MODEL_PUMP_SYNTHETIC_MAP",
+   "registry_id": "pump.synthetic_map",
+   "subsystem": "pump",
+   "doc_id": "",
+   "equation_ref": "",
+   "relation": "repository-generated nondimensional curve about the meanline duty point",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "NO_LOCAL_SOURCE_ROUTE",
+   "local_source": ""
+  },
+  {
+   "target": "MODEL_SPRAY_RAYLEIGH_TAYLOR_OPENFOAM",
+   "registry_id": "spray.rayleigh_taylor_openfoam",
+   "subsystem": "spray",
+   "doc_id": "",
+   "equation_ref": "OpenFOAM Foundation v10 ReitzKHRT.C RT frequency, wave number, timer, and diameter logic",
+   "relation": "OpenFOAM ReitzKHRT fastest-growing RT frequency/wavelength plus c_tau timer and c_RT diameter update",
+   "basis_class": "IMPLEMENTATION_CHOICE",
+   "state": "NO_LOCAL_SOURCE_ROUTE",
+   "local_source": ""
+  },
+  {
+   "target": "MODEL_SPRAY_TYPED_CYCLE_HANDOFF",
+   "registry_id": "spray.typed_cycle_handoff",
+   "subsystem": "spray",
+   "doc_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "equation_ref": "repository evidence routing for Lagrangian spray models",
+   "relation": "eta_vap=sum(m_vaporized,liquid)/sum(m_injected,liquid), with gas-carrier eta undefined and eligibility derived from all required gates",
+   "basis_class": "REPOSITORY_HEURISTIC",
+   "state": "REPOSITORY_BASIS_REVIEW",
+   "local_source": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md"
+  },
+  {
+   "target": "MODEL_THERMAL_CHF",
+   "registry_id": "thermal.chf",
+   "subsystem": "thermal",
+   "doc_id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "equation_ref": "repository provenance note and declared forced-flow limitation",
+   "relation": "conservative Zuber-class boiling reference with optional property backend",
+   "basis_class": "LITERATURE_DERIVED",
+   "state": "REPOSITORY_BASIS_REVIEW",
+   "local_source": "docs/thermofluid_literature_provenance.md"
+  }
+ ],
+ "verification": [
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_2B74BED1",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 7,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_14708D82",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 13,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_D6CE92B0",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 13,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_E4747B63",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 13,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_1080_13647830_2021_1937702_FDF0974B",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 13,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_7C250FB5",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 27,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_9328FF40",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 27,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_8E849220",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 28,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_1080_13647830_2021_1937702_202BF3B5",
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "page": 29,
+   "model_ids": [
+    "MODEL_INJECTOR_D2_EVAPORATION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_44999104",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 1,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_FDED1AC0",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 1,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_0D38E0A7",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_3B728209",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_3C30E30E",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_42233D5A",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_435BD33B",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_442C83DD",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_45AF4D41",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_AF35DD87",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_B1061DD3",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_B88D6DE2",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_BB78546C",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_CF65A807",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_D17CC3DA",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_EEA60617",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_2_5354_658F1672",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 3,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_222FFAAD",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 4,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_997EDFC6",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 4,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_4C710D81",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 5,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_2_5354_9CADD22B",
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "page": 5,
+   "model_ids": [
+    "MODEL_ALTITUDE_ATTACHED_THRUST"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_801D1C3E",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_F1B6F455",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 2,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_8_7324_E79A2E24",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_082529F7",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_1BE77D02",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_3E537078",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_B52B8DD0",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_BEF48217",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 3,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_8_7324_FCFB9073",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 4,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_DOI_10_2514_8_7324_EAD5203E",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 4,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_8_7324_EC266B8E",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 5,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_8_7324_AB9292EE",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 6,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_DOI_10_2514_8_7324_F1610206",
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "page": 6,
+   "model_ids": [
+    "MODEL_NOZZLE_RAO_VARIATIONAL_BVP"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_27C9150F",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 750,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 750,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_717AA556",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 822,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7BBFB1F5",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 822,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E864D84D",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 826,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_19F3D13C",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 827,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1A93E486",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 827,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_36C08E96",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 827,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6CF41B94",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BA24252F",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BD3E34CD",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AFA53D41",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 829,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0828AE01",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 837,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_367CD551",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 839,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_54B451F2",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35B343A",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29B64E7A",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 842,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_83F43F0F",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 842,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AC6B3D60",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 842,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 842,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3AD06B83",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 843,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B9167738",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 843,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_881B0630",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 846,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_83F28E60",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 905,
+   "model_ids": [
+    "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_CB068EFE",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1077,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_CB67885D",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1079,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_81E433D2",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1091,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1091,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_40C7CD25",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1092,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_656E9739",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1092,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1092,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2927B179",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1098,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1098,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_759107C1",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1100,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0F6B140",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1100,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3D934B11",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_591CB269",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BE6FA767",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1101,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E2182ACE",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1102,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_5CA72450",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1120,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_821E7FCD",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1120,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F5F5E320",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1120,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_5A3B4921",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1121,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17AD6907",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1122,
+   "model_ids": [
+    "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_FB45C57A",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 14,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_0BAD6687",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 15,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_DE92F26F",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 15,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_FA371B30",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 15,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_98E8ACF4",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 15,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_AB38856E",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_DC3845D7",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_B679AC9F",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_D5935CFC",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 95,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_06B2C308",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_11BA0C46",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_34C37414",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_41EFB911",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_C1473A5D",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_C3589D9F",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_DCE9CB00",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_E7BDDBCA",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_F0A1A1B5",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 96,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_3094EADD",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 97,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_C0CE7013",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 97,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_C0DE8E6E",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 97,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_74C39084",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_752872E2",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_E1995D1A",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_F38ABA9F",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_7A8070BC",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 98,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_16E1DC3A",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 99,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_9F1C0032",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 104,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19710019929_6BD96C7B",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 104,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_42DCCAAE",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 107,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_76A39C08",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 107,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19710019929_25F6C847",
+   "doc_id": "DOC_NTRS_19710019929",
+   "page": 143,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_DD72BD63",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 17,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_9CEE5060",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 18,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_859569EC",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 22,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_DD18DF89",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 22,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_2DF61348",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 23,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_0AA2DBA5",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 32,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_32024E91",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 32,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_C399DDFE",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 32,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_05B6CE67",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 33,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19760023196_BE05E0AF",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 33,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_915957AE",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 34,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_933F3804",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 34,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19760023196_D7D2D8F1",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 35,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_7B399C11",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 36,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_B8CE0723",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 36,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_CB6A5B4F",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 36,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_D2D26573",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 36,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_FC53330F",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 36,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_7C1A3668",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 39,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_C56D3C55",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 39,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_0D55DC76",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_8216D2D3",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A8C00787",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_DE06F1CF",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_E4CEA728",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_F639CD9A",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_FD60E73E",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_FFE4389B",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 43,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_18C561AB",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_1BE5EFD5",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_36A3DBE4",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_5BC5501D",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_8C39EA38",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A4C9A5E2",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_BCDF0815",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_C1C217E0",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_EEFB077D",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_FD1FBD1D",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_NTRS_19760023196_2A22408D",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 44,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_2A7B9EAA",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 45,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_2BB0CEDA",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 45,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A701FF4C",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 45,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_C1703A3F",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 45,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_F5F34ADF",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 45,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_0EFB137B",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 46,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_251F9EBD",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 46,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_45F7CBE3",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 46,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_99E437B2",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 46,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_B0E8F384",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 46,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_039BD2CB",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 47,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_DAD5A891",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 47,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_8B597B33",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 48,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_370D1757",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 49,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_4C3AC6A7",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 49,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_AB047B4B",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 49,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_E83CCF61",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 49,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_30153DE1",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 50,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_F99D85AF",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 50,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_9955FB36",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 53,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_6EA9EC20",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 87,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_8DBA0EF6",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 87,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_CB96E1A8",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 87,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_FED92883",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 87,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_0B7B9C0C",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 89,
+   "model_ids": [
+    "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A0F9ECDF",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 91,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A6CED96A",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 91,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_AECEC0F3",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 91,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_C7C1055C",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 91,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_53FD474F",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 92,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_9885EEB8",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 92,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_A832666D",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 92,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_AC4E9177",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 92,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_B6637B85",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 92,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_60F1FFDC",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 93,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_72A146EE",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 93,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_7859A4F3",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 93,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_F03D7EC9",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 93,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_9FDDF2A8",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 99,
+   "model_ids": [
+    "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_NTRS_19760023196_F9F81BAC",
+   "doc_id": "DOC_NTRS_19760023196",
+   "page": 102,
+   "model_ids": [
+    "MODEL_INJECTOR_N_TAU_STABILITY"
+   ],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_CAD_04_150F4CC9",
+   "doc_id": "DOC_CAD_04",
+   "page": 4,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_CAD_04_FC1271F8",
+   "doc_id": "DOC_CAD_04",
+   "page": 4,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_CAD_04_5B69A6BC",
+   "doc_id": "DOC_CAD_04",
+   "page": 26,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_CAD_04_7CED0C01",
+   "doc_id": "DOC_CAD_04",
+   "page": 40,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_CAD_04_FB8E0FEB",
+   "doc_id": "DOC_CAD_04",
+   "page": 42,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "CLM_CAD_04_D20F6FFB",
+   "doc_id": "DOC_CAD_04",
+   "page": 116,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 826,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 828,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  },
+  {
+   "target": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "model_ids": [],
+   "state": "PENDING_VERIFICATION"
+  }
+ ],
+ "policy": "Process one source at a time; bank each completed result. No automatic agents or paid calls. A source review is not independent equation verification."
+}

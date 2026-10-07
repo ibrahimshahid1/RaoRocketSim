@@ -459,6 +459,22 @@ _MODELS = (
         "NASA/JHU MOC source port and classical MOC",
         "steady inviscid isentropic constant-gamma supersonic region",
         "source_port_experimental", "NASA M3.5 perfect-nozzle fixture regressions",
+        notes=(
+            "reference_matched_subset = the nasa_moc kernel/BDE design march "
+            "(bit-parity with TT'BF_Kernel/LastKernel, wall.out RMS 1.8e-4) and "
+            "the unit processes.  The forward ANALYSIS net of an arbitrary wall "
+            "(raosim.moc.solve_flowfield -> raosim.moc_bounded.march_bounded_net, "
+            "NASA/JHU RRC topology, boundary points are parents) is oracle-matched "
+            "on the M3.5Perf wall since 2026-09-21: exit M 3.5009+/-0.0017, "
+            "stream thrust 2517.72 vs 2518.05 lbf, mass 35.989 vs 35.998 lbm/s "
+            "(tests/test_moc_bounded_net.py).  It stops with "
+            "stop_reason='rrc_coalescence' on walls whose compression waves "
+            "coalesce (chart-Bezier/TOP bells do, ~20 mm past N at Rt=20 mm), and "
+            "does not integrate through shocks.  The pre-2026-09 front march "
+            "(moc.march_coupled_net) was NOT a bounded net and is deprecated; "
+            "rao_optimizer's optimum is unbenchmarked.  Kliegel-Levine kernel "
+            "reports M* as M (NASA-visible convention kept for oracle parity)."
+        ),
         local_source="propulsion_texts/20030067852.pdf",
         equation_ref="NASA/JHU nozzle design-code report",
         validation_level="reference_matched_subset",

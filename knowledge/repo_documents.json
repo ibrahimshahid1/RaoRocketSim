@@ -1,0 +1,2227 @@
+{
+ "meta": {
+  "generated_at": "2026-09-20T22:58:11.647765+00:00",
+  "n": 62
+ },
+ "records": [
+  {
+   "id": "RDOC_DOCS_AUDIT_WORK_LREKIT_LITERATURE_AUDIT_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/audit_work/LREKIT_LITERATURE_AUDIT_2026-09-05.md",
+   "title": "LREkit literature reconciliation and acquisition issues",
+   "kind": "audit",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Audit date: 2026-09-05. Scope: the local corpus and the source requests for reference geometry, manufacturing, assembly, testing, and model feedback. This is a source/acquisition audit, not a completed verification of every equation in these references. Existing request ledgers are historical inputs; their links and acquisition claims must not be inherited without checking.  ## Evidence and inventory  The corpus instructions in `propulsion_texts/propulsion_texts_for_agents/AGENTS.md` were read. They require the original PDF to control numerical and physical claims and require title, author/ye",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 3,
+     "quote": "Audit date: 2026-09-05. Scope: the local corpus and the source requests for reference geometry, manufacturing, assembly, testing, and model feedback. This is a source/acquisition audit, not a complete"
+    },
+    {
+     "line": 30,
+     "quote": "| G1–G11, G13–G14 from `LITERATURE_REQUESTS_GENERALIZATION.md` | Turbines `19740026132.pdf`; gas generators `19730018978.pdf`; self-cooled chambers `19780013268.pdf`; CEA `19950013764.pdf`, `199600445"
+    },
+    {
+     "line": 57,
+     "quote": "Import the 37 unindexed paths, preserve archive-member identity, merge duplicate-source records by content hash without deleting files, fix the six verified identifiers above, and classify the G12 abs"
+    },
+    {
+     "line": 87,
+     "quote": "| Rosales, Shoffstall and Stoltzfus (2007), *Guide for Oxygen Compatibility Assessments on Oxygen Components and Systems*, NASA/TM-2007-213740 — [20070016582](https://ntrs.nasa.gov/citations/200700165"
+    },
+    {
+     "line": 91,
+     "quote": "Do not mark the 1963 impeller reports permanently “unobtainable” merely because SP-8109's historical bibliography marks them confidential. Their present release/access status was not verified here. Re"
+    },
+    {
+     "line": 105,
+     "quote": "**Done when:** each critical feature maps to a chosen process, tool/fixture access, inspection method and evidence; unsupported features return `unknown` or `infeasible`. Historical SP-8109 and Gradl "
+    }
+   ],
+   "n_lines": 142,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_LITERATURE_AUDIT_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_AUDIT_WORK_LREKIT_PUMP_AUDIT_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/audit_work/LREKIT_PUMP_AUDIT_2026-09-05.md",
+   "title": "Pump audit: reference geometry to inspectable hardware",
+   "kind": "audit",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Audit date: 2026-09-05. Scope: current working tree at HEAD `f763fe1`, including existing local changes. This report changes no solver, CAD builder, or pre-existing plan. Code line references describe this audited tree and can move after edits.  ## Finding  The pump branch is a coupled preliminary sizing and reference-CAD system with useful hydraulic, structural, and assembly screens. It is not yet a released mechanical pump design or a process-qualified set of parts. The central missing geometry is still the spanwise blade surface. Nevertheless, three premises in the supplied assessment need",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 27,
+     "quote": "`git log -1 -- raosim/pump_cad_brep.py` reports commit `625f1b3`, dated 2026-07-22. The assertion that this file has not changed since July 13 is stale. The central 2-D-blade finding remains correct."
+    },
+    {
+     "line": 104,
+     "quote": "H4 at lines 195-200 converts historical trimming observations into a universal nominal `trim` parameter with ±10% authority on head coefficient. The source does not establish such a transfer function,"
+    },
+    {
+     "line": 108,
+     "quote": "### Historical process recommendations need scoped applicability"
+    },
+    {
+     "line": 110,
+     "quote": "SP-8109 §3.3.3 is useful existing literature, but the basis document's description of its criteria as a complete closed-form reachability test or the limits for calling a shrouded part machinable “at "
+    },
+    {
+     "line": 114,
+     "quote": "Source image verified: Furst, NASA SP-8109 (1973), §3.3.3 “Fabrication,” PDF page 84 / printed page 72, document ID 19740020848. This page contains the shrouded-impeller machining recommendations, pro"
+    },
+    {
+     "line": 122,
+     "quote": "Its claim that regen pressure-drop models assume only smooth walls is also stale. `run_nozzle.py:2752` accepts absolute channel roughness; `physics.py:1005` divides by hydraulic diameter, and `mdo/coo"
+    },
+    {
+     "line": 128,
+     "quote": "The hardware program's lines 87-96 say a computed envelope is blocked only by prose. Translating known constraints is useful software work, but “no demonstrated performance-validity range” contains no"
+    }
+   ],
+   "n_lines": 147,
+   "cited_pdfs": [
+    "propulsion_texts/fuel_pump_design/19740020848.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_PUMP_AUDIT_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_AUDIT_WORK_LREKIT_WORKFLOW_AUDIT_2026_09_04_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/audit_work/LREKIT_WORKFLOW_AUDIT_2026-09-04.md",
+   "title": "LREKit workflow, identity, and feedback audit — 2026-09-04",
+   "kind": "audit",
+   "date": "2026-09-04",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This audit inspected the working tree at commit `f763fe1` (2026-08-24), including the existing uncommitted nozzle/MOC work. It changes no source code. Source references below use working-tree line numbers. Generated `build/lib` copies are excluded: the authoritative implementation is `raosim/` and `lrekit/`.  ## Assessment  The repository has made substantial progress toward a common input and analysis contract. It has not connected that contract to a complete artifact-producing workflow, a graphical interface, or a measurement-to-model return path. The next integration work must first repair",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 13,
+     "quote": "## What has actually landed"
+    }
+   ],
+   "n_lines": 143,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_WORKFLOW_AUDIT_2026_09_04_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_CEA_H1_HOST_EVIDENCE_2026_08_22_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/CEA_H1_HOST_EVIDENCE_2026-08-22.md",
+   "title": "H1 host evidence: held-out CEA tables and propellant survey",
+   "kind": "evidence",
+   "date": "2026-08-22",
+   "date_basis": "filename",
+   "status_head": "status: complete_for_four_certifiable_catalog_pairs\n---\n\n# H1 host evidence: held-out CEA tables and propellant survey\n\n## Scope and environment\n\nThis is the host evidence for Completion Plan H1 / Track B1. It covers the four\ncatalog pairs whose RocketCEA reactant cards are sufficiently identified:\nLOX/RP-1, LOX/LCH4, LOX/LH2, and N2O4/MMH. N2O/Ethanol was deliberately not\nsampled: RocketCEA's `N2O` and `N2O_nbp` cards encode different inlet states,\nand the catalog does not yet make that state choice consistently.",
+   "authority": "implementation_state_not_science",
+   "summary": "title: H1 host evidence — production CEA tables and propellant survey date: 2026-08-22 version: \"1.1\" status: complete_for_four_certifiable_catalog_pairs ---  # H1 host evidence: held-out CEA tables and propellant survey  ## Scope and environment  This is the host evidence for Completion Plan H1 / Track B1. It covers the four",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 69,
+     "quote": "blocked with the unresolved `N2O` versus `N2O_nbp` state-selection reason."
+    },
+    {
+     "line": 210,
+     "quote": "7. **N2O/Ethanol remains BLOCKED pending oxidizer-state selection.** The"
+    }
+   ],
+   "n_lines": 212,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_CEA_H1_HOST_EVIDENCE_2026_08_22_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_CHAMBER_DESIGN_LITERATURE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/chamber_design_literature.md",
+   "title": "Combustion-chamber and injector design literature (provenance + acquisition)",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Companion to `docs/thermofluid_literature_provenance.md`. Scope: the references that govern **combustion-chamber and convergent-section geometry** (the next build piece after regen), plus the injector and combustion-stability sources needed for later part exports. Geometry construction is the immediate target; combustion/injector physics is recorded for the layers after it.  ## The documentation question  Unlike the nozzle — which has analytical optimum-shape theory (Rao calculus-of-variations, method of characteristics) — the combustion chamber",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 28,
+     "quote": "SP-125's historical `L*` ranges are starting priors, not universal answers for"
+    }
+   ],
+   "n_lines": 101,
+   "cited_pdfs": [
+    "propulsion_texts/19710019929.pdf",
+    "propulsion_texts/19750020175.pdf",
+    "propulsion_texts/19760023196.pdf",
+    "propulsion_texts/19770009165.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_CHAMBER_DESIGN_LITERATURE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_COMPLETION_PLAN_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/COMPLETION_PLAN.md",
+   "title": "Completion plan",
+   "kind": "plan",
+   "date": "2026-08-26",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: LREKit completion plan — everything left to implement subtitle: Consolidated backlog, sequencing, and acceptance gates version: \"1.0\" audience: [ibrahim, AI coding agents] status_legend: { DONE: complete, WIP: in progress, TODO: not started, BLOCKED: waiting on host/literature } created: 2026-08-17 last_updated: 2026-08-26 supersedes_nothing: true companions:   - docs/DIFFERENTIABLE_ENGINE_MDO_PLAN.md      # formulation + phase tracker   - docs/PHYSICS_FIDELITY_ROADMAP.md            # fidelity ladder",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 6,
+     "quote": "status_legend: { DONE: complete, WIP: in progress, TODO: not started, BLOCKED: waiting on host/literature }"
+    },
+    {
+     "line": 64,
+     "quote": "| **A1** | Correct the stale tracker and J3b claims | this doc | **DONE** (2026-08-22) | A |"
+    },
+    {
+     "line": 66,
+     "quote": "| **A3** | Wire the liner external-pressure buckling screen into the MDO constraint contract | Roadmap §4.3 | **DONE** as mandatory final gate; hard enforcement deferred | A |"
+    },
+    {
+     "line": 69,
+     "quote": "| **B1** | Held-out CEA property-surface gate (Phase 2) | Plan §11 row 2 | **DONE** for four catalog pairs; N2O/Ethanol blocked on state choice | B |"
+    },
+    {
+     "line": 71,
+     "quote": "| **B3** | `ContourProvider` + post-solve contour validation | Remediation 19; Roadmap §5.3 | implementation/contract landed; **qualification blocked** on real MOC resolution/topology audits | B |"
+    },
+    {
+     "line": 101,
+     "quote": "| **G5** | L4 datum/feature-control scaffolding, tolerance-stack input contract | Roadmap §7 | BLOCKED (std.) | G |"
+    },
+    {
+     "line": 144,
+     "quote": "§13.1 (\"the honest long pole\"). J3b landed **2026-06-12**: `raosim/jax/moc_kernel.py`"
+    },
+    {
+     "line": 148,
+     "quote": "J6 v2 design totals are still deferred (`raosim/jax/sensitivities.py:24`). The"
+    },
+    {
+     "line": 149,
+     "quote": "typed `mdo/nozzle.py` adapter has since landed for the analytic TOP path, and an"
+    },
+    {
+     "line": 152,
+     "quote": "remains blocked on distinct MOC resolution/topology audits. Keep those passages and §11 rows"
+    },
+    {
+     "line": 158,
+     "quote": "2026-08-15. A \"faithful mirror\" that is six weeks stale is worse than no mirror."
+    },
+    {
+     "line": 180,
+     "quote": "### A3 — Wire the liner external-pressure buckling screen (landed 2026-08-22)"
+    },
+    {
+     "line": 183,
+     "quote": "collapse was not implemented; that stale statement is now corrected."
+    },
+    {
+     "line": 201,
+     "quote": "is deferred until that corner is robust and NASA SP-8068 (NTRS 19710022285)"
+    },
+    {
+     "line": 205,
+     "quote": "### A4 — Register low-cycle fatigue as unavailable (landed 2026-08-22)"
+    },
+    {
+     "line": 233,
+     "quote": "**Landed 2026-08-22 for four catalog propellant pairs.**"
+    },
+    {
+     "line": 254,
+     "quote": "pair remains blocked until its oxidizer state/card is chosen."
+    },
+    {
+     "line": 263,
+     "quote": "**Landed 2026-08-22.** `raosim/mdo/nozzle.py` defines typed"
+    },
+    {
+     "line": 287,
+     "quote": "2. **B5 — schema v2 and the corrected fixed slice landed.**"
+    },
+    {
+     "line": 292,
+     "quote": "support. The historical H2 run produced"
+    },
+    {
+     "line": 308,
+     "quote": "3. **B3 — implementation/contract landed; qualification blocked.**"
+    },
+    {
+     "line": 315,
+     "quote": "tolerances. Historical coupled and BDE probes reached the numerical BVP/"
+    },
+    {
+     "line": 415,
+     "quote": "unevaluable results. Eq. (6) is retained only as a labelled legacy diagnostic."
+    },
+    {
+     "line": 444,
+     "quote": "Roadmap §8's own cheapest-first order, minus the two items already landed"
+    },
+    {
+     "line": 549,
+     "quote": "The historical v1 identity omitted the inherited 0.5°/5% kernel policy, so"
+    }
+   ],
+   "n_lines": 603,
+   "cited_pdfs": [
+    "propulsion_texts/pizzarelli2011.pdf",
+    "propulsion_texts/rao1999.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_COMPLETION_PLAN_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_CONTRACT_INTEGRITY_REMEDIATION_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/CONTRACT_INTEGRITY_REMEDIATION_2026-09-05.md",
+   "title": "Contract integrity remediation",
+   "kind": "note",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Contract integrity remediation subtitle: W01–W04 — one defect with four faces, and how to close it version: \"0.1\" audience: [ibrahim, AI coding agents] created: 2026-09-05 companions:   - docs/audit_work/LREKIT_WORKFLOW_AUDIT_2026-09-04.md   # where W01-W06 were found   - docs/LREKIT_HARDWARE_PROGRAM_2026-09-05.md            # this is stage 0-1 of that program   - docs/INTEGRATION_PROGRAM_2026-08-22.md                # §2.1, the configuration object --- ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 469,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_CONTRACT_INTEGRITY_REMEDIATION_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_DIFFERENTIABLE_ENGINE_MDO_PLAN_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/DIFFERENTIABLE_ENGINE_MDO_PLAN.md",
+   "title": "Differentiable Engine MDO — Plan & Tracker",
+   "kind": "plan",
+   "date": "2026-08-26",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Differentiable Multidisciplinary Design Optimization of an Electric-Pump-Fed Liquid Rocket Engine subtitle: Formulation, Literature Basis, and Implementation Tracker for LREKit version: \"0.1 (living document)\" audience: [propulsion engineers, AI coding agents] status_legend: { DONE: complete, WIP: in progress, TODO: not started } last_updated: 2026-08-26 ---  # Differentiable Engine MDO — Plan & Tracker  > **What this document is.** A single source of truth for the differentiable",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 17,
+     "quote": "> and its `.tex` source are historical 2026-07-22 snapshots, not current mirrors;"
+    },
+    {
+     "line": 139,
+     "quote": "differentiable throat-arc kernel march landed 2026-06-12:"
+    },
+    {
+     "line": 148,
+     "quote": "remains WIP because real B3 promotion is blocked on MOC resolution/topology"
+    },
+    {
+     "line": 151,
+     "quote": "derivatives remain deferred in `raosim/jax/sensitivities.py`."
+    },
+    {
+     "line": 458,
+     "quote": "deferred transient problem) is the stiffness screen"
+    },
+    {
+     "line": 535,
+     "quote": "kernel-resolution evidence, and Rao Eq. (5) evaluability/validity. The historical"
+    },
+    {
+     "line": 553,
+     "quote": "have landed, but qualification has not: historical 12×12 coupled and"
+    },
+    {
+     "line": 689,
+     "quote": "| 2 | Differentiable CEA/CoolProp property surfaces | Values and gradients pass held-out backend comparison | **PARTIAL — chamber CEA DONE for four catalog pairs** (2026-08-22: C¹ Fritsch–Carlson/tens"
+    },
+    {
+     "line": 690,
+     "quote": "| 3 | Rao/performance total derivatives | AD matches FD of a fully re-solved Rao contour, including total wall-coordinate sensitivities | **WIP** (J3b landed 2026-06-12: `moc_kernel.py` has BD parity "
+    },
+    {
+     "line": 691,
+     "quote": "| 4a | 1-D+fin regen residual | Energy, $\\Delta p$, wall-temp, structural closures converge stationwise | **WIP** (2026-08-22: the stationwise thermal-hydraulic march and static combined-stress screen"
+    },
+    {
+     "line": 694,
+     "quote": "| 6 | Differentiable pump/electric model | Head, power, NPSH, geometry, mass match detailed model; C¹ efficiency | **WIP** (2026-07-23: `mdo/pump.py` — **C¹ η(Ns) surrogate replacing the binned `pumps"
+    },
+    {
+     "line": 701,
+     "quote": "> **Walking skeleton landed (2026-07-22).** The §12.5 first increment exists:"
+    },
+    {
+     "line": 713,
+     "quote": "> this interface in Phases 4a/5. Also landed the same day: the separation"
+    },
+    {
+     "line": 718,
+     "quote": "> **Phase 4a thermal-hydraulic block landed (2026-07-23).** `mdo/grid.py`"
+    },
+    {
+     "line": 740,
+     "quote": "> into an explicit optimizer-visible constraint rather than a deferred TODO."
+    },
+    {
+     "line": 749,
+     "quote": "> **Phase 5 pintle-injector block landed (2026-07-23).** `mdo/injector.py` is a"
+    },
+    {
+     "line": 755,
+     "quote": "> deferred fidelity ladder), the blockage factor BF = N w/(πD_p), and — per rule"
+    },
+    {
+     "line": 767,
+     "quote": "> **Phase 6 pump / electric-feed block landed (2026-07-23).** `mdo/pump.py`"
+    },
+    {
+     "line": 785,
+     "quote": "> **Phase 7 coupled whole-engine solve landed (2026-07-23).** `mdo/engine.py`"
+    },
+    {
+     "line": 808,
+     "quote": "> **Phase 8/9 ε-constraint NLP + Pareto landed (2026-07-23).** `mdo/nlp.py`"
+    },
+    {
+     "line": 821,
+     "quote": "> film-cooling lever landed, a fixed-geometry diagnostic showed the SP-8087"
+    },
+    {
+     "line": 900,
+     "quote": "| 3 | *already JAX*: `jax/primitives.py` (`area_mach_relation`, `thrust_coefficient`), `jax/sensitivities.py` (`cf_de_jax`) | `nozzle.py`: analytic TOP provider done; `contour_validation.py`: opt-in h"
+    },
+    {
+     "line": 964,
+     "quote": "> 14.96 s. The historical dense 65-knot H2 generation took approximately 68"
+    },
+    {
+     "line": 969,
+     "quote": "> solves. **J3b landed 2026-06-12 and is no longer an open blocker.** The"
+    },
+    {
+     "line": 972,
+     "quote": "> promotion is blocked on MOC resolution/topology qualification. An exact inner-loop"
+    }
+   ],
+   "n_lines": 1063,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_DIFFERENTIABLE_ENGINE_MDO_PLAN_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026_07_22_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026-07-22.md",
+   "title": "Differentiable Engine MDO Plan — Verification and Feasibility Evaluation",
+   "kind": "plan",
+   "date": "2026-07-22",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " **Date:** 2026-07-22 **Subject:** `docs/DIFFERENTIABLE_ENGINE_MDO_PLAN.md` (v0.1, mirrored in `latex-report/Differentiable_Engine_MDO_Plan.pdf`) **Method:** Every load-bearing claim was checked against (a) the AI-readable corpus in `propulsion_texts/propulsion_texts_for_agents/markdown/` (224 files, page-traceable via `<!-- PDF page N -->` markers) and (b) the actual code at commit `f2a73ba` (+ working tree). Corpus quotes below carry file + PDF page; code claims carry file + line. Per the corpus's own `AGENTS.md`, the original PDFs remain authoritative where the Markdown mirror flags `needs_",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 51,
+     "quote": "**Resolution (landed 2026-07-22):** `separation.py` rewritten with Schmucker per Eq. 30 (local-Mach march retained, correctly applying only to the local-Mach criterion), Kalt–Badal per the Schilling k"
+    },
+    {
+     "line": 70,
+     "quote": "**B.3 Phase → code map (plan §12.2).** Every cited symbol exists at the cited location: `design_nozzle_v2` (design.py:483), `make_differentiable_solution` (bvp.py:69 — line number exact), `solve_rao_b"
+    },
+    {
+     "line": 138,
+     "quote": "3. Split RQ4 into 4-P (Pareto, property surfaces — in scope) and 4-B (boundary, variable-property characteristics — explicitly scoped or deferred) (D.3.2)."
+    }
+   ],
+   "n_lines": 153,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026_07_22_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_ELECTRIC_PUMP_MODEL_BASIS_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/electric_pump_model_basis.md",
+   "title": "Electric Pump Model Basis",
+   "kind": "provenance",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This model is a first-pass sizing screen. It separates quantities the engine and feed ledger demand from quantities that must be selected from pump, motor, inverter, and battery hardware.  ## Solved From The Engine And Feed Ledger  For each propellant stream, the injector/feed ledger provides mass flow, fluid density, required downstream pressure, tank/inlet pressure when known, and NPSH margin when known. The pump model then uses: ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 265,
+   "cited_pdfs": [
+    "propulsion_texts/fuel_pump_design/19710025474.pdf",
+    "propulsion_texts/fuel_pump_design/19740020848.pdf",
+    "propulsion_texts/fuel_pump_design/BF03404670.pdf",
+    "propulsion_texts/fuel_pump_design/s42405-020-00325-z.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_ELECTRIC_PUMP_MODEL_BASIS_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_FEATURE_DATAFLOW_AUDIT_2026_07_11_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/FEATURE_DATAFLOW_AUDIT_2026-07-11.md",
+   "title": "LREKit / RaoRocketSim — full feature, data-flow, literature & CAD audit (2026-07-11)",
+   "kind": "audit",
+   "date": "2026-07-11",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Scope: every implemented feature; the complete data flow from CLI input through every mathematical/physical model to exported CAD; verification that each relation is rooted in `propulsion_texts/`; a fresh census of all shipped STEP/STL artifacts with a machinability assessment for cold-flow/hot-fire hardware. All code claims below were re-verified against the current working tree today (last commit `ba8fcb6` plus ~6,040 uncommitted inserted lines across 60 files). Companion documents: the historical [2026-07-02 physics audit](REPO_PHYSICS_AUDIT_2026-07-02.md), the [2026-07-11 remediation reco",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 8,
+     "quote": "60 files). Companion documents: the historical"
+    },
+    {
+     "line": 57,
+     "quote": "│   requires explicit η_mix, η_comb; blocked with CLI and Python regen)"
+    },
+    {
+     "line": 229,
+     "quote": "blocked even though hydraulics can be reported. See"
+    },
+    {
+     "line": 401,
+     "quote": "constants; the historical NASA `TT'.out` fixture generator provenance is unresolved and treated"
+    }
+   ],
+   "n_lines": 446,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_FEATURE_DATAFLOW_AUDIT_2026_07_11_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_FROZEN_VARIABLE_CP_EXPANSION_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/FROZEN_VARIABLE_CP_EXPANSION.md",
+   "title": "Frozen-composition, variable-$c_p$ nozzle expansion",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "## Status and claim boundary\n\n[`raosim/frozen_flow.py`](../raosim/frozen_flow.py) implements a\n**thermally-perfect, chemically frozen, quasi-one-dimensional** ideal-gas\nnozzle expansion. Its model-registry identifier is\n`performance.frozen_variable_cp_quasi1d`.\n\nThis path removes the calorically-perfect assumption from the one-dimensional\nperformance calculation: the composition and mixture gas constant remain\nfixed, while $c_p$, $c_v$, $\\gamma$, enthalpy, sound speed, pressure, density,\nvelocity, Mach number, mass flux, $c^*$, and $C_F$ are resolved consistently",
+   "authority": "implementation_state_not_science",
+   "summary": " ## Status and claim boundary  [`raosim/frozen_flow.py`](../raosim/frozen_flow.py) implements a **thermally-perfect, chemically frozen, quasi-one-dimensional** ideal-gas nozzle expansion. Its model-registry identifier is `performance.frozen_variable_cp_quasi1d`.  This path removes the calorically-perfect assumption from the one-dimensional performance calculation: the composition and mixture gas constant remain fixed, while $c_p$, $c_v$, $\\gamma$, enthalpy, sound speed, pressure, density,",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 293,
+   "cited_pdfs": [
+    "propulsion_texts/19710019929.pdf",
+    "propulsion_texts/19770009165.pdf",
+    "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+    "propulsion_texts/Young_Thesis.pdf",
+    "propulsion_texts/betti2014.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_FROZEN_VARIABLE_CP_EXPANSION_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md",
+   "title": "Generalization plan: any thrust class, any propellant, any feed system",
+   "kind": "plan",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " **Question this answers.** What has to change for a user to state performance targets — thrust, Isp, mass, envelope, materials — and receive parts, for an arbitrary engine rather than the 13 kN LOX/RP-1 electric-pump point the solver was built around.  Companion to `ROADMAP_REQUIREMENTS_TO_PARTS.md` (which orders the *parts* work) and `LITERATURE_REQUESTS.md` (which lists sources needed for the *unmodelled subsystems*). This document covers the requirement layer and the three generalization axes, and names the sources for each. ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 503,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_HARDWARE_MASS_LEDGER_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/HARDWARE_MASS_LEDGER.md",
+   "title": "Engine hardware mass ledger",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Closes gaps **12.3** (chamber/nozzle hardware mass), **12.4** (injector hardware mass) and **12.5** (pump BOM mass) from the MDO remediation review.  ## The problem this solves  Before this change the optimizer minimised a quantity it labelled *engine package mass* that contained pumps, motors, inverters and battery — and nothing else. Chamber, nozzle and injector mass were zero placeholders. Two consequences:  - the reported mass-vs-Isp Pareto front was a **feed-system** front, not an",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 340,
+   "cited_pdfs": [
+    "propulsion_texts/19710019929.pdf",
+    "propulsion_texts/19730022965.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_HARDWARE_MASS_LEDGER_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_IMPLICIT_RAO_JAX_MDO_ARCHITECTURE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/IMPLICIT_RAO_JAX_MDO_ARCHITECTURE.md",
+   "title": "Exact Rao/JAX contour architecture for engine MDO",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "**Status:** design checkpoint only; not implemented  \n**Decision owner:** repository maintainer  \n**Scope:** replacing the Rao/TOP chart-and-Bézier contour inside the\ndifferentiable engine model without hiding failures or breaking gradients\n\n## 1. Decision\n\nDo **not** call `solve_rao_bvp_jax()` directly from `mdo/grid.py`.\n\nThe current public Rao function is an excellent exact-analysis backend, but it\nis not yet the function the MDO needs:",
+   "authority": "implementation_state_not_science",
+   "summary": " **Status:** design checkpoint only; not implemented   **Decision owner:** repository maintainer   **Scope:** replacing the Rao/TOP chart-and-Bézier contour inside the differentiable engine model without hiding failures or breaking gradients  ## 1. Decision  Do **not** call `solve_rao_bvp_jax()` directly from `mdo/grid.py`.  The current public Rao function is an excellent exact-analysis backend, but it",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 375,
+   "cited_pdfs": [
+    "propulsion_texts/19770009165.pdf",
+    "propulsion_texts/rao1958.pdf",
+    "propulsion_texts/rao1999.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_IMPLICIT_RAO_JAX_MDO_ARCHITECTURE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_INJECTOR_INTERFACE_MODEL_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/injector_interface_model.md",
+   "title": "Injector/Chamber Interface Screen",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This note documents the preliminary interface ledger implemented in `raosim.interface`.  It is a CAD/readiness and first-pass sizing screen for the injector body, faceplate/flange, and chamber shell interface.  It is not a hardware qualification method.  ## Scope  The chamber/nozzle wall export remains the hot-gas liner or shell.  The pintle package remains injector reference geometry.  The interface screen connects the two by reporting the pressure load, faceplate bending thickness, bolt clamp",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 108,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_INJECTOR_INTERFACE_MODEL_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_INJECTOR_PINTLE_PROVENANCE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/injector_pintle_provenance.md",
+   "title": "Pintle injector model — provenance and validity",
+   "kind": "provenance",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " `raosim/injector.py` sizes a **fixed, liquid/liquid, automatically-sized** pintle injector from the operating point produced by the nozzle + chamber solver. It is a preliminary screening model, not a qualification tool.  Both the strict `DesignInput` workflow and `scripts/run_nozzle.py` call the same `evaluate_pintle_injector` integration boundary. A requested injector is therefore included in backend reports and design gates rather than being a CLI-only side calculation. Failed injector gates block integrated design/CAD output unless the caller explicitly selects the preliminary `allow_infea",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 132,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_INJECTOR_PINTLE_PROVENANCE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_INPUT_EXECUTION_INTEGRITY_2026_09_09_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/INPUT_EXECUTION_INTEGRITY_2026-09-09.md",
+   "title": "Input and execution integrity — September 9, 2026",
+   "kind": "note",
+   "date": "2026-09-09",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This implementation addresses the request/solver/report boundary defects in the September 5 audit. It preserves the existing numerical models and the separate in-progress Rao changes. It does not establish hardware manufacturability or qualification.  | Audit item | Implemented behavior | Remaining scope | |---|---|---| | D01 / W01, W03: accepted inputs disappear | Mission altitude and single-point pressure/duration reach the mission and resolved inputs. Explicit conflicts are rejected. Mission Isp joins effective targets. Unsupported mass/envelope, architecture, schema, model and output requ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 62,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_INPUT_EXECUTION_INTEGRITY_2026_09_09_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_INTEGRATION_PROGRAM_2026_08_22_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/INTEGRATION_PROGRAM_2026-08-22.md",
+   "title": "Integration program",
+   "kind": "note",
+   "date": "2026-08-22",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Integration program — from design candidates to one fabricable article subtitle: Mapping the eight-item gap list onto the existing tracks, with corpus evidence and literature requests version: \"0.1\" audience: [ibrahim, AI coding agents] created: 2026-08-22 companions:   - docs/COMPLETION_PLAN.md                     # tracks A–G, the current backlog   - docs/PHYSICS_FIDELITY_ROADMAP.md            # fidelity ladder   - docs/ROADMAP_REQUIREMENTS_TO_PARTS.md       # R0–R6, requirements→parts   - docs/LITERATURE_REQUESTS.md                 # items 1–26, all still outstanding   - docs/LITERAT",
+   "relations": [
+    {
+     "edge": "BLOCKS",
+     "from": "RDOC_DOCS_INTEGRATION_PROGRAM_2026_08_22_MD",
+     "target_id": "RDOC_DOCS_PLAN_VALVES_LINES_BRACKETS_GIMBAL_MD",
+     "line": 87,
+     "quote": "| 6 | Operating feed system | `PLAN_VALVES_LINES_BRACKETS_GIMBAL.md`, `PUMP_ADVANCED_GEOMETRY_ROADMAP` | No new *plan* — **hard-blocked on literature.** See §4 |"
+    }
+   ],
+   "staleness_signals": [
+    {
+     "line": 19,
+     "quote": "> items are already tracked, which are genuinely new, which are blocked on"
+    },
+    {
+     "line": 87,
+     "quote": "| 6 | Operating feed system | `PLAN_VALVES_LINES_BRACKETS_GIMBAL.md`, `PUMP_ADVANCED_GEOMETRY_ROADMAP` | No new *plan* — **hard-blocked on literature.** See §4 |"
+    },
+    {
+     "line": 88,
+     "quote": "| 7 | Whole-engine mass, CAD, manufacturing | Track G entire; R2/R4 | No — covered, G5 blocked on standards |"
+    },
+    {
+     "line": 185,
+     "quote": "| Injector hydraulics from real CAD geometry | `pintle_injector/` (62 files) + `PINTLE_LITERATURE_CATALOG.md` | `injector.py`, `injector_cad.py`, G1 landed | **ready to build** |"
+    },
+    {
+     "line": 187,
+     "quote": "| Igniter | **nothing** | **no igniter model exists** — only a port diameter and depth cut through the pintle | **hard-blocked** |"
+    },
+    {
+     "line": 188,
+     "quote": "| Combustion stability | SP-8113 (`19750020175`) §2.2.4 acoustic damping analysis, response times at line 1410; SP-194 (`19720026079`) | `chug_margin` static screen only | **partly blocked** — damping"
+    },
+    {
+     "line": 362,
+     "quote": "Phase 3 — the return path                     [ITEM 8]  ← blocked on §5.1"
+    },
+    {
+     "line": 373,
+     "quote": "Phase 5 — transients                          [ITEM 4]  ← blocked on §5.2"
+    },
+    {
+     "line": 377,
+     "quote": "Phase 6 — feed system                         [ITEM 6]  ← hard-blocked on §4"
+    },
+    {
+     "line": 378,
+     "quote": "Phase 7 — whole-engine mass/CAD/mfg           [ITEM 7]  ← partly blocked (fasteners)"
+    }
+   ],
+   "n_lines": 418,
+   "cited_pdfs": [
+    "propulsion_texts/19770009165.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_INTEGRATION_PROGRAM_2026_08_22_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_JAX_DIFFERENTIABLE_PLAN_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/JAX_DIFFERENTIABLE_PLAN.md",
+   "title": "RaoRocketSim — Differentiable (JAX) Rao Nozzle Tool",
+   "kind": "plan",
+   "date": "2026-06-15",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " > **PHYSICS-COUPLED DESIGN LANDED (2026-06-15): the screening physics > now SHAPES the contour, including a differentiable constrained design > loop.**  Closes the \"physics is post-hoc screening, not coupled to > geometry\" gap, in the user's ordered three steps.  (1) **Real Bartz** > (prior turn): `physics.bartz_heat_flux` is the full Bartz 1957 > correlation (`model=\"bartz_1957\"`), replacing a fake screening that > under-predicted throat flux ~1000×; ~50 MW/m² at 7 MPa, exact P_c^0.8. > (2) **Real Sieder-Tate cooling**: `physics.regenerative_cooling_analysis` > — coolant film Nu=0.027 Re^0.8",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 3,
+     "quote": "> **PHYSICS-COUPLED DESIGN LANDED (2026-06-15): the screening physics"
+    },
+    {
+     "line": 43,
+     "quote": "> planar PM), and an 8% converged-to-wrong s15.  **Landed march"
+    },
+    {
+     "line": 56,
+     "quote": "> to a hard 1e-8 parity gate).  **J3b-2 LANDED:**"
+    },
+    {
+     "line": 73,
+     "quote": "> branch stand?  **Phase 13 #8 LANDED:** `plot_net_diagnostics`"
+    },
+    {
+     "line": 79,
+     "quote": "> on the max_nfev=0 mis-converged run).  **§11.7→12.7 LANDED:** the"
+    },
+    {
+     "line": 109,
+     "quote": "> (4) LANDED: padded fan + NASA-faithful tangent-line foot — wall chain"
+    },
+    {
+     "line": 165,
+     "quote": "> angles, stale 21.87°/22° guess echoes removed;"
+    },
+    {
+     "line": 209,
+     "quote": "> branch).  **Landed + sandbox-verified:** corrected"
+    },
+    {
+     "line": 230,
+     "quote": "> **SUPERSEDED HISTORICAL STATUS (pre-characteristic correction).**"
+    },
+    {
+     "line": 232,
+     "quote": "> **STATUS-HEAD (2026-06-11): Phase 12.4 LANDED — the ~24.2° \"march cap\""
+    },
+    {
+     "line": 280,
+     "quote": "> **Phase 12.6 LANDED (2026-06-11b, same session as the DIRECTION"
+    },
+    {
+     "line": 306,
+     "quote": "> landed.  **Record run (2026-06-11, host, weight 1.0, n=10/nk=10/"
+    },
+    {
+     "line": 319,
+     "quote": "> *definitionally* blocked, not solver-blocked: reported θ_N is still"
+    },
+    {
+     "line": 325,
+     "quote": "> **J6 v1 LANDED:** `raosim/jax/sensitivities.py` —"
+    },
+    {
+     "line": 381,
+     "quote": "> **Landed:** `RaoSolverConfig.theta_b_freeze_deg` (bypasses the inner"
+    },
+    {
+     "line": 431,
+     "quote": ">    Deferred until then — the §3 port boundary stays as-is meanwhile;"
+    },
+    {
+     "line": 489,
+     "quote": "> **STATUS (2026-06-09, J0–J4 spike landed).**"
+    },
+    {
+     "line": 509,
+     "quote": "> **Topology seed landed (same session).**  The degenerate `calc_lrc_de`/"
+    },
+    {
+     "line": 542,
+     "quote": "> Landed as ``RaoSolverConfig.formulation=\"characteristic\"``"
+    },
+    {
+     "line": 556,
+     "quote": "> optimum.  Landed as ``RaoSolverConfig.pin_d_mach`` (default False)"
+    },
+    {
+     "line": 607,
+     "quote": "> continuity (pin_d_mach) remains blocked by the ~24.2° march cap"
+    }
+   ],
+   "n_lines": 1028,
+   "cited_pdfs": [
+    "propulsion_texts/RaoRecentDevinRockNozConfig.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_JAX_DIFFERENTIABLE_PLAN_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LAGRANGIAN_SPRAY_MODEL_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LAGRANGIAN_SPRAY_MODEL.md",
+   "title": "One-Way Lagrangian Spray Mid-Tier",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " `raosim.spray` implements the non-reacting Python bridge between a resolved or declared liquid source and a droplet cloud. It is an opt-in engineering model, not a replacement for VOF, reacting CFD, or hardware evidence.  ## Data flow  ```text explicit source geometry + liquid properties + mdot + injection duration   <- optional typed VOF sheet handoff (all evidence gates required)   -> deterministic weighted parcels (mass/momentum closed)",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 188,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LAGRANGIAN_SPRAY_MODEL_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LEGACY_CODE_AUDIT_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/legacy_code_audit.md",
+   "title": "Legacy Code Audit",
+   "kind": "audit",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "status into the legacy BVP wall export.\n\n## Oracle Visibility\n\nAdded artifacts:\n\n- `docs/nasa_jhu_file_list.txt`\n- `docs/legacy_code_audit.md`\n- `docs/rice_jhu_moc_topology_map.md`\n- `docs/nasa_tt_prime_provenance.md`\n- `scripts/compare_nasa_reference.py`",
+   "authority": "implementation_state_not_science",
+   "summary": " > **Historical development snapshot.** The coverage/gap list below records an > earlier stage of the NASA/JHU port and is not the current capability status. > See > [`PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md`](PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md) > and [`nasa_tt_prime_provenance.md`](nasa_tt_prime_provenance.md) for the > current source-port, benchmark, and provenance boundaries.  This audit covers the NASA/JHU `MOC_Grid_BDE` code that is being ported into `raosim.nasa_moc` and compared through `raosim.legacy_io`. ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 3,
+     "quote": "> **Historical development snapshot.** The coverage/gap list below records an"
+    },
+    {
+     "line": 72,
+     "quote": "- `fixture_overlay_available`: true when the historical NASA/JHU files are"
+    },
+    {
+     "line": 154,
+     "quote": "- historical fixture overlay files may be present, but they are diagnostic only"
+    }
+   ],
+   "n_lines": 163,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LEGACY_CODE_AUDIT_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LITERATURE_AUDIT_2026_07_24_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LITERATURE_AUDIT_2026-07-24.md",
+   "title": "Literature Audit — Differentiable Engine MDO",
+   "kind": "audit",
+   "date": "2026-07-24",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Literature Audit of the Differentiable Engine-MDO Layer subtitle: Every design decision, equation, and constant vs. the propulsion_texts corpus date: 2026-07-24 scope: raosim/mdo/* (Phases 1–9 + 7b film cooling) and the separation fix method: text-extracted corpus verification (propulsion_texts_for_agents/markdown), not filename inference ---  # Literature Audit — Differentiable Engine MDO  ## 0. Purpose and method ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 109,
+     "quote": "| NPSH = (p_in−p_v)/(ρg0)(+V²/2g0) | SP-8052 | VERIFIED (static term; velocity term deferred) |"
+    }
+   ],
+   "n_lines": 392,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_AUDIT_2026_07_24_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LITERATURE_REQUESTS_GENERALIZATION.md",
+   "title": "Literature requests — generalization to any thrust class, propellant, and feed system",
+   "kind": "literature_request",
+   "date": "2026-08-06",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Companion to `LITERATURE_REQUESTS.md` (items 1–26, which cover the *unmodelled subsystems*: valves, lines, joints, TVC, igniter, pump rotor support). This file covers what the **generalization axes** in `GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED.md` need, and nothing that is already on disk.  **Method.** Every entry was checked against the 222 PDFs in `propulsion_texts/` and its `fuel_pump_design/`, `materials_science/` and `pintle_injector/` subfolders via `propulsion_texts_for_agents/paper_index.md`. Section 5 lists the gaps I *expected* to find and did not, so you can see what was ruled o",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 116,
+     "quote": "| G11 | Zandbergen, *Simple mass and size estimation relationships of pump fed rocket engines for launch vehicle conceptual design*, **6th EUCASS**, 2015 | ResearchGate 279711349 — EUCASS proceedings,"
+    }
+   ],
+   "n_lines": 199,
+   "cited_pdfs": [
+    "propulsion_texts/Vandenberg_Corrected_Properties.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md",
+   "title": "Literature requests — the hardware loop",
+   "kind": "literature_request",
+   "date": "2026-09-05",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "**Status: the original is unobtainable, and this should be recorded rather than left\nas an open request.**\n\nSP-8109 §3.3.2.4 says \"Impeller disk stresses and deflections should be calculated\nby procedures similar to those presented in references 61, 82, and 83.\" Refs. 82 and\n83 are, verbatim from the rendered reference page:\n\n> **82.** *Mechanical Design Aspects of Centrifugal Impellers with High Tip Speed\n> Capability (U)*. Rep. 7446-01F (AD 350716), Aerojet-General Corp., Mar. 1963.\n> **(Confidential).**\n>",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Literature requests — the hardware loop subtitle: What must be acquired to make geometry machinable, assemblies testable, and measurements ingestible version: \"0.1\" audience: [ibrahim] created: 2026-09-05 companions:   - docs/LREKIT_HARDWARE_PROGRAM_2026-09-05.md            # the tracks these unblock   - docs/PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md     # where each gap was found   - docs/LITERATURE_REQUESTS.md                           # items 1-26, all outstanding   - docs/LITERATURE_REQUESTS_GENERALIZATION.md            # G1-G14, 13/14 acquired ---",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 18,
+     "quote": "> but unindexed material, corrects NASA identifiers, and distinguishes historical"
+    },
+    {
+     "line": 35,
+     "quote": "**Manufacturing is the least literature-blocked of the three hardware tracks.**"
+    },
+    {
+     "line": 45,
+     "quote": "What is genuinely blocked is the **mechanical** side. SP-8109 repeatedly states a"
+    },
+    {
+     "line": 287,
+     "quote": "is currently blocked partly on this."
+    },
+    {
+     "line": 393,
+     "quote": "blocked on GD&T language — only on achievable values (H6) and fastener selection"
+    },
+    {
+     "line": 433,
+     "quote": "| **NASA SP-8048, SP-8101, SP-8121** — existing items 13, 14, 15 | the three monographs SP-8109 defers its mechanical data to; Track J is blocked on all three |"
+    }
+   ],
+   "n_lines": 460,
+   "cited_pdfs": [
+    "propulsion_texts/L-05_BSplines_NURBS.pdf",
+    "propulsion_texts/fuel_pump_design/19740020848.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LITERATURE_REQUESTS_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LITERATURE_REQUESTS.md",
+   "title": "Literature requests — what the repository needs and why",
+   "kind": "literature_request",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " > **Source-status review, September 6:** use the [reconciled literature audit](audit_work/LREKIT_LITERATURE_AUDIT_2026-09-05.md) > for current acquisition status and applicability. This historical request list > includes sources now held outside the agent index. Six NASA identifiers have > been corrected here; the remaining links are not thereby newly verified.  Every entry below is a **gap I actually hit** while implementing, not a general reading list. Each says what the source supplies, which module needs it, and what the repository is doing in its absence. Ordered by how much it blocks.  ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 4,
+     "quote": "> for current acquisition status and applicability. This historical request list"
+    }
+   ],
+   "n_lines": 141,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LREKIT_DELIVERY_BACKLOG_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LREKIT_DELIVERY_BACKLOG_2026-09-05.md",
+   "title": "LREKit delivery backlog",
+   "kind": "note",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "status: open\npriority: first | next | later\nexisting_tracks: []\ndepends_on: []\nscope:\n  architectures: []\n  components: []\n  intended_use: exploratory | component_article | engine_article\ninputs_and_units: []\noutputs_and_consumers: []\nsources:\n  - source_id: required_if_physics_or_process_based",
+   "authority": "implementation_state_not_science",
+   "summary": " Companion to [the readiness review and delivery plan](LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md). These are **local implementation issues**, not GitHub issues created. September 9 working-tree changes address D01/D02/D26 and portions of D03/D04/D24; [the implementation record](INPUT_EXECUTION_INTEGRITY_2026-09-09.md) states exact coverage and remaining acceptance work. Other items remain open. The named owner is a discipline, not a staffing assignment. Existing A–G, P0–P11 and H–M IDs are cross-references; D IDs are the common delivery index.  ## Standard issue contract  Use this struc",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 67,
+     "quote": "Create a run record before expensive work. Model stage dependencies; persist expected/actual artifacts, scientific verdict and package status atomically. Stage files in run-specific directories; disti"
+    },
+    {
+     "line": 69,
+     "quote": "**Acceptance:** inject the 500 N sizing failure and the late oxidizer export failure. Earlier independent results survive with a summary; diagnostic partial directories contain an immediately visible "
+    },
+    {
+     "line": 145,
+     "quote": "Use local coordinates for sweep/lean; include shroud and wear-ring interfaces where selected. Reserve root/edge radii early and perform fragile final fillets after topology stabilizes. Re-run hydrauli"
+    },
+    {
+     "line": 155,
+     "quote": "Define shaft/coupling/retention, radial and axial hydraulic loads, balance arrangement, bearings, seals, wear rings, lubrication/cooling and leakage paths. Select applicable material and purchased-com"
+    },
+    {
+     "line": 207,
+     "quote": "**Acceptance:** recover an identifiable synthetic parameter and reject an underdetermined fit. A real component dataset supports repeatable fit/reduction, held-out assessment and provenance. Unimprove"
+    }
+   ],
+   "n_lines": 263,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_DELIVERY_BACKLOG_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LREKIT_HARDWARE_PROGRAM_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LREKIT_HARDWARE_PROGRAM_2026-09-05.md",
+   "title": "The LREKit hardware program",
+   "kind": "note",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: The LREKit hardware program subtitle: From reference geometry to machinable, testable hardware, and back into the models version: \"0.1\" audience: [ibrahim, AI coding agents] created: 2026-09-05 companions:   - docs/PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md      # the grounding for tracks H, I, J   - docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md              # H1-H14, what must be acquired   - docs/COMPLETION_PLAN.md                                # tracks A-G, the numerical backlog   - docs/PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md   # P0-P11, becomes track H's backlog   - docs/aud",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 94,
+     "quote": "### 1.2 The feasible envelope is blocked on prose, not on physics"
+    },
+    {
+     "line": 260,
+     "quote": "blocked of the three hardware tracks.** SP-8109 §2.3.3 and §3.3.3 constitute a"
+    },
+    {
+     "line": 523,
+     "quote": "ring diameters (§2.5.2.1). These are the historical precedent for the entire return"
+    },
+    {
+     "line": 659,
+     "quote": "| **5** | **J1–J6** mechanical, to the limit of held literature | Parallel with I once H5 lands. Blocked items stay `unavailable` with a named reference. |"
+    }
+   ],
+   "n_lines": 700,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_HARDWARE_PROGRAM_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_LREKIT_READINESS_AND_DELIVERY_PLAN_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md",
+   "title": "LREKit: current readiness and delivery plan",
+   "kind": "plan",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " **September 9 implementation update:** [Input and execution integrity](INPUT_EXECUTION_INTEGRITY_2026-09-09.md) records the request, variable-policy, roughness, verdict, report and CLI fixes now in the working tree. The assessment below remains the September 5 baseline; CAD orchestration and the hardware/evidence loop are still open.  Audit completed against `f763fe1` plus the working tree present September 4–5, 2026. This is a repository audit and proposed implementation program, not a hardware release. Existing source changes were preserved. The August 25 audit's execution results are histo",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 5,
+     "quote": "Audit completed against `f763fe1` plus the working tree present September 4–5, 2026. This is a repository audit and proposed implementation program, not a hardware release. Existing source changes wer"
+    },
+    {
+     "line": 86,
+     "quote": "| Historical ±10% trim response is guaranteed authority | It is context-specific historical guidance, not a transferable head/efficiency derivative or a machining instruction. A trim recommendation re"
+    },
+    {
+     "line": 138,
+     "quote": "Create a run record before solving. Each stage records `pending/running/succeeded/failed/blocked/skipped`, reason code and dependencies. Scientific verdict (`feasible/infeasible/unknown/not_converged/"
+    },
+    {
+     "line": 206,
+     "quote": "| First, parallel | Selected shop/machine/tool/fixture/stock/finish/inspection capability; a finite-tool flank-milling method | D14–D16 process and article definition; this information cannot be suppl"
+    }
+   ],
+   "n_lines": 247,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_READINESS_AND_DELIVERY_PLAN_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MDO_GUIDE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MDO_GUIDE.md",
+   "title": "Reviewer's Guide to the Engine-MDO Layer",
+   "kind": "guide",
+   "date": "2026-08-26",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: LREKit Differentiable Engine-MDO — Reviewer's Guide subtitle: What every module does, where each model comes from, and how to run it date: 2026-08-26 audience: whoever is reviewing or extending raosim/mdo/ ---  # Reviewer's Guide to the Engine-MDO Layer  This is the orientation document for `raosim/mdo/`. It answers four questions: **what is here**, **where each model comes from**, **how to run it**, and **what is still soft**. Companion documents: `DIFFERENTIABLE_ENGINE_MDO_PLAN.md` (the",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 210,
+     "quote": "`mdo/contour_validation.py` contract has now landed: when `reevaluate()` receives"
+    },
+    {
+     "line": 215,
+     "quote": "variational solve. This is not yet B3 qualification: historical coupled and BDE"
+    },
+    {
+     "line": 348,
+     "quote": "matching B5 declared-domain artifact. The historical first fixed-context artifact is"
+    },
+    {
+     "line": 431,
+     "quote": "11. **Exact-Rao post-solve promotion is still blocked.** The B5"
+    },
+    {
+     "line": 433,
+     "quote": "the historical 8/12/16/24-ladder H2 map at fixed $\\gamma=1.4$ and"
+    },
+    {
+     "line": 440,
+     "quote": "Historical 24×24 and 32×32 BDE probes passed numerical BVP, Eq. (5),"
+    }
+   ],
+   "n_lines": 462,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MDO_GUIDE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MDO_REMEDIATION_AND_OUTPUT_CONTRACT_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md",
+   "title": "Engine-MDO remediation, output contract, and parity review",
+   "kind": "note",
+   "date": "2026-08-26",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "## STATUS (updated 2026-08-26)\n\nRemediation items 1–8, 10, 12, 14–18 are **implemented and verified by\nreproduction**; the fixed-O/F sentinel crash, the discarded optimized O/F, the\nthree divergent constraint lists, both requirement-integrity bypasses, the\nfictitious fallback O/F domain, the electric-package-only mass objective, and\nthe unreachable HTD gate no longer reproduce. Definitive 2026-08-22 non-slow\nsuite: 2,106 passed, 26 deselected.\n\nCurrent status of the remediation items that were open at the review baseline:",
+   "authority": "implementation_state_not_science",
+   "summary": " **Review baseline:** commit `e57c93e` (2026-07-26)   **Contract versions:** `EngineState` schema 2; `EngineAnalysisSnapshot` 2.0.0   **Exact implicit Rao status:** typed analytic-provider seam, traditional Eq. (5) validity/refusal gate, B5 declared-domain infrastructure, and opt-in host post-solve validator implemented; no exact-Rao inner-loop provider is promoted  ## STATUS (updated 2026-08-26)  Remediation items 1–8, 10, 12, 14–18 are **implemented and verified by reproduction**; the fixed-O/F sentinel crash, the discarded optimized O/F, the",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 25,
+     "quote": "| 19 — `ContourProvider` | partial — implementation landed, qualification blocked | `raosim/mdo/nozzle.py` defines the typed analytic TOP contract and provider-failure final gate, and `rao_variational"
+    },
+    {
+     "line": 36,
+     "quote": "closed for unsupported or mismatched lookups. The historical H2 run completed"
+    },
+    {
+     "line": 50,
+     "quote": "B3 consumes that evidence only as an opt-in post-solve validator. Historical"
+    },
+    {
+     "line": 56,
+     "quote": "historical `UNKNOWN` outcomes, not qualification passes. Raw $\\Delta M$ is now retained as a diagnostic;"
+    },
+    {
+     "line": 63,
+     "quote": "### Unified engine job (`EngineJobSpec`) — foundation landed"
+    },
+    {
+     "line": 378,
+     "quote": "| The grid ignored active property-surface `gamma` | Pass active `gamma` into the station-grid Mach solve | CEA/property-table runs no longer use stale fallback Mach values |"
+    },
+    {
+     "line": 394,
+     "quote": "| Mission/schema checks occurred only after the traditional report/CAD run | Validate state schema, design, mission, property-surface identity, and coupling mode before constructing `DesignInput` or c"
+    },
+    {
+     "line": 536,
+     "quote": "internal total-fuel pintle calculation is retained only as an optimizer"
+    },
+    {
+     "line": 596,
+     "quote": "deferred; STEP is the authoritative geometry supplied for `step`, `ipt`, or"
+    }
+   ],
+   "n_lines": 742,
+   "cited_pdfs": [
+    "propulsion_texts/19770009165.pdf",
+    "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MDO_REMEDIATION_AND_OUTPUT_CONTRACT_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MODEL_REGISTRY_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MODEL_REGISTRY.md",
+   "title": "Model Provenance Registry",
+   "kind": "provenance",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "status\nverification\nvalidation_level\nnotes\n```\n\n`audit_model_registry(repo_root)` fails its software audit when a declared\nlocal source is absent, a published entry has no local source route, required\nmetadata is empty, or a repository-created assumption is not labeled as a\nheuristic/policy/schedule.\n\nThe registry covers the principal implemented models in:",
+   "authority": "implementation_state_not_science",
+   "summary": " `raosim.model_registry` is the machine-readable physics/source index for the integrated design chain. It distinguishes four questions that were previously mixed together in comments and reports:  1. Is the relation a published equation, a derived balance, or a repository    heuristic? 2. Where is the local source or source-routing document? 3. What is the physical validity envelope? 4. What level of verification or validation has actually been completed? ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 62,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MODEL_REGISTRY_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MOVABLE_PINTLE_MODEL_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MOVABLE_PINTLE_MODEL.md",
+   "title": "Son continuous movable-pintle model",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "## Status and scope\n\nLREKit implements the preliminary hydraulic and static-actuation model for the\ncontinuous radial-gap, center-rod pintle described by Son et al. (2017). The\nlocal source is\n[`propulsion_texts/pintle_injector/son2017.pdf`](../propulsion_texts/pintle_injector/son2017.pdf).\nThe implementation is `son2017_continuous_radial_gap` in\n[`raosim/movable_pintle.py`](../raosim/movable_pintle.py), dispatched by\n[`raosim/injector.py`](../raosim/injector.py).\n\nThis is a software-verified preliminary model. It does not establish a",
+   "authority": "implementation_state_not_science",
+   "summary": " ## Status and scope  LREKit implements the preliminary hydraulic and static-actuation model for the continuous radial-gap, center-rod pintle described by Son et al. (2017). The local source is [`propulsion_texts/pintle_injector/son2017.pdf`](../propulsion_texts/pintle_injector/son2017.pdf). The implementation is `son2017_continuous_radial_gap` in [`raosim/movable_pintle.py`](../raosim/movable_pintle.py), dispatched by [`raosim/injector.py`](../raosim/injector.py). ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 157,
+     "quote": "Lagrangian handoff is blocked. The current OpenFOAM external-gap wedge is a"
+    }
+   ],
+   "n_lines": 267,
+   "cited_pdfs": [
+    "propulsion_texts/pintle_injector/son2017.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MOVABLE_PINTLE_MODEL_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_NASA_TT_PRIME_PROVENANCE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/nasa_tt_prime_provenance.md",
+   "title": "NASA/JHU TT' Provenance",
+   "kind": "provenance",
+   "date": "2026-06-09",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This note records the provenance check for `MOC_Grid_BDE/outputs_M3.5Perf/TT'.out`.  ## Conclusion  The exact executable or source variant that generated the checked-in `TT'.out` is not present in the local NASA tree or in the public upstream `nasa/Three-Dimensional-Nozzle-Design-Code` history.  Treat the M3.5Perf TT' values as sample output from an unpublished or",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 18,
+     "quote": "historical fixture overlay. Matching the orphaned TT' fixture is useful"
+    },
+    {
+     "line": 118,
+     "quote": "reconstruction problem while leaving the historical artifact provenance"
+    },
+    {
+     "line": 139,
+     "quote": "treat the historical files as overlays rather than promotion authority."
+    },
+    {
+     "line": 141,
+     "quote": "The comparison harness keeps the historical overlay distinct from the pinned"
+    },
+    {
+     "line": 150,
+     "quote": "orphaned historical fixture."
+    }
+   ],
+   "n_lines": 150,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_NASA_TT_PRIME_PROVENANCE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_NEXT_SESSION_PROMPT_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/NEXT_SESSION_PROMPT.md",
+   "title": "Next-session prompt (copy-paste to continue RaoRocketSim)",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Continue RaoRocketSim. Analyze the repo state first per project rules: read the head STATUS paragraphs of JAX_DIFFERENTIABLE_PLAN.md (the 2026-06-11h characteristic-pairing correction + the follow-through) and the session memory — they carry the full record. Where we are:  - THE MILESTONE LANDED: after the characteristic-pairing correction   (the stack enforced the C− relation along the C+ CE/DE + a spurious   cosμ/cos(θ±μ) source factor; corrected per Anderson §11.4 and   oracle-proven — tests/test_characteristic_pairing.py), FULL D-state   continuity is the DEFAULT (pin_d_theta=pin_d_mach=T",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 8,
+     "quote": "- THE MILESTONE LANDED: after the characteristic-pairing correction"
+    }
+   ],
+   "n_lines": 62,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_NEXT_SESSION_PROMPT_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_OPENFOAM_SPRAY_EXPORT_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/OPENFOAM_SPRAY_EXPORT.md",
+   "title": "OpenFOAM VOF Spray Export",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " `raosim.openfoam` writes deterministic, provenance-bound OpenFOAM cases. It does not import OpenFOAM, run a solver, or turn a generated dictionary into validation evidence.  ## Pinned solver contract  The first template targets exactly:  - OpenFOAM Foundation 13; - patch/tag `20260624`;",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 132,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_OPENFOAM_SPRAY_EXPORT_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PHYSICAL_INTEGRITY_REMEDIATION_2026_07_11_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PHYSICAL_INTEGRITY_REMEDIATION_2026-07-11.md",
+   "title": "Physical-integrity remediation record — 2026-07-11",
+   "kind": "note",
+   "date": "2026-07-11",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This record maps the findings from the 2026-07-02 audit and the subsequent full-repository review to their current implementation, including both closed software defects and deliberately unresolved blockers. It records code consistency, physical applicability, CAD topology, and provenance. It is **not** a claim of CFD validation, production drawing release, test readiness, or hardware qualification.  The governing distinction is:  - an internal design gate checks whether the implemented preliminary model was",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 35,
+     "quote": "| Rao literature/reference evidence | Literature cases were expected failures and the NASA source/fixture roles were conflated. | Rao 1958 Nozzle B uses digitized Table 2 geometry and Table 3 $C_F$ as"
+    },
+    {
+     "line": 37,
+     "quote": "| Spray and $c^*$ | A correlation-based vaporization estimate was treated as if it were total combustion efficiency, including outside liquid-droplet applicability. | Phase/pressure gates reject gas, "
+    },
+    {
+     "line": 99,
+     "quote": "the unresolved historical-fixture provenance boundary;"
+    }
+   ],
+   "n_lines": 115,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICAL_INTEGRITY_REMEDIATION_2026_07_11_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PHYSICAL_RELEASE_GATES_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PHYSICAL_RELEASE_GATES.md",
+   "title": "Physical Release Evidence",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " RaoRocketSim separates three different claims that must not be conflated:  1. **Software verification** - equations, units, numerical identities, failure    modes, and serialization have automated tests. 2. **Geometry verification** - a CAD kernel can re-import the artifact as a    valid solid with the expected scale, volume, interfaces, and clearances. 3. **Physical release evidence** - independent analyses, drawings, inspections,    proof tests, cold-flow tests, and hot-fire tests have passed under an    authorized configuration. ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 18,
+     "quote": "injector, regenerative wall, or pump. A default report is blocked. Evidence is"
+    }
+   ],
+   "n_lines": 88,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICAL_RELEASE_GATES_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PHYSICS_FIDELITY_ROADMAP_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PHYSICS_FIDELITY_ROADMAP.md",
+   "title": "Physics fidelity roadmap",
+   "kind": "note",
+   "date": "2026-08-26",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "**Status head (2026-08-26):** items **§3.1, §4.1, and §5.1 are implemented** as\nscope/validity gates, and §4.3's existing liner-buckling screen is integrated as\na mandatory MDO final gate (not as a qualification calculation). Section 5.2's\ndeclared-domain infrastructure and §5.3's opt-in host validator contract have\nalso landed. Schema v2 rejects the historical fixed-context H2 slice because\nv1 omitted two kernel-march policies; the corrected 0.25°/2% slice is now\ngenerated and hash-pinned. B3 promotion remains blocked on MOC\nresolution/topology qualification. Other items remain analysis and plan only.\nSee the landed notes in §3–§5. Each item\nstates what the code does *today* (verified against the tree, not recalled), what\nthe literature in `propulsion_texts/` actually supports, and the smallest change",
+   "authority": "implementation_state_not_science",
+   "summary": " **Status head (2026-08-26):** items **§3.1, §4.1, and §5.1 are implemented** as scope/validity gates, and §4.3's existing liner-buckling screen is integrated as a mandatory MDO final gate (not as a qualification calculation). Section 5.2's declared-domain infrastructure and §5.3's opt-in host validator contract have also landed. Schema v2 rejects the historical fixed-context H2 slice because v1 omitted two kernel-march policies; the corrected 0.25°/2% slice is now generated and hash-pinned. B3 promotion remains blocked on MOC resolution/topology qualification. Other items remain analysis and ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 7,
+     "quote": "also landed. Schema v2 rejects the historical fixed-context H2 slice because"
+    },
+    {
+     "line": 9,
+     "quote": "generated and hash-pinned. B3 promotion remains blocked on MOC"
+    },
+    {
+     "line": 11,
+     "quote": "See the landed notes in §3–§5. Each item"
+    },
+    {
+     "line": 33,
+     "quote": "LOX/LH2, and N2O4/MMH only; N2O/Ethanol remains blocked on inlet-state/card"
+    },
+    {
+     "line": 165,
+     "quote": "### Landed (§3.1)"
+    },
+    {
+     "line": 224,
+     "quote": "enforcement is deferred until the implicit root is robust at valid box"
+    },
+    {
+     "line": 229,
+     "quote": "### Landed (§4.1) — and it found two real gaps"
+    },
+    {
+     "line": 276,
+     "quote": "is retained only as a labelled legacy boundary diagnostic. The path remains"
+    },
+    {
+     "line": 314,
+     "quote": "With the 8/12/16/24 ladder and historical screening policy, it recorded 40"
+    },
+    {
+     "line": 325,
+     "quote": "3. **Post-solve implementation/contract DONE; promotion BLOCKED:**"
+    },
+    {
+     "line": 327,
+     "quote": "`ContourProvider`. Historical 12×12 coupled and 24×24/32×32 BDE probes passed"
+    }
+   ],
+   "n_lines": 409,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICS_FIDELITY_ROADMAP_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PINTLE_DESIGN_EVALUATION_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PINTLE_DESIGN_EVALUATION.md",
+   "title": "Pintle Injector: Literature-Grounded Evaluation of the Current Approach",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This document (1) states the governing equations for pintle design **as verified against the corpus**, (2) audits `raosim/injector.py` line-by-line against them, (3) maps the chamber/nozzle/feed-system coupling, and (4) specifies the additional CLI inputs and parameter propagation needed. Every correlation is attributed; where a coefficient is hardware-specific or could not be transcribed cleanly from a scanned source, that is stated rather than asserted. Companion file: `propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md`.  **Bottom line.** `injector.py` sizes from the solved nozz",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 96,
+     "quote": "inside that artifact's declared domain. A constant fallback is retained only"
+    },
+    {
+     "line": 143,
+     "quote": "blocked."
+    }
+   ],
+   "n_lines": 319,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_DESIGN_EVALUATION_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PINTLE_INJECTOR_LITERATURE_INVENTORY_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/pintle_injector_literature_inventory.md",
+   "title": "Pintle injector literature inventory",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "Status: first-pass literature map for using the `propulsion_texts/pintle_injector`\ncorpus to improve the pintle injector design CLI and simulation model.\n\n## Corpus summary\n\n- Local folder inspected: `propulsion_texts/pintle_injector`\n- PDF files: 61\n- Exact duplicate pairs: 7\n- Unique PDFs after exact-duplicate collapse: 54\n- Local helper outputs: `tmp/pintle_pdf_inventory.tsv`,\n  `tmp/pintle_pdf_dois.json`, `tmp/ntrs_pintle_search_merged.json`",
+   "authority": "implementation_state_not_science",
+   "summary": " Status: first-pass literature map for using the `propulsion_texts/pintle_injector` corpus to improve the pintle injector design CLI and simulation model.  ## Corpus summary  - Local folder inspected: `propulsion_texts/pintle_injector` - PDF files: 61 - Exact duplicate pairs: 7 - Unique PDFs after exact-duplicate collapse: 54 - Local helper outputs: `tmp/pintle_pdf_inventory.tsv`,",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 135,
+     "quote": "| Gilroy and Sackheim, *The Lunar Module Descent Engine - A Historical Perspective*, AIAA 1989-2385 | https://doi.org/10.2514/6.1989-2385 | Apollo LMDE design history and throttle context |"
+    }
+   ],
+   "n_lines": 197,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_INJECTOR_LITERATURE_INVENTORY_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PINTLE_INJECTOR_MODEL_GAP_ANALYSIS_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/pintle_injector_model_gap_analysis.md",
+   "title": "Pintle injector model gap analysis",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This document completes the second half of the pintle-injector literature task: it evaluates the current RaoRocketSim approach and proposes a literature-rooted design flow for pintle injector sizing, testing, and simulation.  Companion sources:  - `docs/pintle_injector_literature_inventory.md` - `docs/injector_pintle_provenance.md` - `docs/chamber_design_literature.md` - `docs/thermofluid_literature_provenance.md`",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 484,
+     "quote": "Use LMR/BF in spray-angle gates instead of treating blockage as only a"
+    }
+   ],
+   "n_lines": 695,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_INJECTOR_MODEL_GAP_ANALYSIS_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PLAN_VALVES_LINES_BRACKETS_GIMBAL_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PLAN_VALVES_LINES_BRACKETS_GIMBAL.md",
+   "title": "Design plan: valves, lines, brackets and gimbal",
+   "kind": "plan",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " These four subsystems are the last entries in the mass ledger's `excludes` list, and they are why `total_engine_package_mass_kg` still reports `unavailable`. An engine is not a thrust chamber plus an injector plus pumps — it is those plus the plumbing that connects them, the structure that holds them and the mechanism that points them.  This document specifies how each will be modelled: the governing relations, the interfaces, what is buildable from the current corpus, and what is blocked on the literature requested in `LITERATURE_REQUESTS.md`. ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 10,
+     "quote": "interfaces, what is buildable from the current corpus, and what is blocked on the"
+    },
+    {
+     "line": 79,
+     "quote": "### Blocked on"
+    },
+    {
+     "line": 120,
+     "quote": "### Blocked on"
+    },
+    {
+     "line": 166,
+     "quote": "### Blocked on"
+    },
+    {
+     "line": 215,
+     "quote": "### Blocked on"
+    }
+   ],
+   "n_lines": 255,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PLAN_VALVES_LINES_BRACKETS_GIMBAL_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PROJECT_AUDIT_2026_08_25_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PROJECT_AUDIT_2026-08-25.md",
+   "title": "Deep Technical Project Audit — LREKit / RaoRocketSim",
+   "kind": "audit",
+   "date": "2026-08-25",
+   "date_basis": "filename",
+   "status_head": "**Status** — **planned** Track C / plan Phase 10, not started.\n**Where** — Inside the project.\n**Closure** — A ≥3-point job converging with all margins reported per point, a deep-throttle case exercising both the separation screen and the off-BEP pump surface without silent extrapolation, and the `job.py:542` guard removed.\n\n### 2. Whole-engine dry mass\n\n**Missing** — Configuration-controlled chamber/nozzle and injector mass models, a traditional pump BOM, and mass models for valves, lines, brackets, and the gimbal.\n**Why** — The differentiable objective is a partial subtotal. An optimizer minimizing a subtotal is optimizing the wrong thing — the plan promotes this above multipoint for exactly that reason.\n**Status** — **active** G1 landed and verified; G2 partial; G3/G4 planned.\n**Where** — Inside the project, plus fabrication data for the valve/line/fitting classes.\n**Closure** — `masses.engine_dry_mass` moving off the unavailable registry with every component traced to a measured body or a sourced model.",
+   "authority": "implementation_state_not_science",
+   "summary": " **Audit date:** 2026-08-25 **Repository:** `/Users/ibrahimshahid/Documents/Github/RaoRocketSim` (`github.com/ibrahimshahid1/RaoRocketSim`) **Audited commit:** `f763fe1` \"Implement Rao B3 postsolve validation and B5 domain map\" (2026-08-24), working tree clean **Method:** direct inspection of source, docs, benchmark data, generated artifacts, and git history, plus independent execution of the test suites, the CLI, the MDO optimizer, and the CAD exporters on this host.  Everything marked \"verified\" below was run by the auditor during this session, not read from a status file.  ---  ## 0. What w",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 26,
+     "quote": "| Rao variational BVP | `--contour-method rao-bvp --backend jax --max-nfev 400` | **converged, refused** max_scaled 1.450e-04; export blocked on MOC closure (correct) |"
+    },
+    {
+     "line": 85,
+     "quote": "- A **refusal architecture.** Ten engine outputs are registered *unavailable with a stated reason* rather than estimated. Contour export is blocked when MOC closure fails. The multipoint job path *rai"
+    },
+    {
+     "line": 218,
+     "quote": "- **The B3 post-solve contour validator** has a landed typed contract but no qualification. All three real probes (12×12 coupled, 24×24 BDE, 32×32 BDE) return `UNKNOWN`: the BVP converges, Rao Eq. (5)"
+    },
+    {
+     "line": 220,
+     "quote": "- **J6 v2 total design derivatives** remain deferred (`jax/sensitivities.py:24`). Sensitivities reach the control surface, not manufacturable wall coordinates."
+    },
+    {
+     "line": 228,
+     "quote": "- **Track B, contour and property closure.** B2 (typed `mdo/nozzle.py` adapter) and B4 (Rao valid/invalid boundary on export) landed 2026-08-22; B3 and B5 landed as contracts 2026-08-24 and are in the"
+    },
+    {
+     "line": 229,
+     "quote": "- **Track G, hardware mass and CAD.** G1 (real CadQuery volume/STEP round-trip for the injector) landed 2026-08-22, verified in this audit. G2 is in progress."
+    },
+    {
+     "line": 231,
+     "quote": "- **Fidelity roadmap items §3.1, §4.1, §5.1** landed as scope/validity gates per the roadmap's 2026-08-24 status head; remaining items are analysis-only."
+    },
+    {
+     "line": 245,
+     "quote": "- Igniter model **blocked** (no source in the corpus). Combustion-response function for stability **half-blocked** (SP-8113 gives the damping half, not the response half)."
+    },
+    {
+     "line": 246,
+     "quote": "- L4 datum/feature-control scaffolding and tolerance-stack input contract **blocked on standards**."
+    },
+    {
+     "line": 298,
+     "quote": "- Investigated the provenance of NASA's checked-in `TT'.out` reference fixture, traced the upstream commit timeline, and concluded the generating executable is not present in the local tree or the pub"
+    },
+    {
+     "line": 336,
+     "quote": "**How it is addressed.** `rao_radial_increment_validity` evaluates Eq. (5) directly by midpoint quadrature, returning per-segment predicted dR/R, the limiting segment, evaluability, and a specific rea"
+    },
+    {
+     "line": 366,
+     "quote": "Its outputs are a credible starting point for detailed engineering — a solid model you can open in a CAD system, a channel layout passing millability checks, a mass breakdown, and a documented list of"
+    },
+    {
+     "line": 403,
+     "quote": "**Hardware mass and CAD (Track G).** G1 landed. G2 (chamber mass from disjoint liner/ribs/jacket CAD), G3 (configuration-controlled chamber/nozzle + injector mass models), and G4 (traditional pump BOM"
+    },
+    {
+     "line": 457,
+     "quote": "> The functioning chain stops at a **verified-by-construction single-point optimized design with exported, kernel-validated B-rep geometry and a partial mass ledger**, blocked from physical release by"
+    },
+    {
+     "line": 475,
+     "quote": "**Status** — **active** G1 landed and verified; G2 partial; G3/G4 planned."
+    },
+    {
+     "line": 491,
+     "quote": "**Status** — **active** typed contract landed 2026-08-24; the gate is the named next step."
+    },
+    {
+     "line": 523,
+     "quote": "**Status** — **blocked** ignition has no source in the corpus. Stability is half-blocked: SP-8113 supplies calculable acoustic damping; no source supplies a pintle combustion-response function. η_c* p"
+    },
+    {
+     "line": 551,
+     "quote": "| Physical-release evidence gate *(verified: blocked, 17)* | that the tool refuses to imply hardware readiness | anything about the design | Strong as a refusal mechanism |"
+    },
+    {
+     "line": 639,
+     "quote": "1. **Rao contour promotion is blocked and the fallback is the approximation the exact solve was meant to replace.** All B3 real probes return `UNKNOWN`. The bulk MDO contour is the analytic Rao/TOP Bé"
+    },
+    {
+     "line": 650,
+     "quote": "- **Stale documentation row.** `ROADMAP_REQUIREMENTS_TO_PARTS.md` §Status lists \"R3 requirements layer — not started,\" but `raosim/requirements.py` landed 2026-08-06 → 2026-08-10 (after that doc's 202"
+    },
+    {
+     "line": 653,
+     "quote": "- **Report/README test counts are historical records** (\"1246 passed … July 11, 2026\"). The current number is 2174. The README labels this explicitly as a completed-run record rather than a promise, w"
+    },
+    {
+     "line": 662,
+     "quote": "Genuinely blocked rather than merely unbuilt: the igniter model (no source in the corpus), the combustion-response half of a stability screen (SP-8113 supplies damping only), and the L4 datum/toleranc"
+    },
+    {
+     "line": 814,
+     "quote": "6. Designed a refusal architecture enforced in code rather than documented: ten engine outputs are registered unavailable with specific technical reasons rather than estimated, contour export is block"
+    },
+    {
+     "line": 815,
+     "quote": "7. Currently implementing the contour-provider and hardware-mass tracks — the typed post-solve Rao validator and a hash-pinned 65-knot convergence-domain map landed 2026-08-24 with promotion explicitl"
+    },
+    {
+     "line": 829,
+     "quote": "**Under implementation** — Track B (contour and property closure): B3 post-solve variational validator blocked on forward-MOC compatibility; B5 domain map partial beyond one fixed slice. Track G (hard"
+    }
+   ],
+   "n_lines": 869,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PROJECT_AUDIT_2026_08_25_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PUMP_ADVANCED_GEOMETRY_ROADMAP_2026_07_11_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md",
+   "title": "Pump advanced-geometry roadmap — 2026-07-11",
+   "kind": "note",
+   "date": "2026-07-11",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Implementation analysis for the next tier of impeller/inducer/diffuser/volute geometry features, grounded in `propulsion_texts/fuel_pump_design/` (primary anchors: NASA SP-8109 *Liquid Rocket Engine Centrifugal Flow Turbopumps* = `19740020848.pdf`; NASA SP-8052 *Liquid Rocket Engine Turbopump Inducers* = `19710025474.pdf`; plus the paper set cited per item). Each item states: current state in code → literature basis (with the local file) → math → CAD construction against the existing `pump_cad_brep.py` architecture → gates/tests.  ## Implemented closure update (2026-07-12)  The original beta1",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 348,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_ADVANCED_GEOMETRY_ROADMAP_2026_07_11_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PUMP_CAD_IMPLEMENTATION_PLAN_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PUMP_CAD_IMPLEMENTATION_PLAN.md",
+   "title": "Pump CAD implementation plan — 2026-07-02",
+   "kind": "plan",
+   "date": "2026-07-12",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " > **STATUS 2026-07-12 — coupled hydraulic/mechanical and split-casing > remediation landed.** The shaft, bore fit, root wall, eye/hub annulus, > blade blockage, net phi1/phi2, beta1, b2, and pump power now converge > upstream. The B-rep uses tapered main blades plus downstream splitters and > is forbidden from enlarging either hub. The volute operating geometry is a > rear body plus removable front cover split through the scroll centerplane, > with a keyhole gasket land, body/outlet-neck bolt bores, dowels, pressure > clamp/tool/access/volume/interference gates, and separate STEP re-imports. ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 4,
+     "quote": "> remediation landed.** The shaft, bore fit, root wall, eye/hub annulus,"
+    },
+    {
+     "line": 16,
+     "quote": "> **STATUS 2026-07-02 (latest) — Phases 2 (items 1–4) and 3 landed; plan"
+    },
+    {
+     "line": 17,
+     "quote": "> complete except the deferred default-flip and optional NURBS.**"
+    },
+    {
+     "line": 61,
+     "quote": "> **Deferred:** `--pump-cad-format` default stays `stl` until CI installs"
+    },
+    {
+     "line": 67,
+     "quote": "> **STATUS 2026-07-02 (later) — Phase 1 landed** (`raosim/pump_cad_brep.py`,"
+    },
+    {
+     "line": 92,
+     "quote": "> **STATUS 2026-07-02 — Phase 0 landed.** 2π seam welded in"
+    }
+   ],
+   "n_lines": 267,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_CAD_IMPLEMENTATION_PLAN_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026_07_13_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md",
+   "title": "Pump geometry implementation plan — 2026-07-13",
+   "kind": "plan",
+   "date": "2026-07-13",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Updates `docs/PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md` after (a) the discrepancy review of that roadmap and (b) a code+literature re-verification performed 2026-07-13. Primary anchors remain `propulsion_texts/fuel_pump_design/`: NASA SP-8109 *Liquid Rocket Engine Centrifugal Flow Turbopumps* (`19740020848.pdf`) and NASA SP-8052 *Liquid Rocket Engine Turbopump Inducers* (`19710025474.pdf`). All verbatim quotes below were re-read from the PDF text layers on 2026-07-13; discrepancy-review numeric claims were re-checked against the current working tree (see §1 caveat).  --- ",
+   "relations": [
+    {
+     "edge": "UPDATES",
+     "from": "RDOC_DOCS_PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026_07_13_MD",
+     "target_id": "RDOC_DOCS_PUMP_ADVANCED_GEOMETRY_ROADMAP_2026_07_11_MD",
+     "line": 3,
+     "quote": "Updates `docs/PUMP_ADVANCED_GEOMETRY_ROADMAP_2026-07-11.md` after (a) the discrepancy"
+    }
+   ],
+   "staleness_signals": [
+    {
+     "line": 23,
+     "quote": "| Eye/channel solve is the true prerequisite | **Closed.** `_solve_annular_eye_and_shaft` (`coupled_annular_eye_shaft_bisection_v1`) + net-annular-eye triangle (`centrifugal_meanline_annular_eye_v2`) "
+    },
+    {
+     "line": 27,
+     "quote": "| Blade t = 1.275 mm from `0.04·D2` | **Stale.** `blade_thickness_ratio` default is now 0.012 → floor-limited t = 0.4 mm, separate `inlet_blade_thickness` = 0.2 mm, linear LE→exit taper in `_camber_ri"
+    },
+    {
+     "line": 28,
+     "quote": "| 12 full blades, 116–146 % eye blockage | **Stale.** Meanline splits `inlet_blade_count` + `splitter_blade_count` (probe: 4 + 8), and blockage is screened per station with separate limits: inlet 0.10"
+    },
+    {
+     "line": 238,
+     "quote": "Order rationale vs the review's list: its steps 1–3 are P0/P1 (mostly landed), 4–5 are"
+    }
+   ],
+   "n_lines": 306,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026_07_13_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PUMP_PHYSICS_AND_PROCESS_BASIS_2026_09_05_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/PUMP_PHYSICS_AND_PROCESS_BASIS_2026-09-05.md",
+   "title": "Pump physics and process basis",
+   "kind": "provenance",
+   "date": "2026-09-05",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": "title: Pump physics and process basis subtitle: What the corpus actually supports for promoting pump geometry from reference to hardware version: \"0.1\" audience: [ibrahim, AI coding agents] created: 2026-09-05 companions:   - docs/LREKIT_HARDWARE_PROGRAM_2026-09-05.md      # the program this grounds   - docs/PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026-07-13.md  # P0-P11, the geometry backlog   - docs/electric_pump_model_basis.md               # the existing meanline basis   - docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md       # what is still missing ---",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 17,
+     "quote": "> before implementing the recommendations below. Historical fabrication and trim"
+    },
+    {
+     "line": 684,
+     "quote": "one-dimensional theory plus polynomial fits to historical empirical data"
+    },
+    {
+     "line": 774,
+     "quote": "manufacturing, and mechanical design — with manufacturing blocked on literature we"
+    },
+    {
+     "line": 777,
+     "quote": "After: **manufacturing is the least blocked of the three.** SP-8109 §2.3.3 and"
+    },
+    {
+     "line": 782,
+     "quote": "them free NACA/NASA reports. So the mechanical track is not blocked on *searching*;"
+    },
+    {
+     "line": 783,
+     "quote": "it is blocked on one afternoon of downloading, plus three NASA monographs that have"
+    }
+   ],
+   "n_lines": 798,
+   "cited_pdfs": [
+    "propulsion_texts/fuel_pump_design/19740020848.pdf",
+    "propulsion_texts/fuel_pump_design/reis2019.pdf",
+    "propulsion_texts/gradl2017.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_PHYSICS_AND_PROCESS_BASIS_2026_09_05_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_PYPI_RELEASE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/pypi_release.md",
+   "title": "PyPI Release Checklist",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " LREKit is packaged with `pyproject.toml` and publishes through GitHub Actions plus PyPI trusted publishing. Trusted publishing avoids storing a PyPI API token in GitHub secrets.  ## One-Time Setup  1. Choose and add a top-level `LICENSE` before the first public PyPI release.    The vendored NASA reference tree already carries its own NASA Open Source    Agreement text in `Three-Dimensional-Nozzle-Design-Code-master/license.txt`,    but the package as a whole still needs an explicit project license decision.",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 83,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_PYPI_RELEASE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_RAO_B3_B5_HOST_EVIDENCE_2026_08_24_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md",
+   "title": "Rao B3/B5 host evidence — 2026-08-24",
+   "kind": "evidence",
+   "date": "2026-08-24",
+   "date_basis": "filename",
+   "status_head": "status. The implementation now records the bundle as diagnostics rather than\nincluding it in physical-topology `passes`. Resolution acceptance\nmust use spacing metadata and common-coordinate comparison between independently\nrefined, nonnested meshes. A universal $|\\Delta M|/\\Delta s$ cutoff would still\nbe a repository heuristic, not a shock criterion.\n\nThe literature-supported physical boundary is different. Rao 1958 requires\ncontinuous interior variables and characteristic compatibility (source PDF\np. 3, Eq. 15). Rao, Beck, and Booth 1999 identify loss of positive radial\nincrement $\\mathrm dR$ and the $\\mathrm dR=0$ boundary as the limit of the\nshock-free construction (source PDF pp. 3--4, Eqs. 5--6). Rice's 2003 JHU/NASA\nreport identifies `DTHETAB Max` as a user-selected grid control, gives",
+   "authority": "implementation_state_not_science",
+   "summary": " ## Scope and verdict  This note records observed host behavior for the new B3 opt-in post-solve validator and the B5 $\\varepsilon\\times L_\\%$ declared-domain infrastructure. It is an implementation evidence record, not a solver qualification report. The 2026-08-26 resolution-policy correction below supersedes the original wording that attributed all three probes to one neighbor-smoothness failure.  - **B3:** the typed host validation contract has landed, but full qualification   has **not**. The historical probes below returned `UNKNOWN` for two distinct",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 11,
+     "quote": "- **B3:** the typed host validation contract has landed, but full qualification"
+    },
+    {
+     "line": 12,
+     "quote": "has **not**. The historical probes below returned `UNKNOWN` for two distinct"
+    },
+    {
+     "line": 20,
+     "quote": "classification have landed. The historical v1 H2 slice omitted the kernel"
+    },
+    {
+     "line": 37,
+     "quote": "## Historical B3 real-probe record"
+    },
+    {
+     "line": 46,
+     "quote": "| 12×12 coupled | $\\gamma=1.4$; coupled wall | 16.2 s cold; 12.5 s immediate repeat | pass | pass | available | characteristic-crossing audit; this path does **not** compute the BDE raw-neighbor scree"
+    },
+    {
+     "line": 47,
+     "quote": "| 24×24 BDE | $\\gamma=1.4$, $P_a/P_0=0.01$, $\\varepsilon=10$, $L=80\\%$, $R_t=0.020$ m, `physics_weight=1.0`; characteristic formulation, BDE wall, `coupled_wall=False` | 10.93 s | pass | pass | availa"
+    },
+    {
+     "line": 48,
+     "quote": "| 32×32 BDE | same physical/numerical context as the 24×24 BDE row, except resolution | 14.96 s | pass | pass | available | former hard screen: raw neighbor $\\max|\\Delta M|=0.13752>0.10$; worst edge 4"
+    },
+    {
+     "line": 130,
+     "quote": "- kernel mass-flow drift: the historical Python default was 5%, versus 2% in"
+    },
+    {
+     "line": 161,
+     "quote": "The first H2 slice was generated under the following historical policy. Its"
+    },
+    {
+     "line": 182,
+     "quote": "The historical numerical thresholds are a normalized geometry-residual limit of"
+    },
+    {
+     "line": 264,
+     "quote": "## Historical software verification"
+    },
+    {
+     "line": 278,
+     "quote": "domain JSON; reading that wheel member reproduced the historical artifact hash"
+    },
+    {
+     "line": 279,
+     "quote": "and the 40/25 classification counts above. This historical packaging check does"
+    }
+   ],
+   "n_lines": 297,
+   "cited_pdfs": [
+    "propulsion_texts/20030067852.pdf",
+    "propulsion_texts/rao1958.pdf",
+    "propulsion_texts/rao1999.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_RAO_B3_B5_HOST_EVIDENCE_2026_08_24_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_RAO_STATIONARITY_TRANSVERSALITY_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/rao_stationarity_transversality.md",
+   "title": "Rao Stationarity And Endpoint Transversality",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This note fixes terminology for the D-existence scans.  ## Fixed-Endpoint Problem In This Repo  The current Rao/MOC BVP is posed with:  - fixed throat radius, - fixed exit radius, - fixed nozzle length, - fixed ambient pressure,",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 58,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_RAO_STATIONARITY_TRANSVERSALITY_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_REGEN_WALL_MODEL_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/regen_wall_model.md",
+   "title": "Regenerative wall sizing and CAD model",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This note records what RaoRocketSim now computes, how the user inputs enter the wall design, and which parts are literature equations versus repository engineering assumptions.  ## Literature inventory  The local `propulsion_texts/` directory was inventoried for regenerative-wall sizing, channel geometry, pressure stress, thermal resistance, and helical passages. ",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 309,
+   "cited_pdfs": [
+    "propulsion_texts/19710019929.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_REGEN_WALL_MODEL_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_REMEDIATION_LITERATURE_TRACEABILITY_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/REMEDIATION_LITERATURE_TRACEABILITY.md",
+   "title": "MDO remediation: literature traceability",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This record distinguishes what the cited propulsion literature actually says from repository calculations and software-policy decisions. Runtime code does not parse this document or the transcription corpus. The original PDFs remain the authority; Markdown under `propulsion_texts/propulsion_texts_for_agents` is the search/index layer.  ## Source ledger  | ID | Source | Location checked in the original PDF | Identifier | |---|---|---|---|",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 50,
+   "cited_pdfs": [
+    "propulsion_texts/19710019929.pdf",
+    "propulsion_texts/19730022965.pdf",
+    "propulsion_texts/fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf",
+    "propulsion_texts/nasuti2021.pdf",
+    "propulsion_texts/rao1958.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_REMEDIATION_LITERATURE_TRACEABILITY_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_REPO_PHYSICS_AUDIT_2026_07_02_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/REPO_PHYSICS_AUDIT_2026-07-02.md",
+   "title": "Repository physics & CAD audit — 2026-07-02",
+   "kind": "audit",
+   "date": "2026-07-02",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " > **Historical snapshot — superseded for current-status decisions.** This file > records what the repository and shipped build artifacts looked like on > 2026-07-02. Its census, test counts, findings, and recommended actions are > intentionally preserved rather than silently rewritten. Several issues it > identified were closed afterward, including the SP-8120 bound attribution, > rectangular-channel laminar correlation, full $C$-$D$-$E$ BVP thrust, > direct-MOC spline export, injector/cycle coupling, true pump B-rep and fluid > connectivity, CAD units/interfaces/clearances, and physical-rele",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 3,
+     "quote": "> **Historical snapshot — superseded for current-status decisions.** This file"
+    }
+   ],
+   "n_lines": 307,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_REPO_PHYSICS_AUDIT_2026_07_02_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_REWRITE_PLAN_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/REWRITE_PLAN.md",
+   "title": "RaoRocketSim — Rao Variational / Contour Pipeline Rewrite Plan",
+   "kind": "plan",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "Status: **net new**. Not present anywhere in the repo.\n\n### 2.C DE is not enforced to be a left-running Mach line\n\nIn Rao's optimum-thrust formulation, the supersonic control surface DE is\nexactly a left-running Mach line. Geometrically:\n\n```\ndr/dx |_{DE} = tan(θ + α)        where α = μ = arcsin(1/M)\n```",
+   "authority": "implementation_state_not_science",
+   "summary": " This plan addresses the real mathematical and engineering defects in `raosim/rao_variational.py` and the contour-generation pipeline that consumes it (`raosim/moc.py`, `raosim/rao_optimizer.py`, `raosim/nozzle_geometry.py`, `raosim/validation.py`, the test suite in `tests/`, and the entry points in `main.py` and `design.py`).  It is structured so each phase can be landed independently. Each phase ends with a test gate. Do not advance reliability until that gate passes.  ---",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 9,
+     "quote": "It is structured so each phase can be landed independently. Each phase ends"
+    },
+    {
+     "line": 1408,
+     "quote": "have landed."
+    }
+   ],
+   "n_lines": 1845,
+   "cited_pdfs": [
+    "propulsion_texts/19830016278.pdf",
+    "propulsion_texts/20030067852.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_DOCS_REWRITE_PLAN_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_RICE_JHU_MOC_TOPOLOGY_MAP_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/rice_jhu_moc_topology_map.md",
+   "title": "Rice/JHU MOC Topology Map",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " The NASA/JHU code constructs the Rao nozzle as a set of characteristic regions around the B-D-E topology. This map names the regions in the original code and the Python port.  ## Reference Case  The checked-in oracle is `outputs_M3.5Perf`, generated by `MOC_Grid_BDE`. Important run values from `summary.out`:  - `R* = 1 in`",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 25,
+     "quote": "checked-in M3.5Perf `TT'.out` is a historical overlay with unresolved"
+    }
+   ],
+   "n_lines": 112,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_RICE_JHU_MOC_TOPOLOGY_MAP_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_ROADMAP_REQUIREMENTS_TO_PARTS_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/ROADMAP_REQUIREMENTS_TO_PARTS.md",
+   "title": "Roadmap: requirements in, parameterized parts out",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "## Status\n\n| item | state |\n|---|---|\n| R0 chamber-length convention | **done** — wetted-area parity 0.8828 → 1.00102, mass delta 12.06 % → 0.044 % |\n| R1 jacket sizing + SP-8087 loads | **done** — hoop-sized tapered jacket, thin-shell and nozzle-collapse constraints added |\n| R2 flange/faceplate sizing | **advisory shipped** — 18.13 → 5.53 kg available; not yet applied to exported CAD |\n| R3 requirements layer | not started — still the product gap |\n| R4 parts package | not started |\n| R5 physics gaps | not started |",
+   "authority": "implementation_state_not_science",
+   "summary": " Target end state: a user supplies **dimensions, or targets to optimize toward** (a thrust target, an Isp floor, a mass budget, an envelope limit) plus whatever other engine requirements they care about, and receives **parameterized, manufacturable parts** — nozzle + throat + chamber assembly with flanges and correctly sized bolts, injector parts, and electric pump parts.  This document assesses where the repository actually stands against that goal and what to build next, in order. It supersedes the open-gap list in `MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md` §12 for prioritisation purposes. ",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 318,
+     "quote": "**R3 is now the critical path.** It was previously blocked because a"
+    }
+   ],
+   "n_lines": 333,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_ROADMAP_REQUIREMENTS_TO_PARTS_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_SHOULDER_RADIUS_DESIGN_BASIS_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/shoulder_radius_design_basis.md",
+   "title": "Making the chamber \"shoulder radius\" solver-determined — design basis & proposal",
+   "kind": "provenance",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " **Scope.** The CLI now defaults to `--shoulder-sizing auto`, deriving the chamber shoulder fillet from geometric closure. A scalar `--shoulder-radius-factor` remains available for explicit override, with the legacy `0.25·Rt` value used only when scalar mode is requested without a value. This memo records what physically sets that radius, which variables control it, and which parts are geometric closure versus future physical optimization. All claims are grounded in the `propulsion_texts` corpus; a few standard transonic results are cited to the primary literature the corpus only reproduces as",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 238,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_SHOULDER_RADIUS_DESIGN_BASIS_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_SPRAY_CSTAR_COUPLING_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/SPRAY_CSTAR_COUPLING.md",
+   "title": "Spray-to-Cycle Coupling",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " The legacy pintle atomization block is a correlation screen, not a parcel solver. It reports a liquid vaporized fraction from a Hinze diameter bound, a fixed primary-breakup length, and a calibrated d-squared-law evaporation constant. It does not infer mixing efficiency, chemical completion, or characteristic-velocity efficiency.  `raosim.spray_coupling` provides an explicit, opt-in fixed point:  ```text eta_cstar",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 90,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_SPRAY_CSTAR_COUPLING_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/thermofluid_literature_provenance.md",
+   "title": "Thermofluid and regenerative-cooling literature provenance",
+   "kind": "provenance",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " This document records the physical provenance, applicability limits, and known omissions of RaoRocketSim's thermodynamic, heat-transfer, coolant-flow, wall-sizing, and regenerative-CAD models.  ## Corpus audit  The June 2026 addition to `propulsion_texts/` contained 54 PDF files. SHA-256 deduplication gives 46 unique documents and 1,484 PDF pages. Duplicate copies were treated as one source. Text was extracted for search, and the governing equations, assumptions, conclusions, and validation statements were reviewed",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 36,
+     "quote": "| Laminar coolant film | Shah-London all-walls-uniform-heat-flux rectangular-duct polynomial in `alpha = min(w,h)/max(w,h)` | `Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).p"
+    }
+   ],
+   "n_lines": 204,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "type": "RepositoryDocument",
+   "path": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
+   "title": "Pintle Injector Literature Catalog",
+   "kind": "note",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " **Scope.** An annotated, de-duplicated inventory of the pintle-injector corpus in `propulsion_texts/pintle_injector/`, plus the directly-relevant coupling literature already present in the parent `propulsion_texts/` folder. The purpose is to map every document to the design topics that drive injector parametrization — design/sizing, hot-fire testing, cold-flow & atomization, thermal/cooling, throttling, and the coupling to **combustion-chamber geometry, nozzle geometry, and feed-system (pump) output** — so the corpus can inform the CLI design tool (`raosim/injector.py` and the `main.py` inter",
+   "relations": [],
+   "staleness_signals": [],
+   "n_lines": 243,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  },
+  {
+   "id": "RDOC_README_MD",
+   "type": "RepositoryDocument",
+   "path": "README.md",
+   "title": "LREKit",
+   "kind": "guide",
+   "date": null,
+   "date_basis": "unknown",
+   "status_head": "status is `experimental_variational_geometry`. Unsupported applicability and\nunmet promotion requirements are asserted directly; there are no expected-\nfailure literature tests standing in for missing physics.\n\n### 4. Rao variational / MOC BVP — `method=\"rao_variational_moc\"` (main research solver)\n\nThis solver seeds a finite-dimensional BVP from the NASA/JHU topology\n\n$$\nT T' \\;\\rightarrow\\; B \\;\\rightarrow\\; BD \\;\\rightarrow\\; D \\;\\rightarrow\\; DE \\;\\rightarrow\\; E .\n$$",
+   "authority": "implementation_state_not_science",
+   "summary": " For the current path from performance requirements to machinable, testable parts, start with the [September readiness review and delivery plan](docs/LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md). It consolidates repository findings, the implementation backlog, and literature gaps.  The [local scientific memory](knowledge/README.md) provides searchable source passages, a knowledge graph, and traceability from scientific claims to code and tests. Run `knowledge/kg.sh status` to inspect its current coverage.  LREKit is a Python research and preliminary-design toolkit for liquid rocket engine",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 124,
+     "quote": "`tests/test_model_registry.py`. For historical comparison, the June 14 normal"
+    },
+    {
+     "line": 130,
+     "quote": "packaged, source-labelled narrative anchors; the historical `TT'` artifact is"
+    },
+    {
+     "line": 360,
+     "quote": "`rao_chart_extrapolated`, and blocked by the benchmark/design gate; they are"
+    },
+    {
+     "line": 419,
+     "quote": "and constraints. The endpoint-tangent Bézier intersection is retained only as"
+    },
+    {
+     "line": 602,
+     "quote": "preserves the historical C++ integer-division behavior required for NASA"
+    },
+    {
+     "line": 1288,
+     "quote": "generator provenance of the historical `TT'.out` fixture is **unresolved**"
+    },
+    {
+     "line": 1396,
+     "quote": "A practical roadmap, grounded in the current code rather than historical phase"
+    },
+    {
+     "line": 1410,
+     "quote": "historical `TT'` generator provenance as an overlay limitation; do not use"
+    },
+    {
+     "line": 1476,
+     "quote": "differentiable-solver development record. Those documents contain historical"
+    }
+   ],
+   "n_lines": 1478,
+   "cited_pdfs": [
+    "propulsion_texts/fulltext01.pdf",
+    "propulsion_texts/prmeyer.pdf",
+    "propulsion_texts/rao1999.pdf"
+   ],
+   "provenance_id": "PROV_REPO_DOC_README_MD",
+   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+  }
+ ]
+}

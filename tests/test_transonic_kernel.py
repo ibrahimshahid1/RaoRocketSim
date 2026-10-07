@@ -13,7 +13,8 @@ These tests pin:
 * The 1-D sonic limit (Rc/Rt → ∞ ⇒ U → 1, V → 0, M → 1, θ → 0).
 * Throat-plane monotonicity along the arc from axis to wall.
 * End-to-end: KL as the default ``starting_line_method`` does not
-  regress the BVP ``max_scaled`` residual relative to ``area_ratio``.
+  regress the BVP ``max_scaled`` residual (absolute pin; the former
+  ``area_ratio`` baseline was a silent flat-line fallback).
 
 The packaged Cuffel-Back-Massier 1969 narrative anchors provide an additional
 non-xfailed literature check without pretending that untranscribed plot data
@@ -185,36 +186,36 @@ def test_approximate_starting_line_rejects_unknown_method():
 # ---------------------------------------------------------------------
 
 
-def test_kl_end_to_end_does_not_regress_bvp_residual():
-    """Switching from 'area_ratio' to 'kliegel_levine' should not
-    increase ``max_scaled`` on the reference (ε=10, length_pct=80) case.
+def test_kl_end_to_end_bvp_residual_pinned():
+    """Phase 9 end-to-end pin on the reference (ε=10, length_pct=80) case.
+
+    Until 2026-09-21 this compared KL against ``starting_line_method=
+    "area_ratio"`` — which ``nasa_moc._make_throat_initial_line`` never
+    implemented: it fell through to a silent flat M = 1.001, θ = 0 line, so
+    the "baseline" was meaningless (docs/MOC_MARCH_TOPOLOGY_REMEDIATION_
+    2026-09-21.md F9).  That fallback now raises ``ValueError``; the KL
+    residual is pinned absolutely instead (measured 1.11e-4 at this
+    n_control=8 / n_kernel=8 / max_nfev=200 budget, JAX backend).
     """
     from raosim.rao_variational import RaoSolverConfig, solve_rao_bvp
 
-    base = solve_rao_bvp(RaoSolverConfig(
-        Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
-        length_pct=80.0, n_control=8, n_kernel=8,
-        max_nfev=200, evaluate_moc=False,
-        starting_line_method="area_ratio",
-    ))
     kl = solve_rao_bvp(RaoSolverConfig(
         Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
         length_pct=80.0, n_control=8, n_kernel=8,
         max_nfev=200, evaluate_moc=False,
         starting_line_method="kliegel_levine",
     ))
-    # After the NASA dθ-form wall-march port (CalcArcWallPoint) +
-    # downstream-step iteration in _make_throat_initial_line, KL with
-    # n_kernel=8 now produces a 3-RRC marched kernel (the row march
-    # succeeds where it used to fall back to the arc-following BD).
-    # The resulting BD has higher axis Mach (M ≈ 1.55 vs 1.0 in the
-    # fallback BD), which changes the D selection in calc_lrc_de.  KL
-    # at this small n_kernel sits ~2× above the area_ratio baseline;
-    # bumping n_kernel restores parity (verified at n_kernel ≥ 24).
-    assert kl.residuals.max_scaled <= 2.5 * base.residuals.max_scaled, (
-        f"KL max_scaled {kl.residuals.max_scaled:.4e} significantly "
-        f"worse than area_ratio {base.residuals.max_scaled:.4e}"
+    assert kl.residuals.max_scaled <= 3e-4, (
+        f"KL max_scaled {kl.residuals.max_scaled:.4e} regressed past the "
+        "3e-4 pin (measured 1.11e-4 on 2026-09-21)"
     )
+    with pytest.raises(ValueError):
+        solve_rao_bvp(RaoSolverConfig(
+            Rt=0.020, epsilon=10.0, gamma=1.4, pa_over_p0=0.01,
+            length_pct=80.0, n_control=8, n_kernel=8,
+            max_nfev=0, evaluate_moc=False,
+            starting_line_method="area_ratio",
+        ))
 
 
 def test_kl_centerline_mach_matches_cuffel_back_massier_1969():

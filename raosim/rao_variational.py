@@ -63,6 +63,7 @@ from raosim.moc import (
     approximate_starting_line,
     march_coupled_net,
     sample_exit_plane,
+    solve_flowfield,
     compute_exit_thrust,
 )
 from raosim.rao_residuals import (
@@ -4907,10 +4908,21 @@ def characteristic_net_links(rows: list[CharRow]) -> dict[str, list[MOCNetLink]]
     """
     Return explicit characteristic-family links from a marched MOC net.
 
-    ``CharRow.all_points()`` is only a row ordering convenience.  The true
-    topology is the parent-child construction used by ``march_coupled_net``:
-    interior points are C+ from the lower parent and C- from the upper parent,
-    axis points are C- symmetry hits, and wall points are C+ wall hits.
+    ``CharRow.all_points()`` is only a row ordering convenience.  When the
+    rows carry an explicit parent map (``CharRow.parents``, written by
+    :meth:`raosim.moc_bounded.BoundedNet.to_char_rows`) the links are read
+    from it: interior points are C+ from a point of the previous RRC and
+    C- from the just-completed neighbour on the SAME RRC, wall points are
+    C+ hits from the previous RRC's first interior point, and axis points
+    are C- closures from their own row — the NASA/JHU topology in which the
+    boundary points are parents.
+
+    Rows without a parent map are assumed to come from the deprecated
+    front march (``raosim.moc.march_coupled_net``), whose implicit topology
+    is reproduced here for the historical diagnostics: interior points are
+    C+ from the lower parent and C- from the upper parent of the previous
+    front, axis points are C- symmetry hits, and wall points are C+ wall
+    hits — its axis/wall points are never parents.
     """
     links: dict[str, list[MOCNetLink]] = {
         "cplus": [],
@@ -4919,6 +4931,45 @@ def characteristic_net_links(rows: list[CharRow]) -> dict[str, list[MOCNetLink]]
         "wall": [],
     }
     if len(rows) < 2:
+        return links
+
+    explicit = all(
+        getattr(row, "parents", None) is not None for row in rows[1:]
+    )
+    if explicit:
+        all_pts = [row.all_points() for row in rows]
+        for row_idx, row in enumerate(rows[1:], start=1):
+            curr_pts = all_pts[row_idx]
+            n_curr = len(curr_pts)
+            for child_index, child in enumerate(curr_pts):
+                entry = row.parents[child_index] if child_index < len(row.parents) else None
+                if entry is None:
+                    continue
+                if row.axis is not None and child_index == 0:
+                    role = "axis"
+                elif row.wall is not None and child_index == n_curr - 1:
+                    role = "wall"
+                else:
+                    role = "interior"
+                for family in ("cplus", "cminus"):
+                    src = entry.get(family)
+                    if src is None:
+                        continue
+                    prow, pidx = src
+                    if not (0 <= prow < len(all_pts)) or not (0 <= pidx < len(all_pts[prow])):
+                        continue
+                    link = MOCNetLink(
+                        row=row_idx,
+                        family=family,
+                        role=role,
+                        parent=all_pts[prow][pidx],
+                        child=child,
+                        parent_index=int(pidx),
+                        child_index=int(child_index),
+                    )
+                    links[family].append(link)
+                    if role in ("axis", "wall"):
+                        links[role].append(link)
         return links
 
     prev_pts = rows[0].all_points()
@@ -4985,6 +5036,26 @@ def characteristic_net_links(rows: list[CharRow]) -> dict[str, list[MOCNetLink]]
         prev_pts = curr_pts
 
     return links
+
+
+def interior_parent_pairs(
+    rows: list[CharRow],
+) -> list[tuple[int, CharPoint, CharPoint, CharPoint]]:
+    """``(row, cplus_parent, cminus_parent, child)`` for every interior point
+    that has both parents, derived from :func:`characteristic_net_links`."""
+    links = characteristic_net_links(rows)
+    by_child: dict[tuple[int, int], dict[str, MOCNetLink]] = {}
+    for family in ("cplus", "cminus"):
+        for link in links[family]:
+            if link.role != "interior":
+                continue
+            by_child.setdefault((link.row, link.child_index), {})[family] = link
+    pairs = []
+    for (row_idx, _), fam in sorted(by_child.items()):
+        if "cplus" in fam and "cminus" in fam:
+            pairs.append((row_idx, fam["cplus"].parent, fam["cminus"].parent,
+                          fam["cplus"].child))
+    return pairs
 
 
 def characteristic_net_compatibility_residuals(
@@ -5070,19 +5141,17 @@ def moc_net_compatibility_report(
         if abs(float(value)) > tol:
             bad_rows.add(link.row)
 
-    prev_pts = rows[0].all_points() if rows else []
+    pairs_by_row: dict[int, list[tuple[CharPoint, CharPoint, CharPoint]]] = {}
+    for row_idx, p_plus, p_minus, child in interior_parent_pairs(rows):
+        pairs_by_row.setdefault(row_idx, []).append((p_plus, p_minus, child))
+
     for row_idx, row in enumerate(rows[1:], start=1):
-        curr_pts = row.all_points()
         row_residuals: list[float] = []
 
-        parent_start = 1 if prev_pts and prev_pts[0].r < 1e-10 else 0
-        for j, child in enumerate(row.interior):
-            parent_j = parent_start + j
-            if parent_j + 1 >= len(prev_pts):
-                continue
+        for p_plus, p_minus, child in pairs_by_row.get(row_idx, []):
             geom = residual_intersection(
-                prev_pts[parent_j].to_flow_node(),
-                prev_pts[parent_j + 1].to_flow_node(),
+                p_plus.to_flow_node(),
+                p_minus.to_flow_node(),
                 child.to_flow_node(),
                 x_scale,
                 r_scale,
@@ -5101,7 +5170,6 @@ def moc_net_compatibility_report(
 
         if row_residuals and max(row_residuals) > tol:
             bad_rows.add(row_idx)
-        prev_pts = curr_pts
 
     valid_rows = [
         row for row in rows[1:]
@@ -6123,18 +6191,62 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     slope_start=slope_start,
                     slope_end=slope_end,
                 )
-                starting = approximate_starting_line(
+                # Forward BOUNDED-net audit of the constructed wall
+                # (raosim.moc_bounded: NASA/JHU RRC topology, boundary
+                # points are parents).  Replaces the deprecated shrinking
+                # front march, which never reached the exit — see
+                # docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md.
+                flow = solve_flowfield(
                     config.Rt,
-                    config.throat_downstream_radius_factor * config.Rt,
-                    max(theta_n_chart, 1e-4),
+                    config.epsilon,
                     config.gamma,
-                    config.n_kernel,
-                    method=config.starting_line_method,
-                    transonic_curvature_radius=(
-                        config.throat_upstream_radius_factor * config.Rt
+                    wall,
+                    n_char=config.n_kernel,
+                    starting_line_method=config.starting_line_method,
+                    throat_upstream_radius_factor=(
+                        config.throat_upstream_radius_factor
                     ),
+                    throat_downstream_radius_factor=(
+                        config.throat_downstream_radius_factor
+                    ),
+                    dtheta_limit_deg=float(config.kernel_dtheta_limit_deg),
+                    on_invalid="refine",
                 )
-                char_net = march_coupled_net(starting, wall, config.gamma)
+                char_net = flow["rows"]
+                bounded_net = flow["net"]
+                construction_diagnostics["forward_net"] = {
+                    "topology": "bounded_rrc_nasa_jhu",
+                    "complete": bool(bounded_net.complete),
+                    "stop_reason": bounded_net.stop_reason,
+                    "fold_location": bounded_net.fold_location,
+                    "n_rows": int(bounded_net.n_rows),
+                    "n_special": int(sum(bounded_net.special)),
+                    "truncated_rows": int(bounded_net.truncated_rows),
+                    "containment_violations": int(
+                        bounded_net.containment_violations
+                    ),
+                    "mdot_drift_max": float(max(
+                        abs(e) for e in bounded_net.mdot_rel_err
+                    )),
+                    "wall_x_reached": float(bounded_net.wall_x[-1])
+                    if bounded_net.wall_x else float("nan"),
+                    "exit_metrics": {
+                        k: v for k, v in flow["exit_metrics"].items()
+                        if isinstance(v, (int, float, str, bool))
+                    } if bounded_net.complete else None,
+                }
+                if not bounded_net.complete:
+                    construction_diagnostics["moc_compatibility_preserved"] = False
+                    construction_diagnostics.setdefault("warnings", []).append(
+                        "Forward bounded MOC net did not reach the exit "
+                        f"({bounded_net.stop_reason}"
+                        + (
+                            f" at x={bounded_net.fold_location[0]:.4g}, "
+                            f"r={bounded_net.fold_location[1]:.4g}"
+                            if bounded_net.fold_location else ""
+                        )
+                        + ")."
+                    )
                 crossings = check_characteristic_crossing(char_net)
                 net_compatibility = summarize_characteristic_net_compatibility(
                     char_net, config.gamma

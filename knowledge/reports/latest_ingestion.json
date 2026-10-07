@@ -1,0 +1,1689 @@
+{
+ "started_at": "2026-09-20T22:58:09.645870+00:00",
+ "steps": {
+  "sync": {
+   "pdf_count": 280,
+   "manifest_rows": 286,
+   "synchronized": 286,
+   "missing_markdown": 0,
+   "stale_markdown": 0,
+   "orphan_markdown": 2,
+   "weak_mapping": 0,
+   "duplicate_payloads": 27
+  },
+  "manifest": {
+   "documents": 252
+  },
+  "chunks": {
+   "ingested": 0,
+   "unchanged": 248,
+   "skipped_no_markdown": 0,
+   "skipped_failed_conversion": 0,
+   "n_chunks_total": 19565,
+   "removed": 0,
+   "skipped_alternate_copy": 4,
+   "generated_at": "2026-09-20T22:58:11.033785+00:00"
+  },
+  "index": {
+   "skipped": "no chunk changes"
+  },
+  "registry": {
+   "models": 61,
+   "unresolved": [
+    {
+     "model_id": "MODEL_INJECTOR_AUTO_PINTLE_DIAMETER",
+     "source": "repository packaging policy",
+     "state": "NO_LOCAL_SOURCE_ROUTE"
+    },
+    {
+     "model_id": "MODEL_INJECTOR_PRIMARY_BREAKUP_15DH",
+     "source": "repository midpoint of an order-of-magnitude Reitz-Bracco prompt-breakup range",
+     "state": "NO_LOCAL_SOURCE_ROUTE"
+    },
+    {
+     "model_id": "MODEL_SPRAY_RAYLEIGH_TAYLOR_OPENFOAM",
+     "source": "OpenFOAM Foundation ReitzKHRT model, version-10 source implementation",
+     "state": "NO_LOCAL_SOURCE_ROUTE"
+    },
+    {
+     "model_id": "MODEL_PUMP_AUTO_EFFICIENCY_FLOW_HEAD",
+     "source": "repository conservative screening policy",
+     "state": "NO_LOCAL_SOURCE_ROUTE"
+    },
+    {
+     "model_id": "MODEL_PUMP_SYNTHETIC_MAP",
+     "source": "repository screening policy",
+     "state": "NO_LOCAL_SOURCE_ROUTE"
+    }
+   ]
+  },
+  "freshness": {
+   "changed_documents": {},
+   "invalidated_objects": 0
+  },
+  "repo": {
+   "repo_documents": 62,
+   "doc_relations": 2,
+   "unresolved_doc_refs": [],
+   "tests": 1061,
+   "tests_by_kind": {
+    "unit_test": 879,
+    "published_benchmark_reproduction": 75,
+    "model_vs_model_comparison": 6,
+    "numpy_jax_parity": 25,
+    "autodiff_finite_difference": 52,
+    "numerical_regression": 21,
+    "snapshot_contract": 3
+   },
+   "capabilities": 98,
+   "capabilities_by_state": {
+    "UNSUPPORTED": 13,
+    "NOT_QUALIFIED": 9,
+    "NOT_IMPLEMENTED": 9,
+    "UNAVAILABLE": 32,
+    "BLOCKED_ON_LITERATURE": 35
+   },
+   "citations": 26,
+   "cite_edges": 26,
+   "citations_unresolved": []
+  },
+  "constraints": {
+   "rows": 31,
+   "by_kind": {
+    "optimizer_constraint": 23,
+    "diagnostic": 1,
+    "applicability_gate": 4,
+    "postsolve_gate": 3
+   },
+   "by_basis": {
+    "OK": 18,
+    "SCIENTIFIC_BASIS_UNKNOWN": 13
+   },
+   "method": "source_text_parse"
+  },
+  "graph": {
+   "ontology_version": "1.0.0",
+   "generated_at": "2026-09-20T22:58:12.656481+00:00",
+   "n_nodes": 4514,
+   "n_edges": 5685,
+   "n_dangling_dropped": 0
+  },
+  "validation": {
+   "generated_at": "2026-09-20T22:58:13.127169+00:00",
+   "n_issues": 3,
+   "issues_by_check": {
+    "markdown_without_manifest_row": 2,
+    "registry_citation_not_confirmed_in_local_source": 1
+   },
+   "stats": {
+    "equation_variables": {
+     "ambiguous": 12,
+     "unresolved": 88,
+     "total": 140
+    },
+    "constants_by_basis": {
+     "IMPLEMENTATION_CHOICE": 351,
+     "UNKNOWN_BASIS": 223,
+     "LITERATURE_DERIVED": 189,
+     "PROJECT_DERIVED": 41,
+     "REPOSITORY_HEURISTIC": 175,
+     "EMPIRICALLY_CALIBRATED": 2
+    },
+    "components_without_scientific_link": 214,
+    "graph": {
+     "nodes": 4514,
+     "edges": 5685,
+     "edges_without_provenance": 0,
+     "top_degree": [
+      [
+       "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+       145
+      ],
+      [
+       "DOC_NTRS_19710019929",
+       131
+      ],
+      [
+       "DOC_NTRS_19760023196",
+       111
+      ],
+      [
+       "MODEL_NOZZLE_MOC",
+       97
+      ],
+      [
+       "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+       83
+      ]
+     ]
+    },
+    "duplicate_chunk_texts": 15
+   }
+  },
+  "review_queue": {
+   "models_total": 61,
+   "model_support": {
+    "PARTIALLY_SUPPORTED": 8,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "SUPPORTED": 2,
+    "NOT_CHECKED": 50
+   },
+   "pending_source_reviews": 42,
+   "needs_source_routing": 8,
+   "pending_verifications": 216,
+   "documents_with_extracted_objects": 7,
+   "canonical_documents_without_extracted_objects": 241
+  }
+ },
+ "document_states": [
+  {
+   "doc_id": "DOC_125_1",
+   "state": "INGESTED",
+   "n_chunks": 10,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_3_540_13917_6_196",
+   "state": "INGESTED",
+   "n_chunks": 10,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_52D4CA845732D962C5E49697F8B99533_LECTURE_4_5",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "state": "INGESTED",
+   "n_chunks": 732,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_978_3_7091_4745_0_18",
+   "state": "INGESTED",
+   "n_chunks": 5,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_24_2012_TYPES_AND_APPLICATIONS_OF_ENGINEERING_THE_A",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 112,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_41_2003_DIGITAL_PRODUCT_DEFINITION_DATA_PRACTICES_T",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 163,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA",
+   "state": "INGESTED",
+   "n_chunks": 416,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_AUSTIN2002",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_A_DESIGN_TOOL_FOR_LIQUID_ROCKET_ENGINE_INJECTORS",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_BELL2014",
+   "state": "INGESTED",
+   "n_chunks": 60,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_BELLARY2014",
+   "state": "INGESTED",
+   "n_chunks": 44,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_BF03404670",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_CAD_04",
+   "state": "INGESTED",
+   "n_chunks": 128,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_CHEN1992",
+   "state": "INGESTED",
+   "n_chunks": 14,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DIMENSIONING_AND_TOLERANCING_ENGINEERING_DRAWING_AND_ASTM_IN",
+   "state": "ALTERNATE_COPY_NOT_CHUNKED",
+   "canonical": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA"
+  },
+  {
+   "doc_id": "DOC_DOI_10_1002_FLD_1650130505",
+   "state": "INGESTED",
+   "n_chunks": 45,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_978_3_030_14788_4",
+   "state": "INGESTED",
+   "n_chunks": 0,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
+   "state": "INGESTED",
+   "n_chunks": 19,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_016_8467_X",
+   "state": "INGESTED",
+   "n_chunks": 28,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_018_2033_7",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00193_018_0834_0",
+   "state": "INGESTED",
+   "n_chunks": 42,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "state": "INGESTED",
+   "n_chunks": 374,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S10853_008_2802_Z",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_013_0601_6",
+   "state": "INGESTED",
+   "n_chunks": 17,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_015_0753_7",
+   "state": "INGESTED",
+   "n_chunks": 18,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_016_0838_Y",
+   "state": "INGESTED",
+   "n_chunks": 18,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11837_025_07787_0",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_020_00325_Z",
+   "state": "ALTERNATE_COPY_NOT_CHUNKED",
+   "canonical": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E"
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "state": "INGESTED",
+   "n_chunks": 39,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+   "state": "INGESTED",
+   "n_chunks": 37,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_0010_4485_95_00005_4",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_02_005",
+   "state": "INGESTED",
+   "n_chunks": 25,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_12_012",
+   "state": "INGESTED",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2020_04_067",
+   "state": "INGESTED",
+   "n_chunks": 41,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2021_02_034",
+   "state": "INGESTED",
+   "n_chunks": 53,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_02_019",
+   "state": "INGESTED",
+   "n_chunks": 35,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "state": "INGESTED",
+   "n_chunks": 45,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2024_02_038",
+   "state": "INGESTED",
+   "n_chunks": 49,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2014_10_008",
+   "state": "INGESTED",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120035",
+   "state": "INGESTED",
+   "n_chunks": 46,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120421",
+   "state": "INGESTED",
+   "n_chunks": 48,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2014_05_012",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "state": "INGESTED",
+   "n_chunks": 61,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2021_106729",
+   "state": "INGESTED",
+   "n_chunks": 44,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_CJA_2017_04_007",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_COMBUST",
+   "state": "INGESTED",
+   "n_chunks": 48,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_EXPTHERMFLUSCI_2018_03_033",
+   "state": "INGESTED",
+   "n_chunks": 70,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_FUEL_2020_119212",
+   "state": "INGESTED",
+   "n_chunks": 37,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJFATIGUE_2020_105649",
+   "state": "INGESTED",
+   "n_chunks": 40,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHEAT",
+   "state": "INGESTED",
+   "n_chunks": 36,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHEATMASSTRANSFER_2013_10_046",
+   "state": "INGESTED",
+   "n_chunks": 46,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHYDENE_2008_05_057",
+   "state": "INGESTED",
+   "n_chunks": 35,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_JALLCOM_2013_12_057",
+   "state": "INGESTED",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_JPPR_2018_01_004",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 48,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MSEA_2010_07_051",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MSEA_2015_05_028",
+   "state": "INGESTED",
+   "n_chunks": 68,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106437",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106442",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106456",
+   "state": "INGESTED",
+   "n_chunks": 41,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106496",
+   "state": "INGESTED",
+   "n_chunks": 64,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106545",
+   "state": "INGESTED",
+   "n_chunks": 46,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106558",
+   "state": "INGESTED",
+   "n_chunks": 34,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "state": "INGESTED",
+   "n_chunks": 73,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_SURFCOAT_2013_06_062",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1038_S41598_024_64027_2",
+   "state": "INGESTED",
+   "n_chunks": 35,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1038_S41598_025_18499_5",
+   "state": "INGESTED",
+   "n_chunks": 48,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1051_EUCASS_200901171",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_0305215X_2021_1932867",
+   "state": "INGESTED",
+   "n_chunks": 41,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "state": "INGESTED",
+   "n_chunks": 45,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_10407782_2013_798532",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "state": "INGESTED",
+   "n_chunks": 56,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_15361055_2022_2147765",
+   "state": "INGESTED",
+   "n_chunks": 39,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1742_6596_2369_1_012066",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1755_1315_781_4_042016",
+   "state": "INGESTED",
+   "n_chunks": 27,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1757_899X_101_1_012180",
+   "state": "INGESTED",
+   "n_chunks": 18,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1757_899X_1301_1_012030",
+   "state": "INGESTED",
+   "n_chunks": 13,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1757_899X_1301_1_012030_E0D954A3",
+   "state": "ALTERNATE_COPY_NOT_CHUNKED",
+   "canonical": "DOC_DOI_10_1088_1757_899X_1301_1_012030"
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2814127",
+   "state": "INGESTED",
+   "n_chunks": 19,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2817294",
+   "state": "INGESTED",
+   "n_chunks": 14,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3254633",
+   "state": "INGESTED",
+   "n_chunks": 40,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3616734",
+   "state": "INGESTED",
+   "n_chunks": 59,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3657314",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3657315",
+   "state": "INGESTED",
+   "n_chunks": 43,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3662532",
+   "state": "INGESTED",
+   "n_chunks": 54,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3662656",
+   "state": "INGESTED",
+   "n_chunks": 44,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3672726",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3678503",
+   "state": "INGESTED",
+   "n_chunks": 40,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_4042160",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_4053652",
+   "state": "INGESTED",
+   "n_chunks": 44,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_90_GT_198",
+   "state": "INGESTED",
+   "n_chunks": 55,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_94_GT_426",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1177_0954406212449939",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1177_0954406212449939_50F7ECD5",
+   "state": "ALTERNATE_COPY_NOT_CHUNKED",
+   "canonical": "DOC_DOI_10_1177_0954406212449939"
+  },
+  {
+   "doc_id": "DOC_DOI_10_1179_MHT_2004_014",
+   "state": "INGESTED",
+   "n_chunks": 25,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_1243_PIME_PROC_1963_177_061_02",
+   "state": "INGESTED",
+   "n_chunks": 102,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_15421_452324",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_11645",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_14699",
+   "state": "INGESTED",
+   "n_chunks": 25,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_35074",
+   "state": "INGESTED",
+   "n_chunks": 27,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_47701",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_7988",
+   "state": "INGESTED",
+   "n_chunks": 35,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B34714",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B34855",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36059",
+   "state": "INGESTED",
+   "n_chunks": 17,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36144",
+   "state": "INGESTED",
+   "n_chunks": 27,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36301",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36361",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 49,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36589",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B37669",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 51,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_T4299",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_T6056",
+   "state": "INGESTED",
+   "n_chunks": 51,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 51,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_2_5593",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_23969",
+   "state": "INGESTED",
+   "n_chunks": 43,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_25729",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_28012",
+   "state": "INGESTED",
+   "n_chunks": 14,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_29545",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_60066",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_9031",
+   "state": "INGESTED",
+   "n_chunks": 42,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_4_866197",
+   "state": "INGESTED",
+   "n_chunks": 1406,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_5_9781600866760_0621_0648",
+   "state": "INGESTED",
+   "n_chunks": 63,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1991_1982",
+   "state": "INGESTED",
+   "n_chunks": 25,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1992_3154",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1992_3400",
+   "state": "INGESTED",
+   "n_chunks": 22,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1997_2913",
+   "state": "INGESTED",
+   "n_chunks": 43,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2014_3681",
+   "state": "INGESTED",
+   "n_chunks": 60,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2015_3810",
+   "state": "INGESTED",
+   "n_chunks": 19,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2015_3845",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_1416",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_1453",
+   "state": "INGESTED",
+   "n_chunks": 17,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_4771",
+   "state": "INGESTED",
+   "n_chunks": 48,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_5080",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2017_4670",
+   "state": "INGESTED",
+   "n_chunks": 55,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2017_4928",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4624",
+   "state": "INGESTED",
+   "n_chunks": 64,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4625",
+   "state": "INGESTED",
+   "n_chunks": 70,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4860",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_0152",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_3938",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4117",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4361",
+   "state": "INGESTED",
+   "n_chunks": 41,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4362",
+   "state": "INGESTED",
+   "n_chunks": 49,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4432",
+   "state": "INGESTED",
+   "n_chunks": 22,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2020_3941",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_12572",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_5837",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "state": "INGESTED",
+   "n_chunks": 36,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3233_ATDE250338",
+   "state": "INGESTED",
+   "n_chunks": 22,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_AEROSPACE9090494",
+   "state": "INGESTED",
+   "n_chunks": 25,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_APP15052696",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_ELECTRONICS12163527",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_EN11102588",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_4028_WWW_SCIENTIFIC_NET_AMM_680_303",
+   "state": "INGESTED",
+   "n_chunks": 11,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_5293_IJFMS_2011_4_3_317",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DOI_10_6084_M9_FIGSHARE_22886720",
+   "state": "INGESTED",
+   "n_chunks": 11,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_DRESSLER2000",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "state": "INGESTED",
+   "n_chunks": 2066,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_FP_EUCASS_043",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_FULLTEXT01",
+   "state": "INGESTED",
+   "n_chunks": 238,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_GAVITT2001",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_GROMSKI2010",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_HANDOUT4_1",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_HICKMAN2003",
+   "state": "INGESTED",
+   "n_chunks": 9,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_HUBER2009",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_KUHL1998",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_LIN1993",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_LIQUID_FILM_COOLING_IN_ROCKET_ENGINES_R5YU3J35KY",
+   "state": "INGESTED",
+   "n_chunks": 81,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_L_05_BSPLINES_NURBS",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_MA8UFPJ30PN7K_2BP3WB2SYOYLLYK6K68JQ0R8DXEM8JQ_3D",
+   "state": "INGESTED",
+   "n_chunks": 17,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_MASUOKA2011",
+   "state": "INGESTED",
+   "n_chunks": 15,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_MILLER1974",
+   "state": "INGESTED",
+   "n_chunks": 27,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_MUELLER2000",
+   "state": "INGESTED",
+   "n_chunks": 23,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NARAGHI2004",
+   "state": "INGESTED",
+   "n_chunks": 21,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NOZZLE_GEOMETRIES",
+   "state": "INGESTED",
+   "n_chunks": 1,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19670010557",
+   "state": "INGESTED",
+   "n_chunks": 74,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19680021046",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19680021132",
+   "state": "INGESTED",
+   "n_chunks": 88,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19690023975",
+   "state": "INGESTED",
+   "n_chunks": 83,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19700005097",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19710019929",
+   "state": "INGESTED",
+   "n_chunks": 1115,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19710023317",
+   "state": "INGESTED",
+   "n_chunks": 64,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19710025474",
+   "state": "INGESTED",
+   "n_chunks": 177,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19720000070",
+   "state": "INGESTED",
+   "n_chunks": 3,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19720000634",
+   "state": "INGESTED",
+   "n_chunks": 4,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19720005326",
+   "state": "INGESTED",
+   "n_chunks": 95,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19720008558",
+   "state": "INGESTED",
+   "n_chunks": 120,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19720026079",
+   "state": "INGESTED",
+   "n_chunks": 1173,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19730011150",
+   "state": "INGESTED",
+   "n_chunks": 69,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19730015803",
+   "state": "INGESTED",
+   "n_chunks": 452,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19730018978",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 196,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19730022965",
+   "state": "INGESTED",
+   "n_chunks": 191,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19740017697",
+   "state": "INGESTED",
+   "n_chunks": 41,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19740017910",
+   "state": "INGESTED",
+   "n_chunks": 50,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19740020848",
+   "state": "INGESTED",
+   "n_chunks": 185,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19740023307",
+   "state": "INGESTED",
+   "n_chunks": 36,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19740026132",
+   "state": "INGESTED",
+   "n_chunks": 228,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19750012398",
+   "state": "INGESTED",
+   "n_chunks": 166,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19750020175",
+   "state": "INGESTED",
+   "n_chunks": 135,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19750021165",
+   "state": "INGESTED",
+   "n_chunks": 36,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19760023196",
+   "state": "INGESTED",
+   "n_chunks": 242,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19770009165",
+   "state": "INGESTED",
+   "n_chunks": 185,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19780005428",
+   "state": "INGESTED",
+   "n_chunks": 211,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19780013268",
+   "state": "INGESTED",
+   "n_chunks": 223,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19780023221",
+   "state": "INGESTED",
+   "n_chunks": 181,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19830011760",
+   "state": "INGESTED",
+   "n_chunks": 67,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19830016278",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19870007469",
+   "state": "INGESTED",
+   "n_chunks": 28,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19890068390",
+   "state": "INGESTED",
+   "n_chunks": 57,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19900015790",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19940018570",
+   "state": "INGESTED",
+   "n_chunks": 5,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19950011631",
+   "state": "INGESTED",
+   "n_chunks": 40,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19950013764",
+   "state": "INGESTED",
+   "n_chunks": 38,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19960044559",
+   "state": "INGESTED",
+   "n_chunks": 278,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19970002915",
+   "state": "INGESTED",
+   "n_chunks": 165,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_19970004933",
+   "state": "INGESTED",
+   "n_chunks": 31,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20020050420",
+   "state": "INGESTED",
+   "n_chunks": 15,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20020070630",
+   "state": "INGESTED",
+   "n_chunks": 69,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20020085330",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 391,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20030067852",
+   "state": "INGESTED",
+   "n_chunks": 55,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20050123582",
+   "state": "INGESTED",
+   "n_chunks": 40,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20060005216",
+   "state": "INGESTED",
+   "n_chunks": 20,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20070026245",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20090037061",
+   "state": "INGESTED",
+   "n_chunks": 119,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20100034924",
+   "state": "INGESTED",
+   "n_chunks": 79,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20100035254",
+   "state": "INGESTED",
+   "n_chunks": 53,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20120008551",
+   "state": "INGESTED",
+   "n_chunks": 146,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20130014182",
+   "state": "INGESTED",
+   "n_chunks": 1,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20150002584",
+   "state": "INGESTED",
+   "n_chunks": 3,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20150016316",
+   "state": "INGESTED",
+   "n_chunks": 2,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20150021468",
+   "state": "INGESTED",
+   "n_chunks": 7,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20170004516",
+   "state": "INGESTED",
+   "n_chunks": 79,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_NTRS_20180003628",
+   "state": "INGESTED",
+   "n_chunks": 18,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_PAPERLREENGINEMASSANDSIZING",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_PRMEYER",
+   "state": "INGESTED",
+   "n_chunks": 2,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_RADHAKRISHNAN2018",
+   "state": "INGESTED",
+   "n_chunks": 30,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_RADHAKRISHNAN2020",
+   "state": "INGESTED",
+   "n_chunks": 32,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_RAO1999",
+   "state": "INGESTED",
+   "n_chunks": 16,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_S12666_010_0089_7",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 12,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_SCHARLEMANN2005",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_SCHARLEMANN2006",
+   "state": "INGESTED",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_SINGH1997",
+   "state": "INGESTED",
+   "n_chunks": 26,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_TANI2008",
+   "state": "INGESTED",
+   "n_chunks": 24,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_TOKUDOME2010",
+   "state": "INGESTED",
+   "n_chunks": 29,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_TOMEJ_2_75",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
+   "n_chunks": 27,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_VANDENBERG_CORRECTED_PROPERTIES",
+   "state": "INGESTED",
+   "n_chunks": 19,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_WALTER1999",
+   "state": "INGESTED",
+   "n_chunks": 17,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_WHITFIELD1978",
+   "state": "INGESTED",
+   "n_chunks": 33,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_WHITFIELD1982",
+   "state": "INGESTED",
+   "n_chunks": 12,
+   "unchanged": true
+  },
+  {
+   "doc_id": "DOC_YOUNG_THESIS",
+   "state": "INGESTED",
+   "n_chunks": 174,
+   "unchanged": true
+  }
+ ],
+ "finished_at": "2026-09-20T22:58:13.133825+00:00"
+}

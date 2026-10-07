@@ -1,0 +1,314 @@
+{
+  "type": "object",
+  "properties": {
+    "doc_id": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "equations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "equation_number": {
+            "type": "string"
+          },
+          "form": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "symbol": {
+                  "type": "string"
+                },
+                "meaning": {
+                  "type": "string"
+                },
+                "units": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "input",
+                    "output",
+                    "parameter",
+                    "constant",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "symbol",
+                "meaning"
+              ]
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validity": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "extraction_note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "form",
+          "page",
+          "quote",
+          "confidence"
+        ]
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_type": {
+            "type": "string",
+            "enum": [
+              "definition",
+              "theoretical",
+              "empirical",
+              "methodological",
+              "comparative",
+              "assumption",
+              "constraint",
+              "recommendation",
+              "validity_statement",
+              "design_criterion",
+              "derived_result",
+              "benchmark_result"
+            ]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "predicate": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          }
+        },
+        "required": [
+          "claim_type",
+          "subject",
+          "predicate",
+          "object",
+          "statement",
+          "page",
+          "quote",
+          "confidence"
+        ]
+      }
+    },
+    "validity_statements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "applies_to": {
+            "type": "string"
+          },
+          "bounds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "variable": {
+                  "type": "string"
+                },
+                "lower": {
+                  "type": "string"
+                },
+                "upper": {
+                  "type": "string"
+                },
+                "units": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "variable"
+              ]
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "applies_to",
+          "page",
+          "quote"
+        ]
+      }
+    },
+    "empirical_constants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "units": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "page",
+          "quote"
+        ]
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "page",
+          "quote"
+        ]
+      }
+    },
+    "supports_model": {
+      "type": "object",
+      "properties": {
+        "found": {
+          "type": "boolean"
+        },
+        "equation_labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mismatch_notes": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "SUPPORTED",
+            "PARTIALLY_SUPPORTED",
+            "NOT_FOUND_IN_SOURCE",
+            "SOURCE_UNREADABLE"
+          ]
+        }
+      },
+      "required": [
+        "found",
+        "state"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "doc_id",
+    "target",
+    "equations",
+    "claims",
+    "source_sha256"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LREKit literature extraction result"
+}
