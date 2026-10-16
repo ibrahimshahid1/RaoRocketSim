@@ -116,6 +116,14 @@ class EngineJobResult:
     requirement_coverage: tuple[Mapping[str, Any], ...] = ()
     model_consistency: Mapping[str, Any] = field(default_factory=dict)
     output_directory: str | None = None
+    #: ``parts='reference_cad'``: the written engine part manifest
+    #: (raosim.mdo.build) and a short summary of what it says.
+    part_manifest: str | None = None
+    part_manifest_summary: Mapping[str, Any] = field(default_factory=dict)
+    #: Every file the authoritative re-evaluation wrote, by its handoff key.
+    #: Files that are not exactly one enumerated part are listed here and
+    #: never attributed to a part in the manifest.
+    part_artifacts: Mapping[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -141,6 +149,9 @@ class EngineJobResult:
                 and self.reevaluation.comparison is not None else None
             ),
             "output_directory": self.output_directory,
+            "part_manifest": self.part_manifest,
+            "part_manifest_summary": dict(self.part_manifest_summary),
+            "part_artifacts": dict(self.part_artifacts),
             "contour_validation": (
                 self.contour_validation.to_dict()
                 if self.contour_validation is not None
@@ -337,8 +348,15 @@ def execute_engine_job(
 
     record = RunRecord.start(job)
     progress: dict[str, Any] = {}
+    parts_dir = (
+        record.directory / "parts"
+        if record is not None and spec.output_policy.parts == "reference_cad"
+        else None
+    )
     try:
-        result = _execute_resolved_engine_job(job, size_pumps=size_pumps, progress=progress)
+        result = _execute_resolved_engine_job(
+            job, size_pumps=size_pumps, progress=progress, parts_dir=parts_dir,
+        )
     except JobValidationError:
         if record is not None:
             record.mark_failed("job validation failed during execution")
@@ -352,6 +370,8 @@ def execute_engine_job(
             requirement_coverage=_requirement_coverage(job, ()),
             messages=(f"{type(exc).__name__}: {exc}",),
         )
+    if parts_dir is not None:
+        result = _attach_part_manifest(result, parts_dir)
     if record is not None:
         result = replace(result, output_directory=str(record.directory))
         try:
@@ -368,9 +388,82 @@ def execute_engine_job(
     return result
 
 
+#: Re-evaluation file key -> enumerated part id (raosim.mdo.build), for files
+#: that ARE exactly one part.  Deliberately empty today: the handoff writes
+#: ``thrust_chamber_wall.step``, a single uniform-wall body with its flange
+#: (design_nozzle_v2; its hardware ledger records that it is not the
+#: liner/lands/closeout regions), and does not request injector part CAD.
+#: Mapping that body to ``thrust_chamber.liner`` would claim a part identity
+#: the file does not have, so it is listed as an unattributed artifact.
+_PART_ARTIFACT_KEYS: Mapping[str, str] = {}
+
+
+def _attach_part_manifest(result: EngineJobResult, parts_dir: Any) -> EngineJobResult:
+    """Write the engine part manifest for a ``reference_cad`` job.
+
+    Only evidence :func:`raosim.mdo.build.build_engine_parts` accepts is
+    passed: a declared path per enumerated part, which it hashes and records
+    as UNVERIFIED (status unavailable, L0).  Nothing here awards fidelity.
+    """
+
+    from pathlib import Path
+
+    from raosim.mdo.build import BuildFidelity, build_engine_parts, write_engine_build
+
+    reev = result.reevaluation
+    produced = getattr(getattr(reev, "result", None), "files", None) or {}
+    files = {str(key): str(value) for key, value in dict(produced).items()}
+    artifacts = {
+        part_id: files[key]
+        for key, part_id in _PART_ARTIFACT_KEYS.items()
+        if key in files and Path(files[key]).is_file()
+    }
+    try:
+        manifest = build_engine_parts(
+            result,
+            requested_fidelity=BuildFidelity.L0_NUMERICAL_ONLY,
+            artifacts=artifacts,
+        )
+        path = write_engine_build(manifest, parts_dir)
+    except Exception as exc:
+        message = f"part manifest failed: {type(exc).__name__}: {exc}"
+        return replace(
+            result,
+            statuses={**result.statuses, "part_manifest": "fail"},
+            messages=(*result.messages, message),
+            part_artifacts=files,
+        )
+    summary = {
+        "complete": manifest.complete,
+        "achieved_fidelity": manifest.achieved_fidelity.label,
+        "parts_total": len(manifest.parts),
+        "parts_built": sum(p.status == "built" for p in manifest.parts),
+        "attributed_artifacts": sorted(artifacts),
+        "unattributed_artifacts": sorted(
+            key for key in files if key not in _PART_ARTIFACT_KEYS
+        ),
+        "note": (
+            "path-only CAD is unverified in raosim.mdo.build; no part earns "
+            "geometry fidelity and this is a partial package, not a hardware "
+            "release"
+        ),
+    }
+    return replace(
+        result,
+        part_manifest=str(path),
+        part_manifest_summary=summary,
+        part_artifacts=files,
+        statuses={
+            **result.statuses,
+            "part_manifest": "partial" if not manifest.complete else "complete",
+        },
+    )
+
+
 def _execute_resolved_engine_job(
     job: ResolvedEngineJob, *, size_pumps: bool = False,
     progress: dict[str, Any] | None = None,
+    parts_dir: Any = None,
 ) -> EngineJobResult:
     spec = job.spec
     if progress is None:
@@ -474,6 +567,15 @@ def _execute_resolved_engine_job(
         )
         statuses["workflow"] = "pass" if nlp.success else "fail"
         statuses["optimizer"] = nlp.optimizer_status
+        # Independent first-order check of the returned point; a failed or
+        # unconfirmed check already makes ``nlp.success`` false.
+        statuses["kkt"] = nlp.kkt_status
+        if nlp.evaluation_failures or nlp.derivative_fallbacks:
+            messages.append(
+                f"optimizer rejected {nlp.evaluation_failures} failed trial "
+                f"point(s) and used {nlp.derivative_fallbacks} finite-"
+                "difference derivative fallback(s)"
+            )
         if not nlp.success:
             messages.append(f"optimizer did not converge: {nlp.message}")
             return EngineJobResult(
@@ -528,11 +630,19 @@ def _execute_resolved_engine_job(
     job = job.with_inputs(inputs)
     progress.update(inputs=inputs, job=job)
 
+    # parts='reference_cad': the authoritative re-evaluation writes its
+    # reference STEP into the run directory (reevaluate forwards these to
+    # to_design_input); the part manifest is built after the verdict exists.
+    cad_handoff = (
+        {"output_dir": str(parts_dir), "cad": "step"}
+        if parts_dir is not None else {}
+    )
     reev = reevaluate(
         design, mission, mdo_result=state, mdo_surfaces=surfaces,
         resolved_input_contract=inputs,
         mdo_summary={"Isp": float(state.performance.Isp_delivered)},
         size_pumps=size_pumps,
+        **cad_handoff,
         variational_validation_config=variational_validation_config,
         contour_provider_id=contour_provider.provider_id,
         postsolve_contour_validator_id=(

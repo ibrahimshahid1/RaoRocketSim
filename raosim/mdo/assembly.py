@@ -203,7 +203,8 @@ def readouts(y: Array, x: DesignVector, mission: MissionSpec,
     m_batt_power = P_elec / mission.battery_power_density
 
     m_motor = P_shaft / mission.motor_power_density
-    m_inverter = P_elec / mission.inverter_power_density
+    # Lee PDF p. 7 Eqs. (28)-(29): output-power density, before inverter losses.
+    m_inverter = (P_shaft / mission.eta_motor) / mission.inverter_power_density
     m_pumps = P_shaft / mission.pump_specific_mass
 
     # §3 ledger — excluded items carried as explicit zeros (report §A.2.3).

@@ -18,6 +18,7 @@ from pathlib import Path
 from . import REPO_ROOT
 from .schema import EXTRACTION_VERSION, node_id
 from .store import load, save
+from .execution_reach import StaticReach
 
 sys.path.insert(0, str(REPO_ROOT))
 
@@ -77,6 +78,7 @@ def harvest() -> dict:
             docs_by_path[alt] = canonical
     now = datetime.now(timezone.utc).isoformat()
     existing_models = {m["id"]: m for m in load("models")}
+    execution_reach = StaticReach(REPO_ROOT)
 
     models, links, provenance, unresolved = [], [], [], []
     for mid, m in MODEL_REGISTRY.items():
@@ -121,10 +123,19 @@ def harvest() -> dict:
             "notes": m.notes,
             "basis_class": basis,
             "promotion_status": _promotion(m.status, m.validation_level),
+            "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+            "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+            "execution_reach": execution_reach.model(mid),
             "verification_kinds": _verification_kind(m.verification, m.validation_level),
+            "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+            "software_verification_state": "REPORTED_NOT_REEXECUTED" if m.verification else "UNKNOWN",
+            "software_verification_scope": m.verification,
+            "physical_validation_state": (
+                "REPORTED_NOT_VALIDATED" if "not_" in m.validation_level and
+                any(term in m.validation_level for term in ("validat", "calibrat", "qualified")) else
+                "REPORTED_VALIDATION_NOT_VERIFIED" if any(term in m.validation_level for term in ("cold_flow_validated", "hot_fire_validated")) else "UNKNOWN"),
             "hardware_qualified": False,
-            "experimentally_validated": ("cold_flow_validated" in m.validation_level or "hot_fire_validated" in m.validation_level)
-                                        and "not_" not in m.validation_level,
+            "experimentally_validated": False,
             "provenance_kind": "PROJECT_DERIVES",
             "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
             "extraction_version": EXTRACTION_VERSION,
@@ -156,8 +167,8 @@ def harvest() -> dict:
 
         if src_doc:
             links.append({
-                "id": node_id("LINK", f"{mid} supported_by {src_doc}"),
-                "type": "SoftwareLink", "edge": "SUPPORTED_BY",
+                "id": node_id("LINK", f"{mid} cites {src_doc}"),
+                "type": "SoftwareLink", "edge": "CITES",
                 "from": model_id, "to": src_doc,
                 "basis": basis, "provenance": prov_id,
                 "note": f"registry local_source={local}; equation_ref={m.equation_ref}",

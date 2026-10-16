@@ -13,6 +13,10 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
+from raosim.electric_technology import (
+    DEFAULT_ELECTRIC_TECHNOLOGY,
+    identify_electric_technology,
+)
 from raosim.injector import FeedSystemLedger, InjectorGate
 
 
@@ -24,14 +28,22 @@ SCREENING_DEFAULTS = {
     # data are supplied.  Pump efficiency and RPM are intentionally not fixed
     # here: the default path estimates them from the solved pump duty.
     "pump_margin": 0.10,
-    "motor_efficiency": 0.90,
-    "inverter_efficiency": 0.96,
-    "motor_power_density": 2500.0,
-    "inverter_power_density": 15000.0,
-    "battery_energy_density": 250.0 * 3600.0,
-    "battery_power_density": 3000.0,
-    "battery_discharge_efficiency": 0.95,
-    "battery_structural_margin": 1.20,
+    # Electric drive and battery: ONE technology set shared with the MDO
+    # (raosim.electric_technology; MissionSpec.electric_technology).  The
+    # default set holds the values this module always used, labelled a
+    # repository screening assumption with its published brackets.
+    "motor_efficiency": DEFAULT_ELECTRIC_TECHNOLOGY.motor_efficiency,
+    "inverter_efficiency": DEFAULT_ELECTRIC_TECHNOLOGY.inverter_efficiency,
+    "motor_power_density": DEFAULT_ELECTRIC_TECHNOLOGY.motor_power_density,
+    "inverter_power_density": DEFAULT_ELECTRIC_TECHNOLOGY.inverter_power_density,
+    "battery_energy_density": DEFAULT_ELECTRIC_TECHNOLOGY.battery_energy_density,
+    "battery_power_density": DEFAULT_ELECTRIC_TECHNOLOGY.battery_power_density,
+    "battery_discharge_efficiency": (
+        DEFAULT_ELECTRIC_TECHNOLOGY.battery_discharge_efficiency
+    ),
+    "battery_structural_margin": (
+        DEFAULT_ELECTRIC_TECHNOLOGY.battery_structural_margin
+    ),
     "auto_current_target": 250.0,
     "rotor_material_density": 7800.0,
     "rotor_yield_strength": 600.0e6,
@@ -95,6 +107,12 @@ def _clamp(x: float, lo: float, hi: float) -> float:
 
 @dataclass
 class ElectricDriveSpec:
+    """Technology inputs; separate densities use each component's output power.
+
+    ``power_density`` is the legacy combined motor/controller package density
+    measured against DC input power and overrides both separate densities.
+    """
+
     motor_efficiency: float = SCREENING_DEFAULTS["motor_efficiency"]
     inverter_efficiency: float = SCREENING_DEFAULTS["inverter_efficiency"]
     voltage: float | None = None
@@ -102,9 +120,9 @@ class ElectricDriveSpec:
     max_rpm: float = 120000.0
     max_motor_power: float | None = None
     max_current: float | None = None
-    motor_power_density: float = SCREENING_DEFAULTS["motor_power_density"]
-    inverter_power_density: float = SCREENING_DEFAULTS["inverter_power_density"]
-    # Legacy combined motor+controller override, kept for API compatibility.
+    motor_power_density: float = SCREENING_DEFAULTS["motor_power_density"]  # W/kg shaft output
+    inverter_power_density: float = SCREENING_DEFAULTS["inverter_power_density"]  # W/kg AC output
+    # Legacy combined motor+controller DC-input density [W/kg].
     power_density: float | None = None
     torque_limit: float | None = None
     heat_rejection_limit: float | None = None
@@ -236,6 +254,8 @@ class ElectricDriveSizing:
             "voltage_source": self.voltage_source,
             "shaft_power_w": self.shaft_power,
             "electric_power_w": self.electric_power,
+            "inverter_input_power_w": self.electric_power,
+            "inverter_output_power_w": self.electric_power - self.controller_heat,
             "torque_n_m": self.torque,
             "current_a": self.current,
             "motor_mass_kg": self.motor_mass,
@@ -1032,8 +1052,11 @@ def _drive_sizing(
         motor_mass = motor_controller_mass
         inverter_mass = 0.0
     else:
+        # Scientific basis: model_id=MODEL_PUMP_ELECTRIC_DRIVE;
+        # Lee et al., DOI 10.1007/s42405-020-00325-z, PDF p. 7 Eqs. (26)-(29).
+        # Inverter output feeds the motor; its input also supplies its losses.
         motor_mass = shaft_power / max(drive.motor_power_density, 1e-9)
-        inverter_mass = electric_power / max(drive.inverter_power_density, 1e-9)
+        inverter_mass = motor_input_power / max(drive.inverter_power_density, 1e-9)
         motor_controller_mass = motor_mass + inverter_mass
     return ElectricDriveSizing(
         role=role,
@@ -2777,7 +2800,7 @@ def _estimate_component_masses(
         )
 
     # The drive masses are already solved by ``_drive_sizing`` from the
-    # published power densities; surfacing them here means the BOM and the
+    # supplied technology power densities; surfacing them here means the BOM and the
     # ``ElectricDriveSizing`` rollup can never disagree.
     drv = line.drive
     return {
@@ -2921,6 +2944,14 @@ def _hardware_bom(
         }, mass_key="shaft_coupling", reference_id=f"{role}.shaft_datum")
         add("electrical", "motor", {
             "shaft_power_w": drv.shaft_power,
+            "power_density_w_per_kg": (
+                spec.drive.power_density if spec.drive.power_density is not None
+                else spec.drive.motor_power_density
+            ),
+            "mass_power_basis": (
+                "combined_drive_dc_input" if spec.drive.power_density is not None
+                else "motor_shaft_output"
+            ),
             "rpm": drv.rpm,
             "voltage_v": drv.voltage,
             "current_a": drv.current,
@@ -2930,6 +2961,16 @@ def _hardware_bom(
            source_ids=["Lee et al. 2021", "Spiller, Stabile, Lentini 2013"])
         add("electrical", "inverter/controller", {
             "electric_power_w": drv.electric_power,
+            "inverter_input_power_w": drv.electric_power,
+            "inverter_output_power_w": drv.electric_power - drv.controller_heat,
+            "power_density_w_per_kg": (
+                None if spec.drive.power_density is not None
+                else spec.drive.inverter_power_density
+            ),
+            "mass_power_basis": (
+                "included_in_combined_drive_mass" if spec.drive.power_density is not None
+                else "inverter_ac_output"
+            ),
             "voltage_v": drv.voltage,
             "current_a": drv.current,
             "heat_w": drv.controller_heat,
@@ -3849,12 +3890,31 @@ def size_electric_pumps(
         "motor_efficiency": spec.drive.motor_efficiency,
         "inverter_efficiency": spec.drive.inverter_efficiency,
         "motor_power_density_w_per_kg": spec.drive.motor_power_density,
+        "motor_power_density_basis": "motor_shaft_output",
         "inverter_power_density_w_per_kg": spec.drive.inverter_power_density,
+        "inverter_power_density_basis": "inverter_ac_output",
         "legacy_combined_motor_controller_power_density_w_per_kg": spec.drive.power_density,
+        "legacy_combined_motor_controller_power_density_basis": "combined_drive_dc_input",
         "battery_energy_density_j_per_kg": spec.battery.energy_density,
         "battery_power_density_w_per_kg": spec.battery.power_density,
         "battery_discharge_efficiency": spec.battery.discharge_efficiency,
         "battery_structural_margin": spec.battery.structural_margin,
+        # Which registered technology set (raosim.electric_technology) these
+        # eight values are; "custom" when they match none, or when the
+        # legacy combined drive density replaces the separate densities.
+        "electric_technology_id": (
+            "custom" if spec.drive.power_density is not None
+            else identify_electric_technology({
+                "motor_efficiency": spec.drive.motor_efficiency,
+                "inverter_efficiency": spec.drive.inverter_efficiency,
+                "motor_power_density": spec.drive.motor_power_density,
+                "inverter_power_density": spec.drive.inverter_power_density,
+                "battery_energy_density": spec.battery.energy_density,
+                "battery_power_density": spec.battery.power_density,
+                "battery_discharge_efficiency": spec.battery.discharge_efficiency,
+                "battery_structural_margin": spec.battery.structural_margin,
+            })
+        ),
         "head_coefficient": spec.head_coefficient,
         "flow_coefficient": spec.flow_coefficient,
         "blade_root_structural_closure": (

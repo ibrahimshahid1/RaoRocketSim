@@ -194,6 +194,8 @@ def test_variable_cp_solution_closes_energy_entropy_area_and_mass():
     assert solved.characteristic_velocity_m_s > 0.0
     payload = solved.as_dict()
     assert payload["applicability"]["frozen_composition"] is True
+    assert payload["applicability"]["single_temperature_thermal_properties"] is True
+    assert payload["applicability"]["separate_vibrational_temperature"] is False
     assert payload["applicability"]["equilibrium_chemistry"] is False
     assert payload["applicability"]["moc_or_rao_characteristics"] is False
     assert payload["applicability"]["profile_aware_wall_pressure_screen"] is True

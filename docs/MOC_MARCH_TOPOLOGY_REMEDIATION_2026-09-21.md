@@ -48,7 +48,9 @@
 > full-net `reference_matched` awaits a second oracle (M4Perfect) and a
 > shock-free Rao BVP wall run on host.
 
-> **STATUS (2026-09-21): ANALYSIS + PLAN ONLY, NOTHING IMPLEMENTED.**
+> **HISTORICAL BASELINE (2026-09-21, before phases 0–2 landed): ANALYSIS + PLAN ONLY.**
+> The later status block above supersedes this implementation-state snapshot;
+> the original diagnosis below is retained as history.
 > An external review of `raosim/moc.py` claimed `march_coupled_net` is not a
 > coupled net. This audit (6 parallel readers + 23 adversarial verifications +
 > first-hand instrumented runs) **confirms every item and finds it materially

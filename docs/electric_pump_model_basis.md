@@ -18,7 +18,10 @@ P_hyd = deltaP_pump Q
 P_shaft = P_hyd / eta_pump
 omega = 2 pi rpm / 60
 torque = P_shaft / omega
+P_inverter_out = P_motor_in = P_shaft / eta_motor
 P_electric = P_shaft / (eta_motor eta_inverter)
+m_motor = P_shaft / motor_power_density
+m_inverter = P_inverter_out / inverter_power_density
 I_bus = P_electric / V_bus
 E_pack = P_electric burn_time / eta_battery
 ```
@@ -26,6 +29,30 @@ E_pack = P_electric burn_time / eta_battery
 So the pump is not sized from thrust alone. Thrust only enters upstream by
 setting total propellant flow through Isp or c-star, then the injector/feed
 pressure budget sets pressure rise.
+
+Separate motor and inverter power densities are based on each component's
+output: motor shaft power and inverter AC output (motor electrical input).
+This follows Lee et al., DOI `10.1007/s42405-020-00325-z`, original PDF p. 7,
+Eqs. (26)-(29). Inverter losses increase DC input power, bus current, heat,
+and battery demand; for fixed motor demand they do not increase inverter mass
+at a fixed output-power density. The same convention applies to traditional
+and differentiable sizing. The legacy `ElectricDriveSpec.power_density`
+override retains combined motor/controller mass = DC input power / density;
+the combined mass is carried in the motor entry and its inverter entry is zero.
+Defaults remain technology assumptions, and these mass balances do not
+validate the selected component technology or hardware.
+If component data instead quote inverter DC-input power per mass, convert
+that density to AC-output density using `delta_output = eta_inverter * delta_input`
+at the same rated duty before supplying `inverter_power_density`.
+
+The eight drive/battery technology values (motor and inverter efficiency and
+density, battery energy and power density, discharge efficiency, structural
+margin) come from one registered set in `raosim/electric_technology.py`, shared
+by this traditional path (`SCREENING_DEFAULTS`) and the MDO (`MissionSpec`).
+The default `repository_screening_v1` holds the values this module always used,
+labelled a repository screening assumption with its published brackets;
+`lee2021_ijass_electric_pump` is Lee et al. 2021 Table 2 (PDF p. 11). Select a
+set with `--electric-technology`; an explicit per-field flag makes it `custom`.
 
 ## Hydraulic Meanline V1
 

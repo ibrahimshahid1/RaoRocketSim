@@ -5,10 +5,9 @@
   BLOCKS), each relation carrying the verbatim line that asserts it.
   Repository documents are implementation-state authority, never scientific
   authority; that distinction is stored on every record.
-* ``tests/*.py`` -> Test records classified by verification kind from their
-  names and contents; tests that reference a corpus PDF or a named published
-  case are flagged ``published_benchmark_reproduction`` candidates and linked
-  to the Document.  Classification is heuristic and says so.
+* ``tests/*.py`` -> Test records classified from each exact AST function's
+  name/body. Module citations never become function evidence. Classification
+  is heuristic, explicitly scoped, and never experimental validation.
 * ``raosim/ lrekit/ scripts/`` -> Capability records for explicit
   NotImplementedError / unavailable / blocked paths, with file:line.
 * ``docs/LITERATURE_REQUESTS*.md`` -> BLOCKED_ON_LITERATURE capability records.
@@ -18,6 +17,7 @@
 
 from __future__ import annotations
 
+import ast
 import re
 from collections import Counter
 from datetime import datetime, timezone
@@ -68,7 +68,8 @@ def _docs_harvest(now: str) -> tuple[list[dict], list[dict]]:
     from raosim.model_registry import MODEL_REGISTRY
     registry_notes = [REPO_ROOT / m.local_source for m in MODEL_REGISTRY.values()
                       if m.local_source and m.local_source.endswith(".md")]
-    files = sorted({f for f in list(docs_dir.rglob("*.md")) + [REPO_ROOT / "README.md"] + registry_notes
+    corpus_notes = [REPO_ROOT / "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md"]
+    files = sorted({f for f in list(docs_dir.rglob("*.md")) + [REPO_ROOT / "README.md"] + registry_notes + corpus_notes
                     if f.is_file()})
     by_name = {f.name: node_id("RDOC", str(f.relative_to(REPO_ROOT))) for f in files}
     records, unresolved = [], []
@@ -116,7 +117,7 @@ def _docs_harvest(now: str) -> tuple[list[dict], list[dict]]:
         records.append({
             "id": rid, "type": "RepositoryDocument", "path": rel, "title": title[:160], "kind": kind,
             "date": date, "date_basis": date_basis, "status_head": status_head,
-            "authority": "implementation_state_not_science",
+            "authority": "bibliographic_metadata_not_science" if f in corpus_notes else "implementation_state_not_science",
             "summary": " ".join(lines[1:12])[:600],
             "relations": [r for r in relations if r["from"] == rid],
             "incoming_relations": [r for r in relations if r["from"] != rid],
@@ -134,59 +135,115 @@ def _docs_harvest(now: str) -> tuple[list[dict], list[dict]]:
     return records, unresolved
 
 
+def _test_function_sources(text: str) -> dict[tuple[str, ...], str]:
+    """Keep class-qualified names; duplicate method names are not interchangeable."""
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return {}
+    found = {}
+
+    def walk(body, parents=()):
+        for node in body:
+            if isinstance(node, ast.ClassDef):
+                walk(node.body, (*parents, node.name))
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith("test_"):
+                found[(*parents, node.name)] = ast.get_source_segment(text, node) or ""
+
+    walk(tree.body)
+    return found
+
+
+def _test_classification(name: str, text: str, docs_by_path: dict[str, str], *, function: bool) -> dict:
+    pdfs = sorted(set(PDF_REF.findall(text)))
+    doc_ids = sorted({docs_by_path[p] for p in pdfs if p in docs_by_path})
+    # A published reproduction candidate needs local source and numerical
+    # comparison evidence. A tolerance token elsewhere in the file proves
+    # nothing about this function. Even this local heuristic is not validation.
+    numerical_comparison = False
+    if function:
+        try:
+            tree = ast.parse(text)
+            comparisons = [n for assertion in ast.walk(tree) if isinstance(assertion, ast.Assert)
+                           for n in ast.walk(assertion.test) if isinstance(n, ast.Call)]
+            numerical_comparison = any(
+                (isinstance(c.func, ast.Attribute) and c.func.attr in {"approx", "allclose", "isclose"})
+                or (isinstance(c.func, ast.Name) and c.func.id in {"approx", "allclose", "isclose"})
+                for c in comparisons)
+            numerical_comparison |= any(
+                isinstance(c, ast.Call) and
+                ((isinstance(c.func, ast.Attribute) and c.func.attr == "assert_allclose")
+                 or (isinstance(c.func, ast.Name) and c.func.id == "assert_allclose"))
+                for c in ast.walk(tree))
+        except SyntaxError:
+            pass
+    named_benchmark = bool(re.search(r"benchmark|reference_case|nasa_reference|reproduc|published", name, re.I))
+    benchmark_candidate = bool(doc_ids and (numerical_comparison if function else
+                                          re.search(r"\b(rtol|atol|approx|tolerance)\b", text)))
+    kinds = []
+    if function and named_benchmark and benchmark_candidate:
+        kinds.append("published_benchmark_reproduction")
+    if re.search(r"parity|oracle", name, re.I) or (re.search(r"\bjax\b", text) and "allclose" in text):
+        kinds.append("numpy_jax_parity")
+    if re.search(r"check_grads|finite[_ -]?diff|central[_ -]?diff", text, re.I):
+        kinds.append("autodiff_finite_difference")
+    if re.search(r"cad|brep|step|stl", name, re.I):
+        kinds.append("cad_round_trip")
+    if re.search(r"snapshot|contract|schema", name, re.I):
+        kinds.append("snapshot_contract")
+    if re.search(r"regression|convergence|resolution", name, re.I):
+        kinds.append("numerical_regression")
+    if re.search(r"compare|comparison|parity", name, re.I) and "numpy_jax_parity" not in kinds:
+        kinds.append("model_vs_model_comparison")
+    return {"verification_kind": kinds[0] if kinds else "unit_test",
+            "verification_kinds_all": kinds or ["unit_test"],
+            "verification_kind_basis": (
+                "heuristic classification from the exact AST test function name/body and local citations; not a physical-validation claim"
+                if function else
+                "heuristic module-level metadata only; module benchmark candidates do not establish function evidence"),
+            "classification_scope": "test_function" if function else "module",
+            "benchmark_candidate": benchmark_candidate,
+            "cited_pdfs": pdfs, "source_document_id": doc_ids[0] if doc_ids else "",
+            "source_document_ids": doc_ids,
+            "expected": [ln.strip()[:160] for ln in text.splitlines()
+                         if re.search(r"\b(expected|reference|published)\b.*=\s*[-\d.]", ln)][:6],
+            "is_experimental_validation": False}
+
+
 def _tests_harvest(now: str, docs_by_path: dict[str, str]) -> list[dict]:
     tests_dir = REPO_ROOT / "tests"
     prior = {t["id"]: t for t in load("tests")}
     out = {}
+    functions_by_file = {}
     for f in sorted(tests_dir.glob("test_*.py")):
         text = f.read_text(encoding="utf-8", errors="replace")
         rel = str(f.relative_to(REPO_ROOT))
         name = f.stem.lower()
-        # Conservative classification: the file NAME decides, content only confirms.
-        # A test is a benchmark reproduction only if it cites a corpus PDF AND compares
-        # against a tolerance; everything else defaults to unit_test.
-        kinds = []
-        pdfs = sorted(set(PDF_REF.findall(text)))
-        doc_ids = sorted({docs_by_path[p] for p in pdfs if p in docs_by_path})
-        has_tol = bool(re.search(r"\b(rtol|atol|approx|tolerance|expected)\b", text))
-        if doc_ids and has_tol:
-            kinds.append("published_benchmark_reproduction")
-        if re.search(r"parity|oracle", name) or (re.search(r"\bjax\b", name) and "allclose" in text):
-            kinds.append("numpy_jax_parity")
-        if re.search(r"check_grads|finite[_-]?diff|central[_-]?diff", text):
-            kinds.append("autodiff_finite_difference")
-        if re.search(r"\b(cad|brep|step|stl)\b", name):
-            kinds.append("cad_round_trip")
-        if re.search(r"snapshot|contract|schema", name):
-            kinds.append("snapshot_contract")
-        if re.search(r"regression|convergence|resolution", name):
-            kinds.append("numerical_regression")
-        if re.search(r"compare|comparison|parity", name) and "numpy_jax_parity" not in kinds:
-            kinds.append("model_vs_model_comparison")
-        primary = kinds[0] if kinds else "unit_test"
-        n_tests = len(re.findall(r"^\s*def test_", text, re.M))
+        functions_by_file[rel] = _test_function_sources(text)
+        n_tests = len(functions_by_file[rel])
         subsystem = _subsystem_from_name(name)
         tid = node_id("TEST", rel)
-        # named expected values are captured only as text snippets, never interpreted
-        expected = [ln.strip()[:160] for ln in text.splitlines() if re.search(r"\b(expected|reference|published)\b.*=\s*[-\d.]", ln)][:6]
         rec = {"id": tid, "type": "Test", "path": rel, "file": rel, "n_tests": n_tests,
-               "verification_kind": primary, "verification_kinds_all": kinds or ["unit_test"],
-               "verification_kind_basis": "heuristic classification from test name/content; not a physical-validation claim",
-               "subsystem": subsystem, "cited_pdfs": pdfs, "source_document_id": doc_ids[0] if doc_ids else "",
-               "source_document_ids": doc_ids, "expected": expected, "detail": text[:300],
+               **_test_classification(name, text, docs_by_path, function=False),
+               "subsystem": subsystem, "detail": text[:300],
                "model_ids": sorted(set(prior.get(tid, {}).get("model_ids", []))),
                "is_experimental_validation": False,
                "provenance_id": node_id("PROV", f"tests harvest {rel}"), "harvested_at": now}
         out[tid] = rec
-    # keep the per-test-function records from the survey (TEST ids for path::name) and attach file-level kind
+    # Preserve survey metadata/model links, replacing inherited module evidence
+    # with evidence from the exact class-qualified AST function only.
     for tid, t in prior.items():
         if tid not in out:
-            file_rec = out.get(node_id("TEST", t.get("file", "")))
-            if file_rec:
-                t["verification_kind"] = file_rec["verification_kind"]
-                t["verification_kind_basis"] = file_rec["verification_kind_basis"]
-                t["source_document_id"] = file_rec["source_document_id"]
-            out[tid] = t
+            path_parts = t.get("path", "").split("::")
+            file_path = t.get("file") or path_parts[0]
+            key = tuple(re.sub(r"\[.*\]$", "", p) for p in path_parts[1:])
+            local_text = functions_by_file.get(file_path, {}).get(key, "")
+            if local_text:
+                classification = _test_classification("::".join(key), local_text, docs_by_path, function=True)
+            else:
+                classification = _test_classification("", "", docs_by_path, function=True)
+                classification["verification_kind_basis"] = "exact AST test function not located; conservative unit_test with no inherited source evidence"
+            out[tid] = {**t, **classification, "harvested_at": now}
     return list(out.values())
 
 

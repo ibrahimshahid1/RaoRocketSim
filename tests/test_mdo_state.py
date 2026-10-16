@@ -46,8 +46,8 @@ def test_state_is_a_numeric_fixed_shape_pytree(state):
     leaves = jax.tree_util.tree_leaves(state)
     assert leaves
     assert int(state.schema_version) == ENGINE_STATE_SCHEMA_VERSION
-    assert ENGINE_STATE_SCHEMA_VERSION == 2
-    assert state.design_vector.shape == (11,)
+    assert ENGINE_STATE_SCHEMA_VERSION == 3
+    assert state.design_vector.shape == (13,)
     assert float(state.design_vector[-1]) == pytest.approx(2.27)
     assert all(
         np.issubdtype(np.asarray(leaf).dtype, np.number)

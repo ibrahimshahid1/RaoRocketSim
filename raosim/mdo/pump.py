@@ -162,10 +162,13 @@ def electric_feed(*, mdot_fuel: Array, mdot_ox: Array, dp_rise_fuel: Array,
                     N_rpm=N_rpm, mission=mission)
     P_elec = f.P_electric + o.P_electric
     P_shaft = f.P_shaft + o.P_shaft
+    # Lee et al., DOI 10.1007/s42405-020-00325-z, PDF p. 7 Eqs. (28)-(29):
+    # inverter density uses AC output power, equal to motor electrical input.
+    P_inverter_out = P_shaft / mission.eta_motor
     batt = battery_masses(P_elec, mission)
     return ElectricFeed(
         fuel=f, ox=o, P_electric_total=P_elec, battery=batt,
         motor_mass=P_shaft / mission.motor_power_density,
-        inverter_mass=P_elec / mission.inverter_power_density,
+        inverter_mass=P_inverter_out / mission.inverter_power_density,
         pump_mass=P_shaft / mission.pump_specific_mass,
     )

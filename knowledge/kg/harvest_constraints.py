@@ -16,12 +16,21 @@ string matches a Document's title/identifier; unmatched strings are preserved as
 ``SCIENTIFIC_BASIS_UNKNOWN`` - the row is software policy with no cited basis.
 
 The manifest module is imported with the JAX-free fallback: if the import fails
-(e.g. an environment without jax), the harvester parses the ``ConstraintSpec(...)``
-literals from the source text instead and says so.
+(e.g. an environment without jax), the harvester reads the ``ConstraintSpec(...)``
+literals from the source with ``ast`` (positional AND keyword arguments, string
+concatenation included; nothing is executed) instead and says so.
+
+Each row's ``basis_class`` (literature, geometric_definition,
+model_validity_domain, repository_rule, numerical_contract, requirement) is
+carried as ``declared_basis_class``.  A row without a ``source_id`` whose
+declared basis is not literature is labelled ``DECLARED_<BASIS>`` instead of
+``SCIENTIFIC_BASIS_UNKNOWN``: the repository states what kind of limit it is,
+which is a label, not source support.
 """
 
 from __future__ import annotations
 
+import ast
 import re
 import sys
 from datetime import datetime, timezone
@@ -49,7 +58,11 @@ DOI_KEYS = {
     "Mirzamoghadam-1991": "10.2514/6.1991-1982",
     "Carlile-1992": "10.2514/6.1992-3154",
     "Wadel-1997": "10.2514/6.1997-2913",
+    "Freeberg-2019": "10.2514/6.2019-0152",
 }
+_FIELDS = ("name", "engine_key", "kind", "optimizer_role", "category", "scale",
+           "units", "source_id", "applicability", "basis_class")
+_DEFAULTS = {"applicability": "always", "basis_class": None}
 
 
 def _resolve_source_key(key: str, docs: list[dict]) -> tuple[str, str]:
@@ -69,24 +82,39 @@ def _resolve_source_key(key: str, docs: list[dict]) -> tuple[str, str]:
     return "", "UNRESOLVED_SOURCE_KEY"
 
 
+def _parse_manifest(text: str) -> list[dict]:
+    """``ConstraintSpec(...)`` calls inside ``CONSTRAINT_MANIFEST``, via ``ast``.
+
+    Positional arguments map onto the dataclass field order and keywords by
+    name, so a keyword-only ``basis_class=`` can never be mistaken for the
+    positional ``applicability``.  Values must be literals (``literal_eval``).
+    """
+    rows = []
+    for node in ast.walk(ast.parse(text)):
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                and node.func.id == "ConstraintSpec"):
+            continue
+        try:
+            row = dict(_DEFAULTS)
+            row.update(zip(_FIELDS, (ast.literal_eval(a) for a in node.args)))
+            row.update({k.arg: ast.literal_eval(k.value) for k in node.keywords if k.arg in _FIELDS})
+        except (ValueError, SyntaxError):
+            continue
+        if all(field in row for field in _FIELDS[:8]):
+            rows.append(row)
+    return rows
+
+
 def _load_manifest():
     try:
         from raosim.mdo.constraints import CONSTRAINT_MANIFEST  # type: ignore
         return [dict(name=s.name, engine_key=s.engine_key, kind=s.kind, optimizer_role=s.optimizer_role,
                      category=s.category, scale=s.scale, units=s.units, source_id=s.source_id,
-                     applicability=s.applicability) for s in CONSTRAINT_MANIFEST], "import"
+                     applicability=s.applicability, basis_class=getattr(s, "basis_class", None))
+                for s in CONSTRAINT_MANIFEST], "import"
     except Exception:
         text = (REPO_ROOT / "raosim/mdo/constraints.py").read_text()
-        rows = []
-        for m in re.finditer(r"ConstraintSpec\((.*?)\)\s*,?\n", text, re.S):
-            args = [a.strip() for a in re.split(r",(?![^()]*\))", m.group(1))]
-            vals = [re.sub(r"^\w+\s*=\s*", "", a).strip().strip("'\"") for a in args]
-            if len(vals) >= 8:
-                rows.append(dict(name=vals[0], engine_key=None if vals[1] == "None" else vals[1], kind=vals[2],
-                                 optimizer_role=vals[3], category=vals[4], scale=vals[5], units=None if vals[6] == "None" else vals[6],
-                                 source_id=None if vals[7] == "None" else vals[7],
-                                 applicability=vals[8] if len(vals) > 8 else "always"))
-        return rows, "source_text_parse"
+        return _parse_manifest(text), "source_ast_parse"
 
 
 def harvest() -> dict:
@@ -116,6 +144,15 @@ def harvest() -> dict:
                 states.append({"key": key.strip(), "state": st, "document_id": did})
         else:
             states.append({"key": None, "state": "SCIENTIFIC_BASIS_UNKNOWN", "document_id": ""})
+        declared = r.get("basis_class")
+        if src_docs:
+            basis_state = "NOT_CHECKED"
+        elif r["source_id"]:
+            basis_state = "SOURCE_NOT_INGESTED"
+        elif declared and declared != "literature":
+            basis_state = "DECLARED_" + str(declared).upper()
+        else:
+            basis_state = "SCIENTIFIC_BASIS_UNKNOWN"
         rid = node_id("CST", r["name"])
         out.append({
             "id": rid, "type": "Constraint", "name": r["name"], "engine_key": r["engine_key"],
@@ -124,7 +161,10 @@ def harvest() -> dict:
             "units": r["units"], "scale": r["scale"], "applicability": r["applicability"], "order": i,
             "source_id_text": r["source_id"], "source_resolution": states,
             "source_document_ids": sorted(set(src_docs)),
-            "basis_state": ("OK" if src_docs else ("SCIENTIFIC_BASIS_UNKNOWN" if not r["source_id"] else "SOURCE_NOT_INGESTED")),
+            "basis_state": basis_state, "declared_basis_class": declared,
+            "citation_resolution_state": "CITATION_RESOLVED" if src_docs else "UNRESOLVED",
+            "source_support_state": "NOT_CHECKED",
+            "source_support_scope": "A resolved report key is a citation route, not page-verified support for this constraint or threshold.",
             "subsystem": {"thermal": "cooling", "feed": "pump", "aerodynamics": "performance", "geometry": "nozzle_contour",
                           "structures": "structures", "injector": "injector", "manufacturing": "manufacturing",
                           "requirement": "requirements", "numerical": "mdo", "properties": "thermochemistry"}.get(r["category"], "mdo"),

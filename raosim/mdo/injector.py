@@ -118,13 +118,18 @@ class InjectorReadout:
 
 def injector_readouts(*, Pc: Array, chi_f: Array, chi_o: Array,
                       D_pintle: Array, mdot_fuel: Array, mdot_ox: Array,
-                      mission: MissionSpec) -> InjectorReadout:
+                      mission: MissionSpec, t_post: Array | None = None,
+                      D_cg: Array | None = None) -> InjectorReadout:
     """Closed-form pintle-injector readouts + constraint margins.
 
     All of ``Pc, chi_f, chi_o, D_pintle, mdot_fuel, mdot_ox`` are differentiable
-    inputs; ``mission`` carries the architecture constants.  Pure jnp — safe
-    inside jit/jacfwd/jacrev with no host callbacks.
+    inputs; ``mission`` carries the architecture constants.  ``t_post`` and
+    ``D_cg`` are the pintle component's design variables (``mdo/pintle.py``);
+    omitted, they fall back to the mission's reference geometry.  Pure jnp —
+    safe inside jit/jacfwd/jacrev with no host callbacks.
     """
+    t_post = mission.pintle_post_thickness if t_post is None else t_post
+    D_cg = mission.pintle_center_gap_diameter if D_cg is None else D_cg
     # --- orifice metering (incompressible) ---------------------------------- #
     dp_f = chi_f * Pc
     dp_o = chi_o * Pc
@@ -151,9 +156,8 @@ def injector_readouts(*, Pc: Array, chi_f: Array, chi_o: Array,
     BF = N * slot_w / (jnp.pi * D_pintle)
 
     # --- movable-pintle two-branch minimum area (Son 2017) ------------------ #
-    r_f = 0.5 * D_pintle - mission.pintle_post_thickness
-    A_cg = center_gap_area(mission.pintle_center_gap_diameter,
-                           mission.pintle_rod_diameter)
+    r_f = 0.5 * D_pintle - t_post
+    A_cg = center_gap_area(D_cg, mission.pintle_rod_diameter)
     A_tip = A_f                               # tip meters the required radial area
     L_open = opening_for_tip_area(A_tip, r_f, mission.pintle_tip_angle_deg)
     frac = mission.pintle_transition_area_fraction

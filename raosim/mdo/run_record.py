@@ -97,8 +97,46 @@ class RunRecord:
                 "path": filename, "sha256": digest, "status": status,
             }
             self._save()
+        part_manifest = getattr(result, "part_manifest", None)
+        parts_partial = False
+        if part_manifest is not None:
+            path = Path(part_manifest)
+            summary = dict(getattr(result, "part_manifest_summary", {}) or {})
+            parts_partial = not summary.get("complete", False)
+            self.manifest["parts"] = {
+                "path": str(path.relative_to(self.directory)),
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                "status": "partial" if parts_partial else "complete",
+                "achieved_fidelity": summary.get("achieved_fidelity"),
+                "hardware_release": False,
+            }
+            # CAD the re-evaluation wrote but no manifest part claims (today
+            # the uniform-wall chamber STEP).  Hashing it keeps the only CAD
+            # deliverable inside the run's integrity chain.
+            unattributed: dict[str, Any] = {}
+            for key, raw in dict(getattr(result, "part_artifacts", {}) or {}).items():
+                artifact = Path(raw)
+                if not artifact.is_file():
+                    unattributed[key] = {"path": str(raw), "status": "missing"}
+                    continue
+                try:
+                    shown = str(artifact.relative_to(self.directory))
+                except ValueError:
+                    shown = str(artifact)
+                data = artifact.read_bytes()
+                unattributed[key] = {
+                    "path": shown,
+                    "sha256": hashlib.sha256(data).hexdigest(),
+                    "bytes": len(data),
+                    "attribution": "unattributed",
+                }
+            self.manifest["parts"]["unattributed_artifacts"] = unattributed
+            self.manifest["package_kind"] = "analysis_reports_and_reference_cad"
+        elif getattr(result, "statuses", {}).get("part_manifest") == "fail":
+            parts_partial = True
+            self.manifest["parts"] = {"status": "unavailable"}
         self.manifest.update(
-            package_status="partial" if unavailable else "complete",
+            package_status="partial" if (unavailable or parts_partial) else "complete",
             run_status="failed" if result.verdict == "SOLVER_FAILED" else "completed",
             verdict=result.verdict, exit_code=result.exit_code,
             unavailable_reports=unavailable,

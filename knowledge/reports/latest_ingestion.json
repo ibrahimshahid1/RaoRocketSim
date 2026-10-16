@@ -1,13 +1,14 @@
 {
- "started_at": "2026-09-20T22:58:09.645870+00:00",
+ "started_at": "2026-10-16T18:20:16.508119+00:00",
  "steps": {
   "sync": {
-   "pdf_count": 280,
+   "pdf_count": 286,
    "manifest_rows": 286,
    "synchronized": 286,
    "missing_markdown": 0,
    "stale_markdown": 0,
-   "orphan_markdown": 2,
+   "orphan_markdown": 1,
+   "mirrored_reference_notes": 1,
    "weak_mapping": 0,
    "duplicate_payloads": 27
   },
@@ -16,16 +17,22 @@
   },
   "chunks": {
    "ingested": 0,
-   "unchanged": 248,
+   "unchanged": 247,
    "skipped_no_markdown": 0,
    "skipped_failed_conversion": 0,
+   "skipped_empty_source": 1,
+   "skipped_empty_extraction": 0,
    "n_chunks_total": 19565,
    "removed": 0,
    "skipped_alternate_copy": 4,
-   "generated_at": "2026-09-20T22:58:11.033785+00:00"
+   "generated_at": "2026-10-16T18:20:17.735125+00:00"
   },
   "index": {
    "skipped": "no chunk changes"
+  },
+  "variable_links": {
+   "changed_variable_links": 0,
+   "source_forms_rewritten": 0
   },
   "registry": {
    "models": 61,
@@ -61,118 +68,477 @@
    "changed_documents": {},
    "invalidated_objects": 0
   },
+  "enrichments": {
+   "records": 91,
+   "inactive": 64
+  },
   "repo": {
-   "repo_documents": 62,
+   "repo_documents": 64,
    "doc_relations": 2,
    "unresolved_doc_refs": [],
-   "tests": 1061,
+   "tests": 1068,
    "tests_by_kind": {
-    "unit_test": 879,
-    "published_benchmark_reproduction": 75,
-    "model_vs_model_comparison": 6,
-    "numpy_jax_parity": 25,
-    "autodiff_finite_difference": 52,
-    "numerical_regression": 21,
-    "snapshot_contract": 3
+    "unit_test": 933,
+    "model_vs_model_comparison": 7,
+    "cad_round_trip": 49,
+    "numpy_jax_parity": 50,
+    "numerical_regression": 11,
+    "autodiff_finite_difference": 12,
+    "snapshot_contract": 6
    },
-   "capabilities": 98,
+   "capabilities": 100,
    "capabilities_by_state": {
-    "UNSUPPORTED": 13,
+    "UNSUPPORTED": 14,
     "NOT_QUALIFIED": 9,
     "NOT_IMPLEMENTED": 9,
-    "UNAVAILABLE": 32,
+    "UNAVAILABLE": 33,
     "BLOCKED_ON_LITERATURE": 35
    },
-   "citations": 26,
-   "cite_edges": 26,
+   "citations": 33,
+   "cite_edges": 33,
    "citations_unresolved": []
   },
   "constraints": {
-   "rows": 31,
+   "rows": 36,
    "by_kind": {
-    "optimizer_constraint": 23,
+    "optimizer_constraint": 28,
     "diagnostic": 1,
     "applicability_gate": 4,
     "postsolve_gate": 3
    },
    "by_basis": {
-    "OK": 18,
-    "SCIENTIFIC_BASIS_UNKNOWN": 13
+    "NOT_CHECKED": 22,
+    "DECLARED_GEOMETRIC_DEFINITION": 2,
+    "SOURCE_NOT_INGESTED": 4,
+    "DECLARED_REPOSITORY_RULE": 2,
+    "DECLARED_MODEL_VALIDITY_DOMAIN": 1,
+    "DECLARED_NUMERICAL_CONTRACT": 5
    },
-   "method": "source_text_parse"
+   "method": "import"
+  },
+  "artifacts": {
+   "harvester": "kg.harvest_artifacts@1",
+   "full_scan": true,
+   "discovered_reports": 17,
+   "accepted_reports": 17,
+   "sources": [
+    {
+     "path": "builds/13kn_engine/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "f5c5316c653cc64d5c6af84511b46f7bd82c4d206eb0660b5ac3fd672b53646d"
+    },
+    {
+     "path": "builds/lox_rp1_13kn_20bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "3906529223bfa79801bd4cb8bc7568196131a71b0da7cf36670ef024054c44fb"
+    },
+    {
+     "path": "builds/lox_rp1_13kn_40bar_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "ff3319469811db124bb68779d22b3cd1089f81e43cbbe6e6956b4e40ceeff510"
+    },
+    {
+     "path": "builds/lox_rp1_13kn_grcop84_inconel_pintle/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "8fae395c6b4dc583ee2979c53f252a0ae1246c72e2be7c44a26130100ce090a2"
+    },
+    {
+     "path": "builds/lox_rp1_13kn_grcop84_inconel_pintle_flanged/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "52e719b15f046ec3b7f1d396adccb7f8ad4b269341eecf26b99ec381a9aa584d"
+    },
+    {
+     "path": "builds/pintle_inventor_bundle_20260629/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "b318f8028d8329e3002aab43acf57dc1880806acf796de433cd5c5a18c3c601c"
+    },
+    {
+     "path": "builds/review_machined_pintle_cli/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "9741211f0dfb4005abf8d99254d30752cb1a70e9de726306cb68aa572d65e0b0"
+    },
+    {
+     "path": "builds/review_machined_pintle_cli_after_fixes/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "549fb1def5bfc09ec68d91d23a9465a0c95ea566cb665e568405b4f527734838"
+    },
+    {
+     "path": "builds/tests/13kn_sl_fast/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "88888d2a97d3629838ebd031b3b2bcdd254b64b4072bedfa541a69c624510b1c"
+    },
+    {
+     "path": "builds/tests/13kn_sl_full/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "55862e2c0487a936c050d813abcdda0f371688a50d98a556ebbf8b962b29a948"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "3f1b368d96745391ebe8b6784f34f241a2b46b4960cbce30d128651038df1a99"
+    },
+    {
+     "path": "builds/tests/coaxial_injector_13kn/holes/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "71b4d3f740acd9d30b672892f6bbc507264c63745a3e39dde14f64f625fd8163"
+    },
+    {
+     "path": "builds/tests/coaxial_injector_13kn/slots/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "a47972c23b5edad601a1494930017cb440af759339a44d7520689c1d47c1582f"
+    },
+    {
+     "path": "builds/v045_20260514_191821/design_report_v2.json",
+     "state": "CURRENT",
+     "sha256": "adce0f7146bef302e9cc8bd979e23da4aaa85535d788a22c497234727a81cb83"
+    },
+    {
+     "path": "builds/v309_20260620_224603/design_report_v2.json",
+     "state": "CURRENT",
+     "sha256": "c0b384716bab4ce6a11dde0bea83a72550d69f701bccf15ef0b8cff31c37d5b9"
+    },
+    {
+     "path": "builds/windows_inventor_pintle_20260629_pass/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "d3930c5e786fbb042ba79fbecc1b26839a26a0297820f56d82375dd3b6012391"
+    },
+    {
+     "path": "builds/windows_inventor_pintle_20260629_smoke/pintle/injector_manufacturing_report.json",
+     "state": "CURRENT",
+     "sha256": "e27430bcdca08b3c0ea533814610dea1da442558b9e59e3b22caf0bd5fb10725"
+    }
+   ],
+   "issues": [
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "faceplate",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "injector_body",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "machined_assembly",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "orifice_plate",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "pintle_body",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/tests/13kn_sl_sandbox_20260713/pintle/injector_manufacturing_report.json",
+     "role": "pintle_tip",
+     "state": "OUTSIDE_REPOSITORY"
+    },
+    {
+     "path": "builds/v045_20260514_191821/design_report_v2.json",
+     "state": "NONFINITE_REPORT_VALUES",
+     "json_pointers": [
+      "/report_sections/structural/hoop_stress"
+     ]
+    },
+    {
+     "path": "builds/v309_20260620_224603/design_report_v2.json",
+     "state": "NONFINITE_REPORT_VALUES",
+     "json_pointers": [
+      "/report_sections/structural/hoop_stress"
+     ]
+    }
+   ],
+   "records_by_type": {
+    "ArtifactLink": 187,
+    "ArtifactManifest": 17,
+    "CADArtifact": 70,
+    "EngineConfiguration": 17,
+    "ManufacturingProcess": 15
+   },
+   "physical_evidence_created": false
+  },
+  "parameters": {
+   "records": 49,
+   "default_sets": {
+    "traditional_screening": 16,
+    "mdo_mission": 17,
+    "electric_technology:lee2021_ijass_electric_pump": 8,
+    "electric_technology:repository_screening_v1": 8
+   },
+   "issues": []
+  },
+  "implementation_locators": {
+   "scope": "Exact file and qualified Python AST symbol only; not scientific correctness, execution reach, or physical validation.",
+   "write": true,
+   "files_inspected": 104,
+   "inspected": 438,
+   "verified": 438,
+   "unavailable": 0,
+   "skipped_inactive": 0,
+   "locators_corrected": 71,
+   "fingerprints_baselined": 2,
+   "changed_definitions": 20,
+   "line_corrections": 65,
+   "end_line_updates": 71,
+   "locators_restored": 0,
+   "records_updated": 74,
+   "missing_provenance": 2,
+   "provenance_repaired": 2,
+   "changed_definition_ids": [
+    "SW_RAOSIM_MDO_CAPABILITIES_PY_JOB_CAPABILITIES",
+    "SW_RAOSIM_MDO_CONSTRAINTS_PY_CONSTRAINT_MANIFEST",
+    "SW_RAOSIM_MDO_CONSTRAINTS_PY_CONSTRAINT_METADATA",
+    "SW_RAOSIM_MDO_ENGINE_PY_SOLVE_ENGINE",
+    "SW_RAOSIM_MDO_EXECUTE_PY_EXECUTE_RESOLVED_ENGINE_JOB",
+    "SW_RAOSIM_MDO_GRID_PY_MODULE",
+    "SW_RAOSIM_MDO_JOB_PY_OUTPUTPOLICY",
+    "SW_RAOSIM_MDO_JOB_PY_RESOLVE_ENGINE_JOB",
+    "SW_RAOSIM_MDO_NLP_PY_FOR_MISSION",
+    "SW_RAOSIM_MDO_NLP_PY_MAKE_CALLABLES",
+    "SW_RAOSIM_MDO_NLP_PY_NLPRESULT",
+    "SW_RAOSIM_MDO_NLP_PY_PARETO_FRONTIER",
+    "SW_RAOSIM_MDO_NLP_PY_SOLVE_MIN_MASS",
+    "SW_RAOSIM_MDO_RESOLVED_INPUTS_PY_RESOLVE_ENGINE_INPUTS",
+    "SW_RAOSIM_MDO_SCHEMA_PY_MISSIONSPEC",
+    "SW_RAOSIM_PUMPS_PY_SCREENING_DEFAULTS",
+    "SW_RAOSIM_PUMPS_PY_SIZE_ELECTRIC_PUMPS",
+    "SW_RAOSIM_REQUIREMENTS_PY_MODULE",
+    "SW_RAOSIM_REQUIREMENTS_PY_REQUIREMENTANALYSISCONFIG",
+    "SW_RAOSIM_REQUIREMENTS_PY_RESOLVE_REQUIREMENT"
+   ],
+   "unavailable_components": []
+  },
+  "constant_basis": {
+   "legacy_basis_labels_annotated": 949,
+   "numerical_tuning_classifications": 2
   },
   "graph": {
-   "ontology_version": "1.0.0",
-   "generated_at": "2026-09-20T22:58:12.656481+00:00",
-   "n_nodes": 4514,
-   "n_edges": 5685,
+   "ontology_version": "1.1.0",
+   "generated_at": "2026-10-16T18:20:23.384900+00:00",
+   "n_nodes": 4870,
+   "n_edges": 6267,
    "n_dangling_dropped": 0
   },
   "validation": {
-   "generated_at": "2026-09-20T22:58:13.127169+00:00",
-   "n_issues": 3,
+   "generated_at": "2026-10-16T18:20:23.815321+00:00",
+   "n_issues": 13,
    "issues_by_check": {
-    "markdown_without_manifest_row": 2,
-    "registry_citation_not_confirmed_in_local_source": 1
+    "empty_source_pdf": 1,
+    "canonical_document_without_chunks": 1,
+    "markdown_without_manifest_row": 1,
+    "registry_citation_not_confirmed_in_local_source": 1,
+    "declared_cad_bytes_unavailable": 6,
+    "source_extraction_incomplete": 1,
+    "source_verification_incomplete": 1,
+    "unknown_basis_software_constants": 1
    },
    "stats": {
     "equation_variables": {
-     "ambiguous": 12,
-     "unresolved": 88,
-     "total": 140
+     "ambiguous": 6,
+     "unresolved": 233,
+     "total": 440
     },
     "constants_by_basis": {
+     "UNKNOWN_BASIS": 274,
      "IMPLEMENTATION_CHOICE": 351,
-     "UNKNOWN_BASIS": 223,
-     "LITERATURE_DERIVED": 189,
+     "LITERATURE_DERIVED": 181,
      "PROJECT_DERIVED": 41,
-     "REPOSITORY_HEURISTIC": 175,
-     "EMPIRICALLY_CALIBRATED": 2
+     "REPOSITORY_HEURISTIC": 168
     },
-    "components_without_scientific_link": 214,
+    "components_without_scientific_link": 200,
+    "engineering_artifacts": {
+     "active_by_type": {
+      "ArtifactManifest": 17,
+      "CADArtifact": 70,
+      "EngineConfiguration": 17,
+      "ManufacturingProcess": 15
+     },
+     "inactive_snapshots": 0
+    },
     "graph": {
-     "nodes": 4514,
-     "edges": 5685,
+     "nodes": 4870,
+     "edges": 6267,
      "edges_without_provenance": 0,
      "top_degree": [
       [
        "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
-       145
-      ],
-      [
-       "DOC_NTRS_19710019929",
-       131
+       146
       ],
       [
        "DOC_NTRS_19760023196",
        111
       ],
       [
+       "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+       110
+      ],
+      [
        "MODEL_NOZZLE_MOC",
        97
       ],
       [
-       "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
-       83
+       "MODEL_PUMP_ELECTRIC_DRIVE",
+       81
       ]
      ]
     },
-    "duplicate_chunk_texts": 15
+    "duplicate_chunk_texts": 15,
+    "coverage": {
+     "equation_completeness": "NOT_ESTABLISHED",
+     "concept_completeness": "NOT_ESTABLISHED",
+     "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+     "documents": {
+      "records": 252,
+      "canonical": 248,
+      "alternate_copies": 4,
+      "with_source_objects": 9,
+      "without_source_objects": 239,
+      "with_equations": 9,
+      "without_equations": 239,
+      "with_independently_confirmed_objects": 5,
+      "conversion_requires_review": 230,
+      "conversion_low_confidence": 16,
+      "zero_page_sources": 1,
+      "zero_page_source_ids": [
+       "DOC_DOI_10_1007_978_3_030_14788_4"
+      ]
+     },
+     "source_objects": {
+      "equations": {
+       "records": 93,
+       "current": 75,
+       "independently_confirmed": 58,
+       "inactive_stale_refuted_or_unresolved": 18
+      },
+      "claims": {
+       "records": 188,
+       "current": 188,
+       "independently_confirmed": 7,
+       "inactive_stale_refuted_or_unresolved": 0
+      },
+      "entities": {
+       "records": 94,
+       "current": 94,
+       "independently_confirmed": 0,
+       "inactive_stale_refuted_or_unresolved": 0
+      },
+      "validity": {
+       "records": 36,
+       "current": 36,
+       "independently_confirmed": 0,
+       "inactive_stale_refuted_or_unresolved": 0
+      }
+     },
+     "incomplete_formula_transcriptions": {
+      "count": 18,
+      "ids": [
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+       "EQ_NTRS_19760023196_BE05E0AF",
+       "EQ_NTRS_19760023196_D7D2D8F1"
+      ],
+      "current_count": 0,
+      "current_ids": [],
+      "current_state": "NONE_FLAGGED_CURRENT",
+      "historical_count": 18,
+      "state": "INCOMPLETE_TRANSCRIPTION",
+      "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
+     },
+     "models": {
+      "records": 61,
+      "declared_support": {
+       "PARTIALLY_SUPPORTED": 10,
+       "NOT_FOUND_IN_SOURCE": 1,
+       "SUPPORTED": 3,
+       "NOT_CHECKED": 47
+      },
+      "current_support": {
+       "NOT_CHECKED": 54,
+       "NOT_FOUND_IN_SOURCE": 1,
+       "PARTIALLY_SUPPORTED": 4,
+       "SUPPORTED": 2
+      },
+      "source_reviewed_current_fingerprint": 6,
+      "without_current_source_review": 55,
+      "without_manifest_source": 8
+     },
+     "software_constants": {
+      "records": 1015,
+      "by_basis": {
+       "UNKNOWN_BASIS": 274,
+       "IMPLEMENTATION_CHOICE": 351,
+       "LITERATURE_DERIVED": 181,
+       "PROJECT_DERIVED": 41,
+       "REPOSITORY_HEURISTIC": 168
+      },
+      "unknown_basis": 274,
+      "current": 998,
+      "inactive_or_noncurrent": 17,
+      "by_basis_current": {
+       "UNKNOWN_BASIS": 257,
+       "IMPLEMENTATION_CHOICE": 351,
+       "LITERATURE_DERIVED": 181,
+       "PROJECT_DERIVED": 41,
+       "REPOSITORY_HEURISTIC": 168
+      },
+      "by_basis_inactive_or_noncurrent": {
+       "UNKNOWN_BASIS": 17
+      },
+      "unknown_basis_current": 257,
+      "unknown_basis_inactive_or_noncurrent": 17,
+      "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
+     },
+     "gaps": {
+      "canonical_documents_without_source_objects": 239,
+      "canonical_documents_without_equations": 239,
+      "equations_and_claims_pending_independent_verification": 198,
+      "equations_without_model_links": 47,
+      "incomplete_formula_transcriptions": 0,
+      "zero_page_sources": 1,
+      "unknown_basis_software_constants": 257
+     }
+    }
    }
   },
   "review_queue": {
    "models_total": 61,
    "model_support": {
-    "PARTIALLY_SUPPORTED": 8,
+    "PARTIALLY_SUPPORTED": 10,
     "NOT_FOUND_IN_SOURCE": 1,
-    "SUPPORTED": 2,
-    "NOT_CHECKED": 50
+    "SUPPORTED": 3,
+    "NOT_CHECKED": 47
    },
-   "pending_source_reviews": 42,
+   "effective_model_support": {
+    "NOT_CHECKED": 54,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "PARTIALLY_SUPPORTED": 4,
+    "SUPPORTED": 2
+   },
+   "pending_source_reviews": 47,
    "needs_source_routing": 8,
-   "pending_verifications": 216,
-   "documents_with_extracted_objects": 7,
-   "canonical_documents_without_extracted_objects": 241
+   "pending_verifications": 198,
+   "documents_with_extracted_objects": 9,
+   "canonical_documents_without_extracted_objects": 239
   }
  },
  "document_states": [
@@ -279,9 +645,11 @@
   },
   {
    "doc_id": "DOC_DOI_10_1007_978_3_030_14788_4",
-   "state": "INGESTED",
+   "state": "SOURCE_UNREADABLE",
+   "reason": "EMPTY_SOURCE",
    "n_chunks": 0,
-   "unchanged": true
+   "source_pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
+   "remediation": "Restore the original PDF: the tracked payload has zero pages; enrichment cannot recover absent pages."
   },
   {
    "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
@@ -1260,7 +1628,7 @@
   },
   {
    "doc_id": "DOC_NTRS_19700005097",
-   "state": "INGESTED",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 31,
    "unchanged": true
   },
@@ -1386,7 +1754,7 @@
   },
   {
    "doc_id": "DOC_NTRS_19760023196",
-   "state": "INGESTED",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 242,
    "unchanged": true
   },
@@ -1685,5 +2053,5 @@
    "unchanged": true
   }
  ],
- "finished_at": "2026-09-20T22:58:13.133825+00:00"
+ "finished_at": "2026-10-16T18:20:23.821484+00:00"
 }

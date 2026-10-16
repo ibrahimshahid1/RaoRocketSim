@@ -153,9 +153,9 @@ def test_constraints_dict_exposes_all_three_requirement_screens(solved):
 def test_dry_mass_partial_margin_matches_its_published_scalar(solved):
     """The margin must be built from the same dry_mass_partial the _SCALARS
     accessor publishes — two definitions of engine mass is how the two
-    pipelines drifted apart before."""
+    pipelines drifted apart before.  It includes the pintle component."""
     m, r = solved
-    partial = float(r.objective_mass + r.chamber_mass.total)
+    partial = float(r.objective_mass + r.chamber_mass.total + r.pintle.mass)
     assert float(r.constraints["dry_mass_partial_margin"]) == pytest.approx(
         1.0 - partial / float(m.dry_mass_max), rel=1e-12)
 
@@ -170,7 +170,8 @@ def test_physical_values_stay_reportable_in_diagnostics(solved):
     assert float(d["envelope_length_partial"]) == pytest.approx(
         float(r.envelope.length), rel=1e-12)
     assert float(d["dry_mass_partial"]) == pytest.approx(
-        float(r.objective_mass + r.chamber_mass.total), rel=1e-12)
+        float(r.objective_mass + r.chamber_mass.total + r.pintle.mass),
+        rel=1e-12)
     # ...and the fractional margin must be reconstructible from them.
     assert float(r.constraints["envelope_diameter_margin"]) == pytest.approx(
         1.0 - float(d["envelope_diameter_partial"]) / m.envelope_diameter_max,

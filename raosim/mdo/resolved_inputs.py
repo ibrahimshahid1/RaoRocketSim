@@ -268,12 +268,19 @@ class InjectorInputs:
     slot_aspect_ratio: float
     deflector_angle_deg: float
     radial_stream: str = "fuel"
+    #: Optimized pintle post wall (MDO ``t_post``).  Handed to the host
+    #: ``PintleMechanicalSpec.pintle_wall_thickness`` so the exported post is
+    #: the post the optimizer priced and screened.  ``None`` keeps the host's
+    #: own layout default for callers that never solved a pintle component.
+    pintle_wall_thickness: float | None = None
 
     def __post_init__(self) -> None:
         _positive("fuel_dp_fraction", self.fuel_dp_fraction)
         _positive("oxidizer_dp_fraction", self.oxidizer_dp_fraction)
         _positive("fuel_cd", self.fuel_cd)
         _positive("oxidizer_cd", self.oxidizer_cd)
+        if self.pintle_wall_thickness is not None:
+            _positive("pintle_wall_thickness", self.pintle_wall_thickness)
 
 
 @dataclass(frozen=True)
@@ -286,6 +293,10 @@ class FeedInputs:
     line_pressure_loss: float
     pump_efficiency: float
     pump_speed_rpm: float
+    #: Registered electric technology set (raosim.electric_technology) both
+    #: pipelines size the motor, inverter and battery from; "custom" when the
+    #: mission carries values that belong to no registered set.
+    electric_technology: str = "repository_screening_v1"
 
     def __post_init__(self) -> None:
         _positive("fuel_tank_pressure", self.fuel_tank_pressure)
@@ -598,7 +609,12 @@ def resolve_engine_inputs(
         ),
         injector=InjectorInputs(
             kind="pintle",
-            architecture="fixed_discrete",
+            # Host architecture identities for the MDO's outer choice.
+            architecture=(
+                "son_continuous_movable"
+                if getattr(mission, "pintle_architecture", "fixed_slotted")
+                == "son_movable" else "fixed_discrete"
+            ),
             fuel_dp_fraction=float(d["dp_f_frac"]),
             oxidizer_dp_fraction=float(d["dp_o_frac"]),
             fuel_cd=float(mission.injector_cd_fuel),
@@ -607,6 +623,9 @@ def resolve_engine_inputs(
             slot_count=int(mission.pintle_slot_count),
             slot_aspect_ratio=float(mission.pintle_slot_aspect_ratio),
             deflector_angle_deg=float(mission.pintle_deflector_angle_deg),
+            pintle_wall_thickness=(
+                float(d["t_post"]) if "t_post" in d else None
+            ),
         ),
         feed=FeedInputs(
             architecture="electric_pump",
@@ -615,6 +634,9 @@ def resolve_engine_inputs(
             line_pressure_loss=float(mission.line_dp_allowance),
             pump_efficiency=float(mission.eta_pump),
             pump_speed_rpm=float(d.get("N_rpm", mission.pump_speed_rpm)),
+            electric_technology=str(
+                getattr(mission, "electric_technology", "repository_screening_v1")
+            ),
         ),
         model_identities=identities,
         unavailable=unavailable,
@@ -662,6 +684,8 @@ _DESIGN_INPUT_CROSSCHECKS: tuple[tuple[str, str], ...] = (
     ("injector.oxidizer_cd", "injector.oxidizer_cd"),
     ("injector.pintle_diameter", "injector.geometry.pintle_diameter"),
     ("injector.slot_count", "injector.geometry.slot_count"),
+    ("injector.pintle_wall_thickness",
+     "injector.mechanical.pintle_wall_thickness"),
     ("feed.fuel_tank_pressure", "injector.feed_system.fuel.tank_pressure"),
     ("feed.oxidizer_tank_pressure",
      "injector.feed_system.oxidizer.tank_pressure"),

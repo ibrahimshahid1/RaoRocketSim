@@ -14,7 +14,7 @@ import re
 from functools import lru_cache
 
 from . import REPO_ROOT
-from .graph import Graph
+from .graph import Graph, equation_formulation_state, model_source_support
 from .index import VectorIndex, hybrid_search
 from .quantities import BY_ID, resolve_symbol
 from .store import connect, doc_chunks, get_chunk, index_by, load
@@ -55,12 +55,12 @@ def _claims() -> dict[str, dict]:
 
 @lru_cache(maxsize=1)
 def _software() -> dict[str, dict]:
-    return {s["id"]: s for s in load("software_links") if s.get("type") == "SoftwareComponent"}
+    return {s["id"]: s for s in load("software_links") if s.get("type") == "SoftwareComponent" and _current_source(s)}
 
 
 @lru_cache(maxsize=1)
 def _constants() -> dict[str, dict]:
-    return {s["id"]: s for s in load("software_links") if s.get("type") == "EmpiricalConstant"}
+    return {s["id"]: s for s in load("software_links") if s.get("type") == "EmpiricalConstant" and _current_source(s)}
 
 
 @lru_cache(maxsize=1)
@@ -103,6 +103,8 @@ def _doc_brief(doc_id: str) -> dict:
         return {"id": doc_id, "state": "SOURCE_NOT_INGESTED"}
     return {"id": doc_id, "title": d.get("title"), "authors": d.get("authors"), "year": d.get("year"),
             "identifier": d.get("identifier"), "source_pdf": d["source_pdf"],
+            "source_kind": d.get("source_kind", "file"),
+            "source_container": d.get("source_container"), "archive_member": d.get("archive_member"),
             "generated_markdown": d.get("generated_markdown"),
             "conversion_status": d["conversion"]["status"],
             "low_confidence": bool(d["conversion"].get("low_confidence"))}
@@ -117,7 +119,9 @@ def get_document(document_id: str) -> dict:
     out["equations"] = [n["node"]["id"] for n in g.neighbors(document_id, {"FOUND_IN"}, "in") if n["node"] and n["node"]["type"] == "Equation"]
     out["claims"] = [n["node"]["id"] for n in g.neighbors(document_id, {"FOUND_IN"}, "in") if n["node"] and n["node"]["type"] == "Claim"]
     out["supports_models"] = [n["node"]["id"] for n in g.neighbors(document_id, {"SUPPORTED_BY"}, "in") if n["node"]]
-    out["cited_by_software"] = [n["node"]["id"] for n in g.neighbors(document_id, {"CITES"}, "in") if n["node"]]
+    citations = g.neighbors(document_id, {"CITES"}, "in")
+    out["cited_by_software"] = [n["node"]["id"] for n in citations if n["node"] and n["node"]["type"] == "SoftwareComponent"]
+    out["cited_by_models"] = [n["node"]["id"] for n in citations if n["node"] and n["node"]["type"] == "Model"]
     return out
 
 
@@ -179,6 +183,7 @@ def get_source_context(chunk_id_or_ref: str, window: int = 1) -> dict:
         "escalation": {
             "pdf": d.get("source_pdf"), "pages": [c["page_start"], c["page_end"]],
             "markdown": d.get("generated_markdown"),
+            "source_container": d.get("source_container"), "archive_member": d.get("archive_member"),
             "note": "PDF is authoritative. Verify equations/values against the PDF page(s) before load-bearing use.",
         },
     }
@@ -202,6 +207,34 @@ def get_entity(entity_id: str) -> dict:
     if not n:
         return {"id": entity_id, "state": "UNRESOLVED_ENTITY"}
     return {"node": n, "neighbors": g.neighbors(entity_id)}
+
+
+def find_artifacts(query: str = "", limit: int = 15) -> dict:
+    """Find active observed engineering records; historical snapshots use IDs."""
+    terms = re.findall(r"[a-z0-9_]+", query.lower())
+    hits = []
+    for rec in load("artifacts"):
+        if rec.get("type") == "ArtifactLink" or not rec.get("active", True):
+            continue
+        hay = " ".join(str(rec.get(k, "")) for k in
+                       ("id", "type", "name", "kind", "scope", "source_path", "path")).lower()
+        score = sum(term in hay for term in terms)
+        if not terms or score:
+            hits.append((score, rec))
+    hits.sort(key=lambda hit: (-hit[0], hit[1]["id"]))
+    return {"query": query, "state": "OK" if hits else "NO_RELEVANT_SOURCE_FOUND",
+            "records": [rec for _, rec in hits[:max(0, limit)]],
+            "authority": "Repository report assertions and observed file hashes; inspect binding and qualification states."}
+
+
+def get_artifact(artifact_id: str) -> dict:
+    rec = index_by("artifacts").get(artifact_id)
+    if not rec:
+        return {"id": artifact_id, "state": "UNRESOLVED_ENTITY"}
+    return {"record": rec, "provenance": index_by("provenance").get(rec.get("provenance_id")),
+            "neighbors": get_neighbors(artifact_id),
+            "state": rec.get("source_state", "UNKNOWN"),
+            "observation_note": "Snapshot from the last rebuild; current hashes do not establish generation-time or physical validation."}
 
 
 def get_neighbors(entity_id: str, edge_types: list[str] | None = None) -> list[dict]:
@@ -228,7 +261,7 @@ def _matches(text: str, rec: dict, fields: tuple[str, ...]) -> bool:
 
 
 def _current_source(rec: dict) -> bool:
-    return rec.get("source_state") != "STALE_SOURCE"
+    return rec.get("active", True) and rec.get("source_state", "CURRENT") == "CURRENT"
 
 
 def _validity_model_ids(rec: dict) -> set[str]:
@@ -257,7 +290,10 @@ def find_equations(concept: str, limit: int = 20) -> dict:
         return {"query": concept, "state": "NO_EXTRACTED_EQUATION_MATCH" if not hits else "CHUNK_FALLBACK",
                 "equations": [], "equation_rich_chunks": hits,
                 "note": "No extracted Equation record matched. Chunks flagged equation_rich are returned for manual inspection; this is not a claim that no such equation exists in the corpus."}
-    return {"query": concept, "state": "OK", "equations": eqs[:limit]}
+    selected = [{**e, "transcription_state": equation_formulation_state(e)} for e in eqs[:limit]]
+    incomplete = [e["id"] for e in selected if e["transcription_state"] == "INCOMPLETE_TRANSCRIPTION"]
+    return {"query": concept, "state": "INCOMPLETE_TRANSCRIPTION" if len(incomplete) == len(selected) else "OK",
+            "equations": selected, "incomplete_formula_ids": incomplete}
 
 
 def get_equation(equation_id: str) -> dict:
@@ -265,6 +301,7 @@ def get_equation(equation_id: str) -> dict:
     if not e:
         return {"id": equation_id, "state": "UNRESOLVED_ENTITY"}
     out = dict(e)
+    out["transcription_state"] = equation_formulation_state(e)
     out["document"] = _doc_brief(e["document_id"])
     out["neighbors"] = _graph().neighbors(equation_id)
     return out
@@ -393,21 +430,59 @@ def find_scientific_basis(software_ref: str) -> dict:
     out = []
     for c in comps:
         cid = c["id"]
-        models = [n["node"] for n in g.neighbors(cid, {"IMPLEMENTS"}, "out") if n["node"] and n["node"]["type"] == "Model"]
+        models = ([c] if c.get("type") == "Model" else
+                  [n["node"] for n in g.neighbors(cid, {"IMPLEMENTS"}, "out") if n["node"] and n["node"]["type"] == "Model"])
         equations = [n["node"] for n in g.neighbors(cid, {"IMPLEMENTS"}, "out") if n["node"] and n["node"]["type"] == "Equation"]
         docs = [n["node"] for n in g.neighbors(cid, {"CITES", "SUPPORTED_BY"}, "out") if n["node"] and n["node"]["type"] == "Document"]
+        support = []
+        supported_docs = set()
         for m in models:
-            docs += [n["node"] for n in g.neighbors(m["id"], {"SUPPORTED_BY"}, "out") if n["node"]]
+            # Registry citation paths stay visible even when their support is
+            # absent, partial, unreviewed, or stale. Recheck against the stores
+            # so a pre-rebuild graph cannot turn a stale review into support.
+            record = _models().get(m["id"], m)
+            did = record.get("source_document_id")
+            effective, note = model_source_support(record, _docs().get(did))
+            support.append({"model_id": m["id"], "document_id": did,
+                            "declared_state": record.get("source_support_state", "NOT_CHECKED"),
+                            "state": effective, "notes": record.get("source_support_notes", ""),
+                            "evidence_note": note})
+            if did:
+                if did in _docs():
+                    docs.append(_docs()[did])
+                if effective in {"SUPPORTED", "PARTIALLY_SUPPORTED"}:
+                    supported_docs.add(did)
+            docs += [n["node"] for n in g.neighbors(m["id"], {"CITES", "SUPPORTED_BY"}, "out") if n["node"] and n["node"]["type"] == "Document"]
             equations += [n["node"] for n in g.neighbors(m["id"], {"IMPLEMENTS"}, "out") if n["node"] and n["node"]["type"] == "Equation"]
         constants = [n["node"] for n in g.neighbors(cid, {"USES"}, "out") if n["node"] and n["node"]["type"] == "EmpiricalConstant"]
         refusals = [n["node"] for n in g.neighbors(cid, {"REFUSES_WHEN"}, "out") if n["node"]]
         tests = [n["node"] for n in g.neighbors(cid, {"TESTED_WITH"}, "out") if n["node"]]
-        basis_state = "OK" if (models or equations or docs) else "SCIENTIFIC_BASIS_UNKNOWN"
+        states = [s["state"] for s in support]
+        if states and all(s == "SUPPORTED" for s in states):
+            basis_state = "OK"
+        elif any(s in {"SUPPORTED", "PARTIALLY_SUPPORTED"} for s in states):
+            basis_state = "PARTIALLY_SUPPORTED"
+        elif states:
+            basis_state = next((s for s in ("STALE_SOURCE", "NOT_FOUND_IN_SOURCE", "SOURCE_NOT_INGESTED", "SOURCE_UNREADABLE") if s in states), "NOT_CHECKED")
+        else:
+            basis_state = "NOT_CHECKED" if (equations or docs) else "SCIENTIFIC_BASIS_UNKNOWN"
+        # All source_documents are routes to inspect, not a claim that each
+        # source supports the implemented formulation.
+        doc_ids = {d["id"] for d in docs} | {s["document_id"] for s in support if s["document_id"]}
         out.append({"component": c, "state": basis_state, "models": models, "equations": equations,
-                    "source_documents": [_doc_brief(d["id"]) for d in {d["id"]: d for d in docs}.values()],
+                    "source_documents": [_doc_brief(did) for did in sorted(doc_ids)],
+                    "supported_source_documents": [_doc_brief(did) for did in sorted(supported_docs)],
+                    "model_support": support,
+                    "support_scope": "Citation support only; does not verify implementation correctness or physical validity.",
                     "constants": constants, "refusals": refusals, "tests": tests,
                     "unknown_basis_constants": [k for k in constants if k.get("basis_class") == "UNKNOWN_BASIS"]})
-    return {"ref": software_ref, "state": "OK", "components": out}
+    component_states = {c["state"] for c in out}
+    aggregate = ("OK" if component_states == {"OK"} else
+                 "PARTIALLY_SUPPORTED" if component_states & {"OK", "PARTIALLY_SUPPORTED"} else
+                 next(iter(component_states)) if len(component_states) == 1 else "INSUFFICIENT_SOURCE_CONTEXT")
+    # Keep state=OK as the historical operation-success contract; basis_state
+    # and each component's state describe the scientific support assessment.
+    return {"ref": software_ref, "state": "OK", "basis_state": aggregate, "components": out}
 
 
 # --------------------------------------------------------------------------
@@ -522,6 +597,7 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
     equations = sorted((e for e in _equations().values() if _current_source(e) and e.get("verification") != "REFUTED"),
                        key=lambda e: -term_hits(e, ("label", "form", "description", "concepts_text", "variables_text")))
     equations = [e for e in equations if term_hits(e, ("label", "form", "description", "concepts_text", "variables_text")) or e["document_id"] in doc_ids][:max_items]
+    equations = [{**e, "transcription_state": equation_formulation_state(e)} for e in equations]
     claims = sorted((c for c in _claims().values() if _current_source(c) and c.get("verification") != "REFUTED"),
                     key=lambda c: -term_hits(c, ("subject", "predicate", "object", "statement")))
     claims = [c for c in claims if term_hits(c, ("subject", "predicate", "object", "statement")) >= 1 or c["document_id"] in doc_ids][:max_items * 2]
@@ -544,6 +620,7 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
                   key=lambda c: -term_hits(c, ("name", "detail", "file")))[:max_items]
     reqs = [r for r in _reqs().values() if _sub_match(subsystems, r.get("subsystem")) or term_hits(r, ("name", "quantity", "detail", "category"))][:max_items]
     repo_docs = [r for r in _repo_docs().values() if term_hits(r, ("path", "title", "summary"))][:8]
+    artifacts = find_artifacts(" ".join(task_terms), limit=max_items)["records"] if task_terms else []
 
     conflicts = []
     eq_ids = {e["id"] for e in equations}
@@ -553,6 +630,10 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
             conflicts.append(e)
 
     warnings = []
+    incomplete_formulas = [e["id"] for e in equations if e["transcription_state"] == "INCOMPLETE_TRANSCRIPTION"]
+    if incomplete_formulas:
+        warnings.append("INCOMPLETE_TRANSCRIPTION: formula bodies remain missing/garbled; quote grounding does not verify the mathematics. "
+                        "Excluded from implementation support edges: " + ", ".join(incomplete_formulas))
     if search["retrieval"]["semantic"]["state"] != "OK":
         warnings.append("Semantic index UNAVAILABLE; source retrieval used lexical search only. "
                         + search["retrieval"]["semantic"]["recovery"])
@@ -568,7 +649,7 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
         if count:
             stale_counts[name] = count
     if stale_counts:
-        warnings.append("Excluded STALE_SOURCE records pending source re-verification: "
+        warnings.append("Excluded noncurrent source records (including superseded history and stale evidence): "
                         + ", ".join(f"{name}={count}" for name, count in stale_counts.items()))
     for m in models:
         support = m.get("source_support_state", "NOT_CHECKED")
@@ -590,9 +671,9 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
     unavailable = [c for c in caps if str(c.get("state", "")).upper() in ("UNAVAILABLE", "NOT_IMPLEMENTED", "BLOCKED_ON_LITERATURE", "BLOCKED_ON_STANDARD", "PLANNED_NOT_IMPLEMENTED")]
 
     state = "OK"
-    if not hits and not models and not sw:
+    if not hits and not models and not sw and not artifacts:
         state = "NO_RELEVANT_SOURCE_FOUND"
-    elif not equations and not claims:
+    elif not equations and not claims and not artifacts:
         state = "INSUFFICIENT_SOURCE_CONTEXT"
 
     def slim(rec, keys):
@@ -606,11 +687,11 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
         "quantities": quantities,
         "source_documents": [_doc_brief(d) for d in doc_ids],
         "source_context": [slim(h, ("chunk_id", "doc_id", "page_start", "page_end", "section", "kind", "score", "text", "low_confidence")) for h in hits],
-        "equations": [slim(e, ("id", "label", "form", "document_id", "page", "variables", "assumptions", "validity", "model_ids", "confidence", "grounded", "verification")) for e in equations],
+        "equations": [slim(e, ("id", "label", "form", "document_id", "page", "variables", "assumptions", "validity", "model_ids", "confidence", "grounded", "verification", "transcription_state")) for e in equations],
         "claims": [slim(c, ("id", "claim_type", "subject", "predicate", "object", "statement", "document_id", "page", "model_ids", "confidence", "verification")) for c in claims],
         "assumptions": [slim(a, ("id", "label", "prose", "statement", "document_id", "page")) for a in assumptions],
         "validity_envelopes": [slim(v, ("id", "model_id", "model_ids", "prose", "statement", "machine_readable", "machine_readable_state", "document_id", "page")) for v in validity],
-        "models": [slim(m, ("id", "registry_id", "subsystem", "quantity", "relation", "basis_class", "promotion_status", "validation_level", "source_document_id", "equation_ref", "validity_text", "source_support_state", "source_support_notes")) for m in models],
+        "models": [slim(m, ("id", "registry_id", "subsystem", "quantity", "relation", "basis_class", "basis_class_basis", "promotion_status", "promotion_status_basis", "execution_reach", "software_verification_state", "physical_validation_state", "validation_level", "source_document_id", "equation_ref", "validity_text", "source_support_state", "source_support_notes")) for m in models],
         "existing_implementations": [slim(s, ("id", "qualname", "file", "line", "role", "model_ids", "variant_of_id", "verified")) for s in sw],
         "empirical_constants": [slim(k, ("id", "name", "value", "units", "basis_class", "stated_basis", "file", "line")) for k in constants],
         "requirements_and_gates": [slim(r, ("id", "kind", "name", "quantity", "enforced_by", "file", "line")) for r in reqs],
@@ -618,6 +699,7 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
         "benchmarks": [slim(t, ("id", "path", "source_document_id", "expected")) for t in benchmarks],
         "unavailable_capabilities": [slim(c, ("id", "name", "state", "enforced_by", "unblock_requires")) for c in unavailable],
         "repository_documents": [slim(r, ("id", "path", "kind", "date", "status_head")) for r in repo_docs],
+        "engineering_artifacts": [slim(r, ("id", "type", "name", "kind", "scope", "state", "source_state", "source_path", "source_sha256", "json_pointer", "path", "observed_sha256", "binding_state", "producer_binding_state", "generation_time_integrity_state", "execution_state", "qualification_state", "provenance_id")) for r in artifacts],
         "conflicting_sources": conflicts,
         "implementation_warnings": warnings,
         "protocol": [

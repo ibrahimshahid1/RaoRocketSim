@@ -36,7 +36,14 @@ def boundary_layer_displacement(
     *,
     wall_temperature: float | None = None,
 ) -> dict:
-    """Estimate turbulent boundary-layer displacement and effective area ratio."""
+    """Report a repository nozzle-displacement screening estimate.
+
+    White's 7th-edition Eqs. (7.42), (7.46) instead give
+    delta/x ~= 0.16 Re_x**(-1/7) and delta_star ~= delta/8 for an
+    incompressible smooth flat plate. The one-fifth-power coefficient,
+    temperature factor and nozzle-area application below are separate
+    repository choices with no verified basis in those source equations.
+    """
     x = np.asarray(contour["x"], dtype=float)
     y = np.asarray(contour["y"], dtype=float)
     Rt = float(contour["Rt"])
@@ -79,6 +86,13 @@ def boundary_layer_displacement(
         ),
         "mach": mach,
         "model": "turbulent_flat_plate_displacement_screening",
+        "source_support_state": "PARTIALLY_SUPPORTED",
+        "correlation_basis": "REPOSITORY_HEURISTIC",
+        "reference_formulation": "White 7th ed. Eqs.7.42,7.46: delta_star/x ~= 0.02 Re_x^(-1/7)",
+        "implemented_formulation": "delta_star = 0.046*s*Re_s^(-1/5)*sqrt(max(T/T_wall,0.2))",
+        "validity_state": "NO_VALIDITY_RANGE_LOCATED_FOR_NOZZLE_EXTENSION",
+        "source_comparison_note": "Flat-plate definitions support the concept; the source's one-seventh-power derivation does not establish this coefficient/exponent, temperature correction or nozzle application.",
+        "hardware_qualified": False,
     }
 
 

@@ -26,6 +26,7 @@ from pathlib import Path
 from . import REPO_ROOT
 from .schema import node_id
 from .store import load, save
+from .record_identity import consolidate
 
 DEF_RE = r"^\s*(?:(?:async\s+def|def|class)\s+{name}\b|{name}\s*(?::[^=]+)?=)"
 
@@ -203,8 +204,28 @@ def harvest(survey_results: list[dict], registry_ids: set[str]) -> dict:
         c["test_ids"] = tids
         del c["tests_text"]
 
-    existing_links = [s for s in load("software_links") if s.get("type") not in ("SoftwareComponent", "EmpiricalConstant")]
-    save("software_links", existing_links + components + constants,
+    previous = load("software_links")
+    existing_links = [s for s in previous
+                      if s.get("type") not in ("SoftwareComponent", "EmpiricalConstant")
+                      or s.get("harvest_owner") == "kg.harvest_parameters@1"]
+    incoming = components + constants
+    incoming_ids = {r["id"] for r in incoming}
+    prior_facets = [s for s in previous if s["id"] in incoming_ids
+                    and s.get("harvest_owner") != "kg.harvest_parameters@1"]
+    # Keep current locator fingerprints/history so a subsequent exact AST
+    # reconciliation can detect changed bodies rather than losing its baseline.
+    preferred = {r["id"]: dict(r) for r in incoming}
+    protected = {"line", "end_line", "source_sha256", "definition_sha256", "ast_qualname",
+                 "active", "source_state", "verified"}
+    for old in prior_facets:
+        for key, value in old.items():
+            if key in protected or key.startswith("implementation_"):
+                preferred[old["id"]][key] = value
+    consolidated, identity_report = consolidate(existing_links + prior_facets + incoming,
+                                                 preferred=preferred,
+                                                 origin={"kind": "AGENT_SURVEY_ASSERTION"})
+    report["record_identity"] = identity_report
+    save("software_links", consolidated,
          meta={"generated_at": now, "n_components": len(components), "n_constants": len(constants)})
     # merge tests
     prior_tests = {t["id"]: t for t in load("tests")}

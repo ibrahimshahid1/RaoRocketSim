@@ -27,6 +27,7 @@ _FIXED_POINT = (
     ("Pc", "3 MPa"), ("eps", 8.0), ("dp_f_frac", 0.2), ("dp_o_frac", 0.2),
     ("D_pintle", "20 mm"), ("N_rpm", "30 krpm"), ("channel_width", "0.5 mm"),
     ("channel_height", "1.5 mm"), ("film_frac", 0.1), ("t_wall", "0.8 mm"),
+    ("t_post", "1.5 mm"),
 )
 
 

@@ -294,6 +294,22 @@ def wetted_area(x: Array, r: Array) -> Array:
     return jnp.sum(2.0 * jnp.pi * r * w)
 
 
+def station_segment_lengths(x: Array, r: Array) -> Array:
+    """Meridional segment lengths with a finite derivative at zero length.
+
+    When the L* closure is active the solved barrel length can be exactly 0,
+    so the barrel stations coincide.  The plain norm then returns the right
+    length (0) but sqrt'(0) is infinite, and its reverse-mode product 0 * inf
+    is NaN; that NaN reaches the cooling IFT linear solve, which raises and
+    aborts the whole NLP.  The double-``where`` form keeps every forward length
+    bit-identical and takes the zero subgradient for a coincident pair.
+    """
+
+    d2 = jnp.diff(x) ** 2 + jnp.diff(r) ** 2
+    nonzero = d2 > 0.0
+    return jnp.where(nonzero, jnp.sqrt(jnp.where(nonzero, d2, 1.0)), 0.0)
+
+
 def _resample_by_arclength(x: Array, r: Array, n: int) -> tuple[Array, Array]:
     """Resample a meridional polyline at ``n`` equal arc-length stations.
 
@@ -439,7 +455,7 @@ def build_station_grid(Rt: Array, eps: Array, mission: MissionSpec,
     M_sup = mach_from_area_ratio(ar_sup, gamma, supersonic=True)
     mach = jnp.concatenate([M_sub, M_sup])
 
-    dseg = jnp.sqrt(jnp.diff(x) ** 2 + jnp.diff(r) ** 2)
+    dseg = station_segment_lengths(x, r)
     # The divergent wall must increase monotonically from the throat.  Report
     # rather than repair it: clipping coordinates would hide an invalid nozzle
     # and corrupt gradients.

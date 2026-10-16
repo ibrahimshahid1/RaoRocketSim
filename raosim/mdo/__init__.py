@@ -129,6 +129,14 @@ from raosim.mdo.postprocess import (  # noqa: F401
 from raosim.mdo.nlp import (  # noqa: F401
     solve_min_mass,
     pareto_frontier,
+    kkt_check,
+    KKTReport,
     NLPResult,
     DEFAULT_ENFORCED,
+)
+from raosim.mdo.convergence import (  # noqa: F401
+    ReoptimizedRefinementStudy,
+    StationRefinementStudy,
+    reoptimized_refinement_study,
+    station_refinement_study,
 )

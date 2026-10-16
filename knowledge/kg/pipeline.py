@@ -33,7 +33,7 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE.parent))
 sys.path.insert(0, str(ROOT))
 
-from kg import graph, harvest_constraints, harvest_registry, harvest_repo, index, ingest, quantities, store, validate, report as knowledge_report  # noqa: E402
+from kg import graph, harvest_artifacts, harvest_constraints, harvest_registry, harvest_repo, index, ingest, quantities, store, validate, report as knowledge_report  # noqa: E402
 
 
 def main(argv=None) -> int:
@@ -75,9 +75,13 @@ def main(argv=None) -> int:
     else:
         report["steps"]["index"] = {"skipped": "no chunk changes"}
     store.save("quantities", quantities.to_records(), key="qid", meta={"n": len(quantities.QUANTITIES)})
+    from . import variable_links
+    report["steps"]["variable_links"] = variable_links.reconcile()
     r = harvest_registry.harvest()
     report["steps"]["registry"] = {"models": r["models"], "unresolved": r["unresolved"]}
     report["steps"]["freshness"] = freshness.reconcile(before)
+    from . import enrichment
+    report["steps"]["enrichments"] = enrichment.refresh()
     rr = harvest_repo.harvest()
     report["steps"]["repo"] = {k: v for k, v in rr.items() if k not in ("benchmark_candidates", "citations_unresolved")}
     report["steps"]["repo"]["citations_unresolved"] = rr["citations_unresolved"]
@@ -85,6 +89,14 @@ def main(argv=None) -> int:
         report["steps"]["constraints"] = harvest_constraints.harvest()
     except Exception as exc:  # report partial failure and return nonzero below
         report["steps"]["constraints"] = {"error": repr(exc)}
+    report["steps"]["artifacts"] = harvest_artifacts.harvest()
+    from . import harvest_parameters
+    parameters = harvest_parameters.harvest(repo_root=ROOT)
+    report["steps"]["parameters"] = {k: parameters[k] for k in ("records", "default_sets", "issues")}
+    from . import implementation_freshness
+    report["steps"]["implementation_locators"] = implementation_freshness.reconcile(repo_root=ROOT)
+    from . import constant_basis
+    report["steps"]["constant_basis"] = constant_basis.reconcile(repo_root=ROOT)
     g = graph.assemble()
     report["steps"]["graph"] = g["meta"]
     v = validate.run()
@@ -97,7 +109,9 @@ def main(argv=None) -> int:
     knowledge_report.write()
     from kg.api import reset_caches
     reset_caches()
-    print(json.dumps(report["steps"], indent=1, default=str)[:6000])
+    display = dict(report["steps"])
+    display["artifacts"] = {k: v for k, v in display["artifacts"].items() if k != "sources"}
+    print(json.dumps(display, indent=1, default=str))
     return 1 if any("error" in step for step in report["steps"].values()) else 0
 
 

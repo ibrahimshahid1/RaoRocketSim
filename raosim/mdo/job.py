@@ -106,6 +106,8 @@ VARIABLE_DIMENSIONS: Mapping[str, str] = {
     "channel_height": "length",
     "film_frac": "dimensionless",
     "t_wall": "length",
+    "t_post": "length",
+    "D_cg": "length",
     "OF": "dimensionless",
 }
 
@@ -624,11 +626,35 @@ class OutputPolicy:
                 raise JobValidationError(str(exc)) from exc
         if not isinstance(self.cad_formats, (list, tuple)):
             raise JobValidationError("cad_formats must be a sequence of format names")
-        if self.cad_formats:
+        for cad_format in self.cad_formats:
+            try:
+                require_capability("cad_format", cad_format)
+            except ValueError as exc:
+                raise JobValidationError(str(exc)) from exc
+        if self.parts == "none" and self.cad_formats:
             raise JobValidationError(
-                "cad_formats are not implemented by the unified job execution "
-                "service; no CAD request will be silently omitted"
+                "cad_formats require parts='reference_cad'; with parts='none' "
+                "no CAD is produced and no CAD request will be silently omitted"
             )
+        if self.parts == "reference_cad":
+            if tuple(self.cad_formats) != ("step",):
+                raise JobValidationError(
+                    "parts='reference_cad' exports STEP only; set "
+                    "cad_formats=['step']"
+                )
+            if self.output_dir is None:
+                raise JobValidationError(
+                    "parts='reference_cad' requires output_dir for the CAD "
+                    "and the part manifest"
+                )
+            if not self.allow_partial_package:
+                raise JobValidationError(
+                    "parts='reference_cad' always yields a PARTIAL part "
+                    "package: the engine part manifest (raosim.mdo.build) "
+                    "records path-only CAD as unverified and most parts have "
+                    "no geometry model. Set allow_partial_package=true to "
+                    "accept a partial package"
+                )
         if not isinstance(self.reports, (list, tuple)):
             raise JobValidationError("reports must be a sequence of report names")
         for report in self.reports:
@@ -1061,8 +1087,22 @@ def _resolve_engine_job(spec: EngineJobSpec) -> ResolvedEngineJob:
     active: list[str] = []
     defaulted: list[str] = []
 
+    movable_pintle = mission.pintle_architecture == "son_movable"
     for name, var in space.items():
         policy = policies.get(name)
+        if name == "D_cg" and not movable_pintle:
+            # A slotted post has no centre gap: the value is carried in the
+            # fixed-shape contract but is physically inert, so it is pinned
+            # rather than searched or reported as a user default.
+            if policy is not None and policy.mode is not VariableMode.FIXED:
+                raise JobValidationError(
+                    "D_cg is the centre-gap diameter of the son_movable "
+                    "pintle valve, which unified jobs do not execute yet; a "
+                    "slotted pintle can only fix it"
+                )
+            fixed[name] = float(policy.value if policy is not None
+                                else var.ref())
+            continue
         if policy is None:
             # No stated policy: analyze holds the reference point, optimize
             # searches the model's own validity domain.  A defaulted analyze

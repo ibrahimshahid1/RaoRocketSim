@@ -22,11 +22,14 @@ import jax.numpy as jnp
 from raosim.mdo.schema import MissionSpec
 from raosim.mdo.nlp import (
     solve_min_mass, _make_callables, DEFAULT_ENFORCED, CONSTRAINT_NAMES,
+    _OptimizationSpace,
 )
 
 _M = MissionSpec()
 _ISP = 190.0        # feasible with coking enforced (film cooling costs Isp)
-_NX = 10            # design-vector dimension
+# Free optimizer dimension: the twelve hardware variables less D_cg, which
+# the NLP pins for the default fixed slotted pintle (mdo/pintle.py).
+_NX = len(_OptimizationSpace.for_mission(_M).free_specs)
 _IDX = tuple(CONSTRAINT_NAMES.index(n) for n in DEFAULT_ENFORCED)
 
 
@@ -69,7 +72,7 @@ def test_objective_gradient_matches_fd(callables):
 
 
 def test_min_mass_solve_feasible_with_coking_enforced():
-    """One min-mass solve over the 10-var space with coking HARD-enforced: it
+    """One min-mass solve over the 11-var space with coking HARD-enforced: it
     reaches a feasible KKT point by dialing in film cooling, so the coking
     margin is satisfied (≥0) and the film fraction is active (>0).  A genuinely
     thermal-limited optimum.  Single solve to stay within the compile budget."""

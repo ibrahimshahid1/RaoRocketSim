@@ -203,7 +203,11 @@ def test_jax_parity_question_finds_oracle_links():
 def test_scientific_basis_of_registry_backed_component():
     r = api.find_scientific_basis("raosim/physics.py")
     assert r["state"] == "OK"
-    assert any(c["state"] == "OK" for c in r["components"]), "no component of physics.py has a scientific basis link"
+    assert any(c["models"] and c["source_documents"] for c in r["components"]), "no registry citation route for physics.py"
+    for component in r["components"]:
+        if component["state"] == "OK":
+            assert component["model_support"]
+            assert all(s["state"] == "SUPPORTED" for s in component["model_support"])
 
 
 def test_no_validity_is_reported_not_invented():

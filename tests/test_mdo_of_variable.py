@@ -75,7 +75,7 @@ def test_of_absent_from_design_space_without_surfaces():
     m = MissionSpec.for_thrust(_THRUST)
     names = [s.name for s in default_design_space(m)]
     assert "OF" not in names
-    assert len(names) == 10
+    assert len(names) == 12          # incl. the pintle t_post and D_cg
 
 
 def test_solver_uses_mission_of_when_not_a_variable():
@@ -110,7 +110,7 @@ def test_of_enters_the_design_space_with_surfaces(synthetic_table):
     space = default_design_space(m)
     names = [s.name for s in space]
     assert names[-1] == "OF"
-    assert len(names) == 11
+    assert len(names) == 13
 
 
 def test_of_bounds_come_from_the_sampled_domain(synthetic_table):
@@ -169,11 +169,12 @@ def test_of_is_not_a_dead_variable(synthetic_table):
     the objective gradient and the constraint Jacobian column are zero, the
     variable is decorative."""
     from raosim.mdo.nlp import (
-        _make_callables, CONSTRAINT_NAMES, DEFAULT_ENFORCED,
+        _make_callables, _OptimizationSpace, CONSTRAINT_NAMES, DEFAULT_ENFORCED,
     )
 
     m = MissionSpec.for_thrust(_THRUST, cea_table_path=synthetic_table)
-    space = default_design_space(m)
+    # Free optimizer coordinates: D_cg is pinned for the slotted pintle.
+    space = _OptimizationSpace.for_mission(m).free_specs
     idx = tuple(CONSTRAINT_NAMES.index(n) for n in DEFAULT_ENFORCED)
     ss, obj, obj_grad, con, con_jac = _make_callables(m, 190.0, False, idx)
 

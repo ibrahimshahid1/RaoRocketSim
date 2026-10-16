@@ -1,9 +1,140 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:53:05.300341+00:00",
-  "n": 74
+  "generated_at": "2026-10-16T05:55:51.393982+00:00",
+  "n": 94
  },
  "records": [
+  {
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_state": "CURRENT",
+   "id": "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_7C8E98A5",
+   "type": "Assumption",
+   "label": "Chemically frozen inviscid flow holds species mass fractions fixed.",
+   "prose": "Chemically frozen inviscid flow holds species mass fractions fixed.",
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "page": 675,
+   "chunk_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE#c00603",
+   "quote": "As a result, the chemical composition of a frozen flow remains constant throughout space and time.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D"
+   ],
+   "subsystem": "performance",
+   "provenance_id": "PROV_ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_7C8E98A5",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_state": "CURRENT",
+   "id": "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_A168DAF0",
+   "type": "Assumption",
+   "label": "Quasi-one-dimensional inviscid adiabatic nozzle expansion.",
+   "prose": "Quasi-one-dimensional inviscid adiabatic nozzle expansion.",
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "page": 669,
+   "chunk_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE#c00595",
+   "quote": "Consider the inviscid, adiabatic high-temperature flow through a",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D"
+   ],
+   "subsystem": "performance",
+   "provenance_id": "PROV_ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_A168DAF0",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_state": "CURRENT",
+   "id": "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_B39F19A3",
+   "type": "Assumption",
+   "label": "For a thermally perfect gas, enthalpy and internal energy depend on temperature alone.",
+   "prose": "For a thermally perfect gas, enthalpy and internal energy depend on temperature alone.",
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "page": 682,
+   "chunk_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE#c00613",
+   "quote": "For a thermally perfect gas, h = h(T) and e(T). Hence, again Eq. (17.35) reduces to Eq. (17.36).",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D"
+   ],
+   "subsystem": "performance",
+   "provenance_id": "PROV_ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_B39F19A3",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_12E89F60",
+   "type": "Assumption",
+   "label": "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump.",
+   "prose": "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 7,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00017",
+   "quote": "The 2D configuration of the one-stage centrifugal pump was\ndesigned through the relationship between the flow characteristics and the impeller configuration.",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_12E89F60",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_8F01D86F",
+   "type": "Assumption",
+   "label": "Motor cooling is excluded for the paper's 500 N case by assuming rotor heating has no effect.",
+   "prose": "Motor cooling is excluded for the paper's 500 N case by assuming rotor heating has no effect.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00029",
+   "quote": "At a thrust\nof 500 N, it was predicted to be room temperature. Therefore,\nmotor cooling can be excluded assuming that rotor heating\nhad no effect.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "provenance_id": "PROV_ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_8F01D86F",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B9D73B48",
+   "type": "Assumption",
+   "label": "The study assumes battery energy efficiency is constant for its 600 s design case; this is not a general efficiency map.",
+   "prose": "The study assumes battery energy efficiency is constant for its 600 s design case; this is not a general efficiency map.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "quote": "The energy efficiency is assumed to be 92.5% from Eq. (38)\nbecause the design burning time was 600 s:",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "provenance_id": "PROV_ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B9D73B48",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_D002C669",
+   "type": "Assumption",
+   "label": "This study assumes one motor drives the electric-pump arrangement; LREKit separately sizes two stream drives.",
+   "prose": "This study assumes one motor drives the electric-pump arrangement; LREKit separately sizes two stream drives.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 11,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "quote": "Figure 8 shows\nthe detailed performance, and it was assumed to be driven by\na single motor.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "provenance_id": "PROV_ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_D002C669",
+   "provenance_kind": "SOURCE_STATES"
+  },
   {
    "id": "ASM_DOI_10_1080_13647830_2021_1937702_94E0574D",
    "type": "Assumption",
@@ -214,6 +345,23 @@
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
   },
   {
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_state": "CURRENT",
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6F0A0B04",
+   "type": "Assumption",
+   "label": "Pressure and density stagnation ratios in Eq9.28 require isentropic perfect-gas relations; the temperature and sound-speed ratios of Eq9.26/27 require adiabatic",
+   "prose": "Pressure and density stagnation ratios in Eq9.28 require isentropic perfect-gas relations; the temperature and sound-speed ratios of Eq9.26/27 require adiabatic flow and can hold with irreversibilities.",
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1091,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01474",
+   "quote": "Note that Eqs. (9.26) and (9.27) require only adiabatic flow and hold even in the presence of irreversibilities such as friction losses or shock waves.",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6F0A0B04",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
    "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_74A34544",
    "type": "Assumption",
    "label": "Integration of the momentum law assumes δ = 0 at x = 0 (turbulent flow from the leading edge).",
@@ -233,6 +381,23 @@
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
   },
   {
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_state": "CURRENT",
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7802AC76",
+   "type": "Assumption",
+   "label": "The area-Mach derivation uses perfect-gas and isentropic flow relations, with a sonic reference state that need not occur physically in the duct.",
+   "prose": "The area-Mach derivation uses perfect-gas and isentropic flow relations, with a sonic reference state that need not occur physically in the duct.",
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 1098,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01486",
+   "quote": "We can use the perfect-gas and isentropic flow relations to convert the continuity relation",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7802AC76",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
    "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_79B4E206",
    "type": "Assumption",
    "label": "The isentropic area-change relations (9.45) and (9.34) solve a one-dimensional airflow given the duct shape A(x) and stagnation conditions, assuming there are n",
@@ -250,6 +415,23 @@
    "provenance_kind": "SOURCE_STATES",
    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_state": "CURRENT",
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7DBE37B2",
+   "type": "Assumption",
+   "label": "The turbulent flat-plate thickness derivation integrates with delta = 0 at x = 0.",
+   "prose": "The turbulent flat-plate thickness derivation integrates with delta = 0 at x = 0.",
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "quote": "Separate the variables and integrate, assuming _δ_ = 0 at _x_ = 0:",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7DBE37B2",
+   "provenance_kind": "SOURCE_STATES"
   },
   {
    "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A426565E",
@@ -347,6 +529,23 @@
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
   },
   {
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_state": "CURRENT",
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F186CFD7",
+   "type": "Assumption",
+   "label": "The turbulent flat-plate derivation approximates the logarithmic profile across the boundary layer.",
+   "prose": "The turbulent flat-plate derivation approximates the logarithmic profile across the boundary layer.",
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 840,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01123",
+   "quote": "we assume that the logarithmic law (6.28) holds all the way across the boundary layer",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F186CFD7",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
    "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F668C115",
    "type": "Assumption",
    "label": "Air is approximated as an ideal gas with constant k in the worked examples.",
@@ -364,6 +563,23 @@
    "provenance_kind": "SOURCE_STATES",
    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_state": "CURRENT",
+   "id": "ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F7BCBE38",
+   "type": "Assumption",
+   "label": "The turbulent momentum and displacement thickness integrals use the one-seventh-power velocity-profile approximation.",
+   "prose": "The turbulent momentum and displacement thickness integrals use the one-seventh-power velocity-profile approximation.",
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "page": 841,
+   "chunk_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI#c01124",
+   "quote": "pointed out that the turbulent profiles in Fig. 7.5 can be approximated by a oneseventh-power law:",
+   "grounded": "GROUNDED",
+   "model_ids": [],
+   "subsystem": "",
+   "provenance_id": "PROV_ASM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F7BCBE38",
+   "provenance_kind": "SOURCE_STATES"
   },
   {
    "id": "ASM_NTRS_19710019929_1195E32A",
@@ -573,6 +789,190 @@
    "provenance_kind": "SOURCE_STATES",
    "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_059BBCE4",
+   "type": "EmpiricalConstant",
+   "label": "Lee case battery specific power = 0.650 kW/kg",
+   "name": "Lee case battery specific power",
+   "value": "0.650",
+   "units": "kW/kg",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 11,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "quote": "Fuel tank pressure 3.10 bar Power density 0.650 kW/kg",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_059BBCE4",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20B5BB49",
+   "type": "EmpiricalConstant",
+   "label": "Lee case battery structure margin = 20 %",
+   "name": "Lee case battery structure margin",
+   "value": "20",
+   "units": "%",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "quote": "The battery structure margin was assumed to be 20%.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20B5BB49",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20F32959",
+   "type": "EmpiricalConstant",
+   "label": "Lee case inverter output power density = 60 kW/kg",
+   "name": "Lee case inverter output power density",
+   "value": "60",
+   "units": "kW/kg",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "quote": "inverter\npower density, and the inverter efficiency were set 66%,\n61%, 60 kW/kg, and 85%, respectively.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20F32959",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_6172A9B4",
+   "type": "EmpiricalConstant",
+   "label": "Lee case battery energy efficiency = 0.925 1",
+   "name": "Lee case battery energy efficiency",
+   "value": "0.925",
+   "units": "1",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "quote": "The energy efficiency is assumed to be 92.5% from Eq. (38)\nbecause the design burning time was 600 s:",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_6172A9B4",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_AA8630AD",
+   "type": "EmpiricalConstant",
+   "label": "Lee case motor efficiency = 0.87 1",
+   "name": "Lee case motor efficiency",
+   "value": "0.87",
+   "units": "1",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 11,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "quote": "Margin 10% Motor Efficiency 87%",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_AA8630AD",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_B3727FDB",
+   "type": "EmpiricalConstant",
+   "label": "Lee case battery specific energy = 325 Wh/kg",
+   "name": "Lee case battery specific energy",
+   "value": "325",
+   "units": "Wh/kg",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 11,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "quote": "Energy density 325 W·h/kg",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_B3727FDB",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_D265274E",
+   "type": "EmpiricalConstant",
+   "label": "Lee case motor output power density = 0.875 kW/kg",
+   "name": "Lee case motor output power density",
+   "value": "0.875",
+   "units": "kW/kg",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 11,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "quote": "Power density 0.875 kW/kg",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_D265274E",
+   "provenance_kind": "SOURCE_STATES"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_E196F6F3",
+   "type": "EmpiricalConstant",
+   "label": "Lee case inverter efficiency = 0.85 1",
+   "name": "Lee case inverter efficiency",
+   "value": "0.85",
+   "units": "1",
+   "context": "Case-specific selected/assumed input for Lee et al.; not a universal empirical constant or current LREKit default. Power densities must retain output/input convention.",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "quote": "inverter\npower density, and the inverter efficiency were set 66%,\n61%, 60 kW/kg, and 85%, respectively.",
+   "grounded": "GROUNDED",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "subsystem": "pump",
+   "basis_class": "LITERATURE_DERIVED",
+   "provenance_id": "PROV_CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_E196F6F3",
+   "provenance_kind": "SOURCE_STATES"
   },
   {
    "id": "CONST_DOI_10_2514_2_5354_130E080B",

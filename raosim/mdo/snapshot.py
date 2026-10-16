@@ -2806,9 +2806,24 @@ def snapshot_from_traditional(
     traditional_chamber_mass = _hardware_mass_subsystem(
         hardware_mass, "thrust_chamber"
     )
+    # The MDO partial subtotal includes its pintle component, so the
+    # traditional one includes the measured production pintle parts.  These
+    # are the five-part CAD's body and tip (feed stub, flange and replaceable
+    # tip included), not the MDO's screening post tube, so a signed parity
+    # delta here is the real difference between the two pintle definitions.
+    pintle_parts = [
+        _hardware_mass_component(hardware_mass, name)
+        for name in ("pintle_body", "pintle_tip")
+    ]
+    traditional_pintle_mass = (
+        sum(float(v) for v in pintle_parts)
+        if all(v is not None for v in pintle_parts) else None
+    )
     dry_mass_partial_exact = (
         float(electric_mass) + float(traditional_chamber_mass)
+        + float(traditional_pintle_mass)
         if electric_mass is not None and traditional_chamber_mass is not None
+        and traditional_pintle_mass is not None
         else None
     )
     masses = SnapshotSection({
@@ -2883,8 +2898,9 @@ def snapshot_from_traditional(
         ),
         "dry_mass_partial_exact_mass_kg": maybe(
             dry_mass_partial_exact,
-            "the exact partial subtotal needs both a complete traditional "
-            "electric package and resolved thrust-chamber hardware mass",
+            "the exact partial subtotal needs a complete traditional electric "
+            "package, resolved thrust-chamber hardware mass and the measured "
+            "production pintle body and tip",
         ),
         "dry_mass_partial_objective_mass_kg": unavailable(
             "the traditional pipeline reports as-built/exact masses, not the "

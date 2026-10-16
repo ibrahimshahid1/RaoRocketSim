@@ -6,6 +6,11 @@ therefore deliberately separate: it does **not** pass a station-dependent
 ``gamma`` into MOC or Rao invariants.
 
 For a fixed ideal-gas composition, ``R`` is constant while ``cp(T)`` may vary.
+Here "frozen" refers to chemical composition. Thermal properties use one
+temperature; no separate vibrational temperature or relaxation equation is
+solved. Supplied ``cp(T)`` must describe that fixed composition, excluding the
+equilibrium heat-capacity contribution from changing species mass fractions
+(Anderson, Modern Compressible Flow, 3rd ed., PDF pp. 675-678, Eqs. 17.21-17.25).
 The implementation uses an explicit piecewise-linear ``cp`` table and exact
 segment integrals:
 
@@ -554,6 +559,8 @@ class FrozenNozzleExpansion:
             },
             "applicability": {
                 "frozen_composition": True,
+                "single_temperature_thermal_properties": True,
+                "separate_vibrational_temperature": False,
                 "ideal_gas": True,
                 "inviscid": True,
                 "adiabatic": True,

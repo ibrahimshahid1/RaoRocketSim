@@ -198,6 +198,10 @@ class GuidedSession:
             for name, dimension in VARIABLE_DIMENSIONS.items():
                 if name == "OF":
                     continue  # nominal catalog O/F is declared in the preview
+                if name == "D_cg":
+                    # Centre gap of the movable pintle valve; jobs build the
+                    # slotted post, where the job layer pins it as inert.
+                    continue
                 while True:
                     value = self._ask_one(Question(
                         name, f"Fixed {name}", dimension=dimension,

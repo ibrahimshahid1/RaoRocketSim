@@ -17,11 +17,15 @@ The MDF formulation (plan §4.1) separates:
 Discrete architecture choices (channel counts, bus voltage class, movable vs
 fixed pintle) are *not* variables here — plan rule 4: outer enumeration only.
 
-Constant defaults below are screening values mirroring the NumPy models they
-will be replaced by (``raosim.pumps`` drive/battery specs, Lee 2021 for the
-battery energy/power densities); each is a placeholder in the §3 mass-ledger
-sense: explicit, visible, and swapped for the audited model as the discipline
-blocks deepen.
+Constant defaults below are repository screening assumptions. The electric
+drive and battery values come from ONE registered technology set shared with
+``raosim.pumps`` (:mod:`raosim.electric_technology`; default
+``repository_screening_v1``, the former ``raosim.pumps`` values, with their
+published brackets recorded there).  ``MissionSpec.electric_technology``
+names the set and ``with_electric_technology`` selects another, e.g. the
+page-verified Lee et al. 2021 Table 2 set.  ``pump_specific_mass`` stays an
+MDO-only screening assumption (see its field comment).  Each placeholder
+remains explicit in the §3 mass ledger until its intended duty is reviewed.
 """
 
 from __future__ import annotations
@@ -34,6 +38,13 @@ import warnings
 import jax
 import jax.numpy as jnp
 
+from raosim.electric_technology import (
+    DEFAULT_ELECTRIC_TECHNOLOGY as _ELECTRIC_DEFAULT,
+    DEFAULT_ELECTRIC_TECHNOLOGY_ID as _ELECTRIC_DEFAULT_ID,
+    get_electric_technology,
+    validate_mission_electric_fields,
+)
+
 Array = jnp.ndarray
 
 
@@ -43,11 +54,21 @@ Array = jnp.ndarray
 # oxidizer weight flow divided by fuel weight flow.  The layout classes below
 # are software-contract machinery around that physical scalar; a layout flag
 # must never be encoded in the scalar itself.
+#
+# ``t_post`` and ``D_cg`` are the pintle component's own hardware variables
+# (raosim.mdo.pintle).  ``D_cg`` is physically meaningful only for the movable
+# pintle valve; the NLP pins it for a slotted post rather than leaving a dead
+# Jacobian column, while the contract keeps one fixed shape.
 _DESIGN_BASE_FIELDS = (
     "Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
     "channel_width", "channel_height", "film_frac", "t_wall",
+    "t_post", "D_cg",
 )
 _DESIGN_CONTRACT_FIELDS = _DESIGN_BASE_FIELDS + ("OF",)
+#: Ten hardware variables plus O/F, the order used before the pintle component
+#: owned ``t_post`` and ``D_cg``.  Only the deprecated length-inferring
+#: ``DesignVector.from_array`` adapter still reads it.
+_LEGACY_DESIGN_FIELDS = _DESIGN_BASE_FIELDS[:10] + ("OF",)
 
 
 def validate_mixture_ratio(value: object, *, name: str = "O/F") -> float:
@@ -72,9 +93,9 @@ def validate_mixture_ratio(value: object, *, name: str = "O/F") -> float:
 class DesignLayout:
     """Static description of the active optimizer vector.
 
-    The optimizer owns either the ten hardware variables or those ten plus
-    O/F.  Serialized/state contracts always use :attr:`contract_names`, which
-    has eleven physical values and never contains an intent sentinel.
+    The optimizer owns either the twelve hardware variables or those twelve
+    plus O/F.  Serialized/state contracts always use :attr:`contract_names`,
+    which has thirteen physical values and never contains an intent sentinel.
     """
 
     active_names: tuple[str, ...]
@@ -83,7 +104,7 @@ class DesignLayout:
         allowed = (_DESIGN_BASE_FIELDS, _DESIGN_CONTRACT_FIELDS)
         if self.active_names not in allowed:
             raise ValueError(
-                "DesignLayout active_names must be the ordered 10-variable "
+                "DesignLayout active_names must be the ordered 12-variable "
                 "hardware layout or that layout followed by OF"
             )
 
@@ -310,8 +331,10 @@ class MissionSpec:
     film_coverage_ar_limit: float = 2.5
     # Coolant-channel aspect-ratio (height/width) validity cap.  The HARCC
     # models are validated to AR ≈ 8 (Pizzarelli 2011; Carlile 1992 tested 8 and
-    # 15) and Mirzamoghadam 1991 (AIAA-91-1982) caps manufacturable depth/width
-    # at 7.  Enforced so the optimiser cannot exploit un-validated AR.
+    # 15).  Mirzamoghadam 1991 (AIAA-91-1982) lists a channel aspect ratio of 8
+    # in its initial design criteria (Table 1) and 7 in its present criteria
+    # (Table 2), both on PDF p. 7.
+    # Enforced so the optimiser cannot exploit un-validated AR.
     channel_aspect_ratio_max: float = 8.0
 
     # --- design margins (§10.3; thermal/flow default 1.0; film 2x) -----------
@@ -358,11 +381,17 @@ class MissionSpec:
     liner_structural_fos: float = 1.5
     #   Allowable GAS-SIDE wall temperature.  Mirzamoghadam names "the allowable
     #   design gas-side wall temperature ... based on sensitivity of the material
-    #   yield strength" as a primary criterion and reports 900°F (755 K) average
-    #   wall temperature as compatible for a copper H2/O2 chamber.  Needed once
-    #   t_wall is a variable: a thicker wall lowers T_wc (helping coking) while
-    #   RAISING T_wg, so without this the optimiser could trade the liner away.
-    liner_T_wg_max: float = 800.0     # K, copper-alloy class
+    #   yield strength" as a primary criterion (PDF p. 5) and reports 900°F
+    #   (755 K) average wall temperature as compatible for a copper H2/O2
+    #   chamber (PDF p. 4); his Table 2 (PDF p. 7) lists the 1050°F (839 K)
+    #   hot-channel value as "Depends on Material".  The paper never states
+    #   800 K (its only "800" is 800°F = 700 K, a nominal-channel value with 3 %
+    #   film, PDF p. 6): 800 K is a REPOSITORY RULE between 755 K and 839 K,
+    #   labelled so in the constraint manifest (wall_temp basis_class).  Needed
+    #   once t_wall is a variable: a thicker wall lowers T_wc (helping coking)
+    #   while RAISING T_wg, so without this the optimiser could trade the liner
+    #   away.  A catalogued liner (with_materials) replaces it.
+    liner_T_wg_max: float = 800.0     # K, repository rule (copper-alloy class)
     liner_pressure_stress_report: bool = True  # report the (small) Δp bending
     #   Liquid RP-1 speed of sound, for the coolant-Mach diagnostic
     #   (Mirzamoghadam limits coolant Mach ≤ 0.35 to avoid sonic choking at
@@ -543,9 +572,16 @@ class MissionSpec:
     #   Blockage factor BF = N·w/(π D_p) — with TMR, one of "the two master
     #   geometric knobs" of a pintle injector (Hwang et al., IJASS 23, 2022;
     #   Freeberg 2019 makes the spray angle a function of BF and TMR).  Real
-    #   designs sit in a band: Ryu et al. swept BF 70 → 85 % (c*-efficiency
-    #   +3.85 %), Kang 2022 used 0.6.  Constrained so the optimiser cannot park
-    #   D_pintle at a value that no longer describes a pintle element.
+    #   designs sit in a band.  Lower bound 0.30: TRW advised 0.3 < BF < 0.7
+    #   (relayed by Freeberg 2019, DOI 10.2514/6.2019-0152, PDF pp. 5-6 and
+    #   p. 10).  Upper bound 0.90: a REPOSITORY RULE -- no held source states
+    #   it.  The held upper evidence is that TRW 0.7 and the Ryu et al. sweep of
+    #   BF 70 -> 85 % (c*-efficiency +3.85 %), reported second-hand by Hwang et
+    #   al. together with thermal damage of an 86 % tip (s42405-022-00489-w,
+    #   PDF pp. 2, 4, 8).  Kang 2022's own pintles used BF 86 % and 58 %; the
+    #   0.6 sometimes quoted from Kang is a cited Penn State case (kang2022.pdf
+    #   PDF p. 2).  Constrained so the optimiser cannot park D_pintle at a value
+    #   that no longer describes a pintle element.
     blockage_factor_min: float = 0.30
     blockage_factor_max: float = 0.90
 
@@ -578,17 +614,33 @@ class MissionSpec:
     p_vapor_fuel: float = 3.0e3           # Pa, RP-1 vapour pressure (~300 K)
     p_vapor_ox: float = 1.0e5             # Pa, LOX vapour pressure (near-satur.)
 
-    # Electric drive / battery screening constants
+    # Electric drive / battery.  The eight values below are ONE technology set
+    # shared with the traditional raosim.pumps sizing
+    # (raosim.electric_technology; selected by ``electric_technology`` at the
+    # end of this class).  They default to the registry default set and
+    # __post_init__ refuses values that disagree with the declared set, so the
+    # MDO optimum and the parts sized from it describe one technology.  The
+    # former MDO-only values (1.3 kW/kg battery power, 6.5e5 J/kg, 3.0 kW/kg
+    # motor, 20 kW/kg inverter, 0.95/0.90 inverter/discharge efficiency) had
+    # no recorded basis and disagreed with raosim.pumps on every density.
     eta_pump: float = 0.60
-    eta_motor: float = 0.90
-    eta_inverter: float = 0.95
-    eta_discharge: float = 0.90
-    motor_power_density: float = 3.0e3     # W/kg shaft
-    inverter_power_density: float = 20.0e3  # W/kg electric
-    pump_specific_mass: float = 2.5e3       # W/kg hydraulic (screening)
-    battery_energy_density: float = 6.5e5   # J/kg  (~180 Wh/kg, Lee-2021 class)
-    battery_power_density: float = 1.3e3    # W/kg
-    battery_structural_margin: float = 1.2
+    eta_motor: float = _ELECTRIC_DEFAULT.motor_efficiency
+    eta_inverter: float = _ELECTRIC_DEFAULT.inverter_efficiency
+    eta_discharge: float = _ELECTRIC_DEFAULT.battery_discharge_efficiency
+    motor_power_density: float = _ELECTRIC_DEFAULT.motor_power_density  # W/kg shaft output
+    inverter_power_density: float = _ELECTRIC_DEFAULT.inverter_power_density  # W/kg inverter AC output (motor input)
+    # MDO-ONLY, FLAGGED: pump mass per pump SHAFT power.  Not part of a
+    # technology set and with no held source on this basis -- Kwak 2018
+    # (pump-only, 20/15 kW/kg LOX/fuel) and Pavlov Rachov 2013 (22 kW/kg) are
+    # pump-only shaft densities, Casalino 2019 (1.25/3.92 kW/kg) and Solda &
+    # Lentini 2008 (6 kg/kWe) are combined drive+pump masses per ELECTRIC
+    # power, and the traditional path sizes the pump from hardware geometry.
+    # 2.5 kW/kg matches none of them; it remains a repository screening
+    # assumption until a pump-mass model replaces it.
+    pump_specific_mass: float = 2.5e3       # W/kg of pump shaft power (screening assumption)
+    battery_energy_density: float = _ELECTRIC_DEFAULT.battery_energy_density  # J/kg
+    battery_power_density: float = _ELECTRIC_DEFAULT.battery_power_density    # W/kg
+    battery_structural_margin: float = _ELECTRIC_DEFAULT.battery_structural_margin
 
     g0: float = 9.80665
 
@@ -597,8 +649,53 @@ class MissionSpec:
     # channel_roughness field remains relative roughness (ks / Dh).
     channel_hydraulic_roughness_m: float | None = None
 
+    # --- Pintle component (mdo/pintle.py) -------------------------------------
+    #   Appended to preserve positional construction.  The architecture is an
+    #   outer-enumeration choice (plan rule 4): "fixed_slotted" is the slotted
+    #   post the five-part coaxial CAD exports; "son_movable" is the Son et al.
+    #   (2017, DOI 10.2514/1.B36301) continuous-gap pintle valve, whose CAD the
+    #   host refuses.  ``pintle_post_thickness`` and ``pintle_center_gap_
+    #   diameter`` above are now the references of the t_post / D_cg variables.
+    pintle_architecture: str = "fixed_slotted"
+    #   Post length / post diameter for the hardware mass.  3.0 mirrors the
+    #   host machined-layout default body length (injector_cad
+    #   .resolve_machined_pintle_layout); a repository heuristic, not a source.
+    pintle_body_length_factor: float = 3.0
+    #   Son 2017 observed no uniform liquid sheet within 0.1 mm of opening
+    #   (PDF p. 2) and rejected a schedule below 0.1 mm as infeasible (PDF
+    #   p. 10).  Same value as the host MovablePintleSpec
+    #   .minimum_uniform_sheet_opening.  An applicability bound for the
+    #   observed water/LOX sheets, not a universal hardware limit.
+    pintle_min_opening: float = 1.0e-4
+    #   Lowest throttle level, as a fraction of full-power mass flow, that the
+    #   movable valve must still meter above ``pintle_min_opening``.  1.0 means
+    #   no throttle requirement.  Single-point surrogate; Phase 10 multipoint
+    #   is the full treatment.
+    pintle_throttle_min_fraction: float = 1.0
+
+    # --- Electric technology (raosim.electric_technology) ----------------------
+    #   Appended to preserve positional construction.  Names the registered
+    #   set that the eight electric fields above hold; ``"custom"`` declares
+    #   values that belong to no registered set.  Use with_electric_technology.
+    electric_technology: str = _ELECTRIC_DEFAULT_ID
+
     def __post_init__(self) -> None:
         validate_mixture_ratio(self.OF, name="MissionSpec.OF")
+        validate_mission_electric_fields(self)
+        if self.pintle_architecture not in ("fixed_slotted", "son_movable"):
+            raise ValueError(
+                "pintle_architecture must be 'fixed_slotted' or "
+                f"'son_movable'; got {self.pintle_architecture!r}"
+            )
+        for name in ("pintle_body_length_factor", "pintle_min_opening"):
+            value = float(getattr(self, name))
+            if not math.isfinite(value) or value <= 0.0:
+                raise ValueError(f"{name} must be finite and positive")
+        f_min = float(self.pintle_throttle_min_fraction)
+        if not math.isfinite(f_min) or not 0.0 < f_min <= 1.0:
+            raise ValueError(
+                "pintle_throttle_min_fraction must lie in (0, 1]"
+            )
         for name in ("channel_roughness", "channel_hydraulic_roughness_m"):
             value = getattr(self, name)
             if value is None and name == "channel_hydraulic_roughness_m":
@@ -660,6 +757,20 @@ class MissionSpec:
         """Return the explicit active-variable layout for this mission."""
 
         return DesignLayout.for_mission(self)
+
+    def with_electric_technology(self, technology_id: str) -> "MissionSpec":
+        """Atomically select a registered electric technology set.
+
+        Every one of the eight electric fields is replaced from the set, so a
+        mission can never mix two sets.  ``custom`` is not a set: construct
+        it with ``replace(mission, electric_technology="custom", ...)``.
+        """
+        from dataclasses import replace
+
+        technology = get_electric_technology(technology_id)
+        return replace(
+            self, electric_technology=technology.id, **technology.mission_fields()
+        )
 
     # ----------------------------------------------------------------------- #
     # Thrust-class scaling                                                     #
@@ -924,7 +1035,34 @@ class MissionSpec:
             # direction even when the coking constraint requires film.
             VariableSpec("film_frac", 0.0, 0.30, 0.10),
             VariableSpec("t_wall", 4.0e-4, 2.0e-3, 8.0e-4),
-        ) + self.of_design_space()
+        ) + self.pintle_design_space() + self.of_design_space()
+
+    def pintle_design_space(self) -> tuple["VariableSpec", "VariableSpec"]:
+        """Bounds of the pintle component's own variables (mdo/pintle.py).
+
+        ``t_post`` runs from the 0.4 mm machining floor the liner wall also
+        uses (Son 2017's tested post wall was 0.5 mm, Table 1) to a quarter of
+        the reference post diameter; the host's 0.8 r_o wall cap is a hard
+        row, not a bound.  ``D_cg`` runs from the rod diameter (zero
+        centre-gap area) to the largest post the D_pintle bracket admits; the
+        centre-gap fit row enforces the bore.  Both are search endpoints, not
+        physical limits.  The D_cg reference is moved inside the reference
+        bore, because the thrust-scaled 0.9 D_p heuristic is larger than the
+        bore left by the reference wall.
+        """
+        d_ref = float(self.pintle_diameter)
+        t_lo = 4.0e-4
+        t_hi = max(0.25 * d_ref, 2.0 * t_lo)
+        t_ref = min(max(float(self.pintle_post_thickness), t_lo), t_hi)
+        cg_lo = float(self.pintle_rod_diameter)
+        cg_hi = max(2.0 * d_ref, 2.0 * cg_lo)
+        cg_ref = min(float(self.pintle_center_gap_diameter),
+                     d_ref - 2.0 * t_ref)
+        cg_ref = min(max(cg_ref, cg_lo), cg_hi)
+        return (
+            VariableSpec("t_post", t_lo, t_hi, t_ref),
+            VariableSpec("D_cg", cg_lo, cg_hi, cg_ref),
+        )
 
     def of_design_space(self) -> tuple["VariableSpec", ...]:
         """The O/F variable spec — empty unless CEA surfaces make it real.
@@ -977,7 +1115,7 @@ class MissionSpec:
 @jax.tree_util.register_pytree_node_class
 @dataclass
 class DesignVector:
-    """Eleven-value physical design contract plus a static active layout.
+    """Thirteen-value physical design contract plus a static active layout.
 
     :attr:`layout` says whether O/F is active in the optimizer.  :attr:`OF`
     itself is always a physical value; it never doubles as a layout sentinel.
@@ -1005,6 +1143,13 @@ class DesignVector:
     # THERMAL gradient / low-cycle fatigue, not pressure (§10.2: pressure
     # bending across the channel is ~0.2 MPa vs ~27 MPa thermal).
     t_wall: Array = 8.0e-4          # m
+    # Pintle component variables (mdo/pintle.py).  The post wall trades
+    # hardware mass against the post pressure screen and, for the movable
+    # valve, the Son opening; the centre-gap diameter trades the Son
+    # transition area against the bore it must fit inside.  D_cg is pinned by
+    # the NLP for the slotted post, where it has no physical meaning.
+    t_post: Array = 1.5e-3          # pintle post wall thickness [m]
+    D_cg: Array = 0.017             # movable-pintle centre-gap diameter [m]
     # Mixture ratio.  SP-125 §2.1 (printed p. 31) lists it among the nine
     # requirement parameters, but §2.1's own derivation makes it an OUTPUT:
     # the optimum balances energy release against molecular weight, then moves
@@ -1071,7 +1216,7 @@ class DesignVector:
 
     # -- vector packing ------------------------------------------------------ #
     def to_contract_array(self, *, effective_of: Array | None = None) -> Array:
-        """Return the fixed eleven-value physical state/snapshot contract."""
+        """Return the fixed thirteen-value physical state/snapshot contract."""
 
         of = self.OF if effective_of is None else effective_of
         values = [getattr(self, f) for f in _DESIGN_BASE_FIELDS] + [of]
@@ -1080,7 +1225,7 @@ class DesignVector:
         ])
 
     def to_active_array(self) -> Array:
-        """Return the explicit 10- or 11-value optimizer vector."""
+        """Return the explicit 12- or 13-value optimizer vector."""
 
         return jnp.stack([
             jnp.asarray(getattr(self, name), dtype=jnp.float64)
@@ -1100,7 +1245,7 @@ class DesignVector:
         *,
         fixed_of: float | Array | None = None,
     ) -> "DesignVector":
-        """Build from an explicitly described 10- or 11-value active vector."""
+        """Build from an explicitly described 12- or 13-value active vector."""
 
         x = jnp.asarray(x)
         n = int(x.shape[0])
@@ -1125,23 +1270,27 @@ class DesignVector:
         x: Array,
         layout: DesignLayout,
     ) -> "DesignVector":
-        """Build from the fixed eleven-value physical contract + layout."""
+        """Build from the fixed thirteen-value physical contract + layout."""
 
         x = jnp.asarray(x)
         n = int(x.shape[0])
         if n != len(_DESIGN_CONTRACT_FIELDS):
             raise ValueError(
-                "design contract vector must contain exactly 11 physical values"
+                "design contract vector must contain exactly "
+                f"{len(_DESIGN_CONTRACT_FIELDS)} physical values"
             )
         return cls(*(x[i] for i in range(n)), layout=layout)
 
     @classmethod
     def from_array(cls, x: Array, *,
                    of_is_variable: bool | None = None) -> "DesignVector":
-        """Deprecated compatibility adapter for 4–11 ordered values.
+        """Deprecated compatibility adapter for 4–13 ordered values.
 
         Omitted trailing values retain their dataclass defaults for
-        compatibility with the early four-/six-variable skeletons.
+        compatibility with the early four-/six-variable skeletons.  Lengths
+        4–11 keep their historical order (ten hardware values, then O/F), so
+        a legacy eleventh value is never read as the pintle wall; only 12- and
+        13-value arrays carry ``t_post`` and ``D_cg``.
 
         Only this deprecated boundary infers layout from length.  Internal MDO
         code must use :meth:`from_active_array` or :meth:`from_contract_array`.
@@ -1156,16 +1305,24 @@ class DesignVector:
         x = jnp.asarray(x)
         n = int(x.shape[0])
         if n < 4 or n > len(cls._FIELDS):
-            raise ValueError("legacy design vector length must be between 4 and 11")
+            raise ValueError(
+                "legacy design vector length must be between 4 and "
+                f"{len(cls._FIELDS)}"
+            )
+        names = (
+            _LEGACY_DESIGN_FIELDS[:n]
+            if n <= len(_LEGACY_DESIGN_FIELDS) else cls._FIELDS[:n]
+        )
         if of_is_variable is None:
-            of_is_variable = n >= len(cls._FIELDS)
-        if of_is_variable and n < len(cls._FIELDS):
+            of_is_variable = names[-1] == "OF"
+        if of_is_variable and names[-1] != "OF":
             raise ValueError("variable-O/F design vector must include a physical OF")
         layout = (
             DesignLayout.variable_of()
             if of_is_variable else DesignLayout.fixed_of()
         )
-        return cls(*(x[i] for i in range(n)), layout=layout)
+        return cls(**{name: x[i] for i, name in enumerate(names)},
+                   layout=layout)
 
     @classmethod
     def names(cls) -> tuple[str, ...]:
@@ -1175,7 +1332,7 @@ class DesignVector:
         return {f: getattr(self, f) for f in self._FIELDS}
 
     def as_contract_dict(self, *, effective_of: Array | None = None) -> dict:
-        """Return all eleven physical values, overriding O/F after a solve."""
+        """Return all thirteen physical values, overriding O/F after a solve."""
 
         out = {name: getattr(self, name) for name in _DESIGN_BASE_FIELDS}
         out["OF"] = self.OF if effective_of is None else effective_of
@@ -1232,7 +1389,7 @@ def default_design_space(mission: "MissionSpec | None" = None
         # SP-8087-era liners run ~0.5–1.5 mm (Mirzamoghadam quotes 0.61–0.94 mm
         # for a tube wall); bracket that with machining floors.
         VariableSpec("t_wall", 4.0e-4, 2.0e-3, 8.0e-4),
-    ) + MissionSpec().of_design_space()
+    ) + MissionSpec().pintle_design_space() + MissionSpec().of_design_space()
 
 
 def bounds_arrays(space: tuple[VariableSpec, ...]) -> tuple[Array, Array]:

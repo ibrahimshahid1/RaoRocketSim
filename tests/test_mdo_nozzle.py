@@ -183,7 +183,12 @@ def test_forced_provider_failure_marks_nlp_candidate_physics_failed(
         contour_provider=provider,
     )
 
-    assert provider.calls == 1
+    # The un-jitted post-solve evaluation, plus the traces of the compiled
+    # objective/constraint programs the independent KKT check evaluates at the
+    # returned point (raosim.mdo.nlp.kkt_check); the optimizer itself made no
+    # calls.
+    assert provider.calls >= 1
+    assert result.n_iter == 0
     assert result.constraints["contour_provider"] == -1.0
     assert result.physics_status == "fail"
     assert not result.feasible

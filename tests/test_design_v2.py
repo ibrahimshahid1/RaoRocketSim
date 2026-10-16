@@ -1274,6 +1274,10 @@ def test_physics_trends_are_sensible():
 
     bl = boundary_layer_displacement(contour, 80e5, prop)
     assert bl["effective_epsilon"] < contour["epsilon"]
+    assert bl["source_support_state"] == "PARTIALLY_SUPPORTED"
+    assert bl["correlation_basis"] == "REPOSITORY_HEURISTIC"
+    assert bl["validity_state"] == "NO_VALIDITY_RANGE_LOCATED_FOR_NOZZLE_EXTENSION"
+    assert not bl["hardware_qualified"]
 
     # Real coupled Sieder-Tate solve (gas side = full Bartz): more
     # coolant flow MUST lower the wall temperature (more cooling

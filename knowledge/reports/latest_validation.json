@@ -1,70 +1,278 @@
 {
  "summary": {
-  "generated_at": "2026-09-20T22:58:13.127169+00:00",
-  "n_issues": 3,
+  "generated_at": "2026-10-16T18:20:23.815321+00:00",
+  "n_issues": 13,
   "issues_by_check": {
-   "markdown_without_manifest_row": 2,
-   "registry_citation_not_confirmed_in_local_source": 1
+   "empty_source_pdf": 1,
+   "canonical_document_without_chunks": 1,
+   "markdown_without_manifest_row": 1,
+   "registry_citation_not_confirmed_in_local_source": 1,
+   "declared_cad_bytes_unavailable": 6,
+   "source_extraction_incomplete": 1,
+   "source_verification_incomplete": 1,
+   "unknown_basis_software_constants": 1
   },
   "stats": {
    "equation_variables": {
-    "ambiguous": 12,
-    "unresolved": 88,
-    "total": 140
+    "ambiguous": 6,
+    "unresolved": 233,
+    "total": 440
    },
    "constants_by_basis": {
+    "UNKNOWN_BASIS": 274,
     "IMPLEMENTATION_CHOICE": 351,
-    "UNKNOWN_BASIS": 223,
-    "LITERATURE_DERIVED": 189,
+    "LITERATURE_DERIVED": 181,
     "PROJECT_DERIVED": 41,
-    "REPOSITORY_HEURISTIC": 175,
-    "EMPIRICALLY_CALIBRATED": 2
+    "REPOSITORY_HEURISTIC": 168
    },
-   "components_without_scientific_link": 214,
+   "components_without_scientific_link": 200,
+   "engineering_artifacts": {
+    "active_by_type": {
+     "ArtifactManifest": 17,
+     "CADArtifact": 70,
+     "EngineConfiguration": 17,
+     "ManufacturingProcess": 15
+    },
+    "inactive_snapshots": 0
+   },
    "graph": {
-    "nodes": 4514,
-    "edges": 5685,
+    "nodes": 4870,
+    "edges": 6267,
     "edges_without_provenance": 0,
     "top_degree": [
      [
       "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
-      145
-     ],
-     [
-      "DOC_NTRS_19710019929",
-      131
+      146
      ],
      [
       "DOC_NTRS_19760023196",
       111
      ],
      [
+      "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      110
+     ],
+     [
       "MODEL_NOZZLE_MOC",
       97
      ],
      [
-      "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
-      83
+      "MODEL_PUMP_ELECTRIC_DRIVE",
+      81
      ]
     ]
    },
-   "duplicate_chunk_texts": 15
+   "duplicate_chunk_texts": 15,
+   "coverage": {
+    "equation_completeness": "NOT_ESTABLISHED",
+    "concept_completeness": "NOT_ESTABLISHED",
+    "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+    "documents": {
+     "records": 252,
+     "canonical": 248,
+     "alternate_copies": 4,
+     "with_source_objects": 9,
+     "without_source_objects": 239,
+     "with_equations": 9,
+     "without_equations": 239,
+     "with_independently_confirmed_objects": 5,
+     "conversion_requires_review": 230,
+     "conversion_low_confidence": 16,
+     "zero_page_sources": 1,
+     "zero_page_source_ids": [
+      "DOC_DOI_10_1007_978_3_030_14788_4"
+     ]
+    },
+    "source_objects": {
+     "equations": {
+      "records": 93,
+      "current": 75,
+      "independently_confirmed": 58,
+      "inactive_stale_refuted_or_unresolved": 18
+     },
+     "claims": {
+      "records": 188,
+      "current": 188,
+      "independently_confirmed": 7,
+      "inactive_stale_refuted_or_unresolved": 0
+     },
+     "entities": {
+      "records": 94,
+      "current": 94,
+      "independently_confirmed": 0,
+      "inactive_stale_refuted_or_unresolved": 0
+     },
+     "validity": {
+      "records": 36,
+      "current": 36,
+      "independently_confirmed": 0,
+      "inactive_stale_refuted_or_unresolved": 0
+     }
+    },
+    "incomplete_formula_transcriptions": {
+     "count": 18,
+     "ids": [
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+      "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+      "EQ_NTRS_19760023196_BE05E0AF",
+      "EQ_NTRS_19760023196_D7D2D8F1"
+     ],
+     "current_count": 0,
+     "current_ids": [],
+     "current_state": "NONE_FLAGGED_CURRENT",
+     "historical_count": 18,
+     "state": "INCOMPLETE_TRANSCRIPTION",
+     "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
+    },
+    "models": {
+     "records": 61,
+     "declared_support": {
+      "PARTIALLY_SUPPORTED": 10,
+      "NOT_FOUND_IN_SOURCE": 1,
+      "SUPPORTED": 3,
+      "NOT_CHECKED": 47
+     },
+     "current_support": {
+      "NOT_CHECKED": 54,
+      "NOT_FOUND_IN_SOURCE": 1,
+      "PARTIALLY_SUPPORTED": 4,
+      "SUPPORTED": 2
+     },
+     "source_reviewed_current_fingerprint": 6,
+     "without_current_source_review": 55,
+     "without_manifest_source": 8
+    },
+    "software_constants": {
+     "records": 1015,
+     "by_basis": {
+      "UNKNOWN_BASIS": 274,
+      "IMPLEMENTATION_CHOICE": 351,
+      "LITERATURE_DERIVED": 181,
+      "PROJECT_DERIVED": 41,
+      "REPOSITORY_HEURISTIC": 168
+     },
+     "unknown_basis": 274,
+     "current": 998,
+     "inactive_or_noncurrent": 17,
+     "by_basis_current": {
+      "UNKNOWN_BASIS": 257,
+      "IMPLEMENTATION_CHOICE": 351,
+      "LITERATURE_DERIVED": 181,
+      "PROJECT_DERIVED": 41,
+      "REPOSITORY_HEURISTIC": 168
+     },
+     "by_basis_inactive_or_noncurrent": {
+      "UNKNOWN_BASIS": 17
+     },
+     "unknown_basis_current": 257,
+     "unknown_basis_inactive_or_noncurrent": 17,
+     "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
+    },
+    "gaps": {
+     "canonical_documents_without_source_objects": 239,
+     "canonical_documents_without_equations": 239,
+     "equations_and_claims_pending_independent_verification": 198,
+     "equations_without_model_links": 47,
+     "incomplete_formula_transcriptions": 0,
+     "zero_page_sources": 1,
+     "unknown_basis_software_constants": 257
+    }
+   }
   }
  },
  "issues": [
   {
-   "check": "markdown_without_manifest_row",
-   "path": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md"
+   "check": "empty_source_pdf",
+   "id": "DOC_DOI_10_1007_978_3_030_14788_4",
+   "path": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
+   "state": "SOURCE_UNREADABLE",
+   "reason": "EMPTY_SOURCE",
+   "remediation": "Restore the original source PDF; the tracked payload has zero pages."
+  },
+  {
+   "check": "canonical_document_without_chunks",
+   "id": "DOC_DOI_10_1007_978_3_030_14788_4",
+   "state": "SOURCE_NOT_INGESTED",
+   "severity": "warning",
+   "remediation": "Inspect source readability and extraction; a doc_state entry does not establish ingestion."
   },
   {
    "check": "markdown_without_manifest_row",
-   "path": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/PINTLE_LITERATURE_CATALOG.md"
+   "path": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md"
   },
   {
    "check": "registry_citation_not_confirmed_in_local_source",
    "id": "MODEL_CAD_KERNEL_TOPOLOGY",
    "local_source": "propulsion_texts/CAD_04.pdf",
    "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_7f120789c376a8a8637375a21d5f56c021c17c9d1db810f63ad3f78c320dbdcb",
+   "declared_path": "/tmp/13kn_I/pintle/pintle_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_8e4323a1ebf9f0da9c9d286073eaed6e8841a1d983ff2e2ca87852a26ff84c51",
+   "declared_path": "/tmp/13kn_I/pintle/injector_assembly_machined.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_8f1788f9b4c76617350d48d2ac8c3ca6fb88a12e8b8954bbad956fce0bd8eb1a",
+   "declared_path": "/tmp/13kn_I/pintle/orifice_plate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_d34b562c3e68360cca7ffdd38e09a0aa4e1bf15ce589215d56d857491abbf3ea",
+   "declared_path": "/tmp/13kn_I/pintle/faceplate.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_dbad35c01e77479a6bb8916c41d987011c378a918b0b191786ca90c24d0e2a48",
+   "declared_path": "/tmp/13kn_I/pintle/injector_body.step",
+   "severity": "warning"
+  },
+  {
+   "check": "declared_cad_bytes_unavailable",
+   "id": "CAD_e16c9925239cff2a628320e3d501a906474a43438d4ed3b340e71e4b9036abd5",
+   "declared_path": "/tmp/13kn_I/pintle/pintle_tip.step",
+   "severity": "warning"
+  },
+  {
+   "check": "source_extraction_incomplete",
+   "count": 239,
+   "severity": "warning",
+   "equation_completeness": "NOT_ESTABLISHED"
+  },
+  {
+   "check": "source_verification_incomplete",
+   "count": 198,
+   "severity": "warning",
+   "equation_completeness": "NOT_ESTABLISHED"
+  },
+  {
+   "check": "unknown_basis_software_constants",
+   "count": 257,
+   "severity": "warning",
+   "equation_completeness": "NOT_ESTABLISHED"
   }
  ]
 }

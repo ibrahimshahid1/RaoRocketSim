@@ -61,7 +61,9 @@ from raosim.mdo.constraints import (
 
 Array = jax.Array
 
-ENGINE_STATE_SCHEMA_VERSION = 2
+# v3: the design contract gained the pintle variables ``t_post`` and ``D_cg``
+# (13 values) and the mass vector gained the pintle component rows.
+ENGINE_STATE_SCHEMA_VERSION = 3
 
 
 def _digest_words(digest: bytes) -> tuple[int, ...]:
@@ -235,6 +237,9 @@ MASS_FIELD_NAMES = (
     "thrust_chamber_land_mass",
     "thrust_chamber_closeout_mass",
     "thrust_chamber_mass",
+    "pintle_post_mass",
+    "pintle_rod_mass",
+    "pintle_component_mass",
     "injector_mass",
     "total_dry_mass",
 )
@@ -242,10 +247,15 @@ MASS_FIELD_NAMES = (
 # Host adapters use these stable reasons for false entries in
 # ``MassState.availability``.
 MASS_UNAVAILABLE_REASONS = {
+    "pintle_rod_mass": (
+        "The fixed slotted pintle has no moving centre rod; only the "
+        "son_movable pintle valve carries one."
+    ),
     "injector_mass": (
-        "The differentiable MDO sizes injector flow areas but not injector "
-        "hardware mass; the injector hardware ledger needs the resolved "
-        "machined layout, which is produced host-side by "
+        "The differentiable MDO prices only the pintle post (and the movable "
+        "valve's centre rod) from its own geometry; the injector body, "
+        "faceplate, orifice plate and manifolds need the resolved machined "
+        "layout, which is produced host-side by "
         "raosim.injector_cad.resolve_machined_pintle_layout and priced by "
         "raosim.mass_ledger.injector_mass_ledger."
     ),
@@ -733,6 +743,8 @@ def engine_state_from_result(
     )
     nan = jnp.asarray(jnp.nan, dtype=jnp.float64)
     chamber = result.chamber_mass
+    # Static architecture fact: only the movable valve has a centre rod.
+    has_rod = mission.pintle_architecture == "son_movable"
     mass_values = jnp.stack([
         result.feed.pump_mass,
         result.feed.motor_mass,
@@ -751,6 +763,9 @@ def engine_state_from_result(
         chamber.lands,
         chamber.closeout,
         chamber.total,
+        result.pintle.post_mass,
+        result.pintle.rod_mass if has_rod else nan,
+        result.pintle.mass,
         # Injector hardware and the total dry mass stay unavailable; see
         # MASS_UNAVAILABLE_REASONS.  They are NaN, never 0.0, so a consumer
         # that ignores the availability mask fails loudly instead of quietly
@@ -759,7 +774,7 @@ def engine_state_from_result(
         nan,
     ])
     mass_availability = jnp.asarray(
-        [True] * 17 + [False, False], dtype=jnp.bool_)
+        [True] * 18 + [has_rod, True, False, False], dtype=jnp.bool_)
     masses = MassState(values=mass_values, availability=mass_availability)
 
     constraint_values = jnp.stack([

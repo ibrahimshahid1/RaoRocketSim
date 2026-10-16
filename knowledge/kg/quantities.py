@@ -59,6 +59,11 @@ QUANTITIES: tuple[Quantity, ...] = (
     _q("QTY_CF", "thrust coefficient", "1", "-", ("C_F", "CF"), ("cf", "thrust_coefficient"),
        (), ("performance", "nozzle_contour"),
        note="Distinct from discharge coefficient C_d and from skin-friction coefficient C_f."),
+    _q("QTY_CF_SKIN", "skin-friction coefficient", "1", "-", ("c_f", "C_f"), ("cf", "skin_friction_coefficient"),
+       ("local skin-friction coefficient", "skin friction coefficient"), ("flow", "gas_dynamics"),
+       note="Case-folded C_F can also denote thrust coefficient. Source meaning must disambiguate."),
+    _q("QTY_CD_DRAG", "drag coefficient", "1", "-", ("C_D",), ("drag_coefficient",), (), ("flow", "trajectory"),
+       note="Case-folded C_D can also denote discharge coefficient; identical dimensions do not establish identity."),
     _q("QTY_ETA_CSTAR", "c-star efficiency", "1", "-", ("η_c*",), ("eta_cstar", "eta_c_star"),
        ("combustion efficiency",), ("performance", "injector")),
     _q("QTY_ETA_CF", "thrust-coefficient efficiency", "1", "-", ("η_CF",), ("eta_cf",),
@@ -73,7 +78,12 @@ QUANTITIES: tuple[Quantity, ...] = (
     _q("QTY_PE", "nozzle exit pressure", "M L^-1 T^-2", "Pa", ("p_e", "P_e"), ("pe", "p_exit", "p_e"),
        (), ("nozzle_contour", "performance")),
     _q("QTY_P0", "stagnation pressure", "M L^-1 T^-2", "Pa", ("p_0", "P_t", "p_t"), ("p0", "p_stag"),
-       ("total pressure",), ("gas_dynamics",)),
+       ("total pressure", "local isentropic stagnation pressure", "local stagnation pressure"), ("gas_dynamics",)),
+    _q("QTY_T0", "stagnation temperature", "Θ", "K", ("T_0", "T0"), ("t_stag",),
+       ("total temperature",), ("gas_dynamics",),
+       note="A general stagnation temperature is distinct from a chamber-temperature assumption."),
+    _q("QTY_T_STATIC", "local static temperature", "Θ", "K", ("T",), ("t_static",),
+       ("static temperature",), ("gas_dynamics",)),
     _q("QTY_TC", "chamber temperature", "Θ", "K", ("T_c", "T_0"), ("tc", "t_c", "chamber_temperature"),
        ("combustion temperature",), ("thermochemistry", "chamber")),
     _q("QTY_TWG", "gas-side wall temperature", "Θ", "K", ("T_wg", "T_w,g"), ("t_wg", "twg", "wall_temp_gas"),
@@ -104,7 +114,13 @@ QUANTITIES: tuple[Quantity, ...] = (
        ("area ratio",), ("nozzle_contour",)),
     _q("QTY_CR", "contraction ratio", "1", "-", ("ε_c", "A_c/A_t"), ("contraction_ratio", "cr"),
        (), ("chamber",)),
-    _q("QTY_AT", "throat area", "L^2", "m^2", ("A_t", "A*"), ("a_t", "at", "throat_area"), (), ("throat",)),
+    _q("QTY_AT", "throat area", "L^2", "m^2", ("A_t", "A*", "A_star"), ("a_t", "at", "throat_area"),
+       ("sonic throat area", "flowmeter throat area"), ("throat",)),
+    _q("QTY_LOCAL_FLOW_AREA", "local duct area", "L^2", "m^2", ("A",), ("local_flow_area",),
+       ("local flow area",), ("gas_dynamics",),
+       note="Area at the local flow section, not automatically the throat area."),
+    _q("QTY_SONIC_REFERENCE_AREA", "sonic reference area", "L^2", "m^2", ("A*", "A_star"), (),
+       (), ("gas_dynamics",), note="White's sonic reference may be hypothetical; do not infer a physically sonic throat from A* alone."),
     _q("QTY_RT", "throat radius", "L", "m", ("r_t", "R_t"), ("r_t", "rt", "throat_radius"), (), ("throat",)),
     _q("QTY_AE", "nozzle exit area", "L^2", "m^2", ("A_e",), ("a_e", "exit_area"), (), ("nozzle_contour",)),
     _q("QTY_RE_EXIT", "nozzle exit radius", "L", "m", ("r_e", "R_e"), ("r_e", "exit_radius"), (), ("nozzle_contour",),
@@ -119,11 +135,26 @@ QUANTITIES: tuple[Quantity, ...] = (
        (), ("nozzle_contour",), note="Rao variational construction; see the Rao control-surface literature."),
 
     # ---------------- gas dynamics ----------------
+    _q("QTY_BL_THICKNESS", "boundary-layer thickness", "L", "m", ("δ",), ("delta",),
+       ("boundary layer thickness", "turbulent boundary-layer thickness"), ("flow",),
+       note="Distinct from wall thickness even when both use delta and length units."),
+    _q("QTY_BL_DISPLACEMENT", "displacement thickness", "L", "m", ("δ*", "δ^*"), ("delta_star",), (), ("flow",)),
+    _q("QTY_BL_MOMENTUM", "momentum thickness", "L", "m", ("θ",), ("theta",), (), ("flow",)),
+    _q("QTY_STREAMLINE_HEIGHT", "inlet outer-streamline height", "L", "m", ("h",), (), (), ("flow",),
+       note="White's boundary-layer mass balance inlet height; distinct from pump head despite identical glyph and units."),
+    _q("QTY_FRICTION_VELOCITY", "friction velocity", "L T^-1", "m/s", ("u*", "u^*"), ("u_star",), (), ("flow",)),
+    _q("QTY_FLOW_SPEED", "local flow speed", "L T^-1", "m/s", ("u", "V", "u_star"), ("flow_speed",),
+       ("local flow velocity", "flow velocity", "sonic flow speed", "sonic critical velocity"),
+       ("flow", "gas_dynamics"),
+       note="Generic local speed; not automatically an exit speed or friction velocity. Sonic conditions remain in source context. u_star also denotes friction velocity, and case-folded V conflicts with specific volume."),
+    _q("QTY_NU_KINEMATIC", "kinematic viscosity", "L^2 T^-1", "m^2/s", ("ν",), ("nu_kinematic",), (), ("flow", "pump")),
     _q("QTY_MACH", "Mach number", "1", "-", ("M", "Ma"), ("mach", "m_number"), (), ("gas_dynamics",),
        note="Symbol M also denotes molar mass and moment; disambiguate by dimension."),
     _q("QTY_GAMMA", "specific-heat ratio", "1", "-", ("γ", "k"), ("gamma", "g"), (), ("gas_dynamics", "thermochemistry"),
        note="Sources using k for gamma conflict with k for thermal conductivity. Never merge on the glyph."),
-    _q("QTY_SOUND", "speed of sound", "L T^-1", "m/s", ("a", "c"), ("a_sound", "sound_speed"), (), ("gas_dynamics",)),
+    _q("QTY_SOUND", "speed of sound", "L T^-1", "m/s", ("a", "c", "a_f", "a_e"), ("a_sound", "sound_speed"),
+       ("frozen speed of sound", "equilibrium speed of sound", "local speed of sound"), ("gas_dynamics",),
+       note="Quantity identity only; frozen and equilibrium sound speeds retain different source formulations and conditions and are not asserted equal."),
     _q("QTY_RGAS", "specific gas constant", "L^2 T^-2 Θ^-1", "J/kg/K", ("R", "R_s"), ("r_gas", "rgas"),
        (), ("thermochemistry",), note="Distinct from the universal gas constant R_u and from radius R."),
     _q("QTY_MU", "dynamic viscosity", "M L^-1 T^-1", "Pa.s", ("μ",), ("mu", "viscosity"), (), ("heat_transfer",)),
@@ -131,8 +162,28 @@ QUANTITIES: tuple[Quantity, ...] = (
     _q("QTY_KCOND", "thermal conductivity", "M L T^-3 Θ^-1", "W/m/K", ("k", "λ"), ("k_cond", "conductivity", "k_w"),
        (), ("heat_transfer", "materials"),
        note="Symbol k collides with the specific-heat ratio in older propulsion texts."),
-    _q("QTY_CP", "specific heat at constant pressure", "L^2 T^-2 Θ^-1", "J/kg/K", ("c_p",), ("cp", "c_p"),
-       (), ("thermochemistry", "cooling")),
+    _q("QTY_CP", "specific heat at constant pressure", "L^2 T^-2 Θ^-1", "J/kg/K", ("c_p", "c_pi"), ("cp", "c_p", "cp_f"),
+       ("mixture specific heat at constant pressure", "species specific heat at constant pressure",
+        "frozen specific heat at constant pressure", "frozen mixture specific heat at constant pressure"),
+       ("thermochemistry", "cooling"),
+       note="Quantity identity only; species/composition and frozen versus equilibrium derivative conditions remain in the source assertion."),
+    _q("QTY_CV", "specific heat at constant volume", "L^2 T^-2 Θ^-1", "J/kg/K", ("c_v", "c_vf", "c_vi"), ("cv",),
+       ("mixture specific heat at constant volume", "species specific heat at constant volume",
+        "frozen specific heat at constant volume"), ("thermochemistry", "gas_dynamics"),
+       note="Distinct from constant-pressure specific heat despite identical units; no heat-capacity value or composition model is asserted."),
+    _q("QTY_H_SPECIFIC", "specific enthalpy", "L^2 T^-2", "J/kg", ("h", "h_0", "h_i", "h_2"), ("specific_enthalpy",),
+       ("species specific enthalpy", "mixture specific enthalpy", "stagnation specific enthalpy", "local specific enthalpy"),
+       ("thermochemistry", "gas_dynamics"),
+       note="Mass-specific thermodynamic enthalpy. The glyph h also denotes geometric height and heat-transfer coefficients; units and exact meaning must agree."),
+    _q("QTY_E_SPECIFIC", "specific internal energy", "L^2 T^-2", "J/kg", ("e", "e_i"), ("specific_internal_energy",),
+       ("species specific internal energy", "mixture specific internal energy"), ("thermochemistry", "gas_dynamics"),
+       note="Distinct from specific enthalpy even though both have energy-per-mass units."),
+    _q("QTY_MASS_FRACTION", "species mass fraction", "1", "-", ("c_i",), ("species_mass_fraction",),
+       ("mass fraction",), ("thermochemistry",),
+       note="Species composition on a mass basis; distinct from mole fraction and speed of sound. No composition value is asserted."),
+    _q("QTY_SPECIFIC_VOLUME", "specific volume", "M^-1 L^3", "m^3/kg", ("v",), ("specific_volume",),
+       (), ("thermochemistry", "gas_dynamics"),
+       note="Mass-specific volume; case-folded V may also denote flow speed. Units and source meaning must disambiguate."),
 
     # ---------------- hydraulics / injector ----------------
     _q("QTY_CD", "discharge coefficient", "1", "-", ("C_d", "Cd"), ("cd", "c_d", "discharge_coefficient"),
@@ -147,6 +198,9 @@ QUANTITIES: tuple[Quantity, ...] = (
     _q("QTY_SMD", "Sauter mean diameter", "L", "m", ("SMD", "D_32"), ("smd", "d32"), (), ("spray",)),
 
     # ---------------- pumps / feed ----------------
+    _q("QTY_GRAVITY", "gravitational acceleration", "L T^-2", "m/s^2", ("g", "g_0"), ("g0", "gravity"),
+       ("acceleration of gravity",), ("pump", "trajectory", "performance"),
+       note="The glyph g can also be a code alias for gamma. Units and source context decide; no numerical value is asserted here."),
     _q("QTY_HEAD", "pump head rise", "L", "m", ("H",), ("head", "head_m"), (), ("pump",)),
     _q("QTY_DP_PUMP", "pump pressure rise", "M L^-1 T^-2", "Pa", ("Δp_pump",), ("delta_p_pump", "pump_dp"),
        (), ("pump", "feed_system")),
@@ -196,6 +250,7 @@ SYMBOL_INDEX = _symbol_index()
 # Glyphs that are provably overloaded in this corpus.  Callers MUST supply
 # document/subsystem context before treating a match as an identification.
 KNOWN_AMBIGUOUS = {
+    "g": ["QTY_GRAVITY", "QTY_GAMMA"],
     "k": ["QTY_GAMMA", "QTY_KCOND"],
     "r": ["QTY_RGAS", "QTY_MR"],
     "t": ["QTY_THRUST", "QTY_TC"],
@@ -209,7 +264,7 @@ KNOWN_AMBIGUOUS = {
 }
 
 
-def resolve_symbol(symbol: str, subsystem: str | None = None) -> dict:
+def resolve_symbol(symbol: str, subsystem: str | None = None, *, units: str | None = None, meaning: str | None = None) -> dict:
     """Resolve a symbol to candidate quantities.
 
     Returns ``{"state": ..., "candidates": [...]}``.  ``state`` is
@@ -220,6 +275,25 @@ def resolve_symbol(symbol: str, subsystem: str | None = None) -> dict:
     cands = list(dict.fromkeys(SYMBOL_INDEX.get(key, [])))
     if key in KNOWN_AMBIGUOUS:
         cands = list(dict.fromkeys(cands + KNOWN_AMBIGUOUS[key]))
+    if meaning and cands:
+        def meaning_key(value):
+            return " ".join(value.casefold().replace("-", " ").split())
+        recognized = {q.qid for q in QUANTITIES if meaning_key(meaning) in
+                      {meaning_key(v) for v in (q.canonical, *q.aliases)}}
+        if recognized:
+            cands = [c for c in cands if c in recognized]
+            if not cands:
+                return {"state": "UNRESOLVED_ENTITY", "symbol": symbol, "candidates": [],
+                        "reason": "Recognized source meaning conflicts with the symbol candidates."}
+    if units and cands:
+        def unit_key(value):
+            value = value.replace("²", "^2").replace("³", "^3").replace(" ", "")
+            return "1" if value in ("-", "1", "dimensionless") else value
+        compatible = [c for c in cands if unit_key(BY_ID[c].si_unit) == unit_key(units)]
+        if not compatible:
+            return {"state": "UNRESOLVED_ENTITY", "symbol": symbol, "candidates": [],
+                    "reason": "No exact canonical-unit match; no conversion or dimensional equivalence was assumed."}
+        cands = compatible
     if subsystem:
         narrowed = [c for c in cands if subsystem in BY_ID[c].subsystems]
         if narrowed:

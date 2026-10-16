@@ -265,3 +265,16 @@ surface finishes, drawings/GD&T, structural and thermal analysis, inspection,
 proof/leak testing, configuration-specific cold flow, optical spray data,
 stability assessment, and hot-fire evidence. `hardware_qualified` remains
 `false`.
+
+## MDO component
+
+The differentiable MDO carries this architecture as the `son_movable` choice
+of its pintle component (`raosim/mdo/pintle.py`; `MDO_GUIDE.md` §3a). There
+the post wall and centre-gap diameter are design variables, the transition
+row applies, and the opening at the lowest declared throttle level
+(`pintle_throttle_min_fraction`) must stay above the same 0.1 mm
+uniform-sheet floor as `minimum_uniform_sheet_opening`. Throttling follows the
+`throttle_map()` convention above, so the metered radial area scales as the
+square root of the throttle fraction. The MDO valve has no host handoff:
+`to_design_input` and `--mdo-export` refuse it, consistent with the
+fail-closed CAD boundary here.

@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:58:11.628946+00:00",
-  "n": 95
+  "generated_at": "2026-10-16T18:20:18.327775+00:00",
+  "n": 97
  },
  "records": [
   {
@@ -47,6 +47,54 @@
    "machine_readable_state": "NOT_EXTRACTED",
    "provenance_kind": "PROJECT_DERIVES",
    "source_document_id": "DOC_NTRS_19710019929"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_173E322E",
+   "type": "ValidityEnvelope",
+   "model_id": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "subsystem": "pump",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "extracted_for_model": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "prose": "The paper's worked study is at 500 N, 20 bar, 30 km and 600 s. These are a design point, not demonstrated validity bounds.",
+   "applies_to": "Lee et al. worked performance/mass comparison only",
+   "machine_readable": {},
+   "machine_readable_state": "PROSE_ONLY",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00026",
+   "quote": "Thrust 500 N\n\n\nCombustion chamber pressure 20 bar\n\n\nAltitude 30 km\n\n\n<u>Burning time</u> <u>600 s</u>",
+   "grounded": "GROUNDED",
+   "provenance_id": "PROV_VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_173E322E",
+   "provenance_kind": "SOURCE_STATES",
+   "extraction_version": "1.0.1"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_EE8EA526",
+   "type": "ValidityEnvelope",
+   "model_id": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "subsystem": "pump",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "extracted_for_model": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "prose": "Use technology- and duty-appropriate power and energy densities; large-unit catalog densities cannot be assumed valid for a small engine.",
+   "applies_to": "Electric motor and battery mass estimates",
+   "machine_readable": {},
+   "machine_readable_state": "PROSE_ONLY",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 12,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00033",
+   "quote": "Because it is not proper to apply the power and energy\ndensity of large-sized power units for a small-sized engine,\nit will be necessary to confirm whether the specifications of\nthe motors and batteries applied in this study are appropriate.",
+   "grounded": "GROUNDED",
+   "provenance_id": "PROV_VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_EE8EA526",
+   "provenance_kind": "SOURCE_STATES",
+   "extraction_version": "1.0.1"
   },
   {
    "id": "VAL_DOI_10_1080_13647830_2021_1937702_5CF339A2",
@@ -508,7 +556,7 @@
    "type": "ValidityEnvelope",
    "model_id": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
    "subsystem": "injector",
-   "prose": "single-phase gas with known stagnation state and gamma/R; ideal-gas screen",
+   "prose": "constant-gamma perfect-gas screen; feed temperature and P_back+dp treated as stagnation state; Cd and real/supercritical-gas accuracy are not established by these source equations",
    "machine_readable": {},
    "machine_readable_state": "NOT_EXTRACTED",
    "provenance_kind": "PROJECT_DERIVES",
@@ -1124,7 +1172,7 @@
    "type": "ValidityEnvelope",
    "model_id": "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D",
    "subsystem": "performance",
-   "prose": "fixed ideal-gas composition and R with bounded piecewise-linear cp(T); adiabatic, inviscid, isentropic quasi-one-dimensional flow; initial integrated-design use is Bezier-only and excludes MOC/Rao characteristics, equilibrium chemistry, boundary-layer/thermal/Bartz and Hall-Cd authority",
+   "prose": "fixed ideal-gas composition and R with bounded piecewise-linear cp(T); single-temperature thermal properties, no separate vibrational relaxation or equilibrium reaction contribution to cp; adiabatic, inviscid, isentropic quasi-one-dimensional flow; initial integrated-design use is Bezier-only and excludes MOC/Rao characteristics, equilibrium chemistry, boundary-layer/thermal/Bartz and Hall-Cd authority",
    "machine_readable": {},
    "machine_readable_state": "NOT_EXTRACTED",
    "provenance_kind": "PROJECT_DERIVES",

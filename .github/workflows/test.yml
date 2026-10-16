@@ -16,6 +16,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  knowledge:
+    name: Corpus-free knowledge graph pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONHASHSEED: "0"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install minimal knowledge dependencies
+        run: python -m pip install numpy scipy pytest
+
+      - name: Exercise synthetic pipeline and knowledge regressions
+        # Synthetic tests always run; local-corpus acceptance tests may skip
+        # with an explicit reason when ignored source/index files are absent.
+        run: python -m pytest knowledge/tests -q -ra
+
   non-slow:
     name: Python 3.12 non-slow suite
     runs-on: ubuntu-latest

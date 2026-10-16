@@ -49,7 +49,7 @@ Everything below is ordered by how directly it closes that gap.
 | R0 chamber-length convention | **done** — wetted-area parity 0.8828 → 1.00102, mass delta 12.06 % → 0.044 % |
 | R1 jacket sizing + SP-8087 loads | **done** — hoop-sized tapered jacket, thin-shell and nozzle-collapse constraints added |
 | R2 flange/faceplate sizing | **advisory shipped** — 18.13 → 5.53 kg available; not yet applied to exported CAD |
-| R3 requirements layer | not started — still the product gap |
+| R3 requirements layer | **partly implemented** — typed requirement mapping and job consumption exist in `raosim/requirements.py` and `raosim/mdo/job.py`; complete requirements-to-parts delivery remains open (status clarified 2026-10-15) |
 | R4 parts package | not started |
 | R5 physics gaps | not started |
 

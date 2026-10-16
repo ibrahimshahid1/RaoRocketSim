@@ -61,7 +61,7 @@ def test_slsqp_respects_pins_user_bounds_and_hard_constraints(analytic_engine, l
     assert result.feasible
     assert result.design["eps"] == pytest.approx(expected, abs=1e-7)
     assert result.Isp >= 240.0 - 1e-7
-    assert result.x.shape == (10,)
+    assert result.x.shape == (12,)
     assert tuple(result.design) == DesignVector.names()
     for name, value in fixed.items():
         assert result.design[name] == value
@@ -130,7 +130,7 @@ def test_reduced_jacobian_has_no_columns_for_fixed_coordinates():
     scaling = ScaledSpace.from_specs(policy.free_specs)
     reconstruct = jax.jit(lambda u: policy.reconstruct(scaling.to_physical(u)))
     jacobian = np.asarray(jax.jacrev(reconstruct)(jnp.asarray([0.5, 0.5])))
-    expected = np.zeros((10, 2))
+    expected = np.zeros((12, 2))
     expected[1, 0] = 4.0
     expected[5, 1] = 10000.0
     np.testing.assert_array_equal(jacobian, expected)
@@ -147,7 +147,7 @@ def test_fixed_of_in_active_model_survives_final_reconstruction(analytic_engine,
         enforced=("isp_epsilon",),
     )
     assert result.success
-    assert result.x.shape == (11,)
+    assert result.x.shape == (13,)
     assert result.x[-1] == 2.6
     assert result.design["OF"] == 2.6
 
@@ -190,7 +190,8 @@ def test_invalid_policy_fails_before_physics(fixed, bounds, match, monkeypatch):
 def test_explicit_matching_inactive_of_pin_is_accepted():
     mission = MissionSpec(OF=2.6)
     policy = nlp._OptimizationSpace.for_mission(mission, {"OF": 2.6}, {})
-    assert len(policy.free_specs) == 10
+    # Twelve hardware variables, less D_cg pinned for the slotted pintle.
+    assert len(policy.free_specs) == 11
 
 
 def test_reduced_start_rejects_full_vector_or_nonfinite_values(analytic_engine):

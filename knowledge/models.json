@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:58:11.628946+00:00",
+  "generated_at": "2026-10-16T18:20:18.327775+00:00",
   "source": "raosim/model_registry.py",
   "n": 61
  },
@@ -32,12 +32,29 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "Hagemann et al. 1998 (Advanced Rocket Nozzles) is a qualitative review with no numbered equations. It does NOT state a quasi-one-dimensional attached-flow thrust-coefficient or nozzle momentum-balance relation anywhere; the 'Cf' half of the registry relation is absent. The paper only asserts that nonadapted exhaust flow induces a significant negative thrust contribution and that off-design over/underexpansion losses rise up to 15% (Table 1, Fig. 3). What the document DOES support is the 'explicit separation applicability' half and the equation_ref 'overexpanded nozzle flow and separation regimes': it defines over-/underexpanded off-design regimes, defines the critical pressure ratio p_cr = p_sep/p_p across the separation point, states that p_cr depends strongly on Mach number (slightly on Re) and also on wall temperature, gas composition and wall roughness, catalogs empirical separation-onset criteria (Summerfield, Schmucker, Keldysh empirical p_cr/p_p/p_w,e/p_amb relationships, Aerojet tabulated upper/lower separation ratios for conical vs bell nozzles, European p_sep/p_amb = f(local wall Mach number) criterion), and states that nozzle area ratios are chosen to avoid separation at nominal chamber pressure and that side-load prediction in the separated regime is uncertain/ongoing research. The registry validity_text ('attached flow only; separated-flow thrust must be withheld or separately modeled') is consistent with the paper's statements but is not phrased as a rule by the paper. The Cf momentum balance must be sourced elsewhere (the paper cites NASA SP-8120 as its Ref. 2).",
    "source_support_equation_labels": [
     "critical_pressure_ratio_definition"
-   ]
+   ],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "altitude/separation regression tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_CAD_KERNEL_TOPOLOGY",
@@ -67,10 +84,27 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "NOT_FOUND_IN_SOURCE",
    "source_support_notes": "CAD_04.md is a 173-slide lecture deck on B-Splines and NURBS (basis functions, divided differences, Cox-de Boor recursion, knot insertion/removal, rational curves and surfaces). The registry attributes to it 'OpenCascade valid-solid/re-import/bounding-box/volume checks' under a 'CAD exchange/solid-modeling background' equation_ref. Grep for opencascade, occ, solid, topolog, b-rep/brep, boundary, STEP, IGES, exchange, bounding, volume, valid, manifold, shell, edge, vertex, euler, kernel, export returned zero relevant hits ('import' matches only unrelated text; 'closed' refers to closed curves; 'tolerance' appears once in a control-point replacement step). The document contains no solid-modeling, topology-validity, data-exchange, re-import, bounding-box or volume-check content, so it cannot support the model. The only tangentially related geometric statement is the convex-hull containment property of B-spline curves (page 40), which is a curve property, not a kernel verification policy.",
-   "source_support_equation_labels": []
+   "source_support_equation_labels": [],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "STEP/STL round-trip tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_CHAMBER_LSTAR_VOLUME",
@@ -99,14 +133,31 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "SUPPORTED",
    "source_support_notes": "The registry relation Vc = Lstar*At is exactly the rearranged form of SP-125 eq. (4-4), L* = Vc/At (PDF p.95, book p.86), and the book applies it verbatim as design practice ('With At and minimum required L* established, the required combustion chamber volume Vc can be calculated by equation (4-4)') and numerically (Vc = 487 x 45 = 21915 cu in, PDF p.104). The registry validity text ('empirical propellant/injector design input; not predicted combustion closure') matches the source, which states the minimum required L* 'can only be evaluated by actual firings of experimental thrust chambers' and tabulates typical values (Table 4-1). Caveats: (a) the Markdown conversion drops the equation images for (4-3) and (4-4), so the relation is anchored via the verbal definition and the sample calculation; the equation forms were confirmed from a render of the PDF page. (b) The source also gives the physical basis L* = Wtc V ts / At (stay-time form) which the registry does not carry. (c) The registry's second cited source (Sutton & Biblarz) is not this document and was not checked.",
    "source_support_equation_labels": [
     "SP-125 eq. (4-4): characteristic length L* definition",
     "SP-125 sample calculation (4-2): chamber volume Vc = At x L* for A-1 stage engine",
     "SP-125 eq. (4-3): required combustion chamber volume from stay time"
-   ]
+   ],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "exact revolved-volume closure tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
@@ -135,14 +186,31 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "SP-125 (Huzel & Huang) contains NO chamber-shoulder fillet radius, no symbol Rs or Rs,max, and no 0.8 factor anywhere in the thrust-chamber geometry text (grep of 'shoulder' hits only fatigue/seal contexts; 'fillet' only in the structural stress-concentration discussion). What the document DOES state, and what the registry's equation_ref ('SP-125 qualitative contraction factors') can legitimately point to, is qualitative: (a) any smooth, well-rounded convergent section has very low energy losses because subsonic velocities are low (PDF p. 98); (b) abrupt changes or discontinuities in the wall contour should be avoided (p. 98); (c) the contraction area ratio is optimized against seven listed factors - combustion performance/injector, gas-flow pressure drop, wall cooling, stability, weight, envelope, manufacturability (p. 97); (d) chamber total-pressure loss is a function of gamma and the contraction ratio via Rayleigh flow (pp. 14-15). The only NUMERIC radius guidance is for the THROAT arc (R = 0.5-1.5 Rt) plus a convergent half-angle range of 20-45 deg (p. 98); this is the throat-side upstream arc, not the cylinder-to-cone shoulder. The worked layouts (pp. 104-107) run a straight convergent cone from the cylindrical chamber to the throat arc with no shoulder fillet, and compute the convergent volume as a frustum cone. The only '0.8' in the neighbourhood is the 80-percent-bell nozzle length fraction (p. 107), unrelated to the shoulder. Figure 4-9 ('Elements of basic cylindrical combustion chamber') is not OCR-recoverable in the markdown, so a figure-labelled shoulder radius cannot be ruled out from the rendering, but no text refers to one. Net: the qualitative motivation is supported; the relation Rs = 0.8*Rs,max and the fill-fraction concept are repository policy, as the registry itself concedes, and should not be cited to SP-125.",
    "source_support_equation_labels": [
     "SP-125 Eq. 4-7",
     "SP-125 Eq. 4-6",
     "SP-125 Eq. 1-14"
-   ]
+   ],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "tangency and feasibility tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
@@ -150,18 +218,18 @@
    "registry_id": "flow.boundary_layer_displacement",
    "subsystem": "flow",
    "quantity": "effective nozzle area loss",
-   "relation": "turbulent flat-plate displacement-thickness screening correlation",
-   "cited_source_text": "classical turbulent boundary-layer scaling",
+   "relation": "delta*=0.046*s*Re_s^(-1/5)*sqrt(max(T/T_wall,0.2)); report-only effective area",
+   "cited_source_text": "repository screening extension; White supports displacement definitions and a distinct one-seventh-power flat-plate derivation",
    "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
    "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
    "source_kind": "corpus_pdf",
-   "equation_ref": "turbulent boundary-layer chapter",
+   "equation_ref": "White 7th ed. Eqs.7.42,7.46 (PDF pp841-842): source exponent -1/7 differs from implemented -1/5",
    "validity_text": "attached smooth-wall flow; pressure gradient, curvature, chemistry and roughness simplified",
-   "registry_status": "published_correlation_screening_use",
+   "registry_status": "repository_heuristic_screening_use",
    "verification_text": "trend and bounded-area-loss tests",
    "validation_level": "screening_not_cfd_validated",
    "notes": "",
-   "basis_class": "LITERATURE_DERIVED",
+   "basis_class": "REPOSITORY_HEURISTIC",
    "promotion_status": "screening",
    "verification_kinds": [
     "unit_test"
@@ -171,15 +239,40 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
-   "source_support_notes": "The document does contain the relation the registry attributes to it: Sec. 7.4 'Turbulent Flow' (PDF pp. 839-842) derives a turbulent flat-plate displacement-thickness estimate, Eq. (7.46), from Prandtl's one-seventh-power profile (7.39) and the delta* definition (7.12), following the Karman momentum-integral route (7.33)->(7.42) - i.e. the classical turbulent boundary-layer scaling the registry cites. However, (1) every displayed equation in this Markdown rendering is missing (equation images were not converted), so the numerical coefficient and Re_x exponent of Eq. (7.46) cannot be verified from this source; only the derivation chain and the delta ~ x^(6/7) scaling survive in prose. (2) The source treats a sharp smooth flat plate in incompressible zero-pressure-gradient flow; it never mentions nozzles, wall curvature, chemistry, or 'effective nozzle area loss' - that application is the registry's, not the document's. (3) Roughness is discussed only for drag (Fig. 7.6, Eq. 7.48), not for displacement thickness, and pressure-gradient effects are explicitly excluded from the flat-plate analysis (Sec. 7.5 intro). Stated validity: turbulent formula for Re_x > ~1e6; boundary layer theory fails below Re_x ~ 2500; smooth-wall relations.",
-   "source_support_equation_labels": [
-    "Eq. (7.46) turbulent flat-plate displacement thickness",
-    "Eq. (7.12) displacement thickness in terms of velocity profile",
-    "Eq. (7.39) one-seventh-power turbulent profile",
-    "Eq. (7.42) turbulent boundary-layer thickness growth",
-    "Eq. (7.34) logarithmic-law profile across turbulent boundary layer"
+   "source_support_notes": "Original White PDF pp840-842 recovers Eq7.42 delta/x approx0.16 Re_x^(-1/7) and Eq7.46 delta_star approxdelta/8, implying0.02 x Re_x^(-1/7). This is a smooth flat-plate derivation using a one-seventh-power profile and constant outer velocity. The implementation instead uses0.046*s/Re_s^(1/5)*sqrt(max(T/T_wall,0.2)), with local nozzle properties, distance since throat, radius floor and blockage clipping. The coefficient, exponent, temperature factor, floors/clips and nozzle application are repository screening assumptions, not established by these source equations. No justified substitution of the flat-plate formula into the nozzle is made. CITES links explicitly connect the compared source equations without asserting IMPLEMENTS; numerical validity of the nozzle extension and physical calibration remain unavailable.",
+   "source_support_equation_labels": [],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "trend and bounded-area-loss tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "source_support_history": [
+    {
+     "state": "PARTIALLY_SUPPORTED",
+     "notes": "The document does contain the relation the registry attributes to it: Sec. 7.4 'Turbulent Flow' (PDF pp. 839-842) derives a turbulent flat-plate displacement-thickness estimate, Eq. (7.46), from Prandtl's one-seventh-power profile (7.39) and the delta* definition (7.12), following the Karman momentum-integral route (7.33)->(7.42) - i.e. the classical turbulent boundary-layer scaling the registry cites. However, (1) every displayed equation in this Markdown rendering is missing (equation images were not converted), so the numerical coefficient and Re_x exponent of Eq. (7.46) cannot be verified from this source; only the derivation chain and the delta ~ x^(6/7) scaling survive in prose. (2) The source treats a sharp smooth flat plate in incompressible zero-pressure-gradient flow; it never mentions nozzles, wall curvature, chemistry, or 'effective nozzle area loss' - that application is the registry's, not the document's. (3) Roughness is discussed only for drag (Fig. 7.6, Eq. 7.48), not for displacement thickness, and pressure-gradient effects are explicitly excluded from the flat-plate analysis (Sec. 7.5 intro). Stated validity: turbulent formula for Re_x > ~1e6; boundary layer theory fails below Re_x ~ 2500; smooth-wall relations.",
+     "source_sha256": null,
+     "invalidated_because": "registry changed: relation, equation_ref"
+    }
+   ],
+   "source_support_state_extracted": "PARTIALLY_SUPPORTED",
+   "source_support_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_comparison_equation_ids": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076"
    ]
   },
   {
@@ -209,7 +302,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "reported in result provenance; user override supported",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
@@ -218,12 +328,12 @@
    "subsystem": "injector",
    "quantity": "gas mass flux",
    "relation": "isentropic subsonic/choked orifice mass flux",
-   "cited_source_text": "Anderson, Modern Compressible Flow; Sutton & Biblarz",
+   "cited_source_text": "White, Fluid Mechanics, 7th ed., Eqs. 9.32 and 9.46-9.47; input Cd is an additional empirical factor",
    "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
    "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
    "source_kind": "corpus_pdf",
-   "equation_ref": "compressible-flow/orifice relations",
-   "validity_text": "single-phase gas with known stagnation state and gamma/R; ideal-gas screen",
+   "equation_ref": "White PDF pp1092,1101: sonic ratio9.32 and mass-flow9.46-9.47; flowmeter6.117 is a distinct meter-dependent model",
+   "validity_text": "constant-gamma perfect-gas screen; feed temperature and P_back+dp treated as stagnation state; Cd and real/supercritical-gas accuracy are not established by these source equations",
    "registry_status": "published_equation_screening_use",
    "verification_text": "choke-boundary and continuity tests",
    "validation_level": "software_verified",
@@ -238,16 +348,42 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
-   "source_support_notes": "The document (White, Fluid Mechanics 7th ed., Ch. 9 sections 9.4 and 9.6) does contain the relation the registry describes: an isentropic subsonic mass-flow function (Eq. 9.47, valid when the flow is not choked) and a choked maximum mass flow (Eq. 9.46, proportional to A* p0 / sqrt(T0)), with the choking criterion pb < p* from Eq. (9.32) and a worked converging-nozzle example (63.4 kPa critical pressure; 0.128 kg/s subsonic vs 0.145 kg/s choked). However: (1) every displayed equation was dropped in the Markdown conversion (equation images not rendered), so the algebraic bodies of Eqs. 9.26-9.28, 9.32, 9.44-9.47 cannot be verified verbatim from this rendering - only prose and example numerics survive; (2) the registry's cited_source_text names Anderson (Modern Compressible Flow) and Sutton & Biblarz, not White, so this corpus document is a different text from the ones the registry cites; (3) White uses k for the specific-heat ratio (registry uses gamma) and frames the relations for ducts/nozzles, not injector orifices; the only orifice-specific compressible treatment (Ch. 6, Eq. 6.117) uses an empirical expansion factor Y from Fig. 6.45 rather than the isentropic relation. No discharge coefficient for the compressible orifice is given in the isentropic section.",
-   "source_support_equation_labels": [
-    "White Eq. (9.46) maximum (choked) isentropic mass flow",
-    "White Eq. (9.47) local (subsonic, non-choked) mass flow function",
-    "White Eq. (9.32) critical (sonic) property ratios",
-    "White Eqs. (9.26)-(9.28) adiabatic T/T0 and isentropic p/p0, ρ/ρ0 vs Mach number",
-    "White Eq. (9.44)/(9.45) area ratio A/A* vs Mach number",
-    "White Eq. (6.117) compressible flowmeter (orifice/nozzle/venturi) mass flow with expansion factor Y"
+   "source_support_notes": "Original White PDFpp1092,1101 supplies ideal-gas sonic pressure ratio and choked/local mass-flow functions, matching the perfect-gas functions in injector._stream_mass_flux before its supplied Cd multiplier. White does not establish that empirical injector Cd, real/supercritical-fluid accuracy, or the approximation treating feed temperature and P_back+dp as stagnation states. White6.117(p750) instead describes a meter-dependent expansion-factor model and is preserved as a distinct compared relation. CITES comparison edges document this support/scope separation without asserting that the complete injector implementation is identical to any one source formula.",
+   "source_support_equation_labels": [],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "choke-boundary and continuity tests",
+   "physical_validation_state": "UNKNOWN",
+   "source_support_history": [
+    {
+     "state": "PARTIALLY_SUPPORTED",
+     "notes": "The document (White, Fluid Mechanics 7th ed., Ch. 9 sections 9.4 and 9.6) does contain the relation the registry describes: an isentropic subsonic mass-flow function (Eq. 9.47, valid when the flow is not choked) and a choked maximum mass flow (Eq. 9.46, proportional to A* p0 / sqrt(T0)), with the choking criterion pb < p* from Eq. (9.32) and a worked converging-nozzle example (63.4 kPa critical pressure; 0.128 kg/s subsonic vs 0.145 kg/s choked). However: (1) every displayed equation was dropped in the Markdown conversion (equation images not rendered), so the algebraic bodies of Eqs. 9.26-9.28, 9.32, 9.44-9.47 cannot be verified verbatim from this rendering - only prose and example numerics survive; (2) the registry's cited_source_text names Anderson (Modern Compressible Flow) and Sutton & Biblarz, not White, so this corpus document is a different text from the ones the registry cites; (3) White uses k for the specific-heat ratio (registry uses gamma) and frames the relations for ducts/nozzles, not injector orifices; the only orifice-specific compressible treatment (Ch. 6, Eq. 6.117) uses an empirical expansion factor Y from Fig. 6.45 rather than the isentropic relation. No discharge coefficient for the compressible orifice is given in the isentropic section.",
+     "source_sha256": null,
+     "invalidated_because": "registry changed: equation_ref"
+    }
+   ],
+   "source_support_state_extracted": "PARTIALLY_SUPPORTED",
+   "source_support_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_comparison_equation_ids": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AA664617",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0C8582C",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DA513041",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0"
    ]
   },
   {
@@ -277,12 +413,29 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "The registry attributes the d-squared law d^2(t) = d0^2 - K t to this document via 'evaporation-model context and Eq. 16'. The document's Eq. 16 is a Spalding-type mass-transfer rate, m˙_d = k_c A_d ρ ln(1 + B_m), not a diameter-squared-versus-time law; no d^2 law, no evaporation constant K, and no droplet-lifetime expression appears anywhere (grepped 'd^2', 'squared', 'lifetime', 'vaporiz', 'Priem', 'Heidmann' - none found). Priem/Heidmann are not cited; the evaporation model references are Miller-Harstad-Bellan 1998 [59] and Sazhin 2006 [60]. What IS supported: the subcritical isolated-droplet (Lagrangian DPM) context, the constant-mixture-density assumption near the droplet surface, and the qualitative statement that evaporation rate depends on droplet-gas temperature difference, vapour concentration and relative velocity (through k_c). The d^2 law could be derived from Eq. 16 under quasi-steady constant-property assumptions, but the document does not perform or state that derivation.",
    "source_support_equation_labels": [
     "Eq. 16 - LOX droplet evaporation rate (convection/diffusion controlled model)"
-   ]
+   ],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "closed-form 99-percent time and remaining-volume tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_HINZE_STABLE_DROP",
@@ -311,7 +464,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "equation identity, phase gate, pressure-validity tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE",
@@ -340,10 +510,27 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "NASA SP-8089 (Liquid Rocket Engine Injectors, 1976) never writes the orifice mass-flux relation G = Cd*sqrt(2*rho*dP) or any algebraic orifice-flow equation; a genuine search for discharge coefficient, sqrt/square root, velocity head, Bernoulli, orifice equation, injection velocity, mass flux and the numbered equations (1)-(6) found only mixing/drop-size correlations. The glossary defines Cd as 'discharge coefficient, dimensionless' and the text states orifice flowrate theory is 'not well developed' for injector conditions (p.45). What the document DOES supply is the 'pressure-drop sizing practice' the registry cites: minimum dP_inj/Pc of 5-20% (5% concentric-tube, 10-15% unlike-impinging, 15-25% like-impinging) to avoid chug; injection dP and orifice length as large as practical; upstream manifold losses <25% of orifice dP; and extensive qualitative Cd behaviour (inlet radius/chamfer/burr effects, L/d, cross velocity, full vs separated flow/hydraulic flip, cold-flow vs hot-fire Cd differences) that supports the registry's 'calibrated Cd required' validity note. The equation form itself must be attributed to the other cited source (Sutton & Biblarz), not SP-8089.",
-   "source_support_equation_labels": []
+   "source_support_equation_labels": [],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "unit identity and mass-flow closure tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE",
@@ -372,13 +559,30 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "The registry relation theta = atan2(M_radial*cos(delta), M_axial + M_radial*sin(delta)) does not appear anywhere in SP-8089. Grepped 'momentum', 'resultant', 'vector', 'direction', 'axial', 'radial', 'deflect', 'tan', 'cos', 'sin', 'spray angle' across all 130 pages. What the document does state (and which the registry's 'NASA SP-8089 design variables' attribution can lean on): (1) the pintle deflector angle is the equivalent of impingement angle for the pintle injector and controls oxidizer impingement on the wall and propellant back flow (p.36); (2) for slot-injection pintles the impingement angle is the angle between the slot axis and the deflector, with the LEM descent engine at about 90 deg and a 90 deg recommendation in Sec. 3.1.1.1.3 (pp.36, 89); (3) a momentum balance between the inner and outer streams produces optimum mixing for the pintle, by analogy with unlike-impinging correlations (p.32); (4) for unlike doublets/quadlet (a) the resultant spray direction depends on the relative jet momenta, whereas symmetric triplet/quadlet (b) give an axial resultant (pp.22-23, 39); (5) cold-flow experiments are recommended to determine spray distributions for pintle designs not covered by refs. 10/38 (p.87), which matches the registry validity text. The only trigonometric momentum/geometry statement is qualitative: backward mass flow is proportional to the cosine of the impingement half-angle (p.34). No momentum-vector construction, no atan2/arctan, and no M_axial/M_radial symbols exist in the source; the equation form is the registry's own first-order construction, not SP-8089's.",
    "source_support_equation_labels": [
     "SP-8089 eq. (5) pintle slot optimum-mixing correlation",
     "SP-8089 eq. (6) gas/liquid optimum-mixing impingement angle"
-   ]
+   ],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "vector-limit and trend tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_N_TAU_STABILITY",
@@ -407,10 +611,27 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state": "PARTIALLY_SUPPORTED",
    "source_support_notes": "NASA SP-8089 (this document) contains no n-tau equation, no interaction-index or sensitive-time-lag values, and no sensitive-frequency formula. Its combustion-stability content (sec. 2.1.1.3, pp. 42-45; design criteria sec. 3.1.1.3, pp. 91-92) is qualitative design guidance: it classifies instability into chug (50-250 Hz), buzz (100-900 Hz), acoustic (>500 Hz) and hybrid (>500 Hz); gives a minimum delta-P_inj/P_ch of 5-20 percent (element-type dependent) to prevent chug; recommends estimating the oscillatory response of injector, feed system and combustion process and avoiding coincidence of fluid-system resonances with high combustion-process response; and defers all analytical modeling to references 57 (Harrje & Reardon, NASA SP-194), 62 (Priem), 63 (Smith et al., 'The Sensitive Time Lag Theory...', AFRPL-TR-67-314) and 64, stating that the models of refs. 63 and 64 'have been most widely used'. So the document supports the registry's framing (a frequency-band screen against combustion response, classical time-lag theory as the accepted tool) and its validity caveat (it is guidance, not a transfer-function or stability-margin prediction), but the n-tau relation itself must be sourced from ref. 63 or SP-194, not from this monograph.",
-   "source_support_equation_labels": []
+   "source_support_equation_labels": [],
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "frequency/time-scale trend tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_PRIMARY_BREAKUP_15DH",
@@ -439,7 +660,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "equation identity and geometry-applicability tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP",
@@ -468,7 +706,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "exact Eq.-1/center-gap identities and Son Table-2 transition benchmarks for D_post=8 mm, t_post=0.5 mm, D_cg=4.55 mm, D_pr=3 mm: L_transition=0.417946, 0.454243, and 0.568310 mm at theta_pt=0, 20, and 40 deg (published 0.418/0.454/0.568 mm)",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_SPRAY_CSTAR_FIXED_POINT",
@@ -497,7 +752,48 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "traditional_analysis",
+      "root": "raosim.design.design_nozzle_v2",
+      "root_locator": {
+       "file": "raosim/design.py",
+       "line": 565,
+       "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.design.design_nozzle_v2",
+        "callee": "raosim.spray_coupling.solve_spray_cstar_fixed_point",
+        "file": "raosim/design.py",
+        "line": 827,
+        "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+    ],
+    "located_symbols": [
+     "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "fixed-point/final-state closure, direct-fuel regen, pump-duty, stale-state, and invalid-state tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INJECTOR_THROTTLE_AREA_SCHEDULE",
@@ -526,7 +822,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "area-ratio and pressure-drop closure tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_INTERFACE_PRESSURE_BOLT_PLATE",
@@ -555,7 +868,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "force/stress identity and geometry tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_MATERIALS_NARLOY_GRCOP",
@@ -584,7 +914,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "positivity and trend tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_NOZZLE_MOC",
@@ -602,7 +949,7 @@
    "registry_status": "source_port_experimental",
    "verification_text": "NASA M3.5 perfect-nozzle fixture regressions",
    "validation_level": "reference_matched_subset",
-   "notes": "",
+   "notes": "reference_matched_subset = the nasa_moc kernel/BDE design march (bit-parity with TT'BF_Kernel/LastKernel, wall.out RMS 1.8e-4) and the unit processes.  The forward ANALYSIS net of an arbitrary wall (raosim.moc.solve_flowfield -> raosim.moc_bounded.march_bounded_net, NASA/JHU RRC topology, boundary points are parents) is oracle-matched on the M3.5Perf wall since 2026-09-21: exit M 3.5009+/-0.0017, stream thrust 2517.72 vs 2518.05 lbf, mass 35.989 vs 35.998 lbm/s (tests/test_moc_bounded_net.py).  It stops with stop_reason='rrc_coalescence' on walls whose compression waves coalesce (chart-Bezier/TOP bells do, ~20 mm past N at Rt=20 mm), and does not integrate through shocks.  The pre-2026-09 front march (moc.march_coupled_net) was NOT a bounded net and is deprecated; rao_optimizer's optimum is unbenchmarked.  Kliegel-Levine kernel reports M* as M (NASA-visible convention kept for oracle parity).",
    "basis_class": "LITERATURE_DERIVED",
    "promotion_status": "optimizer_coupled",
    "verification_kinds": [
@@ -614,7 +961,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "NASA M3.5 perfect-nozzle fixture regressions",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_NOZZLE_RAO_TOP_BEZIER",
@@ -644,7 +1008,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "chart and external-geometry regressions",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
@@ -674,7 +1055,7 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00",
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
    "source_support_state_extracted": "SUPPORTED",
    "source_support_state": "SUPPORTED",
    "source_support_notes": "The original source states stationarity (Eqs. 7-13), exit transversality (14), characteristic compatibility (15), mass-flow matching (19), and length closure (3-4). PDF pages 2-6 were visually inspected, with the Rao text in the full six-page Markdown also read. This confirms the registry citation for the method, not numerical solver correctness, hardware qualification, or an unstated numerical validity range.",
@@ -689,7 +1070,24 @@
     "Rao left-characteristic compatibility",
     "Rao zero-ambient exit condition"
    ],
-   "source_support_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3"
+   "source_support_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "residual/topology suite and strict Rao 1958 Nozzle B Table II thrust benchmark",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D",
@@ -702,8 +1100,8 @@
    "local_source": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
    "source_document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
    "source_kind": "corpus_pdf",
-   "equation_ref": "PDF pp. 669-685, Sections 17.3-17.6: high-temperature nozzle flow, frozen composition/mixture cp, and frozen sound speed",
-   "validity_text": "fixed ideal-gas composition and R with bounded piecewise-linear cp(T); adiabatic, inviscid, isentropic quasi-one-dimensional flow; initial integrated-design use is Bezier-only and excludes MOC/Rao characteristics, equilibrium chemistry, boundary-layer/thermal/Bartz and Hall-Cd authority",
+   "equation_ref": "Anderson PDF pp.671-672: energy17.15/continuity17.18; pp.675-678: chemically versus vibrationally frozen flow and mixture cp/cv17.20-17.25; p.682: thermally-perfect sound speed17.36. NASA SP-125 attribution not reviewed in this bounded comparison",
+   "validity_text": "fixed ideal-gas composition and R with bounded piecewise-linear cp(T); single-temperature thermal properties, no separate vibrational relaxation or equilibrium reaction contribution to cp; adiabatic, inviscid, isentropic quasi-one-dimensional flow; initial integrated-design use is Bezier-only and excludes MOC/Rao characteristics, equilibrium chemistry, boundary-layer/thermal/Bartz and Hall-Cd authority",
    "registry_status": "published_equations_with_repository_numerical_policy",
    "verification_text": "exact cp and cp/T segment-integral tests, sonic/energy/entropy/area/mass closure, constant-cp collapse, branch/inverse-pressure tests, strict provenance-schema and fingerprint tests",
    "validation_level": "software_verified_conservation_only_not_property_or_hardware_validated",
@@ -718,7 +1116,42 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "exact cp and cp/T segment-integral tests, sonic/energy/entropy/area/mass closure, constant-cp collapse, branch/inverse-pressure tests, strict provenance-schema and fingerprint tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "source_support_state_extracted": "PARTIALLY_SUPPORTED",
+   "source_support_state": "PARTIALLY_SUPPORTED",
+   "source_support_notes": "Anderson originalPDFpp671-672,675-678,682 supports conserved energy/continuity and thermally-perfect fixed-composition sound speed. Chemically frozen composition permits variable speciescp(T); bothchemical AND vibrationalfreezing is a separate calorically-perfect limit. The class consumes a precomputed mixturecp(T), rather than evaluating species sums17.22/25; reactivecp/cv terms17.20/21/23/24 and equilibrium sound17.35 are comparison citations only. Exact piecewise-linear interpolation/integration, propertyschema, bisection, cstar/Cf policies and NASA SP-125 attribution were not established by this boundedwindow. The entropy integral is a repository derivation from fixed-composition ideal-gas thermodynamics, not a displayed equation in this window. Scientific correctness and fixed-composition/internal-mode basis of suppliedcp grids, gridrefinement, external thermochemistry agreement and hardware validity remainunverified. Code now discloses single-temperature thermal properties and absent separate vibrational relaxation; no numerical computation changed.",
+   "source_support_equation_labels": [
+    "Anderson Eq. (17.15) nozzle enthalpy-to-kinetic-energy relation",
+    "Anderson Eq. (17.18) nozzle continuity area ratio",
+    "Anderson Eq. (17.36) frozen or thermally perfect sound speed"
+   ],
+   "source_support_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_comparison_equation_ids": [
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_182F4635",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_19ADDF30",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_349695C7",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_5E676594",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_6537643E",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB8EB3D8"
+   ]
   },
   {
    "id": "MODEL_PERFORMANCE_IDEAL_THRUST_COEFFICIENT",
@@ -747,7 +1180,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "closed-form identity and engine tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH",
@@ -756,11 +1206,11 @@
    "subsystem": "performance",
    "quantity": "Mach/area state",
    "relation": "A/Astar=f(M,gamma); p/p0 and T/T0 are isentropic functions",
-   "cited_source_text": "standard compressible-flow relations",
+   "cited_source_text": "White, Fluid Mechanics, 7th ed., Eqs. 9.26, 9.28 and 9.44",
    "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
    "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
    "source_kind": "corpus_pdf",
-   "equation_ref": "compressible-flow/nozzle chapters",
+   "equation_ref": "White PDF pp1090-1091,1099: temperature9.26, pressure/density9.28, area-Mach9.44",
    "validity_text": "calorically perfect, constant-gamma, one-dimensional isentropic flow",
    "registry_status": "published_equations",
    "verification_text": "inverse/forward identity and reference-value tests",
@@ -776,7 +1226,35 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "inverse/forward identity and reference-value tests",
+   "physical_validation_state": "UNKNOWN",
+   "source_support_state_extracted": "SUPPORTED",
+   "source_support_state": "SUPPORTED",
+   "source_support_notes": "Original White PDFpp1090-1091,1099 supplies temperature9.26, pressure/density9.28 and area-Mach9.44. raosim/gas_dynamics.py uses the reciprocal T/T0,p/p0,rho/rho0 forms and gamma in place of sourcek, algebraically equivalent under constant-gamma calorically perfect, one-dimensional isentropic conditions. This review supports these governing algebraic relations and source attribution only; it does not certify Newton inversion convergence, all input domains, variable-cp/real-gas models, runtime execution reach or physical validation.",
+   "source_support_equation_labels": [
+    "White Eq. (9.26) adiabatic stagnation temperature ratio",
+    "White Eq. (9.28a) isentropic stagnation pressure ratio",
+    "White Eq. (9.28b) isentropic stagnation density ratio",
+    "White Eq. (9.44) perfect-gas area-Mach relation"
+   ],
+   "source_support_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "source_comparison_equation_ids": []
   },
   {
    "id": "MODEL_PUMP_ANNULAR_EYE_FREE_AREA",
@@ -805,7 +1283,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "continuity, coefficient, blockage, shaft-fit, beta1 and CAD-identity tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PUMP_AUTO_EFFICIENCY_FLOW_HEAD",
@@ -834,7 +1329,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "bounds and monotonic-duty regression tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_PUMP_ELECTRIC_DRIVE",
@@ -842,12 +1354,12 @@
    "registry_id": "pump.electric_drive",
    "subsystem": "pump",
    "quantity": "motor/inverter/battery sizing",
-   "relation": "hydraulic power to shaft/electrical power to energy/current/mass",
+   "relation": "power/energy balance; motor shaft-output and inverter AC-output density masses",
    "cited_source_text": "energy balance with technology-specific efficiency and density inputs",
-   "local_source": "propulsion_texts/fuel_pump_design/s42405-020-00325-z.pdf",
+   "local_source": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
    "source_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
    "source_kind": "corpus_pdf",
-   "equation_ref": "electric-pump-fed engine package study",
+   "equation_ref": "Lee PDF pp. 6-8, Eqs. (20), (26)-(32); separate output-power densities",
    "validity_text": "screening assumptions; measured maps and pulse thermal data required",
    "registry_status": "derived_balance_with_repository_defaults",
    "verification_text": "power/energy identity and Lee reference-point tests",
@@ -863,7 +1375,46 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "source_support_state": "PARTIALLY_SUPPORTED",
+   "source_support_notes": "Lee PDF pp6-8 Eqs20,26-32 support the power and component-density relations. The Eq29 inverter-density convention mismatch was corrected on 2026-10-14 in NumPy and both MDO consumers: inverter mass now uses output power (motor input). Tests cover the calculated inverter estimate and efficiency invariance. Partial support remains: per-stream drives, default technologies/efficiencies/densities, bus selection and electrical/thermal screens are repository extensions. Case inputs are not universal constants; no experimental/hardware validation follows.",
+   "source_support_equation_labels": [
+    "Lee battery mass selection",
+    "Lee energy-limited battery mass",
+    "Lee inverter mass closure",
+    "Lee inverter output power density",
+    "Lee motor mass closure",
+    "Lee motor output power density",
+    "Lee power-limited battery mass",
+    "Lee pump shaft power"
+   ],
+   "source_support_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "power/energy identity and Lee reference-point tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "source_support_history": [
+    {
+     "state": "PARTIALLY_SUPPORTED",
+     "notes": "Lee PDF pp6-8 Eqs20,26-32 support the power and component-density relations. The Eq29 inverter-density convention mismatch was corrected on 2026-10-14 in NumPy and both MDO consumers: inverter mass now uses output power (motor input). Tests cover the calculated inverter estimate and efficiency invariance. Partial support remains: per-stream drives, default technologies/efficiencies/densities, bus selection and electrical/thermal screens are repository extensions. Case inputs are not universal constants; no experimental/hardware validation follows.",
+     "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+     "invalidated_because": "registry changed: relation, local_source, equation_ref"
+    }
+   ],
+   "source_support_state_extracted": "PARTIALLY_SUPPORTED"
   },
   {
    "id": "MODEL_PUMP_INDUCER_NPSH",
@@ -892,7 +1443,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "geometry identities and chart-point tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
@@ -921,7 +1489,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "velocity-triangle identity tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PUMP_SPLIT_CASING_JOINT",
@@ -951,7 +1536,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "two-solid validity, volume closure, tool access, bolt/flow clearance and STEP round-trip tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_PUMP_SYNTHETIC_MAP",
@@ -980,7 +1582,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "shape/bounds regression tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_REGEN_BOOLEAN_BREP",
@@ -1010,7 +1629,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "STEP re-import and passage-connectivity tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_SEPARATION_EMPIRICAL_ONSET",
@@ -1039,7 +1675,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "formula/provenance and trend tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2018_WATER_AIR",
@@ -1068,7 +1721,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "PDF SHA, schema/unit/origin, exact-row, duplicate-id, and readiness-blocker tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_TABLES_7_8",
@@ -1098,7 +1768,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "PDF SHA, schema/unit/origin, exact-table, anti-experimental-relabeling, and readiness-blocker tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_WATER_AIR",
@@ -1127,7 +1814,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "PDF SHA, revision-separation, exact-value, schema/unit/origin, and readiness-blocker tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_DETERMINISTIC_PARCEL_MARCH",
@@ -1156,7 +1860,40 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "explicit_analysis_api",
+      "root": "raosim.spray.solver.march_parcels",
+      "root_locator": {
+       "file": "raosim/spray/solver.py",
+       "line": 407,
+       "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+      },
+      "call_sites": [],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray.solver.march_parcels"
+    ],
+    "located_symbols": [
+     "raosim.spray.solver.march_parcels"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "manufactured ballistic/drag/wall/outlet/evaporation/breakup, determinism, sampling, and conservation tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_OPENFOAM13_EXTERNAL_GAP_VOF",
@@ -1185,7 +1922,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "fixture SHA, SI mapping, wedge mass-flux, dictionary-set, patch, hash, deterministic-writer, and fail-closed gate tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_PRESCRIBED_ONE_WAY_CARRIER",
@@ -1214,7 +1968,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "manufactured-field interpolation, axis regularity, domain-policy, and immutable-state tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_PRIMARY_GEOMETRY_DISPATCH",
@@ -1243,7 +2014,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "source mass/momentum identity, antipodal symmetry, geometry rejection, and primary-path gate tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_RAYLEIGH_TAYLOR_OPENFOAM",
@@ -1272,7 +2060,55 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "explicit_analysis_api",
+      "root": "raosim.spray.solver.march_parcels",
+      "root_locator": {
+       "file": "raosim/spray/solver.py",
+       "line": 407,
+       "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.spray.solver.march_parcels",
+        "callee": "raosim.spray.breakup.advance_breakup",
+        "file": "raosim/spray/solver.py",
+        "line": 594,
+        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+       },
+       {
+        "caller": "raosim.spray.breakup.advance_breakup",
+        "callee": "raosim.spray.breakup.rayleigh_taylor_metrics",
+        "file": "raosim/spray/breakup.py",
+        "line": 615,
+        "source_sha256": "1bd300e71249e74c0d42ea390e182b56c64aa15b81e29834ce124217cc7bcb6f"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray.breakup.rayleigh_taylor_metrics"
+    ],
+    "located_symbols": [
+     "raosim.spray.breakup.rayleigh_taylor_metrics"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "zero-forcing, timer, event-selection, diameter, and represented mass/momentum identity tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_SCHILLER_NAUMANN_DRAG",
@@ -1301,7 +2137,48 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "explicit_analysis_api",
+      "root": "raosim.spray.solver.march_parcels",
+      "root_locator": {
+       "file": "raosim/spray/solver.py",
+       "line": 407,
+       "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.spray.solver.march_parcels",
+        "callee": "raosim.spray.drag.drag_acceleration",
+        "file": "raosim/spray/solver.py",
+        "line": 527,
+        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray.drag.drag_acceleration"
+    ],
+    "located_symbols": [
+     "raosim.spray.drag.drag_acceleration"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "Stokes limit, zero-slip, high-Re branch, sign, and vector-acceleration tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_SEEDED_DISCRETE_RANDOM_WALK",
@@ -1331,7 +2208,28 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [
+     "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+    ],
+    "located_symbols": [
+     "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "same-seed reproducibility, eddy-lifetime, laminar no-RNG-consumption, and invalid-turbulence-state tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_SPALDING_EVAPORATION_EQ16",
@@ -1360,7 +2258,55 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "explicit_analysis_api",
+      "root": "raosim.spray.solver.march_parcels",
+      "root_locator": {
+       "file": "raosim/spray/solver.py",
+       "line": 407,
+       "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.spray.solver.march_parcels",
+        "callee": "raosim.spray.evaporation.advance_evaporation",
+        "file": "raosim/spray/solver.py",
+        "line": 623,
+        "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+       },
+       {
+        "caller": "raosim.spray.evaporation.advance_evaporation",
+        "callee": "raosim.spray.evaporation.evaporation_rate_2021",
+        "file": "raosim/spray/evaporation.py",
+        "line": 285,
+        "source_sha256": "cfeeb7cff6e82f56d2816d36dedc7eeff96fb58460ab97b06bee4fe9a80f778b"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray.evaporation.evaporation_rate_2021"
+    ],
+    "located_symbols": [
+     "raosim.spray.evaporation.evaporation_rate_2021"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "Eq.-16 sign/area identity, Sh/Re/Sc limits, frozen-step d-squared integration, and local mass/momentum source-demand tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_TYPED_CYCLE_HANDOFF",
@@ -1389,7 +2335,40 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "explicit_analysis_api",
+      "root": "raosim.spray.handoff.build_cycle_handoff",
+      "root_locator": {
+       "file": "raosim/spray/handoff.py",
+       "line": 260,
+       "source_sha256": "f13ad98a657b69b9fcd1ac9148f7c5a6abe42f0d0adc2f1b793ca6207951fce2"
+      },
+      "call_sites": [],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.spray.handoff.build_cycle_handoff"
+    ],
+    "located_symbols": [
+     "raosim.spray.handoff.build_cycle_handoff"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "gas/liquid representation, stale-field fingerprint, role/flow identity, source-hash, serialization, and fail-closed gate tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_VOF_TO_LAGRANGIAN_HANDOFF",
@@ -1418,7 +2397,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "immutability, fingerprint, full-thickness, variation, carrier-domain, four-refinement, mass/momentum and conversion-block tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2018",
@@ -1448,7 +2444,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "equation-identity, radius/diameter, coefficient-selection, breakup-relaxation, and conservation tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2021",
@@ -1478,7 +2491,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "coefficient-selection, VOF half-thickness calibration, equation-identity, time-march, and mass/momentum identity tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_SPRAY_WEIGHTED_SMD_ROSIN_RAMMLER",
@@ -1507,7 +2537,28 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [
+     "raosim.spray.statistics.summarize_spray"
+    ],
+    "located_symbols": [
+     "raosim.spray.statistics.summarize_spray"
+    ],
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "analytic weighted-d32 identities, known-distribution RR recovery, percentile, convention, and seeded-sampling tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_STRUCTURE_SP125_LINER_STRESS",
@@ -1536,7 +2587,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "independent equation reconstruction tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_STRUCTURE_STRAIN_LIFE",
@@ -1565,7 +2633,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "synthetic-coefficient equation tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THERMAL_BARTZ",
@@ -1594,7 +2679,69 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "optimizer",
+      "root": "raosim.mdo.nlp._make_callables.solve",
+      "root_locator": {
+       "file": "raosim/mdo/nlp.py",
+       "line": 766,
+       "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.mdo.nlp._make_callables.solve",
+        "callee": "raosim.mdo.engine.solve_engine",
+        "file": "raosim/mdo/nlp.py",
+        "line": 767,
+        "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+       },
+       {
+        "caller": "raosim.mdo.engine.solve_engine",
+        "callee": "raosim.mdo.cooling.solve_cooling",
+        "file": "raosim/mdo/engine.py",
+        "line": 345,
+        "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+       },
+       {
+        "caller": "raosim.mdo.cooling.solve_cooling",
+        "callee": "raosim.mdo.cooling.cooling_march",
+        "file": "raosim/mdo/cooling.py",
+        "line": 527,
+        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+       },
+       {
+        "caller": "raosim.mdo.cooling.cooling_march",
+        "callee": "raosim.jax.thermal.bartz_hg",
+        "file": "raosim/mdo/cooling.py",
+        "line": 339,
+        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.jax.thermal.bartz_hg"
+    ],
+    "located_symbols": [
+     "raosim.jax.thermal.bartz_hg"
+    ],
+    "optimizer_reach_state": "STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "exponent transcription and magnitude tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THERMAL_CHF",
@@ -1623,7 +2770,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "finite/bounds and margin tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_THERMAL_DARCY_PRESSURE_LOSS",
@@ -1652,7 +2816,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "equation and limiting-regime tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_THERMAL_FIN_EFFICIENCY",
@@ -1681,7 +2862,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "limiting-behavior tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THERMAL_RADIATION",
@@ -1710,7 +2908,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "sign, bounds and energy-accounting tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THERMAL_RECTANGULAR_LAMINAR_NUSSELT",
@@ -1739,7 +2954,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "limiting-aspect-ratio tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_THERMAL_SIEDER_TATE",
@@ -1768,7 +3000,69 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "routes": [
+     {
+      "scope": "optimizer",
+      "root": "raosim.mdo.nlp._make_callables.solve",
+      "root_locator": {
+       "file": "raosim/mdo/nlp.py",
+       "line": 766,
+       "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+      },
+      "call_sites": [
+       {
+        "caller": "raosim.mdo.nlp._make_callables.solve",
+        "callee": "raosim.mdo.engine.solve_engine",
+        "file": "raosim/mdo/nlp.py",
+        "line": 767,
+        "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+       },
+       {
+        "caller": "raosim.mdo.engine.solve_engine",
+        "callee": "raosim.mdo.cooling.solve_cooling",
+        "file": "raosim/mdo/engine.py",
+        "line": 345,
+        "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+       },
+       {
+        "caller": "raosim.mdo.cooling.solve_cooling",
+        "callee": "raosim.mdo.cooling.cooling_march",
+        "file": "raosim/mdo/cooling.py",
+        "line": 527,
+        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+       },
+       {
+        "caller": "raosim.mdo.cooling.cooling_march",
+        "callee": "raosim.jax.thermal.sieder_tate_hc",
+        "file": "raosim/mdo/cooling.py",
+        "line": 374,
+        "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+       }
+      ],
+      "state": "STATIC_POSSIBLE_CALL_PATH"
+     }
+    ],
+    "mapped_symbols": [
+     "raosim.jax.thermal.sieder_tate_hc"
+    ],
+    "located_symbols": [
+     "raosim.jax.thermal.sieder_tate_hc"
+    ],
+    "optimizer_reach_state": "STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "equation and trend tests",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THERMOCHEMISTRY_ROCKETCEA_SNAPSHOT",
@@ -1797,7 +3091,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "adapter/plumbing tests; real CEA regression still required",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED"
   },
   {
    "id": "MODEL_THROAT_HALL_DISCHARGE_COEFFICIENT",
@@ -1826,7 +3137,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "forward/inverse regression tests",
+   "physical_validation_state": "UNKNOWN"
   },
   {
    "id": "MODEL_TRAJECTORY_VERTICAL_POINT_MASS",
@@ -1855,7 +3183,24 @@
    "provenance_kind": "PROJECT_DERIVES",
    "provenance_note": "raosim/model_registry.py entry; implementation-state authority. Scientific authority is the cited source document.",
    "extraction_version": "1.0.1",
-   "harvested_at": "2026-09-20T22:58:11.628946+00:00"
+   "harvested_at": "2026-10-16T18:20:18.327775+00:00",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "basis_class_basis": "keyword heuristic from registry status; original source review remains separate",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "routes": [],
+    "mapped_symbols": [],
+    "located_symbols": [],
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "dynamic_dispatch_state": "UNKNOWN",
+    "optimizer_leverage_state": "NOT_MEASURED",
+    "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+   },
+   "verification_kinds_basis": "registry-reported verification types; not independently executed by the harvester",
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "software_verification_scope": "constant-acceleration and integrated-dv tests",
+   "physical_validation_state": "UNKNOWN"
   }
  ]
 }

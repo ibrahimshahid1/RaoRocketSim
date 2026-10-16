@@ -25,7 +25,7 @@ def test_design_vector_pytree_roundtrip():
     x = DesignVector(Pc=jnp.asarray(3.0e6), eps=jnp.asarray(8.0),
                      dp_f_frac=jnp.asarray(0.2), dp_o_frac=jnp.asarray(0.2))
     leaves, treedef = jax.tree_util.tree_flatten(x)
-    assert len(leaves) == 11          # 10 hardware vars + O/F
+    assert len(leaves) == 13          # 12 hardware vars + O/F
     x2 = jax.tree_util.tree_unflatten(treedef, leaves)
     assert float(x2.eps) == 8.0
     # ``layout`` is pytree AUX, not a leaf, so it survives the
@@ -50,7 +50,8 @@ def test_design_vector_pytree_roundtrip():
     assert float(x4.film_frac) == pytest.approx(0.0)
     assert DesignVector.names() == (
         "Pc", "eps", "dp_f_frac", "dp_o_frac", "D_pintle", "N_rpm",
-        "channel_width", "channel_height", "film_frac", "t_wall", "OF")
+        "channel_width", "channel_height", "film_frac", "t_wall",
+        "t_post", "D_cg", "OF")
     # Compatibility construction no longer creates a numerical sentinel.
     assert x4.of_is_variable is False
     assert float(x4.OF) == pytest.approx(MissionSpec().OF)
@@ -63,15 +64,15 @@ def test_explicit_layout_separates_active_and_contract_vectors():
     x = DesignVector.from_active_array(active, layout, fixed_of=mission.OF)
 
     assert layout == DesignLayout.fixed_of()
-    assert x.to_active_array().shape == (10,)
-    assert x.to_contract_array().shape == (11,)
+    assert x.to_active_array().shape == (12,)
+    assert x.to_contract_array().shape == (13,)
     assert float(x.to_contract_array()[-1]) == pytest.approx(mission.OF)
 
     variable_layout = DesignLayout.variable_of()
     variable = DesignVector.from_active_array(
         jnp.concatenate([active, jnp.asarray([2.6])]), variable_layout
     )
-    assert variable.to_active_array().shape == (11,)
+    assert variable.to_active_array().shape == (13,)
     assert float(variable.to_contract_array()[-1]) == pytest.approx(2.6)
 
 
@@ -79,14 +80,14 @@ def test_scaled_space_roundtrip_and_membership():
     space = default_design_space()
     S = ScaledSpace.from_specs(space)
     x = jnp.asarray([3.0e6, 8.0, 0.2, 0.25, 0.020, 3.0e4, 5.0e-4, 1.5e-3, 0.1,
-                     8.0e-4])
+                     8.0e-4, 1.5e-3, 0.017])
     z = S.to_unit(x)
     assert np.all((np.asarray(z) >= 0) & (np.asarray(z) <= 1))
     x2 = S.to_physical(z)
     np.testing.assert_allclose(np.asarray(x2), np.asarray(x), rtol=1e-14)
     assert bool(S.contains(x))
     bad = jnp.asarray([9.9e6, 8.0, 0.2, 0.25, 0.020, 3.0e4, 5.0e-4, 1.5e-3, 0.1,
-                       8.0e-4])
+                       8.0e-4, 1.5e-3, 0.017])
     assert not bool(S.contains(bad))
 
 
@@ -153,14 +154,15 @@ def test_phase1_gate_jit_and_jacobians_no_callbacks():
         x = DesignVector.from_active_array(
             S.to_physical(z), layout, fixed_of=mission.OF
         )
-        # algebra spanning all ten fields, smooth in the box
+        # algebra spanning all twelve fields, smooth in the box
         return (x.Pc / 1e6) ** 0.8 * jnp.sqrt(x.eps) \
             + 10.0 * x.dp_f_frac * x.dp_o_frac \
             + 1.0e3 * x.D_pintle + x.N_rpm / 1.0e5 \
             + 1.0e3 * x.channel_width + 1.0e2 * x.channel_height \
-            + 2.0 * x.film_frac + 1.0e2 * x.t_wall
+            + 2.0 * x.film_frac + 1.0e2 * x.t_wall \
+            + 1.0e2 * x.t_post + 10.0 * x.D_cg
 
-    z0 = jnp.full((10,), 0.5)
+    z0 = jnp.full((len(space),), 0.5)
     v = evaluate(z0)
     assert np.isfinite(float(v))
     g_fwd = jax.jacfwd(evaluate)(z0)

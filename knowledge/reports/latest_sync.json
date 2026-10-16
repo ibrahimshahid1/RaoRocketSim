@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-20T22:58:09.663672+00:00",
- "pdf_count": 280,
+ "generated_at": "2026-10-16T18:20:16.530064+00:00",
+ "pdf_count": 286,
  "manifest_rows": 286,
  "synchronized": [
   {
@@ -1030,6 +1030,42 @@
    "evidence": "manifest_sha256"
   },
   {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.md",
+   "sha256": "63e7e0a347ea9fda94ec58bc147cf1e45f334b06383e9d7b7604932f82bfe3af",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.md",
+   "sha256": "d178282905f409036e954b833068bc076674d49b0f2e0b4cc17a6ff1ce95e422",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.md",
+   "sha256": "8585e7476132d6268a766b52c801cdb674e6bfade6108468cc797133a322db51",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.md",
+   "sha256": "b8918d2d8c7834738c043b73e8c57b0afacc59c56c02e8882582a37f850abc1d",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.md",
+   "sha256": "e0591704cd2f971d2a59a3b7b6786d2261adc9b63a22d2f3eeb757f0ef8a985e",
+   "evidence": "manifest_sha256"
+  },
+  {
+   "pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.pdf",
+   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.md",
+   "sha256": "c4af6396fc1e9841f7811819d275806a11831d3944cd672608110d42b2b4aa5d",
+   "evidence": "manifest_sha256"
+  },
+  {
    "pdf": "propulsion_texts/materials_science/bhat2016.pdf",
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/bhat2016.md",
    "sha256": "41efe00c9aa538426adaac4510ebeacee43409205e0592cb88e3240d854095e6",
@@ -1682,42 +1718,6 @@
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/whitfield1982.md",
    "sha256": "c86691b8b0c742ea0b5eefbc03968775759b7db22ed3e0402c97743f98f813d8",
    "evidence": "manifest_sha256"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.md",
-   "sha256": "63e7e0a347ea9fda94ec58bc147cf1e45f334b06383e9d7b7604932f82bfe3af",
-   "evidence": "manifest_archive_member"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.md",
-   "sha256": "d178282905f409036e954b833068bc076674d49b0f2e0b4cc17a6ff1ce95e422",
-   "evidence": "manifest_archive_member"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.md",
-   "sha256": "8585e7476132d6268a766b52c801cdb674e6bfade6108468cc797133a322db51",
-   "evidence": "manifest_archive_member"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.md",
-   "sha256": "b8918d2d8c7834738c043b73e8c57b0afacc59c56c02e8882582a37f850abc1d",
-   "evidence": "manifest_archive_member"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.md",
-   "sha256": "e0591704cd2f971d2a59a3b7b6786d2261adc9b63a22d2f3eeb757f0ef8a985e",
-   "evidence": "manifest_archive_member"
-  },
-  {
-   "pdf": "materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080.zip::The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.pdf",
-   "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.md",
-   "sha256": "c4af6396fc1e9841f7811819d275806a11831d3944cd672608110d42b2b4aa5d",
-   "evidence": "manifest_archive_member"
   }
  ],
  "missing_markdown": [],
@@ -1727,11 +1727,14 @@
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md",
    "reason": "no source PDF at the mirrored path and no manifest row",
    "manifest_row": false
-  },
+  }
+ ],
+ "mirrored_reference_notes": [
   {
    "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
-   "reason": "no source PDF at the mirrored path and no manifest row",
-   "manifest_row": false
+   "source_note": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
+   "sha256": "55fdb7e56f72a9d7cbeaf9036431207cd52328b07a64bf904e84c11e921e20f8",
+   "authority": "human-authored bibliography; not a PDF-derived scientific assertion"
   }
  ],
  "weak_mapping": [],

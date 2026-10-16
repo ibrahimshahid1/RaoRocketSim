@@ -1,5 +1,5 @@
 {
- "ontology_version": "1.0.0",
+ "ontology_version": "1.1.0",
  "extraction_version": "1.0.1",
  "node_types": [
   "Document",
@@ -11,6 +11,7 @@
   "Citation",
   "SourceReference",
   "ProvenanceRecord",
+  "ExtractionCandidate",
   "Concept",
   "PhysicalQuantity",
   "Variable",
@@ -243,6 +244,7 @@
   "Capability": "CAP",
   "RepositoryDocument": "RDOC",
   "ProvenanceRecord": "PROV",
+  "ExtractionCandidate": "CAND",
   "EmpiricalConstant": "CONST",
   "Subsystem": "SUB"
  }

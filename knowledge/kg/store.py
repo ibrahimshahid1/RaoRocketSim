@@ -34,6 +34,8 @@ STORE_FILES = {
     "tests": "tests.json",
     "capabilities": "capabilities.json",
     "ingestion_state": "ingestion_state.json",
+    "artifacts": "artifacts.json",
+    "enrichments": "enrichments.json",
 }
 
 VECTOR_DIR = KNOWLEDGE_ROOT / "vector_index"
@@ -66,8 +68,35 @@ def load_meta(name: str) -> dict:
     return data.get("meta", {}) if isinstance(data, dict) else {}
 
 
+class DuplicateRecordIdError(ValueError):
+    """Conflicting records must be consolidated or resolved before persistence."""
+
+    def __init__(self, key: str, value, records: list[dict]):
+        self.key, self.value, self.records = key, value, records
+        super().__init__(f"Conflicting duplicate {key}={value!r}; resolve identity or preserve survey facets before saving.")
+
+
+def _unique_records(records: Iterable[dict], key: str) -> list[dict]:
+    unique, seen = [], {}
+    for record in records:
+        if key not in record:
+            unique.append(record)
+            continue
+        value = record[key]
+        encoded = json.dumps(record, sort_keys=True, ensure_ascii=False)
+        if value in seen:
+            previous, previous_encoded = seen[value]
+            if encoded != previous_encoded:
+                raise DuplicateRecordIdError(key, value, [previous, record])
+            continue  # byte-equivalent JSON records add no distinct evidence
+        seen[value] = (record, encoded)
+        unique.append(record)
+    return unique
+
+
 def save(name: str, records: Iterable[dict], meta: dict | None = None, key: str = "id") -> Path:
-    records = sorted(records, key=lambda r: str(r.get(key, "")))
+    # Validate before creating/replacing files; never silently pick a facet.
+    records = sorted(_unique_records(records, key), key=lambda r: str(r.get(key, "")))
     path = store_path(name)
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {"meta": meta or {}, "records": records}
@@ -80,9 +109,9 @@ def save(name: str, records: Iterable[dict], meta: dict | None = None, key: str 
 
 def upsert(name: str, new_records: Iterable[dict], key: str = "id", meta: dict | None = None) -> int:
     """Insert-or-replace by id.  Returns number of records written."""
-    existing = {r[key]: r for r in load(name) if key in r}
+    existing = {r[key]: r for r in _unique_records(load(name), key) if key in r}
     n = 0
-    for rec in new_records:
+    for rec in _unique_records(new_records, key):
         existing[rec[key]] = rec
         n += 1
     save(name, existing.values(), meta=meta or load_meta(name), key=key)

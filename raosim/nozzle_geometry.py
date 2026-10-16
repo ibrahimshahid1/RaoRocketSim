@@ -43,6 +43,18 @@ _LPCT_VALS = np.array([60, 70, 80, 90, 100], dtype=float)
 #  Magnitude cross-check from that paper (pp. 1490-1491): optimal wall
 #  angles "about 28° to 30°" downstream of the throat, exit inclination
 #  "about 10° to 14°" — consistent with these tables' mid-grid values.
+#
+#  ADJUDICATION NOTE (2026-10-16, open; values deliberately unchanged): the
+#  "verified" claim above is NOT supported by the held text.  Rao 1960 (the
+#  cited chart paper) is not in propulsion_texts/.  The held charts are
+#  graphs only -- SP-125 Fig. 4-14 (PDF p. 100) and SP-8120 Fig. 5(b) (PDF
+#  p. 29) -- and the one numeric readout in the held text, the SP-125 worked
+#  example (sec. 4.3, PDF p. 107: ε = 14, L_f = 0.8 -> θ_n = 27.4°,
+#  θ_e = 9.8°), disagrees with these tables, which give 31.6° and 16.7° there.
+#  Both held charts also show θ_e FALLING with ε at fixed L_f, whereas this
+#  θ_e table rises.  The MDO contour (raosim.mdo.grid) uses the same tables.
+#  Only the chart EXTENT (ε 4-50, L_f 60-100 %) is cited as a validity
+#  domain; the ordinates need an owner decision before they are relabelled.
 _THETA_N_TABLE = np.array([
     # L%:  60     70     80     90    100           ε
     [33.0, 28.5, 25.0, 22.5, 20.5],  #  4

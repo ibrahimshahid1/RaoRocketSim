@@ -62,6 +62,7 @@ knowledge/
   requirements.json    requirement / optimizer-constraint / postsolve-gate / diagnostic records (see §7)
   relationships.json   optional cross-store typed edges not owned by a single record; absent means empty
   provenance.json      one ProvenanceRecord per asserted object (who asserts it, where, verified how)
+  artifacts.json       observed input/layout, CAD, producer-report and reference-process snapshots
   ingestion_state.json per-document current states (also in reports/latest_ingestion.json)
   graph/graph.json     assembled graph (view over the stores) ; graph.graphml (export, gitignored)
   vector_index/        chunks.sqlite (FTS5) + LSA vectors — DERIVED, gitignored, rebuild with `kg.sh rebuild`
@@ -153,6 +154,7 @@ find_equations(concept)  get_equation(id)
 find_claims(subject, predicate=None, obj=None)  get_claim_sources(id)
 find_models(concept)  get_model(id)  find_validity_conditions(model)
 find_requirements(q)  compare_sources(q)
+find_artifacts(q)  get_artifact(id)
 find_implementation(scientific_id)  find_scientific_basis(software_ref)
 retrieve_for_task(task)                      # the primary interface
 ```
@@ -240,8 +242,10 @@ Render a page with `gs -sDEVICE=png16m -r150 -dFirstPage=N -dLastPage=N -o out.p
 
 ## 10. Known limitations (current build)
 
-* Equation transcription is from Markdown renderings; OCR/rendering damage is flagged
-  (`extraction_note`, `confidence`) but symbols are not reconstructed. The PDF is the reference.
+* Initial equation transcription used Markdown renderings; OCR/rendering damage is flagged
+  (`extraction_note`, `confidence`). Bounded Docling candidates can be corrected only by
+  original-PDF comparison with source/page provenance and retained supersession history.
+  Parser output is not automatically a verified equation. The PDF is the reference.
 * Semantic retrieval is LSA over this corpus (no neural embeddings, no network); paraphrase recall
   is reasonable within propulsion vocabulary, weak for concepts absent from the corpus.
 * Literature extraction is partial. Consult `kg.sh pending` and `reports/extraction_queue.json`
@@ -273,3 +277,43 @@ while removing active scientific support. Refuted and stale records remain
 inspectable by ID. Missing vectors are explicitly reported as a lexical-only
 fallback. Model source-support checks and independent verification remain
 separate, visible states in task context.
+
+## 12. Engineering artifact observations
+
+Use `kg.sh artifacts "<query>"`, `kg.sh artifact ID`, or `kg.sh sources ID` for
+report/configuration/CAD records. Task context also returns `engineering_artifacts`.
+Read scope, source locator, binding state, and qualification state before use.
+Only two existing producer-report formats are harvested from local `builds/`;
+the graph is not an inventory of every possible output file.
+
+Input and injector-layout snapshots are not globally identified engine designs.
+Their payload-selection metadata reproduces the snapshot hash from the source
+report. Current CAD byte hashes do not prove which generation-time configuration
+produced them. Stored topology inspections remain unverified report assertions.
+`BOUND_TO_CONFIGURATION` with `binding_state=UNKNOWN` is only a same-report
+association. ManufacturingProcess nodes are reference plans with unavailable
+execution evidence. Never promote simulated outputs into Measurement, Experiment,
+Calibration, executed manufacturing, or qualification records.
+
+Full rebuild marks changed/disappeared snapshots inactive, retaining history and
+excluding their old graph associations. Observations are from the last rebuild;
+refresh before relying on current artifact existence. Exported stores may reference
+ignored local build files which will be unavailable on another checkout.
+
+## 13. Docling derivatives and audit states
+
+`tools/docling_enrich.py` runs local formula/table processing on one bounded source
+window. Raw JSON, model versions/revisions, source hashes, original page numbers
+and bounding boxes are retained separately from reviewed Markdown. `enrichments.json`
+contains parser candidates and typed table/figure observations, not automatic
+scientific support. Inspect `kg.sh enrichments` and `kg.sh coverage --documents`.
+Use `tools/docling_batch.py` for a checkpointed plan or bounded sequential jobs.
+Reject contaminated crops and malformed scan notation; inspect the original PDF.
+Explicit source corrections preserve superseded records and parser failures as
+history. A processing ledger never certifies all equations/concepts were extracted.
+
+`execution_reach` is bounded AST evidence, with runtime/leverage explicitly unmeasured
+unless a separate run supplies evidence. Registry keyword hints remain labeled.
+Code locator/body freshness is separate from implementation-versus-literature review.
+Historical model reviews without source fingerprints remain visible but do not
+establish current support. Missing source/threshold evidence stays unresolved.

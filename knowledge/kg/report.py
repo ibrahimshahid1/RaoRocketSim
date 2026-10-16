@@ -29,6 +29,7 @@ def render() -> str:
               f"- PDFs on disk: {sync.get('pdf_count', '?')}; conversion rows: {sync.get('manifest_rows', '?')}; "
               f"synchronized: {len(sync.get('synchronized', []))}; missing Markdown: {len(sync.get('missing_markdown', []))}; "
               f"stale: {len(sync.get('stale_markdown', []))}; orphan Markdown: {len(sync.get('orphan_markdown', []))}; "
+              f"classified reference-note mirrors: {len(sync.get('mirrored_reference_notes', []))}; "
               f"duplicate payload groups: {len(sync.get('duplicate_payloads', {}))}",
               f"- Unique documents: {len(docs)}; alternate copies: {sum(1 for d in docs if d.get('alternate_copy_of'))}",
               f"- Conversion status: {dict(Counter(d['conversion']['status'] for d in docs))}",
@@ -37,9 +38,28 @@ def render() -> str:
     idx = ing.get("steps", {}).get("index", {})
     lines += ["## Chunks and index", "", f"- {ch}", f"- {idx}", ""]
     lines += ["## Knowledge stores", ""]
-    for name in ("models", "validity", "equations", "claims", "entities", "software_links", "tests", "capabilities", "requirements", "repo_documents", "relationships", "provenance"):
+    for name in ("models", "validity", "equations", "claims", "entities", "software_links", "tests", "capabilities", "requirements", "repo_documents", "relationships", "provenance", "artifacts", "enrichments"):
         lines.append(f"- {name}: {len(load(name))}")
     lines.append("")
+    canonical = {d['id'] for d in docs if not d.get('alternate_copy_of')}
+    extracted = {r.get('document_id') for name in ('equations', 'claims', 'entities', 'validity')
+                 for r in load(name) if r.get('document_id') and r.get('source_state') != 'STALE_SOURCE'}
+    lines += ["## Scientific coverage", "",
+              f"- Canonical publications: {len(canonical)}; with current extracted objects: {len(canonical & extracted)}; without: {len(canonical - extracted)}",
+              f"- Independent source-object verification: {dict(Counter(r.get('verification', 'NOT_CHECKED') for r in eqs + cls))}",
+              "- A confirmed source transcription does not validate an implementation or hardware.", ""]
+    from .coverage import summary as coverage_summary
+    from .enrichment import queue as enrichment_queue
+    coverage = coverage_summary()
+    lines += [f"- Equation/concept completeness: {coverage['equation_completeness']}; current model reviews with source fingerprints: {coverage['models']['source_reviewed_current_fingerprint']}/{len(models)}.",
+              f"- Explicitly incomplete equation transcriptions: {coverage['incomplete_formula_transcriptions']['current_count']} (quarantined from implementation edges).",
+              f"- Docling processing coverage: {enrichment_queue()['summary']}; parser candidates require original-page review.", ""]
+    active_artifacts = [r for r in load('artifacts') if r.get('active', True) and r.get('type') != 'ArtifactLink']
+    lines += ["## Engineering evidence", "",
+              f"- Active report snapshots by type: {dict(Counter(r['type'] for r in active_artifacts))}",
+              f"- CAD references with observed bytes: {sum(r.get('type') == 'CADArtifact' and bool(r.get('observed_sha256')) for r in active_artifacts)}",
+              "- Configurations are serialized input/layout snapshots. CAD hashes describe observed current bytes; generation-time configuration binding remains unknown.",
+              "- Manufacturing records are reference plans. No measurement, experiment, calibration, or executed manufacturing is inferred from simulation outputs.", ""]
     lines += ["## Model registry ↔ source support (extraction pass)", ""]
     sup = Counter(m.get("source_support_state", "NOT_CHECKED") for m in models)
     lines.append(f"- {dict(sup)}")
@@ -50,7 +70,7 @@ def render() -> str:
     lines += ["## Extraction grounding", "",
               f"- grounded: {ext.get('grounded')}, page-shifted: {ext.get('page_shifted')}, ungrounded (dropped): {ext.get('n_ungrounded')}",
               f"- equations: {len(eqs)} (confirmed {sum(1 for e in eqs if e.get('verification')=='CONFIRMED')}, refuted {sum(1 for e in eqs if e.get('verification')=='REFUTED')}), "
-              f"claims: {len(cls)}, validity statements from sources: {sum(1 for v in load('validity') if v.get('provenance_kind')=='SOURCE_STATES')}",
+              f"claims: {len(cls)} (confirmed {sum(c.get('verification') == 'CONFIRMED' for c in cls)}), validity statements from sources: {sum(1 for v in load('validity') if v.get('provenance_kind')=='SOURCE_STATES')}",
               ""]
     if ext.get("ungrounded"):
         lines.append("Dropped (anchor not found):")
@@ -61,13 +81,13 @@ def render() -> str:
               f"- stats: {json.dumps(val.get('summary', {}).get('stats', {}), default=str)[:1200]}", ""]
     caps = load("capabilities")
     lines += ["## Explicitly unavailable / blocked", "", f"- {dict(Counter(c['state'] for c in caps))}", ""]
-    consts = [s for s in load("software_links") if s.get("type") == "EmpiricalConstant"]
+    consts = [s for s in load("software_links") if s.get("type") == "EmpiricalConstant" and s.get("active", True)]
     lines += ["## Hard-coded constants by basis", "", f"- {dict(Counter(k['basis_class'] for k in consts))}", ""]
     unk = [k for k in consts if k["basis_class"] == "UNKNOWN_BASIS"]
     lines.append(f"UNKNOWN_BASIS constants ({len(unk)}), first 30:")
     for k in unk[:30]:
         lines.append(f"  - {k['file']}:{k['line']} `{k['name']}` = {k['value']}")
-    return "\n".join(lines) + "\n"
+    return "\n".join(line.rstrip() for line in lines) + "\n"
 
 
 def write() -> str:

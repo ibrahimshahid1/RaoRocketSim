@@ -494,6 +494,63 @@ def _default_coolant_inlet_temperature(coolant: str) -> float:
     return default_coolant_inlet_temperature(coolant)
 
 
+#: Traditional pump-sizing burn time when ``--burn-time`` is absent.  The MDO
+#: paths do NOT use it: they keep ``MissionSpec.burn_time`` (120 s) unless the
+#: flag is given (MDO issues audit 2026-10-16, §1.4 item 23).
+_TRADITIONAL_BURN_TIME_DEFAULT_S = 10.0
+
+#: CLI flag attribute -> raosim.electric_technology set field (same names).
+_ELECTRIC_FLAG_FIELDS = (
+    "motor_efficiency", "inverter_efficiency", "motor_power_density",
+    "inverter_power_density", "battery_energy_density",
+    "battery_power_density", "battery_discharge_efficiency",
+    "battery_structural_margin",
+)
+
+
+def _traditional_burn_time(args) -> float:
+    value = getattr(args, "burn_time", None)
+    return _TRADITIONAL_BURN_TIME_DEFAULT_S if value is None else float(value)
+
+
+def _electric_technology_choices() -> tuple[str, ...]:
+    from raosim.electric_technology import electric_technology_ids
+
+    return electric_technology_ids()
+
+
+def _apply_electric_technology(args) -> None:
+    """Resolve ``--electric-technology`` into the per-field electric flags.
+
+    Flags the user typed explicitly win and make the set ``custom``; every
+    other electric flag takes the selected (or default) set's value, so the
+    traditional sizing and the MDO mission read one technology.
+    """
+    from raosim.electric_technology import (
+        CUSTOM_ELECTRIC_TECHNOLOGY_ID,
+        DEFAULT_ELECTRIC_TECHNOLOGY_ID,
+        get_electric_technology,
+    )
+
+    technology = get_electric_technology(
+        getattr(args, "electric_technology", None)
+        or DEFAULT_ELECTRIC_TECHNOLOGY_ID
+    )
+    # The eight flags default to None, so "explicit" is exact even for an
+    # abbreviated option spelling.
+    explicit = tuple(
+        name for name in _ELECTRIC_FLAG_FIELDS
+        if getattr(args, name, None) is not None
+    )
+    for name in _ELECTRIC_FLAG_FIELDS:
+        if name not in explicit:
+            setattr(args, name, float(getattr(technology, name)))
+    args._explicit_electric_fields = explicit
+    args._electric_technology_id = (
+        CUSTOM_ELECTRIC_TECHNOLOGY_ID if explicit else technology.id
+    )
+
+
 def _argument_present(argv: list[str], option: str) -> bool:
     return any(arg == option or arg.startswith(option + "=") for arg in argv)
 
@@ -848,7 +905,7 @@ def _pump_spec_from_args(args):
             max_mass_fraction=args.battery_max_mass_fraction,
             vehicle_mass=args.vehicle_mass,
         ),
-        burn_time=args.burn_time,
+        burn_time=_traditional_burn_time(args),
         pump_efficiency={
             "fuel": args.pump_efficiency_fuel,
             "oxidizer": args.pump_efficiency_oxidizer,
@@ -1212,7 +1269,7 @@ def _interactive(args) -> None:
                 "Pump maximum speed [rpm]", args.pump_max_rpm
             )
             args.burn_time = _prompt(
-                "Burn time for battery sizing [s]", args.burn_time
+                "Burn time for battery sizing [s]", _traditional_burn_time(args)
             )
             args.motor_voltage = _prompt_optional_float(
                 "Motor DC bus voltage [V] (blank = auto)", args.motor_voltage
@@ -1729,7 +1786,10 @@ def _interactive_engine_mdo(args, *, optimise: bool) -> None:
                                  args.target_thrust or 13000.0)
     args.mixture_ratio = _prompt("Mixture ratio O/F",
                                  args.mixture_ratio or 2.27)
-    args.burn_time = _prompt("Burn time [s]", args.burn_time or 120.0)
+    args.burn_time = _prompt(
+        "Burn time [s]",
+        args.burn_time if args.burn_time is not None else _mdo_default_burn_time(),
+    )
     args.engine_mdo_ambient = _prompt(
         "Ambient pressure [Pa]  (101325 = sea level, ~1000 = high altitude)",
         args.engine_mdo_ambient if args.engine_mdo_ambient is not None
@@ -1889,6 +1949,52 @@ def _resolve_mdo_of_intent(args, *, optimization_capable: bool):
     return mode, ratio
 
 
+def _requirement_flight_duration(args) -> dict:
+    """``--flight-duration``, else ``--burn-time``, else the requirement
+    default (120 s, the MissionSpec value) -- never the traditional 10 s."""
+    for name in ("flight_duration", "burn_time"):
+        value = getattr(args, name, None)
+        if value is not None:
+            return {"flight_duration": float(value)}
+    return {}
+
+
+def _mdo_electric_overrides(args) -> dict:
+    """MissionSpec electric fields from the same technology the traditional
+    sizing uses (``--electric-technology`` plus any explicit per-field flag)."""
+    from raosim.electric_technology import (
+        CUSTOM_ELECTRIC_TECHNOLOGY_ID,
+        MISSION_FIELD_MAP,
+        get_electric_technology,
+    )
+
+    technology_id = getattr(args, "electric_technology", None)
+    explicit = tuple(getattr(args, "_explicit_electric_fields", ()) or ())
+    if technology_id is None and not explicit:
+        return {}
+    base = get_electric_technology(
+        technology_id or "repository_screening_v1"
+    )
+    values = base.mission_fields()
+    if not explicit:
+        return {**values, "electric_technology": base.id}
+    by_field = {field: mission for mission, field in MISSION_FIELD_MAP}
+    for name in explicit:
+        values[by_field[name]] = float(getattr(args, name))
+    return {**values, "electric_technology": CUSTOM_ELECTRIC_TECHNOLOGY_ID}
+
+
+def _mdo_default_burn_time() -> float:
+    """``MissionSpec.burn_time`` default, read from the dataclass field."""
+    import dataclasses
+
+    from raosim.mdo.schema import MissionSpec
+
+    return float(next(
+        f.default for f in dataclasses.fields(MissionSpec) if f.name == "burn_time"
+    ))
+
+
 def _mission_from_mdo_args(args, *, optimization_capable: bool):
     """Build one MissionSpec for direct evaluation and optimization CLIs."""
 
@@ -1910,6 +2016,7 @@ def _mission_from_mdo_args(args, *, optimization_capable: bool):
         overrides["Pa"] = float(args.engine_mdo_ambient)
     if getattr(args, "burn_time", None) is not None:
         overrides["burn_time"] = float(args.burn_time)
+    overrides.update(_mdo_electric_overrides(args))
     if getattr(args, "design_margins", False):
         overrides.update(
             heat_flux_margin=1.10,
@@ -1925,6 +2032,24 @@ def _mission_from_mdo_args(args, *, optimization_capable: bool):
         overrides["chamber_pressure_search_min_pa"] = float(pc_min)
     if pc_max is not None:
         overrides["chamber_pressure_search_max_pa"] = float(pc_max)
+    pintle_architecture = getattr(args, "mdo_pintle_architecture", None)
+    if pintle_architecture is not None:
+        overrides["pintle_architecture"] = str(pintle_architecture)
+        if pintle_architecture == "son_movable" and getattr(
+            args, "mdo_export", False
+        ):
+            raise ValueError(
+                "--mdo-export has no authoritative host handoff for the "
+                "son_movable pintle valve; its optimum is numerical only"
+            )
+    throttle_min = getattr(args, "mdo_pintle_throttle_min", None)
+    if throttle_min is not None:
+        if overrides.get("pintle_architecture") != "son_movable":
+            raise ValueError(
+                "--mdo-pintle-throttle-min applies only to "
+                "--mdo-pintle-architecture son_movable"
+            )
+        overrides["pintle_throttle_min_fraction"] = float(throttle_min)
 
     propellant = getattr(args, "mdo_propellant", None)
     if propellant:
@@ -2016,6 +2141,9 @@ def _run_engine_mdo(args) -> int:
     if args.film_slot_height is not None:
         mission = dataclasses.replace(
             mission, film_slot_height_default=float(args.film_slot_height))
+    pintle_refs = {
+        spec.name: spec.ref() for spec in mission.pintle_design_space()
+    }
     x = DesignVector(Pc=jnp.asarray(float(args.pc)),
                      eps=jnp.asarray(float(args.epsilon)),
                      dp_f_frac=jnp.asarray(chi_f), dp_o_frac=jnp.asarray(chi_o),
@@ -2033,6 +2161,13 @@ def _run_engine_mdo(args) -> int:
                      film_frac=jnp.asarray(float(film)),
                      t_wall=jnp.asarray(float(
                          args.t_wall if args.t_wall is not None else 8.0e-4)),
+                     # Pintle component variables: the existing machined
+                     # post-wall flag, else the mission reference geometry.
+                     t_post=jnp.asarray(float(
+                         args.pintle_wall_thickness
+                         if args.pintle_wall_thickness is not None
+                         else pintle_refs["t_post"])),
+                     D_cg=jnp.asarray(float(pintle_refs["D_cg"])),
                      OF=jnp.asarray(float(mission.OF)),
                      layout=mission.design_layout())
     couple = bool(getattr(args, "engine_mdo_couple_cstar", False))
@@ -2085,6 +2220,16 @@ def _run_engine_mdo(args) -> int:
     print(f"    TMR = {F(r.injector.momentum_ratio):.3f}   "
           f"spray half-angle = {F(r.injector.spray_half_angle_deg):.1f} deg   "
           f"BF = {F(r.injector.blockage_factor):.3f}")
+    p = r.pintle
+    print(f"    pintle [{mission.pintle_architecture}]  "
+          f"D={F(x.D_pintle)*1e3:.2f} mm  t_post={F(x.t_post)*1e3:.2f} mm  "
+          f"mass={F(p.mass)*1e3:.1f} g  hoop={F(p.post_hoop_stress)/1e6:.0f} MPa")
+    if mission.pintle_architecture == "son_movable":
+        print(f"    valve  D_cg={F(x.D_cg)*1e3:.2f} mm  opening "
+              f"{F(p.opening_full)*1e3:.3f} mm at full power, "
+              f"{F(p.opening_throttle_min)*1e3:.3f} mm at "
+              f"{mission.pintle_throttle_min_fraction:.0%} throttle "
+              f"(Son floor {mission.pintle_min_opening*1e3:.2f} mm)")
     print(" -- electric feed ----------------------------------------------")
     print(f"    P_electric = {F(r.feed.P_electric_total)/1e3:.2f} kW    "
           f"battery E/P = {F(r.feed.battery.energy_limited_mass):.1f}"
@@ -2237,10 +2382,19 @@ def _run_requirements(args) -> int:
         of_mode, mixture_ratio = _resolve_mdo_of_intent(
             args, optimization_capable=True
         )
+        if getattr(args, "_explicit_electric_fields", ()):
+            raise ValueError(
+                "per-field electric flags ("
+                + ", ".join("--" + n.replace("_", "-")
+                            for n in args._explicit_electric_fields)
+                + ") are not carried by --requirements; select a registered "
+                "set with --electric-technology"
+            )
         analysis_config = RequirementAnalysisConfig(
             chamber_property_table=args.mdo_chamber_property_table,
             length_pct=float(args.length_pct),
             liner_material=args.material,
+            electric_technology=getattr(args, "electric_technology", None),
         )
         req = EngineRequirement(
             thrust=float(args.target_thrust if args.target_thrust is not None
@@ -2248,9 +2402,7 @@ def _run_requirements(args) -> int:
             thrust_condition=_parse_thrust_condition(args.thrust_condition),
             isp_min=args.isp_min,
             isp_basis=args.isp_basis,
-            flight_duration=float(
-                args.flight_duration if args.flight_duration is not None
-                else args.burn_time),
+            **_requirement_flight_duration(args),
             qualification_duration=args.qualification_duration,
             mixture_ratio_mode=of_mode,
             mixture_ratio=mixture_ratio,
@@ -2297,7 +2449,8 @@ def _run_requirements(args) -> int:
         ("film_frac", "%8.3f", 1.0, "-"), ("t_wall", "%8.3f", 1e3, "mm"),
         ("channel_width", "%8.3f", 1e3, "mm"),
         ("channel_height", "%8.3f", 1e3, "mm"),
-        ("D_pintle", "%8.3f", 1e3, "mm"), ("N_rpm", "%8.1f", 1e-3, "krpm"),
+        ("D_pintle", "%8.3f", 1e3, "mm"), ("t_post", "%8.3f", 1e3, "mm"),
+        ("D_cg", "%8.3f", 1e3, "mm"), ("N_rpm", "%8.1f", 1e-3, "krpm"),
     ):
         print(f"   {key:<16}" + fmt % (n.design[key] * scale) + f" {unit}")
 
@@ -2321,6 +2474,25 @@ def _run_requirements(args) -> int:
     if result.requirements_met is False:
         return 1
     return 3
+
+
+def _nlp_check_metadata(r) -> dict:
+    """Optimality and robustness evidence carried into an export snapshot."""
+
+    return {
+        "kkt_status": r.kkt_status,
+        "kkt_stationarity": r.kkt_stationarity,
+        "kkt_complementarity": r.kkt_complementarity,
+        "kkt_dual_feasibility": r.kkt_dual_feasibility,
+        "kkt_message": r.kkt_message,
+        "active_constraints": list(r.active_constraints),
+        "multipliers": dict(r.multipliers),
+        "evaluation_failures": r.evaluation_failures,
+        "derivative_fallbacks": r.derivative_fallbacks,
+        "n_starts": r.n_starts,
+        "selected_start": r.selected_start,
+        "n_basins": r.n_basins,
+    }
 
 
 def _run_engine_mdo_optimize(args) -> int:
@@ -2354,6 +2526,15 @@ def _run_engine_mdo_optimize(args) -> int:
     objective = args.mdo_mass_objective
     allow_incomplete = bool(args.allow_incomplete_physics)
     couple = bool(args.engine_mdo_couple_cstar)
+    # No ``or`` fallback: an explicit 0 must reach the validation below.
+    n_starts = getattr(args, "mdo_multistart", 1)
+    n_starts = 1 if n_starts is None else int(n_starts)
+    start_seed = getattr(args, "mdo_multistart_seed", 0)
+    start_seed = 0 if start_seed is None else int(start_seed)
+    if n_starts < 1 or start_seed < 0:
+        print("  MDO configuration rejected: --mdo-multistart must be >= 1 "
+              "and --mdo-multistart-seed >= 0")
+        return 2
     (
         authoritative_contour,
         host_rao_solver_options,
@@ -2380,6 +2561,11 @@ def _run_engine_mdo_optimize(args) -> int:
     print("-" * 78)
 
     def _fmt(r):
+        if not r.success and not np.isfinite(r.objective_mass):
+            # A floor whose solve failed numerically has no finite engine
+            # evaluation behind it; print a failure row instead of NaNs.
+            return (f" Isp>={r.isp_min:6.1f} | FAILED (numerical={r.numerical_status}"
+                    f", workflow={r.workflow_status}): {r.message}")
         d = r.design
         exact_selected = (
             r.exact_dry_mass_partial
@@ -2390,8 +2576,45 @@ def _run_engine_mdo_optimize(args) -> int:
                 f"{r.objective_mass:7.2f} kg exact={exact_selected:7.2f} kg  "
                 f"Isp={r.Isp:6.1f} s | Pc={d['Pc']/1e6:4.2f}MPa eps={d['eps']:5.2f} "
                 f"film={d['film_frac']:.3f} t_w={d['t_wall']*1e3:.2f}mm "
-                f"N={d['N_rpm']/1e3:4.1f}k | physics={r.physics_status:7} "
+                f"N={d['N_rpm']/1e3:4.1f}k Dp={d['D_pintle']*1e3:.1f}mm "
+                f"tp={d['t_post']*1e3:.2f}mm | physics={r.physics_status:7} "
                 f"cok={r.constraints['coking']:+.0f}")
+
+    def _station_study(r):
+        if not getattr(args, "mdo_station_study", False):
+            return
+        if not np.isfinite(r.objective_mass):
+            print("    station study skipped: no finite evaluation")
+            return
+        from raosim.mdo.convergence import station_refinement_study
+
+        try:
+            study = station_refinement_study(
+                r.design,
+                mission,
+                objective=objective,
+                isp_min=r.isp_min,
+                active_rows=r.active_constraints,
+                couple_eta_cstar=couple,
+            )
+        except Exception as exc:  # evidence step: report, never abort
+            print(f"    station study failed: {type(exc).__name__}: {exc}")
+            return
+        for line in study.summary_lines():
+            print("    " + line)
+
+    def _checks(r):
+        """Independent optimality/robustness evidence for one result."""
+        active = ", ".join(r.active_constraints) or "none"
+        line = (f"    checks: KKT={r.kkt_status} stationarity="
+                f"{r.kkt_stationarity:.1e} complementarity="
+                f"{r.kkt_complementarity:.1e} | eval failures="
+                f"{r.evaluation_failures} derivative fallbacks="
+                f"{r.derivative_fallbacks}")
+        if r.n_starts > 1:
+            line += (f" | starts={r.n_starts} basins={r.n_basins} "
+                     f"selected={r.selected_start}")
+        return line + f"\n    active (scaled margin <= 1e-5): {active}"
 
     if args.isp_sweep:
         try:
@@ -2410,6 +2633,8 @@ def _run_engine_mdo_optimize(args) -> int:
                 couple_eta_cstar=couple,
                 allow_incomplete_physics=allow_incomplete,
                 objective=objective,
+                n_starts=n_starts,
+                start_seed=start_seed,
             )
         except ModelCoverageError as exc:
             print(f"  model coverage incomplete: {exc}")
@@ -2422,6 +2647,10 @@ def _run_engine_mdo_optimize(args) -> int:
             return 4
         for index, r in enumerate(frontier):
             print(_fmt(r))
+            if r.success or np.isfinite(r.objective_mass):
+                print(_checks(r))
+                if r.success:
+                    _station_study(r)
             if args.mdo_export and r.feasible:
                 from raosim.mdo.postprocess import reevaluate, summarise
 
@@ -2470,6 +2699,7 @@ def _run_engine_mdo_optimize(args) -> int:
                         "authoritative_contour_requested": (
                             authoritative_contour
                         ),
+                        **_nlp_check_metadata(r),
                     },
                     couple_eta_cstar=couple,
                     output_dir=point_out,
@@ -2496,6 +2726,8 @@ def _run_engine_mdo_optimize(args) -> int:
                 couple_eta_cstar=couple,
                 allow_incomplete_physics=allow_incomplete,
                 objective=objective,
+                n_starts=n_starts,
+                start_seed=start_seed,
             )
         except ModelCoverageError as exc:
             print(f"  model coverage incomplete: {exc}")
@@ -2507,7 +2739,15 @@ def _run_engine_mdo_optimize(args) -> int:
             print(f"  MDO solver failed: {type(exc).__name__}: {exc}")
             return 4
         print(_fmt(r))
-        if args.mdo_export:
+        print(_checks(r))
+        if r.success:
+            _station_study(r)
+        if args.mdo_export and not r.success and not np.isfinite(
+            r.objective_mass
+        ):
+            print("    authoritative re-evaluation skipped: the returned point "
+                  "has no finite MDO evaluation")
+        elif args.mdo_export:
             from raosim.mdo.postprocess import reevaluate, summarise
             print(" -- authoritative re-evaluation (Phase 11) ----------------")
             authoritative_cad = (
@@ -2550,6 +2790,7 @@ def _run_engine_mdo_optimize(args) -> int:
                     "authoritative_contour_requested": (
                         authoritative_contour
                     ),
+                    **_nlp_check_metadata(r),
                 },
                 couple_eta_cstar=couple,
                 output_dir=args.out,
@@ -2574,7 +2815,6 @@ def _run_engine_mdo_optimize(args) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    from raosim.pumps import SCREENING_DEFAULTS as PUMP_DEFAULTS
 
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     # nozzle
@@ -2899,23 +3139,37 @@ def main(argv: list[str] | None = None) -> int:
                          "specific speed and impeller geometry bounds")
     ap.add_argument("--pump-max-rpm", type=float, default=120000.0,
                     help="selected motor/pump maximum speed [rpm]")
-    ap.add_argument("--burn-time", type=float, default=10.0,
-                    help="burn duration for battery energy sizing [s]")
+    ap.add_argument("--burn-time", type=float, default=None,
+                    help="burn duration for battery energy sizing [s]; when "
+                         "absent the traditional pump sizing uses "
+                         f"{_TRADITIONAL_BURN_TIME_DEFAULT_S:g} s and "
+                         "--engine-mdo/-optimize and --requirements keep the "
+                         "MissionSpec default (120 s)")
+    ap.add_argument("--electric-technology", default=None,
+                    choices=_electric_technology_choices(),
+                    help="registered electric drive/battery technology set "
+                         "(raosim.electric_technology) for BOTH the "
+                         "traditional pump sizing and the MDO; default "
+                         "repository_screening_v1. Explicit per-field flags "
+                         "(--motor-power-density, --battery-power-density, "
+                         "...) override single values and make the set "
+                         "'custom'")
     ap.add_argument("--motor-voltage", type=float, default=None,
                     help="motor/inverter DC bus voltage [V]; default selects a "
                          "standard bus from power/current requirements")
     ap.add_argument("--motor-efficiency", type=float,
-                    default=PUMP_DEFAULTS["motor_efficiency"],
+                    default=None,
                     help="motor efficiency for electric pump sizing")
     ap.add_argument("--inverter-efficiency", type=float,
-                    default=PUMP_DEFAULTS["inverter_efficiency"],
+                    default=None,
                     help="inverter efficiency for electric pump sizing")
     ap.add_argument("--motor-power-density", type=float,
-                    default=PUMP_DEFAULTS["motor_power_density"],
-                    help="motor power density [W/kg]")
+                    default=None,
+                    help="motor shaft-output power density [W/kg]")
     ap.add_argument("--inverter-power-density", type=float,
-                    default=PUMP_DEFAULTS["inverter_power_density"],
-                    help="inverter/controller power density [W/kg]")
+                    default=None,
+                    help="inverter/controller AC-output power density [W/kg] "
+                         "(motor electrical input, before inverter losses)")
     ap.add_argument("--motor-max-power", type=float, default=None,
                     help="per-stream motor shaft-power limit [W]")
     ap.add_argument("--motor-max-current", type=float, default=None,
@@ -2925,16 +3179,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--motor-heat-rejection-limit", type=float, default=None,
                     help="per-stream motor+inverter heat rejection limit [W]")
     ap.add_argument("--battery-energy-density", type=float,
-                    default=PUMP_DEFAULTS["battery_energy_density"],
+                    default=None,
                     help="pack-level usable energy density [J/kg]")
     ap.add_argument("--battery-power-density", type=float,
-                    default=PUMP_DEFAULTS["battery_power_density"],
+                    default=None,
                     help="pack-level discharge power density [W/kg]")
     ap.add_argument("--battery-discharge-efficiency", type=float,
-                    default=PUMP_DEFAULTS["battery_discharge_efficiency"],
+                    default=None,
                     help="battery discharge efficiency")
     ap.add_argument("--battery-structural-margin", type=float,
-                    default=PUMP_DEFAULTS["battery_structural_margin"],
+                    default=None,
                     help="battery mass multiplier for packaging/structure")
     ap.add_argument("--battery-voltage", type=float, default=None,
                     help="battery pack voltage [V]; defaults to --motor-voltage")
@@ -3379,7 +3633,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--flight-duration", type=float, default=None,
                     metavar="S",
                     help="with --requirements: rated flight duration [s]; "
-                         "sizes the electric-feed energy (default: --burn-time)")
+                         "sizes the electric-feed energy (default: --burn-time "
+                         "when given, else 120 s)")
     ap.add_argument("--qualification-duration", type=float, default=None,
                     metavar="S",
                     help="with --requirements: cumulative demonstrated "
@@ -3416,6 +3671,20 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--isp-sweep", default=None, metavar="LO,HI,N",
                     help="with --engine-mdo-optimize: trace the Pareto frontier "
                          "over N Isp floors from LO to HI (e.g. 250,320,6)")
+    ap.add_argument("--mdo-multistart", type=int, default=1, metavar="N",
+                    help="with --engine-mdo-optimize: optimizer starts per "
+                         "solve (start 0 = the reference design, the rest "
+                         "scrambled Sobol points in the unit box); reports the "
+                         "number of distinct converged basins (default 1)")
+    ap.add_argument("--mdo-multistart-seed", type=int, default=0, metavar="S",
+                    help="with --mdo-multistart: Sobol scrambling seed "
+                         "(default 0; reproducible)")
+    ap.add_argument("--mdo-station-study", action="store_true",
+                    help="with --engine-mdo-optimize: re-solve each converged "
+                         "design with every station-grid segment doubled and "
+                         "report the objective/Isp/active-margin changes "
+                         "against the plan §11 < 0.5%% grid criterion "
+                         "(evidence only; nothing is re-optimized)")
     ap.add_argument("--engine-mdo-ambient", type=float, default=None,
                     metavar="PA",
                     help="ambient pressure [Pa] for --engine-mdo/-optimize "
@@ -3427,6 +3696,19 @@ def main(argv: list[str] | None = None) -> int:
                          "cooling (0 = pure regen; reduces the coking wall temp "
                          "at a c* penalty).  Channel geometry reuses the existing "
                          "--channel-width / --channel-height flags.")
+    ap.add_argument("--mdo-pintle-architecture", default=None,
+                    choices=("fixed_slotted", "son_movable"),
+                    help="with --engine-mdo/-optimize: pintle component "
+                         "architecture (outer choice).  fixed_slotted is the "
+                         "slotted post the injector CAD exports; son_movable is "
+                         "the Son 2017 continuous-gap pintle valve, optimized "
+                         "numerically only (no CAD handoff).")
+    ap.add_argument("--mdo-pintle-throttle-min", type=float, default=None,
+                    metavar="FRACTION",
+                    help="with --mdo-pintle-architecture son_movable: lowest "
+                         "throttle level (fraction of full-power mass flow) "
+                         "the valve must still meter above the Son 0.1 mm "
+                         "uniform-sheet opening; default 1.0 (no throttle)")
     ap.add_argument("--mdo-propellant", default=None, metavar="NAME",
                     help="with --engine-mdo/-optimize: propellant combination "
                          "(lox/rp-1, lox/lch4, lox/lh2, n2o4/mmh, n2o/ethanol). "
@@ -3507,6 +3789,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args = ap.parse_args(expanded_argv)
     _reject_legacy_injector_pressure_drop(ap, cli_argv)
+    _apply_electric_technology(args)
     bare = len(expanded_argv) == 0
     # Front door: a bare `lrekit` (or `lrekit -i`) asks which workflow to run
     # and then prompts for that workflow's parameters.  Explicit mode flags
@@ -3527,6 +3810,23 @@ def main(argv: list[str] | None = None) -> int:
         bare = True          # traditional path keeps its starter defaults
         args.interactive = True
     _validate_common_engine_args(args, ap)
+    optimizer_only = [
+        flag for flag, used in (
+            ("--mdo-multistart", getattr(args, "mdo_multistart", 1) != 1),
+            ("--mdo-multistart-seed",
+             getattr(args, "mdo_multistart_seed", 0) != 0),
+            ("--mdo-station-study",
+             bool(getattr(args, "mdo_station_study", False))),
+        ) if used
+    ]
+    if optimizer_only and (
+        getattr(args, "requirements", False)
+        or not getattr(args, "engine_mdo_optimize", False)
+    ):
+        # These flags only act inside _run_engine_mdo_optimize; accepting them
+        # elsewhere would silently ignore a requested robustness check.
+        ap.error(", ".join(optimizer_only)
+                 + " applies only to --engine-mdo-optimize")
     if getattr(args, "requirements", False):
         return _run_requirements(args)
     if getattr(args, "engine_mdo_optimize", False):
@@ -4107,7 +4407,7 @@ def main(argv: list[str] | None = None) -> int:
         ("electric pump", (
             f"on  ({'auto' if args.pump_rpm is None else f'{args.pump_rpm:g}'} rpm, "
             f"{'auto' if args.motor_voltage is None else f'{args.motor_voltage:g}'} V, "
-            f"burn {args.burn_time:g} s)"
+            f"burn {_traditional_burn_time(args):g} s)"
             if args.electric_pump else dim("off"))),
         ("material", (f"{mat.name}  (k={args.wall_k:g} W/mK, "
                       f"T≤{args.wall_temp_limit:g} K, "

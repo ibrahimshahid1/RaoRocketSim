@@ -13,10 +13,12 @@ Mapping evidence, strongest first:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
 import traceback
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -68,6 +70,7 @@ def scan(verbose: bool = False) -> dict:
         "missing_markdown": [],
         "stale_markdown": [],
         "orphan_markdown": [],
+        "mirrored_reference_notes": [],
         "weak_mapping": [],
         "duplicate_payloads": {},
     }
@@ -127,12 +130,35 @@ def scan(verbose: bool = False) -> dict:
     for md in sorted(MARKDOWN.rglob("*.md")):
         if str(md.resolve()) in seen_outputs:
             continue
+        note_source = CORPUS / md.relative_to(MARKDOWN)
+        if md.name == "PINTLE_LITERATURE_CATALOG.md" and note_source.is_file() and note_source.read_bytes() == md.read_bytes():
+            state["mirrored_reference_notes"].append({"markdown": str(md.relative_to(REPO)),
+                "source_note": str(note_source.relative_to(REPO)), "sha256": sha256_file(note_source),
+                "authority": "human-authored bibliography; not a PDF-derived scientific assertion"})
+            continue
         row = by_output.get(str(md.resolve()))
         if row and row.get("source_kind") and row.get("source_kind") != "file":
             container = CORPUS / row.get("source_container", "")
+            if not container.is_file():
+                state["stale_markdown"].append({"pdf": f"{row.get('source_container')}::{row.get('archive_member')}",
+                                                "markdown": str(md.relative_to(REPO)),
+                                                "reason": "source archive is unavailable; source bytes cannot be verified"})
+                continue
+            try:
+                actual = hashlib.sha256()
+                with zipfile.ZipFile(container) as archive, archive.open(row.get("archive_member", "")) as stream:
+                    for block in iter(lambda: stream.read(1 << 20), b""):
+                        actual.update(block)
+                if actual.hexdigest() != row.get("sha256"):
+                    raise ValueError("archive member checksum differs from conversion manifest")
+            except (OSError, KeyError, ValueError, zipfile.BadZipFile, RuntimeError) as exc:
+                state["stale_markdown"].append({"pdf": f"{row.get('source_container')}::{row.get('archive_member')}",
+                                                "markdown": str(md.relative_to(REPO)),
+                                                "reason": f"source archive member cannot be verified: {exc}"})
+                continue
             state["synchronized"].append({"pdf": f"{row.get('source_container')}::{row.get('archive_member')}",
                                           "markdown": str(md.relative_to(REPO)), "sha256": row.get("sha256"),
-                                          "evidence": "manifest_archive_member" + ("" if container.exists() else "_container_missing")})
+                                          "evidence": "archive_member_sha256"})
             continue
         rel_md = md.relative_to(MARKDOWN)
         candidate = CORPUS / rel_md.with_suffix(".pdf")

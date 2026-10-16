@@ -1,10 +1,29 @@
 {
- "grounded": 324,
+ "grounded": 411,
  "page_shifted": 0,
- "ungrounded": [],
+ "ungrounded": [
+  {
+   "doc_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "kind": "equation",
+   "reason": "anchor not found on stated page ±2",
+   "page": 671,
+   "quote": "Eq. (17.15) locates the appropriate point on the Mollier diagram.",
+   "label": "Anderson Eq. (17.15) nozzle enthalpy-to-kinetic-energy relation"
+  }
+ ],
  "per_doc": {
+  "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE": {
+   "grounded": 15,
+   "page_shifted": 0,
+   "ungrounded": 1
+  },
   "DOC_CAD_04": {
    "grounded": 6,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E": {
+   "grounded": 33,
    "page_shifted": 0,
    "ungrounded": 0
   },
@@ -24,7 +43,7 @@
    "ungrounded": 0
   },
   "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI": {
-   "grounded": 86,
+   "grounded": 123,
    "page_shifted": 0,
    "ungrounded": 0
   },
@@ -34,7 +53,7 @@
    "ungrounded": 0
   },
   "DOC_NTRS_19760023196": {
-   "grounded": 118,
+   "grounded": 120,
    "page_shifted": 0,
    "ungrounded": 0
   }
@@ -50,20 +69,50 @@
   "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE": "PARTIALLY_SUPPORTED",
   "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE": "PARTIALLY_SUPPORTED",
   "MODEL_INJECTOR_N_TAU_STABILITY": "PARTIALLY_SUPPORTED",
-  "MODEL_NOZZLE_RAO_VARIATIONAL_BVP": "SUPPORTED"
+  "MODEL_NOZZLE_RAO_VARIATIONAL_BVP": "SUPPORTED",
+  "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D": "PARTIALLY_SUPPORTED",
+  "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH": "SUPPORTED",
+  "MODEL_PUMP_ELECTRIC_DRIVE": "PARTIALLY_SUPPORTED"
  },
- "n_equations": 37,
- "n_claims": 179,
- "n_validity": 34,
- "n_constants": 44,
- "n_assumptions": 30,
- "n_ungrounded": 0,
+ "n_equations": 93,
+ "n_claims": 188,
+ "n_validity": 36,
+ "n_constants": 52,
+ "n_assumptions": 42,
+ "n_ungrounded": 1,
  "banked_result_hashes": [
-  "a82d051bc4ebbfdbb0d300af62efa4d35bee9246e064bc063eb0e46e4f3b2dfc"
+  "07e8a65d4497feff94c62697a4d4573e80ae8c89a49a745611f25a0180e446fa",
+  "08f34efb937f227273012246a26f2c9b9ae279625d53bbeea2d23a51eaa75803",
+  "1779be73bfe3e6047ec060fec8c501ec4da18dc23d56e443317921327b4e59b1",
+  "17ca39d042f2ee09a6c8b6b621fed6dff2b87aa26fc2ae124a883f20e41aff7f",
+  "1cbd800735caf70f3d1b81780feaa51168413c46248ac45d65b76dce66450fe6",
+  "3135e5292682a40104f781ee4c95f9445d5f468a73da7e1799b7ad30d948dec3",
+  "39f51d0aa123951e295a17d34183e899233359f9e7f1dc90ed8a56491eaf2ae1",
+  "4144a8c0965e3be88797afd908d28f02ffab6440b9a05207f894a36b48d56520",
+  "4571a69267585f6100ccb95e8641c8d82c4b98957061962f647d49f35a0ba1fd",
+  "5150a69fccedf8f88d37e2cdab4f97e7da1373677e59a328fcf96b84db9473dc",
+  "526cd950ae11276781eeef710ef9b65f538e85b3a67bbbfe30990f194ce0b69a",
+  "60a5ee83ac61d48083e1e26421319b9cb5d3a21674a6d84d83255bf3e274f45b",
+  "848c651ef15c7c9b94b3d74c26b34f05f9e9c8439a1bf52d322117f5adf4d51c",
+  "956aaae82633c8878bafdd7d8ecf5d933db2d62aacfc81c0c03da58dcb6aa002",
+  "97729847c2d5076d53dc9bd8164a821119ad860582530171d2221ec516e23638",
+  "a06e7d4565cd9db41fc465031197d056a3edf810919a389ec643e47d1775c025",
+  "a7504ad99c54ed39fc36059b28e6ebe6e90d3595d60cbc2ce46ec9e17a42b19a",
+  "a82d051bc4ebbfdbb0d300af62efa4d35bee9246e064bc063eb0e46e4f3b2dfc",
+  "b4ad783d6ff7051347fbd4072cd7f6a47b58f0c4c01ea40e8534563717a36906",
+  "b9ad1b8751665f72ea966e4a19dc10ad6b334c6e195fea55a7ef97da57bc7f17",
+  "bbb32fabbad2a61444cf1641741186ee793d866584d208b34bed3f380acf20f5",
+  "caf7850c7ff9c5f1d7c810f1c8b6185173be8e430438a212449747e051e37b6f",
+  "d841f31bb9fd03c6fc175366e92b3ad875472107d97b3f344833eed29573cdce"
  ],
  "count_basis": "unique stored source objects; rejected anchors deduplicated across attempts",
  "method": {
   "extraction": "Structured result journal -> kg.ground verbatim-anchor check -> stores",
   "rules": "verbatim quote + page marker; source notation; no invented validity; honest supports_model"
- }
+ },
+ "cross_document_relations": {
+  "attached": 39,
+  "unresolved": []
+ },
+ "skipped": []
 }

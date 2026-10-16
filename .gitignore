@@ -16,6 +16,7 @@ test_failures.log
 # macOS
 .DS_Store
 .venv-jax/
+.venv-docling/
 .claude/
 
 # Local reference material and temporary files
@@ -32,3 +33,4 @@ build/
 knowledge/vector_index/
 knowledge/.work/
 knowledge/graph/graph.graphml
+knowledge/

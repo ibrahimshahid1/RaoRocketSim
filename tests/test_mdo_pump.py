@@ -16,6 +16,7 @@ Two things are checked:
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 import numpy as np
 import pytest
 
@@ -72,6 +73,29 @@ def test_pump_power_chain():
     assert float(s.P_shaft) == pytest.approx(P_hyd / float(s.efficiency), rel=1e-10)
     assert float(s.P_electric) == pytest.approx(
         float(s.P_shaft) / (m.eta_motor * m.eta_inverter), rel=1e-10)
+
+
+@pytest.mark.parametrize("eta_inverter", [0.85, 0.96, 1.0])
+def test_inverter_output_density_matches_numpy_and_is_independent_of_losses(eta_inverter):
+    """Lee PDF p. 7 Eqs. (28)-(29): inverter mass uses its output power."""
+    base, d = _case()
+    m = replace(base, eta_inverter=eta_inverter, electric_technology="custom")
+    ef = electric_feed(mdot_fuel=jnp.asarray(d["mf"]), mdot_ox=jnp.asarray(d["mo"]),
+                       dp_rise_fuel=jnp.asarray(d["dpf"]),
+                       dp_rise_ox=jnp.asarray(d["dpo"]), N_rpm=jnp.asarray(d["N"]),
+                       mission=m)
+    shaft_power = float(ef.fuel.P_shaft + ef.ox.P_shaft)
+    inverter_output = shaft_power / m.eta_motor
+    assert float(ef.inverter_mass) == pytest.approx(
+        inverter_output / m.inverter_power_density, rel=1e-12)
+    spec = oracle.PumpSizingSpec(drive=oracle.ElectricDriveSpec(
+        motor_efficiency=m.eta_motor, inverter_efficiency=m.eta_inverter,
+        motor_power_density=m.motor_power_density,
+        inverter_power_density=m.inverter_power_density))
+    numpy_drive = oracle._drive_sizing("combined", shaft_power, d["N"], spec,
+                                       bus_voltage=48.0)
+    assert float(ef.inverter_mass) == pytest.approx(numpy_drive.inverter_mass, rel=1e-12)
+    assert float(ef.P_electric_total) == pytest.approx(inverter_output / eta_inverter)
 
 
 def test_efficiency_is_c1_where_binned_estimator_jumps():

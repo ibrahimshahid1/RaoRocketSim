@@ -7,6 +7,7 @@ re-solved central differences — the first mass–Isp gradient of the MDO layer
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -110,6 +111,24 @@ def test_readout_ledger_and_stability_fields(setup):
     assert float(out["chi_ox"]) == pytest.approx(0.2)
     # separation margin uses the corrected criterion and is finite/positive.
     assert float(out["separation_margin"]) > 0.0
+
+
+def test_readout_inverter_density_uses_output_power(setup):
+    """Skeleton readouts share Lee p. 7 Eq. (29)'s output-density convention."""
+    mission, surfaces, scales, x = setup
+    y, _ = solve_states(x, mission, surfaces, scales)
+    inverter_masses = []
+    input_powers = []
+    for eta_inverter in (0.85, 0.96, 1.0):
+        m = replace(mission, eta_inverter=eta_inverter,
+                    electric_technology="custom")
+        out = readouts(y, x, m, surfaces, scales)
+        expected = float(out["P_shaft"]) / m.eta_motor / m.inverter_power_density
+        inverter_masses.append(float(out["mass_ledger"]["inverters"]))
+        input_powers.append(float(out["P_electric"]))
+        assert inverter_masses[-1] == pytest.approx(expected, rel=1e-12)
+    assert inverter_masses == pytest.approx([inverter_masses[0]] * 3, rel=1e-12)
+    assert input_powers[0] > input_powers[1] > input_powers[2]
 
 
 def test_end_to_end_gradient_matches_resolved_fd(setup):

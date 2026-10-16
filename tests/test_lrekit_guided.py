@@ -49,7 +49,8 @@ def test_a_complete_design_point_selects_the_analyze_workflow():
     document = run_guided(
         ask=_scripted("3", "13 kN", "sea_level", "120 s", "LOX/RP-1",
                       "GRCop-84", "Inconel 718", "", "3 MPa", "8", "0.2", "0.2",
-                      "20 mm", "30 krpm", "0.5 mm", "1.5 mm", "0.1", "0.8 mm", "y"),
+                      "20 mm", "30 krpm", "0.5 mm", "1.5 mm", "0.1", "0.8 mm",
+                      "1.5 mm", "y"),
         out=lambda _: None,
     )
     assert document["workflow"] == "analyze"
@@ -58,7 +59,9 @@ def test_a_complete_design_point_selects_the_analyze_workflow():
     from raosim.mdo.job import resolve_engine_job
 
     resolved = resolve_engine_job(_build_spec(document))
-    assert len(resolved.fixed_variables) == 10
+    # Ten engine variables plus the pintle wall; the slotted pintle's
+    # centre gap is pinned by the job layer, not asked.
+    assert len(resolved.fixed_variables) == 12
     assert resolved.fixed_variables["Pc"] == 3e6
     assert not any("were not stated" in note for note in resolved.notes)
 

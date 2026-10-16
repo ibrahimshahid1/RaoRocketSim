@@ -83,6 +83,34 @@
           },
           "extraction_note": {
             "type": "string"
+          },
+          "assumption_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Explicit same-document grounded assumption statements whose scope was reviewed for this equation."
+          },
+          "enrichment_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Docling candidates inspected against original PDF; parser output alone is not source support."
+          },
+          "supersedes_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Explicit reviewed replacement of an incomplete same-document, same-number, same-source-hash transcription; history is retained."
+          },
+          "corrects_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Parser notation manually corrected against the original PDF; rejected raw candidates remain traceable."
           }
         },
         "required": [
@@ -275,6 +303,11 @@
           "items": {
             "type": "string"
           }
+        },
+        "comparison_equation_labels": {
+          "description": "Source formulations explicitly compared with a different implementation; CITES only, never IMPLEMENTS.",
+          "type": "array",
+          "items": {"type": "string"}
         },
         "mismatch_notes": {
           "type": "string"

@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:58:11.033785+00:00"
+  "generated_at": "2026-10-16T18:20:17.735125+00:00"
  },
  "records": [
   {
@@ -106,9 +106,11 @@
   },
   {
    "doc_id": "DOC_DOI_10_1007_978_3_030_14788_4",
-   "state": "INGESTED",
+   "state": "SOURCE_UNREADABLE",
+   "reason": "EMPTY_SOURCE",
    "n_chunks": 0,
-   "unchanged": true
+   "source_pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
+   "remediation": "Restore the original PDF: the tracked payload has zero pages; enrichment cannot recover absent pages."
   },
   {
    "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
@@ -1087,7 +1089,7 @@
   },
   {
    "doc_id": "DOC_NTRS_19700005097",
-   "state": "INGESTED",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 31,
    "unchanged": true
   },
@@ -1213,7 +1215,7 @@
   },
   {
    "doc_id": "DOC_NTRS_19760023196",
-   "state": "INGESTED",
+   "state": "LOW_EXTRACTION_CONFIDENCE",
    "n_chunks": 242,
    "unchanged": true
   },

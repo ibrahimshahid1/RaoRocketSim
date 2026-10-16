@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from raosim.mdo.constraints import (
     CONSTRAINT_MANIFEST,
@@ -148,3 +149,44 @@ def test_new_policy_sensitive_rows_have_exact_source_ids():
     assert source["coolant_htd"] == (
         "Nasuti-Pizzarelli-2021-sec-2.2-Eq9-PDF6"
     )
+
+
+def test_every_manifest_row_declares_its_basis():
+    """MDO issues audit 2026-10-16 §1.4 item 22: every hard row carries a
+    page-verified source_id or an explicit basis label."""
+    from raosim.mdo.constraints import BASIS_CLASSES, CONSTRAINT_MANIFEST
+
+    for spec in CONSTRAINT_MANIFEST:
+        assert spec.basis_class in BASIS_CLASSES, spec.name
+        if spec.basis_class == "literature":
+            assert spec.source_id, spec.name
+        if spec.optimizer_role == "hard" and not spec.source_id:
+            assert spec.basis_class != "literature", spec.name
+    by_name = {spec.name: spec for spec in CONSTRAINT_MANIFEST}
+    expected = {
+        "land_fit": "geometric_definition",
+        "blockage_lo": "literature",
+        "blockage_hi": "repository_rule",
+        "pintle_wall_fit": "repository_rule",
+        "wall_temp": "repository_rule",
+        "property_domain": "model_validity_domain",
+        "chart_domain": "model_validity_domain",
+        "wall_monotonic": "geometric_definition",
+    }
+    for name, basis in expected.items():
+        assert by_name[name].basis_class == basis, name
+    assert "Freeberg-2019" in by_name["blockage_lo"].source_id
+
+
+def test_basis_class_is_validated():
+    from raosim.mdo.constraints import ConstraintSpec
+
+    with pytest.raises(ValueError):
+        ConstraintSpec("x", None, "inequality", "hard", "geometry", 1.0, None,
+                       None, basis_class="vibes")
+    with pytest.raises(ValueError):
+        ConstraintSpec("x", None, "inequality", "hard", "geometry", 1.0, None,
+                       None, basis_class="literature")
+    legacy = ConstraintSpec("x", None, "inequality", "hard", "geometry", 1.0,
+                            None, None, "always")
+    assert legacy.basis_class is None

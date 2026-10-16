@@ -60,6 +60,12 @@ from raosim.mdo.cooling import (
     solve_cooling, CoolingMarch, film_cooling_efficiency,
 )
 from raosim.mdo.injector import injector_readouts, InjectorReadout
+from raosim.mdo.pintle import (
+    INERT_MARGIN,
+    PintleComponent,
+    is_movable,
+    pintle_component,
+)
 from raosim.mdo.mass import chamber_mass, ChamberMassBreakdown
 from raosim.mdo.envelope import (
     chamber_envelope, envelope_margins, fractional_margin, ChamberEnvelope,
@@ -129,7 +135,8 @@ def _eta_cstar(mdot: Array, x: DesignVector, mission: MissionSpec,
         mdot_f, mdot_o = _split(mdot, mission, _resolve_of(x, mission))
         inj = injector_readouts(Pc=x.Pc, chi_f=x.dp_f_frac, chi_o=x.dp_o_frac,
                                 D_pintle=x.D_pintle, mdot_fuel=mdot_f,
-                                mdot_ox=mdot_o, mission=mission)
+                                mdot_ox=mdot_o, mission=mission,
+                                t_post=x.t_post, D_cg=x.D_cg)
         base = eta_cstar_coupled(inj.momentum_ratio, mission)
     # film-cooling c* penalty: the wall-film fuel burns fuel-rich and does not
     # fully contribute to core combustion (§6.2b; the film's performance cost).
@@ -202,6 +209,8 @@ class EngineResult:
     # blocks
     cooling: CoolingMarch
     injector: InjectorReadout
+    # Pintle hardware, structure and valve readouts (mdo/pintle.py).
+    pintle: PintleComponent
     feed: ElectricFeed
     # routed hydraulic edge (closed §5 loop)
     dp_regen: Array
@@ -209,8 +218,10 @@ class EngineResult:
     dp_rise_ox: Array
     # Explicit smooth objective branches.  The electric branch is not a
     # physical package total: its battery choice is a log-sum-exp surrogate.
-    # The partial-dry branch adds liner, channel lands, and closeout, but still
-    # excludes injector hardware, manifolds, valves, lines, gimbal, and mounts.
+    # The partial-dry branch adds liner, channel lands, closeout and the
+    # pintle post (plus the valve's centre rod), but still excludes the
+    # injector body, faceplate, orifice plate, manifolds, valves, lines,
+    # gimbal, and mounts.
     electric_package_objective_mass: Array
     dry_mass_partial_objective_mass: Array
     electric_package_exact_mass: Array
@@ -345,7 +356,15 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     # --- injector ---------------------------------------------------------- #
     injector = injector_readouts(
         Pc=Pc, chi_f=x.dp_f_frac, chi_o=x.dp_o_frac, D_pintle=x.D_pintle,
-        mdot_fuel=mdot_f, mdot_ox=mdot_o, mission=mission)
+        mdot_fuel=mdot_f, mdot_ox=mdot_o, mission=mission,
+        t_post=x.t_post, D_cg=x.D_cg)
+    # The pintle as a hardware component: post (and valve rod) mass, post
+    # pressure screen, Son opening over the throttle range, and fits.
+    pintle = pintle_component(
+        D_pintle=x.D_pintle, t_post=x.t_post, D_cg=x.D_cg, Pc=Pc,
+        chi_f=x.dp_f_frac, Rt=Rt, injector=injector, mission=mission)
+    movable = is_movable(mission)
+    inert = jnp.asarray(INERT_MARGIN, dtype=jnp.float64)
 
     # --- CLOSE the §5 hydraulic edge: cooling Δp + injector Δp → pump rise --- #
     dp_rise_f = (Pc * (1.0 + x.dp_f_frac) + dp_regen
@@ -374,11 +393,11 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
     # 8-32 is a propellant-tank relation that corroborates the geometry; it is
     # not a prescribed thrust-chamber mass model (see mdo/mass.py).  Thus the
     # optimizer can trade wall thickness and channel geometry against feed-
-    # system mass instead of minimising only the electric package.  The
-    # injector remains a hydraulic sizing here -- its hardware mass needs the
-    # resolved machined layout, which lives on the host side
-    # (raosim.mass_ledger.injector_mass_ledger) -- so it stays unavailable
-    # rather than being written as a misleading zero.
+    # system mass instead of minimising only the electric package.  The pintle
+    # post (and valve rod) now enters the same way, from its own geometry; the
+    # rest of the injector needs the resolved machined layout, which lives on
+    # the host side (raosim.mass_ledger.injector_mass_ledger), so the injector
+    # total stays unavailable rather than being written as a misleading zero.
     chamber = chamber_mass(
         grid, mission,
         t_wall=x.t_wall,
@@ -434,6 +453,9 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "thrust_chamber_lands": chamber.lands,
         "thrust_chamber_closeout": chamber.closeout,
         "thrust_chamber": chamber.total,
+        "pintle_post": pintle.post_mass,
+        "pintle_rod": pintle.rod_mass,
+        "pintle_component": pintle.mass,
     }
     electric_package_objective_mass = (
         feed.pump_mass
@@ -448,9 +470,11 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         + m_batt_exact
     )
     dry_mass_partial_objective_mass = (
-        electric_package_objective_mass + chamber.total
+        electric_package_objective_mass + chamber.total + pintle.mass
     )
-    dry_mass_partial_exact_mass = electric_package_exact_mass + chamber.total
+    dry_mass_partial_exact_mass = (
+        electric_package_exact_mass + chamber.total + pintle.mass
+    )
     ledger.update({
         "electric_package_objective_smooth": electric_package_objective_mass,
         "electric_package_exact": electric_package_exact_mass,
@@ -493,7 +517,12 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "land_min": cooling.land_min,
         "chug_margin_min": _smooth_min(jnp.stack([
             injector.chug_margin_fuel, injector.chug_margin_ox]), 100.0),
-        "pintle_transition_margin": injector.transition_margin,
+        # Son two-branch transition: only the movable valve has a moving tip.
+        # A slotted post previously carried this row with no hardware behind
+        # it; it is now inert there and marked not applicable.
+        "pintle_transition_margin": (
+            injector.transition_margin if movable else inert
+        ),
         "nss_margin_min": _smooth_min(jnp.stack([
             feed.fuel.nss_margin, feed.ox.nss_margin]), 100.0),
         "tip_speed_margin_min": _smooth_min(jnp.stack([
@@ -502,12 +531,22 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "aspect_ratio_margin": (mission.channel_aspect_ratio_max
                                 - x.channel_height / x.channel_width),
         # blockage-factor band — BF with TMR are the two master pintle knobs
-        # (Hwang 2022; Freeberg 2019).  Two-sided, so D_pintle is a *live*
-        # design variable rather than one with no path to any constraint.
-        "blockage_lo_margin": (injector.blockage_factor
-                               - mission.blockage_factor_min),
-        "blockage_hi_margin": (mission.blockage_factor_max
-                               - injector.blockage_factor),
+        # (Hwang 2022; Freeberg 2019).  Slots exist only on the fixed post; a
+        # continuous radial gap has no blockage factor.
+        "blockage_lo_margin": (
+            inert if movable
+            else injector.blockage_factor - mission.blockage_factor_min
+        ),
+        "blockage_hi_margin": (
+            inert if movable
+            else mission.blockage_factor_max - injector.blockage_factor
+        ),
+        # Pintle component rows (raosim.mdo.pintle).
+        "pintle_post_stress_margin": pintle.post_stress_margin,
+        "pintle_wall_fit_margin": pintle.wall_fit_margin,
+        "pintle_min_opening_margin": pintle.min_opening_margin,
+        "pintle_center_gap_fit_margin": pintle.center_gap_fit_margin,
+        "pintle_module_fit_margin": pintle.module_fit_margin,
         # SP-125 combined liner stress. ``liner_sigma_allow`` is already the
         # post-FOS allowable; post-processing reconstructs the traditional
         # material yield as allowable*FOS so both pipelines enforce the same
@@ -592,8 +631,9 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "envelope_diameter_margin": envelope_d_margin,
         "envelope_length_margin": envelope_l_margin,
         # dry_mass_partial = smooth electric-feed objective + thrust-chamber
-        # structure.  Missing: injector hardware, manifolds, valves, lines,
-        # gimbal, mounts (see docs/HARDWARE_MASS_LEDGER.md `excludes`).
+        # structure + pintle post/rod.  Missing: injector body, faceplate and
+        # orifice plate, manifolds, valves, lines, gimbal, mounts (see
+        # docs/HARDWARE_MASS_LEDGER.md `excludes`).
         "dry_mass_partial_margin": fractional_margin(
             dry_mass_partial_objective_mass, mission.dry_mass_max
         ),
@@ -656,6 +696,13 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         "contour_provider_infeasible": contour_outcome.infeasible,
         "contour_provider_reason_code": contour_outcome.reason_code,
         "contour_provider_model_code": contour_outcome.provider_model_code,
+        # Pintle component readouts in physical units (mdo/pintle.py).
+        "pintle_post_hoop_stress": pintle.post_hoop_stress,
+        "pintle_post_inner_diameter": pintle.post_inner_diameter,
+        "pintle_opening_full": pintle.opening_full,
+        "pintle_opening_throttle_min": pintle.opening_throttle_min,
+        "pintle_module_diameter": pintle.module_diameter,
+        "pintle_chamber_diameter": pintle.chamber_diameter,
     }
 
     return EngineResult(
@@ -663,7 +710,7 @@ def solve_engine(x: DesignVector, mission: MissionSpec, *,
         Cf=Cf, Isp=Isp, Me=Me, Pe=Pe,
         OF=of,
         thrust_residual=resid[0], contour_outcome=contour_outcome,
-        cooling=cooling, injector=injector, feed=feed,
+        cooling=cooling, injector=injector, pintle=pintle, feed=feed,
         dp_regen=dp_regen, dp_rise_fuel=dp_rise_f, dp_rise_ox=dp_rise_o,
         electric_package_objective_mass=electric_package_objective_mass,
         dry_mass_partial_objective_mass=dry_mass_partial_objective_mass,
@@ -706,9 +753,11 @@ _SCALARS = {
     # Thrust-chamber structural metal from the geometric Pappus/shell-volume
     # integration (SP-125 eq. 8-32 only corroborates it for a tank shell).
     "thrust_chamber_mass": lambda r: r.chamber_mass.total,
-    # Electric feed package + thrust-chamber structure.  Still NOT a complete
-    # engine dry mass: injector hardware, manifolds, valves, lines, gimbal and
-    # mounts are absent, and the injector branch is only resolvable host-side.
+    # Pintle post plus, for the movable valve, its centre rod (mdo/pintle.py).
+    "pintle_mass": lambda r: r.pintle.mass,
+    # Electric feed package + thrust-chamber structure + pintle post/rod.
+    # Still NOT a complete engine dry mass: the injector body, faceplate and
+    # orifice plate, manifolds, valves, lines, gimbal and mounts are absent.
     "dry_mass_partial": lambda r: r.dry_mass_partial_objective_mass,
     # SP-125 §2.1 item 6.  Lower bounds on the installed envelope: the cooled
     # chamber only, with no flange, injector body or feed hardware.
@@ -732,14 +781,14 @@ def engine_outputs(x_arr: Array, mission: MissionSpec, *,
             x_arr, layout, fixed_of=mission.OF
         )
     elif n_values == len(DesignVector.names()):
-        # Public compatibility boundary for a fixed 11-value state contract.
+        # Public compatibility boundary for the fixed 13-value state contract.
         design = DesignVector.from_contract_array(x_arr, layout)
     elif n_values == 4:
         # Deprecated walking-skeleton prefix.  Its O/F intent is explicitly
         # fixed; the array length does not select fixed versus variable mode.
         warnings.warn(
             "4-value engine_outputs input is deprecated; pass the explicit "
-            "10/11-value active design vector",
+            "12/13-value active design vector",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -753,7 +802,7 @@ def engine_outputs(x_arr: Array, mission: MissionSpec, *,
     else:
         raise ValueError(
             f"engine_outputs received {n_values} values; expected the "
-            f"{layout.active_size}-value active layout or 11-value contract"
+            f"{layout.active_size}-value active layout or 13-value contract"
         )
     r = solve_engine(
         design,

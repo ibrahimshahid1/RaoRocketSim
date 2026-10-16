@@ -192,12 +192,26 @@ def to_design_input(
         FeedSystemSpec,
         InjectorSpec,
         PintleGeometrySpec,
+        PintleMechanicalSpec,
         PropellantFeedSpec,
         resolve_feed_state,
     )
     from raosim.throat_geometry import ThroatGeometrySpec
 
     from raosim.mdo.resolved_inputs import resolve_engine_inputs
+
+    if getattr(mission, "pintle_architecture", "fixed_slotted") != (
+        "fixed_slotted"
+    ):
+        # Handing the optimized Son valve to the slotted-post builder would
+        # export a different injector than the one optimized.  The host's
+        # son_continuous_movable branch is report-only and needs calibration,
+        # stop and actuator evidence this mapping does not carry yet.
+        raise ValueError(
+            "the son_movable pintle valve has no authoritative host handoff "
+            "yet: its optimum is a numerical MDO design only, and the host "
+            "refuses movable-pintle CAD"
+        )
 
     d = _as_design_dict(design)
 
@@ -368,10 +382,9 @@ def to_design_input(
     )
     injector = InjectorSpec(
         type="pintle",
-        # The MDO uses discrete radial slots and auto-sizes their flow area.
-        # Its separate Son transition inequality remains a screening field;
-        # selecting the traditional continuous-gap architecture would remove
-        # the slots and blockage-factor geometry being compared.
+        # Only the fixed slotted architecture reaches this handoff (the Son
+        # valve is refused above), so the host builds the same slotted post
+        # whose flow area, blockage factor and wall the MDO optimized.
         architecture="fixed_discrete",
         sizing="auto",
         fuel_dp_fraction=resolved.injector.fuel_dp_fraction,
@@ -421,6 +434,11 @@ def to_design_input(
             deflector_angle=resolved.injector.deflector_angle_deg,
             radial_stream="fuel",
             radial_exit_style="slots",
+        ),
+        # The optimized post wall reaches the machined/coaxial CAD, so the
+        # exported pintle is the one the MDO priced and screened.
+        mechanical=PintleMechanicalSpec(
+            pintle_wall_thickness=resolved.injector.pintle_wall_thickness,
         ),
         feed_system=feed,
     )
@@ -549,6 +567,11 @@ def _pump_spec(
             }
     else:
         efficiencies = {"default": float(mission.eta_pump)}
+    # One electric technology for both pipelines: the mission's eight electric
+    # fields ARE its declared raosim.electric_technology set (MissionSpec
+    # refuses a mismatch unless the set is "custom"), so the authoritative
+    # pump package is sized with exactly the numbers the optimizer used.  The
+    # sizing result records the set id it recognises from these values.
     return PumpSizingSpec(
         drive=ElectricDriveSpec(
             motor_efficiency=float(mission.eta_motor),

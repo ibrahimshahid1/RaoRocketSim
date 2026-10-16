@@ -2,6 +2,7 @@
 import hashlib
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -35,6 +36,22 @@ def test_grounding_rejects_reordered_words_and_changed_meaning(isolated):
     assert g.locate('Pressure increases with temperature under fixed volume.', 1)['state'] == 'GROUNDED'
     assert g.locate('Temperature increases with pressure under fixed volume.', 1)['state'] == 'UNGROUNDED'
     assert g.locate('Pressure decreases with temperature under fixed volume.', 1)['state'] == 'UNGROUNDED'
+
+
+def test_legacy_scanned_manifest_is_low_confidence_even_if_old_flag_is_false(isolated, monkeypatch):
+    corpus = isolated / 'propulsion_texts'
+    agents = corpus / 'propulsion_texts_for_agents'
+    agents.mkdir(parents=True)
+    monkeypatch.setattr(ingest, 'CORPUS_ROOT', corpus)
+    monkeypatch.setattr(ingest, 'AGENT_CORPUS_ROOT', agents)
+    (agents / 'paper.md').write_text('<!-- PDF page 1 -->\n\nLegacy OCR passage requiring source verification. This longer synthetic paragraph exercises the readable chunk path while retaining the OCR confidence flag.')
+    (agents / '_conversion_manifest.json').write_text(json.dumps([{
+        'source_pdf': 'paper.pdf', 'output_markdown': 'paper.md', 'sha256': 'original',
+        'extraction_status': 'needs_review', 'scanned': True, 'low_confidence': False,
+    }]))
+    docs = ingest.build_manifest(verbose=False)
+    assert docs[0]['conversion']['low_confidence'] is True
+    assert ingest.ingest_chunks(verbose=False)['states'][0]['state'] == 'LOW_EXTRACTION_CONFIDENCE'
 
 
 def test_incremental_ingest_records_unchanged_and_removes_missing_derivative(isolated):
@@ -105,6 +122,57 @@ def test_sync_checks_output_existence_and_conversion_failure(tmp_path, monkeypat
     assert len(sync_corpus.scan()['missing_markdown']) == 1
 
 
+def test_sync_does_not_call_missing_archive_synchronized(tmp_path, monkeypatch):
+    corpus = tmp_path / 'propulsion_texts'
+    agents = corpus / 'propulsion_texts_for_agents'
+    markdown = agents / 'markdown'
+    markdown.mkdir(parents=True)
+    for name, value in [('REPO', tmp_path), ('CORPUS', corpus), ('AGENTS', agents),
+                        ('MARKDOWN', markdown), ('MANIFEST', agents / '_conversion_manifest.json')]:
+        monkeypatch.setattr(sync_corpus, name, value)
+    (markdown / 'paper.md').write_text('An archive-derived passage.')
+    row = {'source_pdf': 'archive/paper.pdf', 'sha256': 'original',
+           'output_markdown': 'markdown/paper.md', 'source_kind': 'zip_member',
+           'source_container': 'archive.zip', 'archive_member': 'paper.pdf'}
+    sync_corpus.MANIFEST.write_text(json.dumps([row]))
+    result = sync_corpus.scan()
+    assert result['synchronized'] == []
+    assert len(result['stale_markdown']) == 1
+    assert 'archive is unavailable' in result['stale_markdown'][0]['reason']
+    payload = b'original source payload'
+    row['sha256'] = hashlib.sha256(payload).hexdigest()
+    sync_corpus.MANIFEST.write_text(json.dumps([row]))
+    with zipfile.ZipFile(corpus / 'archive.zip', 'w') as archive:
+        archive.writestr('paper.pdf', payload)
+    assert len(sync_corpus.scan()['synchronized']) == 1
+    with zipfile.ZipFile(corpus / 'archive.zip', 'w') as archive:
+        archive.writestr('paper.pdf', b'replaced source payload')
+    result = sync_corpus.scan()
+    assert result['synchronized'] == []
+    assert 'checksum differs' in result['stale_markdown'][0]['reason']
+
+
+def test_sync_classifies_exact_catalog_mirror_without_inventing_pdf(tmp_path, monkeypatch):
+    corpus = tmp_path / 'propulsion_texts'
+    agents = corpus / 'propulsion_texts_for_agents'
+    markdown = agents / 'markdown'
+    (markdown / 'pintle_injector').mkdir(parents=True)
+    (corpus / 'pintle_injector').mkdir()
+    for name, value in [('REPO', tmp_path), ('CORPUS', corpus), ('AGENTS', agents),
+                        ('MARKDOWN', markdown), ('MANIFEST', agents / '_conversion_manifest.json')]:
+        monkeypatch.setattr(sync_corpus, name, value)
+    note = corpus / 'pintle_injector/PINTLE_LITERATURE_CATALOG.md'
+    mirror = markdown / 'pintle_injector/PINTLE_LITERATURE_CATALOG.md'
+    note.write_text('Human-authored bibliographic catalog, not a paper.')
+    mirror.write_bytes(note.read_bytes())
+    result = sync_corpus.scan()
+    assert len(result['mirrored_reference_notes']) == 1
+    assert not result['orphan_markdown']
+    assert result['pdf_count'] == 0
+    mirror.write_text('Changed content without a source mapping.')
+    assert len(sync_corpus.scan()['orphan_markdown']) == 1
+
+
 def test_cli_rebuild_uses_complete_pipeline(monkeypatch):
     args = []
     monkeypatch.setattr(pipeline, 'main', lambda argv: args.extend(argv) or 7)
@@ -124,9 +192,11 @@ def test_queue_skips_completed_reviews_and_lists_missing_source_separately(isola
     from kg import work_queue
     d = document(isolated)
     store.save('manifest', [d])
+    store.save('equations', [{'id': 'EQ_OLD', 'document_id': d['id'], 'form': 'NOT RENDERED',
+                              'source_state': 'SUPERSEDED_EXTRACTION', 'active': False}])
     store.save('models', [
         {'id': 'MODEL_DONE', 'registry_id': 'done', 'subsystem': 'nozzle',
-         'source_document_id': d['id'], 'source_support_state': 'PARTIALLY_SUPPORTED'},
+         'source_document_id': d['id'], 'source_support_state': 'PARTIALLY_SUPPORTED', 'source_support_sha256': 'abc'},
         {'id': 'MODEL_NEXT', 'registry_id': 'next', 'subsystem': 'nozzle', 'source_document_id': d['id']},
         {'id': 'MODEL_MISSING', 'registry_id': 'missing', 'subsystem': 'nozzle'},
     ])
@@ -134,6 +204,7 @@ def test_queue_skips_completed_reviews_and_lists_missing_source_separately(isola
     assert [r['target'] for r in result['model_reviews']] == ['MODEL_NEXT']
     assert [r['target'] for r in result['source_routing']] == ['MODEL_MISSING']
     assert result['summary']['models_total'] == 3
+    assert result['formula_repairs'] == []
 
 
 def test_packet_is_bounded_and_does_not_claim_exhaustive_coverage(isolated):

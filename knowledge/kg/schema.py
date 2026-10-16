@@ -14,7 +14,7 @@ Design notes
 
 from __future__ import annotations
 
-ONTOLOGY_VERSION = "1.0.0"
+ONTOLOGY_VERSION = "1.1.0"
 EXTRACTION_VERSION = "1.0.1"
 
 # --------------------------------------------------------------------------
@@ -31,6 +31,7 @@ SOURCE_NODES = (
     "Citation",
     "SourceReference",     # document + page + verbatim locator
     "ProvenanceRecord",
+    "ExtractionCandidate", # parser output awaiting source-page/semantic review
 )
 
 SCIENCE_NODES = (
@@ -237,6 +238,7 @@ SCHEMA = {
         "Constraint": "CST", "ValidationGate": "GATE", "Test": "TEST",
         "Benchmark": "BENCH", "SoftwareComponent": "SW", "Capability": "CAP",
         "RepositoryDocument": "RDOC", "ProvenanceRecord": "PROV",
+        "ExtractionCandidate": "CAND",
         "EmpiricalConstant": "CONST", "Subsystem": "SUB",
     },
 }

@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 CONVERTER_NAME = "lrekit-kg-pdf2md"
-CONVERTER_VERSION = "1.0.0"
+CONVERTER_VERSION = "1.0.1"
 
 # Characters that signal displayed mathematics in raw PDF text.
 _EQ_CHARS = "=≈≅≡≤≥∂∫∑∏√∞±∓·×÷αβγδεζηθκλμνξπρστφχψωΓΔΘΛΞΠΣΦΨΩ∇⋅"
@@ -249,6 +249,16 @@ def convert_pdf(pdf_path: Path, out_path: Path, *, allow_ocr: bool = True,
         pages = [PageResult(number=i + 1, markdown="", native_chars=per_page_native[i])
                  for i in range(doc.page_count)]
 
+    # A parser can omit an image-only page entirely.  Keep every source page in
+    # the conversion so it can receive OCR and retains its marker if unreadable.
+    present_pages = {page.number for page in pages}
+    missing_pages = [i + 1 for i in range(doc.page_count) if i + 1 not in present_pages]
+    if missing_pages:
+        pages.extend(PageResult(number=pno, markdown="", native_chars=per_page_native[pno - 1])
+                     for pno in missing_pages)
+        pages.sort(key=lambda page: page.number)
+        issues.append(f"Markdown parser omitted {len(missing_pages)} page(s); source page markers were restored")
+
     # The Markdown parser silently returns nothing for some scanned-over-text and
     # older two-column scans.  Where the page demonstrably HAS native text, rebuild
     # it from span geometry rather than emitting a blank page.
@@ -274,9 +284,11 @@ def convert_pdf(pdf_path: Path, out_path: Path, *, allow_ocr: bool = True,
         )
 
     # ---- OCR only for pages the native extractor could not read ----
+    # Eligibility is page-local: a scanned appendix needs OCR even if most of
+    # the document has native text.  `scanned` remains a document diagnostic.
     ocr_pages = 0
     failed_pages = 0
-    if allow_ocr and scanned:
+    if allow_ocr and sparse_pages:
         tessdata = os.environ.get("TESSDATA_PREFIX") or "/opt/homebrew/share/tessdata"
         os.environ.setdefault("TESSDATA_PREFIX", tessdata)
         for page in pages:
@@ -295,11 +307,11 @@ def convert_pdf(pdf_path: Path, out_path: Path, *, allow_ocr: bool = True,
         if ocr_pages:
             method += "+tesseract-ocr"
             issues.append(
-                f"Scanned source: {ocr_pages} page(s) reconstructed by OCR; symbols, equations, "
+                f"Sparse source pages: {ocr_pages} page(s) reconstructed by OCR; symbols, equations, "
                 "subscripts, and reading order require verification against the PDF"
             )
-        elif failed_pages:
-            issues.append(f"Scanned source and OCR failed on {failed_pages} page(s); text is missing, not reconstructed")
+        if failed_pages:
+            issues.append(f"OCR failed on {failed_pages} page(s); missing text was not reconstructed")
 
     result.ocr_pages = ocr_pages
     result.failed_pages = failed_pages
@@ -351,6 +363,7 @@ def convert_pdf(pdf_path: Path, out_path: Path, *, allow_ocr: bool = True,
 
     low_conf = bool(
         scanned
+        or result.ocr_pages
         or result.failed_pages
         or empty_pages > 0.2 * max(doc.page_count, 1)
         or (result.source_equation_signals and result.equation_signals < 0.4 * result.source_equation_signals)

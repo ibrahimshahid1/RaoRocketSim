@@ -1130,3 +1130,74 @@ def test_lrekit_help_does_not_wake_matplotlib_cache():
     assert proc.returncode == 0
     assert "Matplotlib" not in proc.stderr
     assert "Fontconfig" not in proc.stderr
+
+
+def _parsed_cli_args(monkeypatch, argv, mode="--engine-mdo"):
+    """Parse ``argv`` through the real CLI and capture the namespace."""
+    from raosim import run_nozzle
+
+    captured = {}
+
+    def capture(args):
+        captured["args"] = args
+        return 0
+
+    monkeypatch.setattr(run_nozzle, "_run_engine_mdo", capture)
+    monkeypatch.setattr(run_nozzle, "_run_engine_mdo_optimize", capture)
+    assert run_nozzle.main(["--no-banner", mode, *argv]) == 0
+    return captured["args"]
+
+
+@pytest.mark.parametrize("mode", ("--engine-mdo", "--engine-mdo-optimize"))
+def test_burn_time_default_keeps_missionspec_value_on_mdo_path(monkeypatch, mode):
+    """Audit §1.4 item 23: an absent --burn-time no longer forces 10 s on
+    the MDO mission; the MissionSpec default (120 s) stands."""
+    from raosim.run_nozzle import _mission_from_mdo_args, _pump_spec_from_args
+
+    args = _parsed_cli_args(monkeypatch, [], mode)
+    assert args.burn_time is None
+    mission, _ = _mission_from_mdo_args(args, optimization_capable=True)
+    assert mission.burn_time == 120.0
+    # The traditional pump sizing keeps its historical 10 s default.
+    assert _pump_spec_from_args(args).burn_time == 10.0
+
+
+def test_explicit_burn_time_reaches_both_pipelines(monkeypatch):
+    from raosim.run_nozzle import _mission_from_mdo_args, _pump_spec_from_args
+
+    args = _parsed_cli_args(monkeypatch, ["--burn-time", "45"])
+    mission, _ = _mission_from_mdo_args(args, optimization_capable=False)
+    assert mission.burn_time == 45.0
+    assert _pump_spec_from_args(args).burn_time == 45.0
+
+
+def test_requirement_flight_duration_falls_back_to_missionspec_default():
+    from raosim.run_nozzle import _requirement_flight_duration
+
+    assert _requirement_flight_duration(
+        SimpleNamespace(flight_duration=None, burn_time=None)) == {}
+    assert _requirement_flight_duration(
+        SimpleNamespace(flight_duration=None, burn_time=30.0)
+    ) == {"flight_duration": 30.0}
+    assert _requirement_flight_duration(
+        SimpleNamespace(flight_duration=60.0, burn_time=30.0)
+    ) == {"flight_duration": 60.0}
+
+
+def test_electric_technology_flag_reaches_mdo_mission(monkeypatch):
+    from raosim.run_nozzle import _mission_from_mdo_args, _pump_spec_from_args
+
+    args = _parsed_cli_args(
+        monkeypatch, ["--electric-technology", "lee2021_ijass_electric_pump"])
+    mission, _ = _mission_from_mdo_args(args, optimization_capable=False)
+    assert mission.electric_technology == "lee2021_ijass_electric_pump"
+    assert mission.battery_power_density == 650.0
+    spec = _pump_spec_from_args(args)
+    assert spec.battery.power_density == 650.0
+    assert spec.drive.inverter_power_density == 60.0e3
+
+    custom = _parsed_cli_args(monkeypatch, ["--battery-power-density", "2000"])
+    mission, _ = _mission_from_mdo_args(custom, optimization_capable=False)
+    assert mission.electric_technology == "custom"
+    assert mission.battery_power_density == 2000.0
+    assert _pump_spec_from_args(custom).battery.power_density == 2000.0

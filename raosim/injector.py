@@ -1758,6 +1758,12 @@ def _stream_mass_flux(fs: FeedState, dp: float, cd: float, P_back: float):
     against the critical pressure ratio (Sutton & Biblarz; Anderson, *Modern
     Compressible Flow*).  Returns ``(G, v_inj, choked, branch, info)`` where
     ``v_inj`` is the throat injection velocity (sonic when choked).
+
+    White, Fluid Mechanics 7th ed., PDF pp1092,1101, Eqs9.32 and9.46-9.47
+    support the constant-gamma perfect-gas flow functions. Cd is an additional
+    input coefficient. Feed temperature and P_back+dp are treated as stagnation
+    state; this does not establish real/supercritical-gas accuracy or the
+    distinct meter-dependent expansion factor of White Eq6.117.
     """
     if fs.liquid_ok:
         G = cd * math.sqrt(2.0 * fs.density * dp)

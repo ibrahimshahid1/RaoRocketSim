@@ -56,7 +56,9 @@ authoritative snapshot handoff.
 | `injector.py` | Pintle: orifice/TMR/blockage + Son two-branch area | `injector_readouts` |
 | `pump.py` | Electric feed: duty, C¹ efficiency, separate battery energy/power branches | `electric_feed` |
 | `engine.py` | **The coupled solve** — all blocks, one gradient | `solve_engine`, `engine_outputs` |
-| `nlp.py` | ε-constraint optimiser + Pareto sweep | `solve_min_mass`, `pareto_frontier` |
+| `nlp.py` | ε-constraint optimiser + Pareto sweep; fail-closed trial points, independent KKT check, multi-start (§4a) | `solve_min_mass`, `pareto_frontier`, `kkt_check` |
+| `convergence.py` | Station-refinement (grid-convergence) study, plan §11 criterion (§4a) | `station_refinement_study` |
+| `../electric_technology.py` | **One electric-drive technology set for both pipelines** (§4b) | `ElectricTechnologySet`, `MissionSpec.with_electric_technology` |
 | `assembly.py` | The original 4-variable walking skeleton (kept as a gate) | `make_engine_fn` |
 | `state.py` | Versioned, fixed-shape pure-JAX numerical output pytree | `EngineState`, `solve_engine_state` |
 | `snapshot.py` | Versioned host contract shared by MDO and traditional analyses | `EngineAnalysisSnapshot`, `snapshot_from_mdo`, `snapshot_from_traditional`, `compare_snapshots` |
@@ -122,25 +124,58 @@ its physics verdict remains unknown. The LH2 specific-speed sizing can also ask
 for a speed inappropriate for a single stage; tank pressure, NPSH, and pump
 stage count still need propellant-specific resolution.
 
-## 3. The design layout (10 or 11 active variables)
+## 3. The design layout (12 or 13 physical variables)
 
 | Variable | Bounds | Why it is a variable |
 |---|---|---|
 | `Pc` | architecture-labelled recommended window; electric-pump default 1.5–6.0 MPa, explicitly overridable | chamber pressure; hard admissibility comes from property/model domains and live limits |
 | `eps` | Rao/TOP table domain (currently 4–50) | expansion ratio |
 | `dp_f_frac`, `dp_o_frac` | 0.12–0.45 | injector Δp / P_c (chug rule ≥ 0.2) |
-| `D_pintle` | mission-scaled around the resolved reference pintle | sets blockage factor (constrained band) |
+| `D_pintle` | mission-scaled around the resolved reference pintle | pintle post OD: hardware mass vs blockage band (slotted) or Son opening and centre-gap fit (valve) |
 | `N_rpm` | mission-scaled around the specific-speed reference | pump speed → specific speed → efficiency |
 | `channel_width` | 0.3–1.2 mm | jacket geometry |
 | `channel_height` | 0.8–5.0 mm | jacket geometry (AR ≤ 8 enforced) |
 | `film_frac` | 0–0.30 | fuel diverted to wall film — **the coking lever** |
 | `t_wall` | 0.4–2.0 mm | thin for conductance, thick for structure |
+| `t_post` | 0.4 mm – D_ref/4 | pintle post wall: hardware mass vs post pressure screen; for the valve it also sets the Son tip radius |
+| `D_cg` | rod diameter – 2 D_ref | Son valve centre gap: transition area vs the bore it must fit inside. **Pinned** for the slotted post |
 
-O/F is the eleventh active variable only for an explicitly variable layout
-backed by a validated O/F-dependent sampled property table. Fixed mode keeps a
-10-value optimizer vector but every state/snapshot stores an 11-value physical
+O/F is the thirteenth variable only for an explicitly variable layout backed by
+a validated O/F-dependent sampled property table. Fixed mode keeps a 12-value
+physical optimizer vector but every state/snapshot stores a 13-value physical
 contract vector containing the real effective O/F; no numerical sentinel is
-used.
+used. `D_cg` is always in the contract; for the fixed slotted pintle the NLP and
+job layer pin it at its reference, so it never becomes a dead free column.
+
+### 3a. The pintle component (`mdo/pintle.py`)
+
+The pintle is an optimizable component with its own variables (`D_pintle`,
+`t_post`, `D_cg`), its hardware mass in the partial dry-mass objective, and
+constraints chosen by an outer-enumeration architecture
+(`MissionSpec.pintle_architecture`, plan rule 4):
+
+| Architecture | What it is | Rows that apply | CAD handoff |
+|---|---|---|---|
+| `fixed_slotted` (default) | radial fuel through N slots in a fixed post; the five-part coaxial CAD and the water cold-flow article | blockage band, post stress, wall fit, module fit | yes: `t_post` reaches `PintleMechanicalSpec.pintle_wall_thickness` |
+| `son_movable` | Son et al. 2017 continuous-gap pintle **valve** metered by a centre rod; throttles by stroke | Son transition, minimum opening at the lowest throttle level, centre-gap fit, post stress, wall fit, module fit | refused (`to_design_input`, `--mdo-export`); numerical design only |
+
+Mass is direct prismatic geometry: a post tube over `pintle_body_length_factor`
+× D (3.0, the host layout default) less the slot prisms (NumPy-parity with the
+host `injector_mass_ledger` post row), plus the valve's centre rod. Material is
+the closeout/jacket alloy, the host's injector structural alloy. The post
+screen is `p r_o / t` with the radial stream's injector-inlet pressure against
+ambient; on the outside radius it bounds the elastic Lamé bore stress for any
+wall. The valve's throttle check holds the radial Δp fraction and scales Pc
+with flow (host `throttle_map` convention), so the metered area scales as
+f^½; Son 2017 PDF pp. 2 and 10 supply the 0.1 mm uniform-sheet floor. The
+minimum opening is an applicability bound for the observed sheets, not a
+universal hardware limit, and the throttle check is a single-point surrogate
+for Phase 10.
+
+Select it with `--mdo-pintle-architecture son_movable --mdo-pintle-throttle-min
+0.4` (CLI) or `dataclasses.replace(mission, pintle_architecture="son_movable",
+pintle_throttle_min_fraction=0.4)`. Unified jobs do not offer the valve yet,
+because they always run the host re-evaluation it has no handoff for.
 
 **Every active variable is live.** A zero Jacobian column means a variable that cannot
 reach any constraint or the objective; two such variables were found and fixed
@@ -148,39 +183,56 @@ reach any constraint or the objective; two such variables were found and fixed
 
 ---
 
-## 4. One constraint manifest (31 rows)
+## 4. One constraint manifest (36 rows)
 
 `raosim.mdo.constraints.CONSTRAINT_MANIFEST` owns the stable row order,
-applicability, availability, required mask, scaling, optimizer role, and source
-identifier. It currently contains 23 differentiable hard rows, seven mandatory
-post-solve gates, and one report-only thrust-closure equality. Requirement rows,
-the sampled-property row, and the coking/HTD pair are active only when applicable.
+applicability, availability, required mask, scaling, optimizer role, source
+identifier and **basis class**. It currently contains 28 differentiable hard
+rows, seven mandatory post-solve gates, and one report-only thrust-closure
+equality. Requirement rows, the sampled-property row, the coking/HTD pair and
+the architecture-specific pintle rows are active only when applicable.
 
-| Constraint | Meaning | Source |
-|---|---|---|
-| `isp_epsilon` | I_sp ≥ floor | the ε-constraint |
-| `separation` | no flow separation | Östlund Eq. 28–30, SP-8120 |
-| `coking` | T_wc ≤ 728 K (RP-1 liquid-wall) | SP-8087 (850 °F), Sellers 1961 |
-| `land_fit` | channels physically fit the circumference | geometry |
-| `chug` | min(χ_f, χ_o) ≥ 0.2 preliminary screen | SP-125 injector-design rule of thumb (15–20%, source-PDF p. 137 / printed p. 128); SP-194 supplies qualitative chug context |
-| `pintle_transition` | stay on the tip-controlled branch | Son 2017 |
-| `pump_suction` | N_ss ≤ 4 | SP-8052 |
-| `pump_tip_speed` | U₂ ≤ 400 m/s | SP-8109 |
-| `aspect_ratio` | channel h/w ≤ 8 | Pizzarelli 2011, Carlile 1992, Mirzamoghadam |
-| `blockage_lo/hi` | BF in 0.30–0.90 | Hwang 2022, Freeberg 2019, Ryu et al. |
-| `structural_stress` | σ_thermal + \|σ_pressure\| ≤ post-FOS allowable | SP-125 eq. 4-31 convention |
-| `wall_temp` | T_wg ≤ 800 K | Mirzamoghadam allowable gas-side wall temp |
-| `film_capacity` | installed film circuit capacity ≥ 2× design film flow | SP-8087 capacity recommendation plus explicit 60%-of-fuel architecture |
-| `property_domain` | stay inside the sampled property table | interpolation validity |
-| `chart_domain` | stay inside the digitized Rao/TOP chart | SP-8120 chart domain |
-| `wall_monotonic` | divergent wall radius does not reverse | geometry validity |
-| `chamber_volume` | the solved barrel satisfies the L* chamber-volume construction | SP-125 chamber definition |
-| `jacket_thin_shell` | the selected shell approximation remains in its declared thin-shell regime | model applicability screen |
-| `nozzle_collapse` | closeout retains the modeled external-pressure/collapse margin | SP-8087 structural load path |
-| `contour_provider` | selected contour provider returned an available, feasible result | provider availability contract |
-| `liner_buckling` | preliminary rib-supported liner external-pressure screen | SP-8087 failure mode; classical long-plate screening assumption |
-| `envelope_diameter`, `envelope_length` | active partial-envelope requirement margins | SP-125 §2.1 item 6 |
-| `dry_mass_partial` | active resolved-partial mass requirement margin | SP-125 §2.1 item 5; explicitly not full engine dry mass |
+Every row declares `basis_class` (2026-10-16): `literature` (the limit or its
+governing allowable is stated in the cited source), `geometric_definition`,
+`model_validity_domain`, `repository_rule` (a repository number; any
+`source_id` cites only the criterion's form), `numerical_contract` or
+`requirement`. A `literature` row must carry a `source_id`; the eight hard rows
+that had none now carry either a page-verified source or one of the other
+labels. The knowledge graph reports such rows as `DECLARED_<BASIS>` instead of
+`SCIENTIFIC_BASIS_UNKNOWN`.
+
+| Constraint | Meaning | Basis | Source |
+|---|---|---|---|
+| `isp_epsilon` | I_sp ≥ floor | requirement | the ε-constraint |
+| `separation` | no flow separation | literature | Östlund Eq. 28–30, SP-8120 |
+| `coking` | T_wc ≤ 728 K (RP-1 liquid-wall) | literature | SP-8087 (850 °F), Sellers 1961 |
+| `land_fit` | channels physically fit the circumference (positive land) | geometric definition | — |
+| `chug` | min(χ_f, χ_o) ≥ 0.2 preliminary screen | literature | SP-125 injector-design rule of thumb (15–20%, source-PDF p. 137 / printed p. 128); SP-194 supplies qualitative chug context |
+| `pintle_transition` | Son valve stays on the tip-controlled branch (`son_movable` only) | literature | Son 2017 Eq. 1, PDF pp. 4, 9 |
+| `pintle_post_stress` | post hoop `p r_o/t` ≤ closeout yield / SP-8087 FOS | repository_rule (sourced allowable, screening stress form) | outer-radius hoop screening assumption; SP-8087 §2.1.3 |
+| `pintle_wall_fit` | t_post ≤ 0.8 r_o (keeps a bore) | repository rule | host machined-layout cap (`injector_cad.resolve_machined_pintle_layout`) |
+| `pintle_min_opening` | Son opening at the lowest throttle level ≥ 0.1 mm (`son_movable` only) | literature | Son 2017 PDF pp. 2, 10 |
+| `pintle_center_gap_fit` | D_cg ≤ D − 2 t_post (`son_movable` only) | geometric definition | Son 2017 Fig. 2 geometry |
+| `pintle_module_fit` | axial-annulus OD < chamber diameter | literature | Son 2017 PDF p. 9 |
+| `pump_suction` | N_ss ≤ 4 | literature | SP-8052 |
+| `pump_tip_speed` | U₂ ≤ 400 m/s | literature | SP-8109 |
+| `aspect_ratio` | channel h/w ≤ 8 | literature | Wadel 1997, Carlile 1992; Mirzamoghadam lists 8 (initial) and 7 (present criteria), PDF p. 7 |
+| `blockage_lo` | BF ≥ 0.30 (`fixed_slotted` only) | literature | TRW advice 0.3 < BF < 0.7 relayed by Freeberg 2019 (DOI 10.2514/6.2019-0152), PDF pp. 5–6, 10 |
+| `blockage_hi` | BF ≤ 0.90 (`fixed_slotted` only) | repository rule | no held source states 0.90; held evidence is 0.7 (TRW via Freeberg) and the Ryu optimum near 85 % with thermal damage at 86 % (Hwang et al., PDF pp. 2, 4, 8) |
+| `structural_stress` | σ_thermal + \|σ_pressure\| ≤ post-FOS allowable | literature | SP-125 eq. 4-31 convention |
+| `wall_temp` | T_wg ≤ 800 K | repository rule | criterion form Mirzamoghadam 1991 (PDF p. 5; Table 2 PDF p. 7, 1050 °F "Depends on Material"); 800 K is not in the paper (900 °F = 755 K is an H2/O2 copper value) |
+| `film_capacity` | installed film circuit capacity ≥ 2× design film flow | literature | SP-8087 capacity recommendation plus explicit 60%-of-fuel architecture |
+| `property_domain` | stay inside the sampled property table | model validity domain | the sampled CEA table box |
+| `chart_domain` | stay inside the Rao/TOP chart extent (ε 4–50, L_f 60–100 %) | model validity domain | extent of SP-125 Fig. 4-14 (PDF p. 100) and SP-8120 Fig. 5(b) (PDF p. 29); the tabulated ordinates are NOT cited (§9 item 13) |
+| `wall_monotonic` | divergent wall radius does not reverse | geometric definition | — |
+| `chamber_volume` | the solved barrel satisfies the L* chamber-volume construction | geometric definition | SP-125 chamber definition (printed p. 88) |
+| `jacket_thin_shell` | the selected shell approximation remains in its declared thin-shell regime | literature | SP-125 p. 336 |
+| `nozzle_collapse` | closeout retains the modeled external-pressure/collapse margin | literature | SP-8087 structural load path |
+| `contour_provider` | selected contour provider returned an available, feasible result | numerical contract | plan §0.1 rule 1 |
+| `liner_buckling` | preliminary rib-supported liner external-pressure screen | repository_rule (sourced failure mode, screening relation) | SP-8087 failure mode; classical long-plate screening assumption |
+| `engine_residual`, `cooling_residual`, `solver_status`, `finite` | inner solves closed, finite | numerical contract | plan §0.1 rule 6, §11 |
+| `envelope_diameter`, `envelope_length` | active partial-envelope requirement margins | requirement | SP-125 §2.1 item 6 |
+| `dry_mass_partial` | active resolved-partial mass requirement margin | requirement | SP-125 §2.1 item 5; explicitly not full engine dry mass |
 
 Reported but deliberately **not** constrained: coolant Mach (≈2 orders of
 margin — a constraint would just add a dead column). Engine/cooling residual
@@ -188,6 +240,107 @@ closure, root status, finiteness, provider availability, liner buckling, and
 applicable coolant HTD coverage are mandatory final gates. An unavailable
 required model yields an `unknown` physics verdict; it never becomes a passing
 boolean.
+
+## 4a. Solver robustness and optimality evidence (2026-10-16)
+
+The audit `MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md` §1.1 found that one
+bad iterate aborted the NLP, that SciPy success stood in for a KKT check, and
+that there was no multi-start or grid-convergence evidence. All four are now in
+`nlp.py` / `convergence.py`, each with tests on closed-form analytic engines
+(`tests/test_mdo_nlp_robustness.py`, `tests/test_mdo_convergence.py`).
+
+**Fail-closed trial points.** The compiled programs contain two implicit
+solves; a non-finite value reaching a Lineax solve raises
+`jax.errors.JaxRuntimeError` (Equinox `error_if`). `_GuardedProblem` answers a
+primal failure at a trial point with a finite penalty (objective 10×|ref| above
+the largest finite objective seen, every enforced scaled row at −10) so SLSQP's
+merit line search backtracks; a derivative failure at a finite primal falls
+back to central differences of the same compiled primal in the unit box (step
+1e-6, one-sided at a face). An iterate where neither the exact derivative nor
+the fallback exists (a non-finite gradient whose only probe also fails) stops
+that run as a typed failure rather than handing SLSQP a zero-filled gradient,
+which it would read as convergence. A failure at the *returned* point, or at
+a start point itself, gives `success=False`, `numerical_status="fail"` and a
+message; `solve_min_mass` does not raise for numerical failures.
+Configuration errors (`ValueError`, `TypeError`, `ModelCoverageError`) still
+raise. `NLPResult.evaluation_failures` / `derivative_fallbacks` /
+`derivative_failures` count the three cases.
+`pareto_frontier` isolates each floor: a failed floor is recorded and the next
+floor warm-starts only from the last successful, gate-passing point; the CLI
+prints a failure row and keeps sweeping, and `--mdo-export` skips it.
+
+**Independent KKT check** (`nlp.kkt_check`), in the optimizer's own scaled
+unit-box space: exact objective gradient and enforced-row Jacobian, active set
+= scaled margin ≤ 1e-5 plus bound faces (u ≤ 1e-6 or ≥ 1 − 1e-6; a 1e-9
+tolerance missed the Son valve's t_post at u = 1.5e-9 and reported a false
+failure), multipliers
+by non-negative least squares (so dual feasibility holds by construction),
+stationarity `‖∇f − Jᵀλ − μ_lo + μ_hi‖∞ / max(1, ‖∇f‖∞)`, complementarity.
+`kkt_status` is `pass` when stationarity ≤ 1e-4 (plan §11) **and** the point is
+primal feasible to 1e-5, `fail` otherwise, `unknown` without derivatives or
+free variables. The check is independent of SciPy's convergence flag but
+reuses the same exact IFT derivatives; it is not a separate finite-difference
+cross-check. **It gates the result:** `success` and `workflow_status` pass only
+when `kkt_status` is `pass` (or `unknown` because every variable is fixed), so
+a run that stalls on the edge of a failing region, which SciPy reports as
+converged, is a failure. That makes the CLI exit 4, keeps the point out of a
+Pareto warm start, and gives a unified job a `SOLVER_FAILED` verdict with
+`statuses["kkt"]`. `optimizer_status` still reports feasibility alone. The
+definition is the standard textbook one; no held source states it, and the
+tolerances are the plan's repository definition of done.
+
+**Multi-start** (`n_starts`, `start_seed`; CLI `--mdo-multistart N`): start 0
+is the reference (or `u0`), the rest scrambled Sobol points in the unit box.
+The compiled programs are built once. The returned result is the best start
+passing optimizer and numerical status (physics pass, then convergence,
+preferred), else the least-violating start; `start_summaries` and `n_basins`
+(single-linkage: unit-box max-norm ≤ 1e-3 AND relative objective ≤ 1e-6, a
+repository choice) record all starts.
+
+**Station refinement**, two readings of the plan's < 0.5 % criterion.
+`convergence.station_refinement_study` (CLI `--mdo-station-study`) holds one
+design fixed, re-solves the engine with every segment count doubled
+(24 → 47 stations), and reports objective/Isp (relative) and every hard-row
+margin (|Δ| / manifest scale): the discretization error of that design.
+`convergence.reoptimized_refinement_study` re-solves the whole NLP on the
+refined grid (`solve_min_mass(..., topology=...)`, warm-started from the base
+optimum) and compares the optima: objective, Isp, KKT status and active set.
+Every block accepts a non-default `GridTopology`; no hard-coded station count
+was found.
+
+Measured at the 13 kN LOX/RP-1, Isp ≥ 190 s optimum (2026-10-16, after §4b):
+
+| Evidence | Result |
+|---|---|
+| Single solve | 26.2274 kg, Isp 224.69 s, all five statuses pass, 26 iterations; Isp ≥ 225 s: 26.2309 kg, KKT pass |
+| Son valve, 40 % throttle floor | 26.2569 kg, all pass, KKT pass (stationarity 2.0e-6); active: transition, centre-gap fit, coking, chug, chart_domain, chamber_volume + lower eps/t_wall/t_post |
+| KKT | **pass**, stationarity 1.6e-7, complementarity 2.7e-12; active: coking, chug, blockage_hi, chart_domain, chamber_volume + lower bounds on eps, t_wall, t_post (rank 7 of 8: chart_domain and the eps bound are the same face, LICQ fails, residual unique) |
+| 8-start multi-start (seed 0) | 2 basins: 6 starts reach 26.2274 kg; one reaches 26.5055 kg (+1.06 %, KKT pass; wider/shallower channels, film 0.216 vs 0.184); one fails ("Inequality constraints incompatible" from a far Sobol start). The reference basin is the best found. 4 starts: 1 basin, all KKT pass |
+| Station doubling, fixed design (24 → 47) | objective +0.009 %, Isp unchanged (1-D closure), but the active **coking margin moves +14.6 K = 4.9 % of its 300 K scale: NOT met** for that design. ×4 (93 stations): +22.3 K (7.4 %). `wall_temp` moves 15 K; `wall_monotonic` (a min of station differences) is grid-dependent by construction |
+| Station doubling, re-optimized | 24 → 47: optimum 26.2274 → 26.1606 kg (**−0.25 %**), Isp 224.69 → 225.30 s, film 0.184 → 0.179; 24 → 93: −0.39 %, Isp 225.62 s. Same active set and KKT pass on every grid: **met**. The optimum is still drifting downward with refinement, so the 24-station grid is slightly conservative |
+
+## 4b. One electric technology for both pipelines (2026-10-16)
+
+About 94 % of the objective is the electric package, and the MDO and
+`raosim/pumps.py` used to disagree on every density. `raosim/electric_technology.py`
+now holds complete `ElectricTechnologySet`s; `pumps.SCREENING_DEFAULTS` and
+`MissionSpec`'s eight electric fields both default to `repository_screening_v1`
+(the former `pumps.py` values: battery 3.0 kW/kg and 250 Wh/kg, κ_b 1.2,
+η_disch 0.95, motor 2.5 kW/kg shaft at 0.90, inverter 15 kW/kg output at 0.96),
+labelled a repository screening assumption with its published brackets — the
+inverter density is below and the inverter efficiency above every held value,
+and the constant discharge efficiency stands in for the Lee/Kwak burn-time
+correlation. `lee2021_ijass_electric_pump` is the page-verified Lee et al. 2021
+Table 2 set (PDF p. 11; η_E is Eq. 38 at 600 s). `MissionSpec.electric_technology`
+names the set; a mission whose numbers disagree with its declared set is
+refused unless the set is `custom`; `with_electric_technology(id)` swaps all
+eight fields atomically; the MDO→traditional handoff and resolved inputs carry
+the same set; CLI `--electric-technology`. `pump_specific_mass` stays an
+MDO-only, flagged screening value (no held source on its basis).
+
+Effect at 13 kN, Isp ≥ 190 s: **35.761 kg → 26.227 kg** partial dry mass (the
+review predicted ≈26.3 kg); Isp 224.77 → 224.69 s; design essentially unchanged
+(Pc 2.35 MPa, ε 4.0, film 0.184); the battery stays power-limited.
 
 ---
 
@@ -265,7 +418,8 @@ repository architecture choices and are recorded as such.
 
 **Injector.** Incompressible orifice, TMR, blockage factor, and the **Son 2017
 two-branch minimum area** (tip-opening vs centre-gap) with a consistency
-inequality — never a differentiable `min()`.
+inequality — never a differentiable `min()`. The pintle hardware, post screen
+and valve opening live in the separate pintle component (§3a).
 
 **Pump.** Meanline duty, N_s / N_ss / NPSH, a **C¹ η(N_s)** surrogate replacing
 the shipped binned estimator (which is a C0 step and cannot be differentiated),
@@ -304,7 +458,10 @@ system just to look coupled).
 **Dead design variables.** A variable with a zero Jacobian column *and* zero
 objective gradient is worse than useless — it makes the NLP rank-deficient.
 `film_slot_height` (physically inert for a liquid film) was removed;
-`D_pintle` was made live by constraining blockage factor. Always re-check.
+`D_pintle` was made live by constraining blockage factor, but with no path to
+the objective it still ended every solve at its starting value; it now also
+reaches the objective through the pintle post mass. `D_cg` would be dead for a
+slotted post, so it is pinned there. Always re-check.
 
 **Forward-mode AD through nested implicit solves.** `jacfwd` silently drops the
 tangent of geometry-only `jnp.min` margins through jit'd nested Optimistix
@@ -329,6 +486,29 @@ lrekit --engine-mdo --pc 3e6 --epsilon 8 --film-frac 0.10 --design-margins
 lrekit --engine-mdo-optimize --isp-min 200
 lrekit --engine-mdo-optimize --isp-sweep 250,320,6 --engine-mdo-ambient 1000
 
+# multi-start + grid-convergence evidence; another electric technology set
+lrekit --engine-mdo-optimize --isp-min 190 --mdo-multistart 8 --mdo-station-study
+lrekit --engine-mdo-optimize --isp-min 190 --electric-technology lee2021_ijass_electric_pump
+```
+
+Every optimizer line now ends with a `checks:` line: KKT status, stationarity,
+complementarity, evaluation failures and derivative fallbacks (and starts/basins
+with `--mdo-multistart`), then the active set. `--burn-time` defaults to *absent*:
+the traditional pump sizing then uses 10 s, while `--engine-mdo/-optimize` and
+`--requirements` keep `MissionSpec.burn_time` (120 s) — previously the CLI's
+10 s silently replaced it.
+
+Unified jobs can export the reference STEP: `output_policy` with
+`parts="reference_cad"`, `cad_formats=["step"]`, an `output_dir` and
+`allow_partial_package=true` (required, because the package is always partial).
+The authoritative re-evaluation writes into `<run>/parts/`, and
+`raosim.mdo.build` writes `engine_build_manifest.json` there. That module
+records path-only files as unverified, so no part is "built" and nothing earns
+geometry fidelity; the uniform-wall `thrust_chamber_wall.step` is listed as an
+unattributed artifact, not as the liner. The run manifest records the part
+manifest with `status: partial` and `hardware_release: false`.
+
+```bash
 # post-analyse an MDO point with the existing host Rao variational/MOC solver
 # (preliminary numerical analysis only; this path cannot emit manufacturing CAD)
 lrekit --engine-mdo --mdo-export --contour-method rao-bvp --cad none
@@ -404,14 +584,17 @@ for k, s in enumerate(default_design_space()):
    altitude/vacuum.
 7. **The optimized mass is not whole-engine dry mass.** The default
    differentiable objective contains pumps, motors, inverters, a smooth battery
-   governing-branch surrogate, and screening liner/land/closeout chamber masses.
+   governing-branch surrogate, screening liner/land/closeout chamber masses,
+   and the screening pintle post (plus the valve's centre rod).
    Exact installed electric and resolved-partial subtotals are reported
    separately. The traditional handoff now measures its five injector parts
    from the exact CadQuery bodies that are exported, with a shared geometry
-   identity and STEP round-trip gate. MDO injector mass and chamber/nozzle
-   CAD-linked qualification remain unavailable, so the full engine total stays
-   `None` plus an availability reason and the objective remains a partial
-   screening subtotal.
+   identity and STEP round-trip gate; its partial subtotal adds the measured
+   pintle body and tip, which include the feed stub, flange and replaceable
+   tip that the MDO post tube does not, so that parity delta is expected. The
+   rest of the MDO injector mass and chamber/nozzle CAD-linked qualification
+   remain unavailable, so the full engine total stays `None` plus an
+   availability reason and the objective remains a partial screening subtotal.
 8. **Nonzero-film thermal parity is intentionally unavailable.** The
    traditional bridge closes and reports the regen/film mass split, but the
    traditional thermal solver does not apply the MDO wall-film heat-load
@@ -449,6 +632,18 @@ for k, s in enumerate(default_design_space()):
     reference does not qualify other design contexts. These
     tolerances are repository screening policy, not literature qualification
     limits; see `RAO_B3_B5_HOST_EVIDENCE_2026-08-24.md`.
+12. **Fixed-design thermal margins are grid-sensitive.** At one fixed design,
+    doubling the stations moves the active coking margin by ~5 % of its scale
+    (§4a). Re-solving the NLP on the refined grids moves the optimum only
+    −0.25 % (×2) and −0.39 % (×4) with the same active set, so the solved
+    problem meets the plan criterion, but the optimum still drifts downward:
+    the 24-station grid is slightly conservative. No grid was retuned to pass.
+13. **The Rao/TOP angle tables need adjudication.** `nozzle_geometry.py`'s
+    θ_n/θ_e tables (used by the MDO contour too) give 31.6°/16.7° at ε = 14,
+    L_f = 0.8 where the held SP-125 worked example (PDF p. 107) reads 27.4°/9.8°,
+    and their θ_e rises with ε while both held charts fall. Only the chart
+    extent is cited (`chart_domain`); the values are unchanged pending an owner
+    decision.
 
 ---
 

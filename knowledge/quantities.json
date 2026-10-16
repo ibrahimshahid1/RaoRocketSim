@@ -1,6 +1,6 @@
 {
  "meta": {
-  "n": 72
+  "n": 91
  },
  "records": [
   {
@@ -32,14 +32,18 @@
    "si_unit": "m^2",
    "symbols": [
     "A_t",
-    "A*"
+    "A*",
+    "A_star"
    ],
    "code_symbols": [
     "a_t",
     "at",
     "throat_area"
    ],
-   "aliases": [],
+   "aliases": [
+    "sonic throat area",
+    "flowmeter throat area"
+   ],
    "subsystems": [
     "throat"
    ],
@@ -65,6 +69,70 @@
     "injector"
    ],
    "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_BL_DISPLACEMENT",
+   "type": "PhysicalQuantity",
+   "canonical": "displacement thickness",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "δ*",
+    "δ^*"
+   ],
+   "code_symbols": [
+    "delta_star"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "flow"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_BL_MOMENTUM",
+   "type": "PhysicalQuantity",
+   "canonical": "momentum thickness",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "θ"
+   ],
+   "code_symbols": [
+    "theta"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "flow"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_BL_THICKNESS",
+   "type": "PhysicalQuantity",
+   "canonical": "boundary-layer thickness",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "δ"
+   ],
+   "code_symbols": [
+    "delta"
+   ],
+   "aliases": [
+    "boundary layer thickness",
+    "turbulent boundary-layer thickness"
+   ],
+   "subsystems": [
+    "flow"
+   ],
+   "note": "Distinct from wall thickness even when both use delta and length units.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -113,6 +181,27 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_CD_DRAG",
+   "type": "PhysicalQuantity",
+   "canonical": "drag coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "C_D"
+   ],
+   "code_symbols": [
+    "drag_coefficient"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "flow",
+    "trajectory"
+   ],
+   "note": "Case-folded C_D can also denote discharge coefficient; identical dimensions do not establish identity.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_CF",
    "type": "PhysicalQuantity",
    "canonical": "thrust coefficient",
@@ -132,6 +221,32 @@
     "nozzle_contour"
    ],
    "note": "Distinct from discharge coefficient C_d and from skin-friction coefficient C_f.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CF_SKIN",
+   "type": "PhysicalQuantity",
+   "canonical": "skin-friction coefficient",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "c_f",
+    "C_f"
+   ],
+   "code_symbols": [
+    "cf",
+    "skin_friction_coefficient"
+   ],
+   "aliases": [
+    "local skin-friction coefficient",
+    "skin friction coefficient"
+   ],
+   "subsystems": [
+    "flow",
+    "gas_dynamics"
+   ],
+   "note": "Case-folded C_F can also denote thrust coefficient. Source meaning must disambiguate.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -165,18 +280,25 @@
    "dimension": "L^2 T^-2 Θ^-1",
    "si_unit": "J/kg/K",
    "symbols": [
-    "c_p"
+    "c_p",
+    "c_pi"
    ],
    "code_symbols": [
     "cp",
-    "c_p"
+    "c_p",
+    "cp_f"
    ],
-   "aliases": [],
+   "aliases": [
+    "mixture specific heat at constant pressure",
+    "species specific heat at constant pressure",
+    "frozen specific heat at constant pressure",
+    "frozen mixture specific heat at constant pressure"
+   ],
    "subsystems": [
     "thermochemistry",
     "cooling"
    ],
-   "note": "",
+   "note": "Quantity identity only; species/composition and frozen versus equilibrium derivative conditions remain in the source assertion.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -222,6 +344,33 @@
     "thermochemistry"
    ],
    "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_CV",
+   "type": "PhysicalQuantity",
+   "canonical": "specific heat at constant volume",
+   "dimension": "L^2 T^-2 Θ^-1",
+   "si_unit": "J/kg/K",
+   "symbols": [
+    "c_v",
+    "c_vf",
+    "c_vi"
+   ],
+   "code_symbols": [
+    "cv"
+   ],
+   "aliases": [
+    "mixture specific heat at constant volume",
+    "species specific heat at constant volume",
+    "frozen specific heat at constant volume"
+   ],
+   "subsystems": [
+    "thermochemistry",
+    "gas_dynamics"
+   ],
+   "note": "Distinct from constant-pressure specific heat despite identical units; no heat-capacity value or composition model is asserted.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -388,6 +537,31 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_E_SPECIFIC",
+   "type": "PhysicalQuantity",
+   "canonical": "specific internal energy",
+   "dimension": "L^2 T^-2",
+   "si_unit": "J/kg",
+   "symbols": [
+    "e",
+    "e_i"
+   ],
+   "code_symbols": [
+    "specific_internal_energy"
+   ],
+   "aliases": [
+    "species specific internal energy",
+    "mixture specific internal energy"
+   ],
+   "subsystems": [
+    "thermochemistry",
+    "gas_dynamics"
+   ],
+   "note": "Distinct from specific enthalpy even though both have energy-per-mass units.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_FIN_EFF",
    "type": "PhysicalQuantity",
    "canonical": "fin efficiency",
@@ -405,6 +579,34 @@
     "cooling"
    ],
    "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_FLOW_SPEED",
+   "type": "PhysicalQuantity",
+   "canonical": "local flow speed",
+   "dimension": "L T^-1",
+   "si_unit": "m/s",
+   "symbols": [
+    "u",
+    "V",
+    "u_star"
+   ],
+   "code_symbols": [
+    "flow_speed"
+   ],
+   "aliases": [
+    "local flow velocity",
+    "flow velocity",
+    "sonic flow speed",
+    "sonic critical velocity"
+   ],
+   "subsystems": [
+    "flow",
+    "gas_dynamics"
+   ],
+   "note": "Generic local speed; not automatically an exit speed or friction velocity. Sonic conditions remain in source context. u_star also denotes friction velocity, and case-folded V conflicts with specific volume.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -432,6 +634,27 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_FRICTION_VELOCITY",
+   "type": "PhysicalQuantity",
+   "canonical": "friction velocity",
+   "dimension": "L T^-1",
+   "si_unit": "m/s",
+   "symbols": [
+    "u*",
+    "u^*"
+   ],
+   "code_symbols": [
+    "u_star"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "flow"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_GAMMA",
    "type": "PhysicalQuantity",
    "canonical": "specific-heat ratio",
@@ -451,6 +674,32 @@
     "thermochemistry"
    ],
    "note": "Sources using k for gamma conflict with k for thermal conductivity. Never merge on the glyph.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_GRAVITY",
+   "type": "PhysicalQuantity",
+   "canonical": "gravitational acceleration",
+   "dimension": "L T^-2",
+   "si_unit": "m/s^2",
+   "symbols": [
+    "g",
+    "g_0"
+   ],
+   "code_symbols": [
+    "g0",
+    "gravity"
+   ],
+   "aliases": [
+    "acceleration of gravity"
+   ],
+   "subsystems": [
+    "pump",
+    "trajectory",
+    "performance"
+   ],
+   "note": "The glyph g can also be a code alias for gamma. Units and source context decide; no numerical value is asserted here.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -519,6 +768,35 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_H_SPECIFIC",
+   "type": "PhysicalQuantity",
+   "canonical": "specific enthalpy",
+   "dimension": "L^2 T^-2",
+   "si_unit": "J/kg",
+   "symbols": [
+    "h",
+    "h_0",
+    "h_i",
+    "h_2"
+   ],
+   "code_symbols": [
+    "specific_enthalpy"
+   ],
+   "aliases": [
+    "species specific enthalpy",
+    "mixture specific enthalpy",
+    "stagnation specific enthalpy",
+    "local specific enthalpy"
+   ],
+   "subsystems": [
+    "thermochemistry",
+    "gas_dynamics"
+   ],
+   "note": "Mass-specific thermodynamic enthalpy. The glyph h also denotes geometric height and heat-transfer coefficients; units and exact meaning must agree.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_ISP",
    "type": "PhysicalQuantity",
    "canonical": "specific impulse",
@@ -565,6 +843,28 @@
     "materials"
    ],
    "note": "Symbol k collides with the specific-heat ratio in older propulsion texts.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_LOCAL_FLOW_AREA",
+   "type": "PhysicalQuantity",
+   "canonical": "local duct area",
+   "dimension": "L^2",
+   "si_unit": "m^2",
+   "symbols": [
+    "A"
+   ],
+   "code_symbols": [
+    "local_flow_area"
+   ],
+   "aliases": [
+    "local flow area"
+   ],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "Area at the local flow section, not automatically the throat area.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -652,6 +952,28 @@
     "mass"
    ],
    "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_MASS_FRACTION",
+   "type": "PhysicalQuantity",
+   "canonical": "species mass fraction",
+   "dimension": "1",
+   "si_unit": "-",
+   "symbols": [
+    "c_i"
+   ],
+   "code_symbols": [
+    "species_mass_fraction"
+   ],
+   "aliases": [
+    "mass fraction"
+   ],
+   "subsystems": [
+    "thermochemistry"
+   ],
+   "note": "Species composition on a mass basis; distinct from mole fraction and speed of sound. No composition value is asserted.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -867,6 +1189,27 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_NU_KINEMATIC",
+   "type": "PhysicalQuantity",
+   "canonical": "kinematic viscosity",
+   "dimension": "L^2 T^-1",
+   "si_unit": "m^2/s",
+   "symbols": [
+    "ν"
+   ],
+   "code_symbols": [
+    "nu_kinematic"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "flow",
+    "pump"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_OMEGA",
    "type": "PhysicalQuantity",
    "canonical": "rotational speed",
@@ -905,7 +1248,9 @@
     "p_stag"
    ],
    "aliases": [
-    "total pressure"
+    "total pressure",
+    "local isentropic stagnation pressure",
+    "local stagnation pressure"
    ],
    "subsystems": [
     "gas_dynamics"
@@ -1316,6 +1661,25 @@
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
   {
+   "qid": "QTY_SONIC_REFERENCE_AREA",
+   "type": "PhysicalQuantity",
+   "canonical": "sonic reference area",
+   "dimension": "L^2",
+   "si_unit": "m^2",
+   "symbols": [
+    "A*",
+    "A_star"
+   ],
+   "code_symbols": [],
+   "aliases": [],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "White's sonic reference may be hypothetical; do not infer a physically sonic throat from A* alone.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
    "qid": "QTY_SOUND",
    "type": "PhysicalQuantity",
    "canonical": "speed of sound",
@@ -1323,17 +1687,44 @@
    "si_unit": "m/s",
    "symbols": [
     "a",
-    "c"
+    "c",
+    "a_f",
+    "a_e"
    ],
    "code_symbols": [
     "a_sound",
     "sound_speed"
    ],
-   "aliases": [],
+   "aliases": [
+    "frozen speed of sound",
+    "equilibrium speed of sound",
+    "local speed of sound"
+   ],
    "subsystems": [
     "gas_dynamics"
    ],
-   "note": "",
+   "note": "Quantity identity only; frozen and equilibrium sound speeds retain different source formulations and conditions and are not asserted equal.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_SPECIFIC_VOLUME",
+   "type": "PhysicalQuantity",
+   "canonical": "specific volume",
+   "dimension": "M^-1 L^3",
+   "si_unit": "m^3/kg",
+   "symbols": [
+    "v"
+   ],
+   "code_symbols": [
+    "specific_volume"
+   ],
+   "aliases": [],
+   "subsystems": [
+    "thermochemistry",
+    "gas_dynamics"
+   ],
+   "note": "Mass-specific volume; case-folded V may also denote flow speed. Units and source meaning must disambiguate.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -1354,6 +1745,47 @@
     "structures"
    ],
    "note": "Symbol epsilon also denotes expansion ratio and emissivity.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_STREAMLINE_HEIGHT",
+   "type": "PhysicalQuantity",
+   "canonical": "inlet outer-streamline height",
+   "dimension": "L",
+   "si_unit": "m",
+   "symbols": [
+    "h"
+   ],
+   "code_symbols": [],
+   "aliases": [],
+   "subsystems": [
+    "flow"
+   ],
+   "note": "White's boundary-layer mass balance inlet height; distinct from pump head despite identical glyph and units.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_T0",
+   "type": "PhysicalQuantity",
+   "canonical": "stagnation temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T_0",
+    "T0"
+   ],
+   "code_symbols": [
+    "t_stag"
+   ],
+   "aliases": [
+    "total temperature"
+   ],
+   "subsystems": [
+    "gas_dynamics"
+   ],
+   "note": "A general stagnation temperature is distinct from a chamber-temperature assumption.",
    "provenance_kind": "SYSTEM_INFERS",
    "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
   },
@@ -1605,6 +2037,28 @@
     "cooling",
     "heat_transfer",
     "structures"
+   ],
+   "note": "",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "Canonical naming and alias grouping are a knowledge-system terminology decision, not a source claim."
+  },
+  {
+   "qid": "QTY_T_STATIC",
+   "type": "PhysicalQuantity",
+   "canonical": "local static temperature",
+   "dimension": "Θ",
+   "si_unit": "K",
+   "symbols": [
+    "T"
+   ],
+   "code_symbols": [
+    "t_static"
+   ],
+   "aliases": [
+    "static temperature"
+   ],
+   "subsystems": [
+    "gas_dynamics"
    ],
    "note": "",
    "provenance_kind": "SYSTEM_INFERS",

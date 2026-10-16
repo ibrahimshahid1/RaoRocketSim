@@ -120,6 +120,10 @@ def build_manifest(verbose: bool = True) -> list[dict]:
             "id_basis": id_basis,
             "filename": Path(rel_pdf).name,
             "source_pdf": str(Path("propulsion_texts") / rel_pdf),
+            "source_kind": canon.get("source_kind", "file"),
+            "source_container": str(Path("propulsion_texts") / canon["source_container"])
+                if canon.get("source_kind") == "zip_member" else "",
+            "archive_member": canon.get("archive_member", ""),
             "alternate_paths": [str(Path("propulsion_texts") / r["source_pdf"]) for r in rows[1:]],
             "generated_markdown": str(md_path.relative_to(REPO_ROOT)) if md_path.exists() else "",
             "markdown_exists": md_path.exists(),
@@ -145,7 +149,9 @@ def build_manifest(verbose: bool = True) -> list[dict]:
                 "converter_version": canon.get("converter_version", ""),
                 "converted_at": canon.get("converted_at", ""),
                 "scanned": canon.get("scanned"),
-                "low_confidence": canon.get("low_confidence"),
+                # Older OCR rows incorrectly marked confidence as high. A scan
+                # or recorded OCR still requires source-PDF verification.
+                "low_confidence": bool(canon.get("low_confidence") or canon.get("scanned") or canon.get("ocr_pages")),
                 "issues": canon.get("issues", []),
                 "equation_signals": canon.get("equation_signals"),
                 "source_equation_signals": canon.get("source_equation_signals"),
@@ -206,20 +212,37 @@ def ingest_chunks(force: bool = False, verbose: bool = True) -> dict:
     state_rows = {r["doc_id"]: dict(r) for r in conn.execute("SELECT * FROM doc_state")}
     now = datetime.now(timezone.utc).isoformat()
     summary = {"ingested": 0, "unchanged": 0, "skipped_no_markdown": 0, "skipped_failed_conversion": 0,
+               "skipped_empty_source": 0, "skipped_empty_extraction": 0,
                "n_chunks_total": 0, "removed": 0, "states": []}
     live = set()
     for doc in docs:
         doc_id = doc["id"]
         status = doc["conversion"]["status"]
-        if not doc["markdown_exists"] or not doc.get("generated_markdown") or not (REPO_ROOT / doc["generated_markdown"]).is_file():
-            summary["skipped_no_markdown"] += 1
-            summary["states"].append({"doc_id": doc_id, "state": "SOURCE_NOT_INGESTED",
-                                      "reason": "no generated Markdown"})
-            continue
         if doc.get("alternate_copy_of"):
             summary["skipped_alternate_copy"] = summary.get("skipped_alternate_copy", 0) + 1
             summary["states"].append({"doc_id": doc_id, "state": "ALTERNATE_COPY_NOT_CHUNKED",
                                       "canonical": doc["alternate_copy_of"]})
+            continue
+        # A conversion artifact is not source content. In particular, PyMuPDF
+        # can open a broken payload reporting zero pages without raising.
+        if doc.get("page_count") == 0:
+            live.add(doc_id)
+            path = REPO_ROOT / doc.get("generated_markdown", "")
+            text = path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
+            replace_doc_chunks(conn, doc_id, [], {
+                "doc_id": doc_id, "source_sha256": doc["sha256"], "markdown_sha256": markdown_sha256(text),
+                "extraction_version": EXTRACTION_VERSION, "n_chunks": 0, "ingested_at": now,
+            })
+            summary["skipped_empty_source"] += 1
+            summary["states"].append({"doc_id": doc_id, "state": "SOURCE_UNREADABLE",
+                                      "reason": "EMPTY_SOURCE", "n_chunks": 0,
+                                      "source_pdf": doc.get("source_pdf"),
+                                      "remediation": "Restore the original PDF: the tracked payload has zero pages; enrichment cannot recover absent pages."})
+            continue
+        if not doc["markdown_exists"] or not doc.get("generated_markdown") or not (REPO_ROOT / doc["generated_markdown"]).is_file():
+            summary["skipped_no_markdown"] += 1
+            summary["states"].append({"doc_id": doc_id, "state": "SOURCE_NOT_INGESTED",
+                                      "reason": "no generated Markdown"})
             continue
         if status in {"pdf_conversion_failed"}:
             summary["skipped_failed_conversion"] += 1
@@ -231,6 +254,12 @@ def ingest_chunks(force: bool = False, verbose: bool = True) -> dict:
         md_sha = markdown_sha256(text)
         prev = state_rows.get(doc_id)
         if prev and not force and prev["markdown_sha256"] == md_sha and prev["extraction_version"] == EXTRACTION_VERSION and prev["source_sha256"] == doc["sha256"]:
+            if not prev["n_chunks"]:
+                summary["skipped_empty_extraction"] += 1
+                summary["states"].append({"doc_id": doc_id, "state": "SOURCE_NOT_INGESTED",
+                                          "reason": "EMPTY_EXTRACTED_TEXT", "n_chunks": 0,
+                                          "remediation": "Inspect original PDF pages and rerun extraction or enrichment; no source text was indexed."})
+                continue
             summary["unchanged"] += 1
             summary["n_chunks_total"] += prev["n_chunks"]
             summary["states"].append({"doc_id": doc_id, "state": "LOW_EXTRACTION_CONFIDENCE"
@@ -250,6 +279,12 @@ def ingest_chunks(force: bool = False, verbose: bool = True) -> dict:
             "doc_id": doc_id, "source_sha256": doc["sha256"], "markdown_sha256": md_sha,
             "extraction_version": EXTRACTION_VERSION, "n_chunks": len(rows), "ingested_at": now,
         })
+        if not rows:
+            summary["skipped_empty_extraction"] += 1
+            summary["states"].append({"doc_id": doc_id, "state": "SOURCE_NOT_INGESTED",
+                                      "reason": "EMPTY_EXTRACTED_TEXT", "n_chunks": 0,
+                                      "remediation": "Inspect original PDF pages and rerun extraction or enrichment; no source text was indexed."})
+            continue
         summary["ingested"] += 1
         summary["n_chunks_total"] += len(rows)
         st = "LOW_EXTRACTION_CONFIDENCE" if doc["conversion"].get("low_confidence") or status == "partial_conversion" else "INGESTED"
@@ -264,7 +299,12 @@ def ingest_chunks(force: bool = False, verbose: bool = True) -> dict:
                 conn.execute("DELETE FROM chunks WHERE doc_id = ?", (doc_id,))
                 conn.execute("DELETE FROM doc_state WHERE doc_id = ?", (doc_id,))
             summary["removed"] += 1
-            summary["states"].append({"doc_id": doc_id, "state": "REMOVED_STALE"})
+            current = next((r for r in summary["states"] if r["doc_id"] == doc_id), None)
+            if current is not None:
+                current["stale_index_removed"] = True
+                current["previous_index_state"] = state_rows[doc_id]
+            else:
+                summary["states"].append({"doc_id": doc_id, "state": "REMOVED_STALE"})
     summary["generated_at"] = now
     conn.close()
     save("ingestion_state", summary["states"], key="doc_id", meta={"generated_at": now})

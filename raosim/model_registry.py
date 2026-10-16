@@ -47,11 +47,11 @@ _MODELS = (
     ModelProvenance(
         "injector.compressible_orifice", "injector", "gas mass flux",
         "isentropic subsonic/choked orifice mass flux",
-        "Anderson, Modern Compressible Flow; Sutton & Biblarz",
-        "single-phase gas with known stagnation state and gamma/R; ideal-gas screen",
+        "White, Fluid Mechanics, 7th ed., Eqs. 9.32 and 9.46-9.47; input Cd is an additional empirical factor",
+        "constant-gamma perfect-gas screen; feed temperature and P_back+dp treated as stagnation state; Cd and real/supercritical-gas accuracy are not established by these source equations",
         "published_equation_screening_use", "choke-boundary and continuity tests",
         local_source="propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
-        equation_ref="compressible-flow/orifice relations",
+        equation_ref="White PDF pp1092,1101: sonic ratio9.32 and mass-flow9.46-9.47; flowmeter6.117 is a distinct meter-dependent model",
     ),
     ModelProvenance(
         "injector.auto_pintle_diameter", "injector", "pintle diameter",
@@ -394,11 +394,11 @@ _MODELS = (
     ModelProvenance(
         "performance.isentropic_area_mach", "performance", "Mach/area state",
         "A/Astar=f(M,gamma); p/p0 and T/T0 are isentropic functions",
-        "standard compressible-flow relations",
+        "White, Fluid Mechanics, 7th ed., Eqs. 9.26, 9.28 and 9.44",
         "calorically perfect, constant-gamma, one-dimensional isentropic flow",
         "published_equations", "inverse/forward identity and reference-value tests",
         local_source="propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
-        equation_ref="compressible-flow/nozzle chapters",
+        equation_ref="White PDF pp1090-1091,1099: temperature9.26, pressure/density9.28, area-Mach9.44",
     ),
     ModelProvenance(
         "performance.frozen_variable_cp_quasi1d", "performance",
@@ -409,6 +409,8 @@ _MODELS = (
         "Anderson, Modern Compressible Flow, 3rd ed., Sections 17.3-17.6; "
         "NASA SP-125 frozen-flow practice",
         "fixed ideal-gas composition and R with bounded piecewise-linear cp(T); "
+        "single-temperature thermal properties, no separate vibrational relaxation "
+        "or equilibrium reaction contribution to cp; "
         "adiabatic, inviscid, isentropic quasi-one-dimensional flow; initial "
         "integrated-design use is Bezier-only and excludes MOC/Rao characteristics, "
         "equilibrium chemistry, boundary-layer/thermal/Bartz and Hall-Cd authority",
@@ -420,8 +422,10 @@ _MODELS = (
         "refinement, a pinned external thermochemistry fixture, profile-aware "
         "thermal/viscous adapters, CFD and test evidence remain release gates.",
         local_source="propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
-        equation_ref="PDF pp. 669-685, Sections 17.3-17.6: high-temperature "
-        "nozzle flow, frozen composition/mixture cp, and frozen sound speed",
+        equation_ref="Anderson PDF pp.671-672: energy17.15/continuity17.18; "
+        "pp.675-678: chemically versus vibrationally frozen flow and mixture "
+        "cp/cv17.20-17.25; p.682: thermally-perfect sound speed17.36. "
+        "NASA SP-125 attribution not reviewed in this bounded comparison",
         validation_level="software_verified_conservation_only_not_property_or_hardware_validated",
     ),
     ModelProvenance(
@@ -571,12 +575,12 @@ _MODELS = (
     ),
     ModelProvenance(
         "pump.electric_drive", "pump", "motor/inverter/battery sizing",
-        "hydraulic power to shaft/electrical power to energy/current/mass",
+        "power/energy balance; motor shaft-output and inverter AC-output density masses",
         "energy balance with technology-specific efficiency and density inputs",
         "screening assumptions; measured maps and pulse thermal data required",
         "derived_balance_with_repository_defaults", "power/energy identity and Lee reference-point tests",
-        local_source="propulsion_texts/fuel_pump_design/s42405-020-00325-z.pdf",
-        equation_ref="electric-pump-fed engine package study",
+        local_source="propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+        equation_ref="Lee PDF pp. 6-8, Eqs. (20), (26)-(32); separate output-power densities",
         validation_level="software_verified_not_hardware_validated",
     ),
     ModelProvenance(
@@ -621,12 +625,12 @@ _MODELS = (
     ),
     ModelProvenance(
         "flow.boundary_layer_displacement", "flow", "effective nozzle area loss",
-        "turbulent flat-plate displacement-thickness screening correlation",
-        "classical turbulent boundary-layer scaling",
+        "delta*=0.046*s*Re_s^(-1/5)*sqrt(max(T/T_wall,0.2)); report-only effective area",
+        "repository screening extension; White supports displacement definitions and a distinct one-seventh-power flat-plate derivation",
         "attached smooth-wall flow; pressure gradient, curvature, chemistry and roughness simplified",
-        "published_correlation_screening_use", "trend and bounded-area-loss tests",
+        "repository_heuristic_screening_use", "trend and bounded-area-loss tests",
         local_source="propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
-        equation_ref="turbulent boundary-layer chapter",
+        equation_ref="White 7th ed. Eqs.7.42,7.46 (PDF pp841-842): source exponent -1/7 differs from implemented -1/5",
         validation_level="screening_not_cfd_validated",
     ),
     ModelProvenance(

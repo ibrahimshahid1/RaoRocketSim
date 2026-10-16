@@ -241,6 +241,16 @@ def test_two_stream_mass_rollup_includes_drives_and_battery():
     data = pump.to_dict()["mass_rollup"]
     assert data["contract_id"] == "electric_bipropellant_feed_hardware@1"
     assert data["complete"]
+    assert pump.assumptions["inverter_power_density_basis"] == "inverter_ac_output"
+    for item in pump.hardware_bom:
+        if item.component == "inverter/controller":
+            params = item.key_parameters
+            drive = pump.lines[item.role].drive
+            assert params["mass_power_basis"] == "inverter_ac_output"
+            assert params["inverter_output_power_w"] == pytest.approx(
+                drive.shaft_power / pump.assumptions["motor_efficiency"])
+            assert item.mass_estimate_kg == pytest.approx(
+                params["inverter_output_power_w"] / params["power_density_w_per_kg"])
 
 
 def test_impeller_blade_camber_matches_log_spiral_closed_form():
@@ -646,9 +656,46 @@ class TestLiteratureBenchmarks:
         drive = _drive_sizing("fuel", shaft_power, 57940.0, spec,
                               bus_voltage=48.0, voltage_source="benchmark")
         assert drive.motor_mass == pytest.approx(0.4512, rel=1e-6)
+        # PDF p. 7 Eqs. (28)-(29) define inverter density from OUTPUT
+        # power, P_shaft / eta_motor, rather than battery-side input power.
+        # This inverter mass is derived from those equations and Table 2
+        # inputs; Table 4 does not independently report inverter mass.
+        assert drive.inverter_mass == pytest.approx(0.007563218390804598, rel=1e-12)
         battery = _battery_sizing(drive.electric_power, spec, 48.0)
         assert battery.limiting == "power"
         assert battery.mass == pytest.approx(0.9856, rel=2e-3)
+
+        # At fixed motor demand, inverter losses increase input power and
+        # heat but cannot alter a mass defined by output-power density.
+        for eta_inverter in (0.85, 0.96, 1.0):
+            spec.drive.inverter_efficiency = eta_inverter
+            sized = _drive_sizing("fuel", shaft_power, 57940.0, spec,
+                                  bus_voltage=48.0, voltage_source="benchmark")
+            inverter_output = shaft_power / 0.87
+            assert sized.inverter_mass == pytest.approx(drive.inverter_mass, rel=1e-12)
+            assert sized.electric_power == pytest.approx(inverter_output / eta_inverter)
+            assert sized.controller_heat == pytest.approx(
+                inverter_output * (1.0 / eta_inverter - 1.0), abs=1e-12)
+            assert sized.current == pytest.approx(sized.electric_power / 48.0)
+
+    def test_legacy_combined_drive_density_keeps_input_power_basis(self):
+        from raosim.pumps import ElectricDriveSpec, PumpSizingSpec, _drive_sizing
+
+        spec = PumpSizingSpec(drive=ElectricDriveSpec(
+            motor_efficiency=0.9, inverter_efficiency=0.8, power_density=2000.0))
+        drive = _drive_sizing("fuel", 900.0, 30000.0, spec, bus_voltage=48.0)
+        assert drive.electric_power == pytest.approx(1250.0)
+        assert drive.motor_controller_mass == pytest.approx(0.625)
+        assert drive.motor_mass == pytest.approx(drive.motor_controller_mass)
+        assert drive.inverter_mass == 0.0  # included in the combined package
+        pump = _pump_result_with_spec(spec)
+        assert pump.assumptions[
+            "legacy_combined_motor_controller_power_density_basis"
+        ] == "combined_drive_dc_input"
+        inverter = next(item for item in pump.hardware_bom
+                        if item.component == "inverter/controller")
+        assert inverter.key_parameters["mass_power_basis"] == "included_in_combined_drive_mass"
+        assert inverter.key_parameters["power_density_w_per_kg"] is None
 
     def test_sp8109_specific_speed_envelope(self):
         """SP-8109 flight-proven stage specific speeds span 450..2100 US

@@ -1,9 +1,141 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:53:05.300341+00:00",
-  "n": 179
+  "generated_at": "2026-10-16T05:55:51.393982+00:00",
+  "n": 188
  },
  "records": [
+  {
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_state": "CURRENT",
+   "id": "CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0BE6F1C1",
+   "type": "Claim",
+   "claim_type": "definition",
+   "subject": "chemically frozen inviscid flow",
+   "predicate": "holds fixed",
+   "object": "species mass fractions",
+   "statement": "Chemically frozen inviscid flow has fixed species mass fractions; frozen composition alone does not require constant species heat capacity.",
+   "qualifiers": [
+    "The source explicitly notes diffusion can change a fluid element composition in viscous flow. Variable species cp(T) follows from source17.22, not a separate printed assertion onp675."
+   ],
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "page": 675,
+   "reported_page": 675,
+   "chunk_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE#c00603",
+   "quote": "As a result, the chemical composition of a frozen flow remains constant throughout space and time.",
+   "grounded": "GROUNDED",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0BE6F1C1",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "performance",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-16T05:51:16.127544+00:00",
+   "verifier_result_hash": "73a538a128bd289c44a05ed78a0978d9dd0e3b0df58afceed30d9c1e89ac7dcd",
+   "verification": "CONFIRMED",
+   "verifier_reason": "Original PDFp675 (printed659) explicitly defines zero-reaction-rate frozen flow and says its chemical composition remains constant throughout space and time. The following parenthesis explicitly restricts this to inviscid flow and notes that viscous diffusion can change a fluid element composition even when chemistry is frozen. The stored fixed-species-mass-fraction definition and qualifier match this context. The statement that frozen composition alone does not require constant species heat capacity is a source-based comparison across17.22 onp678 and the thermally-perfect sound-speed discussion onp682, not a verbatim assertion onp675; the record qualifier preserves that distinction. The separate both-chemical-and-vibrationally-frozen assertion onp676 further prevents conflating these models.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "verifier_evidence": {
+    "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+    "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+    "pdf_page": 675,
+    "printed_page": 659,
+    "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+    "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p675.png",
+    "render_sha256": "42e96978f018252f0cba8cec0826c4912a9274a72ddd480be825a37cbc932179",
+    "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+    "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+    "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+    "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+    "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+    "assumption_ids_reviewed": [],
+    "supporting_pages": [
+     {
+      "pdf_page": 676,
+      "printed_page": 660,
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p676.png",
+      "render_sha256": "e5692b69603db0864747b0bcdf62955dfae9e14f02304ae2a9c143d27b0308ea"
+     },
+     {
+      "pdf_page": 678,
+      "printed_page": 662,
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8"
+     },
+     {
+      "pdf_page": 682,
+      "printed_page": 666,
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p682.png",
+      "render_sha256": "4eeba0332ee954e074277fe054532016f7f3ae5a732e0806afd4371174899ba7"
+     }
+    ]
+   },
+   "verifier_scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied.",
+   "verified_at": "2026-10-16T05:55:51.258426+00:00"
+  },
+  {
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "source_state": "CURRENT",
+   "id": "CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_E550CF9A",
+   "type": "Claim",
+   "claim_type": "definition",
+   "subject": "simultaneously chemically and vibrationally frozen flow",
+   "predicate": "has",
+   "object": "constant specific heats in the source treatment",
+   "statement": "The source identifies simultaneously chemically and vibrationally frozen flow with the calorically perfect constant-specific-heat treatment.",
+   "qualifiers": [],
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "page": 676,
+   "reported_page": 676,
+   "chunk_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE#c00606",
+   "quote": "Note that a flow which is both chemically and vibrationally frozen has constant specific heats.",
+   "grounded": "GROUNDED",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_E550CF9A",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "performance",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-16T05:51:16.127544+00:00",
+   "verifier_result_hash": "431925063501fcea7bc5b3f48c2c2511a97aba0d8464cf53fff0cbf870522529",
+   "verification": "CONFIRMED",
+   "verifier_reason": "Original PDFp676 (printed660) explicitly states that flow which is both chemically and vibrationally frozen has constant specific heats and identifies it as the calorically perfect treatment used in earlier chapters. This directly matches the stored claim with its source-treatment qualification. The precedingp675-p676 discussion explains that vibrationally frozen energy remains at its reservoir value; chemical composition freezing and vibrational freezing are distinct assumptions. This statement does not imply that a merely chemically frozen, thermally perfect mixture must have constant cp.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "verifier_evidence": {
+    "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+    "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+    "pdf_page": 676,
+    "printed_page": 660,
+    "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+    "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p676.png",
+    "render_sha256": "e5692b69603db0864747b0bcdf62955dfae9e14f02304ae2a9c143d27b0308ea",
+    "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+    "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+    "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+    "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+    "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+    "assumption_ids_reviewed": [],
+    "supporting_pages": [
+     {
+      "pdf_page": 675,
+      "printed_page": 659,
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p675.png",
+      "render_sha256": "42e96978f018252f0cba8cec0826c4912a9274a72ddd480be825a37cbc932179"
+     }
+    ]
+   },
+   "verifier_scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied.",
+   "verified_at": "2026-10-16T05:55:51.258426+00:00"
+  },
   {
    "id": "CLM_CAD_04_150F4CC9",
    "type": "Claim",
@@ -144,6 +276,226 @@
    "recorded_at": "2026-09-19T01:04:12.394495+00:00",
    "source_sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb",
    "source_hash_basis": "manifest at first freshness audit; original extraction did not record a hash"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+   "type": "Claim",
+   "claim_type": "design_criterion",
+   "subject": "battery mass",
+   "predicate": "uses",
+   "object": "maximum power- and energy-limited estimates with structure margin",
+   "statement": "Battery sizing selects the heavier branch and includes a structural mass multiplier.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 8,
+   "reported_page": 8,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00021",
+   "quote": "requiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+   "type": "Claim",
+   "claim_type": "recommendation",
+   "subject": "motor power density",
+   "predicate": "must suit",
+   "object": "the engine design and available motor technology",
+   "statement": "The paper cautions that motor mass estimates depend on the selected technology-specific power density.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 7,
+   "reported_page": 7,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00019",
+   "quote": "Careful selection of the motor power density suitable for\nthe engine design is necessary because the motor mass estimation depends on the power density, and the technological\nlimitationoftheelectric-pumpcycleisdependentonthetechnology maturity of the electric motor.",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [
+    "QTY_RHO"
+   ],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_6024B7D3",
+   "type": "Claim",
+   "claim_type": "methodological",
+   "subject": "electric-cycle component sizing",
+   "predicate": "has no additional validation in this study beyond",
+   "object": "the stated commercial-product inputs",
+   "statement": "The authors report no additional validation for the component mass estimates discussed here; this is not experimental validation of an electric-pump engine.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 10,
+   "reported_page": 10,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00026",
+   "quote": "Furthermore, additional validations have not been conducted because the actual\nperformance data supplied from commercial products are\nused to estimate the mass of the electric motor and pump\nfor the specific factors, such as the power density and energy\ndensity.",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_6024B7D3",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_60957F86",
+   "type": "Claim",
+   "claim_type": "benchmark_result",
+   "subject": "Lee Table 4 analytical result",
+   "predicate": "reports",
+   "object": "motor 451.2 g and battery 985.6 g",
+   "statement": "Table 4 reports estimated motor mass 451.2 g and estimated battery mass 985.6 g; commercial minimum masses are 80 g and 222 g respectively.",
+   "qualifiers": [
+    "Analytical estimates and catalog comparisons, not measured engine masses.",
+    "Design point: 500 N, 20 bar, 600 s, 30 km, LOX/RP-1."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 12,
+   "reported_page": 12,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00033",
+   "quote": "Motor mass 451.2 80 [33]\n\n\n<u>Battery mass</u> <u>985.6</u> <u>222</u> <u>[34]</u>",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_60957F86",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+   "type": "Claim",
+   "claim_type": "definition",
+   "subject": "inverter output power",
+   "predicate": "equals",
+   "object": "motor output power divided by motor efficiency",
+   "statement": "The paper defines inverter output power as motor output power divided by motor efficiency.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 7,
+   "reported_page": 7,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00019",
+   "quote": "The\noutput power of the inverter is the value obtained by dividing\nthe output power of the motor by the motor efficiency, and,\nlike the motor, estimates the mass from Eqs. (28–29) using\nthe power density [1]:",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+   "type": "Claim",
+   "claim_type": "definition",
+   "subject": "motor output power",
+   "predicate": "equals",
+   "object": "required pump shaft power",
+   "statement": "The paper equates motor output power with required pump power for component mass sizing.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 7,
+   "reported_page": 7,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00018",
+   "quote": "Because the output power of the motor is the same\nas the required pump power, the mass of the motor was calculated from Eqs. (26–27) using the pump power and motor\npower density [1]:",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
+  },
+  {
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "source_state": "CURRENT",
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_C70A2429",
+   "type": "Claim",
+   "claim_type": "recommendation",
+   "subject": "final applicability and performance",
+   "predicate": "require further study of",
+   "object": "dynamic propellant-supply and power-unit characteristics",
+   "statement": "The paper calls for further study of supply-system dynamics and the power unit before a more realistic applicability assessment.",
+   "qualifiers": [
+    "Lee et al. case study; not LREKit hardware validation."
+   ],
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "page": 13,
+   "reported_page": 13,
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00035",
+   "quote": "On the other hand, the final applicability and performance of the electric-pump cycle as a small-sized rocket\nengine should be evaluated more realistically through further\nstudies, including the dynamic characteristics of the propellant supply system, including the power unit.",
+   "grounded": "GROUNDED",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "quantity_ids": [],
+   "contradicts": [],
+   "provenance_id": "PROV_CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_C70A2429",
+   "provenance_kind": "SOURCE_STATES",
+   "subsystem": "pump",
+   "extraction_version": "1.0.1",
+   "recorded_at": "2026-10-07T22:58:26.060037+00:00"
   },
   {
    "id": "CLM_DOI_10_1080_13647830_2021_1937702_14708D82",
@@ -1048,7 +1400,26 @@
    "provenance_kind": "SOURCE_STATES",
    "subsystem": "nozzle",
    "extraction_version": "1.0.1",
-   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00",
+   "verifier_result_hash": "0c48ee9605c9ed7a2f6ce0c82e66bc639f68ffc2c21c5188fcf62bca09913e23",
+   "verification": "CONFIRMED",
+   "verifier_reason": "PDF page 6 (printed p. 382), Conclusions, directly states that ambient pressure, nozzle length and wall contour in the throat region are governing conditions in the formulation and solution. The stored statement is supported by the original prose, with no implied universal numerical validity range.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "verifier_evidence": {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "pdf_page": 6,
+    "printed_page": 382,
+    "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+    "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-5.png",
+    "render_sha256": "77d08f5cd9ffbc5732f02237ebb29c3875f75949c6882b05cf9bc230b3a91dea",
+    "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+    "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+    "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+   },
+   "verifier_scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+   "verified_at": "2026-10-07T23:01:20.472385+00:00"
   },
   {
    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
@@ -1077,7 +1448,26 @@
    "provenance_kind": "SOURCE_STATES",
    "subsystem": "nozzle",
    "extraction_version": "1.0.1",
-   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00",
+   "verifier_result_hash": "127abc6dd8721c3ae2db288c04f25ab4d24c7642837a3c3dc0509598b47ea420",
+   "verification": "CONFIRMED",
+   "verifier_reason": "PDF page 3 (printed p. 379), paragraph after Eq. [15], directly states that without compatibility the control surface becomes a limiting line and the flow pattern would be physically impossible. This confirms the source claim in its characteristic construction; it is not a physical validation of repository results.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "verifier_evidence": {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "pdf_page": 3,
+    "printed_page": 379,
+    "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+    "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+    "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+    "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+    "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+    "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+   },
+   "verifier_scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+   "verified_at": "2026-10-07T23:01:20.472385+00:00"
   },
   {
    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
@@ -1108,7 +1498,26 @@
    "provenance_kind": "SOURCE_STATES",
    "subsystem": "nozzle",
    "extraction_version": "1.0.1",
-   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00",
+   "verifier_result_hash": "8ec8cc668a34a064863eb03c82bef38ae38b465929b916f9d7e5b62905f2d700",
+   "verification": "CONFIRMED",
+   "verifier_reason": "PDF page 5 (printed p. 381), paragraph below Table 3, compares the contour A cut off at length 2.94 y_t (thrust coefficient 1.5688) with nozzle B designed for maximum thrust at that length (Table 3: 1.5829). The original text explicitly says the truncated value is lower. Page 6 further discusses distinct optimum contours at different lengths. This supports the stored distinction in the paper, not a universal exclusion of coincident contours in every nozzle problem.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "verifier_evidence": {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "pdf_page": 5,
+    "printed_page": 381,
+    "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+    "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-4.png",
+    "render_sha256": "c242f7c56bb832d8a7177a640209efe2cf25abe96f156eab5b0a2e691847698a",
+    "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+    "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+    "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+   },
+   "verifier_scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+   "verified_at": "2026-10-07T23:01:20.472385+00:00"
   },
   {
    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
@@ -1137,7 +1546,26 @@
    "provenance_kind": "SOURCE_STATES",
    "subsystem": "nozzle",
    "extraction_version": "1.0.1",
-   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00",
+   "verifier_result_hash": "3aa0584edded19d0f7af2c0d6bdb5d766aa86bdc4253e1847ab558cdf06882bf",
+   "verification": "CONFIRMED",
+   "verifier_reason": "PDF page 6 (printed p. 382), paragraph immediately after Fig. 6, explicitly states that Figs. 5 and 6 are computed for inviscid isentropic flow and discusses a boundary-layer displacement correction separately. The indexed quote splits inviscid as in viscid; the original PDF word and scientific proposition are clear.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "verifier_evidence": {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "pdf_page": 6,
+    "printed_page": 382,
+    "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+    "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-5.png",
+    "render_sha256": "77d08f5cd9ffbc5732f02237ebb29c3875f75949c6882b05cf9bc230b3a91dea",
+    "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+    "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+    "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+   },
+   "verifier_scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+   "verified_at": "2026-10-07T23:01:20.472385+00:00"
   },
   {
    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
@@ -1166,7 +1594,26 @@
    "provenance_kind": "SOURCE_STATES",
    "subsystem": "nozzle",
    "extraction_version": "1.0.1",
-   "recorded_at": "2026-09-20T22:53:05.300341+00:00"
+   "recorded_at": "2026-09-20T22:53:05.300341+00:00",
+   "verifier_result_hash": "408122ad37c13a9476f30611098f45b66111d09ed357cb4d4e2b4d8adac5e00c",
+   "verification": "CONFIRMED",
+   "verifier_reason": "PDF page 4 (printed p. 380), paragraph immediately above Eq. [19], explicitly equates the mass flow across right characteristic B_1D_1 with the mass flow across the control surface from D_1 to E. The equation display and following paragraph confirm the two integration paths. The stored proposition is correct. Its indexed quote has damaged point labels (A A and A instead of B_1D_1 and D_1), so that quote must not be treated as an exact transcription of the original PDF.",
+   "verifier_confidence": "high",
+   "verifier_source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "verifier_evidence": {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "pdf_page": 4,
+    "printed_page": 380,
+    "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+    "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-3.png",
+    "render_sha256": "61d3282b9a3c1c8660e4ac04eaea47b3c846738bc33259c4eab0468cf6b7651d",
+    "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+    "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+    "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+   },
+   "verifier_scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+   "verified_at": "2026-10-07T23:01:20.472385+00:00"
   },
   {
    "id": "CLM_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0828AE01",

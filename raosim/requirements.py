@@ -93,12 +93,19 @@ class RequirementAnalysisConfig:
     chamber_property_table: str | Path | None = None
     length_pct: float = 80.0
     liner_material: str | None = None
+    #: Registered electric technology set (raosim.electric_technology) for
+    #: the motor, inverter and battery; None keeps the MissionSpec default.
+    electric_technology: str | None = None
 
     def __post_init__(self) -> None:
         if not math.isfinite(float(self.length_pct)) or not (
             60.0 <= float(self.length_pct) <= 100.0
         ):
             raise ValueError("length_pct must be finite and within the 60-100% Rao domain")
+        if self.electric_technology is not None:
+            from raosim.electric_technology import get_electric_technology
+
+            get_electric_technology(self.electric_technology)
 
 
 @dataclass(frozen=True)
@@ -576,6 +583,12 @@ def resolve_requirement(req: EngineRequirement) -> ResolvedRequirement:
             "liner_structural_fos": structural_fos,
             "liner_T_wg_max": float(material.max_temperature),
         })
+    if req.analysis_config.electric_technology is not None:
+        from raosim.electric_technology import get_electric_technology
+
+        technology = get_electric_technology(req.analysis_config.electric_technology)
+        overrides.update(technology.mission_fields())
+        overrides["electric_technology"] = technology.id
     if req.envelope_diameter_max is not None:
         overrides["envelope_diameter_max"] = float(req.envelope_diameter_max)
     if req.envelope_length_max is not None:

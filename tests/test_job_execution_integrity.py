@@ -171,7 +171,10 @@ def test_optimizer_receives_resolved_pins_bounds_and_strongest_floor(monkeypatch
                    VariableRequest("eps", "bounded", lower=6, upper=9)),
     ))
     assert observed["floor"] == 240.0
-    assert observed["fixed_variables"] == {"Pc": 3e6}
+    # The slotted pintle has no centre gap, so the job pins D_cg as well.
+    assert set(observed["fixed_variables"]) == {"Pc", "D_cg"}
+    assert observed["fixed_variables"]["Pc"] == 3e6
+    assert "D_cg" not in observed["bounds"]
     assert observed["bounds"]["eps"] == (6, 9)
     assert "Pc" not in observed["bounds"]
     assert result.verdict == "SOLVER_FAILED"

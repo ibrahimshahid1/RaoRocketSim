@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:58:11.647765+00:00",
-  "n": 98
+  "generated_at": "2026-10-16T18:20:18.581282+00:00",
+  "n": 100
  },
  "records": [
   {
@@ -18,7 +18,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_57",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_1B_THERMOCHEMISTRY_AXIS_B_THE_LARGEST_SINGLE_HOLE_FOUND",
@@ -36,7 +36,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_74",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_1C_REAL_FLUID_COOLANT_AND_PROPELLANT_PROPERTIES_AXIS_B",
@@ -54,7 +54,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_87",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_1D_THE_COOLING_FAILURE_MODE_NOT_CURRENTLY_SCREENED_AXIS_B",
@@ -72,7 +72,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_99",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_TIER_1_DIRECTLY_BLOCKS_A_GENERALIZATION_AXIS",
@@ -88,7 +88,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_55",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_TIER_2_NEEDED_TO_VALIDATE_ACROSS_THE_THRUST_SPAN",
@@ -104,7 +104,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_112",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_TIER_3_ARCHITECTURE_AXES_BEYOND_THE_FEED_SYSTEM",
@@ -120,7 +120,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD_120",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_1_RE_PRIORITY_OF_EXISTING_REQUESTS",
@@ -136,7 +136,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_60",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_2_NEW_REQUESTS_TIER_1_BLOCKING_A_TRACK",
@@ -152,7 +152,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_73",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_3_NEW_REQUESTS_TIER_2_NEEDED_TO_CERTIFY_RATHER_THAN_TO_BUILD",
@@ -168,7 +168,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_275",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_4_NEW_REQUESTS_TIER_3_WOULD_IMPROVE_A_MODEL_ALREADY_IMPLEMENTABLE",
@@ -184,7 +184,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_344",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_6_SUGGESTED_ACQUISITION_ORDER",
@@ -200,7 +200,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_418",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H10_ROTORDYNAMICS_OF_HIGH_SPEED_PUMPS",
@@ -218,7 +218,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_323",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H11_CRYOGENIC_AND_PROPELLANT_LUBRICATED_BEARING_PRACTICE",
@@ -234,7 +234,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_335",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H12_SP_8109_FIGURES_3_5_13_16_AND_21_DIGITIZED",
@@ -250,7 +250,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_346",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H13_SP_8109_EQUATIONS_20_AND_21_RENDERED",
@@ -266,7 +266,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_364",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H14_A_ROCKET_ENGINE_TEST_INSTRUMENTATION_REFERENCE",
@@ -284,7 +284,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_376",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H1B_SELF_COMPENSATING_THRUST_BALANCE_SYSTEM_PERFORMANCE",
@@ -302,7 +302,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_116",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H1C_IMPELLER_STRUCTURAL_DESIGN_A_SUBSTITUTE_IS_REQUIRED_NOT_THE_ORI",
@@ -320,7 +320,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_136",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H1_PRESSURE_DISTRIBUTION_ON_ROTATING_NON_PUMPING_SURFACES_THE_AXIAL",
@@ -338,7 +338,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_75",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H2B_LOW_THRUST_PUMP_DESIGN_AND_TESTING_DIRECTLY_RELEVANT_TO_TRACK_L",
@@ -356,7 +356,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_198",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H2_VOLUTE_AREA_LAW_WITH_FRICTION_CORRECTION",
@@ -372,7 +372,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_169",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H3_PUMP_PERFORMANCE_TEST_STANDARD",
@@ -390,7 +390,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_220",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H4_MEASUREMENT_UNCERTAINTY_FRAMEWORK",
@@ -406,7 +406,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_242",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H5_FLOW_MEASUREMENT_STANDARD",
@@ -422,7 +422,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_261",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H6_ACHIEVABLE_TOLERANCE_AND_FITS_BY_PROCESS",
@@ -438,7 +438,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_277",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H7_BOLTED_JOINT_PRELOAD_AND_A_SELECTED_FASTENER_FAMILY",
@@ -454,7 +454,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_289",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H8_TURBOMACHINERY_BLADE_GEOMETRY_AND_FLANK_MILLING",
@@ -470,7 +470,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_299",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H9_INVERSE_PRESCRIBED_LOADING_BLADE_DESIGN",
@@ -488,7 +488,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_312",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_1_BLOCKING_VALVES_LINES_AND_JOINTS_THE_UNMODELLED_SUBSYSTEMS",
@@ -504,7 +504,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_24",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_2_STRUCTURAL_AND_DIRECTLY_BLOCKING_WORK_ALREADY_IN_FLIGHT",
@@ -520,7 +520,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_45",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_3_PUMP_COMPLETION_IMPELLER_INDUCER_VOLUTE_ROTOR",
@@ -538,7 +538,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_58",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_4_FEED_SYSTEM_PRESSURISATION_AND_DYNAMICS",
@@ -554,7 +554,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_73",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_5_THRUST_VECTOR_CONTROL",
@@ -570,7 +570,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_85",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_MD_PRIORITY_6_IGNITER",
@@ -586,7 +586,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_LITERATURE_REQUEST_DOCS_LITERATURE_REQUESTS_MD_102",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_116",
@@ -605,7 +605,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_116",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_123",
@@ -624,7 +624,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_123",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_125",
@@ -643,7 +643,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_125",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_42",
@@ -662,7 +662,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_42",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_639",
@@ -681,7 +681,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_639",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_640",
@@ -700,7 +700,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_640",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_706",
@@ -719,7 +719,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_706",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_707",
@@ -738,7 +738,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_707",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_721",
@@ -757,7 +757,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_721",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BENCHMARKS_PY_724",
@@ -776,7 +776,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BENCHMARKS_PY_724",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_BUILD_LOG_PY_121",
@@ -795,7 +795,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_BUILD_LOG_PY_121",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_CEA_PY_132",
@@ -814,7 +814,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_CEA_PY_132",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_CEA_PY_241",
@@ -833,7 +833,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_CEA_PY_241",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_DESIGN_PY_2198",
@@ -852,7 +852,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_DESIGN_PY_2198",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_DESIGN_PY_2368",
@@ -871,7 +871,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_DESIGN_PY_2368",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_INJECTOR_EXPORT_PY_700",
@@ -890,7 +890,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_INJECTOR_EXPORT_PY_700",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_INJECTOR_EXPORT_PY_766",
@@ -909,7 +909,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_INJECTOR_EXPORT_PY_766",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_INJECTOR_PLOTS_PY_737",
@@ -928,7 +928,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_INJECTOR_PLOTS_PY_737",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_JAX_ASSEMBLY_PY_127",
@@ -947,7 +947,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_JAX_ASSEMBLY_PY_127",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_JAX_ASSEMBLY_PY_128",
@@ -966,7 +966,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_JAX_ASSEMBLY_PY_128",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_JAX_ASSEMBLY_PY_135",
@@ -985,7 +985,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_JAX_ASSEMBLY_PY_135",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_JAX_MOC_KERNEL_PY_824",
@@ -1004,7 +1004,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_JAX_MOC_KERNEL_PY_824",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_JAX_SENSITIVITIES_PY_184",
@@ -1023,7 +1023,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_JAX_SENSITIVITIES_PY_184",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1103",
@@ -1042,7 +1042,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1103",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1137",
@@ -1061,7 +1061,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1137",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1216",
@@ -1080,7 +1080,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1216",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1237",
@@ -1099,7 +1099,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1237",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1285",
@@ -1118,7 +1118,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1285",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_1363",
@@ -1137,7 +1137,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_1363",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_188",
@@ -1156,7 +1156,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_188",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_385",
@@ -1175,7 +1175,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_385",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_753",
@@ -1194,7 +1194,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_753",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_780",
@@ -1213,7 +1213,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_780",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MASS_LEDGER_PY_854",
@@ -1232,7 +1232,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MASS_LEDGER_PY_854",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_BUILD_PY_144",
@@ -1251,7 +1251,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_BUILD_PY_144",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_BUILD_PY_161",
@@ -1270,7 +1270,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_BUILD_PY_161",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_BUILD_PY_277",
@@ -1289,7 +1289,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_BUILD_PY_277",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_BUILD_PY_292",
@@ -1308,7 +1308,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_BUILD_PY_292",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_BUILD_PY_302",
@@ -1327,26 +1327,45 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_BUILD_PY_302",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_MDO_JOB_PY_928",
+   "id": "CAP_RAOSIM_MDO_JOB_PY_954",
    "type": "Capability",
    "name": "row.update(status=\"unavailable\", reason=(",
    "state": "UNAVAILABLE",
    "file": "raosim/mdo/job.py",
-   "line": 928,
+   "line": 954,
    "quote": "row.update(status=\"unavailable\", reason=(",
    "context": ") if name == \"qualification_duration\": row.update(status=\"unavailable\", reason=( \"qualification_duration requires configuration-bound test evidence; \"",
-   "enforced_by": "raosim/mdo/job.py:928",
+   "enforced_by": "raosim/mdo/job.py:954",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": ") if name == \"qualification_duration\": row.update(status=\"unavailable\", reason=( \"qualification_duration requires configuration-bound test evidence; \"",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_JOB_PY_928",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_JOB_PY_954",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
+  },
+  {
+   "id": "CAP_RAOSIM_MDO_RUN_RECORD_PY_137",
+   "type": "Capability",
+   "name": "self.manifest[\"parts\"] = {\"status\": \"unavailable\"}",
+   "state": "UNAVAILABLE",
+   "file": "raosim/mdo/run_record.py",
+   "line": 137,
+   "quote": "self.manifest[\"parts\"] = {\"status\": \"unavailable\"}",
+   "context": "elif getattr(result, \"statuses\", {}).get(\"part_manifest\") == \"fail\": parts_partial = True self.manifest[\"parts\"] = {\"status\": \"unavailable\"} self.manifest.update(",
+   "enforced_by": "raosim/mdo/run_record.py:137",
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "detail": "elif getattr(result, \"statuses\", {}).get(\"part_manifest\") == \"fail\": parts_partial = True self.manifest[\"parts\"] = {\"status\": \"unavailable\"} self.manifest.update(",
+   "unblock_requires": "",
+   "blocked_on_document_requests": [],
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_RUN_RECORD_PY_137",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_MDO_RUN_RECORD_PY_91",
@@ -1365,159 +1384,178 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_MDO_RUN_RECORD_PY_91",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_PUMPS_PY_2830",
+   "id": "CAP_RAOSIM_NOZZLE_GEOMETRY_PY_48",
+   "type": "Capability",
+   "name": "# \"verified\" claim above is NOT supported by the held text. Rao 1960 (the",
+   "state": "UNSUPPORTED",
+   "file": "raosim/nozzle_geometry.py",
+   "line": 48,
+   "quote": "#  \"verified\" claim above is NOT supported by the held text.  Rao 1960 (the",
+   "context": "# #  ADJUDICATION NOTE (2026-10-16, open; values deliberately unchanged): the #  \"verified\" claim above is NOT supported by the held text.  Rao 1960 (the #  cited chart paper) is not in propulsion_texts/.  The held charts are",
+   "enforced_by": "raosim/nozzle_geometry.py:48",
+   "subsystems": [
+    "nozzle_contour"
+   ],
+   "detail": "# #  ADJUDICATION NOTE (2026-10-16, open; values deliberately unchanged): the #  \"verified\" claim above is NOT supported by the held text.  Rao 1960 (the #  cited chart paper) is not in propulsion_texts/.  The held charts are",
+   "unblock_requires": "",
+   "blocked_on_document_requests": [],
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_NOZZLE_GEOMETRY_PY_48",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
+  },
+  {
+   "id": "CAP_RAOSIM_PUMPS_PY_2853",
    "type": "Capability",
    "name": "status=\"unavailable\",",
    "state": "UNAVAILABLE",
    "file": "raosim/pumps.py",
-   "line": 2830,
+   "line": 2853,
    "quote": "status=\"unavailable\",",
    "context": "component=component, quantity=1, status=\"unavailable\", mass_estimate_kg=None,",
-   "enforced_by": "raosim/pumps.py:2830",
+   "enforced_by": "raosim/pumps.py:2853",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "component=component, quantity=1, status=\"unavailable\", mass_estimate_kg=None,",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_2830",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_2853",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_PUMPS_PY_2859",
+   "id": "CAP_RAOSIM_PUMPS_PY_2882",
    "type": "Capability",
    "name": "status=\"unavailable\",",
    "state": "UNAVAILABLE",
    "file": "raosim/pumps.py",
-   "line": 2859,
+   "line": 2882,
    "quote": "status=\"unavailable\",",
    "context": "component=component, quantity=1, status=\"unavailable\", mass_estimate_kg=None,",
-   "enforced_by": "raosim/pumps.py:2859",
+   "enforced_by": "raosim/pumps.py:2882",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "component=component, quantity=1, status=\"unavailable\", mass_estimate_kg=None,",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_2859",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_2882",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_PUMPS_PY_611",
+   "id": "CAP_RAOSIM_PUMPS_PY_631",
    "type": "Capability",
    "name": "and self.status != \"unavailable\"",
    "state": "UNAVAILABLE",
    "file": "raosim/pumps.py",
-   "line": 611,
+   "line": 631,
    "quote": "and self.status != \"unavailable\"",
    "context": "return bool( self.unavailable_reason is None and self.status != \"unavailable\" and value is not None",
-   "enforced_by": "raosim/pumps.py:611",
+   "enforced_by": "raosim/pumps.py:631",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "return bool( self.unavailable_reason is None and self.status != \"unavailable\" and value is not None",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_611",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_PUMPS_PY_631",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_RAO_VARIATIONAL_PY_6608",
+   "id": "CAP_RAOSIM_RAO_VARIATIONAL_PY_6720",
    "type": "Capability",
    "name": "\"Not hardware-qualified; requires published benchmark comparison, CFD, \"",
    "state": "NOT_QUALIFIED",
    "file": "raosim/rao_variational.py",
-   "line": 6608,
+   "line": 6720,
    "quote": "\"Not hardware-qualified; requires published benchmark comparison, CFD, \"",
    "context": ") warnings.append( \"Not hardware-qualified; requires published benchmark comparison, CFD, \" \"thermal/structural review, manufacturing review, inspection, and hot-fire data.\"",
-   "enforced_by": "raosim/rao_variational.py:6608",
+   "enforced_by": "raosim/rao_variational.py:6720",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": ") warnings.append( \"Not hardware-qualified; requires published benchmark comparison, CFD, \" \"thermal/structural review, manufacturing review, inspection, and hot-fire data.\"",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RAO_VARIATIONAL_PY_6608",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RAO_VARIATIONAL_PY_6720",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_RAO_VARIATIONAL_PY_6804",
+   "id": "CAP_RAOSIM_RAO_VARIATIONAL_PY_6916",
    "type": "Capability",
    "name": "raw MOC wall points from export geometry. It remains non-hardware-qualified",
    "state": "NOT_QUALIFIED",
    "file": "raosim/rao_variational.py",
-   "line": 6804,
+   "line": 6916,
    "quote": "raw MOC wall points from export geometry.  It remains non-hardware-qualified",
    "context": " This path solves a global finite-dimensional residual system and separates raw MOC wall points from export geometry.  It remains non-hardware-qualified until literature benchmarks pass.",
-   "enforced_by": "raosim/rao_variational.py:6804",
+   "enforced_by": "raosim/rao_variational.py:6916",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": " This path solves a global finite-dimensional residual system and separates raw MOC wall points from export geometry.  It remains non-hardware-qualified until literature benchmarks pass.",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RAO_VARIATIONAL_PY_6804",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RAO_VARIATIONAL_PY_6916",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_REQUIREMENTS_PY_409",
+   "id": "CAP_RAOSIM_REQUIREMENTS_PY_416",
    "type": "Capability",
    "name": "\"unsupported\": \"✗\"}[c.coverage.value]",
    "state": "UNSUPPORTED",
    "file": "raosim/requirements.py",
-   "line": 409,
+   "line": 416,
    "quote": "\"unsupported\": \"✗\"}[c.coverage.value]",
    "context": "item = f\"({c.sp125_item})\" if c.sp125_item else \" - \" mark = {\"enforced\": \"✓\", \"partially_enforced\": \"~\", \"unsupported\": \"✗\"}[c.coverage.value] lines.append(",
-   "enforced_by": "raosim/requirements.py:409",
+   "enforced_by": "raosim/requirements.py:416",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "item = f\"({c.sp125_item})\" if c.sp125_item else \" - \" mark = {\"enforced\": \"✓\", \"partially_enforced\": \"~\", \"unsupported\": \"✗\"}[c.coverage.value] lines.append(",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_409",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_416",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_REQUIREMENTS_PY_439",
+   "id": "CAP_RAOSIM_REQUIREMENTS_PY_446",
    "type": "Capability",
    "name": "raise NotImplementedError(",
    "state": "NOT_IMPLEMENTED",
    "file": "raosim/requirements.py",
-   "line": 439,
+   "line": 446,
    "quote": "raise NotImplementedError(",
    "context": "# --- architecture: hard-fail, because it changes what is being designed - # if req.feed_architecture not in _SUPPORTED_FEED: raise NotImplementedError( f\"feed_architecture={req.feed_architecture!r} is not implemented; \"",
-   "enforced_by": "raosim/requirements.py:439",
+   "enforced_by": "raosim/requirements.py:446",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "# --- architecture: hard-fail, because it changes what is being designed - # if req.feed_architecture not in _SUPPORTED_FEED: raise NotImplementedError( f\"feed_architecture={req.feed_architecture!r} is not implemented; \"",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_439",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_446",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_REQUIREMENTS_PY_448",
+   "id": "CAP_RAOSIM_REQUIREMENTS_PY_455",
    "type": "Capability",
    "name": "raise NotImplementedError(",
    "state": "NOT_IMPLEMENTED",
    "file": "raosim/requirements.py",
-   "line": 448,
+   "line": 455,
    "quote": "raise NotImplementedError(",
    "context": ") if req.objective not in _SUPPORTED_OBJECTIVE: raise NotImplementedError( f\"objective={req.objective!r} is not implemented; supported: \"",
-   "enforced_by": "raosim/requirements.py:448",
+   "enforced_by": "raosim/requirements.py:455",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": ") if req.objective not in _SUPPORTED_OBJECTIVE: raise NotImplementedError( f\"objective={req.objective!r} is not implemented; supported: \"",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_448",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_455",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_REQUIREMENTS_PY_73",
@@ -1536,26 +1574,26 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_REQUIREMENTS_PY_73",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
-   "id": "CAP_RAOSIM_RUN_NOZZLE_PY_6676",
+   "id": "CAP_RAOSIM_RUN_NOZZLE_PY_6976",
    "type": "Capability",
    "name": "print(dim(\" Numerical design/CAD output is never hardware-qualified by LREKit.\"))",
    "state": "NOT_QUALIFIED",
    "file": "raosim/run_nozzle.py",
-   "line": 6676,
+   "line": 6976,
    "quote": "print(dim(\"  Numerical design/CAD output is never hardware-qualified by LREKit.\"))",
    "context": "\"qualification still requires the external engineering authority.\" )) print(dim(\"  Numerical design/CAD output is never hardware-qualified by LREKit.\")) return 0",
-   "enforced_by": "raosim/run_nozzle.py:6676",
+   "enforced_by": "raosim/run_nozzle.py:6976",
    "subsystems": [
     "nozzle_contour"
    ],
    "detail": "\"qualification still requires the external engineering authority.\" )) print(dim(\"  Numerical design/CAD output is never hardware-qualified by LREKit.\")) return 0",
    "unblock_requires": "",
    "blocked_on_document_requests": [],
-   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RUN_NOZZLE_PY_6676",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_RUN_NOZZLE_PY_6976",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_RAOSIM_VALIDATION_PY_27",
@@ -1574,7 +1612,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_RAOSIM_VALIDATION_PY_27",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_185",
@@ -1593,7 +1631,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_185",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_189",
@@ -1612,7 +1650,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_189",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_407",
@@ -1631,7 +1669,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_407",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_472",
@@ -1650,7 +1688,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_472",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_509",
@@ -1669,7 +1707,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_509",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_539",
@@ -1688,7 +1726,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_539",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_570",
@@ -1707,7 +1745,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_570",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_644",
@@ -1726,7 +1764,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_644",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_COMPARE_NASA_REFERENCE_PY_725",
@@ -1745,7 +1783,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_COMPARE_NASA_REFERENCE_PY_725",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_GENERATE_CONTOUR_PY_173",
@@ -1762,7 +1800,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_GENERATE_CONTOUR_PY_173",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "CAP_SCRIPTS_GENERATE_CONTOUR_PY_21",
@@ -1779,7 +1817,7 @@
    "unblock_requires": "",
    "blocked_on_document_requests": [],
    "provenance_id": "PROV_CAPABILITY_SCAN_SCRIPTS_GENERATE_CONTOUR_PY_21",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   }
  ]
 }

@@ -109,7 +109,7 @@ def main(argv=None) -> int:
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name in ("search", "docs", "doc", "entity", "equation", "claims", "model", "validity", "sources",
-                 "implementation", "basis", "compare", "ask"):
+                 "implementation", "basis", "compare", "ask", "artifacts", "artifact"):
         p = sub.add_parser(name)
         p.add_argument("arg")
         p.add_argument("--limit", type=int, default=10)
@@ -119,6 +119,12 @@ def main(argv=None) -> int:
     p = sub.add_parser("path"); p.add_argument("a"); p.add_argument("b")
     p = sub.add_parser("context"); p.add_argument("--task", required=True); p.add_argument("--limit", type=int, default=12)
     sub.add_parser("status")
+    p = sub.add_parser("coverage", help="all-document source/equation coverage; completeness is not presumed")
+    p.add_argument("--documents", action="store_true")
+    p = sub.add_parser("enrichments", help="unreviewed Docling formula/table candidates")
+    p.add_argument("query", nargs="?", default="")
+    p.add_argument("--document-id")
+    p.add_argument("--limit", type=int, default=20)
     p = sub.add_parser("pending", help="show a resumable review queue; never starts agents")
     p.add_argument("--limit", type=int, default=5)
     p.add_argument("--subsystem", default=None)
@@ -132,7 +138,13 @@ def main(argv=None) -> int:
     sub.add_parser("validate")
     ns = ap.parse_args(argv)
 
-    if ns.cmd == "search":
+    if ns.cmd == "coverage":
+        from kg.coverage import summary
+        _emit(summary(include_documents=ns.documents), ns.json)
+    elif ns.cmd == "enrichments":
+        from kg.enrichment import find
+        _emit(find(ns.query, ns.document_id, ns.limit), ns.json)
+    elif ns.cmd == "search":
         r = api.semantic_search(ns.arg, limit=ns.limit)
         if ns.json:
             _emit(r, True)
@@ -146,6 +158,10 @@ def main(argv=None) -> int:
         _emit(api.get_document(ns.arg), ns.json)
     elif ns.cmd == "entity":
         _emit(api.get_entity(ns.arg) if ns.arg.isupper() and "_" in ns.arg and " " not in ns.arg else api.find_entity(ns.arg, limit=ns.limit), ns.json)
+    elif ns.cmd == "artifacts":
+        _emit(api.find_artifacts(ns.arg, limit=ns.limit), ns.json)
+    elif ns.cmd == "artifact":
+        _emit(api.get_artifact(ns.arg), ns.json)
     elif ns.cmd == "equation":
         _emit(api.get_equation(ns.arg) if ns.arg.startswith("EQ_") else api.find_equations(ns.arg, limit=ns.limit), ns.json)
     elif ns.cmd == "claims":
@@ -218,6 +234,8 @@ def _sources(obj_id: str) -> dict:
     m = index_by("models").get(obj_id)
     if m:
         return api.get_model(obj_id)
+    if obj_id in index_by("artifacts"):
+        return api.get_artifact(obj_id)
     ctx = api.get_source_context(obj_id)
     if ctx.get("state") != "INSUFFICIENT_SOURCE_CONTEXT":
         return ctx

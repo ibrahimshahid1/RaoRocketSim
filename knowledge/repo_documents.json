@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-09-20T22:58:11.647765+00:00",
-  "n": 62
+  "generated_at": "2026-10-16T18:20:18.581282+00:00",
+  "n": 64
  },
  "records": [
   {
@@ -45,7 +45,7 @@
    "n_lines": 142,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_LITERATURE_AUDIT_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_AUDIT_WORK_LREKIT_PUMP_AUDIT_2026_09_05_MD",
@@ -94,7 +94,7 @@
     "propulsion_texts/fuel_pump_design/19740020848.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_PUMP_AUDIT_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_AUDIT_WORK_LREKIT_WORKFLOW_AUDIT_2026_09_04_MD",
@@ -117,7 +117,7 @@
    "n_lines": 143,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_AUDIT_WORK_LREKIT_WORKFLOW_AUDIT_2026_09_04_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_CEA_H1_HOST_EVIDENCE_2026_08_22_MD",
@@ -144,7 +144,7 @@
    "n_lines": 212,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_CEA_H1_HOST_EVIDENCE_2026_08_22_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_CHAMBER_DESIGN_LITERATURE_MD",
@@ -172,7 +172,7 @@
     "propulsion_texts/19770009165.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_CHAMBER_DESIGN_LITERATURE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_COMPLETION_PLAN_MD",
@@ -294,7 +294,7 @@
     "propulsion_texts/rao1999.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_COMPLETION_PLAN_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_CONTRACT_INTEGRITY_REMEDIATION_2026_09_05_MD",
@@ -312,7 +312,7 @@
    "n_lines": 469,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_CONTRACT_INTEGRITY_REMEDIATION_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_DIFFERENTIABLE_ENGINE_MDO_PLAN_MD",
@@ -431,7 +431,7 @@
    "n_lines": 1063,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_DIFFERENTIABLE_ENGINE_MDO_PLAN_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026_07_22_MD",
@@ -462,7 +462,7 @@
    "n_lines": 153,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_DIFFERENTIABLE_MDO_PLAN_EVALUATION_2026_07_22_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_ELECTRIC_PUMP_MODEL_BASIS_MD",
@@ -477,7 +477,7 @@
    "summary": " This model is a first-pass sizing screen. It separates quantities the engine and feed ledger demand from quantities that must be selected from pump, motor, inverter, and battery hardware.  ## Solved From The Engine And Feed Ledger  For each propellant stream, the injector/feed ledger provides mass flow, fluid density, required downstream pressure, tank/inlet pressure when known, and NPSH margin when known. The pump model then uses: ",
    "relations": [],
    "staleness_signals": [],
-   "n_lines": 265,
+   "n_lines": 292,
    "cited_pdfs": [
     "propulsion_texts/fuel_pump_design/19710025474.pdf",
     "propulsion_texts/fuel_pump_design/19740020848.pdf",
@@ -485,7 +485,7 @@
     "propulsion_texts/fuel_pump_design/s42405-020-00325-z.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_ELECTRIC_PUMP_MODEL_BASIS_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_FEATURE_DATAFLOW_AUDIT_2026_07_11_MD",
@@ -520,7 +520,7 @@
    "n_lines": 446,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_FEATURE_DATAFLOW_AUDIT_2026_07_11_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_FROZEN_VARIABLE_CP_EXPANSION_MD",
@@ -544,7 +544,7 @@
     "propulsion_texts/betti2014.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_FROZEN_VARIABLE_CP_EXPANSION_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED_MD",
@@ -562,7 +562,7 @@
    "n_lines": 503,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_GENERALIZATION_PLAN_THRUST_PROPELLANT_FEED_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_HARDWARE_MASS_LEDGER_MD",
@@ -583,7 +583,7 @@
     "propulsion_texts/19730022965.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_HARDWARE_MASS_LEDGER_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_IMPLICIT_RAO_JAX_MDO_ARCHITECTURE_MD",
@@ -605,7 +605,7 @@
     "propulsion_texts/rao1999.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_IMPLICIT_RAO_JAX_MDO_ARCHITECTURE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_INJECTOR_INTERFACE_MODEL_MD",
@@ -623,7 +623,7 @@
    "n_lines": 108,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_INJECTOR_INTERFACE_MODEL_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_INJECTOR_PINTLE_PROVENANCE_MD",
@@ -641,7 +641,7 @@
    "n_lines": 132,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_INJECTOR_PINTLE_PROVENANCE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_INPUT_EXECUTION_INTEGRITY_2026_09_09_MD",
@@ -659,7 +659,7 @@
    "n_lines": 62,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_INPUT_EXECUTION_INTEGRITY_2026_09_09_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_INTEGRATION_PROGRAM_2026_08_22_MD",
@@ -728,7 +728,7 @@
     "propulsion_texts/19770009165.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_INTEGRATION_PROGRAM_2026_08_22_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_JAX_DIFFERENTIABLE_PLAN_MD",
@@ -833,7 +833,7 @@
     "propulsion_texts/RaoRecentDevinRockNozConfig.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_JAX_DIFFERENTIABLE_PLAN_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LAGRANGIAN_SPRAY_MODEL_MD",
@@ -851,7 +851,7 @@
    "n_lines": 188,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LAGRANGIAN_SPRAY_MODEL_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LEGACY_CODE_AUDIT_MD",
@@ -882,7 +882,7 @@
    "n_lines": 163,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LEGACY_CODE_AUDIT_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LITERATURE_AUDIT_2026_07_24_MD",
@@ -905,7 +905,7 @@
    "n_lines": 392,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_AUDIT_2026_07_24_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD",
@@ -930,7 +930,7 @@
     "propulsion_texts/Vandenberg_Corrected_Properties.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_GENERALIZATION_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD",
@@ -976,7 +976,7 @@
     "propulsion_texts/fuel_pump_design/19740020848.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LITERATURE_REQUESTS_MD",
@@ -999,7 +999,7 @@
    "n_lines": 141,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LITERATURE_REQUESTS_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LREKIT_DELIVERY_BACKLOG_2026_09_05_MD",
@@ -1038,7 +1038,7 @@
    "n_lines": 263,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_DELIVERY_BACKLOG_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LREKIT_HARDWARE_PROGRAM_2026_09_05_MD",
@@ -1073,7 +1073,7 @@
    "n_lines": 700,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_HARDWARE_PROGRAM_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_LREKIT_READINESS_AND_DELIVERY_PLAN_2026_09_05_MD",
@@ -1108,7 +1108,7 @@
    "n_lines": 247,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_LREKIT_READINESS_AND_DELIVERY_PLAN_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_MDO_GUIDE_MD",
@@ -1124,34 +1124,61 @@
    "relations": [],
    "staleness_signals": [
     {
-     "line": 210,
+     "line": 363,
      "quote": "`mdo/contour_validation.py` contract has now landed: when `reevaluate()` receives"
     },
     {
-     "line": 215,
+     "line": 368,
      "quote": "variational solve. This is not yet B3 qualification: historical coupled and BDE"
     },
     {
-     "line": 348,
+     "line": 528,
      "quote": "matching B5 declared-domain artifact. The historical first fixed-context artifact is"
     },
     {
-     "line": 431,
+     "line": 614,
      "quote": "11. **Exact-Rao post-solve promotion is still blocked.** The B5"
     },
     {
-     "line": 433,
+     "line": 616,
      "quote": "the historical 8/12/16/24-ladder H2 map at fixed $\\gamma=1.4$ and"
     },
     {
-     "line": 440,
+     "line": 623,
      "quote": "Historical 24×24 and 32×32 BDE probes passed numerical BVP, Eq. (5),"
     }
    ],
-   "n_lines": 462,
+   "n_lines": 657,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_MDO_GUIDE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026_10_16_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026-10-16.md",
+   "title": "MDO solver: open issues and what keeps it out of the part-geometry workflow",
+   "kind": "note",
+   "date": "2026-10-16",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " Date: 2026-10-16. Working tree on top of `6c04d92` (uncommitted, including other in-progress work on the electric-drive convention and `python -m raosim`).  Sources: the *LREKit Consolidated Technical Review and Forward Program* (70 pp., Oct 7; cited as \"review §n\"), `docs/` (chiefly `DIFFERENTIABLE_ENGINE_MDO_PLAN.md`, `MDO_GUIDE.md`, `MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md`, `ROADMAP_REQUIREMENTS_TO_PARTS.md`, `LREKIT_READINESS_AND_DELIVERY_PLAN_2026-09-05.md`), the knowledge graph (`knowledge/kg.sh`, `knowledge/reports/KNOWLEDGE_GRAPH_AUDIT_2026-10-16.md`, `knowledge/reports/pdf_issue_disp",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 118,
+     "quote": "18. **Property coverage gaps.** N2O/ethanol is blocked on the oxidizer inlet"
+    },
+    {
+     "line": 240,
+     "quote": "`test_software_components_point_at_real_definitions` fails on stale line"
+    }
+   ],
+   "n_lines": 242,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MDO_ISSUES_AND_WORKFLOW_BLOCKERS_2026_10_16_MD",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_MDO_REMEDIATION_AND_OUTPUT_CONTRACT_MD",
@@ -1209,7 +1236,38 @@
     "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_MDO_REMEDIATION_AND_OUTPUT_CONTRACT_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
+  },
+  {
+   "id": "RDOC_DOCS_MOC_MARCH_TOPOLOGY_REMEDIATION_2026_09_21_MD",
+   "type": "RepositoryDocument",
+   "path": "docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md",
+   "title": "`raosim/moc.py` forward march — topology audit and remediation plan",
+   "kind": "note",
+   "date": "2026-09-21",
+   "date_basis": "filename",
+   "status_head": "",
+   "authority": "implementation_state_not_science",
+   "summary": " > **STATUS (2026-09-21, later the same day): PHASES 0–2 LANDED; Oracle B > PASSES.** `raosim/moc_bounded.py` (new) marches the bounded net RRC-by-RRC > on the NASA/JHU topology (wall point = C− parent of `[1][j]`, previous > axis point = C+ parent, `iLast[j] = iLast[j−1] + specialFlag`), reusing > `nasa_moc._calc_interior_mesh_point` / `_calc_axial_mesh_point` and the > arc unit processes verbatim (throat-arc rows are **bit-identical** to > `build_kernel`, incl. NASA's axis closure of an r<0-truncated row). A > general dθ-form wall point (`_calc_wall_point_raw_general`) + a > geometry-factore",
+   "relations": [],
+   "staleness_signals": [
+    {
+     "line": 3,
+     "quote": "> **STATUS (2026-09-21, later the same day): PHASES 0–2 LANDED; Oracle B"
+    },
+    {
+     "line": 30,
+     "quote": "> CLI). Also landed: `solve_interior_point(on_upstream=\"keep\"|\"raise\"|\"clamp\")`"
+    },
+    {
+     "line": 51,
+     "quote": "> **HISTORICAL BASELINE (2026-09-21, before phases 0–2 landed): ANALYSIS + PLAN ONLY.**"
+    }
+   ],
+   "n_lines": 417,
+   "cited_pdfs": [],
+   "provenance_id": "PROV_REPO_DOC_DOCS_MOC_MARCH_TOPOLOGY_REMEDIATION_2026_09_21_MD",
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_MODEL_REGISTRY_MD",
@@ -1227,7 +1285,7 @@
    "n_lines": 62,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_MODEL_REGISTRY_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_MOVABLE_PINTLE_MODEL_MD",
@@ -1247,12 +1305,12 @@
      "quote": "Lagrangian handoff is blocked. The current OpenFOAM external-gap wedge is a"
     }
    ],
-   "n_lines": 267,
+   "n_lines": 280,
    "cited_pdfs": [
     "propulsion_texts/pintle_injector/son2017.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_MOVABLE_PINTLE_MODEL_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_NASA_TT_PRIME_PROVENANCE_MD",
@@ -1291,7 +1349,7 @@
    "n_lines": 150,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_NASA_TT_PRIME_PROVENANCE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_NEXT_SESSION_PROMPT_MD",
@@ -1314,7 +1372,7 @@
    "n_lines": 62,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_NEXT_SESSION_PROMPT_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_OPENFOAM_SPRAY_EXPORT_MD",
@@ -1332,7 +1390,7 @@
    "n_lines": 132,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_OPENFOAM_SPRAY_EXPORT_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PHYSICAL_INTEGRITY_REMEDIATION_2026_07_11_MD",
@@ -1363,7 +1421,7 @@
    "n_lines": 115,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICAL_INTEGRITY_REMEDIATION_2026_07_11_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PHYSICAL_RELEASE_GATES_MD",
@@ -1386,7 +1444,7 @@
    "n_lines": 88,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICAL_RELEASE_GATES_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PHYSICS_FIDELITY_ROADMAP_MD",
@@ -1449,7 +1507,7 @@
    "n_lines": 409,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PHYSICS_FIDELITY_ROADMAP_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PINTLE_DESIGN_EVALUATION_MD",
@@ -1476,7 +1534,7 @@
    "n_lines": 319,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_DESIGN_EVALUATION_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PINTLE_INJECTOR_LITERATURE_INVENTORY_MD",
@@ -1499,7 +1557,7 @@
    "n_lines": 197,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_INJECTOR_LITERATURE_INVENTORY_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PINTLE_INJECTOR_MODEL_GAP_ANALYSIS_MD",
@@ -1522,7 +1580,7 @@
    "n_lines": 695,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PINTLE_INJECTOR_MODEL_GAP_ANALYSIS_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PLAN_VALVES_LINES_BRACKETS_GIMBAL_MD",
@@ -1561,7 +1619,7 @@
    "n_lines": 255,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PLAN_VALVES_LINES_BRACKETS_GIMBAL_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PROJECT_AUDIT_2026_08_25_MD",
@@ -1680,7 +1738,7 @@
    "n_lines": 869,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PROJECT_AUDIT_2026_08_25_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PUMP_ADVANCED_GEOMETRY_ROADMAP_2026_07_11_MD",
@@ -1698,7 +1756,7 @@
    "n_lines": 348,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_ADVANCED_GEOMETRY_ROADMAP_2026_07_11_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PUMP_CAD_IMPLEMENTATION_PLAN_MD",
@@ -1741,7 +1799,7 @@
    "n_lines": 267,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_CAD_IMPLEMENTATION_PLAN_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026_07_13_MD",
@@ -1784,7 +1842,7 @@
    "n_lines": 306,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_GEOMETRY_IMPLEMENTATION_PLAN_2026_07_13_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PUMP_PHYSICS_AND_PROCESS_BASIS_2026_09_05_MD",
@@ -1831,7 +1889,7 @@
     "propulsion_texts/gradl2017.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_PUMP_PHYSICS_AND_PROCESS_BASIS_2026_09_05_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_PYPI_RELEASE_MD",
@@ -1849,7 +1907,7 @@
    "n_lines": 83,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_PYPI_RELEASE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_RAO_B3_B5_HOST_EVIDENCE_2026_08_24_MD",
@@ -1924,7 +1982,7 @@
     "propulsion_texts/rao1999.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_RAO_B3_B5_HOST_EVIDENCE_2026_08_24_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_RAO_STATIONARITY_TRANSVERSALITY_MD",
@@ -1942,7 +2000,7 @@
    "n_lines": 58,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_RAO_STATIONARITY_TRANSVERSALITY_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_REGEN_WALL_MODEL_MD",
@@ -1962,7 +2020,7 @@
     "propulsion_texts/19710019929.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_REGEN_WALL_MODEL_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_REMEDIATION_LITERATURE_TRACEABILITY_MD",
@@ -1986,7 +2044,7 @@
     "propulsion_texts/rao1958.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_REMEDIATION_LITERATURE_TRACEABILITY_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_REPO_PHYSICS_AUDIT_2026_07_02_MD",
@@ -2009,7 +2067,7 @@
    "n_lines": 307,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_REPO_PHYSICS_AUDIT_2026_07_02_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_REWRITE_PLAN_MD",
@@ -2039,7 +2097,7 @@
     "propulsion_texts/20030067852.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_DOCS_REWRITE_PLAN_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_RICE_JHU_MOC_TOPOLOGY_MAP_MD",
@@ -2062,7 +2120,7 @@
    "n_lines": 112,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_RICE_JHU_MOC_TOPOLOGY_MAP_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_ROADMAP_REQUIREMENTS_TO_PARTS_MD",
@@ -2070,9 +2128,9 @@
    "path": "docs/ROADMAP_REQUIREMENTS_TO_PARTS.md",
    "title": "Roadmap: requirements in, parameterized parts out",
    "kind": "note",
-   "date": null,
-   "date_basis": "unknown",
-   "status_head": "## Status\n\n| item | state |\n|---|---|\n| R0 chamber-length convention | **done** — wetted-area parity 0.8828 → 1.00102, mass delta 12.06 % → 0.044 % |\n| R1 jacket sizing + SP-8087 loads | **done** — hoop-sized tapered jacket, thin-shell and nozzle-collapse constraints added |\n| R2 flange/faceplate sizing | **advisory shipped** — 18.13 → 5.53 kg available; not yet applied to exported CAD |\n| R3 requirements layer | not started — still the product gap |\n| R4 parts package | not started |\n| R5 physics gaps | not started |",
+   "date": "2026-10-15",
+   "date_basis": "first 4000 chars of content",
+   "status_head": "## Status\n\n| item | state |\n|---|---|\n| R0 chamber-length convention | **done** — wetted-area parity 0.8828 → 1.00102, mass delta 12.06 % → 0.044 % |\n| R1 jacket sizing + SP-8087 loads | **done** — hoop-sized tapered jacket, thin-shell and nozzle-collapse constraints added |\n| R2 flange/faceplate sizing | **advisory shipped** — 18.13 → 5.53 kg available; not yet applied to exported CAD |\n| R3 requirements layer | **partly implemented** — typed requirement mapping and job consumption exist in `raosim/requirements.py` and `raosim/mdo/job.py`; complete requirements-to-parts delivery remains open (status clarified 2026-10-15) |\n| R4 parts package | not started |\n| R5 physics gaps | not started |",
    "authority": "implementation_state_not_science",
    "summary": " Target end state: a user supplies **dimensions, or targets to optimize toward** (a thrust target, an Isp floor, a mass budget, an envelope limit) plus whatever other engine requirements they care about, and receives **parameterized, manufacturable parts** — nozzle + throat + chamber assembly with flanges and correctly sized bolts, injector parts, and electric pump parts.  This document assesses where the repository actually stands against that goal and what to build next, in order. It supersedes the open-gap list in `MDO_REMEDIATION_AND_OUTPUT_CONTRACT.md` §12 for prioritisation purposes. ",
    "relations": [],
@@ -2085,7 +2143,7 @@
    "n_lines": 333,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_ROADMAP_REQUIREMENTS_TO_PARTS_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_SHOULDER_RADIUS_DESIGN_BASIS_MD",
@@ -2103,7 +2161,7 @@
    "n_lines": 238,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_SHOULDER_RADIUS_DESIGN_BASIS_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_SPRAY_CSTAR_COUPLING_MD",
@@ -2121,7 +2179,7 @@
    "n_lines": 90,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_SPRAY_CSTAR_COUPLING_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
@@ -2144,7 +2202,7 @@
    "n_lines": 204,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
@@ -2155,14 +2213,14 @@
    "date": null,
    "date_basis": "unknown",
    "status_head": "",
-   "authority": "implementation_state_not_science",
+   "authority": "bibliographic_metadata_not_science",
    "summary": " **Scope.** An annotated, de-duplicated inventory of the pintle-injector corpus in `propulsion_texts/pintle_injector/`, plus the directly-relevant coupling literature already present in the parent `propulsion_texts/` folder. The purpose is to map every document to the design topics that drive injector parametrization — design/sizing, hot-fire testing, cold-flow & atomization, thermal/cooling, throttling, and the coupling to **combustion-chamber geometry, nozzle geometry, and feed-system (pump) output** — so the corpus can inform the CLI design tool (`raosim/injector.py` and the `main.py` inter",
    "relations": [],
    "staleness_signals": [],
    "n_lines": 243,
    "cited_pdfs": [],
    "provenance_id": "PROV_REPO_DOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   },
   {
    "id": "RDOC_README_MD",
@@ -2221,7 +2279,7 @@
     "propulsion_texts/rao1999.pdf"
    ],
    "provenance_id": "PROV_REPO_DOC_README_MD",
-   "harvested_at": "2026-09-20T22:58:11.647765+00:00"
+   "harvested_at": "2026-10-16T18:20:18.581282+00:00"
   }
  ]
 }
