@@ -14,7 +14,7 @@ Design notes
 
 from __future__ import annotations
 
-ONTOLOGY_VERSION = "1.1.0"
+ONTOLOGY_VERSION = "1.2.0"  # 1.2.0: StandardSource, HELD_AS, BLOCKED_ON
 EXTRACTION_VERSION = "1.0.1"
 
 # --------------------------------------------------------------------------
@@ -69,6 +69,7 @@ SOFTWARE_NODES = (
     "ValidationGate",
     "ArtifactManifest",
     "RepositoryDocument",   # docs/*.md - implementation-state authority, NOT scientific authority
+    "StandardSource",       # a requested/held standard; HELD or BLOCKED_ON_STANDARD, never compliance
 )
 
 SYSTEM_NODES = (
@@ -104,7 +105,7 @@ EDGE_TYPES = (
     "IMPLEMENTS", "IMPLEMENTED_IN", "COMPARED_WITH", "REFERENCE_ORACLE_FOR",
     "PARITY_CHECKED_AGAINST", "BENCHMARKED_AGAINST", "VALIDATES", "INVALIDATES",
     "TESTED_WITH", "GATED_BY", "REFUSES_WHEN", "PRODUCES_ARTIFACT",
-    "AVAILABLE_IN", "UNAVAILABLE_IN", "BLOCKED_ON_LITERATURE",
+    "AVAILABLE_IN", "UNAVAILABLE_IN", "BLOCKED_ON_LITERATURE", "BLOCKED_ON", "HELD_AS",
     "PART_OF", "BOUND_TO_CONFIGURATION",
     # document state
     "SUPERSEDES", "CORRECTS", "UPDATES", "AUDITS", "IMPLEMENTS_PLAN_ITEM",
@@ -239,6 +240,6 @@ SCHEMA = {
         "Benchmark": "BENCH", "SoftwareComponent": "SW", "Capability": "CAP",
         "RepositoryDocument": "RDOC", "ProvenanceRecord": "PROV",
         "ExtractionCandidate": "CAND",
-        "EmpiricalConstant": "CONST", "Subsystem": "SUB",
+        "EmpiricalConstant": "CONST", "Subsystem": "SUB", "StandardSource": "STD",
     },
 }

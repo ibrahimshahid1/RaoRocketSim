@@ -1,0 +1,80 @@
+{
+ "packet": "P1-SP125-p100",
+ "at": "2026-10-16T20:40:18.660584+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P1-SP125-p100.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 5,\n \"page_shifted\": 0,\n \"n_equations\": 0,\n \"n_claims\": 5,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T20:40:18.980363+00:00', 'n_nodes': 4961, 'n_edges': 6359, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P1-SP125-p100.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T20:40:20.084107+00:00",
+  "n_nodes": 4961,
+  "n_edges": 6357,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "pending_source_reviews": 47,
+  "needs_source_routing": 8,
+  "pending_verifications": 203,
+  "documents_with_extracted_objects": 9,
+  "canonical_documents_without_extracted_objects": 239
+ },
+ "integrity": {
+  "nodes": 4961,
+  "edges": 6357,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [],
+ "verdict_state_mismatches": []
+}

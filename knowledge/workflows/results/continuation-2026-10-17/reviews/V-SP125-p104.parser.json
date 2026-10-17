@@ -1,0 +1,141 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "GPT-6 (Codex)"
+ },
+ "packet": "V-SP125-p104",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_6c50f4870137f6267bb49b65",
+   "state": "REJECTED",
+   "reason": "Crop is a blackened page header/footer artifact, not a scientific figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_d4bcf9a3425ef6a0e0316da7",
+   "state": "REJECTED",
+   "reason": "Crop is a blackened page header/footer artifact, not a scientific figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_3ab742b7612d39f22e759bd6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_3e3b66091f69769be8aafacc",
+   "state": "REJECTED",
+   "reason": "Radical rendered as vee with 1.6 outside a radical; source has sqrt(1.6) times 24.9.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_59445c907ca57998b8d6b3a5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_698011780caaa25e5d787956",
+   "state": "REJECTED",
+   "reason": "Parser places 487 outside the radical; source diameter is sqrt((4/pi)*487).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_6a0f3ffb60f3efd60a64309b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_8e3da9723d2c4feefc0acd8c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_b3fb3d5c34ad5e9c514e0738",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_c1be43c0f43dfc2fcb32df72",
+   "state": "REJECTED",
+   "reason": "Parser replaces division by tan(20 deg) with an underbrace; source has a quotient.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_e78ba319d06b7f1d15554712",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_e87a6277c46b4485c05e8ba0",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Compared original PDF p.104 full-page render: printed symbols, values and units match candidate (rounding preserved).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 104,
+    "method": "Original PDF pnggray 140 dpi full-page visual comparison.",
+    "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+   }
+  }
+ ]
+}

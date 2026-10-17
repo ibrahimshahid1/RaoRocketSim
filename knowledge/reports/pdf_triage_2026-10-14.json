@@ -1,0 +1,6840 @@
+{
+ "generated_at": "2026-10-14T21:36:48.514773+00:00",
+ "method": "native-first-middle-last@1",
+ "limitations": "First/middle/last native text only. Sparse pages can be blank covers/figures; damaged embedded OCR can have abundant text. This is not an OCR-needed census or parser benchmark.",
+ "summary": {
+  "canonical_documents": 248,
+  "documents_assessed": 248,
+  "canonical_pages_in_manifest": 11375,
+  "pages_sampled": 724,
+  "documents_with_sampled_sparse_pages": 20,
+  "sampled_sparse_pages": 25,
+  "documents_with_sampled_replacement_chars": 1,
+  "errors_or_timeouts": 0
+ },
+ "records": [
+  {
+   "doc_id": "DOC_125_1",
+   "source_pdf": "propulsion_texts/125_1.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6871,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 2,
+     "native_chars": 6179,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d800ac300ec8df15efa5ba6f4bff8b01443e8e2e315b2e3e2bb0bd0f0ba0b4d8",
+   "page_count": 2
+  },
+  {
+   "doc_id": "DOC_3_540_13917_6_196",
+   "source_pdf": "propulsion_texts/3-540-13917-6_196.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2899,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 4090,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 701,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7623a33ec042cb16681166b07962056cf5072e2f0087746b8e10bd1fcab0f313",
+   "page_count": 5
+  },
+  {
+   "doc_id": "DOC_52D4CA845732D962C5E49697F8B99533_LECTURE_4_5",
+   "source_pdf": "propulsion_texts/52d4ca845732d962c5e49697f8b99533_lecture_4_5.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 959,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 558,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 20,
+     "native_chars": 700,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "dac8cb6dc6c07ac1fb1c7d95f8c6d408110e10384175e14dc7d4f7c27ec00151",
+   "page_count": 20
+  },
+  {
+   "doc_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 53,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 389,
+     "native_chars": 1514,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 776,
+     "native_chars": 487,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+   "page_count": 776
+  },
+  {
+   "doc_id": "DOC_978_3_7091_4745_0_18",
+   "source_pdf": "propulsion_texts/978-3-7091-4745-0_18.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3164,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 2,
+     "native_chars": 3004,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "82f09d79b688188ea4e5dd9023b3605a62538a688fc0ac3631ccdc45564a967e",
+   "page_count": 2
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_24_2012_TYPES_AND_APPLICATIONS_OF_ENGINEERING_THE_A",
+   "source_pdf": "propulsion_texts/ASME Y14_24-2012 - Types and Applications of Engineering -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791834879 -- c6e2f1b2f38c3a9e360896a3466bf381 -- Anna’s Archive.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 500,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 43,
+     "native_chars": 360,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 84,
+     "native_chars": 310,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "97330300f1e881dc815a50217e55d82af399e62ade33deda935033881ab92e03",
+   "page_count": 84
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_41_2003_DIGITAL_PRODUCT_DEFINITION_DATA_PRACTICES_T",
+   "source_pdf": "propulsion_texts/ASME Y14_41-2003 - DIGITAL PRODUCT DEFINITION DATA PRACTICES -- The American Society of Mechanical Engineers -- Engineering Drawing and Related -- isbn13 9780791828106 -- c3f09533a7b49746adeef2ee40f3251c -- Anna’s Archive.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 597,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 53,
+     "native_chars": 1825,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 105,
+     "native_chars": 310,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a143ca864cb9ae1dc8b5c25840d809917bd56dc162700c34ddb122d84b7422d7",
+   "page_count": 105
+  },
+  {
+   "doc_id": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA",
+   "source_pdf": "propulsion_texts/ASME Y14_5-2018_ Dimensioning and Tolerancing_ 8_2 -- The American Society of Mechanical Engineers -- 1, 2019 -- Multiple_ Distributed through -- isbn13 9780791872192 -- e57c38f7fcfdb4cd0b9e81a9ed26f615 -- Anna’s Archive.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 188,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 174,
+     "native_chars": 163,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 347,
+     "native_chars": 15,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2ce0c6825ce1bcea4b916d9eb86a774525232c3330262625ad0400e881ed7dc0",
+   "page_count": 347
+  },
+  {
+   "doc_id": "DOC_AUSTIN2002",
+   "source_pdf": "propulsion_texts/pintle_injector/austin2002.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4072,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2510,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 2543,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "16794c134d81fdaf7abce57c797cd0a9e64c7b27b59c66e9a2cd10d938910fa3",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_A_DESIGN_TOOL_FOR_LIQUID_ROCKET_ENGINE_INJECTORS",
+   "source_pdf": "propulsion_texts/pintle_injector/A_Design_Tool_for_Liquid_Rocket_Engine_Injectors.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3320,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2941,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 214,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "afd833028e7e887be62522f1828333d4e84cfc1e079473d02768156a2dde637a",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_BELL2014",
+   "source_pdf": "propulsion_texts/bell2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4819,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4344,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3439,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "bf1894e8832585eede97bc689cb71fcd8c4f9b08879e750866ac57ab7f9ee600",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_BELLARY2014",
+   "source_pdf": "propulsion_texts/fuel_pump_design/bellary2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3121,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4769,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 2679,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e67cb06aad1f4ef4ae599f32a19c640072a3ce95a8f8ec9e49e9645dd6a37770",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_BF03404670",
+   "source_pdf": "propulsion_texts/fuel_pump_design/BF03404670.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4285,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2330,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 421,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "53fccf67ea30a02d69734cc40a49fc8e54463aeeb42fb5e0674131682a32c3df",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_CAD_04",
+   "source_pdf": "propulsion_texts/CAD_04.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 33,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 87,
+     "native_chars": 669,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 173,
+     "native_chars": 241,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb",
+   "page_count": 173
+  },
+  {
+   "doc_id": "DOC_CHEN1992",
+   "source_pdf": "propulsion_texts/fuel_pump_design/chen1992.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 540,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4475,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 874,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "262f34c9dff9ea753147c009192a0caa94c7dca8d9a8344981dd37328a573eed",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1002_FLD_1650130505",
+   "source_pdf": "propulsion_texts/10.1002_fld.1650130505.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3167,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 294,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 26,
+     "native_chars": 1235,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ad90a746e7ca7491b7549f8acd8b8e518b822f21531e191f0b06c42e506c6f39",
+   "page_count": 26
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_978_3_030_14788_4",
+   "source_pdf": "propulsion_texts/10.1007_978-3-030-14788-4.pdf",
+   "sampled_pages": [],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "3e2dd0d8ad6708aa56e5c658644b7d3b5c5e594c83b1a8b4f2d027cedf1cbd17",
+   "page_count": 0
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_015_7201_4",
+   "source_pdf": "propulsion_texts/10.1007_s00170-015-7201-4.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3769,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3987,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2117,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "373fb906c1b2d48118af453fe935a37e619e20786b129668938a168114b71302",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_016_8467_X",
+   "source_pdf": "propulsion_texts/10.1007_s00170-016-8467-x.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3669,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4828,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 1150,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7e05a60fc999f1c1fc56b680d66fc6d25d353c53fd02aaae0b0a5d4efd6dd10b",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00170_018_2033_7",
+   "source_pdf": "propulsion_texts/10.1007_s00170-018-2033-7.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4165,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1071,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 5988,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "17d654c47f97fb0e19a4ae8c4ae73fa5bc96f9f10ec82c9a7743d326c1806ef8",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S00193_018_0834_0",
+   "source_pdf": "propulsion_texts/schomberg2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4097,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 4686,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 5028,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "61cea1150d556eab6d50b1e4d6e5e2759ac4136e924671d7b70ecc7021b57dea",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "source_pdf": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 406,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 92,
+     "native_chars": 2431,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 183,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f26b86d388aab022b9aa7148904f74e2a14886bffb72374b4d840aaa7d0d07ee",
+   "page_count": 183
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S10853_008_2802_Z",
+   "source_pdf": "propulsion_texts/materials_science/s10853-008-2802-z.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3753,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1748,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 4687,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "84c6a3315d8ba67137d225dab6961a5565fec031ef7340bed3e860629f55532f",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_013_0601_6",
+   "source_pdf": "propulsion_texts/fuel_pump_design/s11630-013-0601-6.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3687,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 2775,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2551,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1c98cad2f5cb1cbdeca777a37466f26e0e60916c7da39f572da10ef289b14111",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_015_0753_7",
+   "source_pdf": "propulsion_texts/pintle_injector/s11630-015-0753-7.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3613,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 1408,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2056,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "53ea8b034d69e7eae3ec3851bb63301ef6ffe2604fa47c0ac9db9d0b5d078095",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11630_016_0838_Y",
+   "source_pdf": "propulsion_texts/pintle_injector/s11630-016-0838-y.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3892,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 1919,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1614,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "984e39fdd00cf2d6327984b7b9a6dfbacdcabdb444c00d0db175a5acbdc745ef",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S11837_025_07787_0",
+   "source_pdf": "propulsion_texts/materials_science/s11837-025-07787-0.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3624,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4167,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 17,
+     "native_chars": 1015,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "60fc73f96b011bb99611e28f1901fd5264cd8363d4dbcadf4820ae96fbad79f9",
+   "page_count": 17
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2683,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2326,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 5032,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2882,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1402,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 1275,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+   "source_pdf": "propulsion_texts/10.1007_s42405-022-00561-5.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3074,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2945,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 6678,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_0010_4485_95_00005_4",
+   "source_pdf": "propulsion_texts/10.1016_0010-4485(95)00005-4.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5222,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 1767,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 1356,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d32c455a058b0d81d127cf09f9c7102e813997ff3aa88472ba1e595bab149075",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_02_005",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017 (2).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5134,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1829,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 6358,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d85aead0c65391d04f33bb7da2ca1138f2058e9c158f117e4fc164729d0c0d7f",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_12_012",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5038,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2366,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 7569,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "49d2ee8c1f992b4662eac2dd1f8d4a357e72f11dfc3b571b6e2ff1dd31ed11e9",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2020_04_067",
+   "source_pdf": "propulsion_texts/gradl2020.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5090,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 5395,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 723,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "658f9927ff22732fb730216a07c51bb195dc6fc32676b0972e17640f3b0c07b1",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2021_02_034",
+   "source_pdf": "propulsion_texts/kerstens2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4864,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 7669,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 5426,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0ec39cb093799f9445b55adbb52783197e81fc7602b5bb655ab71aa1ebb3f9a7",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_02_019",
+   "source_pdf": "propulsion_texts/pintle_injector/1-s2.0-S0094576522000741-main.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5575,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3388,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 9207,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b40d5fa1c78af47d4814dbe2a92a9cc00b6db05ebc7b2d15385ee0f0ef3c53b4",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5184,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3980,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 8375,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_ACTAASTRO_2024_02_038",
+   "source_pdf": "propulsion_texts/pintle_injector/1-s2.0-S0094576524001103-main.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5166,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1901,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 5434,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e2d51ae489344ccf75c5707eb342e1197e413d09d5f2edb3bd861ef1635aca57",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2014_10_008",
+   "source_pdf": "propulsion_texts/pizzarelli2015.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3971,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2150,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 4449,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2fac046b62a1d0056564b6bd9d9b73a6512047165b60393222f3bb4eb44c6eef",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120035",
+   "source_pdf": "propulsion_texts/pintle_injector/thermal-performance-study-of-mmhnto-rocket-thrust-chamber-a223.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 386,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 6571,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 6540,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "89e5079e309fcc2375927536afb12ee0bc463b0d12c772b66033d4c6fc9c7e26",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120421",
+   "source_pdf": "propulsion_texts/pintle_injector/Characterization-of-pintle-engine-performance-for-GO2-kerosene-propellants.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4920,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 6943,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 9216,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "72ef556ebedc40523a98f0248c20c2796b9a829d1c56b3444a34107f2b90ed54",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2014_05_012",
+   "source_pdf": "propulsion_texts/pintle_injector/ahn2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5514,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3239,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1321,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "eb5166864025fff0024f864c1000e5b53afb82df568fc89db3c39089db9d6b3f",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5373,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 3186,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 7869,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_AST_2021_106729",
+   "source_pdf": "propulsion_texts/fuel_pump_design/hu2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5002,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2839,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 4373,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_CJA_2017_04_007",
+   "source_pdf": "propulsion_texts/song2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1116,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3756,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 4635,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0a2b306a94f4437b721998dd3648ac103143e9650e00f588c9c32b12998dccda",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_COMBUST",
+   "source_pdf": "propulsion_texts/pintle_injector/sakaki2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4926,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 5840,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 4606,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5d4cd47d63703550f01e75b6c46462bc4d1edec6318ac0677cffb83632c1d489",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_EXPTHERMFLUSCI_2018_03_033",
+   "source_pdf": "propulsion_texts/pintle_injector/ninish2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1063,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 21,
+     "native_chars": 1673,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 40,
+     "native_chars": 282,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e4fa1d121e4b28905197004361249b67f02025b80ac106cabc1096ce7befcba3",
+   "page_count": 40
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_FUEL_2020_119212",
+   "source_pdf": "propulsion_texts/pintle_injector/song2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5028,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2494,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 3344,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f2cfe20eab73e6c74a2e9b7d69dad15082dc06504a8f2598d5037f271637fce9",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJFATIGUE_2020_105649",
+   "source_pdf": "propulsion_texts/10.1016@j.ijfatigue.2020.105649.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4981,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 991,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 4720,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "deccc89ae09a500f8d464d7e4504d67ed5ec2d5c89b8ab99c0fe028a459cb5e1",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHEAT",
+   "source_pdf": "propulsion_texts/pizzarelli2013.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4871,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2868,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 2013,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a475c8ca4b5916a9d5e616a9ce2d94a0051b68af9e8f10e2aa9b5e2907e68285",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHEATMASSTRANSFER_2013_10_046",
+   "source_pdf": "propulsion_texts/kim2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5360,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 6142,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 1523,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5495490c32f5ba90c7977649febe4e54c49f40e5c13dbb6ebf5b33c9d2594509",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_IJHYDENE_2008_05_057",
+   "source_pdf": "propulsion_texts/materials_science/ellis2008.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4369,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3454,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3269,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c494407687dc8e374f187f2d00ea575c6706987ad80b2e1388a5139ed7255431",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_JALLCOM_2013_12_057",
+   "source_pdf": "propulsion_texts/materials_science/shukla2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5332,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2272,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 6360,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "99cbf0b9fff993e87b2c92e7c50ab7125316260cb427ef3bc9438fd77d8ef966",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_JPPR_2018_01_004",
+   "source_pdf": "propulsion_texts/shine2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3715,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 4769,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 5606,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "010e525acb15556a2e03109011bc3f2128644b769b96d87cd440f485c441143d",
+   "page_count": 18
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MSEA_2010_07_051",
+   "source_pdf": "propulsion_texts/materials_science/walley2010.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5217,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3394,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 747,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5a19f3ee049274874044d19206cea3d3065ef4cdcd94e6a37a065dad6ad8a742",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MSEA_2015_05_028",
+   "source_pdf": "propulsion_texts/materials_science/ellis2015.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4904,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2807,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 895,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "86e898e00fda74c6416e03fd59d792d0770e66eb07932e6e0747f6ba8ac66279",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106437",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/The-effect-of-heat-treatment-on-structure-and-magnetic-_2023_Materials-Today.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4968,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3361,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 6791,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c4af6396fc1e9841f7811819d275806a11831d3944cd672608110d42b2b4aa5d",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106442",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Effect-of-crystallinity-and-morphology-on-the-mechanical-pr_2023_Materials-T.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4833,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 7784,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 10052,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8585e7476132d6268a766b52c801cdb674e6bfade6108468cc797133a322db51",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106456",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Mechanical-characterisation-of-3D-printed-lightweight-la_2023_Materials-Toda.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5167,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1606,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 6036,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b8918d2d8c7834738c043b73e8c57b0afacc59c56c02e8882582a37f850abc1d",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106496",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Adsorption-and-migration-of-Cs-and-Na-ions-in-geo_2023_Materials-Today-Commu.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5202,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 6964,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 9981,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "63e7e0a347ea9fda94ec58bc147cf1e45f334b06383e9d7b7604932f82bfe3af",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106545",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Predicting-adhesion-strength-of-micropatterned-surfaces-us_2023_Materials-To.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4800,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2543,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 2904,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e0591704cd2f971d2a59a3b7b6786d2261adc9b63a22d2f3eeb757f0ef8a985e",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106558",
+   "source_pdf": "propulsion_texts/materials_science/ScienceDirect_articles_19Jun2026_18-51-20.080/Creep-at-low-stresses-in-aluminium--Harper-Dorn--and-in-_2023_Materials-Toda.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5199,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4186,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2249,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d178282905f409036e954b833068bc076674d49b0f2e0b4cc17a6ff1ce95e422",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "source_pdf": "propulsion_texts/nasuti2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3349,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 6666,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 880,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1016_J_SURFCOAT_2013_06_062",
+   "source_pdf": "propulsion_texts/materials_science/coddet2013.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5623,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 1945,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 7490,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6d49a4581ead7d2190c596fc72d4fd5f923bd78d5c674452099edcb4b48adc40",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_1038_S41598_024_64027_2",
+   "source_pdf": "propulsion_texts/pintle_injector/s41598-024-64027-2.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4177,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2233,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 1033,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ae6aea7c7315f685d0f8d18b2c0a446867d7cae0e20cda2ebef68ad9194cd54e",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1038_S41598_025_18499_5",
+   "source_pdf": "propulsion_texts/fuel_pump_design/s41598-025-18499-5.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2811,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3508,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 2985,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "bd43b1e8dbab3bf1fbdece828281e91bf53731e0fbf02256a80c5083c6c44e53",
+   "page_count": 18
+  },
+  {
+   "doc_id": "DOC_DOI_10_1051_EUCASS_200901171",
+   "source_pdf": "propulsion_texts/eucass1p171.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2735,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 882,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 638,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2fe936408ed941e265a1fb5b7ad105c2e557a39bcbfe59aa2283a9d530786258",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_0305215X_2021_1932867",
+   "source_pdf": "propulsion_texts/fuel_pump_design/jaiswal2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 845,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3549,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 19,
+     "native_chars": 2557,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b285a2d813a63cfdd8dbdafbeeea36ba384210ef1c31a5576f7c3f929350de1e",
+   "page_count": 19
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2454,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 2658,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 25,
+     "native_chars": 3725,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "page_count": 25
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_10407782_2013_798532",
+   "source_pdf": "propulsion_texts/park2013.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2410,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 1861,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 20,
+     "native_chars": 2058,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "801bb58b2fadb3f6576875fe08d7ca7fe394fb1b82b07ae3e3c3a533143cc03b",
+   "page_count": 20
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 881,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 1742,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 1095,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784",
+   "page_count": 34
+  },
+  {
+   "doc_id": "DOC_DOI_10_1080_15361055_2022_2147765",
+   "source_pdf": "propulsion_texts/materials_science/Precipitate Size in GRCop-42 and GRCop-84 Cu-Cr-Nb Alloy Gas Atomized Powder and L-PBF Additive Manufactured Material.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 989,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3512,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 3760,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "816b512e82fc6a5198c174a0145098f785962670d439bd0b6a90296047be3d4c",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1742_6596_2369_1_012066",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Zhou_2022_J._Phys.__Conf._Ser._2369_012066.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 796,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3894,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3663,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d7889466947c26de0f9b0c39c7bb0f3e7847f5a31c9872a33d9cf61e94cf0eeb",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1755_1315_781_4_042016",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Liu_2021_IOP_Conf._Ser.__Earth_Environ._Sci._781_042016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 815,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 4062,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 3623,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5223de6847478f864e74453566e97677783b2258f9d2a8b5a3b2316760db7c36",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1757_899X_101_1_012180",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Mishra_2015_IOP_Conf._Ser.__Mater._Sci._Eng._101_012180.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 837,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2962,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 3497,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "10204c9c51f10c9da6d2fb97163acfa2198a41103bd257a129be1e723f8a900c",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1088_1757_899X_1301_1_012030",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Li_2024_IOP_Conf._Ser.__Mater._Sci._Eng._1301_012030 (1).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 799,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 1622,
+     "replacement_chars": 15,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 1314,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c66a6cc5f17d0ea2d02fd75ae6dd1c600f27b3ef0cd91d93cb5f4601fa68248b",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2814127",
+   "source_pdf": "propulsion_texts/10.1115_1.2814127.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4939,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 2654,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3242,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d0e2c0efb1b4ba68e48f40361c8ce7df5cbc063d55ae7bad313941298defaa84",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_2817294",
+   "source_pdf": "propulsion_texts/10.1115_1.2817294.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4949,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 2,
+     "native_chars": 4370,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 7708,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "cbdd73c15c2abfb7befa036a55cf87e533e492bb5d92d87f00c2d4782f69c916",
+   "page_count": 3
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3254633",
+   "source_pdf": "propulsion_texts/10.1115_1.3254633.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4753,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2482,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2351,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6b21ec7d397afd4cc1468b4a34c8853812cf3b8fa1a7695931af70724350fd76",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3616734",
+   "source_pdf": "propulsion_texts/10.1115_1.3616734.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4321,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3149,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 6638,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "adb77348cbbb3cb16e6c5d38dd158de879daf89d74995ea9a5500176fbaa2fa6",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3657314",
+   "source_pdf": "propulsion_texts/10.1115_1.3657314.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6451,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1355,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 1423,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0f2825df887cd177fc79cb80e13c5e2eede843f04e098796612f09cbcef5b7af",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3657315",
+   "source_pdf": "propulsion_texts/10.1115_1.3657315.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5990,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2486,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 1351,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "da3b029f3f093fab72727f1acab11e39cbc839a5d47cdaf5ad898e506016b47b",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3662532",
+   "source_pdf": "propulsion_texts/10.1115_1.3662532.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5174,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 4411,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 1878,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "433b858a9686809b75a22323f8035bd31721a08bd1d40d4d6646c5c8ecd81b52",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3662656",
+   "source_pdf": "propulsion_texts/10.1115_1.3662656.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6223,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 8646,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 4274,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f85c1e41d6865014db64947d90ef65e132692e2fb42243594f9c148c30430ebe",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3672726",
+   "source_pdf": "propulsion_texts/10.1115_1.3672726.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5795,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 7644,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1447,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "dd177e28731ba681bb437c2f355c5f88f1e7de27efc58d48c87df2daab49811a",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_3678503",
+   "source_pdf": "propulsion_texts/10.1115_1.3678503.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6072,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 250,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 5936,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4c4f57edb19192eac7aca19bf4ca3adbbde6f629f1cfd740f2b6066ee0292bfa",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_4042160",
+   "source_pdf": "propulsion_texts/fuel_pump_design/yang2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6196,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3118,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 6563,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "224c305ca1a8635b1b4bd693169f352366b7cda9f0cdb4f3806e29dc779047fc",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_1_4053652",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Investigation-of-the-Effect-of-the-Stages-Number-the-Impeller-Outlet-Width-and-the-Impeller.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5855,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 3289,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 3563,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2931491b2df30877c862ef0e90109190d0ac82e37f3bbf67cb4c35f8a6acd0cf",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_90_GT_198",
+   "source_pdf": "propulsion_texts/10.1115_90-GT-198.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3642,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 4742,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 3284,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "fac2c714d7d8a359a0d1268538daf556c07812ab51db1e0112094556ac288fcb",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1115_94_GT_426",
+   "source_pdf": "propulsion_texts/10.1115_94-GT-426.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4002,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3923,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 4145,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "418b57369d0c9369c8c5994e913798099036cefc780ec92d4d86a8adaa1bd012",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_1177_0954406212449939",
+   "source_pdf": "propulsion_texts/fuel_pump_design/hong-et-al-2012-study-on-inducer-and-impeller-of-a-centrifugal-pump-for-a-rocket-engine-turbopump.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3672,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3971,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 293,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7d25d3126e9def8b5bbc191adfb404e21458bc44abf3736b4fc0b99539ddf2ee",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_1179_MHT_2004_014",
+   "source_pdf": "propulsion_texts/materials_science/ogbuji2004.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 793,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3850,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 58,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "18a45e76cfe8182bc0a172241de803ac4683ba4e7cac265ae3084b2ff45dc4f0",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_1243_PIME_PROC_1963_177_061_02",
+   "source_pdf": "propulsion_texts/10.1243_PIME_PROC_1963_177_061_02.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1150,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 3511,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 2112,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "be52bb533a16d2446db44e6b7bc8ca0a67a7a24a5942fa5e293bba3e06077035",
+   "page_count": 34
+  },
+  {
+   "doc_id": "DOC_DOI_10_15421_452324",
+   "source_pdf": "propulsion_texts/fuel_pump_design/191-Article Text-322-1-10-20240202.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4077,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 3472,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 3790,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a2e8cd9f09008b7ece04069d3abdec1b3d4cf7c943c1409c3e7efab05fe2f35c",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_11645",
+   "source_pdf": "propulsion_texts/materials_science/russell2007.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6325,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4623,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 971,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b095a0507446698250ddc5345078f56f8feac881d9d194be26882e97be3efcd9",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_14699",
+   "source_pdf": "propulsion_texts/wang2006.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5212,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 4877,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2992,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c551a526d552fa07286702da23dd466edcfe0dcdc83abd0dcd087d7d7a6280b9",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_35074",
+   "source_pdf": "propulsion_texts/10.2514_1.35074.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5118,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4630,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 7278,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_47701",
+   "source_pdf": "propulsion_texts/kang2011.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5222,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3391,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3618,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "719af26af5c0955221969bfc57ee4459c1150a4112fef699559426727c7aabe5",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_7988",
+   "source_pdf": "propulsion_texts/pintle_injector/austin2005.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6432,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3132,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 1325,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "fda3de7fb60c705299b30942d00caea6e05d5b9e0726ab69299bbb8deead8c04",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4548,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 5397,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3328,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B34855",
+   "source_pdf": "propulsion_texts/betti2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5733,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 1320,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 8260,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c8ff4b1477b8d07ffe922513af718b303e43ed4e8d6fb9a7f544f8fa3367cf7b",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36059",
+   "source_pdf": "propulsion_texts/schomberg2016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6096,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 4018,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 5861,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7803ca2d10a059603c9c2d366115c27be2601148ccc9d68f41b8c42b0d971b3a",
+   "page_count": 4
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36144",
+   "source_pdf": "propulsion_texts/pintle_injector/sakaki2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6450,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3089,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 1248,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6a447ef28db511fd4e6b35df812edf274a07fe8a11c28e4d582efbd322208206",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4760,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 284,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 5215,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36361",
+   "source_pdf": "propulsion_texts/thiede2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5174,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3380,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 4202,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b9821f7341cc25a14ded3acaecbe5144a6f76bd33479415e642d65be6288d226",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B36589",
+   "source_pdf": "propulsion_texts/leccese2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5625,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 5968,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4235,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a2eef7ceb290cf670f759dbf0e268e6281a5020dfc9db110d783dcca2fe701d6",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_B37669",
+   "source_pdf": "propulsion_texts/pizzarelli2020.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5081,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 6507,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 4347,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a0cb7adffe5155479bcd2bba95c6cd3a61649e8f9fa1632e8a8ee012bdd46cf9",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_T4299",
+   "source_pdf": "propulsion_texts/pizzarelli2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4935,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 5372,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 7581,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1257bc2d708d8884da1618baf425f718bf3c8de29bcb64592414da7a8f373882",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_1_T6056",
+   "source_pdf": "propulsion_texts/perakis2021.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4941,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3088,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 3016,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "051e927dfe674789f178d11541a5827210ca8c62948d6f9baa15c4f07d993912",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_2_5354",
+   "source_pdf": "propulsion_texts/hagemann1998.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4501,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3341,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 5413,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_2_5593",
+   "source_pdf": "propulsion_texts/frey2000.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5830,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 7699,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1502,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4ec2d8ef0f7f4f7fac7e6bfdd27ac56d758b460fa7d699dcb1323a14a844f734",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_23969",
+   "source_pdf": "propulsion_texts/life-prediction-of-the-thrust-chamber-wall-of-a-reusable-rocket--1995.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4758,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3302,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 6279,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "cf949c64685d920afa2aa8089d2268718b07ac29104f186306a5457fffe332eb",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_25729",
+   "source_pdf": "propulsion_texts/porowski1985.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4193,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3759,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 5334,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "acf5b2b0facf0f726139da6ae880eec64df482ee935dc9e2225187629cb63ccf",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_28012",
+   "source_pdf": "propulsion_texts/bose1978.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4329,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 2,
+     "native_chars": 3467,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 4934,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "24f554da63dd0dc1b51d7d149311bd43b2882e57e60ca7f5aecb42d3283dd66f",
+   "page_count": 3
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_29545",
+   "source_pdf": "propulsion_texts/stechman1969.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3804,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 6154,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2946,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "484c2f78be8cd93beb8052305fd086be952f932f37f58cc635bdf554ae84a3fc",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_60066",
+   "source_pdf": "propulsion_texts/whitfield1981.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3435,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2133,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 5756,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "50a7e2a228037df8b6b6c930cb9a96294bc97e624e1cf2a3c4e80c4a9e7be7cd",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_3_9031",
+   "source_pdf": "propulsion_texts/swafford1985.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5843,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 4708,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 7901,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c1f385692c55ab7ad086b105b5c353a4e76e1d844a0b83d0ab3a7d59f9b099ca",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_4_866197",
+   "source_pdf": "propulsion_texts/10.2514_4.866197.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 98,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 222,
+     "native_chars": 4366,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 442,
+     "native_chars": 200,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2c717c34a18ac06e47677ae189a5c8bb3a617be53d76af4baca2cbdeda0992b8",
+   "page_count": 442
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_5_9781600866760_0621_0648",
+   "source_pdf": "propulsion_texts/fuel_pump_design/thermodynamic-power-cycles-for-pumpfed-liquid-rocket-engines-2004.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1760,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 1687,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 28,
+     "native_chars": 2368,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e379f117a28847c3bb63fb32f6fd34f6d372b2158e6dc88456cfb435bfe1a24e",
+   "page_count": 28
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 489,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 6036,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 108,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1992_3154",
+   "source_pdf": "propulsion_texts/carlile1992.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 575,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2015,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 1426,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1532427b372b06dd4213e1082a10fea9b0a84e3db01910b4a44e041fb2ba2576",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1992_3400",
+   "source_pdf": "propulsion_texts/fuel_pump_design/barson1992.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 470,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4539,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 4095,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e69ecdeed216cae777c57601221420b73d54fda9dabc6f0cdcf5260a949ce053",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_1997_2913",
+   "source_pdf": "propulsion_texts/wadel1997.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4270,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 3727,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 4318,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "67d7069012df35a47d33dbef89a05e59288d9c223b143223ed3198ec9380a9da",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2014_3681",
+   "source_pdf": "propulsion_texts/pintle_injector/melcher2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3243,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 4546,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 28,
+     "native_chars": 4322,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "44a0b4b1d7dea70f69f4b1eb1726ca7fd508d3fdc20357805ddb84df8210ff7a",
+   "page_count": 28
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2015_3810",
+   "source_pdf": "propulsion_texts/pintle_injector/nardi2015.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3284,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3809,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3056,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "fda6f188447376c62d6be016581e73e34df2b3d44a110074da608e8fc4264d65",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2015_3845",
+   "source_pdf": "propulsion_texts/pintle_injector/sakaki2015.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3128,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2554,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 4999,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2fb2ba8dafc60da2fe3fcc97ceb1e139a7d393c8078b69c5d1f0b49df329ea90",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_1416",
+   "source_pdf": "propulsion_texts/materials_science/bhat2016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2196,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2161,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 1935,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "41efe00c9aa538426adaac4510ebeacee43409205e0592cb88e3240d854095e6",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_1453",
+   "source_pdf": "propulsion_texts/pintle_injector/son2016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2963,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3695,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 4839,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "de7646768ac2e3148bb60f8bf2d50e087fb2af987b4edaa59f0ab6eb83a3250c",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_4771",
+   "source_pdf": "propulsion_texts/gradl2016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3080,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 1996,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 21,
+     "native_chars": 4508,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "81f6b2ed0770c40d8fb821464d808bcb6df49946d688bcfaea1c38f9a46d1c64",
+   "page_count": 21
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2016_5080",
+   "source_pdf": "propulsion_texts/pintle_injector/sakaki2016.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3541,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 1310,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 1950,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "dcd323f398315b4c0b89f88b0d3eedfbafec604d283bbcc0835199eed5ea9db2",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2017_4670",
+   "source_pdf": "propulsion_texts/gradl2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3335,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 2888,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 27,
+     "native_chars": 2943,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "eeeb8a82ec83a5aedba13c7a4b65a8369f5af31cdc9fcb660416b87d254cc1a9",
+   "page_count": 27
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2017_4928",
+   "source_pdf": "propulsion_texts/fuel_pump_design/costanzo2017.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2551,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2064,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 1871,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "bbdf4f7dfff269bad02bf5833c8c4644d7ae43e37786b5fb7b3c3eca20b019b1",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4624",
+   "source_pdf": "propulsion_texts/materials_science/hayes2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3303,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 30,
+     "native_chars": 260,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 58,
+     "native_chars": 177,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8fbc5d72cc38f1b3e8cf7f0748127696c19c7d7114b0883a17677ffe34ce4b88",
+   "page_count": 58
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4625",
+   "source_pdf": "propulsion_texts/gradl2018.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3630,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 2900,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 5070,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d230ac59edabcb2aa135b8c8d9b2d636070d3417fcea88c8c6d0f26b1996c991",
+   "page_count": 34
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2018_4860",
+   "source_pdf": "propulsion_texts/gradl2018 (1).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3390,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 4180,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 5339,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ade5ee2684d53b2cc82d8f68823e96eb727b2ef416185a3b72b1b2abbb23fff8",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_0152",
+   "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3248,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2407,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 2411,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_3938",
+   "source_pdf": "propulsion_texts/atefi2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2726,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2738,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 2646,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ef71daa4f75f8ca515c068ee4a79bbcbf0355d123d30f1a2a83950067ddb665a",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4117",
+   "source_pdf": "propulsion_texts/pintle_injector/erkal2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2748,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 1021,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 2380,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2a70e99bfefd4a645fa5e72a3f4d971022aaf6324454e7a2882026348d01286c",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4361",
+   "source_pdf": "propulsion_texts/gradl2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3490,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3645,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 5478,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ffd6db5179ad0947f0b382278b576e6a245bc0d7ef9bc3a0f4c092266c4419b8",
+   "page_count": 18
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4362",
+   "source_pdf": "propulsion_texts/gradl2019 (1).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3904,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 1849,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 20,
+     "native_chars": 2664,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9d9d95a8cd541e99ab2c914fc428668cb53fdb5ee0a0ff5d281773cdbf92d039",
+   "page_count": 20
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2019_4432",
+   "source_pdf": "propulsion_texts/fuel_pump_design/reis2019.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1826,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2166,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 3295,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7b34c624ed2dd5709b8c8dcf00d7e480634d797036686fa23bf60056ac18d936",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_6_2020_3941",
+   "source_pdf": "propulsion_texts/garcia2020.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3004,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1253,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3218,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "dfc3157632bce1f7becf33920edfc33da04fbbca5b0371625dc3f25f1fb96f7c",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5761,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 5655,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 5545,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+   "page_count": 5
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_5837",
+   "source_pdf": "propulsion_texts/RaoRecentDevinRockNozConfig.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5133,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4791,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 9597,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "35a1a2a02d5e029a3bf3f3b9c6fc6280fcce533861915922ea4280cc4a3e65a8",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_2514_8_7324",
+   "source_pdf": "propulsion_texts/rao1958.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6465,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4587,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 5217,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_DOI_10_3233_ATDE250338",
+   "source_pdf": "propulsion_texts/fuel_pump_design/ATDE-71-ATDE250338.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2824,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3234,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4368,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ede8253324df87420b3fca76e2063ca7e81b721e391a966a0de1d2b310469aab",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "source_pdf": "propulsion_texts/fuel_pump_design/aerospace-06-00036.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3680,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 1807,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 3324,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_AEROSPACE9090494",
+   "source_pdf": "propulsion_texts/pintle_injector/aerospace-09-00494-v2.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4383,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1353,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 2049,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "948984b188b74fbe852daab7ce191a0113ec33bd70a32085afa127828b9b453e",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_APP15052696",
+   "source_pdf": "propulsion_texts/pintle_injector/applsci-15-02696.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3723,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2926,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 4362,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e334635308ac223688c9496cea569fa2098a5b1dc153e2e359650b7da2a5ebb1",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_ELECTRONICS12163527",
+   "source_pdf": "propulsion_texts/fuel_pump_design/electronics-12-03527.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4424,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 361,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 3933,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9f8ff888b001f01de3d4c557876aba4d8ab552585beee6b27bd96b70540d187d",
+   "page_count": 18
+  },
+  {
+   "doc_id": "DOC_DOI_10_3390_EN11102588",
+   "source_pdf": "propulsion_texts/fuel_pump_design/energies-11-02588.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3606,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 2253,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 673,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "20131c6f07161ab49123331a5f36b9fda59dfea46e064a947157aca2de7b6ae5",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_DOI_10_4028_WWW_SCIENTIFIC_NET_AMM_680_303",
+   "source_pdf": "propulsion_texts/fuel_pump_design/li2014.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3401,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 1700,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 220,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f264bb8166cb7e166ceac36874156dbbdebba5ada51f04b0765cfbb54a79c8c7",
+   "page_count": 5
+  },
+  {
+   "doc_id": "DOC_DOI_10_5293_IJFMS_2011_4_3_317",
+   "source_pdf": "propulsion_texts/fuel_pump_design/Influence of Blade Outlet Angle and Blade Thickness on Performance and Internal Flow Conditions of Mini Centrifugal Pump.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4940,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 2002,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2997,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9530b3052437dc069603f09c072128f8ff90d341a3939d9b8e1c09ad57c71729",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DOI_10_6084_M9_FIGSHARE_22886720",
+   "source_pdf": "propulsion_texts/Statement+of+the+problem+of+designing+a+liquid+rocket+engine+dual+bell+nozzle+of+the+maximum+thrust+using+the+direct+method+of+the+calculus+of+variations.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1360,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 764,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1740,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d1b2f5780bec47b05b80c48458c7debf0833e74ec8cf98507e066edd86956a27",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_DRESSLER2000",
+   "source_pdf": "propulsion_texts/pintle_injector/dressler2000.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 569,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 3095,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 24,
+     "native_chars": 1518,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "429db1b89310cbf4f34ff89eaf9e935e2b21967fccfcfc77d292a06afa3aedec",
+   "page_count": 24
+  },
+  {
+   "doc_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 770,
+     "native_chars": 677,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 1538,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+   "page_count": 1538
+  },
+  {
+   "doc_id": "DOC_FP_EUCASS_043",
+   "source_pdf": "propulsion_texts/FP_EUCASS-043.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4512,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2984,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4681,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e1fe29a40ed639f12d120b1f2a2cd8e3496be56e75d4e3fceacf7136118ce292",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_FULLTEXT01",
+   "source_pdf": "propulsion_texts/fulltext01.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 262,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 66,
+     "native_chars": 2248,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 130,
+     "native_chars": 1397,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a0bc22fdbe5808452370b593569bea8bf249a4f79cbca61fd5d5e6838084465b",
+   "page_count": 130
+  },
+  {
+   "doc_id": "DOC_GAVITT2001",
+   "source_pdf": "propulsion_texts/pintle_injector/gavitt2001.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 598,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1707,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 2185,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8b2d44d2d501e942c677acc6db2b5765f35f7f38271206c9445b9e3ae14aaca9",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_GROMSKI2010",
+   "source_pdf": "propulsion_texts/pintle_injector/gromski2010.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3153,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 3100,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 2838,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_HANDOUT4_1",
+   "source_pdf": "propulsion_texts/handout4.1.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2349,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 451,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 1584,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "eb0d80b61099f6291dac9b83ac1873f98ee2283d1bd3ee01f6250eec1e917c44",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_HICKMAN2003",
+   "source_pdf": "propulsion_texts/materials_science/hickman2003.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2782,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 801,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 524,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c0aa9076171f73554e3c04b3ece83b657d3d5f2573098e60781a11b75f4d38e9",
+   "page_count": 5
+  },
+  {
+   "doc_id": "DOC_HUBER2009",
+   "source_pdf": "propulsion_texts/huber2009.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 6091,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 4986,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 5046,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d68f3c1f36470039c5a6f0501e3d9143ac8f94b6a45136e9e1d62144b5ade53c",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_KUHL1998",
+   "source_pdf": "propulsion_texts/kuhl1998.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3820,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 3612,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 3416,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4be181a431b6637495b0f06a39a90f7f34ba9fe94ae1a067b1215e1bd96d1975",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_LIN1993",
+   "source_pdf": "propulsion_texts/fuel_pump_design/lin1993.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 497,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2348,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 1035,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6989a3daf9c865e15f87c1557e581add327b839e9b460dd22785187050cec922",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_LIQUID_FILM_COOLING_IN_ROCKET_ENGINES_R5YU3J35KY",
+   "source_pdf": "propulsion_texts/liquid-film-cooling-in-rocket-engines-r5yu3j35ky.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 500,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 37,
+     "native_chars": 1851,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 72,
+     "native_chars": 982,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "cb4c4da541bf92c015080b31e66ac084a5e7e62015ea761ab3fe7c21cf29b34b",
+   "page_count": 72
+  },
+  {
+   "doc_id": "DOC_L_05_BSPLINES_NURBS",
+   "source_pdf": "propulsion_texts/L-05_BSplines_NURBS.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 160,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 22,
+     "native_chars": 315,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 43,
+     "native_chars": 507,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "fb451022bc43bd4314eebe0235e088ad24b8aee29e08619e9b358fc67df18cc1",
+   "page_count": 43
+  },
+  {
+   "doc_id": "DOC_MA8UFPJ30PN7K_2BP3WB2SYOYLLYK6K68JQ0R8DXEM8JQ_3D",
+   "source_pdf": "propulsion_texts/pintle_injector/Ma8uFpj30pN7K%2BP3wB2syoyllyK6k68jQ0r8DxEM8jQ%3D.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4413,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 3,
+     "native_chars": 4401,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 2914,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4a021c2484a9395d98d1af1b701401e8cbfe74607852584420c4c29bcf9f149c",
+   "page_count": 4
+  },
+  {
+   "doc_id": "DOC_MASUOKA2011",
+   "source_pdf": "propulsion_texts/masuoka2011.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3145,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2016,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 1439,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "83529aea0e3eece29f950336182f12a0522855c0e24403c80037e5b35ab2e64c",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_MILLER1974",
+   "source_pdf": "propulsion_texts/miller1974.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 349,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2949,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 581,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8173f77862a965e9983101fe82e0cdebce217c441db88db2839749393327976a",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_MUELLER2000",
+   "source_pdf": "propulsion_texts/pintle_injector/mueller2000.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 570,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2472,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 1381,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b41b138c5f7e5a8506c51cbba0d4c19a333ee739319ee486aabcb44d810fda99",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_NARAGHI2004",
+   "source_pdf": "propulsion_texts/naraghi2004.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3385,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1180,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 1546,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4f629a634e5959923865716641982ab8442bc8ea9fcc1151c1ecf8abd9c2d72c",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_NOZZLE_GEOMETRIES",
+   "source_pdf": "propulsion_texts/nozzle_geometries.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 709,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 611,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 791,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "31f842896ec7ad9aa24b4b0f2baa7ef483b1ebb7467c30fca25ce28357d34f06",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_NTRS_19670010557",
+   "source_pdf": "propulsion_texts/19670010557.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 390,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 39,
+     "native_chars": 4428,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 76,
+     "native_chars": 1731,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8efe831e2e3ac9f775962d078ac171fef664f69d3cc3e348b2ebfe6b54d0dc10",
+   "page_count": 76
+  },
+  {
+   "doc_id": "DOC_NTRS_19680021046",
+   "source_pdf": "propulsion_texts/19680021046.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 338,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 20,
+     "native_chars": 1868,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 39,
+     "native_chars": 2033,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "23b03953cc59444008e00640efb0301324741b7502937b2846d995059c78356a",
+   "page_count": 39
+  },
+  {
+   "doc_id": "DOC_NTRS_19680021132",
+   "source_pdf": "propulsion_texts/19680021132.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 379,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 37,
+     "native_chars": 1840,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 72,
+     "native_chars": 1984,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f01212ec8191957cf67b1484fb00cba368be3de0026a9f5e2b4ad3b1718d2337",
+   "page_count": 72
+  },
+  {
+   "doc_id": "DOC_NTRS_19690023975",
+   "source_pdf": "propulsion_texts/19690023975.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 375,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 23,
+     "native_chars": 351,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 45,
+     "native_chars": 2095,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "25d5ce1c14e592059b04e61af1a847947785a3a3f8ae7d48f5cea5a78636c421",
+   "page_count": 45
+  },
+  {
+   "doc_id": "DOC_NTRS_19700005097",
+   "source_pdf": "propulsion_texts/pintle_injector/19700005097.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 183,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 2199,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 17,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c0c044f6b16aaeaabbd7327eb5269027085d595b6d1c382b3e7b979380516df1",
+   "page_count": 17
+  },
+  {
+   "doc_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 85,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 235,
+     "native_chars": 3486,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 469,
+     "native_chars": 1930,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "page_count": 469
+  },
+  {
+   "doc_id": "DOC_NTRS_19710023317",
+   "source_pdf": "propulsion_texts/19710023317.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 32,
+     "native_chars": 2428,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 63,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6d6c1cb0b4bd8dbcff0e86f17fcc79c13f9e0311fa6ac3c70c756a9c6ca82c44",
+   "page_count": 63
+  },
+  {
+   "doc_id": "DOC_NTRS_19710025474",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 161,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 59,
+     "native_chars": 2573,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 116,
+     "native_chars": 276,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+   "page_count": 116
+  },
+  {
+   "doc_id": "DOC_NTRS_19720000070",
+   "source_pdf": "propulsion_texts/19720000070.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3021,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "a6a10b94d5f56e063d6e92550e322dbe4731b257e1e75c38071ab34171745049",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_19720000634",
+   "source_pdf": "propulsion_texts/fuel_pump_design/19720000634.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3884,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "721ea330364d455c6b15c3add808fee77e59a81740f83dd178eefa7e7fb442f7",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_19720005326",
+   "source_pdf": "propulsion_texts/19720005326.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 282,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 31,
+     "native_chars": 1518,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 60,
+     "native_chars": 2380,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7d2379ed0b9b02059b8ae5a32846801dd032b081874c7f26bd34a3df5de5267e",
+   "page_count": 60
+  },
+  {
+   "doc_id": "DOC_NTRS_19720008558",
+   "source_pdf": "propulsion_texts/19720008558.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 258,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 2880,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 66,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0e72f96593d4afe18953510a34c764b81e2753ff156f96964212acd8904e27c3",
+   "page_count": 66
+  },
+  {
+   "doc_id": "DOC_NTRS_19720026079",
+   "source_pdf": "propulsion_texts/19720026079.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 92,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 329,
+     "native_chars": 3591,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 657,
+     "native_chars": 1757,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "87983a2fe2fd9e900494438023e8fabf6dcc3c1ce36874efb48a01dfaed969ac",
+   "page_count": 657
+  },
+  {
+   "doc_id": "DOC_NTRS_19730011150",
+   "source_pdf": "propulsion_texts/19730011150.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 276,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 19,
+     "native_chars": 3509,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 36,
+     "native_chars": 2902,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "e3cafa6b5225e492b2e96d10b0395a5da8c2e7e1b4ae64e0dd4df2b9b270a15c",
+   "page_count": 36
+  },
+  {
+   "doc_id": "DOC_NTRS_19730015803",
+   "source_pdf": "propulsion_texts/fuel_pump_design/19730015803.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 585,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 203,
+     "native_chars": 902,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 405,
+     "native_chars": 975,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7f5a356d63453ea7f5d460ed4ce88495d542afa8b9ddb6ed7e901281c23f99ec",
+   "page_count": 405
+  },
+  {
+   "doc_id": "DOC_NTRS_19730018978",
+   "source_pdf": "propulsion_texts/19730018978.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 217,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 59,
+     "native_chars": 3346,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 116,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5111fed2c8ad3fc8527174159398ce8fbda83ccc494667954a840d90a2330702",
+   "page_count": 116
+  },
+  {
+   "doc_id": "DOC_NTRS_19730022965",
+   "source_pdf": "propulsion_texts/19730022965.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 181,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 66,
+     "native_chars": 89,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 130,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+   "page_count": 130
+  },
+  {
+   "doc_id": "DOC_NTRS_19740017697",
+   "source_pdf": "propulsion_texts/19740017697.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 306,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 448,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 2146,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4fe887639104b7e80910e4643209ac8d7f24de75b15a26959f71ef2452769077",
+   "page_count": 34
+  },
+  {
+   "doc_id": "DOC_NTRS_19740017910",
+   "source_pdf": "propulsion_texts/materials_science/19740017910.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 567,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 25,
+     "native_chars": 3044,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 49,
+     "native_chars": 167,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "66a3cfda03abd14895a5a53b9f3cb90b0a88033bd7ecaf03c7a83d5ec7b5b3b5",
+   "page_count": 49
+  },
+  {
+   "doc_id": "DOC_NTRS_19740020848",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 180,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 63,
+     "native_chars": 2768,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 124,
+     "native_chars": 294,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+   "page_count": 124
+  },
+  {
+   "doc_id": "DOC_NTRS_19740023307",
+   "source_pdf": "propulsion_texts/19740023307.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 343,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 2546,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 22,
+     "native_chars": 2152,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "06770b52f8b3c91a6a7379f055cfa46aa6e9176fc9bdd84607781d598b0ef574",
+   "page_count": 22
+  },
+  {
+   "doc_id": "DOC_NTRS_19740026132",
+   "source_pdf": "propulsion_texts/19740026132.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 155,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 81,
+     "native_chars": 1053,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 160,
+     "native_chars": 1367,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8e9b2d92b3fb2b02b5f656b5a5a65faba3304e304f41aa7eb7f720cc1faee368",
+   "page_count": 160
+  },
+  {
+   "doc_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 288,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 85,
+     "native_chars": 3461,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 168,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "page_count": 168
+  },
+  {
+   "doc_id": "DOC_NTRS_19750020175",
+   "source_pdf": "propulsion_texts/19750020175.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 64,
+     "native_chars": 3038,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 127,
+     "native_chars": 168,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9d39defe59ece29e239869cf60f6de34fd3384a912f46888e68aed39b3553eaa",
+   "page_count": 127
+  },
+  {
+   "doc_id": "DOC_NTRS_19750021165",
+   "source_pdf": "propulsion_texts/materials_science/19750021165.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2082,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 28,
+     "native_chars": 557,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 54,
+     "native_chars": 475,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7ab916d7d5b7095bacde4fb41265db62d9103e300fe261d5cd35cf4eb5815f70",
+   "page_count": 54
+  },
+  {
+   "doc_id": "DOC_NTRS_19760023196",
+   "source_pdf": "propulsion_texts/19760023196.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 66,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 130,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+   "page_count": 130
+  },
+  {
+   "doc_id": "DOC_NTRS_19770009165",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 161,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 64,
+     "native_chars": 3011,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 126,
+     "native_chars": 980,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "page_count": 126
+  },
+  {
+   "doc_id": "DOC_NTRS_19780005428",
+   "source_pdf": "propulsion_texts/19780005428.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 125,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 74,
+     "native_chars": 1718,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 146,
+     "native_chars": 274,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "f5d702dd42c8e6a5087094b3d06cfb0d0f5973ef789bf94828fe4ac113e162d8",
+   "page_count": 146
+  },
+  {
+   "doc_id": "DOC_NTRS_19780013268",
+   "source_pdf": "propulsion_texts/19780013268.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 184,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 70,
+     "native_chars": 3424,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 138,
+     "native_chars": 1302,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "ebf03d4bf87eec638e2a2ed36c8d93bbf80f0e1cf73acdbcfcc7005e1660f716",
+   "page_count": 138
+  },
+  {
+   "doc_id": "DOC_NTRS_19780023221",
+   "source_pdf": "propulsion_texts/pintle_injector/19780023221.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 278,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 65,
+     "native_chars": 2416,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 129,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "756334f7d774a3811d859a770ae8cc67b63887279ed30165a85fef02981a07bf",
+   "page_count": 129
+  },
+  {
+   "doc_id": "DOC_NTRS_19830011760",
+   "source_pdf": "propulsion_texts/19830011760.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 504,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 26,
+     "native_chars": 423,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 51,
+     "native_chars": 2633,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "383aa66d56920c241fc09b122c1fdd60cffb919008b77965c40c668090a684d4",
+   "page_count": 51
+  },
+  {
+   "doc_id": "DOC_NTRS_19830016278",
+   "source_pdf": "propulsion_texts/19830016278.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 263,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 721,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 31,
+     "native_chars": 391,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "d3f0b2761591e70054c2f868f883a1b61c2bafc69dc63186dad8049e57638ebf",
+   "page_count": 31
+  },
+  {
+   "doc_id": "DOC_NTRS_19870007469",
+   "source_pdf": "propulsion_texts/materials_science/19870007469.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 218,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3962,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 73,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "60ca93443bade050fde157c044f87f55c214b14fb9fa32be53ccb2b1a41a9aeb",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_NTRS_19890068390",
+   "source_pdf": "propulsion_texts/19890068390.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 378,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 23,
+     "native_chars": 284,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 44,
+     "native_chars": 382,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "abcb2711122db9d81a3fef65499d0a3854ba1b14e9004467cd89fd69e7f3af56",
+   "page_count": 44
+  },
+  {
+   "doc_id": "DOC_NTRS_19900015790",
+   "source_pdf": "propulsion_texts/19900015790.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 388,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2931,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0f016f1ebcd7a537d530684d7b78aab0ec46714516000b69db591d4e0aea2d89",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_NTRS_19940018570",
+   "source_pdf": "propulsion_texts/pintle_injector/19940018570.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3377,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 2,
+     "native_chars": 2069,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1edef5f6edf625a213e7475da4111b95f481546276ab9811ab3dd3cfd7a33402",
+   "page_count": 2
+  },
+  {
+   "doc_id": "DOC_NTRS_19950011631",
+   "source_pdf": "propulsion_texts/materials_science/19950011631.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 722,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 500,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 35,
+     "native_chars": 842,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "3553aa0ab4966d18e9a6a112a35b8534a655cb270c1fbd2dc2931852e8503a76",
+   "page_count": 35
+  },
+  {
+   "doc_id": "DOC_NTRS_19950013764",
+   "source_pdf": "propulsion_texts/19950013764.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 372,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 33,
+     "native_chars": 2730,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 64,
+     "native_chars": 3848,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6241ca2eece86c36edf82bc400039bc83f137223ebf1db7e3eb0186e6b23d097",
+   "page_count": 64
+  },
+  {
+   "doc_id": "DOC_NTRS_19960044559",
+   "source_pdf": "propulsion_texts/19960044559.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 401,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 93,
+     "native_chars": 3339,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 184,
+     "native_chars": 3680,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "09bc8a8d215daa8d7902c194e812a67466074f8154c81fb4c94f95a42b435a1a",
+   "page_count": 184
+  },
+  {
+   "doc_id": "DOC_NTRS_19970002915",
+   "source_pdf": "propulsion_texts/materials_science/19970002915.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 311,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 104,
+     "native_chars": 122,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 206,
+     "native_chars": 3629,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5cfc72f4fff0ae454a9803128eadeeb554e7258ef880db22c764265fce82de7f",
+   "page_count": 206
+  },
+  {
+   "doc_id": "DOC_NTRS_19970004933",
+   "source_pdf": "propulsion_texts/19970004933.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 322,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4098,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 2873,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "2f6019b87d44d349532124351934de5d1593e382577ae43eaab6cbd5695bb028",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_NTRS_20020050420",
+   "source_pdf": "propulsion_texts/fuel_pump_design/20020050420.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4025,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 2807,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 3096,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "53c631216d64bcf0ed7a24614d6045d88fae5466b6c4b9359497818ab7e16012",
+   "page_count": 8
+  },
+  {
+   "doc_id": "DOC_NTRS_20020070630",
+   "source_pdf": "propulsion_texts/materials_science/20020070630.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 485,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 29,
+     "native_chars": 212,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 57,
+     "native_chars": 451,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9be16e69abd6f6ca5d62610e3ac289a54fe8eaabf333a3f92f694b66c7dd4289",
+   "page_count": 57
+  },
+  {
+   "doc_id": "DOC_NTRS_20020085330",
+   "source_pdf": "propulsion_texts/20020085330.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 215,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 148,
+     "native_chars": 5295,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 295,
+     "native_chars": 3244,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0ab4154b0fdeac29581f8d047a4cb6836c138c0b41da8f28990ef7d3e2756765",
+   "page_count": 295
+  },
+  {
+   "doc_id": "DOC_NTRS_20030067852",
+   "source_pdf": "propulsion_texts/20030067852.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 449,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 22,
+     "native_chars": 222,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 42,
+     "native_chars": 1187,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7dd5dcdd9505e2f8ee9598a2c566b279958ef0de245433dce7bedc741fd35bbc",
+   "page_count": 42
+  },
+  {
+   "doc_id": "DOC_NTRS_20050123582",
+   "source_pdf": "propulsion_texts/materials_science/20050123582.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 161,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 1248,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 30,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b2e309fe10458e0e770381fbbd07f3e9e46c6e1aa5fecacf100e4eda07440226",
+   "page_count": 30
+  },
+  {
+   "doc_id": "DOC_NTRS_20060005216",
+   "source_pdf": "propulsion_texts/materials_science/20060005216.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 233,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 494,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 19,
+     "native_chars": 474,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "5e43e7f6d40d7d97cec0df88761073e2f270782f18cfa703e4b37bebdf226eb5",
+   "page_count": 19
+  },
+  {
+   "doc_id": "DOC_NTRS_20070026245",
+   "source_pdf": "propulsion_texts/materials_science/20070026245.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5111,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 2,
+     "replacement_chars": 0,
+     "text_sparse": true
+    },
+    {
+     "page": 24,
+     "native_chars": 2,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "38b9a69c80d8fc64bcc25a42d6a0a139af0be2996d6bd7b9b3d2bdf22a03381c",
+   "page_count": 24
+  },
+  {
+   "doc_id": "DOC_NTRS_20090037061",
+   "source_pdf": "propulsion_texts/20090037061.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3293,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 31,
+     "native_chars": 2168,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 61,
+     "native_chars": 396,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "3574b4975ea6422c7a8961a0b167c79b8f9371e65a065f44a974e8216ab4a22c",
+   "page_count": 61
+  },
+  {
+   "doc_id": "DOC_NTRS_20100034924",
+   "source_pdf": "propulsion_texts/20100034924.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3284,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 28,
+     "native_chars": 2682,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 55,
+     "native_chars": 356,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "cb47d461c94b7b978e53b1918a83003e3284ea7540a6a11788e4b98543204966",
+   "page_count": 55
+  },
+  {
+   "doc_id": "DOC_NTRS_20100035254",
+   "source_pdf": "propulsion_texts/fuel_pump_design/20100035254.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 518,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 18,
+     "native_chars": 2070,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 34,
+     "native_chars": 412,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "57639b0bb32d6ced57b3be88d70a6d90555dabdd3fb589c388b0bae82b23f03b",
+   "page_count": 34
+  },
+  {
+   "doc_id": "DOC_NTRS_20120008551",
+   "source_pdf": "propulsion_texts/materials_science/20120008551.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 236,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 47,
+     "native_chars": 780,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 92,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "28a68c616e3ec6b8f7fb30e2937924ccbb65f63256303c026113aa08a6494741",
+   "page_count": 92
+  },
+  {
+   "doc_id": "DOC_NTRS_20130014182",
+   "source_pdf": "propulsion_texts/20130014182.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2109,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "efd037e725d82f9f4f0c3414d2c5b629e5a6bce4b5f229137095276d516ff789",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_20150002584",
+   "source_pdf": "propulsion_texts/pintle_injector/20150002584.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4509,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "eb69f57cabffaf2154360f31c97c5118e29bb15d74138df3ee9a1c8dd300aaf5",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_20150016316",
+   "source_pdf": "propulsion_texts/pintle_injector/20150016316.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3221,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "good",
+   "timeout_seconds": 5.0,
+   "source_sha256": "48eb3bb2d8aed4792a76c418504a98b08f147633426c2103ab01166844fe0ff2",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_20150021468",
+   "source_pdf": "propulsion_texts/pintle_injector/20150021468.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3519,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6bd123788367d9321f9ca1411d58aae90447a1904bbce41508f32afe49f626e1",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_NTRS_20170004516",
+   "source_pdf": "propulsion_texts/materials_science/20170004516.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 188,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 26,
+     "native_chars": 349,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 50,
+     "native_chars": 0,
+     "replacement_chars": 0,
+     "text_sparse": true
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "9d389b44f78c95863bb2829ff8ca019f6c78a6cc1cda25e29ba0f09b0e370f58",
+   "page_count": 50
+  },
+  {
+   "doc_id": "DOC_NTRS_20180003628",
+   "source_pdf": "propulsion_texts/fuel_pump_design/20180003628.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2306,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 66,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 14,
+     "native_chars": 1440,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "4af0549b85cd1b100f00d0b65bef9c9cabab73c438faac57a9aecf6dae02f63b",
+   "page_count": 14
+  },
+  {
+   "doc_id": "DOC_PAPERLREENGINEMASSANDSIZING",
+   "source_pdf": "propulsion_texts/PaperLREenginemassandsizing.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4845,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 8,
+     "native_chars": 2241,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 15,
+     "native_chars": 4095,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "eeadfb994b65aba1ebcabc208388e48d599e7ebe32a70bdf1a206439d90ace38",
+   "page_count": 15
+  },
+  {
+   "doc_id": "DOC_PRMEYER",
+   "source_pdf": "propulsion_texts/prmeyer.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1756,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "b0f7081fda333623d7bea32a8d43d23830c72ceec418114c5f6f593c03bcbd26",
+   "page_count": 1
+  },
+  {
+   "doc_id": "DOC_RADHAKRISHNAN2018",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2789,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 1987,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 16,
+     "native_chars": 3310,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "512f152720e604770e28e5e684700d9d22e7450a065e066f58fe305b0273e266",
+   "page_count": 16
+  },
+  {
+   "doc_id": "DOC_RADHAKRISHNAN2020",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2020.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2444,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 436,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 21,
+     "native_chars": 790,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "fa94afb46beb04a3661b700de72e5cda9e8216263cb7af7059eebaf4daec8e9b",
+   "page_count": 21
+  },
+  {
+   "doc_id": "DOC_RAO1999",
+   "source_pdf": "propulsion_texts/rao1999.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 493,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3012,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2879,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "6cb9f624f75076ae764b8c1064777d7f345eea2d584212db6ef0427b56edd1f9",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_S12666_010_0089_7",
+   "source_pdf": "propulsion_texts/s12666-010-0089-7.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3515,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 2882,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2586,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "55e33a14ade64532ac04f76868d53822b02f1c6a2e126416e4bf33b25a346a99",
+   "page_count": 6
+  },
+  {
+   "doc_id": "DOC_SCHARLEMANN2005",
+   "source_pdf": "propulsion_texts/fuel_pump_design/scharlemann2005.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4632,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4382,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 11,
+     "native_chars": 3702,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "8e0066cc054aa1ea44b45c0dd43515625e73ea1b8f47b23a7f2cb67e106956dc",
+   "page_count": 11
+  },
+  {
+   "doc_id": "DOC_SCHARLEMANN2006",
+   "source_pdf": "propulsion_texts/fuel_pump_design/scharlemann2006.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 4548,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 2268,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 3843,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "34d86bb2dd61d7aa985b00d87c7f12a2d25878df0abb1fca765a3176c478a2e1",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_SINGH1997",
+   "source_pdf": "propulsion_texts/materials_science/singh1997.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3616,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 2223,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 13,
+     "native_chars": 2867,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "7e9b37562221f4f6901d648ea468525b7f5c662333a2018a3513d1bb87fef6f4",
+   "page_count": 13
+  },
+  {
+   "doc_id": "DOC_TANI2008",
+   "source_pdf": "propulsion_texts/fuel_pump_design/tani2008.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2513,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 3906,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 3515,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1f3fa6556697080b02e18c329b90ca0bcfb5210a1463916dec091a8360af9572",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_TOKUDOME2010",
+   "source_pdf": "propulsion_texts/pintle_injector/tokudome2010.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 2925,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 4769,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 4019,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "33167aa3ebc558002dd74d5c548d3abd6de1f3c34ed7ac2fa37cf2f832a1e34b",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_TOMEJ_2_75",
+   "source_pdf": "propulsion_texts/fuel_pump_design/TOMEJ-2-75.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 5437,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 3437,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 4690,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "017f2a7d020bc969d961422d0a7d2a43c0502d88bd33036c243bdab64e7abb61",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_VANDENBERG_CORRECTED_PROPERTIES",
+   "source_pdf": "propulsion_texts/Vandenberg_Corrected_Properties.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3825,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 6,
+     "native_chars": 1602,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 10,
+     "native_chars": 411,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "73b34becda4f5fcd14bf9a1284de7173f94a9d09774612a059a4a84525194045",
+   "page_count": 10
+  },
+  {
+   "doc_id": "DOC_WALTER1999",
+   "source_pdf": "propulsion_texts/materials_science/walter1999.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 3576,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 4,
+     "native_chars": 3718,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 4277,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "1640695cebe3d350ab9d2458937fe29b236d02de5897a232c647c6d6a630310c",
+   "page_count": 7
+  },
+  {
+   "doc_id": "DOC_WHITFIELD1978",
+   "source_pdf": "propulsion_texts/whitfield1978.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 376,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 7,
+     "native_chars": 1394,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 12,
+     "native_chars": 1642,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "68c1d4024aef4ae2ae3180a12af25b0f05f6a6c29ced7c3a5fd0e75b8645053a",
+   "page_count": 12
+  },
+  {
+   "doc_id": "DOC_WHITFIELD1982",
+   "source_pdf": "propulsion_texts/whitfield1982.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 1861,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 5,
+     "native_chars": 1165,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 9,
+     "native_chars": 2129,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "c86691b8b0c742ea0b5eefbc03968775759b7db22ed3e0402c97743f98f813d8",
+   "page_count": 9
+  },
+  {
+   "doc_id": "DOC_YOUNG_THESIS",
+   "source_pdf": "propulsion_texts/Young_Thesis.pdf",
+   "sampled_pages": [
+    {
+     "page": 1,
+     "native_chars": 589,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 65,
+     "native_chars": 699,
+     "replacement_chars": 0,
+     "text_sparse": false
+    },
+    {
+     "page": 128,
+     "native_chars": 89,
+     "replacement_chars": 0,
+     "text_sparse": false
+    }
+   ],
+   "conversion_status": "needs_review",
+   "timeout_seconds": 5.0,
+   "source_sha256": "0132adf6527dfc43ddde36a5853c0950c434e2209d9ecb588d2ac7a19eab4ebb",
+   "page_count": 128
+  }
+ ]
+}

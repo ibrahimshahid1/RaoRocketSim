@@ -1,0 +1,19 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-SP8087-p065-067",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_84fc3fc839f2afd5cbc96ea9",
+   "state": "REJECTED",
+   "reason": "Table VIII is a rotated page; the grid is unreadable OCR fragments (caption correct).",
+   "evidence": {
+    "source_sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 66
+   }
+  }
+ ]
+}

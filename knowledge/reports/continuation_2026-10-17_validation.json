@@ -1,0 +1,101 @@
+{
+ "date": "2026-10-17",
+ "scope": "Knowledge-system continuation; no engineering files changed or engineering suites run.",
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "result": "467 passed in 16.41s"
+ },
+ "deterministic_refresh": true,
+ "packet_replay": {
+  "packets": 62,
+  "files": 118,
+  "replay_failures": [],
+  "no_op": true,
+  "all_steps_resolved": true,
+  "success": true
+ },
+ "manual_replay": {
+  "failures": [],
+  "changed_stores_ignoring_timestamps": [],
+  "no_op": true,
+  "success": true
+ },
+ "fresh_checkout": {
+  "head": "550d5c26bc2679b43b027f612805eb18516e8343",
+  "head_only_knowledge_tests": {
+   "exit_code": 2,
+   "summary": "2 errors in 0.28s",
+   "first_errors": [
+    "E   ModuleNotFoundError: No module named 'kg.execution_reach'",
+    "E   ModuleNotFoundError: No module named 'kg.execution_reach'",
+    "ERROR knowledge/tests/test_kg_pipeline.py",
+    "ERROR knowledge/tests/test_kg_registry.py"
+   ]
+  },
+  "head_plus_changes_knowledge_tests": {
+   "exit_code": 0,
+   "summary": "428 passed, 39 skipped in 8.99s",
+   "first_errors": []
+  },
+  "proof": "PASS"
+ },
+ "graph_integrity": {
+  "nodes": 5719,
+  "edges": 7262,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "candidate_link_issues": {
+  "CANDIDATE_LINK_REQUIRES_ORIGINAL_PAGE_REVIEWER": 40,
+  "CANDIDATE_INACTIVE": 4,
+  "REJECTED_CANDIDATE_IS_CORRECTION_HISTORY_ONLY": 10
+ },
+ "validation_open_issues": {
+  "empty_source_pdf": 1,
+  "canonical_document_without_chunks": 1,
+  "markdown_without_manifest_row": 1,
+  "registry_citation_not_confirmed_in_local_source": 1,
+  "declared_cad_bytes_unavailable": 6,
+  "source_extraction_incomplete": 1,
+  "source_verification_incomplete": 1,
+  "unknown_basis_software_constants": 1,
+  "incomplete_formula_transcriptions": 1
+ },
+ "packet_states": {
+  "FINAL_AUDIT_ELIGIBLE": 62,
+  "QUEUED": 39
+ },
+ "model_source_audit": {
+  "models": 61,
+  "by_audit_status": {
+   "NOT_CHECKED": 48,
+   "SOURCE_REVIEW_CURRENT_UNSTRUCTURED": 6,
+   "STRUCTURED_REVIEW_CURRENT": 7
+  },
+  "by_current_support": {
+   "NOT_CHECKED": 48,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 9,
+   "SUPPORTED": 3
+  },
+  "by_fidelity": {
+   "EQUIVALENT": 2,
+   "BAD_ATTRIBUTION": 1,
+   "CONDITIONALLY_EQUIVALENT": 1,
+   "REPOSITORY_EXTENSION": 2,
+   "DIFFERENT_FORMULA": 1
+  },
+  "by_route": {
+   "PENDING": 41,
+   "REVIEWED_CURRENT": 12,
+   "NO_LOCAL_SOURCE_ROUTE": 5,
+   "REPOSITORY_BASIS_REVIEW": 3
+  },
+  "physical_validation_established": 0
+ },
+ "engineering_paths_changed": [],
+ "committed_or_pushed": false,
+ "staged_by_this_session": false
+}

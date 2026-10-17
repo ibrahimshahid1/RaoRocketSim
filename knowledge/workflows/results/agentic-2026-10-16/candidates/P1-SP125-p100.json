@@ -1,0 +1,185 @@
+{
+ "packet": "P1-SP125-p100",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  100,
+  100
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 100,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0100.png",
+   "sha256": "41a84e2478a462997039c219c1081f1d8747dfac048e84f2939c5c629282186f",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_dee8b80392001b2387a6bdf7"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_10a35e0984f0db6285ca1b33",
+   "kind": "figure",
+   "pages": [
+    100
+   ],
+   "bbox": [
+    {
+     "l": 348.13407180211743,
+     "t": 686.6180520470206,
+     "r": 554.0725402452434,
+     "b": 567.3988441249854,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/47\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dee8b80392001b2387a6bdf7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+   "raw_sha256": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_30fe334539a25d2989b9146f",
+   "kind": "figure",
+   "pages": [
+    100
+   ],
+   "bbox": [
+    {
+     "l": 115.44684743728264,
+     "t": 682.4029380112224,
+     "r": 315.56572268022455,
+     "b": 484.55186398821223,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dee8b80392001b2387a6bdf7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+   "raw_sha256": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9be1802a757d9d01c5529886",
+   "kind": "figure",
+   "pages": [
+    100
+   ],
+   "bbox": [
+    {
+     "l": 276.962742086807,
+     "t": 68.10151410072513,
+     "r": 400.98229421862214,
+     "b": 45.49486469308556,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dee8b80392001b2387a6bdf7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+   "raw_sha256": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a79da095de2e62b545ce25a2",
+   "kind": "figure",
+   "pages": [
+    100
+   ],
+   "bbox": [
+    {
+     "l": 341.5287677011943,
+     "t": 314.6534954609178,
+     "r": 554.8027623133183,
+     "b": 124.63401722821732,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/76\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dee8b80392001b2387a6bdf7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+   "raw_sha256": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b8ec8588250035e21947f621",
+   "kind": "figure",
+   "pages": [
+    100
+   ],
+   "bbox": [
+    {
+     "l": 269.5127340153821,
+     "t": 765.142345992769,
+     "r": 410.0357802430698,
+     "b": 728.7586542579736,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dee8b80392001b2387a6bdf7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+   "raw_sha256": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [
+  "MODEL_NOZZLE_RAO_TOP_BEZIER"
+ ],
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00235",
+   "page_start": 100,
+   "page_end": 100,
+   "section": "MAIN PROPELLANT",
+   "text": "-\n\nDESIGN OF THRUST CHAMBERS AND OTHER COMBUSTION DEVICES 91\n\nE~\n\nA •• ~RI\n\nI I I I\n\nR, 1 '-CIRCLE, I\n., I I\nw----------------r---!...-- **f«llZU:**\ni L. I '<lS\n\nT I\n\n~ **THROAT**\n\n_Figure_ 4-13. _-Parabolic_ _approximation_ _o[_ _bell_\n\n_nozzle contour._\n\n.:r\n\n...J\n<I\n\n~ 9\n\n9\n\n|Col1|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|Col10|\n|---|---|---|---|---|---|---|---|---|---|\n|||||||(_BELLNOZZJS-<br>I <br>I <br>|(_BELLNOZZJS-<br>I <br>I <br>|(_BELLNOZZJS-<br>I <br>I <br>|(_BELLNOZZJS-<br>I <br>I <br>|\n||||||<br>|<br>|<br>|<br>|<br>|\n||||~~~ ~~<br> <br>|~~~ ~~<br> <br>|~ <br> <br>|<br> <br>~~P\"~~||||\n|||~~..,~~ <br>|~ <br> <br>|<br> <br>~~_V _~~|<br> <br>|<br>|<br>|<br>|<br>|\n|<br>|~ <br> <br> <br>|<br> <br> <br>~ <br> <br>|<br> <br> <br>~~_V _~~<br>|<br> <br>|_L _|_V _|_V _|||\n|~a40<br> .':3<)|<br> ~~_'1 _~~<br> <br> <br>|<br> <br> <br> <br> <br>~~r/~~<br>|<br> <br> <br>|~~_V _~~<br>|<br>~,<br>\\~CONCALNOZZLE|<br>~,<br>\\~CONCALNOZZLE|<br>~,<br>\\~CONCALNOZZLE|<br>~,<br>\\~CONCALNOZZLE||\n|<br>.,zo<br>|<br> ~~_Ii_~~<br> <br> <br> <br>|<br> <br> <br>/' <br>|<br> ~~_V _~~|||||||\n|<br>.-10|<br> / <br> <br> <br>|<br> <br>~~_V _~~||||||||\n|<br>|~~/ ~~<br>/ <br>|||||||||\n|~~/ ~~||||||||||\n\n60\n\nsection with a radius of 0.382 _R_ _t_ from the throat\n_T_ to the point N and a parabola from there to the\nexit E.\n\nFRACTIONAL NOZZLE LENGTH (L~ BASED ON A 15° HALF ANGLE\n\nCONICAL NOZZLE WITH ANY AREA RATIO."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00236",
+   "page_start": 100,
+   "page_end": 100,
+   "section": "MAIN PROPELLANT",
+   "text": "_Figure_ 4-12. - _Thrust efficiency versus bell nozzle_\n\n_length. (Shown_ [or _comparison:_ _effect_ o[ _short-_\n_ening_ _conical_ _nozzle,_ _increasing_ _half_ _angle.)_\n\nFor the design of a specific nozzle. the following data are required:\n\n(1) Throat diameter, Dr, inches\n(2) Axial length of the nozzle from throat to\n\nCommonly, an equivalent 15° half-angle conical nozzle is used as a standard to specify bell\nnozzles. For instance, the length of an 80percent bell nozzle (distance between throat and\nexit plane) is 80 percent, or 0.8 of that of a 15°\nhalf-angle conical nozzle having the same throat\narea, radius below the throat, and area expansion\nratio.\n\nexit plane, Ln, inches (or the desired\nfractional length Lf based on a 15°\nconical nozzle)\n(3) Expansion area ratio c\n(4) Initial wall angle of the parabola. _Bn,_\n\ndegrees\n(5) Nozzle exit wall angle, Be, degrees\nThe wall angles, _en_ and _Be_ are shown in figure\n4-14 as a function of the expansion area ratio c.\n\nFigure 4-12 shows the thrust efficiency,\\\nversus fractional nozzle length Lf for conical\nand bell nozzles.\n\nAs may be seen, bell nozzle lengths beyond\napproximately 80 percent do not significantly\ncontribute to performance, especially when conSidering weight penalties.\n\n3. Parabolic Approximation of Bell Nozzles\n\nOne convenient way to design a near-optimumthrust bell nozzle contour is through the use of\nthe parabolic approximation procedures as suggested by G.V.R. Rao. The design configuration\nof a parabolic approximation bell nozzle is\nshown in figure 4-13. The nozzle contour immediately upstream of the throat _T_ is a circular arc\nwith a radius of 1.5 _Rt ._ The divergent section\nnozzle contour is made up of a circular entrance\n\n|Col1|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|Col10|\n|---|---|---|---|---|---|---|---|---|---|\n||||||I--<br>|||||\n||<br>/'<br>|_V _<br> <br>|:..-<br>|~ <br><br>|<br>I--<br>|~~_r-_~~<br>||||\n||<br>/'::<br>|<br> ~ <br>|<br>~|<br>t:::=|~~:~~::::|f=-||||\n||<br>~ <br>|<br> <br>_V _|<br>|<br>||||||\n|||||||||||\n|||||||||||\n||~~l'--~~|~~\"\"'-~~||||||||\n||~ <br><br>~~.~~...:::::<br>|<br>\"\"'-<br> ~ <br>|<br>|||||i||\n||||<br>I <br>|<br>I <br>||<br>, <br> <br>|<br>, <br> <br>|<br>, <br> <br>||"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00237",
+   "page_start": 100,
+   "page_end": 100,
+   "section": "MAIN PROPELLANT",
+   "text": "EXPANSION AREA RATIO •\n\n_Figure 4-14.-13_ _n_ _and_ 13 e as _function_ _of expansion_\n\n_area_ _ratio_ c.\n\n**~~L~~** **t'\"** 60~.\n\n**~~L~~** **t·** **70'/.**\n\n**Lt·** **80'4**\n**<u>Lp 90',.</u>**\n**~~L~~** **t:aIOO\".**\n\nLf' 60'/,\n\nL **til** **_70'/,_**\nL **,. eo'/.**\nL f' 90'/,\nL **,Z** **10C\".**"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 5
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

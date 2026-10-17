@@ -1,0 +1,107 @@
+{
+ "packet": "P3-HWANG-p002",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+ "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+ "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+ "pages": [
+  2,
+  2
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00489_W/p0002.png",
+   "sha256": "6b24e1b9021170e8da11fd4312824d1102a3a005b00d8e21f2b15dd0d59531b3",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_e430bf2e00dcef892d8c902d"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_fdf4cec05cef07c554d7cdec",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.42640500889208,
+     "t": 55.91764964338802,
+     "r": 60.288955805989715,
+     "b": 44.025194420970024,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e430bf2e00dcef892d8c902d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p2-2-cd4a1bcd0c968dc44099ac49cd0682daec68f9afcb4b1785f603d89eebab32b6.json",
+   "raw_sha256": "cde167922abfff9b08f691b3c9e1798389d6cdb236f5227a1dcf97c6817a751e",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00004",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > Abstract",
+   "text": "942 International Journal of Aeronautical and Space Sciences (2022) 23:941–952\n\ntheo Theoretical\nTot Total\n1 First\n2 Second"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 1 Introduction",
+   "text": "Pintle injectors for liquid rocket engines have a single element protruding from the center of the head of combustors.\nIn pintle injectors, a propellant is injected in the axial direction of a combustion chamber from the annular ring to form\na sheet along the circumference of the pintle post. This propellant collides with another propellant discharged radially\nfrom the tip of the pintle at right angles. The mixed propellants form a cone-shaped spray pattern near the pintle tip.\nTherefore, the pintle injector releases energy to the acoustic\nnode of the combustion chamber and provides high combustion stability. Furthermore, a recirculation zone with a\nhigh OFR formed along the combustion chamber axis at\nthe tip of the pintle improves the combustion efficiency by\nallowing unburned propellant to participate in the combustion again [1, 2].\n\nSince the pintle injector was first proposed by Elverum\n\n[3] in the late 1950s, studies on various subjects on the pintle\ninjector have continued into the 2000s, mainly by researchers\nof TRW Inc. Dressler and Bauer briefly reported the history\nof TRW in the research and development of pintle injectors\n\n[4]. The liquid pintle injector studies in TRW revealed that\npintle injectors with discontinuous two-row orifices provide\nthe highest characteristic velocity efficiency ( _ηC_ <sup>_*_</sup> ), and various geometric parameters can affect combustor performance"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00006",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 1 Introduction",
+   "text": "[5–7].\n\nPintle injectors have attracted considerable attention again\nafter their use in successful spacecraft and reusable launch\nvehicle missions. Austin et al. reported that the characteristic velocity efficiency was asymptotically maximized at\na TMR of 0.7 by conducting combustion tests with fuelcentered discontinuous two-row circular pintle orifices using\na non-toxic self-igniting propellant. Furthermore, they studied the characteristic length ( _L_ <sup>_*_</sup> ), pintle-combustion chamber\ndiameter ratio ( _D_ c/ _D_ p), secondary-to-primary orifice diameter ratio, skip distance ( _L_ S), and pulse mode operation [8].\nBedard et al. fabricated a liquid oxygen-liquid methane pintle injector combustor with a fixed area orifice to achieve\n30% throttling [9]. Yu et al. performed single-row squareshaped orifice pintle-combustion tests and confirmed that the\neffect of the TMR was qualitatively more dominant than that\nof the BF [10]. In a study with the canted slit pintle, Yu\net al. reported that _ηC_ <sup>_*_</sup> converged to a maximum at _L_ <sup>_*_</sup> 0.75 m [11], which is consistent with the study by Austin\net al. [8]. Sakaki et al. observed that ηC <sup>_*_</sup> increased with a"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00007",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+   "text": "decrease in the TMR in an oxidizer-centered continuous orifice configuration [12]. Subsequent combustion experiments\nrevealed that pressure fluctuation increases with decreasing\nTMR [13]. Cheng et al. simplified the fluid momentum equation assuming a non-viscous, steady-state fluid and presented\na spray angle prediction model for liquid–liquid pintle injectors with continuous orifices as a function of the TMR [14].\nSubsequently, Cheng et al. introduced a local momentum\nratio (LMR) concept and proposed that the deformed pintle\njetundertheLMRconditionaffectssprayangle[15].Vasques\nand Oskar performed combustion tests to investigate the skip\ndistance( _L_ S),LOxactivecooling,andannularrampeffectsin\nliquid oxygen-liquid methane pintle injectors[16]. Ryu et al.\nreported that the maximum _ηC_ <sup>_*_</sup> occurred near BF � 85% for\ndiscontinuous two-row pintle injectors with an aspect ratio\nof 1 or less [17]. Ninish et al. conducted a spray atomization\nstudy with discontinuous single-row circular and continuous\norifice pintle injectors. They reported that liquid film thickness and Weber number affected the spray wave stability and\ndroplet size distribution [18].\n\nAs in the literature review, several studies on various pintle injector parameters were performed. However, they were\nlimited to the water flow test or, as shown in Table 1, the\nsubcritical condition combustion tests for oxidizers. However, most high-performance liquid rocket engines operate\nin supercritical conditions. Supercritical combustion properties differ from subcritical conditions due to the propellant’s\nloss of surface tension and high diffusivity [19]. Therefore,\nadditional research is necessary to extend the understanding of pintle injector operation characteristics at supercritical\nconditions. In particular, the pintle injector having a discontinuous orifice has various geometric variables, unlike the\ncontinuous type. In this study, to understand a pintle injector operation characteristic at supercritical conditions [20],\ncombustion tests were performed on 1.5-tonf class two-row\npintle injectors with discontinuous orifices under a combustion pressure of 70 bar using LOx/Jet A-1 as propellants. This\nstudy focused on the effects of TMR and BF on _ηC_ <sup>_*_</sup> and their\npressure fluctuation characteristics.\n\n**2 Experimental Setup and Test Conditions**"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00008",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123 > 2.1 Test Facility",
+   "text": "Figure 1 displays the pressure-feed facility used for the pintle injector combustion test. Liquid oxygen (6.7 m <sup>3</sup> ), fuel\n(3.3 m <sup>3</sup> ), and coolant (3.9 m <sup>3</sup> ) run tanks supplied propellants and cooling water to the combustor. A high-pressure\nnitrogen supply system (29.1 m <sup>3</sup>, 25 MPa) pressurized these\nrun tanks. Two groups of valves with various orifice diameters (8 for each group) controlled the pressure of the run"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

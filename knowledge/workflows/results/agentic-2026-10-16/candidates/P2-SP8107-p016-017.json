@@ -1,0 +1,151 @@
+{
+ "packet": "P2-SP8107-p016-017",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19750012398",
+ "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+ "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+ "pages": [
+  16,
+  17
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 16,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19750012398/p0016.png",
+   "sha256": "bf07d7d90315fe169d8371f72489fab698d0b00b7f49250bcc7d962e226e0012",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 17,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19750012398/p0017.png",
+   "sha256": "ec5feae4ccfe4467f5bdba67b7721440ae84f1aef7805558382c0363da871440",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_68f068d94c2e83a39ffa5cfb",
+  "ENR_926da837eb388425b990cf6e"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_6d37bdc7e0affa5910032eea",
+   "kind": "table",
+   "pages": [
+    17
+   ],
+   "table_grid": [
+    [
+     "Engine",
+     "Engine",
+     "Engine",
+     "Engine",
+     "Turbopump Assembly",
+     "Turbopump Assembly",
+     "Turbopump Assembly",
+     "Turbopump Assembly",
+     "Turbopump Assembly"
+    ],
+    [
+     "Designation",
+     "Application",
+     "Thrust, lbf",
+     "Chamber pressure, psia",
+     "Arrangement",
+     "Efficiency, percent",
+     "Weight, Ibm",
+     "Specific horsepower, hp/lbm",
+     "Start system"
+    ],
+    [
+     "A-7 MB-3 LR87-AJ-3 LR91-A J-3 H-1 MA-5 sustainer MA-5 booster F-1 YLR8 I-BA-11 YLR87-AJ-7 YLR9 I-A J-7 RLIOA-3-3 J-2 SSME (EPL*) high pressure",
+     "Redstone Thor Titan I, I st stage Titan l, 2nd stage Saturn IB Atlas Atlas Saturn IC Agena Gemini-Titan 1st stage Gemini-Titan 2nd stage Centaur Saturn S-II and S-1VB Space Shuttle",
+     "78 000 170 000 150 000 80 000 205 000 57 000 330 0002 1 522 000 16 000 215 000 1O0 000 15 000 230 000 512 300",
+     "318 594 585 682 702 706 577 1122 506 784 804 400 787 3237",
+     "Single shaft, turbine in middle Geared turbine Geared turbine and pumps Geared O2 pump Geared turbine Geared turbine Geared turbine Single shaft, turbine on end Geared turbine and pumps Geared turbine and pumps Geared N204 pump Geared 02 pump Dual turbopump, series turbines Dual turbopump, parallel turbines",
+     "26.4 46.0 45.8 34.0 47.0 35.0 48.0 44.6 20.0 38.1 42.0 37.4 44.9 56.5 58.5",
+     "332 562 720 204 520 229 875 3150 60.5 484 256 76.1 305 369 555 701",
+     "2.22 5.40 5.11 7.25 7.98 7.27 3.59 16.6 5.81 10.70 8.30 9.03 7.73 21.60 50D 108.9",
+     "Liquid monopropellant start tank Solid propellant start cartridge Liquid propellant start tanks Liquid propellant start tanks Solid propellant start cartridge Solid propellant start cartridge Solid propellant start cartridge Tank head Solid propellant start cartridge Solid propellant start cartridge Solid propellant start cartridge Tank head Pressurized-gas start tank Tank head"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 167.30859375,
+     "t": 509.40686798095703,
+     "r": 687.2910766601562,
+     "b": 91.75433349609375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 3x9 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_926da837eb388425b990cf6e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.json",
+   "raw_sha256": "206eb06c02d44d786a57ab410a218ff51c415f7de6e5060c093463519869a989",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19750012398#c00016",
+   "page_start": 16,
+   "page_end": 16,
+   "section": "",
+   "text": "**2.** **STATE** **OF** **THE** **ART**\n\nThe chief features of operational turbopump assemblies, pumps, and turbines are displayed\nin tables I, II, and Ill, respectively. :,\n\nTo minimize inert weight and thereby increase the delivered payload, the turbopump system\n\nfor a liquid rocket engine has the highest power-to-weight ratio in the entire field of rotating\nmachinery. Specific horsepower (hp/lbm)*, which was high in the mid-1950's, has increased\n\neven further in more recent engines. Table I, in which rocket engine turbopump assemblies\nthat have been used on flight vehicles are listed in approximate chronological order,\n\nillustrates this progress. In approximately 10 years, the specific horsepower increased from\n\n2.22 for the Redstone turbopump assembly to values greater than 10 for the Saturn V (F-1\nand J-2 engines) turbopump assemblies. The turbopumps for Space Shuttle Main Engine\n(SSME), which will undergo initial development testing in 1974, will increase the specific\n\nhorsepower by another order of magnitude to a value greater than 100.\n\nr\n\nThis increase in specific horsepower has been achieved primarily by developing turbopump\n\nsystems that can operate reliably at high speed. High-speed bearings and seals were\n\ndeveloped and utilized in systems that exert low axial thrusts on the bearings. High-speed\ninducers then were developed to enable high-speed pump operation without any increase in\npump inlet pressurization requirements, a very important condition because of the increase"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19750012398#c00017",
+   "page_start": 16,
+   "page_end": 16,
+   "section": "",
+   "text": "in inert weight involved in raising the pressure level in large propellant tanks. As shown for\nthe F-1 and J-2 turbopump assemblies, the high-speed technology has made it no longer\n\nnecessary to use gearing to couple a high-volume pump with an efficient, high-speed turbine.\nAs a result, the latest designs have the pump connected directly to the turbine.\n\nIn general, the pumps for all propellants other than hydrogen have been single-stage,\ncentrifugal designs (table II). Simplicity, light weight, and good performance on and off\n\ndesign are the reasons for this selection; the J-2 centrifugal-flow oxidizer pump shown in\n\nfigure 1 is a good example of the current state of the art. For hydrogen, the high headrise\nrequirement has made it necessary to employ multiple stages in order to stay within the\n\ncentrifugal-stress limits for pump impellers. As a result, an eight-stage (including the inducer\nstage) axial design was used for the J-2 fuel pump (fig. 2) and a two-stage centrifugal design\n\nwas used for the RL10 turbopump (fig. 3). The Atlas MA-5 booster turbopump assembly\n\n(fig. 4) has the fuel and oxidizer pumps on the same shaft and uses a double gear reduction\nfrom the drive turbine. The Titan II YLR87-AJ-7 (fig. 5) has a geared-turbine arrangement\n\nwith the fuel and oxidizer pumps on separate shafts. The F-1 turbopump assembly (fig. 6)\nhas both pumps and the turbine on the same shaft. The turbines for all but the Agena"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19750012398#c00018",
+   "page_start": 16,
+   "page_end": 16,
+   "section": "",
+   "text": "LR81-BA-11 engine have had two rotors, the design being either velocity compounded or\n\n*Factors for converting U.S. customary units to **the** **International** System of Units (SI units) **are** given **in** Appendix A."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19750012398#c00019",
+   "page_start": 17,
+   "page_end": 17,
+   "section": "",
+   "text": "**Table** **I.** - Chief **Features** **of** **Operational** **Turbopump** **Assemblies** t\n\n**Turbopump** **Assembly**\n\nEfficiency,\n\n_Arrangement_ percent\n\nStart system\n\nLiquid monopropellant start\ntank\n\nSolid propellant start cartridge\n\nLiquid propellant start tanks\n\nLiquid propellant start tanks\n\nSolid propellant start cartridge\n\nSolid propellant start cartridge\n\nSolid propellant start cartridge\n\nTank head\n\n**Solid** propellant start cartridge\n\nSolid propellant start cartridge\n\nSolid propellant start cartridge\n\nTank head\n\nPressurized-gas start tank\n\nTank head\n\nSpecific\n\nWeight, horsepower,\nIbm hp/lbm\n\n332 2.22\n\nChamber\n\npressure,\n\npsia\n\n318 Single shaft, turbine\nin middle\n\n594 i Geared turbine\n\n585 Geared turbine and\n\npumps\n\n682 Geared O2 pump\n\n702 Geared turbine\n\n706 Geared turbine\n\n577 Geared turbine\n\n1122 Single shaft, turbine\non end\n\n506 Geared turbine and\n\npumps\n\n784 Geared turbine and\n\npumps\n\n804 Geared N204 pump\n\n400 Geared 02 pump\n\n**787** Dual **turbopump,**\n**series** **turbines**\n\n3237 Dual turbopump,\nparallel turbines\n\nApplication Thrust, lbf\n\nRedstone 78 000\n\nThor 170 000\n\nTitan I, 150 000\n\nI **st** stage\n\nTitan l, 80 000\n2nd stage\n\nSaturn IB 205 000\n\nAtlas 57 000\n\nAtlas 330 0002\n\nSaturn IC 1 522 000\n\nAgena 16 000\n\nGemini-Titan 215 000\n\n1st stage\n\nGemini-Titan 1O0 000\n\n2 nd stage\n\nCentaur 15 000\n\nSaturn S-II 230 000\nand S-1VB\n\nSpace Shuttle 512 300\n\n26.4\n\n46.0 562 5.40"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19750012398#c00020",
+   "page_start": 17,
+   "page_end": 17,
+   "section": "",
+   "text": "45.8 720 5.11\n\n34.0 204 7.25\n\n47.0 520 7.98\n\n35.0 229 7.27\n\n48.0 875 3.59\n\n44.6 3150 16.6\n\n20.0 60.5 5.81\n\n38.1 484 10.70\n\n256 8.30\n\n42.0 76.1 9.03\n\n37.4 305 7.73\n\n44.9 369 21.60\n\n56.5 555 50D\n\n58.5 701 108.9\n\n**L_**\n\nDesignation\n\nA-7\n\nMB-3\n\nLR87-AJ-3\n\n**LR91-A** J-3\n\nH-1\n\n**MA-5** sustainer\n\n**MA-5** booster\n\nF-1\n\nYLR8 I-BA-11\n\nYLR87-AJ-7\n\nYLR9 I-A J-7\n\nRLIOA-3-3\n\nJ-2\n\nSSME (EPL*) 3\n\nhigh pressure\n\nIBased on **the** best **available** data **as** of mid-t973. Numbers presented are **those** for a turbopump operational system.\n\n2Two engines, each developing 165 000 hp.\n3Not operational, but presented for comparative purposes. *Emergency po_,er level."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

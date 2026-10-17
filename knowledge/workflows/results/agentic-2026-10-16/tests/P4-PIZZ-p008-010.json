@@ -1,0 +1,32 @@
+{
+ "packet": "P4-PIZZ-p008-010",
+ "at": "2026-10-16T23:04:32.878324+00:00",
+ "tested_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 22%]\n........................................................................ [ 45%]\n........................................................................ [ 68%]\n........................................................................ [ 91%]\n............................                                             [100%]\n316 passed in 6.16s\n"
+ },
+ "replay": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P4-PIZZ-p008-010.extraction.jsonl",
+   "exit_code": 0,
+   "already_banked": true
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P4-PIZZ-p008-010.parser.json",
+   "idempotent": true
+  }
+ ],
+ "integrity": {
+  "nodes": 5530,
+  "edges": 7053,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ }
+}

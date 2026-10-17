@@ -1,0 +1,964 @@
+{
+ "packet": "P4-PIZZ-p002-003",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [],
+   "queue_reason": "P4 Pizzarelli 2011 quasi-2-D cooling model: scope, assumptions and stated validity",
+   "queue_pages": [
+    2,
+    3
+   ],
+   "queue_document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "queue_source_pdf": "propulsion_texts/pizzarelli2011.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P4-PIZZ-p002-003.json",
+   "sha256": "34f2f5f366674545f30d8c4ed8bdef5c6ff907ecec6d582751c399cd69ebe597",
+   "size_bytes": 14553,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "pages": [
+    2,
+    3
+   ],
+   "docling_run_ids": [
+    "ENR_1082ccbf414a4d0977b79464",
+    "ENR_70457a8deccd7b1eb468117f"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 1,
+     "table": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 499,
+    "records_now": 499,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pizzarelli2011.pdf",
+   "sha256_in_bundle": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "sha256_recomputed": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 2,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0002.png",
+    "dpi": 150,
+    "sha256_in_bundle": "07b376693027b57352fdc8c2622d38265b33d686899b8e470dabd233276a3c2b",
+    "file_exists": true,
+    "sha256_recomputed": "07b376693027b57352fdc8c2622d38265b33d686899b8e470dabd233276a3c2b",
+    "sha256_match": true
+   },
+   {
+    "page": 3,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0003.png",
+    "dpi": 150,
+    "sha256_in_bundle": "a5cf8d77c34032b95ce1c0fd85fd1e6eb343fe24a79a1aad24bd3848c0ed80bd",
+    "file_exists": true,
+    "sha256_recomputed": "a5cf8d77c34032b95ce1c0fd85fd1e6eb343fe24a79a1aad24bd3848c0ed80bd",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_1082ccbf414a4d0977b79464",
+    "run_record_found": true,
+    "page_range": [
+     3,
+     3
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.json",
+    "raw_sha256_recorded": "6bd23c259173480527004c4393c5838f5f131d04f48758d4ac84f09a07d6b518",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.md",
+    "markdown_sha256_recorded": "f3dac37bd52246f1a951af2f8a1cbc44ebdcb64fe225bc17d54637689038fc67",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "6bd23c259173480527004c4393c5838f5f131d04f48758d4ac84f09a07d6b518",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "f3dac37bd52246f1a951af2f8a1cbc44ebdcb64fe225bc17d54637689038fc67",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_70457a8deccd7b1eb468117f",
+    "run_record_found": true,
+    "page_range": [
+     2,
+     2
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.json",
+    "raw_sha256_recorded": "82afe3121e4d09d4366b15fddbdf7349f8ac8232224094679970d6a820db2edd",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.md",
+    "markdown_sha256_recorded": "1a787016a48078d2d2d245cc5cf51340a074070f11592fbe1a4ff77ce34e3725",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "82afe3121e4d09d4366b15fddbdf7349f8ac8232224094679970d6a820db2edd",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "1a787016a48078d2d2d245cc5cf51340a074070f11592fbe1a4ff77ce34e3725",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.json",
+    "sha256_in_bundle": "82afe3121e4d09d4366b15fddbdf7349f8ac8232224094679970d6a820db2edd",
+    "file_exists": true,
+    "sha256_recomputed": "82afe3121e4d09d4366b15fddbdf7349f8ac8232224094679970d6a820db2edd",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.json",
+    "sha256_in_bundle": "6bd23c259173480527004c4393c5838f5f131d04f48758d4ac84f09a07d6b518",
+    "file_exists": true,
+    "sha256_recomputed": "6bd23c259173480527004c4393c5838f5f131d04f48758d4ac84f09a07d6b518",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 1,
+   "table": 1
+  },
+  "candidates_total": 2,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure",
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_d24031f9cc79241957e6ca17",
+    "CAND_153e09155d194e56023dbadf"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_d24031f9cc79241957e6ca17",
+    "CAND_153e09155d194e56023dbadf"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00003",
+     "occurrences": 19
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_d24031f9cc79241957e6ca17",
+    "kind": "figure",
+    "pages": [
+     2
+    ],
+    "bbox": [
+     {
+      "l": 349.537353515625,
+      "t": 667.9272193908691,
+      "r": 431.1766052246094,
+      "b": 646.8810729980469,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_70457a8deccd7b1eb468117f",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 2
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 7,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_153e09155d194e56023dbadf",
+    "kind": "table",
+    "pages": [
+     3
+    ],
+    "bbox": [
+     {
+      "l": 72.704345703125,
+      "t": 643.1080017089844,
+      "r": 432.42047119140625,
+      "b": 364.0433349609375,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/tables/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "TABLE 21x4 (see table_grid; full cells in raw item /tables/0)",
+    "transcription_length": 61,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_1082ccbf414a4d0977b79464",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 3
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true,
+    "table_cell_grid": {
+     "bundle_table_grid_present": true,
+     "bundle_table_grid_as_given": [
+      [
+       "NOMENCLATURE",
+       "NOMENCLATURE",
+       "NOMENCLATURE",
+       "NOMENCLATURE"
+      ],
+      [
+       "_m",
+       "mass flow rate, kg s \u00001 area of the channel cross-section, m 2",
+       "qc Re sw T",
+       "coolant heat flux, Wm \u00002 wall heat flux, Wm \u00002"
+      ],
+      [
+       "A",
+       "",
+       "qw",
+       ""
+      ],
+      [
+       "Aw",
+       "area of the lateral inner surface of channel wall, m 2",
+       "r",
+       "engine radius, m"
+      ],
+      [
+       "b",
+       "channel width, m correction factor for skin friction correction factor for Nusselt channel hydraulic diameter, m",
+       "",
+       "Reynolds number internal wall thickness, m temperature, K"
+      ],
+      [
+       "Cf",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Ch",
+       "number",
+       "Tw",
+       "wall temperature, K"
+      ],
+      [
+       "Dh",
+       "",
+       "tw",
+       "rib thickness, m"
+      ],
+      [
+       "F",
+       "velocity shape function",
+       "u",
+       "streamwise velocity component, ms \u00001"
+      ],
+      [
+       "fw",
+       "skin friction factor",
+       "ub",
+       "bulk velocity, ms \u00001"
+      ],
+      [
+       "H",
+       "enthalpy, Jkg \u00001",
+       "umh",
+       "velocity at channel middle height, ms \u00001"
+      ],
+      [
+       "h",
+       "channel height, m",
+       "v, w",
+       "transverse velocity component, ms \u00001"
+      ],
+      [
+       "hw i, j",
+       "heat transfer coefficient, Wm \u00002 K \u00001 indices",
+       "x, y, z k",
+       "length, height, and width coordinates, m channel aspect ratio"
+      ],
+      [
+       "k",
+       "thermal conductivity, Wm \u00001 K \u00001",
+       "m",
+       "viscosity, kgm \u00001 s \u00001"
+      ],
+      [
+       "kt",
+       "turbulent thermal conductivity,",
+       "q",
+       "density, kgm \u00003"
+      ],
+      [
+       "",
+       "W m \u00001 K \u00001",
+       "sw",
+       "skin friction, Pa"
+      ],
+      [
+       "kw",
+       "wall material thermal conductivity, W m \u00001 K \u00001",
+       "e",
+       "wall relative roughness"
+      ],
+      [
+       "N, M",
+       "number of nodes of the computational grid in the radial and streamwise",
+       "Subscripts",
+       "stagnation value"
+      ],
+      [
+       "Nu",
+       "directions",
+       "0 aw adiabatic hg in",
+       "wall hot-gas initial conditions"
+      ],
+      [
+       "p",
+       "Nusselt number pressure, Pa",
+       "",
+       ""
+      ],
+      [
+       "Pr",
+       "Prandtl number",
+       "w",
+       "wall"
+      ]
+     ],
+     "rows": 21,
+     "row_lengths": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+     ],
+     "empty_string_cell_positions_row_col": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       15,
+       0
+      ],
+      [
+       19,
+       2
+      ],
+      [
+       19,
+       3
+      ]
+     ],
+     "empty_string_cell_count": 10,
+     "bundle_transcription_marker_dimensions": [
+      21,
+      4
+     ],
+     "bundle_grid_dimensions_equal_marker_dimensions": true,
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_153e09155d194e56023dbadf, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_record_json_pointer": "/tables/0",
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "stored_num_rows": 21,
+     "stored_num_cols": 4,
+     "stored_orientation": "rot_0",
+     "stored_table_cells_count": 71,
+     "bundle_table_grid_equals_stored_content_grid_texts": true,
+     "cells_with_row_span_or_col_span_not_1": [
+      {
+       "start_row": 0,
+       "start_col": 0,
+       "row_span": 1,
+       "col_span": 4,
+       "text": "NOMENCLATURE"
+      }
+     ],
+     "cell_positions_row_col_with_flag_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "stored_grid_texts_equal_matrix_from_table_cells_start_indices": false,
+     "grid_positions_without_a_table_cells_entry_row_col": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       2
+      ],
+      [
+       0,
+       3
+      ],
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       15,
+       0
+      ],
+      [
+       19,
+       2
+      ],
+      [
+       19,
+       3
+      ]
+     ],
+     "grid_positions_without_a_table_cells_entry_count": 13,
+     "grid_texts_found_at_positions_without_a_table_cells_entry": [
+      "",
+      "NOMENCLATURE"
+     ],
+     "grid_vs_table_cells_text_mismatches_at_positions_with_a_table_cells_entry": [],
+     "positions_without_table_cells_entry_equal_empty_string_positions_of_bundle_grid": false,
+     "per_cell_bboxes_and_flags_note": "not copied here; per-cell bbox/flags are in the stored enrichment record and the raw Docling table (data.table_cells)",
+     "raw_table_self_ref": "#/tables/0",
+     "bundle_table_grid_equals_raw_table_data_grid_texts": true,
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_captions_refs": [],
+     "raw_table_children_refs": [],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0,
+     "table_shape_observations": {
+      "rows_x_cols": [
+       21,
+       4
+      ],
+      "row_lengths_uniform": true,
+      "header_rows_by_column_header_flag": [
+       0
+      ],
+      "body_row_count": 20,
+      "cells_with_row_or_col_span_not_1": [
+       {
+        "start_row": 0,
+        "start_col": 0,
+        "row_span": 1,
+        "col_span": 4
+       }
+      ],
+      "per_row_nonempty_cell_counts": [
+       4,
+       4,
+       2,
+       4,
+       3,
+       1,
+       4,
+       3,
+       4,
+       4,
+       4,
+       4,
+       4,
+       4,
+       4,
+       3,
+       4,
+       4,
+       4,
+       2,
+       4
+      ],
+      "mixed_digit_letter_tokens_inside_numeric_dominant_cells_lexical_only": [],
+      "cells_with_8_or_more_whitespace_tokens": [
+       {
+        "row": 1,
+        "col": 1,
+        "whitespace_tokens": 13,
+        "numeric_tokens": 1,
+        "characters": 62
+       },
+       {
+        "row": 1,
+        "col": 3,
+        "whitespace_tokens": 10,
+        "numeric_tokens": 0,
+        "characters": 46
+       },
+       {
+        "row": 3,
+        "col": 1,
+        "whitespace_tokens": 11,
+        "numeric_tokens": 1,
+        "characters": 54
+       },
+       {
+        "row": 4,
+        "col": 1,
+        "whitespace_tokens": 16,
+        "numeric_tokens": 0,
+        "characters": 112
+       },
+       {
+        "row": 4,
+        "col": 3,
+        "whitespace_tokens": 8,
+        "numeric_tokens": 0,
+        "characters": 57
+       },
+       {
+        "row": 12,
+        "col": 1,
+        "whitespace_tokens": 8,
+        "numeric_tokens": 0,
+        "characters": 45
+       },
+       {
+        "row": 12,
+        "col": 3,
+        "whitespace_tokens": 9,
+        "numeric_tokens": 0,
+        "characters": 61
+       },
+       {
+        "row": 16,
+        "col": 1,
+        "whitespace_tokens": 9,
+        "numeric_tokens": 0,
+        "characters": 47
+       },
+       {
+        "row": 17,
+        "col": 1,
+        "whitespace_tokens": 12,
+        "numeric_tokens": 0,
+        "characters": 70
+       }
+      ],
+      "cells_with_2_or_more_whole_number_tokens": [],
+      "cells_made_only_of_2_or_more_numbers": [],
+      "cells_containing_newline_or_double_space": [],
+      "adjacent_cells_where_left_ends_with_point_or_comma_or_right_starts_with_point_or_comma_digit": [
+       {
+        "row": 14,
+        "left_col": 1,
+        "left_text_last_chars": "onductivity,",
+        "right_col": 2,
+        "right_text_first_chars": "q"
+       }
+      ],
+      "horizontally_adjacent_cells_with_identical_nonempty_text": [
+       {
+        "row": 0,
+        "cols": [
+         0,
+         1
+        ],
+        "text": "NOMENCLATURE",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         1,
+         2
+        ],
+        "text": "NOMENCLATURE",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         2,
+         3
+        ],
+        "text": "NOMENCLATURE",
+        "inside_a_recorded_span": true
+       }
+      ],
+      "vertical_runs_of_identical_nonempty_text_in_a_column": [],
+      "header_row_texts_occurring_more_than_once": {
+       "0": {
+        "NOMENCLATURE": [
+         0,
+         1,
+         2,
+         3
+        ]
+       }
+      },
+      "markdown_pointer_after_caption_S2_heuristic": null,
+      "observed_patterns_lexical": [
+       "grid 21 rows x 4 cols; header rows by column_header flag: [0]; body rows: 20",
+       "1 cell(s) with row_span/col_span != 1",
+       "cells holding >= 8 whitespace-separated tokens: [r1,c1] 13 tokens/1 numeric; [r1,c3] 10 tokens/0 numeric; [r3,c1] 11 tokens/1 numeric; [r4,c1] 16 tokens/0 numeric; [r4,c3] 8 tokens/0 numeric; [r12,c1] 8 tokens/0 numeric; [r12,c3] 9 tokens/0 numeric; [r16,c1] 9 tokens/0 numeric; [r17,c1] 12 tokens/0 numeric",
+       "1 adjacent pair(s) with a point/comma at a cell edge",
+       "3 horizontally adjacent pair(s) with identical non-empty text (3 inside a recorded span)",
+       "header row repeats texts: {\"0\": {\"NOMENCLATURE\": [0, 1, 2, 3]}}"
+      ]
+     }
+    }
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.json",
+    "collection_counts": {
+     "texts": 20,
+     "tables": 0,
+     "pictures": 1,
+     "groups": 1,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 2,
+     "text": 14,
+     "section_header": 3,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 1,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.json",
+    "collection_counts": {
+     "texts": 5,
+     "tables": 1,
+     "pictures": 0,
+     "groups": 1,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 2
+    },
+    "candidate_count_from_this_artifact": 1,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00005",
+    "line": "Figure 1. Schematic of cooling channels geometry."
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_1082ccbf414a4d0977b79464": {
+    "markdown_lines": 26,
+    "caption_like_lines": []
+   },
+   "ENR_70457a8deccd7b1eb468117f": {
+    "markdown_lines": 21,
+    "caption_like_lines": []
+   }
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 0,
+    "stored_objects_listing_a_queue_target_in_model_ids": {},
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {},
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    2,
+    3
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "2": {
+     "figure": 1
+    },
+    "3": {
+     "table": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00005",
+     "page_start": 3,
+     "page_end": 4
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 5,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00001",
+     "page_start": 2,
+     "page_end": 2,
+     "section": "",
+     "text_length": 1640
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00002",
+     "page_start": 2,
+     "page_end": 2,
+     "section": "",
+     "text_length": 1359
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00003",
+     "page_start": 3,
+     "page_end": 3,
+     "section": "",
+     "text_length": 1417
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00004",
+     "page_start": 3,
+     "page_end": 3,
+     "section": "",
+     "text_length": 1656
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00005",
+     "page_start": 3,
+     "page_end": 4,
+     "section": "",
+     "text_length": 1845
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

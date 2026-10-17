@@ -1,0 +1,48 @@
+{
+ "scope": "All knowledge stores; canonical records compared with timestamps ignored. Both rebuilds completed successfully.",
+ "stores": 18,
+ "changed_stores_ignoring_timestamps": [],
+ "deterministic": true,
+ "fingerprints_after_each_rebuild": [
+  {
+   "manifest": "d852f4956dfe334f0e20fe06dbb32169ee297e415df7b942980715a408aec773",
+   "entities": "6e4f7dda7c7e10fd3b0f27b85e0e087cbe6f1b3e41db39cfea00746bcce1037a",
+   "quantities": "9624cd24b0733cfbe727a2067accb2b87fc614c4dfec40a08173d0192ffb2919",
+   "equations": "c4c723bf02bec3ef1a4ab83b0a02f0949f3f9ce2b805e6b1dd099cfdbac38d01",
+   "claims": "70c3a7fa7c8b01d87129bed3ee9994ebb260c60122b1bd90dbe5dc4d84730652",
+   "models": "a169494212e9ffd63d0deeda1109350dda5cbb39a10bb5cbd98b46819f8b0410",
+   "requirements": "61ea46dea293527616643760b3460d7a9437a759e309c25552813eaa9f4c62fa",
+   "validity": "636d858076a065725ddd6709d7fc6413e04100b0f9d45a6add07f740b6fade1e",
+   "software_links": "a9fccaa75018296f65cc80196b4c23f0c57ff88776b7fd43eaefc702abb6be89",
+   "relationships": "12c0de4d70d713fbf455a9c9db4879fc2380d985f8799eb662972e254b818108",
+   "provenance": "995bc7eb51b39ddfcdf5961d790ea578503854bdab7e677b33b5221245c68a15",
+   "repo_documents": "94b2253a16f91df35f10fac8ffde3437347b01dc4189555c44bde01c8445b841",
+   "tests": "766d729aa09537a882964063aaf8415cd916835cb60836ee7f8576f9fb8a1590",
+   "capabilities": "1159f6981e60ea323c76cca019ad29cbc3233f0986f75db457a0227181d77a40",
+   "ingestion_state": "3ef9765b3a8968849f52e67ca11db78ff09ae08f4a5e4a34fb802e398aac8bad",
+   "artifacts": "a24778c80d77e353911c8c0db1cbd7191f9053a2fa0c276b4ec6369db8a94d88",
+   "enrichments": "1fb04f3f1513e926754b265cadb540c213f6a6e353438c0e1ef444c1f0940eb0",
+   "standards": "07d68d08924cc3ec942e367f9713d59c43f31585bf35c0d30677436124353c1f"
+  },
+  {
+   "manifest": "d852f4956dfe334f0e20fe06dbb32169ee297e415df7b942980715a408aec773",
+   "entities": "6e4f7dda7c7e10fd3b0f27b85e0e087cbe6f1b3e41db39cfea00746bcce1037a",
+   "quantities": "9624cd24b0733cfbe727a2067accb2b87fc614c4dfec40a08173d0192ffb2919",
+   "equations": "c4c723bf02bec3ef1a4ab83b0a02f0949f3f9ce2b805e6b1dd099cfdbac38d01",
+   "claims": "70c3a7fa7c8b01d87129bed3ee9994ebb260c60122b1bd90dbe5dc4d84730652",
+   "models": "a169494212e9ffd63d0deeda1109350dda5cbb39a10bb5cbd98b46819f8b0410",
+   "requirements": "61ea46dea293527616643760b3460d7a9437a759e309c25552813eaa9f4c62fa",
+   "validity": "636d858076a065725ddd6709d7fc6413e04100b0f9d45a6add07f740b6fade1e",
+   "software_links": "a9fccaa75018296f65cc80196b4c23f0c57ff88776b7fd43eaefc702abb6be89",
+   "relationships": "12c0de4d70d713fbf455a9c9db4879fc2380d985f8799eb662972e254b818108",
+   "provenance": "995bc7eb51b39ddfcdf5961d790ea578503854bdab7e677b33b5221245c68a15",
+   "repo_documents": "94b2253a16f91df35f10fac8ffde3437347b01dc4189555c44bde01c8445b841",
+   "tests": "766d729aa09537a882964063aaf8415cd916835cb60836ee7f8576f9fb8a1590",
+   "capabilities": "1159f6981e60ea323c76cca019ad29cbc3233f0986f75db457a0227181d77a40",
+   "ingestion_state": "3ef9765b3a8968849f52e67ca11db78ff09ae08f4a5e4a34fb802e398aac8bad",
+   "artifacts": "a24778c80d77e353911c8c0db1cbd7191f9053a2fa0c276b4ec6369db8a94d88",
+   "enrichments": "1fb04f3f1513e926754b265cadb540c213f6a6e353438c0e1ef444c1f0940eb0",
+   "standards": "07d68d08924cc3ec942e367f9713d59c43f31585bf35c0d30677436124353c1f"
+  }
+ ]
+}

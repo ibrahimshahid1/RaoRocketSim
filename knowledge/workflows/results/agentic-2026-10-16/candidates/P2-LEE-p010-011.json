@@ -1,0 +1,1118 @@
+{
+ "packet": "P2-LEE-p010-011",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+ "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+ "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+ "pages": [
+  10,
+  11
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0010.png",
+   "sha256": "538fc59d7b7c40bca604cea6ed1b29efe50f2c48f764c825707079838052acff",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 11,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0011.png",
+   "sha256": "71be2fd93b2b002110eb5094bea945cadc2dcccb81159fbe887be08fe0d485cb",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a42ff41ef1221668dead1053",
+  "ENR_ce87700cc254fc34cbc5453d"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_f62419255da62ba39d406156",
+   "kind": "figure",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.412391596058065,
+     "t": 55.880973728647746,
+     "r": 60.26251777671967,
+     "b": 43.9910205237079,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_ce87700cc254fc34cbc5453d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p10-10-582f55dec63e3ef45a3de828129315095f7bf7f2e1b5df643dbc9f5b6436d67b.json",
+   "raw_sha256": "b73d00d41820ac1c5f283636f9793cfbd8e769a14757869a8d2e36640e24115c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2d77f91f6cf7983375323714",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.81301508716797,
+     "t": 372.5309618442538,
+     "r": 544.2583063321024,
+     "b": 347.3650453555651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\eta _ { E } & = 0 . 0 9 3 \\ln ( t _ { b } ) + 0 . 3 3 0 1 , \\\\ \\eta _ { E } & = 0 . 9 2 5 , \\quad \\text {at} \\, t _ { b } = 6 0 0 \\, s .",
+   "original_text": "ηE equal1 0.093 ln(tb) + 0.3301, ηE equal1 0.925, at tb equal1 600 s. (38)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_ce87700cc254fc34cbc5453d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p10-10-582f55dec63e3ef45a3de828129315095f7bf7f2e1b5df643dbc9f5b6436d67b.json",
+   "raw_sha256": "b73d00d41820ac1c5f283636f9793cfbd8e769a14757869a8d2e36640e24115c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ff4b5f7cc455f31a0b8b4747",
+   "kind": "table",
+   "pages": [
+    10
+   ],
+   "table_grid": [
+    [
+     "Table 1 Design point Parameter",
+     "Values"
+    ],
+    [
+     "Thrust",
+     "500 N"
+    ],
+    [
+     "Combustion chamber pressure",
+     "20 bar"
+    ],
+    [
+     "Altitude",
+     "30 km"
+    ],
+    [
+     "Burning time",
+     "600 s"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 49.841811755826804,
+     "t": 732.3890916005748,
+     "r": 289.7652814341295,
+     "b": 646.6903398326001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 5x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_ce87700cc254fc34cbc5453d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p10-10-582f55dec63e3ef45a3de828129315095f7bf7f2e1b5df643dbc9f5b6436d67b.json",
+   "raw_sha256": "b73d00d41820ac1c5f283636f9793cfbd8e769a14757869a8d2e36640e24115c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_81ff0d44333968d441f5a53f",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 502.41079719697063,
+     "t": 55.87804453745389,
+     "r": 544.1292834730724,
+     "b": 43.78878428169571,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a940c01f1d06b9236645829c",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 8 Commercial motor specifications [33]"
+   ],
+   "bbox": [
+    {
+     "l": 53.07011268431388,
+     "t": 491.1055409897757,
+     "r": 286.0222447632655,
+     "b": 424.4607355082014,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_acd43555a6a360064b6e73c1",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 9 Commercial battery specifications [34]"
+   ],
+   "bbox": [
+    {
+     "l": 307.5947622324284,
+     "t": 491.64774648472996,
+     "r": 541.0755024942488,
+     "b": 432.65105921042885,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/24\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_500e7bc48e03eb655bde21e7",
+   "kind": "table",
+   "pages": [
+    11
+   ],
+   "table_grid": [
+    [
+     "Parameter",
+     "Specifications"
+    ],
+    [
+     "Motor type",
+     "BLDC"
+    ],
+    [
+     "Power density",
+     "0.875 kWikg"
+    ],
+    [
+     "rpm",
+     "57940"
+    ],
+    [
+     "Efficiency",
+     "87%"
+    ],
+    [
+     "Mass",
+     "80g"
+    ]
+   ],
+   "json_pointer": "/tables/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 140.78645689863166,
+     "t": 491.5131562518519,
+     "r": 286.0370582893935,
+     "b": 424.57228887283577,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 6x2 (see table_grid; full cells in raw item /tables/1)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6cb8d245137885b0317b29cf",
+   "kind": "table",
+   "pages": [
+    11
+   ],
+   "table_grid": [
+    [
+     "Parameter",
+     "Specifications"
+    ],
+    [
+     "Battery type",
+     "Li-polymer"
+    ],
+    [
+     "Energy density",
+     "325 W-hikg"
+    ],
+    [
+     "Power density",
+     "0.65 kWikg"
+    ],
+    [
+     "Mass",
+     "222g"
+    ]
+   ],
+   "json_pointer": "/tables/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 401.03363864709223,
+     "t": 491.7748306651736,
+     "r": 541.0684310167555,
+     "b": 432.6819072551896,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 5x2 (see table_grid; full cells in raw item /tables/2)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ec404128a1bfd11d2e65ed23",
+   "kind": "table",
+   "pages": [
+    11
+   ],
+   "table_grid": [
+    [
+     "Common",
+     "",
+     "",
+     "Electric-pump cycle",
+     "",
+     ""
+    ],
+    [
+     "Propellant",
+     "LOX/RP-1",
+     "",
+     "Pump",
+     "Efficiency",
+     "66%/61%"
+    ],
+    [
+     "",
+     "Margin",
+     "10%",
+     "Motor",
+     "Efficiency",
+     "87%"
+    ],
+    [
+     "Chamber, nozzle",
+     "Material",
+     "Stainless steel 301",
+     "",
+     "Power density",
+     "0.875 kW/kg"
+    ],
+    [
+     "",
+     "Characteristic length",
+     "1.145 m",
+     "",
+     "Rpm",
+     "57,940 rpm"
+    ],
+    [
+     "Tank",
+     "Material",
+     "6061-T6 Aluminum alloy",
+     "Inverter",
+     "Efficiency",
+     "85%"
+    ],
+    [
+     "",
+     "Oxygen tank pressure",
+     "3.79 bar",
+     "",
+     "Power density",
+     "60 kW/kg"
+    ],
+    [
+     "",
+     "",
+     "",
+     "Battery",
+     "Energy efficiency",
+     "92.5%"
+    ],
+    [
+     "",
+     "Fuel tank pressure",
+     "3.10 bar",
+     "",
+     "Power density",
+     "0.650 kW/kg"
+    ],
+    [
+     "",
+     "",
+     "",
+     "",
+     "Energy density",
+     "325 W·h/kg"
+    ],
+    [
+     "",
+     "Ullage",
+     "20%",
+     "",
+     "Structure margin",
+     "20%"
+    ],
+    [
+     "Pipe",
+     "Material",
+     "6061-T6 Aluminum alloy",
+     "Gas-generator cycle",
+     "",
+     ""
+    ],
+    [
+     "",
+     "",
+     "",
+     "Turbine",
+     "rpm",
+     "7000"
+    ],
+    [
+     "Elbow",
+     "Material",
+     "6061-T6 Aluminum alloy",
+     "",
+     "Efficiency",
+     "58.2%"
+    ],
+    [
+     "Valve",
+     "Loss coefficient",
+     "0.579",
+     "Gas-generator",
+     "Maximum temperature",
+     "1127 K"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2 Input parameter values"
+   ],
+   "bbox": [
+    {
+     "l": 49.90942132916546,
+     "t": 721.1363900423496,
+     "r": 545.0777758723522,
+     "b": 515.0221124762959,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 15x6 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a42ff41ef1221668dead1053",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p11-11-c2aff46231.json",
+   "raw_sha256": "69c11816a2ed73b5f4d49121d11b6047386c50a58a2392135941f8c85599c220",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F56CC231",
+   "store": "equations",
+   "type": "Equation",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Lee 2021 Eq. (38) battery energy efficiency versus burning time",
+   "equation_number": "38",
+   "form": "eta_E = 0.093*ln(t_b) + 0.3301;  eta_E = 0.925 at t_b = 600 s",
+   "statement": null,
+   "quote": "function of the final burning time by referring to the energy",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "eta_E",
+     "meaning": "battery energy efficiency",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "t_b",
+     "meaning": "burning time",
+     "units": "s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "single specific Li-polymer battery data [1]"
+   ],
+   "validity": [
+    "fit used at t_b = 600 s in this paper; no stated range"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_2d77f91f6cf7983375323714"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "eta_E",
+      "t_b"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_064D644B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Lee 2021 states that a characteristic length of 1.02-1.27 m is generally recommended for LOX/RP-1 and sets 1.145 m from the A-1 engine data.",
+   "quote": "is recommended for the LOX/RP-1 propellant",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_328BC1DD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Lee 2021 takes motor and battery values from commercial products: the Vishan EC2060L-3660 BLDC motor (0.875 kW/kg, 57,940 rpm, 87%, 80 g) and the Amicell ABLP8474170H320 Li-polymer cell (325 W h/kg, 0.65 kW/kg, 222 g).",
+   "quote": "the commercial motor Vishan",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_6024B7D3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The authors report no additional validation for the component mass estimates discussed here; this is not experimental validation of an electric-pump engine.",
+   "quote": "Furthermore, additional validations have not been conducted because the actual\nperformance data supplied from commercial products are\nused to estimate the mass of the electric motor and pump\nfor the specific factors, such as the power density and energy\ndensity.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_88D3482A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Lee 2021 analyses a 500 N, 20 bar, 30 km altitude, 600 s burning-time design point (Table 1); the 92.5% battery energy efficiency follows from Eq. 38 at this burn time.",
+   "quote": "the burning time was approximately 600 s as the operating conditions",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_8F01D86F",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Motor cooling is excluded for the paper's 500 N case by assuming rotor heating has no effect.",
+   "equation_number": null,
+   "form": null,
+   "statement": "Motor cooling is excluded for the paper's 500 N case by assuming rotor heating has no effect.",
+   "quote": "At a thrust\nof 500 N, it was predicted to be room temperature. Therefore,\nmotor cooling can be excluded assuming that rotor heating\nhad no effect.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_A334658B",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Lee et al. assume the electric-pump cycle is driven by a single motor, the commercial BLDC motor Vishan EC2060L-3660 (0.875 kW/kg, 57,940 rpm, 87%, 80 g).",
+   "equation_number": null,
+   "form": null,
+   "statement": "Lee et al. assume the electric-pump cycle is driven by a single motor, the commercial BLDC motor Vishan EC2060L-3660 (0.875 kW/kg, 57,940 rpm, 87%, 80 g).",
+   "quote": "it was assumed to be driven by a single motor",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B9D73B48",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "The study assumes battery energy efficiency is constant for its 600 s design case; this is not a general efficiency map.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The study assumes battery energy efficiency is constant for its 600 s design case; this is not a general efficiency map.",
+   "quote": "The energy efficiency is assumed to be 92.5% from Eq. (38)\nbecause the design burning time was 600 s:",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_D002C669",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "REFUTED",
+   "label": "This study assumes one motor drives the electric-pump arrangement; LREKit separately sizes two stream drives.",
+   "equation_number": null,
+   "form": null,
+   "statement": "This study assumes one motor drives the electric-pump arrangement; LREKit separately sizes two stream drives.",
+   "quote": "Figure 8 shows\nthe detailed performance, and it was assumed to be driven by\na single motor.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_059BBCE4",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case battery specific power = 0.650 kW/kg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Fuel tank pressure 3.10 bar Power density 0.650 kW/kg",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20B5BB49",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case battery structure margin = 20 %",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "The battery structure margin was assumed to be 20%.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20F32959",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case inverter output power density = 60 kW/kg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "inverter\npower density, and the inverter efficiency were set 66%,\n61%, 60 kW/kg, and 85%, respectively.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_6172A9B4",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case battery energy efficiency = 0.925 1",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "The energy efficiency is assumed to be 92.5% from Eq. (38)\nbecause the design burning time was 600 s:",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_AA8630AD",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case motor efficiency = 0.87 1",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Margin 10% Motor Efficiency 87%",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_B3727FDB",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case battery specific energy = 325 Wh/kg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Energy density 325 W·h/kg",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_D265274E",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 11,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case motor output power density = 0.875 kW/kg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Power density 0.875 kW/kg",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_E196F6F3",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee case inverter efficiency = 0.85 1",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "inverter\npower density, and the inverter efficiency were set 66%,\n61%, 60 kW/kg, and 85%, respectively.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  },
+  {
+   "id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_173E322E",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper's worked study is at 500 N, 20 bar, 30 km and 600 s. These are a design point, not demonstrated validity bounds.",
+   "quote": "Thrust 500 N\n\n\nCombustion chamber pressure 20 bar\n\n\nAltitude 30 km\n\n\n<u>Burning time</u> <u>600 s</u>",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00026",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Table 1** Design point\n\nParameter Values\n\nThrust 500 N\n\nCombustion chamber pressure 20 bar\n\nAltitude 30 km\n\n<u>Burning time</u> <u>600 s</u>\n\nOn the other hand, additional validations are unnecessary\nbecause most components in an electric-pump cycle, such as\nthe thrust chamber, feed line, and pump performance, are the\nsame as those in a gas generator cycle. Furthermore, additional validations have not been conducted because the actual\nperformance data supplied from commercial products are\nused to estimate the mass of the electric motor and pump\nfor the specific factors, such as the power density and energy\ndensity.\n\n**3 Results and Discussion**\n\n**3.1** **Design Point**\n\nThe reported specifications of a small-sized engine which is\noperated at high altitude using a bipropellant showed that the\nsystem generally has a thrust of 400–500 N, a propellant supply pressure of 4–30 bar, and an expansion ratio of 150–400\n\n[3]. In this study, it was assumed that the operational altitude\nwas approximately 30 km, and the burning time was approximately 600 s as the operating conditions. Table 1 summarizes\nthe requirements.\n\n**3.2** **Operating Conditions for Performance Analysis**\n\nTable 2 lists the specifications of engine to conduct performance analysis, such as the propellant type and performance\nof each component. The propellant type, pipe, valve, and\ntank, which are the same components for both systems, were\nset identically in the left column of Table 2. Different particulars are indicated in the right column for both systems."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00027",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "The propellant considered in the study was the LOX/RP1 combination, which is currently being used in most liquid\nrocket, and stainless steel 301 was applied to the combustion chamber and nozzle’s material. Stainless steel 301 has a\nwide operating temperature range from cryogenic to 1100 K.\nTherefore, it shows better performancethanaluminumor carbon fibers under the operating temperature condition of the\nengine, and it is used for boosters of large rockets and the\nstarships project of Space X [28]. The characteristic length\nof the combustion chamber is a variable that depends only\non the propellant composition. Generally, 1.02–1.27 m is\nrecommended for the LOX/RP-1 propellant. In this study,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00028",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "International Journal of Aeronautical and Space Sciences\n\nthe characteristic length was set to 1.145 m from the A-1\nengine data, which is using the same propellant [29]. In addition, the combustion chamber was assumed to be cylindrical.\nThe 6061-T6 Aluminum alloy, which is lighter than steel\nand maintains robustness even at very low temperatures, was\napplied as the material of the propellant tank [28, 30]. The\ntank pressure is generally recommended as a specific pressure range depending on the type of propellant. The pressures\nof the oxidizer tank and fuel tank were also determined from\nthe A-1 engine data [29]. The material of the pipe and elbow\nwas 6061-T6 Aluminum alloy, which is the same as the tank,\nfor the same reasons. The loss coefficient of the valve was set\nby referring to the data of the specific ball valve [31] under\nthe fully opening condition.\n\nBy referring to a previous study [1, 12], the efficiency\nof the oxidizer pump, efficiency of the fuel pump, inverter\npower density, and the inverter efficiency were set 66%,\n61%, 60 kW/kg, and 85%, respectively. The battery structure margin was assumed to be 20%. The battery energy\nefficiency is difficult to determine because the specific value\nvaries according to the discharge time and operating environment conditions. Therefore, the battery energy efficiency\nwas assumed to be a constant value, which is a logarithmic\nfunction of the final burning time by referring to the energy\nefficiency measurement results according to the burning time\nof a specific Li-polymer battery of the previous study [1].\nThe energy efficiency is assumed to be 92.5% from Eq. (38)\nbecause the design burning time was 600 s:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00029",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "_η_ E - 0 _._ 093 ln _(t_ b _)_ + 0 _._ 3301 _,_\n\n(38)\n_η_ E - 0 _._ 925 _,_ at _t_ b - 600 s _._\n\nThe following three considerations are needed for selecting an electric motor: (1) limitation of the motor output, (2)\nrotor heating, and (3) type of motor. The limitation of the\nmotor output varies according to the type of motor. The motor\noutput based on the PMSM type was limited to less than a\n100 kN thrust [1]. The limitation of motor output has no influence because the required thrust of 500 N in this study was\nlow enough. In addition, the temperature of the rotor also\nincreases with increasing thrust. Based on the PMSM type, a\ntemperature of approximately 390 K and 300 K at a thrust of\n100 kN and 10 kN, respectively, were found [1]. At a thrust\nof 500 N, it was predicted to be room temperature. Therefore,\nmotor cooling can be excluded assuming that rotor heating\nhad no effect.\n\nThe BLDC motor or PMSM was mainly considered as the\nmotortypeoftheelectricpumpcycle.TheBLDCmotorwasa\nmotor developed to improve the disadvantages of brush wear\nof the DC motor when rotating at high speed. The advantage\nof the BLDC motor was that it can rotate at high speed without brush wear, and it is easy to control because the motor\nspeed can be controlled by the applied voltage. On the other"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00030",
+   "page_start": 11,
+   "page_end": 11,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Table 2** Input parameter values\n\nCommon Electric-pump cycle\n\nPropellant LOX/RP-1 Pump Efficiency 66%/61%\n\nMargin 10% Motor Efficiency 87%\n\nChamber, nozzle Material Stainless steel 301 Power density 0.875 kW/kg\n\nCharacteristic length 1.145 m Rpm 57,940 rpm\n\nTank Material 6061-T6 Aluminum alloy Inverter Efficiency 85%\n\nOxygen tank pressure 3.79 bar Power density 60 kW/kg\n\nBattery Energy efficiency 92.5%\n\nFuel tank pressure 3.10 bar Power density 0.650 kW/kg\n\nEnergy density 325 W·h/kg\n\nUllage 20% Structure margin 20%\n\nPipe Material 6061-T6 Aluminum alloy Gas-generator cycle\n\nTurbine rpm 7000\n\nElbow Material 6061-T6 Aluminum alloy Efficiency 58.2%\n\n<u>Valve</u> <u>Loss coeffcienti</u> <u>0.579</u> <u>Gas-generator</u> <u>Maximum temperature</u> <u>1127 K</u>\n\n**Fig. 9** Commercial battery specifications [34]\n\n**Fig. 8** Commercial motor specifications [33]\n\nhand, there is a disadvantage in that it is impossible to control the speed precisely because of torque ripple. Moreover,\ncontrolling PMSM is complicated because it needs to control not only variable voltage, but also variable frequency to\ncontrol the speed, but it is advantageous for precise speed\ncontrol because there is no torque ripple [32]. Therefore,\nthe characteristics of the motor type must be considered for\nselecting a suitable motor for the system. In this analysis,\nthe BLDC motor was selected considering the diversity of\ncommercial motors. For this reason, the commercial motor\nVishan’s EC2060L-3660 model was chosen. Figure 8 shows\nthe detailed performance, and it was assumed to be driven by\na single motor."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00031",
+   "page_start": 11,
+   "page_end": 11,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "In general, Li-ion batteries are used mainly in electric\nvehicles because of their high power density and energy density. On the other hand, according to the previous study [1], a\nlarge voltage drop was observed within a short discharge time\nin an experiment using a specific commercial battery. Therefore, the Li-polymer battery was finally adopted, which is a\ncandidate for the next-generation batteries. The commercial\nbattery selected was Amicell’s ABLP8474170H320 model.\nFigure 9 shows the detailed performance.\n\nThe rotation speed of the turbine, which is a component\nof the gas-generator cycle, was applied to 7000 rpm with\n\nreference to the A-1 engine data. The turbine efficiency was\napplied to 58.2%, and the maximum inlet temperature limit\nof the turbine was set to the melting point of stainless steel\n301. Figure 10 shows the design schematics of the electricpump cycle and the gas-generator cycle. Both cycles have a\ndifference in the components that drive the pump. Moreover,\nadditional valves to control the flow rate of the gas generator\nare present in the gas generator cycle. These additional valves\nwere modeled using the valve modeling method described in\nSect. 2.1, which is similar to the main valve in the feed line.\n\n**3.3** **Performance Analysis Results**\n\nPerformance analysis was conducted for the electricpump cycle and gas generator cycle under the design point\nand operating conditions. Table 3 shows the difference in\nthe mass estimation results for both systems. The tank, feed\nline, propellant, and total and dry mass of the electric-pump\ncycle were lighter than those of the gas generator cycle. This\nwas caused by the amount of propellant used to drive the\ngas generator because the gas-generator cycle requires more\npropellant than the electric-pump cycle under the same conditions, such as thrust and combustion chamber pressure.\nConsequently, the gas-generator cycle has a heavier tank and\nfeed line because a higher mass flow rate is needed compared"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 4,
+   "formula": 1,
+   "table": 4
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

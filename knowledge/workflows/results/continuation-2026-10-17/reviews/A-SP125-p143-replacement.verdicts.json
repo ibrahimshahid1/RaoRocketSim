@@ -1,0 +1,47 @@
+[
+  {
+    "object_id": "CLM_NTRS_19710019929_0A23FCDE",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original SP-125 PDF p143 (printed134), full original page independently visually inspected. In the Liquid Bipropellant Gas Generators section, total turbine-nozzle throat area 'may be considered' equivalent to gas-generator combustion-chamber throat area. The source then explicitly uses the volume between injector and turbine nozzle throats, with a correction factor allowing for the specific design configuration, in calculating L*. The stored methodological subject, predicate, object, statement and qualifiers preserve the bipropellant gas-generator context and permissive equivalent-area modality. The complete stored quote is verbatim, with only source line breaks. No numerical correction factor is supplied by this passage; no general chamber prescription, chamber-model implementation equivalence or physical validation is inferred.",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "content_sha256": "cf4b0c3516b1f16af0ebd1a243a76d2baec1b60503fbcb614735c50c1b60a348",
+    "content_version": "source-assertion-v1",
+    "reviewer": {
+      "role": "A",
+      "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+    },
+    "evidence": {
+      "document_id": "DOC_NTRS_19710019929",
+      "source_pdf": "propulsion_texts/19710019929.pdf",
+      "pdf_page": 143,
+      "printed_page": "134",
+      "method": "Full original PDF page rendered with pdftoppm and visually re-inspected for every current scientific assertion field.",
+      "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/SP125-143.png",
+      "inspected_science_fields": [
+        "id",
+        "type",
+        "claim_type",
+        "subject",
+        "predicate",
+        "object",
+        "statement",
+        "qualifiers",
+        "document_id",
+        "page",
+        "quote"
+      ],
+      "independence": "Role A verification separate from role F replacement transcription; same Codex model family, no model-diversity claim."
+    },
+    "field_reviews": {
+      "id_type_claim_type": "Identifies a methodological Claim corresponding to the page passage.",
+      "subject_predicate_object": "Accurately summarizes permitted equivalent-area modeling and the stated volume/correction-factor use for bipropellant gas generators.",
+      "statement": "Both sentences match the original passage, preserving may-be-considered modality and design-specific correction context.",
+      "qualifiers": "Bipropellant context and permissive equivalence are preserved. Modeling approximation is a conservative paraphrase of may be considered, not a claimed measured error bound.",
+      "document_id_page": "DOC_NTRS_19710019929 PDF p143/printed134 confirmed.",
+      "quote": "Complete two-sentence passage visually matches original, with normalized line breaks.",
+      "model_links": "No model_ids or comparison_model_ids attached; no chamber-model implementation support implied."
+    },
+    "scope_note": "Bounded source-method statement for bipropellant gas generators only. No numerical configuration correction, general chamber prescription, code equivalence or physical validation."
+  }
+]

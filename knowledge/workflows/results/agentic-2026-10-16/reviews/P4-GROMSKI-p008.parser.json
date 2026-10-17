@@ -1,0 +1,29 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-GROMSKI-p008",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_19cb9a9a0524e205e699fa47",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 11 caption matches.",
+   "evidence": {
+    "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_67bcf74ce9e9f7c4eb949a8f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 10 caption matches.",
+   "evidence": {
+    "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  }
+ ]
+}

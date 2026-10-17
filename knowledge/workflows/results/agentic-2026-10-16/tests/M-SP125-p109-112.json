@@ -1,0 +1,32 @@
+{
+ "packet": "M-SP125-p109-112",
+ "at": "2026-10-17T01:12:51.387083+00:00",
+ "tested_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 22%]\n........................................................................ [ 45%]\n........................................................................ [ 68%]\n........................................................................ [ 91%]\n............................                                             [100%]\n316 passed in 6.04s\n"
+ },
+ "replay": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/M-SP125-p109-112.extraction.jsonl",
+   "exit_code": 0,
+   "already_banked": true
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/M-SP125-p109-112.parser.json",
+   "idempotent": true
+  }
+ ],
+ "integrity": {
+  "nodes": 5647,
+  "edges": 7234,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ }
+}

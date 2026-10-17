@@ -1,0 +1,46 @@
+{
+ "at": "2026-10-17T17:59:44.409763+00:00",
+ "packet": "V-SP125-p143",
+ "queue": {
+  "packets": 101,
+  "by_state": {
+   "QUEUED": 38,
+   "DOCLING_RUNNING": 0,
+   "RAW_CAPTURED": 0,
+   "CANDIDATES_PREPARED": 0,
+   "OPUS_SOURCE_REVIEW": 0,
+   "VERIFIED": 0,
+   "REJECTED": 0,
+   "BLOCKED": 0,
+   "GRAPH_INTEGRATED": 0,
+   "TESTED": 0,
+   "FINAL_AUDIT_ELIGIBLE": 63
+  },
+  "reviewed_object_outcomes": {
+   "confirmed": 49,
+   "refuted": 4,
+   "uncertain": 0,
+   "extracted_objects": 358,
+   "model_reviews": 9
+  },
+  "note": "Object outcomes come from reviewed verdict files; a packet label alone is not verification."
+ },
+ "tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 15%]\n........................................................................ [ 30%]\n........................................................................ [ 46%]\n........................................................................ [ 61%]\n........................................................................ [ 77%]\n........................................................................ [ 92%]\n...................................                                      [100%]\n467 passed in 13.16s\n"
+ },
+ "graph": {
+  "nodes": 5728,
+  "edges": 7266,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "session_replay_success": true,
+ "manual_replay_success": true,
+ "source_claim_replacement": "CLM_NTRS_19710019929_0A23FCDE",
+ "new_model_reviews": 0,
+ "engineering_suites": "NOT_RUN"
+}

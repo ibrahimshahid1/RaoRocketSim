@@ -1,0 +1,1076 @@
+{
+ "packet": "R-SP125-p098-099",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  98,
+  99
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 98,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0098.png",
+   "sha256": "490690f7ba64d9ca92e9eea176d3f296c725e09bb1d79e4ae2e869f7381ea8d6",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 99,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0099.png",
+   "sha256": "ef69f31705d980947eb96532049556523f744ed4113a215d17859152fa1e304e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_6e00c6d3750238f888be6a88",
+  "ENR_e7e8ff2d5ff9e6d09bb5ae37"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_553de187ac7be26d886f30a0",
+   "kind": "figure",
+   "pages": [
+    98
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 257.1059673323062,
+     "t": 57.72705078125,
+     "r": 398.18524263822115,
+     "b": 37.96954345703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+   "raw_sha256": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9e0bd34fa51b2d794c395845",
+   "kind": "figure",
+   "pages": [
+    98
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 272.88646113568944,
+     "t": 747.2488098144531,
+     "r": 413.7840646017671,
+     "b": 723.8277359008789,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+   "raw_sha256": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f2b84e486ed6fe2dbb081679",
+   "kind": "figure",
+   "pages": [
+    98
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 4-10.—Conical nozzle contour."
+   ],
+   "bbox": [
+    {
+     "l": 340.7394916201028,
+     "t": 209.314697265625,
+     "r": 553.3058131680903,
+     "b": 98.9398193359375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/20\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+   "raw_sha256": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ddb7b019c43229b989eb20f9",
+   "kind": "formula",
+   "pages": [
+    98
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 133.33333333333334,
+     "t": 619.3333333333333,
+     "r": 322.0,
+     "b": 610.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T o t a l a r e a = 2 L _ { c } \\sqrt { \\pi } \\epsilon _ { c } A _ { t } + \\csc \\theta ( \\epsilon _ { c } - 1 ) A _ { t } \\left ( 4 \\cdot 6 \\right )",
+   "original_text": "Total area=2LeVmecAt+csc Weg - 1)Az (4-6)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+   "raw_sha256": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0207dba89691212826663597",
+   "kind": "figure",
+   "pages": [
+    99
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 219.7546849946617,
+     "t": 766.096981048584,
+     "r": 342.62294288148274,
+     "b": 738.0098838806152,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_6e00c6d3750238f888be6a88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+   "raw_sha256": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2364822bd4bac5686e9ed750",
+   "kind": "figure",
+   "pages": [
+    99
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 4-11.—Bell nozzle contour."
+   ],
+   "bbox": [
+    {
+     "l": 292.2049546002327,
+     "t": 693.6685562133789,
+     "r": 496.8683378139065,
+     "b": 578.1825866699219,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/12\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_6e00c6d3750238f888be6a88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+   "raw_sha256": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cf0d75098d423ea2cdadea27",
+   "kind": "figure",
+   "pages": [
+    99
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 214.75640879130015,
+     "t": 72.50592041015625,
+     "r": 352.60959200944916,
+     "b": 50.62677001953125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_6e00c6d3750238f888be6a88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+   "raw_sha256": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_56b12192ceb007e0860f237a",
+   "kind": "formula",
+   "pages": [
+    99
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 115.33333333333334,
+     "t": 641.0,
+     "r": 271.66666666666663,
+     "b": 619.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\_ _ { \\mathbf n } = \\frac { R _ { t } ( \\sqrt { \\epsilon - 1 } ) + R ( s e c \\ a - 1 ) } { \\tan \\ a }",
+   "original_text": "_ Ri(\\fe1)+ R(sec a-1) tan a (4-7) n",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_6e00c6d3750238f888be6a88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+   "raw_sha256": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6820d6abc6266e72d9b2f948",
+   "kind": "formula",
+   "pages": [
+    99
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 136.66666666666669,
+     "t": 429.0,
+     "r": 272.0,
+     "b": 419.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\lambda = \\frac { 1 } { \\frac { 1 } { 3 } } ( 1 + \\cos \\alpha )",
+   "original_text": "A= 3(1+cos a) (4-8)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_6e00c6d3750238f888be6a88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+   "raw_sha256": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19710019929_0BBBD3E9",
+   "store": "equations",
+   "type": "Equation",
+   "page": 98,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 4-6",
+   "equation_number": "4-6",
+   "form": "Total area = 2*L_c*sqrt(pi*eps_c*A_t) + csc(theta)*(eps_c - 1)*A_t",
+   "statement": null,
+   "quote": "chamber walls excluding injector face can be approximated by the following expression",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Total area",
+     "meaning": "chamber wall surface area",
+     "units": "in^2",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "L_c",
+     "meaning": "cylindrical length",
+     "units": "in",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eps_c",
+     "meaning": "contraction ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_t",
+     "meaning": "throat area",
+     "units": "in^2",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "theta",
+     "meaning": "convergent half angle",
+     "units": "rad",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_ddb7b019c43229b989eb20f9"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Total area",
+      "L_c",
+      "eps_c",
+      "A_t",
+      "theta"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_16E1DC3A",
+   "store": "equations",
+   "type": "Equation",
+   "page": 99,
+   "is_target": true,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "SP-125 Eq. 4-7",
+   "equation_number": "4-7",
+   "form": "_<u>R</u>_ _<u>t</u>_ _<u>(Vc-1)</u>_ <u>+</u> _<u>R(sec</u>_ <u>a</u> <u>-1)</u> Ln (4-7) <u>tan a</u>",
+   "statement": null,
+   "quote": "_<u>R</u>_ _<u>t</u>_ _<u>(Vc-1)</u>_ <u>+</u> _<u>R(sec</u>_ <u>a</u> <u>-1)</u> Ln (4-7) <u>tan a</u>",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Ln",
+     "meaning": "length of conical nozzle (or convergent cone) section",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Rt",
+     "meaning": "throat radius",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_RT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "R",
+     "meaning": "radius of the circular-arc throat contour (0.5 to 1.5 Rt)",
+     "units": "in",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_MR",
+        "QTY_RGAS"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "a",
+     "meaning": "cone half angle (divergent 12-18 deg; convergent 20-45 deg)",
+     "units": "deg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "AMBIGUOUS_SYMBOL",
+       "quantity_candidates": [
+        "QTY_SOUND",
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "eps (rendered 'c')",
+     "meaning": "area ratio (expansion ratio for the divergent cone; contraction ratio when applied to the convergent cone)",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "conical nozzle contour with circular-arc throat"
+   ],
+   "validity": [
+    "throat arc radius R from 0.5 to 1.5 times throat radius",
+    "convergent cone half angle 20 to 45 deg",
+    "divergent cone half angle approximately 12 to 18 deg"
+   ],
+   "extraction_note": "OCR is garbled: the radical sign renders as 'V' and the area-ratio epsilon as 'c'. The numerator reads Rt(sqrt(eps)-1) + R(sec a - 1) over tan a. Structure is confirmed by the worked instance on PDF p. 104: '12.45 (v1.6 -1) + 18.68 (sec 20 deg - 1) / tan 20 deg = 12.4 in' with Rt = 12.45 in, R = 1.5 Rt = 18.68 in, eps_c = 1.6, a = 20 deg.",
+   "same_page_formula_candidates": [
+    "CAND_56b12192ceb007e0860f237a",
+    "CAND_6820d6abc6266e72d9b2f948"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "Rt",
+      "eps (rendered 'c')"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Ln",
+      "Rt",
+      "R",
+      "a",
+      "eps (rendered 'c')"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_2AD5D2F0",
+   "store": "equations",
+   "type": "Equation",
+   "page": 99,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 4-7",
+   "equation_number": "4-7",
+   "form": "L_n = [R_t*(sqrt(eps) - 1) + R*(sec(alpha) - 1)]/tan(alpha)",
+   "statement": null,
+   "quote": "The length of the conical nozzle section can be expressed by the equation",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "L_n",
+     "meaning": "conical nozzle length",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "R_t",
+     "meaning": "throat radius",
+     "units": "in",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eps",
+     "meaning": "expansion area ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_EPS"
+     ]
+    },
+    {
+     "symbol": "R",
+     "meaning": "throat arc radius",
+     "units": "in",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "divergent half angle",
+     "units": "rad",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_56b12192ceb007e0860f237a",
+    "CAND_6820d6abc6266e72d9b2f948"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "L_n",
+      "R_t",
+      "R",
+      "alpha"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_2C0051B3",
+   "store": "equations",
+   "type": "Equation",
+   "page": 99,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 4-8",
+   "equation_number": "4-8",
+   "form": "lambda = (1/2)*(1 + cos(alpha))",
+   "statement": null,
+   "quote": "is applied for the calculation of the exit gas momentum",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "lambda",
+     "meaning": "divergence correction factor",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "alpha",
+     "meaning": "conical half angle",
+     "units": "rad",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_56b12192ceb007e0860f237a",
+    "CAND_6820d6abc6266e72d9b2f948"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "lambda",
+      "alpha"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_7A8070BC",
+   "store": "equations",
+   "type": "Equation",
+   "page": 98,
+   "is_target": true,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "SP-125 Eq. 4-6",
+   "equation_number": "4-6",
+   "form": "Total area = 2LcY _TTfcAt_ + csc _e«(c_   - _l)Ae_",
+   "statement": null,
+   "quote": "chamber walls excluding injector face can be approximated by the following expression: Total area = 2LcY _TTfcAt_ + csc _e«(c_   - _l)Ae_ (4-6)",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Lc",
+     "meaning": "length of cylindrical chamber section",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eps_c (rendered 'fc'/'(c')",
+     "meaning": "chamber contraction area ratio Ac/At",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "throat area",
+     "units": "",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_AT"
+     ]
+    },
+    {
+     "symbol": "theta (rendered 'e')",
+     "meaning": "half angle of the convergent cone",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "cylindrical chamber with straight convergent cone; injector face excluded"
+   ],
+   "validity": [],
+   "extraction_note": "OCR heavily garbled. Readable elements: a cylinder term 2 Lc sqrt(pi eps_c At) and a convergent-cone term csc(theta) (eps_c - 1) At, with theta the convergent half angle. Transcribed verbatim; not repaired.",
+   "same_page_formula_candidates": [
+    "CAND_ddb7b019c43229b989eb20f9"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "eps_c (rendered 'fc'/'(c')",
+      "theta (rendered 'e')"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Lc",
+      "eps_c (rendered 'fc'/'(c')",
+      "theta (rendered 'e')"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_74C39084",
+   "store": "claims",
+   "type": "Claim",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Theoretically the throat is just the plane of minimum area; in practice a well-rounded throat section is employed, and only the exit plane uses a sharp edge.",
+   "quote": "Theoretically, the nozzle throat is simply the unique plane of minimum cross-section area. In practice, a wellrounded throat section is employed.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_752872E2",
+   "store": "claims",
+   "type": "Claim",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In design practice any abrupt change or discontinuity in the nozzle wall contour should be avoided to eliminate the possibility of shock waves or turbulence losses.",
+   "quote": "In actual design practice, any abrupt change or discontinuity in the nozzle wall contour should be avoided to eliminate the possibility of shock waves or turbulence losses.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_E1995D1A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Because gas velocity in the converging section is low, any smooth, well-rounded convergent nozzle section will have very low energy losses; the divergent contour is what matters for performance.",
+   "quote": "Since the flow velocity of the gases in the converging section of rocket nozzle is relatively low, any smooth and wellrounded convergent nozzle section will have very low energy losses.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_F38ABA9F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For a typical conical nozzle the throat section is a circular arc with radius R from 0.5 to 1.5 times the throat radius, and the convergent cone half angle can range from 20 to 45 degrees.",
+   "quote": "The nozzle throat section has the contour of a circular arc with a radius _R_ ranging from 0.5 to 1.5 times the throat radius _Re._ The half angle of the nozzle convergent cone section can range from 20° to 45°.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_FC59C93D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 99,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "SP-125 states the conical divergent half angle varies from about 12 to 18 deg, 15 deg having become almost a standard compromise on weight, length and performance; with lambda = 0.983 at 15 deg the theoretical vacuum thrust coefficient is 98.3 percent of the ideal.",
+   "quote": "will be 98.3 percent of the ideal nozzle thrust coefficient",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_E301D3E4",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Convergent cone half angle = 20 to 45 deg",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "The half angle of the nozzle convergent cone section can range from 20° to 45°.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_F813B4B9",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Throat arc radius ratio R/Rt (conical nozzle) = 0.5 to 1.5 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "The nozzle throat section has the contour of a circular arc with a radius _R_ ranging from 0.5 to 1.5 times the throat radius _Re._",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_1ED3FFE2",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 99,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Divergent cone half angle varies from approximately 12 to 18 degrees; 15 degrees is nearly standard.",
+   "quote": "divergent cone half angle a varies from approximately 12° to 18°. The length of the conical nozzle section can be expressed by the equation",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 99
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_7E4E61AC",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 98,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Conical-nozzle throat arc radius is 0.5 to 1.5 times the throat radius; convergent cone half angle is 20 to 45 degrees.",
+   "quote": "The nozzle throat section has the contour of a circular arc with a radius _R_ ranging from 0.5 to 1.5 times the throat radius _Re._ The half angle of the nozzle convergent cone section can range from 20° to 45°.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 98
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00229",
+   "page_start": 98,
+   "page_end": 98,
+   "section": "MAIN PROPELLANT",
+   "text": "&'=\"t~\n\nDESIGN OF THRUST CHAMBERS AND OTHER COMBUSTION DEVICES 89\n\nThe total surface area of the combustion\nchamber walls excluding injector face can be\napproximated by the following expression:\n\nTotal area = 2LcY _TTfcAt_ + csc _e«(c_   - _l)Ae_ (4-6)\n\nNozzle Expansion Area Ratio\n\nIt was learned earlier that with all other\nparameters fixed, in particular chamber pressure,\nthere is only one optimum nozzle expansion area\nratio for a given altitude or, more specifically,\nambient pressure. Except for those systems\nwhich start in vacuum, ambient pressure will\nhave to be considered. This is especially true\nfor boosters which start at or near sea-level\nconditions.\n\nIt is the ultimate purpose of a rocket engine\nto lift vehicles to altitudes. Inherently, then,\nambient pressure will not be a constant (except\nfor high-altitude starts, as mentioned). It is,\ntherefore, extremely important for the designer to\nknow the trajectory of the vehicle to be propelled\nor, more specifically, its altitude-versus-time\ncharacteristics. With this information, the designer is in a position to make a first, optimizing\nselection of a nozzle expansion area ratio, for\nbest results throughout the entire trajectory. As\nshown earlier, area ratio will be truly optimum\nfor only one speCific altitude. The optimization\nfor ambient pressure then is essentially an\naveraging process.\n\nOther considerations usually cause the designer to deviate from the \"paper optimum\" for\nthe nozzle expansion area ratio. Some of the\nmost common are: weight, size, ease of manufacturing, handling, and cooling (heat transfer)\nconsiderations."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00230",
+   "page_start": 98,
+   "page_end": 98,
+   "section": "MAIN PROPELLANT",
+   "text": "Nozzle Shape\n\nMost rocket nozzles are of the convergingdiverging De Laval type. Since the flow velocity\nof the gases in the converging section of rocket\nnozzle is relatively low, any smooth and wellrounded convergent nozzle section will have\nvery low energy losses. By contrast, the contour\nof the diverging nozzle section is very important\nto performance, because of the very high flow\nvelocities involved.\n\nThe selection of an optimum nozzle shape for\na given expansion area ratio is generally influenced by the following design considerations\nand goals:\n\n(1) Uniform parallel axial gas flow at the\n\nnozzle exit for maximum momentum\nvector\n(2) Minimum separation and turbulence losses\n\nwithin the nozzle\n(3) Shortest possible nozzle length for mini\n\nmum space envelope, weight, wall friction losses, and cooling requirements\n(4) Ease of manufacturing\nIn actual design practice, any abrupt change or\ndiscontinuity in the nozzle wall contour should\nbe avoided to eliminate the possibility of shock\nwaves or turbulence losses. Theoretically, the\nnozzle throat is simply the unique plane of minimum cross-section area. In practice, a wellrounded throat section is employed. Only at the\nnozzle exit plane is a sharp edge used because\na rounded one would permit overexpansion and\nflow separation.\n\n1. Conical Nozzle\n\nIn early rocket engine applications, the conical nozzle, which had proved satisfactory in\nmost respects, was used almost exclusively.\nThe advantages of a conical nozzle are ease of\nmanufacturing and flexibility of converting an\nexisting design to higher or lower expansion area\nratios without major redesign of the nozzle contour."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00231",
+   "page_start": 98,
+   "page_end": 98,
+   "section": "MAIN PROPELLANT",
+   "text": "The configuration of a typical conical nozzle\nis shown in figure 4-10. The nozzle throat section has the contour of a circular arc with a\nradius _R_ ranging from 0.5 to 1.5 times the throat\nradius _Re._ The half angle of the nozzle convergent cone section can range from 20° to 45°. The\n\nJ~.\n\n4<---=-_-=-_--c. ----Tl-...~ THROAT i\n\n_Figure_ _4-10.-Conical nozzle_ _contour._"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00232",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "MAIN PROPELLANT",
+   "text": "90 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\ndivergent cone half angle a varies from approximately 12° to 18°. The length of the conical\nnozzle section can be expressed by the equation\n\n_<u>R</u>_ _<u>t</u>_ _<u>(Vc-1)</u>_ <u>+</u> _<u>R(sec</u>_ <u>a</u> <u>-1)</u>\nLn (4-7)\n<u>tan a</u>\n\nThe conical nozzle with a 15° divergent half\nangle has become almost a standard. as it is a\ngood compromise on the basis of weight. length,\nand performance.\n\nSince in a conical nozzle certain performance\nlosses occur as a result of the non axial component of the exhaust gas velocity, a correction\nfactor A is applied for the calculation of the exit\ngas momentum. This factor or thrust efficiency\nis the ratio between the exit gas momentum of\nthe conical nozzle and that of an ideal nozzle\nwith uniformly parallel axial gas flow. The\nvalue of A can be expressed by the following\nequation:\n\nA=i(ltcosa) (4-8)\n\nwhere a = half angle of the conical nozzle.\n\nFor an ideal nozzle, A would be unity. For a\nconical nozzle with a = 15° and A = 0.983, the exit\ngas momentum or the exit velocity will be 98.3\npercent of the ideal nozzle exit velocity calculated by equation (1-18). The value of the vacuum thrust coefficient of a nozzle is in direct\nproportion to the thrust generated by the nozzle,\nor to the nozzle exit gas velocity. Therefore,\nthe theoretical vacuum thrust coefficient (neglecting friction and other flow losses) of a conical\nnozzle with _15°_ half angle will be 98.3 percent\nof the ideal nozzle thrust coefficient calculated\nby equation (l-33a)."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00233",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "MAIN PROPELLANT",
+   "text": "2. Bell Nozzle\n\nFor increased performance and shorter length.\nbell-shaped nozzles have been developed. This\nnozzle design employs a fast expansion or radial\nflow section in the initial divergent region,\nwhich then leads over to a uniform, axially\ndirected flow at the nozzle exit. The wall contour is changed gradually enough so that oblique\nshocks will not form.\n\nFigure 4-11 shows the contour of a bell nozzle. A circular arc of selected radius _R_ _J_ is\n\n**[XIT**\n1-1.----- L, ______ P...,LANE\n\nI\n**i** **THROAT**\n\nI I\n\n**END** '\n\"\"'NT 1\n\n,\n\n~ jfR,\n**.-T** ..\nR f i r -' ~ **RIGHT CHARACT[NSTIC** I\nI' 1 \\ **kERIIIEL** **(TN_O)** **p.** **Ii'** **INK)**,\n_L_ -10-------------- ; .' ----~-~ NOZZLE\n\n_Figure_ 4-11. _-Bell_ _nozzle_ _contour._\n\nchosen for the nozzle contour MT upstream of the\nthroat. Contour TNE is the diverging portion of\nthe nozzle. The initial expansion occurs along\ncontour TN; contour NE turns the flow over to a\ndirection nearer to axial. For design convenience, the contour TN is also a circular arc. with\na smaller radius _R_ _2 •_\n\nFor those familiar with compressible flow\ntheories. it is noted that, using transonic flow\nanalyses, a constant-Mach-number line TO can\nbe defined at the throat. Given the flow condition along TO and the solid boundary TN, a\nkernel flow field TNKO can be generated by the\nmethod of characteristics developed in gas dynamics. The kernel of the rocket nozzle contour\nis defined as that portion of the supersonic flow\nfield determined entirely by throat conditions.\nThe last right characteristic line NK of kernel\nTNKO, and thus the loeation of the point N along\ncontour TN, is to be determined by specific\ndesign criteria."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00234",
+   "page_start": 99,
+   "page_end": 99,
+   "section": "MAIN PROPELLANT",
+   "text": "The location of the end point E along contour\nNE is defined by the given nozzle expansion\narea ratio and nozzle length (distance between\nthroat and exit plane). Then the right characteristic line NK can be determined by satisfying the\nfollowing conditions concurrently:\n\n(1) A control surface PE can be generated\n\nbetween the point E and a selected point\nP along the line NK\n(2) Mass now across PE equals the mass\n\nnow across NP\n(3) Maximum thrust by the nozzle is attained.\nBy selecting points p', p\", etc .• along line\nNK, a series of control surfaces P'E'. P\" E\",\netc .. can be generated to define points E I, E\",\netc .. along the contour NE. Calculations for the\nnozzle contour can be effectively performed by a\ncomputer."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 6,
+   "formula": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 4,
+  "objects_with_anchor_problems": 0
+ }
+}

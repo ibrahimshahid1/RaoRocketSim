@@ -1,0 +1,402 @@
+{
+ "packet": "P4-PIZZ-p005-007",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  5,
+  7
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0005.png",
+   "sha256": "00ebc1af1f8404c2077807690946ea2a9e652603b8bd2e5b74a0d0896afc70c1",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0006.png",
+   "sha256": "bf9532e80e76173f35a3307a9f9a51567bfebb5f2e111b0d59357b487a57dc61",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 7,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0007.png",
+   "sha256": "eb24c6ad3e220c00e8791ec874ceb905b92e9929c6b9c2286b4561347b371dcf",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_0384f829ddfd38411e555224",
+  "ENR_130f1411ea49e279e2832fb6",
+  "ENR_e48f8d02fbed9d12f5529d2b"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_5545b342900e71c2eed8a1af",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 177.50701753999996,
+     "t": 243.6642802,
+     "r": 430.3973156399999,
+     "b": 215.7805836177406,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "u _ { m h } ( x ) = \\frac { \\dot { m } } { \\int _ { 0 } ^ { h ( x ) } \\rho ( x , y ) F ( y ) b ( x , y ) d y }",
+   "original_text": "umhðxÞ ¼ _m R hðxÞ 0 qðx; yÞFðyÞbðx; yÞdy ð4Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e48f8d02fbed9d12f5529d2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p6-6-16213a7b06bd0804239f85563a6111efa243397216cc7adc23523ad0b573f114.json",
+   "raw_sha256": "68e56b0312dc505d1e48c090fc14374e9de4f5f7265e920de463c314f6376c26",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6e5935e00168d3c0083273aa",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 203.47180408000003,
+     "t": 564.7186264200001,
+     "r": 430.3942883799999,
+     "b": 554.698014958159,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "u ( x , y ) = u _ { m h } ( x ) \\cdot F ( y )",
+   "original_text": "uðx; yÞ ¼ umhðxÞ \u0001 FðyÞ ð1Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e48f8d02fbed9d12f5529d2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p6-6-16213a7b06bd0804239f85563a6111efa243397216cc7adc23523ad0b573f114.json",
+   "raw_sha256": "68e56b0312dc505d1e48c090fc14374e9de4f5f7265e920de463c314f6376c26",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_93f99260d86f813b82ebefc5",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/17",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 141.16525178,
+     "t": 111.34682138000005,
+     "r": 430.39369727999997,
+     "b": 85.94885078451887,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { d } { d x } \\left [ \\iint _ { A } ( \\rho u ^ { 2 } + p ) d A \\right ] d x - p \\frac { d A } { d x } d x = - \\iint _ { A _ { w } } \\tau _ { w } d A _ { w }",
+   "original_text": "d dx ZZ A qu 2 þ p \u0000 \u0001 dA \u0014 \u0015 dx \u0000 p dA dx dx ¼ \u0000 Z Z Aw swdAw ð5Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e48f8d02fbed9d12f5529d2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p6-6-16213a7b06bd0804239f85563a6111efa243397216cc7adc23523ad0b573f114.json",
+   "raw_sha256": "68e56b0312dc505d1e48c090fc14374e9de4f5f7265e920de463c314f6376c26",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b3ac1011c00b5b3bf6f7733c",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 201.5454637599999,
+     "t": 304.04419416,
+     "r": 430.39267463999994,
+     "b": 280.24771495815895,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\dot { m } = \\iint _ { A } \\rho u d A = \\text {const}",
+   "original_text": "_m ¼ Z Z A qudA ¼ const ð3Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e48f8d02fbed9d12f5529d2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p6-6-16213a7b06bd0804239f85563a6111efa243397216cc7adc23523ad0b573f114.json",
+   "raw_sha256": "68e56b0312dc505d1e48c090fc14374e9de4f5f7265e920de463c314f6376c26",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fc592561519cc375aa992974",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 214.69595178,
+     "t": 379.44577272,
+     "r": 430.3933595799999,
+     "b": 355.64921495815895,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { d } { d x } \\iint _ { A } \\rho u d A = 0",
+   "original_text": "d dx Z Z A qudA ¼ 0 ð2Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_e48f8d02fbed9d12f5529d2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p6-6-16213a7b06bd0804239f85563a6111efa243397216cc7adc23523ad0b573f114.json",
+   "raw_sha256": "68e56b0312dc505d1e48c090fc14374e9de4f5f7265e920de463c314f6376c26",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1582db1d165e929d9e926ef4",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 228.13197721999998,
+     "t": 98.73110059999999,
+     "r": 432.26387109999996,
+     "b": 85.73408789815903,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "f _ { w } = f _ { w } ^ { 0 } \\cdot C _ { f }",
+   "original_text": "fw ¼ f 0 w \u0001 Cf ð11Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_92b99b10ee2e94d46de307f1",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 214.01532361999998,
+     "t": 456.3056062,
+     "r": 432.26415364,
+     "b": 432.41141495815896,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "u _ { b } = \\frac { 1 } { \\dot { m } } \\iint _ { A } \\rho u ^ { 2 } d A",
+   "original_text": "ub ¼ 1 _m Z Z A qu 2 dA ð7Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_97f0080d56d943174a3f0679",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 181.64360585999998,
+     "t": 311.7387062,
+     "r": 432.26452909999995,
+     "b": 289.2743229147281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { w } ( x , y ) = \\frac { 1 } { 8 } \\rho ( x , y ) u ^ { 2 } ( x , y ) f _ { w } ( x , y )",
+   "original_text": "swðx; yÞ ¼ 1 8 qðx; yÞu 2 ðx; yÞfwðx; yÞ ð9Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ab7965af1d2325981ed49d7b",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 163.39051606000004,
+     "t": 397.7119146,
+     "r": 432.26606735999985,
+     "b": 371.5729158577406,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "u _ { b } ( x ) = \\frac { u _ { m h } ^ { 2 } ( x ) } { \\dot { m } } \\int _ { 0 } ^ { h ( x ) } \\rho ( x , y ) F ( y ) ^ { 2 } b ( x , y ) d y",
+   "original_text": "ubðxÞ ¼ u 2 mh ðxÞ _m Z hðxÞ 0 qðx; yÞFðyÞ 2 bðx; yÞdy ð8Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_efc3a6ae898b869963db96fd",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 113.27372249999993,
+     "t": 241.79508420000002,
+     "r": 432.26388838,
+     "b": 219.03182291472808,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { w } ( x , 0 ) = \\frac { 1 } { 8 } \\frac { \\dot { m } \\cdot u _ { b } ( x ) } { A } f _ { w } ( x , 0 ) \\quad \\text {and} \\quad \\tau _ { w } ( x , h ) = \\frac { 1 } { 8 } \\frac { \\dot { m } \\cdot u _ { b } ( x ) } { A } f _ { w } ( x , h )",
+   "original_text": "swðx; 0Þ ¼ 1 8 _m \u0001 ubðxÞ A fwðx; 0Þ and swðx; hÞ ¼ 1 8 _m \u0001 ubðxÞ A fwðx; hÞ ð10Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f481fe591a46463db703b4cf",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 111.23131353999997,
+     "t": 574.0835146000001,
+     "r": 432.26459728,
+     "b": 505.1977960577406,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left ( \\dot { m } \\frac { d u _ { b } } { d x } + A ( x ) \\frac { d p } { d x } \\right ) d x & = - \\underbrace { 2 \\, d x \\int _ { 0 } ^ { h ( x ) } \\tau _ { w } ( x , y ) d y } _ { \\ r i b f i r i c t } - \\underbrace { b ( x , 0 ) \\tau _ { w } ( x , 0 ) d x } _ { \\text {bottom base friction} } \\\\ & - \\underbrace { b ( x , h ) \\tau _ { w } ( x , h ) d x } _ { \\text {top base friction} }",
+   "original_text": "_m dub dx þ AðxÞ dp dx \u0012 \u0013 dx ¼\u0000 2dx Z hðxÞ 0 swðx; yÞdy |fflfflfflfflfflfflfflfflfflfflfflfflfflfflffl{zfflfflfflfflfflfflfflfflfflfflfflfflfflfflffl} rib friction \u0000 bðx; 0Þswðx; 0Þdx |fflfflfflfflfflfflfflfflfflfflfflfflffl{zfflfflfflfflfflfflfflfflfflfflfflfflffl} bottom base friction \u0000 bðx; hÞswðx; hÞdx |fflfflfflfflfflfflfflfflfflfflfflfflffl{zfflfflfflfflfflfflfflfflfflfflfflfflffl} top base friction ð6Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0384f829ddfd38411e555224",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p7-7-50ac48758db077bed98cbb1041107a3d12d650f61e379336aa018840508d52e3.json",
+   "raw_sha256": "70e51841bb32086f682a7fe808e7489a77854938490c07ad3b086f8c4f6e454c",
+   "mechanical_flags": [
+    "REPEATED_GLYPH_RUN_IN_ORIGINAL_TEXT"
+   ]
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00007",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "",
+   "text": "4 M. PIZZARELLI ET AL.\n\ncoupling with wall thermal stratification and hot-gas flow, confirmed that\none-dimensional approximation introduces large errors in the prediction capability\nfor such flows. Moreover, temperature stratification through solid walls enhances\nthe uncertainties of one-dimensional approximation.\n\nThe objective of the present study is to overcome the above limitations by developing a computational tool that is able to describe the coupled hot-gas=wall=coolant\nenvironment that occurs in most liquid rocket engines, and to provide a quick and\nreliable prediction of thermal stratification phenomena in cooling channels. This goal\nis achieved by an extension of one-dimensional methods still widely relying on empirical relationships. In particular, the proposed model, inspired by the approaches introduced in references [25–27], allows one to compute the radial stratification of both the\nwall and the coolant temperatures by considering a quasi-2-D flow evolution through\nthe cooling channels, which is coupled to the radial heat transfer in the rib. The\nquasi-2-D model includes a nonuniform velocity profile in the coolant governing\nequations to describe with reasonable precision the wall heat flux distribution in the\nradial direction. The model, aiming to study any fluid evolving through cooling channels, considers a generic equation of state and thus the coolant fluid can be either a gas,\na supercritical fluid, or a liquid. The proposed model is validated with reference solutions of supercritical methane in a straight cooling channel with different aspect ratios,\nwhich are obtained with a CFD solver developed in references [23,24,28–30]. The\nCFD solver, which is able to accurately describe the coolant flow in rocket engines,\nhas been previously validated against experimental data relevant to supercritical nitrogen [24] and near-critical hydrogen [31] in heated tubes. The comparison with CFD\nsolutions provides thorough validation of the quasi-2-D model in terms of bulk variables evolution along the channel path, as well as local variables, distribution in the\ncross-section. A further validation, which also proves the capability of the proposed\nmodel to study the cooling of an actual liquid rocket engine thrust chamber, is carried\nout by the analysis of the European Vulcain engine thrust chamber including hot-gas\nexpansion, wall heat conduction, and regenerative cooling in high aspect ratio cooling\nchannels. The available data of maximum wall temperature and coolant pressure drop\nare compared with the obtained results."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00008",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "",
+   "text": "2. GOVERNING EQUATIONS FOR THE COOLANT FLOW\n\nThe cooling channel flow model is developed by using the steady-state conservation laws of mass, momentum, and energy, taking into account the effects of heat\ntransfer and friction. In particular, the mass and momentum governing equations\nare written in a one-dimensional form, whereas a simplified arrangement of the 2-D\nenergy equation is considered. In fact, in the case of a high aspect ratio cooling channel\nwith asymmetric heating, the thermal stratification that arises is strongly pronounced\nin the radial direction [6,19–21], and thus the fluid energy equation can be reduced to a\n2-D balance in the streamwise direction x and radial direction y (Figure 1). For that\nreason, this flow model is referred to as quasi-2-D. Moreover, to accurately describe\nthe wall heat flux, the axial component of the fluid velocity u and the wall temperature\nTw are assumed to vary along the y direction. Similar to 1-D analysis, the transverse\nvelocity components v and w (radial y, and circumferential z directions, respectively)\nare neglected because they are much smaller than u. According to the above"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00009",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 5\n\nhypotheses, the fluid pressure only depends on the streamwise coordinate position\np ¼ p(x), whereas the fluid temperature and axial velocity and wall temperature are left\nto vary in a radial direction: T ¼ T(x, y), u ¼ u(x, y), and Tw ¼ Tw(x, y). As a consequence, the derived thermodynamic properties, such as density and enthalpy, and\nthe fluid molecular properties depend on both x and y. Finally, it is assumed that\nthe velocity dependence on x and y can be expressed by separation of variables as\n\nuðx; yÞ ¼ umhðxÞ � F ðyÞ ð1Þ\n\nwhere the function umh(x) represents the velocity at channel middle height, while the\nfunction F(y) represents the shape of the velocity profile, which is also assumed to\ndepend on the temperature field.\n\nThe goal of the proposed quasi-2-D flow model is to describe HARCC with\nmore detail than the 1-D model because of the energy balance discretization in the\nradial direction. On the contrary, the standard 1-D flow model takes into account\nonly a single fluid temperature in a channel cross-section, thus failing in the description of flow-fields with strong temperature differences.\n\n2.1. Mass Equation\n\nThe steady-state integral mass conservation equation through the channel\ncross-sections is\n\n<u>d</u>\ndx\n\nZZA\n\nqudA ¼ 0 ð2Þ\n\nwhere q is the coolant density, A is the cross-section area, and x is the axial direction.\nThe above equation simply states that the mass flow rate **m** _ is constant along the\naxial direction; that is,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00010",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "",
+   "text": "**m** _ ¼\n\nZZ\n\nqudA ¼ const ð3Þ\n\nA\n\nApplying the quasi-2-D flow model in the mass equation, Eq. (3), it is possible\nto express the middle height velocity as\n\n**<u>m</u>** <u>_</u>\numhðxÞ ¼ ~~R~~ hðxÞ\n\n0 qðx; yÞF ðyÞbðx; yÞdy\n\nð4Þ\n\nThe mass conservation equation is thus used to evaluate the value of umh if the\ndensity and the temperature fields in the channel section are known.\n\n2.2. Momentum Equation\n\nThe steady-state integral momentum equation through the channel\ncross-sections is\n\nswdAw ð5Þ\n\n�ZZ\n   -   qu <sup>2</sup> þ p dA dx � p <sup><u>dA</u></sup>\n\nZZA\n\nZZ\n\nAw\n\ndx <sup>dx ¼ �</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00011",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "",
+   "text": "6 M. PIZZARELLI ET AL.\n\nwhere the left part of the equation represents the momentum flux and the axial\ncomponent of the pressure force acting on the lateral surface of the channel, while\nthe right part is the integral skin friction force acting on the lateral surface (Aw).\nConsidering the quasi-2-D flow model (p is uniform through the channel\ncross-section), the momentum equation becomes\n\n- <u>�</u>\n\n**m** _ <sup><u>dub</u></sup> <sup>þ AðxÞ</sup> <sup><u>dp</u></sup> dx ¼ � 2 dx\n\n**m** _ <sup><u>dub</u></sup>\n\n<sup><u>dub</u></sup> <sup><u>dp</u></sup>\n\ndx <sup>þ AðxÞ</sup> dx\n\nZ hðxÞ\n\n- b|fðl fxl f;l f 0l fl fÞlffl{zfswðxl fl f; 0l fl fÞl fdxlffl}\n\nbottom base friction\n\nð6Þ\n\ndx swðx; yÞdy\n\n|fl fl fl f0l fl fl fl ffl{zfl fl fl fl fl fl fl ffl}\n\nrib friction\n\n- b|fðl fxl f;l f hl fl fÞlffl{zfswðxl fl f; hl fl fÞl fdxlffl}\n\ntop base friction\n\nwhere the bulk velocity ub(x), which represents a suitable average value of the velocity in the channel section, is defined as\n\nub ¼ <sup><u>1</u></sup>\n\n**m** _\n\nZZA\n\nqu <sup>2</sup> dA ð7Þ\n\nand according to the quasi-2-D model, it can be expressed as\n\nubðxÞ ¼ <sup><u>u2</u></sup>\n\n**m** _\n\n<sup>2</sup> <u>mh</u> <sup><u>ðxÞ</u></sup>\n\nZ hðxÞ\n\nqðx; yÞF ðyÞ <sup>2</sup> bðx; yÞdy ð8Þ\n0\n\nThe wall shear stress sw can be related to flow variables by the skin friction\nfactor fw. In the case of the lateral surface, this relation is based on the local flow\nvariables; that is,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00012",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "",
+   "text": "swðx; yÞ ¼ <sup><u>1</u></sup> ð9Þ\n\n8 <sup>qðx; yÞu2ðx; yÞfwðx; yÞ</sup>\n\nIn the case of the channel bases, sw and fw are related by the flow average quantities in the channel cross-section, that is,\n\n**<u>m</u>** <u>_</u> <u>�</u> <u>ubðxÞ</u>\n\n<sup><u>1</u></sup>\n\n8 A\n\n**<u>m</u>** <u>_</u> <u>�</u> <u>ubðxÞ</u>\n\n<sup><u>1</u></sup>\n\n8 A\n\nswðx; 0Þ ¼ <sup><u>1</u></sup>\n\n<u>ubðxÞ</u>\n\nfwðx; 0Þ and swðx; hÞ ¼ <sup><u>1</u></sup>\nA 8\n\nfwðx; hÞ ð10Þ\nA\n\nIn the literature, the skin friction factor fw, such as the heat transfer coefficient,\nis evaluated by means of semi-empirical correlations which are theoretically or experimentally derived on the basis of 1-D momentum balance (heat balance in the case of\nheat transfer coefficient). In regards to the skin friction factor, the semi-empirical\ncorrelations are generally composed of two terms: the first, fw <sup>0, expresses the skin fric-</sup>\n\ntion for the case of constant properties flow (which grossly represents the adiabatic\nflow) in rough tubes; the second, Cf, is the correction that applies in the case of fluid\nwith variable temperature, that is,\n\nfw ¼ fw <sup>0</sup> <sup>�</sup> <sup>Cf</sup> ð11Þ"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 11
+  },
+  "flagged_candidates": 1,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

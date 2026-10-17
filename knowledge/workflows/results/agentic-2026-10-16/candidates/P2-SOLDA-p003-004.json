@@ -1,0 +1,820 @@
+{
+ "packet": "P2-SOLDA-p003-004",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_1_35074",
+ "source_pdf": "propulsion_texts/10.2514_1.35074.pdf",
+ "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+ "pages": [
+  3,
+  4
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_35074/p0003.png",
+   "sha256": "96138b886ea8333cbfcd411ad23ccd69119f8d3b2b03055806481fdcb5a27b69",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_35074/p0004.png",
+   "sha256": "97cdc8c2a98af1db1144ee01cff3e43e4a2632aa3f302ef56f9754187a5b3a0d",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_32bda7409f56500a17626e27",
+  "ENR_65b8ddfd77c01c1af1d0934f"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_0f66f02a9240d2ba6707d09a",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/30",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 382.9035,
+     "t": 526.2610999999999,
+     "r": 544.4778,
+     "b": 504.6884187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 4 } = \\frac { 3 } { 2 } \\alpha _ { o } \\kappa _ { t , p } \\kappa _ { p 2 } \\kappa _ { u } \\frac { \\delta _ { t , p } } { \\sigma _ { t , p } }",
+   "original_text": "D4 .0136 3 2 .0011o.0020t;p.0020p2.0020u .0014t;p .0027t;p (34)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_214907706fb098b9f6af9086",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/27",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 356.0311,
+     "t": 649.491,
+     "r": 544.4778,
+     "b": 627.2349222597364,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 1 } = \\gamma _ { g } \\left ( \\frac { \\mathcal { M } _ { g } } { R ^ { 0 } T _ { 0 } } + \\frac { 3 } { 2 } \\kappa _ { t . g } \\frac { \\delta _ { t , g } } { \\sigma _ { t , g } } \\right ) \\alpha \\kappa _ { g } \\kappa _ { p 1 } \\kappa _ { u }",
+   "original_text": "D1 .0136 .0013g .0018 Mg R 0 T0 .0135 3 2 .0020t;g .0014t;g .0027t;g .0019 .0011.0020g.0020p1.0020u (31)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_260a2a57a0345064ce3596c5",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/28",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 382.9035,
+     "t": 610.7335999999999,
+     "r": 544.4778,
+     "b": 589.2175187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 2 } = \\frac { 3 } { 2 } \\alpha _ { f } \\kappa _ { t , p } \\kappa _ { p 2 } \\kappa _ { u } \\frac { \\delta _ { t , p } } { \\sigma _ { t , p } }",
+   "original_text": "D2 .0136 3 2 .0011f.0020t;p.0020p2.0020u .0014t;p .0027t;p (32)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2643f29c56f081a3331d9ae2",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 111.4578,
+     "t": 419.3745,
+     "r": 280.4589,
+     "b": 397.1184222597364,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "Q _ { o } = \\frac { 2 \\sigma _ { t , p } \\tau _ { \\min } } { \\kappa _ { p 2 } \\kappa _ { t , p } } \\left ( \\frac { 4 \\pi } { 3 \\kappa _ { u } \\alpha _ { o } } \\right ) ^ { 1 / 3 }",
+   "original_text": "Qo .0136 2.0027t;p.0028min .0020p2.0020t;p .0018 4.0025 3.0020u.0011o .0019 1=3 (22)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_2ecde7dbe29b79d34cdf53fb",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/31",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 368.6169,
+     "t": 478.3801198,
+     "r": 544.4778,
+     "b": 468.21132225973645,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 5 } = ( 4 \\pi ) ^ { 1 / 3 } ( 3 \\kappa _ { u } \\alpha _ { o } ) ^ { 2 / 3 } \\tau _ { \\min } \\delta _ { t . p }",
+   "original_text": "D5 .0136 .01334.0025.0134 1=3 .01333.0020u.0011o.0134 2=3 .0028min.0014t;p (35)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_351e3477bf6122d99194571f",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 105.619,
+     "t": 645.8627,
+     "r": 280.4589,
+     "b": 623.6868187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { f } = \\frac { \\kappa _ { p 2 } \\kappa _ { t , p } } { 2 \\sigma _ { t , p } } \\, p _ { c } \\left ( \\frac { 3 \\kappa _ { u } \\alpha _ { f } } { 4 \\pi } m _ { p } \\right ) ^ { 1 / 3 }",
+   "original_text": ".0028f .0136 .0020p2.0020t;p 2.0027t;p pc .0018 3.0020u.0011f 4.0025 mp .0019 1=3 (18)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4273f8acf2f6aff8f32c1316",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/32",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 398.9478,
+     "t": 444.0564,
+     "r": 544.4778,
+     "b": 422.40342225973643,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 6 } = \\frac { \\alpha \\kappa _ { p 3 } \\mu _ { e p } } { \\eta _ { e p } }",
+   "original_text": "D6 .0136 .0011.0020p3.0022ep .0017ep (36)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_45cf734c75c2be45a7d9ffa1",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/19",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 130.7907,
+     "t": 151.29430000000002,
+     "r": 280.4589,
+     "b": 129.6980222597365,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "E _ { e } = \\frac { \\alpha \\kappa _ { p 3 } } { \\eta _ { e p } } m _ { p } p _ { c }",
+   "original_text": "Ee .0136 .0011.0020p3 .0017ep mppc (27)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_496b8db9812a3cd6fe4fac46",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 111.4581,
+     "t": 458.6627,
+     "r": 280.4589,
+     "b": 436.4066222597364,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "Q _ { f } = \\frac { 2 \\sigma _ { t , p } \\tau _ { \\min } } { \\kappa _ { p 2 } \\kappa _ { t , p } } \\left ( \\frac { 4 \\pi } { 3 \\kappa _ { u } \\alpha _ { f } } \\right ) ^ { 1 / 3 }",
+   "original_text": "Qf .0136 2.0027t;p.0028min .0020p2.0020t;p .0018 4.0025 3.0020u.0011f .0019 1=3 (21)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4b6350de38f6aa2f67fe8fc3",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/17",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 94.4505,
+     "t": 217.87621979999994,
+     "r": 280.4589,
+     "b": 206.4602222597365,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { t , o } = ( 4 \\pi ) ^ { 1 / 3 } ( 3 \\kappa _ { u } \\alpha _ { o } ) ^ { 2 / 3 } \\tau _ { \\min } \\delta _ { t , p } m _ { p } ^ { 2 / 3 }",
+   "original_text": "mt;o .0136 .01334.0025.0134 1=3 .01333.0020u.0011o.0134 2=3 .0028min.0014t;pm 2=3 p (26)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6da7e0733c8ec04a8bcb170c",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 106.0728,
+     "t": 307.1998,
+     "r": 280.4589,
+     "b": 285.68381873762814,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { t , o } = \\frac { 3 } { 2 } \\alpha _ { o } \\kappa _ { p 2 } \\kappa _ { u } \\kappa _ { t , p } \\frac { \\delta _ { t , p } } { \\sigma _ { t , p } } m _ { p } p _ { c }",
+   "original_text": "mt;o .0136 3 2 .0011o.0020p2.0020u.0020t;p .0014t;p .0027t;p mppc (24)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_736501a067b1fb06ca9284e1",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 106.0728,
+     "t": 357.8265,
+     "r": 280.4589,
+     "b": 336.3105187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { t , f } = \\frac { 3 } { 2 } \\alpha _ { f } \\kappa _ { p 2 } \\kappa _ { u } \\kappa _ { t , p } \\frac { \\delta _ { _ { t , p } } } { \\sigma _ { _ { t , p } } } m _ { p } p _ { c }",
+   "original_text": "mt;f .0136 3 2 .0011f.0020p2.0020u.0020t;p .0014t;p .0027t;p mppc (23)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_74d227fbcf3e8ab7d58e27c7",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/36",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 315.0424,
+     "t": 294.8202,
+     "r": 544.4781,
+     "b": 229.13742225973647,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { m _ { e p s } } { m _ { p } } & = \\frac { D _ { 1 } } { 1 - \\kappa _ { p 2 } p _ { c } / p _ { 0 } } \\, p _ { c } + \\max \\left ( D _ { 2 } p _ { c } , \\frac { D _ { 3 } } { m _ { p } ^ { 1 / 3 } } \\right ) \\\\ & + \\max \\left ( D _ { 4 } p _ { c } , \\frac { D _ { 5 } } { m _ { p } ^ { 1 / 3 } } \\right ) + D _ { 6 } \\frac { p _ { c } } { t _ { b } } + \\max \\left ( \\frac { D _ { 7 } p _ { c } } { t _ { b } } , D _ { 8 } p _ { c } \\right ) \\\\ & = g ( p _ { c } , p _ { 0 } , m _ { p } , t _ { b } )",
+   "original_text": "meps mp .0136 D1 1 .0000 .0020p2pc=p0 pc .0135max .0018 D2pc; D3 m 1=3 p .0019 .0135max .0018 D4pc; D5 m 1=3 p .0019 .0135D6 pc tb .0135 max .0018 D7pc tb ; D8pc .0019 .0136 g.0133pc; p0; mp; tb.0134 (39)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_77a9bd3ec31ed6cab661cb9b",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/34",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 401.0457,
+     "t": 352.384,
+     "r": 544.4778,
+     "b": 330.7877222597364,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 8 } = \\frac { \\alpha \\kappa _ { b } \\kappa _ { p 3 } } { \\eta _ { e p } \\delta _ { E } }",
+   "original_text": "D8 .0136 .0011.0020b.0020p3 .0017ep.0014E (38)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_7d0ce3cc2e5353dd083d2c04",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/23",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 111.7418,
+     "t": 35.479799999999955,
+     "r": 280.45920000000007,
+     "b": 25.950022259736443,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { e p } = \\mu _ { e p } P _ { e } = \\mu _ { e p } ( E _ { e } / t _ { b } )",
+   "original_text": "mep .0136 .0022epPe .0136 .0022ep.0133Ee=tb.0134 (29)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8021090d4d5c43a10b3577f3",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/33",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 401.0457,
+     "t": 398.1918,
+     "r": 544.4778,
+     "b": 376.59562225973644,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 7 } = \\frac { \\alpha \\kappa _ { b } \\kappa _ { p 3 } } { \\eta _ { e p } \\delta _ { P } }",
+   "original_text": "D7 .0136 .0011.0020b.0020p3 .0017ep.0014P (37)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a6a006e35f23ce7517fb5c24",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/21",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 136.4025,
+     "t": 91.94590000000005,
+     "r": 280.4587,
+     "b": 82.49641873762812,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "P _ { e } = ( E _ { e } / t _ { b } )",
+   "original_text": "Pe .0136 .0133Ee=tb.0134 (28)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ac4cdd556b1353fb65f8faf2",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 105.6186,
+     "t": 606.5745,
+     "r": 280.4589,
+     "b": 584.3986187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau _ { o } = \\frac { \\kappa _ { p 2 } \\kappa _ { t , p } } { 2 \\sigma _ { t , p } } \\, p _ { c } \\left ( \\frac { 3 \\kappa _ { u } \\alpha _ { o } } { 4 \\pi } m _ { p } \\right ) ^ { 1 / 3 }",
+   "original_text": ".0028o .0136 .0020p2.0020t;p 2.0027t;p pc .0018 3.0020u.0011o 4.0025 mp .0019 1=3 (19)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c3d9ef6919dc6e306c76edbb",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/16",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 94.4505,
+     "t": 246.50611979999996,
+     "r": 280.4589,
+     "b": 235.1468222597365,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { t , f } = ( 4 \\pi ) ^ { 1 / 3 } ( 3 \\kappa _ { u } \\alpha _ { f } ) ^ { 2 / 3 } \\tau _ { \\min } \\delta _ { t , p } m _ { p } ^ { 2 / 3 }",
+   "original_text": "mt;f .0136 .01334.0025.0134 1=3 .01333.0020u.0011f.0134 2=3 .0028min.0014t;pm 2=3 p (25)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cc233ac7e0c0646942699dca",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 57.5433,
+     "t": 497.0321198,
+     "r": 280.4601,
+     "b": 485.7530187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p _ { c } m _ { p } ^ { 1 / 3 } < Q _ { f } \\text { for } \\text { fuel} , \\quad p _ { c } m _ { p } ^ { 1 / 3 } < Q _ { o } \\text { for } \\text { oxidizer}",
+   "original_text": "pcm 1=3 p <Qf for fuel; pcm 1=3 p <Qo for oxidizer (20)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e68e8963b14394bf4767bcd1",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/29",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 368.6169,
+     "t": 562.9092198,
+     "r": 544.4778,
+     "b": 552.6837222597364,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { 3 } = ( 4 \\pi ) ^ { 1 / 3 } ( 3 \\kappa _ { u } \\alpha _ { f } ) ^ { 2 / 3 } \\tau _ { \\min } \\delta _ { t . p }",
+   "original_text": "D3 .0136 .01334.0025.0134 1=3 .01333.0020u.0011f.0134 2=3 .0028min.0014t;p (33)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f98f605a5097de002d189215",
+   "kind": "formula",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/25",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 382.5642,
+     "t": 706.9775999999999,
+     "r": 544.4774000000001,
+     "b": 684.8018187376281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b } = \\kappa _ { b } \\max \\left ( \\frac { P _ { e } } { \\delta _ { P } } \\, , \\frac { E _ { e } } { \\delta _ { E } } \\right )",
+   "original_text": "mb .0136 .0020b max .0018 Pe .0014P ; Ee .0014E .0019 (30)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_32bda7409f56500a17626e27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p3-3-9b237178bee0164ee3db537613fcbd66c0a7013cc32341344661043c130f7ae0.json",
+   "raw_sha256": "fc0aa9ad08c37a8e4fc8a11dfe3988b30673117c48361d37b4784ccfbb31246a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_367ae4d2ca140d88e5bac9b5",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 2 Ratio of feed system mass over total propellant mass as a function of chamber pressure for p0 .013620 MPa and tb .01361000 s. Solid line: pressure-gas system; dashed line: proposed system mp .0136 1000 kg; long-dashed line: mp .01363000 kg; and extra-long-dashed line: mp .0136 10; 000 kg."
+   ],
+   "bbox": [
+    {
+     "l": 320.8686719365,
+     "t": 721.8014473030994,
+     "r": 527.2153609653499,
+     "b": 541.9902313607777,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/31\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_65b8ddfd77c01c1af1d0934f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p4-4-47cc91fa5f79cf72d783209d2a4eb60e8ef8e1483e5106239b325c6c8301a2e4.json",
+   "raw_sha256": "96a4645d6e626fa6f3713295980084967c56e95805025a4636871988ffd07359",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5df23558117ce5aabf6a16ee",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 1 Ragone plot of premiumLi-polymer batteries."
+   ],
+   "bbox": [
+    {
+     "l": 55.47002346710506,
+     "t": 737.3326755820077,
+     "r": 265.51107459795986,
+     "b": 544.1994967245226,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_65b8ddfd77c01c1af1d0934f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p4-4-47cc91fa5f79cf72d783209d2a4eb60e8ef8e1483e5106239b325c6c8301a2e4.json",
+   "raw_sha256": "96a4645d6e626fa6f3713295980084967c56e95805025a4636871988ffd07359",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a7f9566ddb3fd82075703b5a",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [
+    "Fig. 3 Ratio of feed system mass over total propellant mass as a function of initial helium pressure for pc .0136 3 MPa and tb .0136 1000 s. Solid line: pressure-gas system; dashed line: proposed system mp .0136 1000 kg; long-dashed line: mp .01363000 kg; and extra-long-dashed line: mp .0136 10; 000 kg."
+   ],
+   "bbox": [
+    {
+     "l": 319.16149143502315,
+     "t": 447.21824184795514,
+     "r": 530.5776017735315,
+     "b": 265.2417851769833,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/47\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_65b8ddfd77c01c1af1d0934f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p4-4-47cc91fa5f79cf72d783209d2a4eb60e8ef8e1483e5106239b325c6c8301a2e4.json",
+   "raw_sha256": "96a4645d6e626fa6f3713295980084967c56e95805025a4636871988ffd07359",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b109a412d7f88340f1a2c200",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/26",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 52.7806,
+     "t": 324.21669999999995,
+     "r": 277.68170000000003,
+     "b": 205.15622225973652,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\kappa _ { p 1 } & = 1 . 8 & \\kappa _ { p 2 } & = 0 . 3 & \\kappa _ { p 3 } & = 1 . 5 \\\\ \\kappa _ { g } & = 1 . 3 & \\kappa _ { t , g } & = 2 . 4 & \\kappa _ { t , p } & = 1 . 2 5 \\\\ \\kappa _ { \\mu } & = 1 . 0 5 & \\kappa _ { h } & = 1 . 2 & \\tau _ { \\min } & = 1 \\ m m \\\\ \\gamma _ { g } & = 1 . 6 6 7 & \\mathcal { M } _ { g } & = 4 . 0 0 2 6 \\, \\ k g / \\kmod { \\tau _ { 0 } } = 2 8 8 . 1 5 \\ K \\\\ \\rho _ { o } & = 1 4 3 1 \\, \\ k g / m ^ { 3 } & \\rho _ { f } & = 8 7 4 \\, \\ k g / m ^ { 3 } & O / F & = \\rho _ { o } / \\rho _ { f } \\\\ \\delta _ { t , g } & = 1 7 0 0 \\, \\ k g / m ^ { 3 } & \\delta _ { t , p } & = 2 8 0 0 \\, \\ k g / m ^ { 3 } \\\\ \\sigma _ { t , g } & = 3 3 0 0 \\, \\ M P a & \\sigma _ { t , p } & = 4 5 5 \\, \\ M P a \\\\ \\eta _ { e p } & = 0 . 6 8 & \\mu _ { e p } & = 6 \\, \\ k g / k W _ { c }",
+   "original_text": ".0020p1 .0136 1:8 .0020p2 .0136 0:3 .0020p3 .0136 1:5 .0020g .0136 1:3 .0020t;g .0136 2:4 .0020t;p .0136 1:25 .0020u .0136 1:05 .0020b .0136 1:2 .0028min .0136 1 mm .0013g.01361:667 Mg.01364:0026 kg=kmol T0 .0136288:15 K .0026o.01361431 kg=m 3 .0026f .0136874 kg=m 3 O=F .0136 .0026o=.0026f .0014t;g.01361700 kg=m 3 .0014t;p.01362800 kg=m 3 .0027t;g.01363300MPa .0027t;p.0136455MPa .0017ep .0136 0:68 .0022ep .0136 6 kg=kWe",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_65b8ddfd77c01c1af1d0934f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_35074/c383b3856b5c-p4-4-47cc91fa5f79cf72d783209d2a4eb60e8ef8e1483e5106239b325c6c8301a2e4.json",
+   "raw_sha256": "96a4645d6e626fa6f3713295980084967c56e95805025a4636871988ffd07359",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00008",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "1342 SOLDÀ AND LENTINI\n\nrise to compensate for losses in the cooling channels; this can be\neasily accommodated in the formulation if necessary, but at this stage\nit is not considered an essential point. The masses of the various\nentries of Eq. (15) will now be derived. For _mg_ and _mt;g_, expressions\nanalogous to Eqs. (5) and (8) hold, but with _�p_ 2 in place of _�p_ 1. As far\nas the propellant tanks are concerned, the wall thickness required is,\nin principle, again given by Laplace’s law, for example, for fuel and\noxidizer, respectively,\n\nAs far as the batteries are concerned, their mass depends on whether\nthe constraint on the power or the energy is more stringent:\n\n<u>�</u> _<u>Pe</u>_\n_;_ <sup>_<u>Ee</u>_</sup>\n_�P_ _�E_\n\n_mb_ - _�b_ max\n\n<u>�</u>\n(30)\n\nwhere a factor _�b_ is introduced to account for the design margins. We\nfurther introduce the following constants:\n\n�1 _=_ 3\n(18)\n\n�1 _=_ 3\n(19)\n\n_�t;p_\n\n_D_ 2 � <sup><u>3</u></sup> (32)\n\n2 <sup>_�f�t;p�p_</sup> <sup>2</sup> <sup>_�u_</sup> _�t;p_\n\n<u>�</u>\n_��g�p_ 1 _�u_ (31)\n\n_�f_ - <sup>_�p_</sup> <sup><u>2</u></sup> <sup>_�t;p_</sup> _pc_\n2 _�t;p_\n\n_�o_ - <sup>_�p_</sup> <sup><u>2</u></sup> <sup>_�t;p_</sup> _pc_\n2 _�t;p_\n\n<u>�3</u> _�u�f_\n_mp_\n4 _�_\n\n<u>�3</u> _<u>�u�o</u>_\n_mp_\n4 _�_\n\n_D_ 1 � _�g_\n\n<u>�</u> M _<u>g</u>_\n_R_ <sup>0</sup> _T_ 0\n\n- <sup><u>3</u></sup> _�t;g_\n2 <sup>_�t;g_</sup> _�t;g_\n\nHowever, in the case of pump feeding, the tanks are thin walled,\nand the thickness as defined by Eqs. (18) and (19), may turn out to be\ntoo small to withstand acceleration loads. To account for this\ncircumstance, a minimum thickness _�_ min is introduced; it can be\neasily seen that the condition that causes the wall thickness to stick at\nthis limit is"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00009",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "_pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_p_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _< Qf_ for fuel _;_ _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_p_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _< Qo_ for oxidizer (20)\n\nwhere\n\n<u>�1</u> _=_ 3\n(21)\n\n<u>�1</u> _=_ 3\n(22)\n\n_D_ 3 ��4 _�_     - <sup>1</sup> <sup>_=_</sup> <sup>3</sup> �3 _�u�f_     - <sup>2</sup> <sup>_=_</sup> <sup>3</sup> _�_ min _�t;p_ (33)\n\n_�t;p_\n\n_D_ 4 � <sup><u>3</u></sup> (34)\n\n2 <sup>_�o�t;p�p_</sup> <sup>2</sup> <sup>_�u_</sup> _�t;p_\n\n_D_ 5 ��4 _�_     - <sup>1</sup> <sup>_=_</sup> <sup>3</sup> �3 _�u�o_     - <sup>2</sup> <sup>_=_</sup> <sup>3</sup> _�_ min _�t;p_ (35)\n\n_D_ 6 � <sup>_��p_</sup> <sup><u>3</u></sup> <sup>_�_</sup> <sup><u>ep</u></sup> (36)\n\n_�_ ep\n\n_D_ 7 � <sup>_��b�p_</sup> <sup><u>3</u></sup> (37)\n\n_�_ ep _�P_\n\n_D_ 8 � <sup>_��b�p_</sup> <sup><u>3</u></sup> (38)\n\n_�_ ep _�E_\n\nAfter Eq. (15), the ratio of the total mass of the electric pump system\nto the propellant mass can be put in the following form:\n\n_Qf_ - <sup>2</sup> <sup>_�t;p�_</sup> <sup><u>min</u></sup>\n\n_�p_ 2 _�t;p_\n\n_Qo_ - <sup>2</sup> <sup>_�t;p�_</sup> <sup><u>min</u></sup>\n\n_�p_ 2 _�t;p_\n\n- <u>4</u> _<u>�</u>_\n3 _�u�f_\n\n- <u>4</u> _<u>�</u>_\n3 _�u�o_\n\nAccordingly, if _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _> Qf_, then the fuel tank mass is\n\n_�t;p_\n\n_mt;f_ - <sup><u>3</u></sup> _mppc_ (23)\n\n2 <sup>_�f�p_</sup> <sup>2</sup> <sup>_�u�t;p_</sup> _�t;p_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00010",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "and if _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _> Qo_, then the oxidizer tank mass is\n\n_�t;p_\n\n_mt;o_ - <sup><u>3</u></sup> _mppc_ (24)\n\n2 <sup>_�o�p_</sup> <sup>2</sup> <sup>_�u�t;p_</sup> _�t;p_\n\n_m_ <u>eps</u>\n\n_mp_\n\n<u>�</u>\n\n_<u>D</u>_ <u>1</u>\n\n- _pc_ - max\n1 � _�p_ 2 _pc=p_ 0\n\n_D_ 2 _pc;_ <sup>_<u>D</u>_</sup> <sup><u>3</u></sup>\n\nHowever, in the event that _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_p_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _< Qf_ and/or _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_mp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_p_\n\nHowever, in the event that _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _< Qf_ and/or _pcmp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup> _< Qo_, the\n\nrelevant tank masses are determined as\n\n- max _D_ 4 _pc;_ <sup>_<u>D</u>_</sup> <sup><u>5</u></sup>\n\n<u>�</u>\n_<u>pc</u>_\n\n - _D_ 6\n\n<u>�</u> _<u>D</u>_ <u>7</u> _<u>pc</u>_\n\n- max\n_tb_\n\n_; D_ 8 _pc_\n\n_tb_\n\n_mt;f_ ��4 _�_ - <sup>1</sup> <sup>_=_</sup> <sup>3</sup> �3 _�u�f_ - <sup>2</sup> <sup>_=_</sup> <sup>3</sup> _�_ min _�t;pmp_ <sup>2</sup> <sup>_=_</sup> <sup>3</sup> (25)\n\n_mp_ <sup>1</sup> <sup>_=_</sup> <sup>3</sup>\n\n_p_\n\n_mt;o_ ��4 _�_ - <sup>1</sup> <sup>_=_</sup> <sup>3</sup> �3 _�u�o_ - <sup>2</sup> <sup>_=_</sup> <sup>3</sup> _�_ min _�t;pmp_ <sup>2</sup> <sup>_=_</sup> <sup>3</sup> (26)\n\n  - _g_  - _pc; p_ 0 _; mp; tb_  - (39)\n\nIII. Comparison of the Two Systems"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00011",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "As already indicated, the mass of the batteries in the proposed\nsystem depends on either the energy or the power requirements,\naccording to which is the most stringent. For a given battery, the\nvalues of the power density _�P_ and the energy density _�E_ depend on\nthe discharge time, which in the present context is the engine burning\ntime _tb_ ; such a relationship is given by Ragone’s plot [3,4]. Figure 1\nshows such a plot for commercially available, premium Li-polymer\nbatteries, <sup>‡</sup> which are representative of the best technology currently\navailable. Notice that the line interpolating the data is limited to a\nminimum discharge time of about 12.5 min; accordingly, this is the\nminimum burning time considered in the comparison. It is also\nimportant to note that the choice of energy storage device is not\nlimited to batteries, but might also include supercapacitors and fuel\ncells. However, the former suffer from limited energy density\n\n‡Data available online at www.symmetryresourcesinc.com [retrieved on\n26 August 2008].\n\nThe definition of the masses of the electric pumps and the batteries\nis now considered. The electric energy required over the whole\nengine operating time _tb_ is\n\n_Ee_           - <sup>_��p_</sup> <sup><u>3</u></sup> _mppc_ (27)\n\n_�_ ep\n\nwhere _�_ ep is the overall efficiency of the conditioning/controller and\nelectric pump unit, and the power is obviously"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00012",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "_Pe_ �� _Ee=tb_            - (28)\n\nAccordingly, the mass of the electric pumps can be determined in\nterms of their specific mass _�_ ep (mass per unit electric power\nabsorbed):\n\n_m_ ep � _�_ ep _Pe_      - _�_ ep� _Ee=tb_      - (29)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00013",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "**POWER AND ENERGY DENSITIES**\n\nSOLDÀ AND LENTINI 1343\n\n**RATIO FEED SYSTEM / PROPELLANT MASS**\n\n<mark>δ</mark> **E** **<mark>(W</mark>** <sup>**<mark>.</mark>**</sup> **<mark>h/kg)</mark>**\n\n|0.12<br>0.09|Col2|\n|---|---|\n|||\n|0.06|0.06|\n|0<br>0.03|0<br>0.03|\n|0<br>0.03|<br>0<br>1<br>2|\n\nFig. 1 Ragone plot of premium Li-polymer batteries.\n\nwhereas the latter, despite giving a performance even higher than\nbatteries on a mass basis, result in a much lower volumetric\nperformance, unless the reactant storage pressure is assumed to be\ngreater than about 60 MPa [5], <sup>§</sup> which is about 20 times as much as\ncurrent technology cells. Further, fuel cells require the handling of\ncryogenic reactants (oxygen and hydrogen), which can be\ninconvenient for small upper stages and spacecraft.\n\nQuite obviously, the preference for one system or the other\n(turbopumps or electric pumps) depends to a critical extent on the\nvalues of several performance parameters absorbed in the constants\n_C_ 1, _C_ 2,and _D_ 1– _D_ 8.Towork out acomparison of the twosystems, we\nconsider a nitrogen tetroxide/monomethylhydrazine (NTO/MMH)\npropellant combination in a ratio that will ensure equal volume tanks.\nFurther, we assume helium as the pressurant gas, stored at ambient\ntemperature. As far as the tank material is concerned, Kevlar® is\nchosen for the pressurant gas tank, whereas aluminum alloy is\nassumed for the propellant tanks. Accordingly, the following values\nare assumed in the present calculations:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00014",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "_�p_ 1 � 1 _:_ 8 _�p_ 2 � 0 _:_ 3 _�p_ 3 � 1 _:_ 5\n\n_�g_  - 1 _:_ 3 _�t;g_  - 2 _:_ 4 _�t;p_  - 1 _:_ 25\n\n_�u_  - 1 _:_ 05 _�b_  - 1 _:_ 2 _�_ min � 1 mm\n\n_�g_  - 1 _:_ 667 M _g_  - 4 _:_ 0026 kg _=_ kmol _T_ 0 � 288 _:_ 15 K\n\n_�o_  - 1431 kg _=_ m <sup>3</sup> _�f_  - 874 kg _=_ m <sup>3</sup> _O=F_  - _�o=�f_\n\n_�t;g_   - 1700 kg _=_ m <sup>3</sup> _�t;p_   - 2800 kg _=_ m <sup>3</sup>\n\n_�t;g_   - 3300 MPa _�t;p_   - 455 MPa\n\n_�_ ep � 0 _:_ 68 _�_ ep � 6 kg _=_ kW _e_\n\nNotice that the values assumed for the parameters are quite\nconservative, aimed at avoiding a bias toward one particular feed\nsystem.\n\nAs seen in Eq. (14), the mass of a pressure-gas feed system,\ndivided by the overall propellant mass, depends on the chamber\npressure _pc_ and the initial gas pressure _p_ 0. The mass of the proposed\nsystem based on electric pumps (39) also depends on _pc_ and _p_ 0 and,\nin addition, on the burning time and the propellant mass itself in the\ncase that the tank thickness is dictated by the constraint not to be\nsmaller than a given value _�_ min. We will therefore first examine the\ntrend of the ratio between the feed system mass _m_ fs and the propellant\nmass _mp_ as a function of the chamber pressure for a value of _p_ 0 set to\n20 MPa (see also the comment on Fig. 3 in the next paragraph), a\nburning timeset to2000 s, and for three values ofthe propellant mass,\n1000, 3000, and 10,000 kg. Such trends are shown in Fig. 2 for the"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_35074#c00015",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "C turbopump fed or pressure-gas fed [1,2]. It is well known that",
+   "text": "§Data available online at gltrs.grc.nasa.gov [retrieved on 26 August 2008].\n\nFig. 2 Ratio of feed system mass over total propellant mass as a\nfunction of chamber pressure for p0 **�** 20 MPa and tb **�** 1000 s. Solid\nline: pressure-gas system; dashed line: proposed system mp **�** 1000 kg;\nlong-dashed line: mp **�** 3000 kg; and extra-long-dashed line:\nmp **�** 10 **_;_** 000 kg.\n\n**RATIO FEED SYSTEM / PROPELLANT MASS**\n\n|0.15|Col2|\n|---|---|\n|0.09<br>0.12|0.09<br>0.12|\n|||\n|0.06|0.06|\n\nFig. 3 Ratio of feed system mass over total propellant mass as a\nfunction of initial helium pressure for pc **�** 3 MPa and tb **�** 1000 s. Solid\nline: pressure-gas system; dashed line: proposed system mp **�** 1000 kg;\nlong-dashed line: mp **�** 3000 kg; and extra-long-dashed line:\nmp **�** 10 **_;_** 000 kg.\n\ntwo feed systems under consideration. The curves for the electric\npump system, referring to the aforementioned values of _mp_, exhibit a\nseparate, nearly parallel, trend for relatively low values of _pc_,\nindicating that the factor limiting the wall thickness is the constraint\n\n_�_ - _�_ min. However, for chamber pressures slightly above 3.5 MPa,\nthe curves for _mp_ - 3000 and 10,000 kg coalesce into a single curve,\nas under such circumstances the wall thickness is greater than _�_ min, so\nthat the walls are actually sized according to Laplace’s law. The\nfigure further suggests that, for _pc_ greater than about 5 MPa, the\ncurve for _mp_ - 1000 kg will also coalesce with the others. It is worth\nnoting that the separate trends for the three curves follow from the\nassumption of the same minimum thickness for the three values of\n_mp_ under consideration; if the minimum thickness is instead\nassumed to be proportional to the cubic root of _mp_, the variable _mp_ is\ndropped from the arguments of function _g_ in Eq. (39). In summation,\nFig. 2 indicates that the proposed feed system is preferable when the\nchamber pressure is above roughly 1 MPa."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 23,
+   "figure": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

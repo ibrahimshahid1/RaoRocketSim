@@ -1,0 +1,2262 @@
+{
+ "packet": "R2-LEE-p006-008",
+ "kind": "model_review",
+ "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+ "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+ "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+ "pages": [
+  6,
+  8
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0006.png",
+   "sha256": "a95c595c294b3c41c16e5009dada266b844d378e7154d71ca6d8a80381a60c44",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 7,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0007.png",
+   "sha256": "ee57a9fcb66c0a250f2a3c50a69729582a43421c4a6413449bce5b40779b7619",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 8,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0008.png",
+   "sha256": "0fcf50aa6321556bbd5cc712a069eeef99f5bcb9cf4c1f6990f3b05b68ac3594",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_122bc921523575fef36c1a59",
+  "ENR_820214f4dd8a82b78eefe407",
+  "ENR_82c0a2e35be6cf157ec4ff03"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_7db39d5daaf765c0916fc496",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.32996087646484,
+     "t": 56.00131466686378,
+     "r": 60.361343198712234,
+     "b": 43.996512757196456,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e63970003bd71fdc641f4a3a",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 5 Valve mass surface about the commercial valve data"
+   ],
+   "bbox": [
+    {
+     "l": 182.48145794452435,
+     "t": 736.302216423951,
+     "r": 544.7234704655384,
+     "b": 394.28658779648737,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_038274bee167e4f1ba894f9a",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.02920171280954,
+     "t": 96.43993422553797,
+     "r": 544.2667655251664,
+     "b": 72.13593463756513,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "P _ { \\mathbf p } = \\frac { \\Delta p _ { \\mathbf p } \\dot { m } } { \\rho \\eta _ { \\mathbf p } } .",
+   "original_text": "Pp equal1 Delta1pp ˙m ρηp . (20)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_158f656b1384363e96db7a3a",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.035999298,
+     "t": 371.84225031414803,
+     "r": 289.14383599152313,
+     "b": 349.1415457114133,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\Delta p _ { \\text {elb} } = K _ { \\text {elb} } \\frac { 1 } { 2 } \\rho v ^ { 2 } .",
+   "original_text": "Delta1pelb equal1 Kelb 1 2 ρv 2 . (16)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_19e5a0a5cc1f91e60f11aa90",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03673308415003,
+     "t": 146.28423639814798,
+     "r": 289.1443376431664,
+     "b": 136.63903217156508,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { e l b } = V _ { e l b } \\rho _ { e l b } .",
+   "original_text": "melb equal1 Velbρelb. (19)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_407db9cb4be4f6786dcbfe19",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.315329927061384,
+     "t": 177.95291089853413,
+     "r": 289.1448597247008,
+     "b": 157.41455596541323,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "V _ { \\text {elb} } = 4 \\pi ^ { 2 } t _ { \\text {elb} } ( r _ { \\text {out} } + r _ { \\text {in} } ) ( r _ { \\text {out} } - r _ { \\text {in} } - t _ { \\text {elb} } ) \\frac { \\alpha } { 3 6 0 } ,",
+   "original_text": "Velb equal1 4π 2 telb(rout + rin)(rout - rin - telb) α 360 , (18)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ad36ad097e09042859943ee7",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.82916063236612,
+     "t": 199.97823664214798,
+     "r": 289.14450377450015,
+     "b": 190.3329408635651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "r _ { o u t } = r _ { i n } + 2 D _ { e l b } ,",
+   "original_text": "rout equal1 rin + 2Delb, (17)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_820214f4dd8a82b78eefe407",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+   "raw_sha256": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_09f720a145f2cd4cd67d53aa",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03519207561534,
+     "t": 89.23427958868399,
+     "r": 289.1446818771212,
+     "b": 77.27908892610003,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { p } = 0 . 4 7 0 3 \\times \\exp ( 0 . 0 1 0 7 2 \\times D _ { p } ) .",
+   "original_text": "mp equal1 0.4703 × exp ( 0.01072 × Dp ) . (25)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_15370161bab192cc69dbeaa3",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/3",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.7926005507926,
+     "t": 301.944102748,
+     "r": 289.17123715704463,
+     "b": 276.461683251684,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { s } = \\frac { D _ { \\text {out} } ( g H ) ^ { 1 / 4 } } { \\sqrt { Q } } ,",
+   "original_text": "Ds equal1 Dout(g H ) 1/4 √Q , (22)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4dec2e8c8ab8632dfd3e5c28",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/15",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.15859321156915,
+     "t": 224.89036006691595,
+     "r": 544.2586194437072,
+     "b": 201.27703266056506,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta _ { \\text {inv} } = \\frac { P _ { \\text {inv} , \\text {out} } } { m _ { \\text {inv} } } ,",
+   "original_text": "δinv equal1 Pinv,out minv , (28)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_58446f2eb9d6850e05f916af",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.71167576047924,
+     "t": 265.949410918,
+     "r": 289.1440380491928,
+     "b": 252.5861911735651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N _ { s } = 3 . 7 2 \\cdot D _ { s } ^ { - 1 . 1 4 2 9 } ,",
+   "original_text": "Ns equal1 3.72 · D -1.1429 s , (23)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_999e16fd252b83864b5029a6",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03591140864202,
+     "t": 238.92136690191603,
+     "r": 289.1532781777012,
+     "b": 216.31055205841324,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "u _ { \\text {out} } = \\omega \\frac { D _ { \\text {out} } } { 2 } .",
+   "original_text": "uout equal1 ω Dout 2 . (24)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c6b92bb87b76d96e7c5edd3b",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.158533013736,
+     "t": 557.395002464702,
+     "r": 544.2587497723166,
+     "b": 533.6919191345651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { \\mathbf m } = \\frac { 1 } { \\delta _ { P , \\mathbf m } } P _ { \\mathbf m , \\text {out} } = \\frac { 1 } { \\delta _ { P , \\mathbf m } } P _ { p } .",
+   "original_text": "mm equal1 1 δP,m Pm,out equal1 1 δP,m Pp. (27)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cb50f32b987f41ae02148a43",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.71103270725588,
+     "t": 334.55684629365555,
+     "r": 289.14455896593313,
+     "b": 309.70784291635835,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N _ { s } = \\frac { \\omega \\sqrt { Q } } { ( g H ) ^ { 3 / 4 } } ,",
+   "original_text": "Ns equal1 ω√Q (gH) 3/4 , (21)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e27dabc2bfb8f36d29349b13",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/16",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.15945914293513,
+     "t": 196.01801882570203,
+     "r": 544.2581240788161,
+     "b": 172.31493549256516,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { \\text {inv} } = \\frac { 1 } { \\delta _ { P , \\text {inv} } } \\, P _ { \\text {inv} , \\text {out} } = \\frac { 1 } { \\delta _ { P , \\text {inv} } \\eta _ { \\text {m} } } \\, P _ { \\text {m} , \\text {out} } .",
+   "original_text": "minv equal1 1 δP,inv Pinv,out equal1 1 δP,invηm Pm,out . (29)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f67942fc267657109716011e",
+   "kind": "formula",
+   "pages": [
+    7
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.1578174819921,
+     "t": 586.267375202916,
+     "r": 544.2576933145081,
+     "b": 562.6539552675652,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta _ { P , \\mathbf m } = \\frac { P _ { \\mathbf m , \\text {out} } } { m _ { \\mathbf m } } ,",
+   "original_text": "δP,m equal1 Pm,out mm , (26)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+   "raw_sha256": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_026de44529be972bb237b3a5",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 48.122871215487486,
+     "t": 740.0096723593846,
+     "r": 543.9561541965152,
+     "b": 437.3658975610938,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5ad286f64d1a4a6c8c83688f",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.21431783504614,
+     "t": 55.91838194118657,
+     "r": 91.95574831236769,
+     "b": 43.76028569237178,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4022dd34281c55f0053cc2a4",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/46",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.4346627487081,
+     "t": 332.395592287362,
+     "r": 544.2667383420666,
+     "b": 308.5299318305651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "V _ { \\text {tk} } = u _ { \\text {tk} } \\frac { m _ { \\text {prop} } } { \\rho _ { \\text {prop} } } ,",
+   "original_text": "Vtk equal1 utk mprop ρprop , (34)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_512c2b2d1ba2a3ab8e9d5172",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/37",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03719010934989,
+     "t": 343.95332485431396,
+     "r": 289.1438463849136,
+     "b": 322.4619386665651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b , P } = \\frac { \\kappa _ { b } } { \\delta _ { P , b } } P _ { b } = \\frac { \\kappa _ { b } } { \\delta _ { P , b } \\eta _ { \\text {inv} } } P _ { \\text {inv} , \\text {out} } ,",
+   "original_text": "mb,P equal1 κb δP,b Pb equal1 κb δP,bηinv Pinv,out , (30)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_62fa487de8c8924705c754f9",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/38",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03571974436281,
+     "t": 316.917314111314,
+     "r": 289.14403074226175,
+     "b": 295.4259279235651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b , E } = \\frac { \\kappa _ { b } } { \\delta _ { E , b } } E _ { b } = \\frac { \\kappa _ { b } } { \\delta _ { E , b } \\eta _ { E } \\eta _ { \\text {inv} } } P _ { \\text {inv} , \\text {out} } t _ { b } ,",
+   "original_text": "mb,E equal1 κb δE,b Eb equal1 κb δE,bηEηinv Pinv,outtb, (31)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_bbe8038a6eb73e26357f6906",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/39",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.035904101711,
+     "t": 286.98226640468397,
+     "r": 289.1707961254923,
+     "b": 275.0270976541001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b } = \\max ( m _ { b , P } , m _ { b , E } ) .",
+   "original_text": "mb equal1 MAX ( mb,P, mb,E ) . (32)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f9a079d6a703e27c74131038",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/43",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.036630894151216,
+     "t": 83.97493025853805,
+     "r": 289.1445708756412,
+     "b": 73.98093585856509,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { \\text {prop} } = \\kappa _ { \\text {prop} } ( \\dot { m } _ { o } + \\dot { m } _ { f } ) t _ { b } .",
+   "original_text": "mprop equal1 κprop( ˙mo + ˙mf)tb. (33)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fa7d4cb3a825e5aa873ce059",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/47",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.1586163540501,
+     "t": 301.674113735,
+     "r": 544.2584984034743,
+     "b": 274.94191913456507,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { \\text {tk} } = \\rho _ { \\text {tk} } 4 \\pi \\left ( \\frac { 3 V _ { \\text {tk} } } { 4 \\pi } \\right ) ^ { 2 / 3 } \\frac { p _ { \\text {tk} } } { 2 \\sigma _ { \\text {zul} } } \\left ( \\frac { 3 V _ { \\text {tk} } } { 4 \\pi } \\right ) ^ { 1 / 3 } .",
+   "original_text": "mtk equal1 ρtk4π ( 3Vtk 4π )2/3 ptk 2σzul ( 3Vtk 4π )1/3 . (35)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_122bc921523575fef36c1a59",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+   "raw_sha256": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E0B6A91",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee dimensionless specific speed",
+   "equation_number": "21",
+   "form": "N_s = omega * sqrt(Q) / (g * H)^(3/4)",
+   "statement": null,
+   "quote": "The specific velocity and specific\ndiameter are defined using Eqs. (21–22), respectively, and the\noutlet diameter was derived from Eq. (23) from the Cordier\ndiagram, which shows the empirical relationship between the\nspecific velocity and specific diameter. Because the relationship between the outlet diameter and the outlet velocity is\nexpressed by Eq. (24), the outlet velocity can be calculated,\nand the outlet blade angle can be calculated from the velocity\ntriangle theory:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "N_s",
+     "meaning": "dimensionless specific speed, using angular speed rather than US customary specific speed",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_NS"
+     ]
+    },
+    {
+     "symbol": "omega",
+     "meaning": "pump angular speed",
+     "units": "rad/s",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_OMEGA"
+     ]
+    },
+    {
+     "symbol": "Q",
+     "meaning": "volumetric flow rate",
+     "units": "m^3/s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_QFLUX"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "g",
+     "meaning": "gravitational acceleration",
+     "units": "m/s^2",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GRAVITY"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_GAMMA"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "H",
+     "meaning": "pump head rise",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_HEAD"
+     ]
+    }
+   ],
+   "assumptions": [
+    "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump."
+   ],
+   "validity": [],
+   "extraction_note": "Extracted using Docling formula enrichment (2.139.0, crop expansion 0.02), then visually compared with original PDF p7. Equation numbers read from PDF, not inferred from parser output. This is a source transcription, not independent verification or implementation validation. No validity interval is extracted from this page.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Q"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 8,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee battery mass selection",
+   "equation_number": "32",
+   "form": "m_b = max(m_b_P, m_b_E)",
+   "statement": null,
+   "quote": "requiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_b",
+     "meaning": "selected battery pack mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "m_b_P",
+     "meaning": "power-limited battery pack mass including structure",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "m_b_E",
+     "meaning": "energy-limited battery pack mass including structure",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_4022dd34281c55f0053cc2a4",
+    "CAND_512c2b2d1ba2a3ab8e9d5172",
+    "CAND_62fa487de8c8924705c754f9",
+    "CAND_bbe8038a6eb73e26357f6906",
+    "CAND_f9a079d6a703e27c74131038",
+    "CAND_fa7d4cb3a825e5aa873ce059"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 8
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_b",
+      "m_b_P",
+      "m_b_E"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_1BA28156",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee selected Cordier fit",
+   "equation_number": "23",
+   "form": "N_s = 3.72 * D_s^(-1.1429)",
+   "statement": null,
+   "quote": "The specific velocity and specific\ndiameter are defined using Eqs. (21–22), respectively, and the\noutlet diameter was derived from Eq. (23) from the Cordier\ndiagram, which shows the empirical relationship between the\nspecific velocity and specific diameter. Because the relationship between the outlet diameter and the outlet velocity is\nexpressed by Eq. (24), the outlet velocity can be calculated,\nand the outlet blade angle can be calculated from the velocity\ntriangle theory:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "N_s",
+     "meaning": "dimensionless specific speed",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_NS"
+     ]
+    },
+    {
+     "symbol": "D_s",
+     "meaning": "dimensionless specific diameter",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump."
+   ],
+   "validity": [],
+   "extraction_note": "Extracted using Docling formula enrichment (2.139.0, crop expansion 0.02), then visually compared with original PDF p7. Equation numbers read from PDF, not inferred from parser output. This is a source transcription, not independent verification or implementation validation. No validity interval is extracted from this page.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "D_s"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+   "store": "equations",
+   "type": "Equation",
+   "page": 6,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee pump shaft power",
+   "equation_number": "20",
+   "form": "P_p = Delta_p_p * mdot / (rho * eta_p)",
+   "statement": null,
+   "quote": "As shown in\nEq. (20), the required power was calculated from the head\nrise, pump efficiency, mass flow rate, and propellant density\n\n[23]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "P_p",
+     "meaning": "pump shaft power",
+     "units": "W",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Delta_p_p",
+     "meaning": "pump pressure rise",
+     "units": "Pa",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mdot",
+     "meaning": "propellant mass flow rate",
+     "units": "kg/s",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MDOT"
+     ]
+    },
+    {
+     "symbol": "rho",
+     "meaning": "propellant density",
+     "units": "kg/m^3",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RHO"
+     ]
+    },
+    {
+     "symbol": "eta_p",
+     "meaning": "pump efficiency",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_038274bee167e4f1ba894f9a",
+    "CAND_158f656b1384363e96db7a3a",
+    "CAND_19e5a0a5cc1f91e60f11aa90",
+    "CAND_407db9cb4be4f6786dcbfe19",
+    "CAND_ad36ad097e09042859943ee7"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 6
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "P_p",
+      "Delta_p_p",
+      "eta_p"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee motor mass closure",
+   "equation_number": "27",
+   "form": "m_m = P_m_out / delta_P_m = P_p / delta_P_m",
+   "statement": null,
+   "quote": "Because the output power of the motor is the same\nas the required pump power, the mass of the motor was calculated from Eqs. (26–27) using the pump power and motor\npower density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_m",
+     "meaning": "motor mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_m_out",
+     "meaning": "motor output / pump shaft power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_p",
+     "meaning": "pump shaft power",
+     "units": "W",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta_P_m",
+     "meaning": "motor output power density",
+     "units": "W/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_m",
+      "P_m_out",
+      "P_p",
+      "delta_P_m"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_29C78740",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee impeller outlet peripheral speed",
+   "equation_number": "24",
+   "form": "u_out = omega * D_out / 2",
+   "statement": null,
+   "quote": "The specific velocity and specific\ndiameter are defined using Eqs. (21–22), respectively, and the\noutlet diameter was derived from Eq. (23) from the Cordier\ndiagram, which shows the empirical relationship between the\nspecific velocity and specific diameter. Because the relationship between the outlet diameter and the outlet velocity is\nexpressed by Eq. (24), the outlet velocity can be calculated,\nand the outlet blade angle can be calculated from the velocity\ntriangle theory:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "u_out",
+     "meaning": "impeller outlet peripheral speed",
+     "units": "m/s",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "omega",
+     "meaning": "angular speed",
+     "units": "rad/s",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_OMEGA"
+     ]
+    },
+    {
+     "symbol": "D_out",
+     "meaning": "impeller outlet diameter",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump."
+   ],
+   "validity": [],
+   "extraction_note": "Extracted using Docling formula enrichment (2.139.0, crop expansion 0.02), then visually compared with original PDF p7. Equation numbers read from PDF, not inferred from parser output. This is a source transcription, not independent verification or implementation validation. No validity interval is extracted from this page.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "u_out",
+      "D_out"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee 2021 Eq. (25) empirical pump mass versus outlet diameter",
+   "equation_number": "25",
+   "form": "m_p = 0.4703*exp(0.01072*D_p)",
+   "statement": null,
+   "quote": "The empirical relationship between the diameter and mass can be expressed as",
+   "confidence": "medium",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_p",
+     "meaning": "pump mass",
+     "units": "unstated (kg presumed)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "D_p",
+     "meaning": "pump (impeller outlet) diameter",
+     "units": "unstated (mm presumed)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "commercial centrifugal pumps trend line [25]"
+   ],
+   "validity": [
+    "range of the commercial data not stated on this page"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_p",
+      "D_p"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 8,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee power-limited battery mass",
+   "equation_number": "30",
+   "form": "m_b_P = kappa_b * P_b / delta_P_b = kappa_b * P_inv_out / (delta_P_b * eta_inv)",
+   "statement": null,
+   "quote": "requiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_b_P",
+     "meaning": "power-limited battery pack mass including structure",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "kappa_b",
+     "meaning": "battery structural mass multiplier",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_b",
+     "meaning": "battery delivered electrical power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta_P_b",
+     "meaning": "battery specific power",
+     "units": "W/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_inv_out",
+     "meaning": "inverter output / motor electrical input power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eta_inv",
+     "meaning": "inverter efficiency",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_4022dd34281c55f0053cc2a4",
+    "CAND_512c2b2d1ba2a3ab8e9d5172",
+    "CAND_62fa487de8c8924705c754f9",
+    "CAND_bbe8038a6eb73e26357f6906",
+    "CAND_f9a079d6a703e27c74131038",
+    "CAND_fa7d4cb3a825e5aa873ce059"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 8
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_b_P",
+      "kappa_b",
+      "P_b",
+      "delta_P_b",
+      "P_inv_out",
+      "eta_inv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee motor output power density",
+   "equation_number": "26",
+   "form": "delta_P_m = P_m_out / m_m",
+   "statement": null,
+   "quote": "Because the output power of the motor is the same\nas the required pump power, the mass of the motor was calculated from Eqs. (26–27) using the pump power and motor\npower density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "delta_P_m",
+     "meaning": "motor output power density",
+     "units": "W/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_m_out",
+     "meaning": "motor output / pump shaft power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "m_m",
+     "meaning": "motor mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "delta_P_m",
+      "P_m_out",
+      "m_m"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee inverter output power density",
+   "equation_number": "28",
+   "form": "delta_P_inv = P_inv_out / m_inv",
+   "statement": null,
+   "quote": "The\noutput power of the inverter is the value obtained by dividing\nthe output power of the motor by the motor efficiency, and,\nlike the motor, estimates the mass from Eqs. (28–29) using\nthe power density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "delta_P_inv",
+     "meaning": "inverter output power density; Eq. 28 prints delta_inv",
+     "units": "W/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_inv_out",
+     "meaning": "inverter output / motor electrical input power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "m_inv",
+     "meaning": "inverter mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "delta_P_inv",
+      "P_inv_out",
+      "m_inv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_C452A65C",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee 2021 Eq. (29) inverter mass",
+   "equation_number": "29",
+   "form": "m_inv = P_inv_out/delta_P_inv = P_m_out/(delta_P_inv*eta_m)",
+   "statement": null,
+   "quote": "like the motor, estimates the mass from Eqs",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_inv",
+     "meaning": "inverter mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_inv_out",
+     "meaning": "inverter output power",
+     "units": "W",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta_P_inv",
+     "meaning": "inverter output-power density",
+     "units": "W/kg",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_m_out",
+     "meaning": "motor output (shaft) power",
+     "units": "W",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eta_m",
+     "meaning": "motor efficiency",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_inv",
+      "P_inv_out",
+      "delta_P_inv",
+      "P_m_out",
+      "eta_m"
+     ]
+    },
+    {
+     "check": "duplicate_form_in_packet"
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee inverter mass closure",
+   "equation_number": "29",
+   "form": "m_inv = P_inv_out / delta_P_inv = P_m_out / (delta_P_inv * eta_m)",
+   "statement": null,
+   "quote": "The\noutput power of the inverter is the value obtained by dividing\nthe output power of the motor by the motor efficiency, and,\nlike the motor, estimates the mass from Eqs. (28–29) using\nthe power density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_inv",
+     "meaning": "inverter mass",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_inv_out",
+     "meaning": "inverter output / motor electrical input power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "delta_P_inv",
+     "meaning": "inverter output power density; Eq. 28 prints delta_inv",
+     "units": "W/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_m_out",
+     "meaning": "motor output / pump shaft power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eta_m",
+     "meaning": "motor efficiency",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_inv",
+      "P_inv_out",
+      "delta_P_inv",
+      "P_m_out",
+      "eta_m"
+     ]
+    },
+    {
+     "check": "duplicate_form_in_packet"
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_E25A3881",
+   "store": "equations",
+   "type": "Equation",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee dimensionless specific diameter",
+   "equation_number": "22",
+   "form": "D_s = D_out * (g * H)^(1/4) / sqrt(Q)",
+   "statement": null,
+   "quote": "The specific velocity and specific\ndiameter are defined using Eqs. (21–22), respectively, and the\noutlet diameter was derived from Eq. (23) from the Cordier\ndiagram, which shows the empirical relationship between the\nspecific velocity and specific diameter. Because the relationship between the outlet diameter and the outlet velocity is\nexpressed by Eq. (24), the outlet velocity can be calculated,\nand the outlet blade angle can be calculated from the velocity\ntriangle theory:",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "D_s",
+     "meaning": "dimensionless specific diameter",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "D_out",
+     "meaning": "impeller outlet diameter",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Q",
+     "meaning": "volumetric flow rate",
+     "units": "m^3/s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_QFLUX"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "g",
+     "meaning": "gravitational acceleration",
+     "units": "m/s^2",
+     "role": "parameter",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GRAVITY"
+     ],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_GAMMA"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "H",
+     "meaning": "pump head rise",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_HEAD"
+     ]
+    }
+   ],
+   "assumptions": [
+    "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump."
+   ],
+   "validity": [],
+   "extraction_note": "Extracted using Docling formula enrichment (2.139.0, crop expansion 0.02), then visually compared with original PDF p7. Equation numbers read from PDF, not inferred from parser output. This is a source transcription, not independent verification or implementation validation. No validity interval is extracted from this page.",
+   "same_page_formula_candidates": [
+    "CAND_09f720a145f2cd4cd67d53aa",
+    "CAND_15370161bab192cc69dbeaa3",
+    "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "CAND_58446f2eb9d6850e05f916af",
+    "CAND_999e16fd252b83864b5029a6",
+    "CAND_c6b92bb87b76d96e7c5edd3b",
+    "CAND_cb50f32b987f41ae02148a43",
+    "CAND_e27dabc2bfb8f36d29349b13",
+    "CAND_f67942fc267657109716011e"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "D_s",
+      "D_out",
+      "Q"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+   "store": "equations",
+   "type": "Equation",
+   "page": 8,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Lee energy-limited battery mass",
+   "equation_number": "31",
+   "form": "m_b_E = kappa_b * E_b / delta_E_b = kappa_b * P_inv_out * t_b / (delta_E_b * eta_E * eta_inv)",
+   "statement": null,
+   "quote": "requiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "m_b_E",
+     "meaning": "energy-limited battery pack mass including structure",
+     "units": "kg",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "kappa_b",
+     "meaning": "battery structural mass multiplier",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "E_b",
+     "meaning": "battery stored energy required",
+     "units": "J",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_EBATT"
+     ]
+    },
+    {
+     "symbol": "delta_E_b",
+     "meaning": "battery specific energy; paper lists Wh/kg, requiring time conversion",
+     "units": "J/kg",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "P_inv_out",
+     "meaning": "inverter output / motor electrical input power",
+     "units": "W",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "t_b",
+     "meaning": "burning duration",
+     "units": "s",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eta_E",
+     "meaning": "battery energy efficiency",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "eta_inv",
+     "meaning": "inverter efficiency",
+     "units": "1",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Component power/energy density sizing, not a measured hardware map."
+   ],
+   "validity": [
+    "Use component technology inputs for the intended operating duty; the example values are not universal constants."
+   ],
+   "extraction_note": "Formula transcribed by visual inspection of original PDF; contiguous Markdown quote anchors the adjacent explanatory paragraph. Markdown math layout is damaged. Source reading is not independent verification or physical validation.",
+   "same_page_formula_candidates": [
+    "CAND_4022dd34281c55f0053cc2a4",
+    "CAND_512c2b2d1ba2a3ab8e9d5172",
+    "CAND_62fa487de8c8924705c754f9",
+    "CAND_bbe8038a6eb73e26357f6906",
+    "CAND_f9a079d6a703e27c74131038",
+    "CAND_fa7d4cb3a825e5aa873ce059"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 8
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "m_b_E",
+      "kappa_b",
+      "delta_E_b",
+      "P_inv_out",
+      "t_b",
+      "eta_E",
+      "eta_inv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+   "store": "claims",
+   "type": "Claim",
+   "page": 8,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Battery sizing selects the heavier branch and includes a structural mass multiplier.",
+   "quote": "requiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 8
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+   "store": "claims",
+   "type": "Claim",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper cautions that motor mass estimates depend on the selected technology-specific power density.",
+   "quote": "Careful selection of the motor power density suitable for\nthe engine design is necessary because the motor mass estimation depends on the power density, and the technological\nlimitationoftheelectric-pumpcycleisdependentonthetechnology maturity of the electric motor.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+   "store": "claims",
+   "type": "Claim",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper defines inverter output power as motor output power divided by motor efficiency.",
+   "quote": "The\noutput power of the inverter is the value obtained by dividing\nthe output power of the motor by the motor efficiency, and,\nlike the motor, estimates the mass from Eqs. (28–29) using\nthe power density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+   "store": "claims",
+   "type": "Claim",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The paper equates motor output power with required pump power for component mass sizing.",
+   "quote": "Because the output power of the motor is the same\nas the required pump power, the mass of the motor was calculated from Eqs. (26–27) using the pump power and motor\npower density [1]:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  },
+  {
+   "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_12E89F60",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 7,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump.",
+   "quote": "The 2D configuration of the one-stage centrifugal pump was\ndesigned through the relationship between the flow characteristics and the impeller configuration.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 7
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**Fig. 4** Elbow of the torus shape\n\n**Fig. 5** Valve mass surface about\nthe commercial valve data\n\n<u>1</u>\n_�p_ elb - _K_ elb 2 <sup>_ρv_</sup> <sup>2</sup> <sup>_._</sup> (16)\n\nThe shape of the elbow is a part of the torus, and the mass\ncan be estimated from the volume and density of the material.\nFigure 4 presents the shape and design parameters of the\nelbow. The diameter, thickness, and material of the elbow\ncan be assumed to be the same as the pipe, and once the inner\nradius of curvature ( _r_ in) suitable for the system is determined,\nthe outer radius of curvature ( _r_ out) can be determined through\na relationship with the pipe diameter. In this study, it was\nassumed that the inner radius of curvature was the same as\nthe pipe diameter:\n\n_r_ out - _r_ in + 2 _D_ elb _,_ (17)\n\n_V_ elb - 4 _π_ <sup>2</sup> _t_ elb _(r_ out + _r_ in _)(r_ out − _r_ in − _t_ elb _)_ <sup>_α_</sup> (18)\n\n360 <sup>_,_</sup>\n\n_m_ elb - _V_ elb _ρ_ elb _._ (19)\n\nThe valve was used to control the mass flow rate of the\npropellant. As the causes of pressure loss, various factors\nneed to be considered, such as wall friction, change in flow\npath area, and change in the flow direction. Therefore, there"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00016",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "International Journal of Aeronautical and Space Sciences\n\nis a large difference in pressure loss and mass depending on\nthe valve type and size. Hence, an estimation of the valve\nperformance theoretically has low accuracy. In this study, to\novercome this problem, pressure loss and mass were estimated from the commercial product data provided by the\ncompany. The pressure loss was calculated from the valve\nloss coefficient. The mass was estimated from the operating pressure in the system [21]. This was derived from the\nperformance curve for the hydraulic diameter-pressure-mass\nconstructed from the valve data of Yuznoye of Ukraine [22],\nas shown in Fig. 5. The hydraulic diameter of the valve was\nassumed to be the same as the pipe diameter.\n\n**2.1.3** **Pump**\n\nThe pump is a component used to supply the required mass\nflow of propellant to the combustion chamber. Therefore,\nthe head rise is the main value considering the combustion\nchamber pressure and feed line pressure loss. As shown in\nEq. (20), the required power was calculated from the head\nrise, pump efficiency, mass flow rate, and propellant density\n\n[23]:\n\n_P_ p - <sup>_�p_</sup> <sup><u>p</u></sup> <sup>_m_</sup> <sup>˙</sup>\n\n_ρη_ p\n\n_._ (20)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00017",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "Several methods can be used to estimate the mass of the\npump, which includes the method using the power density,\nthe empirical method, and the configuration design method.\nThe estimating method from the power density is simple,\nbut the mass estimation has low reliability when the selected\npower density is invalid. The configuration design method\nis the most accurate, but it is necessary to perform additional validations on whether the performance satisfies the\ndesign conditions, such as mass flow rate, head rise, and efficiency. Moreover, it is inappropriate to perform this at the\nconceptual design stage. Therefore, in this study, the mass\nwas estimated by an empirical method using existing pumps.\nThe 2D configuration of the one-stage centrifugal pump was\ndesigned through the relationship between the flow characteristics and the impeller configuration. In addition, using\nthe diameter derived, the pump mass was estimated from the\ndiameter-mass trend line constructed from commercial centrifugal pumps. Figure 6 shows the design procedure and\nresults of the 2D configuration design. The configuration\ndesign of the impeller was composed of a process of deriving\na 2D configuration from the mass flow rate, inlet pressure,\noutlet pressure, rpm, efficiency, suction speed, blade thickness, and diameter ratio. The specific velocity and specific\ndiameter are defined using Eqs. (21–22), respectively, and the\noutlet diameter was derived from Eq. (23) from the Cordier\ndiagram, which shows the empirical relationship between the\nspecific velocity and specific diameter. Because the relationship between the outlet diameter and the outlet velocity is\nexpressed by Eq. (24), the outlet velocity can be calculated,\nand the outlet blade angle can be calculated from the velocity\ntriangle theory:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00018",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "_ω_ <sup>√</sup> _<u>Q</u>_\n_N_ s - _(gH_ _)_ <sup>3</sup> <sup>_/_</sup> <sup>4</sup> <sup>_,_</sup> (21)\n\n_D_ s - <sup>_<u>D</u>_</sup> <sup><u>out</u></sup> <sup>_<u>(gH</u>_</sup> <sup>_<u>)</u>_</sup> <sup>1</sup> <sup>_/_</sup> <sup>4</sup> _,_ (22)\n\n~~√~~ _Q_\n\n_N_ s - 3 _._ 72 · _D_ s <sup>−1</sup> <sup>_._</sup> <sup>1429</sup> _,_ (23)\n\n_u_ out - _ω_ <sup>_<u>D</u>_</sup> <sup><u>out</u></sup> (24)\n\n2 <sup>_._</sup>\n\nThe inlet diameter and the shaft diameter were determined\nby the relationship with the outlet diameter. The inlet blade\nangle was calculated from the velocity triangle theory. The\nnumber and shape of the blades were determined empirically\n\n[24]. Figure 6b, c presents some design results, top and side\nviews of the impeller 2D configuration. The empirical relationship between the diameter and mass can be expressed as\nEq. (25) [25]:\n\n**2.1.4** **Electric Motor**\n\nThe motor, which is a component that rotates using electric energy, serves to transmit shaft power to the pump. The\npower density, which is an important performance factor of\nthe motor, is defined as the ratio of the motor’s output power\nto the mass; hence, a high power density means high performance. Because the output power of the motor is the same\nas the required pump power, the mass of the motor was calculated from Eqs. (26–27) using the pump power and motor\npower density [1]:\n\n_δ_ P _,_ m - <sup>_<u>P</u>_</sup> <sup><u>m</u></sup> <sup>_<u>,</u>_</sup> <sup><u>out</u></sup> _,_ (26)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00019",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "_m_ m\n\n<u>1</u>\n_m_ m _δ_ P _,_ m\n\n<u>1</u>\n_P_ m _,_ out _δ_ P _,_ m\n\n_P_ p _._ (27)\n\nCareful selection of the motor power density suitable for\nthe engine design is necessary because the motor mass estimation depends on the power density, and the technological\nlimitationoftheelectric-pumpcycleisdependentonthetechnology maturity of the electric motor. In addition, because the\nelectric motor is a component with a dry mass, it is inappropriate to use a larger motor’s power density than necessary\nfor a compact design. In view of these aspects, the power\ndensity of a commercial motor was used for practical purposes in this study, and it was confirmed that the estimated\nmass of the motor was suitable for the manufacture of the\nengine.\n\n**2.1.5** **Inverter**\n\nThe inverter is a component that converts the DC power to AC\npower and can convert from DC to AC with a desired voltage\nand frequency. Ultimately, the inverter serves to control the\nrotation speed and output power of the electric motor. The\noutput power of the inverter is the value obtained by dividing\nthe output power of the motor by the motor efficiency, and,\nlike the motor, estimates the mass from Eqs. (28–29) using\nthe power density [1]:\n\n_δ_ inv - <sup>_<u>P</u>_</sup> <sup><u>inv</u></sup> <sup>_<u>,</u>_</sup> <sup><u>out</u></sup>\n\n_m_ inv\n\n_,_ (28)\n\n<u>1</u>\n_m_ inv _δ_ P _,_ inv\n\n**2.1.6** **Battery**\n\n<u>1</u>\n_P_ inv _,_ out _δ_ P _,_ inv _η_ m"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00020",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "_P_ m _,_ out _._ (29)\n\nThe battery is an energy source that drives an electric motor.\nLike motors and inverters, the power density is an important performance factor in estimating the battery mass, but\nthe energy density is also a major performance factor that\ndetermines the mass. Therefore, it is determined by values"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00021",
+   "page_start": 7,
+   "page_end": 8,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "_m_ p - 0 _._ 4703 × exp\n\n- 0 _._ 01072 × _D_ p _._ (25)\n\n**Fig. 6** Impeller 2-D design flow\nchart ( **a** ), top view ( **b** ), side view\n( **c** )\n\nrequiring a heavier mass, considering the power density and\nenergy density, as shown in Eqs. (30–32). The structural margin ( _κ_ b) of the battery pack is another factor considering the\nnecessary sub-component mass, such as a case, and _η_ E is the\nenergy efficiency of the battery [1]:\n\nInternational Journal of Aeronautical and Space Sciences\n\nThe shape of the tank was assumed to be spherical, and\nthe volume of the tank was estimated by the total propellant\nvolume and ullage. Depending on the tank configuration, the\ntank mass was estimated from the volume, material density,\ninternal pressure, and thickness [12], as expressed in Eqs.\n(34–35):\n\n_m_ b _,_ P - <sup>_κ_</sup> <sup><u>b</u></sup>\n\n_δ_ P _,_ b\n\n_m_ b _,_ E - <sup>_κ_</sup> <sup><u>b</u></sup>\n\n_δ_ E _,_ b\n\n_m_ b - MAX\n\n_κ_ <u>b</u>\n_P_ b _δ_ P _,_ b _η_ inv\n\n_P_ inv _,_ out _,_ (30)\n\n_m_ <u>prop</u>\n\n_ρ_ prop\n\n_,_ (34)\n\n_κ_ <u>b</u>\n_E_ b _δ_ E _,_ b _η_ E _η_ inv\n\n_V_ tk - _u_ tk\n\n_P_ inv _,_ out _t_ b _,_ (31)\n\n- <u>3</u> _<u>V</u>_ <u>tk</u>\n4 _π_\n\n�1 _/_ 3\n_._ (35)\n\n�2 _/_ 3 _<u>p</u>_ <u>tk</u>\n2 _σ_ zul\n\n_m_ b _,_ P _, m_ b _,_ E\n\n_._ (32)\n\n_m_ tk - _ρ_ tk4 _π_\n\n- <u>3</u> _<u>V</u>_ <u>tk</u>\n4 _π_\n\nBecause the battery is also a component with a dry mass\nlike an electric motor, it is inappropriate to use a larger battery’s power density and energy density than necessary for\na compact design. The mass of the battery was confirmed to\nbe suitable for design and manufacture."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00022",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**2.1.7** **Propellant and Tank**\n\nThe total propellant mass was calculated from the product of the propellant mass flow rate and burning time, as\nshown in Eq. (33). The propellant margin ( _κ_ prop) represents\nthe remaining propellant in the feed line after the engine has\nshut down:\n\n_m_ prop - _κ_ prop _(_ ˙ _m_ - + _m_ ˙ f _)t_ b _._ (33)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00023",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+   "text": "**2.2** **Gas-Generator Cycle Modeling**\n\nThe gas-generator cycle is a method of driving a pump by\noperating the turbine through the combustion gas generated\nfrom the gas generator. Compared to the electric-pump cycle,\nthe gas- generator cycle does not require an electric motor\nand inverter but requires additional components, such as gas\ngenerators, flow control valves, and turbines. In this study,\nthe turbopump and gas-generator analysis modules were validated as reported elsewhere [16]. The components, except\nfor the gas generator and turbopump, were modeled similar\nto that of the electric-pump cycle. Therefore, it was omitted\nin this section. A mass estimation was newly performed in\nthis study. Figure 3b presents the analysis process of the gasgenerator cycle. The program initially assumed the mass flow"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 4,
+   "formula": 20
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

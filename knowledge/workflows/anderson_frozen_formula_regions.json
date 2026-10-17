@@ -1,0 +1,42 @@
+[
+ {
+  "page": 671,
+  "bbox": {
+   "l": 198.2,
+   "b": 246.71,
+   "r": 444.61,
+   "t": 288.36
+  },
+  "locator_note": "Anderson17.15 total enthalpy decrease"
+ },
+ {
+  "page": 672,
+  "bbox": {
+   "l": 215.04,
+   "b": 498.42,
+   "r": 451.58,
+   "t": 538.38
+  },
+  "locator_note": "Anderson17.18 continuity area ratio"
+ },
+ {
+  "page": 682,
+  "bbox": {
+   "l": 225.79,
+   "b": 451.42,
+   "r": 462.34,
+   "t": 493.95
+  },
+  "locator_note": "Anderson17.35 equilibrium speed of sound"
+ },
+ {
+  "page": 682,
+  "bbox": {
+   "l": 247.3,
+   "b": 320.58,
+   "r": 478.46,
+   "t": 356.56
+  },
+  "locator_note": "Anderson17.36 frozen sound speed"
+ }
+]

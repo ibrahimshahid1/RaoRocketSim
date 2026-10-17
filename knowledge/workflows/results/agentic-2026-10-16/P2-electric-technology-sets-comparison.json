@@ -1,0 +1,305 @@
+{
+ "record": "P2 electric-drive technology sets - page-verified values, power basis and code check (findings only; no code edits)",
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "recorded_at": "2026-10-16",
+ "code": {
+  "file": "raosim/electric_technology.py",
+  "file_sha256": "8bb54c04a942264ccaac4f50c12396ee69c1e1bdf8ea29b8fb2256e600416b5f",
+  "brackets_symbol": "_SCREENING_BRACKETS (lines 238-306)",
+  "sets": {
+   "repository_screening_v1": {
+    "eta_motor": 0.9,
+    "eta_inverter": 0.96,
+    "eta_discharge": 0.95,
+    "motor_power_density": 2500.0,
+    "inverter_power_density": 15000.0,
+    "battery_energy_density": 900000.0,
+    "battery_power_density": 3000.0,
+    "battery_structural_margin": 1.2
+   },
+   "lee2021_ijass_electric_pump": {
+    "eta_motor": 0.87,
+    "eta_inverter": 0.85,
+    "eta_discharge": 0.925,
+    "motor_power_density": 875.0,
+    "inverter_power_density": 60000.0,
+    "battery_energy_density": 1170000.0,
+    "battery_power_density": 650.0,
+    "battery_structural_margin": 1.2
+   }
+  },
+  "repository_screening_v1_bracket_positions": {
+   "battery_power_density": "inside",
+   "battery_energy_density": "inside",
+   "battery_structural_margin": "inside",
+   "battery_discharge_efficiency": "above",
+   "motor_power_density": "inside",
+   "motor_efficiency": "inside",
+   "inverter_power_density": "below",
+   "inverter_efficiency": "above"
+  }
+ },
+ "sources": [
+  {
+   "source": "Lee et al. 2021 (IJASS)",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "pages": "PDF pp.7-8 (Eqs. 26-32, from prior verified review), 10-11 (Table 2, Eq. 38)",
+   "battery": {
+    "power_density": "0.650 kW/kg (single commercial cell, Amicell ABLP8474170H320)",
+    "energy_density": "325 Wh/kg (cell)",
+    "margin": "20% structure margin (kappa 1.2)",
+    "discharge_efficiency": "0.925 = Eq. 38 at t_b 600 s (correlation, not constant)",
+    "basis": "cell specification; power on battery output (= inverter input)"
+   },
+   "motor": {
+    "power_density": "0.875 kW/kg (commercial Vishan EC2060L-3660)",
+    "efficiency": 0.87,
+    "basis": "motor OUTPUT power (Eqs. 26-27)"
+   },
+   "inverter": {
+    "power_density": "60 kW/kg",
+    "efficiency": 0.85,
+    "basis": "inverter OUTPUT power (Eqs. 28-29)"
+   },
+   "completeness": {
+    "battery": "COMPLETE",
+    "motor": "COMPLETE",
+    "inverter": "COMPLETE"
+   }
+  },
+  {
+   "source": "Kwak et al. 2018 (AST 77)",
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "pages": "PDF p.5 (Table 2, Eq. 4), p.8 (Eqs. 35-43), p.9 (Table 3)",
+   "battery": {
+    "power_density": "cells 1.53/1.64/1.68/6.95 kW/kg; D cell 6.95 used",
+    "energy_density": "cells 230.0/213.0/168.2/198.5 Wh/kg (Table 2); D cell 198 Wh/kg in Table 3",
+    "margin": "kappa_bp 1.2 (BMS, wires, case)",
+    "discharge_efficiency": "eta_E = 0.093 ln(t_d) + 0.3301 (Eq. 4)",
+    "basis": "CELL level; pack via kappa_bp"
+   },
+   "motor": {
+    "power_density": "5.3 kW/kg (5.8 kW/kg state of the art reported)",
+    "efficiency": 0.95,
+    "basis": "motor MECHANICAL output (Eq. 35)"
+   },
+   "inverter": {
+    "power_density": "60 kW/kg",
+    "efficiency": 0.85,
+    "basis": "inverter ELECTRICAL output (Eq. 37)"
+   },
+   "pump": {
+    "power_density": "LOX 20, fuel 15 kW/kg (authors' reference data); GG turbopump mean 13.5 kW/kg"
+   },
+   "completeness": {
+    "battery": "COMPLETE",
+    "motor": "COMPLETE",
+    "inverter": "COMPLETE"
+   }
+  },
+  {
+   "source": "Pavlov Rachov, Tacca and Lentini 2013 (JPP)",
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "pages": "PDF p.4 (Eqs. 34-42), p.5 (Tables 1-2)",
+   "battery": {
+    "power_density": "Li-Po 6000, Li-ion 2000, Li-S 1200 W/kg",
+    "energy_density": "Li-Po 130, Li-ion 220, Li-S 350 Wh/kg",
+    "margin": "kappa_b 1.2",
+    "discharge_efficiency": "none (E = P_pu t_b/eta_ep)",
+    "basis": "datasheets incl. Thunder Power five-cell (5S) Li-Po pack and Sion Power Li-S; cell/pack not stated"
+   },
+   "motor": {
+    "power_density": "3.8 kW/kg (datasheets, called conservative)",
+    "efficiency": 0.8,
+    "basis": "motor MECHANICAL output (Eq. 35)"
+   },
+   "inverter": {
+    "power_density": "60 kW/kg (Castle Creations data)",
+    "efficiency": 0.85,
+    "basis": "inverter ELECTRICAL output (Eq. 37)"
+   },
+   "pump": {
+    "power_density": "22 kW/kg extrapolated from Titan turbopump data; turbopump 18 kW/kg on axis power"
+   },
+   "completeness": {
+    "battery": "COMPLETE",
+    "motor": "COMPLETE",
+    "inverter": "COMPLETE"
+   }
+  },
+  {
+   "source": "Casalino, Masseni and Pastrone 2019 (Aerospace 6)",
+   "document_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "pages": "PDF p.5 (Eqs. 14-15), p.6 (Eqs. 16-18, Table 1)",
+   "battery": {
+    "power_density": "Set A 3.00, Set B 6.95 kW/kg",
+    "energy_density": "Set A 90.00, Set B 198.50 Wh/kg",
+    "margin": "1.2 safety factor (Eq. 17)",
+    "discharge_efficiency": "none",
+    "basis": "Ragone plots [34] (A); Li-polymer literature [19] (B); cell/pack not stated"
+   },
+   "motor": "NOT SEPARABLE: combined electric drive system plus pump delta_ep 1.25 (A) / 3.92 (B) kW/kg on maximum ELECTRICAL power (Eq. 14)",
+   "inverter": "NOT SEPARABLE (included in delta_ep)",
+   "efficiency": "overall eta_ep electrical-to-hydraulic: Set A 0.64 in text (p.5) vs 0.68 in Table 1 (p.6) - CONFLICT; Set B 0.53",
+   "completeness": {
+    "battery": "COMPLETE",
+    "motor": "NOT_SEPARABLE",
+    "inverter": "NOT_SEPARABLE"
+   }
+  },
+  {
+   "source": "Solda and Lentini 2008 (JPP)",
+   "document_id": "DOC_DOI_10_2514_1_35074",
+   "pages": "PDF p.3 (Eqs. 27-30), p.4 (assumed values, Fig. 1)",
+   "battery": {
+    "power_and_energy": "Ragone relation of premium Li-polymer batteries (Fig. 1), discharge time >= about 12.5 min; no single value",
+    "margin": "kappa_b 1.2",
+    "basis": "not stated"
+   },
+   "motor": "NOT SEPARABLE: specific mass 6 kg/kW_e for conditioning/controller plus electric pump unit on ELECTRIC power absorbed (Eq. 29)",
+   "inverter": "NOT SEPARABLE",
+   "efficiency": "overall eta_eo 0.68 (controller plus electric pump unit)",
+   "completeness": {
+    "battery": "RAGONE_RELATION_ONLY",
+    "motor": "NOT_SEPARABLE",
+    "inverter": "NOT_SEPARABLE"
+   }
+  },
+  {
+   "source": "Park et al. 2023 (IJASS 24)",
+   "document_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+   "pages": "PDF p.6 (Table 3), p.10 (Eq. 16), p.11",
+   "battery": "NONE INDEPENDENT: battery mass from Kwak's 6.95 kW/kg (power supply used in tests)",
+   "motor": {
+    "power_density": "8.20 kW/kg (Plettenberg Teras 50/2 BM, 1.22 kg)",
+    "efficiency": "0.90 manufacturer",
+    "basis": "NOT STATED"
+   },
+   "inverter": {
+    "power_density": "26.64 kW/kg (ZTW Beast Pro 300A, 0.5 kg)",
+    "efficiency": "0.80 measured output/input, assumed",
+    "basis": "NOT STATED (equals 300 A x 44.4 V / 0.5 kg, a rating product)"
+   },
+   "completeness": {
+    "battery": "NONE",
+    "motor": "COMPLETE_BASIS_UNSTATED",
+    "inverter": "COMPLETE_BASIS_UNSTATED"
+   }
+  },
+  {
+   "source": "NASA SP-8107 Turbopump Systems (1974)",
+   "document_id": "DOC_NTRS_19750012398",
+   "pages": "PDF pp.16-17 (Table I)",
+   "turbopump": "assembly specific horsepower 2.22 (Redstone) to 21.60 (J-2) hp/lbm operational, 50.0/108.9 SSME (not operational, emergency power level); 1 hp/lbm = 1.644 kW/kg",
+   "completeness": {
+    "battery": "NONE",
+    "motor": "NONE",
+    "inverter": "NONE"
+   }
+  }
+ ],
+ "bracket_checks": [
+  {
+   "parameter": "battery_power_density",
+   "code_low": 650.0,
+   "code_high": 6950.0,
+   "code_held_values_text": "Lee 2021 0.650 kW/kg (Table 2, PDF p.11); Kwak 2018 cells 1.53, 1.64, 1.68 kW/kg (Table 2, PDF p.5) and cell D 6.95 kW/kg (Table 3, PDF p.9); Casalino 2019 set A 3.00 and set B 6.95 kW/kg (Table 1, PDF p.6); Pavlov Rachov 2013 Li-S 1.2, Li-ion 2.0, Li-Po 6.0 kW/kg (Table 1, PDF p.5)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Values confirmed; bases mix cell-level (Kwak, Lee) and unstated or pack datasheets (Rachov, Casalino). The code applies kappa_b after the density, consistent with Kwak Eq. 40."
+  },
+  {
+   "parameter": "battery_energy_density",
+   "code_low": 324000.0,
+   "code_high": 1260000.0,
+   "code_held_values_text": "Casalino 2019 set A 90.00 and set B 198.50 Wh/kg (Table 1, PDF p.6); Kwak 2018 cells 168.2-230.0 Wh/kg (Table 2, PDF p.5); Pavlov Rachov 2013 Li-Po 130, Li-ion 220, Li-S 350 Wh/kg (Table 1, PDF p.5); Lee 2021 325 Wh/kg (Table 2, PDF p.11)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed; Kwak D cell is 198.5 (Table 2) vs 198 Wh/kg (Table 3) - source-internal difference."
+  },
+  {
+   "parameter": "battery_structural_margin",
+   "code_low": 1.2,
+   "code_high": 1.2,
+   "code_held_values_text": "1.2 in every held set: Lee 2021 (PDF p.10-11), Kwak 2018 (Table 3, PDF p.9), Casalino 2019 (Eq. 17, PDF p.6), Solda & Lentini 2008 (PDF p.4), Pavlov Rachov 2013 (Table 2, PDF p.5)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed 1.2 in Lee, Kwak, Casalino, Solda-Lentini and Rachov; Park borrows Kwak."
+  },
+  {
+   "parameter": "battery_discharge_efficiency",
+   "code_low": 0.925,
+   "code_high": 0.925,
+   "code_held_values_text": "No held source states a constant. Lee 2021 Eq. (38) (PDF p.10) and Kwak 2018 Eq. (4) (PDF p.5) give eta_E = 0.093 ln(t_b) + 0.3301; the only stated number is 0.925 at t_b = 600 s (Lee). The correlation gives 0.775 at 120 s and reaches 0.95 near 785 s",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed: only correlations (Lee Eq. 38, Kwak Eq. 4); 0.925 is the 600 s value."
+  },
+  {
+   "parameter": "motor_power_density",
+   "code_low": 875.0,
+   "code_high": 8200.0,
+   "code_held_values_text": "Lee 2021 0.875 kW/kg (Table 2, PDF p.11); Pavlov Rachov 2013 3.8 kW/kg (Table 1, PDF p.5); Kwak 2018 5.3 kW/kg (Table 3, PDF p.9), shaft output; Park 2023 8.20 kW/kg (Table 3, PDF p.6), basis unstated",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed 0.875 (Lee, output), 3.8 (Rachov, mechanical output), 5.3 (Kwak, mechanical output), 8.20 (Park, basis unstated)."
+  },
+  {
+   "parameter": "motor_efficiency",
+   "code_low": 0.8,
+   "code_high": 0.95,
+   "code_held_values_text": "Pavlov Rachov 2013 0.8 (Table 1, PDF p.5); Lee 2021 0.87 (Table 2, PDF p.11); Park 2023 0.90 (PDF p.10); Kwak 2018 0.95 (Table 3, PDF p.9)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed 0.80 (Rachov), 0.87 (Lee), 0.90 (Park, manufacturer), 0.95 (Kwak)."
+  },
+  {
+   "parameter": "inverter_power_density",
+   "code_low": 26640.0,
+   "code_high": 60000.0,
+   "code_held_values_text": "Lee 2021 (PDF p.7, p.10-11), Kwak 2018 (Table 3, PDF p.9) and Pavlov Rachov 2013 (Table 1, PDF p.5): 60 kW/kg on inverter output; Park 2023 26.64 kW/kg, basis unstated (Table 3, PDF p.6)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed 60 kW/kg on output (Lee, Kwak, Rachov) and 26.64 (Park, basis unstated)."
+  },
+  {
+   "parameter": "inverter_efficiency",
+   "code_low": 0.8,
+   "code_high": 0.85,
+   "code_held_values_text": "Lee 2021 (PDF p.10-11), Kwak 2018 (Table 3, PDF p.9), Pavlov Rachov 2013 (Table 1, PDF p.5): 0.85; Park 2023 0.80 (PDF p.11)",
+   "review": "CONFIRMED_ON_ORIGINAL_PAGES",
+   "note": "Confirmed 0.85 (Lee, Kwak, Rachov), 0.80 (Park)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "P2-F1",
+   "statement": "Every value and page cited in electric_technology.py _SCREENING_BRACKETS and in the lee2021 set was found on the original pages; no transcription error was found."
+  },
+  {
+   "id": "P2-F2",
+   "statement": "Complete battery+motor+inverter sets with stated power bases exist in three held sources: Lee 2021 (registered in code), Kwak 2018 and Pavlov Rachov 2013 (not registered). Casalino 2019 and Solda-Lentini 2008 give battery data but only combined drive-plus-pump values on electrical-input basis; Park 2023 gives motor and inverter values with unstated basis and no independent battery; SP-8107 gives only turbine-driven turbopump assembly data."
+  },
+  {
+   "id": "P2-F3",
+   "statement": "repository_screening_v1 (the default set) has inverter density 15 kW/kg below every held value (26.64-60) and inverter efficiency 0.96 above every held value (0.80-0.85); its constant discharge efficiency 0.95 corresponds to the held correlation only near 785 s. Confirmed against the code's own bracket positions."
+  },
+  {
+   "id": "P2-F4",
+   "statement": "Source-internal conflicts recorded, not corrected: Casalino 2019 Set A overall efficiency 0.64 (text p.5) vs 0.68 (Table 1 p.6); Kwak 2018 D-cell energy density 198.5 (Table 2) vs 198 Wh/kg (Table 3)."
+  },
+  {
+   "id": "P2-F5",
+   "statement": "MDO pump_specific_mass (2.5 kW/kg, not part of a technology set) lies below every held pump-only electric-pump value (Kwak 15 and 20 kW/kg; Rachov 22 kW/kg) and below operational turbopump assemblies in SP-8107 Table I (3.65-35.5 kW/kg); the bases differ (pump only, turbopump assembly, combined drive plus pump), so no value is directly transferable."
+  }
+ ],
+ "unblock": {
+  "item": "(j) a sourced default electric-technology set",
+  "status": "UNBLOCKED (literature)",
+  "note": "Three complete held sets are page-verified (Lee 2021, Kwak 2018, Pavlov Rachov 2013); choosing the default and registering additional sets is an owner/engineering decision. The current default repository_screening_v1 lies outside held evidence (gap G4). No code was changed.",
+  "status_history": [
+   {
+    "status": "PARTLY",
+    "superseded_at": "2026-10-16T22:35Z",
+    "reason": "status scale aligned with NEXT_KNOWLEDGE_SESSION.md: literature sufficiency only"
+   }
+  ]
+ },
+ "physical_validation": "NOT_ESTABLISHED (component catalogue and study assumptions, not measured flight hardware for the LREKit duty)"
+}

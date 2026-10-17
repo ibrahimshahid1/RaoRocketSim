@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-10-16T18:20:17.703992+00:00",
+  "generated_at": "2026-10-17T17:57:58.952149+00:00",
   "n_documents": 252,
   "n_conversion_rows": 286,
   "authority_note": "The PDF is authoritative; generated Markdown is a derivative (DERIVED_FROM)."
@@ -55,7 +55,7 @@
     "2 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -104,7 +104,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -171,7 +171,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -255,7 +255,7 @@
     "Possible repeated page-edge text remains: T; 2 **CHAPTER** **1** Compressible Flow-Some History and Introductory Thoughts; I I-"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -317,7 +317,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -380,7 +380,7 @@
     "References heading detected in source but not preserved as a Markdown heading"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "isbn": "9780791834879",
    "alternate_copy_of": "",
    "alternate_copies": []
@@ -444,7 +444,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "isbn": "9780791828106",
    "alternate_copy_of": "",
    "alternate_copies": []
@@ -500,7 +500,7 @@
     "Possible missing figure captions (93 output vs 428 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "isbn": "9780791872192",
    "alternate_copies": [
     "DOC_DIMENSIONING_AND_TOLERANCING_ENGINEERING_DRAWING_AND_ASTM_IN"
@@ -583,7 +583,7 @@
     "References heading detected in source but not preserved as a Markdown heading"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -661,7 +661,7 @@
     "Possible repeated page-edge text remains: **(a)** **Z** **=** **1** **inch** **(b)** **Z** **=** **1.5** **inch** **(c)** **Z** **=** **2** **inch**; Top: Empirical Solution; Bottom: CFD Solution; K.."
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -716,7 +716,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -786,7 +786,7 @@
     "Possible repeated page-edge text remains: 1 Copyright © 2014 by ASME; _<u>th</u>_; Blade"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -864,7 +864,7 @@
     "Possible repeated page-edge text remains: 124 _D._ _Spiller,_ _A._ _Stabile,_ _D._ _Lentini_; (2)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -927,7 +927,7 @@
     "Possible repeated page-edge text remains: B-Splines; ; _P_  _u_ =∑"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1005,7 +1005,7 @@
     "Possible repeated page-edge text remains: 13 13; 65 (85); 5.0"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1060,7 +1060,7 @@
     "Possible missing figure captions (93 output vs 428 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "isbn": "9780791872192",
    "alternate_copy_of": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA",
    "alternate_copy_basis": "same bibliographic identifier (isbn:9780791872192) with a different PDF payload",
@@ -1111,7 +1111,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1164,7 +1164,7 @@
     "pymupdf4llm markdown extraction failed (<pymupdf.mupdf.FzErrorArgument; proxy of <Swig Object of type 'mupdf::FzErrorArgument *' at 0x105650f00> >)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1217,7 +1217,7 @@
     "Repeated page-edge text was removed: Int J Adv Manuf Technol"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1274,7 +1274,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1331,7 +1331,7 @@
     "Section hierarchy may be incomplete (fewer than two Markdown headings)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1416,7 +1416,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1503,7 +1503,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1580,7 +1580,7 @@
     "Possible repeated page-edge text remains: J Mater Sci (2008) 43:6546–6555 6547; 6548 J Mater Sci (2008) 43:6546–6555"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1652,7 +1652,7 @@
     "Possible repeated page-edge text remains: 118 J. Therm. Sci., Vol.22, No.2, 2013"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1725,7 +1725,7 @@
     "Possible repeated page-edge text remains: 38 J. Therm. Sci., Vol.24, No.1, 2015; Min Son et al. Effects of Momentum Ratio and Weber Number on Spray Half Angles of Liquid Controlled Pintle Injector 39"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1800,7 +1800,7 @@
     "Possible repeated page-edge text remains: Min Son et al. Verification on Spray Simulation of a Pintle Injector for Liquid Rocket Engine 91; 92 J. Therm. Sci., Vol.25, No.1, 2016"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1888,7 +1888,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -1976,7 +1976,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
    "alternate_copy_basis": "same bibliographic identifier (10.1007/s42405-020-00325-z) with a different PDF payload",
    "alternate_copies": []
@@ -2034,7 +2034,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copies": [
     "DOC_DOI_10_1007_S42405_020_00325_Z"
    ],
@@ -2122,7 +2122,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2177,7 +2177,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2226,7 +2226,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2308,7 +2308,7 @@
     "Possible repeated page-edge text remains: M. Son et al. _Acta Astronautica (xxxx) xxxx–xxxx_; Table 2; PI−1 4 mm 0.6 mm 13.40"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2391,7 +2391,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2476,7 +2476,7 @@
     "Possible repeated page-edge text remains: P.R. Gradl and C.S. Protz _Acta Astronautica 174 (2020) 148–158_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2560,7 +2560,7 @@
     "Possible repeated page-edge text remains: _Source:_ Reproduced with permission from [46]."
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2641,7 +2641,7 @@
     "Possible repeated page-edge text remains: _R. Zhou and C. Shen Acta Astronautica 194 (2022) 255–262_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2722,7 +2722,7 @@
     "Possible repeated page-edge text remains: _D. Kang et al. Acta Astronautica 201 (2022) 48–58_; **Table 1**; **BI-AM04** 4.34 0.19 2.44 69.20 5.95 0.88 94.83"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2807,7 +2807,7 @@
     "Possible repeated page-edge text remains: to the web version of this article.)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2894,7 +2894,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -2977,7 +2977,7 @@
     "Possible repeated page-edge text remains: _G. Zhang et al. Applied Thermal Engineering 223 (2023) 120035_; [3](https://www.studocu.com/row?utm_campaign=shared-document&utm_source=studocu-document&utm_medium=social_sharing&utm_content=1-s2-rocket-design-sample-paper)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3061,7 +3061,7 @@
     "Possible repeated page-edge text remains: _W. Zhou et al. Applied Thermal Engineering 227 (2023) 120421_; **Table 1**; (2)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3145,7 +3145,7 @@
     "Possible repeated page-edge text remains: JID:AESCTE AID:3069 /FLA [m5G; v 1.134; Prn:9/06/2014; 16:08] P.1 (1-7); 2 68; 2 _K. Ahn et al. / Aerospace Science and Technology_ ••• _(_ •••• _)_ ••• _–_ •••"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3231,7 +3231,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3314,7 +3314,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3401,7 +3401,7 @@
     "Possible repeated page-edge text remains: # Thermal-structural analysis of regeneratively-cooled thrust chamber wall in reusable LOX/Methane rocket engines; Jiawen Song, Bing Sun; ·2 · Chinese Journal of Aeronautics"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3488,7 +3488,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3572,7 +3572,7 @@
     "Possible repeated page-edge text remains: ; ### Annular flow; ### Radial flow"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3652,7 +3652,7 @@
     "Possible repeated page-edge text remains: _W. Song et al. Fuel 285 (2021) 119212_; ∫; _A_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3738,7 +3738,7 @@
     "Possible repeated page-edge text remains: F. Hötte, et al. _International Journal of Fatigue 138 (2020) 105649_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3826,7 +3826,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3916,7 +3916,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -3997,7 +3997,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4074,7 +4074,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4131,7 +4131,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4213,7 +4213,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4301,7 +4301,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4358,7 +4358,7 @@
     "Possible repeated page-edge text remains: _T. Riipinen et al. Materials Today Communications 36 (2023) 106437_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4417,7 +4417,7 @@
     "Possible repeated page-edge text remains: _H. P_ ´ _erez-Martín et al. Materials Today Communications 36 (2023) 106442_; 380–4–2 718.8 ± 73.1 95.8 ± 2.8 31.3 ± 2.3 3.4 ± 0.3 24.4 ± 2.0"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4476,7 +4476,7 @@
     "Possible repeated page-edge text remains: _J.J. Lee et al. Materials Today Communications 36 (2023) 106456_; Table 3."
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4531,7 +4531,7 @@
     "Possible repeated page-edge text remains: _E. Duque-Redondo et al. Materials Today Communications 36 (2023) 106496_; **1.4** -44.6 -50.6 -40.9 -46.7 -41.8 -44.8"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4586,7 +4586,7 @@
     "Possible repeated page-edge text remains: _I.U. Ekanayake et al. Materials Today Communications 36 (2023) 106545_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4641,7 +4641,7 @@
     "Possible repeated page-edge text remains: _R. Sandstr_ ¨ _om Materials Today Communications 36 (2023) 106558_; [20–24.](http://refhub.elsevier.com/S2352-4928%0x2823%0x2901249-7/sbref15)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4702,7 +4702,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4772,7 +4772,7 @@
     "Possible repeated page-edge text remains: P. Coddet et al. / Surface & Coatings Technology 232 (2013) 652–657 653"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4857,7 +4857,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -4939,7 +4939,7 @@
     "Possible repeated page-edge text remains: [www.nature.com/scientificreports/](http://www.nature.com/scientificreports); **Fig. 10** . Comparison of oxidizer mass flow rate during decrease process ( **a** ), and increase process ( **b** ) at; timing sequences between motors."
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5024,7 +5024,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5105,7 +5105,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5189,7 +5189,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5273,7 +5273,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5354,7 +5354,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5436,7 +5436,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5516,7 +5516,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5594,7 +5594,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5672,7 +5672,7 @@
     "Possible repeated page-edge text remains: <u>CEC 2015</u> <u>IOP Publishing</u>; H"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5741,7 +5741,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copies": [
     "DOC_DOI_10_1088_1757_899X_1301_1_012030_E0D954A3"
    ],
@@ -5812,7 +5812,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "DOC_DOI_10_1088_1757_899X_1301_1_012030",
    "alternate_copy_basis": "same bibliographic identifier (10.1088/1757-899x/1301/1/012030) with a different PDF payload",
    "alternate_copies": []
@@ -5862,7 +5862,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5919,7 +5919,7 @@
     "Possible missing figure captions (1 output vs 5 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -5974,7 +5974,7 @@
     "Possible missing figure captions (3 output vs 7 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6029,7 +6029,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6084,7 +6084,7 @@
     "Possible missing figure captions (9 output vs 17 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6139,7 +6139,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6192,7 +6192,7 @@
     "13 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6247,7 +6247,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6300,7 +6300,7 @@
     "6 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6355,7 +6355,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6438,7 +6438,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6517,7 +6517,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6570,7 +6570,7 @@
     "9 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6623,7 +6623,7 @@
     "7 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6708,7 +6708,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copies": [
     "DOC_DOI_10_1177_0954406212449939_50F7ECD5"
    ],
@@ -6795,7 +6795,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "DOC_DOI_10_1177_0954406212449939",
    "alternate_copy_basis": "same bibliographic identifier (10.1177/0954406212449939) with a different PDF payload",
    "alternate_copies": []
@@ -6873,7 +6873,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6928,7 +6928,7 @@
     "Possible missing figure captions (12 output vs 51 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -6998,7 +6998,7 @@
     "Possible repeated page-edge text remains: **Figure 5 – Cavitation characteristics of pump No. 1 of LPRE No. 1 when it operates on a gas-**; **liquid two-phase mixture [4].**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7079,7 +7079,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7167,7 +7167,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7220,7 +7220,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7310,7 +7310,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7389,7 +7389,7 @@
     "Possible repeated page-edge text remains: 628 AUSTIN, HEISTER, AND ANDERSON; AUSTIN, HEISTER, AND ANDERSON 629"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7444,7 +7444,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7531,7 +7531,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7610,7 +7610,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7693,7 +7693,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7782,7 +7782,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7870,7 +7870,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -7956,7 +7956,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8045,7 +8045,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8127,7 +8127,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8214,7 +8214,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8304,7 +8304,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8383,7 +8383,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8468,7 +8468,7 @@
     "Possible repeated page-edge text remains: ## 1280 DAI AND RAY; ### DAI AND RAY 1283"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8557,7 +8557,7 @@
     "Possible repeated page-edge text remains: 182 POROWSKI ET AL. J. SPACECRAFT; MARCH-APRIL 1985 DESIGN AND LIFE PREDICTION OF ROCKET THRUST CHAMBERS 183"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8629,7 +8629,7 @@
     "Possible repeated page-edge text remains: (4)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8686,7 +8686,7 @@
     "Possible missing figure captions (1 output vs 10 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8743,7 +8743,7 @@
     "Possible missing figure captions (2 output vs 12 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8798,7 +8798,7 @@
     "Possible missing figure captions (3 output vs 9 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8851,7 +8851,7 @@
     "441 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -8933,7 +8933,7 @@
     "Possible repeated page-edge text remains: 622 R. C. PARSLEY AND B. ZHANG; THERMODYNAMIC POWER CYCLES 623; ## 15 20 25"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9016,7 +9016,7 @@
     "A lowercase paragraph opening after a heading suggests a displaced drop cap or broken reading order"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9100,7 +9100,7 @@
     "Possible repeated page-edge text remains: ### TGAW; ### (a) Baseline configuration (AR = 0.75); ### (c) Configuration 3 (AR = 5.00)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9179,7 +9179,7 @@
     "Possible repeated page-edge text remains: AsthestartinewintforaCFD eridCATIAsurfaces were"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9261,7 +9261,7 @@
     "Possible repeated page-edge text remains: 1 American Institute of Aeronautics and Astronautics; ### -25 -20 -15-10 -5 0 Chamber length, cm; ### Figure 6.—Hot-gas-side wall temperature comparison"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9344,7 +9344,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9416,7 +9416,7 @@
     "Possible repeated page-edge text remains: **0.60**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9496,7 +9496,7 @@
     "Possible repeated page-edge text remains: 1-Propanol 9.6"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9573,7 +9573,7 @@
     "Possible repeated page-edge text remains: A B"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9645,7 +9645,7 @@
     "Table captions exist in the source but corresponding table content may be missing or merged"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9728,7 +9728,7 @@
     "Possible repeated page-edge text remains: 0.006"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9805,7 +9805,7 @@
     "Possible repeated page-edge text remains: OC27 0.38 1.41 1.69 39.72 47.57 73.30 C"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9881,7 +9881,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -9954,7 +9954,7 @@
     "Possible repeated page-edge text remains: (7)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10033,7 +10033,7 @@
     "Possible repeated page-edge text remains: 2. Grinding at 250 RPM with 180 grit Al2O3 sandpaper for 1 min at 5 lbf, water rinse; **A** **B**; **C** **D**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10111,7 +10111,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10187,7 +10187,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10272,7 +10272,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10353,7 +10353,7 @@
     "Possible repeated page-edge text remains: (2)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10426,7 +10426,7 @@
     "Possible repeated page-edge text remains: <u>1</u> <u>3</u> <u>8</u> <u>0.5</u> <u>1.5</u> <u>30</u> <u>20</u>; <u>4</u> <u>3</u> <u>8</u> <u>1</u> <u>1.5</u> <u>30</u> <u>20</u>; |1|1 <br>2 <br>2.4<br>44<br>0.151<br>1.69<br>32.56|"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10506,7 +10506,7 @@
     "A lowercase paragraph opening after a heading suggests a displaced drop cap or broken reading order"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10585,7 +10585,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10668,7 +10668,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10742,7 +10742,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10826,7 +10826,7 @@
     "Possible repeated page-edge text remains: ### 1.0"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10909,7 +10909,7 @@
     "Possible repeated page-edge text remains: 1488 ARS JOURNAL"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -10983,7 +10983,7 @@
     "Possible repeated page-edge text remains: JUNE 1958 377"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11057,7 +11057,7 @@
     "Possible repeated page-edge text remains: _H. He et al._ _/ Thrust Regulation Characteristics of Electric Pump-Fed Rocket Engine_ 201; 202 _H. He et al._ _/ Thrust Regulation Characteristics of Electric Pump-Fed Rocket Engine_; 3.2"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11137,7 +11137,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11217,7 +11217,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11298,7 +11298,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11375,7 +11375,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11453,7 +11453,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11519,7 +11519,7 @@
     "Possible repeated page-edge text remains: 1.3"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11586,7 +11586,7 @@
     "Possible repeated page-edge text remains: 3.25"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11662,7 +11662,7 @@
     "Possible repeated page-edge text remains: 𝑠"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11742,7 +11742,7 @@
     "Possible repeated page-edge text remains: TRW; (c)2000 American Institute of Aeronautics & Astronautics or Published with Permission of Author(s) and/or Author(s) <sup>1</sup> Sponsoring Organization."
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11826,7 +11826,7 @@
     "Possible repeated page-edge text remains: **Chapter 1**; Problems; Fundamentals of Engineering Exam Problems"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11905,7 +11905,7 @@
     "Possible repeated page-edge text remains: 3.5; 3 0.436 23.7 10.3 0.26"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -11991,7 +11991,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12072,7 +12072,7 @@
     "Possible repeated page-edge text remains: Redondo Beach, CA; 5.8 ± 5%"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12151,7 +12151,7 @@
     "Possible repeated page-edge text remains: 7R038366"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12210,7 +12210,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12283,7 +12283,7 @@
     "Possible repeated page-edge text remains: 0 200 400 600 800 1000 1200 1400 1600; **Temperature (F)**; a b"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12342,7 +12342,7 @@
     "Section hierarchy may be incomplete (fewer than two Markdown headings)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12425,7 +12425,7 @@
     "Possible repeated page-edge text remains: (3); 0.3"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12499,7 +12499,7 @@
     "Possible repeated page-edge text remains: ##### **U**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12552,7 +12552,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12614,7 +12614,7 @@
     "Possible repeated page-edge text remains: - Splines; - B-splines; - NURBS"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12686,7 +12686,7 @@
     "Possible repeated page-edge text remains: ACTA IMEKO | www.imeko.org December 2015 | Volume 4 | Number 4 | 26"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12764,7 +12764,7 @@
     "Possible repeated page-edge text remains: 2.5"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12850,7 +12850,7 @@
     "Possible repeated page-edge text remains: ~"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -12924,7 +12924,7 @@
     "Possible repeated page-edge text remains: TRW; 2.4; NA"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13004,7 +13004,7 @@
     "Possible repeated page-edge text remains: 3.5; **Axial Distance From Throat (in)**; -10 -8 -6 -4 -2 0 2 4"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13068,7 +13068,7 @@
     "Possible repeated page-edge text remains: # Nozzle Geometries; # Nozzle Configurations; # Copyright © 2012, 2018 by Jerry M. Seitzman. All rights reserved. AE6450 Rocket Propulsion"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13125,7 +13125,7 @@
     "Possible missing figure captions (18 output vs 41 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13202,7 +13202,7 @@
     "Possible repeated page-edge text remains: **_Lewis_** **_Research_** **_Center_**; **NATIONAL AERONAUTICS AND SPACE ADMINISTRATION**; **5.04**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13284,7 +13284,7 @@
     "Possible repeated page-edge text remains: **_Lewis_** **_Research_** **_Center_**; **_Cleveland,_** **_Ohio_**; By Walter F. Dankhoff, Irving A. Johnsen, E. William Conrad,"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13337,7 +13337,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13412,7 +13412,7 @@
     "Possible repeated page-edge text remains: _/_; _s_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13499,7 +13499,7 @@
     "Possible repeated page-edge text remains: 2 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES; INTRODUCTION TO LIQUID PROPELLANT ROCKET ENGINES 3; _Sample_ _Calculation_ (1-1)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13556,7 +13556,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13647,7 +13647,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13696,7 +13696,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13754,7 +13754,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13809,7 +13809,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13864,7 +13864,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -13950,7 +13950,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14037,7 +14037,7 @@
     "Possible repeated page-edge text remains: Helium"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14112,7 +14112,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14169,7 +14169,7 @@
     "Possible missing figure captions (15 output vs 53 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14257,7 +14257,7 @@
     "Possible repeated page-edge text remains: **I.**; _3.1.1.4.1_ 58; _3.1.1.5_ 59"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14306,7 +14306,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14378,7 +14378,7 @@
     "Possible repeated page-edge text remains: 0 200 400 600; 4-3; R-24-17 0.34 3.5 1.714 307 3.203 0.297 293 99 87"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14462,7 +14462,7 @@
     "Possible repeated page-edge text remains: 5O; where; **_7.86_**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14515,7 +14515,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14570,7 +14570,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14649,7 +14649,7 @@
     "Possible repeated page-edge text remains: 2.1.2.4 35; 5O; **(9)**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14725,7 +14725,7 @@
     "Possible repeated page-edge text remains: **50**; **0.35**; - **U**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14806,7 +14806,7 @@
     "Possible repeated page-edge text remains: \\.,:; x._j; 3O"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14895,7 +14895,7 @@
     "Possible repeated page-edge text remains: ###### eee; where"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -14982,7 +14982,7 @@
     "Possible repeated page-edge text remains: r; ### t; o"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15035,7 +15035,7 @@
     "3 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15092,7 +15092,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15180,7 +15180,7 @@
     "Possible repeated page-edge text remains: **_Z_**; _2.2.2.4_ 26 _3.2.2.4_ 71; 32 800"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15233,7 +15233,7 @@
     "1 page(s) produced no extractable text and are represented by an empty page marker"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15291,7 +15291,7 @@
     "Possible repeated page-edge text remains: **NASA**; ¥; NOZZLE _DATA_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15374,7 +15374,7 @@
     "Possible repeated page-edge text remains: John M. Kazaroff; ##### 1 !I; c60"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15427,7 +15427,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15495,7 +15495,7 @@
     "Possible repeated page-edge text remains: **(5)**; **OF** **POOR** **QUALITY**; **_SCARFED_** **NOZZLE**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15557,7 +15557,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15633,7 +15633,7 @@
     "Possible repeated page-edge text remains: J_; 4 <sup>1</sup>; .— '"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15688,7 +15688,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15747,7 +15747,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15813,7 +15813,7 @@
     "Possible repeated page-edge text remains: **_5_**; Figure 1 **_-_**; 40 48"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15891,7 +15891,7 @@
     "Possible repeated page-edge text remains: 0.003"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -15964,7 +15964,7 @@
     "Possible repeated page-edge text remains: 7.147 inch"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16043,7 +16043,7 @@
     "Possible repeated page-edge text remains: **_Extruded_**; **_HIPed_** :; Temperature (F)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16104,7 +16104,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16174,7 +16174,7 @@
     "Possible repeated page-edge text remains: **U** **N** **I** **V** **B** **R** **S** **I** **T** **Y**; **U** **N** **I** **V** **E** **R** **S** **I** **T** **Y**; 0.006792 1.00002 0 0"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16255,7 +16255,7 @@
     "Possible repeated page-edge text remains: # GRCop-84: A High-Temperature Copper Alloy for High-Heat-Flux Applications; David L. Ellis; Glenn Research Center, Cleveland, Ohio"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16322,7 +16322,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16402,7 +16402,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16451,7 +16451,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16508,7 +16508,7 @@
     "Table captions exist in the source but no table structure was reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16591,7 +16591,7 @@
     "Possible repeated page-edge text remains: Figure 5 Elements of a Pump"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16668,7 +16668,7 @@
     "Possible repeated page-edge text remains: # Tensile Properties of GRCop-84; _David L. Ellis_; _William S. Loewenthal_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16717,7 +16717,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16781,7 +16781,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16843,7 +16843,7 @@
    "source_authority": "primary_literature",
    "known_limitations": [],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16909,7 +16909,7 @@
     "Possible missing figure captions (0 output vs 4 source)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -16990,7 +16990,7 @@
     "Possible repeated page-edge text remains: # Reversible and Irreversible Time-Dependent Behavior of GRCop-84; _Bradley A. Lerch, Steven M. Arnold, and David L. Ellis_; _Glenn Research Center, Cleveland, Ohio_"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17070,7 +17070,7 @@
     "Possible repeated page-edge text remains: ##### `U.S. Patent May 8, 2018 Sheet 1 of 9 US 9,964,073 B1`; #### `FIG 1`; Prior Art"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17129,7 +17129,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17186,7 +17186,7 @@
     "A lowercase paragraph opening after a heading suggests a displaced drop cap or broken reading order"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17263,7 +17263,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17345,7 +17345,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17412,7 +17412,7 @@
     "Possible repeated page-edge text remains: 1 American Institute of Aeronautics and Astronautics"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17495,7 +17495,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17574,7 +17574,7 @@
     "Possible repeated page-edge text remains: 41 <sup>st</sup> Joint Propulsion Conference, Arizona, July 2005 **AIAA-2005-3654**; 0.25"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17656,7 +17656,7 @@
     "Possible missing/broken equations (2 output signals vs 6 source signals)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17736,7 +17736,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17810,7 +17810,7 @@
     "Possible repeated page-edge text remains: **1.08**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17893,7 +17893,7 @@
     "Possible repeated page-edge text remains: **GH2**"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -17971,7 +17971,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -18028,7 +18028,7 @@
     "Section hierarchy may be incomplete (fewer than two Markdown headings)"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -18101,7 +18101,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -18156,7 +18156,7 @@
     "References heading detected in source but not preserved as a Markdown heading"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -18209,7 +18209,7 @@
     "1 page(s) were rebuilt from PDF span geometry because the Markdown parser returned no text; table and equation layout on those pages is not reconstructed"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   },
@@ -18292,7 +18292,7 @@
     "Invalid/replacement characters may affect symbols or units"
    ],
    "extraction_version": "1.0.1",
-   "registered_at": "2026-10-16T18:20:17.703992+00:00",
+   "registered_at": "2026-10-17T17:57:58.952149+00:00",
    "alternate_copy_of": "",
    "alternate_copies": []
   }

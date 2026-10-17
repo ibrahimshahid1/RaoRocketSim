@@ -1,0 +1,688 @@
+{
+ "packet": "P2-KWAK-p008-009",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+ "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+ "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+ "pages": [
+  8,
+  9
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 8,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0008.png",
+   "sha256": "d1c3db2f190a9cb520747b792d429d8a5e8f294dbe93dd4acf2f5e47e52da434",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 9,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0009.png",
+   "sha256": "317cb59251d6d5342b19f358a21f66e4e662a7dd709f05becd5e36015a51b54e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_1d6db02f41283c3e6e19ff1d",
+  "ENR_aaa5e6711f9a38bb14c4f621"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_19ae89ab8f129d3b79f7e065",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/29",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 301.46799999999996,
+     "t": 594.2154204999999,
+     "r": 552.8056320400001,
+     "b": 550.2702250000001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { E P } & = \\left ( \\frac { 1 } { \\delta _ { o p } } + B _ { 1 } \\right ) \\left ( \\frac { \\Delta p _ { o p } \\dot { m } _ { o p } } { \\rho _ { o } \\eta _ { o p } } \\right ) + \\left ( \\frac { 1 } { \\delta _ { f p } } + B _ { 1 } \\right ) \\left ( \\frac { \\Delta p _ { f p } \\dot { m } _ { f p } } { \\rho _ { f } \\eta _ { f p } } \\right ) \\\\ & \\quad + \\left ( A _ { 3 } + \\kappa _ { p } \\rho _ { o } + p _ { o t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) \\right ) \\frac { \\dot { m } _ { o p } t _ { b } } { \\rho }",
+   "original_text": "mEP = ( 1 δop + B1 )( Delta1pop ˙mop ρoηop ) + ( 1 δ fp + B1 )( Delta1p f p ˙m f p ρf η fp ) + ( A3 + κpρo + pot,i (A2 + A3 A4) ) ˙moptb (45)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1fa0d1cb91856280d275b570",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/17",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.476,
+     "t": 316.4128801,
+     "r": 283.8122009500001,
+     "b": 293.8270264357348,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b p , P } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b c , P } } P _ { b p } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b c , P } \\eta _ { i n \\nu } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+   "original_text": "mbp,P = κbp 1 δbc,P Pbp = κbp 1 δbc, P ηinvηem (Pop + P f p) (40)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_23b69fc97cf9f5cdbf38746e",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/27",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 301.46799999999996,
+     "t": 648.5912335,
+     "r": 552.8056320400001,
+     "b": 638.7622191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { f } = \\kappa _ { p } ( \\dot { m } _ { f p } - \\dot { m } _ { c o o l a n t } ) t _ { b }",
+   "original_text": "mf =κp( ˙mfp - ˙mcoolant )tb (44)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_473e4531ce6c79c4a2268726",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/30",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 302.296,
+     "t": 553.7406951999999,
+     "r": 552.8056320400001,
+     "b": 490.98102643573486,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "& \\quad | ( A _ { 3 } + \\kappa _ { p } \\rho _ { 0 } + p _ { 0 t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) ) \\, \\rho _ { o } \\\\ & \\quad \\rho _ { o } \\\\ & + ( A _ { 5 } + \\kappa _ { p } \\rho _ { f } + p _ { f t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) ) \\frac { ( \\dot { m } _ { f p } - \\dot { m } _ { c o o l a n t } ) t _ { b } } { \\rho _ { f } } \\\\ & B _ { 1 } = \\frac { 1 } { \\delta _ { m } } + \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } + \\kappa _ { b p } \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } M A X \\left ( \\frac { 1 } { \\delta _ { b c , P } } , \\frac { t _ { b } } { \\eta _ { E } \\delta _ { b c , E } } \\right )",
+   "original_text": "ρo + ( A5 +κpρf + p f t,i(A2 + A3A4) )( ˙mfp - ˙mcoolant )tb ρ f B1 = 1 δm + 1 δinvηem + κbp 1 ηinvηem MAX ( 1 δbc,P , tb ηEδbc,E ) (46)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5d8fd129869734899efa8364",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/20",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 33.304,
+     "t": 185.7328801,
+     "r": 283.81363203999996,
+     "b": 163.38221910872812,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "E _ { b p } = \\frac { 1 } { \\eta _ { E } } P _ { b p } t _ { b } = \\frac { 1 } { \\eta _ { E } \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } ) t _ { b }",
+   "original_text": "Ebp = 1 ηE Pbptb = 1 ηE ηinvηem (Pop + P f p)tb (41)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_91a99d131fb2e1799225d038",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.476,
+     "t": 509.6068801,
+     "r": 283.81363203999996,
+     "b": 487.2562191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { i n v } = \\frac { 1 } { \\delta _ { i n v } } P _ { i n v , o u t } = \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } P _ { e m , o u t } = \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+   "original_text": "minv = 1 δinv Pinv,out = 1 δinvηem Pem,out = 1 δinvηem (Pop + P fp) (38)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9c1e60cd8ef04038846e1e46",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 33.484,
+     "t": 406.6648801,
+     "r": 283.81363203999996,
+     "b": 358.88021910872817,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "P _ { b p } & = P _ { i n v , i n } = \\frac { 1 } { \\eta _ { i n v } } \\, P _ { i n v , o u t } = \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } \\, P _ { e m , o u t } \\\\ & = \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+   "original_text": "Pbp = P inv,in = 1 ηinv Pinv,out = 1 ηinvηem P em,out = 1 ηinvηem (Pop + P f p) (39)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_aec0c7311c338d72e0543716",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.476,
+     "t": 643.0048800999999,
+     "r": 283.81363203999996,
+     "b": 620.7802191087281,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { e m } = \\frac { 1 } { \\delta _ { e m } } P _ { e m , o u t } = \\frac { 1 } { \\delta _ { e m } } ( P _ { o p } + P _ { f p } )",
+   "original_text": "mem = 1 δem Pem,out = 1 δem (Pop + P f p) (36)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cb29b22b14c611792f43270f",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/22",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.476,
+     "t": 131.15698010000006,
+     "r": 283.81363203999996,
+     "b": 108.57112643573487,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b p , E } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b C , E } } E _ { b p } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b C , E } \\eta _ { E } \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } ) t _ { b }",
+   "original_text": "mbp,E = κbp 1 δbc,E Ebp = κbp 1 δbc,E ηE ηinvηem (Pop + P f p)tb (42)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e2cf7e27547d6d18f6a68956",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/24",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.476,
+     "t": 83.74488010000005,
+     "r": 283.81363203999996,
+     "b": 46.70502643573491,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "m _ { b p } & = M A X ( m _ { b p , \\, P } , m _ { b p , \\, E } ) \\\\ & = \\kappa _ { b p } \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } M A X \\left ( \\frac { 1 } { \\delta _ { b c , \\, P } } , \\frac { t _ { b } } { \\eta _ { E } \\delta _ { b c , \\, E } } \\right ) ( P _ { o p } + P _ { f p } )",
+   "original_text": "mbp = MAX(mbp,P ,mbp,E ) = κbp 1 ηinvηem MAX ( 1 δbc,P , tb ηEδbc,E ) (Pop + P f p) (43)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ebf7c8146f34590808004435",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.728,
+     "t": 696.2128800999999,
+     "r": 283.81363203999996,
+     "b": 673.9882191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta _ { e m } = \\frac { P _ { e m , o u t } } { m _ { e m } }",
+   "original_text": "δem = P em,out mem (35)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_efa527d2e4ef5f24215cfcd0",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 32.728,
+     "t": 574.2088801,
+     "r": 283.81363203999996,
+     "b": 551.8582191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\delta _ { i n v } = \\frac { P _ { i n v , o u t } } { m _ { i n v } }",
+   "original_text": "δinv = P inv,out minv (37)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1d6db02f41283c3e6e19ff1d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+   "raw_sha256": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_be34430ffed9fb30bb463227",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 8. Turbopump power densities using LOX/kerosene propellants [29-33]."
+   ],
+   "bbox": [
+    {
+     "l": 161.64762030858802,
+     "t": 482.5603991951354,
+     "r": 441.87641997328376,
+     "b": 263.0864989721649,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/6\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_aaa5e6711f9a38bb14c4f621",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p9-9-4dbee59d4bfef57b2cf7f3ec7ff6cde6b16cfb2cf522663a1f153c3792d142ae.json",
+   "raw_sha256": "d10683819c431fcb2578663549a519e2e97484fa483f311fbace8f6914498801",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_65bd9c0062be40ecb26f4c24",
+   "kind": "table",
+   "pages": [
+    9
+   ],
+   "table_grid": [
+    [
+     "Parameter",
+     "Value",
+     "Note",
+     "Parameter",
+     "Value",
+     "Note"
+    ],
+    [
+     "Cp, f",
+     "2009 J/kg-K",
+     "Kerosene",
+     "δbc,E",
+     "198 Wh/kg",
+     "D cell"
+    ],
+    [
+     "C p,g g",
+     "2024.7 J/kg-K",
+     "GG gas",
+     "ηop",
+     "0.66",
+     ""
+    ],
+    [
+     "gmax",
+     "4.5g0",
+     "",
+     "η f p",
+     "0.61",
+     ""
+    ],
+    [
+     "kh",
+     "1.667",
+     "Helium",
+     "ηtu",
+     "0.52",
+     ""
+    ],
+    [
+     "kgg",
+     "1.16",
+     "GG gas",
+     "ηem",
+     "0.95",
+     ""
+    ],
+    [
+     "(O /F )cc",
+     "2.45",
+     "",
+     "ηinv",
+     "0.85",
+     ""
+    ],
+    [
+     "(O/F )gg",
+     "0.320",
+     "",
+     "κbp",
+     "1.2",
+     ""
+    ],
+    [
+     "p 0 h",
+     "27.0 MPaA",
+     "",
+     "κh",
+     "1.1",
+     ""
+    ],
+    [
+     "p 1 h",
+     "5.0 MPaA",
+     "",
+     "κg g",
+     "2.5",
+     ""
+    ],
+    [
+     "p f t,i",
+     "0.25 MPaA",
+     "",
+     "κht",
+     "1.2",
+     ""
+    ],
+    [
+     "pot,i",
+     "0.4 MPaA",
+     "",
+     "κp",
+     "1.01",
+     ""
+    ],
+    [
+     "ptu,in/ptu,out",
+     "27",
+     "",
+     "κt",
+     "2.5",
+     ""
+    ],
+    [
+     "Rh",
+     "2080 J/kg-K",
+     "Helium",
+     "κu",
+     "1.08",
+     ""
+    ],
+    [
+     "R gg",
+     "274.1 J/kg-K",
+     "GG gas",
+     "ρo",
+     "1126.1 kg/m 3",
+     "LOX"
+    ],
+    [
+     "T 0 h",
+     "100 K",
+     "",
+     "ρ f",
+     "804.2 kg/m 3",
+     "Kerosene"
+    ],
+    [
+     "Ttu,in",
+     "900 K",
+     "",
+     "ρgg,m",
+     "8220 kg/m 3",
+     "INCO 718"
+    ],
+    [
+     "ts",
+     "10 ms",
+     "",
+     "ρot,m",
+     "2850 kg/m 3",
+     "AL alloy"
+    ],
+    [
+     "δtp",
+     "13.5 kW/kg",
+     "",
+     "ρ f t,m",
+     "2850 kg/m 3",
+     "AL alloy"
+    ],
+    [
+     "δop",
+     "20 kW/kg",
+     "",
+     "ρht,m",
+     "4430 kg/m 3",
+     "Ti-6AL-4V"
+    ],
+    [
+     "δ fp",
+     "15 kW/kg",
+     "",
+     "σgg,m",
+     "550 MPa",
+     "INCO 718"
+    ],
+    [
+     "δem",
+     "5.3 kW/kg",
+     "",
+     "σot,m",
+     "250 MPa",
+     "AL alloy"
+    ],
+    [
+     "δinv",
+     "60 kW/kg",
+     "",
+     "σ f t,m",
+     "250 MPa",
+     "AL alloy"
+    ],
+    [
+     "δbc,P",
+     "6.95 kW/kg",
+     "D cell",
+     "σht,m",
+     "1100 MPa",
+     "Ti-6AL-4V"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 3 Parameter values."
+   ],
+   "bbox": [
+    {
+     "l": 103.44537521346943,
+     "t": 713.5648067637715,
+     "r": 501.4986070808564,
+     "b": 495.5941549400887,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 24x6 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_aaa5e6711f9a38bb14c4f621",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p9-9-4dbee59d4bfef57b2cf7f3ec7ff6cde6b16cfb2cf522663a1f153c3792d142ae.json",
+   "raw_sha256": "d10683819c431fcb2578663549a519e2e97484fa483f311fbace8f6914498801",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00024",
+   "page_start": 7,
+   "page_end": 8,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "helium tank pressure, and the initial helium storage temperature,\nrespectively. In addition, _p_ and _V_ represent the propellant tank\n\n=\n_δ fp_\n\n_m fp_ =\n\n_P_ _<u>fp</u>_\n_δ fp_\n\n74 _H.-D. Kwak et al. / Aerospace Science and Technology 77 (2018) 67–82_\n\n_3.2.2._ _Motor_ _mass_\nThe motor mass ( _mem_ ) is found by defining the mechanical output power density of the motor ( _δem_ ).\n\n_δem_ = <sup>_P_</sup> <sup>_<u>em,out</u>_</sup>\n\n_mem_\n\n_3.2.5._ _ElecPump_ _cycle_ _mass_\nFor the masses of the last six terms on the right-hand side of\nEq. (32), the same expressions in the GG cycle are applied, except\nfor Eq. (13). As previously described in Section 2, some amount of\nfuel from the pump outlet flows into the battery pack as coolant\nand returns to the pump inlet. Therefore, for the ElecPump cycle,\nEq. (13) is revised as\n\n_m f_ = _κp(m_ ˙ _fp_ −˙ _mcoolant)tb_ (44)\n\nFrom the definition of Eq. (32), the total mass of the ElecPump\ncycle is expressed as a function of mass flow rate, head rise, and\nburning time.\n\nAssuming no mechanical loss between the pumps and motor,\nthe motor mass is given as\n\n1\n_mem_ =\n_δem_\n\n1\n_P_ _em,out_ =\n_δem_\n\n_(P_ _op_ + _P_ _fp)_ (36)\n\n_3.2.3._ _Inverter_ _mass_\nIn a similar fashion, the electric output power density of the\ninverter ( _δinv_ ) is defined:\n\n_mEP_ =\n\n+\n\n1\n\n_δ fp_\n\n+ _B_ 1\n\n(45)\n\n1\n\n_δop_\n\n+ _B_ 1\n\n��\n_<u>�popm</u>_ ˙ _<u>op</u>_\n_ρoηop_\n\n��\n_�p fpm_ ˙ _<u>fp</u>_\n_ρ f η fp_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00025",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "_δinv_ = <sup>_P_</sup> <sup>_<u>inv,out</u>_</sup>\n\n_minv_\n\n(37)\n\n+\n\n+\n\n_B_ 1 = <sup>1</sup>\n\n_δm_\n\n- - _m_ ˙ _<u>optb</u>_\n_A_ 3 + _κpρo_ + _pot,i(_ _A_ 2 + _A_ 3 _A_ 4 _)_\n\n_ρo_\n\n_A_ 3 + _κpρo_ + _pot,i(_ _A_ 2 + _A_ 3 _A_ 4 _)_\n\n_A_ 5 + _κpρ f_ + _p f t,i(_ _A_ 2 + _A_ 3 _A_ 4 _)_\n\n1\n+\n_δinvηem_\n\nBecause the ratio of motor mechanical output power to inverter electrical output power represents the efficiency of the motor ( _ηem_ ), the inverter mass is given as\n\n - _(m_ ˙ _<u>fp</u>_ −˙ _mcoolant)tb_\n\n_)_\n\n_ρ f_\n\n_tb_\n_,_\n_ηE_ _δbc,E_\n\n1\n_minv_ =\n_δinv_\n\n1 1\n_P_ _inv,out_ = _P_ _em,out_ =\n_δinvηem_ _δinvηem_\n\n1\n_ηinvηem_\n\n1\n\n_δbc,P_\n\n(46)\n\n_(P_ _op_ + _P_ _fp)_ (38)\n\n+ _κbp_\n\n_M A X_\n\n_3.2.4._ _Battery_ _pack_ _mass_\nThere are two factors for estimating the battery pack mass:\nthe power density and energy density. Depending on the required\npower or energy, either the power density or the energy density\nconstrains the mass. The required electric power of the battery\npack is given as\n\n1\n_P_ _bp_ = _P_ _inv,in_ =\n_ηinv_\n\n1\n_P_ _inv,out_ = _ηinvηem_\n\n_P_ _em,out_\n\n1\n=\n_ηinvηem_\n\n_(P_ _op_ + _P_ _fp)_ (39)\n\nwhere _ηinv_ represents the inverter efficiency.\n\nIntroducing the power density of the battery cell ( _δbc,P_ ), the\npower-constrained battery pack mass can be described as\n\n_mbp,P_ = _κbp_\n\n1\n\n_δbc,P_\n\n_P_ _bp_ = _κbp_\n\n1\n_δbc,P_ _ηinvηem_\n\n_(P_ _op_ + _P_ _fp)_ (40)\n\nIn Eq. (40), a structural margin ( _κbp_ ) is adopted to account for\nthe necessary sub-component masses (battery management system, wires and case) of the battery pack."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00026",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "The other constraint is energy density. In preceding studies [17,\n18], the energy density of the battery cell was assumed to be constant. However, as described in Section 2.3, the practically available\nenergy is a function of discharge time (i.e., burning time). The\nrequired electric energy of the battery pack is expressed by introducing the energy efficiency of battery cell ( _ηE_ ).\n\n_Ebp_ = <sup>1</sup>\n\n_ηE_\n\n1\n_P_ _bptb_ =\n_ηEηinvηem_\n\n_(P_ _op_ + _P_ _fp)tb_ (41)\n\nThe energy-constrained battery pack mass is given with the energy density of the battery cell ( _δbc,E_ ) as\n\n1\n\n_mbp,E_ = _κbp_\n\n_δbc,E_\n\n_Ebp_ = _κbp_\n\n1\n_δbc,E_ _ηEηinvηem_\n\n_(P_ _op_ + _P_ _fp)tb_ (42)\n\n**4.** **Analysis** **parameters**"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00027",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "Table 3 summarizes the comparative study parameters. To determine the turbopump power density, some case studies were\nperformed using practical data. Fig. 8 plots the power densities of\nturbopumps using LOX/kerosene propellant. For the GG cycle only,\nthe majority of the turbopumps (indicated by dashed-box) have\npower densities between 11 kW/kg and 16 kW/kg. Their mean\nvalue is 13.5 kW/kg with a standard deviation of 1.5 kW/kg. In\nthis study, a value of 13.5 kW/kg is adopted. For the pump power\ndensities of the ElecPump cycle, the values of 20 kW/kg for the\nLOX pump and 15 kW/kg for the fuel pump are taken from the\nauthors’ research group reference data. In the GG cycle turbopumps, most turbines are single or dual-stage supersonic impulse\nturbines because of their high pressure ratio (whereas reaction turbines are usually employed for staged-combustion cycles). Thus a\nsingle-stage supersonic impulse turbine is used, as described in\nSection 3.1.2. Considering the temperature limit of turbine material\n(INCO 718), the turbine inlet temperature is assumed to be 900 K.\nThe efficiency of the turbine is also assumed to have a value of 52%\nfrom historical data [40]. The exhausted gas properties from the\nGG are determined from an empirical formulation. The GG pressure is assumed to be the same as the combustion chamber pressure ( _pcc_ ). The LOX pump and fuel pump efficiencies are 66% and\n61%, respectively. For the motor, a maximum value of 5.8 kW/kg\nfor the power density and 96% efficiency were reported for the\nstate-of-the-art PM motor [41]. In this study, a power density of\n5.3 kW/kg and 95% efficiency were chosen. The inverter properties\nare assumed to be the same as in the preceding study [18]. For the\nbattery pack, the properties of the D cell are used. Helium is considered with an initial pressure of 27.0 MPaA and temperature of\n100 K for the pressurizing gas. Titanium alloy, Ti-6AL-4V, is chosen\nfor the helium tank material. For the propellant tanks and GG, an\naluminum alloy and INCONEL 718 are used, respectively."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00028",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "To determine a mass flow rate in a combustion chamber with\nrespect to thrust level, the characteristic velocity ( _c_ <sup>∗</sup> ) and thrust\ncoefficient ( _C F_ ) are calculated as a function of combustion chamber pressure ( _pcc_ ) using CEA [42]. The nozzle exit pressure is set to\n0.002 MPaA in the calculations, considering the final stage application of a launch vehicle. Finally, the required pump outlet pressures\nare assumed to be 115% for the LOX pump and 155% for the fuel\npump with respect to combustion chamber pressure.\n\nThe battery pack mass is hence\n\n_mbp_ = _MAX(mbp,P_ _,_ _mbp,E_ _)_\n\n_tb_\n_,_\n_ηE_ _δbc,E_\n\n_(P_ _op_ + _P_ _fp)_ (43)\n\n= _κbp_\n\n_ηinvηem_\n\n_MAX_\n\n_δbc,P_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00029",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "_H.-D. Kwak et al. / Aerospace Science and Technology 77 (2018) 67–82_ 75\n\n**Table 3**\nParameter values.\n\nParameter Value Note Parameter Value Note\n\n_C p, f_ 2009 J/kg-K Kerosene _δbc,E_ 198 Wh/kg D cell\n_C p,gg_ 2024.7 J/kg-K GG gas _ηop_ 0.66\n_g_ max 4 _._ 5 _g_ 0 _η fp_ 0.61\n_kh_ 1.667 Helium _ηtu_ 0.52\n_kgg_ 1.16 GG gas _η_ em 0.95\n( _O_ _/F_ ) _cc_ 2.45 _η_ inv 0.85\n( _O_ _/F_ ) _gg_ 0.320 _κbp_ 1.2\n_ph_ <sup>0</sup> 27.0 MPaA _κh_ 1.1\n\n_ph_ <sup>1</sup> 5.0 MPaA _κgg_ 2.5\n\n_p f t,i_ 0.25 MPaA _κht_ 1.2\n_pot,i_ 0.4 MPaA _κp_ 1.01\n_ptu,in/ptu,out_ 27 _κt_ 2.5\n_Rh_ 2080 J/kg-K Helium _κu_ 1.08\n_R gg_ 274.1 J/kg-K GG gas _ρo_ 1126.1 kg/m <sup>3</sup> LOX\n\n_T_ _h_ <sup>0</sup> 100 K _ρ f_ 804.2 kg/m <sup>3</sup> Kerosene\n\n_Ttu,in_ 900 K _ρgg,m_ 8220 kg/m <sup>3</sup> INCO 718\n_ts_ 10 ms _ρot,m_ 2850 kg/m <sup>3</sup> AL alloy\n_δtp_ 13.5 kW/kg _ρ f t,m_ 2850 kg/m <sup>3</sup> AL alloy\n_δop_ 20 kW/kg _ρht,m_ 4430 kg/m <sup>3</sup> Ti-6AL-4V\n_δ fp_ 15 kW/kg _σgg,m_ 550 MPa INCO 718\n_δem_ 5.3 kW/kg _σot,m_ 250 MPa AL alloy\n_δinv_ 60 kW/kg _σ f t,m_ 250 MPa AL alloy\n_δbc,P_ 6.95 kW/kg D cell _σht,m_ 1100 MPa Ti-6AL-4V\n\n**Fig. 8.** Turbopump power densities using LOX/kerosene propellants [29–33].\n\n**5.** **Results**\n\n_5.1._ _Basic_ _features_\n\nIn this section, the ElecPump cycle is analyzed in terms of mass\nfor application to a final stage with a thrust range of 25–100 kN.\nOne important feature of a final stage is that the initial mass itself should be as low as possible, because this mass is a payload of\nthe lower stages. Fig. 9 shows the initial ElecPump cycle mass ratio\nto GG cycle as a function of combustion chamber pressure. For a\nshorter burning time of 300 s, the ElecPump cycle weighs more\nthan the GG cycle, primarily because the battery pack is heavier than the propellant consumed by the GG. A shorter burning\ntime leads to less available battery cell energy, and consequently\nincreases the mass of the battery pack. However, the initial mass\nof the ElecPump cycle is from 0.2% to 1.3% lighter than that of\nGG cycle for a longer burning time of 1200 s. In these cases, the\npropellant for the GG has a higher mass than the battery pack.\nThe higher energy efficiency of the battery cell for long discharge"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00030",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "times also contributes to this advantages. Recalling that the definitions of the initial mass in each cycle in Eq. (4) and Eq. (30)\ndo not include valves, pipelines, and other structural masses, this\nadvantage would be further increased if the mass analysis were\nexpanded to the stage level in detail, because the ElecPump cycle\nhas fewer components than the GG cycle. To examine this phenomenon in depth, the initial mass budgets are analyzed. Three\ncases are demonstrated ( _m_ <sup>0</sup> _EP_ <sup>_> m_</sup> _GG_ <sup>0</sup> <sup>,</sup> <sup>_m_</sup> <sup>0</sup> _EP_ <sup>=</sup> <sup>_m_</sup> _GG_ <sup>0</sup> <sup>,</sup> <sup>and</sup> <sup>_m_</sup> <sup>0</sup> _EP_ <sup>_< m_</sup> _GG_ <sup>0</sup> <sup>),</sup>\n\nwhere _pcc_ is 10 MPaA because the higher combustion chamber\npressure mostly influences the initial mass difference. As shown\nin Fig. 9, the relative initial mass of the ElecPump cycle to that\nof the GG cycle is lighter as it moves to longer burning times.\nFig. 10 presents the initial mass budgets of both cycles when the\nthrust level is 100 kN. The inner circle represents the GG cycle,\nwhile the outer circle represents the ElecPump cycle. The critical\nburning time for two cycles of equal mass ( _m_ <sup>0</sup> _EP_ <sup>=</sup> <sup>_m_</sup> _GG_ <sup>0</sup> <sup>)</sup> <sup>is</sup> <sup>390</sup> <sup>s.</sup>\n\nFirst, the CC propellant mass is slightly more in the ElecPump cycle for all cases. This is because there is no contribution to the"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00031",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "<sup>0</sup> _EP_ <sup>_> m_</sup> <sup>0</sup>\n\n<sup>0</sup> _GG_ <sup>,</sup> <sup>_m_</sup> <sup>0</sup>\n\n<sup>0</sup> _EP_ <sup>=</sup> <sup>_m_</sup> <sup>0</sup>\n\n<sup>0</sup> _GG_ <sup>,</sup> <sup>and</sup> <sup>_m_</sup> <sup>0</sup>\n\n<sup>0</sup> _EP_ <sup>_< m_</sup> <sup>0</sup>\n\n<sup>0</sup> _EP_ <sup>=</sup> <sup>_m_</sup> <sup>0</sup>"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 12,
+   "figure": 1,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

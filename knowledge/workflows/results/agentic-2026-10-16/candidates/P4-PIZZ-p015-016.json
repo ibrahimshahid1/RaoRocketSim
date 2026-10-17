@@ -1,0 +1,261 @@
+{
+ "packet": "P4-PIZZ-p015-016",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  15,
+  16
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 15,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0015.png",
+   "sha256": "234bbcbed042970c51d3da759f99df745ad2b2c43172829c03de7dc27add7ac1",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 16,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0016.png",
+   "sha256": "57ed4a7437204799ba002cb5154ccaaa861a26ea7e56767df6452927d1f875bd",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a5704a007a213d1de02712b5",
+  "ENR_f302f6dcb5d974c3de49aca4"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_97299448269dfab3119ed2ea",
+   "kind": "table",
+   "pages": [
+    15
+   ],
+   "table_grid": [
+    [
+     "k",
+     "L [mm]",
+     "b [mm]",
+     "h [mm]"
+    ],
+    [
+     "1",
+     "27",
+     "0.28",
+     "0.28"
+    ],
+    [
+     "2",
+     "27",
+     "0.20",
+     "0.40"
+    ],
+    [
+     "4",
+     "27",
+     "0.14",
+     "0.57"
+    ],
+    [
+     "8",
+     "27",
+     "0.10",
+     "0.80"
+    ],
+    [
+     "16",
+     "27",
+     "0.07",
+     "1.13"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 1. Dimensions of the cooling channels"
+   ],
+   "bbox": [
+    {
+     "l": 120.46894073486328,
+     "t": 161.20330810546875,
+     "r": 385.07122802734375,
+     "b": 82.1844482421875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 6x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a5704a007a213d1de02712b5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p15-15-4f752141983a54eaf4a7d2b8c415e20fbd4b60f414098673ecc9b81f9009d281.json",
+   "raw_sha256": "43c96420a15550db3d95630e61f73ff85b6c94233c7d3621df7b47de10e3e37d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9101db35e5d7ccac941fb390",
+   "kind": "figure",
+   "pages": [
+    16
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 3. Methane temperature flow-field at various cross-sections of the channel. (a) k¼1 and (b) k¼8."
+   ],
+   "bbox": [
+    {
+     "l": 70.39717102050781,
+     "t": 643.1484222412109,
+     "r": 429.7554931640625,
+     "b": 470.68817138671875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f302f6dcb5d974c3de49aca4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p16-16-d8edb04d7ebaa74941c0004bbb79436c557ceaa3af8337a4a4b9a1e8e869f931.json",
+   "raw_sha256": "5fb8a7c15f9f8c99ee5a78fff32b14de92ea824f46566b3e2006bc12d2529407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_00133f2261a158415b85f8c0",
+   "kind": "formula",
+   "pages": [
+    16
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/28",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 197.68879539999995,
+     "t": 111.47567749999996,
+     "r": 430.3929711,
+     "b": 83.81760726000005,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mathcal { C } _ { h } = \\left ( \\frac { T _ { w } } { T } \\right ) ^ { - 0 . 3 \\log ( \\frac { T _ { w } } { T } ) - 0 . 3 6 }",
+   "original_text": "Ch ¼ Tw T \u0012 \u0013\u00000:3 log Tw T ð Þ\u00000:36 ð38Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f302f6dcb5d974c3de49aca4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p16-16-d8edb04d7ebaa74941c0004bbb79436c557ceaa3af8337a4a4b9a1e8e869f931.json",
+   "raw_sha256": "5fb8a7c15f9f8c99ee5a78fff32b14de92ea824f46566b3e2006bc12d2529407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_137a15a42e559a72f9ddec11",
+   "kind": "formula",
+   "pages": [
+    16
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/24",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 120.92621064000002,
+     "t": 254.21089210000002,
+     "r": 430.3929711,
+     "b": 226.23010726,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "f _ { w } ^ { 0 } = ( 1 . 8 2 \\log R e - 1 . 6 4 ) ^ { - 2 } \\quad \\text {and} \\quad C _ { f } = \\left ( \\frac { T _ { w } } { T } \\right ) ^ { - 0 . 6 + 5 . 6 ( R e _ { w } ^ { * } ) ^ { - 0 . 3 8 } }",
+   "original_text": "f 0 w ¼ ð1:82 logRe \u0000 1:64Þ \u00002 and Cf ¼ Tw T \u0012 \u0013\u00000:6þ5:6ðRe \u0003 w Þ \u00000:38 ð36Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f302f6dcb5d974c3de49aca4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p16-16-d8edb04d7ebaa74941c0004bbb79436c557ceaa3af8337a4a4b9a1e8e869f931.json",
+   "raw_sha256": "5fb8a7c15f9f8c99ee5a78fff32b14de92ea824f46566b3e2006bc12d2529407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_50021eaf67ab6518d35678ea",
+   "kind": "formula",
+   "pages": [
+    16
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/27",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 134.53287731999995,
+     "t": 170.0508006,
+     "r": 430.39221741999995,
+     "b": 142.48421293815898,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u ^ { 0 } = \\frac { \\text {Re} \\Pr ( f _ { w } ^ { 0 } / 8 ) } { 1 + 3 . 4 f _ { w } ^ { 0 } + ( 1 1 . 7 + 1 . 8 \\Pr ^ { - 1 / 3 } ) \\sqrt { f _ { w } ^ { 0 } / 8 } ( \\text {Pr} ^ { 2 / 3 } - 1 ) }",
+   "original_text": "Nu 0 ¼ Re Prðf 0 w =8Þ 1 þ 3:4f 0 w þ ð11:7 þ 1:8Pr \u00001=3 Þ ffiffiffiffiffiffiffiffiffi f 0 w =8 p ðPr 2=3 \u0000 1Þ ð37Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f302f6dcb5d974c3de49aca4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p16-16-d8edb04d7ebaa74941c0004bbb79436c557ceaa3af8337a4a4b9a1e8e869f931.json",
+   "raw_sha256": "5fb8a7c15f9f8c99ee5a78fff32b14de92ea824f46566b3e2006bc12d2529407",
+   "mechanical_flags": [
+    "REPEATED_GLYPH_RUN_IN_ORIGINAL_TEXT"
+   ]
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00026",
+   "page_start": 15,
+   "page_end": 15,
+   "section": "",
+   "text": "14 M. PIZZARELLI ET AL.\n\n4. The new value of umh, p, Tw, hg is used for step 2 and the procedure is repeated\nuntil the change of the solution becomes smaller than a prescribed tolerance.\n\n5. RESULTS\n\nThe proposed quasi-2-D model has to be validated by comparison with experimental data. However, due to the lack of detailed and reproducible experimental\ndata of HARCC in the open literature (e.g. [26]), the comparison with validated\nCFD solutions can also be considered as an effective validation method. In fact,\nCFD solutions provide detailed data in terms of bulk and local variables in the channel cross-section. Moreover, the relatively simple geometry of the test cases (that is,\nstraight channels) enables focus on the validation of the proposed model rather than\nof the semi-empirical relations that supply it. Therefore, two sets of computations\nare discussed. The first one is relevant to straight channels validated by comparison\nwith reference solutions obtained with the CFD solver presented in references [24,\n28], which in turn has been validated against the experimental data of heated tubes\nin references [24,31]. The second set of computations is relevant to a rocket engine\ncooling system, which allows one to demonstrate model capabilities and to validate\nresults by comparison with gross experimental data.\n\n5.1. Straight Channels\n\nThe first validation test case addresses the supercritical methane turbulent flow\nin straight channels with asymmetric heating. The reference CFD solutions have been\npartially presented in reference [23] and refer to channels with the same length and\ncross-section area, but different aspect ratio of the cross-section: 1, 2, 4, 8, and 16,\nrespectively. The dimensions of the channels are shown in Table 1 and the boundary\nconditions are as follows. The methane inlet stagnation temperature is 220 K and the\nstagnation pressure is 90 bar, while the back pressure at the channel exit is 70 bar. The\nchannel wall is smooth and the imposed wall temperature ranges from 600 K at the\nbottom wall (y ¼ 0) to 220 K at the top wall (y ¼ h). A linear wall temperature distribution is imposed on the side wall to simulate the fin effect. The supercritical methane\nbehavior is described by means of the MBWR equation of state [34]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00027",
+   "page_start": 15,
+   "page_end": 15,
+   "section": "",
+   "text": "The typical temperature flow-fields obtained by CFD computations are presented for two configurations in Figure 3 at various cross-sections, from the inlet\ntoward the exit. The first geometric configuration (k ¼ 1), represents the limit case\nof the low aspect ratio cooling channel (that is, square section), whereas the second\n\nTable 1. Dimensions of the cooling channels\n\nk L [mm] b [mm] h [mm]\n\n1 27 0.28 0.28\n2 27 0.20 0.40\n4 27 0.14 0.57\n8 27 0.10 0.80\n16 27 0.07 1.13"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00028",
+   "page_start": 16,
+   "page_end": 16,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 15\n\nFigure 3. Methane temperature flow-field at various cross-sections of the channel. (a) k ¼ 1 and (b) k ¼ 8.\n\none represents one case of HARCC (k ¼ 8). Methane enters the channel in a\nhigh-density, low-temperature state at 220 K. It is heated up by the entering heat flux\nfrom the hot walls and thus the coolant temperature distribution in a channel\ncross-section is strongly stratified. At the last channel section, the temperature stratification almost reproduces the imposed wall temperature distribution. This is particularly evident in the case of a high aspect ratio (Figure 3b).\n\nTo reproduce the described methane flow-fields, the coolant inlet conditions of\nthe quasi-2-D model are the same mass flow rate and inlet static temperature and\npressure of the CFD solutions. The boundary conditions for the quasi-2-D model\nare those of imposed wall temperature. The coefficients fw and hw are computed\naccording to Petukhov’s semiempirical relations [35], which apply to straight,\nsmooth channel flow, and present good accuracy in the case of supercritical fluids\n(that is, far enough from the critical region) for a wide range of Reynolds number\n(from 10 <sup>4</sup> to 5 � 10 <sup>6</sup> ). The semiempirical relations for the skin friction are\n\nw <sup>0</sup> <sup>¼ ð1:82 log Re �</sup> <sup>1:64Þ�2</sup> and Cf ¼ <u>Tw</u>\n\nf <sup>0</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00029",
+   "page_start": 16,
+   "page_end": 16,
+   "section": "",
+   "text": "<u>�</u> <u>��0:6þ5:6ðRe</u> <sup>�</sup> w <sup>Þ�0:38</sup>\n\nT\n\nð36Þ\n\nwhere Re <sup>�</sup> w <sup>¼ Rew �</sup> <sup>q</sup> w <sup>=q, qw is the fluid density at wall, and Rew is the wall Reynolds</sup>\n\nnumber (that is, the Reynolds number based on the fluid viscosity at wall).\n\nThe semiempirical relations for the Nusselt number are\n\nNu <sup>0</sup> ¼ <u>Re</u> <u>Prðfw</u> <sup>0</sup>\n\n<u>w</u> <sup>0=8Þ</sup>\n\n~~pf f f f~~ **~~f~~**\n\nfw <sup>0=8</sup>\n\nðPr <sup>2=3</sup> - 1Þ\n\nð37Þ\n\nð38Þ\n\n1 þ 3:4fw <sup>0</sup> <sup>þ ð11:7 þ 1:8Pr�1=3Þ</sup>\n\nand\n\n<u>�</u> ��0:3 logð <sup><u>T</u></sup> TwÞ <sup>�0:36</sup>\n\nCh ¼ <u>Tw</u>\n\nT"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "table": 1,
+   "figure": 1,
+   "formula": 3
+  },
+  "flagged_candidates": 1,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

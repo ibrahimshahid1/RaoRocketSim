@@ -1,0 +1,107 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "GPT-6 (Codex)"
+ },
+ "packet": "V-SP125-p143",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_564d14f4e922dbc5fc279849",
+   "state": "REJECTED",
+   "reason": "Blackened page header/footer stamp, not a scientific figure.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_a13e1848fa21cbbfc8ae527f",
+   "state": "REJECTED",
+   "reason": "Blackened page header/footer stamp, not a scientific figure.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_386d5a2f2525894e5d3a7ff4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Original full-page visual comparison confirms the numerical expression, symbols and displayed units, preserving the source rounding. This is parser fidelity, not verification of a gas-generator model.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_6ab6408d6e3b5f35cc5d44bc",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Original full-page visual comparison confirms the numerical expression, symbols and displayed units, preserving the source rounding. This is parser fidelity, not verification of a gas-generator model.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_8a014c91f3b8cdef0989779a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Original full-page visual comparison confirms the numerical expression, symbols and displayed units, preserving the source rounding. This is parser fidelity, not verification of a gas-generator model.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_c5d16d1caf5a5d421adcf561",
+   "state": "REJECTED",
+   "reason": "Garbled pressure-drop label and an incomplete equality: original expression continues with +0.021 times480. This candidate alone omits that additive term and is not a full transcription of the printed equation.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  },
+  {
+   "candidate_id": "CAND_f11e1118f4e2ea7d62f72f0b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Exact continuation fragment +0.021 times480 matches the original page. It is only the additive continuation of the preceding pressure-drop expression, not a standalone equation or model support.",
+   "evidence": {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 143,
+    "printed_page": "134",
+    "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+    "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+   }
+  }
+ ]
+}

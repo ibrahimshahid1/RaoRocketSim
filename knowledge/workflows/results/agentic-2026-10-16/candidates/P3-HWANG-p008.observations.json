@@ -1,0 +1,528 @@
+{
+ "packet": "P3-HWANG-p008",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [],
+   "queue_reason": "P3 Hwang 2022 BF/thermal damage",
+   "queue_pages": [
+    8,
+    8
+   ],
+   "queue_document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "queue_source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P3-HWANG-p008.json",
+   "sha256": "983f7f26a6caf758ef15f065a394c9a33888e5245c513a2e62dc736d8338cd30",
+   "size_bytes": 10333,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+   "pages": [
+    8,
+    8
+   ],
+   "docling_run_ids": [
+    "ENR_d3fc4dae7bd2703c9519f9ea"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 2
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "5bac8586a6199ece51df9eee8fd881267e83efa6e6a196b46dcc4c3ae56e4127"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "5bac8586a6199ece51df9eee8fd881267e83efa6e6a196b46dcc4c3ae56e4127"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 306,
+    "records_now": 306,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "sha256_in_bundle": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+   "sha256_recomputed": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 8,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00489_W/p0008.png",
+    "dpi": 150,
+    "sha256_in_bundle": "727251913e3b3c8c12fb84117937a5699317e61100818356db05689d97413927",
+    "file_exists": true,
+    "sha256_recomputed": "727251913e3b3c8c12fb84117937a5699317e61100818356db05689d97413927",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+    "run_record_found": true,
+    "page_range": [
+     8,
+     8
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+    "raw_sha256_recorded": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.md",
+    "markdown_sha256_recorded": "6d80a8a43ddac84baf5b6d3b851b9bd8bb6a3d4d0e41b1051be7332536963efa",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "6d80a8a43ddac84baf5b6d3b851b9bd8bb6a3d4d0e41b1051be7332536963efa",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+    "sha256_in_bundle": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+    "file_exists": true,
+    "sha256_recomputed": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 2
+  },
+  "candidates_total": 4,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_c418def0165206881b09d118",
+    "CAND_f4a8cba5e58a79ce5a522b8b"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_c418def0165206881b09d118"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00021",
+     "occurrences": 1
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00022",
+     "occurrences": 3
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_c418def0165206881b09d118",
+    "kind": "figure",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 50.37085809597553,
+      "t": 55.97775908767949,
+      "r": 60.26081086835925,
+      "b": 44.03929115359074,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 8
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_f4a8cba5e58a79ce5a522b8b",
+    "kind": "figure",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 312.19134452502357,
+      "t": 732.8413312597455,
+      "r": 539.6734601591993,
+      "b": 433.4256472067658,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 9 ηC * sensitivity to the TMR and BF"
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/8\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 8
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/8"
+    ],
+    "raw_item_children_count": 33,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/8",
+      "label": "caption",
+      "page_no": 8,
+      "bbox": {
+       "l": 306.158996582,
+       "t": 424.412568855,
+       "r": 448.12293118601644,
+       "b": 415.391658390503,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 9 ηC * sensitivity to the TMR and BF",
+      "orig": "Fig. 9 ηC * sensitivity to the TMR and BF",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_4c3f372558f206f670edb1cc",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.03599847110419,
+      "t": 129.517939458,
+      "r": 289.14367341305666,
+      "b": 106.25855010541329,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/6",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "T M R s e n s i t i v y = \\frac { 1 C ^ { * } } { 1 T M R } \\times 1 0 0 ,",
+    "transcription_length": 74,
+    "original_text_as_given": "TMRsensitivity equal1 1C ∗ 1TMR × 100, (6)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(6)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d3fc4dae7bd2703c9519f9ea"
+   },
+   {
+    "id": "CAND_cb71df4aee2efe45042d7c5b",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.03654058541778,
+      "t": 94.20194728326214,
+      "r": 289.1435806795776,
+      "b": 70.49793329556508,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "1 T M R = \\frac { T M R _ { A 0 3 } - T M R _ { A 0 1 } } { T M R _ { A 0 1 } } .",
+    "transcription_length": 81,
+    "original_text_as_given": "1TMR equal1 TMRA03 - TMRA01 TMRA01 . (7)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(7)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d3fc4dae7bd2703c9519f9ea"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(6)",
+    "(7)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+    "collection_counts": {
+     "texts": 43,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 2,
+     "section_header": 2,
+     "text": 35,
+     "formula": 2,
+     "caption": 1,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 4,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00021",
+    "line": "Figure 8 displays the relationship between the BF and ηC <sup>*</sup>"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00023",
+    "line": "**Fig. 9** ηC <sup>_*_</sup> sensitivity to the TMR and BF"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00023",
+    "line": "Figure 9 displays the ηC <sup>*</sup> sensitivities for the two"
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_d3fc4dae7bd2703c9519f9ea": {
+    "markdown_lines": 19,
+    "caption_like_lines": [
+     "Figure 8 displays the relationship between the BF and ηC * according to the pintle orifice combination in each annular ring. Table 6 lists the filtering conditions and filtered data average values. Be",
+     "Fig. 9 ηC * sensitivity to the TMR and BF",
+     "Figure 9 displays the ηC * sensitivities for the two variables. In Fig. 9a, the ηC * sensitivity to the TMR is approximately 5, regardless of the BF changes. However, as displayed in Fig. 9b, the sens"
+    ]
+   }
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 2,
+    "stored_objects_listing_a_queue_target_in_model_ids": {},
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {},
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    8,
+    8
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "8": {
+     "figure": 2,
+     "formula": 2
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00021",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+     "text_length": 2007
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00022",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+     "text_length": 843
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00023",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+     "text_length": 1543
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

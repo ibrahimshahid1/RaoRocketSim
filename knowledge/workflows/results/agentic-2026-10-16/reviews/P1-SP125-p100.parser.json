@@ -1,0 +1,65 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P1-SP125-p100",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_a79da095de2e62b545ce25a2",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Box and caption match Figure 4-14 (theta_n, theta_e vs epsilon, L_f 60-100 percent) on original p.100. Curves digitized by F with +-0.3 deg reading uncertainty; values are reviewer measurements, not source text.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 100,
+    "digitization": "knowledge/workflows/results/agentic-2026-10-16/p1/sp125_fig4_14_digitized.json"
+   }
+  },
+  {
+   "candidate_id": "CAND_10a35e0984f0db6285ca1b33",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Box matches Figure 4-13 parabolic approximation contour sketch on original p.100.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 100
+   }
+  },
+  {
+   "candidate_id": "CAND_30fe334539a25d2989b9146f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Box matches Figure 4-12 thrust efficiency versus fractional length on original p.100; not digitized.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 100
+   }
+  },
+  {
+   "candidate_id": "CAND_9be1802a757d9d01c5529886",
+   "state": "REJECTED",
+   "reason": "Not a figure: bottom-of-page security-marking banner.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 100
+   }
+  },
+  {
+   "candidate_id": "CAND_b8ec8588250035e21947f621",
+   "state": "REJECTED",
+   "reason": "Not a figure: top-of-page security-marking banner.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 100
+   }
+  }
+ ]
+}

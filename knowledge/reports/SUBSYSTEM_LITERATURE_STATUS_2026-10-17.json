@@ -1,0 +1,3496 @@
+{
+  "report": "SUBSYSTEM_LITERATURE_STATUS_2026-10-17",
+  "snapshot_at_utc": "2026-10-17T17:56:40.412102+00:00",
+  "client_date": "2026-10-17",
+  "scope": "Read-only model/source/implementation-state audit. Existing structured reviews were checked for freshness, not re-performed from PDF equations. No engineering tests or physical validation performed.",
+  "repository": {
+    "root": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim",
+    "head": "550d5c26bc2679b43b027f612805eb18516e8343",
+    "model_store_meta": {
+      "generated_at": "2026-10-17T17:43:40.419892+00:00",
+      "source": "raosim/model_registry.py",
+      "n": 61
+    },
+    "models_sha256": "1ba7c1410cea0889203a02a3040013fb0d651c4edd81467bcdf08bc478ff7ff3",
+    "registry_sha256": "e2e7911fbd064c5235bee4f11b8f4d163de2ae69b897954bae436a04c8d77c06"
+  },
+  "provided_review_pdf": {
+    "path": "/Users/ibrahimshahid/Downloads/LREKit Consolidated Technical Review and Forward Program (1).pdf",
+    "sha256": "9af01aac7344873505f040e9c5c45ff44b323226bd4b2345ab7e51e4b7d4bc68",
+    "report_date": "2026-10-07",
+    "compared_pages": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ],
+    "cached_text": "knowledge/.work/consolidated-review-comparison-2026-10-17/review-pages.json",
+    "cached_text_sha256": "189f3e7c28af116bfa8543626eaac63190e5b616d3dde6aa8cf6fb1ce562f927",
+    "instructions_treated_as": "Document proposals and audit content; not task authorization."
+  },
+  "totals": {
+    "models": 61,
+    "subsystems": 17,
+    "current_structured_reviewed_models": 7,
+    "current_structured_source_reviews": 8,
+    "without_structured_review": 54,
+    "current_citation_assessment_states": {
+      "NOT_CHECKED": 48,
+      "NOT_FOUND_IN_SOURCE": 1,
+      "PARTIALLY_SUPPORTED": 9,
+      "SUPPORTED": 3
+    },
+    "positive_current_citation_assessments": 12,
+    "source_only_positive_assessments": 5,
+    "legacy_support_assessments_without_current_pdf_binding": 7,
+    "experimentally_validated": 0,
+    "hardware_qualified": 0,
+    "physical_validation_states": {
+      "REPORTED_NOT_VALIDATED": 44,
+      "UNKNOWN": 17
+    }
+  },
+  "metric_comparison": {
+    "historical_pdf": {
+      "source_checked": 11,
+      "supported": 2,
+      "partially_supported": 8,
+      "not_found": 1,
+      "meaning": "Historical source-support statuses harvested 2026-09-20; no requirement for current source and implementation fingerprints."
+    },
+    "current_structured_review": {
+      "models": 7,
+      "meaning": "Explicit implementation-versus-source review with retained source and exact definition fingerprints; a review may find non-equivalence."
+    },
+    "current_positive_source_assessments": {
+      "models": 12,
+      "meaning": "Current PDF-fingerprint citation support, including partial support and five records without structured code comparison."
+    },
+    "interpretation": "Different evidence metrics and freshness requirements, not a decrease from 11 checked to 7 checked. Seven legacy statuses are retained as history but not promoted to current source support."
+  },
+  "subsystems": [
+    {
+      "subsystem": "altitude",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "altitude.attached_thrust"
+      ]
+    },
+    {
+      "subsystem": "cad",
+      "models": 2,
+      "current_structured_reviews": 0,
+      "no_structured_review": 2,
+      "current_source_support": {
+        "NOT_CHECKED": 1,
+        "NOT_FOUND_IN_SOURCE": 1
+      },
+      "model_registry_ids": [
+        "cad.kernel_topology",
+        "regen.boolean_brep"
+      ]
+    },
+    {
+      "subsystem": "chamber",
+      "models": 2,
+      "current_structured_reviews": 0,
+      "no_structured_review": 2,
+      "current_source_support": {
+        "NOT_CHECKED": 2
+      },
+      "model_registry_ids": [
+        "chamber.lstar_volume",
+        "chamber.shoulder_fill_fraction"
+      ]
+    },
+    {
+      "subsystem": "flow",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "PARTIALLY_SUPPORTED": 1
+      },
+      "model_registry_ids": [
+        "flow.boundary_layer_displacement"
+      ]
+    },
+    {
+      "subsystem": "injector",
+      "models": 11,
+      "current_structured_reviews": 1,
+      "no_structured_review": 10,
+      "current_source_support": {
+        "NOT_CHECKED": 9,
+        "PARTIALLY_SUPPORTED": 1,
+        "SUPPORTED": 1
+      },
+      "model_registry_ids": [
+        "injector.auto_pintle_diameter",
+        "injector.compressible_orifice",
+        "injector.d2_evaporation",
+        "injector.hinze_stable_drop",
+        "injector.incompressible_orifice",
+        "injector.momentum_resultant_angle",
+        "injector.n_tau_stability",
+        "injector.primary_breakup_15dh",
+        "injector.son2017_movable_continuous_gap",
+        "injector.spray_cstar_fixed_point",
+        "injector.throttle_area_schedule"
+      ]
+    },
+    {
+      "subsystem": "interface",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "interface.pressure_bolt_plate"
+      ]
+    },
+    {
+      "subsystem": "materials",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "materials.narloy_grcop"
+      ]
+    },
+    {
+      "subsystem": "nozzle",
+      "models": 3,
+      "current_structured_reviews": 1,
+      "no_structured_review": 2,
+      "current_source_support": {
+        "NOT_CHECKED": 1,
+        "PARTIALLY_SUPPORTED": 1,
+        "SUPPORTED": 1
+      },
+      "model_registry_ids": [
+        "nozzle.moc",
+        "nozzle.rao_top_bezier",
+        "nozzle.rao_variational_bvp"
+      ]
+    },
+    {
+      "subsystem": "performance",
+      "models": 3,
+      "current_structured_reviews": 0,
+      "no_structured_review": 3,
+      "current_source_support": {
+        "NOT_CHECKED": 1,
+        "PARTIALLY_SUPPORTED": 1,
+        "SUPPORTED": 1
+      },
+      "model_registry_ids": [
+        "performance.frozen_variable_cp_quasi1d",
+        "performance.ideal_thrust_coefficient",
+        "performance.isentropic_area_mach"
+      ]
+    },
+    {
+      "subsystem": "pump",
+      "models": 7,
+      "current_structured_reviews": 3,
+      "no_structured_review": 4,
+      "current_source_support": {
+        "NOT_CHECKED": 4,
+        "PARTIALLY_SUPPORTED": 3
+      },
+      "model_registry_ids": [
+        "pump.annular_eye_free_area",
+        "pump.auto_efficiency_flow_head",
+        "pump.electric_drive",
+        "pump.inducer_npsh",
+        "pump.meanline_coefficients",
+        "pump.split_casing_joint",
+        "pump.synthetic_map"
+      ]
+    },
+    {
+      "subsystem": "separation",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "separation.empirical_onset"
+      ]
+    },
+    {
+      "subsystem": "spray",
+      "models": 16,
+      "current_structured_reviews": 0,
+      "no_structured_review": 16,
+      "current_source_support": {
+        "NOT_CHECKED": 16
+      },
+      "model_registry_ids": [
+        "spray.benchmark_radhakrishnan2018_water_air",
+        "spray.benchmark_radhakrishnan2021_tables_7_8",
+        "spray.benchmark_radhakrishnan2021_water_air",
+        "spray.deterministic_parcel_march",
+        "spray.openfoam13_external_gap_vof",
+        "spray.prescribed_one_way_carrier",
+        "spray.primary_geometry_dispatch",
+        "spray.rayleigh_taylor_openfoam",
+        "spray.schiller_naumann_drag",
+        "spray.seeded_discrete_random_walk",
+        "spray.spalding_evaporation_eq16",
+        "spray.typed_cycle_handoff",
+        "spray.vof_to_lagrangian_handoff",
+        "spray.wave_kh_radhakrishnan_2018",
+        "spray.wave_kh_radhakrishnan_2021",
+        "spray.weighted_smd_rosin_rammler"
+      ]
+    },
+    {
+      "subsystem": "structure",
+      "models": 2,
+      "current_structured_reviews": 0,
+      "no_structured_review": 2,
+      "current_source_support": {
+        "NOT_CHECKED": 2
+      },
+      "model_registry_ids": [
+        "structure.sp125_liner_stress",
+        "structure.strain_life"
+      ]
+    },
+    {
+      "subsystem": "thermal",
+      "models": 7,
+      "current_structured_reviews": 2,
+      "no_structured_review": 5,
+      "current_source_support": {
+        "NOT_CHECKED": 5,
+        "PARTIALLY_SUPPORTED": 2
+      },
+      "model_registry_ids": [
+        "thermal.bartz",
+        "thermal.chf",
+        "thermal.darcy_pressure_loss",
+        "thermal.fin_efficiency",
+        "thermal.radiation",
+        "thermal.rectangular_laminar_nusselt",
+        "thermal.sieder_tate"
+      ]
+    },
+    {
+      "subsystem": "thermochemistry",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "thermochemistry.rocketcea_snapshot"
+      ]
+    },
+    {
+      "subsystem": "throat",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "throat.hall_discharge_coefficient"
+      ]
+    },
+    {
+      "subsystem": "trajectory",
+      "models": 1,
+      "current_structured_reviews": 0,
+      "no_structured_review": 1,
+      "current_source_support": {
+        "NOT_CHECKED": 1
+      },
+      "model_registry_ids": [
+        "trajectory.vertical_point_mass"
+      ]
+    }
+  ],
+  "models": [
+    {
+      "id": "MODEL_ALTITUDE_ATTACHED_THRUST",
+      "registry_id": "altitude.attached_thrust",
+      "subsystem": "altitude",
+      "source_document_id": "DOC_DOI_10_2514_2_5354",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_separated_flow_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_CAD_KERNEL_TOPOLOGY",
+      "registry_id": "cad.kernel_topology",
+      "subsystem": "cad",
+      "source_document_id": "DOC_CAD_04",
+      "source_support_state": "NOT_FOUND_IN_SOURCE",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "topology_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_FOUND_IN_SOURCE",
+      "current_source_support_reason": "CAD_04.md is a 173-slide lecture deck on B-Splines and NURBS (basis functions, divided differences, Cox-de Boor recursion, knot insertion/removal, rational curves and surfaces). The registry attributes to it 'OpenCascade valid-solid/re-import/bounding-box/volume checks' under a 'CAD exchange/solid-modeling background' equation_ref. Grep for opencascade, occ, solid, topolog, b-rep/brep, boundary, STEP, IGES, exchange, bounding, volume, valid, manifold, shell, edge, vertex, euler, kernel, export returned zero relevant hits ('import' matches only unrelated text; 'closed' refers to closed curves; 'tolerance' appears once in a control-point replacement step). The document contains no solid-modeling, topology-validity, data-exchange, re-import, bounding-box or volume-check content, so it cannot support the model. The only tangentially related geometric statement is the convex-hull containment property of B-spline curves (page 40), which is a curve property, not a kernel verification policy.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_CHAMBER_LSTAR_VOLUME",
+      "registry_id": "chamber.lstar_volume",
+      "subsystem": "chamber",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": "SUPPORTED",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
+      "registry_id": "chamber.shoulder_fill_fraction",
+      "subsystem": "chamber",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "assumption_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+      "registry_id": "flow.boundary_layer_displacement",
+      "subsystem": "flow",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_cfd_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "Original White PDF pp840-842 recovers Eq7.42 delta/x approx0.16 Re_x^(-1/7) and Eq7.46 delta_star approxdelta/8, implying0.02 x Re_x^(-1/7). This is a smooth flat-plate derivation using a one-seventh-power profile and constant outer velocity. The implementation instead uses0.046*s/Re_s^(1/5)*sqrt(max(T/T_wall,0.2)), with local nozzle properties, distance since throat, radius floor and blockage clipping. The coefficient, exponent, temperature factor, floors/clips and nozzle application are repository screening assumptions, not established by these source equations. No justified substitution of the flat-plate formula into the nozzle is made. CITES links explicitly connect the compared source equations without asserting IMPLEMENTS; numerical validity of the nozzle extension and physical calibration remain unavailable.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_AUTO_PINTLE_DIAMETER",
+      "registry_id": "injector.auto_pintle_diameter",
+      "subsystem": "injector",
+      "source_document_id": "",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "assumption_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+      "registry_id": "injector.compressible_orifice",
+      "subsystem": "injector",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "Original White PDFpp1092,1101 supplies ideal-gas sonic pressure ratio and choked/local mass-flow functions, matching the perfect-gas functions in injector._stream_mass_flux before its supplied Cd multiplier. White does not establish that empirical injector Cd, real/supercritical-fluid accuracy, or the approximation treating feed temperature and P_back+dp as stagnation states. White6.117(p750) instead describes a meter-dependent expansion-factor model and is preserved as a distinct compared relation. CITES comparison edges document this support/scope separation without asserting that the complete injector implementation is identical to any one source formula.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_D2_EVAPORATION",
+      "registry_id": "injector.d2_evaporation",
+      "subsystem": "injector",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_HINZE_STABLE_DROP",
+      "registry_id": "injector.hinze_stable_drop",
+      "subsystem": "injector",
+      "source_document_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE",
+      "registry_id": "injector.incompressible_orifice",
+      "subsystem": "injector",
+      "source_document_id": "DOC_NTRS_19760023196",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE",
+      "registry_id": "injector.momentum_resultant_angle",
+      "subsystem": "injector",
+      "source_document_id": "DOC_NTRS_19760023196",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_cold_flow_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_N_TAU_STABILITY",
+      "registry_id": "injector.n_tau_stability",
+      "subsystem": "injector",
+      "source_document_id": "DOC_NTRS_19760023196",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_stability_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "Legacy support assessment has no current source fingerprint.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_PRIMARY_BREAKUP_15DH",
+      "registry_id": "injector.primary_breakup_15dh",
+      "subsystem": "injector",
+      "source_document_id": "",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "assumption_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP",
+      "registry_id": "injector.son2017_movable_continuous_gap",
+      "subsystem": "injector",
+      "source_document_id": "DOC_DOI_10_2514_1_B36301",
+      "source_support_state": "SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_geometry_and_literature_transition_only_not_hydraulic_actuator_sheet_or_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "SUPPORTED",
+      "current_source_support_reason": "Code equals Eq. (1) in expanded form, including the exact theta->0 limit, and inverts it with R_post - t_post. The printed Eq. (2) omits t_post, but the paper's own Table 2 transition openings (0.418/0.454/0.568 mm) agree with the code form and not with the printed Eq. (2) (0.366/0.395/0.492 mm), so Eq. (2) carries a typographical omission. A_cg = pi/4 (Dcg^2 - Dpr^2) is the annulus geometry of the named diameters; Son gives no printed formula. The registry author list ('Son, Hong, and Koo') is wrong; the authors are Son, Radhakrishnan, Koo, Kwon and Kim.",
+      "structured_review_state": "CURRENT",
+      "fidelity": "EQUIVALENT",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_DOI_10_2514_1_B36301",
+          "reviewed_source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+          "state": "CURRENT",
+          "fidelity": "EQUIVALENT",
+          "fidelity_scope": null,
+          "source_pages": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10
+          ],
+          "equation_ids": [
+            "EQ_DOI_10_2514_1_B36301_821FB00A",
+            "EQ_DOI_10_2514_1_B36301_D0D3A636"
+          ],
+          "comparison": [
+            {
+              "source": "Eq. (1), PDF p.2 (printed 859): A_min = pi/sin(th)[(R_post - t_post)^2 - (R_post - t_post - L sin th cos th)^2]",
+              "implementation": "pi*(2 r_f L cos th - L^2 sin th cos^2 th), r_f = D_post/2 - t_post",
+              "verdict": "ALGEBRAICALLY_IDENTICAL; theta->0 limit 2 pi r_f L is exact and also covers Son's 0 deg tip (Table 1)"
+            },
+            {
+              "source": "Eq. (2), PDF p.4 (printed 861), as printed with R_post",
+              "implementation": "smaller-root inverse of Eq. (1) with r_f = R_post - t_post",
+              "verdict": "CODE_FOLLOWS_EQ1_CONSISTENT_FORM; printed Eq. (2) disagrees with the paper's Table 2"
+            },
+            {
+              "source": "Table 2, PDF p.3: transition openings 0.418, 0.454, 0.568 mm at 0, 20, 40 deg (D_post 8, t_post 0.5, D_cg 4.55, D_pr 3 mm from Table 1, PDF p.2)",
+              "implementation": "transition_opening reproduces 0.417946, 0.454243, 0.568310 mm; printed Eq. (2) would give 0.365703, 0.395456, 0.492309 mm",
+              "verdict": "REPRODUCED (rounding)"
+            },
+            {
+              "source": "PDF p.2: past the transition the minimum area becomes the constant center-gap area",
+              "implementation": "A_eff = min(A_tip, A_cg) (registry relation); the MDO keeps A_tip <= frac*A_cg as an inequality",
+              "verdict": "CONSISTENT"
+            },
+            {
+              "source": "Eq. (3), PDF p.4: Cd defined on A_min or A_cg by branch, measured (Fig. 6b)",
+              "implementation": "MDO uses a constant radial Cd input (injector_cd_fuel = 0.75); no Son Cd map",
+              "verdict": "NOT_IMPLEMENTED_AS_SOURCE_MAP (repository input; Son provides no universal Cd-versus-stroke map)"
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "No physics change required. Source-internal typo in printed Eq. (2) (t_post omitted) is corroborated by the source's own Table 2; code is correct.",
+          "remaining_uncertainties": [
+            "Cd versus stroke for a new geometry (Son Eq. 3 is a definition, not a correlation)",
+            "applicability of the 0.1 mm uniform-sheet limit beyond Son's water/air rig and geometry",
+            "the 0.95 transition fraction is a repository margin",
+            "hot-fire behaviour across the transition (Son p.4 warns of possible instability)"
+          ],
+          "review_hash": "982b291681ff69454e515a481441e2ff47d5a2f83712e9e6a8d310ddf45e6cf6",
+          "recorded_at": "2026-10-17T03:28:45.162959+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_SPRAY_CSTAR_FIXED_POINT",
+      "registry_id": "injector.spray_cstar_fixed_point",
+      "subsystem": "injector",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_hot_fire_calibrated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "traditional_analysis",
+            "root": "raosim.design.design_nozzle_v2",
+            "root_locator": {
+              "file": "raosim/design.py",
+              "line": 565,
+              "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.design.design_nozzle_v2",
+                "callee": "raosim.spray_coupling.solve_spray_cstar_fixed_point",
+                "file": "raosim/design.py",
+                "line": 827,
+                "source_sha256": "1673f1e564fef469c5c328f9c4a09db394b728e59c5ca5b5e7b38fca14ac5e5c"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+        ],
+        "located_symbols": [
+          "raosim.spray_coupling.solve_spray_cstar_fixed_point"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INJECTOR_THROTTLE_AREA_SCHEDULE",
+      "registry_id": "injector.throttle_area_schedule",
+      "subsystem": "injector",
+      "source_document_id": "DOC_NTRS_19760023196",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_INTERFACE_PRESSURE_BOLT_PLATE",
+      "registry_id": "interface.pressure_bolt_plate",
+      "subsystem": "interface",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_joint_qualified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_MATERIALS_NARLOY_GRCOP",
+      "registry_id": "materials.narloy_grcop",
+      "subsystem": "materials",
+      "source_document_id": "DOC_NTRS_19740017910",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_material_qualified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_NOZZLE_MOC",
+      "registry_id": "nozzle.moc",
+      "subsystem": "nozzle",
+      "source_document_id": "DOC_NTRS_20030067852",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "reference_matched_subset",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+      "registry_id": "nozzle.rao_top_bezier",
+      "subsystem": "nozzle",
+      "source_document_id": "DOC_NTRS_19770009165",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "benchmark_screened_not_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "DOC_NTRS_19770009165: PARTIALLY_SUPPORTED (Figure 5(a) and section 2.1.2.1.2 support the conceptual canted-parabola approximation. The currently attributed angle-table ordinates fail Figure 5(b), including the opposite exit-angle trend. No equation IMPLEMENTS or claim SUPPORTS assertion is made for this non-equivalent review.)",
+      "structured_review_state": "CURRENT",
+      "fidelity": "BAD_ATTRIBUTION",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_NTRS_19770009165",
+          "reviewed_source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+          "state": "CURRENT",
+          "fidelity": "BAD_ATTRIBUTION",
+          "fidelity_scope": "BAD_ATTRIBUTION applies to _THETA_N_TABLE/_THETA_E_TABLE and their claimed reproduction of SP-8120 Figure 5(b). It does not reject the general canted-parabola geometry concept or claim that every user-supplied-angle Bezier contour is invalid. No blanket equivalence of the complete multi-method bell_nozzle_contour function is established.",
+          "source_pages": [
+            28,
+            29
+          ],
+          "equation_ids": [],
+          "comparison": [
+            {
+              "source": "SP-8120 PDF p.29, Figure 5(b), alpha_e curves for 60-100 percent length",
+              "implementation": "All five _THETA_E_TABLE columns are nondecreasing with epsilon and rise overall; lookup_angles interpolates those values.",
+              "verdict": "BAD_ATTRIBUTION: source exit angles fall as epsilon rises; table trend is opposite. The current table ordinates are NOT_FOUND_IN_SOURCE as an attributed transcription, not a claim that canted-parabola guidance is absent."
+            },
+            {
+              "source": "SP-8120 Figure 5(b), epsilon 20 / 80 percent length",
+              "implementation": "Static table gives theta_n=33 degrees, theta_e=18 degrees.",
+              "verdict": "BAD_ATTRIBUTION: reviewer visual reading gives alpha_i about 28-30 degrees and alpha_e about 8-10 degrees. These intervals are reviewer measurements with scan uncertainty, not source-stated numeric values."
+            },
+            {
+              "source": "SP-8120 Figure 5(b), epsilon 40 / 80 percent length",
+              "implementation": "Static table gives theta_n=35.5 degrees, theta_e=20 degrees.",
+              "verdict": "BAD_ATTRIBUTION: reviewer visual reading gives alpha_i about 30-32 degrees and alpha_e about 7-9 degrees. Mismatch exceeds the deliberately broad reading intervals."
+            },
+            {
+              "source": "SP-8120 PDF p.29, Figure 5(a) and section 2.1.2.1.2",
+              "implementation": "bell_nozzle_contour method=bezier constructs a quadratic Bezier from N, tangent-intersection P1, and E.",
+              "verdict": "CONCEPTUALLY_CONSISTENT geometry family. Quadratic-Bezier tangent/end-point reasoning is reviewer mathematics, not an algorithm printed on this page; it cannot validate incorrect input angles."
+            },
+            {
+              "source": "SP-8120 Figure 5(b) chart extent versus repository grid metadata",
+              "implementation": "epsilon grid 4-50, length grid 60-100; interpolator extrapolates beyond its grid and reports status separately.",
+              "verdict": "Repository grid membership and extrapolation flags do not establish source ordinate fidelity, optimum performance, or physical validity."
+            }
+          ],
+          "physics_change_required": true,
+          "physics_finding": "Current attributed angle tables require an owner decision on corrected source/digitization and subsequent geometry/performance validation. No engineering code, coefficient or geometry changed in this review.",
+          "remaining_uncertainties": [
+            "No new complete digitization of Figure 5(b), interpolation-error characterization or replacement table was produced.",
+            "Rao 1960 chart-origin paper remains outside this bounded held-source review; no claim about its uninspected ordinates.",
+            "SP-125 worked-point evidence and P1 full digitization remain prior supporting context, not a new independent source inspection here.",
+            "Throat-radius defaults, 15-degree length normalization, other contour methods and engine-specific thermochemical/applicability limits are not all established by the two reviewed pages.",
+            "No measured flow, wall-pressure, thrust or hardware qualification evidence is established."
+          ],
+          "review_hash": "b8262cffcbdeff8eb553707685c3a8aa99ea9ccdfad216f94766aac022ebd659",
+          "recorded_at": "2026-10-17T11:04:45.435803+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+      "registry_id": "nozzle.rao_variational_bvp",
+      "subsystem": "nozzle",
+      "source_document_id": "DOC_DOI_10_2514_8_7324",
+      "source_support_state": "SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "strict_literature_benchmark_passed_not_cfd_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "SUPPORTED",
+      "current_source_support_reason": "The original source states stationarity (Eqs. 7-13), exit transversality (14), characteristic compatibility (15), mass-flow matching (19), and length closure (3-4). PDF pages 2-6 were visually inspected, with the Rao text in the full six-page Markdown also read. This confirms the registry citation for the method, not numerical solver correctness, hardware qualification, or an unstated numerical validity range.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D",
+      "registry_id": "performance.frozen_variable_cp_quasi1d",
+      "subsystem": "performance",
+      "source_document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_conservation_only_not_property_or_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "Anderson originalPDFpp671-672,675-678,682 supports conserved energy/continuity and thermally-perfect fixed-composition sound speed. Chemically frozen composition permits variable speciescp(T); bothchemical AND vibrationalfreezing is a separate calorically-perfect limit. The class consumes a precomputed mixturecp(T), rather than evaluating species sums17.22/25; reactivecp/cv terms17.20/21/23/24 and equilibrium sound17.35 are comparison citations only. Exact piecewise-linear interpolation/integration, propertyschema, bisection, cstar/Cf policies and NASA SP-125 attribution were not established by this boundedwindow. The entropy integral is a repository derivation from fixed-composition ideal-gas thermodynamics, not a displayed equation in this window. Scientific correctness and fixed-composition/internal-mode basis of suppliedcp grids, gridrefinement, external thermochemistry agreement and hardware validity remainunverified. Code now discloses single-temperature thermal properties and absent separate vibrational relaxation; no numerical computation changed.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PERFORMANCE_IDEAL_THRUST_COEFFICIENT",
+      "registry_id": "performance.ideal_thrust_coefficient",
+      "subsystem": "performance",
+      "source_document_id": "DOC_NTRS_19770009165",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_cfd_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH",
+      "registry_id": "performance.isentropic_area_mach",
+      "subsystem": "performance",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": "SUPPORTED",
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "SUPPORTED",
+      "current_source_support_reason": "Original White PDFpp1090-1091,1099 supplies temperature9.26, pressure/density9.28 and area-Mach9.44. raosim/gas_dynamics.py uses the reciprocal T/T0,p/p0,rho/rho0 forms and gamma in place of sourcek, algebraically equivalent under constant-gamma calorically perfect, one-dimensional isentropic conditions. This review supports these governing algebraic relations and source attribution only; it does not certify Newton inversion convergence, all input domains, variable-cp/real-gas models, runtime execution reach or physical validation.",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_ANNULAR_EYE_FREE_AREA",
+      "registry_id": "pump.annular_eye_free_area",
+      "subsystem": "pump",
+      "source_document_id": "DOC_NTRS_19740020848",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_AUTO_EFFICIENCY_FLOW_HEAD",
+      "registry_id": "pump.auto_efficiency_flow_head",
+      "subsystem": "pump",
+      "source_document_id": "",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "assumption_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_ELECTRIC_DRIVE",
+      "registry_id": "pump.electric_drive",
+      "subsystem": "pump",
+      "source_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "The source equations are supported exactly: Lee Eqs. (20) and (26)-(32), PDF pp.6-8, as implemented in raosim/mdo/pump.py, raosim/mdo/engine.py and raosim/pumps.py (motor density on shaft output; inverter density on output = shaft/eta_m; battery power and energy branches with kappa_b; eta_E = eta_discharge). Support stays PARTIAL, as the 2026-10-14 review recorded: per-stream drives, the default technology set and its efficiencies and densities (repository_screening_v1 lies outside held evidence; P2 gap G4), bus selection and the electrical/thermal screens are repository extensions. The NLP objective uses a log-sum-exp upper envelope of Eq. (32); installed mass uses the exact MAX.",
+      "structured_review_state": "CURRENT",
+      "fidelity": "CONDITIONALLY_EQUIVALENT",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+          "reviewed_source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+          "state": "CURRENT",
+          "fidelity": "CONDITIONALLY_EQUIVALENT",
+          "fidelity_scope": null,
+          "source_pages": [
+            6,
+            7,
+            8,
+            10,
+            11
+          ],
+          "equation_ids": [
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+            "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827"
+          ],
+          "comparison": [
+            {
+              "source": "Eq. (20) PDF p.6",
+              "implementation": "P_shaft = mdot*dp/(rho*eta) (pump_stream)",
+              "verdict": "EXACT"
+            },
+            {
+              "source": "Eqs. (26)-(27) PDF p.7, motor density on output power",
+              "implementation": "motor_mass = P_shaft/motor_power_density (both paths)",
+              "verdict": "EXACT"
+            },
+            {
+              "source": "Eqs. (28)-(29) PDF p.7, inverter output = motor output/eta_m",
+              "implementation": "inverter_mass = (P_shaft/eta_motor)/inverter_power_density",
+              "verdict": "EXACT"
+            },
+            {
+              "source": "Eqs. (30)-(31) PDF p.8 with kappa_b",
+              "implementation": "battery_masses (no kappa_b) times mission.battery_structural_margin in engine.py:378-386; host multiplies the max by structural_margin",
+              "verdict": "EXACT (kappa_b applied downstream)"
+            },
+            {
+              "source": "Eq. (32) PDF p.8 MAX",
+              "implementation": "exact jnp.maximum for installed mass; objective uses logsumexp(2v)/2 upper envelope",
+              "verdict": "CONDITIONALLY_EQUIVALENT (objective smoothing)"
+            },
+            {
+              "source": "Eq. (38) PDF p.10 eta_E(t_b)",
+              "implementation": "eta_discharge is a technology-set input, not Lee's burn-time fit",
+              "verdict": "REPOSITORY_INPUT"
+            },
+            {
+              "source": "Eq. (25) PDF p.7 pump mass vs diameter",
+              "implementation": "pump_mass = P_shaft/pump_specific_mass",
+              "verdict": "DIFFERENT_METHOD (outside the registry relation)"
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "Sizing relations agree with Lee. Remaining issues are inputs (technology-set values and basis; see P2) and the pump-mass method, not the drive equations.",
+          "remaining_uncertainties": [
+            "technology-set values (inverter 15 kW/kg and 0.96 efficiency in repository_screening_v1 lie outside held sources; P2)",
+            "eta_E is not tied to burn time as in Lee Eq. (38)",
+            "no thermal or pulse derating of motor or battery"
+          ],
+          "review_hash": "8c57ddb9fb07c10b92e9151873dfbdc49dccd33cab54658ad62bfab4b529541a",
+          "recorded_at": "2026-10-17T03:27:56.521024+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_INDUCER_NPSH",
+      "registry_id": "pump.inducer_npsh",
+      "subsystem": "pump",
+      "source_document_id": "DOC_NTRS_19710025474",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_cavitation_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "DOC_NTRS_19710025474: PARTIALLY_SUPPORTED (Source selections and constant-lead geometry are supported. Repository advisory thresholds, sizing rules, and missing cavity/head-rise validation prevent whole-model equivalence.)",
+      "structured_review_state": "CURRENT",
+      "fidelity": "REPOSITORY_EXTENSION",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_NTRS_19710025474",
+          "reviewed_source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+          "state": "CURRENT",
+          "fidelity": "REPOSITORY_EXTENSION",
+          "fidelity_scope": null,
+          "source_pages": [
+            19,
+            34,
+            69,
+            71
+          ],
+          "equation_ids": [
+            "EQ_NTRS_19710025474_B280B6A9"
+          ],
+          "comparison": [
+            {
+              "source": "Eq. (1a), PDF p.19 (printed 7): S_s = n sqrt(Q) / NPSH^0.75.",
+              "implementation": "omega sqrt(Q) / (g NPSH_head)^0.75, using coherent SI quantities.",
+              "verdict": "UNIT_CONVENTION_VARIANT: the published dimensional suction speed and the code nondimensional value require a unit conversion before numerical chart comparisons."
+            },
+            {
+              "source": "Eq. (31), PDF p.34, and sec.3.1.10, PDF p.69.",
+              "implementation": "pitch = 2 pi r_tip tan(beta_tip); hub angle follows the same constant lead.",
+              "verdict": "EQUIVALENT geometric identity. The source discusses uniform flow, zero prewhirl and small blade angles when describing optimal radial angle variation."
+            },
+            {
+              "source": "Sec.3.1.9, PDF p.69: incidence ratio 0.35 to 0.50, mean 0.425; a wider flow range may require a larger ratio.",
+              "implementation": "Default alpha/beta = 0.425; beta = atan(phi_tip)/(1-ratio).",
+              "verdict": "SUPPORTED default selection; the wider-flow-range caveat and source design range are not enforced here."
+            },
+            {
+              "source": "Secs.3.1.14 and 3.1.15, PDF p.71.",
+              "implementation": "Defaults of three blades and solidity 2.5.",
+              "verdict": "SUPPORTED selections for the described low-head inducer. Other accepted inputs need separate review."
+            },
+            {
+              "source": "Sec.3.2.1, PDF p.71: monotone head increase without backflow, radial equilibrium and cavity analysis.",
+              "implementation": "Kinematic geometry and a pressure-margin recommendation, without a local cavity or head-rise solution.",
+              "verdict": "NOT_IMPLEMENTED by this function; source design requirements do not establish code suction performance."
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "No engineering edits. Advisory suction-speed threshold, eye diameter floor and hub choices remain repository assumptions. Cavitation/head-rise and operating-range evidence is required for qualification.",
+          "remaining_uncertainties": [
+            "Carry units and corrected-versus-uncorrected conventions when comparing suction-speed charts.",
+            "No cavity, thermodynamic-suppression, head-rise or stability solution is established by this function.",
+            "Other code paths and user selections are outside the four pages inspected."
+          ],
+          "review_hash": "7f1c994e27d37c57851739a01c5ebf85353085b3ce1d10229a29d145ddc59e0f",
+          "recorded_at": "2026-10-17T17:35:40.352439+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
+      "registry_id": "pump.meanline_coefficients",
+      "subsystem": "pump",
+      "source_document_id": "DOC_NTRS_19740020848",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_hardware_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "DOC_NTRS_19740020848: PARTIALLY_SUPPORTED (Core coefficient identities agree. Net-area continuity is project-derived. Chart conditions, fixed initial angle, geometry limits and the incomplete source performance procedure make the whole implementation a repository extension.)",
+      "structured_review_state": "CURRENT",
+      "fidelity": "REPOSITORY_EXTENSION",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_NTRS_19740020848",
+          "reviewed_source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+          "state": "CURRENT",
+          "fidelity": "REPOSITORY_EXTENSION",
+          "fidelity_scope": null,
+          "source_pages": [
+            20,
+            40,
+            42,
+            78,
+            79
+          ],
+          "equation_ids": [
+            "EQ_NTRS_19740020848_FFCA6B14",
+            "EQ_NTRS_19740020848_4840B4A3"
+          ],
+          "comparison": [
+            {
+              "source": "Eq. (7), PDF p.20 (printed 8): psi = g H / u_t2^2.",
+              "implementation": "tip_speed = sqrt(g stage_head / psi), with D2 = 2 tip_speed / omega.",
+              "verdict": "EQUIVALENT algebra for positive inputs. Staged head splitting and the configured coefficient remain project selections."
+            },
+            {
+              "source": "Fig.16, PDF p.42: phi2 = c_m2/u2; chart at best efficiency, zero prewhirl, shrouded impellers and diameter ratio 0.65.",
+              "implementation": "achieved_phi = Q/(open_perimeter b2 tip_speed); blade-count lookup uses psi and phi.",
+              "verdict": "EQUIVALENT coefficient identity. Chart conditions are not established for every coupled geometry, and all digitized nodes were not independently rechecked here."
+            },
+            {
+              "source": "Sec.3.3.1.3, PDF p.79: inlet free area greater than 80 percent; discharge greater than 85 percent; four to eight inlet blades.",
+              "implementation": "Exit blockage Z t/(pi D2 sin(beta2)), net-area continuity and main/splitter blade selection.",
+              "verdict": "PROJECT_DERIVED_GEOMETRIC_CLOSURE consistent with the free-area concept. The expanded Q = b2 (pi D2 - Z t/sin(beta2)) c_m2 relation was not located as a displayed source equation on these pages."
+            },
+            {
+              "source": "Secs.3.3.1.2 and 3.3.1.3, PDF pp.78-79: iterate blade number, angle and diameter for the head-flow curve; quasi-three-dimensional and stability analysis.",
+              "implementation": "Initial 25-degree exit angle, geometry closure, slip-based velocity triangle and repository limits.",
+              "verdict": "REPOSITORY_EXTENSION: these functions do not implement the full source design and stability procedure."
+            },
+            {
+              "source": "Sec.2.3.1.2, PDF p.40: head coefficients approximately 0.35 to above 0.70 and flow coefficients 0.05 to 0.30.",
+              "implementation": "Defaults psi = 0.55 and phi = 0.08.",
+              "verdict": "INSIDE_REPORTED_DESIGN_VALUES. Those general ranges do not validate or optimize these selections for a particular pump."
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "No engineering changes. Preserve chart conditions and project-derived closure. Qualified head-flow, slip, efficiency, cavitation and stability evidence remains unavailable.",
+          "remaining_uncertainties": [
+            "All Fig.16 digitization nodes and clamping behavior were not independently reverified.",
+            "The chart diameter ratio 0.65 and best-efficiency scope are not established for every coupled geometry.",
+            "Source velocity-gradient and stability requirements need analyses or measurements beyond kinematic closure.",
+            "Specific-speed and specific-diameter unit conventions are not promoted as raw numerical chart identity."
+          ],
+          "review_hash": "e574cabb4f3a31f182b6e780b8ebfe9c16795d388fc174d899bdf25338d26e42",
+          "recorded_at": "2026-10-17T17:35:50.807511+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_SPLIT_CASING_JOINT",
+      "registry_id": "pump.split_casing_joint",
+      "subsystem": "pump",
+      "source_document_id": "DOC_NTRS_19740020848",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_joint_qualified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_PUMP_SYNTHETIC_MAP",
+      "registry_id": "pump.synthetic_map",
+      "subsystem": "pump",
+      "source_document_id": "",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "assumption_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_REGEN_BOOLEAN_BREP",
+      "registry_id": "regen.boolean_brep",
+      "subsystem": "cad",
+      "source_document_id": "DOC_DOI_10_2514_6_2018_4625",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "topology_only",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SEPARATION_EMPIRICAL_ONSET",
+      "registry_id": "separation.empirical_onset",
+      "subsystem": "separation",
+      "source_document_id": "DOC_DOI_10_2514_2_5354",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_cfd_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2018_WATER_AIR",
+      "registry_id": "spray.benchmark_radhakrishnan2018_water_air",
+      "subsystem": "spray",
+      "source_document_id": "DOC_RADHAKRISHNAN2018",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "experimental_target_fixture_not_end_to_end_model_validation",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_TABLES_7_8",
+      "registry_id": "spray.benchmark_radhakrishnan2021_tables_7_8",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "literature_reproduction_only_not_experimental_validation",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_WATER_AIR",
+      "registry_id": "spray.benchmark_radhakrishnan2021_water_air",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "experimental_target_fixture_distinct_revision_not_end_to_end_model_validation",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_DETERMINISTIC_PARCEL_MARCH",
+      "registry_id": "spray.deterministic_parcel_march",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_one_way_march_not_cfd_or_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "report_only",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "root_locator": {
+              "file": "raosim/spray/solver.py",
+              "line": 407,
+              "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+            },
+            "call_sites": [],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray.solver.march_parcels"
+        ],
+        "located_symbols": [
+          "raosim.spray.solver.march_parcels"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_OPENFOAM13_EXTERNAL_GAP_VOF",
+      "registry_id": "spray.openfoam13_external_gap_vof",
+      "subsystem": "spray",
+      "source_document_id": "DOC_RADHAKRISHNAN2018",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_template_static_verified_not_openfoam_run_or_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_PRESCRIBED_ONE_WAY_CARRIER",
+      "registry_id": "spray.prescribed_one_way_carrier",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_one_way_interface_not_cfd_or_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "report_only",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_PRIMARY_GEOMETRY_DISPATCH",
+      "registry_id": "spray.primary_geometry_dispatch",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_geometry_dispatch_not_primary_breakup_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_RAYLEIGH_TAYLOR_OPENFOAM",
+      "registry_id": "spray.rayleigh_taylor_openfoam",
+      "subsystem": "spray",
+      "source_document_id": "",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_identity_only_external_source_not_pinned_or_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "root_locator": {
+              "file": "raosim/spray/solver.py",
+              "line": 407,
+              "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.spray.solver.march_parcels",
+                "callee": "raosim.spray.breakup.advance_breakup",
+                "file": "raosim/spray/solver.py",
+                "line": 594,
+                "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+              },
+              {
+                "caller": "raosim.spray.breakup.advance_breakup",
+                "callee": "raosim.spray.breakup.rayleigh_taylor_metrics",
+                "file": "raosim/spray/breakup.py",
+                "line": 615,
+                "source_sha256": "1bd300e71249e74c0d42ea390e182b56c64aa15b81e29834ce124217cc7bcb6f"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray.breakup.rayleigh_taylor_metrics"
+        ],
+        "located_symbols": [
+          "raosim.spray.breakup.rayleigh_taylor_metrics"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_SCHILLER_NAUMANN_DRAG",
+      "registry_id": "spray.schiller_naumann_drag",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_spray_drag_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "report_only",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "root_locator": {
+              "file": "raosim/spray/solver.py",
+              "line": 407,
+              "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.spray.solver.march_parcels",
+                "callee": "raosim.spray.drag.drag_acceleration",
+                "file": "raosim/spray/solver.py",
+                "line": 527,
+                "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray.drag.drag_acceleration"
+        ],
+        "located_symbols": [
+          "raosim.spray.drag.drag_acceleration"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_SEEDED_DISCRETE_RANDOM_WALK",
+      "registry_id": "spray.seeded_discrete_random_walk",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_reproducible_closure_not_dispersion_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [
+          "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+        ],
+        "located_symbols": [
+          "raosim.spray.dispersion.DiscreteRandomWalk.advance"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_SPALDING_EVAPORATION_EQ16",
+      "registry_id": "spray.spalding_evaporation_eq16",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_evaporation_or_energy_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "root_locator": {
+              "file": "raosim/spray/solver.py",
+              "line": 407,
+              "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.spray.solver.march_parcels",
+                "callee": "raosim.spray.evaporation.advance_evaporation",
+                "file": "raosim/spray/solver.py",
+                "line": 623,
+                "source_sha256": "e188c787866d96978a5d4ae0e5f507ddbc3d469569e7c40fa9020a8b47be17d5"
+              },
+              {
+                "caller": "raosim.spray.evaporation.advance_evaporation",
+                "callee": "raosim.spray.evaporation.evaporation_rate_2021",
+                "file": "raosim/spray/evaporation.py",
+                "line": 285,
+                "source_sha256": "cfeeb7cff6e82f56d2816d36dedc7eeff96fb58460ab97b06bee4fe9a80f778b"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray.evaporation.evaporation_rate_2021"
+        ],
+        "located_symbols": [
+          "raosim.spray.evaporation.evaporation_rate_2021"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_TYPED_CYCLE_HANDOFF",
+      "registry_id": "spray.typed_cycle_handoff",
+      "subsystem": "spray",
+      "source_document_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_fail_closed_interface_not_cycle_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.handoff.build_cycle_handoff",
+            "root_locator": {
+              "file": "raosim/spray/handoff.py",
+              "line": 260,
+              "source_sha256": "f13ad98a657b69b9fcd1ac9148f7c5a6abe42f0d0adc2f1b793ca6207951fce2"
+            },
+            "call_sites": [],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.spray.handoff.build_cycle_handoff"
+        ],
+        "located_symbols": [
+          "raosim.spray.handoff.build_cycle_handoff"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_VOF_TO_LAGRANGIAN_HANDOFF",
+      "registry_id": "spray.vof_to_lagrangian_handoff",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_fail_closed_interface_not_cfd_or_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2018",
+      "registry_id": "spray.wave_kh_radhakrishnan_2018",
+      "subsystem": "spray",
+      "source_document_id": "DOC_RADHAKRISHNAN2018",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_literature_reproduction_not_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2021",
+      "registry_id": "spray.wave_kh_radhakrishnan_2021",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_literature_reproduction_not_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_SPRAY_WEIGHTED_SMD_ROSIN_RAMMLER",
+      "registry_id": "spray.weighted_smd_rosin_rammler",
+      "subsystem": "spray",
+      "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_statistic_not_spray_physically_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [
+          "raosim.spray.statistics.summarize_spray"
+        ],
+        "located_symbols": [
+          "raosim.spray.statistics.summarize_spray"
+        ],
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_STRUCTURE_SP125_LINER_STRESS",
+      "registry_id": "structure.sp125_liner_stress",
+      "subsystem": "structure",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_fea_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_STRUCTURE_STRAIN_LIFE",
+      "registry_id": "structure.strain_life",
+      "subsystem": "structure",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_material_qualified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_BARTZ",
+      "registry_id": "thermal.bartz",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_DOI_10_2514_8_12572",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_cht_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "DOC_DOI_10_2514_8_12572: SUPPORTED (h_g and sigma equal Bartz Eqs. [7] and [5] (SI with g_c = 1; properties at chamber stagnation conditions). Pr estimate equals Eq. [8]. Viscosity estimator uses 1.1929e-7 where the exact SI conversion of Eq. [9] (46.6e-10 lb/(in s) x 17.85797 x 1.8^0.6) is 1.184081e-7, i.e. 0.745% high (0.149% in h_g); code docstrings cite SP-125 'Eq. 4-23' and 'Eq. 4-18' but the SP-125 equations are 4-16 and 4-15 (PDF p.110). Recovery temperature uses r = Pr^(1/3) (not in Bartz; SP-125 p.109 defines T_aw as (T_c)ns x recovery factor 0.90-0.98). Bartz's applicability statements (D*/r_c <= ~3; angles within 50% of 30/15 deg; chamber fluxes 40-50% of measured) are not enforced.); DOC_NTRS_19710019929: PARTIALLY_SUPPORTED (SP125 h_g, sigma atomega0.6 and Pr agree. Viscosity SI coefficient and equation-number docstrings differ; clipping and generalizedomega branches outside equivalence scope. Source uncertainty remains.)",
+      "structured_review_state": "CURRENT",
+      "fidelity": "EQUIVALENT",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_DOI_10_2514_8_12572",
+          "reviewed_source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+          "state": "CURRENT",
+          "fidelity": "EQUIVALENT",
+          "fidelity_scope": "EQUIVALENT applies to h_g (Eq. [7]), sigma (Eq. [5]) and Pr (Eq. [8]); the two symbols in implementation_findings are not covered by that class.",
+          "source_pages": [
+            1,
+            2,
+            3
+          ],
+          "equation_ids": [
+            "EQ_DOI_10_2514_8_12572_CED2301E",
+            "EQ_DOI_10_2514_8_12572_14DF9A7B",
+            "EQ_DOI_10_2514_8_12572_022F8F4C",
+            "EQ_DOI_10_2514_8_12572_280CBC6A"
+          ],
+          "comparison": [
+            {
+              "source": "Bartz Eq. [7] (PDF p.2); SP-125 Eq. 4-13 (PDF p.109)",
+              "implementation": "0.026/Dt^0.2*(mu^0.2 cp/Pr^0.6)*(Pc/c*)^0.8*(Dt/r_c)^0.1*(At/A)^0.9*sigma",
+              "verdict": "EQUIVALENT (SI, g_c = 1)"
+            },
+            {
+              "source": "Bartz Eq. [5] (PDF p.1); SP-125 Eq. 4-14 (PDF p.110, exponents 0.68/0.12 for omega = 0.6)",
+              "implementation": "bartz_sigma with exponents 0.8 - omega/5 and omega/5, omega default 0.6",
+              "verdict": "EXACT"
+            },
+            {
+              "source": "Bartz Eq. [8]; SP-125 Eq. 4-15 (PDF p.110)",
+              "implementation": "prandtl_number_estimate = 4g/(9g-5); docstring cites SP-125 'Eq. 4-18'",
+              "verdict": "EXACT_FORMULA; BAD_LOCATOR (4-18 is the deposit conductance equation)"
+            },
+            {
+              "source": "Bartz Eq. [9]; SP-125 Eq. 4-16 (PDF p.110): 46.6e-10 m^0.5 T_R^0.6 lb/(in s)",
+              "implementation": "1.1929e-7 M^0.5 T_K^0.6 Pa s; docstring claims an exact conversion and cites SP-125 'Eq. 4-23'",
+              "verdict": "CONVERSION_ERROR (+0.746% in mu, +0.149% in h_g); BAD_LOCATOR (4-23 is the coolant Nusselt equation)"
+            },
+            {
+              "source": "SP-125 p.109: T_aw = (T_c)ns x turbulent recovery factor (0.90-0.98)",
+              "implementation": "T_aw = Tc(1 + r(g-1)/2 M^2)/(1 + (g-1)/2 M^2), r = Pr^(1/3)",
+              "verdict": "REPOSITORY_EXTENSION (standard compressible recovery form; not stated by Bartz)"
+            },
+            {
+              "source": "Bartz PDF p.2-3 applicability: D*/r_c <= ~3, angles within 50% of 30/15 deg; chamber fluxes 40-50% of measured",
+              "implementation": "no applicability check; MDO cooling applies Bartz at every station (raosim/mdo/cooling.py:339-357) with mu_gas, cp_gas, Pr_gas from mission inputs",
+              "verdict": "VALIDITY_NOT_ENFORCED"
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "Formula transcription is correct. Recommended (not applied; code edits forbidden this session): correct the viscosity coefficient to 1.18407e-7 or drop the 'exact' claim, fix the two SP-125 equation numbers, and report Bartz's D*/r_c and chamber-flux applicability limits.",
+          "remaining_uncertainties": [
+            "chamber-section heat flux (Bartz: 40-50% of measured for RFNA-NH3)",
+            "D*/r_c and wall-angle range of the design versus Bartz's stated range",
+            "property evaluation (stagnation vs mean film) for propellants unlike RFNA-N2H4",
+            "recovery-factor definition differs between SP-125 and the code"
+          ],
+          "review_hash": "b20129610d007ed998e424c77f0353381f640a9458b17cfea37c6d86bbc8f17f",
+          "recorded_at": "2026-10-17T03:29:08.295388+00:00"
+        },
+        {
+          "reviewed_document_id": "DOC_NTRS_19710019929",
+          "reviewed_source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+          "state": "CURRENT",
+          "fidelity": "EQUIVALENT",
+          "fidelity_scope": "EQUIVALENT applies only to Eq4-13 h_g, Eq4-14 sigma with omega=0.6, and Eq4-15 Pr, for physical positive inputs within the code clipping bounds. Eq4-16 viscosity is CITES_ONLY: coefficient conversion differs. Recovery temperature is not covered by this source-equation support.",
+          "source_pages": [
+            109,
+            110
+          ],
+          "equation_ids": [
+            "EQ_NTRS_19710019929_4E64145B",
+            "EQ_NTRS_19710019929_AEB01E6D",
+            "EQ_NTRS_19710019929_145484E8",
+            "EQ_NTRS_19710019929_D069B835"
+          ],
+          "comparison": [
+            {
+              "source": "SP-125 Eq4-13, PDF109 printed100",
+              "implementation": "physics.bartz_heat_transfer_coefficient and jax.thermal.bartz_hg",
+              "verdict": "EQUIVALENT for positive physical inputs outside protective clipping/floor branches; coherence of supplied gas properties remains required."
+            },
+            {
+              "source": "SP-125 Eq4-14, PDF110 printed101",
+              "implementation": "both bartz_sigma functions, omega=0.6",
+              "verdict": "EQUIVALENT; other omega values are generalized Bartz variants, not the fixed exponents printed here."
+            },
+            {
+              "source": "SP-125 Eq4-15, PDF110",
+              "implementation": "prandtl_number_estimate",
+              "verdict": "EXACT_FORMULA; docstring incorrectly cites4-18."
+            },
+            {
+              "source": "SP-125 Eq4-16, PDF110",
+              "implementation": "combustion_gas_viscosity",
+              "verdict": "CONVERSION_ERROR; exact coefficient 1.1840810853327972e-07 Pa s, code1.1929e-7 (0.7447897594550446 percent high). Docstring incorrectly cites4-23."
+            }
+          ],
+          "physics_change_required": false,
+          "physics_finding": "G15-G18 remain open engineering decisions; no raosim/lrekit/tests changes.",
+          "remaining_uncertainties": [
+            "SP-125 itself calls h_g approximate and lists radiating species, recombination and instability as possible causes of underprediction, and incomplete combustion/deposits as overprediction mechanisms.",
+            "No new numerical applicability gate; Bartz primary-source limits remain in retained primary review.",
+            "No physical validation or gas-property qualification."
+          ],
+          "review_hash": "3edbd5b1e3864be3c22573818b3eff81f235f80ea0293905379954c42cc978d0",
+          "recorded_at": "2026-10-17T11:02:11.487868+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "optimizer",
+            "root": "raosim.mdo.nlp._make_callables.solve",
+            "root_locator": {
+              "file": "raosim/mdo/nlp.py",
+              "line": 766,
+              "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.mdo.nlp._make_callables.solve",
+                "callee": "raosim.mdo.engine.solve_engine",
+                "file": "raosim/mdo/nlp.py",
+                "line": 767,
+                "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+              },
+              {
+                "caller": "raosim.mdo.engine.solve_engine",
+                "callee": "raosim.mdo.cooling.solve_cooling",
+                "file": "raosim/mdo/engine.py",
+                "line": 345,
+                "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+              },
+              {
+                "caller": "raosim.mdo.cooling.solve_cooling",
+                "callee": "raosim.mdo.cooling.cooling_march",
+                "file": "raosim/mdo/cooling.py",
+                "line": 527,
+                "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+              },
+              {
+                "caller": "raosim.mdo.cooling.cooling_march",
+                "callee": "raosim.jax.thermal.bartz_hg",
+                "file": "raosim/mdo/cooling.py",
+                "line": 339,
+                "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.jax.thermal.bartz_hg"
+        ],
+        "located_symbols": [
+          "raosim.jax.thermal.bartz_hg"
+        ],
+        "optimizer_reach_state": "STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_CHF",
+      "registry_id": "thermal.chf",
+      "subsystem": "thermal",
+      "source_document_id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "conservative_reference_not_design_correlation",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_DARCY_PRESSURE_LOSS",
+      "registry_id": "thermal.darcy_pressure_loss",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_FIN_EFFICIENCY",
+      "registry_id": "thermal.fin_efficiency",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_DOI_10_2514_6_2019_3938",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_cht_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_RADIATION",
+      "registry_id": "thermal.radiation",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_DOI_10_2514_1_B36589",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "screening_not_spectral_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_RECTANGULAR_LAMINAR_NUSSELT",
+      "registry_id": "thermal.rectangular_laminar_nusselt",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_local_secondary_source",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMAL_SIEDER_TATE",
+      "registry_id": "thermal.sieder_tate",
+      "subsystem": "thermal",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": "PARTIALLY_SUPPORTED",
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_not_cht_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "PARTIALLY_SUPPORTED",
+      "current_source_support_reason": "SP-125 (the registry's local source) prints Nu = C1 Re^0.8 Pr^0.4 (mu/mu_w)^0.14 with a coolant-specific C1 (RP-1: 0.0214, PDF p.119). The code and registry use 0.027 Re^0.8 Pr^(1/3) (mu_b/mu_w)^0.14 (the classical Sieder & Tate 1936 form, which is not held in the corpus). Same structure and viscosity correction; different coefficient and Prandtl exponent. Relative to the SP-125 RP-1 form the code's h_c is higher by about 26% at Pr = 1, 17% at Pr = 3 and 7% at Pr = 11.7 (RP-1 at 600 R).",
+      "structured_review_state": "CURRENT",
+      "fidelity": "DIFFERENT_FORMULA",
+      "review_sources": [
+        {
+          "reviewed_document_id": "DOC_NTRS_19710019929",
+          "reviewed_source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+          "state": "CURRENT",
+          "fidelity": "DIFFERENT_FORMULA",
+          "fidelity_scope": null,
+          "source_pages": [
+            115,
+            119
+          ],
+          "equation_ids": [
+            "EQ_NTRS_19710019929_78B48BD5",
+            "EQ_NTRS_19710019929_848A0FB1"
+          ],
+          "comparison": [
+            {
+              "source": "SP-125 Eq. 4-23 (PDF p.115 / printed 106): Nu = C1 Re^0.8 Pr^0.4 (mu/mu_w)^0.14, C1 coolant-specific",
+              "implementation": "Nu = 0.027 Re^0.8 Pr^(1/3) (mu_b/mu_w)^0.14",
+              "verdict": "DIFFERENT_FORMULA (coefficient and Pr exponent)"
+            },
+            {
+              "source": "SP-125 PDF p.119: RP-1 experimental C1 = 0.0214",
+              "implementation": "0.027 for every coolant",
+              "verdict": "NOT_COOLANT_SPECIFIC; code h_c exceeds the SP-125 RP-1 form by +7% (Pr 11.7) to +26% (Pr 1)"
+            },
+            {
+              "source": "SP-125 Eq. 4-25 (PDF p.115): supercritical vapor-film h_c",
+              "implementation": "not implemented; supercritical/HTD handled by the separate Nasuti Eq. 9 screen (unavailable without real-fluid properties)",
+              "verdict": "NOT_IMPLEMENTED"
+            },
+            {
+              "source": "SP-125 applicability (PDF p.115): nonboiling subcritical-temperature regions",
+              "implementation": "applied at all stations without a regime check",
+              "verdict": "VALIDITY_NOT_ENFORCED"
+            }
+          ],
+          "physics_change_required": true,
+          "physics_finding": "Owner decision required (code edits are outside this session's scope): adopt SP-125 Eq. 4-23 with coolant-specific C1 (RP-1 = 0.0214, page-verified), or acquire Sieder & Tate (1936) to support 0.027 and Pr^(1/3); coolant-specific constants are missing for methane and hydrogen.",
+          "remaining_uncertainties": [
+            "C1 for methane/hydrogen/propane not held",
+            "entrance-length and curvature effects not represented",
+            "supercritical and boiling regimes need separate models (Eq. 4-24, 4-25; Nasuti Eq. 9)"
+          ],
+          "review_hash": "98c80b79360590a5b8f574b8bb8c905bf4dbdbb59f3a0f12a21f81778681083a",
+          "recorded_at": "2026-10-17T03:29:30.961066+00:00"
+        }
+      ],
+      "execution_reach": {
+        "state": "CODE_INSPECTED",
+        "routes": [
+          {
+            "scope": "optimizer",
+            "root": "raosim.mdo.nlp._make_callables.solve",
+            "root_locator": {
+              "file": "raosim/mdo/nlp.py",
+              "line": 766,
+              "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+            },
+            "call_sites": [
+              {
+                "caller": "raosim.mdo.nlp._make_callables.solve",
+                "callee": "raosim.mdo.engine.solve_engine",
+                "file": "raosim/mdo/nlp.py",
+                "line": 767,
+                "source_sha256": "3681953f527e3b38b7bc62b4087f299a80d5a549f0410eff128f5abf6e4e7705"
+              },
+              {
+                "caller": "raosim.mdo.engine.solve_engine",
+                "callee": "raosim.mdo.cooling.solve_cooling",
+                "file": "raosim/mdo/engine.py",
+                "line": 345,
+                "source_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f"
+              },
+              {
+                "caller": "raosim.mdo.cooling.solve_cooling",
+                "callee": "raosim.mdo.cooling.cooling_march",
+                "file": "raosim/mdo/cooling.py",
+                "line": 527,
+                "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+              },
+              {
+                "caller": "raosim.mdo.cooling.cooling_march",
+                "callee": "raosim.jax.thermal.sieder_tate_hc",
+                "file": "raosim/mdo/cooling.py",
+                "line": 374,
+                "source_sha256": "c2895834d6d091aa7c22500ffbf7179514d337d32e9b1a0c77e6f32f55de30a2"
+              }
+            ],
+            "state": "STATIC_POSSIBLE_CALL_PATH"
+          }
+        ],
+        "mapped_symbols": [
+          "raosim.jax.thermal.sieder_tate_hc"
+        ],
+        "located_symbols": [
+          "raosim.jax.thermal.sieder_tate_hc"
+        ],
+        "optimizer_reach_state": "STATIC_PATH_FOUND",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THERMOCHEMISTRY_ROCKETCEA_SNAPSHOT",
+      "registry_id": "thermochemistry.rocketcea_snapshot",
+      "subsystem": "thermochemistry",
+      "source_document_id": "DOC_NTRS_19710019929",
+      "source_support_state": null,
+      "physical_validation_state": "REPORTED_NOT_VALIDATED",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "external_solver_not_locally_regression_validated",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "optimizer_coupled",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_THROAT_HALL_DISCHARGE_COEFFICIENT",
+      "registry_id": "throat.hall_discharge_coefficient",
+      "subsystem": "throat",
+      "source_document_id": "DOC_NTRS_19770009165",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    },
+    {
+      "id": "MODEL_TRAJECTORY_VERTICAL_POINT_MASS",
+      "registry_id": "trajectory.vertical_point_mass",
+      "subsystem": "trajectory",
+      "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_support_state": null,
+      "physical_validation_state": "UNKNOWN",
+      "hardware_qualified": false,
+      "experimentally_validated": false,
+      "validation_level": "software_verified_mission_screen",
+      "software_verification_state": "REPORTED_NOT_REEXECUTED",
+      "promotion_status": "screening",
+      "current_source_support": "NOT_CHECKED",
+      "current_source_support_reason": "",
+      "structured_review_state": "NOT_CHECKED",
+      "fidelity": null,
+      "review_sources": [],
+      "execution_reach": {
+        "state": "UNKNOWN",
+        "routes": [],
+        "mapped_symbols": [],
+        "located_symbols": [],
+        "optimizer_reach_state": "UNKNOWN",
+        "runtime_trace_state": "NOT_RUN",
+        "dynamic_dispatch_state": "UNKNOWN",
+        "optimizer_leverage_state": "NOT_MEASURED",
+        "basis": "bounded AST imports and direct call sites; conditional execution and dynamic calls are not proven"
+      }
+    }
+  ],
+  "reviewed_models": [
+    "injector.son2017_movable_continuous_gap",
+    "nozzle.rao_top_bezier",
+    "pump.electric_drive",
+    "pump.inducer_npsh",
+    "pump.meanline_coefficients",
+    "thermal.bartz",
+    "thermal.sieder_tate"
+  ],
+  "source_only_assessments": [
+    "flow.boundary_layer_displacement",
+    "injector.compressible_orifice",
+    "nozzle.rao_variational_bvp",
+    "performance.frozen_variable_cp_quasi1d",
+    "performance.isentropic_area_mach"
+  ],
+  "legacy_unbound_assessments": [
+    "altitude.attached_thrust",
+    "chamber.lstar_volume",
+    "chamber.shoulder_fill_fraction",
+    "injector.d2_evaporation",
+    "injector.incompressible_orifice",
+    "injector.momentum_resultant_angle",
+    "injector.n_tau_stability"
+  ],
+  "freshness": {
+    "structured_source_pdf_hashes": [
+      {
+        "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+        "pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+        "manifest_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+        "observed_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_DOI_10_2514_1_B36301",
+        "pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+        "manifest_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+        "observed_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_DOI_10_2514_8_12572",
+        "pdf": "propulsion_texts/technical-notes-1957.pdf",
+        "manifest_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+        "observed_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_NTRS_19710019929",
+        "pdf": "propulsion_texts/19710019929.pdf",
+        "manifest_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+        "observed_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_NTRS_19710025474",
+        "pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+        "manifest_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+        "observed_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_NTRS_19740020848",
+        "pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+        "manifest_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+        "observed_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+        "state": "MATCH"
+      },
+      {
+        "document_id": "DOC_NTRS_19770009165",
+        "pdf": "propulsion_texts/19770009165.pdf",
+        "manifest_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+        "observed_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+        "state": "MATCH"
+      }
+    ],
+    "registry_differences": [],
+    "implementation_locators": {
+      "scope": "Exact file and qualified Python AST symbol only; not scientific correctness, execution reach, or physical validation.",
+      "write": false,
+      "files_inspected": 104,
+      "inspected": 438,
+      "verified": 438,
+      "unavailable": 0,
+      "skipped_inactive": 0,
+      "locators_corrected": 0,
+      "fingerprints_baselined": 0,
+      "changed_definitions": 0,
+      "line_corrections": 0,
+      "end_line_updates": 0,
+      "locators_restored": 0,
+      "records_updated": 0,
+      "missing_provenance": 0,
+      "provenance_repaired": 0,
+      "changed_definition_ids": [],
+      "unavailable_components": []
+    },
+    "execution_reach_matches_stores": true,
+    "scope_limit": "Matching bytes/ASTs establishes absence of drift from the recorded comparisons, not correctness or physical validation."
+  },
+  "execution": {
+    "models": [
+      {
+        "registry_id": "altitude.attached_thrust",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "cad.kernel_topology",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "chamber.lstar_volume",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "chamber.shoulder_fill_fraction",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "flow.boundary_layer_displacement",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.auto_pintle_diameter",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.compressible_orifice",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.d2_evaporation",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.hinze_stable_drop",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.incompressible_orifice",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.momentum_resultant_angle",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.n_tau_stability",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.primary_breakup_15dh",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.son2017_movable_continuous_gap",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "injector.spray_cstar_fixed_point",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "traditional_analysis",
+            "root": "raosim.design.design_nozzle_v2",
+            "call_site_count": 1
+          }
+        ]
+      },
+      {
+        "registry_id": "injector.throttle_area_schedule",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "interface.pressure_bolt_plate",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "materials.narloy_grcop",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "nozzle.moc",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "nozzle.rao_top_bezier",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "nozzle.rao_variational_bvp",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "performance.frozen_variable_cp_quasi1d",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "performance.ideal_thrust_coefficient",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "performance.isentropic_area_mach",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.annular_eye_free_area",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.auto_efficiency_flow_head",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.electric_drive",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.inducer_npsh",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.meanline_coefficients",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.split_casing_joint",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "pump.synthetic_map",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "regen.boolean_brep",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "separation.empirical_onset",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.benchmark_radhakrishnan2018_water_air",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.benchmark_radhakrishnan2021_tables_7_8",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.benchmark_radhakrishnan2021_water_air",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.deterministic_parcel_march",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "call_site_count": 0
+          }
+        ]
+      },
+      {
+        "registry_id": "spray.openfoam13_external_gap_vof",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.prescribed_one_way_carrier",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.primary_geometry_dispatch",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.rayleigh_taylor_openfoam",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "call_site_count": 2
+          }
+        ]
+      },
+      {
+        "registry_id": "spray.schiller_naumann_drag",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "call_site_count": 1
+          }
+        ]
+      },
+      {
+        "registry_id": "spray.seeded_discrete_random_walk",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.spalding_evaporation_eq16",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.solver.march_parcels",
+            "call_site_count": 2
+          }
+        ]
+      },
+      {
+        "registry_id": "spray.typed_cycle_handoff",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "explicit_analysis_api",
+            "root": "raosim.spray.handoff.build_cycle_handoff",
+            "call_site_count": 0
+          }
+        ]
+      },
+      {
+        "registry_id": "spray.vof_to_lagrangian_handoff",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.wave_kh_radhakrishnan_2018",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.wave_kh_radhakrishnan_2021",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "spray.weighted_smd_rosin_rammler",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "structure.sp125_liner_stress",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "structure.strain_life",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.bartz",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "optimizer",
+            "root": "raosim.mdo.nlp._make_callables.solve",
+            "call_site_count": 4
+          }
+        ]
+      },
+      {
+        "registry_id": "thermal.chf",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.darcy_pressure_loss",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.fin_efficiency",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.radiation",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.rectangular_laminar_nusselt",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "thermal.sieder_tate",
+        "state": "CODE_INSPECTED",
+        "optimizer_reach_state": "STATIC_PATH_FOUND",
+        "matches_stored": true,
+        "routes": [
+          {
+            "scope": "optimizer",
+            "root": "raosim.mdo.nlp._make_callables.solve",
+            "call_site_count": 4
+          }
+        ]
+      },
+      {
+        "registry_id": "thermochemistry.rocketcea_snapshot",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "throat.hall_discharge_coefficient",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      },
+      {
+        "registry_id": "trajectory.vertical_point_mass",
+        "state": "UNKNOWN",
+        "optimizer_reach_state": "UNKNOWN",
+        "matches_stored": true,
+        "routes": []
+      }
+    ],
+    "states": {
+      "UNKNOWN": 53,
+      "CODE_INSPECTED": 8
+    },
+    "optimizer_reach_states": {
+      "UNKNOWN": 51,
+      "NO_STATIC_PATH_FOUND": 8,
+      "STATIC_PATH_FOUND": 2
+    },
+    "runtime_trace": "NOT_RUN",
+    "optimizer_leverage": "NOT_MEASURED",
+    "dynamic_dispatch": "UNKNOWN",
+    "limit": "Bounded AST mapping; NO_STATIC_PATH_FOUND is not proof of unreachability and UNKNOWN is not proof of absence."
+  },
+  "pdf_program_comparison": [
+    {
+      "pages": "11–15",
+      "finding": "The 61-model/17-subsystem inventory persists. Literature comparison has progressed, but whole-subsystem coverage has not been established."
+    },
+    {
+      "pages": "28–33",
+      "finding": "The V0–V3 ladder and external dataset tables are a validation program, not completed comparisons. This audit establishes no new V0/V1 execution or V2/V3 result; candidate sources and fixtures do not certify current models."
+    },
+    {
+      "pages": "34–37",
+      "finding": "Execution/state/provenance infrastructure has advanced. The requested full code-plus-trace reach, optimizer leverage and remaining model reviews are incomplete. Existing artifact observations are not executed manufacturing, measurement, calibration or qualification evidence."
+    }
+  ],
+  "unresolved_scientific_gaps": [
+    {
+      "ids": "G1–G3",
+      "kind": "Engineering/source attribution",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "Rao/TOP exit and initial angle tables disagree with held charts; the cited origin paper is absent. No contour table was changed."
+    },
+    {
+      "ids": "G4–G5",
+      "kind": "Engineering assumptions",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "Default electric-drive technology values lie outside held evidence; pump specific-mass values have different assembly bases. No default was selected or changed."
+    },
+    {
+      "ids": "G6",
+      "kind": "Engineering gate",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "The 0.90 blockage ceiling exceeds the held single-row evidence, which stops at 0.7; two-row observations have different definitions and damage caveats."
+    },
+    {
+      "ids": "G7–G9",
+      "kind": "Engineering assumptions and attribution",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "800 K remains a repository wall-temperature rule; the aspect-ratio limits and Pizzarelli validity rationale remain unresolved."
+    },
+    {
+      "ids": "G10–G14",
+      "kind": "Attribution and locators",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "Freeberg and Son locators, Son author list, an absent Hwang quotation, and the mid-band sizing attribution remain open in engineering source/comments."
+    },
+    {
+      "ids": "G15–G18",
+      "kind": "Thermal formula and applicability",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "The gas-viscosity SI constant differs; SP-125 equation-number comments differ; Bartz validity and chamber underprediction are not enforced; recovery-temperature support remains a separate extension."
+    },
+    {
+      "ids": "G19",
+      "kind": "Thermal formula",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "The implemented Sieder–Tate form differs from the held SP-125 RP-1 correlation and produces higher coolant coefficients over the compared Prandtl range."
+    },
+    {
+      "ids": "G20–G22",
+      "kind": "Locators and sizing context",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "SP-8087 film-cooling and Nasuti citation locators, plus the repository film-capacity sizing assumption, remain engineering/source-context issues."
+    },
+    {
+      "ids": "G23",
+      "kind": "Repository choices",
+      "status": "OPEN_ENGINEERING_DECISION",
+      "summary": "Son transition fraction and module-diameter sizing are repository choices. The reviewed source equation equivalence does not validate those choices."
+    },
+    {
+      "ids": "G24–G25",
+      "kind": "Source-internal inconsistencies",
+      "status": "RECORDED_SOURCE_INCONSISTENCY",
+      "summary": "Son printed Eq. (2) omits the post thickness; its tabulated vaporization data disagree. The code follows the internally consistent transition form, so G24 is not a requested code correction."
+    },
+    {
+      "ids": "G26–G30",
+      "kind": "Source-internal inconsistencies",
+      "status": "RECORDED_SOURCE_INCONSISTENCY",
+      "summary": "Casalino efficiency, Kwak energy density, Kang table/axis notation and Hwang delta notation remain recorded inconsistencies in original publications."
+    },
+    {
+      "ids": "G31–G34",
+      "kind": "Source-internal inconsistencies",
+      "status": "RECORDED_SOURCE_INCONSISTENCY",
+      "summary": "Pizzarelli velocity-profile sign/prose, SP-125 viscosity-sample arithmetic, tube-sample equations/results and frustum-volume arithmetic remain recorded source issues."
+    }
+  ],
+  "follow_on_source_work": "Tracked separately in continuation results. Renewing individual SP-125 claims does not establish a structured chamber model review or physical validation.",
+  "reproduce": {
+    "startup": [
+      "knowledge/kg.sh status",
+      "knowledge/kg.sh context --task \"Audit whether all subsystems have been verified against literature, current structured reviews and stale fingerprints\""
+    ],
+    "python": "PYTHONPATH=knowledge .venv-jax/bin/python",
+    "methods": [
+      "kg.store.load(\"models\") and load(\"manifest\")",
+      "kg.harvest_extraction.model_review_state(model, documents=documents)",
+      "kg.graph.model_source_support(model, document, documents=documents)",
+      "kg.implementation_freshness.reconcile(write=False)",
+      "kg.execution_reach.StaticReach(REPO_ROOT).model(registry_id)",
+      "Compare stored registry-owned fields with raosim.model_registry.MODEL_REGISTRY; hash every distinct reviewed source PDF."
+    ],
+    "engineering_tests_run": false,
+    "stores_mutated": false
+  }
+}

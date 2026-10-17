@@ -1,0 +1,1087 @@
+{
+ "packet": "P2-CASALINO-p005-006",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "queue_reason": "P2 Casalino 2019 Table 1 and power-basis equations",
+   "queue_pages": [
+    5,
+    6
+   ],
+   "queue_document_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "queue_source_pdf": "propulsion_texts/fuel_pump_design/aerospace-06-00036.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P2-CASALINO-p005-006.json",
+   "sha256": "171046d158668780b2d2eff7c0d901f2f5472e14139a6a41bb4c35c5be54c4ae",
+   "size_bytes": 24270,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "source_pdf": "propulsion_texts/fuel_pump_design/aerospace-06-00036.pdf",
+   "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+   "pages": [
+    5,
+    6
+   ],
+   "docling_run_ids": [
+    "ENR_1bd969532ea19de7e71743f3",
+    "ENR_aec8074c8a8949e4c82b3868"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "formula": 8,
+     "table": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/fuel_pump_design/aerospace-06-00036.pdf",
+   "sha256_in_bundle": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+   "sha256_recomputed": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 5,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_3390_AEROSPACE6030036/p0005.png",
+    "dpi": 150,
+    "sha256_in_bundle": "2319da84ca0d7c451ddc7905420d5c4f396b91492b240fbcdb4c1eb30e13eecd",
+    "file_exists": true,
+    "sha256_recomputed": "2319da84ca0d7c451ddc7905420d5c4f396b91492b240fbcdb4c1eb30e13eecd",
+    "sha256_match": true
+   },
+   {
+    "page": 6,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_3390_AEROSPACE6030036/p0006.png",
+    "dpi": 150,
+    "sha256_in_bundle": "652112da6cf03507896b7e574915d09d9ba035373ab064972e07026ca32462d0",
+    "file_exists": true,
+    "sha256_recomputed": "652112da6cf03507896b7e574915d09d9ba035373ab064972e07026ca32462d0",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_3390_AEROSPACE6030036/4ad3449ce01f-p5-5-c3b294134edfe24c0244cad12f7d73c2be36140572fc555f2768d35460298a14.json",
+    "sha256_in_bundle": "5e68d436e86e3f8c4ea52ea96e33c5cffc2761ffc29a3b5338510bb4ba8c0ec4",
+    "file_exists": true,
+    "sha256_recomputed": "5e68d436e86e3f8c4ea52ea96e33c5cffc2761ffc29a3b5338510bb4ba8c0ec4",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_3390_AEROSPACE6030036/4ad3449ce01f-p6-6-9c9ce35abb44d155a3db6eca28d4a10061b97b9eae4d919087ad3ec8a537695e.json",
+    "sha256_in_bundle": "c6939be986a6c66074e9595ad4a414c6cb33a52a902484c264bf40f58e932c78",
+    "file_exists": true,
+    "sha256_recomputed": "c6939be986a6c66074e9595ad4a414c6cb33a52a902484c264bf40f58e932c78",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "formula": 8,
+   "table": 1
+  },
+  "candidates_total": 9,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_83e7ab7a2dd072a328ed2069"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_83e7ab7a2dd072a328ed2069"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_83e7ab7a2dd072a328ed2069",
+    "kind": "table",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 178.64685783232616,
+      "t": 302.05214811927635,
+      "r": 413.6737827441324,
+      "b": 246.31590025478192,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "caption_text_as_given_in_bundle": [],
+    "transcription_length": 4000,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_1bd969532ea19de7e71743f3",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_3390_AEROSPACE6030036/4ad3449ce01f-p6-6-9c9ce35abb44d155a3db6eca28d4a10061b97b9eae4d919087ad3ec8a537695e.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 6
+     }
+    ],
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [
+     "#/texts/10"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/10",
+      "label": "caption",
+      "page_no": 6,
+      "bbox": {
+       "l": 243.199,
+       "t": 317.124152,
+       "r": 351.7821199999999,
+       "b": 308.62224914125875,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 1. Electric properties.",
+      "orig": "Table 1. Electric properties.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": false,
+    "table_cell_grid": {
+     "bundle_transcription_length": 4000,
+     "bundle_transcription_reaches_4000_character_cap": true,
+     "bundle_transcription_parses_as_json": false,
+     "bundle_transcription_ends_with": ", \"row_header\": false, \"row_section\": false, \"fillable\": fal",
+     "cell_texts_fully_visible_in_bundle_transcription": [
+      "Design Set",
+      "dbp kW/kg",
+      "dbe Wh/kg",
+      "dep kW/kg",
+      "hep -",
+      "t ∗ burn s",
+      "A",
+      "3.00",
+      "90.00",
+      "1.25",
+      "0.68"
+     ],
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_83e7ab7a2dd072a328ed2069, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "num_rows": 3,
+     "num_cols": 6,
+     "orientation": "rot_0",
+     "table_cells_count": 18,
+     "grid_row_lengths": [
+      6,
+      6,
+      6
+     ],
+     "grid_text_rows_as_given": [
+      [
+       "Design Set",
+       "dbp kW/kg",
+       "dbe Wh/kg",
+       "dep kW/kg",
+       "hep -",
+       "t ∗ burn s"
+      ],
+      [
+       "A",
+       "3.00",
+       "90.00",
+       "1.25",
+       "0.68",
+       "108"
+      ],
+      [
+       "B",
+       "6.95",
+       "198.50",
+       "3.92",
+       "0.53",
+       "103"
+      ]
+     ],
+     "cells_as_given": [
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Design Set",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 185.472,
+        "t": 551.3965791999999,
+        "r": 230.04397440000005,
+        "b": 559.685788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "dbp kW/kg",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 241.99900000000002,
+        "t": 547.7377584,
+        "r": 269.5617136,
+        "b": 565.621788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "dbe Wh/kg",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 281.51392480000004,
+        "t": 547.7377584,
+        "r": 309.07663840000004,
+        "b": 565.621788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "dep kW/kg",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 321.037816,
+        "t": 547.7377584,
+        "r": 348.6005296,
+        "b": 565.621788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "hep -",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 361.96900000000005,
+        "t": 547.7377584,
+        "r": 374.35370400000005,
+        "b": 565.621788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 5,
+       "end_col_offset_idx": 6,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "t ∗ burn s",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 388.31100000000004,
+        "t": 543.7030437999999,
+        "r": 406.727325,
+        "b": 565.621788040678,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "A",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 204.27,
+        "t": 573.219848,
+        "r": 211.2458592,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "3.00",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 247.93636800000002,
+        "t": 573.219848,
+        "r": 263.62756800000005,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "90.00",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 285.2096928,
+        "t": 573.219848,
+        "r": 305.3840928000001,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "1.25",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 326.96621760000005,
+        "t": 573.219848,
+        "r": 342.6574176000001,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "0.68",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 360.5543520000001,
+        "t": 573.219848,
+        "r": 376.24555200000015,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 5,
+       "end_col_offset_idx": 6,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "108",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 391.0311456000002,
+        "t": 573.219848,
+        "r": 404.4807456000002,
+        "b": 581.7217508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "B",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 205.019,
+        "t": 584.178848,
+        "r": 210.4974704,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "6.95",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 247.9321904,
+        "t": 584.178848,
+        "r": 263.6233904,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "198.50",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 282.9728816,
+        "t": 584.178848,
+        "r": 307.63048160000005,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "3.92",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 326.9710064000001,
+        "t": 584.178848,
+        "r": 342.6622064000001,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "0.53",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 360.5501744000001,
+        "t": 584.178848,
+        "r": 376.24137440000015,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 5,
+       "end_col_offset_idx": 6,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "103",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 391.0269680000002,
+        "t": 584.178848,
+        "r": 404.4765680000002,
+        "b": 592.6807508587412,
+        "coord_origin": "TOPLEFT"
+       }
+      }
+     ],
+     "cells_with_row_span_or_col_span_not_1": [],
+     "cells_with_flags_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        0,
+        3
+       ],
+       [
+        0,
+        4
+       ],
+       [
+        0,
+        5
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "grid_text_rows_equal_matrix_from_table_cells_start_indices": true,
+     "bundle_visible_cell_texts_are_a_prefix_of_stored_table_cells_texts": true,
+     "number_of_stored_cells_not_fully_visible_in_bundle_transcription": 7,
+     "raw_table_self_ref": "#/tables/0",
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_data_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "raw_table_captions_refs": [
+      "#/texts/10"
+     ],
+     "raw_table_children_refs": [
+      "#/texts/10"
+     ],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0
+    },
+    "raw_text_items_with_label_caption_on_candidate_pages_not_linked_by_S2": [
+     {
+      "ref": "#/texts/10",
+      "page_no": 6,
+      "bbox": {
+       "l": 243.199,
+       "t": 317.124152,
+       "r": 351.7821199999999,
+       "b": 308.62224914125875,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 1. Electric properties."
+     }
+    ]
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [
+   {
+    "id": "CAND_83e7ab7a2dd072a328ed2069",
+    "kind": "table",
+    "caption_text_as_given_in_bundle": [],
+    "raw_item_captions_refs": [
+     "#/texts/10"
+    ],
+    "raw_resolved_texts": [
+     "Table 1. Electric properties."
+    ]
+   }
+  ],
+  "formula_candidates": [
+   {
+    "id": "CAND_094e2b6f2e36ab8f7a0ae52e",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 246.777,
+      "t": 497.1355112,
+      "r": 518.7406916,
+      "b": 470.91918835623267,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "p _ { f s } = ( p _ { t } ) _ { i } \\left [ \\frac { ( V _ { g } ) _ { B D } } { V _ { g } } \\right ] ^ { \\gamma _ { g } }",
+    "transcription_length": 121,
+    "original_text_as_given": "pf s = (pt)i [ (Vg )BD Vg ]gg (13)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(13)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 1,
+     "]": 1,
+     "{": 10,
+     "}": 10
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_aec8074c8a8949e4c82b3868"
+   },
+   {
+    "id": "CAND_88652ecdb578c1b9d4776533",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 256.339,
+      "t": 236.73629129999995,
+      "r": 518.7406916,
+      "b": 210.94318835623267,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "P _ { e } = \\frac { \\dot { m } _ { O } ( p _ { f s } - p _ { t } ) } { \\rho _ { O } \\eta _ { e p } }",
+    "transcription_length": 100,
+    "original_text_as_given": "Pe = ˙mO(pf s - pt) rOhep (15)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(15)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_aec8074c8a8949e4c82b3868"
+   },
+   {
+    "id": "CAND_b5f27248a72fc2996faf2c7c",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 269.134,
+      "t": 336.56108179999995,
+      "r": 518.7406916,
+      "b": 312.6871883562327,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "m _ { e p } = \\frac { P _ { e , \\max } } { \\delta _ { e p } }",
+    "transcription_length": 61,
+    "original_text_as_given": "mep = Pe,max dep (14)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(14)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_aec8074c8a8949e4c82b3868"
+   },
+   {
+    "id": "CAND_22f3b3dbb5f5e789d1cc2f03",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 184.63699999999997,
+      "t": 147.72229129999994,
+      "r": 518.7406915999999,
+      "b": 123.34718835623266,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "\\frac { d r } { d t } = v \\quad \\frac { d v } { d t } = g + \\frac { F - D } { M } \\quad \\frac { d M } { d t } = - \\frac { | F | } { c ^ { * } C _ { F } }",
+    "transcription_length": 153,
+    "original_text_as_given": "dr dt = v dv dt = g + F -D M dM dt = - |F| c∗ CF (19)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(19)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 12,
+     "}": 12
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1bd969532ea19de7e71743f3"
+   },
+   {
+    "id": "CAND_4e01488bf634546c58980be5",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 231.897,
+      "t": 645.3935040000001,
+      "r": 518.7406916,
+      "b": 617.1381883562326,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "m _ { b } = 1 . 2 \\max \\left ( \\frac { P _ { e , \\max } } { \\delta _ { b p } } , \\frac { E _ { e , t o t } } { \\delta _ { b e } } \\right )",
+    "transcription_length": 138,
+    "original_text_as_given": "mb = 1.2max ( Pe,max dbp , Ee,tot dbe ) (17)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(17)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1bd969532ea19de7e71743f3"
+   },
+   {
+    "id": "CAND_51caca84c1b14ac3a397dfb3",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 258.135,
+      "t": 715.8241188,
+      "r": 518.7406916,
+      "b": 691.1653286489511,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "E _ { e , t o t } = \\int _ { 0 } ^ { t _ { b u r n } } P _ { e } d t",
+    "transcription_length": 68,
+    "original_text_as_given": "Ee,tot = ∫ tburn 0 Pe dt (16)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(16)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1bd969532ea19de7e71743f3"
+   },
+   {
+    "id": "CAND_6cebdebab1ab33d7ea2ab676",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 258.23900000000003,
+      "t": 501.8142913,
+      "r": 518.7406916000001,
+      "b": 490.7421883562327,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "E _ { e , t o t } = P _ { e , \\max } t _ { b u r n }",
+    "transcription_length": 52,
+    "original_text_as_given": "Ee,tot = Pe,maxtburn (18)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(18)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1bd969532ea19de7e71743f3"
+   },
+   {
+    "id": "CAND_b2fbcebc75a179f712ceff7a",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 268.50199999999995,
+      "t": 90.57008180000003,
+      "r": 518.7406915999999,
+      "b": 67.62327098021979,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "g = - \\frac { G M _ { \\oplus } } { | | r ^ { 3 } | | } r",
+    "transcription_length": 56,
+    "original_text_as_given": "g = - GM⊕ ||r 3 || r (20)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(20)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1bd969532ea19de7e71743f3"
+   }
+  ],
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 8,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_PUMP_ELECTRIC_DRIVE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_PUMP_ELECTRIC_DRIVE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 8
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 7
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 11
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 3
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    5,
+    6
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "5": {
+     "formula": 3
+    },
+    "6": {
+     "formula": 5,
+     "table": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 6,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00010",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 1570
+    },
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00011",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 1618
+    },
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00012",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 941
+    },
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00013",
+     "page_start": 6,
+     "page_end": 6,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 1590
+    },
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00014",
+     "page_start": 6,
+     "page_end": 6,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 1472
+    },
+    {
+     "chunk_id": "DOC_DOI_10_3390_AEROSPACE6030036#c00015",
+     "page_start": 6,
+     "page_end": 6,
+     "section": "**_aerospace_** > **Viability of an Electrically Driven Pump-Fed Hybrid** **Rocket for Small Launcher Upper Stages**",
+     "text_length": 1198
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

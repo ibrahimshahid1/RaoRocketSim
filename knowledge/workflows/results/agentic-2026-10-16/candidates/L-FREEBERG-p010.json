@@ -1,0 +1,298 @@
+{
+ "packet": "L-FREEBERG-p010",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_2019_0152",
+ "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+ "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+ "pages": [
+  10,
+  10
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_2019_0152/p0010.png",
+   "sha256": "31d65fe35d1560ef007ab0a0626d9943c1d28e3cde3de0d4063f32b494ab38ca",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_da47829e7f7bb958d175cdc3"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_83a62e68075bb77532a13ddd",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 154.06100000000004,
+     "t": 659.6025331,
+     "r": 540.0003916,
+     "b": 634.5636762346999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "B F \\times L M R = \\frac { N w } { \\pi d _ { P } } \\times \\frac { \\rho _ { r } U _ { r } ^ { 2 } w h } { \\rho _ { z } U _ { z } ^ { 2 } w t } = \\frac { \\rho _ { r } U _ { r } ^ { 2 } N w h } { \\rho _ { z } U _ { z } ^ { 2 } \\pi d _ { p } t } \\approx \\frac { \\rho _ { r } U _ { r } ^ { 2 } A _ { r } } { \\rho _ { z } U _ { z } ^ { 2 } A _ { z } } = \\frac { ( \\dot { m } U ) _ { r } } { ( \\dot { m } U ) _ { z } } = T M R ,",
+   "original_text": "BF � LMR = Nw �dp � �rU 2 r wh �zU 2 z wt = �rU 2 r Nwh �zU 2 z �dpt � �rU 2 r Ar �zU 2 z Az = \" �mU\"r \" �mU\"z = T MR; (6)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_da47829e7f7bb958d175cdc3",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p10-10-387b9112bc1b464597f16dd95ec640365d003b1edea1fe912946367ee284b8c8.json",
+   "raw_sha256": "7676bc544de18ed77afbf6a02d4a7bad42fd984cd3f234e82c699675122ae01f",
+   "mechanical_flags": [
+    "REPLACEMENT_CHARACTER_IN_ORIGINAL_TEXT"
+   ]
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_2514_6_2019_0152_63EB168A",
+   "store": "equations",
+   "type": "Equation",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Freeberg 2019 Eq. (6) blockage factor times local momentum ratio approximates TMR",
+   "equation_number": "6",
+   "form": "BF*LMR = (N*w/(pi*d_p)) * (rho_r*U_r^2*w*h)/(rho_z*U_z^2*w*t) = (rho_r*U_r^2*N*w*h)/(rho_z*U_z^2*pi*d_p*t) ~ (rho_r*U_r^2*A_r)/(rho_z*U_z^2*A_z) = (mdot*U)_r/(mdot*U)_z = TMR",
+   "statement": null,
+   "quote": "smaller than the pintle tip diameter",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "BF",
+     "meaning": "blockage factor",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BF"
+     ]
+    },
+    {
+     "symbol": "LMR",
+     "meaning": "local momentum ratio",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "TMR",
+     "meaning": "total momentum ratio",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_TMR"
+     ]
+    },
+    {
+     "symbol": "N",
+     "meaning": "number of orifices",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "w",
+     "meaning": "orifice width",
+     "units": "m",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "h",
+     "meaning": "orifice height",
+     "units": "m",
+     "role": "unknown",
+     "resolution_state": "AMBIGUOUS_SYMBOL",
+     "quantity_candidates": [
+      "QTY_STREAMLINE_HEIGHT",
+      "QTY_HEAD"
+     ]
+    },
+    {
+     "symbol": "t",
+     "meaning": "annulus thickness",
+     "units": "m",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d_p",
+     "meaning": "pintle tip diameter",
+     "units": "m",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho_r",
+     "meaning": "radial propellant density",
+     "units": "kg/m^3",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "U_r",
+     "meaning": "radial propellant velocity",
+     "units": "m/s",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "rho_z",
+     "meaning": "axial propellant density",
+     "units": "kg/m^3",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "U_z",
+     "meaning": "axial propellant velocity",
+     "units": "m/s",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "t << d_p"
+   ],
+   "validity": [
+    "annulus thickness much smaller than pintle tip diameter"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_83a62e68075bb77532a13ddd"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "LMR",
+      "N",
+      "w",
+      "h",
+      "t",
+      "d_p",
+      "rho_r",
+      "U_r",
+      "rho_z",
+      "U_z"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_6_2019_0152_14547A16",
+   "store": "claims",
+   "type": "Claim",
+   "page": 10,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Freeberg 2019 observes that a BF between 0.3 and 0.7 allows adequate shear mixing between the radial and axial streams while maintaining an axisymmetric flow profile (discussion section, just before the Conclusions heading).",
+   "quote": "between 0.3 and 0.7 allows for adequate shear mixing between the",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 10
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00023",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > V. Discussion",
+   "text": "orifice shape, or aspect ratio. Moreover, the figures show that for each tip at a given θ, the corresponding values of _TMR_\nand _LMR_ merely differ by roughly a factor of the tip’s blockage factor. Putting the data in terms of _LMR_ normalizes\nit by removing the blockage factor dependency. This is explained by the fact that if the annulus thickness _t_ is much\nsmaller than the pintle tip diameter _d_ p, the product _BF_ × _LMR_ can be simplified to\n\n<sup><u>ρr</u></sup> <sup>_<u>U</u>_</sup> <u>r</u> <sup>2</sup> <sup>_<u>N</u>_</sup> <sup><u>w</u></sup> <sup>_<u>h</u>_</sup> <u>r</u>\n\nρz _U_ z <sup>2</sup> π _d_ p _t_ <sup>≈</sup> <sup><u>ρ</u></sup> ρ <sup><u>r</u></sup> z _U_ <sup>_<u>U</u>_</sup> z <sup>22</sup>\n\n<u>r</u> <sup>_<u>A</u>_</sup> <sup><u>r</u></sup>\n\n<sup><u>ρr</u></sup> <sup>_<u>U</u>_</sup> <sup>2</sup>\n\nρz _U_ z <sup>2</sup> _A_ z\n\n= _TMR_, (6)\n\n= <sup>( �</sup> <sup>_<u>mU</u>_</sup> <sup>)r</sup>\n\n( � _mU_ )z\n\n_BF_ × _LMR_ = <sup>_<u>N</u>_</sup> <sup><u>w</u></sup>\n\nπ _d_ p\n\n× <sup><u>ρr</u></sup> <sup>_<u>U</u>_</sup> <u>r</u> <sup>2</sup>\n\n<sup><u>r</u></sup> <sup>_<u>U</u>_</sup> <u>r</u> <sup>2w</sup> <sup>_<u>h</u>_</sup> <sup><u>ρr</u></sup> <sup>_<u>U</u>_</sup> <u>r</u> <sup>2</sup>\n\nρz _U_ z <sup>2</sup> w _t_ <sup>=</sup> ρz _U_ z <sup>2</sup>\n\nwhere _Ar_ and _A_ z are the total area of the radial and outer propellants, respectively. When normalized in terms of _LMR_,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00024",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > V. Discussion",
+   "text": "the effects of varying orifice shape on collision are not readily detectable by video analysis.\n\nAs mentioned, Escher’s curve fit (Eq. (3)) was only equal to measured data for low _TMR_ . Given that Escher’s\n\nmeasurements often deviated by as much as 20°, this curve was intended only to approximate his data. Tip 5, which was\nmeant to mirror Escher’s _BF_ = 0.6, did not help resolve differences between the two studies. Furthermore, Escher\nnoted that a term he describes as the “Effective Momentum Ratio,” which is defined almost identically to _LMR_, did not\nimprove his correlations. This is the opposite of what was found in this study which shows that _LMR_ reduces variation\n\nbetween tips.\n\nFigure 12 shows that measurements of θ overshoot the collisional model in all cases. This is particularly true for\n_LMR_ ⪅ 0.5, where measurements overshoot by as much 30°. An explanation for this is that the collisional model\n\nidealizes each collision as two-dimensional and perfectly inelastic. In reality, the pintle tip introduces both collisional\n\nand shear mixing between the propellant streams. This shear mixing results in the deflection of propellant upon impact,\n\ncausing droplets to leave the two-dimensional plane. The fact that the data points overshoot (as opposed to undershoot)\n\nindicates that this shear mixing effect is more pronounced for the axial propellant than the radial one. This results in a\nlower mass flow rate and lower velocity in the denominator of Eq. (4), corresponding to higher θ. Evidence of this"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00025",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > V. Discussion",
+   "text": "was observed during tests, as regions where uninterrupted coaxial spray collided with the ground were clearly visible.\nThe fact that the overshoot effect is more apparent for _LMR_ ⪅ 0.5 may indicate that the mere presence of the radial\njets results in some deflection of the axial propellant. As _LMR_ increases, the momentum and energy of the radial\n\npropellant increases relative to the axial propellant, resulting in atomization and deflection (shear mixing) of the radial\npropellant as well. This effect may counterbalance the effect of axial propellant deflections, resulting in θ closer to what\n\nthe collisional model would predict.\n\nThe derived curve fits in Fig. 13 and 14 highlight the difference between measured data and the collisional model.\nMathematically, the β term in the curves’ argument horizontally compresses the inverse tangent function, an effect\nexpected by apparent reductions in the denominator of Eq. (4). In this light, β represents the amount of energy loss and\ndeflection in the axial propellant. While β causes the expected value of θ to increase, the α term causes it to decrease.\nThe α term therefore accounts for the inelasticity of the collision and energy loss in the radial propellant. As shown,\n\nallowing the curve to intercept the vertical axis above zero increases its validity across the collected data. This forces\nthe non-physical condition that for _LMR_ = 0, θ - 0. As mentioned, θ ⪅ 20° could not be achieved in the experiment."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00026",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > V. Discussion",
+   "text": "Allowing a non-zero intercept accounts for the fact that the fluid streams are of a finite size. In contrast the collisional\n\nmodel neglects fluid volume and approximates their collision as infinitesimal. Overall, these results show that the\ncollisional model can be used to normalize tips of varying _BF_ and provide a rough estimate of θ. However, energy\nlosses and the three-dimensional effects of shear mixing and propellant atomization require the use of the α and β\n\ncorrection factors.\n\nWhile the above results describe a more robust means of predicting θ, they do not address the question of which\n\ntest case provides the strongest engine performance. Although this study was not intended to answer that question,\nseveral observations can be made. First, a _BF_ between 0.3 and 0.7 allows for adequate shear mixing between the\n\nradial and axial streams, while maintaining an axisymmetric flow profile. Second, because this study failed to find\n\nmeasurable differences between tip-geometries, spray-cone angle should not be used as a selection criteria for that\n\nparticular parameter. While circular orifices have the advantage of manufacturing simplicity, the greater levels of\n\ndynamic instability found in rectangular liquid jets ([8]) could lead to greater levels of atomization at the point of\n\nimpingement, which is desirable for combustion. This, in addition to the fact that rectangular orifice areas can be easily\n\nmodified by use of a sleeve mechanism, could be the reason that TRW recommended their use [6]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00027",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > VI. Conclusions",
+   "text": "The objective of this research was to investigate the relationships between the spray cone angle, total and local\n\nmomentum ratios, and pintle-tip geometry. In particular, the study shows that a two-dimensional collisional physics"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 1
+  },
+  "flagged_candidates": 1,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

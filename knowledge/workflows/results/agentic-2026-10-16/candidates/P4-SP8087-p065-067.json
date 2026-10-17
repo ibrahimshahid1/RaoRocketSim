@@ -1,0 +1,163 @@
+{
+ "packet": "P4-SP8087-p065-067",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19730022965",
+ "source_pdf": "propulsion_texts/19730022965.pdf",
+ "source_sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+ "pages": [
+  65,
+  67
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 65,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0065.png",
+   "sha256": "56ea1856d6f58901ddb6731411e83fde3be154e6148147031e0aec1409f39d2d",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 66,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0066.png",
+   "sha256": "276a7033bec96fc74dd2c65599b09906987e6d7506367210f63195e1f74716c4",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 67,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0067.png",
+   "sha256": "b07689002d6871195629a0aeef31a50a5e85e7e6654e3c99fab0f98eb8716aeb",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_6d4880ab12015f577941ec4a",
+  "ENR_7cf2b268e66d547803462437",
+  "ENR_df537c14b5a57edec669e491"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_84fc3fc839f2afd5cbc96ea9",
+   "kind": "table",
+   "pages": [
+    66
+   ],
+   "table_grid": [
+    [
+     "_",
+     "\"-7",
+     "",
+     "",
+     "_",
+     "\"7",
+     "o",
+     "o",
+     ""
+    ],
+    [
+     "_°o",
+     "_",
+     "_",
+     "_",
+     "_",
+     "_",
+     "_:",
+     "<",
+     "z"
+    ],
+    [
+     "",
+     "\"2,",
+     "",
+     "",
+     "",
+     "\"7",
+     "uq",
+     "uq",
+     ""
+    ],
+    [
+     "",
+     "",
+     ",",
+     "",
+     "",
+     "._--",
+     ".__",
+     "__",
+     ""
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "TABLE VIII. — Major Regeneratively Cooled Chambers With Supplemental Film Cooling"
+   ],
+   "bbox": [
+    {
+     "l": 192.81307983398438,
+     "t": 716.0494232177734,
+     "r": 448.5057678222656,
+     "b": 161.1787109375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 4x9 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7cf2b268e66d547803462437",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19730022965/7c8f7cff3022-p66-66-1430338f633bb189b379d408fab6ffd1dc2d3779e9da3acbb2e9a71faac53388.json",
+   "raw_sha256": "28bd2bbf1eb6370172144c6d7650833ba4c55a8d001f71a681f40101ac42b13e",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00090",
+   "page_start": 65,
+   "page_end": 65,
+   "section": "i",
+   "text": "t_ The depth of heat penetrationinto the porouswall increasesunderthrottled\n\nconditionsunlessspecialflow adjustnlentsaremade.\n\nHot spots can developin seeminglywell-cooledzones,indicating that the\npropertiesof random-poremediamaychangewithtime.\n\nt> Walltemperaturescanbeaccuratelymeasuredby smallthermocouplesimbedded\n\nin theporouswall(especiallytheplatewalls).\n\nTheserepresentativeproblemsshowthat manydesign,fabrication,and operationalareas\nmustberesolvedbeforetranspirationcoolingcanbeconsideredoperational.\n\n**2.3** **Film** **Cooling**\n\nNearly all fluid-cooled chambers have experienced some form of overheating from injector\n\nmaldistribution and streaking. The overheating almost always has been eliminated by\nrevising the injector pattern or by film cooling; in rare instances, the chamber tubes have\nbeen redesigned for higher velocities or thicker walls.\n\nAs shown in table VIII, in all of the major regeneratively cooled chambers supplemental\ncooling is derived from film cooling (which is normally provided from the injector). _Film_\ncooling is used to (1) reduce the severity of the thermal conditions near the wall,(2) produce\na more acceptable chemical environment, or (3) achieve a combination of (1) and (2). On\noccasion, film cooling is used to overcome very localized overheating simply by directing\ncoolant at the affected area. As noted above, injector maldistribution and streaking impact\nthe cooling requirements; therefore, successful chamber design dictates that both the"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00091",
+   "page_start": 65,
+   "page_end": 65,
+   "section": "i",
+   "text": "injector designer and the chamber designer must understand the principles of film cooling in\norder to interface effectively. Their common goal is to achieve the combination of film\n\ncooling and regenerative cooling that produces the required margins of chamber safety while\nmaintaining high combustion efficiency. The principal design problems have resulted from\nthe inability to (1) provide an _a_ _priori_ prediction of film-coolant quantities, and _(2)_ size and\narrange the flow streams so that the required quantity of coolant can be used efficiently.\n\nIn spite of many studies of film cooling carried out over the past several years, accurate\nprediction methods still are not available. The major unknown is the interaction of the film\n\ncoolant with the combustion gases; this interaction is known to depend on such things as\nthe velocity, location, and direction of injecting the film and on the energy-release potential\nat the wall compared to that in **the** prime combustion zone, but there **are** additional factors\nnot yet identified. Also, part of the prediction uncertainty stems from the inaccuracies in\nmodeling the local thermal conditions that exist without film cooling; these conditions are\n\nan essential input to the composite calculation. In a real situation, therefore, the predictions\nrepresent more of a rough estimate than an absolute requirement. Consequently, when\npossible, the design provides flexibility to accommodate the inevitable changes _that_ will\nhave to be made."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00092",
+   "page_start": 66,
+   "page_end": 67,
+   "section": "i",
+   "text": "E\n\nE\n\no_\n\nE\n\n_m,_\n\n_.<_\n\n_ \"-7 _ \"7   -\n\n_°o _ _ _ _ _ _: < z\n\n\"2, \"7 _uq_ _uq_\n\n, ._-- .__ __\n\n5O\n\n-i\n\nA somewhat qualitative understanding exists on how the coolant streams should be canted\nrelative to the wall and to each other in order to (1) minimize mixing with the reactants; (2)\n\nmaximize coverage of the surfaces to be protected; and (3) develop penetration to protect\nthese surfaces over maximum length. The film coolant, normally injected through a ring of\norifices around the periphery of the injector, can be directed parallel to or against the\nchamber wall. In most cases, a constant orifice diameter and peripheral spacing is\nmaintained to provide uniform injection. It is believed that when the coolant is injected as a\n\nnon-impinging stream into an unreactive environment, it traverses the chamber length more\neffectively and is presumed to provide protection for the convergent section and the throat\nzone of the chamber. When protection of a forward flange surface or the forward cooling\nzone is critical, greater stream spreading and sheet formation is provided by impinging the\npropellant directly on the wall. Combinations of both wall-impinging and non-impinging\nfilm-coolant streams are used for efficient protection of the entire combustion zone.\n\nSelective orifice sizing has been used to achieve minimum film-coolant flowrates. The larger\norifices are used at hot streaks; between the hot streaks, less film coolant is provided. This\nmethod of tailoring film coolant tends to result in circumferentially uniform wall\ntemperatures. Local protection has also been achieved by the addition or enlargement of\ndiscrete orifices or the installation of flow tubes to place film coolant directly at heated\nareas."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00093",
+   "page_start": 67,
+   "page_end": 67,
+   "section": "i",
+   "text": "An alternative or supplement to film cooling is barrier cooling, in which sets of bipropellant\ninjection elements adjacent to the chamber wall are operated at low O/F ratio. This\n\nprocedure produces a milder thermal and chemical environment and involves more\npropellant in the combustion process.\n\nFilm-coolant injection in the convergent section, via short tubes located between coolant\ntubes, has been attempted during development programs; only limited success has been\nachieved. Currently, this method is not an accepted technique for supplemental cooling,\nbecause problems of manifolding, structural integrity, and assembly procedures have not\nbeen resolved.\n\n**2.4** **Coatings**\n\nCoatings have been used on a few chambers to provide chemical and thermal protection for\ncooled walls (table IX). On paper, there are many reasons for coating regeneratively-cooled\nchambers (e.g., to achieve local chemical protection, lower coolant bulk temperatures,\nlower heat fluxes, lower coolant pressure drop, higher chamber pressure potential, or\nincreased throttling range). An additional factor is the simple desire to improve performance\nby replacing film cooling with coatings. Despite all these reasons, coatings remain a very\ncontroversial subject because of their tendency to spall, delaminate, and crack. The Agena\nand the X-15 chambers achieved extended lifetime by using a coating as a chemical or\nerosion barrier; the X-15 chamber, however, must be recoated after a set number of firings"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

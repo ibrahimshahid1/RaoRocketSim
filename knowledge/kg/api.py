@@ -195,7 +195,7 @@ def get_source_context(chunk_id_or_ref: str, window: int = 1) -> dict:
 
 def find_entity(name: str, limit: int = 15) -> dict:
     g = _graph()
-    hits = [n for n in g.find(name, limit=len(g.nodes)) if _current_source(n)][:limit]
+    hits = [n for n in g.find(name, limit=len(g.nodes)) if _active_science(n)][:limit]
     sym = resolve_symbol(name)
     return {"query": name, "state": "OK" if hits or sym["candidates"] else "UNRESOLVED_ENTITY",
             "symbol_resolution": sym, "nodes": hits}
@@ -264,6 +264,20 @@ def _current_source(rec: dict) -> bool:
     return rec.get("active", True) and rec.get("source_state", "CURRENT") == "CURRENT"
 
 
+def _active_science(rec: dict) -> bool:
+    """Current and not independently refuted; refuted records stay inspectable by ID only."""
+    return _current_source(rec) and rec.get("verification") != "REFUTED"
+
+
+def content_verification_summary(rec: dict) -> dict:
+    """Current assertion fingerprint, separate from historical source verdicts."""
+    from . import verification_freshness
+    return verification_freshness.state(rec, _docs().get(rec.get("document_id"))) | {
+        "content_sha256": verification_freshness.content_sha256(rec),
+        "content_version": verification_freshness.CONTENT_VERSION,
+    }
+
+
 def _validity_model_ids(rec: dict) -> set[str]:
     ids = set(rec.get("model_ids", []))
     if rec.get("model_id"):
@@ -290,7 +304,8 @@ def find_equations(concept: str, limit: int = 20) -> dict:
         return {"query": concept, "state": "NO_EXTRACTED_EQUATION_MATCH" if not hits else "CHUNK_FALLBACK",
                 "equations": [], "equation_rich_chunks": hits,
                 "note": "No extracted Equation record matched. Chunks flagged equation_rich are returned for manual inspection; this is not a claim that no such equation exists in the corpus."}
-    selected = [{**e, "transcription_state": equation_formulation_state(e)} for e in eqs[:limit]]
+    selected = [{**e, "transcription_state": equation_formulation_state(e),
+                 "content_verification": content_verification_summary(e)} for e in eqs[:limit]]
     incomplete = [e["id"] for e in selected if e["transcription_state"] == "INCOMPLETE_TRANSCRIPTION"]
     return {"query": concept, "state": "INCOMPLETE_TRANSCRIPTION" if len(incomplete) == len(selected) else "OK",
             "equations": selected, "incomplete_formula_ids": incomplete}
@@ -302,6 +317,7 @@ def get_equation(equation_id: str) -> dict:
         return {"id": equation_id, "state": "UNRESOLVED_ENTITY"}
     out = dict(e)
     out["transcription_state"] = equation_formulation_state(e)
+    out["content_verification"] = content_verification_summary(e)
     out["document"] = _doc_brief(e["document_id"])
     out["neighbors"] = _graph().neighbors(equation_id)
     return out
@@ -320,20 +336,44 @@ def find_claims(subject: str, predicate: str | None = None, obj: str | None = No
             continue
         res.append(c)
     return {"query": {"subject": subject, "predicate": predicate, "object": obj},
-            "state": "OK" if res else "NO_RELEVANT_SOURCE_FOUND", "claims": res[:limit]}
+            "state": "OK" if res else "NO_RELEVANT_SOURCE_FOUND", "claims": [
+                {**c, "content_verification": content_verification_summary(c)} for c in res[:limit]]}
 
 
 def get_claim_sources(claim_id: str) -> dict:
     c = _claims().get(claim_id)
     if not c:
         return {"id": claim_id, "state": "UNRESOLVED_ENTITY"}
-    return {"claim": c, "document": _doc_brief(c["document_id"]),
+    return {"claim": {**c, "content_verification": content_verification_summary(c)},
+            "document": _doc_brief(c["document_id"]),
             "source_context": get_source_context(c["chunk_id"]) if c.get("chunk_id") else None}
+
+
+def model_review_summary(model: dict) -> dict:
+    """Expose every retained source comparison and its live source/code freshness."""
+    from .harvest_extraction import model_review_state
+    current = model_review_state(model, documents=_docs())
+    if not current.get("source_reviews"):
+        return current
+    reviews = current["source_reviews"]
+    primary = model.get("source_review") or reviews[0]
+    return {"state": current["state"], "reason": current.get("reason"), "changed": current.get("changed", []),
+            "fidelity": current.get("fidelity"), "fidelities": current.get("fidelities", []),
+            "physics_change_required": current.get("physics_change_required"),
+            "reviewed_document_id": primary.get("reviewed_document_id"),
+            "reviewed_source_sha256": primary.get("reviewed_source_sha256"),
+            "equation_ids": sorted({eid for review in reviews for eid in review.get("equation_ids", [])}),
+            "implementation": [{k: f.get(k) for k in ("file", "symbol", "line", "state")}
+                               for f in primary.get("implementation_fingerprints", [])],
+            "source_reviews": reviews,
+            "reviewer": primary.get("reviewer"), "physical_validation": "NOT_ESTABLISHED",
+            "scope": "Source-versus-code comparison only; not execution reach, sensitivity or physical validation."}
 
 
 def find_models(concept: str, limit: int = 20) -> dict:
     ms = [m for m in _models().values() if _matches(concept, m, ("registry_id", "quantity", "relation", "subsystem", "cited_source_text", "equation_ref"))]
-    return {"query": concept, "state": "OK" if ms else "NO_RELEVANT_SOURCE_FOUND", "models": ms[:limit]}
+    return {"query": concept, "state": "OK" if ms else "NO_RELEVANT_SOURCE_FOUND",
+            "models": [{**m, "source_review_state": model_review_summary(m)} for m in ms[:limit]]}
 
 
 def get_model(model_id: str) -> dict:
@@ -341,6 +381,7 @@ def get_model(model_id: str) -> dict:
     if not m:
         return {"id": model_id, "state": "UNRESOLVED_ENTITY"}
     out = dict(m)
+    out["source_review_state"] = model_review_summary(m)
     g = _graph()
     out["neighbors"] = g.neighbors(model_id)
     out["source_document"] = _doc_brief(m["source_document_id"]) if m.get("source_document_id") else {"state": "NO_LOCAL_SOURCE_ROUTE"}
@@ -353,7 +394,7 @@ def find_validity_conditions(model: str) -> dict:
     out = []
     for m in ms:
         for v in vals:
-            if _current_source(v) and m["id"] in _validity_model_ids(v) and v not in out:
+            if _active_science(v) and m["id"] in _validity_model_ids(v) and v not in out:
                 out.append(v)
         for c in _claims().values():
             if (_current_source(c) and c.get("verification") != "REFUTED" and m["id"] in c.get("model_ids", [])
@@ -404,10 +445,28 @@ def find_implementation(scientific_object_id: str) -> dict:
         if m["node"] and m["node"]["type"] == "Model":
             via_model += [n for n in g.neighbors(m["node"]["id"], {"IMPLEMENTS"}, "in") if n["node"] and n["node"]["type"] == "SoftwareComponent"]
     all_hits = list({n["node"]["id"]: n for n in via_model + impls}.values())
-    return {"id": scientific_object_id, "state": "OK" if all_hits else "NO_IMPLEMENTATION_LINK",
+    # A structured review names the exact symbols it compared with this
+    # equation; those are reviewed implementations, with their current state.
+    reviewed = []
+    for m in models:
+        if m["node"] and m["node"]["type"] == "Model" and m.get("edge") == "IMPLEMENTS":
+            record = _models().get(m["node"]["id"], {})
+            summary = model_review_summary(record)
+            for review in summary.get("source_reviews", []):
+                # A model may implement equations from several documents with
+                # distinct scopes; return only the source review for this object.
+                equation = _equations().get(scientific_object_id, {})
+                if review.get("reviewed_document_id") != equation.get("document_id"):
+                    continue
+                reviewed += [{"model_id": record["id"], "fidelity": review.get("fidelity"),
+                              "review_state": review["state"], "reviewed_document_id": review["reviewed_document_id"],
+                              **{k: f.get(k) for k in ("file", "symbol", "line", "state")}}
+                             for f in review.get("implementation_fingerprints", [])]
+    return {"id": scientific_object_id, "state": "OK" if (all_hits or reviewed) else "NO_IMPLEMENTATION_LINK",
             "implementations": [{"id": n["node"]["id"], "type": n["node"]["type"], "file": n["node"].get("file"),
                                  "line": n["node"].get("line"), "label": n["node"].get("label"), "provenance": n.get("provenance")}
-                                for n in all_hits]}
+                                for n in all_hits],
+            "reviewed_implementations": reviewed}
 
 
 def find_scientific_basis(software_ref: str) -> dict:
@@ -446,7 +505,7 @@ def find_scientific_basis(software_ref: str) -> dict:
             support.append({"model_id": m["id"], "document_id": did,
                             "declared_state": record.get("source_support_state", "NOT_CHECKED"),
                             "state": effective, "notes": record.get("source_support_notes", ""),
-                            "evidence_note": note})
+                            "evidence_note": note, "source_review": model_review_summary(record)})
             if did:
                 if did in _docs():
                     docs.append(_docs()[did])
@@ -602,11 +661,11 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
                     key=lambda c: -term_hits(c, ("subject", "predicate", "object", "statement")))
     claims = [c for c in claims if term_hits(c, ("subject", "predicate", "object", "statement")) >= 1 or c["document_id"] in doc_ids][:max_items * 2]
     assumptions = [c for c in claims if c.get("claim_type") in ("assumption",)] + \
-                  [a for a in _entities().values() if _current_source(a) and a.get("type") == "Assumption" and (term_hits(a, ("label", "prose")) or a.get("document_id") in doc_ids)][:max_items]
+                  [a for a in _entities().values() if _active_science(a) and a.get("type") == "Assumption" and (term_hits(a, ("label", "prose")) or a.get("document_id") in doc_ids)][:max_items]
     stored_validity = load("validity")
     selected_model_ids = {m["id"] for m in models}
     validity = [c for c in claims if c.get("claim_type") == "validity_statement"] + \
-               [v for v in stored_validity if _current_source(v) and _validity_model_ids(v) & selected_model_ids]
+               [v for v in stored_validity if _active_science(v) and _validity_model_ids(v) & selected_model_ids]
     sfields = ("qualname", "role", "relations_text", "file")
     sw = [s for s in _software().values() if term_hits(s, sfields) >= 1]
     sw = sorted(sw, key=lambda s: -(term_hits(s, sfields) * 2 + (1 if _sub_match(subsystems, s.get("subsystem")) else 0)))[:max_items]
@@ -651,7 +710,28 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
     if stale_counts:
         warnings.append("Excluded noncurrent source records (including superseded history and stale evidence): "
                         + ", ".join(f"{name}={count}" for name, count in stale_counts.items()))
+    refuted_counts = {}
+    for name, records, fields in (
+            ("equations", _equations().values(), ("label", "form", "description")),
+            ("claims", _claims().values(), ("subject", "predicate", "object", "statement")),
+            ("entities", _entities().values(), ("label", "prose")),
+            ("validity", stored_validity, ("prose", "statement"))):
+        count = sum(1 for rec in records if _current_source(rec) and rec.get("verification") == "REFUTED" and (
+            term_hits(rec, fields) or rec.get("document_id") in doc_ids
+            or _validity_model_ids(rec) & selected_model_ids))
+        if count:
+            refuted_counts[name] = count
+    if refuted_counts:
+        warnings.append("Excluded independently refuted source records (inspectable by ID): "
+                        + ", ".join(f"{name}={count}" for name, count in refuted_counts.items()))
+    review_summaries = {m["id"]: model_review_summary(m) for m in models}
     for m in models:
+        summary = review_summaries[m["id"]]
+        if summary["state"] in ("IMPLEMENTATION_CHANGED_REVIEW_REQUIRED", "STALE_SOURCE", "SOURCE_NOT_INGESTED"):
+            warnings.append(f"{m['registry_id']}: structured source review {summary['state']} - {summary.get('reason')}")
+        if summary["state"] != "NOT_CHECKED" and summary.get("fidelity") not in ("EXACT", "EQUIVALENT"):
+            warnings.append(f"{m['registry_id']}: structured source review fidelity={summary.get('fidelity')}"
+                            + ("; physics change required (owner decision)" if summary.get("physics_change_required") else ""))
         support = m.get("source_support_state", "NOT_CHECKED")
         if support != "SUPPORTED":
             warning = f"{m['registry_id']}: source_support_state={support}"
@@ -687,11 +767,11 @@ def retrieve_for_task(task: str, max_chunks: int = 12, max_items: int = 15) -> d
         "quantities": quantities,
         "source_documents": [_doc_brief(d) for d in doc_ids],
         "source_context": [slim(h, ("chunk_id", "doc_id", "page_start", "page_end", "section", "kind", "score", "text", "low_confidence")) for h in hits],
-        "equations": [slim(e, ("id", "label", "form", "document_id", "page", "variables", "assumptions", "validity", "model_ids", "confidence", "grounded", "verification", "transcription_state")) for e in equations],
-        "claims": [slim(c, ("id", "claim_type", "subject", "predicate", "object", "statement", "document_id", "page", "model_ids", "confidence", "verification")) for c in claims],
-        "assumptions": [slim(a, ("id", "label", "prose", "statement", "document_id", "page")) for a in assumptions],
-        "validity_envelopes": [slim(v, ("id", "model_id", "model_ids", "prose", "statement", "machine_readable", "machine_readable_state", "document_id", "page")) for v in validity],
-        "models": [slim(m, ("id", "registry_id", "subsystem", "quantity", "relation", "basis_class", "basis_class_basis", "promotion_status", "promotion_status_basis", "execution_reach", "software_verification_state", "physical_validation_state", "validation_level", "source_document_id", "equation_ref", "validity_text", "source_support_state", "source_support_notes")) for m in models],
+        "equations": [slim(e, ("id", "label", "form", "document_id", "page", "variables", "assumptions", "validity", "model_ids", "confidence", "grounded", "verification", "transcription_state")) | {"content_verification": content_verification_summary(e)} for e in equations],
+        "claims": [slim(c, ("id", "claim_type", "subject", "predicate", "object", "statement", "document_id", "page", "model_ids", "confidence", "verification")) | {"content_verification": content_verification_summary(c)} for c in claims],
+        "assumptions": [slim(a, ("id", "label", "prose", "statement", "document_id", "page")) | {"content_verification": content_verification_summary(a)} for a in assumptions],
+        "validity_envelopes": [slim(v, ("id", "model_id", "model_ids", "prose", "statement", "machine_readable", "machine_readable_state", "document_id", "page")) | {"content_verification": content_verification_summary(v)} for v in validity],
+        "models": [slim(m, ("id", "registry_id", "subsystem", "quantity", "relation", "basis_class", "basis_class_basis", "promotion_status", "promotion_status_basis", "execution_reach", "software_verification_state", "physical_validation_state", "validation_level", "source_document_id", "equation_ref", "validity_text", "source_support_state", "source_support_notes")) | {"source_review": review_summaries[m["id"]]} for m in models],
         "existing_implementations": [slim(s, ("id", "qualname", "file", "line", "role", "model_ids", "variant_of_id", "verified")) for s in sw],
         "empirical_constants": [slim(k, ("id", "name", "value", "units", "basis_class", "stated_basis", "file", "line")) for k in constants],
         "requirements_and_gates": [slim(r, ("id", "kind", "name", "quantity", "enforced_by", "file", "line")) for r in reqs],

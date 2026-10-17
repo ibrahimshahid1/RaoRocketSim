@@ -1,0 +1,585 @@
+{
+ "packet": "V-SP125-p104",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  104,
+  104
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "GPT-6 (Codex)"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 104,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0104.png",
+   "sha256": "8ea9e3f23e37ff466dbdc5bf14b443d7afbad9d6907b6d6a9f22c1d7c7d5d1da",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_1939762106ec4e162cfabf6b"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_6c50f4870137f6267bb49b65",
+   "kind": "figure",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 276.17163770809896,
+     "t": 67.07906238640464,
+     "r": 410.7992163845131,
+     "b": 42.17416731410685,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d4bcf9a3425ef6a0e0316da7",
+   "kind": "figure",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 273.15412390676147,
+     "t": 757.1258259145052,
+     "r": 399.32616129424105,
+     "b": 728.5937814045142,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3ab742b7612d39f22e759bd6",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/28",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 418.6666666666667,
+     "t": 523.6666766666666,
+     "r": 526.6666666666667,
+     "b": 502.33334333333335,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "A _ { t } = \\frac { 7 4 7 \\, 0 0 0 } { 1 . 5 3 1 \\times 1 0 0 0 } = 4 8 7 \\, \\text { in} ^ { 2 }",
+   "original_text": "At= nS 487 in?",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3e3b66091f69769be8aafacc",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/38",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 430.3333333333333,
+     "t": 242.33334333333323,
+     "r": 533.0,
+     "b": 233.66667666666672,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { c } = \\vee 1 . 6 \\times 2 4 . 9 = 3 1 . 5 \\text { in}",
+   "original_text": "Dp =V1.6x 24.9=31.5 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_59445c907ca57998b8d6b3a5",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/31",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 417.3333333333333,
+     "t": 427.00001,
+     "r": 517.0,
+     "b": 412.66667666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { e } = \\sqrt { 1 4 } \\times 2 4 . 9 = 9 3 . 4 \\text { in }",
+   "original_text": "De=V14* 24.9 =93.4 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_698011780caaa25e5d787956",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/29",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 419.0,
+     "t": 486.33334333333335,
+     "r": 512.0,
+     "b": 468.6666766666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "D _ { t } = \\sqrt { \\frac { 4 } { \\pi } } \\times 4 8 7 = 2 4 . 9 \\text { in }",
+   "original_text": "D; = ee 487 =24.9 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6a0f3ffb60f3efd60a64309b",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/23",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 448.6666666666667,
+     "t": 569.00001,
+     "r": 555.6666666666667,
+     "b": 559.6666766666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( P _ { c } ) _ { n s } = 1 0 0 0 \\ p s i a ; \\ \\epsilon = 1 4",
+   "original_text": "(Pe)ns = 1000 psia; «=14",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8e3da9723d2c4feefc0acd8c",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/32",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 480.0,
+     "t": 405.00001,
+     "r": 555.3333333333333,
+     "b": 386.3333433333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "R _ { e } = \\frac { 9 3 . 4 } { 2 } = 4 6 . 7 \\text { in}",
+   "original_text": "Re =32:4 3 =46.7 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b3fb3d5c34ad5e9c514e0738",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/30",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 476.6666666666667,
+     "t": 458.6666766666666,
+     "r": 555.0,
+     "b": 442.00001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "R _ { t } = \\frac { 2 4 . 9 } { 2 } = 1 2 . 4 5 \\text { in }",
+   "original_text": "R,=249=12.45 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c1be43c0f43dfc2fcb32df72",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/43",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 400.0,
+     "t": 145.33334333333335,
+     "r": 554.3333333333333,
+     "b": 122.6666766666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= \\underbrace { 1 2 . 4 5 ( \\sqrt { 1 . 6 } - 1 ) + 1 8 . 6 8 ( \\sec 2 0 ^ { \\circ } - 1 ) } _ { \\tan 2 0 ^ { \\circ } }",
+   "original_text": "_ 12.45 (V1.6 - 1) +18.68(sec 20°- 1) ~ tan 20°",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e78ba319d06b7f1d15554712",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/39",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 474.3333333333333,
+     "t": 224.33334333333323,
+     "r": 554.3333333333333,
+     "b": 206.00000999999997,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "R _ { c } = \\frac { 3 1 . 5 } { 2 } = 1 5 . 7 5 \\text { in }",
+   "original_text": "31.5 2 Ro =2e2= 15.75 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e87a6277c46b4485c05e8ba0",
+   "kind": "formula",
+   "pages": [
+    104
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/44",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 487.3333333333333,
+     "t": 111.6666766666666,
+     "r": 554.6666666666667,
+     "b": 93.6666766666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= \\frac { 4 . 5 1 5 } { 0 . 3 6 4 } = 1 2 . 4 \\text { in }",
+   "original_text": "4.515 _ ; =9 3647124 in",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1939762106ec4e162cfabf6b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p104-104-92d3f068dcca68ba65a0288d1f19769fb7fdf2444b5ff21c118b2be42d48bba8.json",
+   "raw_sha256": "94cec1cefac7f62143ab938b4db1d7d26b72ede029130bfbf9255deebeb2ea07",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19710019929_6BD96C7B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 104,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "SP-125 sample calculation (4-2): chamber volume Vc = At x L* for A-1 stage engine",
+   "equation_number": "sample calculation 4-2 (applies eq. 4-4)",
+   "form": "Vc = 487 x 45 = 21915 cu in",
+   "statement": null,
+   "quote": "Use a combustion chamber L* of 45 in for\nL0 2 /RP-1 application. Substitute into equation\n(4-4):\n\n\nChamber volume: _V_ c = 487 x 45 = 21915 cu in",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Vc",
+     "meaning": "chamber volume",
+     "units": "cu in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "throat area (487 in^2 for the A-1 stage engine)",
+     "units": "in^2",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "L*",
+     "meaning": "combustion chamber characteristic length (45 in chosen for LO2/RP-1)",
+     "units": "in",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_LSTAR"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    }
+   ],
+   "assumptions": [
+    "L* of 45 in selected for LO2/RP-1 application"
+   ],
+   "validity": [],
+   "extraction_note": "'L0 2' is OCR of LO2. This is the direct numeric instance of the registry relation Vc = Lstar*At.",
+   "same_page_formula_candidates": [
+    "CAND_3ab742b7612d39f22e759bd6",
+    "CAND_3e3b66091f69769be8aafacc",
+    "CAND_59445c907ca57998b8d6b3a5",
+    "CAND_698011780caaa25e5d787956",
+    "CAND_6a0f3ffb60f3efd60a64309b",
+    "CAND_8e3da9723d2c4feefc0acd8c",
+    "CAND_b3fb3d5c34ad5e9c514e0738",
+    "CAND_c1be43c0f43dfc2fcb32df72",
+    "CAND_e78ba319d06b7f1d15554712",
+    "CAND_e87a6277c46b4485c05e8ba0"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 104
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "At",
+      "L*"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Vc",
+      "At",
+      "L*"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_9F1C0032",
+   "store": "claims",
+   "type": "Claim",
+   "page": 104,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The worked thrust-chamber layout uses a 20-degree convergent half angle, a contraction area ratio of 1.6, and a circular arc of radius 1.5 Rt upstream of the throat; the convergent length is computed with Eq. 4-7 and no chamber-to-cone shoulder fillet is specified.",
+   "quote": "Use a nozzle convergent half angle of 20°. a contraction area ratio (c = 1.6. and a circular arc of radius _R_ = 1.5 _R t•_ or 18.68 in. for nozzle con tour upstream of the throat.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 104
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_6EA4DA2D",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 104,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Sample-calc throat arc radius R = 1.5 Rt = 18.68 in",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "a circular arc of radius _R_ = 1.5 _R t•_ or 18.68 in. for nozzle con tour upstream of the throat.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 104
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_856F71B3",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 104,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "L* chosen for LO2/RP-1 A-1 stage engine sample calculation = 45 in",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Use a combustion chamber L* of 45 in for\nL0 2 /RP-1 application. Substitute into equation\n(4-4):\n\n\nChamber volume: _V_ c = 487 x 45 = 21915 cu in",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 104
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00246",
+   "page_start": 104,
+   "page_end": 104,
+   "section": "MAIN PROPELLANT",
+   "text": "DESIGN OF THRUST CHAMBERS AND OTHER COMBUSTION DEVICES 95\n\nespecially in the areas of boattail structure and\nmission staging optimization. The advantages\nand disadvantages of annular nozzles are stunmarized as follows:\n\n_Advantages_\n\n(1) Shortened nozzle length for the same per\n\nformance. or increased performance (higher\nexpansion area ratios) for a given length.\n(2) Improved performance at sea level or low\n\naltitudes. (Annular nozzles with high\nexpansion area ratios can be used for a\nsingle-stage sea level to vacuum vehicle\nmission.)\n(3) The relatively stagnant region in the cen\n\nter of the nozzle can possibly be used\nfor installation of gas generators. turbopumps. tanks. auxiliary equipment. and\nturbine gas discharges.\n(4) A segmented combustion chamber design\n\napproach can be used. easing development effort (individual segments can be\nbuilt and tested during the early phases)\nand improving combustion stability.\n\n4-23. The reader is urged to conduct his own\ncalculations using the first stage as a guide. and\nto compare his results with those shown.\n\n_Solution_\n\nA-I Stage Engine:\n\nFrom sample calculation (4-1):\n\nDesign sea level _C[= 1.531;_\n\n_(P_ c)ns = 1000 psia; (= 14\n\nSubstitute into equation (1-33):\n\n747000 _ . 2\nThroat area: _A_ <sup>-</sup>\n_t_ -1.531 x 1000 - 487 m\n\nThroat diameter: _D_ _t_ = ~x 487 = 24.9 in\nl\n\n_R_ _t-_ <sup>__ 24.9_</sup> 2 - <sup>_-1245·_</sup> . m"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00247",
+   "page_start": 104,
+   "page_end": 104,
+   "section": "MAIN PROPELLANT",
+   "text": "Exit diameter: De =vl4x 24.9=93.4 in\n\n_R_ e- <sup>-</sup> <sup>93.4 -</sup> 2 - <sup>46 7 .</sup> . m\n\nUse a combustion chamber L* of 45 in for\nL0 2 /RP-1 application. Substitute into equation\n(4-4):\n\nChamber volume: _V_ c = 487 x 45 = 21915 cu in\n\nUse a nozzle convergent half angle of 20°. a\ncontraction area ratio (c = 1.6. and a circular arc\nof radius _R_ = 1.5 _R t•_ or 18.68 in. for nozzle con\ntour upstream of the throat.\n\nChamber diameter: Dc =vT.6 <sup>x</sup> 24.9=31.5 in\n\n_R c--2--_ <sup>_31.5_</sup> 1575. m <sup>,</sup>\n\nUse equation (4-7) to calculate the chamber\nconvergent cone length\n\nConvergent cone length\n\n_12.45 (v1.6 -1) + 18.68 (sec 20°- 1)\n\n         - tan 20°\n\n4.515 12 4 .\n=0.364 = . In\n\n_Disadvantages_\n\n(1) Relatively high cooling requirements.\n\nbecause of higher heat fluxes and greater\nsurface areas to be cooled.\n(2) Heavier structural construction in some\n\napplications.\n(3) Manufacturing difficulties.\n\n_Sample_ _Calculation_ (4-2)\n\nLayout the thrust chamber internal configuration (cylindrical combustion chamber with bell\nnozzle) for the engines on the Alpha vehicle with\nthe data derived from sample calculation (4-1)\nand the following required chamber thrusts Ftc:\n\n(a) A-1 stage engine: _F_ _tc_ _,==747000_ lb at sea\n\nlevel\n(b) A-2 stage engine: _Ftc 2_ = 149500 lb at\n\naltitude\n(c) A-3 stage engine: _F_ tCl = 16000 lb at\n\naltitude\n(d) A-4 stage engine: Ftc. = 7500 lb at\naltitude\nThe detailed calculations and their results\nare presented in the following for the first-stage\nengine only. For the other stages. the calculation results are summarized in figures 4-21 to"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 10
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

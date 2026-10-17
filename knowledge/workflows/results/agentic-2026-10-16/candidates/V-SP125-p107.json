@@ -1,0 +1,666 @@
+{
+ "packet": "V-SP125-p107",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  107,
+  107
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "GPT-6 (Codex)"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 107,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0107.png",
+   "sha256": "6e9e5eb968e933cf895aa7e467cf99f9c57e7a4657c4951606b77a005b901738",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_95d889928ecd31472116da81"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_5ca65534b55b3934c98f5b68",
+   "kind": "figure",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 210.90607495396893,
+     "t": 72.28796295446068,
+     "r": 346.9856571258695,
+     "b": 50.70782406678097,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c719abe20cb62e2a2fe9e0c8",
+   "kind": "figure",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 213.11298253535446,
+     "t": 760.0501765606333,
+     "r": 348.71702449717424,
+     "b": 739.8019239476407,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_490fece68631ea68de458a08",
+   "kind": "formula",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 61.333333333333336,
+     "t": 645.3333233333334,
+     "r": 270.66666666666663,
+     "b": 613.6666566666668,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\ V o l u m e = & \\frac { \\pi } { 3 } \\times 1 2 . 4 \\left [ ( 1 5 . 7 5 ) ^ { 2 } + ( 1 2 . 4 5 ) ^ { 2 } + 1 5 . 7 5 \\times 1 2 . 4 5 \\right ] \\\\ = & 7 7 6 0 \\, c u i n",
+   "original_text": "7 3 x12.4 [(15.75)\"+ (12.45)?+15.7512.45 | =7760 cu in Volume =",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_eb6ea4c927b105d01ed8cee4",
+   "kind": "formula",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 62.333333333333336,
+     "t": 391.33332333333334,
+     "r": 251.66666666666666,
+     "b": 368.99999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "L _ { n } = 0 . 8 \\times \\left [ \\frac { 1 2 . 4 5 ( \\sqrt { 1 4 } - 1 ) + 4 . 7 5 ( \\sec 1 5 ^ { \\circ } - 1 ) } { \\tan 1 5 ^ { \\circ } } \\right ]",
+   "original_text": "_ 12.45 (v141)+ 4.75 (see 18-0) 1n=0.8%| can ise",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f03b5ede55e3fd56acfa1afa",
+   "kind": "formula",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 166.33333333333331,
+     "t": 359.33332333333334,
+     "r": 271.0,
+     "b": 347.6666566666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= 0 . 8 \\times 1 2 8 = 1 0 2 . 4 \\text { inches}",
+   "original_text": "=0.8x 128 = 102.4 inches",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f2c609093e90150858af6bb6",
+   "kind": "formula",
+   "pages": [
+    107
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 76.66666666666667,
+     "t": 264.66665666666677,
+     "r": 258.0,
+     "b": 203.99999000000003,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N _ { t } & = 0 . 3 8 2 \\, R _ { t } \\, \\sin \\, \\theta _ { d } = 2 . 1 9 \\, \\text { inches} \\\\ N _ { a } & = R _ { t } + 0 . 3 8 2 \\, R _ { t } ( 1 - \\cos \\, \\theta _ { n } ) = 1 2 . 9 9 \\, \\text { inches} \\\\ E _ { t } & = L _ { n } = 1 0 2 . 4 \\, \\text { inches} \\\\ E _ { a } & = R _ { e } = 4 6 . 7 \\, \\text { inches}",
+   "original_text": "N, =0.382 Rz sin 9p = 2.19 inches N,=R,+0.382 Re(1cos @n)= 12.99 inches E, = Ln = 102.4 inches E,=Re=46.7 inches",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_95d889928ecd31472116da81",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+   "raw_sha256": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19710019929_2DC4BFBD",
+   "store": "equations",
+   "type": "Equation",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 sample calculation 4-2: convergent frustum volume",
+   "equation_number": "sample 4-2",
+   "form": "V_conv = (pi/3)*12.4*[(15.75)^2 + (12.45)^2 + 15.75*12.45] = 7760 in^3",
+   "statement": null,
+   "quote": "Using the frustrum cone volume equation and",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "V_conv",
+     "meaning": "approximate convergent cone volume",
+     "units": "in^3",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "slight rounding of the throat neglected"
+   ],
+   "validity": [
+    "A-1 stage sample numbers"
+   ],
+   "extraction_note": "Transcribed from original PDF page 107; Docling candidate matches.",
+   "same_page_formula_candidates": [
+    "CAND_490fece68631ea68de458a08",
+    "CAND_eb6ea4c927b105d01ed8cee4",
+    "CAND_f03b5ede55e3fd56acfa1afa",
+    "CAND_f2c609093e90150858af6bb6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "V_conv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_5262D00E",
+   "store": "equations",
+   "type": "Equation",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 sample calculation 4-2: 80-percent bell nozzle length",
+   "equation_number": "sample 4-2 (Eq. 4-7 x 0.8)",
+   "form": "L_n = 0.8*[R_t*(sqrt(epsilon)-1) + R*(sec(15 deg)-1)]/tan(15 deg); A-1 sample: 0.8*[12.45*(sqrt(14)-1) + 4.75*(sec(15 deg)-1)]/tan(15 deg) = 0.8*128 = 102.4 in",
+   "statement": null,
+   "quote": "By definition, the nozzle length Ln will",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "L_n",
+     "meaning": "bell nozzle length from throat to exit plane",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "R_t",
+     "meaning": "throat radius (12.45 in in the sample)",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "epsilon",
+     "meaning": "nozzle expansion area ratio (14 in the sample)",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_EPS"
+     ]
+    },
+    {
+     "symbol": "R",
+     "meaning": "downstream throat arc radius, 0.382 R_t (4.75 in in the sample)",
+     "units": "in",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "80-percent bell length defined from an equivalent 15 deg half-angle conical nozzle"
+   ],
+   "validity": [
+    "numeric values are the A-1 stage sample; general relation is Eq. 4-7 with alpha = 15 deg times L_f"
+   ],
+   "extraction_note": "Transcribed from the original PDF page 107; Docling candidates match. Indexed Markdown drops the decimal points (renders 12.45 as 1245 and 102.4 as 1024).",
+   "same_page_formula_candidates": [
+    "CAND_490fece68631ea68de458a08",
+    "CAND_eb6ea4c927b105d01ed8cee4",
+    "CAND_f03b5ede55e3fd56acfa1afa",
+    "CAND_f2c609093e90150858af6bb6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "L_n",
+      "R_t",
+      "R"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_8C0C7364",
+   "store": "equations",
+   "type": "Equation",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 parabolic bell inflection and exit point coordinates",
+   "equation_number": "sample 4-2",
+   "form": "N_t = 0.382*R_t*sin(theta_n); N_a = R_t + 0.382*R_t*(1 - cos(theta_n)); E_t = L_n; E_a = R_e; A-1 sample: N_t = 2.19 in, N_a = 12.99 in, E_t = 102.4 in, E_a = 46.7 in",
+   "statement": null,
+   "quote": "The location of Nand E along the nozzle contour",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "N_t",
+     "meaning": "axial distance of point N from the throat",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "N_a",
+     "meaning": "radial coordinate of point N from the nozzle axis",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "E_t",
+     "meaning": "axial distance of exit point E from the throat",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "E_a",
+     "meaning": "radial coordinate of exit point E",
+     "units": "in",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "R_t",
+     "meaning": "throat radius",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "theta_n",
+     "meaning": "initial parabola wall angle",
+     "units": "deg",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "R_e",
+     "meaning": "nozzle exit radius",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "downstream throat arc of radius 0.382 R_t centred on the throat-plane normal"
+   ],
+   "validity": [
+    "sample values for theta_n = 27.4 deg, R_t = 12.45 in, R_e = 46.7 in"
+   ],
+   "extraction_note": "Original page shows sin(theta_n) in N_t; the Docling candidate misread the subscript as theta_d and is rejected. Independent arithmetic: 0.382*12.45*sin(27.4 deg) = 2.189; 12.45 + 4.756*(1-cos 27.4 deg) = 12.984.",
+   "same_page_formula_candidates": [
+    "CAND_490fece68631ea68de458a08",
+    "CAND_eb6ea4c927b105d01ed8cee4",
+    "CAND_f03b5ede55e3fd56acfa1afa",
+    "CAND_f2c609093e90150858af6bb6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "N_t",
+      "N_a",
+      "E_t",
+      "E_a",
+      "R_t",
+      "theta_n",
+      "R_e"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_14AF6642",
+   "store": "claims",
+   "type": "Claim",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Sample calculation 4-2 designs an 80-percent bell nozzle by the parabolic approximation procedure: the contour downstream of the throat is a circular arc of radius 0.382 R_t (4.75 in), and by definition the nozzle length is 80 percent of that of an equivalent 15 deg half-angle conical nozzle.",
+   "quote": "The nozzle contour downstream of the throat will be a circular arc of radius 0.382",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_42DCCAAE",
+   "store": "claims",
+   "type": "Claim",
+   "page": 107,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The convergent section volume is estimated with the frustum-cone volume formula, neglecting the slight rounding of the throat, and subtracted from the L*-derived chamber volume to size the cylindrical length.",
+   "quote": "Using the frustrum cone volume equation and neglecting the slight rounding of the throat, the approximate convergent cone volume is obtained:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_57F8642E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In SP-125 sample calculation 4-2 the parabolic-contour wall angles are derived from Figure 4-14 for epsilon = 14 and L_f = 0.8 as theta_n = 27.4 deg and theta_e = 9.8 deg.",
+   "quote": "The parabolic contour wall angles en and ee can be derived from figure 4-14",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_76A39C08",
+   "store": "claims",
+   "type": "Claim",
+   "page": 107,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The 80-percent bell nozzle length is defined as 80 percent of the equivalent 15-degree conical nozzle length, with a downstream throat arc of radius 0.382 Rt; this is the only 0.8 factor in the thrust-chamber geometry section and it is unrelated to any chamber shoulder radius.",
+   "quote": "Design an \"80-percent bell\" nozzle configuration using the parabolic approximation procedure. The nozzle contour downstream of the throat will be a circular arc of radius 0.382 _R_ _t,_ or 4.75 inches.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_D8BF208E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "With the coordinates of N and E and the angles theta_n and theta_e a parabola can be fitted to complete the contour; with a computer program more accurate divergent contours can be calculated by the method of characteristics.",
+   "quote": "a parabola can be fitted to complete the contour",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19710019929_1195E32A",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 107,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The convergent-section volume is computed as a frustum cone, neglecting the slight rounding of the throat.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The convergent-section volume is computed as a frustum cone, neglecting the slight rounding of the throat.",
+   "quote": "Using the frustrum cone volume equation and neglecting the slight rounding of the throat, the approximate convergent cone volume is obtained:",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 107
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00250",
+   "page_start": 107,
+   "page_end": 107,
+   "section": "MAIN PROPELLANT",
+   "text": "98 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\nUsing the frustrum cone volume equation and\nneglecting the slight rounding of the throat, the\napproximate convergent cone volume is obtained:\n\nVolume =j x12.4 815.75)2+ (12.45f + 15. 75x12.45 ]\n\n= 7760 cu in\n\nRequired volume for cylindrical chamber section\n\n= 21915 - 7760 = 14155 cu in\n\nRequired length for cylindrical chamber section\n\n_=14155/1.6A_ _t_ _=18.17_ inches\n\nDistance from injector face to throat\n\n=18.17+12.40=30.57, say 31 inches\n\nDesign an \"80-percent bell\" nozzle configuration using the parabolic approximation procedure.\nThe nozzle contour downstream of the throat will\nbe a circular arc of radius 0.382 _R_ _t,_ or 4.75\ninches. By definition, the nozzle length Ln will\nbe 80 percent of the length for an equivalent 15°\nhalf-angle conical nozzle. Substitute into equation (4-7)\n\nL =0.8x[1245(\\'14-1)+4.75(SeC 15 <sup>0</sup> -1)]\n\n_n_ tan 150\n\n= 0.8 x 128 = 1024 inches\n\nThe parabolic contour wall angles _en_ and _ee_ can\nbe derived from figure 4-14, for (= 14 and L[=0.8;\n_en_ = 274° and _ee_ = 9.8°. The location of Nand E\nalong the nozzle contour, with respect to throat\nand nozzle axis, can be calculated\n\n_Nc_ =0.382 _Rt_ sin _en_ = 2.19 inches\n\n_N_ a = _Rc_ + 0.382 _Rt(1-_ cos _en)_ = 12.99 inches\n\n_E_ _t_ := Ln = 102.4 inches\n\n_Ea_ = _Re_ = 46.7 inches\n\nWith the aid of the established coordinates for\npoints Nand E, and the angles _en_ and _ee,_ a\nparabola can be fitted to complete the contour.\nThe general layout of the A-1 stage engine thrust\nchamber is shown in figure 4-20. With the aid of\na computer program, more accurate calculations\nof the divergent nozzle contour can be made by\nthe method of characteristics."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00251",
+   "page_start": 107,
+   "page_end": 107,
+   "section": "MAIN PROPELLANT",
+   "text": "Since the calculations for the thrust chamber\nconfiguration are based on the calculated design\nC [ value which has to be verified by later actual\ntesting, a slight change of chamber pressure is\nusually allowed to compensate for C [ deviations\nin order to meet the required thrust value.\n\n4.4 THRUST CHAMBER COOLING\n\nTechniques and Their Selection\n\nBecause of the high combustion temperatures\n(4000° to 6000° F) and the high heat transfer\nrates from the hot gases to the chamber wall (0.5\nto 50 Btulin <sup>2</sup> -sec), thrust chamber cooling becomes a major design consideration. For shortduration operation (up to a few seconds), uncooled chamber walls can be used. In this case,\nthe heat can be absorbed by the sufficiently\nheavy chamber wall material which acts as a\nheat sink, before the wall temperature rises to\nthe failure level. For most longer duration applications, a steady-state chamber cooling system\nhas to be employed. One or a combination of the\nfollowing chamber cooling techniques is often\nused:\n\n1. _Regenerative_ cooling.-Regenerative cooling is the most widely applied method and utilizes one or possibly both of the propellants, fed\nthrough passages in the thrust chamber wall for\ncooling, before they are injected into the combustion chamber. (See par. 4.1 and fig. 4-1.)\n\n_2._ _Dump_ cooling.-With this principle, a small\npercentage of the propellant, such as the hydrogen in a L0 2 /LH 2 engine, is fed through passages in the thrust chamber wall for cooling and\nsubsequently dumped overboard through openings\nat the rear end of the nozzle skirt. Because of\ninherent problems, this method has only limited\napplication."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00252",
+   "page_start": 107,
+   "page_end": 107,
+   "section": "MAIN PROPELLANT",
+   "text": "_3._ _Film_ cooling.-Here, exposed chamber wall\nsurfaces are protected from excessive heat with\na thin film of coolant or propellant which is introduced through manifolded orifices in the chamber wall near the injector. and usually in several\nmore planes toward the throat. The method has\nbeen widely used, particularly for high heat\nfluxes, either alone or in combination with\nregenerative cooling.\n\n_4. Transpiration_ _cooling._  - Transpiration cooling is accomplished by introducing a coolant"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 4
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "scope": "Continue knowledge-system open gaps from PASS_WITH_OPEN_GAPS handoff; preserve engineering decisions and existing staged snapshot.",
+ "engineering_edits_authorized_in_this_pass": false,
+ "committed": false,
+ "staged_by_this_session": false,
+ "reported_starting_packet_counts": {
+  "FINAL_AUDIT_ELIGIBLE": 60,
+  "QUEUED": 41
+ },
+ "source_authority": "Original held PDFs; no physical-validation promotion.",
+ "code_gap_assignments": {
+  "K7_K9_K11": "model_links",
+  "K10": "integration_guard",
+  "K12_content_freshness": "verification_freshness",
+  "K8_parser_lineage": "integration_guard"
+ }
+}

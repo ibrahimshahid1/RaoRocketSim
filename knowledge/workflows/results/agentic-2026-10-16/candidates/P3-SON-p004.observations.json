@@ -1,0 +1,654 @@
+{
+ "packet": "P3-SON-p004",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "queue_reason": "P3 Son 2017 PDF p.4 Eq. 1 and transition",
+   "queue_pages": [
+    4,
+    4
+   ],
+   "queue_document_id": "DOC_DOI_10_2514_1_B36301",
+   "queue_source_pdf": "propulsion_texts/pintle_injector/son2017.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P3-SON-p004.json",
+   "sha256": "966fd831735c81200470533cee83cb49cfe9af1215d0f290807dbdddffdb7e0a",
+   "size_bytes": 10729,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "pages": [
+    4,
+    4
+   ],
+   "docling_run_ids": [
+    "ENR_3daa39abfbacd389fae9ebcb"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 4
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "5bac8586a6199ece51df9eee8fd881267e83efa6e6a196b46dcc4c3ae56e4127"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "5bac8586a6199ece51df9eee8fd881267e83efa6e6a196b46dcc4c3ae56e4127"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 306,
+    "records_now": 306,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pintle_injector/son2017.pdf",
+   "sha256_in_bundle": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "sha256_recomputed": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 4,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0004.png",
+    "dpi": 150,
+    "sha256_in_bundle": "c801946fcfdbb893edba5e96e17045701f3cf5ad9b5f605db4ed8abbca9748d3",
+    "file_exists": true,
+    "sha256_recomputed": "c801946fcfdbb893edba5e96e17045701f3cf5ad9b5f605db4ed8abbca9748d3",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+    "run_record_found": true,
+    "page_range": [
+     4,
+     4
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+    "raw_sha256_recorded": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.md",
+    "markdown_sha256_recorded": "63871fc6f251ebc5b454525ea9b967ae6d4b5d17298c208904406092118e4182",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "63871fc6f251ebc5b454525ea9b967ae6d4b5d17298c208904406092118e4182",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+    "sha256_in_bundle": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+    "file_exists": true,
+    "sha256_recomputed": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 4
+  },
+  "candidates_total": 6,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_bb25f1489e555ee6eaa11dbc",
+    "CAND_ff559628839e03e75b401405"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_ff559628839e03e75b401405"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B36301#c00011",
+     "occurrences": 76
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B36301#c00012",
+     "occurrences": 9
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [
+    {
+     "id": "CAND_d73feefec476f38a89bcebcb",
+     "kind": "formula",
+     "field": "original_text",
+     "repeated_unit": ".0129",
+     "repetitions": 44,
+     "run_characters": 220,
+     "start_offset": 28,
+     "field_length": 308
+    },
+    {
+     "id": "CAND_fbce17fe8aa1f64cb217689f",
+     "kind": "formula",
+     "field": "original_text",
+     "repeated_unit": ".0129",
+     "repetitions": 15,
+     "run_characters": 75,
+     "start_offset": 28,
+     "field_length": 260
+    }
+   ],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_bb25f1489e555ee6eaa11dbc",
+    "kind": "figure",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 58.21141532516479,
+      "t": 371.3819093963896,
+      "r": 520.9676242484851,
+      "b": 37.62872171959805,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/12\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 4
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/12"
+    ],
+    "raw_item_children_count": 77,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/12",
+      "label": "caption",
+      "page_no": 4,
+      "bbox": {
+       "l": 137.1401,
+       "t": 31.353255200000035,
+       "r": 447.89341587999985,
+       "b": 24.32353880000005,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient.",
+      "orig": "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_ff559628839e03e75b401405",
+    "kind": "figure",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 74.81478237195137,
+      "t": 738.1831817016601,
+      "r": 246.70900683463333,
+      "b": 528.5921416480988,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 4
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_339398d8818bdc3f9beb9a84",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 363.91106795999997,
+      "t": 424.4822371,
+      "r": 544.46007128,
+      "b": 402.1780646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/9",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "W e = \\frac { ( \\rho _ { g a s } ) ( L _ { o p e n } ) ( V _ { g a s } - V _ { l i q } ) ^ { 2 } } { \\sigma _ { l i q } }",
+    "transcription_length": 121,
+    "original_text_as_given": "We .0136 .0133ρgas .0134.0133L open.0134.0133V gas - V liq.0134 2 σ liq (5)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(5)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 3,
+     ")": 3,
+     "[": 0,
+     "]": 0,
+     "{": 8,
+     "}": 8
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb"
+   },
+   {
+    "id": "CAND_b0e478a589c7f3a4a4b3a6bf",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 360.67961344,
+      "t": 480.2585514,
+      "r": 544.46007128,
+      "b": 458.3040646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/8",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "T M R = \\frac { \\dot { m } _ { l i q } V _ { l i q } \\cos \\theta _ { p t } } { \\dot { m } _ { g a s } V _ { g a s } + \\dot { m } _ { l i q } V _ { l i q } \\sin \\theta _ { p t } }",
+    "transcription_length": 178,
+    "original_text_as_given": "TMR .0136 _m liq V liq cos θ pt _m gas V gas .0135 _m liq V liq sin θ pt (4)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(4)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 13,
+     "}": 13
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb"
+   },
+   {
+    "id": "CAND_d73feefec476f38a89bcebcb",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 346.3946793,
+      "t": 732.4879081400001,
+      "r": 544.5018058,
+      "b": 703.6142646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/5",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "L _ { o p e n , \\max } = \\frac { R _ { p o s t } - \\sqrt { R _ { p o s t } ^ { 2 } - A _ { c g } ( \\sin \\theta _ { p t } / \\pi ) } } { \\sin \\theta _ { p t } \\cos \\theta _ { p t } }",
+    "transcription_length": 180,
+    "original_text_as_given": "L open ; max .0136 R post - .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 R 2 post - A cg.0133sin θ pt∕π.0134 q sin θ pt cos θ pt (2)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(2)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 11,
+     "}": 11
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb"
+   },
+   {
+    "id": "CAND_fbce17fe8aa1f64cb217689f",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 360.73615352,
+      "t": 540.8669728,
+      "r": 544.46007128,
+      "b": 506.3967161,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\begin{cases} \\, C _ { d } = \\frac { \\dot { m } _ { l i q } } { A _ { \\min } \\sqrt { 2 \\rho _ { l i q } \\Delta P _ { l i q } } } & A _ { c g } \\geq A _ { \\min } \\\\ \\, C _ { d } = \\frac { \\dot { m } _ { l i q } } { A _ { c g } \\sqrt { 2 \\rho _ { l i q } \\Delta P _ { l i q } } } & A _ { c g } < A _ { \\min } \\end{cases}",
+    "transcription_length": 318,
+    "original_text_as_given": "8 < : Cd .0136 _m liq A min .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 2ρliq ΔP liq p A cg ≥ A min Cd .0136 _m liq A cg .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 2ρliq ΔP liq p A cg < A min (3)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(3)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 24,
+     "}": 24
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_3daa39abfbacd389fae9ebcb"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(5)",
+    "(4)",
+    "(2)",
+    "(3)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+    "collection_counts": {
+     "texts": 89,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 81,
+     "formula": 4,
+     "caption": 1
+    },
+    "candidate_count_from_this_artifact": 6,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_2514_1_B36301#c00011",
+    "line": "Fig. 5 Definition of the spray angle."
+   },
+   {
+    "chunk_id": "DOC_DOI_10_2514_1_B36301#c00012",
+    "line": "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient."
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_3daa39abfbacd389fae9ebcb": {
+    "markdown_lines": 21,
+    "caption_like_lines": [
+     "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient."
+    ]
+   }
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 4,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "model_targets_as_given": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    4,
+    4
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "4": {
+     "figure": 2,
+     "formula": 4
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 2,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B36301#c00011",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "A developed in the 1950s for application to throttleable liquid",
+     "text_length": 1789
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B36301#c00012",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "A developed in the 1950s for application to throttleable liquid",
+     "text_length": 239
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

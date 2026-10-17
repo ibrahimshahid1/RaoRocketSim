@@ -1,0 +1,149 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "V-SP125-p014-015",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_2c5fc2d8fabfcfa1ebdfadc8",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_7723eff3420979a89543c95a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_1278d37a9f46bc6c8d91bc2e",
+   "state": "REJECTED",
+   "reason": "Eq. 1-13: exponent garbled ((gamma-1)'gamma); original prints T_i/T_x = (p_i/p_x)^((gamma-1)/gamma) = (V_x/V_i)^(gamma-1).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_3811b9c648222c7b1c784c95",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 1-10 matches: (1/2gJ)(v_x^2 - v_i^2) = C_p(T_i - T_x).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_41d63c9d6b57a919515534ca",
+   "state": "REJECTED",
+   "reason": "Eq. 1-12: exponent gamma rendered as a 'Y' factor and subscripts capitalised; original prints p_i V_i^gamma = p_x V_x^gamma = constant.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_71eb191c535403dfebf7446f",
+   "state": "REJECTED",
+   "reason": "Eq. 1-11: leading W-dot missing (starts with '='); original prints W = A_i v_i/(144 V_i) = A_x v_x/(144 V_x) = constant.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_f65be50546d9fdc615625b99",
+   "state": "REJECTED",
+   "reason": "Table 1-1 (terms): symbol column empty or garbled for most rows and two rows merged (e.g. 'Cpo Cv', '(Pelioj', '€e y').",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 14
+   }
+  },
+  {
+   "candidate_id": "CAND_53de0233a83cafd27c3adf0a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_a5e40032687349d45cea47f4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 1-4 (total-pressure ratio versus contraction ratio, gamma 1.2 and 1.4); caption 'Figure 1-4' not linked by Docling.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_d52dceae9a7f7be3b96267d3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_077d02e87a82dd330d561d2c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 1-15 p_inj/p_i = 1 + gamma M_i^2 matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_1989f36801ab50f52ce2ef0f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 1-16 p_t/(p_c)ns = [2/(gamma+1)]^(gamma/(gamma-1)) matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_8a0eab359a3216bea1bd2044",
+   "state": "REJECTED",
+   "reason": "Eq. 1-14: exponent gamma/(gamma-1) garbled ('gamma n (gamma-1)'); corrected form banked by F (300 dpi check).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_c37b18e3b22d52daafb32e05",
+   "state": "REJECTED",
+   "reason": "Fragment '=' only (left side of Eq. 1-14 split off).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF pp.14-15 renders (105 dpi; Eq. 1-14 region at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  }
+ ]
+}

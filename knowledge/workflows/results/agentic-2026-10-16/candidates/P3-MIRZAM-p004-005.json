@@ -1,0 +1,143 @@
+{
+ "packet": "P3-MIRZAM-p004-005",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_1991_1982",
+ "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+ "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+ "pages": [
+  4,
+  5
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_1991_1982/p0004.png",
+   "sha256": "88b354980dd5faca15bbf1487b0304d3d057deb62f711f0ece80beecc076d2d4",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_1991_1982/p0005.png",
+   "sha256": "5261a74ac780fccbcaac8775c35802ae93ac3e73c9a7d9c0b9b34438a06af152",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_21dc8c632591fa7182095568",
+  "ENR_ad6a39d933fbecbc70373084"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_32ff3ade48dffb3f436d12dd",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 121.33333333333334,
+     "t": 542.1858366666667,
+     "r": 308.66666666666663,
+     "b": 524.51917,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "s t _ { \\mathfrak { g } ^ { 2 } } = C _ { \\mathfrak { x } } \\left [ \\ \\{ z \\ \\ ( R e _ { \\mathfrak { x } } ) \\} ^ { \\alpha } \\ \\Pr ^ { b } \\right ]",
+   "original_text": "ot b St,= Cx{ (2 (Rey)) Pr J 3 (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_ad6a39d933fbecbc70373084",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_1991_1982/ee23dd29f600-p4-4-6d011da1e7c44740025404565f0f979f8af38926fb4c1f40bc38c8be5dc5e4bc.json",
+   "raw_sha256": "27e0344a11f3b8634acc7ebd95cb9cca27fbaab70063f7c8da64b8922f4326bd",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00009",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "AIAA/ 14 E/Al EE 27th Joint Propulsion Conference June 24-26, 1991 / Sacramento, CA I I > Introduction",
+   "text": "adjacent to the chamber wall is defined in 4 terms of an entrainment fraction. This coefficient which depends on coolant/freestream velocity ratio and subsonic (or supersonic) flow, was determined by d experiments at Aerojet. Test data have indicated circumferential variations in the entrainment fraction due to phenomena such as increased free-stream turbulence, flow turning, discontinuous coolant slot effects, and propellant injector effects. This latter phenomenon called \"streaking\"\n\nis the source of a local hot/cold spot on the gas-side wall.\n\nThe turbulent gas-side heat transfer coefficient for film and regenerative cooled walls is determined by an empirical correlation for the local Stanton number derived recently at Aerojet. It includes a complicated function for the local Reynolds number,\n\nEquation (1) allows the calculation of wall hg values with film cooling if the position dependent correlation (empirical) coefficient, C , , without film cooling is known. This case is encountered very often\n\nin the rocket engine industry. The CX value permits a curve fit of the model predicting local heat flux profile to the\n\nactual calorimetric test data.\n\nv The film cooling model has been generalized to allow for injection at a given mixture ratio. When a non-zero inlet v mixture ratio is used, barrier cooling is simulated by reducing the entrainment fraction. The method of superposition allows modeling regenerative cooling in conjunction with both film and barrier cooling inside the chamber."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00010",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "AIAA/ 14 E/Al EE 27th Joint Propulsion Conference June 24-26, 1991 / Sacramento, CA I I > Introduction",
+   "text": "Design Approach\n\nThe absence of circumferential heat flux data to simulate the real behavior of coolant channels is a serious limitation in designing for reliability and robustness. The approach has been to scale available calorimeter (1 dimensional) heat flux data to the appropriate chamber pressure and mixture ratio of interest. other issues that have not properly entered into the design criteria are sensitivity of channel\n\nlocalized effects on the type of failure mode under consideration, channel flow maldistribution and gas-side wall oxidation. In addition, the important factors influencing the design approach are cycle requirements and design constraints. The former consists of engine mission, thrust, specific impulse, chamber pressure, propellants/mixture ratio, cost, and v weight. The most important design constraint is the limitation on the regenerative coolant pressure drop which is a function of the allowable gas-side wall temperature, pump discharge pressure, v coolant flow direction, coolant passage geometry including a constraint on the number of channels, and flow rate. Chamber\n\nlength and diameter, convergence angle, chamber/nozzle attachment location, and nozzle exit area ratio are some of the geometric constraints imposed on the cooling design. Large chambers (i.e. high thrust, low chamber pressure) have been of tubular construction because of weight and flexibility-in-cooling advantages. With the current trend toward higher heat loads"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00011",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "AIAA/ 14 E/Al EE 27th Joint Propulsion Conference June 24-26, 1991 / Sacramento, CA I I > Introduction",
+   "text": "(i. e. high chamber pressure) , advanced designs using channel wall construction with high thermal conductivity materials\n\nand low fabrication cost are emerging.\n\nThe allocated chamber pressure drop for the GG cycle was determined as a function of coolant heat load and flow rate by performing system studies with hydrogen as the chamber coolant flowing in a direction opposite to the flow of the combustion gases. sensitivity studies involving coolant flow direction as a function of nozzle interface area ratio indicated that for an area ratio of seven and below, the counterflow coolant arrangement produced lower pressure drop. The bulk temperature of the coolant entering the high heat flux region at the throat was seen to strongly influence the\n\noverall pressure drop. Since a mixer would be required for coolant flows less than\n\n100% of the total fuel flow (see Figure 1). the system requires a chamber cooling design which optimizes pumping power requirements, mixer design, specific imDulse loss. and sensitivitv to channel toierance effects. Initially, the philosophy for designing the channels was based on a circumferentially averaged chamber wall temperature (due to the nature of calorimeter data) with added barrier cooling to control the maximum wall mixture ratio. The design criteria called for sizing the channels under a so called hot channel scenario. The design temperature and the amount of mixture ratio biasing were determined from reliability studies of hydrogen cooled chambers as a function of"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00012",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "AIAA/ 14 E/Al EE 27th Joint Propulsion Conference June 24-26, 1991 / Sacramento, CA I I > Introduction",
+   "text": "chamber pressure. The objective is to avoid any chemical reaction between wall and gas which will adversly affect wall heat transfer conductance and decrease the chamber life. Wall blanching and surface roughening results from the incompatability between wall and environment. For every material, the surface oxidation rate (i.e wall blanching and surface roughening) is a\n\nfunction of local oxygen concentration as well as pressure and temperature. The results from the reliability studies indicated that for a H2/02 copper chamber at 2250 psia pressure, a maximum wall mixture ratio of five at an average wall temperature of 900F (755 K) was compatable. The number of channels was also taken into consideration in an attempt to lower the cost of fabrication and producibility. To prevent the possibility of sonic choking at bends, contractions, or exit/entrance regions, coolant velocities were limited t o a Mach number(Ma) of 0.35. High aspect ratio (i.e. 8 ) dual width channels with surface roughness to enhance heat transfer were selected. This type of channel is"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00013",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "AIAA/ 14 E/Al EE 27th Joint Propulsion Conference June 24-26, 1991 / Sacramento, CA I I > Introduction",
+   "text": "b\n\ndesigned by specifying one width for the throat region and another width for the barrel/nozzle regions. At the throat, the Spacing (i.e. land width) between adjacent channels is also specified. Once the channels were configured, the nominal channel was defined by introducing film cooling. The amount of film cooling added was dictated by the desired average wall temperature (i.e. lower than 900~). Coolant exit conditions were then based on the nominal channel. Table 1 summarizes the previous design criteria used."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00014",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "s",
+   "text": "the coolant exit conditions as well as the maximum wall temperature are determined by -\n\nremoving the streaking, flow\n\nmaldistribution, and thicker wall effects,\n\nand by adding film cooling as necessary to iachieve a desired maximum wall temperature based on life cycle requirements. Fundamental to arriving at an optimum chamber cooling system is integrated analysis which consists of taking into account all important effects (i.e. system/component) in the final design.\n\nThe main deficiency in the design criteria of Table 1 was in sizing the hot channel. In reality, the hot channel should represent a worst case scenario where there is no dependence on fuel film cooling, and local hot spots exist along the walls of this channel due to injector streaking effects. In addition, the Coolant flow through the hot channel has been reduced due to an increase in flow resistance. In normal operating conditions, a channel will benefit from fuel film cooling and not be exposed to streaks or any causes for coolant flow maldistribution. The performance of the nominal channel will represent the average coolant exit conditions. For chamber survivability, however, the channels are designed to accommodate the hot walls.\n\nBased on the above rationale, a chamber design criteria has recently been\n\nformulated by Aerojet that includes sizing the channels according to new conditions defined under the \"hot channel\" scenario but whose performance characteristics are based on an improved \"nominal channel\" scenario. For a pre-established chamber length and diameter based on weight/volume and combustion stability considerations, channel design is performed with barrier cooling as needed to avoid wall blanching. with the aid of recent Aerojet calorimeter measurements (Fall, 1990) which included segmented axial circuits in the chamber section for limited circumferential data, the injector streaking effect was taken"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00015",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "s",
+   "text": "into account by a 10% increase in chamber heat flux. Flow maldistribution due to the combined effects of channel inlet manifold, manufacturing tolerance, and streaking (i .e. increased flow resistance) is accounted for by reducing the actual flow through the channel by 10%. The channels are designed with an over-sized wall (i.e. thicker than nominal) for heat transfer but with an under-sized wall (i.e. thinner than nominal) for strength. With a thicker wall, the heat transfer conductance is\n\nreduced, and with a thinner wall, the\n\nchannel is designed to withstand the pressure differential across the wall. A maximum channel depth to width ratio of seven is allowed based on current chamber manufacturing techniques. The allowable design gas-side wall temperature is set to a relatively high value based on sensitivity of the material yield strength. Table 2 summarizes the \"hot channel\" design criteria. With a channel profile at hand,\n\nChamber cooling designs for the GG cycle were performed with the advanced philosophy summarized in Table 2 . These results were then compared with the cooling designs obtained based on the former design philosophy (Table 1) in order to assess the relative impact on the performance of the system. Besides the advantage of designing to a maximum wall temperature, the advanced chamber desisn criteria offers a comoromise between pump power requirement and engine specific impulse."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00016",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "s",
+   "text": "Former Design Philosophy\n\nThe percent flow through the jacket at a given barrier mixture ratio (MRb) was varied and the resulting pressure drop was obtained. For a cost efficient fabrication process, however, it was necessary to specify the number of channels in the u design. Thus, at each flow rate, the channel geometry was optimized to produce the same number of channels at minimum pressure drop. The minimum number of channels required was obtained by a sensitivity analysis at the given engine operating conditions as depicted in Figure 2 . Since the amount of flow through the jacket was unknown at this point, full flow\n\n(i.e. 100%) was considered. The selected range for barrier mixture ratio conformed to the wall mixture ratio limitation. The results according to Figure 2 indicated that based on Mach number limitation, 325 channels would be the minimum number obtainable and that the number of channels would become insensitive to coolant pressure drop and Mach number above 4 2 5 . Thus, parametric studies were performed to obtain the optimum flow split by selecting 372 channels at the first iteration. Figure 3 shows the flow split at each barrier mixture ratio which satisfies the design criteria. The results indicate the relation between component and system performance. Every pressure drop curve is associated with a curve for maximum Mach number at a given barrier mixture ratio. Independent of the constraint on local Mach number (the channel maximum Mach number is -"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00017",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "s",
+   "text": "limited t.o 0.35 to avoid the possibility of sonic chocking), an optimum coolant flow rate exists at a given barrier MR which yields minimum pressure drop. As the barrier MR is reduced, the required coolant\n\nflow to maintain the limit on Mach number becomes more flexible in range. At high MR, at least 8 0 % coolant flow is necessary. The optimum design was selected based on a"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

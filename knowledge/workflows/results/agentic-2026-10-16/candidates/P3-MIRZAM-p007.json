@@ -1,0 +1,56 @@
+{
+ "packet": "P3-MIRZAM-p007",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_1991_1982",
+ "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+ "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+ "pages": [
+  7,
+  7
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 7,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_1991_1982/p0007.png",
+   "sha256": "ac6eb617e6176824e27e7b9ae9deca95cb36ab6a0f7e989f9f914bb672ac85d4",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_f3075a9838ec25e5b82fa2dc"
+ ],
+ "candidates": [],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00023",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "-",
+   "text": "TABLE 1 Initial Chamber Design Criteria\n\n(GG Cycle)\n\nDESIGN COMMENT/VALUE\n\n~ Channel Configuration Mill-Slotted, Dual Width Channel Aspect Ratio a Maximum Coolant Mach No. .35\n\nConditions to Size Channels:\n\nFuel Film Cooling None Barrier Mixture Ratio A s Needed\n\nCas-Side Wall Temp.(F) 9 0 0 .\n\nMaximum Wall Mixture Ratio 5 Allowance for Streaks None Channel Tolerances Oversized Wall for Heat Transfer\n\nUndersized Wall for Strength Performance of the Channel: Amount of Fuel Film Cooling Defines wall Temperature and Coolant Pressure Drop\n\n\"HOT CHANNEL\"\n\nW\n\nW\n\nDESIGN\n\nChannel Configuration Channel Asoect Ratio Maximum Coolant Mach No. Fuel Film Cooling Barrier Mixture Ratio Maximum Wall Mixture Ratio\n\nCOMMENT/VALUE\n\nMill-Slotted, Dual Width"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00024",
+   "page_start": 7,
+   "page_end": 7,
+   "section": "- > 7 .35 None As Needed",
+   "text": "Maximum Wall Mixture Ratio 5 Allowance for Streaks Increase Heat Flux by 10% Allowance for Flow Maldistribution 90% of Actual Flow Gas-Side Wall Temp.(F) 1050 (Depends on Material) Wall Thickness Tolerance, in. .005 (Oversized for Heat Transfer, Undersized\n\nfor Strenath) ~~~ ~ ~~~~ Channel Width Tolerance, in. .002 (oversized' for Strength) \"NOMINAL CHANNEL''\n\nfor Strenath) ~~~ ~ ~~~~ Channel Width Tolerance, in. .002 (oversized' f\n\nStreaks None Flow Maldistribution None Wall Thickness Reduced by .005 in. ** Select Fuel Film Cooling According to Desired Maximum Wall Temperature ** Defines coolant Exit Conditions -_________-_______--____________________-----------------"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

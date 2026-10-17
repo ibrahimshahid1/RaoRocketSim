@@ -1,0 +1,338 @@
+{
+ "packet": "P2-PARK-p006",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+ "source_pdf": "propulsion_texts/10.1007_s42405-022-00561-5.pdf",
+ "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+ "pages": [
+  6,
+  6
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00561_5/p0006.png",
+   "sha256": "97533f1c2336b8b78032d102ae457f822902e09f44f3356953202ef4dedb1509",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a8ef84d99620c0d78febbeb7"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_cfc06134f41c6934d1bcd08f",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.29847832337962,
+     "t": 55.87377280029614,
+     "r": 91.95093239235078,
+     "b": 43.58624291560079,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d1d65d61dfc8d51ece34997c",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 49.61071998621793,
+     "t": 260.72389077932405,
+     "r": 542.7237663602892,
+     "b": 75.23444507082854,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1b3a30185bb15e85e4d80e36",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.9147577950682,
+     "t": 406.915581301362,
+     "r": 544.2677676157856,
+     "b": 384.3090800029081,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "H _ { 0 } = \\frac { \\sigma _ { s l i p } u _ { 2 } V _ { u 2 } } { g } = \\sigma _ { s l i p } H _ { E u l e r } ,",
+   "original_text": "H0 = σsl i pu2Vu2 g = σsli p HEuler , (10)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f20b02c32f0d29f15be852b1",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.91517167378095,
+     "t": 288.538234201148,
+     "r": 544.2586551862231,
+     "b": 278.8929384215651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "H _ { m a n o } = H _ { 0 } - h _ { l , v o l u t e } - h _ { l , e y e } .",
+   "original_text": "Hmano = H0 - hl, volute - hl, eye. (11)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4918758697e508911297d2d6",
+   "kind": "table",
+   "pages": [
+    6
+   ],
+   "table_grid": [
+    [
+     "Description",
+     "Parameter",
+     "Value",
+     "Impeller B"
+    ],
+    [
+     "",
+     "",
+     "Impeller A",
+     ""
+    ],
+    [
+     "Inlet diameter (mm)",
+     "D1",
+     "19",
+     "19"
+    ],
+    [
+     "Outlet diameter (mm)",
+     "D2",
+     "63",
+     "63"
+    ],
+    [
+     "Inlet angle (degree)",
+     "β1",
+     "14.5",
+     "14.5"
+    ],
+    [
+     "Discharge angle (degree)",
+     "β2",
+     "10",
+     "33"
+    ],
+    [
+     "Blade thickness (mm)",
+     "T",
+     "2.5",
+     "2.5"
+    ],
+    [
+     "Blade number",
+     "Z",
+     "4",
+     "4"
+    ],
+    [
+     "Inlet blade height (mm)",
+     "b1",
+     "2.9",
+     "2.9"
+    ],
+    [
+     "Outlet blade height (mm)",
+     "b2",
+     "1.5",
+     "1.5"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2 Impeller design parameters"
+   ],
+   "bbox": [
+    {
+     "l": 50.04417564811962,
+     "t": 477.3531714088642,
+     "r": 289.66823150163685,
+     "b": 284.49427731782356,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 10x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_dda1516b65418556b114deed",
+   "kind": "table",
+   "pages": [
+    6
+   ],
+   "table_grid": [
+    [
+     "",
+     "BLDC motor",
+     "Inverter"
+    ],
+    [
+     "Company",
+     "Plettenberg",
+     "ZTW"
+    ],
+    [
+     "Model",
+     "Teras 50/2 BM",
+     "Beast Pro 300A"
+    ],
+    [
+     "Weight (kg)",
+     "1.22",
+     "0.5"
+    ],
+    [
+     "Power density (kW/kg)",
+     "8.20",
+     "26.64"
+    ],
+    [
+     "Voltage (V)",
+     "37-51.8",
+     "22.2-44.4"
+    ],
+    [
+     "Maximum current (A)",
+     "N/A",
+     "300"
+    ],
+    [
+     "Velocity constant (RPM/V)",
+     "950",
+     "N/A"
+    ]
+   ],
+   "json_pointer": "/tables/1",
+   "caption_text": [
+    "Table 3 Specifications of the BLDC motor and inverter"
+   ],
+   "bbox": [
+    {
+     "l": 304.88038169277115,
+     "t": 719.6926725607582,
+     "r": 544.7703494844372,
+     "b": 598.8145862814112,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 8x3 (see table_grid; full cells in raw item /tables/1)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a8ef84d99620c0d78febbeb7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p6-6-8919eb94e7cb5b2f89b1fca60a604aafc63395a4f18715a406fff009fbed19a3.json",
+   "raw_sha256": "ec44dfe997035bda4d48e9052342d1c28eaa7a47bcd08ac98447186a03db880d",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00014",
+   "page_start": 5,
+   "page_end": 6,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "_<u>N</u>_ <sup>~~√~~</sup> _<u>Q</u>_\n_NSS_ =\n_N PSHre_ <sup>0</sup> <sup>_._</sup> <sup>75</sup>\n\n_._ (9)\n\n960 International Journal of Aeronautical and Space Sciences (2023) 24:955–969\n\nspace vector control is more controllable than a BLDC motor\nthatusesscalarcontrolandisnotcommercial.However,since\na BLDC motor, which is commonly used for drones and RC\ncars, has many advantages, such as low cost, high power\ndensity, and commercial products, it is easy to use and offers\nmany options. The power density of the commercial BLDC\nmotorofPlettenbergusedinthisstudywas8.20kW/kgwhich\nis higher than that of the motors used in other studies [6, 9].\nTherefore, the commercial BLDC motors and inverters for\ndrones and RC cars are used to build small EP systems considering the practical design. The specifications of the BLDC\nmotor and the inverter used in this study are shown in Table\n3. For stable and continuous DC performance during the performance tests, an AC/DC power supply was used instead of\nbatteries. Since a battery is replaced by a power supply, the\nmass of the battery was calculated based on a power density\nof 6.95 kW/kg used by Kwak et al. [6]. Thus, the total mass\nof the electrical components was about 3.1 kg (Fig. 4).\n\n**Table 2** Impeller design parameters\n\nDescription Parameter Value\n\nImpeller A Impeller\nB\n\nInlet diameter (mm) D1 19 19\n\nOutlet diameter (mm) D2 63 63\n\nInlet angle (degree) β1 14.5 14.5"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00015",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "**Table 3** Specifications of the BLDC motor and inverter\n\nBLDC motor Inverter\n\nCompany Plettenberg ZTW\n\nModel Teras 50/2 BM Beast Pro 300A\n\nWeight (kg) 1.22 0.5\n\nPower density (kW/kg) 8.20 26.64\n\nVoltage (V) 37–51.8 22.2–44.4\n\nMaximum current (A) N/A 300\n\n<u>Velocity constant (RPM/V)</u> <u>950</u> <u>N/A</u>\n\n**3 Methods**\n\n**3.1 Theoretical Method**\n\nThe theoretical performance of the pump was calculated\nbasedonaone-dimensionalflowanalysisconsideringEuler’s\npump equation and the pressure loss in the pump. The proposed head loss model in the pump was used, which includes\nslippage head loss, volute head loss, and eye head loss [23].\nThe water head at impeller outlet (H0), which takes into\naccount the slippage head loss at the impeller exit, can be\nexpressed as Eq. (10):\n\n_H_ 0 = <sup>_σslipu_</sup> <sup><u>2</u></sup> <sup>_Vu_</sup> <sup><u>2</u></sup> = _σslip_ _HEuler_, (10)\n\n_g_\n\nwhere _σslip_ indicates the slip factor. The manometric head\n(Hmano), which is the difference between the static heads\nbetweenthepumpoutletandthepumpinlet,canbecalculated\nby subtracting the volute head loss (hl,volute) and eye head loss\n(hl,eye _)_ from the actual head and can be expressed as Eq. (11):\n\n_Hmano_ = _H_ 0 − _hl_, _volute_ - _hl_, _eye._ (11)\n\nDischarge angle\n\n(degree)\n\nβ2 10 33\n\nBlade thickness (mm) T 2.5 2.5\n\nBlade number Z 4 4\n\nInlet blade height\n\n(mm)\n\nOutlet blade height\n\n<u>(mm)</u>\n\n**Fig. 4** Details of impeller\nassembly ( **a** ) and volute\ngeometry ( **b** )"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00016",
+   "page_start": 6,
+   "page_end": 7,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "b1 2.9 2.9\n\nb2 1.5 1.5\n\nInternational Journal of Aeronautical and Space Sciences (2023) 24:955–969 961\n\n**Table 4** Condition for numerical analysis\n\nAnalysis type Steady-state\nanalysis\n\nWorking fluid Cold-water, LN2,\n\nLCH4\n\nTurbulence model SST k-ω\n\nBoundary condition Inlet Pressure\n\nOutlet Mass flow rate\n\nWall No slip\n\nMesh Type Polyhedral\n\nNumber of elements 1,861,972\n\n<u>Inflation layer</u> <u>5</u>\n\nThe volute head loss includes friction losses, diffusion\nfriction losses, losses due to the vanishing of radial flow at\nthe volute outlet, and losses within the pump volute throat.\nDetails of the individual head loss models were described\nprevious study [15].\n\n**Fig. 5** Mesh of pump assembly ( **a** ) and impeller ( **b** )\n\n**Fig. 6** Inflation layer of meshed\nmodel\n\n**3.2** **Numerical Method**\n\nFor the flow analysis and the estimation of the pump\nperformance, a numerical analysis was performed using\nthe commercial software ANSYS CFX, which numerically\nsolves the Navier–Stokes equations based on the finite element method. Steady-state analysis was performed using\ncold-water, LN2, and LCH4 as working fluid. The condition\nfor numerical analysis is shown in Table 4.\n\nThe turbulence model is the shear stress transport k-omega\n(SST k-ω), which is a hybrid turbulence model combining\nthe advantages of the standard k-ω and k-ε model. It has been\nwidely used to predict flow in centrifugal pumps and inducers\nsince it is found to be applicable for the accurate prediction\nof flow under adverse pressure gradient and accounts for the\ntransport of the turbulence shear stress [24–26]. Inlet and\noutlet boundary conditions are pressure and mass flow rate,\nrespectively. Free slip and no-slip condition were used for\nboundary conditions of wall and impeller, respectively. The\nmesh was generated as a polyhedron with an inflation layer\nof 5. Figures 5 and 6 show the mesh of the pump assembly,\nimpeller, and inflation layer, respectively. In order to select\nthe number of elements, CFD was performed by changing"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 2,
+   "table": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

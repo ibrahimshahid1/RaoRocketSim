@@ -33,4 +33,8 @@ build/
 knowledge/vector_index/
 knowledge/.work/
 knowledge/graph/graph.graphml
-knowledge/
+# Do not ignore all of knowledge/: tracked kg modules import kg/*.py files that
+# would otherwise be missing from a checkout, and reviewed extraction and
+# verification journals are authoritative evidence. Timestamped validation
+# snapshots are regenerated history; latest_validation.json stays tracked.
+knowledge/reports/validation_20*.json

@@ -1,0 +1,308 @@
+{
+ "packet": "P2-PARK-p010-011",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+ "source_pdf": "propulsion_texts/10.1007_s42405-022-00561-5.pdf",
+ "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+ "pages": [
+  10,
+  11
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00561_5/p0010.png",
+   "sha256": "a69ac76ea8496573a36715ad7dab14ec57389c68d08b193cacfca805a9c13bc0",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 11,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00561_5/p0011.png",
+   "sha256": "360e35502a9fbb7c9547525c52ff13d319a5dc486fbb33bf0f7414161ec2af80",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_5ce8fcb24cee8978f9be5e61",
+  "ENR_dfa4b5f1a55861d69622b132"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_507bf8837ea17eda446a0b88",
+   "kind": "figure",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.2773781927992,
+     "t": 56.03731930862216,
+     "r": 60.4599171565267,
+     "b": 44.04264751850042,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5ce8fcb24cee8978f9be5e61",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p10-10-641e179bdb0013783a557b6057fc521302f5da8a0b328421af867070d1dd035a.json",
+   "raw_sha256": "55f9d7bc54b6f35d0b67a5b16862ca3ce1b2a77f7e53af786ddd73503b399569",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d1c7cda29990ce0be4696929",
+   "kind": "figure",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 11 Post-processing of the test data using the kernel filter"
+   ],
+   "bbox": [
+    {
+     "l": 53.024544327191855,
+     "t": 544.5936248684774,
+     "r": 539.4419911933232,
+     "b": 209.21021907114834,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/25\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5ce8fcb24cee8978f9be5e61",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p10-10-641e179bdb0013783a557b6057fc521302f5da8a0b328421af867070d1dd035a.json",
+   "raw_sha256": "55f9d7bc54b6f35d0b67a5b16862ca3ce1b2a77f7e53af786ddd73503b399569",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f426eedcd96601928e21f528",
+   "kind": "figure",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 9 Cryogenic test facility (a) and configuration of main components (b)"
+   ],
+   "bbox": [
+    {
+     "l": 69.80233335154489,
+     "t": 733.940113593949,
+     "r": 523.5692674667051,
+     "b": 576.9809596016325,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5ce8fcb24cee8978f9be5e61",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p10-10-641e179bdb0013783a557b6057fc521302f5da8a0b328421af867070d1dd035a.json",
+   "raw_sha256": "55f9d7bc54b6f35d0b67a5b16862ca3ce1b2a77f7e53af786ddd73503b399569",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_7e1077a00f44d7aa61774664",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/223",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.0307237977343,
+     "t": 175.88609294412458,
+     "r": 544.2582865023131,
+     "b": 157.95341338692458,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "P _ { s h a f t } = \\left ( V I - I ^ { 2 } R \\right ) \\eta _ { i n v } \\eta _ { m o t o r } - P _ { l , m e c h } .",
+   "original_text": "Psha f t = ( V I - I 2 R ) ηinvηmotor - Pl, mech. (16)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5ce8fcb24cee8978f9be5e61",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p10-10-641e179bdb0013783a557b6057fc521302f5da8a0b328421af867070d1dd035a.json",
+   "raw_sha256": "55f9d7bc54b6f35d0b67a5b16862ca3ce1b2a77f7e53af786ddd73503b399569",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_dad0e284b3e2ce30a685cc3c",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/222",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03617655891101,
+     "t": 95.64136006691604,
+     "r": 289.14487688400163,
+     "b": 72.1339678247025,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\eta _ { h } = \\frac { P _ { h } } { P _ { s h a f t } } ,",
+   "original_text": "ηh = Ph Psha f t , (15)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5ce8fcb24cee8978f9be5e61",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p10-10-641e179bdb0013783a557b6057fc521302f5da8a0b328421af867070d1dd035a.json",
+   "raw_sha256": "55f9d7bc54b6f35d0b67a5b16862ca3ce1b2a77f7e53af786ddd73503b399569",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4bf7b212e5a10f34a13eff45",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 13 Performance curve derived by affinity law with 18,000 RPM data of type B impeller"
+   ],
+   "bbox": [
+    {
+     "l": 307.35567313994335,
+     "t": 536.4235156367287,
+     "r": 540.4746707513796,
+     "b": 392.01402362855316,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/54\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dfa4b5f1a55861d69622b132",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p11-11-408b4d49744d2622e3456dd08b5d0f350f7a1901a98fbaded92c52d53c055670.json",
+   "raw_sha256": "78029b2ba9c2cc8896c46a4e46a3e5de6b0b1e247afcb35bb1a647bee1ece9ac",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5528ac9c620149cc895c374d",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 12 Cold-water hydraulic performance test data and the theoretically developed pressure"
+   ],
+   "bbox": [
+    {
+     "l": 51.954484238054924,
+     "t": 734.2094313655424,
+     "r": 540.9257212856215,
+     "b": 576.6541411966548,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dfa4b5f1a55861d69622b132",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p11-11-408b4d49744d2622e3456dd08b5d0f350f7a1901a98fbaded92c52d53c055670.json",
+   "raw_sha256": "78029b2ba9c2cc8896c46a4e46a3e5de6b0b1e247afcb35bb1a647bee1ece9ac",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b9edd6955a731cfaabd416a4",
+   "kind": "figure",
+   "pages": [
+    11
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 502.3698618768269,
+     "t": 55.73964025354212,
+     "r": 544.1382447419646,
+     "b": 43.84572043552714,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_dfa4b5f1a55861d69622b132",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00561_5/f2a2025cc78d-p11-11-408b4d49744d2622e3456dd08b5d0f350f7a1901a98fbaded92c52d53c055670.json",
+   "raw_sha256": "78029b2ba9c2cc8896c46a4e46a3e5de6b0b1e247afcb35bb1a647bee1ece9ac",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00022",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "964 International Journal of Aeronautical and Space Sciences (2023) 24:955–969\n\n**Fig. 9** Cryogenic test facility ( **a** ) and configuration of main components ( **b** )\n\n**Fig. 10** Efficiency of inverter ( **a** ) and mechanical power loss over rotational speed ( **b** )\n\n**Fig. 11** Post-processing of the test data using the kernel filter\n\n_ηinvηmotor_ - _Pl_, _mech._ (16)\n\nbe calculated by multiplying the volume flow rate with the\ndeveloped pressure. The Psupply can be calculated by multiplying the voltage and the current measured at the power\nsupply. The wire resistance was measured to be 18 m _�_ . The\nηmotor was 90% as specified by the manufacturer.\n\n_Pshaf t_ =\n\n_V I_ - _I_ <sup>2</sup> _R_\n\n_<u>Ph</u>_\n_ηh_ =\n_Pshaf t_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00023",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": ", (15)\n\nThe ηinv and mechanical power loss (Pl,mech) were experimentally measured, as shown in Fig. 10. The inverter used\nin this study comprises an electronic speed controller for\nBLDC motor controlled using pulse with modulation (PWM)\nmethod and a motor driver that control the power and speed\nof the motor by adjusting the duty cycle of the PWM signal."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00024",
+   "page_start": 11,
+   "page_end": 11,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "International Journal of Aeronautical and Space Sciences (2023) 24:955–969 965\n\n**Fig. 12** Cold-water hydraulic performance test data and the theoretically developed pressure\n\nThe ηinv is affected by the loss due to the internal resistance\nof the inverter and the loss due to field effect transistor (FET)\nswitching. In this study, assuming that the ηinv is a function\nof rotational speed [27], the ηinv was measured by operating\nthe pump under no-load condition without a working fluid.\nThe ηinv was calculated by dividing the inverter output power\nby the input power. The ηinv was measured to vary depending on the rotational speed, current, and voltage. At very\nlow rotational speeds of less than 10,000 RPM, there was\nsignificant difference in ηinv depending on the voltage. However, the change in the ηinv depending on the voltage was\nnot considered because the voltage was fixed in the study.\nMoreover, since the ηinv converged to approximately 80%\nfor both the current and rotational speed used in the test, the\nηinv was assumed as 80%. The Pl,mech is power loss due to\nfriction between the shaft of the pump and the bearings and\nseals, which is proportional to the rotational speed. Pl,mech\nwas calculated by measuring the power consumed by the\nmotor under no-load condition and the inverter output power\nunder no-load condition was divided by the ηmotor.\n\nAs shown in Fig. 11, post-processing of the steady state\ndata was performed using a kernel filter with a rate of 50 Hz\nand a filter sample size of 51. The yellow area in Fig. 11\nmeans a steady-state area after the flow is stabilized at the\ntest target rotational speed. The mean value of the data in the\nyellow area was used as the test result."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00561_5#c00025",
+   "page_start": 11,
+   "page_end": 11,
+   "section": "**Design and Verification of Electric Pump for Small LOX/Methane** **Rocket Engine** > 123",
+   "text": "**4.1** **Cold-Water Test**\n\nIn this section, the affinity laws for pumps with a constant\nimpeller diameter are verified using the test results. In addition, by comparing the numerical and theoretical analysis\nresults with the test results, the reliability of the numerical\nand theoretical analyses was evaluated. Finally, the hydraulic\nperformance of the pump with type A and type B impellers\nwas compared by estimating the performance at the design\npoint based on a theoretical analysis.\n\n**Fig. 13** Performance curve derived by affinity law with 18,000 RPM\ndata of type B impeller\n\n**4.1.1** **Hydraulic Performance**\n\nFigure 12 shows the theoretically developed pressure based\non the above head loss model and the cold-water hydraulic\nperformance test data. The head loss model was validated\nby comparing the test data and theoretical value. The trends\nof the performance curves of both values are similar, but\nthere are some differences in the values. The friction loss\nincreases with increasing flow rate, while the slippage loss,\nshock loss, and leakage loss increase with decreasing flow\nrate, Therefore, the difference between the theoretical value\nand experimental value increases at the low flow rate because\nthe actual values of slippage loss, shock loss, and leakage loss\nwere smaller than the calculation. However, considering that\nthe measurement error of rotational speed in the experimental\nenvironment was ± 5%, the head loss model was consistent\nwith the test data. Figure 13 shows the test data and performance curves calculated using the affinity law based on the\ntest data with a rotational speed of 18,000 RPM. The affinity\nlaw was verified by comparing the test data and the values\ncalculated using the affinity law."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 6,
+   "formula": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

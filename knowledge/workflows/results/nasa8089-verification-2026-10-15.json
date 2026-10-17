@@ -1,0 +1,47 @@
+[
+  {
+    "object_id": "EQ_NTRS_19760023196_65647A04",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Independent fresh rendering of the original PDF page 33 (printed page 24) confirms Eq. (5): rho_f V_f^2 (A S + 2 ell C)/(rho_o V_o^2 S ell) = 1. The numerator has the fuel density and squared fuel velocity, the parenthesis contains a plus sign and the factor 2 multiplying ell C, and the denominator has the oxidizer density, squared oxidizer velocity, S and ell. The page explicitly introduces this as a liquid/liquid correlation for oxidizer injected through slots in the pintle, adapted from reference 10, with Figure 4 showing inner slots and outer annulus. It defines A as fuel-slot/annulus width, S as oxidizer-slot width, ell as oxidizer-slot length, and C as a cross-influence term defined in reference 10; all four lengths are printed in inches. The subsequent note reports the same expression also found applicable to gas/liquid designs according to reference 38. This review does not recover C's definition from reference 10 or establish a computable universal design correlation.",
+    "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+    "evidence": {
+      "document_id": "DOC_NTRS_19760023196",
+      "source_pdf": "propulsion_texts/19760023196.pdf",
+      "pdf_page": 33,
+      "printed_page": 24,
+      "equation_number": "5",
+      "method": "Independent visual comparison against a fresh PyMuPDF rendering made directly from the original scanned PDF; checked subscripts, velocity squares, plus sign, parenthesis and denominator against printed notation rather than Docling/OCR output.",
+      "render_path": "knowledge/.work/nasa_injector/p33.png",
+      "render_sha256": "928bcb1216162b18548fdb7b1eab4010fbc0f944ac56ea5d029cd1a448ee65af",
+      "independent_render_sha256": "296a5efdbe1a6e1cd26ffcf876e0be16bcf19a13b1dc5391899876da46b18e38",
+      "extraction_file": "knowledge/workflows/results/nasa8089-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "eec194c55af2fdf72fd83406f8407a7255b3491e99bcbf1573a1cad3e3160463",
+      "reviewed_at": "2026-10-15T06:39:50+00:00",
+      "unresolved_source_dependency": "The page delegates the definition of C to reference 10; that reference was not inspected in this bounded review."
+    },
+    "scope_note": "Confirms this source transcription, listed geometric meanings/units and local context only. Does not establish the reference-10 C relation, numeric applicability bounds, calibration, software correctness or physical/hardware qualification. This equation is not the repository's momentum-resultant spray-angle relation and receives no implementation/model-support endorsement from this verdict."
+  },
+  {
+    "object_id": "EQ_NTRS_19760023196_D636F1EE",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Independent fresh rendering of original PDF page 35 (printed page 26) confirms Eq. (6): cos(90 degrees - theta) = 0.2 (V_g/V_l)(d_g/d_l)(rho_g/rho_l)^(1/2). The printed angular argument has a minus sign, the coefficient is 0.2, both velocity and diameter ratios have gas in the numerator and liquid in the denominator, and the density ratio alone has exponent one-half. The sentence immediately below limits this expression's stated optimum-mixing configuration to two opposed liquid jets penetrating into a central gaseous jet; it directs other configurations to other expressions in references 12 and 20. The degree unit matches the printed 90-degree argument. The other quantities occur as ratios and require internally consistent velocity, diameter and density units; no numerical validity envelope is supplied by this page-level verification.",
+    "source_sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44",
+    "evidence": {
+      "document_id": "DOC_NTRS_19760023196",
+      "source_pdf": "propulsion_texts/19760023196.pdf",
+      "pdf_page": 35,
+      "printed_page": 26,
+      "equation_number": "6",
+      "method": "Independent visual comparison against a fresh PyMuPDF rendering directly from the original scanned PDF; checked the angular minus sign, gas/liquid ratio directions, square-root exponent, and configuration statement below the equation.",
+      "render_path": "knowledge/.work/nasa_injector/p35.png",
+      "render_sha256": "030967a7ce0c329f9a45934136c20e57e9f25bf1467adf42f6ce37768bca98c0",
+      "independent_render_sha256": "91c9645338c40dc93b760d9223c0609ee8e35659fb6390be09865e3bc41e8dec",
+      "extraction_file": "knowledge/workflows/results/nasa8089-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "eec194c55af2fdf72fd83406f8407a7255b3491e99bcbf1573a1cad3e3160463",
+      "reviewed_at": "2026-10-15T06:39:50+00:00"
+    },
+    "scope_note": "Confirms source formula and opposed-liquid-jets/central-gas configuration only. No transfer to a generic pintle or momentum-resultant spray-angle model, numeric validity bounds, software validation, experimental validation or qualification is inferred."
+  }
+]

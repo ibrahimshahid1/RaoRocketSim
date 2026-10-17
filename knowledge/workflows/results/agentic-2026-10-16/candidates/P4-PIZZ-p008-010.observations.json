@@ -1,0 +1,1001 @@
+{
+ "packet": "P4-PIZZ-p008-010",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [],
+   "queue_reason": "P4 Pizzarelli 2011 energy equation, Nusselt correction and EOS (Eqs. 12-21)",
+   "queue_pages": [
+    8,
+    10
+   ],
+   "queue_document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "queue_source_pdf": "propulsion_texts/pizzarelli2011.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P4-PIZZ-p008-010.json",
+   "sha256": "caf07f00d730588004e5902d2e0572da51aab76a1153b67c03324b5ec167c39b",
+   "size_bytes": 23383,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "pages": [
+    8,
+    10
+   ],
+   "docling_run_ids": [
+    "ENR_57ba1de7d2f768a0f9f15849",
+    "ENR_c33ebbf47b43de957767ca36",
+    "ENR_d8b9f4ac70fef1938109c617"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "formula": 10,
+     "figure": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 499,
+    "records_now": 499,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pizzarelli2011.pdf",
+   "sha256_in_bundle": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "sha256_recomputed": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 8,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0008.png",
+    "dpi": 150,
+    "sha256_in_bundle": "24f527bf7a2db32407382cc89b7528f5c38d7e1bd36bb906658f3d5d5f104c02",
+    "file_exists": true,
+    "sha256_recomputed": "24f527bf7a2db32407382cc89b7528f5c38d7e1bd36bb906658f3d5d5f104c02",
+    "sha256_match": true
+   },
+   {
+    "page": 9,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0009.png",
+    "dpi": 150,
+    "sha256_in_bundle": "8202ef46ff7c255c43085fbec351b180a6a9e588e735ee814d32042cce238e24",
+    "file_exists": true,
+    "sha256_recomputed": "8202ef46ff7c255c43085fbec351b180a6a9e588e735ee814d32042cce238e24",
+    "sha256_match": true
+   },
+   {
+    "page": 10,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0010.png",
+    "dpi": 150,
+    "sha256_in_bundle": "40da38d1624ce2bffccf9a79dae0030bf92fdc9cdfe9cafa92dd5b98034af741",
+    "file_exists": true,
+    "sha256_recomputed": "40da38d1624ce2bffccf9a79dae0030bf92fdc9cdfe9cafa92dd5b98034af741",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_57ba1de7d2f768a0f9f15849",
+    "run_record_found": true,
+    "page_range": [
+     8,
+     8
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.json",
+    "raw_sha256_recorded": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.md",
+    "markdown_sha256_recorded": "fc33242d71e4bce56f460384ad56f9743c84e01a1c2eef763586d57e2e14591a",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "fc33242d71e4bce56f460384ad56f9743c84e01a1c2eef763586d57e2e14591a",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_c33ebbf47b43de957767ca36",
+    "run_record_found": true,
+    "page_range": [
+     10,
+     10
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+    "raw_sha256_recorded": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.md",
+    "markdown_sha256_recorded": "f76492bbb814c0d399f716bb501798beb07a0306d8b39b2091ff9aa93fe821cf",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "f76492bbb814c0d399f716bb501798beb07a0306d8b39b2091ff9aa93fe821cf",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_d8b9f4ac70fef1938109c617",
+    "run_record_found": true,
+    "page_range": [
+     9,
+     9
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+    "raw_sha256_recorded": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.md",
+    "markdown_sha256_recorded": "3363f6901c3f9401c18534cad49e3c60d1a6a5d156de892602bc1969e48a61fc",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "3363f6901c3f9401c18534cad49e3c60d1a6a5d156de892602bc1969e48a61fc",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.json",
+    "sha256_in_bundle": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+    "file_exists": true,
+    "sha256_recomputed": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+    "sha256_in_bundle": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+    "file_exists": true,
+    "sha256_recomputed": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+    "sha256_in_bundle": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+    "file_exists": true,
+    "sha256_recomputed": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "formula": 10,
+   "figure": 1
+  },
+  "candidates_total": 11,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_295a58e9701f17ae2bc31d58"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00014",
+     "occurrences": 3
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00015",
+     "occurrences": 5
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00018",
+     "occurrences": 8
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_295a58e9701f17ae2bc31d58",
+    "kind": "figure",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 125.04949951171875,
+      "t": 645.4059677124023,
+      "r": 380.2853698730469,
+      "b": 529.7147827148438,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [
+     "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_d8b9f4ac70fef1938109c617",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 9
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/3"
+    ],
+    "raw_item_children_count": 4,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/3",
+      "label": "caption",
+      "page_no": 9,
+      "bbox": {
+       "l": 122.0031,
+       "t": 518.0927274000001,
+       "r": 383.86561504,
+       "b": 510.93548780000003,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy.",
+      "orig": "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_ab9214e93bf81d96c8685e48",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 171.94955178,
+      "t": 330.06802138,
+      "r": 430.39324474,
+      "b": 304.72675078451886,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/6",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { d } { d x } \\left [ \\iint _ { A } ( \\rho u H _ { 0 } ) d A \\right ] d x = \\iint _ { A _ { w } } q _ { w } d A _ { w }",
+    "transcription_length": 125,
+    "original_text_as_given": "d dx ZZ A quH0 ð ÞdA \u0014 \u0015 dx ¼ Z Z Aw qwdAw ð12Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð12Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(12)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 1,
+     "]": 1,
+     "{": 8,
+     "}": 8
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_57ba1de7d2f768a0f9f15849"
+   },
+   {
+    "id": "CAND_c2e85fb42b6ac89f7c50af66",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 80.22082712000001,
+      "t": 152.51067120000005,
+      "r": 430.3952359799998,
+      "b": 129.74911898000005,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/8",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { \\partial } { \\partial x } [ \\rho ( y ) u ( y ) H _ { 0 } ( y ) b ( y ) d y ] d x = 2 q _ { w } ( y ) d y d x + q _ { c } ( y ) b ( y ) d x - q _ { c } ( y + d y ) b ( y ) d x",
+    "transcription_length": 182,
+    "original_text_as_given": "q qx ½qðyÞuðyÞH0ðyÞbðyÞdydx ¼ 2qwðyÞdydxþ qcðyÞbðyÞdx\u0000 qcðy þdyÞbðyÞdx ð13Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð13Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(13)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 9,
+     ")": 9,
+     "[": 1,
+     "]": 1,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_57ba1de7d2f768a0f9f15849"
+   },
+   {
+    "id": "CAND_6b14d21255577925c7f2e7f3",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 216.7937,
+      "t": 358.957655,
+      "r": 432.26404474000003,
+      "b": 336.70390156903767,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/10",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 9,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { k _ { t } } { k } = 0 . 0 0 8 \\cdot R e ^ { 0 . 9 }",
+    "transcription_length": 59,
+    "original_text_as_given": "kt k ¼ 0:008 \u0001 Re 0:9 ð15Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð15Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(15)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d8b9f4ac70fef1938109c617"
+   },
+   {
+    "id": "CAND_87ef5aa55fd90b57c5c5e658",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 220.59159591999997,
+      "t": 466.36247119999996,
+      "r": 432.26376419999997,
+      "b": 443.60091898,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/8",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 9,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "q _ { c } ( y ) = - k _ { t } \\frac { \\partial T } { \\partial y }",
+    "transcription_length": 65,
+    "original_text_as_given": "qcðyÞ ¼ \u0000kt qT qy ð14Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð14Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(14)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d8b9f4ac70fef1938109c617"
+   },
+   {
+    "id": "CAND_a49f77b5ae4b82226af7bdb5",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 221.21623145999996,
+      "t": 98.3343006,
+      "r": 432.26387109999996,
+      "b": 86.528114958159,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/16",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 9,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "N u = N u ^ { 0 } \\cdot C _ { h }",
+    "transcription_length": 33,
+    "original_text_as_given": "Nu ¼ Nu 0 \u0001 Ch ð18Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð18Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(18)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 2,
+     "}": 2
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d8b9f4ac70fef1938109c617"
+   },
+   {
+    "id": "CAND_ebf876e01603fc6c423f2cf2",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 182.15471394,
+      "t": 276.88986184000004,
+      "r": 432.26387109999996,
+      "b": 252.98958444000004,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/12",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 9,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { \\hat { c } } { \\hat { \\partial } x } ( \\rho u H _ { 0 } b ) = \\frac { \\hat { c } } { \\hat { \\partial } y } \\left ( k _ { t } b \\frac { \\hat { \\partial } T } { \\hat { \\partial } y } \\right ) + 2 q _ { w }",
+    "transcription_length": 211,
+    "original_text_as_given": "q qx quH0b ð Þ ¼ q qy ktb qT qy \u0012 \u0013 þ2qw ð16Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð16Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(16)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 15,
+     "}": 15
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d8b9f4ac70fef1938109c617"
+   },
+   {
+    "id": "CAND_fc0d5be81640fad8b06502fe",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 212.99650553999996,
+      "t": 192.35888420000003,
+      "r": 432.26271182,
+      "b": 182.33911495815903,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/14",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 9,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "q _ { w } = h _ { w } \\cdot ( T _ { w } - T )",
+    "transcription_length": 45,
+    "original_text_as_given": "qw ¼ hw \u0001 ðTw \u0000TÞ ð17Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð17Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(17)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_d8b9f4ac70fef1938109c617"
+   },
+   {
+    "id": "CAND_92bf03ebaca8fa45281b9b7a",
+    "pages": [
+     10
+    ],
+    "bbox": [
+     {
+      "l": 183.68934217999993,
+      "t": 333.9232278400001,
+      "r": 430.39818728,
+      "b": 324.40850648560007,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/8",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 10,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\mu = \\mu ( \\rho , T ) \\quad \\text {and} \\quad k = k ( \\rho , T )",
+    "transcription_length": 65,
+    "original_text_as_given": "m ¼ mðq; TÞ and k ¼ kðq; TÞ ð20Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð20Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(20)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 1,
+     "}": 1
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c33ebbf47b43de957767ca36"
+   },
+   {
+    "id": "CAND_a8055affbfe01cb40cc08f10",
+    "pages": [
+     10
+    ],
+    "bbox": [
+     {
+      "l": 231.5338,
+      "t": 107.99129319999997,
+      "r": 430.39344823999994,
+      "b": 84.93080156903761,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/12",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 10,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { \\Delta u } { \\overline { u } } = \\frac { \\Delta T } { \\overline { T } }",
+    "transcription_length": 79,
+    "original_text_as_given": "Du u ¼ DT T ð21Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð21Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(21)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c33ebbf47b43de957767ca36"
+   },
+   {
+    "id": "CAND_ae3af2be52c8fe4ee1f6436b",
+    "pages": [
+     10
+    ],
+    "bbox": [
+     {
+      "l": 180.79620313999982,
+      "t": 402.6910706000001,
+      "r": 430.3961947599999,
+      "b": 393.1763492456001,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/6",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 10,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "p = p ( \\rho , T ) \\quad \\text {and} \\quad H = H ( \\rho , T )",
+    "transcription_length": 61,
+    "original_text_as_given": "p ¼ pðq; TÞ and H ¼ Hðq; TÞ ð19Þ",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "ð19Þ",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(19)",
+    "trailing_token_delimiters_as_given": "ðÞ",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 1,
+     "}": 1
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c33ebbf47b43de957767ca36"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(12)",
+    "(13)",
+    "(15)",
+    "(14)",
+    "(18)",
+    "(16)",
+    "(17)",
+    "(20)",
+    "(21)",
+    "(19)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_with_non_ascii_delimiters_as_given": [
+    "CAND_ab9214e93bf81d96c8685e48",
+    "CAND_c2e85fb42b6ac89f7c50af66",
+    "CAND_6b14d21255577925c7f2e7f3",
+    "CAND_87ef5aa55fd90b57c5c5e658",
+    "CAND_a49f77b5ae4b82226af7bdb5",
+    "CAND_ebf876e01603fc6c423f2cf2",
+    "CAND_fc0d5be81640fad8b06502fe",
+    "CAND_92bf03ebaca8fa45281b9b7a",
+    "CAND_a8055affbfe01cb40cc08f10",
+    "CAND_ae3af2be52c8fe4ee1f6436b"
+   ],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.json",
+    "collection_counts": {
+     "texts": 10,
+     "tables": 0,
+     "pictures": 0,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 4,
+     "section_header": 1,
+     "formula": 2
+    },
+    "candidate_count_from_this_artifact": 2,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+    "collection_counts": {
+     "texts": 17,
+     "tables": 0,
+     "pictures": 1,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "caption": 1,
+     "text": 8,
+     "formula": 5
+    },
+    "candidate_count_from_this_artifact": 6,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+    "collection_counts": {
+     "texts": 13,
+     "tables": 0,
+     "pictures": 0,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 5,
+     "section_header": 2,
+     "formula": 3
+    },
+    "candidate_count_from_this_artifact": 3,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00015",
+    "line": "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy."
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_57ba1de7d2f768a0f9f15849": {
+    "markdown_lines": 13,
+    "caption_like_lines": []
+   },
+   "ENR_c33ebbf47b43de957767ca36": {
+    "markdown_lines": 19,
+    "caption_like_lines": []
+   },
+   "ENR_d8b9f4ac70fef1938109c617": {
+    "markdown_lines": 23,
+    "caption_like_lines": [
+     "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy."
+    ]
+   }
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 10,
+    "stored_objects_listing_a_queue_target_in_model_ids": {},
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {},
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    8,
+    10
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "8": {
+     "formula": 2
+    },
+    "9": {
+     "figure": 1,
+     "formula": 5
+    },
+    "10": {
+     "formula": 3
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00018",
+     "page_start": 10,
+     "page_end": 11
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 6,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00013",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "",
+     "text_length": 1667
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00014",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "",
+     "text_length": 1321
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00015",
+     "page_start": 9,
+     "page_end": 9,
+     "section": "",
+     "text_length": 1600
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00016",
+     "page_start": 9,
+     "page_end": 10,
+     "section": "",
+     "text_length": 1491
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00017",
+     "page_start": 10,
+     "page_end": 10,
+     "section": "",
+     "text_length": 1417
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00018",
+     "page_start": 10,
+     "page_end": 11,
+     "section": "",
+     "text_length": 1931
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

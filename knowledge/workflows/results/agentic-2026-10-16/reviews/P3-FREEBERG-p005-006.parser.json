@@ -1,0 +1,39 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-FREEBERG-p005-006",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_029a3791dd6018e48c9487c6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 6 caption and region match.",
+   "evidence": {
+    "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_5d120362b146867e10ab46ec",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 7 caption and region match.",
+   "evidence": {
+    "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_4e6f75aa5aad05052a013bff",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 8 caption and region match.",
+   "evidence": {
+    "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  }
+ ]
+}

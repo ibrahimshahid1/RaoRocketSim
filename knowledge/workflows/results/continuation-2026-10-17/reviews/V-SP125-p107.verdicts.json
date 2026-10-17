@@ -1,0 +1,40 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_76A39C08",
+  "refuted": true,
+  "confidence": "high",
+  "reason": "Full original PDF p107 (printed 98): the 80-percent equivalent 15-degree cone length and 0.382 Rt arc are stated. The claims that this is the only 0.8 factor in the section and that it is unrelated to every chamber shoulder radius are extractor inferences, not statements established on this page. Refute combined SOURCE_STATES assertion; replace with bounded stated geometry. No inference of absence across the whole book.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "50b8167b5684c6a1b95a7c3dd723f7d01379c36b1c3383380052bba111e826c7",
+  "reviewer": {
+   "role": "F",
+   "model": "GPT-6 (Codex; independent of historical September extraction)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "Original PDF full-page pnggray 140dpi visual comparison.",
+   "render": "knowledge/.work/continuation-2026-10-17/sp125-p107.png"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_42DCCAAE",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Full original PDF p107: approximate convergent frustum volume explicitly neglects slight throat rounding, then the printed volume is subtracted from chamber volume to obtain cylindrical section length. Stored statement describes that calculation; it does not endorse printed arithmetic. Source G34 arithmetic discrepancy (7760 versus recomputation about7780 cu in) remains recorded.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "2e224df065271a7f153d0749e6b4159a3229f03391b125c4f445ffb9a93e84a1",
+  "reviewer": {
+   "role": "F",
+   "model": "GPT-6 (Codex; independent of historical September extraction)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "Original PDF full-page pnggray 140dpi visual comparison.",
+   "render": "knowledge/.work/continuation-2026-10-17/sp125-p107.png"
+  }
+ }
+]

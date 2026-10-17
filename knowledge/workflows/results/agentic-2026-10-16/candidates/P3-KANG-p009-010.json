@@ -1,0 +1,313 @@
+{
+ "packet": "P3-KANG-p009-010",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+ "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+ "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+ "pages": [
+  9,
+  10
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 9,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/p0009.png",
+   "sha256": "aec92180b79007787573b23e2f19502e8ad44804be97c37cd391c71e0a560bce",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/p0010.png",
+   "sha256": "37143e74ea3daf4af83bf9c0b52edab172a4d4c1d840c422a52cd5b5a33d0570",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_04500dac80d52d9cf26a3554",
+  "ENR_c176bf9ed33879fa1d442752"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_6f9bf6d77f9cdfe5d561ec0d",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 26. Pintle tips after hot-firing tests."
+   ],
+   "bbox": [
+    {
+     "l": 70.57168431292568,
+     "t": 738.7658741607667,
+     "r": 254.77786678333229,
+     "b": 643.8748341353553,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c176bf9ed33879fa1d442752",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p9-9-1646de54e6fca5809f64a86cf3ab427185edba3705e1a336b9cba974feffce3e.json",
+   "raw_sha256": "45d1389be8cd26c6f8221565aeedea8a44ac3464c13352ad2eaf7a4f82ffa060",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_72050092780da1bc73d54e79",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/3",
+   "caption_text": [
+    "Fig. 29. vs. Heat flux."
+   ],
+   "bbox": [
+    {
+     "l": 97.09972256303996,
+     "t": 314.17955172467924,
+     "r": 229.35151595969646,
+     "b": 211.95487923519818,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/23\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c176bf9ed33879fa1d442752",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p9-9-1646de54e6fca5809f64a86cf3ab427185edba3705e1a336b9cba974feffce3e.json",
+   "raw_sha256": "45d1389be8cd26c6f8221565aeedea8a44ac3464c13352ad2eaf7a4f82ffa060",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_80b849dd6fc0e2ccca603df9",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [
+    "Fig. 28. vs. . Heat flux"
+   ],
+   "bbox": [
+    {
+     "l": 96.3449185406407,
+     "t": 459.16100463444343,
+     "r": 228.50078978338152,
+     "b": 357.6119809280863,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/13\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c176bf9ed33879fa1d442752",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p9-9-1646de54e6fca5809f64a86cf3ab427185edba3705e1a336b9cba974feffce3e.json",
+   "raw_sha256": "45d1389be8cd26c6f8221565aeedea8a44ac3464c13352ad2eaf7a4f82ffa060",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_912fa08dc8d9396de9a347ca",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 27. TMR vs. ηC ∗ ."
+   ],
+   "bbox": [
+    {
+     "l": 95.64039973381892,
+     "t": 602.537303586919,
+     "r": 227.74629056604712,
+     "b": 501.4665085309432,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c176bf9ed33879fa1d442752",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p9-9-1646de54e6fca5809f64a86cf3ab427185edba3705e1a336b9cba974feffce3e.json",
+   "raw_sha256": "45d1389be8cd26c6f8221565aeedea8a44ac3464c13352ad2eaf7a4f82ffa060",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_320af7bc59ff5a7193aecf9b",
+   "kind": "table",
+   "pages": [
+    9
+   ],
+   "table_grid": [
+    [
+     "Pintle",
+     "˙mTot (kg/s)",
+     "˙mFCR (kg/s)",
+     "OFR",
+     "PC (bara)",
+     "Heat Flux (MW/m 2 )",
+     "TMR",
+     "ηC * (%)"
+    ],
+    [
+     "BI-AM04",
+     "4.34",
+     "0.19",
+     "2.44",
+     "69.20",
+     "5.95",
+     "0.88",
+     "94.83"
+    ],
+    [
+     "BI-AM02*",
+     "4.31",
+     "0.20",
+     "2.38",
+     "68.71",
+     "5.17",
+     "1.01",
+     "94.80"
+    ],
+    [
+     "BI-AM01",
+     "4.61",
+     "0.19",
+     "2.40",
+     "72.55",
+     "5.18",
+     "1.17",
+     "93.29"
+    ],
+    [
+     "BI-AM03",
+     "4.43",
+     "0.17",
+     "2.39",
+     "69.30",
+     "5.20",
+     "1.32",
+     "92.92"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 6 Averaged properties and filtering ranges for BF effects on ηC * ."
+   ],
+   "bbox": [
+    {
+     "l": 36.75392432123567,
+     "t": 106.20693689931488,
+     "r": 558.044732896856,
+     "b": 52.777846492322055,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 5x8 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c176bf9ed33879fa1d442752",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p9-9-1646de54e6fca5809f64a86cf3ab427185edba3705e1a336b9cba974feffce3e.json",
+   "raw_sha256": "45d1389be8cd26c6f8221565aeedea8a44ac3464c13352ad2eaf7a4f82ffa060",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00025",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_D. Kang et al.                                                                                                                  Acta Astronautica 201 (2022) 48–58_\n\ncharacteristics test..\n\n_5.1._ _Test results of AI-AM02_\n\n**Fig. 26.** Pintle tips after hot-firing tests.\n\n**Fig. 27.** _TMR_ vs. _η_ C <sup>∗</sup> .\n\n**Fig. 28.** vs. . _Heat flux_\n\n**Fig. 29.** vs. _Heat flux_ .\n\nwere performed on a model with a redesigned pintle injector and an\ninsert nozzle. The combustion tests were performed in combination with\nAM02 ( _TMR_ of 0.85), which has high mixing efficiency in the mixed\n\n**Table 6**\n<u>Averaged properties and fltering ranges for</u> _<u>BF</u>_ <u>effects on</u> _ηC_ <sup>*</sup> <u>.</u>\n\nThe combustion test time was determined to be 1.0 s because the\npintle tip was damaged 0.7 s after normal combustion in the previous\ncombustion tests. When normal combustion occurs in the pintle injector,\nthe pressure fluctuations in the combustion chamber at the beginning of\ncombustion are attenuated and converges to a normal value..\n\nHowever, as observed from the combustion test results presented in\nFig. 18, the combustion chamber pressure increased to 70 bara but the\ninitial pressure fluctuations were not damped. It is also observed that a\npressure drop occurs at 5.53 s (about 0.85 s after ignition) based on the\ntest sequence prior to closing the propellant supply valve from highfrequency pressure data shown in Fig. 19. This pressure change is\nbelieved to be a phenomenon caused by the pintle tip thermal damage,\nwhich is as shown in Fig. 20. The damage configuration of AI was\nobserved to be opposite to that of the insert nozzle wing position and\npintle tip side damage pattern. The fact that a part of the pintle tip re­\nmains shows that the damage to the pintle injector AI began at the\nrounded pintle tip. Thermal damage to the pintle tip occurred 0.2 s later\nthan that in A without the insert nozzle; moreover, the pintle tip is not\ncompletely damaged, which is considered to be an effect of the insert\nnozzle on cooling performance. The temperature of the pintle tip is also\nlower than that of the model with the insert nozzle (AI) compared with\nthat without the insert nozzle (A), which is consistent with the results of\nnumerical analysis."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00026",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_5.2._ _Test results of BI-AM02_\n\nPintle injector BI has different _AR_, _BF_, and installed insert nozzle for\nverification of the pintle tip cooling performance based on the _BF_ and\ninsert nozzle with the same number of orifices compared to the AI but\nwith lower _BF_ of 58% instead of 86% and _AR_ of 8:1 instead of 3:1. The\neffects of the pintle tip cooling performance by the insert nozzle were\nexperimentally confirmed through the AI-AM02 combustion test. From\nthe results of numerical analysis, the pintle tip temperature of the pintle\ninjector BI with the insert nozzle was confirmed to be lowest, so a hot\nfiring test (5.0 s) was performed by combining BI and AM02. As shown\nin Figs. 21 and 22, the combustion tests were completed normally\nwithout any notable issues until the end of the burn, except for the lowfrequency fluctuations during the transient ignition period.\n\nThe low-frequency fluctuations at the beginning of combustion were\nsimilar to those in the previous pintle tests of AI-AM02. It did not occur\nin the turbo pump test facility, but only in the pressure-fed facility, are\nconsidered to be the effects of the propellant supply method of the\npressure-fed test facility. The fast fourier transform for the dynamic\npressure of the combustion chamber corresponding to the transient re­\ngion after ignition is shown in Fig. 23. The frequency analysis shows that\nmaximum fluctuations occur at 97.6 Hz, whose size is 0.14 bar in all\nmanifolds. The high-frequency pressure fluctuations of the combustion\nchamber in the steady state operation cause maximum fluctuations\nowing to the boiling of propellant in the low-frequency region of 146 Hz,\nbut the low-intensity pressure fluctuations were maintained overall. The\nroot mean-squared (RMS) value of the pressure fluctuations, as shown in\nFig. 24, are also maintained at the 0.5 bar level except for the initial\nignition, indicating that stable combustion was achieved."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00027",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "**Pintle** **_m_** ˙ **_Tot_** **(kg/s)** **_m_** ˙ **_FCR_** **(kg/s)** **_OFR_** **_PC_** **(bara)** **_Heat Flux_** **(MW/m** <sup>**2**</sup> **)** **_TMR_** **_ηC_** <sup>*</sup> **(%)**\n\n**BI-AM04** 4.34 0.19 2.44 69.20 5.95 0.88 94.83\n**BI-AM02*** 4.31 0.20 2.38 68.71 5.17 1.01 94.80\n**BI-AM01** 4.61 0.19 2.40 72.55 5.18 1.17 93.29\n**BI-AM03** 4.43 0.17 2.39 69.30 5.20 1.32 92.92"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00028",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_D. Kang et al.                                                                                                                  Acta Astronautica 201 (2022) 48–58_\n\nThe pintle injector after the combustion test is shown in Fig. 25. A\nlarge amount of soot was formed near the head plate and pintle tip,\nwhere a low-mixing-ratio region was formed in the pintle injector. The\nsoot around the pintle orifice was generated about 30% in the longitu­\ndinal direction of the 1st pintle orifice and about 50% at the bottom of\nthe 2nd pintle orifice. It is considered that the flame is generated by\ncollision and mixing of the propellant in the primary orifice, and addi­\ntional flames are generated at the bottom of the secondary pintle by the\nhigh-temperature recirculation zone formed at the center of the pintle.\nComparing the shapes of the soot between the 1st and 2nd orifices of A,\nAI, and BI (Fig. 26), a soot-free area is observed in BI (with _BF_ 57%), but\nA and AI (with _BF_ 86%) have soot formation in all areas.\n\nTherefore, some annular fuel flow from the wide rib between the 1st\nand 2nd orifices of BI does not participate in combustion, which exits to\nthe 2nd orifice and participates in the combustion of the core recircu­\nlation region with high mixing ratio (Fig. 4). Accordingly, the mixing\nratio is lower than those of pintle injectors A and AI and is believed to\ncontribute to the increase in the cooling effects of the pintle tip.."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00029",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_5.3._ _Test results of BI-AM01~AM04_\n\nA 20-s hot firing test was performed at the design point to verify the\neffects of pintle tip cooling and combustion performance characteristics\nbased on the _TMR_ . Damage to the pintle tip did not occur in the hot firing\ntest with the combination of four annulus rings. The propellant flow rate\nsupplied to the combustor was controlled via pressure control in the\npressure-fed test facility, and the changes in the propellant flow rate\naffected the _TMR_ and characteristic velocity efficiency. Therefore, to\ncompare the combustion characteristics under similar test conditions,\nthe combustion test data were averaged at 1-s intervals and then filtered.\nFiltering was performed under the conditions of a mixing ratio 2.415 ±\n0.035 and total mass flow rate of 4.46 ± 0.16, and the average of the\nfiltered values is presented in Table 6.\n\nChanges in the combustion performance based on the total mo­\nmentum ratio are shown in Fig. 27 with uncertainty [40–42]. From the\nresults of the analysis, the highest characteristic velocity efficiency of\n94.83% was achieved in AM04 with a design momentum ratio of 0.78,\nand it was confirmed that as the annulus orifice gap decreased, the TMR\nincreased and performance decreased. The relationship between the\nTMR and characteristic velocity efficiency is similar to the results re­\nported in previous studies [13,19].\n\nThe changes in heat flux based on the _TMR_ and _O/ F_ ratio are shown\nin Figs. 28 and 29 with uncertainty. The heat flux of the combustion\nchamber tends to increase markedly as the mixing ratio increases, except\nfor AM02, and decreases as the TMR increases. The reason for this is that\nthe amount of propellant that collides with the combustion chamber\nwall increases as the _TMR_ increases, which manifests as film cooling\neffect. This means that the amount of propellant that does not partici­\npate in the combustion increases. Thus, it was found that the charac­\nteristic velocity efficiency decreased. Therefore, it can be considered\nthat the cause of the low heat flux of AM02 is due to the mixing ratio."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00030",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "For all models in Tables 4 and 5, the combustion pressures were\npredicted to be around 60 bara, which was lower than the actual target\ncombustion pressure of 70 bara. This means that as noted in Ref. [43],\nthe currently used turbulence model standard K-ε model shows that the\ncombustion reaction is not achieved completely. Owing to the low res­\nolution of the grid, the turbulent mixing efficiency was much lower than\nthe actual value, so it is estimated that the unburned propellant escaped\nthrough the nozzle before the chemical reaction. However, it is possible\nto quantitatively compare the changes in combustion pressure and\ncombustion characteristics based on the _TMR_ . From the analysis, it was\npredicted that the combustion pressure and combustion efficiency\nincreased inversely with _TMR_, and the maximum combustion efficiency\nwas predicted for AM04, which is similar to the combustion test result.\nTherefore, it is determined that the characteristic velocity efficiency also\nincreases with improvement in the relative mixing efficiency of fuel and\n\noxidizer via increase of the flow velocity of fuel by reducing the gap size\nof the annulus ring.\n\n**6.** **Conclusion**\n\nA 1.5-tonf class liquid–liquid pintle injector with rectangular tworow orifices using kerosene/liquid oxygen as the propellant was\ndesigned and manufactured, and hot firing tests of the pintle injector\nwere carried out to verify the combustion performance and combustion\nstability under supercritical conditions, which is the actual operational\ncondition of the liquid rocket engine. Thermal damage occurred at the\npintle tip owing to the high mixing ratio recirculation region formed\nwithin the combustion chamber. To increase the cooling effect, the\ndesign of the pintle injector was changed by installing an insert nozzle.\nThen, numerical analysis was performed on the pintle injector with\ndifferent design parameters to confirm the effects on pintle tip cooling\nand changes in combustion performance. Finally, combustion tests were\nperformed and the following results were obtained."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00031",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "1) In the numerical analysis results, it was observed that the insert\nnozzle had an effect of up to 21.4% on pintle tip cooling, which was\nconfirmed through the combustion tests of pintle injectors A and AI.\n2) From the numerical analysis results, it was considered that the\ncombustion pressure and combustion efficiency increased inversely\nwith the _TMR_ . Similar results were confirmed by performing com­\nbustion tests on pintle injectors BI-AM01 to BI-AM04, and a\nmaximum characteristic velocity efficiency of 95.1% and combus­\ntion pressure of 69.9 bara were achieved with BI-AM04 ( _TMR_ of\n0.72).\n3) The heat flux of the combustion chamber increased markedly with\nthe mixing ratio and decreased with increase in _TMR_ . Further, it was\nfound that the characteristic velocity efficiency decreased.\n4) From the numerical analysis results, the pintle tip temperature was\nobserved to reduce by 9.5–21.4% depending on the presence or\nabsence of the insert nozzle. In addition, the effects of reducing the\npintle tip temperature by 17.3% were confirmed by changing the _BF_\nfrom 86% to 58%, which means that the pintle tip temperature of the\npintle injector BI with the insert nozzle was the lowest.\n5) When the AR is increased from 3:1 to 8:1 and _BF_ is reduced from 86%\nto 58%, the injected fuel pushes the flames outward from the pintle\ntip or forms a low-mixing-ratio region at the pintle tip; further, the\ninsert nozzle installed within the pintle has been identified as a major\nfactor affecting the thermal damage to the pintle tip. Finally, similar\nresults were confirmed from the numerical analyses and hot firing\ntests for the pintle tip thermal damage. However, there is a limit to\ndesigning a pintle injector with optimal performance only from the\nresults of this study, and studies on the parameters (BF, TMR and\norifice configuration) of liquid-liquid pintle injectors will be con­\nducted under critical combustion.\n\n**Declaration of competing interest**\n\nThe authors declare that they have no known competing financial\ninterests or personal relationships that could have influenced the work\nreported in this paper."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00032",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > Acknowledgments",
+   "text": "This work was supported by a grant from the Korea Aerospace\nResearch Institute Seed Project [grant number FR21P24]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00033",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "Acta Astronautica > References",
+   "text": "[1] [G. Dressler, Summary of deep throttling rocket engines with emphasis on apollo](http://refhub.elsevier.com/S0094-5765%0x2822%0x2900441-6/sref1)\n\n[LMDE, in: 42nd AIAA/ASME/SAE/ASEE Joint Propulsion Conference & Exhibit,](http://refhub.elsevier.com/S0094-5765%0x2822%0x2900441-6/sref1)\n[2006. Sacramento, C.A.](http://refhub.elsevier.com/S0094-5765%0x2822%0x2900441-6/sref1)"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 4,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

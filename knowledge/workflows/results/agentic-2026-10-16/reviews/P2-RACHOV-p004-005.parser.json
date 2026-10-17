@@ -1,0 +1,209 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-RACHOV-p004-005",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_47c4fc2101fb3db7a4953ee3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (33) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_6a5055fab9769d36b7f21144",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (34) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_89511562269bea18d6c88a33",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (35) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_99e6d07c962dd18641d151f9",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (37) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_df9dec09076463cceaf7475a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (38) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_58cbf40e817548f53c42c09a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (39) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_619915ee188bd73d404a3817",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (40) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_51f86a0f3b15f222aafadbd5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (41) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_9e60da9a9285082b31a4fde4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (42) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_7feab1f57260fa98945464cd",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (43) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_e769b4c64ec9eec88bfe9ea1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (44) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_8338a174d11e87c32e601791",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (45) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_0fc6285045506e94dab2cb93",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (46) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_16216ed79278dc37c738792b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (47) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_d044b92c7ff08cd8a065358e",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (48) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_b8be13c5d26b4cf66d0f0197",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (49) matches original.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_96812aa9c0d8d74e146e7a6f",
+   "state": "REJECTED",
+   "reason": "Eq. (36): chamber pressure transcribed as capital P_c; the original (400 dpi) prints lowercase p_c, and capital P denotes power in this paper. Corrected full form banked by F.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_5ad936c20987962f3d380aff",
+   "state": "REJECTED",
+   "reason": "Table 1: Docling collapsed all body rows into one row, so each cell holds a whole column and name-value pairing survives only as token order. Values banked by F from the rendered page instead.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_afa419ba471ab9ef7404d262",
+   "state": "REJECTED",
+   "reason": "Table 2: same row collapse as Table 1 (one body row; whole columns per cell). Values used by F from the rendered page.",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_d9041ea89913db1c7190dfbb",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 1 caption matches the original; curve values not digitized (not needed for the technology set).",
+   "evidence": {
+    "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+    "method": "original PDF p.4 render at 150 dpi (Eqs. 34/36 also at 400 dpi) and p.5 at 150 dpi viewed by F; symbol-by-symbol comparison",
+    "pdf_page": 5
+   }
+  }
+ ]
+}

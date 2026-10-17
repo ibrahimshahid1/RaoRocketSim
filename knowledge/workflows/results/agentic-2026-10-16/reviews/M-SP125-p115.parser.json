@@ -1,0 +1,69 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "M-SP125-p115",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_7891589d3bb82f5958e26f0f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  },
+  {
+   "candidate_id": "CAND_f4527f21e00bf2f411b2927b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  },
+  {
+   "candidate_id": "CAND_0b15f574c936587e844600b5",
+   "state": "REJECTED",
+   "reason": "Eq. (4-24): coolant pressure p_co transcribed as capital P_co (300 dpi check); corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  },
+  {
+   "candidate_id": "CAND_59c5b93ea9dc00fc2dd0e189",
+   "state": "REJECTED",
+   "reason": "Eq. (4-25): C_p mu^0.2 transcribed as C_{p mu}^0.2; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  },
+  {
+   "candidate_id": "CAND_83163b1b38ad81ec52cda67c",
+   "state": "REJECTED",
+   "reason": "Eq. (4-23): Prandtl exponent 0.4 transcribed as '04'; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  },
+  {
+   "candidate_id": "CAND_e5b9293d638533e465c7b8a9",
+   "state": "REJECTED",
+   "reason": "Eq. (4-26): T_cc transcribed as T_ce (300 dpi check).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 115
+   }
+  }
+ ]
+}

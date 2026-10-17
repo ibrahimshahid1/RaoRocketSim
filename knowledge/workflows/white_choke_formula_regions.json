@@ -1,0 +1,32 @@
+[
+  {
+    "page": 1101,
+    "bbox": {
+      "l": 135,
+      "b": 650,
+      "r": 430,
+      "t": 725
+    },
+    "locator_note": "Displayed Eq9.46a, general choked mass flow"
+  },
+  {
+    "page": 1101,
+    "bbox": {
+      "l": 150,
+      "b": 560,
+      "r": 395,
+      "t": 615
+    },
+    "locator_note": "Displayed Eq9.46b, k1.4 specialization"
+  },
+  {
+    "page": 1101,
+    "bbox": {
+      "l": 115,
+      "b": 275,
+      "r": 480,
+      "t": 335
+    },
+    "locator_note": "Displayed Eq9.47, local mass-flow function"
+  }
+]

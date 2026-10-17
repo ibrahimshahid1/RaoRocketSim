@@ -1,0 +1,39 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-GROMSKI-p002-003",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_91c2b6d065202259b15c08cc",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 1 caption matches.",
+   "evidence": {
+    "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_64d13eba21a4f499fe07f4d3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 3 caption matches.",
+   "evidence": {
+    "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_0b11524d23e00f1c713283be",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 2 engine-characteristics table matches cell by cell (throttle 100% to 18.8%, Pc 700-130 psia, Isp 453-436 s).",
+   "evidence": {
+    "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  }
+ ]
+}

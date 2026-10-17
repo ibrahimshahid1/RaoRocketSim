@@ -1,0 +1,90 @@
+{
+ "packet": "P3-SON-p004",
+ "at": "2026-10-16T22:27:16.525751+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-SON-p004.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 2,\n \"page_shifted\": 0,\n \"n_equations\": 1,\n \"n_claims\": 1,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T22:27:16.852933+00:00', 'n_nodes': 5427, 'n_edges': 6872, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-SON-p004.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T22:27:19.153872+00:00",
+  "n_nodes": 5427,
+  "n_edges": 6872,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "pending_source_reviews": 47,
+  "needs_source_routing": 8,
+  "pending_verifications": 486,
+  "pending_verifications_by_store": {
+   "entities": 160,
+   "equations": 56,
+   "claims": 235,
+   "validity": 35
+  },
+  "documents_with_extracted_objects": 20,
+  "canonical_documents_without_extracted_objects": 228
+ },
+ "integrity": {
+  "nodes": 5427,
+  "edges": 6872,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [],
+ "verdict_state_mismatches": []
+}

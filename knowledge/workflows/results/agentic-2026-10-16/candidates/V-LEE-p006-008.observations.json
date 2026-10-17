@@ -1,0 +1,2702 @@
+{
+ "packet": "V-LEE-p006-008",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230"
+   ],
+   "queue_reason": "independent original-page verification of pending September extraction objects: electric drive power/mass equations and claims",
+   "queue_pages": [
+    6,
+    8
+   ],
+   "queue_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "queue_source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/V-LEE-p006-008.json",
+   "sha256": "303b2e2e707371e30b629b0010722307e1d739b706f7cb421e3b7162bad623bb",
+   "size_bytes": 79323,
+   "kind": "verification",
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "pages": [
+    6,
+    8
+   ],
+   "docling_run_ids": [
+    "ENR_122bc921523575fef36c1a59",
+    "ENR_820214f4dd8a82b78eefe407",
+    "ENR_82c0a2e35be6cf157ec4ff03"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 4,
+     "formula": 20
+    },
+    "flagged_candidates": 0,
+    "target_objects": 11,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 499,
+    "records_now": 499,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "sha256_in_bundle": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "sha256_recomputed": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 6,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0006.png",
+    "dpi": 150,
+    "sha256_in_bundle": "a95c595c294b3c41c16e5009dada266b844d378e7154d71ca6d8a80381a60c44",
+    "file_exists": true,
+    "sha256_recomputed": "a95c595c294b3c41c16e5009dada266b844d378e7154d71ca6d8a80381a60c44",
+    "sha256_match": true
+   },
+   {
+    "page": 7,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0007.png",
+    "dpi": 150,
+    "sha256_in_bundle": "ee57a9fcb66c0a250f2a3c50a69729582a43421c4a6413449bce5b40779b7619",
+    "file_exists": true,
+    "sha256_recomputed": "ee57a9fcb66c0a250f2a3c50a69729582a43421c4a6413449bce5b40779b7619",
+    "sha256_match": true
+   },
+   {
+    "page": 8,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/p0008.png",
+    "dpi": 150,
+    "sha256_in_bundle": "0fcf50aa6321556bbd5cc712a069eeef99f5bcb9cf4c1f6990f3b05b68ac3594",
+    "file_exists": true,
+    "sha256_recomputed": "0fcf50aa6321556bbd5cc712a069eeef99f5bcb9cf4c1f6990f3b05b68ac3594",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_122bc921523575fef36c1a59",
+    "run_record_found": true,
+    "page_range": [
+     8,
+     8
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+    "raw_sha256_recorded": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.md",
+    "markdown_sha256_recorded": "3c8d15280ba1e5b982b9fb480584f22161f6ff5c26aebd57de9df88b6f0acb75",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "3c8d15280ba1e5b982b9fb480584f22161f6ff5c26aebd57de9df88b6f0acb75",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_820214f4dd8a82b78eefe407",
+    "run_record_found": true,
+    "page_range": [
+     6,
+     6
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+    "raw_sha256_recorded": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.md",
+    "markdown_sha256_recorded": "e57ab95bbb90b8c1d10dc531d019b4681b22fb85c3c940ef2b9fc69306e2420f",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "e57ab95bbb90b8c1d10dc531d019b4681b22fb85c3c940ef2b9fc69306e2420f",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03",
+    "run_record_found": true,
+    "page_range": [
+     7,
+     7
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+    "raw_sha256_recorded": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+    "markdown_artifact": null,
+    "markdown_sha256_recorded": null,
+    "metadata_integrity_state": "UNAVAILABLE",
+    "raw_sha256_recomputed": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+    "raw_sha256_match": true,
+    "markdown_sha256_match": null
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+    "sha256_in_bundle": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+    "file_exists": true,
+    "sha256_recomputed": "f5b9c31d6bdaa1f8e8ddea8858d51ab3232f2c5812d92e5a15b4e6b8609e28d9",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+    "sha256_in_bundle": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+    "file_exists": true,
+    "sha256_recomputed": "69433b7de4e7c8a20eb69bfb616d1d966166b134ea59013e3065830683d55914",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+    "sha256_in_bundle": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+    "file_exists": true,
+    "sha256_recomputed": "30a1f11cd81edc192a4fe47ca5a500e2b25efe74428bc7ffc6455f8bcf9035cc",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 4,
+   "formula": 20
+  },
+  "candidates_total": 24,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_7db39d5daaf765c0916fc496",
+    "CAND_e63970003bd71fdc641f4a3a",
+    "CAND_026de44529be972bb237b3a5",
+    "CAND_5ad286f64d1a4a6c8c83688f"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_7db39d5daaf765c0916fc496",
+    "CAND_026de44529be972bb237b3a5",
+    "CAND_5ad286f64d1a4a6c8c83688f"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+     "occurrences": 1
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00016",
+     "occurrences": 1
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00021",
+     "occurrences": 2
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [
+   {
+    "kind": "figure",
+    "transcription_whitespace_collapsed": "{\"captions\": [], \"annotations\": []}",
+    "candidate_ids": [
+     "CAND_7db39d5daaf765c0916fc496",
+     "CAND_026de44529be972bb237b3a5",
+     "CAND_5ad286f64d1a4a6c8c83688f"
+    ]
+   }
+  ],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_7db39d5daaf765c0916fc496",
+    "kind": "figure",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 50.32996087646484,
+      "t": 56.00131466686378,
+      "r": 60.361343198712234,
+      "b": 43.996512757196456,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_820214f4dd8a82b78eefe407",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 6
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_e63970003bd71fdc641f4a3a",
+    "kind": "figure",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 182.48145794452435,
+      "t": 736.302216423951,
+      "r": 544.7234704655384,
+      "b": 394.28658779648737,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 5 Valve mass surface about the commercial valve data"
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_820214f4dd8a82b78eefe407",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 6
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/2"
+    ],
+    "raw_item_children_count": 3,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/2",
+      "label": "caption",
+      "page_no": 6,
+      "bbox": {
+       "l": 51.035999298,
+       "t": 620.6357387870501,
+       "r": 159.14611807438084,
+       "b": 603.1318548551579,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 5 Valve mass surface about the commercial valve data",
+      "orig": "Fig. 5 Valve mass surface about the commercial valve data",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_026de44529be972bb237b3a5",
+    "kind": "figure",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 48.122871215487486,
+      "t": 740.0096723593846,
+      "r": 543.9561541965152,
+      "b": 437.3658975610938,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_122bc921523575fef36c1a59",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 8
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 35,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_5ad286f64d1a4a6c8c83688f",
+    "kind": "figure",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 50.21431783504614,
+      "t": 55.91838194118657,
+      "r": 91.95574831236769,
+      "b": 43.76028569237178,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_122bc921523575fef36c1a59",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 8
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_038274bee167e4f1ba894f9a",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 307.02920171280954,
+      "t": 96.43993422553797,
+      "r": 544.2667655251664,
+      "b": 72.13593463756513,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/13",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 6,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "P _ { \\mathbf p } = \\frac { \\Delta p _ { \\mathbf p } \\dot { m } } { \\rho \\eta _ { \\mathbf p } } .",
+    "transcription_length": 97,
+    "original_text_as_given": "Pp equal1 Delta1pp ˙m ρηp . (20)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(20)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(20)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_820214f4dd8a82b78eefe407"
+   },
+   {
+    "id": "CAND_158f656b1384363e96db7a3a",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 51.035999298,
+      "t": 371.84225031414803,
+      "r": 289.14383599152313,
+      "b": 349.1415457114133,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/5",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 6,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\Delta p _ { \\text {elb} } = K _ { \\text {elb} } \\frac { 1 } { 2 } \\rho v ^ { 2 } .",
+    "transcription_length": 83,
+    "original_text_as_given": "Delta1pelb equal1 Kelb 1 2 ρv 2 . (16)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(16)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(16)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_820214f4dd8a82b78eefe407"
+   },
+   {
+    "id": "CAND_19e5a0a5cc1f91e60f11aa90",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 51.03673308415003,
+      "t": 146.28423639814798,
+      "r": 289.1443376431664,
+      "b": 136.63903217156508,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/9",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 6,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { e l b } = V _ { e l b } \\rho _ { e l b } .",
+    "transcription_length": 48,
+    "original_text_as_given": "melb equal1 Velbρelb. (19)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(19)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(19)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_820214f4dd8a82b78eefe407"
+   },
+   {
+    "id": "CAND_407db9cb4be4f6786dcbfe19",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 51.315329927061384,
+      "t": 177.95291089853413,
+      "r": 289.1448597247008,
+      "b": 157.41455596541323,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/8",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 6,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "V _ { \\text {elb} } = 4 \\pi ^ { 2 } t _ { \\text {elb} } ( r _ { \\text {out} } + r _ { \\text {in} } ) ( r _ { \\text {out} } - r _ { \\text {in} } - t _ { \\text {elb} } ) \\frac { \\alpha } { 3 6 0 } ,",
+    "transcription_length": 196,
+    "original_text_as_given": "Velb equal1 4π 2 telb(rout + rin)(rout - rin - telb) α 360 , (18)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(18)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(18)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 17,
+     "}": 17
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_820214f4dd8a82b78eefe407"
+   },
+   {
+    "id": "CAND_ad36ad097e09042859943ee7",
+    "pages": [
+     6
+    ],
+    "bbox": [
+     {
+      "l": 50.82916063236612,
+      "t": 199.97823664214798,
+      "r": 289.14450377450015,
+      "b": 190.3329408635651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 6,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "r _ { o u t } = r _ { i n } + 2 D _ { e l b } ,",
+    "transcription_length": 47,
+    "original_text_as_given": "rout equal1 rin + 2Delb, (17)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(17)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(17)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_820214f4dd8a82b78eefe407"
+   },
+   {
+    "id": "CAND_09f720a145f2cd4cd67d53aa",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 51.03519207561534,
+      "t": 89.23427958868399,
+      "r": 289.1446818771212,
+      "b": 77.27908892610003,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { p } = 0 . 4 7 0 3 \\times \\exp ( 0 . 0 1 0 7 2 \\times D _ { p } ) .",
+    "transcription_length": 72,
+    "original_text_as_given": "mp equal1 0.4703 × exp ( 0.01072 × Dp ) . (25)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(25)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(25)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 2,
+     "}": 2
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_15370161bab192cc69dbeaa3",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 51.7926005507926,
+      "t": 301.944102748,
+      "r": 289.17123715704463,
+      "b": 276.461683251684,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/3",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { s } = \\frac { D _ { \\text {out} } ( g H ) ^ { 1 / 4 } } { \\sqrt { Q } } ,",
+    "transcription_length": 79,
+    "original_text_as_given": "Ds equal1 Dout(g H ) 1/4 √Q , (22)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(22)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(22)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_4dec2e8c8ab8632dfd3e5c28",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 306.15859321156915,
+      "t": 224.89036006691595,
+      "r": 544.2586194437072,
+      "b": 201.27703266056506,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/15",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { \\text {inv} } = \\frac { P _ { \\text {inv} , \\text {out} } } { m _ { \\text {inv} } } ,",
+    "transcription_length": 96,
+    "original_text_as_given": "δinv equal1 Pinv,out minv , (28)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(28)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(28)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_58446f2eb9d6850e05f916af",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 51.71167576047924,
+      "t": 265.949410918,
+      "r": 289.1440380491928,
+      "b": 252.5861911735651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/4",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "N _ { s } = 3 . 7 2 \\cdot D _ { s } ^ { - 1 . 1 4 2 9 } ,",
+    "transcription_length": 57,
+    "original_text_as_given": "Ns equal1 3.72 · D -1.1429 s , (23)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(23)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(23)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_999e16fd252b83864b5029a6",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 51.03591140864202,
+      "t": 238.92136690191603,
+      "r": 289.1532781777012,
+      "b": 216.31055205841324,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/5",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "u _ { \\text {out} } = \\omega \\frac { D _ { \\text {out} } } { 2 } .",
+    "transcription_length": 66,
+    "original_text_as_given": "uout equal1 ω Dout 2 . (24)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(24)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(24)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_c6b92bb87b76d96e7c5edd3b",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 306.158533013736,
+      "t": 557.395002464702,
+      "r": 544.2587497723166,
+      "b": 533.6919191345651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/11",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { \\mathbf m } = \\frac { 1 } { \\delta _ { P , \\mathbf m } } P _ { \\mathbf m , \\text {out} } = \\frac { 1 } { \\delta _ { P , \\mathbf m } } P _ { p } .",
+    "transcription_length": 151,
+    "original_text_as_given": "mm equal1 1 δP,m Pm,out equal1 1 δP,m Pp. (27)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(27)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(27)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 10,
+     "}": 10
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_cb50f32b987f41ae02148a43",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 51.71103270725588,
+      "t": 334.55684629365555,
+      "r": 289.14455896593313,
+      "b": 309.70784291635835,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/2",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "N _ { s } = \\frac { \\omega \\sqrt { Q } } { ( g H ) ^ { 3 / 4 } } ,",
+    "transcription_length": 66,
+    "original_text_as_given": "Ns equal1 ω√Q (gH) 3/4 , (21)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(21)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(21)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_e27dabc2bfb8f36d29349b13",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 306.15945914293513,
+      "t": 196.01801882570203,
+      "r": 544.2581240788161,
+      "b": 172.31493549256516,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/16",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { \\text {inv} } = \\frac { 1 } { \\delta _ { P , \\text {inv} } } \\, P _ { \\text {inv} , \\text {out} } = \\frac { 1 } { \\delta _ { P , \\text {inv} } \\eta _ { \\text {m} } } \\, P _ { \\text {m} , \\text {out} } .",
+    "transcription_length": 208,
+    "original_text_as_given": "minv equal1 1 δP,inv Pinv,out equal1 1 δP,invηm Pm,out . (29)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(29)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(29)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 18,
+     "}": 18
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_f67942fc267657109716011e",
+    "pages": [
+     7
+    ],
+    "bbox": [
+     {
+      "l": 306.1578174819921,
+      "t": 586.267375202916,
+      "r": 544.2576933145081,
+      "b": 562.6539552675652,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/10",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 7,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { P , \\mathbf m } = \\frac { P _ { \\mathbf m , \\text {out} } } { m _ { \\mathbf m } } ,",
+    "transcription_length": 94,
+    "original_text_as_given": "δP,m equal1 Pm,out mm , (26)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(26)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(26)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_82c0a2e35be6cf157ec4ff03"
+   },
+   {
+    "id": "CAND_4022dd34281c55f0053cc2a4",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 306.4346627487081,
+      "t": 332.395592287362,
+      "r": 544.2667383420666,
+      "b": 308.5299318305651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/46",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "V _ { \\text {tk} } = u _ { \\text {tk} } \\frac { m _ { \\text {prop} } } { \\rho _ { \\text {prop} } } ,",
+    "transcription_length": 100,
+    "original_text_as_given": "Vtk equal1 utk mprop ρprop , (34)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(34)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(34)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 10,
+     "}": 10
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   },
+   {
+    "id": "CAND_512c2b2d1ba2a3ab8e9d5172",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.03719010934989,
+      "t": 343.95332485431396,
+      "r": 289.1438463849136,
+      "b": 322.4619386665651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/37",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b , P } = \\frac { \\kappa _ { b } } { \\delta _ { P , b } } P _ { b } = \\frac { \\kappa _ { b } } { \\delta _ { P , b } \\eta _ { \\text {inv} } } P _ { \\text {inv} , \\text {out} } ,",
+    "transcription_length": 182,
+    "original_text_as_given": "mb,P equal1 κb δP,b Pb equal1 κb δP,bηinv Pinv,out , (30)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(30)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(30)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 15,
+     "}": 15
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   },
+   {
+    "id": "CAND_62fa487de8c8924705c754f9",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.03571974436281,
+      "t": 316.917314111314,
+      "r": 289.14403074226175,
+      "b": 295.4259279235651,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/38",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b , E } = \\frac { \\kappa _ { b } } { \\delta _ { E , b } } E _ { b } = \\frac { \\kappa _ { b } } { \\delta _ { E , b } \\eta _ { E } \\eta _ { \\text {inv} } } P _ { \\text {inv} , \\text {out} } t _ { b } ,",
+    "transcription_length": 205,
+    "original_text_as_given": "mb,E equal1 κb δE,b Eb equal1 κb δE,bηEηinv Pinv,outtb, (31)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(31)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(31)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 17,
+     "}": 17
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   },
+   {
+    "id": "CAND_bbe8038a6eb73e26357f6906",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.035904101711,
+      "t": 286.98226640468397,
+      "r": 289.1707961254923,
+      "b": 275.0270976541001,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/39",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b } = \\max ( m _ { b , P } , m _ { b , E } ) .",
+    "transcription_length": 52,
+    "original_text_as_given": "mb equal1 MAX ( mb,P, mb,E ) . (32)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(32)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(32)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   },
+   {
+    "id": "CAND_f9a079d6a703e27c74131038",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 51.036630894151216,
+      "t": 83.97493025853805,
+      "r": 289.1445708756412,
+      "b": 73.98093585856509,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/43",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { \\text {prop} } = \\kappa _ { \\text {prop} } ( \\dot { m } _ { o } + \\dot { m } _ { f } ) t _ { b } .",
+    "transcription_length": 104,
+    "original_text_as_given": "mprop equal1 κprop( ˙mo + ˙mf)tb. (33)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(33)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(33)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   },
+   {
+    "id": "CAND_fa7d4cb3a825e5aa873ce059",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 306.1586163540501,
+      "t": 301.674113735,
+      "r": 544.2584984034743,
+      "b": 274.94191913456507,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/47",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { \\text {tk} } = \\rho _ { \\text {tk} } 4 \\pi \\left ( \\frac { 3 V _ { \\text {tk} } } { 4 \\pi } \\right ) ^ { 2 / 3 } \\frac { p _ { \\text {tk} } } { 2 \\sigma _ { \\text {zul} } } \\left ( \\frac { 3 V _ { \\text {tk} } } { 4 \\pi } \\right ) ^ { 1 / 3 } .",
+    "transcription_length": 250,
+    "original_text_as_given": "mtk equal1 ρtk4π ( 3Vtk 4π )2/3 ptk 2σzul ( 3Vtk 4π )1/3 . (35)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(35)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(35)",
+    "trailing_token_delimiters_as_given": "()",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 20,
+     "}": 20
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_122bc921523575fef36c1a59"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(20)",
+    "(16)",
+    "(19)",
+    "(18)",
+    "(17)",
+    "(25)",
+    "(22)",
+    "(28)",
+    "(23)",
+    "(24)",
+    "(27)",
+    "(21)",
+    "(29)",
+    "(26)",
+    "(34)",
+    "(30)",
+    "(31)",
+    "(32)",
+    "(33)",
+    "(35)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_with_non_ascii_delimiters_as_given": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p6-6-23ad4f279632a6d6f86ab9a9f72e4550df6ccbfb1a66fe3da6da2b4a9936dd7c.json",
+    "collection_counts": {
+     "texts": 15,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 1,
+     "caption": 2,
+     "text": 5,
+     "formula": 5,
+     "section_header": 1,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 7,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": [
+     {
+      "pointer": "/texts/1",
+      "label": "caption",
+      "why_listed": "caption item not referenced by any picture/table captions",
+      "page_no": 6,
+      "bbox": {
+       "l": 51.038015347027965,
+       "t": 734.5849219071523,
+       "r": 157.51292478137378,
+       "b": 727.0438749576052,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "characters": 31,
+      "text_as_given": "Fig. 4 Elbow of the torus shape",
+      "truncated_at_4000": false
+     }
+    ]
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p7-7-9ebb491b71.json",
+    "collection_counts": {
+     "texts": 20,
+     "tables": 0,
+     "pictures": 0,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 1,
+     "text": 6,
+     "formula": 9,
+     "section_header": 3,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 9,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E/00d2425ed35f-p8-8-d093342b6fc735b623af90721bb11dab433e273ff0e4dc917145ff06fd4f17c2.json",
+    "collection_counts": {
+     "texts": 50,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 1,
+     "caption": 1,
+     "text": 39,
+     "formula": 6,
+     "section_header": 2,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 8,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": [
+     {
+      "pointer": "/texts/1",
+      "label": "caption",
+      "why_listed": "caption item not referenced by any picture/table captions",
+      "page_no": 8,
+      "bbox": {
+       "l": 51.037168052835796,
+       "t": 734.5849219071523,
+       "r": 161.5844334390875,
+       "b": 707.1275160126182,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "characters": 70,
+      "text_as_given": "Fig. 6 Impeller 2-D design flow chart (a), top view (b), side view (c)",
+      "truncated_at_4000": false
+     }
+    ]
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+    "line": "**Fig. 4** Elbow of the torus shape"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+    "line": "**Fig. 5** Valve mass surface about"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+    "line": "Figure 4 presents the shape and design parameters of the"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00021",
+    "line": "**Fig. 6** Impeller 2-D design flow"
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_122bc921523575fef36c1a59": {
+    "markdown_lines": 29,
+    "caption_like_lines": []
+   },
+   "ENR_820214f4dd8a82b78eefe407": {
+    "markdown_lines": 25,
+    "caption_like_lines": [
+     "Fig. 4 Elbow of the torus shape",
+     "Fig. 5 Valve mass surface about the commercial valve data"
+    ]
+   }
+  },
+  "stored_objects": {
+   "count": 17,
+   "by_store": {
+    "equations": 12,
+    "claims": 4,
+    "entities": 1
+   },
+   "quote_anchor_state_counts": {
+    "GROUNDED": 17
+   },
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E0B6A91",
+     "symbols": [
+      "Q"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+     "symbols": [
+      "m_b",
+      "m_b_P",
+      "m_b_E"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_1BA28156",
+     "symbols": [
+      "D_s"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+     "symbols": [
+      "P_p",
+      "Delta_p_p",
+      "eta_p"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+     "symbols": [
+      "m_m",
+      "P_m_out",
+      "P_p",
+      "delta_P_m"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_29C78740",
+     "symbols": [
+      "u_out",
+      "D_out"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+     "symbols": [
+      "m_b_P",
+      "kappa_b",
+      "P_b",
+      "delta_P_b",
+      "P_inv_out",
+      "eta_inv"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+     "symbols": [
+      "delta_P_m",
+      "P_m_out",
+      "m_m"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+     "symbols": [
+      "delta_P_inv",
+      "P_inv_out",
+      "m_inv"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+     "symbols": [
+      "m_inv",
+      "P_inv_out",
+      "delta_P_inv",
+      "P_m_out",
+      "eta_m"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_E25A3881",
+     "symbols": [
+      "D_s",
+      "D_out",
+      "Q"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+     "symbols": [
+      "m_b_E",
+      "kappa_b",
+      "delta_E_b",
+      "P_inv_out",
+      "t_b",
+      "eta_E",
+      "eta_inv"
+     ]
+    }
+   ],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 12,
+    "formula_candidates_in_bundle": 20,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176": [],
+     "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635": [],
+     "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598": [],
+     "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06": [],
+     "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230": []
+    },
+    "model_ids_values_across_stored_objects": [
+     "MODEL_PUMP_ELECTRIC_DRIVE"
+    ]
+   },
+   "objects": [
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E0B6A91",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": "CONFIRMED",
+     "label_as_given": "Lee dimensionless specific speed",
+     "equation_number_as_given": "21",
+     "model_ids_as_given": [],
+     "quote_length": 479,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "Q"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+     "store": "equations",
+     "type": "Equation",
+     "page": 8,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee battery mass selection",
+     "equation_number_as_given": "32",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 287,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 8
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "m_b",
+        "m_b_P",
+        "m_b_E"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_4022dd34281c55f0053cc2a4",
+      "CAND_512c2b2d1ba2a3ab8e9d5172",
+      "CAND_62fa487de8c8924705c754f9",
+      "CAND_bbe8038a6eb73e26357f6906",
+      "CAND_f9a079d6a703e27c74131038",
+      "CAND_fa7d4cb3a825e5aa873ce059"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_1BA28156",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": "CONFIRMED",
+     "label_as_given": "Lee selected Cordier fit",
+     "equation_number_as_given": "23",
+     "model_ids_as_given": [],
+     "quote_length": 479,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "D_s"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+     "store": "equations",
+     "type": "Equation",
+     "page": 6,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee pump shaft power",
+     "equation_number_as_given": "20",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 138,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 6
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "P_p",
+        "Delta_p_p",
+        "eta_p"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_038274bee167e4f1ba894f9a",
+      "CAND_158f656b1384363e96db7a3a",
+      "CAND_19e5a0a5cc1f91e60f11aa90",
+      "CAND_407db9cb4be4f6786dcbfe19",
+      "CAND_ad36ad097e09042859943ee7"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee motor mass closure",
+     "equation_number_as_given": "27",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 182,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "m_m",
+        "P_m_out",
+        "P_p",
+        "delta_P_m"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_29C78740",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": "CONFIRMED",
+     "label_as_given": "Lee impeller outlet peripheral speed",
+     "equation_number_as_given": "24",
+     "model_ids_as_given": [],
+     "quote_length": 479,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "u_out",
+        "D_out"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+     "store": "equations",
+     "type": "Equation",
+     "page": 8,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee power-limited battery mass",
+     "equation_number_as_given": "30",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 287,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 8
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "m_b_P",
+        "kappa_b",
+        "P_b",
+        "delta_P_b",
+        "P_inv_out",
+        "eta_inv"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_4022dd34281c55f0053cc2a4",
+      "CAND_512c2b2d1ba2a3ab8e9d5172",
+      "CAND_62fa487de8c8924705c754f9",
+      "CAND_bbe8038a6eb73e26357f6906",
+      "CAND_f9a079d6a703e27c74131038",
+      "CAND_fa7d4cb3a825e5aa873ce059"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee motor output power density",
+     "equation_number_as_given": "26",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 182,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "delta_P_m",
+        "P_m_out",
+        "m_m"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee inverter output power density",
+     "equation_number_as_given": "28",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 208,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "delta_P_inv",
+        "P_inv_out",
+        "m_inv"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": "CONFIRMED",
+     "label_as_given": "Lee inverter mass closure",
+     "equation_number_as_given": "29",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 208,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "m_inv",
+        "P_inv_out",
+        "delta_P_inv",
+        "P_m_out",
+        "eta_m"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_E25A3881",
+     "store": "equations",
+     "type": "Equation",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": "CONFIRMED",
+     "label_as_given": "Lee dimensionless specific diameter",
+     "equation_number_as_given": "22",
+     "model_ids_as_given": [],
+     "quote_length": 479,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "D_s",
+        "D_out",
+        "Q"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_09f720a145f2cd4cd67d53aa",
+      "CAND_15370161bab192cc69dbeaa3",
+      "CAND_4dec2e8c8ab8632dfd3e5c28",
+      "CAND_58446f2eb9d6850e05f916af",
+      "CAND_999e16fd252b83864b5029a6",
+      "CAND_c6b92bb87b76d96e7c5edd3b",
+      "CAND_cb50f32b987f41ae02148a43",
+      "CAND_e27dabc2bfb8f36d29349b13",
+      "CAND_f67942fc267657109716011e"
+     ]
+    },
+    {
+     "id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+     "store": "equations",
+     "type": "Equation",
+     "page": 8,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Lee energy-limited battery mass",
+     "equation_number_as_given": "31",
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 287,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 8
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "m_b_E",
+        "kappa_b",
+        "delta_E_b",
+        "P_inv_out",
+        "t_b",
+        "eta_E",
+        "eta_inv"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_4022dd34281c55f0053cc2a4",
+      "CAND_512c2b2d1ba2a3ab8e9d5172",
+      "CAND_62fa487de8c8924705c754f9",
+      "CAND_bbe8038a6eb73e26357f6906",
+      "CAND_f9a079d6a703e27c74131038",
+      "CAND_fa7d4cb3a825e5aa873ce059"
+     ]
+    },
+    {
+     "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+     "store": "claims",
+     "type": "Claim",
+     "page": 8,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 287,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 8
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+     "store": "claims",
+     "type": "Claim",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 266,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+     "store": "claims",
+     "type": "Claim",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 208,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+     "store": "claims",
+     "type": "Claim",
+     "page": 7,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_PUMP_ELECTRIC_DRIVE"
+     ],
+     "quote_length": 182,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_12E89F60",
+     "store": "entities",
+     "type": "Assumption",
+     "page": 7,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": "The relations are used in the paper's preliminary two-dimensional configuration procedure for a one-stage centrifugal pump.",
+     "equation_number_as_given": null,
+     "model_ids_as_given": [],
+     "quote_length": 157,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 7
+      }
+     ],
+     "same_page_formula_candidates": null
+    }
+   ]
+  },
+  "targets": {
+   "queue_targets": [
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230"
+   ],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 11,
+   "target_id_occurrences_in_stores_S2_script": {
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    6,
+    8
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "6": {
+     "figure": 2,
+     "formula": 5
+    },
+    "7": {
+     "formula": 9
+    },
+    "8": {
+     "figure": 2,
+     "formula": 6
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 9,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00015",
+     "page_start": 6,
+     "page_end": 6,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1197
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00016",
+     "page_start": 6,
+     "page_end": 6,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1215
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00017",
+     "page_start": 7,
+     "page_end": 7,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1799
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00018",
+     "page_start": 7,
+     "page_end": 7,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1490
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00019",
+     "page_start": 7,
+     "page_end": 7,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1429
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00020",
+     "page_start": 7,
+     "page_end": 7,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 320
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00021",
+     "page_start": 7,
+     "page_end": 8,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 1614
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00022",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 343
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E#c00023",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "**Performance Analysis and Mass Estimation of a Small-Sized Liquid** **Rocket Engine with Electric-Pump Cycle** > 123",
+     "text_length": 817
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

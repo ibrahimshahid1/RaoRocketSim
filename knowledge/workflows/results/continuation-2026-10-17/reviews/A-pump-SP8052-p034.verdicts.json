@@ -1,0 +1,34 @@
+[
+ {
+  "object_id": "EQ_NTRS_19710025474_B280B6A9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8052 PDF p.34 (printed p.22), section 2.1.10, prints Eq. (31) Lambda = 2 pi r tan beta. It describes the flat-plate inducer as constant lead both radially and axially and defines r as radial coordinate on the blade; the following prose identifies beta as blade angle. The stored form, equation number, description, variable meanings, geometric length dimensions for Lambda and r, blank angle-unit field, assumption and quote match this bounded page. No quantitative validity range or complete NPSH/inducer model equivalence is asserted by this equation review.",
+  "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+  "content_sha256": "87f146783bb464dd2f831bb01e14ea2f28267d04279793b37f9dccbaf25b2a75",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710025474",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "pdf_page": 34,
+   "printed_page": "22",
+   "method": "Full original PDF page rendered with pdftoppm at 180 dpi and visually inspected.",
+   "inspected_science_fields": [
+    "label",
+    "equation_number",
+    "form",
+    "description",
+    "variables",
+    "assumptions",
+    "validity",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Source transcription only. No complete pump model, cavitation qualification, or all chart nodes reviewed."
+ }
+]

@@ -1,0 +1,181 @@
+{
+ "meta": {
+  "generated_at": "2026-10-17T17:58:03.059031+00:00",
+  "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+  "n": 8
+ },
+ "records": [
+  {
+   "id": "STD_ASME_PTC_19_1",
+   "type": "StandardSource",
+   "designation": "ASME PTC 19.1",
+   "title": "Test Uncertainty",
+   "requested_by": [
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md H4 alternative"
+   ],
+   "capability_ids": [
+    "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H4_MEASUREMENT_UNCERTAINTY_FRAMEWORK"
+   ],
+   "missing_capability_ids": [],
+   "state": "BLOCKED_ON_STANDARD",
+   "edition": "UNSPECIFIED",
+   "held_document_id": null,
+   "held_source_sha256": null,
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ASME_Y14_24",
+   "type": "StandardSource",
+   "designation": "ASME Y14.24",
+   "title": "Types and Applications of Engineering Drawings",
+   "requested_by": [
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md GD&T note"
+   ],
+   "capability_ids": [],
+   "missing_capability_ids": [],
+   "state": "HELD",
+   "edition": "2012",
+   "held_document_id": "DOC_ASME_Y14_24_2012_TYPES_AND_APPLICATIONS_OF_ENGINEERING_THE_A",
+   "held_source_sha256": "97330300f1e881dc815a50217e55d82af399e62ade33deda935033881ab92e03",
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ASME_Y14_41",
+   "type": "StandardSource",
+   "designation": "ASME Y14.41",
+   "title": "Digital Product Definition Data Practices",
+   "requested_by": [
+    "consolidated review section 10.4 item 8"
+   ],
+   "capability_ids": [],
+   "missing_capability_ids": [],
+   "state": "HELD",
+   "edition": "2003",
+   "held_document_id": "DOC_ASME_Y14_41_2003_DIGITAL_PRODUCT_DEFINITION_DATA_PRACTICES_T",
+   "held_source_sha256": "a143ca864cb9ae1dc8b5c25840d809917bd56dc162700c34ddb122d84b7422d7",
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ASME_Y14_5",
+   "type": "StandardSource",
+   "designation": "ASME Y14.5",
+   "title": "Dimensioning and Tolerancing",
+   "requested_by": [
+    "consolidated review section 10.4 item 8",
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md H6/GD&T note"
+   ],
+   "capability_ids": [],
+   "missing_capability_ids": [],
+   "state": "HELD",
+   "edition": "2018",
+   "held_document_id": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA",
+   "held_source_sha256": "2ce0c6825ce1bcea4b916d9eb86a774525232c3330262625ad0400e881ed7dc0",
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ASTM_E606",
+   "type": "StandardSource",
+   "designation": "ASTM E606",
+   "title": "Strain-controlled fatigue testing",
+   "requested_by": [
+    "consolidated review section 10.4 item 8"
+   ],
+   "capability_ids": [],
+   "missing_capability_ids": [],
+   "state": "BLOCKED_ON_STANDARD",
+   "edition": "UNSPECIFIED",
+   "held_document_id": null,
+   "held_source_sha256": null,
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ISO_2768",
+   "type": "StandardSource",
+   "designation": "ISO 2768",
+   "title": "General tolerances",
+   "requested_by": [
+    "consolidated review section 10.4 item 8",
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md H6"
+   ],
+   "capability_ids": [
+    "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H6_ACHIEVABLE_TOLERANCE_AND_FITS_BY_PROCESS"
+   ],
+   "missing_capability_ids": [],
+   "state": "BLOCKED_ON_STANDARD",
+   "edition": "UNSPECIFIED",
+   "held_document_id": null,
+   "held_source_sha256": null,
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_ISO_286",
+   "type": "StandardSource",
+   "designation": "ISO 286",
+   "title": "ISO system of limits and fits",
+   "requested_by": [
+    "consolidated review section 10.4 item 8",
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md H6"
+   ],
+   "capability_ids": [
+    "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H6_ACHIEVABLE_TOLERANCE_AND_FITS_BY_PROCESS"
+   ],
+   "missing_capability_ids": [],
+   "state": "BLOCKED_ON_STANDARD",
+   "edition": "UNSPECIFIED",
+   "held_document_id": null,
+   "held_source_sha256": null,
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  },
+  {
+   "id": "STD_JCGM_GUM",
+   "type": "StandardSource",
+   "designation": "JCGM uncertainty guides (GUM, ISO/IEC Guide 98-3)",
+   "title": "Guide to the expression of uncertainty in measurement",
+   "requested_by": [
+    "consolidated review section 10.4 item 8",
+    "docs/LITERATURE_REQUESTS_HARDWARE_LOOP.md H4"
+   ],
+   "capability_ids": [
+    "CAP_LITREQ_DOCS_LITERATURE_REQUESTS_HARDWARE_LOOP_MD_H4_MEASUREMENT_UNCERTAINTY_FRAMEWORK"
+   ],
+   "missing_capability_ids": [],
+   "state": "BLOCKED_ON_STANDARD",
+   "edition": "UNSPECIFIED",
+   "held_document_id": null,
+   "held_source_sha256": null,
+   "rule_extraction_state": "NOT_EXTRACTED",
+   "compliance_state": "NOT_ASSESSED",
+   "provenance_kind": "PROJECT_DERIVES",
+   "scope": "Source availability only. HELD means an exact current corpus PDF is mapped; it is not compliance, rule extraction or applicability. BLOCKED_ON_STANDARD keeps dependent rules unavailable.",
+   "harvested_at": "2026-10-17T17:58:03.059031+00:00"
+  }
+ ]
+}

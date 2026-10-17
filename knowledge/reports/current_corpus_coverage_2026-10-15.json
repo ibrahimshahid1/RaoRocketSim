@@ -1,0 +1,1722 @@
+{
+ "equation_completeness": "NOT_ESTABLISHED",
+ "concept_completeness": "NOT_ESTABLISHED",
+ "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+ "documents": {
+  "records": 252,
+  "canonical": 248,
+  "alternate_copies": 4,
+  "with_source_objects": 9,
+  "without_source_objects": 239,
+  "with_equations": 9,
+  "without_equations": 239,
+  "with_independently_confirmed_objects": 5,
+  "conversion_requires_review": 230,
+  "conversion_low_confidence": 16,
+  "zero_page_sources": 1,
+  "zero_page_source_ids": [
+   "DOC_DOI_10_1007_978_3_030_14788_4"
+  ]
+ },
+ "source_objects": {
+  "equations": {
+   "records": 93,
+   "current": 75,
+   "independently_confirmed": 58,
+   "inactive_stale_refuted_or_unresolved": 18
+  },
+  "claims": {
+   "records": 188,
+   "current": 188,
+   "independently_confirmed": 7,
+   "inactive_stale_refuted_or_unresolved": 0
+  },
+  "entities": {
+   "records": 94,
+   "current": 94,
+   "independently_confirmed": 0,
+   "inactive_stale_refuted_or_unresolved": 0
+  },
+  "validity": {
+   "records": 36,
+   "current": 36,
+   "independently_confirmed": 0,
+   "inactive_stale_refuted_or_unresolved": 0
+  }
+ },
+ "incomplete_formula_transcriptions": {
+  "count": 18,
+  "ids": [
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+   "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+   "EQ_NTRS_19760023196_BE05E0AF",
+   "EQ_NTRS_19760023196_D7D2D8F1"
+  ],
+  "current_count": 0,
+  "current_ids": [],
+  "current_state": "NONE_FLAGGED_CURRENT",
+  "historical_count": 18,
+  "state": "INCOMPLETE_TRANSCRIPTION",
+  "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
+ },
+ "models": {
+  "records": 61,
+  "declared_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "current_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "source_reviewed_current_fingerprint": 6,
+  "without_current_source_review": 55,
+  "without_manifest_source": 8
+ },
+ "software_constants": {
+  "records": 983,
+  "by_basis": {
+   "UNKNOWN_BASIS": 242,
+   "IMPLEMENTATION_CHOICE": 351,
+   "LITERATURE_DERIVED": 181,
+   "PROJECT_DERIVED": 41,
+   "REPOSITORY_HEURISTIC": 168
+  },
+  "unknown_basis": 242,
+  "current": 982,
+  "inactive_or_noncurrent": 1,
+  "by_basis_current": {
+   "UNKNOWN_BASIS": 241,
+   "IMPLEMENTATION_CHOICE": 351,
+   "LITERATURE_DERIVED": 181,
+   "PROJECT_DERIVED": 41,
+   "REPOSITORY_HEURISTIC": 168
+  },
+  "by_basis_inactive_or_noncurrent": {
+   "UNKNOWN_BASIS": 1
+  },
+  "unknown_basis_current": 241,
+  "unknown_basis_inactive_or_noncurrent": 1,
+  "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
+ },
+ "gaps": {
+  "canonical_documents_without_source_objects": 239,
+  "canonical_documents_without_equations": 239,
+  "equations_and_claims_pending_independent_verification": 198,
+  "equations_without_model_links": 47,
+  "incomplete_formula_transcriptions": 0,
+  "zero_page_sources": 1,
+  "unknown_basis_software_constants": 241
+ },
+ "by_document": [
+  {
+   "document_id": "DOC_125_1",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_3_540_13917_6_196",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_52D4CA845732D962C5E49697F8B99533_LECTURE_4_5",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 15,
+   "equations": 10,
+   "confirmed_source_objects": 12,
+   "confirmed_equations": 10,
+   "claims": 2,
+   "confirmed_claims": 2,
+   "entities": 3,
+   "cited_models": 1,
+   "supported_models": 1,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_978_3_7091_4745_0_18",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_ASME_Y14_24_2012_TYPES_AND_APPLICATIONS_OF_ENGINEERING_THE_A",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_ASME_Y14_41_2003_DIGITAL_PRODUCT_DEFINITION_DATA_PRACTICES_T",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_ASME_Y14_5_2018_DIMENSIONING_AND_TOLERANCING_8_2_THE_AMERICA",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_AUSTIN2002",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_A_DESIGN_TOOL_FOR_LIQUID_ROCKET_ENGINE_INJECTORS",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_BELL2014",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_BELLARY2014",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_BF03404670",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_CAD_04",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 6,
+   "equations": 1,
+   "claims": 5,
+   "cited_models": 1,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_CHEN1992",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DIMENSIONING_AND_TOLERANCING_ENGINEERING_DRAWING_AND_ASTM_IN",
+   "canonical": false,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1002_FLD_1650130505",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_978_3_030_14788_4",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S00170_015_7201_4",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S00170_016_8467_X",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S00170_018_2033_7",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S00193_018_0834_0",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 3,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S10853_008_2802_Z",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S11630_013_0601_6",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S11630_015_0753_7",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S11630_016_0838_Y",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S11837_025_07787_0",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z",
+   "canonical": false,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 33,
+   "equations": 12,
+   "confirmed_source_objects": 5,
+   "confirmed_equations": 5,
+   "claims": 7,
+   "entities": 12,
+   "validity": 2,
+   "cited_models": 1,
+   "supported_models": 1,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00561_5",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_0010_4485_95_00005_4",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_02_005",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2017_12_012",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2020_04_067",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2021_02_034",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_02_019",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2024_02_038",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2014_10_008",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120035",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_APPLTHERMALENG_2023_120421",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_AST_2014_05_012",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_AST_2021_106729",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_CJA_2017_04_007",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_COMBUST",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_EXPTHERMFLUSCI_2018_03_033",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_FUEL_2020_119212",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_IJFATIGUE_2020_105649",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_IJHEAT",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_IJHEATMASSTRANSFER_2013_10_046",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_IJHYDENE_2008_05_057",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_JALLCOM_2013_12_057",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_JPPR_2018_01_004",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MSEA_2010_07_051",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MSEA_2015_05_028",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106437",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106442",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106456",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106496",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106545",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_MTCOMM_2023_106558",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1016_J_SURFCOAT_2013_06_062",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1038_S41598_024_64027_2",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1038_S41598_025_18499_5",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1051_EUCASS_200901171",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_0305215X_2021_1932867",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_10407782_2013_798532",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 12,
+   "equations": 1,
+   "claims": 8,
+   "entities": 2,
+   "validity": 1,
+   "cited_models": 10,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_15361055_2022_2147765",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1088_1742_6596_2369_1_012066",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1088_1755_1315_781_4_042016",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1088_1757_899X_101_1_012180",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1088_1757_899X_1301_1_012030",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1088_1757_899X_1301_1_012030_E0D954A3",
+   "canonical": false,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_2814127",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_2817294",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3254633",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3616734",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3657314",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3657315",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3662532",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3662656",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3672726",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_3678503",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_4042160",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_1_4053652",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_90_GT_198",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1115_94_GT_426",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1177_0954406212449939",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1177_0954406212449939_50F7ECD5",
+   "canonical": false,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1179_MHT_2004_014",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_1243_PIME_PROC_1963_177_061_02",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_15421_452324",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_11645",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_14699",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_35074",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_47701",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_7988",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B34855",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B36059",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B36144",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B36361",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B36589",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_B37669",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_T4299",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_1_T6056",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_2_5354",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 35,
+   "equations": 1,
+   "claims": 20,
+   "entities": 9,
+   "validity": 5,
+   "cited_models": 2,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_2_5593",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_23969",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_25729",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_28012",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_29545",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_60066",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_3_9031",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_4_866197",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_5_9781600866760_0621_0648",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_1992_3154",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_1992_3400",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_1997_2913",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2014_3681",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2015_3810",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2015_3845",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2016_1416",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2016_1453",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2016_4771",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2016_5080",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2017_4670",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2017_4928",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2018_4624",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2018_4625",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2018_4860",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_0152",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_3938",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_4117",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_4361",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_4362",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2019_4432",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_6_2020_3941",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_8_5837",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 17,
+   "equations": 9,
+   "confirmed_source_objects": 14,
+   "confirmed_equations": 9,
+   "claims": 5,
+   "confirmed_claims": 5,
+   "entities": 2,
+   "validity": 1,
+   "cited_models": 1,
+   "supported_models": 1,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_DOI_10_3233_ATDE250338",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_3390_AEROSPACE6030036",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_3390_AEROSPACE9090494",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_3390_APP15052696",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_3390_ELECTRONICS12163527",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_3390_EN11102588",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_4028_WWW_SCIENTIFIC_NET_AMM_680_303",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_5293_IJFMS_2011_4_3_317",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DOI_10_6084_M9_FIGSHARE_22886720",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_DRESSLER2000",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 107,
+   "equations": 32,
+   "confirmed_source_objects": 32,
+   "confirmed_equations": 32,
+   "claims": 39,
+   "entities": 26,
+   "validity": 10,
+   "cited_models": 6,
+   "supported_models": 3,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_FP_EUCASS_043",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_FULLTEXT01",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_GAVITT2001",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_GROMSKI2010",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_HANDOUT4_1",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_HICKMAN2003",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_HUBER2009",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_KUHL1998",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_LIN1993",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_LIQUID_FILM_COOLING_IN_ROCKET_ENGINES_R5YU3J35KY",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_L_05_BSPLINES_NURBS",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_MA8UFPJ30PN7K_2BP3WB2SYOYLLYK6K68JQ0R8DXEM8JQ_3D",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_MASUOKA2011",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_MILLER1974",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_MUELLER2000",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NARAGHI2004",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NOZZLE_GEOMETRIES",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19670010557",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19680021046",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19680021132",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19690023975",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19700005097",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19710019929",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 50,
+   "equations": 6,
+   "claims": 26,
+   "entities": 13,
+   "validity": 5,
+   "cited_models": 7,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_NTRS_19710023317",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19710025474",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19720000070",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19720000634",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19720005326",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19720008558",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19720026079",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19730011150",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19730015803",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19730018978",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19730022965",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19740017697",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19740017910",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19740020848",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 3,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19740023307",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19740026132",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19750012398",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19750020175",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19750021165",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19760023196",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "source_objects": 118,
+   "equations": 3,
+   "confirmed_source_objects": 2,
+   "confirmed_equations": 2,
+   "claims": 76,
+   "entities": 27,
+   "validity": 12,
+   "cited_models": 4,
+   "extraction_gap": false
+  },
+  {
+   "document_id": "DOC_NTRS_19770009165",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 3,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19780005428",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19780013268",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19780023221",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19830011760",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19830016278",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19870007469",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19890068390",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19900015790",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19940018570",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19950011631",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19950013764",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19960044559",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19970002915",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_19970004933",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20020050420",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20020070630",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20020085330",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20030067852",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 1,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20050123582",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20060005216",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20070026245",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20090037061",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20100034924",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20100035254",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20120008551",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20130014182",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20150002584",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20150016316",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20150021468",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20170004516",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_NTRS_20180003628",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_PAPERLREENGINEMASSANDSIZING",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_PRMEYER",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_RADHAKRISHNAN2018",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "cited_models": 3,
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_RADHAKRISHNAN2020",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_RAO1999",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_S12666_010_0089_7",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_SCHARLEMANN2005",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_SCHARLEMANN2006",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_SINGH1997",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_TANI2008",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_TOKUDOME2010",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_TOMEJ_2_75",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_VANDENBERG_CORRECTED_PROPERTIES",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_WALTER1999",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_WHITFIELD1978",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_WHITFIELD1982",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  },
+  {
+   "document_id": "DOC_YOUNG_THESIS",
+   "canonical": true,
+   "equation_completeness": "NOT_ESTABLISHED",
+   "extraction_gap": true
+  }
+ ]
+}

@@ -1,0 +1,189 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "X-BARTZ-p001-005",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_6eb95d64ddd1c84f0b0535aa",
+   "state": "REJECTED",
+   "reason": "Eq. [1]: symbols garbled (h_theta, exponent varpi for m); original h_g ~ (rho'U)^m; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_bb473ddb814f0d7914c5d7a6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. [2] Nu = C(Re)^m(Pr)^n matches.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_370524790511f3c302df7e00",
+   "state": "REJECTED",
+   "reason": "Eq. [3]: h_sigma for h_g; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_02bfdf683cc2743e59b31248",
+   "state": "REJECTED",
+   "reason": "Eq. [4]: left side garbled and Pr^{0,6}; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_0caa1a61bdec71d7c98bccd9",
+   "state": "REJECTED",
+   "reason": "Eq. [5]: numerator 1 missing and second exponent omega/3 for omega/5; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_0207c87c83c86601c5d034be",
+   "state": "REJECTED",
+   "reason": "Eq. [6]: subscript glyphs garbled (h_varrho, C_varrho, p_varrho for h_g, C_p, p_c); corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_3549ce141628cf4f38e8c586",
+   "state": "REJECTED",
+   "reason": "Fig. 2 caption damaged ('parameter o' for sigma).",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_5fd61d4818f57c85c4966348",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 1 caption matches.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_3736fe50e67a60ab2833fb1b",
+   "state": "REJECTED",
+   "reason": "Eq. [7]: h_sigma for h_g and property subscript sigma for 0; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_9ee7a05259cc234be62e1e82",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. [8] Pr = 4 gamma/(9 gamma - 5) matches (dot leaders are printed).",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_f9d319a6e2a49087231a3949",
+   "state": "REJECTED",
+   "reason": "Eq. [9]: exponent 1/2 and degree-R symbol garbled; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_000c2acaf57a14f5c9eb0972",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_e339ad4fab9e707b85078f9c",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_73e526aeeebec358f91641db",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_16ebe7c1ff288de78313cb7e",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_d5ffc12cf2d5f3eff8fc4e39",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_6c089c280d53056708766c68",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_76c52f8419a67775046f1b20",
+   "state": "REJECTED",
+   "reason": "Not part of Bartz's technical note: unrelated journal content (advertisement or news) on the scanned issue pages.",
+   "evidence": {
+    "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 5
+   }
+  }
+ ]
+}

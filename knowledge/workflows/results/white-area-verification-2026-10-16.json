@@ -1,0 +1,115 @@
+[
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6C754D6F",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1098 displays rho V A = rho* V* A* and A/A* = (rho*/rho)(V*/V), numbered9.41. The density and velocity ratios both have sonic-reference quantities in the numerator. Its introductory paragraph explicitly uses perfect-gas and isentropic-flow relations, equates the mass flow, and states that the sonic conditions need not actually occur in the duct. Each side of the continuity equality has mass-flow dimensions; the area and density/velocity ratios are dimensionless.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1098,
+      "equation_number": "9.41",
+      "method": "Independent visual comparison of original-PDF page render;9.44 additionally inspected from a fresh PyMuPDF crop and the original embedded raster, with an independent algebraic exponent check. No Docling text was used as authority.",
+      "render_path": "knowledge/.work/white/p1098.png",
+      "render_sha256": "1d4292175f1193a1e8c68657acafa2871dc7f362ca0d8d915e89b9c6fe006ab0",
+      "extraction_file": "knowledge/workflows/results/white-area-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+      "reviewed_at": "2026-10-16T05:05:49.694709+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations; these display equations do not print the SI units beside the variables.",
+      "assumptions_scope": "The local source pages explicitly state perfect-gas and isentropic relations, allow a hypothetical sonic reference, and state one-dimensional airflow with no shocks for the numerical application. No additional validity envelope was inferred."
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, page attribution and local assumptions. SI units are dimensional interpretations. This verdict does not establish complete textbook extraction, numeric validity bounds, correct implementation, experimental validation or hardware qualification. Earlier cross-referenced equations are outside the two-page source window."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1099 displays rho*/rho = (rho*/rho0)(rho0/rho) = {2/(k+1)[1+(k-1)Ma^2/2]}^[1/(k-1)], numbered9.42. The bracket, Mach square, factor2/(k+1), direction of both density ratios, and reciprocal exponent1/(k-1) match the stored expression. All factors are dimensionless. The paragraph continues the preceding perfect-gas isentropic area-change derivation and explicitly cites source equations9.28 and9.32; those earlier pages are outside this bounded review.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1099,
+      "equation_number": "9.42",
+      "method": "Independent visual comparison of original-PDF page render;9.44 additionally inspected from a fresh PyMuPDF crop and the original embedded raster, with an independent algebraic exponent check. No Docling text was used as authority.",
+      "render_path": "knowledge/.work/white/p1099.png",
+      "render_sha256": "7bf022429c08d85318931ebf2861a6c51e813846974adae14a524e0d9225d49d",
+      "extraction_file": "knowledge/workflows/results/white-area-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+      "reviewed_at": "2026-10-16T05:05:49.694709+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations; these display equations do not print the SI units beside the variables.",
+      "assumptions_scope": "The local source pages explicitly state perfect-gas and isentropic relations, allow a hypothetical sonic reference, and state one-dimensional airflow with no shocks for the numerical application. No additional validity envelope was inferred."
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, page attribution and local assumptions. SI units are dimensional interpretations. This verdict does not establish complete textbook extraction, numeric validity bounds, correct implementation, experimental validation or hardware qualification. Earlier cross-referenced equations are outside the two-page source window."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1099 displays V*/V = sqrt(k R T*)/V = [sqrt(k R T)/V](T*/T0)^(1/2)(T0/T)^(1/2) = (1/Ma){2/(k+1)[1+(k-1)Ma^2/2]}^(1/2), numbered9.43. The sonic-to-local ratio direction, three temperature states, square-root factors, Mach reciprocal and one-half exponent match the stored transcription. R must be a mass-specific gas constant for kRT to have squared-speed dimensions. The page cites9.26 and9.32; this verdict does not independently review those earlier pages.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1099,
+      "equation_number": "9.43",
+      "method": "Independent visual comparison of original-PDF page render;9.44 additionally inspected from a fresh PyMuPDF crop and the original embedded raster, with an independent algebraic exponent check. No Docling text was used as authority.",
+      "render_path": "knowledge/.work/white/p1099.png",
+      "render_sha256": "7bf022429c08d85318931ebf2861a6c51e813846974adae14a524e0d9225d49d",
+      "extraction_file": "knowledge/workflows/results/white-area-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+      "reviewed_at": "2026-10-16T05:05:49.694709+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations; these display equations do not print the SI units beside the variables.",
+      "assumptions_scope": "The local source pages explicitly state perfect-gas and isentropic relations, allow a hypothetical sonic reference, and state one-dimensional airflow with no shocks for the numerical application. No additional validity envelope was inferred."
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, page attribution and local assumptions. SI units are dimensional interpretations. This verdict does not establish complete textbook extraction, numeric validity bounds, correct implementation, experimental validation or hardware qualification. Earlier cross-referenced equations are outside the two-page source window."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1099 displays the boxed area-Mach expression, numbered9.44, with numerator1+(k-1)Ma^2/2, denominator(k+1)/2 inside the bracket and reciprocal Mach outside it. Inspection of the original embedded equation raster and a fresh original-PDF crop confirms the superscript is (1/2)(k+1)/(k-1), equivalent to the stored exponent(k+1)/(2*(k-1)); the final(k-1) is a denominator. The exponent is also independently consistent with adding the density and velocity exponents in9.42 and9.43:1/(k-1)+1/2. This algebraic check supports the source reading without certifying any software implementation. The form and area ratio are dimensionless.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1099,
+      "equation_number": "9.44",
+      "method": "Independent visual comparison of original-PDF page render;9.44 additionally inspected from a fresh PyMuPDF crop and the original embedded raster, with an independent algebraic exponent check. No Docling text was used as authority.",
+      "render_path": "knowledge/.work/white/p1099.png",
+      "render_sha256": "7bf022429c08d85318931ebf2861a6c51e813846974adae14a524e0d9225d49d",
+      "extraction_file": "knowledge/workflows/results/white-area-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+      "reviewed_at": "2026-10-16T05:05:49.694709+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations; these display equations do not print the SI units beside the variables.",
+      "assumptions_scope": "The local source pages explicitly state perfect-gas and isentropic relations, allow a hypothetical sonic reference, and state one-dimensional airflow with no shocks for the numerical application. No additional validity envelope was inferred.",
+      "independent_render_sha256": "a14c6608c1873e6b6855c00a2342ad7048d044e2356ec6d6d9b634412c1cdb78",
+      "original_equation_image_xref": 4602,
+      "original_equation_image_sha256": "0a5eb7caa4a09c6c0ce9e30df341a51f613931c94140c1555e7592817393aa15"
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, page attribution and local assumptions. SI units are dimensional interpretations. This verdict does not establish complete textbook extraction, numeric validity bounds, correct implementation, experimental validation or hardware qualification. Earlier cross-referenced equations are outside the two-page source window."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BEFA360A",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1099 explicitly specializes9.44 to k=1.4 and displays A/A* = (1/Ma)(1+0.2 Ma^2)^3/1.728, numbered9.45. The coefficient0.2, Mach square, cube, denominator1.728 and reciprocal Mach match the stored transcription. Independent substitution into9.44 yields exponent3 and denominator1.2^3=1.728. The paragraph below assumes one-dimensional isentropic airflow and no shock waves in the duct. This specialization does not establish k=1.4 for other working fluids or all operating conditions.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1099,
+      "equation_number": "9.45",
+      "method": "Independent visual comparison of original-PDF page render;9.44 additionally inspected from a fresh PyMuPDF crop and the original embedded raster, with an independent algebraic exponent check. No Docling text was used as authority.",
+      "render_path": "knowledge/.work/white/p1099.png",
+      "render_sha256": "7bf022429c08d85318931ebf2861a6c51e813846974adae14a524e0d9225d49d",
+      "extraction_file": "knowledge/workflows/results/white-area-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+      "reviewed_at": "2026-10-16T05:05:49.694709+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations; these display equations do not print the SI units beside the variables.",
+      "assumptions_scope": "The local source pages explicitly state perfect-gas and isentropic relations, allow a hypothetical sonic reference, and state one-dimensional airflow with no shocks for the numerical application. No additional validity envelope was inferred."
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, page attribution and local assumptions. SI units are dimensional interpretations. This verdict does not establish complete textbook extraction, numeric validity bounds, correct implementation, experimental validation or hardware qualification. Earlier cross-referenced equations are outside the two-page source window."
+  }
+]

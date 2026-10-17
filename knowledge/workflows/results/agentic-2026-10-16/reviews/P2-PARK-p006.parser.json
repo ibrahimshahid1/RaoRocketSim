@@ -1,0 +1,69 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-PARK-p006",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_cfc06134f41c6934d1bcd08f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 4(a) impeller-assembly panel; Docling did not link the printed caption 'Fig. 4 Details of impeller assembly (a) and volute geometry (b)'.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_d1d65d61dfc8d51ece34997c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 4(b) volute panel; same unlinked caption.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_1b3a30185bb15e85e4d80e36",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (10) H0 = sigma_slip u2 Vu2/g = sigma_slip H_Euler matches the original.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_f20b02c32f0d29f15be852b1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (11) H_mano = H0 - h_l,volute - h_l,eye matches the original.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_4918758697e508911297d2d6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 2: all 8 data rows and the Impeller A / Impeller B column order match the original; the two-level header (Value over Impeller A | Impeller B) is flattened across rows 0-1.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_dda1516b65418556b114deed",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 3 matches the original cell by cell (motor 1.22 kg, 8.20 kW/kg; inverter 0.5 kg, 26.64 kW/kg).",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  }
+ ]
+}

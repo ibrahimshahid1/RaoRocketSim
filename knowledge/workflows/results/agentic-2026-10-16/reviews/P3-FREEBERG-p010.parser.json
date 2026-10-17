@@ -1,0 +1,19 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-FREEBERG-p010",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_83a62e68075bb77532a13ddd",
+   "state": "REJECTED",
+   "reason": "Eq. (6): the first denominator is transcribed as pi d_P (capital P); the original prints pi d_p (pintle tip diameter). Corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+[
+ {
+  "object_id": "CONST_NTRS_19710025474_5CE4B98A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8052 PDF p.69 (printed p.57), sec.3.1.9, defines alpha/beta as incidence angle divided by blade angle. It gives a design range 0.35 for thin blades to 0.50 for thick blades, a preferred mean 0.425, and explicitly says a wide required flow range calls for a design ratio greater than the optimum 0.425 to avoid blockage. The stored name, value 0.425, dimensionless units, quote, page and context preserve these qualifications and do not turn this preference into a universal bound. This is confirmation of a page-stated design preference, not experimental calibration of the repository inducer model.",
+  "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+  "content_sha256": "ed48868f24d7ed6fa2a994f4444500a8043c1c6c3b1ffc339078e285d5f8eb04",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710025474",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "pdf_page": 69,
+   "printed_page": "57",
+   "method": "Full original PDF page rendered with pdftoppm at 180 dpi and visually inspected.",
+   "inspected_science_fields": [
+    "label",
+    "name",
+    "value",
+    "units",
+    "context",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Bounded source preference and its caveats only; not complete inducer-model equivalence or physical validation."
+ }
+]

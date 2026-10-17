@@ -1,0 +1,228 @@
+{
+ "harvest_owner": "kg.harvest_parameters@1",
+ "scope": "bounded repository defaults and static references",
+ "records": 49,
+ "default_sets": {
+  "traditional_screening": 16,
+  "mdo_mission": 17,
+  "electric_technology:lee2021_ijass_electric_pump": 8,
+  "electric_technology:repository_screening_v1": 8
+ },
+ "sources": [
+  {
+   "path": "raosim/pumps.py",
+   "state": "CURRENT",
+   "sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef"
+  },
+  {
+   "path": "raosim/mdo/schema.py",
+   "state": "CURRENT",
+   "sha256": "a789c145ee311bb4f27629d1c2f072356694edd3c29b7cc804f4bacf94d70c27"
+  }
+ ],
+ "comparisons": [
+  {
+   "traditional_name": "motor_efficiency",
+   "mdo_name": "eta_motor",
+   "traditional_id": "CONST_DEFAULT_9b268c7f4a53862e4066356f7d489c5a119694946ee72945ee71aa1785c09c32",
+   "mdo_id": "CONST_DEFAULT_08be9e135af050bb97b10fbee625f80e163b772fbf0a62a859d187eb3ade7b31",
+   "traditional_value": 0.9,
+   "mdo_value": 0.9,
+   "units": "1",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "inverter_efficiency",
+   "mdo_name": "eta_inverter",
+   "traditional_id": "CONST_DEFAULT_5dca23edb08032ded617afaaca59767c67651d1c9a81a9eb16b91afbbe5b2845",
+   "mdo_id": "CONST_DEFAULT_28b752c8be116e70354af5aa29b488dc147e49f3b339a167be82b38c219d294b",
+   "traditional_value": 0.96,
+   "mdo_value": 0.96,
+   "units": "1",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "battery_discharge_efficiency",
+   "mdo_name": "eta_discharge",
+   "traditional_id": "CONST_DEFAULT_5134adda9b09cf0f523783eea9517fbe1c9fe0e800f512f89d97ffb712d5c839",
+   "mdo_id": "CONST_DEFAULT_833eab083bc11e239577c68dd05b95779b1ffb8ae5e9c672fbf6e27c192dd5fd",
+   "traditional_value": 0.95,
+   "mdo_value": 0.95,
+   "units": "1",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "motor_power_density",
+   "mdo_name": "motor_power_density",
+   "traditional_id": "CONST_DEFAULT_77e188b33e52f047a58b4e4ae431cbd11eba71a641673466fe2ab7b1b7afe544",
+   "mdo_id": "CONST_DEFAULT_a20698faa6d55785663c614fefde4aa2db3535ed68395be427377a96b909da27",
+   "traditional_value": 2500.0,
+   "mdo_value": 2500.0,
+   "units": "W/kg",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "inverter_power_density",
+   "mdo_name": "inverter_power_density",
+   "traditional_id": "CONST_DEFAULT_25f202c7e219ac26810d95781a881d3e2d174cb43949dd8a85c5d039c4ce34a0",
+   "mdo_id": "CONST_DEFAULT_6fd5deeea02e63801c8767014dd3fe9f04133056132f683ec000d306db423fe1",
+   "traditional_value": 15000.0,
+   "mdo_value": 15000.0,
+   "units": "W/kg",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "battery_energy_density",
+   "mdo_name": "battery_energy_density",
+   "traditional_id": "CONST_DEFAULT_3a566ddd469bae6ce9dfe728a913295edce0dcfac148c2e08193a896e84abec0",
+   "mdo_id": "CONST_DEFAULT_3b3c6ee9a1b030fc5cda1ba58109560b973f0e1670e501b75207e2287560a70a",
+   "traditional_value": 900000.0,
+   "mdo_value": 900000.0,
+   "units": "J/kg",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "battery_power_density",
+   "mdo_name": "battery_power_density",
+   "traditional_id": "CONST_DEFAULT_a5c88bdd4019663d414c33b876444f91cb2941ffd371203080f1112882643f99",
+   "mdo_id": "CONST_DEFAULT_684ab7d6514033625e11b88ba9d440906c35362004580abec7d52631c907274f",
+   "traditional_value": 3000.0,
+   "mdo_value": 3000.0,
+   "units": "W/kg",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  },
+  {
+   "traditional_name": "battery_structural_margin",
+   "mdo_name": "battery_structural_margin",
+   "traditional_id": "CONST_DEFAULT_250e1e8d452b9906001537a8105604bdfdf26c8f532a6f8f1c24099958809ee8",
+   "mdo_id": "CONST_DEFAULT_5873d5edffe493713834b53a9af37c136ea696d7e881ffe846fb4ccde0e2d3db",
+   "traditional_value": 1.2,
+   "mdo_value": 1.2,
+   "units": "1",
+   "state": "EQUAL",
+   "shared_registry_set": "repository_screening_v1",
+   "resolution": "Preserve separate technology assumptions; neither value is source-validated here."
+  }
+ ],
+ "unpaired_parameters": [
+  {
+   "id": "CONST_DEFAULT_bbeab36ac31cf010a99d077256796d55f0dbe063899cea7501449ab3a4042e76",
+   "default_set": "traditional_screening",
+   "name": "pump_margin",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_02ffb48fd4e06f89da45edbb3976c7d9ff09f7c3c3d463b9ea0031c77f718000",
+   "default_set": "traditional_screening",
+   "name": "auto_current_target",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_c5a5bdd1e8cedbdd2f90b0770fec082a3da05b7464c6badb5b42440471b7367f",
+   "default_set": "traditional_screening",
+   "name": "rotor_material_density",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_fe6b39e7c33000ca1f02469a9e0d17d7e3f415e80fb22b210711781a66e3e6ab",
+   "default_set": "traditional_screening",
+   "name": "rotor_yield_strength",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_c8c3752d857782c09e8e8032d2c82e782959c347e6e8cbc5c3496b274a6814fb",
+   "default_set": "traditional_screening",
+   "name": "casing_yield_strength",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_368acdbdfea72503ff01e52708caeef62e0c345a0e3b2eed1e47016ef5f4f74a",
+   "default_set": "traditional_screening",
+   "name": "structural_fos",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_de945e397eff0c1d002f197a943de7c42b8771f77c801ef5c7b091d89064fe7c",
+   "default_set": "traditional_screening",
+   "name": "bearing_dn_limit",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_201fe3643d90b20db5d41e5947aea127f8e512774fc314fb6f1e3a397cd3ac0a",
+   "default_set": "traditional_screening",
+   "name": "seal_face_speed_limit",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_45d39ccafcdd51d4434e0da5fe52d056824a864fa47b0e7832cc86d9bf450be8",
+   "default_set": "mdo_mission",
+   "name": "pump_eta_peak",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_46ca862d829cef633a17af83252ffa9e88ba1d59f78e45cd118b6dd6c05b5e56",
+   "default_set": "mdo_mission",
+   "name": "pump_ns_opt",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_6e31b443de13c221e46699554d0e5adc881e87ddeaec446cb24906202679df12",
+   "default_set": "mdo_mission",
+   "name": "pump_eta_ns_width",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_44f920f45ada63171600f5cb62aefed9a5c4b2de670388a0ebf24f439ffc4f9f",
+   "default_set": "mdo_mission",
+   "name": "pump_speed_rpm",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_f32aebf38df41a45f3b63153ed961145ec8ee89b1f2c1588a2e43150d80bd729",
+   "default_set": "mdo_mission",
+   "name": "pump_head_coefficient",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_524de68995b8676e4fb058b725069e7628f3159c288743a82eb1754fdd4bcdf8",
+   "default_set": "mdo_mission",
+   "name": "pump_tip_speed_max",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_b911e5ed1bffe5c4442e029ccce06c244a4e47a2ff5d1b417f25dc4b5526c33c",
+   "default_set": "mdo_mission",
+   "name": "pump_nss_max",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_caf86e828e6a18f9fd887d69f04c72c160c02f8edda4428e456e5e38d7d9f9e8",
+   "default_set": "mdo_mission",
+   "name": "eta_pump",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  },
+  {
+   "id": "CONST_DEFAULT_2735c0dea38c4a576fe7c5310711486d28882d7791a725a6e3a0e9efa0be6ce4",
+   "default_set": "mdo_mission",
+   "name": "pump_specific_mass",
+   "state": "NO_COUNTERPART_IN_INSPECTED_DEFAULT_SET"
+  }
+ ],
+ "issues": [],
+ "scientific_support_created": false,
+ "numerical_defaults_changed": false
+}

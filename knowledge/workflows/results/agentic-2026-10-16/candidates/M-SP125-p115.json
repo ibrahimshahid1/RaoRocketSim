@@ -1,0 +1,231 @@
+{
+ "packet": "M-SP125-p115",
+ "kind": "model_review",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  115,
+  115
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 115,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0115.png",
+   "sha256": "3284e0da1b165b291be290c382cb1506d14ed32472aa82e490d19736da8ef39d",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_5f8febc334359bf644a794bc"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_7891589d3bb82f5958e26f0f",
+   "kind": "figure",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 223.4395883693164,
+     "t": 755.4428291320801,
+     "r": 346.60518839185244,
+     "b": 738.3765563964844,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f4527f21e00bf2f411b2927b",
+   "kind": "figure",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 223.5671578355155,
+     "t": 73.58538818359375,
+     "r": 352.54395612501276,
+     "b": 48.06451416015625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0b15f574c936587e844600b5",
+   "kind": "formula",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/24",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 354.0,
+     "t": 550.6666666666666,
+     "r": 505.0,
+     "b": 526.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { q _ { u l } } { q _ { n o n b o i l i n g } } = \\frac { C _ { 2 } \\times 1 0 ^ { 4 } } { P _ { c o } G }",
+   "original_text": "q Cx 104 ee (4-24) Gnonboiling PeoG",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_59c5b93ea9dc00fc2dd0e189",
+   "kind": "formula",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/33",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 332.3333333333333,
+     "t": 339.6666666666667,
+     "r": 505.3333333333333,
+     "b": 313.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { c } = \\frac { 0 . 0 2 9 \\, C _ { p \\mu } \\, ^ { 0 . 2 } } { P _ { r } \\, ^ { 2 / 3 } } \\left ( \\frac { G ^ { 0 . 8 } } { d ^ { 0 . 2 } } \\right ) \\left ( \\frac { T _ { c o } } { T _ { w c } } \\right ) ^ { 0 . 5 5 } \\quad ( 4 \\cdot 2 5 )",
+   "original_text": "he= 0.029 Cpp?? (caany es coy\" (4-25) P,23 227 \\T we",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_83163b1b38ad81ec52cda67c",
+   "kind": "formula",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 119.33333333333334,
+     "t": 212.33333333333326,
+     "r": 277.66666666666663,
+     "b": 187.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = C _ { 1 } R e ^ { 0 . 8 } P _ { r } ^ { 0 4 } \\left ( \\frac { \\mu } { \\mu _ { W } } \\right ) ^ { 0 . 1 4 } \\quad ( 4 \\cdot 2 3 )",
+   "original_text": "B 0.14 Nu=C,Re*P,% () (4-28) Ww",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e5b9293d638533e465c7b8a9",
+   "kind": "formula",
+   "pages": [
+    115
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/43",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 355.6666666666667,
+     "t": 104.33333333333337,
+     "r": 505.3333333333333,
+     "b": 94.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "Q _ { c } = \\dot { w } _ { c } C _ { p } ( T _ { c e } - T _ { c i } )",
+   "original_text": "Qe=WeCp(TceTei) (4-26)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_5f8febc334359bf644a794bc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p115-115-1947f7212f7446fb559ccc2f882c6bf143dcf508efdf61d4243581945ad5a01c.json",
+   "raw_sha256": "820dcb3446b8fd7251976e487948d6e95c96e381bfb0922ad878e1311aee950b",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_THERMAL_SIEDER_TATE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00271",
+   "page_start": 115,
+   "page_end": 115,
+   "section": "MAIN PROPELLANT",
+   "text": "106 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\nwall temperature is so high that failure of the\nwall material often occurs. The heat flux at A3\nis defined as the upper limit of nucleate boiling\nof the coolant quI. which therefore should be\nused as the design limit for a regenerative cooling system.\n\nCurve B indicates the heat transfer behavior\nof a coolant above critical pressure. Since no\nboiling can occur. the wall temperature continually increases with increasing heat flux. Line\n\nB 1- B 2 represents the heat-transfer region. when\nthe wall temperature is below the coolant critical\ntemperature. The heat-transfer coefficient remains essentially constant. As the wall temperature reaches the critical temperature B2 and\nhigher. a gradual transition to a stable supercritical vapor-film boundary layer begins. which\nresults in somewhat lower heat-transfer coefficients. Line B2-B3 represents the heat transfer\nin this region. Wall failure temperatures are\nusually reached at lower temperatures when the\ncoolant is above the critical pressure than when\nit is below it. Where possible. a coolant operating pressure between 0.3 to 0.7 of critical\npressure should be used to take advantage of the\nhigh heat-transfer coefficients available with\nnucleate boiling. However. in most systems.\nparticularly those which are fed from a turbopump. the cooling jacket pressure. which is\nequal to or larger than the sum of chamber pressure and injection pressure. is supercritical.\nFor the nonboiling subcritical temperature regions of both, subcritical and supercritical coolant pressures (A 1-A 2 and B]-B2 in fig. 4-27), the\nrelationship between wall temperature and heat\nflux, which depends on the heat transfer coefficient _he._ can be predicted with sufficient accuracy for design purposes with the help of the\nSieder-Tate equation (eq. 4-23) for turbulent heat\ntransfer to liquids flowing in channels:"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00272",
+   "page_start": 115,
+   "page_end": 115,
+   "section": "MAIN PROPELLANT",
+   "text": "_JI_ _0]4_\nNu=CIReoSPr04 _8w)_ ( 4-23)\n\n_JIw_ = coolant viscosity at coolant sidewall\n\n/1 = coolant viscosity, lblin-sec\nP r = Prandtl number\nG = coolant weight flow rate per unit area,\n\nIb/in <sup>2</sup> -sec\nd = coolant passage hydraulic diameter, in\n_Teo_ = coolant bulk temperature. deg R\n_Twe_ = coolant side wall temperature. deg R\n\ntemperature\nd = coolant passage hydraulic diameter. in\n_k_ = coolant thermal conductivity. Btu/sec-in 2_\n\ndeg F/in\n_p_ = coolant density, lblin 3\nVeo = coolant velocity, in/sec\nC p = coolant specific heat at constant pres\n\nsure, Btu/lb-deg F\nThe heat flux at the upper limit of nucleate\nboiling _qui_ can be estimated from\n\n( 4-24)\nqnonboiling Peo <sup>G</sup>\n\nwhere\n\n= constant. its value depending on\n\nC2\n\ncoolant used\nqnonboiling = heat flux without nucleate boiling,\n\nBtu/in <sup>2</sup> -sec\nPeo = coolant pressure, psia\nG = coolant maximum flow rate per\n\nunit area. lblin 2-sec\n\nWhen the heat is transferred through a vaporfilm boundary layer (coolant at supercritical\npressure and temperature, region B 2 -B 3 in fig.\n4-27). the coolant-side heat-transfer coefficient\n_he_ can be estimated from\n\n_ 0.029 C p/1 02 (G o.s _(Teo) 0.55_\n_he -_ -) ( 4-25)\n_P//3_ d <sup>02</sup> Twe\n\nwhere\n\nCp = coolant specific heat at constant pres\n\nsure. Btu/lb-deg F\n\nwhere\n\nc] = a constant (different values for various\n\nThe bulk temperature of most coolants should\nbe kept below the critical temperature. since the\nvapor-film heat-transfer coefficient would be too\nlow to cool the wall effectively. The cooling\ncapacity of the liquid-state regenerative coolant\nsystem can be estimated by"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00273",
+   "page_start": 115,
+   "page_end": 116,
+   "section": "MAIN PROPELLANT",
+   "text": "coolants)\n_Nu_ = Nusselt _number=hedlk_\n_Re_ = Reynolds _number=pVeodlJI_\nP r = Prandtl number = _JIC pi k_\n\n_JI_ = coolant viscosity at bulk temperature\n\nDESIGN OF THRUST CHAMBERS :\\ND OrHER COMBUSTION DEVICES 107\n\ntransfer calculatIOn. Ther3 are several basic\ndesign approaches for regenerative-cooled thrust\nchambers. Axial-flow cooling jackets, made up\nof tubes, are us\"'d in the design of large thrust\nchambers (3000 pounds of thrust and up); coa:.ial\nshells separated by helical ribs or wires are\ntypical of the smaller thrust chamber designs.\n\nFigure 4-1 shows a lal'ee regenerative cooled\ntubular wall thrusc chamber. Figure 4-28 represents a typif'al co!txial shell desir,D for a smaller\nthrust chamber.\n\nIn thi design, the coolant p ssage is defined\nas the rectan 'ul ar area between inner and outer\nsh('ll and two a,iacent ribs, wh ' h are wrapped\nhelically around the inner shell or liner .\n\nTubular Wall Thrust Cbamoer Desig]1.\n\n_Figure_ _4-2B.-Coaxial_ _::;hell_ _t.'lrust chamber cuta-_\n\nway. _Note overheated and burnt.-throllgh_ _spot_\n_nn_ _clianJber_ w~. l1 .\n\nwhere\n\n_Q_ c = coolant capacity, E:u/ sec\nwe = cool a. t mas now rate, lb/ sec\n\nC p = C00lant .~gecific i1eat at 00nstant pres\n\nsure. Btu/ lb-deg F\nTee = c )olant critical temperature, deg R\n_'T_ ci = coolant inlet temperature, deg R\nThe allowed value of the total charr;ber wall gas\nheat-transfel rate Q should be kept below _Qc_ by\na afe filar in _(Q_ _Qc)·_"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 4
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

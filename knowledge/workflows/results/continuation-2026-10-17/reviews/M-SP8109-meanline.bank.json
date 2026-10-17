@@ -1,0 +1,57 @@
+{
+ "grounded": 1,
+ "page_shifted": 0,
+ "ungrounded": [
+  {
+   "doc_id": "DOC_NTRS_19740020848",
+   "kind": "equation",
+   "reason": "anchor too short to be verifiable",
+   "page": 20,
+   "quote": "Head coefficient",
+   "label": "SP-8109 Eq. (7) pump head coefficient"
+  }
+ ],
+ "per_doc": {
+  "DOC_NTRS_19740020848": {
+   "grounded": 1,
+   "page_shifted": 0,
+   "ungrounded": 1
+  }
+ },
+ "model_support": {
+  "MODEL_PUMP_MEANLINE_COEFFICIENTS": "PARTIALLY_SUPPORTED"
+ },
+ "n_equations": 1,
+ "n_claims": 0,
+ "n_validity": 0,
+ "n_constants": 0,
+ "n_assumptions": 0,
+ "unresolved_comparison_links": [
+  {
+   "model_id": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
+   "label": "EQ_NTRS_19740020848_55B0F0B5",
+   "unresolved": [
+    "no exact label, equation id or printed number matched"
+   ]
+  }
+ ],
+ "model_review_equation_link_mismatches": [
+  {
+   "model_id": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
+   "doc_id": "DOC_NTRS_19740020848",
+   "declared_implements": [],
+   "actual_implements": [],
+   "declared_cites": [
+    "EQ_NTRS_19740020848_4840B4A3",
+    "EQ_NTRS_19740020848_55B0F0B5"
+   ],
+   "actual_cites": [
+    "EQ_NTRS_19740020848_4840B4A3"
+   ],
+   "invalid": []
+  }
+ ],
+ "content_verifications_invalidated": [],
+ "n_ungrounded": 1,
+ "already_banked": false
+}

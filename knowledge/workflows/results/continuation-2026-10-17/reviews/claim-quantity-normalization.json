@@ -1,0 +1,16 @@
+{
+ "authority": "SYSTEM_INFERS metadata normalization only; assertion content and verification hashes unchanged.",
+ "changes": [
+  {
+   "object_id": "CLM_NTRS_19710019929_07437818",
+   "before": [
+    "QTY_MR",
+    "QTY_RT"
+   ],
+   "after": [
+    "QTY_RT"
+   ],
+   "content_sha256": "5a609d140390f1cd3d98276421169a48953c71fe6155ebf0a27cd8da488b4aed"
+  }
+ ]
+}

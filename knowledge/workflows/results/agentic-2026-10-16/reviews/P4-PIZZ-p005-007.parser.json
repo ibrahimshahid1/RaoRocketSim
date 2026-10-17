@@ -1,0 +1,119 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-PIZZ-p005-007",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_6e5935e00168d3c0083273aa",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (1) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_fc592561519cc375aa992974",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (2) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_b3ac1011c00b5b3bf6f7733c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (3) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_5545b342900e71c2eed8a1af",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (4) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_93f99260d86f813b82ebefc5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (5) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_f481fe591a46463db703b4cf",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (6): mathematics matches; the first underbrace label is garbled ('ribfirict' for 'rib friction'), and the text layer carries a repeated ligature run.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_92b99b10ee2e94d46de307f1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (7) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_ab7965af1d2325981ed49d7b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (8) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_97f0080d56d943174a3f0679",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (9) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_efc3a6ae898b869963db96fd",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (10) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_1582db1d165e929d9e926ef4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (11) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "grounded": 3,
+ "page_shifted": 0,
+ "ungrounded": [
+  {
+   "doc_id": "DOC_NTRS_19710025474",
+   "kind": "constant",
+   "reason": "anchor not found on stated page ±2",
+   "page": 69,
+   "quote": "A mean value, 0.425, has gained preference.",
+   "label": "Inducer preferred incidence-to-blade-angle ratio"
+  }
+ ],
+ "per_doc": {
+  "DOC_NTRS_19710025474": {
+   "grounded": 3,
+   "page_shifted": 0,
+   "ungrounded": 1
+  }
+ },
+ "model_support": {
+  "MODEL_PUMP_INDUCER_NPSH": "PARTIALLY_SUPPORTED"
+ },
+ "n_equations": 1,
+ "n_claims": 0,
+ "n_validity": 0,
+ "n_constants": 2,
+ "n_assumptions": 0,
+ "content_verifications_invalidated": [],
+ "n_ungrounded": 1,
+ "already_banked": false
+}

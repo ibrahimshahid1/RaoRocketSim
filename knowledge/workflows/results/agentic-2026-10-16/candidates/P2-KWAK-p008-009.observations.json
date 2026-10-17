@@ -1,0 +1,1481 @@
+{
+ "packet": "P2-KWAK-p008-009",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "queue_reason": "P2 Kwak 2018 Table 3 motor/inverter/battery set",
+   "queue_pages": [
+    8,
+    9
+   ],
+   "queue_document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "queue_source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P2-KWAK-p008-009.json",
+   "sha256": "ac36edfe1573b29b37f4ffbe9f31ade3f6f0ee8c984d92ee5cbf32bae7820a9f",
+   "size_bytes": 32288,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "pages": [
+    8,
+    9
+   ],
+   "docling_run_ids": [
+    "ENR_1d6db02f41283c3e6e19ff1d",
+    "ENR_aaa5e6711f9a38bb14c4f621"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "formula": 12,
+     "figure": 1,
+     "table": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "sha256_in_bundle": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "sha256_recomputed": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 8,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0008.png",
+    "dpi": 150,
+    "sha256_in_bundle": "d1c3db2f190a9cb520747b792d429d8a5e8f294dbe93dd4acf2f5e47e52da434",
+    "file_exists": true,
+    "sha256_recomputed": "d1c3db2f190a9cb520747b792d429d8a5e8f294dbe93dd4acf2f5e47e52da434",
+    "sha256_match": true
+   },
+   {
+    "page": 9,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0009.png",
+    "dpi": 150,
+    "sha256_in_bundle": "317cb59251d6d5342b19f358a21f66e4e662a7dd709f05becd5e36015a51b54e",
+    "file_exists": true,
+    "sha256_recomputed": "317cb59251d6d5342b19f358a21f66e4e662a7dd709f05becd5e36015a51b54e",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p8-8-cef7d17541cfbd37c5e2d2883a1d7d64129235548778e85f4e41f47951e91ff3.json",
+    "sha256_in_bundle": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+    "file_exists": true,
+    "sha256_recomputed": "b89558dcd13ef00ef6ba2be1db869181159cb236a2b38e5b05a85bcc3c24a66c",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p9-9-4dbee59d4bfef57b2cf7f3ec7ff6cde6b16cfb2cf522663a1f153c3792d142ae.json",
+    "sha256_in_bundle": "d10683819c431fcb2578663549a519e2e97484fa483f311fbace8f6914498801",
+    "file_exists": true,
+    "sha256_recomputed": "d10683819c431fcb2578663549a519e2e97484fa483f311fbace8f6914498801",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "formula": 12,
+   "figure": 1,
+   "table": 1
+  },
+  "candidates_total": 14,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure",
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_be34430ffed9fb30bb463227",
+    "CAND_65bd9c0062be40ecb26f4c24"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [
+   {
+    "candidate_a": "CAND_19ae89ab8f129d3b79f7e065",
+    "kind_a": "formula",
+    "candidate_b": "CAND_473e4531ce6c79c4a2268726",
+    "kind_b": "formula",
+    "pages": [
+     8
+    ],
+    "overlap_width": 250.5096320400001,
+    "overlap_height": 3.470470199999795,
+    "overlap_area": 869.3862128077342,
+    "fraction_of_smaller_bbox_area": 0.07871252217816142
+   }
+  ],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_be34430ffed9fb30bb463227",
+    "kind": "figure",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 161.64762030858802,
+      "t": 482.5603991951354,
+      "r": 441.87641997328376,
+      "b": 263.0864989721649,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 8. Turbopump power densities using LOX/kerosene propellants [29-33]."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/6\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_aaa5e6711f9a38bb14c4f621",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p9-9-4dbee59d4bfef57b2cf7f3ec7ff6cde6b16cfb2cf522663a1f153c3792d142ae.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 9
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/6"
+    ],
+    "raw_item_children_count": 19,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/6",
+      "label": "caption",
+      "page_no": 9,
+      "bbox": {
+       "l": 187.708,
+       "t": 250.26533440000003,
+       "r": 414.9915596800001,
+       "b": 244.25125491072322,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 8. Turbopump power densities using LOX/kerosene propellants [29-33].",
+      "orig": "Fig. 8. Turbopump power densities using LOX/kerosene propellants [29-33].",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_65bd9c0062be40ecb26f4c24",
+    "kind": "table",
+    "pages": [
+     9
+    ],
+    "bbox": [
+     {
+      "l": 103.44537521346943,
+      "t": 713.5648067637715,
+      "r": 501.4986070808564,
+      "b": 495.5941549400887,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/tables/0",
+    "caption_text_as_given_in_bundle": [
+     "Table 3 Parameter values."
+    ],
+    "transcription_as_given": "TABLE 24x6 (see table_grid; full cells in raw item /tables/0)",
+    "transcription_length": 61,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_aaa5e6711f9a38bb14c4f621",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p9-9-4dbee59d4bfef57b2cf7f3ec7ff6cde6b16cfb2cf522663a1f153c3792d142ae.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 9
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [
+     "#/texts/2"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/2",
+      "label": "caption",
+      "page_no": 9,
+      "bbox": {
+       "l": 104.152,
+       "t": 731.8193344,
+       "r": 156.5808225600001,
+       "b": 717.2373549107232,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 3 Parameter values.",
+      "orig": "Table 3 Parameter values.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true,
+    "table_cell_grid": {
+     "bundle_table_grid_present": true,
+     "bundle_table_grid_as_given": [
+      [
+       "Parameter",
+       "Value",
+       "Note",
+       "Parameter",
+       "Value",
+       "Note"
+      ],
+      [
+       "Cp, f",
+       "2009 J/kg-K",
+       "Kerosene",
+       "δbc,E",
+       "198 Wh/kg",
+       "D cell"
+      ],
+      [
+       "C p,g g",
+       "2024.7 J/kg-K",
+       "GG gas",
+       "ηop",
+       "0.66",
+       ""
+      ],
+      [
+       "gmax",
+       "4.5g0",
+       "",
+       "η f p",
+       "0.61",
+       ""
+      ],
+      [
+       "kh",
+       "1.667",
+       "Helium",
+       "ηtu",
+       "0.52",
+       ""
+      ],
+      [
+       "kgg",
+       "1.16",
+       "GG gas",
+       "ηem",
+       "0.95",
+       ""
+      ],
+      [
+       "(O /F )cc",
+       "2.45",
+       "",
+       "ηinv",
+       "0.85",
+       ""
+      ],
+      [
+       "(O/F )gg",
+       "0.320",
+       "",
+       "κbp",
+       "1.2",
+       ""
+      ],
+      [
+       "p 0 h",
+       "27.0 MPaA",
+       "",
+       "κh",
+       "1.1",
+       ""
+      ],
+      [
+       "p 1 h",
+       "5.0 MPaA",
+       "",
+       "κg g",
+       "2.5",
+       ""
+      ],
+      [
+       "p f t,i",
+       "0.25 MPaA",
+       "",
+       "κht",
+       "1.2",
+       ""
+      ],
+      [
+       "pot,i",
+       "0.4 MPaA",
+       "",
+       "κp",
+       "1.01",
+       ""
+      ],
+      [
+       "ptu,in/ptu,out",
+       "27",
+       "",
+       "κt",
+       "2.5",
+       ""
+      ],
+      [
+       "Rh",
+       "2080 J/kg-K",
+       "Helium",
+       "κu",
+       "1.08",
+       ""
+      ],
+      [
+       "R gg",
+       "274.1 J/kg-K",
+       "GG gas",
+       "ρo",
+       "1126.1 kg/m 3",
+       "LOX"
+      ],
+      [
+       "T 0 h",
+       "100 K",
+       "",
+       "ρ f",
+       "804.2 kg/m 3",
+       "Kerosene"
+      ],
+      [
+       "Ttu,in",
+       "900 K",
+       "",
+       "ρgg,m",
+       "8220 kg/m 3",
+       "INCO 718"
+      ],
+      [
+       "ts",
+       "10 ms",
+       "",
+       "ρot,m",
+       "2850 kg/m 3",
+       "AL alloy"
+      ],
+      [
+       "δtp",
+       "13.5 kW/kg",
+       "",
+       "ρ f t,m",
+       "2850 kg/m 3",
+       "AL alloy"
+      ],
+      [
+       "δop",
+       "20 kW/kg",
+       "",
+       "ρht,m",
+       "4430 kg/m 3",
+       "Ti-6AL-4V"
+      ],
+      [
+       "δ fp",
+       "15 kW/kg",
+       "",
+       "σgg,m",
+       "550 MPa",
+       "INCO 718"
+      ],
+      [
+       "δem",
+       "5.3 kW/kg",
+       "",
+       "σot,m",
+       "250 MPa",
+       "AL alloy"
+      ],
+      [
+       "δinv",
+       "60 kW/kg",
+       "",
+       "σ f t,m",
+       "250 MPa",
+       "AL alloy"
+      ],
+      [
+       "δbc,P",
+       "6.95 kW/kg",
+       "D cell",
+       "σht,m",
+       "1100 MPa",
+       "Ti-6AL-4V"
+      ]
+     ],
+     "rows": 24,
+     "row_lengths": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ],
+     "empty_string_cell_positions_row_col": [
+      [
+       2,
+       5
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       3,
+       5
+      ],
+      [
+       4,
+       5
+      ],
+      [
+       5,
+       5
+      ],
+      [
+       6,
+       2
+      ],
+      [
+       6,
+       5
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       7,
+       5
+      ],
+      [
+       8,
+       2
+      ],
+      [
+       8,
+       5
+      ],
+      [
+       9,
+       2
+      ],
+      [
+       9,
+       5
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       10,
+       5
+      ],
+      [
+       11,
+       2
+      ],
+      [
+       11,
+       5
+      ],
+      [
+       12,
+       2
+      ],
+      [
+       12,
+       5
+      ],
+      [
+       13,
+       5
+      ],
+      [
+       15,
+       2
+      ],
+      [
+       16,
+       2
+      ],
+      [
+       17,
+       2
+      ],
+      [
+       18,
+       2
+      ],
+      [
+       19,
+       2
+      ],
+      [
+       20,
+       2
+      ],
+      [
+       21,
+       2
+      ],
+      [
+       22,
+       2
+      ]
+     ],
+     "empty_string_cell_count": 28,
+     "bundle_transcription_marker_dimensions": [
+      24,
+      6
+     ],
+     "bundle_grid_dimensions_equal_marker_dimensions": true,
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_65bd9c0062be40ecb26f4c24, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_record_json_pointer": "/tables/0",
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "stored_num_rows": 24,
+     "stored_num_cols": 6,
+     "stored_orientation": "rot_0",
+     "stored_table_cells_count": 116,
+     "bundle_table_grid_equals_stored_content_grid_texts": true,
+     "cells_with_row_span_or_col_span_not_1": [],
+     "cell_positions_row_col_with_flag_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        0,
+        3
+       ],
+       [
+        0,
+        4
+       ],
+       [
+        0,
+        5
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "stored_grid_texts_equal_matrix_from_table_cells_start_indices": false,
+     "grid_positions_without_a_table_cells_entry_row_col": [
+      [
+       2,
+       5
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       3,
+       5
+      ],
+      [
+       4,
+       5
+      ],
+      [
+       5,
+       5
+      ],
+      [
+       6,
+       2
+      ],
+      [
+       6,
+       5
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       7,
+       5
+      ],
+      [
+       8,
+       2
+      ],
+      [
+       8,
+       5
+      ],
+      [
+       9,
+       2
+      ],
+      [
+       9,
+       5
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       10,
+       5
+      ],
+      [
+       11,
+       2
+      ],
+      [
+       11,
+       5
+      ],
+      [
+       12,
+       2
+      ],
+      [
+       12,
+       5
+      ],
+      [
+       13,
+       5
+      ],
+      [
+       15,
+       2
+      ],
+      [
+       16,
+       2
+      ],
+      [
+       17,
+       2
+      ],
+      [
+       18,
+       2
+      ],
+      [
+       19,
+       2
+      ],
+      [
+       20,
+       2
+      ],
+      [
+       21,
+       2
+      ],
+      [
+       22,
+       2
+      ]
+     ],
+     "grid_positions_without_a_table_cells_entry_count": 28,
+     "grid_texts_found_at_positions_without_a_table_cells_entry": [
+      ""
+     ],
+     "grid_vs_table_cells_text_mismatches_at_positions_with_a_table_cells_entry": [],
+     "positions_without_table_cells_entry_equal_empty_string_positions_of_bundle_grid": true,
+     "per_cell_bboxes_and_flags_note": "not copied here; per-cell bbox/flags are in the stored enrichment record and the raw Docling table (data.table_cells)",
+     "raw_table_self_ref": "#/tables/0",
+     "bundle_table_grid_equals_raw_table_data_grid_texts": true,
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_captions_refs": [
+      "#/texts/2"
+     ],
+     "raw_table_children_refs": [
+      "#/texts/2"
+     ],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0
+    }
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_19ae89ab8f129d3b79f7e065",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 301.46799999999996,
+      "t": 594.2154204999999,
+      "r": 552.8056320400001,
+      "b": 550.2702250000001,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/29",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { E P } & = \\left ( \\frac { 1 } { \\delta _ { o p } } + B _ { 1 } \\right ) \\left ( \\frac { \\Delta p _ { o p } \\dot { m } _ { o p } } { \\rho _ { o } \\eta _ { o p } } \\right ) + \\left ( \\frac { 1 } { \\delta _ { f p } } + B _ { 1 } \\right ) \\left ( \\frac { \\Delta p _ { f p } \\dot { m } _ { f p } } { \\rho _ { f } \\eta _ { f p } } \\right ) \\\\ & \\quad + \\left ( A _ { 3 } + \\kappa _ { p } \\rho _ { o } + p _ { o t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) \\right ) \\frac { \\dot { m } _ { o p } t _ { b } } { \\rho }",
+    "transcription_length": 513,
+    "original_text_as_given": "mEP = ( 1 δop + B1 )( Delta1pop ˙mop ρoηop ) + ( 1 δ fp + B1 )( Delta1p f p ˙m f p ρf η fp ) + ( A3 + κpρo + pot,i (A2 + A3 A4) ) ˙moptb (45)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(45)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 6,
+     ")": 6,
+     "[": 0,
+     "]": 0,
+     "{": 35,
+     "}": 35
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_1fa0d1cb91856280d275b570",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.476,
+      "t": 316.4128801,
+      "r": 283.8122009500001,
+      "b": 293.8270264357348,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/17",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b p , P } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b c , P } } P _ { b p } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b c , P } \\eta _ { i n \\nu } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+    "transcription_length": 203,
+    "original_text_as_given": "mbp,P = κbp 1 δbc,P Pbp = κbp 1 δbc, P ηinvηem (Pop + P f p) (40)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(40)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 14,
+     "}": 14
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_23b69fc97cf9f5cdbf38746e",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 301.46799999999996,
+      "t": 648.5912335,
+      "r": 552.8056320400001,
+      "b": 638.7622191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/27",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { f } = \\kappa _ { p } ( \\dot { m } _ { f p } - \\dot { m } _ { c o o l a n t } ) t _ { b }",
+    "transcription_length": 94,
+    "original_text_as_given": "mf =κp( ˙mfp - ˙mcoolant )tb (44)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(44)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_473e4531ce6c79c4a2268726",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 302.296,
+      "t": 553.7406951999999,
+      "r": 552.8056320400001,
+      "b": 490.98102643573486,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/30",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "& \\quad | ( A _ { 3 } + \\kappa _ { p } \\rho _ { 0 } + p _ { 0 t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) ) \\, \\rho _ { o } \\\\ & \\quad \\rho _ { o } \\\\ & + ( A _ { 5 } + \\kappa _ { p } \\rho _ { f } + p _ { f t , i } ( A _ { 2 } + A _ { 3 } A _ { 4 } ) ) \\frac { ( \\dot { m } _ { f p } - \\dot { m } _ { c o o l a n t } ) t _ { b } } { \\rho _ { f } } \\\\ & B _ { 1 } = \\frac { 1 } { \\delta _ { m } } + \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } + \\kappa _ { b p } \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } M A X \\left ( \\frac { 1 } { \\delta _ { b c , P } } , \\frac { t _ { b } } { \\eta _ { E } \\delta _ { b c , E } } \\right )",
+    "transcription_length": 634,
+    "original_text_as_given": "ρo + ( A5 +κpρf + p f t,i(A2 + A3A4) )( ˙mfp - ˙mcoolant )tb ρ f B1 = 1 δm + 1 δinvηem + κbp 1 ηinvηem MAX ( 1 δbc,P , tb ηEδbc,E ) (46)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(46)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 6,
+     ")": 6,
+     "[": 0,
+     "]": 0,
+     "{": 45,
+     "}": 45
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_5d8fd129869734899efa8364",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 33.304,
+      "t": 185.7328801,
+      "r": 283.81363203999996,
+      "b": 163.38221910872812,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/20",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "E _ { b p } = \\frac { 1 } { \\eta _ { E } } P _ { b p } t _ { b } = \\frac { 1 } { \\eta _ { E } \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } ) t _ { b }",
+    "transcription_length": 167,
+    "original_text_as_given": "Ebp = 1 ηE Pbptb = 1 ηE ηinvηem (Pop + P f p)tb (41)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(41)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 14,
+     "}": 14
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_91a99d131fb2e1799225d038",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.476,
+      "t": 509.6068801,
+      "r": 283.81363203999996,
+      "b": 487.2562191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/11",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { i n v } = \\frac { 1 } { \\delta _ { i n v } } P _ { i n v , o u t } = \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } P _ { e m , o u t } = \\frac { 1 } { \\delta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+    "transcription_length": 226,
+    "original_text_as_given": "minv = 1 δinv Pinv,out = 1 δinvηem Pem,out = 1 δinvηem (Pop + P fp) (38)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(38)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 16,
+     "}": 16
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_9c1e60cd8ef04038846e1e46",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 33.484,
+      "t": 406.6648801,
+      "r": 283.81363203999996,
+      "b": 358.88021910872817,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/14",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "P _ { b p } & = P _ { i n v , i n } = \\frac { 1 } { \\eta _ { i n v } } \\, P _ { i n v , o u t } = \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } \\, P _ { e m , o u t } \\\\ & = \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } )",
+    "transcription_length": 253,
+    "original_text_as_given": "Pbp = P inv,in = 1 ηinv Pinv,out = 1 ηinvηem P em,out = 1 ηinvηem (Pop + P f p) (39)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(39)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 17,
+     "}": 17
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_aec0c7311c338d72e0543716",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.476,
+      "t": 643.0048800999999,
+      "r": 283.81363203999996,
+      "b": 620.7802191087281,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/6",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { e m } = \\frac { 1 } { \\delta _ { e m } } P _ { e m , o u t } = \\frac { 1 } { \\delta _ { e m } } ( P _ { o p } + P _ { f p } )",
+    "transcription_length": 131,
+    "original_text_as_given": "mem = 1 δem Pem,out = 1 δem (Pop + P f p) (36)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(36)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 10,
+     "}": 10
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_cb29b22b14c611792f43270f",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.476,
+      "t": 131.15698010000006,
+      "r": 283.81363203999996,
+      "b": 108.57112643573487,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/22",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b p , E } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b C , E } } E _ { b p } = \\kappa _ { b p } \\frac { 1 } { \\delta _ { b C , E } \\eta _ { E } \\eta _ { i n v } \\eta _ { e m } } ( P _ { o p } + P _ { f p } ) t _ { b }",
+    "transcription_length": 224,
+    "original_text_as_given": "mbp,E = κbp 1 δbc,E Ebp = κbp 1 δbc,E ηE ηinvηem (Pop + P f p)tb (42)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(42)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 16,
+     "}": 16
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_e2cf7e27547d6d18f6a68956",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.476,
+      "t": 83.74488010000005,
+      "r": 283.81363203999996,
+      "b": 46.70502643573491,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/24",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b p } & = M A X ( m _ { b p , \\, P } , m _ { b p , \\, E } ) \\\\ & = \\kappa _ { b p } \\frac { 1 } { \\eta _ { i n v } \\eta _ { e m } } M A X \\left ( \\frac { 1 } { \\delta _ { b c , \\, P } } , \\frac { t _ { b } } { \\eta _ { E } \\delta _ { b c , \\, E } } \\right ) ( P _ { o p } + P _ { f p } )",
+    "transcription_length": 293,
+    "original_text_as_given": "mbp = MAX(mbp,P ,mbp,E ) = κbp 1 ηinvηem MAX ( 1 δbc,P , tb ηEδbc,E ) (Pop + P f p) (43)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(43)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 3,
+     ")": 3,
+     "[": 0,
+     "]": 0,
+     "{": 18,
+     "}": 18
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_ebf7c8146f34590808004435",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.728,
+      "t": 696.2128800999999,
+      "r": 283.81363203999996,
+      "b": 673.9882191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/4",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { e m } = \\frac { P _ { e m , o u t } } { m _ { e m } }",
+    "transcription_length": 64,
+    "original_text_as_given": "δem = P em,out mem (35)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(35)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   },
+   {
+    "id": "CAND_efa527d2e4ef5f24215cfcd0",
+    "pages": [
+     8
+    ],
+    "bbox": [
+     {
+      "l": 32.728,
+      "t": 574.2088801,
+      "r": 283.81363203999996,
+      "b": 551.8582191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/9",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 8,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { i n v } = \\frac { P _ { i n v , o u t } } { m _ { i n v } }",
+    "transcription_length": 70,
+    "original_text_as_given": "δinv = P inv,out minv (37)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(37)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_1d6db02f41283c3e6e19ff1d"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(45)",
+    "(40)",
+    "(44)",
+    "(46)",
+    "(41)",
+    "(38)",
+    "(39)",
+    "(36)",
+    "(42)",
+    "(43)",
+    "(35)",
+    "(37)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 12,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_PUMP_ELECTRIC_DRIVE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_PUMP_ELECTRIC_DRIVE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 8
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 7
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 11
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 3
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    8,
+    9
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "8": {
+     "formula": 12
+    },
+    "9": {
+     "figure": 1,
+     "table": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00024",
+     "page_start": 7,
+     "page_end": 8
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 8,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00024",
+     "page_start": 7,
+     "page_end": 8,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1433
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00025",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1560
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00026",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 716
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00027",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 2048
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00028",
+     "page_start": 8,
+     "page_end": 8,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 691
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00029",
+     "page_start": 9,
+     "page_end": 9,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 2237
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00030",
+     "page_start": 9,
+     "page_end": 9,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1492
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00031",
+     "page_start": 9,
+     "page_end": 9,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 351
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

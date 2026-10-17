@@ -1,0 +1,234 @@
+[
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_059BBCE4",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2 Battery power density 0.650 kW/kg; Fig. 9 Amicell cell 0.65 kW/kg.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 11
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20B5BB49",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Text: battery structure margin assumed 20%; Table 2 Structure margin 20%.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 10
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20F32959",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Text sets inverter power density 60 kW/kg (with 66%, 61% pump efficiencies and 85% inverter efficiency); Table 2 agrees. Output-power basis is from Eqs. 28-29 (PDF p.7).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 10
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_6172A9B4",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. 38 eta_E = 0.093 ln(t_b) + 0.3301 = 0.925 at t_b = 600 s; reviewer arithmetic 0.093*ln(600)+0.3301 = 0.9250.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 10
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_AA8630AD",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2 Motor efficiency 87%; Fig. 8 Vishan EC2060L-3660 87%.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 11
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_B3727FDB",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2 Battery energy density 325 W h/kg; Fig. 9 Amicell cell 325 W h/kg.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 11
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_D265274E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2 Motor power density 0.875 kW/kg; Fig. 8 commercial motor 0.875 kW/kg; output basis from Eq. 26-27 (PDF p.7).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 11
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_E196F6F3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Text sets inverter efficiency 85%; Table 2 agrees.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 10
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_6024B7D3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.10: additional validations were judged unnecessary (components shared with the gas-generator cycle) and were not conducted because commercial product data were used for motor and pump masses; the claim's no-validation reading is faithful.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 rendered at 110 dpi and read by F; Table 2 and Sec. 3.2 text",
+   "pdf_page": 10
+  },
+  "scope_note": "Confirms the stated case-specific input value and page only; not a universal technology value, component qualification or measurement."
+ },
+ {
+  "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_8F01D86F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "p.10: at 500 N the rotor was predicted to be at room temperature, so motor cooling can be excluded assuming rotor heating had no effect.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 renders (150 dpi) read by F",
+   "pdf_page": 10
+  }
+ },
+ {
+  "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B9D73B48",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "p.10: battery energy efficiency assumed constant, from the logarithmic burning-time fit of one Li-polymer battery [1], 92.5% at the 600 s design burning time (Eq. 38).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 renders (150 dpi) read by F",
+   "pdf_page": 10
+  },
+  "scope_note": "'not a general efficiency map' is a scope caveat consistent with the source (single-battery fit evaluated at one burning time), not a further source statement."
+ },
+ {
+  "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_D002C669",
+  "refuted": true,
+  "confidence": "high",
+  "reason": "The source (p.11) states only that the electric pump was assumed to be driven by a single motor (Vishan EC2060L-3660). The record's second clause, 'LREKit separately sizes two stream drives', is repository commentary, not source content. A corrected source-only assumption is banked in this packet.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 renders (150 dpi) read by F",
+   "pdf_page": 11
+  }
+ },
+ {
+  "object_id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_173E322E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "p.10 Table 1 design point: thrust 500 N, chamber pressure 20 bar, altitude 30 km, burning time 600 s; the paper states no validity range.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.10-11 renders (150 dpi) read by F",
+   "pdf_page": 10
+  },
+  "scope_note": "'not demonstrated validity bounds' is a scope caveat, not a source statement; the paper says additional validations were not conducted (p.10)."
+ }
+]

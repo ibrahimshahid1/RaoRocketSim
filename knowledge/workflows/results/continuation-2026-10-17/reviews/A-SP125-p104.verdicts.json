@@ -1,0 +1,34 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_98D71B37",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-125 PDF p.104 (printed p.95) places this selection under Sample Calculation (4-2), Solution, A-1 Stage Engine. It explicitly selects a nozzle convergent half angle of 20 degrees, contraction area ratio epsilon_c = 1.6, and circular arc radius R = 1.5 R_t, or 18.68 in, upstream of the throat. The page separately gives R_t = 12.45 in, consistent with the selected radius rounded to 18.68 in. The record's complete statement, subject/predicate/object, methodological claim type, page and worked-example qualifier faithfully preserve this local scope. Its grounded quote has derivative OCR/markup for epsilon_c and R_t; the original symbols, values, angle units and length units were visually checked. These are example geometry selections, not general validity bounds or physical qualification.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "b91129c10d10bfd9607fd4c489355df2f3c5d7d652d7a09676483f452db4c2d6",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 104,
+   "printed_page": "95",
+   "method": "Original PDF rendered with pdftoppm at 180 dpi; full page visually inspected, including sample heading and the A-1 solution.",
+   "inspected_science_fields": [
+    "claim_type",
+    "subject",
+    "predicate",
+    "object",
+    "statement",
+    "qualifiers",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis from the role F transcription; same Codex model family, no assertion of model diversity."
+  },
+  "scope_note": "Bounded source fidelity review; worked-example choices do not establish a general engineering limit or physical validation."
+ }
+]

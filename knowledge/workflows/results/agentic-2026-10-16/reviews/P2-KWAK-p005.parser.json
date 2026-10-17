@@ -1,0 +1,79 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-KWAK-p005",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_ab143e512f721906bf0fffa6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 1 (0.023 Re^(4/5) Pr^(1/3) (mu_b/mu_s)^0.14) matches original.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_8492bed85f10d5b5798e8583",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 2 short-pipe correction matches original.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_29179bc604b4b66ea0c108c7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 3 current rate matches original.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_f7c30a51f4a58da3ca71ccc8",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 4 eta_E fit matches original.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_728175dc336a4ee43782dbca",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 2 cell values and headers match original.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_2107e4691f2ddc3e59601798",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 4 location and caption match original; not digitized.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_8d2bcf5918dea14d28a83333",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 5 location and caption match original; not digitized.",
+   "evidence": {
+    "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  }
+ ]
+}

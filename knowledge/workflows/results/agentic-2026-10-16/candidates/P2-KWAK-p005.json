@@ -1,0 +1,249 @@
+{
+ "packet": "P2-KWAK-p005",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+ "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+ "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+ "pages": [
+  5,
+  5
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0005.png",
+   "sha256": "4e40ab7dbfe5beec93f6d3ae59bd3efd1121514ff28d4ea7814380ab3a908686",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_c871cdad548a9b6304a6e3f2"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_2107e4691f2ddc3e59601798",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "caption_text": [
+    "Fig. 4. Vacuum thrust vs. turbopump power with respect to PMSM power limits [21, 29-34]."
+   ],
+   "bbox": [
+    {
+     "l": 49.65069136034562,
+     "t": 737.8668967381388,
+     "r": 285.8350944537476,
+     "b": 558.2376856258018,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8d2bcf5918dea14d28a83333",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "caption_text": [
+    "Fig. 5. Predicted rotor temperature of the PMSM according to vacuum thrust."
+   ],
+   "bbox": [
+    {
+     "l": 321.5550780242305,
+     "t": 738.0224892164658,
+     "r": 550.2823833073353,
+     "b": 540.943007573356,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/10\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_29179bc604b4b66ea0c108c7",
+   "kind": "formula",
+   "pages": [
+    5
+   ],
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 311.548,
+     "t": 352.0528801,
+     "r": 562.6149973600001,
+     "b": 329.6123191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "C u r r e n t \\, R a t e = \\frac { 3 6 0 0 } { t _ { d } }",
+   "original_text": "Current Rate = 3600 td (3)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8492bed85f10d5b5798e8583",
+   "kind": "formula",
+   "pages": [
+    5
+   ],
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 42.556000000000004,
+     "t": 341.2501882,
+     "r": 293.62299736,
+     "b": 316.23370150000005,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u _ { c o r r e c t e d } = N u \\left ( 1 + \\left ( \\frac { d _ { i } } { L } \\right ) ^ { 0 . 7 } \\right )",
+   "original_text": "Nucorrected = Nu ( 1 + ( di L )0.7) (2)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ab143e512f721906bf0fffa6",
+   "kind": "formula",
+   "pages": [
+    5
+   ],
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 42.556000000000004,
+     "t": 411.1981882,
+     "r": 293.62299736,
+     "b": 385.7542191087282,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = 0 . 0 2 3 R e ^ { 4 / 5 } P r ^ { 1 / 3 } \\left ( \\frac { \\mu _ { b } } { \\mu _ { s } } \\right ) ^ { 0 . 1 4 }",
+   "original_text": "Nu = 0.023Re 4/5 Pr 1/3 ( μb μs )0.14 (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f7c30a51f4a58da3ca71ccc8",
+   "kind": "formula",
+   "pages": [
+    5
+   ],
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 311.548,
+     "t": 159.9186952,
+     "r": 562.6153521,
+     "b": 150.17021910872813,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\eta _ { E } = 0 . 0 9 3 \\ln ( t _ { d } ) + 0 . 3 3 0 1",
+   "original_text": "ηE = 0.093 ln(td) + 0.3301 (4)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_728175dc336a4ee43782dbca",
+   "kind": "table",
+   "pages": [
+    5
+   ],
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 310.57514615175387,
+     "t": 489.62649338671787,
+     "r": 563.1151642050519,
+     "b": 429.5526886134304,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"table_cells\": [{\"bbox\": {\"l\": 317.614, \"t\": 309.14756560000006, \"r\": 352.56124479999994, \"b\": 315.1616450892769, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 0, \"end_row_offset_idx\": 1, \"start_col_offset_idx\": 0, \"end_col_offset_idx\": 1, \"text\": \"Designation\", \"column_header\": true, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 367.69806015999995, \"t\": 309.14756560000006, \"r\": 381.88540864, \"b\": 315.1616450892769, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 0, \"end_row_offset_idx\": 1, \"start_col_offset_idx\": 1, \"end_col_offset_idx\": 2, \"text\": \"Type\", \"column_header\": true, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 415.048, \"t\": 309.14756560000006, \"r\": 457.32246192, \"b\": 323.72974508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 0, \"end_row_offset_idx\": 1, \"start_col_offset_idx\": 2, \"end_col_offset_idx\": 3, \"text\": \"Power density (kW/kg)\", \"column_header\": true, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 475.52799999999996, \"t\": 309.14756560000006, \"r\": 519.7645619199997, \"b\": 323.72974508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 0, \"end_row_offset_idx\": 1, \"start_col_offset_idx\": 3, \"end_col_offset_idx\": 4, \"text\": \"Energy density (Wh/kg)\", \"column_header\": true, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 538.852, \"t\": 309.14756560000006, \"r\": 556.7577759999998, \"b\": 315.1616450892769, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 0, \"end_row_offset_idx\": 1, \"start_col_offset_idx\": 4, \"end_col_offset_idx\": 5, \"text\": \"C-rate\", \"column_header\": true, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 317.614, \"t\": 329.6676656, \"r\": 334.38918591999993, \"b\": 335.68174508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 1, \"end_row_offset_idx\": 2, \"start_col_offset_idx\": 0, \"end_col_offset_idx\": 1, \"text\": \"A cell\", \"column_header\": false, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 367.692976, \"t\": 329.6676656, \"r\": 384.7408, \"b\": 335.68174508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 1, \"end_row_offset_idx\": 2, \"start_col_offset_idx\": 1, \"end_col_offset_idx\": 2, \"text\": \"Li-ion\", \"column_header\": false, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 415.03540288, \"t\": 329.6676656, \"r\": 427.00033792000005, \"b\": 335.68174508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 1, \"end_row_offset_idx\": 2, \"start_col_offset_idx\": 2, \"end_col_offset_idx\": 3, \"text\": \"1.53\", \"column_header\": false, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 475.51529919999996, \"t\": 329.6676656, \"r\": 491.69945152, \"b\": 335.68174508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 1, \"end_row_offset_idx\": 2, \"start_col_offset_idx\": 3, \"end_col_offset_idx\": 4, \"text\": \"230.0\", \"column_header\": false, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 538.8448672, \"t\": 329.6676656, \"r\": 547.69638976, \"b\": 335.68174508927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 1, \"end_row_offset_idx\": 2, \"start_col_offset_idx\": 4, \"end_col_offset_idx\": 5, \"text\": \"6.7\", \"column_header\": false, \"row_header\": false, \"row_section\": false, \"fillable\": false}, {\"bbox\": {\"l\": 317.6076448, \"t\": 338.2344752, \"r\": 334.01804223999994, \"b\": 344.24855468927683, \"coord_origin\": \"TOPLEFT\"}, \"row_span\": 1, \"col_span\": 1, \"start_row_offset_idx\": 2, \"end_row_offset_idx\": 3, \"start_col_offset_idx\": 0, \"end_col_offset_idx\": 1, \"text\": \"B cell\", \"column_header\": false, \"row_header\": false, \"row_sec",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+   "raw_sha256": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_PUMP_ELECTRIC_DRIVE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00014",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "_H.-D. Kwak et al. / Aerospace Science and Technology 77 (2018) 67–82_ 71\n\n**Fig. 4.** Vacuum thrust vs. turbopump power with respect to PMSM power limits [21,\n29–34].\n\n**Fig. 5.** Predicted rotor temperature of the PMSM according to vacuum thrust.\n\n(equivalent to 70 kN thrust, approximately). Based on the basic\ndesign dimensions of the prototype, some modifications have been\nmade in accordance with the thrust level and the rotor temperature during operation is predicted. An exact prediction of the rotor\ntemperature (a 3D electromagnetic-fluid coupled problem) is costly\nand slow. Instead, a simple approach is used to explore feasibility.\nBecause the heat transfer in the cooling channels of the PMSM can\nbe modeled as forced convection in turbulent pipe flow, Seider–\nTate correlation [37] is used for the calculation.\n\n**Table 2**\nSpecifications of selected battery cells.\n\nDesignation Type Power density\n(kW/kg)\n\nEnergy density\n(Wh/kg)\n\nC-rate\n\n�0 _._ 14\n(1)\n\nA cell Li-ion 1.53 230.0 6.7\nB cell Li-ion 1.64 213.0 7.7\nC cell Li-polymer 1.68 168.2 10.0\nD cell Li-polymer 6.95 198.5 35.0\n\nmeasured while varying two conditions: discharge time and environmental temperature. The basic specifications of the selected\ncells are given in Table 2. The current rate (C-rate) is an index of\nthe energy discharge rate of the battery cell, which is defined as a\nfunction of discharge time ( _td_ ).\n\n_Nu_ = 0 _._ 023 _Re_ <sup>4</sup> <sup>_/_</sup> <sup>5</sup> _Pr_ <sup>1</sup> <sup>_/_</sup> <sup>3</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00015",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "_<u>μb</u>_\n_μs_\n\nBecause, the aspect ratio of the cooling channels is not large\nenough to treat them as a long pipe, the Nusselt number should\nbe corrected for the short pipe case, as follows.\n\n_Nucorrected_ = _Nu_\n\n  _di_\n1 +\n_L_\n\n(3)\n\n�0 _._ 7�\n\n(2)\n\n_Current_ _Rate_ = <sup>3600</sup>\n\n_td_\n\nFig. 6 shows the ratio of total measured energy to nominal energy versus the discharge time, at room temperature. The available\nenergy clearly declines with a shorter discharge time for all types\nof battery cells, which means that the available energy is a function of the discharge time (i.e., current rate). Two Li-ion battery\ncells (A and B cells) showed a significant voltage drop for short\ndischarge times (less than 400 s) and their results are not plotted\nin Fig. 6. The D cells had the most favorable characteristic from\nthe viewpoint of available energy with respect to time. Thus, the\nD cell was chosen for further analysis. To account for the effects\nof discharge time on available energy, energy efficiency ( _ηE_ ) is introduced, and is assumed to be a logarithmic function of discharge\ntime ( _td_ ). Using the test data in Fig. 6, the energy efficiency of the\nD cell is given below.\n\n_ηE_ = 0 _._ 093 ln _(td)_ + 0 _._ 3301 (4)\n\nAnother major concern for the battery pack is cooling. In the\nscreening test, it was also found that there is an environmental\ntemperature range in which the battery cells have the available\nenergy. Fig. 7 shows the measured energy of D cells according to\nenvironmental temperature. Three random samples were taken for\nthe test. The D cells have an available energy that is close to nominal value when the environmental temperature is between 274\nand 314 K. To estimate a coolant mass flow rate, it is assumed\nthat the overall battery cell energy loss is dissipated into heat and"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00016",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "Equation (1) is implicit, and iterative calculations are needed to\ndetermine the surface temperature of the rotor. As stated above,\nthe mass flow rate of gaseous oxygen leaks from the LOX pump\nis assumed to be 0.5% of the nominal flow rate. The bulk temperature and pressure in the cooling channels are also assumed to\nbe 150 K and 0.2 MPaA, respectively (an average value of leaked\ngaseous oxygen from the LOX pump). The electromagnetic loss is\nset to be 1.5% of the motor power [29,35]. Fig. 5 shows the predicted rotor temperature according to thrust levels up to 100 kN.\nClearly, the rotor temperatures are under the limit of 403 K and\nthe use of a PMSM for the ElecPump cycle is valid up to the maximum thrust level of interest in this study. The gaseous mass flow\nrates for motor cooling are neglected in this study because they\ncomprise a relatively small amount of the LOX pump flow rate.\n\n_2.3._ _Battery_ _pack_\n\nA battery pack consists of battery cells, a battery management\nsystem (internal circuit and software), wires, and a case. Of all the\nfeatures of the battery pack, a battery cell with higher power and\nenergy densities is desirable because this ensures a lighter battery\npack. The actual battery cell characteristics are greatly influenced\nby the conditions of use. Therefore, a battery cell screening test\nwas conducted. Four types of commercially available lithium-based\nbattery cells were chosen, and their actual available energy was"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 4,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

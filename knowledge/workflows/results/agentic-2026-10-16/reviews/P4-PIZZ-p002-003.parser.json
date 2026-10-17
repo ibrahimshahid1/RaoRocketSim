@@ -1,0 +1,29 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-PIZZ-p002-003",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_d24031f9cc79241957e6ca17",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Small publisher graphic near the journal header on the title page (bbox 350-431 x 647-668 pt); not a figure.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_153e09155d194e56023dbadf",
+   "state": "REJECTED",
+   "reason": "Nomenclature: two-column layout flattened; several symbols paired with the wrong definitions or merged cells (e.g. 'qc Re sw T', 'hw i, j', 'x, y, z k').",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  }
+ ]
+}

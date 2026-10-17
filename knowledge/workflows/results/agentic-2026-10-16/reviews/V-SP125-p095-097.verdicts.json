@@ -1,0 +1,275 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_AB38856E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.95: L* is the ratio of chamber volume to throat area and specifies propellant stay time.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 95
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_DC3845D7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.95: chamber volume affects combustion efficiency; required volume is a function of mass flow, average density and stay time.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 95
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_E7BDDBCA",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: A_t nearly proportional to W_tc V, so L* is essentially a function of t_s.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_06B2C308",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96 and Fig. 4-7: c* increases with L* to an asymptotic maximum; larger L* beyond a point decreases system performance.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_F0A1A1B5",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: the three penalties of larger L* (volume/weight, cooling area, wall friction).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_C3589D9F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: optimization analyses determine the minimum L* consistent with efficient combustion.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_DCE9CB00",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: L* 15-120 in for stay times 0.002-0.040 s.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_C1473A5D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: with A_t and minimum L* established, V_c follows from Eq. (4-4).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_41EFB911",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96 Table 4-1 values cited in the statement match (listed as examples; the table has further rows).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_11BA0C46",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: from Eq. (4-3) stay time is independent of chamber geometry; theoretically any shape.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_C0DE8E6E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.97: the seven factors for optimizing contraction ratio.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 97
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_C0CE7013",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.97: contraction ratios 2-5 (pressure-fed, low thrust) and 1.3-2.5 (turbopump, high thrust and pressure).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 97
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_3094EADD",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.97: chamber volume defined from injector face I-I to throat plane II-II (hence including the convergent section).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 97
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_34C37414",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.96: minimum required L* can only be evaluated by actual firings of experimental thrust chambers.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 96
+  },
+  "scope_note": "'not a predicted quantity' restates 'can only be evaluated by actual firings'; no further source content."
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_B679AC9F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (4-3) V_c = W_tc V t_s matches PDF p.95.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 95
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_D5935CFC",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (4-4) L* = V_c/A_t = W_tc V t_s/A_t matches PDF p.95.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 95
+  }
+ }
+]

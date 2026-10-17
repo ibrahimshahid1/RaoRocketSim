@@ -139,3 +139,39 @@ To keep the list actionable:
    screen I have already written — smallest effort, immediate payoff.
 3. **Items 13–15** turn the pump BOM into a real machine.
 4. Everything else is second-order.
+
+---
+
+## Request status 2026-10-16: SP-8068/8094/8097/8090/8080/8048/8121 not held; Huber 2009 and SP-8087 held
+
+The owner's instruction for this session was *do not download anything*. Holdings
+were checked against `knowledge/manifest.json` (keys: NTRS accession, SP number, DOI,
+title and author keywords) on 2026-10-16. "Pages searched" lists the original-PDF
+pages that were read for this session's questions. A NOT HELD entry is a statement
+about the local corpus, not about whether the literature exists.
+
+| Request | Accession / DOI | Status | Pages searched / note | Blocks (unblock table) |
+|---|---|---|---|---|
+| NASA SP-8068, *Buckling Strength of Structural Plates* | 19710022285 | NOT HELD | — | (g) liner buckling as a hard constraint |
+| NASA SP-8094, *Liquid Rocket Valve Components* | 19740019163 | NOT HELD | — | (e) valve losses |
+| NASA SP-8097, *Liquid Rocket Valve Assemblies* | 19740008129 | NOT HELD | — | (e) |
+| NASA SP-8090, *Liquid Rocket Actuators and Operators* | 19730013807 | NOT HELD | — | (e) |
+| NASA SP-8080, *Regulators, Relief/Check Valves, Burst Disks* | 19740002611 | NOT HELD | — | (e) |
+| NASA SP-8048, *Turbopump Bearings* | 19710018535 | NOT HELD | — | pump BOM placeholders |
+| NASA SP-8121, *Turbopump Rotating-Shaft Seals* | 19780022641 | NOT HELD | — | pump BOM placeholders |
+| Low-specific-speed / partial-emission (Barske-type) pump design texts | — | NOT HELD | One related held paper (`fuel_pump_design/s11630-013-0601-6.pdf`, 6 pp) was not reviewed this session | (i) 500 N pump path |
+| Huber et al. 2009, RP-1 thermophysical properties | 10.1021/ef900216z | **HELD** — `DOC_HUBER2009`, `propulsion_texts/huber2009.pdf` (6 pp) | Not yet extracted | (d) real-fluid coolant properties |
+| NASA SP-8087, *Fluid-Cooled Combustion Chambers* | 19730022965 | **HELD** — `DOC_NTRS_19730022965` (130 pp) | PDF pp. 65–68 (sec. 2.3 film cooling), 107–109 (sec. 3.3, Table XI), 78 (coking limit, earlier session) | (f) film-injector hardware |
+
+### Requests raised 2026-10-16 by source reviews (all NOT HELD)
+
+| Request | Why | Evidence |
+|---|---|---|
+| G. V. R. Rao (1960), "Approximation of Optimum Thrust Nozzle Contour", *ARS Journal* 30(6) | Origin of the θn/θe parabolic-approximation charts that `raosim/nozzle_geometry.py` cites. Rao 1958 (held, `DOC_DOI_10_2514_8_7324`) has no such charts (Figs. 1–6 checked by caption). | P1 record; gap G3 |
+| E. N. Sieder and G. E. Tate (1936), *Ind. Eng. Chem.* 28 | Basis of the code's 0.027 Re^0.8 Pr^(1/3) form; the held SP-125 prints Pr^0.4 with a coolant-specific C1 | Gap G19 |
+| Coolant-specific C1 for SP-125 Eq. 4-23 (methane, hydrogen, propane) | SP-125 gives only RP-1 (C1 = 0.0214, PDF p.119) | Gap G19, unblock (d) |
+| M. E. Hatch and S. S. Papell (1959), NASA TN D-130 (SP-8087 ref. 21) | Basis of the SP-8087 Table XI gaseous-film equation; defines the v_g/v_f symbols | Unblock (f) |
+| SP-8087 ref. 60 (film mixing-efficiency ratio η_m/η_g data) | Table XI step (3) otherwise uses 0.4 "as a conservative approximation" | Unblock (f) |
+| D. Escher (1996), Penn State MS thesis, pintle injectors | Primary record of the TRW 0.3 < BF < 0.7 advice that Freeberg relays second-hand | P3 record (blockage_lo/hi) |
+| H. Ryu et al. (2017), combustion performance of a pintle injector (Hwang 2022 ref. [17]) | Two-row BF sweep 70→85 % and the BF ≈ 85 % optimum, held only second-hand | P3 record; gap G6 |
+| D. Kang et al. (2020), pintle tip thermal analysis (Hwang 2022 ref. [20]) | Primary record of the 86 % BF tip damage cited by Hwang | P3 record; gap G6 |

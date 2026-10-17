@@ -1,0 +1,303 @@
+{
+ "at": "2026-10-17T17:59:43.491779+00:00",
+ "extraction_replays": [
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP125-bartz-p109-110.extraction.jsonl",
+   "sha256": "fc6086afc9c7f648c5439d70c9eeee9f8e8da266a43019af79be48e93e79ffd3",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8120-Rao-top-p028-029.extraction.jsonl",
+   "sha256": "68465446501b4791f5e4dd7eeb3176f9a306fbe52064dcf7a887f61e4b4a790a",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8052-inducer.readable.extraction.jsonl",
+   "sha256": "819b1be4ee2c655da087bc0785069f53c4861ac1a71c8bfaa50d48437a2d445d",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8109-meanline.readable.extraction.jsonl",
+   "sha256": "ed444c7d038197cd1b9ff870634a2ad7b772a4e526949175b01ec48f93d7ba6e",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/X-SP125-Eq4-26.extraction.jsonl",
+   "sha256": "612575b57a8632dac954d0ecc45ed7819ee969a135af84ae35e22f923881dbd8",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p107.scope-clarification.extraction.jsonl",
+   "sha256": "24b78fe45f8523d2e825c5b2ee4db9d46fb1c75d48888b13370cbbe3395c475c",
+   "exit_code": 0,
+   "already_banked": true,
+   "mismatches": {}
+  }
+ ],
+ "independent_verdict_replays": [
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-KANG-p006.verdicts.json",
+   "sha256": "42f4b8119c9cfff4898964de03a269be48c5146cc8522d6c50e52b62de4ae686",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-Eq4-26-p115-p116.verdicts.json",
+   "sha256": "5853dbf839c700b20b1c6d7035677f2de0279911ece3f8221fde09487ce600e9",
+   "objects": 3,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 3,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p104.verdicts.json",
+   "sha256": "42ef021f9c82349fabc46e7b1af6b92450759c8809f21162924b09a34846e24f",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p107.verdicts.json",
+   "sha256": "6c28e0bfc94f0b41c27383a8ce2f1411851223358d544cabd9f57dd1d5fbf84a",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p034.verdicts.json",
+   "sha256": "e0a43382a1c11c3d0a37d2455bf02804670db3ceaca26c50ceba5c0e7075c647",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p069.verdicts.json",
+   "sha256": "cc3f2965b008ce5da72e409bdae0db1bf106ef17e3ebd8591f7918f1c29baf89",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p071.verdicts.json",
+   "sha256": "689178047692bcacc5ea7840925fd358cdd37bc18185678d395b6ae27e5988c8",
+   "objects": 2,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 2,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8109-p020.verdicts.json",
+   "sha256": "a0d2e5fa91e99d1c87e625a749b8bf77c04e7b1f39a268772cf69a6df3f99b5f",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8109-p042.verdicts.json",
+   "sha256": "06a85309ea127b3d4045ddf1d50cde43d1ad60a9e91e7065266f7bf2c6bcf9d9",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p143-replacement.verdicts.json",
+   "sha256": "7c17a548614d33b245d78b095f7fe690135fb933cd8d0462a7f88d149908dd8f",
+   "objects": 1,
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   }
+  }
+ ],
+ "failures": [],
+ "changed_stores_ignoring_timestamps": [],
+ "no_op": true,
+ "success": true
+}

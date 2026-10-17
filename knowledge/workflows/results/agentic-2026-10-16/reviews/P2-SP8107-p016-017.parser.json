@@ -1,0 +1,19 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-SP8107-p016-017",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_6d37bdc7e0affa5910032eea",
+   "state": "REJECTED",
+   "reason": "Table I: all body rows collapsed into one row (each cell holds a whole column), OCR letter/digit substitutions ('1O0', '50D') and the caption is unlinked. Values banked by F from the rendered page instead.",
+   "evidence": {
+    "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 17
+   }
+  }
+ ]
+}

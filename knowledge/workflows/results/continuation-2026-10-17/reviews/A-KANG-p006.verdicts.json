@@ -1,0 +1,34 @@
+[
+ {
+  "object_id": "CLM_DOI_10_1016_J_ACTAASTRO_2022_08_029_EB5F4015",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original PDF p.6 (printed p.53) explicitly says the temperature distributions in Figs. 11 and 12 were somewhat over predicted because the chemical equilibrium combustion model was applied. Table 4 is captioned numerical results and lists maximum temperatures A 1868 K, AI 1468 K, B 1545 K and BI 1398 K, matching every value and unit in the claim. The adjacent prose attributes the maximum pintle-tip temperatures and Table 4 to the numerical analysis, supporting the simulation-versus-measurement qualifier. The overprediction sentence names Figs. 11-12; Table 4 does not itself repeat that caveat on this page. Confirmed the complete statement, subject/predicate/object, claim type, page, quote and both qualifiers; this does not quantify or automatically transfer the overprediction bias to each Table 4 wall temperature.",
+  "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+  "content_sha256": "ee032f35e4367b54b7b30afc69cfcc6da269c97093d2902ac77eb67cc6218064",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "pdf_page": 6,
+   "printed_page": "53",
+   "method": "Original PDF rendered with pdftoppm at 170 dpi; complete page visually inspected, including Table 4 and surrounding prose.",
+   "inspected_science_fields": [
+    "claim_type",
+    "subject",
+    "predicate",
+    "object",
+    "statement",
+    "qualifiers",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of prior role F assertion; no claim of physical validation or independent model diversity."
+  },
+  "scope_note": "Source fidelity of this bounded claim only; numerical temperatures are not measured qualification evidence."
+ }
+]

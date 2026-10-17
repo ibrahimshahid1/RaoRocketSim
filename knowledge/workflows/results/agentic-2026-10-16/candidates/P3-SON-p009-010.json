@@ -1,0 +1,473 @@
+{
+ "packet": "P3-SON-p009-010",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_1_B36301",
+ "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+ "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+ "pages": [
+  9,
+  10
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 9,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0009.png",
+   "sha256": "029eac780cddd727dd5424c6fc9a083259560efdba72682a97501035559b10a8",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0010.png",
+   "sha256": "7d637a9132ca35be8096bbf8b556c1d6c80c8e2d34783334f1508897ec77f69a",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_309d26aeecf93662afa59457",
+  "ENR_45765f7f8e1348f4eebc6710"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_026466fbd9e80096276100c9",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 14 Effect of throttling on a) spray angle, b) SMD, c) radial vaporization distance, and d) axial vaporization distance."
+   ],
+   "bbox": [
+    {
+     "l": 62.14131747936673,
+     "t": 395.98547338430666,
+     "r": 523.3746128388756,
+     "b": 35.9527262962215,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/9\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_309d26aeecf93662afa59457",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p9-9-7b49935032a454530650d31e01dfaa7e8c3ef03361f9d03040e2e779442a5fe8.json",
+   "raw_sha256": "95ffdee8b689c63e3c50e7b21133b7d77cca47c95f4a5c8628b52fff7051a2c5",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d85d86448b447c15919d5862",
+   "kind": "table",
+   "pages": [
+    9
+   ],
+   "table_grid": [
+    [
+     "Throttling",
+     "Decrease in pintle-opening distance, mm",
+     "Decrease in pintle-opening distance, mm",
+     "Decrease in pintle-opening distance, mm",
+     "Decrease in pintle-opening distance, mm"
+    ],
+    [
+     "level, %",
+     "Case 1",
+     "Case 2",
+     "Case3",
+     "Case 4"
+    ],
+    [
+     "100",
+     "0.50",
+     "0.50",
+     "0.50",
+     "0.50"
+    ],
+    [
+     "80",
+     "0.50",
+     "0.45",
+     "0.40",
+     "0.25"
+    ],
+    [
+     "60",
+     "0.50",
+     "0.40",
+     "0.30",
+     "0.125"
+    ],
+    [
+     "40",
+     "0.50",
+     "0.35",
+     "0.20",
+     "0.0625"
+    ],
+    [
+     "20",
+     "0.50",
+     "0.30",
+     "0.10",
+     "0.03125"
+    ]
+   ],
+   "json_pointer": "/tables/1",
+   "caption_text": [
+    "Table 6 Cases for sensitivity analysis of the throttling levels"
+   ],
+   "bbox": [
+    {
+     "l": 82.4996956669082,
+     "t": 562.420378953215,
+     "r": 238.07785114696534,
+     "b": 474.26471337890627,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 7x5 (see table_grid; full cells in raw item /tables/1)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_309d26aeecf93662afa59457",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p9-9-7b49935032a454530650d31e01dfaa7e8c3ef03361f9d03040e2e779442a5fe8.json",
+   "raw_sha256": "95ffdee8b689c63e3c50e7b21133b7d77cca47c95f4a5c8628b52fff7051a2c5",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ff341ca807a561e5d73de69f",
+   "kind": "table",
+   "pages": [
+    9
+   ],
+   "table_grid": [
+    [
+     "Parameter",
+     "Value"
+    ],
+    [
+     "Pintle injection velocity, m∕s",
+     "8.83"
+    ],
+    [
+     "Annular injection velocity, m∕s",
+     "84.03"
+    ],
+    [
+     "Weber number",
+     "1802.3"
+    ],
+    [
+     "Estimated spray angle, deg",
+     "52.61"
+    ],
+    [
+     "Estimated SMD, μm",
+     "33.93"
+    ],
+    [
+     "Vaporization time, ms",
+     "8.83"
+    ],
+    [
+     "Actual vaporization distance, mm",
+     "84.04"
+    ],
+    [
+     "Estimated chamber diameter, mm",
+     "74.40"
+    ],
+    [
+     "Estimated cylinder length, mm",
+     "29.88"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table5 Designresults of thebaseline pintle injector at 100% throttling level"
+   ],
+   "bbox": [
+    {
+     "l": 91.46819838247707,
+     "t": 714.8682833317237,
+     "r": 228.97741538072896,
+     "b": 613.0588015275471,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 10x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_309d26aeecf93662afa59457",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p9-9-7b49935032a454530650d31e01dfaa7e8c3ef03361f9d03040e2e779442a5fe8.json",
+   "raw_sha256": "95ffdee8b689c63e3c50e7b21133b7d77cca47c95f4a5c8628b52fff7051a2c5",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0f7950db3186be89d41cbcd9",
+   "kind": "figure",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 15 Designed combustor profile and estimated spray trajectory according to throttling level."
+   ],
+   "bbox": [
+    {
+     "l": 303.8541286249666,
+     "t": 224.30818413363443,
+     "r": 545.1635384857439,
+     "b": 44.61797663265531,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/7\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_45765f7f8e1348f4eebc6710",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p10-10-2121189de9e448f7e05d915e6718eaa7590566c611ee4e356b61f1396afadf81.json",
+   "raw_sha256": "a1b81387ccd9db406f43c7c3ee2486f9d59555bfe670cb46a22b100d43966802",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_82f47f55777418a0734d4591",
+   "kind": "table",
+   "pages": [
+    10
+   ],
+   "table_grid": [
+    [
+     "",
+     "100% throttling level",
+     "60% throttling level",
+     "20% throttling level"
+    ],
+    [
+     "Thrust, N",
+     "500",
+     "300",
+     "100"
+    ],
+    [
+     "Chamber pressure, MPa",
+     "2.0",
+     "1.2",
+     "0.4"
+    ],
+    [
+     "Pintle tip diameter, mm",
+     "- -",
+     "8.0",
+     "- -"
+    ],
+    [
+     "Annular gap thickness, mm",
+     "- -",
+     "1.0",
+     "- -"
+    ],
+    [
+     "Center gap diameter, mm",
+     "- -",
+     "6.0",
+     "- -"
+    ],
+    [
+     "Pintle rod diameter, mm",
+     "- -",
+     "3.0",
+     "- -"
+    ],
+    [
+     "Post recess length, mm",
+     "- -",
+     "3.0",
+     "- -"
+    ],
+    [
+     "Pintle tip thickness, mm",
+     "- -",
+     "1.0",
+     "- -"
+    ],
+    [
+     "Pintle tip angle, deg",
+     "- -",
+     "20",
+     "- -"
+    ],
+    [
+     "Pintle-opening distance, mm",
+     "0.5",
+     "0.3",
+     "0.1"
+    ],
+    [
+     "Total mass flow rate, kg∕s",
+     "0.159",
+     "0.096",
+     "0.032"
+    ],
+    [
+     "Oxidizer mass flow rate, kg∕s",
+     "0.128",
+     "0.077",
+     "0.026"
+    ],
+    [
+     "Fuel mass flow rate, kg∕s",
+     "0.032",
+     "0.019",
+     "0.006"
+    ],
+    [
+     "Pintle injection velocity, m∕s",
+     "8.83",
+     "8.88",
+     "8.99"
+    ],
+    [
+     "Annular injection velocity, m∕s",
+     "84.03",
+     "85.66",
+     "87.75"
+    ],
+    [
+     "Weber number",
+     "1802.3",
+     "666.6",
+     "76.9"
+    ],
+    [
+     "Estimated spray angle, deg",
+     "52.61",
+     "45.71",
+     "19.43"
+    ],
+    [
+     "Estimated SMD, μm",
+     "33.93",
+     "39.28",
+     "44.40"
+    ],
+    [
+     "Vaporization time, ms",
+     "1.870",
+     "0.433",
+     "0.612"
+    ],
+    [
+     "Actual vaporization distance, mm",
+     "41.79",
+     "60.96",
+     "84.68"
+    ],
+    [
+     "Radial vaporization distance, mm",
+     "33.20",
+     "43.64",
+     "28.17"
+    ],
+    [
+     "Axial vaporization distance, mm",
+     "25.38",
+     "42.57",
+     "79.85"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 7 Summary of designed combustor with 5:1 throttling performance"
+   ],
+   "bbox": [
+    {
+     "l": 130.42336550141684,
+     "t": 724.7087674764387,
+     "r": 454.4488323827499,
+     "b": 505.3467992244248,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 23x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_45765f7f8e1348f4eebc6710",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p10-10-2121189de9e448f7e05d915e6718eaa7590566c611ee4e356b61f1396afadf81.json",
+   "raw_sha256": "a1b81387ccd9db406f43c7c3ee2486f9d59555bfe670cb46a22b100d43966802",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00020",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "866 SON ET AL.\n\nTable5 Design results of the baseline\npintle injector at 100% throttling level\n\nParameter Value\nPintle injection velocity, m∕s 8.83\nAnnular injection velocity, m∕s 84.03\nWeber number 1802.3\nEstimated spray angle, deg 52.61\nEstimated SMD, μm 33.93\nVaporization time, ms 8.83\nActual vaporization distance, mm 84.04\nEstimated chamber diameter, mm 74.40\nEstimated cylinder length, mm 29.88\n\nTable 6 Cases for sensitivity analysis of\nthe throttling levels\n\nDecrease in pintle-opening\n\nThrottling distance, mm\nlevel, % Case 1 Case 2 Case 3 Case 4\n\n100 0.50 0.50 0.50 0.50\n80 0.50 0.45 0.40 0.25\n60 0.50 0.40 0.30 0.125\n40 0.50 0.35 0.20 0.0625\n20 0.50 0.30 0.10 0.03125\n\nwas conducted for the initial results of the chamber diameter and\nlength. There were some important checkpoints in this process. First,\nthe minimum area of the pintle nozzle had to be lower than the center\ngaparea, as mentioned in the previoussection. Additionally, injection\n\nvelocities needed to be lower than the speed of sound and additional\nrestrictions on velocities had to be considered from the hot firing test\nto avoid a blowout. Furthermore, because an excessive vaporization\ndistance requires a large combustion chamber size, it should be\ncontrolled within a reasonable range. Moreover, the calculated\nchamber diameter should be larger than the injector module diameter.\nThe iterative calculation began with the decrease in the throttling\nlevel down to its minimum value if all results were feasible. Then, the\nchamber diameter and length data could be obtained at all throttling\nlevels. The maximum values could be chosen to cover all throttling\nlevels from these databases."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00021",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "B. Design Results\n\nThe sample design was applied to a 500 N thrust combustor with\n5:1 throttling performance, as shown in Table 3 using the design\nprocedure outlined previously. The target chamber pressure at the\n100% throttling level was 2.0 MPa. The propellants were a\ncombination of liquid oxygen and gaseous methane, and it was\nassumed that liquid oxygen was injected at the central pintle nozzle.\nThe initial geometry was assumed to be similar to the experimental\nmodel shown in Table 4. The result shown in Table 5 was reasonable\nfor this geometry. The maximum injection velocity was lower than\nthe speed of sound, and the orders ofinjectionvelocities were feasible\nin terms of the performances of actual engines [29]. The effects of the\nthrottling level upon the spray performances and chamber geometries\nwere analyzed for the cases in Table 6 using this baseline. The\nopening distance was fixed at 0.5 mm for case 1. This distance\ndecreased by 10, 20, and 50% of the previous values for cases 2–4,\nrespectively.\n\nConsequently, the spray angle was completely dependent upon the\nthrottling level, regardless of the change in the opening distance, as\nshowninFig.14a,becausethecharacteristicnumberdefinedbyEq.(5)\n\nFig. 14 Effect of throttling on a) spray angle, b) SMD, c) radial vaporization distance, and d) axial vaporization distance."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00022",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "SON ET AL. 867\n\nTable 7 Summary of designed combustor with 5:1 throttling performance\n\n100% throttling level 60% throttling level 20% throttling level\n\nThrust, N 500 300 100\nChamber pressure, MPa 2.0 1.2 0.4\nPintle tip diameter, mm - - 8.0 - Annular gap thickness, mm - - 1.0 - Center gap diameter, mm - - 6.0 - Pintle rod diameter, mm - - 3.0 - Post recess length, mm - - 3.0 - Pintle tip thickness, mm - - 1.0 - Pintle tip angle, deg - - 20 - Pintle-opening distance, mm 0.5 0.3 0.1\nTotal mass flow rate, kg∕s 0.159 0.096 0.032\nOxidizer mass flow rate, kg∕s 0.128 0.077 0.026\nFuel mass flow rate, kg∕s 0.032 0.019 0.006\nPintle injection velocity, m∕s 8.83 8.88 8.99\nAnnular injection velocity, m∕s 84.03 85.66 87.75\nWeber number 1802.3 666.6 76.9\nEstimated spray angle, deg 52.61 45.71 19.43\nEstimated SMD, μm 33.93 39.28 44.40\nVaporization time, ms 1.870 0.433 0.612\nActual vaporization distance, mm 41.79 60.96 84.68\nRadial vaporization distance, mm 33.20 43.64 28.17\nAxial vaporization distance, mm 25.38 42.57 79.85\n\nhadnoeffecton the openingdistancewhenthe O∕F ratiowas fixedata\nconstant value for the best performance. This means that avoiding a\nreduction in the spray angle is impossible. Conversely, significant\nchanges were observed for the other parameters. As shown in Fig. 14b,\nthe SMD increased as throttling level decreased in all cases except\ncase 4. This trend means that the engine will have poorer combustion\nperformance at the lower throttling level due to the increase of SMD if\nthere is no proper control of the opening distance. In a manner similar\ntotheSMDtrend,theradialandaxialvaporizationdistancesdrastically\nmonotonically increased for cases 1 and 2, whereas the diameter in\ncase 3 decreased over the throttling level of 60%, as shown in Figs. 14c\nand 14d. In particular, a large increase in the vaporization distance was\nobserved in case 1 without controlling the pintle, and this indicated the\nimportance of applying the variable injector to the deep throttling\napplication. These results also suggested that a control plan for the\nopening distance in case 4 was the optimal means to maintain high\nperformance in the design of a small combustor. However, the opening\ndistance at the 20% throttling level in case 4 was approximately\n0.03 mm. There was a nonuniform injection problem below 0.1 mm of\nthe opening distance in the spray experiment. Thus, this condition was\nnotfeasibleandcase3waschosenasthenextbestcondition.Thistrend\nwas used to obtain the chamber diameter and length to complete\nvaporization in the chamber."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00023",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "In case 3, using Eqs. (15) and (16), the required maximum chamber\ndiameter was calculated as 95.50 mm at a 40% throttling level and the\nrequired maximum chamber length was calculated as 83.35 mm at a\n20% throttling level. These dimensions of the chamber geometry\nwere used to design a combustor, and the results of the combustor\ndesign are summarized in Table 7. The decrease in the throttling level\nled to the proportional reduction in the chamber pressures and mass\nflow rates, and the opening distancewas controlled by the case 3 plan.\nA combustor profile was designed by the modified Rao method for a\nlarge contraction ratio, as shown in Fig. 15. The estimated spray\ntrajectories are also presented in Fig. 15 and were calculated by\nthevaporization distances in Table 7. As expected, the widest spray at\nthe 60% throttling level was limited by the chamber diameter and the\nlongest spray at a 20% throttling level was restricted by the\ncylindrical chamber length. These results indicate that the design\nprocedure was feasible and well established.\n\nMoreover, a sensitivity analysis was conducted for the baseline\ndesign at a 100% throttling level, as shown in Fig. 16. This sensitivity\nanalysis indicated which design parameter most significantly\naffected performance. From the result of the sensitivity analysis, the\nneed for precision manufacturing could be clearly understood. The\nvariation of the opening distance was totally independent of the spray\nangle, whereas the pintle tip angle strongly influenced the spray"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00024",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "angle, as shown in Fig. 16a. In addition, spray angles could be wider\nthan the design point as the O∕F ratio and chamber pressure\nincreased. This result indicates that spray could strongly fluctuate\nunder oscillation of the propellant supply. If spray fluctuation was\ncoupled with heat release, combustion instability in the radial\ndirection could occur. As shown in Fig. 16b, the SMD was not much\naffected by the pintle tip angle and opening distance, whereas other\nvariances have proportional relations. Because the SMD determines\nthe burning time and flight length of a droplet, oscillation of the O∕F\nratio and chamber pressure can cause longitudinal instability. As\nshown in Figs. 16c and 16d, annular tip thickness had the most critical\neffect on vaporization length. An increase in the radial vaporization\ndistance is crucial to the wall-cooling problem. If nonvaporized\noxygen droplets impact the combustor wall, the wall material can be\nrapidly oxidized and critically damaged. To avoid burning the\ncombustor wall, the annular gap thickness and tip diameter should\nhave negative tolerances when they are manufactured. In addition,\ntoo short control of the oxygen mass flow rate can lead to\novershooting of the O∕F ratio. Therefore, the control system of the\npintle injector should be designed to avoid overshoot of the mass flow\nrate. Additionally, some control and restriction of manufacturing\nprocesses are required to burn all propellant inside the chamber, as\nshown in Fig. 16d. If the axial vaporization distance increases,\nunburnt propellant can be exhausted and there can be a loss of thrust."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00025",
+   "page_start": 10,
+   "page_end": 11,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "Fig. 15 Designed combustor profile and estimated spray trajectory\naccording to throttling level.\n\n868 SON ET AL.\n\nFig. 16 Sensitivity of geometry variation on a) spray angle, b) SMD, c) radial vaporization distance, and d) axial vaporization distance.\n\nIV. Conclusions\n\nThis study involved the development of an appropriate design\nprocedure for a liquid–gas pintle injector for liquid rocket engines\nbased on spray characteristics. The spray angle and Sauter mean\ndiameter (SMD) were selected as the major performance parameters\nin an atmospheric experiment. Nondimensional numbers such as the\nvelocity ratio, characteristic length, and Weber number were adopted\nto generalize the design procedure. The correlations needed to\nestimate the spray angle and SMD from the injector design were\nproposed using nondimensional numbers. The estimated spray angle\nand SMD were applied to restrict the diameter and length of the\ncombustion chamber using a droplet vaporization model. This\nprocedure for the pintle-injector analysis was merged with the\ncombustor design method to establish an integrated design\nprocedure. As a sample case, the procedure was used to design a\npintle injector for a 500 N combustor with 5:1 throttleable\nperformance. Four cases were examined to determine the pintleopening distances at lower throttling levels, and the investigations\nrevealed that it was feasible to decrease the pintle-opening distances\nin the same proportion as the throttling level. The results indicated\nthat the geometries were reasonably designed and optimal\nperformances were achieved for 60 and 20% throttling conditions.\nAvoiding reduction of the spray angle according to a decrease in the\nthrottling level in sensitivity analysis was impossible, even though\nthe pintle-opening distance changed. An effective method of\nchanging the spray angle involved changing the pintle tip angle. The\nannular gap thickness was the most sensitive parameter for the SMD\nand chamber design. Hence, the results of this study revealed the\nmajor design parameters of a movable pintle injector and established\na design procedure. Future research could investigate the application"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "table": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

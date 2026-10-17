@@ -19,6 +19,7 @@ from xml.sax.saxutils import escape
 
 from .schema import ONTOLOGY_VERSION
 from .store import GRAPH_DIR, load
+from . import candidate_links
 
 
 def _node(nid: str, ntype: str, label: str, **attrs) -> dict:
@@ -27,7 +28,7 @@ def _node(nid: str, ntype: str, label: str, **attrs) -> dict:
     return d
 
 
-def model_source_support(model: dict, document: dict | None) -> tuple[str, str]:
+def model_source_support(model: dict, document: dict | None, *, documents=None) -> tuple[str, str]:
     """Return current reviewed support, separately from a registry citation.
 
     A legacy assessment without a source fingerprint remains inspectable, but
@@ -39,6 +40,13 @@ def model_source_support(model: dict, document: dict | None) -> tuple[str, str]:
         return "STALE_SOURCE", "Model source-support assessment is stale."
     if not model.get("active", True) or model.get("source_state", "CURRENT") != "CURRENT":
         return "NOT_CHECKED", "Model source-support assessment is inactive or noncurrent; its declared result is retained as history."
+    if model.get("source_assessments"):
+        from .harvest_extraction import aggregate_source_support, model_source_assessments
+        if documents is None:
+            documents = {d["id"]: d for d in load("manifest")}
+            if document is not None and model.get("source_document_id"):
+                documents[model["source_document_id"]] = document
+        return aggregate_source_support(model_source_assessments(model), documents)
     reviewed_sha = model.get("source_support_sha256")
     if reviewed_sha and document and reviewed_sha != document.get("sha256"):
         return "STALE_SOURCE", "Source bytes differ from the reviewed source fingerprint."
@@ -51,13 +59,25 @@ def model_source_support(model: dict, document: dict | None) -> tuple[str, str]:
     return declared, model.get("source_support_notes", "")
 
 
-def equation_formulation_state(record: dict) -> str:
-    """Flag explicitly missing/garbled bodies without judging intact formulas.
+_FORM_DAMAGE = re.compile(r"not\s+rendered|ocr[-\s]+garbled", re.I)
+# The extractor's own statement that the *stored form* is garbled/unreadable.
+# "Markdown dropped the display; transcribed from the PDF render" is a recovery
+# note and must not match, so only garbling/illegibility words count here.
+_SELF_DECLARED_DAMAGE = re.compile(r"\bgarbl|\bunreadable\b|\billegible\b", re.I)
 
-    Inspect the current form, not historical extraction notes: an equation
-    recovered from a PDF may legitimately describe earlier Markdown damage.
+
+def equation_formulation_state(record: dict) -> str:
+    """Flag missing/garbled bodies without judging intact formulas.
+
+    Explicit markers in the current form, a low-confidence transcription, or the
+    record's own note declaring the stored form garbled/unreadable all mean the
+    form is unusable. A recovered equation's note may describe earlier Markdown
+    loss ("not rendered in the Markdown"); that alone does not flag it. Absence
+    of a flag is never evidence that a transcription is correct.
     """
-    if re.search(r"not\s+rendered|ocr[-\s]+garbled", record.get("form") or "", re.I):
+    if _FORM_DAMAGE.search(record.get("form") or ""):
+        return "INCOMPLETE_TRANSCRIPTION"
+    if record.get("confidence") == "low" or _SELF_DECLARED_DAMAGE.search(record.get("extraction_note") or ""):
         return "INCOMPLETE_TRANSCRIPTION"
     return "NOT_FLAGGED_INCOMPLETE"
 
@@ -65,6 +85,7 @@ def equation_formulation_state(record: dict) -> str:
 def assemble() -> dict:
     nodes: dict[str, dict] = {}
     edges: list[dict] = []
+    candidate_link_issues: list[dict] = []
 
     seen_edges: set[tuple] = set()
     invalid_science = {r["id"] for name in ("equations", "claims", "entities", "validity")
@@ -115,6 +136,14 @@ def assemble() -> dict:
         edge = dict(enrichment_edge)
         add_edge(edge.pop("from"), edge.pop("to"), edge.pop("type"), **edge)
 
+    # Standards are availability records, never compliance or rule extraction.
+    from .standards import graph_records as standard_records
+    standard_nodes, standard_edges = standard_records()
+    nodes.update({n["id"]: n for n in standard_nodes})
+    for standard_edge in standard_edges:
+        edge = dict(standard_edge)
+        add_edge(edge.pop("from"), edge.pop("to"), edge.pop("type"), **edge)
+
     # ---- quantities ----
     for q in load("quantities"):
         nodes[q["qid"]] = _node(q["qid"], "PhysicalQuantity", q["canonical"], si_unit=q["si_unit"],
@@ -128,8 +157,16 @@ def assemble() -> dict:
 
     # ---- models (registry) ----
     equations_by_id = {e["id"]: e for e in load("equations")}
+    from .harvest_extraction import model_review_state, model_source_assessments, IMPLEMENTS_FIDELITY
+    reviews_by_pair = {}
     for m in load("models"):
-        support_state, support_note = model_source_support(m, documents.get(m.get("source_document_id")))
+        support_state, support_note = model_source_support(m, documents.get(m.get("source_document_id")), documents=documents)
+        # The structured model-versus-source review is a separate, visible state:
+        # its fidelity class and whether its source/code fingerprints are current.
+        review = m.get("source_review") or {}
+        review_state = model_review_state(m, documents=documents)
+        for item in review_state.get("source_reviews", []):
+            reviews_by_pair[(m["id"], item["reviewed_document_id"])] = item
         nodes[m["id"]] = _node(m["id"], "Model", m["registry_id"], subsystem=m["subsystem"],
                                quantity=m["quantity"], relation=m["relation"], basis_class=m["basis_class"],
                                promotion_status=m["promotion_status"], validation_level=m["validation_level"],
@@ -142,28 +179,74 @@ def assemble() -> dict:
                                physical_validation_state=m.get("physical_validation_state"),
                                effective_source_support_state=support_state, source_support_evidence_note=support_note,
                                source_document_id=m.get("source_document_id"),
-                               source_support_sha256=m.get("source_support_sha256"))
+                               source_support_sha256=m.get("source_support_sha256"),
+                               source_review_state=review_state["state"],
+                               source_review_fidelity=review_state.get("fidelity"),
+                               source_reviews=review_state.get("source_reviews"),
+                               source_review_physics_change_required=review_state.get("physics_change_required"),
+                               source_review_document_id=review.get("reviewed_document_id"),
+                               source_review_implementation=[f"{f.get('file')}:{f.get('symbol')}"
+                                                             for f in review.get("implementation_fingerprints", [])])
         add_edge(m["id"], f"SUB_{m['subsystem'].upper()}" if f"SUB_{m['subsystem'].upper()}" in nodes else "SUB_" + _sub_alias(m["subsystem"]),
                  "PART_OF", provenance="model_registry")
         if m.get("source_document_id"):
             add_edge(m["id"], m["source_document_id"], "CITES", provenance="model_registry",
                      basis=m["basis_class"], equation_ref=m.get("equation_ref"),
                      support_state=support_state, support_notes=support_note)
-            if support_state in {"SUPPORTED", "PARTIALLY_SUPPORTED"}:
-                add_edge(m["id"], m["source_document_id"], "SUPPORTED_BY", provenance="model_source_review",
-                         support_state=support_state, support_notes=support_note,
-                         source_sha256=m.get("source_support_sha256"),
+        assessments = model_source_assessments(m)
+        if not assessments and m.get("source_document_id") and support_state in {"SUPPORTED", "PARTIALLY_SUPPORTED"}:
+            assessments = [{"document_id": m["source_document_id"], "source_sha256": m.get("source_support_sha256"),
+                            "state": support_state, "notes": support_note,
+                            "comparison_equation_ids": m.get("source_comparison_equation_ids", [])}]
+        if not m.get("active", True) or m.get("source_state", "CURRENT") != "CURRENT":
+            assessments = []
+        for assessment in assessments:
+            did = assessment["document_id"]
+            source = documents.get(did)
+            if (not source or not assessment.get("source_sha256")
+                    or source.get("sha256") != assessment["source_sha256"]):
+                continue
+            add_edge(m["id"], did, "CITES", provenance="model_source_review", support_state=assessment.get("state"))
+            if assessment.get("state") in {"SUPPORTED", "PARTIALLY_SUPPORTED"}:
+                add_edge(m["id"], did, "SUPPORTED_BY", provenance="model_source_review",
+                         support_state=assessment["state"], support_notes=assessment.get("notes"),
+                         source_sha256=assessment["source_sha256"],
                          scope="citation support only; not implementation or physical validation")
-                for eid in m.get("source_comparison_equation_ids", []):
-                    equation = equations_by_id.get(eid, {})
-                    if (equation.get("document_id") == m["source_document_id"]
-                            and equation.get("source_sha256") == m.get("source_support_sha256")):
-                        add_edge(m["id"], eid, "CITES", provenance="model_source_review",
-                                 scope="explicit source/implementation comparison; no IMPLEMENTS assertion",
-                                 support_notes=support_note)
+            for eid in assessment.get("comparison_equation_ids", []):
+                equation = equations_by_id.get(eid, {})
+                if (equation.get("document_id") == did
+                        and equation.get("source_sha256") == assessment["source_sha256"]):
+                    add_edge(m["id"], eid, "CITES", provenance="model_source_review",
+                             scope="explicit source/implementation comparison; no IMPLEMENTS assertion",
+                             support_notes=assessment.get("notes"))
+    def add_candidate_edges(record):
+        """Parser links are reviewed provenance, with rejected notation kept as history."""
+        doc_id = record.get("document_id")
+        source_sha = record.get("source_sha256")
+        if (not record.get("active", True) or record.get("source_state", "CURRENT") != "CURRENT"
+                or record.get("verification") == "REFUTED" or not source_sha
+                or source_sha != documents.get(doc_id, {}).get("sha256")):
+            return
+        for field, relation in candidate_links.FIELDS.items():
+            for cid in record.get(field, []):
+                problem = candidate_links.link_problem(
+                        nodes.get(cid, {}), document_id=doc_id, page=record.get("page"),
+                        source_sha256=source_sha, reviewer=record.get("transcribed_by"),
+                        correction=relation == "CORRECTS")
+                if problem:
+                    candidate_link_issues.append({"object_id": record["id"], "candidate_id": cid,
+                                                  "field": field, "reason": problem})
+                    continue
+                add_edge(record["id"], cid, relation, provenance=record.get("provenance_id", ""),
+                         scope=("Parser notation corrected by original-PDF inspection; not model validation"
+                                if relation == "CORRECTS" else
+                                "Reviewed source transcription used this parser candidate; parser alone does not establish correctness."))
+
     for v in load("validity"):
         nodes[v["id"]] = _node(v["id"], "ValidityEnvelope", v["prose"][:120], prose=v["prose"],
-                               machine_readable_state=v.get("machine_readable_state"), source_state=v.get("source_state"))
+                               machine_readable_state=v.get("machine_readable_state"), source_state=v.get("source_state"),
+                               verification=v.get("verification"))
+        add_candidate_edges(v)
         if v.get("source_state") == "STALE_SOURCE":
             continue
         for mid in v.get("model_ids", []) or [v.get("model_id")]:
@@ -182,17 +265,8 @@ def assemble() -> dict:
             continue
         for old_id in e.get("corrects_ids", []):
             add_edge(e["id"], old_id, "CORRECTS", provenance=e.get("provenance_id", ""), scope="superseded extraction history")
-        for candidate_id in e.get("corrects_candidate_ids", []):
-            candidate = nodes.get(candidate_id, {})
-            if candidate.get("document_id") == e["document_id"] and candidate.get("source_sha256") == e.get("source_sha256"):
-                add_edge(e["id"], candidate_id, "CORRECTS", provenance=e.get("provenance_id", ""),
-                         scope="Parser notation corrected by original-PDF inspection; not model validation")
+        add_candidate_edges(e)
         add_edge(e["id"], e["document_id"], "FOUND_IN", provenance=e.get("provenance_id", ""), page=e.get("page"))
-        for candidate_id in e.get("enrichment_candidate_ids", []):
-            candidate = nodes.get(candidate_id, {})
-            if candidate.get("active", True) and candidate.get("document_id") == e["document_id"] and candidate.get("source_sha256") == e.get("source_sha256"):
-                add_edge(e["id"], candidate_id, "DERIVED_FROM", provenance=e.get("provenance_id", ""),
-                         note="Reviewed source transcription used this parser candidate; parser alone does not establish correctness.")
         for v in e.get("variables", []):
             if v.get("resolution_state") != "RESOLVED":
                 continue  # candidate identities are not physical dependencies
@@ -203,6 +277,11 @@ def assemble() -> dict:
         for a in e.get("assumption_ids", []):
             add_edge(e["id"], a, "ASSUMES", provenance=e.get("provenance_id", ""))
         for mid in e.get("model_ids", []):
+            review = reviews_by_pair.get((mid, e.get("document_id")))
+            if review and (review["state"] != "CURRENT" or review.get("fidelity") not in IMPLEMENTS_FIDELITY
+                           or ("resolved_implementation_equation_ids" in review
+                               and e["id"] not in review["resolved_implementation_equation_ids"])):
+                continue
             add_edge(mid, e["id"], "IMPLEMENTS", provenance=e.get("provenance_id", ""),
                      link_basis=e.get("model_link_basis"))
     for r in load("relationships"):
@@ -216,21 +295,33 @@ def assemble() -> dict:
                                claim_type=c.get("claim_type"), page=c.get("page"), document_id=c.get("document_id"),
                                confidence=c.get("confidence"), grounded=c.get("grounded"),
                                source_state=c.get("source_state"), verification=c.get("verification"))
-        if c.get("source_state") == "STALE_SOURCE" or c.get("verification") == "REFUTED":
+        if (c.get("source_state") == "STALE_SOURCE" or c.get("verification") == "REFUTED"
+                or (c.get("source_sha256") and c.get("source_sha256") != documents.get(c.get("document_id"), {}).get("sha256"))):
             continue
         add_edge(c["id"], c["document_id"], "FOUND_IN", provenance=c.get("provenance_id", ""), page=c.get("page"))
+        add_candidate_edges(c)
         for mid in c.get("model_ids", []):
+            review = reviews_by_pair.get((mid, c.get("document_id")))
+            if review and (review["state"] != "CURRENT" or review.get("fidelity") not in IMPLEMENTS_FIDELITY):
+                add_edge(mid, c["id"], "CITES", provenance=c.get("provenance_id", ""),
+                         scope="source/implementation comparison; no model support assertion")
+                continue
             add_edge(c["id"], mid, "SUPPORTS" if c.get("claim_type") != "validity_statement" else "CONSTRAINS",
                      provenance=c.get("provenance_id", ""))
+        for mid in c.get("comparison_model_ids", []):
+            add_edge(mid, c["id"], "CITES", provenance=c.get("provenance_id", ""),
+                     scope="source/implementation comparison; no model support assertion")
         for other in c.get("contradicts", []):
             add_edge(c["id"], other, "CONTRADICTS", provenance=c.get("provenance_id", ""))
         for qid in c.get("quantity_ids", []):
             add_edge(c["id"], qid, "DESCRIBES", provenance=c.get("provenance_id", ""))
     for a in load("entities"):
         nodes[a["id"]] = _node(a["id"], a.get("type", "Concept"), a.get("label", a["id"]),
-                               **{k: a[k] for k in ("subsystem", "document_id", "page", "prose", "source_state") if k in a})
+                               **{k: a[k] for k in ("subsystem", "document_id", "page", "prose", "source_state",
+                                                    "verification") if k in a})
         if a.get("source_state") == "STALE_SOURCE":
             continue
+        add_candidate_edges(a)
         if a.get("document_id"):
             add_edge(a["id"], a["document_id"], "FOUND_IN", provenance=a.get("provenance_id", ""), page=a.get("page"))
         for mid in a.get("model_ids", []):
@@ -356,8 +447,10 @@ def assemble() -> dict:
     edges = [e for e in edges if e["from"] in nodes and e["to"] in nodes]
     graph = {
         "meta": {"ontology_version": ONTOLOGY_VERSION, "generated_at": datetime.now(timezone.utc).isoformat(),
-                 "n_nodes": len(nodes), "n_edges": len(edges), "n_dangling_dropped": len(dangling)},
+                 "n_nodes": len(nodes), "n_edges": len(edges), "n_dangling_dropped": len(dangling),
+                 "n_candidate_link_issues": len(candidate_link_issues)},
         "nodes": list(nodes.values()), "edges": edges, "dangling": dangling[:200],
+        "candidate_link_issues": candidate_link_issues,
     }
     GRAPH_DIR.mkdir(parents=True, exist_ok=True)
     (GRAPH_DIR / "graph.json").write_text(json.dumps(graph, indent=1, ensure_ascii=False))

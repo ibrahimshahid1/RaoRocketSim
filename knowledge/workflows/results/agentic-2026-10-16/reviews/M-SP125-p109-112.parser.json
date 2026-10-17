@@ -1,0 +1,479 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "M-SP125-p109-112",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_0028603114e797f69a4503a4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_57bdf91136d86b9f9c1f4f3c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_9a15506d584116917256d0f8",
+   "state": "REJECTED",
+   "reason": "Eq. (4-12): Prandtl-number symbol P_r transcribed as P_tau; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_ac1c566c1d18c129467167f6",
+   "state": "REJECTED",
+   "reason": "Eq. (4-13) truncated before (A_t/A)^0.9 sigma; D_t exponent 0.2 read as '02' and P_r as P_R; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_c996acf11955ac749d330a9e",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (4-10) q = h_g (T_aw - T_wg) matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_cbd7f8f1fcad7d95290bf538",
+   "state": "REJECTED",
+   "reason": "Eq. (4-11): h_g rendered as hbar with an empty subscript and the printed approximately-equal sign as '='; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 109
+   }
+  },
+  {
+   "candidate_id": "CAND_1e4bb3177306682cb74dc705",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_a7946854c277c3a6a6f16fad",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_f965f01472217e6e659be194",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 4-24 region (sigma versus area ratio, three gamma panels) located correctly; the printed caption is on the page but the parser did not link it to this picture.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_3bfc565e2e8450b68ad28d64",
+   "state": "REJECTED",
+   "reason": "Eq. (4-15): P_r transcribed as P_tau; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_481931693daa248561feb73f",
+   "state": "REJECTED",
+   "reason": "Eq. (4-17): T_aw transcribed as T_{a Psi}; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_60d4deee12130c63c929d27d",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (4-18) h_gc = 1/(1/h_g + R_d) matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_a9c90a1d6362be7f7faf0fcb",
+   "state": "REJECTED",
+   "reason": "Eq. (4-16): molecular-weight symbol (script M) transcribed as Re-symbol; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_c7a33083516e53056f86e84e",
+   "state": "REJECTED",
+   "reason": "Eq. (4-14): numerator 1 dropped and both 1/2 factors read as 1/i and 1/i^2; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 110
+   }
+  },
+  {
+   "candidate_id": "CAND_068eb3b5d431b843b56ed0a7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_0f8d5a0eeac0cd91b3a9b5d4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_3c192636e1a5a2b952ac84ac",
+   "state": "REJECTED",
+   "reason": "Figure 4-25 region is correct, but the linked caption text carries OCR damage ('LO,/RP-1' for LO2/RP-1, '(Pe)ns' for (pc)ns).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_1200db900bb9fa9fb2c76438",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line: mean throat-contour radius (18.68 + 4.75)/2 = 11.71 in matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_15c20dafc3171ac028245da5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line P_r = 4 x 1.222/((9 x 1.222) - 5) = 0.816 matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_324cd20449b84ffcb2b5f82e",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line D_t = 24.9 in matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_50409ad96c37df612f6e4588",
+   "state": "REJECTED",
+   "reason": "Sample-calculation line: molecular-weight symbol (script M) transcribed as Re-symbol; gamma = 1.222 on the same line omitted.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_59d1b100d357558e8e973818",
+   "state": "REJECTED",
+   "reason": "Sample-calculation h_g expression: A_t transcribed as A_1 (three times); numbers otherwise match (result 0.0027 (A_t/A)^0.9 sigma).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_71ec11c0578217863e8fe868",
+   "state": "REJECTED",
+   "reason": "Sample-calculation line: unit ft/sec transcribed as t/sec (value 5660 matches).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_9af2ceca7d0abd598db9a43a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line '= 6460 x (0.975)^2 = 6140 deg R' matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_d2547700f6127cebbd3a79d8",
+   "state": "REJECTED",
+   "reason": "Sample-calculation viscosity: numbers match (46.6e-10 x 22.5^0.5 x 6140^0.6 = 4.18e-6) but unit lb/in-sec transcribed as '1b/in-sec'; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_e9540bbb26689c12ae0ee275",
+   "state": "REJECTED",
+   "reason": "Sample-calculation C_p = 0.485: numbers match but unit Btu/lb-deg F transcribed as 'Btu/1b-deg F'.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 111
+   }
+  },
+  {
+   "candidate_id": "CAND_00a7d1e3512db134d3877eec",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line at the throat (A_t/A)^0.9 = 1, sigma = 1 matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_15833754ae7681a012105ff0",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line (8.4 + 2.14)/2 = 5.27 in matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_244998368c5fa378bf97372b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_gc = 1/(1/0.0027 + 1125) = 0.00067 Btu/in^2-sec-deg F matches; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_2961e1b81f3b461f9c918fb6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "A-2 sample h_g expression [0.026/11.2^0.2 x ((2.92e-6)^0.2 x 0.943/0.820^0.6) x (800 x 32.2/7480)^0.8 x (11.2/5.27)^0.1](A_t/A)^0.9 sigma matches (continues on p.113).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_2bce60f829dc3decdc9d960f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line D_t = 11.2 in matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_2ed9e48f23140ba20df05c5a",
+   "state": "REJECTED",
+   "reason": "R_d values 1670 and 1125 with their units garbled into arrow constructs; values banked as constants by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_378651b204855fd1afa3f1e8",
+   "state": "REJECTED",
+   "reason": "Chamber-station line: A_t transcribed as A_tau (values 0.655 and sigma = 1.05 match).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_5702aa368bf020ec38bf5f9d",
+   "state": "REJECTED",
+   "reason": "A-2 P_r line: spurious overlines on '9 x 1.213' and '5' (value 0.820 matches).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_9307fc8e934b3eeb51a9c15b",
+   "state": "REJECTED",
+   "reason": "R_d 1645: unit in^2-sec-deg F transcribed as i^2-sec-deg F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_95fd983aafd9296de0b597f1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_g = 0.0027 x 1 x 1 = 0.0027 Btu/in^2-sec-deg F matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_a20edd2fa45fcfef02d32139",
+   "state": "REJECTED",
+   "reason": "Sample-calculation line: unit ft/sec transcribed as t/sec (value 7480 matches).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_aec6ee537d060e4810f45830",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line 'Theoretical (T_c)ns x (c* correction factor)^2 = 6040 x (0.975)^2 = 5740 deg R' matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_b7b9e05866e014e3a2afc258",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line '(T_c)ns = 5580 deg F or 6040 deg R' matches; M = 12 lb/mol and gamma = 1.213 on the next line are not part of this candidate.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_bf3673b9ea255f60946c17d4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line C_p = gamma R/((gamma - 1)J) = 0.943 Btu/lb-deg F matches (subscript p rendered upper-case).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_caf7136a350f37498658f147",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation viscosity (46.6e-10)(12)^0.5(5740)^0.6 = 2.92e-6 lb/in-sec matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_d78f3f0a0621077adaebcdb9",
+   "state": "REJECTED",
+   "reason": "Exit-station line: spurious overlines on A and 5 (values 0.235 and sigma = 0.8 match).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_e6769fe53d54ee21ed576858",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_gc = 1/(1/0.000507 + 1645) = 0.000276 Btu/in^2-sec-deg F matches; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_e83b273b2819dcb0a543b611",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_g = 0.0027 x 0.235 x 0.8 matches (the result 0.000507 on the next line is not part of this candidate).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_ef3bdc33b6aaee417bf72b3b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_gc = 1/(1/0.00185 + 1670) = 0.00045 Btu/in^2-sec-deg F matches; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_9388cdc246054cabb63b2b18",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  },
+  {
+   "candidate_id": "CAND_d3be0d6f18a979de49ccb8b7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 112
+   }
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/A-audit-verdicts.json",
+ "sha256": "486fec1f624975c42b327ec247d0ffb91eb99c3e07dec56f9ba8861910d9904b",
+ "applied_by": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "mechanism": "kg.harvest_extraction.apply_verification (direct; packets accept only F-signed verdicts)",
+ "stats": {
+  "confirmed": 145,
+  "refuted": 0,
+  "unknown_ids": 0,
+  "added_assumptions": 0,
+  "added_validity": 0,
+  "ungrounded_additions": 0,
+  "model_links_removed": 0,
+  "unchanged": 0,
+  "stale": 0,
+  "uncertain": 0,
+  "retired_or_noncurrent": 0,
+  "self_verification_refused": 0,
+  "unsigned_refused": 0,
+  "worker_role_refused": 0,
+  "stores_saved": true
+ }
+}

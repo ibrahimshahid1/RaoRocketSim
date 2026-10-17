@@ -1,0 +1,99 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-CASALINO-p005-006",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_094e2b6f2e36ab8f7a0ae52e",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 13 blow-down pressure matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_b5f27248a72fc2996faf2c7c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 14 m_ep = P_e,max/delta_ep matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_88652ecdb578c1b9d4776533",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 15 matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 5
+   }
+  },
+  {
+   "candidate_id": "CAND_51caca84c1b14ac3a397dfb3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 16 energy integral matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_4e01488bf634546c58980be5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 17 battery mass with 1.2 factor matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_6cebdebab1ab33d7ea2ab676",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 18 matches original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_22f3b3dbb5f5e789d1cc2f03",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 19 trajectory state equations match original.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_b2fbcebc75a179f712ceff7a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. 20 matches the printed form (||r^3|| as printed).",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_83e7ab7a2dd072a328ed2069",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 1 values match original; header symbols OCR-misread (delta read as d, eta as h); banked constants use the original symbols.",
+   "evidence": {
+    "source_sha256": "4ad3449ce01fdc3c521f11cbba45c806c9050bf81c4ec5f11f5071e206d4a815",
+    "method": "original-page renders at 110 dpi viewed by F; transcription compared symbol by symbol",
+    "pdf_page": 6
+   }
+  }
+ ]
+}

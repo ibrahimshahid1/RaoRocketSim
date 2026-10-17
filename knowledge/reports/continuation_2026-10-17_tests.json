@@ -1,0 +1,6 @@
+{
+ "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+ "result": "414 passed in 9.52s",
+ "scope": "knowledge only",
+ "sequence": "Before final independent-review follow-up fixes; final suite still required."
+}

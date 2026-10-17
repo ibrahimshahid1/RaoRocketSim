@@ -1,0 +1,317 @@
+{
+ "date": "2026-10-16",
+ "recorded_at": "2026-10-16T06:13:09.958874+00:00",
+ "status": "PASS",
+ "scope": "Current rebuild plus replay of twelve completed remediation journals. Projections compare identities, source/active/verification/support states, math forms, variable bindings, locators, defaults and complete graph edges. Complete relationship records and all 34 White plus 5 Anderson saved relation tuples are checked separately. Generated store metadata timestamps are excluded. This is software reproducibility, not scientific completeness.",
+ "duplicate_id_groups": {},
+ "changed_projections": [],
+ "before": {
+  "manifest": "f20407655a4bdc8ded18dcccb1ed647aaf78d056dc4891c097e29a87d4f44767",
+  "equations": "454dc9caf66ddb631bf4391350fa116dea0fb6a911a985e0d1033a7858b470fa",
+  "claims": "61355c11ff1c6af8cf9843201db40c68ffed2a87f462238bc7f6bbc0b2d9c60b",
+  "entities": "2b1d5c8d8fa7ff319a06052661b801b74db75dea977035538deb98c22925d555",
+  "validity": "b15a3b416ca4482fc510ff9a411eab77c5bb7c1e9676471069f3125731f5dbc1",
+  "models": "7ffba0057f0c95e1720c4499638cd222623a92420f817ebdcb2ec59d7e0449fb",
+  "software_links": "8b0e53c8d7613968b94782c935c4c8c3e6181ab5a858d1a54ae71cef22987c6f",
+  "quantities": "3e228ef56625ddbaa31adf185766e793aea3a66026be54c188ef27dafd69f5ed",
+  "provenance": "713c82382262a5096ae0298a4945fd831e9eaa494a31bad3ef0b1d47488b019f",
+  "enrichments": "85776eba0c4374e886d8b3af72ec30e4235eeb2df37d4289ca6ee35ae110dff2",
+  "relationships": "34a840ec0dc9291020ce9f736f4aeb3f234e590ff608aee236ed2f28a33b7151",
+  "artifacts": "129d20c164c24231a98b2788663bc979a49188b9f89b5b6813f66ffe6bbf8c38",
+  "requirements": "b2f1f0b0c7d1cc4a3b511b6d44ec34883ce314ac2951572d54e1120239d78f8f",
+  "tests": "956d2019c4f1d472849f8744da19c3e45e68556be06b16b34a23c28674f9e4cd",
+  "capabilities": "cf41cee438c23bc12cdbf663b479a19b312da0b97dcacd92045d54c932829b3d",
+  "repo_documents": "32a5ee100165113d6e7f31c7d4c65e9272f95dcfc31414872b3a632d46bebd91",
+  "relationship_complete_records": "bd2feff917ff0f39bf2c8aa10015d687da0368b5268b2325554931cb3c45752c",
+  "graph_node_identities": "9e887bbe64653e93e5e21958a1524897d3c2af4e8249d8b91d7dacb459fc9a99",
+  "graph_edges": "00ad30b39f48c22f81341295bf6b270ff6cf6c9115a5695d83a18e7f1efdc799"
+ },
+ "after": {
+  "manifest": "f20407655a4bdc8ded18dcccb1ed647aaf78d056dc4891c097e29a87d4f44767",
+  "equations": "454dc9caf66ddb631bf4391350fa116dea0fb6a911a985e0d1033a7858b470fa",
+  "claims": "61355c11ff1c6af8cf9843201db40c68ffed2a87f462238bc7f6bbc0b2d9c60b",
+  "entities": "2b1d5c8d8fa7ff319a06052661b801b74db75dea977035538deb98c22925d555",
+  "validity": "b15a3b416ca4482fc510ff9a411eab77c5bb7c1e9676471069f3125731f5dbc1",
+  "models": "7ffba0057f0c95e1720c4499638cd222623a92420f817ebdcb2ec59d7e0449fb",
+  "software_links": "8b0e53c8d7613968b94782c935c4c8c3e6181ab5a858d1a54ae71cef22987c6f",
+  "quantities": "3e228ef56625ddbaa31adf185766e793aea3a66026be54c188ef27dafd69f5ed",
+  "provenance": "713c82382262a5096ae0298a4945fd831e9eaa494a31bad3ef0b1d47488b019f",
+  "enrichments": "85776eba0c4374e886d8b3af72ec30e4235eeb2df37d4289ca6ee35ae110dff2",
+  "relationships": "34a840ec0dc9291020ce9f736f4aeb3f234e590ff608aee236ed2f28a33b7151",
+  "artifacts": "129d20c164c24231a98b2788663bc979a49188b9f89b5b6813f66ffe6bbf8c38",
+  "requirements": "b2f1f0b0c7d1cc4a3b511b6d44ec34883ce314ac2951572d54e1120239d78f8f",
+  "tests": "956d2019c4f1d472849f8744da19c3e45e68556be06b16b34a23c28674f9e4cd",
+  "capabilities": "cf41cee438c23bc12cdbf663b479a19b312da0b97dcacd92045d54c932829b3d",
+  "repo_documents": "32a5ee100165113d6e7f31c7d4c65e9272f95dcfc31414872b3a632d46bebd91",
+  "relationship_complete_records": "bd2feff917ff0f39bf2c8aa10015d687da0368b5268b2325554931cb3c45752c",
+  "graph_node_identities": "9e887bbe64653e93e5e21958a1524897d3c2af4e8249d8b91d7dacb459fc9a99",
+  "graph_edges": "00ad30b39f48c22f81341295bf6b270ff6cf6c9115a5695d83a18e7f1efdc799"
+ },
+ "journal_replays": [
+  {
+   "journal": "lee-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "6a8b6cf2cc0f614d6db66de0eed5532b2f499a8c3f3c87789ea81dfd6f68e7f3",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "nasa8089-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "eec194c55af2fdf72fd83406f8407a7255b3491e99bcbf1573a1cad3e3160463",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-boundary-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "23efa7fbaf5f37c2191156e63cde0a03a986abeba682a9131110f9f6e514c7a0",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-integrals-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "0a847f88ea249416ce9d65b2c662f576463ece584cc660cbe8b5cd93f32e3e36",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-gas-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-meter-docling-2026-10-15.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "b2c98e9ab0b25371617efb4b0c2fca1bfbc7550a2c036cc406995de324997e8c",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-area-docling-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "54375d2285d1da671c4afa5379c4f1bf4c652dde42fa8dee228457eac8faf27c",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-choke-docling-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "6c4c1b619db657058064206ca99e648bfca5dcb4c73e96cf6052dee75e27656a",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-model-comparisons-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "655235ef41fb3ddc8ebee9e58ac40fcd98756636ee9d012c7e4fc5f9da4b0371",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "white-derivation-links-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "62762213f4e385f97badfe6838714891b014b1c8acedd4d0973935599c89e8a4",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "anderson-frozen-docling-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  },
+  {
+   "journal": "anderson-frozen-derivations-2026-10-16.jsonl",
+   "exit_code": 0,
+   "journal_sha256": "847600d51f3e02149a90ac29c4239a4c528a49f8450432581d61ba953ba397b0",
+   "state": "ALREADY_BANKED_NO_CHANGES",
+   "output": "[bank] All results already banked; no changes"
+  }
+ ],
+ "derivation_inventory_before": {
+  "status": "PASS",
+  "journal_sha256": "62762213f4e385f97badfe6838714891b014b1c8acedd4d0973935599c89e8a4",
+  "expected_unique_tuples": 34,
+  "stored_exactly_once": 34,
+  "graph_exactly_once": 34,
+  "current_confirmed_endpoints": 29,
+  "by_type": {
+   "EQUIVALENT_TO": 1,
+   "DERIVED_FROM": 32,
+   "APPROXIMATES": 1
+  },
+  "scope": "Saved explicit same-source comparisons; no cross-source completeness assertion."
+ },
+ "derivation_inventory_after": {
+  "status": "PASS",
+  "journal_sha256": "62762213f4e385f97badfe6838714891b014b1c8acedd4d0973935599c89e8a4",
+  "expected_unique_tuples": 34,
+  "stored_exactly_once": 34,
+  "graph_exactly_once": 34,
+  "current_confirmed_endpoints": 29,
+  "by_type": {
+   "EQUIVALENT_TO": 1,
+   "DERIVED_FROM": 32,
+   "APPROXIMATES": 1
+  },
+  "scope": "Saved explicit same-source comparisons; no cross-source completeness assertion."
+ },
+ "anderson_derivation_inventory_before": {
+  "status": "PASS",
+  "journal_sha256": "847600d51f3e02149a90ac29c4239a4c528a49f8450432581d61ba953ba397b0",
+  "expected_unique_tuples": 5,
+  "stored_exactly_once": 5,
+  "graph_exactly_once": 5,
+  "current_confirmed_endpoints": 6,
+  "by_type": {
+   "DERIVED_FROM": 5
+  },
+  "scope": "Saved explicit same-source comparisons; no cross-source completeness assertion."
+ },
+ "anderson_derivation_inventory_after": {
+  "status": "PASS",
+  "journal_sha256": "847600d51f3e02149a90ac29c4239a4c528a49f8450432581d61ba953ba397b0",
+  "expected_unique_tuples": 5,
+  "stored_exactly_once": 5,
+  "graph_exactly_once": 5,
+  "current_confirmed_endpoints": 6,
+  "by_type": {
+   "DERIVED_FROM": 5
+  },
+  "scope": "Saved explicit same-source comparisons; no cross-source completeness assertion."
+ },
+ "coverage": {
+  "equation_completeness": "NOT_ESTABLISHED",
+  "concept_completeness": "NOT_ESTABLISHED",
+  "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+  "documents": {
+   "records": 252,
+   "canonical": 248,
+   "alternate_copies": 4,
+   "with_source_objects": 9,
+   "without_source_objects": 239,
+   "with_equations": 9,
+   "without_equations": 239,
+   "with_independently_confirmed_objects": 5,
+   "conversion_requires_review": 230,
+   "conversion_low_confidence": 16,
+   "zero_page_sources": 1,
+   "zero_page_source_ids": [
+    "DOC_DOI_10_1007_978_3_030_14788_4"
+   ]
+  },
+  "source_objects": {
+   "equations": {
+    "records": 93,
+    "current": 75,
+    "independently_confirmed": 58,
+    "inactive_stale_refuted_or_unresolved": 18
+   },
+   "claims": {
+    "records": 188,
+    "current": 188,
+    "independently_confirmed": 7,
+    "inactive_stale_refuted_or_unresolved": 0
+   },
+   "entities": {
+    "records": 94,
+    "current": 94,
+    "independently_confirmed": 0,
+    "inactive_stale_refuted_or_unresolved": 0
+   },
+   "validity": {
+    "records": 36,
+    "current": 36,
+    "independently_confirmed": 0,
+    "inactive_stale_refuted_or_unresolved": 0
+   }
+  },
+  "incomplete_formula_transcriptions": {
+   "count": 18,
+   "ids": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+    "EQ_NTRS_19760023196_BE05E0AF",
+    "EQ_NTRS_19760023196_D7D2D8F1"
+   ],
+   "current_count": 0,
+   "current_ids": [],
+   "current_state": "NONE_FLAGGED_CURRENT",
+   "historical_count": 18,
+   "state": "INCOMPLETE_TRANSCRIPTION",
+   "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
+  },
+  "models": {
+   "records": 61,
+   "declared_support": {
+    "PARTIALLY_SUPPORTED": 10,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "SUPPORTED": 3,
+    "NOT_CHECKED": 47
+   },
+   "current_support": {
+    "NOT_CHECKED": 54,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "PARTIALLY_SUPPORTED": 4,
+    "SUPPORTED": 2
+   },
+   "source_reviewed_current_fingerprint": 6,
+   "without_current_source_review": 55,
+   "without_manifest_source": 8
+  },
+  "software_constants": {
+   "records": 983,
+   "by_basis": {
+    "UNKNOWN_BASIS": 242,
+    "IMPLEMENTATION_CHOICE": 351,
+    "LITERATURE_DERIVED": 181,
+    "PROJECT_DERIVED": 41,
+    "REPOSITORY_HEURISTIC": 168
+   },
+   "unknown_basis": 242,
+   "current": 982,
+   "inactive_or_noncurrent": 1,
+   "by_basis_current": {
+    "UNKNOWN_BASIS": 241,
+    "IMPLEMENTATION_CHOICE": 351,
+    "LITERATURE_DERIVED": 181,
+    "PROJECT_DERIVED": 41,
+    "REPOSITORY_HEURISTIC": 168
+   },
+   "by_basis_inactive_or_noncurrent": {
+    "UNKNOWN_BASIS": 1
+   },
+   "unknown_basis_current": 241,
+   "unknown_basis_inactive_or_noncurrent": 1,
+   "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
+  },
+  "gaps": {
+   "canonical_documents_without_source_objects": 239,
+   "canonical_documents_without_equations": 239,
+   "equations_and_claims_pending_independent_verification": 198,
+   "equations_without_model_links": 47,
+   "incomplete_formula_transcriptions": 0,
+   "zero_page_sources": 1,
+   "unknown_basis_software_constants": 241
+  }
+ }
+}

@@ -1,0 +1,269 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-SOLDA-p003-004",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_351e3477bf6122d99194571f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (18) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_ac4cdd556b1353fb65f8faf2",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (19) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_cc233ac7e0c0646942699dca",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (20) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_496b8db9812a3cd6fe4fac46",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (21) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_2643f29c56f081a3331d9ae2",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (22) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_736501a067b1fb06ca9284e1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (23) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_6da7e0733c8ec04a8bcb170c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (24) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_c3d9ef6919dc6e306c76edbb",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (25) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_4b6350de38f6aa2f67fe8fc3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (26) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_45cf734c75c2be45a7d9ffa1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (27) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_a6a006e35f23ce7517fb5c24",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (28) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_7d0ce3cc2e5353dd083d2c04",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (29) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_f98f605a5097de002d189215",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (30) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_260a2a57a0345064ce3596c5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (32) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_0f66f02a9240d2ba6707d09a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (34) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_2ecde7dbe29b79d34cdf53fb",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (35) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_4273f8acf2f6aff8f32c1316",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (36) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_8021090d4d5c43a10b3577f3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (37) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_77a9bd3ec31ed6cab661cb9b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (38) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_74d227fbcf3e8ab7d58e27c7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (39) matches the original.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_214907706fb098b9f6af9086",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (31) matches apart from a period in one subscript (kappa_t.g for kappa_t,g); symbols and structure correct.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_e68e8963b14394bf4767bcd1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (33) matches apart from a period in one subscript (delta_t.p for delta_t,p).",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_b109a412d7f88340f1a2c200",
+   "state": "REJECTED",
+   "reason": "Constant block on p.4: values match but symbols are wrong (kappa_mu for kappa_u, kappa_h for kappa_b, tau_0 for T_0, kW_c for kW_e) and the M_g unit is garbled. Constants banked by F from the page.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_5df23558117ce5aabf6a16ee",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 1 Ragone plot caption matches.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_367ae4d2ca140d88e5bac9b5",
+   "state": "REJECTED",
+   "reason": "Fig. 2 caption damaged by the text layer ('.0136' in place of '='); the figure itself is correctly located.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  },
+  {
+   "candidate_id": "CAND_a7f9566ddb3fd82075703b5a",
+   "state": "REJECTED",
+   "reason": "Fig. 3 caption damaged by the text layer ('.0136' in place of '='); the figure itself is correctly located.",
+   "evidence": {
+    "source_sha256": "c383b3856b5c4ed1c9048bd4f260db9d34f64fe9e1302309a8faec1ad7eefe89",
+    "method": "original PDF pp.3-4 renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  }
+ ]
+}

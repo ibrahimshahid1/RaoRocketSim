@@ -1,0 +1,23 @@
+{
+ "authority": "Accepted current manual result files; earlier refused quote-anchor drafts remain diagnostic history, not accepted replay inputs. Packet-managed reviewed files are covered by session_replay_check.",
+ "extraction_files": [
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP125-bartz-p109-110.extraction.jsonl",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8120-Rao-top-p028-029.extraction.jsonl",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8052-inducer.readable.extraction.jsonl",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8109-meanline.readable.extraction.jsonl",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/X-SP125-Eq4-26.extraction.jsonl",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p107.scope-clarification.extraction.jsonl"
+ ],
+ "verdict_files": [
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-KANG-p006.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-Eq4-26-p115-p116.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p104.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p107.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p034.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p069.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8052-p071.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8109-p020.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-pump-SP8109-p042.verdicts.json",
+  "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p143-replacement.verdicts.json"
+ ]
+}

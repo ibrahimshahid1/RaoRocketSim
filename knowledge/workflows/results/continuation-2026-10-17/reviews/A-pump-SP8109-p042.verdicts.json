@@ -1,0 +1,34 @@
+[
+ {
+  "object_id": "EQ_NTRS_19740020848_4840B4A3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8109 PDF p.42 (printed p.30), Figure 16 horizontal axis, explicitly prints impeller discharge flow coefficient phi_2 = c_m2/u_2 at best efficiency point. The chart states zero prewhirl, shrouded impellers and delta = 0.65. The stored form, figure-axis equation locator, quote, description and dimensionless coefficient match. The variable descriptions consistently identify discharge meridional velocity over discharge speed; no dimensional unit values are invented. The description correctly keeps zero prewhirl/shrouding/delta=0.65 as chart conditions rather than universal restrictions on the coefficient identity. No chart-node values, digitized curves, blade-count correlations or complete meanline implementation were verified by this bounded axis-definition review.",
+  "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+  "content_sha256": "9813ca568141f5e42120b0b6520c8518a937a30228dc463f1ad2defb0f63f7df",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19740020848",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "pdf_page": 42,
+   "printed_page": "30",
+   "method": "Full original PDF page rendered with pdftoppm at 190 dpi and visually inspected, including both chart axes, caption and printed chart conditions.",
+   "inspected_science_fields": [
+    "label",
+    "equation_number",
+    "form",
+    "description",
+    "variables",
+    "assumptions",
+    "validity",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Source axis definition and listed chart conditions only. Curves and chart nodes remain unreviewed; no full pump-model or physical-validation claim."
+ }
+]

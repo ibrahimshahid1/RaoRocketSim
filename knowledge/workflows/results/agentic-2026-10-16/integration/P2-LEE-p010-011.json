@@ -1,0 +1,199 @@
+{
+ "packet": "P2-LEE-p010-011",
+ "at": "2026-10-16T22:58:34.332718+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P2-LEE-p010-011.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] All results already banked; no changes\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P2-LEE-p010-011.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    }
+   ]
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P2-LEE-p010-011.verdicts.json",
+   "action": "apply_verification",
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 13,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0
+   }
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T22:58:36.166008+00:00",
+  "n_nodes": 5470,
+  "n_edges": 6921,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "pending_source_reviews": 47,
+  "needs_source_routing": 8,
+  "pending_verifications": 500,
+  "pending_verifications_by_store": {
+   "entities": 168,
+   "equations": 56,
+   "claims": 241,
+   "validity": 35
+  },
+  "documents_with_extracted_objects": 20,
+  "canonical_documents_without_extracted_objects": 228
+ },
+ "integrity": {
+  "nodes": 5470,
+  "edges": 6921,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_059BBCE4",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20B5BB49",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_20F32959",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_6172A9B4",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_AA8630AD",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_B3727FDB",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_D265274E",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CONST_DOI_10_1007_S42405_020_00325_Z_00D2425E_E196F6F3",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_6024B7D3",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_8F01D86F",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B9D73B48",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_D002C669",
+   "expected": "REFUTED",
+   "stored": "REFUTED",
+   "match": true
+  },
+  {
+   "object_id": "VAL_DOI_10_1007_S42405_020_00325_Z_00D2425E_173E322E",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  }
+ ],
+ "verdict_state_mismatches": []
+}

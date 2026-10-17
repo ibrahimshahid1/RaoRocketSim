@@ -1,0 +1,1580 @@
+{
+ "packet": "P2-RACHOV-p004-005",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "queue_reason": "P2 Pavlov Rachov 2013 Tables 1-2",
+   "queue_pages": [
+    4,
+    5
+   ],
+   "queue_document_id": "DOC_DOI_10_2514_1_B34714",
+   "queue_source_pdf": "propulsion_texts/10.2514_1.B34714.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P2-RACHOV-p004-005.json",
+   "sha256": "4d94124ca5b130d83368062aed48aa83e36457c3a42fe9ec8cf77c1690517aec",
+   "size_bytes": 38419,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+   "pages": [
+    4,
+    5
+   ],
+   "docling_run_ids": [
+    "ENR_27b7559eac5a86fc13d6f47f",
+    "ENR_ec4d41ad5de43c4230a53291"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "formula": 17,
+     "figure": 1,
+     "table": 2
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/10.2514_1.B34714.pdf",
+   "sha256_in_bundle": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+   "sha256_recomputed": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 4,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B34714/p0004.png",
+    "dpi": 150,
+    "sha256_in_bundle": "ec46e3b4fd76ae0629edbe37e2332e4075492a657240673cd6fc3ab985a0533a",
+    "file_exists": true,
+    "sha256_recomputed": "ec46e3b4fd76ae0629edbe37e2332e4075492a657240673cd6fc3ab985a0533a",
+    "sha256_match": true
+   },
+   {
+    "page": 5,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B34714/p0005.png",
+    "dpi": 150,
+    "sha256_in_bundle": "278163547c195912848d497a614d52757c75ed34c575e4ff87d7c491bf299c0a",
+    "file_exists": true,
+    "sha256_recomputed": "278163547c195912848d497a614d52757c75ed34c575e4ff87d7c491bf299c0a",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B34714/ffd945de6124-p4-4-2b173bf6c85ee1c615fc0b5d8d0aaa8067490a373a4fbd921bf35f38de229e43.json",
+    "sha256_in_bundle": "aa1b7c35346cb43dc5530da9764d1de5df0d44facc21bfd9af47456802c270a6",
+    "file_exists": true,
+    "sha256_recomputed": "aa1b7c35346cb43dc5530da9764d1de5df0d44facc21bfd9af47456802c270a6",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B34714/ffd945de6124-p5-5-1c4da1241f18a9997bb3c34d96c4e338332701f0d7c34c05020257481d2e8b80.json",
+    "sha256_in_bundle": "8a155a878d327b1f31f0edff984260cb2e955b649d09ae31b04ff970ae75ad3e",
+    "file_exists": true,
+    "sha256_recomputed": "8a155a878d327b1f31f0edff984260cb2e955b649d09ae31b04ff970ae75ad3e",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "formula": 17,
+   "figure": 1,
+   "table": 2
+  },
+  "candidates_total": 20,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure",
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_d9041ea89913db1c7190dfbb",
+    "CAND_5ad936c20987962f3d380aff",
+    "CAND_afa419ba471ab9ef7404d262"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_d9041ea89913db1c7190dfbb",
+    "kind": "figure",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 312.36075199270243,
+      "t": 204.79498846134823,
+      "r": 535.2732407261859,
+      "b": 34.697378534726,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 1 Quantities α 0 and βf as functions of chamber pressure."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/15\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_ec4d41ad5de43c4230a53291",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B34714/ffd945de6124-p5-5-1c4da1241f18a9997bb3c34d96c4e338332701f0d7c34c05020257481d2e8b80.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/15"
+    ],
+    "raw_item_children_count": 19,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/15",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 318.9542,
+       "t": 32.65968780000003,
+       "r": 530.03996316,
+       "b": 23.29398916695277,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 1 Quantities α 0 and βf as functions of chamber pressure.",
+      "orig": "Fig. 1 Quantities α 0 and βf as functions of chamber pressure.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_5ad936c20987962f3d380aff",
+    "kind": "table",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 59.40967165845555,
+      "t": 724.1826532614432,
+      "r": 261.4865899566734,
+      "b": 577.36740732822,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/tables/0",
+    "caption_text_as_given_in_bundle": [
+     "Table 1 Values of parameters and figures of merit"
+    ],
+    "transcription_as_given": "TABLE 2x4 (see table_grid; full cells in raw item /tables/0)",
+    "transcription_length": 60,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_ec4d41ad5de43c4230a53291",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B34714/ffd945de6124-p5-5-1c4da1241f18a9997bb3c34d96c4e338332701f0d7c34c05020257481d2e8b80.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [
+     "#/texts/3"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/3",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 76.7622,
+       "t": 733.3813552,
+       "r": 252.25803380000005,
+       "b": 726.3516388,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 1 Values of parameters and figures of merit",
+      "orig": "Table 1 Values of parameters and figures of merit",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true,
+    "table_cell_grid": {
+     "bundle_table_grid_present": true,
+     "bundle_table_grid_as_given": [
+      [
+       "Parameter",
+       "Value",
+       "Parameter",
+       "Value"
+      ],
+      [
+       "p 0 δ em δ inv ηem η pu T tu;in p tu;in∕p tu;out W∕F δP;Li - Po δP;Li - Ion δP;Li -S ρt;g ρt;p ρm;gg",
+       "20 MPa 3.8 kW∕kg 60 kW∕kg 0.8 0.68 900 K 20 0.328 6000 W∕kg 2000 W∕kg 1200 W∕kg 1700 kg∕m 3 2800 kg∕m 3 8890 kg∕m 3",
+       "pc δ pu δ tp ηinv η tu ts Δh tu;s ρgg δE;Li - Po δE;Li - Ion δE;Li -S σt;g σt;p σ gg",
+       "3 MPa 22 kW∕kg 18 kW∕kg 0.85 0.56 10 ms 1060 kJ∕kg 6.3 kg∕m 3 130 W · h∕kg 220 W · h∕kg 350 W · h∕kg 3300 MPa 455 MPa 524 MPa (at 1033 K)"
+      ]
+     ],
+     "rows": 2,
+     "row_lengths": [
+      4,
+      4
+     ],
+     "empty_string_cell_positions_row_col": [],
+     "empty_string_cell_count": 0,
+     "bundle_transcription_marker_dimensions": [
+      2,
+      4
+     ],
+     "bundle_grid_dimensions_equal_marker_dimensions": true,
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_5ad936c20987962f3d380aff, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_record_json_pointer": "/tables/0",
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "stored_num_rows": 2,
+     "stored_num_cols": 4,
+     "stored_orientation": "rot_0",
+     "stored_table_cells_count": 8,
+     "bundle_table_grid_equals_stored_content_grid_texts": true,
+     "cells_with_row_span_or_col_span_not_1": [],
+     "cell_positions_row_col_with_flag_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        0,
+        3
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "stored_grid_texts_equal_matrix_from_table_cells_start_indices": true,
+     "grid_positions_without_a_table_cells_entry_row_col": [],
+     "grid_positions_without_a_table_cells_entry_count": 0,
+     "grid_texts_found_at_positions_without_a_table_cells_entry": [],
+     "grid_vs_table_cells_text_mismatches_at_positions_with_a_table_cells_entry": [],
+     "positions_without_table_cells_entry_equal_empty_string_positions_of_bundle_grid": true,
+     "per_cell_bboxes_and_flags_note": "not copied here; per-cell bbox/flags are in the stored enrichment record and the raw Docling table (data.table_cells)",
+     "raw_table_self_ref": "#/tables/0",
+     "bundle_table_grid_equals_raw_table_data_grid_texts": true,
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_captions_refs": [
+      "#/texts/3"
+     ],
+     "raw_table_children_refs": [
+      "#/texts/3"
+     ],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0,
+     "table_shape_observations": {
+      "rows_x_cols": [
+       2,
+       4
+      ],
+      "row_lengths_uniform": true,
+      "header_rows_by_column_header_flag": [
+       0
+      ],
+      "body_row_count": 1,
+      "cells_with_row_or_col_span_not_1": [],
+      "per_row_nonempty_cell_counts": [
+       4,
+       4
+      ],
+      "cells_with_8_or_more_whitespace_tokens": [
+       {
+        "row": 1,
+        "col": 0,
+        "whitespace_tokens": 26,
+        "numeric_tokens": 1,
+        "characters": 100
+       },
+       {
+        "row": 1,
+        "col": 1,
+        "whitespace_tokens": 27,
+        "numeric_tokens": 17,
+        "characters": 115
+       },
+       {
+        "row": 1,
+        "col": 2,
+        "whitespace_tokens": 24,
+        "numeric_tokens": 0,
+        "characters": 84
+       },
+       {
+        "row": 1,
+        "col": 3,
+        "whitespace_tokens": 36,
+        "numeric_tokens": 16,
+        "characters": 137
+       }
+      ],
+      "cells_with_2_or_more_whole_number_tokens": [
+       {
+        "row": 1,
+        "col": 1,
+        "numeric_token_count": 17,
+        "first_numeric_tokens": [
+         "20",
+         "3.8",
+         "60",
+         "0.8",
+         "0.68",
+         "900",
+         "20",
+         "0.328",
+         "6000",
+         "2000"
+        ]
+       },
+       {
+        "row": 1,
+        "col": 3,
+        "numeric_token_count": 16,
+        "first_numeric_tokens": [
+         "3",
+         "22",
+         "18",
+         "0.85",
+         "0.56",
+         "10",
+         "1060",
+         "6.3",
+         "3",
+         "130"
+        ]
+       }
+      ],
+      "cells_made_only_of_2_or_more_numbers": [],
+      "cells_containing_newline_or_double_space": [],
+      "adjacent_cells_where_left_ends_with_point_or_comma_or_right_starts_with_point_or_comma_digit": [],
+      "horizontally_adjacent_cells_with_identical_nonempty_text": [],
+      "vertical_runs_of_identical_nonempty_text_in_a_column": [],
+      "header_row_texts_occurring_more_than_once": {
+       "0": {
+        "Parameter": [
+         0,
+         2
+        ],
+        "Value": [
+         1,
+         3
+        ]
+       }
+      },
+      "markdown_pointer_after_caption_S2_heuristic": {
+       "chunk_id": "DOC_DOI_10_2514_1_B34714#c00018",
+       "caption_line": "Table 1 Values of parameters and figures of merit",
+       "first_6_nonempty_lines_after_caption_paragraph": [
+        "<u>Parameter</u> <u>Value</u> <u>Parameter</u> <u>Value</u>",
+        "_p_ 0 20 MPa _pc_ 3 MPa",
+        "δem 3.8 kW∕kg δpu 22 kW∕kg",
+        "δinv 60 kW∕kg δtp 18 kW∕kg",
+        "ηem 0.8 ηinv 0.85",
+        "ηpu 0.68 ηtu 0.56"
+       ],
+       "note": "pointer only; the caption paragraph ends at the first empty line (heuristic)"
+      },
+      "observed_patterns_lexical": [
+       "grid 2 rows x 4 cols; header rows by column_header flag: [0]; body rows: 1",
+       "no cell has row_span/col_span other than 1",
+       "cells holding >= 8 whitespace-separated tokens: [r1,c0] 26 tokens/1 numeric; [r1,c1] 27 tokens/17 numeric; [r1,c2] 24 tokens/0 numeric; [r1,c3] 36 tokens/16 numeric",
+       "cells holding >= 2 whole-number tokens: 2 (positions [[1, 1], [1, 3]])",
+       "header row repeats texts: {\"0\": {\"Parameter\": [0, 2], \"Value\": [1, 3]}}",
+       "markdown caption line found in chunk DOC_DOI_10_2514_1_B34714#c00018 (first lines after it are recorded)"
+      ]
+     }
+    }
+   },
+   {
+    "id": "CAND_afa419ba471ab9ef7404d262",
+    "kind": "table",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 364.3027371994916,
+      "t": 715.5984139830666,
+      "r": 484.1162320359753,
+      "b": 550.4395128742274,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/tables/1",
+    "caption_text_as_given_in_bundle": [
+     "Table 2 Values of ancillary quantities"
+    ],
+    "transcription_as_given": "TABLE 2x2 (see table_grid; full cells in raw item /tables/1)",
+    "transcription_length": 60,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_ec4d41ad5de43c4230a53291",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B34714/ffd945de6124-p5-5-1c4da1241f18a9997bb3c34d96c4e338332701f0d7c34c05020257481d2e8b80.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/1",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [
+     "#/texts/10"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/10",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 379.3322,
+       "t": 733.3813552,
+       "r": 477.6486020999999,
+       "b": 717.3939288,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 2 Values of ancillary quantities",
+      "orig": "Table 2 Values of ancillary quantities",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true,
+    "table_cell_grid": {
+     "bundle_table_grid_present": true,
+     "bundle_table_grid_as_given": [
+      [
+       "Ancillary quantity",
+       "Value"
+      ],
+      [
+       "κp1 κp2 κp3 κg κt;g κt;p κu κb τ min γg Mg T 0 ρo ρf ρw O∕F",
+       "1.8 0.3 1.5 1.3 2.4 1.25 1.05 1.2 1 mm 1.667 4.0026 kg∕kmol 288.15 K 1431 kg∕m 3 874 kg∕m 3 997 kg∕m 3 ρo∕pf"
+      ]
+     ],
+     "rows": 2,
+     "row_lengths": [
+      2,
+      2
+     ],
+     "empty_string_cell_positions_row_col": [],
+     "empty_string_cell_count": 0,
+     "bundle_transcription_marker_dimensions": [
+      2,
+      2
+     ],
+     "bundle_grid_dimensions_equal_marker_dimensions": true,
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_afa419ba471ab9ef7404d262, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_record_json_pointer": "/tables/1",
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "stored_num_rows": 2,
+     "stored_num_cols": 2,
+     "stored_orientation": "rot_0",
+     "stored_table_cells_count": 4,
+     "bundle_table_grid_equals_stored_content_grid_texts": true,
+     "cells_with_row_span_or_col_span_not_1": [],
+     "cell_positions_row_col_with_flag_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "stored_grid_texts_equal_matrix_from_table_cells_start_indices": true,
+     "grid_positions_without_a_table_cells_entry_row_col": [],
+     "grid_positions_without_a_table_cells_entry_count": 0,
+     "grid_texts_found_at_positions_without_a_table_cells_entry": [],
+     "grid_vs_table_cells_text_mismatches_at_positions_with_a_table_cells_entry": [],
+     "positions_without_table_cells_entry_equal_empty_string_positions_of_bundle_grid": true,
+     "per_cell_bboxes_and_flags_note": "not copied here; per-cell bbox/flags are in the stored enrichment record and the raw Docling table (data.table_cells)",
+     "raw_table_self_ref": "#/tables/1",
+     "bundle_table_grid_equals_raw_table_data_grid_texts": true,
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_captions_refs": [
+      "#/texts/10"
+     ],
+     "raw_table_children_refs": [
+      "#/texts/10"
+     ],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0,
+     "table_shape_observations": {
+      "rows_x_cols": [
+       2,
+       2
+      ],
+      "row_lengths_uniform": true,
+      "header_rows_by_column_header_flag": [
+       0
+      ],
+      "body_row_count": 1,
+      "cells_with_row_or_col_span_not_1": [],
+      "per_row_nonempty_cell_counts": [
+       2,
+       2
+      ],
+      "cells_with_8_or_more_whitespace_tokens": [
+       {
+        "row": 1,
+        "col": 0,
+        "whitespace_tokens": 18,
+        "numeric_tokens": 1,
+        "characters": 59
+       },
+       {
+        "row": 1,
+        "col": 1,
+        "whitespace_tokens": 25,
+        "numeric_tokens": 18,
+        "characters": 108
+       }
+      ],
+      "cells_with_2_or_more_whole_number_tokens": [
+       {
+        "row": 1,
+        "col": 1,
+        "numeric_token_count": 18,
+        "first_numeric_tokens": [
+         "1.8",
+         "0.3",
+         "1.5",
+         "1.3",
+         "2.4",
+         "1.25",
+         "1.05",
+         "1.2",
+         "1",
+         "1.667"
+        ]
+       }
+      ],
+      "cells_made_only_of_2_or_more_numbers": [],
+      "cells_containing_newline_or_double_space": [],
+      "adjacent_cells_where_left_ends_with_point_or_comma_or_right_starts_with_point_or_comma_digit": [],
+      "horizontally_adjacent_cells_with_identical_nonempty_text": [],
+      "vertical_runs_of_identical_nonempty_text_in_a_column": [],
+      "header_row_texts_occurring_more_than_once": {
+       "0": {}
+      },
+      "markdown_pointer_after_caption_S2_heuristic": {
+       "chunk_id": "DOC_DOI_10_2514_1_B34714#c00020",
+       "caption_line": "Table 2 Values of ancillary",
+       "first_6_nonempty_lines_after_caption_paragraph": [
+        "<u>Ancillary quantity</u> <u>Value</u>",
+        "κ _p_ 1 1.8",
+        "κ _p_ 2 0.3",
+        "κ _p_ 3 1.5",
+        "κ _g_ 1.3",
+        "κ _t;g_ 2.4"
+       ],
+       "note": "pointer only; the caption paragraph ends at the first empty line (heuristic)"
+      },
+      "observed_patterns_lexical": [
+       "grid 2 rows x 2 cols; header rows by column_header flag: [0]; body rows: 1",
+       "no cell has row_span/col_span other than 1",
+       "cells holding >= 8 whitespace-separated tokens: [r1,c0] 18 tokens/1 numeric; [r1,c1] 25 tokens/18 numeric",
+       "cells holding >= 2 whole-number tokens: 1 (positions [[1, 1]])",
+       "markdown caption line found in chunk DOC_DOI_10_2514_1_B34714#c00020 (first lines after it are recorded)"
+      ]
+     }
+    }
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_0fc6285045506e94dab2cb93",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 324.22578,
+      "t": 616.3240498,
+      "r": 544.5062558000001,
+      "b": 594.0268646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/28",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 6 } = \\alpha \\kappa _ { p 3 } \\left ( \\frac { 1 } { \\delta _ { p u } } + \\frac { 1 } { \\eta _ { p u } \\delta _ { e m } } + \\frac { 1 } { \\eta _ { p u } \\eta _ { e m } \\delta _ { i n v } } \\right ) = \\alpha \\kappa _ { p 3 } \\mu _ { e p }",
+    "transcription_length": 242,
+    "original_text_as_given": "D6 .0136 ακp3 .0018 1 δ pu .0135 1 ηpu δ em .0135 1 ηpuηem δ inv .0019 .0136 ακp3μep (46)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(46)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 16,
+     "}": 16
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_16216ed79278dc37c738792b",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 400.47789,
+      "t": 573.2075383,
+      "r": 544.5062558000001,
+      "b": 553.4348646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/29",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 7 } = \\frac { \\alpha \\kappa _ { b } \\kappa _ { p 3 } } { \\eta _ { e p } \\delta _ { P } }",
+    "transcription_length": 94,
+    "original_text_as_given": "D 7 .0136 ακbκp3 ηep δP (47)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(47)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_47c4fc2101fb3db7a4953ee3",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 51.30692,
+      "t": 651.3672371,
+      "r": 280.5440558000001,
+      "b": 629.4431129,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/5",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { e p s } = m _ { g } + m _ { t , g } + m _ { t , f } + m _ { t , o } + m _ { p u } + m _ { e m } + m _ { i n v } + m _ { b }",
+    "transcription_length": 129,
+    "original_text_as_given": "meps .0136 mg .0135 mt;g .0135 mt;f .0135 mt;o .0135 mpu .0135 mem .0135 minv .0135 mb (33)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(33)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_51f86a0f3b15f222aafadbd5",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 144.73599,
+      "t": 147.8139939,
+      "r": 280.5440558000001,
+      "b": 126.66309184245972,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/21",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "P _ { e } = \\frac { E _ { e } } { t _ { b } }",
+    "transcription_length": 45,
+    "original_text_as_given": "Pe .0136 Ee tb (41)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(41)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_58cbf40e817548f53c42c09a",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 130.90279,
+      "t": 252.36263710000003,
+      "r": 280.5440558000001,
+      "b": 242.7576646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/17",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\eta _ { e p } = \\eta _ { p u } \\eta _ { e m } \\eta _ { i n v }",
+    "transcription_length": 63,
+    "original_text_as_given": "ηep .0136 ηpuηemηinv (39)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(39)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_619915ee188bd73d404a3817",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 114.123,
+      "t": 201.0486939,
+      "r": 280.5440558000001,
+      "b": 179.3183646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/19",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "E _ { e } = \\frac { P _ { p u } t _ { b } } { \\eta _ { e p } } = \\frac { \\alpha \\kappa _ { p 3 } } { \\eta _ { e p } } m _ { p } p _ { c }",
+    "transcription_length": 137,
+    "original_text_as_given": "Ee .0136 Pputb ηep .0136 ακp3 ηep mppc (40)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(40)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 12,
+     "}": 12
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_6a5055fab9769d36b7f21144",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 115.31218,
+      "t": 577.9429938999999,
+      "r": 280.5440558000001,
+      "b": 556.1559646000001,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { p u } = \\frac { P _ { p u } } { \\delta _ { p u } } = \\frac { \\kappa _ { p 3 } \\alpha } { \\delta _ { p u } } \\frac { p _ { c } m _ { p } } { t _ { b } }",
+    "transcription_length": 157,
+    "original_text_as_given": "mpu .0136 P pu δ pu .0136 κp3 α δ pu pcmp tb (34)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(34)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 14,
+     "}": 14
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_7feab1f57260fa98945464cd",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 355.0688,
+      "t": 733.0547498,
+      "r": 544.5062558000001,
+      "b": 710.5875646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/25",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 1 } = \\gamma _ { g } \\left ( \\frac { \\mathcal { M } _ { g } } { R ^ { 0 } T _ { 0 } } + \\frac { 3 } { 2 } \\kappa _ { t , g } \\frac { \\rho _ { t , g } } { \\sigma _ { t , g } } \\right ) \\alpha \\kappa _ { g } \\kappa _ { p 2 } \\kappa _ { u }",
+    "transcription_length": 243,
+    "original_text_as_given": "D1 .0136 γg .0018 Mg R 0 T 0 .0135 3 2 κt;g ρt;g σt;g .0019 ακgκp2 κu (43)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(43)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 18,
+     "}": 18
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_8338a174d11e87c32e601791",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 367.42631,
+      "t": 647.807102,
+      "r": 544.5062558000001,
+      "b": 637.0567646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/27",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 3 } = ( 4 \\pi ) ^ { 1 / 3 } ( 3 \\kappa _ { u } \\alpha _ { f } ) ^ { 2 / 3 } \\tau _ { \\min } \\rho _ { t , p }",
+    "transcription_length": 114,
+    "original_text_as_given": "D 3 .0136 .01334π.0134 1∕3 .01333κuαf.0134 2∕3 τ minρt;p (45)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(45)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_89511562269bea18d6c88a33",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 136.11848,
+      "t": 504.2422939,
+      "r": 280.5440558000001,
+      "b": 482.9655646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/9",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { \\text {em} } = \\frac { P _ { \\text {em} , \\text {out} } } { m _ { \\text {em} } }",
+    "transcription_length": 91,
+    "original_text_as_given": "δ em .0136 Pem;out mem (35)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(35)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_96812aa9c0d8d74e146e7a6f",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 103.46322,
+      "t": 452.70927300000005,
+      "r": 280.5440558000001,
+      "b": 430.4678646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/11",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { e m } = \\frac { P _ { p u } / \\eta _ { p u } } { \\delta _ { e m } } = \\frac { \\kappa _ { p 3 } \\alpha } { \\eta _ { p u } \\delta _ { e m } } \\frac { P _ { c } m _ { p } } { t _ { b } }",
+    "transcription_length": 189,
+    "original_text_as_given": "m em .0136 P pu∕ηpu δ em .0136 κp3 α ηpu δ em pcmp tb (36)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(36)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 16,
+     "}": 16
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_99e6d07c962dd18641d151f9",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 135.77926,
+      "t": 388.7587939,
+      "r": 280.5440558000001,
+      "b": 367.4253646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/13",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\delta _ { \\text {inv} } = \\frac { P _ { \\text {inv} , \\text {out} } } { m _ { \\text {inv} } }",
+    "transcription_length": 94,
+    "original_text_as_given": "δ inv .0136 P inv;out m inv (37)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(37)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_9e60da9a9285082b31a4fde4",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 117.07072,
+      "t": 75.87105980000001,
+      "r": 280.54473580000007,
+      "b": 53.75599184245971,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/23",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { b } = \\kappa _ { b } \\, \\max \\left ( \\frac { P _ { e } } { \\delta _ { P } } \\, , \\frac { E _ { e } } { \\delta _ { E } } \\right )",
+    "transcription_length": 134,
+    "original_text_as_given": "mb .0136 κb max .0018 Pe δP ; Ee δE .0019 (42)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(42)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 10,
+     "}": 10
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_b8be13c5d26b4cf66d0f0197",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 305.4046,
+      "t": 452.14185979999996,
+      "r": 544.8615525,
+      "b": 402.1338918424597,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/32",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "& \\frac { m _ { e p s } } { m _ { p } } = \\frac { D _ { 1 } } { 1 - \\kappa _ { p 2 } p _ { c } / p _ { 0 } } p _ { c } + \\max \\left ( D _ { 2 } p _ { c } , \\frac { D _ { 3 } } { m _ { p } ^ { 1 / 3 } } \\right ) + \\max \\left ( D _ { 4 } p _ { c } , \\frac { D _ { 5 } } { m _ { p } ^ { 1 / 3 } } \\right ) \\\\ & \\quad + D _ { 6 } \\frac { p _ { c } } { t _ { b } } + \\max \\left ( \\frac { D _ { 7 } p _ { c } } { t _ { b } } , D _ { 8 } p _ { c } \\right ) = g ( p _ { c } , p _ { 0 } , m _ { p } , t _ { b } )",
+    "transcription_length": 503,
+    "original_text_as_given": "m eps mp .0136 D 1 1 - κp2 pc∕p 0 pc .0135max .0018 D 2 pc; D 3 m 1∕3 p .0019 .0135max .0018 D 4 pc; D 5 m 1∕3 p .0019 .0135D6 pc tb .0135max .0018 D 7 pc tb ; D8pc .0019 .0136 g.0133pc; p0 ;mp; tb.0134 (49)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(49)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 4,
+     ")": 4,
+     "[": 0,
+     "]": 0,
+     "{": 41,
+     "}": 41
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_d044b92c7ff08cd8a065358e",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 400.47789,
+      "t": 532.6154382999999,
+      "r": 544.5062558000001,
+      "b": 512.7859646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/30",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 8 } = \\frac { \\alpha \\kappa _ { b } \\kappa _ { p 3 } } { \\eta _ { e p } \\delta _ { E } }",
+    "transcription_length": 94,
+    "original_text_as_given": "D 8 .0136 ακbκp3 ηep δE (48)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(48)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_df9dec09076463cceaf7475a",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 96.88733,
+      "t": 337.112473,
+      "r": 280.5440558000001,
+      "b": 314.8710646,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/15",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "m _ { i n v } = \\frac { P _ { p u } / \\eta _ { p u } } { \\eta _ { e m } \\delta _ { i n v } } = \\frac { \\kappa _ { p 3 } \\alpha } { \\eta _ { p u } \\eta _ { e m } \\delta _ { i n v } } \\frac { p _ { c } m _ { p } } { t _ { b } }",
+    "transcription_length": 225,
+    "original_text_as_given": "m inv .0136 Ppu∕ηpu ηem δ inv .0136 κp3 α ηpuηem δ inv pcmp tb (38)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(38)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 18,
+     "}": 18
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   },
+   {
+    "id": "CAND_e769b4c64ec9eec88bfe9ea1",
+    "pages": [
+     4
+    ],
+    "bbox": [
+     {
+      "l": 381.99655,
+      "t": 688.4075382999999,
+      "r": 544.5062558000001,
+      "b": 668.7038918424598,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/26",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 4,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "D _ { 2 } = \\frac { 3 } { 2 } \\alpha _ { f } \\kappa _ { t , p } \\kappa _ { p 2 } \\kappa _ { u } \\frac { \\rho _ { t , p } } { \\sigma _ { t , p } }",
+    "transcription_length": 145,
+    "original_text_as_given": "D 2 .0136 3 2 αfκt;pκp2 κu ρt;p σt;p (44)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(44)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 11,
+     "}": 11
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_27b7559eac5a86fc13d6f47f"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(46)",
+    "(47)",
+    "(33)",
+    "(41)",
+    "(39)",
+    "(40)",
+    "(34)",
+    "(43)",
+    "(45)",
+    "(35)",
+    "(36)",
+    "(37)",
+    "(42)",
+    "(49)",
+    "(48)",
+    "(38)",
+    "(44)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 17,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_PUMP_ELECTRIC_DRIVE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_PUMP_ELECTRIC_DRIVE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 8
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 7
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 11
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 3
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    4,
+    5
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "4": {
+     "formula": 17
+    },
+    "5": {
+     "figure": 1,
+     "table": 2
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00013",
+     "page_start": 3,
+     "page_end": 4
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 9,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00013",
+     "page_start": 3,
+     "page_end": 4,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1472
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00014",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1459
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00015",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1452
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00016",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1440
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00017",
+     "page_start": 4,
+     "page_end": 4,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 643
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00018",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 2080
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00019",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1565
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00020",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1524
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_1_B34714#c00021",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "F based on either pressurized gas or turbopumps (piston pumps",
+     "text_length": 1261
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

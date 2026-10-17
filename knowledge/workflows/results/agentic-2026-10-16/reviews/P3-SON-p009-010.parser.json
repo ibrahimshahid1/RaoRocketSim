@@ -1,0 +1,59 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-SON-p009-010",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_026466fbd9e80096276100c9",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 14 caption matches.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_d85d86448b447c15919d5862",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 6 matches cell by cell (case schedules down to 0.03125 mm).",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_ff341ca807a561e5d73de69f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 5 matches as printed, including vaporization time 8.83 ms and actual vaporization distance 84.04 mm, which disagree with Table 7 at 100% (1.870 ms, 41.79 mm): a source-internal inconsistency.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_0f7950db3186be89d41cbcd9",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 15 caption matches.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_82f47f55777418a0734d4591",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 7 matches; '- -' cells reproduce the printed dashes around the shared geometry values.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  }
+ ]
+}

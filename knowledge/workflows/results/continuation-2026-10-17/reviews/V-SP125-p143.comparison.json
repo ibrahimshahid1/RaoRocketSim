@@ -1,0 +1,25 @@
+{
+ "packet": "V-SP125-p143",
+ "reviewer": {
+  "role": "F",
+  "model": "GPT-6 (Codex)"
+ },
+ "source": {
+  "document_id": "DOC_NTRS_19710019929",
+  "source_pdf": "propulsion_texts/19710019929.pdf",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "pdf_page": 143,
+  "printed_page": "134",
+  "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+  "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+ },
+ "target": "CLM_NTRS_19710019929_25F6C847",
+ "finding": "REFUTED as combined wording; narrowed replacement retains permitted equivalent-area approximation and design-specific L* volume method.",
+ "independent_check": "knowledge/workflows/results/continuation-2026-10-17/reviews/A-SP125-p143.verdicts.json",
+ "parser_comparison": {
+  "compared": 7,
+  "matched": 4,
+  "rejected": 3
+ },
+ "model_review": "NOT_PERFORMED; a source claim cannot establish chamber implementation equivalence."
+}

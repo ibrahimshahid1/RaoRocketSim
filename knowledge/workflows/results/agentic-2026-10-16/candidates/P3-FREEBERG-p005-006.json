@@ -1,0 +1,175 @@
+{
+ "packet": "P3-FREEBERG-p005-006",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_2019_0152",
+ "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+ "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+ "pages": [
+  5,
+  6
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_2019_0152/p0005.png",
+   "sha256": "8aa1fc375162a198cbb52215536567b3995b9f208efe41a0d387f2632348c846",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_2019_0152/p0006.png",
+   "sha256": "fe07e25c7693618de2535d0ba11bc375be7d66e1f54aa5ca08c3e4d3bb6f00b2",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_3351ff3a79b3689bbb31d852",
+  "ENR_7d0dac231c6670db282d590e"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_029a3791dd6018e48c9487c6",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 6 Top-level diagram of the experimental setup."
+   ],
+   "bbox": [
+    {
+     "l": 161.30184936523438,
+     "t": 720.491813659668,
+     "r": 448.99920654296875,
+     "b": 590.0580902099609,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/1\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3351ff3a79b3689bbb31d852",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p5-5-7ded858b3dbc03ce5f70b0b23324d5f8fa00581534ad1c385f86d68147c3ce1e.json",
+   "raw_sha256": "587213ad6909a3767b68229ba3c0ae8d72df1db1d96513b45d040b19f81e4b99",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5d120362b146867e10ab46ec",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 7 Cross-sectional view of injector design."
+   ],
+   "bbox": [
+    {
+     "l": 168.1685791015625,
+     "t": 392.1246032714844,
+     "r": 418.1391906738281,
+     "b": 251.58819580078125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/28\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3351ff3a79b3689bbb31d852",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p5-5-7ded858b3dbc03ce5f70b0b23324d5f8fa00581534ad1c385f86d68147c3ce1e.json",
+   "raw_sha256": "587213ad6909a3767b68229ba3c0ae8d72df1db1d96513b45d040b19f81e4b99",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4e6f75aa5aad05052a013bff",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 8 Schematic diagram of experimental feed system."
+   ],
+   "bbox": [
+    {
+     "l": 161.27101135253906,
+     "t": 582.3358154296875,
+     "r": 450.4796142578125,
+     "b": 377.2323303222656,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/4\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7d0dac231c6670db282d590e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p6-6-7d9736a5a8a9e69158f059b971a58ea7d02aeaf726cbb7c2fd567e7c93abc2db.json",
+   "raw_sha256": "def821b37ae81f354fe43738cd077b58f69aedec2da00f4c7966125800bb73a2",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00012",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > III. Materials and Methods",
+   "text": "**Fig. 6** **Top-level diagram of the experimental setup.**\n\nThe injector and feed system were sized based on the research needs of USC’s Rocket Propulsion Laboratory,\nwhich sought a bi-propellant, liquid oxygen (LOX) and kerosene engine with 4.5 kN (1000 lbs) of thrust and a chamber\npressure of 17 bar (250 psi). Using these parameters and an assumed oxidizer-to-fuel ratio of _OF_ = 2, NASA’s Chemical\n\nEquilibrium Applications (CEA) program was used to generate the expected combustion properties. The program\nyielded the a required mass flow rate _m_ - = 1.8 kg/s of the two propellants. Assuming _OF_ = 2, the nominal operating\nmass flow rates of the oxidizer and fuel lines were calculated as _m_ - - = 1.2 kg/s and _m_ - f = 0.6 kg/s, respectively. These\n\nvalues were fed into one-dimensional energy loss calculations to determine the required length and diameter of the\n\nsupply lines and orifice injector exit areas.\n\n**A. Injector Design**\n\nThe above requirements were used to design the pintle injector shown in Fig. 7.\n\n**Fig. 7** **Cross-sectional view of injector design.**\n\nThe modular injector body was designed to be geometrically similar to previously studied fixed-area pintle injectors\n\n(such as that used by Escher) and to interface with interchangeable threaded tips. For comparability to Escher, the fuel\n\nand oxidizer (both simulated with water) were selected as the radial and axial propellants, respectively. Using a target"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00013",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > III. Materials and Methods",
+   "text": "pressure drop of 15 %, one-dimensional pressure loss and exit velocity calculations were used for initial sizing and\n\nlater verified with Ansys CFX, a commercial CFD software. The design was then iterated to ensure an even mass flow\n\ndistribution from the annulus (and therefore an even cone angle). To further ensure flow symmetry, concentricity was\n\nrequired and achieved through locating pins. Tight tolerances were achieved by manufacturing all components on a\nHaas VM-1 CNC Mill reserved for exclusive use, which allowed fabrication of parts to within ±0.0005 in of the design\n\nspecifications.\n\nSeven pintle tips were designed and manufactured, the details of which are provided in Fig. 10 (see Results).\n\nAccording to Escher’s personal correspondence with TRW (now owned by Northrop Grumman), the company advised"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00014",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > III. Materials and Methods",
+   "text": "the use of pintle tips with 0.3 < _BF_ < 0.7. For this reason, tips were selected within this range. Similarly, Escher\nwrites that TRW recommended the use of rectangular orifices. To investigate how orifice geometry affects θ, both\nrectangular and circular orifices were selected. Three of these tips used circular orifices with _BF_ = 0.35, _BF_ = 0.45,\nand _BF_ = 0.55 while the other four tips used rectangular orifices. For comparison with Escher, a tip of _BF_ = 0.6 and\n\naspect ratio of 1:2 was fabricated, but manufacturing constraints prevented exact replication. Three other tips with\n_BF_ = 0.55 and aspect ratios of 1:2, 4:5, and 1:1 were made to study the effect of orifice aspect ratio at a constant _BF_ .\n\n**B. Feed System Design**\n\nThe feed system shown in 8 was designed to allow start-up and shut-off control and to regulate and measure the\n\nmass flow of each propellant.\n\n**Fig. 8** **Schematic diagram of experimental feed system.**\n\nAs shown, a solenoid valve controlled the flow of the nitrogen pressurant into the propellant tanks. A three-way\n\nsolenoid was used for this purpose to allow pressure relief in the supply lines after operation. Two additional solenoids\n\nwere positioned downstream of each tank and were simultaneously actuated by means of a voltage switch. The\n\npropellants were driven by the pressure difference between the propellant tank and atmosphere. Pressure regulators"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00015",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > III. Materials and Methods",
+   "text": "positioned upstream of the propellant tanks allowed for independent control of the fuel and oxidizer flow rates, and\n\nconsequently, the propellant momenta. Check valves were positioned between the tanks and regulators to prevent the\n\nback flow of water into the regulators and pressure supply lines. The mass flow _m_ - of each line was calculated from\n\ndifferential pressure transducer measurements in a calibrated venturi flow meter. Exit velocities from the injector were\nobtained assuming _m_ - = ρ _V A_, where _A_ is the relevant exit area. These quantities were used to calculate _TMR_ and _LMR_\n\nfrom Eq. 2 and 4."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00016",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to > C. Angle Measurement",
+   "text": "A MATLAB Digital Image Processing (DIP) script was developed to provide repeatable angle measurements. The\n\nDIP technique required high contrast videos of the spray for best results. This was achieved by using a 200 W spot light\n\nand frosted glass to create a bright and uniform back-drop behind the injector (Fig. 6)."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

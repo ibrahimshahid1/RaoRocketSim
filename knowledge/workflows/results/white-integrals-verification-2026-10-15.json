@@ -1,0 +1,92 @@
+[
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_95B47AD1",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original boxed Eq. (7.5) on PDF p826 is tau_w = rho U^2 dtheta/dx, with an equality sign. The preceding derivation explicitly takes U constant; the following sentence states validity for either laminar or turbulent flat-plate flow. The source momentum-thickness definition on this page gives theta length units, so the right-hand side has wall-shear units Pa. This confirms the source flat-plate relation, not a nozzle or compressible extension.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 826,
+      "source_equation_number": "7.5",
+      "render_path": "/private/tmp/white-integrals-independent-2026-10-15-0826.png",
+      "render_sha256": "813edfec012a994ea3034fbbb3cd58a4445df9eabe092c7ba0e6bea29d9d854a",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 826 -l 826 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-integrals-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-integrals-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "extraction_entry_key": "white-integrals826828",
+      "extraction_entry_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "reviewed_source_fields_sha256": "c8b1a7773eb41fe11489146069e790b70aeb1a57a23538fcab8e83bfe9f11c01",
+      "source_model_separation": "Reviewed equation model_ids are empty; comparison citations are not implementation validation."
+    },
+    "scope_note": "Confirmed the bounded source formula, equality sign, source-variable meaning and SI dimensions on PDF pp826 and828 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_850EBB3B",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (7.11) on PDF p828 has the inlet integral from 0 to h and outlet integral from 0 to delta, with the displayed geometric relation delta = h + delta_star. Both integrals have mass-rate units kg/s. Figure 7.4 confirms that h is the inlet outer-streamline height, with metres as stated in the record; it is not hydraulic pump head. The current canonical QTY_HEAD normalization is outside this formula confirmation and needs correction. The copied validity sentence about Eq. 7.5 is not an independent source statement about Eq. 7.11.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 828,
+      "source_equation_number": "7.11",
+      "render_path": "/private/tmp/white-integrals-independent-2026-10-15-0828.png",
+      "render_sha256": "dc24d431ea0158231639bde45bc2b8ae24c16c3f9ebae316da02155204550df0",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 828 -l 828 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-integrals-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-integrals-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "extraction_entry_key": "white-integrals826828",
+      "extraction_entry_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "reviewed_source_fields_sha256": "4558078465b7cd7c3b2b59b62d4678cd95795ada885baef9966a44635d243685",
+      "source_model_separation": "Reviewed equation model_ids are empty; comparison citations are not implementation validation.",
+      "canonical_quantity_issue": {
+        "symbol": "h",
+        "source_meaning": "inlet outer-streamline height",
+        "observed_quantity_candidates": [
+          "QTY_HEAD"
+        ],
+        "state": "SOURCE_MEANING_CONFIRMED_CANONICAL_BINDING_NOT_CONFIRMED"
+      }
+    },
+    "scope_note": "Confirmed the bounded source formula, equality sign, source-variable meaning and SI dimensions on PDF pp826 and828 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (7.12) on PDF p828 is delta_star = integral_0^delta (1-u/U) dy, with an equality sign. The integrand is dimensionless and the result has length units. The preceding source derivation cancels common rho and b and uses the uniform outer velocity U; this confirms the displayed flat-plate displacement construction rather than a variable-density mass-deficit definition. The copied validity sentence about Eq. 7.5 is not an independent source statement about Eq. 7.12.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 828,
+      "source_equation_number": "7.12",
+      "render_path": "/private/tmp/white-integrals-independent-2026-10-15-0828.png",
+      "render_sha256": "dc24d431ea0158231639bde45bc2b8ae24c16c3f9ebae316da02155204550df0",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 828 -l 828 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-integrals-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-integrals-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "extraction_entry_key": "white-integrals826828",
+      "extraction_entry_sha256": "bb1f57593b79ada9e3140756ef2efc8370a1d4cc69aff7c2b3791286b11b8e8e",
+      "reviewed_source_fields_sha256": "6ebc5f45a6bede95a3be5a1ac20a156a0fedd2379a9d82d484c86e87f8c864d6",
+      "source_model_separation": "Reviewed equation model_ids are empty; comparison citations are not implementation validation."
+    },
+    "scope_note": "Confirmed the bounded source formula, equality sign, source-variable meaning and SI dimensions on PDF pp826 and828 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified.",
+    "missing_assumptions": [
+      {
+        "statement": "The source derivation treats density rho and plate width b as common constant factors that can be cancelled from the inlet and outlet mass integrals.",
+        "page": 828,
+        "quote": "cancel ρ and b from Eq. (7.11)"
+      }
+    ]
+  }
+]

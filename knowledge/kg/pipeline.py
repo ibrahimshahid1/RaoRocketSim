@@ -41,6 +41,14 @@ def main(argv=None) -> int:
     ap.add_argument("--force-chunks", action="store_true")
     ap.add_argument("--skip-sync", action="store_true")
     ns = ap.parse_args(argv)
+    from kg import locks
+    # One complete rebuild owns every store; concurrent banking or Docling
+    # integration waits instead of interleaving read-modify-write cycles.
+    with locks.writer(purpose="kg rebuild", timeout=None):
+        return _run(ns)
+
+
+def _run(ns) -> int:
     t0 = datetime.now(timezone.utc)
     report: dict = {"started_at": t0.isoformat(), "steps": {}}
 
@@ -85,6 +93,8 @@ def main(argv=None) -> int:
     rr = harvest_repo.harvest()
     report["steps"]["repo"] = {k: v for k, v in rr.items() if k not in ("benchmark_candidates", "citations_unresolved")}
     report["steps"]["repo"]["citations_unresolved"] = rr["citations_unresolved"]
+    from kg import standards
+    report["steps"]["standards"] = standards.harvest()
     try:
         report["steps"]["constraints"] = harvest_constraints.harvest()
     except Exception as exc:  # report partial failure and return nonzero below
@@ -105,6 +115,8 @@ def main(argv=None) -> int:
     store.REPORT_DIR.mkdir(parents=True, exist_ok=True)
     from kg.work_queue import write as write_queue
     report["steps"]["review_queue"] = write_queue()["summary"]
+    from kg import completion
+    report["steps"]["completion_reports"] = completion.write_all()
     (store.REPORT_DIR / "latest_ingestion.json").write_text(json.dumps(report, indent=1, ensure_ascii=False))
     knowledge_report.write()
     from kg.api import reset_caches

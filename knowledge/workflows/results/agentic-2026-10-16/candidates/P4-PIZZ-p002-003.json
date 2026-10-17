@@ -1,0 +1,270 @@
+{
+ "packet": "P4-PIZZ-p002-003",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  2,
+  3
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0002.png",
+   "sha256": "07b376693027b57352fdc8c2622d38265b33d686899b8e470dabd233276a3c2b",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0003.png",
+   "sha256": "a5cf8d77c34032b95ce1c0fd85fd1e6eb343fe24a79a1aad24bd3848c0ed80bd",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_1082ccbf414a4d0977b79464",
+  "ENR_70457a8deccd7b1eb468117f"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_d24031f9cc79241957e6ca17",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 349.537353515625,
+     "t": 667.9272193908691,
+     "r": 431.1766052246094,
+     "b": 646.8810729980469,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_70457a8deccd7b1eb468117f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p2-2-307c9609c27fb7868a973a807f7cfc14d851a5cfc0d92b718adee23c2b8f92f7.json",
+   "raw_sha256": "82afe3121e4d09d4366b15fddbdf7349f8ac8232224094679970d6a820db2edd",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_153e09155d194e56023dbadf",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "NOMENCLATURE",
+     "NOMENCLATURE",
+     "NOMENCLATURE",
+     "NOMENCLATURE"
+    ],
+    [
+     "_m",
+     "mass flow rate, kg s \u00001 area of the channel cross-section, m 2",
+     "qc Re sw T",
+     "coolant heat flux, Wm \u00002 wall heat flux, Wm \u00002"
+    ],
+    [
+     "A",
+     "",
+     "qw",
+     ""
+    ],
+    [
+     "Aw",
+     "area of the lateral inner surface of channel wall, m 2",
+     "r",
+     "engine radius, m"
+    ],
+    [
+     "b",
+     "channel width, m correction factor for skin friction correction factor for Nusselt channel hydraulic diameter, m",
+     "",
+     "Reynolds number internal wall thickness, m temperature, K"
+    ],
+    [
+     "Cf",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Ch",
+     "number",
+     "Tw",
+     "wall temperature, K"
+    ],
+    [
+     "Dh",
+     "",
+     "tw",
+     "rib thickness, m"
+    ],
+    [
+     "F",
+     "velocity shape function",
+     "u",
+     "streamwise velocity component, ms \u00001"
+    ],
+    [
+     "fw",
+     "skin friction factor",
+     "ub",
+     "bulk velocity, ms \u00001"
+    ],
+    [
+     "H",
+     "enthalpy, Jkg \u00001",
+     "umh",
+     "velocity at channel middle height, ms \u00001"
+    ],
+    [
+     "h",
+     "channel height, m",
+     "v, w",
+     "transverse velocity component, ms \u00001"
+    ],
+    [
+     "hw i, j",
+     "heat transfer coefficient, Wm \u00002 K \u00001 indices",
+     "x, y, z k",
+     "length, height, and width coordinates, m channel aspect ratio"
+    ],
+    [
+     "k",
+     "thermal conductivity, Wm \u00001 K \u00001",
+     "m",
+     "viscosity, kgm \u00001 s \u00001"
+    ],
+    [
+     "kt",
+     "turbulent thermal conductivity,",
+     "q",
+     "density, kgm \u00003"
+    ],
+    [
+     "",
+     "W m \u00001 K \u00001",
+     "sw",
+     "skin friction, Pa"
+    ],
+    [
+     "kw",
+     "wall material thermal conductivity, W m \u00001 K \u00001",
+     "e",
+     "wall relative roughness"
+    ],
+    [
+     "N, M",
+     "number of nodes of the computational grid in the radial and streamwise",
+     "Subscripts",
+     "stagnation value"
+    ],
+    [
+     "Nu",
+     "directions",
+     "0 aw adiabatic hg in",
+     "wall hot-gas initial conditions"
+    ],
+    [
+     "p",
+     "Nusselt number pressure, Pa",
+     "",
+     ""
+    ],
+    [
+     "Pr",
+     "Prandtl number",
+     "w",
+     "wall"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 72.704345703125,
+     "t": 643.1080017089844,
+     "r": 432.42047119140625,
+     "b": 364.0433349609375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 21x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1082ccbf414a4d0977b79464",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p3-3-64175fd83c30406da288daebab5fc08db2944466334d5b407af2e7f27b53f1da.json",
+   "raw_sha256": "6bd23c259173480527004c4393c5838f5f131d04f48758d4ac84f09a07d6b518",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00001",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "",
+   "text": "Numerical Heat Transfer, Part A, 60: 1–24, 2011\nCopyright # Taylor & Francis Group, LLC\nISSN: 1040-7782 print=1521-0634 online\nDOI: 10.1080/10407782.2011.578011\n\nA QUASI-2-D MODEL FOR THE PREDICTION OF\nTHE WALL TEMPERATURE OF ROCKET ENGINE\nCOOLING CHANNELS\n\nM. Pizzarelli, S. Carapellese, and Francesco Nasuti\nDipartimento di Ingegneria Meccanica e Aerospaziale, Sapienza University of\nRome, Rome, Italy\n\nA simplified quasi-2-D model is developed to study the coupled problem of coolant flow and\nwall structure heat transfer in the cooling channels of an liquid rocket engine thrust chambers. This model is based on one-dimensional governing equations for coolant mass conservation and momentum balance, and on a two-dimensional governing equation for coolant\nenergy balance. The energy balance equation is coupled to the wall heat transfer balance\nin the radial direction. The turbulent thermal conductivity, fluid skin friction, and\ncoolant-wall heat transfer coefficients are evaluated by semiempirical relationships provided\nin the literature. This model, which is suited to high aspect ratio cooling channels, permits\nfast prediction of both the coolant flow evolution and the temperature distribution along the\nwhole cooling channel structure. Validation of the model is first carried out by comparison\nwith straight channel solutions obtained with an experimentally validated CFD solver.\nThen, further validation is carried out by using the quasi-2-D model for the analysis of a\nregeneratively cooled rocket engine thrust chamber. Results show good agreement with\navailable data of maximum wall temperature and coolant pressure drop."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00002",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "",
+   "text": "1. INTRODUCTION\n\nThe design and realization of a liquid rocket engine thrust chamber requires a\nthorough analysis to predict wall temperatures, raised by the large heat flux coming\nfrom the combustion gases, and thus to ensure its structural integrity. The need for\nthermal analysis is especially important in reusable engines, where an effective and\nefficient cooling system is crucial to extend the engine life, or in expander cycle\nengines, where coolant warming provides the available power for turbo-machinery.\nIn these cases, regenerative cooling is usually considered, where one of the propellants, typically the fuel (liquid hydrogen, RP1, liquid methane, etc.), is forced\nthrough passages that are machined inside the thrust chamber wall, then, the heated\nfuel is injected into the chamber or goes to turbine. A regenerative cooling technique\nprovides: no energy loss (thermal energy is absorbed by the coolant and returned to\nthe injector); no change in wall contour as a function of time; indefinite firing duration; and relatively lightweight construction [1]. However, it has to be kept in mind\n\nReceived 28 July 2010; accepted 17 March 2011.\nAddress correspondence to Francesco Nasuti, Sapienza University of Rome, Dipartimento di\nIngegneria Meccanica e Aerospaziale, via Eudossiana 18, I 00184 Rome, Italy. E-mail: francesco.\nnasuti@uniromal.it"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00003",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "",
+   "text": "2 M. PIZZARELLI ET AL.\n\nNOMENCLATURE\n\n**m** _ mass flow rate, kg s <sup>�1</sup>\n\nA area of the channel cross-section, m <sup>2</sup>\n\nAw area of the lateral inner surface of\nchannel wall, m <sup>2</sup>\n\nb channel width, m\nCf correction factor for skin friction\nCh correction factor for Nusselt number\nDh channel hydraulic diameter, m\nF velocity shape function\nfw skin friction factor\nH enthalpy, J kg <sup>�1</sup>\n\nh channel height, m\nhw heat transfer coefficient, W m <sup>�2</sup> K <sup>�1</sup>\n\ni, j indices\nk thermal conductivity, W m <sup>�1</sup> K <sup>�1</sup>\n\nkt turbulent thermal conductivity,\nW m <sup>�1</sup> K <sup>�1</sup>\n\nkw wall material thermal conductivity,\nW m <sup>�1</sup> K <sup>�1</sup>\n\nN, M number of nodes of the computational\ngrid in the radial and streamwise\ndirections\nNu Nusselt number\np pressure, Pa\nPr Prandtl number\n\nqc coolant heat flux, W m <sup>�2</sup>\n\nqw wall heat flux, W m <sup>�2</sup>\n\nr engine radius, m\nRe Reynolds number\nsw internal wall thickness, m\nT temperature, K\nTw wall temperature, K\ntw rib thickness, m\nu streamwise velocity component, m s <sup>�1</sup>\n\nub bulk velocity, m s <sup>�1</sup>\n\numh velocity at channel middle height, m s <sup>�1</sup>\n\nv, w transverse velocity component, m s <sup>�1</sup>\n\nx, y, z length, height, and width coordinates, m\nk channel aspect ratio\nm viscosity, kg m <sup>�1</sup> s <sup>�1</sup>\n\nq density, kg m <sup>�3</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00004",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "",
+   "text": "sw skin friction, Pa\ne wall relative roughness\n\nSubscripts\n0 stagnation value\naw adiabatic wall\nhg hot-gas\nin initial conditions\nw wall\n\nthat it permits only limited throttling with most coolants, has reduced reliability\nwith some coolants (e.g., hydrazine), and requires increased pump power because of\nthe large pressure drop at high heat-flux levels [1]. The trade-off among these aspects\nmakes regenerative cooling interesting for large high-pressure, high heat-flux thrust\nchambers and for expander (and expander-bleed) cycle engines. Thermal analysis of\nregeneratively cooled engines is therefore essential to predict not only wall temperature but also coolant temperature and pressure at the channel exit. Moreover, thermal\nanalysis becomes particularly important if the goal is to search for optimum cooling\nchannel configuration. An example of such modifications is that of high-aspect-ratio\ncooling-channels (HARCC) [2]. In fact, an increase of the channel aspect ratio,\nk ¼ h=b, leads to a reduction of the wall temperature on the hot-gas side,\nmainly because of the increase of the coolant side surface area (relative to the hot-gas\nside surface) by the use of extended surfaces, or ribs (Figure 1). Theoretical and\nexperimental studies on a high aspect ratio cooling channel for rocket engines have\nbeen conducted by NASA since the 1990s [2–4] to increase the life of the Space Shuttle\nmain engine. The technological solution of HARCC has also been considered in Europe, where the thrust chamber of the cryogenic engines Vulcain and Vulcain 2\nare characterized by cooling passages, with an aspect ratio as high as 8 in the throat\nregion [5,6]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00005",
+   "page_start": 3,
+   "page_end": 4,
+   "section": "",
+   "text": "To design more efficient thrust chambers, cooling channel configurations\nshould be studied by optimization methods which will include suitable models for\n\nTEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 3\n\nFigure 1. Schematic of cooling channels geometry.\n\nthermal analysis. Unfortunately, a comprehensive thermal model aiming to estimate\nwall temperature and coolant pressure drop is rather complex, because it must\naccount for different phenomena coupled with each other: convection from hot-gas\nto the wall, conduction within the wall, and convection form the wall to the cold\nfluid. A further complication is that the coolant is often a supercritical fluid, and\nmethods based on the assumption of perfect gas or incompressible fluid cannot be\nused [7]. Finally, it has to be considered that the optimization process consists of\nmany calculation loops which include thermal and fluid analysis of the coolant flow\nin cooling channels, as well as the thermal analysis of the wall structure. As a consequence, the solution of the 3-D Navier Stokes equations coupled with the wall thermal analysis, which would be necessary to describe the regenerative cooling system,\nis not suitable. In fact, its computational cost is too high to be part of an optimization process or to understand the role of the main parameters that affect the cooling\nsystem. For this reason one-dimensional models for both coolant and hot-gas flows,\nand heavily relying on empirical relationships, are widely used to analyze the regeneratively cooled thrust chambers [4,5,8–12]. Recently, to overcome the simplification\narising from one-dimensional modeling of hot-gas expansion, which fails in the case\nof the nozzle with a large expansion rate (e.g., bell-shaped nozzles), efforts have been\nmade to describe the hot-gas flow-field by means of a multidimensional CFD solver"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

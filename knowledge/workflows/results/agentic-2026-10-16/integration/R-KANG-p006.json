@@ -1,0 +1,71 @@
+{
+ "packet": "R-KANG-p006",
+ "at": "2026-10-17T03:30:38.124214+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/R-KANG-p006.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "report": "knowledge/workflows/results/agentic-2026-10-16/bank_reports/R-KANG-p006.R-KANG-p006.extraction.json",
+   "counts": {
+    "n_equations": 0,
+    "n_claims": 1,
+    "n_constants": 0,
+    "n_assumptions": 0,
+    "n_validity": 0,
+    "already_banked": false
+   },
+   "mismatches": {},
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 1,\n \"page_shifted\": 0,\n \"n_equations\": 0,\n \"n_claims\": 1,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-17T03:30:38.742132+00:00', 'n_nodes': 5695, 'n_edges': 7267, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-17T03:30:40.167115+00:00",
+  "n_nodes": 5695,
+  "n_edges": 7267,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 11,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 5,
+   "NOT_CHECKED": 44
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 51,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 5,
+   "SUPPORTED": 4
+  },
+  "pending_source_reviews": 44,
+  "needs_source_routing": 8,
+  "pending_verifications": 475,
+  "pending_verifications_by_store": {
+   "entities": 161,
+   "claims": 209,
+   "validity": 37,
+   "equations": 68
+  },
+  "documents_with_extracted_objects": 28,
+  "canonical_documents_without_extracted_objects": 220
+ },
+ "integrity": {
+  "nodes": 5695,
+  "edges": 7267,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [],
+ "verdict_state_mismatches": [],
+ "bank_mismatches": []
+}

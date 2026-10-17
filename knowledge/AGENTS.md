@@ -317,3 +317,38 @@ unless a separate run supplies evidence. Registry keyword hints remain labeled.
 Code locator/body freshness is separate from implementation-versus-literature review.
 Historical model reviews without source fingerprints remain visible but do not
 establish current support. Missing source/threshold evidence stays unresolved.
+
+## 14. Review freshness and parser lineage
+
+Models may retain a separate `source_reviews` entry for each source document.
+The legacy `source_review` remains the primary-source view; consult
+`source_review_state.source_reviews` for every retained comparison. Mixed
+fidelity is reported as `MIXED`, with the original classifications preserved.
+A secondary review must not replace the primary review or certify another
+source's equations. Registry, PDF, and implementation changes require renewed
+review of the affected source. Non-equivalent formulations and their contextual
+claims are citations, not implementation support.
+
+Independent verification binds two different identities: `source_sha256` for
+the PDF bytes and `content_sha256` for the assertion inspected. Generate the
+latter with `kg.verification_freshness.content_sha256(record)` and include it
+in new verdicts. Read `content_verification` in queries: a historical stored
+`CONFIRMED` without a content fingerprint is `LEGACY_CONTENT_NOT_BOUND`, not
+proof that all current fields were checked. Re-banking changed scientific
+content invalidates its earlier verdict while retaining history. Renewed
+verification of changed content requires an explicit content hash. Missing
+manifest sources cannot establish current confirmation.
+
+Equations, constants, claims, assumptions, and validity statements can retain
+`enrichment_candidate_ids` and `corrects_candidate_ids`. New links need a named
+original-page reviewer and matching document, source hash, and page. Rejected
+parser notation can remain `CORRECTS` history; it cannot be `DERIVED_FROM`
+support. Stored historical references are retained when an edge is withheld;
+`graph.json` exposes `candidate_link_issues` for review. No candidate link or
+parser verdict establishes physical validation.
+
+Parser QA also keeps an assertion history. Replaying an exact historical review
+does not replace the latest state. A bounded source packet may span consecutive
+pages when an equation's definitions or applicability continue onto the next
+page; inspect the full dependency before judging the equation. The session
+replay tool's `success` requires both unchanged stores and resolved operations.

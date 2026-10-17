@@ -1,0 +1,14 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "R2-LEE-p006-008",
+ "duplicate_retirements": [
+  {
+   "duplicate_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_C452A65C",
+   "canonical_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+   "reason": "Lee 2021 Eq. (29), PDF p.7: F's V-LEE transcription duplicates the legacy record (forms differ only in spacing around '/'). The legacy record is kept: it carries the CONFIRMED verification, the IMPLEMENTS link, assumptions and validity. The duplicate's parser-candidate link and model comparison link move to it; the duplicate stays inspectable by id."
+  }
+ ]
+}

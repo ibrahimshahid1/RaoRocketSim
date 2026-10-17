@@ -1,0 +1,4195 @@
+{
+ "generated_at": "2026-10-17T17:58:10.328032+00:00",
+ "content_sha256": "cf0238d115f6c600de22a4d2fbd02cfafa2c0baa099473e1e7e77664838406b1",
+ "authority": "All registered models. Citation, source support, structured implementation comparison, software verification and physical validation are separate fields; NOT_CHECKED is explicit.",
+ "inputs": {
+  "knowledge/manifest.json": "f7a3fa25e323c1b19cfdb7a9238c6e91e0ed373651c0c9345e1a04e0e4c6ad16",
+  "knowledge/equations.json": "2d9283064d05754f293618c4634e235ad2332c26ec4bef824398224b4bbf23e2",
+  "knowledge/claims.json": "42528037f10fc42ec3111c9b2175728f84a053d20ca735ebf7f292b97c738c50",
+  "knowledge/entities.json": "4c2713733d91a365b525e07bf21903a60d1cf60ecec20063c4f952e3308e7e23",
+  "knowledge/validity.json": "67e1ed990e166e57c3a5b136cb93b26730cb23fd1e222f814ad185897b49a0f4",
+  "knowledge/models.json": "321f5ed2280f486a3b4a56e4d69f747f62e78672378944cf75b8b2095187b221",
+  "knowledge/enrichments.json": "eb65e4b1cca351988c9e5566ec052b03826c9f826a318337107f2e59a31c8f73",
+  "knowledge/relationships.json": "e58f53f0455e5b286806a5bc2c45c6ee7409b56d99158018751b4c136b6dc150",
+  "knowledge/software_links.json": "f7b07952184158416ff20e1d817039cc4b6cf133e31722c9ef3caeeb093d0bf7",
+  "knowledge/reports/packet_queue.json": "e3f238fc0d13c6615e7935f64e7d8b1a9c3a664b3eb27226c6d25e0f8269f893",
+  "knowledge/reports/docling_jobs.jsonl": "459275612caae7362c4560db59dbdcfcca7b5f5f954f142c6547d694d50f9c04"
+ },
+ "summary": {
+  "models": 61,
+  "by_audit_status": {
+   "NOT_CHECKED": 48,
+   "SOURCE_REVIEW_CURRENT_UNSTRUCTURED": 6,
+   "STRUCTURED_REVIEW_CURRENT": 7
+  },
+  "by_current_support": {
+   "NOT_CHECKED": 48,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 9,
+   "SUPPORTED": 3
+  },
+  "by_fidelity": {
+   "EQUIVALENT": 2,
+   "BAD_ATTRIBUTION": 1,
+   "CONDITIONALLY_EQUIVALENT": 1,
+   "REPOSITORY_EXTENSION": 2,
+   "DIFFERENT_FORMULA": 1
+  },
+  "by_route": {
+   "PENDING": 41,
+   "REVIEWED_CURRENT": 12,
+   "NO_LOCAL_SOURCE_ROUTE": 5,
+   "REPOSITORY_BASIS_REVIEW": 3
+  },
+  "physical_validation_established": 0
+ },
+ "models": [
+  {
+   "id": "MODEL_ALTITUDE_ATTACHED_THRUST",
+   "registry_id": "altitude.attached_thrust",
+   "subsystem": "altitude",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_2_5354",
+   "local_source": "propulsion_texts/hagemann1998.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_2514_2_5354_658F1672"
+   ],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_CAD_KERNEL_TOPOLOGY",
+   "registry_id": "cad.kernel_topology",
+   "subsystem": "cad",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_CAD_04",
+   "local_source": "propulsion_texts/CAD_04.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_FOUND_IN_SOURCE",
+   "current_support": "NOT_FOUND_IN_SOURCE",
+   "current_support_note": "CAD_04.md is a 173-slide lecture deck on B-Splines and NURBS (basis functions, divided differences, Cox-de Boor recursion, knot insertion/removal, rational curves and surfaces). The registry attributes to it 'OpenCascade valid-solid/re-import/bounding-box/volume checks' under a 'CAD exchange/solid-modeling background' equation_ref. Grep for opencascade, occ, solid, topolog, b-rep/brep, boundary, STEP, IGES, exchange, bounding, volume, valid, manifold, shell, edge, vertex, euler, kernel, export returned zero relevant hits ('import' matches only unrelated text; 'closed' refers to closed curves; 'tolerance' appears once in a control-point replacement step). The document contains no solid-modeling, topology-validity, data-exchange, re-import, bounding-box or volume-check content, so it cannot support the model. The only tangentially related geometric statement is the convex-hull containment property of B-spline curves (page 40), which is a curve property, not a kernel verification policy.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_CHAMBER_LSTAR_VOLUME",
+   "registry_id": "chamber.lstar_volume",
+   "subsystem": "chamber",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_NTRS_19710019929_6BD96C7B",
+    "EQ_NTRS_19710019929_B679AC9F",
+    "EQ_NTRS_19710019929_D5935CFC"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_NTRS_19710019929_6BD96C7B",
+    "EQ_NTRS_19710019929_B679AC9F",
+    "EQ_NTRS_19710019929_D5935CFC"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [
+    "EQ_NTRS_19710019929_6BD96C7B"
+   ],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_CHAMBER_SHOULDER_FILL_FRACTION",
+   "registry_id": "chamber.shoulder_fill_fraction",
+   "subsystem": "chamber",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_FLOW_BOUNDARY_LAYER_DISPLACEMENT",
+   "registry_id": "flow.boundary_layer_displacement",
+   "subsystem": "flow",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "Original White PDF pp840-842 recovers Eq7.42 delta/x approx0.16 Re_x^(-1/7) and Eq7.46 delta_star approxdelta/8, implying0.02 x Re_x^(-1/7). This is a smooth flat-plate derivation using a one-seventh-power profile and constant outer velocity. The implementation instead uses0.046*s/Re_s^(1/5)*sqrt(max(T/T_wall,0.2)), with local nozzle properties, distance since throat, radius floor and blockage clipping. The coefficient, exponent, temperature factor, floors/clips and nozzle application are repository screening assumptions, not established by these source equations. No justified substitution of the flat-plate formula into the nozzle is made. CITES links explicitly connect the compared source equations without asserting IMPLEMENTS; numerical validity of the nozzle extension and physical calibration remain unavailable.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl",
+    "knowledge/workflows/results/white-boundary-docling-2026-10-15.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_INJECTOR_AUTO_PINTLE_DIAMETER",
+   "registry_id": "injector.auto_pintle_diameter",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "",
+   "local_source": "",
+   "source_route_state": "NO_LOCAL_SOURCE_ROUTE",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_COMPRESSIBLE_ORIFICE",
+   "registry_id": "injector.compressible_orifice",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "Original White PDFpp1092,1101 supplies ideal-gas sonic pressure ratio and choked/local mass-flow functions, matching the perfect-gas functions in injector._stream_mass_flux before its supplied Cd multiplier. White does not establish that empirical injector Cd, real/supercritical-fluid accuracy, or the approximation treating feed temperature and P_back+dp as stagnation states. White6.117(p750) instead describes a meter-dependent expansion-factor model and is preserved as a distinct compared relation. CITES comparison edges document this support/scope separation without asserting that the complete injector implementation is identical to any one source formula.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AA664617",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0C8582C",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DA513041",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl",
+    "knowledge/workflows/results/white-model-comparisons-2026-10-16.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_INJECTOR_D2_EVAPORATION",
+   "registry_id": "injector.d2_evaporation",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_1080_13647830_2021_1937702_FDF0974B"
+   ],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_HINZE_STABLE_DROP",
+   "registry_id": "injector.hinze_stable_drop",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "local_source": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
+   "source_route_state": "REPOSITORY_BASIS_REVIEW",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE",
+   "registry_id": "injector.incompressible_orifice",
+   "subsystem": "injector",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19760023196",
+   "local_source": "propulsion_texts/19760023196.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE",
+   "registry_id": "injector.momentum_resultant_angle",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19760023196",
+   "local_source": "propulsion_texts/19760023196.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_N_TAU_STABILITY",
+   "registry_id": "injector.n_tau_stability",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19760023196",
+   "local_source": "propulsion_texts/19760023196.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "Legacy support assessment has no current source fingerprint.",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_NTRS_19760023196_2A22408D"
+   ],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/recovered_results.jsonl"
+   ],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_PRIMARY_BREAKUP_15DH",
+   "registry_id": "injector.primary_breakup_15dh",
+   "subsystem": "injector",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "",
+   "local_source": "",
+   "source_route_state": "NO_LOCAL_SOURCE_ROUTE",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP",
+   "registry_id": "injector.son2017_movable_continuous_gap",
+   "subsystem": "injector",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_1_B36301",
+   "local_source": "propulsion_texts/pintle_injector/son2017.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "SUPPORTED",
+   "current_support": "SUPPORTED",
+   "current_support_note": "Code equals Eq. (1) in expanded form, including the exact theta->0 limit, and inverts it with R_post - t_post. The printed Eq. (2) omits t_post, but the paper's own Table 2 transition openings (0.418/0.454/0.568 mm) agree with the code form and not with the printed Eq. (2) (0.366/0.395/0.492 mm), so Eq. (2) carries a typographical omission. A_cg = pi/4 (Dcg^2 - Dpr^2) is the annulus geometry of the named diameters; Son gives no printed formula. The registry author list ('Son, Hong, and Koo') is wrong; the authors are Son, Radhakrishnan, Koo, Kwon and Kim.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "EQUIVALENT",
+    "fidelities": [
+     "EQUIVALENT"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "EQUIVALENT",
+      "implementation": [
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "son_minimum_tip_area"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "opening_for_tip_area"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "center_gap_area"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "transition_opening"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "son_tip_area"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "opening_for_tip_area"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "center_gap_area"
+       }
+      ],
+      "source_pages": [
+       1,
+       2,
+       3,
+       4,
+       9,
+       10
+      ],
+      "equation_ids": [
+       "EQ_DOI_10_2514_1_B36301_821FB00A",
+       "EQ_DOI_10_2514_1_B36301_D0D3A636"
+      ],
+      "comparison": [
+       {
+        "source": "Eq. (1), PDF p.2 (printed 859): A_min = pi/sin(th)[(R_post - t_post)^2 - (R_post - t_post - L sin th cos th)^2]",
+        "implementation": "pi*(2 r_f L cos th - L^2 sin th cos^2 th), r_f = D_post/2 - t_post",
+        "verdict": "ALGEBRAICALLY_IDENTICAL; theta->0 limit 2 pi r_f L is exact and also covers Son's 0 deg tip (Table 1)"
+       },
+       {
+        "source": "Eq. (2), PDF p.4 (printed 861), as printed with R_post",
+        "implementation": "smaller-root inverse of Eq. (1) with r_f = R_post - t_post",
+        "verdict": "CODE_FOLLOWS_EQ1_CONSISTENT_FORM; printed Eq. (2) disagrees with the paper's Table 2"
+       },
+       {
+        "source": "Table 2, PDF p.3: transition openings 0.418, 0.454, 0.568 mm at 0, 20, 40 deg (D_post 8, t_post 0.5, D_cg 4.55, D_pr 3 mm from Table 1, PDF p.2)",
+        "implementation": "transition_opening reproduces 0.417946, 0.454243, 0.568310 mm; printed Eq. (2) would give 0.365703, 0.395456, 0.492309 mm",
+        "verdict": "REPRODUCED (rounding)"
+       },
+       {
+        "source": "PDF p.2: past the transition the minimum area becomes the constant center-gap area",
+        "implementation": "A_eff = min(A_tip, A_cg) (registry relation); the MDO keeps A_tip <= frac*A_cg as an inequality",
+        "verdict": "CONSISTENT"
+       },
+       {
+        "source": "Eq. (3), PDF p.4: Cd defined on A_min or A_cg by branch, measured (Fig. 6b)",
+        "implementation": "MDO uses a constant radial Cd input (injector_cd_fuel = 0.75); no Son Cd map",
+        "verdict": "NOT_IMPLEMENTED_AS_SOURCE_MAP (repository input; Son provides no universal Cd-versus-stroke map)"
+       }
+      ],
+      "constants": [
+       {
+        "name": "transition fraction",
+        "value": 0.95,
+        "where": "raosim/mdo/schema.py:564",
+        "basis": "repository applicability choice, not in source"
+       },
+       {
+        "name": "minimum opening",
+        "value": "1.0e-4 m",
+        "where": "raosim/mdo/schema.py:669",
+        "basis": "Son PDF p.2 and p.10 (cold-flow sheet uniformity); applicability-limited"
+       }
+      ],
+      "citation_vs_support": "Equations and Table 2 are correctly located in the cited paper. The registry author list at raosim/model_registry.py:113 ('Son, Hong, and Koo') is wrong; the PDF p.1 authors are Min Son, Kanmaniraja Radhakrishnan, Jaye Koo, Oh Chae Kwon and Heuy Dong Kim. This is a citation-metadata error, not a physics error.",
+      "software_verification": "Benchmarks in the registry match the published Table 2; no new tests were run by this review.",
+      "physical_validation": "NOT_ESTABLISHED: Son's data are atmospheric water/air cold-flow spray tests; geometry identities only.",
+      "execution_reach": "Not measured by this review.",
+      "sensitivity": "Not assessed.",
+      "physics_change_required": false,
+      "physics_finding": "No physics change required. Source-internal typo in printed Eq. (2) (t_post omitted) is corroborated by the source's own Table 2; code is correct.",
+      "remaining_uncertainties": [
+       "Cd versus stroke for a new geometry (Son Eq. 3 is a definition, not a correlation)",
+       "applicability of the 0.1 mm uniform-sheet limit beyond Son's water/air rig and geometry",
+       "the 0.95 transition fraction is a repository margin",
+       "hot-fire behaviour across the transition (Son p.4 warns of possible instability)"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_DOI_10_2514_1_B36301_821FB00A",
+        "relation": "IMPLEMENTS",
+        "reason": "Code equals Eq. (1) in expanded form (ratio 1.000000000 at 0/20/40 deg) and inverts it with R_post - t_post."
+       },
+       {
+        "equation_id": "EQ_DOI_10_2514_1_B36301_D0D3A636",
+        "relation": "CITES_ONLY",
+        "reason": "Printed Eq. (2) omits t_post (typo); the code follows the t_post form that reproduces the paper's own Table 2 openings, so the printed form is cited, not implemented."
+       }
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "son_minimum_tip_area",
+        "state": "VERIFIED",
+        "line": 277,
+        "end_line": 312,
+        "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+        "definition_sha256": "987aef0f86e466a8d019b940110527a8412b09b1feed8614c22698fcce96a1bc"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "opening_for_tip_area",
+        "state": "VERIFIED",
+        "line": 325,
+        "end_line": 356,
+        "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+        "definition_sha256": "69b2f441b550f5bbd3d92e064512100cc616962ddde2058d8b35d511d43e5c5a"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "center_gap_area",
+        "state": "VERIFIED",
+        "line": 267,
+        "end_line": 274,
+        "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+        "definition_sha256": "f7631bc28156295a980d76cac1e85149ebaa87dfe05ac0d1b191beaa4dd01acd"
+       },
+       {
+        "file": "raosim/movable_pintle.py",
+        "symbol": "transition_opening",
+        "state": "VERIFIED",
+        "line": 359,
+        "end_line": 378,
+        "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+        "definition_sha256": "e3e667625113e301c3e6875f71fdc6e9d5817122348a64d753a95aa371ded04a"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "son_tip_area",
+        "state": "VERIFIED",
+        "line": 61,
+        "end_line": 68,
+        "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+        "definition_sha256": "58a8a2810d9869ba7589d24116a894abda093a156adc3f8fce47ccf0d335b651"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "opening_for_tip_area",
+        "state": "VERIFIED",
+        "line": 71,
+        "end_line": 82,
+        "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+        "definition_sha256": "3ce5b056819203235c5eb1a7facc70dffdd95f8b9b6932282e6509c195cc200a"
+       },
+       {
+        "file": "raosim/mdo/injector.py",
+        "symbol": "center_gap_area",
+        "state": "VERIFIED",
+        "line": 85,
+        "end_line": 88,
+        "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+        "definition_sha256": "78144bb68e1bb85696baf7a2c5653388a9f1e66b37c77fe22f29b79e9557858f"
+       }
+      ],
+      "reviewed_source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+      "reviewed_document_id": "DOC_DOI_10_2514_1_B36301",
+      "reviewer": {
+       "role": "F",
+       "model": "claude-opus-5-5 (Opus F, main session)"
+      },
+      "recorded_at": "2026-10-17T03:28:45.162959+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "982b291681ff69454e515a481441e2ff47d5a2f83712e9e6a8d310ddf45e6cf6",
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     1,
+     2,
+     3,
+     4,
+     9,
+     10
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "claude-opus-5-5 (Opus F, main session)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/movable_pintle.py",
+      "symbol": "son_minimum_tip_area",
+      "state": "VERIFIED",
+      "line": 277,
+      "end_line": 312,
+      "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+      "definition_sha256": "987aef0f86e466a8d019b940110527a8412b09b1feed8614c22698fcce96a1bc"
+     },
+     {
+      "file": "raosim/movable_pintle.py",
+      "symbol": "opening_for_tip_area",
+      "state": "VERIFIED",
+      "line": 325,
+      "end_line": 356,
+      "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+      "definition_sha256": "69b2f441b550f5bbd3d92e064512100cc616962ddde2058d8b35d511d43e5c5a"
+     },
+     {
+      "file": "raosim/movable_pintle.py",
+      "symbol": "center_gap_area",
+      "state": "VERIFIED",
+      "line": 267,
+      "end_line": 274,
+      "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+      "definition_sha256": "f7631bc28156295a980d76cac1e85149ebaa87dfe05ac0d1b191beaa4dd01acd"
+     },
+     {
+      "file": "raosim/movable_pintle.py",
+      "symbol": "transition_opening",
+      "state": "VERIFIED",
+      "line": 359,
+      "end_line": 378,
+      "file_sha256": "8af412fb70d8b01ee6ea220978d61b134b0970eee6ab0572d74bb9b064b88ae6",
+      "definition_sha256": "e3e667625113e301c3e6875f71fdc6e9d5817122348a64d753a95aa371ded04a"
+     },
+     {
+      "file": "raosim/mdo/injector.py",
+      "symbol": "son_tip_area",
+      "state": "VERIFIED",
+      "line": 61,
+      "end_line": 68,
+      "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+      "definition_sha256": "58a8a2810d9869ba7589d24116a894abda093a156adc3f8fce47ccf0d335b651"
+     },
+     {
+      "file": "raosim/mdo/injector.py",
+      "symbol": "opening_for_tip_area",
+      "state": "VERIFIED",
+      "line": 71,
+      "end_line": 82,
+      "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+      "definition_sha256": "3ce5b056819203235c5eb1a7facc70dffdd95f8b9b6932282e6509c195cc200a"
+     },
+     {
+      "file": "raosim/mdo/injector.py",
+      "symbol": "center_gap_area",
+      "state": "VERIFIED",
+      "line": 85,
+      "end_line": 88,
+      "file_sha256": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+      "definition_sha256": "78144bb68e1bb85696baf7a2c5653388a9f1e66b37c77fe22f29b79e9557858f"
+     }
+    ],
+    "physics_change_required": false,
+    "remaining_uncertainties": [
+     "Cd versus stroke for a new geometry (Son Eq. 3 is a definition, not a correlation)",
+     "applicability of the 0.1 mm uniform-sheet limit beyond Son's water/air rig and geometry",
+     "the 0.95 transition fraction is a repository margin",
+     "hot-fire behaviour across the transition (Son p.4 warns of possible instability)"
+    ]
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_2514_1_B36301_821FB00A"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_DOI_10_2514_1_B36301_821FB00A"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_DOI_10_2514_1_B36301_821FB00A",
+    "EQ_DOI_10_2514_1_B36301_D0D3A636"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/M-SON2017-p003.extraction.jsonl",
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/R-SON2017-p003.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_INJECTOR_SPRAY_CSTAR_FIXED_POINT",
+   "registry_id": "injector.spray_cstar_fixed_point",
+   "subsystem": "injector",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INJECTOR_THROTTLE_AREA_SCHEDULE",
+   "registry_id": "injector.throttle_area_schedule",
+   "subsystem": "injector",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19760023196",
+   "local_source": "propulsion_texts/19760023196.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_INTERFACE_PRESSURE_BOLT_PLATE",
+   "registry_id": "interface.pressure_bolt_plate",
+   "subsystem": "interface",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_MATERIALS_NARLOY_GRCOP",
+   "registry_id": "materials.narloy_grcop",
+   "subsystem": "materials",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19740017910",
+   "local_source": "propulsion_texts/materials_science/19740017910.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_NOZZLE_MOC",
+   "registry_id": "nozzle.moc",
+   "subsystem": "nozzle",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_20030067852",
+   "local_source": "propulsion_texts/20030067852.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+   "registry_id": "nozzle.rao_top_bezier",
+   "subsystem": "nozzle",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19770009165",
+   "local_source": "propulsion_texts/19770009165.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "DOC_NTRS_19770009165: PARTIALLY_SUPPORTED (Figure 5(a) and section 2.1.2.1.2 support the conceptual canted-parabola approximation. The currently attributed angle-table ordinates fail Figure 5(b), including the opposite exit-angle trend. No equation IMPLEMENTS or claim SUPPORTS assertion is made for this non-equivalent review.)",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "BAD_ATTRIBUTION",
+    "fidelities": [
+     "BAD_ATTRIBUTION"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "BAD_ATTRIBUTION",
+      "fidelity_scope": "BAD_ATTRIBUTION applies to _THETA_N_TABLE/_THETA_E_TABLE and their claimed reproduction of SP-8120 Figure 5(b). It does not reject the general canted-parabola geometry concept or claim that every user-supplied-angle Bezier contour is invalid. No blanket equivalence of the complete multi-method bell_nozzle_contour function is established.",
+      "implementation": [
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_EPSILON_VALS"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_LPCT_VALS"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_THETA_N_TABLE"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_THETA_E_TABLE"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_interp_theta_n"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_interp_theta_e"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "lookup_angles"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "rao_chart_domain_status"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_full_cone_length"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "bell_nozzle_contour"
+       }
+      ],
+      "source_pages": [
+       28,
+       29
+      ],
+      "equation_ids": [],
+      "equation_links": [],
+      "source_claim_ids": [
+       "CLM_NTRS_19770009165_66958850",
+       "CLM_NTRS_19770009165_E68DC318",
+       "CLM_NTRS_19770009165_5C8147DB"
+      ],
+      "comparison": [
+       {
+        "source": "SP-8120 PDF p.29, Figure 5(b), alpha_e curves for 60-100 percent length",
+        "implementation": "All five _THETA_E_TABLE columns are nondecreasing with epsilon and rise overall; lookup_angles interpolates those values.",
+        "verdict": "BAD_ATTRIBUTION: source exit angles fall as epsilon rises; table trend is opposite. The current table ordinates are NOT_FOUND_IN_SOURCE as an attributed transcription, not a claim that canted-parabola guidance is absent."
+       },
+       {
+        "source": "SP-8120 Figure 5(b), epsilon 20 / 80 percent length",
+        "implementation": "Static table gives theta_n=33 degrees, theta_e=18 degrees.",
+        "verdict": "BAD_ATTRIBUTION: reviewer visual reading gives alpha_i about 28-30 degrees and alpha_e about 8-10 degrees. These intervals are reviewer measurements with scan uncertainty, not source-stated numeric values."
+       },
+       {
+        "source": "SP-8120 Figure 5(b), epsilon 40 / 80 percent length",
+        "implementation": "Static table gives theta_n=35.5 degrees, theta_e=20 degrees.",
+        "verdict": "BAD_ATTRIBUTION: reviewer visual reading gives alpha_i about 30-32 degrees and alpha_e about 7-9 degrees. Mismatch exceeds the deliberately broad reading intervals."
+       },
+       {
+        "source": "SP-8120 PDF p.29, Figure 5(a) and section 2.1.2.1.2",
+        "implementation": "bell_nozzle_contour method=bezier constructs a quadratic Bezier from N, tangent-intersection P1, and E.",
+        "verdict": "CONCEPTUALLY_CONSISTENT geometry family. Quadratic-Bezier tangent/end-point reasoning is reviewer mathematics, not an algorithm printed on this page; it cannot validate incorrect input angles."
+       },
+       {
+        "source": "SP-8120 Figure 5(b) chart extent versus repository grid metadata",
+        "implementation": "epsilon grid 4-50, length grid 60-100; interpolator extrapolates beyond its grid and reports status separately.",
+        "verdict": "Repository grid membership and extrapolation flags do not establish source ordinate fidelity, optimum performance, or physical validity."
+       }
+      ],
+      "citation_vs_support": "The source is correctly routed to SP-8120 and genuinely describes canted-parabola design practice. The label that the code ordinates reproduce its chart is contradicted by the chart. PARTIALLY_SUPPORTED refers to conceptual citation support; no source equation is linked as IMPLEMENTS and no claim is promoted to model SUPPORTS.",
+      "software_verification": "No engineering tests or engineering module execution. Static table literals and exact Python source definitions inspected only.",
+      "physical_validation": "NOT_ESTABLISHED",
+      "execution_reach": "Not dynamically traced; scope is the method=bezier branch and chart lookup, not other selectable solvers.",
+      "sensitivity": "NOT_MEASURED: no contour/performance perturbation or optimization rerun.",
+      "physics_change_required": true,
+      "physics_finding": "Current attributed angle tables require an owner decision on corrected source/digitization and subsequent geometry/performance validation. No engineering code, coefficient or geometry changed in this review.",
+      "remaining_uncertainties": [
+       "No new complete digitization of Figure 5(b), interpolation-error characterization or replacement table was produced.",
+       "Rao 1960 chart-origin paper remains outside this bounded held-source review; no claim about its uninspected ordinates.",
+       "SP-125 worked-point evidence and P1 full digitization remain prior supporting context, not a new independent source inspection here.",
+       "Throat-radius defaults, 15-degree length normalization, other contour methods and engine-specific thermochemical/applicability limits are not all established by the two reviewed pages.",
+       "No measured flow, wall-pressure, thrust or hardware qualification evidence is established."
+      ],
+      "evidence_file": "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8120-Rao-top-p028-029.comparison.json",
+      "evidence_file_sha256": "8bef681ee9654d3cdc5f4c9aaf75ad0afb071cb448b718ca1801c1639264dc34",
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_EPSILON_VALS",
+        "state": "VERIFIED",
+        "line": 25,
+        "end_line": 26,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "8e8778fa8cf3509a8b177ee887f2a806740c71dec386acb38a9b9a25b38ee017"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_LPCT_VALS",
+        "state": "VERIFIED",
+        "line": 28,
+        "end_line": 28,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "35f19f894874fe8c91cab4c7eaf19f9c813f29d25f6d5f847273c1ce50674e82"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_THETA_N_TABLE",
+        "state": "VERIFIED",
+        "line": 58,
+        "end_line": 73,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "369d7799b3e6329340163b38a243c1392c3e3e22800eda6d94e7a887c0f52231"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_THETA_E_TABLE",
+        "state": "VERIFIED",
+        "line": 76,
+        "end_line": 91,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "560bd6eee9f2a0344aba202ee037a0c54d8d6d6ecc95c96c55f2e72b31b5fb7d"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_interp_theta_n",
+        "state": "VERIFIED",
+        "line": 94,
+        "end_line": 97,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "a5c67d7ffbc49bde1fb597bf0224112913e7f032f9f83e0073b5273ebeeea2fb"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_interp_theta_e",
+        "state": "VERIFIED",
+        "line": 98,
+        "end_line": 101,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "8f8a79882ce1bfb083ac103c0561aad22163efb8a21d3aecf16c11ba9e5a1e84"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "lookup_angles",
+        "state": "VERIFIED",
+        "line": 104,
+        "end_line": 120,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "ff38bba3518362c106921b4d42a1be50faca492b8c5a9cb07c993ffbc6bd6171"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "rao_chart_domain_status",
+        "state": "VERIFIED",
+        "line": 123,
+        "end_line": 138,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "5080af115c4ca7288fee4c1cf05deb0a2929d10af3e425bc4ce95845ae6b4c49"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "_full_cone_length",
+        "state": "VERIFIED",
+        "line": 143,
+        "end_line": 146,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "2107ae2b8dc8031da25c86c07a11604a5800969dd0e439910ba0f203bb1dc4ea"
+       },
+       {
+        "file": "raosim/nozzle_geometry.py",
+        "symbol": "bell_nozzle_contour",
+        "state": "VERIFIED",
+        "line": 163,
+        "end_line": 417,
+        "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+        "definition_sha256": "8c5c3cd9920680c9ae777c8260a88c0c9a6543679312317ba179f6a2c0d59069"
+       }
+      ],
+      "reviewed_source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+      "reviewed_document_id": "DOC_NTRS_19770009165",
+      "reviewer": {
+       "role": "F",
+       "model": "GPT-6 (Codex)"
+      },
+      "recorded_at": "2026-10-17T11:04:45.435803+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "b8262cffcbdeff8eb553707685c3a8aa99ea9ccdfad216f94766aac022ebd659",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "Figure 5(a) and section 2.1.2.1.2 support the conceptual canted-parabola approximation. The currently attributed angle-table ordinates fail Figure 5(b), including the opposite exit-angle trend. No equation IMPLEMENTS or claim SUPPORTS assertion is made for this non-equivalent review.",
+      "resolved_implementation_equation_ids": [],
+      "resolved_comparison_equation_ids": [],
+      "resolved_comparison_claim_ids": [],
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     28,
+     29
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "GPT-6 (Codex)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_EPSILON_VALS",
+      "state": "VERIFIED",
+      "line": 25,
+      "end_line": 26,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "8e8778fa8cf3509a8b177ee887f2a806740c71dec386acb38a9b9a25b38ee017"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_LPCT_VALS",
+      "state": "VERIFIED",
+      "line": 28,
+      "end_line": 28,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "35f19f894874fe8c91cab4c7eaf19f9c813f29d25f6d5f847273c1ce50674e82"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_THETA_N_TABLE",
+      "state": "VERIFIED",
+      "line": 58,
+      "end_line": 73,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "369d7799b3e6329340163b38a243c1392c3e3e22800eda6d94e7a887c0f52231"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_THETA_E_TABLE",
+      "state": "VERIFIED",
+      "line": 76,
+      "end_line": 91,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "560bd6eee9f2a0344aba202ee037a0c54d8d6d6ecc95c96c55f2e72b31b5fb7d"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_interp_theta_n",
+      "state": "VERIFIED",
+      "line": 94,
+      "end_line": 97,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "a5c67d7ffbc49bde1fb597bf0224112913e7f032f9f83e0073b5273ebeeea2fb"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_interp_theta_e",
+      "state": "VERIFIED",
+      "line": 98,
+      "end_line": 101,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "8f8a79882ce1bfb083ac103c0561aad22163efb8a21d3aecf16c11ba9e5a1e84"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "lookup_angles",
+      "state": "VERIFIED",
+      "line": 104,
+      "end_line": 120,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "ff38bba3518362c106921b4d42a1be50faca492b8c5a9cb07c993ffbc6bd6171"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "rao_chart_domain_status",
+      "state": "VERIFIED",
+      "line": 123,
+      "end_line": 138,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "5080af115c4ca7288fee4c1cf05deb0a2929d10af3e425bc4ce95845ae6b4c49"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "_full_cone_length",
+      "state": "VERIFIED",
+      "line": 143,
+      "end_line": 146,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "2107ae2b8dc8031da25c86c07a11604a5800969dd0e439910ba0f203bb1dc4ea"
+     },
+     {
+      "file": "raosim/nozzle_geometry.py",
+      "symbol": "bell_nozzle_contour",
+      "state": "VERIFIED",
+      "line": 163,
+      "end_line": 417,
+      "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+      "definition_sha256": "8c5c3cd9920680c9ae777c8260a88c0c9a6543679312317ba179f6a2c0d59069"
+     }
+    ],
+    "physics_change_required": true,
+    "remaining_uncertainties": [
+     "No new complete digitization of Figure 5(b), interpolation-error characterization or replacement table was produced.",
+     "Rao 1960 chart-origin paper remains outside this bounded held-source review; no claim about its uninspected ordinates.",
+     "SP-125 worked-point evidence and P1 full digitization remain prior supporting context, not a new independent source inspection here.",
+     "Throat-radius defaults, 15-degree length normalization, other contour methods and engine-specific thermochemical/applicability limits are not all established by the two reviewed pages.",
+     "No measured flow, wall-pressure, thrust or hardware qualification evidence is established."
+    ]
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8120-Rao-top-p028-029.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+   "registry_id": "nozzle.rao_variational_bvp",
+   "subsystem": "nozzle",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_8_7324",
+   "local_source": "propulsion_texts/rao1958.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "SUPPORTED",
+   "current_support": "SUPPORTED",
+   "current_support_note": "The original source states stationarity (Eqs. 7-13), exit transversality (14), characteristic compatibility (15), mass-flow matching (19), and length closure (3-4). PDF pages 2-6 were visually inspected, with the Rao text in the full six-page Markdown also read. This confirms the registry citation for the method, not numerical solver correctness, hardware qualification, or an unstated numerical validity range.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_2514_8_7324_082529F7",
+    "EQ_DOI_10_2514_8_7324_1BE77D02",
+    "EQ_DOI_10_2514_8_7324_3E537078",
+    "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+    "EQ_DOI_10_2514_8_7324_801D1C3E",
+    "EQ_DOI_10_2514_8_7324_B52B8DD0",
+    "EQ_DOI_10_2514_8_7324_BEF48217",
+    "EQ_DOI_10_2514_8_7324_EAD5203E",
+    "EQ_DOI_10_2514_8_7324_F1B6F455"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_DOI_10_2514_8_7324_082529F7",
+    "EQ_DOI_10_2514_8_7324_1BE77D02",
+    "EQ_DOI_10_2514_8_7324_3E537078",
+    "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+    "EQ_DOI_10_2514_8_7324_801D1C3E",
+    "EQ_DOI_10_2514_8_7324_B52B8DD0",
+    "EQ_DOI_10_2514_8_7324_BEF48217",
+    "EQ_DOI_10_2514_8_7324_EAD5203E",
+    "EQ_DOI_10_2514_8_7324_F1B6F455"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/rao1958-2026-09-20.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D",
+   "registry_id": "performance.frozen_variable_cp_quasi1d",
+   "subsystem": "performance",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "local_source": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "Anderson originalPDFpp671-672,675-678,682 supports conserved energy/continuity and thermally-perfect fixed-composition sound speed. Chemically frozen composition permits variable speciescp(T); bothchemical AND vibrationalfreezing is a separate calorically-perfect limit. The class consumes a precomputed mixturecp(T), rather than evaluating species sums17.22/25; reactivecp/cv terms17.20/21/23/24 and equilibrium sound17.35 are comparison citations only. Exact piecewise-linear interpolation/integration, propertyschema, bisection, cstar/Cf policies and NASA SP-125 attribution were not established by this boundedwindow. The entropy integral is a repository derivation from fixed-composition ideal-gas thermodynamics, not a displayed equation in this window. Scientific correctness and fixed-composition/internal-mode basis of suppliedcp grids, gridrefinement, external thermochemistry agreement and hardware validity remainunverified. Code now discloses single-temperature thermal properties and absent separate vibrational relaxation; no numerical computation changed.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_68A60BF8",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB096C54",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_C32703C2"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_68A60BF8",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB096C54",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_C32703C2"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_182F4635",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_19ADDF30",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_349695C7",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_5E676594",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_6537643E",
+    "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB8EB3D8"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_PERFORMANCE_IDEAL_THRUST_COEFFICIENT",
+   "registry_id": "performance.ideal_thrust_coefficient",
+   "subsystem": "performance",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19770009165",
+   "local_source": "propulsion_texts/19770009165.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH",
+   "registry_id": "performance.isentropic_area_mach",
+   "subsystem": "performance",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "SUPPORTED",
+   "current_support": "SUPPORTED",
+   "current_support_note": "Original White PDFpp1090-1091,1099 supplies temperature9.26, pressure/density9.28 and area-Mach9.44. raosim/gas_dynamics.py uses the reciprocal T/T0,p/p0,rho/rho0 forms and gamma in place of sourcek, algebraically equivalent under constant-gamma calorically perfect, one-dimensional isentropic conditions. This review supports these governing algebraic relations and source attribution only; it does not certify Newton inversion convergence, all input domains, variable-cp/real-gas models, runtime execution reach or physical validation.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+    "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/white-model-comparisons-2026-10-16.jsonl"
+   ],
+   "audit_status": "SOURCE_REVIEW_CURRENT_UNSTRUCTURED"
+  },
+  {
+   "id": "MODEL_PUMP_ANNULAR_EYE_FREE_AREA",
+   "registry_id": "pump.annular_eye_free_area",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19740020848",
+   "local_source": "propulsion_texts/fuel_pump_design/19740020848.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_PUMP_AUTO_EFFICIENCY_FLOW_HEAD",
+   "registry_id": "pump.auto_efficiency_flow_head",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "",
+   "local_source": "",
+   "source_route_state": "NO_LOCAL_SOURCE_ROUTE",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_PUMP_ELECTRIC_DRIVE",
+   "registry_id": "pump.electric_drive",
+   "subsystem": "pump",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "local_source": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "The source equations are supported exactly: Lee Eqs. (20) and (26)-(32), PDF pp.6-8, as implemented in raosim/mdo/pump.py, raosim/mdo/engine.py and raosim/pumps.py (motor density on shaft output; inverter density on output = shaft/eta_m; battery power and energy branches with kappa_b; eta_E = eta_discharge). Support stays PARTIAL, as the 2026-10-14 review recorded: per-stream drives, the default technology set and its efficiencies and densities (repository_screening_v1 lies outside held evidence; P2 gap G4), bus selection and the electrical/thermal screens are repository extensions. The NLP objective uses a log-sum-exp upper envelope of Eq. (32); installed mass uses the exact MAX.",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "CONDITIONALLY_EQUIVALENT",
+    "fidelities": [
+     "CONDITIONALLY_EQUIVALENT"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "CONDITIONALLY_EQUIVALENT",
+      "implementation": [
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "pump_stream"
+       },
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "battery_masses"
+       },
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "electric_feed"
+       },
+       {
+        "file": "raosim/mdo/engine.py",
+        "symbol": "_smooth_max"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_drive_sizing"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_battery_sizing"
+       }
+      ],
+      "source_pages": [
+       6,
+       7,
+       8,
+       10,
+       11
+      ],
+      "equation_ids": [
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+       "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827"
+      ],
+      "comparison": [
+       {
+        "source": "Eq. (20) PDF p.6",
+        "implementation": "P_shaft = mdot*dp/(rho*eta) (pump_stream)",
+        "verdict": "EXACT"
+       },
+       {
+        "source": "Eqs. (26)-(27) PDF p.7, motor density on output power",
+        "implementation": "motor_mass = P_shaft/motor_power_density (both paths)",
+        "verdict": "EXACT"
+       },
+       {
+        "source": "Eqs. (28)-(29) PDF p.7, inverter output = motor output/eta_m",
+        "implementation": "inverter_mass = (P_shaft/eta_motor)/inverter_power_density",
+        "verdict": "EXACT"
+       },
+       {
+        "source": "Eqs. (30)-(31) PDF p.8 with kappa_b",
+        "implementation": "battery_masses (no kappa_b) times mission.battery_structural_margin in engine.py:378-386; host multiplies the max by structural_margin",
+        "verdict": "EXACT (kappa_b applied downstream)"
+       },
+       {
+        "source": "Eq. (32) PDF p.8 MAX",
+        "implementation": "exact jnp.maximum for installed mass; objective uses logsumexp(2v)/2 upper envelope",
+        "verdict": "CONDITIONALLY_EQUIVALENT (objective smoothing)"
+       },
+       {
+        "source": "Eq. (38) PDF p.10 eta_E(t_b)",
+        "implementation": "eta_discharge is a technology-set input, not Lee's burn-time fit",
+        "verdict": "REPOSITORY_INPUT"
+       },
+       {
+        "source": "Eq. (25) PDF p.7 pump mass vs diameter",
+        "implementation": "pump_mass = P_shaft/pump_specific_mass",
+        "verdict": "DIFFERENT_METHOD (outside the registry relation)"
+       }
+      ],
+      "constants": [
+       {
+        "name": "technology-set densities and efficiencies",
+        "where": "raosim/electric_technology.py",
+        "basis": "see P2-electric-technology-sets-comparison.json"
+       }
+      ],
+      "citation_vs_support": "The equation reference 'Lee PDF pp. 6-8, Eqs. (20), (26)-(32)' is accurate (page-verified). The registry relation also covers technology-specific inputs, whose default values are repository choices outside the held sources (P2).",
+      "software_verification": "Not re-run here; registry lists power/energy identity and Lee reference-point tests.",
+      "physical_validation": "NOT_ESTABLISHED: Lee states no additional validation of component mass estimates (PDF p.10).",
+      "execution_reach": "Not measured by this review.",
+      "sensitivity": "Not assessed (the P2 record notes the electric package dominates the MDO objective).",
+      "physics_change_required": false,
+      "physics_finding": "Sizing relations agree with Lee. Remaining issues are inputs (technology-set values and basis; see P2) and the pump-mass method, not the drive equations.",
+      "remaining_uncertainties": [
+       "technology-set values (inverter 15 kW/kg and 0.96 efficiency in repository_screening_v1 lie outside held sources; P2)",
+       "eta_E is not tied to burn time as in Lee Eq. (38)",
+       "no thermal or pulse derating of motor or battery"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (20) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (26) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (27) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (28) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (29) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (30) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+        "relation": "IMPLEMENTS",
+        "reason": "Lee Eq. (31) implemented in raosim/mdo/pump.py and raosim/pumps.py"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+        "relation": "IMPLEMENTS",
+        "reason": "Eq. (32) battery selection: exact max for installed mass; the MDO objective uses the smooth max of engine.py (_smooth_max), hence CONDITIONALLY_EQUIVALENT"
+       },
+       {
+        "equation_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827",
+        "relation": "CITES_ONLY",
+        "reason": "Code sizes pump mass as P_shaft/pump_specific_mass, a different method from the Eq. (25) diameter fit"
+       }
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "pump_stream",
+        "state": "VERIFIED",
+        "line": 85,
+        "end_line": 117,
+        "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+        "definition_sha256": "02e945782f03e9c34cae5ad7abe910f034b66432581e1d5a74f1f84546cc6362"
+       },
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "battery_masses",
+        "state": "VERIFIED",
+        "line": 129,
+        "end_line": 135,
+        "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+        "definition_sha256": "a1ab0a28474cc184623c5b8497997a5890a61e6d0f690d24c53602bbbd58bc5a"
+       },
+       {
+        "file": "raosim/mdo/pump.py",
+        "symbol": "electric_feed",
+        "state": "VERIFIED",
+        "line": 152,
+        "end_line": 174,
+        "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+        "definition_sha256": "f475961b620c0f99f9b5fa3889ed88568ddcc0e237b5a2980b168e3ce82dc6fd"
+       },
+       {
+        "file": "raosim/mdo/engine.py",
+        "symbol": "_smooth_max",
+        "state": "VERIFIED",
+        "line": 90,
+        "end_line": 93,
+        "file_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f",
+        "definition_sha256": "41e272fb2e416042bd2389f2f6c94c7664fdc8c0b520a6f54f835322cb319d57"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_drive_sizing",
+        "state": "VERIFIED",
+        "line": 1029,
+        "end_line": 1076,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "e3604a70136ac0a447eeaeb12cc37d2e836f76a5c7941c59e85dfff85ade0a6a"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_battery_sizing",
+        "state": "VERIFIED",
+        "line": 1079,
+        "end_line": 1114,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "076ee1d2c86268e0e3f4c63554633b58f498ccda4195d5be29c3aeac7b90ae6b"
+       }
+      ],
+      "reviewed_source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+      "reviewed_document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "reviewer": {
+       "role": "F",
+       "model": "claude-opus-5-5 (Opus F, main session)"
+      },
+      "recorded_at": "2026-10-17T03:27:56.521024+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "8c57ddb9fb07c10b92e9151873dfbdc49dccd33cab54658ad62bfab4b529541a",
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     6,
+     7,
+     8,
+     10,
+     11
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "claude-opus-5-5 (Opus F, main session)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/mdo/pump.py",
+      "symbol": "pump_stream",
+      "state": "VERIFIED",
+      "line": 85,
+      "end_line": 117,
+      "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+      "definition_sha256": "02e945782f03e9c34cae5ad7abe910f034b66432581e1d5a74f1f84546cc6362"
+     },
+     {
+      "file": "raosim/mdo/pump.py",
+      "symbol": "battery_masses",
+      "state": "VERIFIED",
+      "line": 129,
+      "end_line": 135,
+      "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+      "definition_sha256": "a1ab0a28474cc184623c5b8497997a5890a61e6d0f690d24c53602bbbd58bc5a"
+     },
+     {
+      "file": "raosim/mdo/pump.py",
+      "symbol": "electric_feed",
+      "state": "VERIFIED",
+      "line": 152,
+      "end_line": 174,
+      "file_sha256": "9dde839a936e1f89fded4f204b822aed76b3e7d9126719431a1c029a277d7e4c",
+      "definition_sha256": "f475961b620c0f99f9b5fa3889ed88568ddcc0e237b5a2980b168e3ce82dc6fd"
+     },
+     {
+      "file": "raosim/mdo/engine.py",
+      "symbol": "_smooth_max",
+      "state": "VERIFIED",
+      "line": 90,
+      "end_line": 93,
+      "file_sha256": "2cb0668f7a8baad32805efabc70decd072b2fbd1d42fab9c7340dd2c66817e6f",
+      "definition_sha256": "41e272fb2e416042bd2389f2f6c94c7664fdc8c0b520a6f54f835322cb319d57"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "_drive_sizing",
+      "state": "VERIFIED",
+      "line": 1029,
+      "end_line": 1076,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "e3604a70136ac0a447eeaeb12cc37d2e836f76a5c7941c59e85dfff85ade0a6a"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "_battery_sizing",
+      "state": "VERIFIED",
+      "line": 1079,
+      "end_line": 1114,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "076ee1d2c86268e0e3f4c63554633b58f498ccda4195d5be29c3aeac7b90ae6b"
+     }
+    ],
+    "physics_change_required": false,
+    "remaining_uncertainties": [
+     "technology-set values (inverter 15 kW/kg and 0.96 efficiency in repository_screening_v1 lie outside held sources; P2)",
+     "eta_E is not tied to burn time as in Lee Eq. (38)",
+     "no thermal or pulse derating of motor or battery"
+    ]
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+    "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/R-LEE-p006-008.extraction.jsonl",
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/R2-LEE-p006-008.extraction.jsonl",
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/V-LEE-p006-008.extraction.jsonl",
+    "knowledge/workflows/results/electric-drive-2026-10-07.jsonl",
+    "knowledge/workflows/results/lee-docling-2026-10-15.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_PUMP_INDUCER_NPSH",
+   "registry_id": "pump.inducer_npsh",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710025474",
+   "local_source": "propulsion_texts/fuel_pump_design/19710025474.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "DOC_NTRS_19710025474: PARTIALLY_SUPPORTED (Source selections and constant-lead geometry are supported. Repository advisory thresholds, sizing rules, and missing cavity/head-rise validation prevent whole-model equivalence.)",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "REPOSITORY_EXTENSION",
+    "fidelities": [
+     "REPOSITORY_EXTENSION"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "REPOSITORY_EXTENSION",
+      "implementation": [
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_inducer_geometry"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "PumpSizingSpec"
+       }
+      ],
+      "source_pages": [
+       19,
+       34,
+       69,
+       71
+      ],
+      "equation_ids": [
+       "EQ_NTRS_19710025474_B280B6A9"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_NTRS_19710025474_B280B6A9",
+        "relation": "CITES_ONLY",
+        "reason": "Pitch matches the constant-lead identity; complete inducer/NPSH screening includes repository heuristics and unqualified suction performance."
+       }
+      ],
+      "comparison": [
+       {
+        "source": "Eq. (1a), PDF p.19 (printed 7): S_s = n sqrt(Q) / NPSH^0.75.",
+        "implementation": "omega sqrt(Q) / (g NPSH_head)^0.75, using coherent SI quantities.",
+        "verdict": "UNIT_CONVENTION_VARIANT: the published dimensional suction speed and the code nondimensional value require a unit conversion before numerical chart comparisons."
+       },
+       {
+        "source": "Eq. (31), PDF p.34, and sec.3.1.10, PDF p.69.",
+        "implementation": "pitch = 2 pi r_tip tan(beta_tip); hub angle follows the same constant lead.",
+        "verdict": "EQUIVALENT geometric identity. The source discusses uniform flow, zero prewhirl and small blade angles when describing optimal radial angle variation."
+       },
+       {
+        "source": "Sec.3.1.9, PDF p.69: incidence ratio 0.35 to 0.50, mean 0.425; a wider flow range may require a larger ratio.",
+        "implementation": "Default alpha/beta = 0.425; beta = atan(phi_tip)/(1-ratio).",
+        "verdict": "SUPPORTED default selection; the wider-flow-range caveat and source design range are not enforced here."
+       },
+       {
+        "source": "Secs.3.1.14 and 3.1.15, PDF p.71.",
+        "implementation": "Defaults of three blades and solidity 2.5.",
+        "verdict": "SUPPORTED selections for the described low-head inducer. Other accepted inputs need separate review."
+       },
+       {
+        "source": "Sec.3.2.1, PDF p.71: monotone head increase without backflow, radial equilibrium and cavity analysis.",
+        "implementation": "Kinematic geometry and a pressure-margin recommendation, without a local cavity or head-rise solution.",
+        "verdict": "NOT_IMPLEMENTED by this function; source design requirements do not establish code suction performance."
+       }
+      ],
+      "constants": [
+       {
+        "name": "suction_ns advisory threshold",
+        "value": 4.0,
+        "basis": "Repository rule; no supporting numerical threshold established by inspected source pages."
+       },
+       {
+        "name": "eye diameter floor relative to impeller",
+        "value": 0.45,
+        "basis": "Repository rule; no inspected source support."
+       },
+       {
+        "name": "default hub ratio",
+        "value": 0.35,
+        "basis": "Repository choice; not established by inspected pages."
+       }
+      ],
+      "citation_vs_support": "The held source supports the helix identity, selection practices and suction-speed concept. The complete implementation is a repository screening extension, not a validated execution of the full source design procedure.",
+      "software_verification": "Engineering suites were not run; this is a direct code and original-source comparison.",
+      "physical_validation": "NOT_ESTABLISHED: no cavitation, inlet-fluid or inducer hardware evidence is supplied.",
+      "execution_reach": "Not dynamically measured.",
+      "sensitivity": "NOT_MEASURED",
+      "physics_change_required": false,
+      "physics_finding": "No engineering edits. Advisory suction-speed threshold, eye diameter floor and hub choices remain repository assumptions. Cavitation/head-rise and operating-range evidence is required for qualification.",
+      "remaining_uncertainties": [
+       "Carry units and corrected-versus-uncorrected conventions when comparing suction-speed charts.",
+       "No cavity, thermodynamic-suppression, head-rise or stability solution is established by this function.",
+       "Other code paths and user selections are outside the four pages inspected."
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_inducer_geometry",
+        "state": "VERIFIED",
+        "line": 2489,
+        "end_line": 2573,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "f3a4ffeb5cac14e6afe495c418a368c95e80bc82121b12dd03de3f3ceb5848af"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "PumpSizingSpec",
+        "state": "VERIFIED",
+        "line": 144,
+        "end_line": 229,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "35133fd8699cda7d04e47fd70178861fe14ad34f0084b523c76b5a7707408800"
+       }
+      ],
+      "reviewed_source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+      "reviewed_document_id": "DOC_NTRS_19710025474",
+      "reviewer": {
+       "role": "F",
+       "model": "GPT-6 (Codex)"
+      },
+      "recorded_at": "2026-10-17T17:35:40.352439+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "7f1c994e27d37c57851739a01c5ebf85353085b3ce1d10229a29d145ddc59e0f",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "Source selections and constant-lead geometry are supported. Repository advisory thresholds, sizing rules, and missing cavity/head-rise validation prevent whole-model equivalence.",
+      "resolved_implementation_equation_ids": [],
+      "resolved_comparison_equation_ids": [
+       "EQ_NTRS_19710025474_B280B6A9"
+      ],
+      "resolved_comparison_claim_ids": [],
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     19,
+     34,
+     69,
+     71
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "GPT-6 (Codex)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "_inducer_geometry",
+      "state": "VERIFIED",
+      "line": 2489,
+      "end_line": 2573,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "f3a4ffeb5cac14e6afe495c418a368c95e80bc82121b12dd03de3f3ceb5848af"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "PumpSizingSpec",
+      "state": "VERIFIED",
+      "line": 144,
+      "end_line": 229,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "35133fd8699cda7d04e47fd70178861fe14ad34f0084b523c76b5a7707408800"
+     }
+    ],
+    "physics_change_required": false,
+    "remaining_uncertainties": [
+     "Carry units and corrected-versus-uncorrected conventions when comparing suction-speed charts.",
+     "No cavity, thermodynamic-suppression, head-rise or stability solution is established by this function.",
+     "Other code paths and user selections are outside the four pages inspected."
+    ]
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_NTRS_19710025474_B280B6A9"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8052-inducer.extraction.jsonl",
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8052-inducer.quote-repair.extraction.jsonl",
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8052-inducer.readable.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_PUMP_MEANLINE_COEFFICIENTS",
+   "registry_id": "pump.meanline_coefficients",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19740020848",
+   "local_source": "propulsion_texts/fuel_pump_design/19740020848.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "DOC_NTRS_19740020848: PARTIALLY_SUPPORTED (Core coefficient identities agree. Net-area continuity is project-derived. Chart conditions, fixed initial angle, geometry limits and the incomplete source performance procedure make the whole implementation a repository extension.)",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "REPOSITORY_EXTENSION",
+    "fidelities": [
+     "REPOSITORY_EXTENSION"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "REPOSITORY_EXTENSION",
+      "implementation": [
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_impeller_geometry"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_velocity_triangle"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "sp8109_min_blade_count"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "PumpSizingSpec"
+       }
+      ],
+      "source_pages": [
+       20,
+       40,
+       42,
+       78,
+       79
+      ],
+      "equation_ids": [
+       "EQ_NTRS_19740020848_FFCA6B14",
+       "EQ_NTRS_19740020848_4840B4A3"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_NTRS_19740020848_FFCA6B14",
+        "relation": "CITES_ONLY",
+        "reason": "The coefficient identity agrees, but the full geometry implementation includes repository selections and conditional chart use."
+       },
+       {
+        "equation_id": "EQ_NTRS_19740020848_4840B4A3",
+        "relation": "CITES_ONLY",
+        "reason": "The coefficient identity agrees, but the full geometry implementation includes repository selections and conditional chart use."
+       }
+      ],
+      "comparison": [
+       {
+        "source": "Eq. (7), PDF p.20 (printed 8): psi = g H / u_t2^2.",
+        "implementation": "tip_speed = sqrt(g stage_head / psi), with D2 = 2 tip_speed / omega.",
+        "verdict": "EQUIVALENT algebra for positive inputs. Staged head splitting and the configured coefficient remain project selections."
+       },
+       {
+        "source": "Fig.16, PDF p.42: phi2 = c_m2/u2; chart at best efficiency, zero prewhirl, shrouded impellers and diameter ratio 0.65.",
+        "implementation": "achieved_phi = Q/(open_perimeter b2 tip_speed); blade-count lookup uses psi and phi.",
+        "verdict": "EQUIVALENT coefficient identity. Chart conditions are not established for every coupled geometry, and all digitized nodes were not independently rechecked here."
+       },
+       {
+        "source": "Sec.3.3.1.3, PDF p.79: inlet free area greater than 80 percent; discharge greater than 85 percent; four to eight inlet blades.",
+        "implementation": "Exit blockage Z t/(pi D2 sin(beta2)), net-area continuity and main/splitter blade selection.",
+        "verdict": "PROJECT_DERIVED_GEOMETRIC_CLOSURE consistent with the free-area concept. The expanded Q = b2 (pi D2 - Z t/sin(beta2)) c_m2 relation was not located as a displayed source equation on these pages."
+       },
+       {
+        "source": "Secs.3.3.1.2 and 3.3.1.3, PDF pp.78-79: iterate blade number, angle and diameter for the head-flow curve; quasi-three-dimensional and stability analysis.",
+        "implementation": "Initial 25-degree exit angle, geometry closure, slip-based velocity triangle and repository limits.",
+        "verdict": "REPOSITORY_EXTENSION: these functions do not implement the full source design and stability procedure."
+       },
+       {
+        "source": "Sec.2.3.1.2, PDF p.40: head coefficients approximately 0.35 to above 0.70 and flow coefficients 0.05 to 0.30.",
+        "implementation": "Defaults psi = 0.55 and phi = 0.08.",
+        "verdict": "INSIDE_REPORTED_DESIGN_VALUES. Those general ranges do not validate or optimize these selections for a particular pump."
+       }
+      ],
+      "constants": [
+       {
+        "name": "Initial exit blade angle",
+        "value": 25,
+        "units": "deg",
+        "basis": "Repository selection, not a universal SP-8109 prescription."
+       },
+       {
+        "name": "Default head and flow coefficients",
+        "value": [
+         0.55,
+         0.08
+        ],
+        "basis": "Repository selections within reported design values, without performance validation."
+       }
+      ],
+      "citation_vs_support": "SP-8109 supplies coefficient definitions, a conditional design chart, and free-area and performance criteria. The complete code is a repository preliminary screen, not qualified pump performance.",
+      "software_verification": "Engineering suites were not run; direct source/code inspection only.",
+      "physical_validation": "NOT_ESTABLISHED",
+      "execution_reach": "Not dynamically traced. Scope is the raosim.pumps path, not a separate audit of the MDO solver.",
+      "sensitivity": "NOT_MEASURED",
+      "physics_change_required": false,
+      "physics_finding": "No engineering changes. Preserve chart conditions and project-derived closure. Qualified head-flow, slip, efficiency, cavitation and stability evidence remains unavailable.",
+      "remaining_uncertainties": [
+       "All Fig.16 digitization nodes and clamping behavior were not independently reverified.",
+       "The chart diameter ratio 0.65 and best-efficiency scope are not established for every coupled geometry.",
+       "Source velocity-gradient and stability requirements need analyses or measurements beyond kinematic closure.",
+       "Specific-speed and specific-diameter unit conventions are not promoted as raw numerical chart identity."
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_impeller_geometry",
+        "state": "VERIFIED",
+        "line": 1245,
+        "end_line": 1403,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "939daae9d1f7e97300f7994948e91bf7fd2bff6b9c8d1786147fab685432dfb4"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "_velocity_triangle",
+        "state": "VERIFIED",
+        "line": 1418,
+        "end_line": 1473,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "008546875be62f1d194abdf3e68e941478c4ae6d23ef79f632ec95201f12c62d"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "sp8109_min_blade_count",
+        "state": "VERIFIED",
+        "line": 1202,
+        "end_line": 1242,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "5b898ee453451bcdbf15f69e52426beb2cc83b9334f4d5bf2d0ab9af0f411576"
+       },
+       {
+        "file": "raosim/pumps.py",
+        "symbol": "PumpSizingSpec",
+        "state": "VERIFIED",
+        "line": 144,
+        "end_line": 229,
+        "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+        "definition_sha256": "35133fd8699cda7d04e47fd70178861fe14ad34f0084b523c76b5a7707408800"
+       }
+      ],
+      "reviewed_source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+      "reviewed_document_id": "DOC_NTRS_19740020848",
+      "reviewer": {
+       "role": "F",
+       "model": "GPT-6 (Codex)"
+      },
+      "recorded_at": "2026-10-17T17:35:50.807511+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "e574cabb4f3a31f182b6e780b8ebfe9c16795d388fc174d899bdf25338d26e42",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "Core coefficient identities agree. Net-area continuity is project-derived. Chart conditions, fixed initial angle, geometry limits and the incomplete source performance procedure make the whole implementation a repository extension.",
+      "resolved_implementation_equation_ids": [],
+      "resolved_comparison_equation_ids": [
+       "EQ_NTRS_19740020848_4840B4A3",
+       "EQ_NTRS_19740020848_FFCA6B14"
+      ],
+      "resolved_comparison_claim_ids": [],
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     20,
+     40,
+     42,
+     78,
+     79
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "GPT-6 (Codex)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "_impeller_geometry",
+      "state": "VERIFIED",
+      "line": 1245,
+      "end_line": 1403,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "939daae9d1f7e97300f7994948e91bf7fd2bff6b9c8d1786147fab685432dfb4"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "_velocity_triangle",
+      "state": "VERIFIED",
+      "line": 1418,
+      "end_line": 1473,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "008546875be62f1d194abdf3e68e941478c4ae6d23ef79f632ec95201f12c62d"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "sp8109_min_blade_count",
+      "state": "VERIFIED",
+      "line": 1202,
+      "end_line": 1242,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "5b898ee453451bcdbf15f69e52426beb2cc83b9334f4d5bf2d0ab9af0f411576"
+     },
+     {
+      "file": "raosim/pumps.py",
+      "symbol": "PumpSizingSpec",
+      "state": "VERIFIED",
+      "line": 144,
+      "end_line": 229,
+      "file_sha256": "30fec44be98251aec90f73d4f20a512e2dbcbfd800f3d3ba5d65daa22b4683ef",
+      "definition_sha256": "35133fd8699cda7d04e47fd70178861fe14ad34f0084b523c76b5a7707408800"
+     }
+    ],
+    "physics_change_required": false,
+    "remaining_uncertainties": [
+     "All Fig.16 digitization nodes and clamping behavior were not independently reverified.",
+     "The chart diameter ratio 0.65 and best-efficiency scope are not established for every coupled geometry.",
+     "Source velocity-gradient and stability requirements need analyses or measurements beyond kinematic closure.",
+     "Specific-speed and specific-diameter unit conventions are not promoted as raw numerical chart identity."
+    ]
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_NTRS_19740020848_4840B4A3",
+    "EQ_NTRS_19740020848_FFCA6B14"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8109-meanline.extraction.jsonl",
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP8109-meanline.readable.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_PUMP_SPLIT_CASING_JOINT",
+   "registry_id": "pump.split_casing_joint",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19740020848",
+   "local_source": "propulsion_texts/fuel_pump_design/19740020848.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_PUMP_SYNTHETIC_MAP",
+   "registry_id": "pump.synthetic_map",
+   "subsystem": "pump",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "",
+   "local_source": "",
+   "source_route_state": "NO_LOCAL_SOURCE_ROUTE",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_REGEN_BOOLEAN_BREP",
+   "registry_id": "regen.boolean_brep",
+   "subsystem": "cad",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_6_2018_4625",
+   "local_source": "propulsion_texts/gradl2018.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SEPARATION_EMPIRICAL_ONSET",
+   "registry_id": "separation.empirical_onset",
+   "subsystem": "separation",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_2_5354",
+   "local_source": "propulsion_texts/hagemann1998.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2018_WATER_AIR",
+   "registry_id": "spray.benchmark_radhakrishnan2018_water_air",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_RADHAKRISHNAN2018",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_TABLES_7_8",
+   "registry_id": "spray.benchmark_radhakrishnan2021_tables_7_8",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_BENCHMARK_RADHAKRISHNAN2021_WATER_AIR",
+   "registry_id": "spray.benchmark_radhakrishnan2021_water_air",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_DETERMINISTIC_PARCEL_MARCH",
+   "registry_id": "spray.deterministic_parcel_march",
+   "subsystem": "spray",
+   "promotion_status": "report_only",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "local_source": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_OPENFOAM13_EXTERNAL_GAP_VOF",
+   "registry_id": "spray.openfoam13_external_gap_vof",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_RADHAKRISHNAN2018",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_PRESCRIBED_ONE_WAY_CARRIER",
+   "registry_id": "spray.prescribed_one_way_carrier",
+   "subsystem": "spray",
+   "promotion_status": "report_only",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "local_source": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_PRIMARY_GEOMETRY_DISPATCH",
+   "registry_id": "spray.primary_geometry_dispatch",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_RAYLEIGH_TAYLOR_OPENFOAM",
+   "registry_id": "spray.rayleigh_taylor_openfoam",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "",
+   "local_source": "",
+   "source_route_state": "NO_LOCAL_SOURCE_ROUTE",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_SCHILLER_NAUMANN_DRAG",
+   "registry_id": "spray.schiller_naumann_drag",
+   "subsystem": "spray",
+   "promotion_status": "report_only",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1007_S10494_024_00610_X",
+   "local_source": "propulsion_texts/pintle_injector/Tesi_dottorato_Cavalieri.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_SEEDED_DISCRETE_RANDOM_WALK",
+   "registry_id": "spray.seeded_discrete_random_walk",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_SPALDING_EVAPORATION_EQ16",
+   "registry_id": "spray.spalding_evaporation_eq16",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_TYPED_CYCLE_HANDOFF",
+   "registry_id": "spray.typed_cycle_handoff",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "RDOC_PROPULSION_TEXTS_PINTLE_INJECTOR_PINTLE_LITERATURE_CATALOG_MD",
+   "local_source": "propulsion_texts/pintle_injector/PINTLE_LITERATURE_CATALOG.md",
+   "source_route_state": "REPOSITORY_BASIS_REVIEW",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_VOF_TO_LAGRANGIAN_HANDOFF",
+   "registry_id": "spray.vof_to_lagrangian_handoff",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2018",
+   "registry_id": "spray.wave_kh_radhakrishnan_2018",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_RADHAKRISHNAN2018",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2018 (1).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_WAVE_KH_RADHAKRISHNAN_2021",
+   "registry_id": "spray.wave_kh_radhakrishnan_2021",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_SPRAY_WEIGHTED_SMD_ROSIN_RAMMLER",
+   "registry_id": "spray.weighted_smd_rosin_rammler",
+   "subsystem": "spray",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "NO_STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "local_source": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_STRUCTURE_SP125_LINER_STRESS",
+   "registry_id": "structure.sp125_liner_stress",
+   "subsystem": "structure",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_STRUCTURE_STRAIN_LIFE",
+   "registry_id": "structure.strain_life",
+   "subsystem": "structure",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_BARTZ",
+   "registry_id": "thermal.bartz",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_8_12572",
+   "local_source": "propulsion_texts/technical-notes-1957.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "DOC_DOI_10_2514_8_12572: SUPPORTED (h_g and sigma equal Bartz Eqs. [7] and [5] (SI with g_c = 1; properties at chamber stagnation conditions). Pr estimate equals Eq. [8]. Viscosity estimator uses 1.1929e-7 where the exact SI conversion of Eq. [9] (46.6e-10 lb/(in s) x 17.85797 x 1.8^0.6) is 1.184081e-7, i.e. 0.745% high (0.149% in h_g); code docstrings cite SP-125 'Eq. 4-23' and 'Eq. 4-18' but the SP-125 equations are 4-16 and 4-15 (PDF p.110). Recovery temperature uses r = Pr^(1/3) (not in Bartz; SP-125 p.109 defines T_aw as (T_c)ns x recovery factor 0.90-0.98). Bartz's applicability statements (D*/r_c <= ~3; angles within 50% of 30/15 deg; chamber fluxes 40-50% of measured) are not enforced.); DOC_NTRS_19710019929: PARTIALLY_SUPPORTED (SP125 h_g, sigma atomega0.6 and Pr agree. Viscosity SI coefficient and equation-number docstrings differ; clipping and generalizedomega branches outside equivalence scope. Source uncertainty remains.)",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "EQUIVALENT",
+    "fidelities": [
+     "EQUIVALENT"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "EQUIVALENT",
+      "implementation": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_heat_transfer_coefficient"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_sigma"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "prandtl_number_estimate"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "combustion_gas_viscosity"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_hg"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_sigma"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "recovery_temperature"
+       }
+      ],
+      "source_pages": [
+       1,
+       2,
+       3
+      ],
+      "equation_ids": [
+       "EQ_DOI_10_2514_8_12572_CED2301E",
+       "EQ_DOI_10_2514_8_12572_14DF9A7B",
+       "EQ_DOI_10_2514_8_12572_022F8F4C",
+       "EQ_DOI_10_2514_8_12572_280CBC6A"
+      ],
+      "comparison": [
+       {
+        "source": "Bartz Eq. [7] (PDF p.2); SP-125 Eq. 4-13 (PDF p.109)",
+        "implementation": "0.026/Dt^0.2*(mu^0.2 cp/Pr^0.6)*(Pc/c*)^0.8*(Dt/r_c)^0.1*(At/A)^0.9*sigma",
+        "verdict": "EQUIVALENT (SI, g_c = 1)"
+       },
+       {
+        "source": "Bartz Eq. [5] (PDF p.1); SP-125 Eq. 4-14 (PDF p.110, exponents 0.68/0.12 for omega = 0.6)",
+        "implementation": "bartz_sigma with exponents 0.8 - omega/5 and omega/5, omega default 0.6",
+        "verdict": "EXACT"
+       },
+       {
+        "source": "Bartz Eq. [8]; SP-125 Eq. 4-15 (PDF p.110)",
+        "implementation": "prandtl_number_estimate = 4g/(9g-5); docstring cites SP-125 'Eq. 4-18'",
+        "verdict": "EXACT_FORMULA; BAD_LOCATOR (4-18 is the deposit conductance equation)"
+       },
+       {
+        "source": "Bartz Eq. [9]; SP-125 Eq. 4-16 (PDF p.110): 46.6e-10 m^0.5 T_R^0.6 lb/(in s)",
+        "implementation": "1.1929e-7 M^0.5 T_K^0.6 Pa s; docstring claims an exact conversion and cites SP-125 'Eq. 4-23'",
+        "verdict": "CONVERSION_ERROR (+0.746% in mu, +0.149% in h_g); BAD_LOCATOR (4-23 is the coolant Nusselt equation)"
+       },
+       {
+        "source": "SP-125 p.109: T_aw = (T_c)ns x turbulent recovery factor (0.90-0.98)",
+        "implementation": "T_aw = Tc(1 + r(g-1)/2 M^2)/(1 + (g-1)/2 M^2), r = Pr^(1/3)",
+        "verdict": "REPOSITORY_EXTENSION (standard compressible recovery form; not stated by Bartz)"
+       },
+       {
+        "source": "Bartz PDF p.2-3 applicability: D*/r_c <= ~3, angles within 50% of 30/15 deg; chamber fluxes 40-50% of measured",
+        "implementation": "no applicability check; MDO cooling applies Bartz at every station (raosim/mdo/cooling.py:339-357) with mu_gas, cp_gas, Pr_gas from mission inputs",
+        "verdict": "VALIDITY_NOT_ENFORCED"
+       }
+      ],
+      "constants": [
+       {
+        "name": "C",
+        "value": 0.026,
+        "basis": "Bartz PDF p.2 single-nozzle calibration"
+       },
+       {
+        "name": "omega",
+        "value": 0.6,
+        "basis": "Bartz Eq. [9] (air data)"
+       },
+       {
+        "name": "mu coefficient",
+        "value": "1.1929e-7 (code) vs 1.18407e-7 (exact conversion)",
+        "where": "raosim/physics.py:125"
+       }
+      ],
+      "citation_vs_support": "Registry cites Bartz 1957 (local technical-notes-1957.pdf), which contains Eqs. [5], [7], [8], [9] (PDF pp.1-2). Code docstring equation numbers for SP-125 are wrong (see comparison).",
+      "software_verification": "Not re-run by this review.",
+      "physical_validation": "NOT_ESTABLISHED: Bartz calibrates C against one boundary-layer calculation and says the meager experimental data neither support nor deny it.",
+      "execution_reach": "Not measured.",
+      "sensitivity": "mu coefficient error changes h_g by 0.149%; validity-domain issues may matter more (chamber under-prediction).",
+      "physics_change_required": false,
+      "physics_finding": "Formula transcription is correct. Recommended (not applied; code edits forbidden this session): correct the viscosity coefficient to 1.18407e-7 or drop the 'exact' claim, fix the two SP-125 equation numbers, and report Bartz's D*/r_c and chamber-flux applicability limits.",
+      "remaining_uncertainties": [
+       "chamber-section heat flux (Bartz: 40-50% of measured for RFNA-NH3)",
+       "D*/r_c and wall-angle range of the design versus Bartz's stated range",
+       "property evaluation (stagnation vs mean film) for propellants unlike RFNA-N2H4",
+       "recovery-factor definition differs between SP-125 and the code"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_DOI_10_2514_8_12572_14DF9A7B",
+        "relation": "IMPLEMENTS",
+        "reason": "h_g equals Bartz Eq. [7] (SI, g_c = 1, stagnation properties)."
+       },
+       {
+        "equation_id": "EQ_DOI_10_2514_8_12572_CED2301E",
+        "relation": "IMPLEMENTS",
+        "reason": "sigma equals Bartz Eq. [5] with omega = 0.6."
+       },
+       {
+        "equation_id": "EQ_DOI_10_2514_8_12572_022F8F4C",
+        "relation": "IMPLEMENTS",
+        "reason": "Pr = 4*gamma/(9*gamma - 5) equals Bartz Eq. [8]."
+       },
+       {
+        "equation_id": "EQ_DOI_10_2514_8_12572_280CBC6A",
+        "relation": "CITES_ONLY",
+        "reason": "Viscosity coefficient 1.1929e-7 differs from the exact SI conversion of Eq. [9] (1.184081e-7, +0.745 % in mu, +0.149 % in h_g): cited, not implemented exactly."
+       }
+      ],
+      "implementation_findings": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "combustion_gas_viscosity",
+        "finding": "CONVERSION_ERROR",
+        "detail": "1.1929e-7 vs exact 46.6e-10 x 17.857967 x 1.8^0.6 = 1.184081e-7 (+0.745 % in mu, +0.149 % in h_g); docstring claims an exact conversion; MDO path uses mission.mu_gas instead"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "recovery_temperature",
+        "finding": "REPOSITORY_EXTENSION",
+        "detail": "r = Pr^(1/3) is not stated by Bartz 1957; SP-125 uses a stagnation-referenced factor 0.90-0.98 (PDF p.109)"
+       }
+      ],
+      "fidelity_scope": "EQUIVALENT applies to h_g (Eq. [7]), sigma (Eq. [5]) and Pr (Eq. [8]); the two symbols in implementation_findings are not covered by that class.",
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_heat_transfer_coefficient",
+        "state": "VERIFIED",
+        "line": 186,
+        "end_line": 231,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "3d0fb91a54e8b727ddfc4ecc7eb7d27cace53cc8bd277e25f826d231bac67877"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_sigma",
+        "state": "VERIFIED",
+        "line": 161,
+        "end_line": 183,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "70ffdbebf276d71c0d209aba137ecb4591d41405d8b1e5ab4b21475eebc73ec8"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "prandtl_number_estimate",
+        "state": "VERIFIED",
+        "line": 99,
+        "end_line": 107,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "f311380221a57e7282ae3740c590ea1e429de9ca9457b48acb9e2d00308bc40a"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "combustion_gas_viscosity",
+        "state": "VERIFIED",
+        "line": 110,
+        "end_line": 127,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "7da0e3385c866b93e82ad0f5e5797bf9b0d998a4b1766026687b2fb14b408422"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_hg",
+        "state": "VERIFIED",
+        "line": 44,
+        "end_line": 55,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "a7546a715fd527b59675ec4831f16b0f0f8f5cb508bae984778d3db4b0c4cb3e"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_sigma",
+        "state": "VERIFIED",
+        "line": 36,
+        "end_line": 41,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "60ac2c66424b43d137d6cd749e771e2f9c5464561edd3f1365418ed69794d909"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "recovery_temperature",
+        "state": "VERIFIED",
+        "line": 58,
+        "end_line": 63,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "1c82a244887d9565e4b7ae23e3272510654c889ad3fbae3b2684e721709dc753"
+       }
+      ],
+      "reviewed_source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+      "reviewed_document_id": "DOC_DOI_10_2514_8_12572",
+      "reviewer": {
+       "role": "F",
+       "model": "claude-opus-5-5 (Opus F, main session)"
+      },
+      "recorded_at": "2026-10-17T03:29:08.295388+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "b20129610d007ed998e424c77f0353381f640a9458b17cfea37c6d86bbc8f17f",
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     },
+     {
+      "fidelity": "EQUIVALENT",
+      "fidelity_scope": "EQUIVALENT applies only to Eq4-13 h_g, Eq4-14 sigma with omega=0.6, and Eq4-15 Pr, for physical positive inputs within the code clipping bounds. Eq4-16 viscosity is CITES_ONLY: coefficient conversion differs. Recovery temperature is not covered by this source-equation support.",
+      "implementation": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_heat_transfer_coefficient"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_sigma"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "prandtl_number_estimate"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "combustion_gas_viscosity"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_hg"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_sigma"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "recovery_temperature"
+       }
+      ],
+      "source_pages": [
+       109,
+       110
+      ],
+      "equation_ids": [
+       "EQ_NTRS_19710019929_4E64145B",
+       "EQ_NTRS_19710019929_AEB01E6D",
+       "EQ_NTRS_19710019929_145484E8",
+       "EQ_NTRS_19710019929_D069B835"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_NTRS_19710019929_4E64145B",
+        "relation": "IMPLEMENTS",
+        "reason": "Bartz h_g form in coherent SI (g_c=1), with supplied stagnation properties."
+       },
+       {
+        "equation_id": "EQ_NTRS_19710019929_AEB01E6D",
+        "relation": "IMPLEMENTS",
+        "reason": "At omega=0.6, exponents0.8-omega/5 and omega/5 equal0.68 and0.12."
+       },
+       {
+        "equation_id": "EQ_NTRS_19710019929_145484E8",
+        "relation": "IMPLEMENTS",
+        "reason": "Same Pr=4gamma/(9gamma-5)."
+       },
+       {
+        "equation_id": "EQ_NTRS_19710019929_D069B835",
+        "relation": "CITES_ONLY",
+        "reason": "Code coefficient1.1929e-7 differs from unit conversion 1.1840810853327972e-07"
+       }
+      ],
+      "comparison": [
+       {
+        "source": "SP-125 Eq4-13, PDF109 printed100",
+        "implementation": "physics.bartz_heat_transfer_coefficient and jax.thermal.bartz_hg",
+        "verdict": "EQUIVALENT for positive physical inputs outside protective clipping/floor branches; coherence of supplied gas properties remains required."
+       },
+       {
+        "source": "SP-125 Eq4-14, PDF110 printed101",
+        "implementation": "both bartz_sigma functions, omega=0.6",
+        "verdict": "EQUIVALENT; other omega values are generalized Bartz variants, not the fixed exponents printed here."
+       },
+       {
+        "source": "SP-125 Eq4-15, PDF110",
+        "implementation": "prandtl_number_estimate",
+        "verdict": "EXACT_FORMULA; docstring incorrectly cites4-18."
+       },
+       {
+        "source": "SP-125 Eq4-16, PDF110",
+        "implementation": "combustion_gas_viscosity",
+        "verdict": "CONVERSION_ERROR; exact coefficient 1.1840810853327972e-07 Pa s, code1.1929e-7 (0.7447897594550446 percent high). Docstring incorrectly cites4-23."
+       }
+      ],
+      "constants": [
+       {
+        "name": "Bartz coefficient",
+        "value": 0.026,
+        "source": "Eq4-13 p109"
+       },
+       {
+        "name": "sigma exponents",
+        "value": [
+         0.68,
+         0.12
+        ],
+        "source": "Eq4-14 p110"
+       },
+       {
+        "name": "SI viscosity coefficient",
+        "value": 1.1840810853327972e-07,
+        "basis": "Reviewer unit conversion of printed46.6e-10 lb/(in s), T_R=1.8 T_K; not a new source-stated SI constant."
+       }
+      ],
+      "citation_vs_support": "Secondary SP-125 review. Three equivalent formulas support implementation. Viscosity and recovery definitions remain separate discrepancies; primary Bartz1957 review is retained.",
+      "software_verification": "Engineering suites not run; direct source/code comparison only.",
+      "physical_validation": "NOT_ESTABLISHED",
+      "execution_reach": "Not dynamically traced.",
+      "sensitivity": "Only algebraic viscosity coefficient ratio calculated; no engine sensitivity run.",
+      "physics_change_required": false,
+      "physics_finding": "G15-G18 remain open engineering decisions; no raosim/lrekit/tests changes.",
+      "remaining_uncertainties": [
+       "SP-125 itself calls h_g approximate and lists radiating species, recombination and instability as possible causes of underprediction, and incomplete combustion/deposits as overprediction mechanisms.",
+       "No new numerical applicability gate; Bartz primary-source limits remain in retained primary review.",
+       "No physical validation or gas-property qualification."
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_heat_transfer_coefficient",
+        "state": "VERIFIED",
+        "line": 186,
+        "end_line": 231,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "3d0fb91a54e8b727ddfc4ecc7eb7d27cace53cc8bd277e25f826d231bac67877"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "bartz_sigma",
+        "state": "VERIFIED",
+        "line": 161,
+        "end_line": 183,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "70ffdbebf276d71c0d209aba137ecb4591d41405d8b1e5ab4b21475eebc73ec8"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "prandtl_number_estimate",
+        "state": "VERIFIED",
+        "line": 99,
+        "end_line": 107,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "f311380221a57e7282ae3740c590ea1e429de9ca9457b48acb9e2d00308bc40a"
+       },
+       {
+        "file": "raosim/physics.py",
+        "symbol": "combustion_gas_viscosity",
+        "state": "VERIFIED",
+        "line": 110,
+        "end_line": 127,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "7da0e3385c866b93e82ad0f5e5797bf9b0d998a4b1766026687b2fb14b408422"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_hg",
+        "state": "VERIFIED",
+        "line": 44,
+        "end_line": 55,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "a7546a715fd527b59675ec4831f16b0f0f8f5cb508bae984778d3db4b0c4cb3e"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "bartz_sigma",
+        "state": "VERIFIED",
+        "line": 36,
+        "end_line": 41,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "60ac2c66424b43d137d6cd749e771e2f9c5464561edd3f1365418ed69794d909"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "recovery_temperature",
+        "state": "VERIFIED",
+        "line": 58,
+        "end_line": 63,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "1c82a244887d9565e4b7ae23e3272510654c889ad3fbae3b2684e721709dc753"
+       }
+      ],
+      "reviewed_source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+      "reviewed_document_id": "DOC_NTRS_19710019929",
+      "reviewer": {
+       "role": "F",
+       "model": "GPT-6 (Codex)"
+      },
+      "recorded_at": "2026-10-17T11:02:11.487868+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "3edbd5b1e3864be3c22573818b3eff81f235f80ea0293905379954c42cc978d0",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "SP125 h_g, sigma atomega0.6 and Pr agree. Viscosity SI coefficient and equation-number docstrings differ; clipping and generalizedomega branches outside equivalence scope. Source uncertainty remains.",
+      "resolved_implementation_equation_ids": [
+       "EQ_NTRS_19710019929_145484E8",
+       "EQ_NTRS_19710019929_4E64145B",
+       "EQ_NTRS_19710019929_AEB01E6D"
+      ],
+      "resolved_comparison_equation_ids": [
+       "EQ_NTRS_19710019929_145484E8",
+       "EQ_NTRS_19710019929_4E64145B",
+       "EQ_NTRS_19710019929_AEB01E6D",
+       "EQ_NTRS_19710019929_D069B835"
+      ],
+      "resolved_comparison_claim_ids": [],
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     1,
+     2,
+     3
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "claude-opus-5-5 (Opus F, main session)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/physics.py",
+      "symbol": "bartz_heat_transfer_coefficient",
+      "state": "VERIFIED",
+      "line": 186,
+      "end_line": 231,
+      "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+      "definition_sha256": "3d0fb91a54e8b727ddfc4ecc7eb7d27cace53cc8bd277e25f826d231bac67877"
+     },
+     {
+      "file": "raosim/physics.py",
+      "symbol": "bartz_sigma",
+      "state": "VERIFIED",
+      "line": 161,
+      "end_line": 183,
+      "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+      "definition_sha256": "70ffdbebf276d71c0d209aba137ecb4591d41405d8b1e5ab4b21475eebc73ec8"
+     },
+     {
+      "file": "raosim/physics.py",
+      "symbol": "prandtl_number_estimate",
+      "state": "VERIFIED",
+      "line": 99,
+      "end_line": 107,
+      "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+      "definition_sha256": "f311380221a57e7282ae3740c590ea1e429de9ca9457b48acb9e2d00308bc40a"
+     },
+     {
+      "file": "raosim/physics.py",
+      "symbol": "combustion_gas_viscosity",
+      "state": "VERIFIED",
+      "line": 110,
+      "end_line": 127,
+      "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+      "definition_sha256": "7da0e3385c866b93e82ad0f5e5797bf9b0d998a4b1766026687b2fb14b408422"
+     },
+     {
+      "file": "raosim/jax/thermal.py",
+      "symbol": "bartz_hg",
+      "state": "VERIFIED",
+      "line": 44,
+      "end_line": 55,
+      "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+      "definition_sha256": "a7546a715fd527b59675ec4831f16b0f0f8f5cb508bae984778d3db4b0c4cb3e"
+     },
+     {
+      "file": "raosim/jax/thermal.py",
+      "symbol": "bartz_sigma",
+      "state": "VERIFIED",
+      "line": 36,
+      "end_line": 41,
+      "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+      "definition_sha256": "60ac2c66424b43d137d6cd749e771e2f9c5464561edd3f1365418ed69794d909"
+     },
+     {
+      "file": "raosim/jax/thermal.py",
+      "symbol": "recovery_temperature",
+      "state": "VERIFIED",
+      "line": 58,
+      "end_line": 63,
+      "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+      "definition_sha256": "1c82a244887d9565e4b7ae23e3272510654c889ad3fbae3b2684e721709dc753"
+     }
+    ],
+    "physics_change_required": false,
+    "remaining_uncertainties": [
+     "chamber-section heat flux (Bartz: 40-50% of measured for RFNA-NH3)",
+     "D*/r_c and wall-angle range of the design versus Bartz's stated range",
+     "property evaluation (stagnation vs mean film) for propellants unlike RFNA-N2H4",
+     "recovery-factor definition differs between SP-125 and the code"
+    ]
+   },
+   "supporting_equation_links": [
+    "EQ_DOI_10_2514_8_12572_022F8F4C",
+    "EQ_DOI_10_2514_8_12572_14DF9A7B",
+    "EQ_DOI_10_2514_8_12572_CED2301E",
+    "EQ_NTRS_19710019929_145484E8",
+    "EQ_NTRS_19710019929_4E64145B",
+    "EQ_NTRS_19710019929_AEB01E6D"
+   ],
+   "supporting_equation_links_confirmed": [
+    "EQ_DOI_10_2514_8_12572_022F8F4C",
+    "EQ_DOI_10_2514_8_12572_14DF9A7B",
+    "EQ_DOI_10_2514_8_12572_CED2301E",
+    "EQ_NTRS_19710019929_145484E8",
+    "EQ_NTRS_19710019929_4E64145B",
+    "EQ_NTRS_19710019929_AEB01E6D"
+   ],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_DOI_10_2514_8_12572_022F8F4C",
+    "EQ_DOI_10_2514_8_12572_14DF9A7B",
+    "EQ_DOI_10_2514_8_12572_280CBC6A",
+    "EQ_DOI_10_2514_8_12572_CED2301E",
+    "EQ_NTRS_19710019929_145484E8",
+    "EQ_NTRS_19710019929_4E64145B",
+    "EQ_NTRS_19710019929_AEB01E6D",
+    "EQ_NTRS_19710019929_D069B835"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/R-BARTZ-p001-005.extraction.jsonl",
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/X-BARTZ-p001-005.extraction.jsonl",
+    "knowledge/workflows/results/continuation-2026-10-17/reviews/M-SP125-bartz-p109-110.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_THERMAL_CHF",
+   "registry_id": "thermal.chf",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "RDOC_DOCS_THERMOFLUID_LITERATURE_PROVENANCE_MD",
+   "local_source": "docs/thermofluid_literature_provenance.md",
+   "source_route_state": "REPOSITORY_BASIS_REVIEW",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_DARCY_PRESSURE_LOSS",
+   "registry_id": "thermal.darcy_pressure_loss",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_FIN_EFFICIENCY",
+   "registry_id": "thermal.fin_efficiency",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_6_2019_3938",
+   "local_source": "propulsion_texts/atefi2019.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_RADIATION",
+   "registry_id": "thermal.radiation",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_DOI_10_2514_1_B36589",
+   "local_source": "propulsion_texts/leccese2018.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_RECTANGULAR_LAMINAR_NUSSELT",
+   "registry_id": "thermal.rectangular_laminar_nusselt",
+   "subsystem": "thermal",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THERMAL_SIEDER_TATE",
+   "registry_id": "thermal.sieder_tate",
+   "subsystem": "thermal",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "CODE_INSPECTED",
+    "optimizer_reach_state": "STATIC_PATH_FOUND",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "REVIEWED_CURRENT",
+   "declared_support": "PARTIALLY_SUPPORTED",
+   "current_support": "PARTIALLY_SUPPORTED",
+   "current_support_note": "SP-125 (the registry's local source) prints Nu = C1 Re^0.8 Pr^0.4 (mu/mu_w)^0.14 with a coolant-specific C1 (RP-1: 0.0214, PDF p.119). The code and registry use 0.027 Re^0.8 Pr^(1/3) (mu_b/mu_w)^0.14 (the classical Sieder & Tate 1936 form, which is not held in the corpus). Same structure and viscosity correction; different coefficient and Prandtl exponent. Relative to the SP-125 RP-1 form the code's h_c is higher by about 26% at Pr = 1, 17% at Pr = 3 and 7% at Pr = 11.7 (RP-1 at 600 R).",
+   "source_support_fingerprint_current": true,
+   "structured_review": {
+    "state": "CURRENT",
+    "fidelity": "DIFFERENT_FORMULA",
+    "fidelities": [
+     "DIFFERENT_FORMULA"
+    ],
+    "source_reviews": [
+     {
+      "fidelity": "DIFFERENT_FORMULA",
+      "implementation": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "sieder_tate_coefficient"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "sieder_tate_hc"
+       }
+      ],
+      "source_pages": [
+       115,
+       119
+      ],
+      "equation_ids": [
+       "EQ_NTRS_19710019929_78B48BD5",
+       "EQ_NTRS_19710019929_848A0FB1"
+      ],
+      "comparison": [
+       {
+        "source": "SP-125 Eq. 4-23 (PDF p.115 / printed 106): Nu = C1 Re^0.8 Pr^0.4 (mu/mu_w)^0.14, C1 coolant-specific",
+        "implementation": "Nu = 0.027 Re^0.8 Pr^(1/3) (mu_b/mu_w)^0.14",
+        "verdict": "DIFFERENT_FORMULA (coefficient and Pr exponent)"
+       },
+       {
+        "source": "SP-125 PDF p.119: RP-1 experimental C1 = 0.0214",
+        "implementation": "0.027 for every coolant",
+        "verdict": "NOT_COOLANT_SPECIFIC; code h_c exceeds the SP-125 RP-1 form by +7% (Pr 11.7) to +26% (Pr 1)"
+       },
+       {
+        "source": "SP-125 Eq. 4-25 (PDF p.115): supercritical vapor-film h_c",
+        "implementation": "not implemented; supercritical/HTD handled by the separate Nasuti Eq. 9 screen (unavailable without real-fluid properties)",
+        "verdict": "NOT_IMPLEMENTED"
+       },
+       {
+        "source": "SP-125 applicability (PDF p.115): nonboiling subcritical-temperature regions",
+        "implementation": "applied at all stations without a regime check",
+        "verdict": "VALIDITY_NOT_ENFORCED"
+       }
+      ],
+      "constants": [
+       {
+        "name": "C",
+        "value": 0.027,
+        "where": "raosim/physics.py:489; raosim/jax/thermal.py:74",
+        "basis": "classical Sieder & Tate 1936 (source not held); SP-125 gives C1 = 0.0214 for RP-1"
+       },
+       {
+        "name": "Pr exponent",
+        "value": "1/3 (code) vs 0.4 (SP-125 Eq. 4-23)"
+       }
+      ],
+      "citation_vs_support": "BAD_ATTRIBUTION for the coefficients: the registry's local source (NASA SP-125) does not state 0.027 or Pr^(1/3); it states Pr^0.4 with a coolant-specific C1. The code docstring also cites Sieder & Tate (Ind. Eng. Chem. 28, 1936), which is not in the corpus.",
+      "software_verification": "Not re-run by this review.",
+      "physical_validation": "NOT_ESTABLISHED.",
+      "execution_reach": "Not measured; the MDO cooling march uses sieder_tate_hc for the coolant side.",
+      "sensitivity": "Coolant-side h_c +7% to +26% versus SP-125's RP-1 calibration lowers predicted wall temperatures (non-conservative direction).",
+      "physics_change_required": true,
+      "physics_finding": "Owner decision required (code edits are outside this session's scope): adopt SP-125 Eq. 4-23 with coolant-specific C1 (RP-1 = 0.0214, page-verified), or acquire Sieder & Tate (1936) to support 0.027 and Pr^(1/3); coolant-specific constants are missing for methane and hydrogen.",
+      "remaining_uncertainties": [
+       "C1 for methane/hydrogen/propane not held",
+       "entrance-length and curvature effects not represented",
+       "supercritical and boiling regimes need separate models (Eq. 4-24, 4-25; Nasuti Eq. 9)"
+      ],
+      "equation_links": [
+       {
+        "equation_id": "EQ_NTRS_19710019929_78B48BD5",
+        "relation": "CITES_ONLY",
+        "reason": "DIFFERENT_FORMULA: SP-125 Eq. 4-23 has Pr^0.4 and a coolant-specific C1; the code uses 0.027 Pr^(1/3)."
+       },
+       {
+        "equation_id": "EQ_NTRS_19710019929_848A0FB1",
+        "relation": "CITES_ONLY",
+        "reason": "SP-125's RP-1 specialisation (C1 = 0.0214, PDF p.119) against which the code's h_c is +26/+17/+7 % at Pr 1/3/11.7."
+       }
+      ],
+      "implementation_fingerprints": [
+       {
+        "file": "raosim/physics.py",
+        "symbol": "sieder_tate_coefficient",
+        "state": "VERIFIED",
+        "line": 466,
+        "end_line": 502,
+        "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+        "definition_sha256": "cc9acafadf0c4f089ca813f2e511d337644372f7e7e9c6c24f52eff6b2761231"
+       },
+       {
+        "file": "raosim/jax/thermal.py",
+        "symbol": "sieder_tate_hc",
+        "state": "VERIFIED",
+        "line": 69,
+        "end_line": 76,
+        "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+        "definition_sha256": "3f4c8dd438b3edcde1e0a2d2a65f614005da543d0ee745ad2bf6cba044c845bb"
+       }
+      ],
+      "reviewed_source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+      "reviewed_document_id": "DOC_NTRS_19710019929",
+      "reviewer": {
+       "role": "F",
+       "model": "claude-opus-5-5 (Opus F, main session)"
+      },
+      "recorded_at": "2026-10-17T03:29:30.961066+00:00",
+      "citation_is_not_support": true,
+      "review_hash": "98c80b79360590a5b8f574b8bb8c905bf4dbdbb59f3a0f12a21f81778681083a",
+      "state": "CURRENT",
+      "reason": "Source and implementation fingerprints match the recorded comparison."
+     }
+    ],
+    "source_pages": [
+     115,
+     119
+    ],
+    "reviewer": {
+     "role": "F",
+     "model": "claude-opus-5-5 (Opus F, main session)"
+    },
+    "implementation_fingerprints": [
+     {
+      "file": "raosim/physics.py",
+      "symbol": "sieder_tate_coefficient",
+      "state": "VERIFIED",
+      "line": 466,
+      "end_line": 502,
+      "file_sha256": "92a8a6f64618e38bc86d5d592ca36e4046f2f7ea0df4219bc32b42d6e2662b3b",
+      "definition_sha256": "cc9acafadf0c4f089ca813f2e511d337644372f7e7e9c6c24f52eff6b2761231"
+     },
+     {
+      "file": "raosim/jax/thermal.py",
+      "symbol": "sieder_tate_hc",
+      "state": "VERIFIED",
+      "line": 69,
+      "end_line": 76,
+      "file_sha256": "a90701a48ce10ecd1e9d99cd192d28bbd24b767a21535a9dadf94748bdbe7402",
+      "definition_sha256": "3f4c8dd438b3edcde1e0a2d2a65f614005da543d0ee745ad2bf6cba044c845bb"
+     }
+    ],
+    "physics_change_required": true,
+    "remaining_uncertainties": [
+     "C1 for methane/hydrogen/propane not held",
+     "entrance-length and curvature effects not represented",
+     "supercritical and boiling regimes need separate models (Eq. 4-24, 4-25; Nasuti Eq. 9)"
+    ]
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [
+    "EQ_NTRS_19710019929_78B48BD5",
+    "EQ_NTRS_19710019929_848A0FB1"
+   ],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/M-SP125-p115.extraction.jsonl",
+    "knowledge/workflows/results/agentic-2026-10-16/reviews/R-SP125-p115.extraction.jsonl"
+   ],
+   "audit_status": "STRUCTURED_REVIEW_CURRENT"
+  },
+  {
+   "id": "MODEL_THERMOCHEMISTRY_ROCKETCEA_SNAPSHOT",
+   "registry_id": "thermochemistry.rocketcea_snapshot",
+   "subsystem": "thermochemistry",
+   "promotion_status": "optimizer_coupled",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19710019929",
+   "local_source": "propulsion_texts/19710019929.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "REPORTED_NOT_VALIDATED",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_THROAT_HALL_DISCHARGE_COEFFICIENT",
+   "registry_id": "throat.hall_discharge_coefficient",
+   "subsystem": "throat",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_NTRS_19770009165",
+   "local_source": "propulsion_texts/19770009165.pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  },
+  {
+   "id": "MODEL_TRAJECTORY_VERTICAL_POINT_MASS",
+   "registry_id": "trajectory.vertical_point_mass",
+   "subsystem": "trajectory",
+   "promotion_status": "screening",
+   "promotion_status_basis": "legacy keyword heuristic from registry text; not execution reach",
+   "execution_reach": {
+    "state": "UNKNOWN",
+    "optimizer_reach_state": "UNKNOWN",
+    "runtime_trace_state": "NOT_RUN",
+    "optimizer_leverage_state": "NOT_MEASURED"
+   },
+   "source_document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "local_source": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "source_route_state": "PENDING",
+   "declared_support": "NOT_CHECKED",
+   "current_support": "NOT_CHECKED",
+   "current_support_note": "",
+   "source_support_fingerprint_current": false,
+   "structured_review": {
+    "state": "NOT_CHECKED"
+   },
+   "supporting_equation_links": [],
+   "supporting_equation_links_confirmed": [],
+   "supporting_equation_links_confirmed_basis": "Historical stored CONFIRMED verdicts on current source equations; may lack a current assertion-content binding.",
+   "supporting_equation_links_content_bound_confirmed": [],
+   "comparison_equation_ids": [],
+   "software_verification_state": "REPORTED_NOT_REEXECUTED",
+   "physical_validation_state": "UNKNOWN",
+   "hardware_qualified": false,
+   "evidence_journals": [],
+   "audit_status": "NOT_CHECKED"
+  }
+ ]
+}

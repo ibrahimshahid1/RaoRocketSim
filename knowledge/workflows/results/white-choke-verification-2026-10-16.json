@@ -1,0 +1,48 @@
+[
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_B0C8582C",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1101 displays9.46a as m_dot_max = rho* A* V* = rho0[2/(k+1)]^[1/(k-1)] A*[2kRT0/(k+1)]^(1/2) = sqrt(k)[2/(k+1)]^[(k+1)/(2(k-1))] A*rho0*sqrt(RT0). The stored consolidated expression retains the resulting prefactor, division by2(k-1) in its exponent, and the sonic density/area/velocity product. Its equivalent p0*A*/sqrt(RT0) form follows from the perfect-gas identity p0=rho0*R*T0; this equivalence is also printed explicitly in9.46b. For k=1.4 the page gives0.6847, and an independent evaluation yields0.6847314563772704, confirming four-decimal rounding. The source explicitly identifies this as maximum mass flow at choking (sonic exit). Both rho0*A*sqrt(RT0) and p0*A*/sqrt(RT0) have mass-flow dimensions. The general p0 form in the stored record is algebraically equivalent to9.46a rather than a separate additional displayed general equality.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1101,
+      "equation_number": "9.46",
+      "method": "Independent visual comparison against original-PDF page render, checking the exponent denominator, pressure powers, stagnation-state factors, local-variable statements and choking distinction. Independent arithmetic checks the rounded k=1.4 prefactor. Docling output is not treated as authority.",
+      "render_path": "knowledge/.work/white/p1101.png",
+      "render_sha256": "7a796f81588296e594f89e13e820ae3d95c36393cd68e3c031a2785c829db4dc",
+      "extraction_file": "knowledge/workflows/results/white-choke-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "6c4c1b619db657058064206ca99e648bfca5dcb4c73e96cf6052dee75e27656a",
+      "reviewed_at": "2026-10-16T05:08:53.057702+00:00",
+      "units_status": "Stored SI units are reviewer dimensional interpretations; source equations do not list SI units next to every variable.",
+      "source_assumptions_scope": "Local page explicitly treats isentropic flow and known stagnation conditions; perfect-gas and fixed-k assumptions are the surrounding chapter framework, not independently rederived by this one-page check.",
+      "independent_prefactor_k_1_4": 0.6847314563772704
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, its page attribution and stated local scope. Algebraically equivalent forms and SI dimensional interpretations are explicitly distinguished from directly printed equalities. Does not certify quantity-alias links, software implementations, empirical discharge coefficients, real-gas applicability, experimental validation or hardware qualification."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DA513041",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page1101 displays (m_dot/A)*sqrt(RT0)/p0 = sqrt{[2k/(k-1)](p/p0)^(2/k)[1-(p/p0)^((k-1)/k)]}, numbered9.47. The square root covers the complete product; the pressure powers are2/k and(k-1)/k, with a minus sign inside the final bracket. The source explicitly stresses that p and A are local values at positionx and says the expression is handy when stagnation conditions are known and flow is not choked. The normalized mass flux on the left and all right-side factors are dimensionless for a mass-specific gas constant. The applicability warning in the stored record correctly prevents treating arbitrary below-critical back pressure as local nonchoked exit pressure. This source confirmation does not endorse the current QTY_AT alias for A: the displayed A is general local duct area, not a declaration that every section is a sonic throat.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1101,
+      "equation_number": "9.47",
+      "method": "Independent visual comparison against original-PDF page render, checking the exponent denominator, pressure powers, stagnation-state factors, local-variable statements and choking distinction. Independent arithmetic checks the rounded k=1.4 prefactor. Docling output is not treated as authority.",
+      "render_path": "knowledge/.work/white/p1101.png",
+      "render_sha256": "7a796f81588296e594f89e13e820ae3d95c36393cd68e3c031a2785c829db4dc",
+      "extraction_file": "knowledge/workflows/results/white-choke-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "6c4c1b619db657058064206ca99e648bfca5dcb4c73e96cf6052dee75e27656a",
+      "reviewed_at": "2026-10-16T05:08:53.057702+00:00",
+      "units_status": "Stored SI units are reviewer dimensional interpretations; source equations do not list SI units next to every variable.",
+      "source_assumptions_scope": "Local page explicitly treats isentropic flow and known stagnation conditions; perfect-gas and fixed-k assumptions are the surrounding chapter framework, not independently rederived by this one-page check.",
+      "normalization_discrepancy": "Stored variable A currently resolves to throat quantity QTY_AT although the source explicitly means local duct area. Root informed for correction; no quantity-normalization endorsement is provided."
+    },
+    "scope_note": "Source-only confirmation of this numbered equation, its page attribution and stated local scope. Algebraically equivalent forms and SI dimensional interpretations are explicitly distinguished from directly printed equalities. Does not certify quantity-alias links, software implementations, empirical discharge coefficients, real-gas applicability, experimental validation or hardware qualification."
+  }
+]

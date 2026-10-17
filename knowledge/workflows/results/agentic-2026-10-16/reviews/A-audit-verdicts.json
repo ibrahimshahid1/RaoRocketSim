@@ -1,0 +1,2467 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_57F8642E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.107 (printed 98): 'theta_n and theta_e can be derived from figure 4-14, for eps = 14 and L_f = 0.8; theta_n = 27.4 deg and theta_e = 9.8 deg'. Statement matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_8C0C7364",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.107 prints N_t = 0.382 R_t sin(theta_n) = 2.19 in, N_a = R_t + 0.382 R_t (1 - cos theta_n) = 12.99 in, E_t = L_n = 102.4 in, E_a = R_e = 46.7 in; stored form and values match (independent arithmetic 2.189 / 12.984 in).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_5262D00E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.107 prints L_n = 0.8 x [12.45(sqrt(14) - 1) + 4.75(sec 15 deg - 1)]/tan 15 deg = 0.8 x 128 = 102.4 in; stored form matches; independent arithmetic 0.8 x 128.01 = 102.41 in.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_2DC4BFBD",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.107 prints Volume = (pi/3) x 12.4 [(15.75)^2 + (12.45)^2 + 15.75 x 12.45] = 7760 cu in; the record transcribes the page faithfully. Note: the printed inputs evaluate to 7780 in^3 (0.26 % above the printed 7760), a source-arithmetic discrepancy not recorded anywhere.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_12171EEE",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.100 (printed 91): 'bell nozzle lengths beyond approximately 80 percent do not significantly contribute to performance, especially when considering weight penalties' (Fig. 4-12). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 100,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_BB048609",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.100: the 80-percent bell length is 0.8 of a 15 deg half-angle conical nozzle with the same throat area, radius below the throat and area expansion ratio. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 100,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_7391233A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.100: upstream throat arc radius 1.5 R_t; divergent entrance arc 0.382 R_t from T to N, then a parabola to E. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 100,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_18B96611",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.100: 'One convenient way to design a near-optimum-thrust bell nozzle contour is through the use of the parabolic approximation procedures as suggested by G.V.R. Rao.' Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 100,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_10263FCE",
+  "refuted": false,
+  "confidence": "medium",
+  "reason": "PDF p.100 lists the five design inputs and says theta_n and theta_e are shown in Fig. 4-14 versus eps for L_f 60-100 %. The final sentence (theta_n rises, theta_e falls with eps) is the transcriber's reading of the figure, not printed text; it agrees with the plotted curves on the render. Medium because that part is a figure reading.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 100,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19770009165_66958850",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8120 PDF p.29 (printed 15), sec. 2.1.2.1.2: optimum contours vary only slightly with gas properties; for a given area ratio and length a single canted parabola very closely approximates them. Matches.",
+  "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19770009165",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "pdf_page": 29,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19770009165_5C8147DB",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8120 PDF p.29: 'The available optimization methods are based on assumptions that often only roughly approximate the actual conditions.' Matches.",
+  "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19770009165",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "pdf_page": 29,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19770009165_E68DC318",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8120 PDF p.29: near-optimum parabolic contours suit many applications and can be generated without a computer; Fig. 5 shows the canted parabola and initial/final wall angles. Matches.",
+  "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19770009165",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "pdf_page": 29,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_C452A65C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.7 prints Eq. (29) m_inv = (1/delta_P,inv) P_inv,out = P_m,out/(delta_P,inv eta_m); stored form matches. Caution: this record duplicates the already-confirmed legacy record EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465 (same document, page, number and form up to whitespace); see audit finding on duplicates.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_462E6827",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.7 prints Eq. (25) m_p = 0.4703 x exp(0.01072 x D_p) as the commercial-pump diameter-mass trend [25]; stored form matches and the record correctly says units are not stated on the page.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F56CC231",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.10 prints Eq. (38) eta_E = 0.093 ln(t_b) + 0.3301 and eta_E = 0.925 at t_b = 600 s; stored form matches (0.093 ln 600 + 0.3301 = 0.9250).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 10,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_064D644B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.10: '1.02-1.27 m is recommended for the LOX/RP-1 propellant. In this study, the characteristic length was set to 1.145 m from the A-1 engine data'. Matches.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 10,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_88D3482A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.10 Table 1: 500 N, 20 bar, 30 km, 600 s; text: energy efficiency assumed 92.5 % from Eq. (38) for the 600 s burn. Matches.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 10,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_328BC1DD",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.11 Figs. 8-9: Vishan EC2060L-3660 BLDC 0.875 kW/kg, 57940 rpm, 87 %, 80 g; Amicell ABLP8474170H320 Li-polymer 325 W h/kg, 0.65 kW/kg, 222 g. Matches.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 11,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "ASM_DOI_10_1007_S42405_020_00325_Z_00D2425E_A334658B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Lee 2021 PDF p.11: 'the commercial motor Vishan's EC2060L-3660 model was chosen ... it was assumed to be driven by a single motor'. Source-only assumption; matches.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "pdf_page": 11,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_83DE1395",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pavlov Rachov 2013 PDF p.4 (printed 1174) Eq. (35) delta_em = P_em,out/m_em, defined on mechanical output power. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_1947394A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (36) m_em = (P_pu/eta_pu)/delta_em = kappa_p3 alpha/(eta_pu delta_em) x p_c m_p/t_b. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_27608400",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (37) delta_inv = P_inv,out/m_inv (inverter density on output). Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_C8BF2FB1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (38) m_inv = (P_pu/eta_pu)/(eta_em delta_inv) = kappa_p3 alpha/(eta_pu eta_em delta_inv) x p_c m_p/t_b. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_C230EB1F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (39) eta_ep = eta_pu eta_em eta_inv. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_E1CE772C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (42) m_b = kappa_b max(P_e/delta_P, E_e/delta_E). Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B34714_BBFDF57C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4 Eq. (46) D_6 = alpha kappa_p3 (1/delta_pu + 1/(eta_pu delta_em) + 1/(eta_pu eta_em delta_inv)) = alpha kappa_p3 mu_ep. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_FE691168",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5: 'the specific electric-pump mass after Eq. (46) is determined as 0.463 kg/kW'. Matches; independent check 1/22 + 1/(0.68 x 3.8) + 1/(0.68 x 0.8 x 60) = 0.4631 kg/kW.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_E2043538",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5: 'the value of eta_ep is determined after Eq. (39) as about 0.462'. Matches (0.68 x 0.8 x 0.85 = 0.4624).",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_E5BE35D2",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5 Table 1: delta_em = 3.8 kW/kg. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_96A51933",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5 Table 1: delta_inv = 60 kW/kg. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_0B92D9D7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5 Table 1: delta_pu = 22 kW/kg. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B34714_FD0FC90D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5 Table 2: kappa_b = 1.2. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B34714_C8AC5307",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5: 'A safety factor of 1.2 is adopted for the battery mass, in order to allow the batteries to operate somewhat underrated ... and also to make room for a significant redundancy in the case of partial failure.' Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B34714_D317F8CD",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.5: motor power density/efficiency from datasheets, called conservative; inverter properties after Castle Creations; battery figures from [18,19] and Thunder Power / Sion Power datasheets. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B34714_E6D5F1E4",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.4: Titan II first stage reference, turbine 56 %, pump 68 %, 18 kW/kg on axis power; electric pump keeps 68 % and 22 kW/kg extrapolated from Titan data. Matches.",
+  "source_sha256": "ffd945de61245529f2965e66a76e6f06df7318a627fac278616e04683f9e6550",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B34714",
+   "source_pdf": "propulsion_texts/10.2514_1.B34714.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_3E53C7F0",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_em = 5.3 kW/kg. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_F1FD9D85",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_inv = 60 kW/kg. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_D08B6403",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_bc,P = 6.95 kW/kg (D cell). Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_EDC70092",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_bc,E = 198 Wh/kg (D cell). Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_755EA09F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: eta_em = 0.95. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_D8F52C7F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: eta_inv = 0.85. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_970CC4B8",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: kappa_bp = 1.2. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_01FB97E1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_fp = 15 kW/kg. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_AST_2018_02_033_3E1648DF",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kwak 2018 PDF p.9 Table 3: delta_op = 20 kW/kg. Matches.",
+  "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19750012398_2F93D27A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.17 Table I: A-7 (Redstone) specific horsepower 2.22 hp/lbm. Matches.",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 17,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19750012398_44B6368E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.17 Table I: J-2 first row 37.4 %, 305 lbm, 7.73 hp/lbm. Matches.",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 17,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19750012398_38FB8206",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.17 Table I: J-2 second row 44.9 %, 369 lbm, 21.60 hp/lbm. Matches.",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 17,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19750012398_310A721B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.17 Table I: SSME (EPL) second row 58.5 %, 701 lbm, 108.9 hp/lbm; footnote 3 marks SSME not operational. Matches.",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 17,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19750012398_21DFD0A9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.16: specific horsepower rose from 2.22 (Redstone) to values greater than 10 for Saturn V (F-1 and J-2) in about 10 years; SSME expected greater than 100; highest power-to-weight ratio in rotating machinery. Matches the source wording (the source's own Table I lists one J-2 row at 7.73).",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 16,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19750012398_CC72774C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-8107 PDF p.17 footnotes: best available data as of mid-1973 for operational systems; SSME not operational, presented for comparison; * emergency power level. Matches.",
+  "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "pdf_page": 17,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_4FAA9C06",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam 1991 PDF p.7 Table 2 (hot channel): 'Gas-Side Wall Temp. (F) 1050 (Depends on Material)'. Matches (= 838.7 K).",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_6BB527C4",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.6: nominal-channel performance obtained by adding 3 % fuel film cooling to limit the wall temperature to 800 F (700 K). Matches; 800 F, not 800 K.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_ABB76020",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.7 Table 1 (initial, GG cycle): gas-side wall temp 900 F. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_D06B0320",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.7 Table 2: channel aspect ratio 7. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_F9E52B8D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.7 Table 1: channel aspect ratio 8 (former criteria). Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_6_1991_1982_B0980658",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.7 Table 2: allowance for flow maldistribution '90% of Actual Flow'. Matches 0.9.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_1991_1982_703FA7C9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.4 (printed 3): for an H2/O2 copper chamber at 2250 psia a maximum wall mixture ratio of five at an average wall temperature of 900F (755 K) was compatible. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_1991_1982_E80ED5BB",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.4: coolant velocities limited to Mach 0.35 to prevent sonic choking; high aspect ratio (8) dual-width channels with surface roughness selected. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_1991_1982_693C8D65",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.5 (printed 4): streaking via 10 % heat-flux increase, maldistribution via 10 % flow reduction, maximum depth/width 7 from manufacturing, allowable wall temperature set high from yield-strength sensitivity. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 5,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_1991_1982_AF59238D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.6: 3 % fuel film for both designs, wall limited to 800 F (700 K); pressure drop 780 psi (5.4 MP) for 372 channels and 700 psi (4.8 MP) for 450. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_1991_1982_7D33350F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Mirzamoghadam PDF p.6: higher design wall temperature (1050 F); barrier MR range increased to 4.7; acceptable designs at about 50 % flow split with 372 channels at MR 4.5 or 450 at MR 4.7. Matches.",
+  "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_022_00489_W_022B305D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Hwang 2022 PDF p.4 (printed 944) Eq. (3) BF = n (w_1 + w_2)/(pi D_p) x 100 %; text: 22 orifices in each row. Stored form, assumption and two-row validity note match.",
+  "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_022_00489_W_0120AD31",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Hwang PDF p.4: BF implemented as 58 +/- 7 % by changing second-row aspect ratio; first row fixed; first:second mass-flow ratio 82.5:17.5; 22 orifices per row. Matches.",
+  "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_022_00489_W_85FA8082",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Hwang PDF p.4: in a previous test with BF = 86 % (Ryu's case [17]) pintle damage occurred because of excessive heat transfer to the tip [20]. Matches.",
+  "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_6_2019_0152_0F38B96F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Freeberg 2019 PDF p.6: 'the use of pintle tips with 0.3 < BF < 0.7. For this reason, tips were selected within this range'; circular BF 0.35/0.45/0.55; rectangular 0.6 and three at 0.55. Matches (the Escher/TRW attribution starts on p.5).",
+  "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_6_2019_0152",
+   "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_ACTAASTRO_2022_08_029_4B9DC35D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kang 2022 PDF p.6 (printed 53) text and Table 4: maximum tip temperature of A (BF 86 %) 1868 K. Value correct. Same page also says the computed temperature distributions 'were somewhat over predicted because the chemical equilibrium combustion model was applied'; that caveat is not on the record.",
+  "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_ACTAASTRO_2022_08_029_423563B3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kang 2022 PDF p.6 Table 4: B (BF 58 %) maximum temperature 1545 K. Matches.",
+  "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1016_J_ACTAASTRO_2022_08_029_22B88715",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kang PDF p.6: 1868 K (A), 1468 K (AI), 1545 K (B), 1398 K (BI); reduced by 323 K (17.3 %) changing BF 86 to 58 %, and by 147 K (9.5 %) to 400 K (21.4 %) by the insert nozzle. Matches.",
+  "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1016_J_ACTAASTRO_2022_08_029_6974E3E6",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Kang PDF p.6: type B (BF 58 %) has a higher orifice flow rate than A (BF 86 %), believed to push out flames at the tip; A and AI tips predicted to be damaged in the combustion test. Matches.",
+  "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B36301_821FB00A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son 2017 PDF p.2 (printed 859) Eq. (1): A_min = pi/sin(theta_pt) [(R_post - t_post)^2 - (R_post - t_post - L_open sin(theta_pt) cos(theta_pt))^2]. Stored form identical term by term. Independent check: raosim expanded form equals this to 1e-9 relative at 0/20/40 deg with Table 1 dimensions.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_1_B36301_D0D3A636",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.4 (printed 861) prints Eq. (2) L_open,max = (R_post - sqrt(R_post^2 - A_cg sin(theta_pt)/pi))/(sin theta_pt cos theta_pt), with R_post and no t_post; record is labelled 'as printed' and notes the inconsistency. With Table 1 values it gives 0.3657/0.3955/0.4923 mm against Table 2's 0.418/0.454/0.568 mm.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B36301_9D1A03CE",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.3 Table 2: 0 deg tip -> estimated transition opening 0.418 mm. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 3,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B36301_878597C1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.3 Table 2: 20 deg -> 0.454 mm. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 3,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B36301_2395FEBA",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.3 Table 2: 40 deg -> 0.568 mm. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 3,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B36301_A4D2E813",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.2 Table 1: pintle-opening distance L_open 0.2-1.0 mm. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_2514_1_B36301_7BDE33C1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.10 Table 7: pintle-opening distance 0.1 mm at the 20 % throttling level. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 10,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B36301_D0718F2D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.2: uniform liquid sheet was not constructed within 0.1 mm of opening; experimental opening controlled from 0.2 mm at a 0.1 mm interval. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B36301_CDFE0649",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.10: case 4 needed about 0.03 mm at 20 %; nonuniform injection below 0.1 mm in the spray experiment, so not feasible; case 3 chosen. Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 10,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B36301_1D92B7D7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.4: the transition could cause unexpected instability, so a controllable opening range should be considered below the transition point; transition points estimated by Eq. (2). Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 4,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_1_B36301_B644B454",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Son PDF p.2: A_min equals A_cg at a transition point after which it no longer changes with opening; transition points increase with tip angle (Fig. 3, Table 2). Matches.",
+  "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_A2327F98",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli 2011 PDF p.9 (printed 8) Eq. (15) k_t/k = 0.008 Re^0.9 (from [25], smooth wall; assumed also for rough wall 'due to the lack of modeling'). Form, validity and assumption match.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_92269168",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.9 Eq. (14) q_c(y) = -k_t dT/dy. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_8B5870F6",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.9 Eq. (16) d/dx(rho u H0 b) = d/dy(k_t b dT/dy) + 2 q_w. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 9,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_9DDCEBE7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.7 (printed 6) Eq. (10) tau_w(x,0) = (1/8)(mdot u_b(x)/A) f_w(x,0) and the same at h. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_0F32BC6F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.7 Eq. (6) momentum balance with rib friction and bottom/top base friction terms. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_FC102305",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.7 Eq. (9) tau_w(x,y) = (1/8) rho u^2 f_w. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1080_10407782_2011_578011_93D39CC0",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.7 Eq. (11) f_w = f_w^0 C_f. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 7,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_036694A8",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.18 (printed 17) Table 2: lambda = 1, Delta-T error 29.3 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_3003DA5E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 1, Delta-p error 18.8 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_6B8CA500",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 2, Delta-T error 19.0 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_BDC2ABC6",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 2, Delta-p error 12.8 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_757311E9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 4, Delta-T error 6.7 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_D513A405",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 4, Delta-p error 2.2 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_D423FA7B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 8, Delta-T error 1.2 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_2ABA9684",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 8, Delta-p error 4.4 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_3DAEB1EC",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 16, Delta-T error 3.7 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1080_10407782_2011_578011_7B43C087",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Table 2: lambda = 16, Delta-p error 2.8 %. Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1080_10407782_2011_578011_6CF40C13",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Pizzarelli PDF p.18: better match at high aspect ratio (29.3 % vs 1.2 % temperature rise; 18.8 % vs 4.4 % pressure drop); bases treated with less accurate 1-D Eqs. (28)-(29) and (10). Matches.",
+  "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+   "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+   "pdf_page": 18,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1016_J_SUPFLU_2020_105066_6E6747A7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Nasuti & Pizzarelli 2021 PDF p.6 Eq. (9) (q_w/(G f_w)) (beta/c_p)_b > K. Matches.",
+  "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "source_pdf": "propulsion_texts/nasuti2021.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_DOI_10_1016_J_SUPFLU_2020_105066_5A02BAD1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Nasuti PDF p.6: '... equal to that proposed in [21] where the threshold value is also estimated to be K = 0.187'. Value matches; note the source attributes the estimate to its ref. [21].",
+  "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "source_pdf": "propulsion_texts/nasuti2021.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1016_J_SUPFLU_2020_105066_F923221A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Nasuti PDF p.6 Eq. (5) tau = tau_w (1 - eta/R) - 2 q_w G (beta/(rho c_p))_b (eta/R). Matches.",
+  "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+   "source_pdf": "propulsion_texts/nasuti2021.pdf",
+   "pdf_page": 6,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_78B48BD5",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.115 (printed 106) Eq. (4-23) Nu = C1 Re^0.8 Pr^0.4 (mu/mu_w)^0.14, C1 'different values for various coolants', mu at bulk and mu_w at wall temperature; nonboiling subcritical-temperature regions (A1-A2, B1-B2). Confirmed at 300 dpi.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 115,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_D0642188",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.115 Eq. (4-25) h_c = (0.029 C_p mu^0.2/Pr^(2/3)) (G^0.8/d^0.2) (T_co/T_wc)^0.55. Confirmed at 300 dpi.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 115,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_11A1C6DB",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.115 Eq. (4-24) q_ul/q_nonboiling = C2 x 10^4/(p_co G). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 115,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_79A70B82",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.115: coolant pressure 0.3-0.7 of critical where possible; turbopump-fed jacket pressures usually supercritical. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 115,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_7620B1E8",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119 (printed 110): 'established by equation (4-23), and experimental data for RP-1 (C1 = 0.0214)'. Confirmed at 300 dpi.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_848A0FB1",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119 prints Nu = 0.0214 Re^0.8 Pr^0.4 (mu/mu_w)^0.14. Form matches (300 dpi). The label's 'p.110' is the printed page number.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_86373216",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119 Eq. (a) h_c d/k = 0.0214 (rho V_co d/mu)^0.8 (mu C_p/k)^0.4 (mu/mu_w)^0.14. Matches (300 dpi).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_B0A2D1A5",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119 Eq. (b) first form N = pi [D_t + 0.8 (d + 0.04)]/(d + 0.04). Stored general form matches; the printed expanded form (0.8 d + 24.93)/(d + 0.04) omits pi (300 dpi crop), as gap G33 records.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_58154C1E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119 Eq. (c) V_co = (w_f/rho)/((N/2)(pi d^2/4)) = 827 x 8/(pi N d^2 rho) = 2106/(N d^2 rho). Matches (827 x 8/pi = 2105.9).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_95114066",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: RP-1 at 600 R, mu = 4.16 x 10^-5 lb/in-sec (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_B0C2F519",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: k = 1.78 x 10^-6 Btu/in^2-sec-deg F/in (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_5523C457",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: C_p = 0.5 Btu/lb-deg F (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_C852E730",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: estimated stagnation recovery factor 0.923 (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_A0D399C6",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: h_c = 3.00/(1000 - 600) = 0.0075 Btu/in^2-sec-deg F (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CONST_NTRS_19710019929_7B566336",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: q = (5667 - 1188) x 0.00067 = 3.00 Btu/in^2-sec (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_94193B5D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: T_aw = 6140 x 0.923 = 5667 R using sample calculation 4-3. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_EA4D3C9E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.119: required h_c versus tube diameter from Eq. (4-23) with RP-1 C1 = 0.0214. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 119,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_D069B835",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110 (printed 101) Eq. (4-16) mu = (46.6 x 10^-10) M^0.5 T^0.6, T in deg R (300 dpi). Matches; the lb/(in s) unit comes from the p.109 nomenclature ('mu = Viscosity, lb/in sec').",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_AEB01E6D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110 Eq. (4-14) sigma with exponents 0.68 and 0.12 (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_145484E8",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110 Eq. (4-15) Pr = 4 gamma/(9 gamma - 5) (300 dpi). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_BBBEF301",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110 Eq. (4-17) q = h_gc (T_aw - T_wg). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_D05EEAF7",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110 Eq. (4-18) h_gc = 1/(1/h_g + R_d). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_3A1D8F3B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.110: Eqs. (4-13)-(4-16) approximate h_g; may be low with strong radiators, dissociation/recombination, high-frequency instabilities; high with incomplete combustion or deposits. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 110,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_4E64145B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.109 (printed 100) Eq. (4-13) h_g = [0.026/D_t^0.2 (mu^0.2 C_p/Pr^0.6)_ns ((p_c)_ns g/c*)^0.8 (D_t/R)^0.1] (A_t/A)^0.9 sigma. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 109,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_0CC7BBF3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.109 Eq. (4-10) q = h_g (T_aw - T_wg). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 109,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_6EB8AD9C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.109 Eq. (4-11) h_g ~ (rho' V)^0.8. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 109,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_B2892AD8",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.109 Eq. (4-12) Nu = C Re^0.8 Pr^0.34 (Colburn). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 109,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_3869185A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.109: T_aw = (T_c)ns x turbulent boundary-layer recovery factor (ranging from 0.90 to 0.98). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 109,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_C43FA39B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.15 (printed 6) Eq. (1-14) (p_c)inj/(p_c)ns = (1 + gamma M_i^2)/(1 + (gamma-1)/2 M_i^2)^(gamma/(gamma-1)); exponent applies to the denominator (300 dpi). The correction is right. Note: the superseded record carried the page-stated assumption v_inj = 0, (p_c)inj = p_inj; the correction does not.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 15,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_802D1B5E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.15 Eq. (1-15) p_inj/p_i = 1 + gamma M_i^2. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 15,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_2D14232A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.15 Eq. (1-16) p_t/(p_c)ns = [2/(gamma + 1)]^(gamma/(gamma-1)). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 15,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_0BBBD3E9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.98 (printed 89) Eq. (4-6) Total area = 2 L_c sqrt(pi eps_c A_t) + csc(theta)(eps_c - 1) A_t ('excluding injector face'). The correction is right; the 'injector face excluded' assumption on the superseded record was not carried.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 98,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_2AD5D2F0",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.99 (printed 90) Eq. (4-7) L_n = [R_t (sqrt(eps) - 1) + R (sec alpha - 1)]/tan alpha (300 dpi, '+' confirmed). The correction is right; the superseded record's assumption and three validity ranges (R 0.5-1.5 R_t; convergent 20-45 deg; divergent 12-18 deg) were not carried.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 99,
+   "method": "gs pnggray 130 dpi full page plus 300 dpi crop of the equation; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_2C0051B3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.99 Eq. (4-8) lambda = (1/2)(1 + cos alpha). Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 99,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_FC59C93D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "SP-125 PDF p.99: divergent half angle about 12-18 deg, 15 deg almost standard; lambda = 0.983 at 15 deg, so C_F is 98.3 % of ideal. Matches.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 99,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_14DF9A7B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz 1957 PDF p.2 (printed 50) Eq. [7] h_g = [0.026/D*^0.2 (mu^0.2 C_p/Pr^0.6)_0 (p_c g/C*)^0.8 (D*/r_c)^0.1] (A*/A)^0.9 sigma. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_CED2301E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.1 (printed 49) Eq. [5] sigma = 1/{[1/2 (T_w/T_0)(1 + (gamma-1)/2 M^2) + 1/2]^(0.8 - omega/5) [1 + (gamma-1)/2 M^2]^(omega/5)}. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 1,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_022F8F4C",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.2 Eq. [8] Pr = 4 gamma/(9 gamma - 5). Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_280CBC6A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.2 Eq. [9] mu = (46.6 x 10^-10)(m)^(1/2)(T deg R)^omega lb/in. sec, omega = 0.60 (NBS air data). Matches. Exact SI conversion is 1.18408e-7 Pa s K^-0.6 (audit arithmetic).",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_8485301E",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.1 Eq. [6] h_g = [C/D*^0.2 (mu^0.2 C_p/Pr^0.6)_0 (p_c g/C*)^0.8] (A*/A)^0.9 sigma. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 1,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_2514_8_12572_428A438D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.1 Eq. [4] h_g = C/D^0.2 (mu^0.2 C_p/Pr^0.6)_0 (rho' U)^0.8 sigma with sigma = (rho_am/rho')^0.8 (mu_am/mu_0)^0.2. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 1,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_8_12572_A8AAB8BA",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.2: 'These experimental data should not be construed as supporting or denying the results of either the equation presented or the turbulent boundary layer method'; more reliable local data needed. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_8_12572_F3B5610B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF p.2: comparison nozzle D*/r_c about unity, 30/15 deg angles; sufficiently accurate if angles change by no more than 50 per cent and D*/r_c not greater than about 3. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 2,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_2514_8_12572_A2ACDE2D",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Bartz PDF pp.2-3: good agreement for average nozzle heat flux (RFNA-NH3), notably unsuccessful for chamber heat fluxes, 'the values being only 40-50 per cent of the measured values'; conditions for too-low/too-high predictions. Matches.",
+  "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+  "reviewer": {
+   "role": "A",
+   "model": "claude-opus-5-5 (Opus A, independent auditor)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_2514_8_12572",
+   "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+   "pdf_page": 3,
+   "method": "gs pnggray 130 dpi full-page render; compared the stored form/value/statement with the printed page"
+  }
+ }
+]

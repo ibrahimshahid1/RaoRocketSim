@@ -1,0 +1,1770 @@
+{
+ "packet": "R-BARTZ-p001-005",
+ "kind": "model_review",
+ "document_id": "DOC_DOI_10_2514_8_12572",
+ "source_pdf": "propulsion_texts/technical-notes-1957.pdf",
+ "source_sha256": "541b64824579e4b133466f9f026089a4abcaa0e48fad40288a8fc08c4c0d0a72",
+ "pages": [
+  1,
+  5
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_8_12572/p0001.png",
+   "sha256": "f8736a8e4b1491ad4367d392b2dc7b1299f6946508fbc18e0fbc280c48676533",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_8_12572/p0002.png",
+   "sha256": "e83c1e4392f1fb3c04a63fc476b5516184d9e08a669cc920aa804dd1ea129aa8",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_8_12572/p0003.png",
+   "sha256": "24b3795ea2c67e3b5af3631a023888af9948b0db72baba0b43f8b148ca0f2aa1",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_8_12572/p0004.png",
+   "sha256": "1f01ae982a678a724f27efe2ac2e14b7497f7b0f3813e3eca098b34b1c7ee1af",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 5,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_8_12572/p0005.png",
+   "sha256": "708f90547d7eb3e87197576e1c4a5da4792ee59ffd4c6a7ee37f537b4c3f6568",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_3ced1d0b0fa76cf457ba834c",
+  "ENR_6d85004226f2c227b6efdb32",
+  "ENR_9b5be794de9e547a38f9837f",
+  "ENR_a05722c5b5db0c15fab78883",
+  "ENR_b77f9b4dacca2f179ee5d3be"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_0207c87c83c86601c5d034be",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/56",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 360.0,
+     "t": 162.0,
+     "r": 563.0,
+     "b": 142.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { \\varrho } = \\left [ \\frac { C } { D _ { * ^ { 0 , 2 } } } \\left ( \\frac { \\mu ^ { 0 . 2 } C _ { \\varrho } } { P r ^ { 0 . 6 } } \\right ) _ { 0 } \\left ( \\frac { p _ { \\varrho } g } { C ^ { * } } \\right ) ^ { 0 . 8 } \\right ] \\left ( \\frac { A _ { * } } { A } \\right ) ^ { 0 , 9 } \\sigma \\dots \\dots \\dots \\left [ 6 \\right ]",
+   "original_text": "h = C 02C, 'peg \\o-8 An \\o? F ig = Dy? Pros Jo \\ C* A O...... B |",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_02bfdf683cc2743e59b31248",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/52",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 394.0,
+     "t": 352.6666666666667,
+     "r": 563.0,
+     "b": 329.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\hbar { _ } q = \\frac { C } { D ^ { 0 . 2 } } \\left ( \\frac { \\mu ^ { 0 . 2 } C _ { p } } { P r ^ { 0 , 6 } } \\right ) _ { 0 } ( \\rho ^ { \\prime } U ) ^ { 0 . 8 } \\sigma ,",
+   "original_text": "Cc (ee 2 = Doe wat), (p'U 8a... 0.0.6.6. [4]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0caa1a61bdec71d7c98bccd9",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/54",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 325.3333333333333,
+     "t": 248.33333333333337,
+     "r": 564.3333333333334,
+     "b": 203.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\overline { \\left [ \\frac { 1 } { 2 } \\, \\frac { T _ { w } } { T _ { 0 } } \\left ( 1 + \\frac { \\gamma - 1 } { 2 } \\, M ^ { 2 } \\right ) + \\frac { 1 } { 2 } \\right ] ^ { 0 . 8 - ( \\omega / 5 ) } \\left [ 1 + \\frac { \\gamma - 1 } { 2 } \\, M ^ { 2 } \\right ] ^ { \\omega / 3 } } \\\\",
+   "original_text": "1 1T. _ y-1 1 ]o.8-(o/s) y-1 ie ~ — | 1 + —— M? = 1 ——— M? [5 7 ( + 2 )+ 5] [ + 2 bene ete t teen eee ae 23)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_370524790511f3c302df7e00",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/50",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 384.3333333333333,
+     "t": 433.0,
+     "r": 563.3333333333334,
+     "b": 410.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { \\sigma } = \\frac { C } { D ^ { 0 . 2 } } \\left ( \\frac { \\mu ^ { 0 . 2 } C _ { p } } { P r ^ { 0 . 6 } } \\right ) _ { a m } ( \\rho _ { a m } U ) ^ { 0 . 8 } ,",
+   "original_text": "C (uC, ho = Do? \\ Pros ) (DamU 8.00... 0.222.. 18]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6eb95d64ddd1c84f0b0535aa",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/45",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 420.6666666666667,
+     "t": 691.3333333333334,
+     "r": 563.6666666666666,
+     "b": 680.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { \\vartheta } \\sim ( \\rho ^ { \\prime } U ) ^ { \\varpi } .",
+   "original_text": "hg ~ (pr )™. ccc cece eee eee {1]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_bb473ddb814f0d7914c5d7a6",
+   "kind": "formula",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/47",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 408.0,
+     "t": 610.6666666666666,
+     "r": 561.150324,
+     "b": 602.5534,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = C ( R e ) ^ { m } ( P r ) ^ { n } ,",
+   "original_text": "Nu = C(Re)™(Pr)n... · [ 2 ]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3ced1d0b0fa76cf457ba834c",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p1-1-1f3d681871a6d34c041b36498dcaf2cc15c6e9b10e7d28693de77ef28763dfeb.json",
+   "raw_sha256": "32826cf4f6d8103906ab439dfe99307e296f80426e0b8436b93b778c2cdaefb6",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3549ce141628cf4f38e8c586",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 2 Values of the properties variation parameter o"
+   ],
+   "bbox": [
+    {
+     "l": 330.6175231933594,
+     "t": 757.2767677307129,
+     "r": 569.6759643554688,
+     "b": 480.64324951171875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/159\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_a05722c5b5db0c15fab78883",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p2-2-fda779ac36da941ddaa164118f1289369158da5d4d155360d81bc1c256ab365d.json",
+   "raw_sha256": "6c0c9b8724f83787374f92ce6c29de305dbaaa4dd2254337d65bedab574dbb91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5fd61d4818f57c85c4966348",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 1 Distribution of heat transfer coefficient for nozzle of Fig. 2, Ref. 2"
+   ],
+   "bbox": [
+    {
+     "l": 67.76778411865234,
+     "t": 668.8263168334961,
+     "r": 305.3214111328125,
+     "b": 481.4930725097656,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a05722c5b5db0c15fab78883",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p2-2-fda779ac36da941ddaa164118f1289369158da5d4d155360d81bc1c256ab365d.json",
+   "raw_sha256": "6c0c9b8724f83787374f92ce6c29de305dbaaa4dd2254337d65bedab574dbb91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3736fe50e67a60ab2833fb1b",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/150",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 66.0,
+     "t": 406.0,
+     "r": 305.66666666666663,
+     "b": 380.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { \\sigma } = \\left [ \\frac { 0 . 0 2 6 } { \\overline { D } _ { * ^ { 0 . 2 } } } \\left ( \\frac { \\mu ^ { 0 . 2 } C _ { p } } { P r ^ { 0 . 6 } } \\right ) _ { \\sigma } \\left ( \\frac { p _ { c } g } { C ^ { * } } \\right ) ^ { 0 . 8 } \\left ( \\frac { D _ { * } } { r _ { \\epsilon } } \\right ) ^ { 0 . 1 } \\right ] \\left ( \\frac { A _ { * } } { A } \\right ) ^ { 0 . 9 } \\sigma \\dots \\dots \\left [ 7 \\right ]",
+   "original_text": "he 0.026 / u2C, peg \\°* [Da \\ Ax \\o-9 7 °* | Dee \\ Pros Jy \\C# T. A) Tor",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_a05722c5b5db0c15fab78883",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p2-2-fda779ac36da941ddaa164118f1289369158da5d4d155360d81bc1c256ab365d.json",
+   "raw_sha256": "6c0c9b8724f83787374f92ce6c29de305dbaaa4dd2254337d65bedab574dbb91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9ee7a05259cc234be62e1e82",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/154",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 159.647,
+     "t": 189.29999999999995,
+     "r": 305.85666000000003,
+     "b": 170.82667144948755,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "P r = \\frac { 4 \\gamma } { 9 \\gamma - 5 } \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots",
+   "original_text": "Pr = 4y 9 T - 5 [8]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_a05722c5b5db0c15fab78883",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p2-2-fda779ac36da941ddaa164118f1289369158da5d4d155360d81bc1c256ab365d.json",
+   "raw_sha256": "6c0c9b8724f83787374f92ce6c29de305dbaaa4dd2254337d65bedab574dbb91",
+   "mechanical_flags": [
+    "DAMAGE_OR_REPETITION_MARKER"
+   ]
+  },
+  {
+   "id": "CAND_f9d319a6e2a49087231a3949",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/156",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 98.66666666666666,
+     "t": 119.33333333333337,
+     "r": 304.33333333333337,
+     "b": 109.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mu \\, = \\, ( 4 6 . 6 \\times 1 0 ^ { - 1 0 } ) \\, ( \\widetilde { m } ) ^ { 1 / \\ast } \\, ( T \\, \\circledast R ) ^ { \\omega } \\, l b / i n . \\, s e c \\, , \\dots \\, ,",
+   "original_text": "Bw = (46.6 X 10-%) (m)'/* (7 °R)*Ib/in, sec...... (9]",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_a05722c5b5db0c15fab78883",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p2-2-fda779ac36da941ddaa164118f1289369158da5d4d155360d81bc1c256ab365d.json",
+   "raw_sha256": "6c0c9b8724f83787374f92ce6c29de305dbaaa4dd2254337d65bedab574dbb91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_000c2acaf57a14f5c9eb0972",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 331.0210266113281,
+     "t": 83.84942626953125,
+     "r": 426.82110595703125,
+     "b": 49.60064697265625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_9b5be794de9e547a38f9837f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p3-3-e0fcb336135482c2c14293bdac16b61063941fe81d5f8f4913c4d67fc685eebd.json",
+   "raw_sha256": "b77bef51e09895e3cfa7034140469b67a2c2688e488a04971e5e4f4f671bf1bd",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e339ad4fab9e707b85078f9c",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "BRISTOL'S SYNCROVERTER SWITCH is made to fit 7-pin miniature tube socket (left) or %-in. diameter chassis hole (right). Covered by patents."
+   ],
+   "bbox": [
+    {
+     "l": 324.57025146484375,
+     "t": 764.9885425567627,
+     "r": 560.80810546875,
+     "b": 540.906982421875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/19\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_9b5be794de9e547a38f9837f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p3-3-e0fcb336135482c2c14293bdac16b61063941fe81d5f8f4913c4d67fc685eebd.json",
+   "raw_sha256": "b77bef51e09895e3cfa7034140469b67a2c2688e488a04971e5e4f4f671bf1bd",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_73e526aeeebec358f91641db",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "",
+     "400 cps",
+     "500 cps"
+    ],
+    [
+     "Coil voltage",
+     "6.3V sine, square, pulse wave",
+     "6.3V sine, square, pulse wave"
+    ],
+    [
+     "Coil current",
+     "55 milliamperes",
+     "45 milliamperes"
+    ],
+    [
+     "Coil resistance",
+     "85 ohms",
+     "85 ohms"
+    ],
+    [
+     "*Phase lag",
+     "55° ±10 °",
+     "65° ±10°"
+    ],
+    [
+     "*Dissymmetry Temperature",
+     "less than 4% -55°Ctol00°C",
+     "less than 4% -55°Ctol00°C"
+    ],
+    [
+     "'Switching time",
+     "15° ±5°",
+     "15° ±5°"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 342.80010986328125,
+     "t": 213.54595947265625,
+     "r": 545.107177734375,
+     "b": 115.22210693359375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 7x3 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_9b5be794de9e547a38f9837f",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p3-3-e0fcb336135482c2c14293bdac16b61063941fe81d5f8f4913c4d67fc685eebd.json",
+   "raw_sha256": "b77bef51e09895e3cfa7034140469b67a2c2688e488a04971e5e4f4f671bf1bd",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_16ebe7c1ff288de78313cb7e",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "U.S. Army photo;"
+   ],
+   "bbox": [
+    {
+     "l": 50.53565979003906,
+     "t": 768.9734649658203,
+     "r": 381.23162841796875,
+     "b": 528.1322937011719,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/1\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_6d85004226f2c227b6efdb32",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p4-4-988e6764ef640181addf90a8594cd9cc81382505980abfbac551bd4d2bb8149c.json",
+   "raw_sha256": "c1db23df3a29ff9bf0594c09663eec1f1f8ccfcd7389a30ada004db8febe271e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d5ffc12cf2d5f3eff8fc4e39",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Nike-Cajun on its way."
+   ],
+   "bbox": [
+    {
+     "l": 49.09843444824219,
+     "t": 280.19683837890625,
+     "r": 205.8465118408203,
+     "b": 66.56719970703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/6\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_6d85004226f2c227b6efdb32",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p4-4-988e6764ef640181addf90a8594cd9cc81382505980abfbac551bd4d2bb8149c.json",
+   "raw_sha256": "c1db23df3a29ff9bf0594c09663eec1f1f8ccfcd7389a30ada004db8febe271e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6c089c280d53056708766c68",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 220.9800262451172,
+     "t": 407.72528076171875,
+     "r": 559.7804565429688,
+     "b": 53.9317626953125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_b77f9b4dacca2f179ee5d3be",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p5-5-0a2b46e3d2a8c8118ebb9d8465aeaaa1054d3a7649c55828926545c9f4c92d39.json",
+   "raw_sha256": "2acc6b5e6d5d336ab7254cc6dc5f6c288fcfa52f067fa74cef1cd8c80ce3ded1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_76c52f8419a67775046f1b20",
+   "kind": "figure",
+   "pages": [
+    5
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "\"SSULIY JYSIU JULOUT STTVO Ixe],"
+   ],
+   "bbox": [
+    {
+     "l": 52.77879333496094,
+     "t": 768.1729412078857,
+     "r": 210.0540313720703,
+     "b": 552.58056640625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/1\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_b77f9b4dacca2f179ee5d3be",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_8_12572/541b64824579-p5-5-0a2b46e3d2a8c8118ebb9d8465aeaaa1054d3a7649c55828926545c9f4c92d39.json",
+   "raw_sha256": "2acc6b5e6d5d336ab7254cc6dc5f6c288fcfa52f067fa74cef1cd8c80ce3ded1",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_2514_8_12572_00455E65",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Bartz 1957 Eq. [1] mass-velocity scaling",
+   "equation_number": "1",
+   "form": "h_g ~ (rho'*U)^m",
+   "statement": null,
+   "quote": "might serve as the desired rough approximation equation",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "h_g",
+     "meaning": "gas-side heat transfer coefficient",
+     "units": "Btu/(in^2 s F)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "h_g"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_022F8F4C",
+   "store": "equations",
+   "type": "Equation",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [8] kinetic-theory Prandtl number",
+   "equation_number": "8",
+   "form": "Pr = 4*gamma/(9*gamma - 5)",
+   "statement": null,
+   "quote": "kinetic theory (5) can be used to get the approximate result",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "ratio of specific heats",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_3736fe50e67a60ab2833fb1b",
+    "CAND_9ee7a05259cc234be62e1e82",
+    "CAND_f9d319a6e2a49087231a3949"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_14DF9A7B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [7] final rapid-estimation equation",
+   "equation_number": "7",
+   "form": "h_g = [(0.026/D_star^0.2)*(mu^0.2*C_p/Pr^0.6)_0*(p_c*g/C*)^0.8*(D_star/r_c)^0.1]*(A_star/A)^0.9*sigma",
+   "statement": null,
+   "quote": "a factor to account for the effect of radius of curvature of the nozzle throat",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "h_g",
+     "meaning": "gas-side heat transfer coefficient",
+     "units": "Btu/(in^2 s F)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "D_star",
+     "meaning": "throat diameter",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mu",
+     "meaning": "viscosity",
+     "units": "lb/(in s)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_p",
+     "meaning": "specific heat",
+     "units": "Btu/(lb F)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    },
+    {
+     "symbol": "p_c",
+     "meaning": "chamber pressure",
+     "units": "lb/in^2",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_star",
+     "meaning": "characteristic velocity",
+     "units": "ft/s",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "r_c",
+     "meaning": "throat radius of curvature",
+     "units": "in",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "A_star/A",
+     "meaning": "area ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "sigma",
+     "meaning": "property-variation factor",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [
+    "comparison nozzle: D*/r_c about 1, contraction/expansion half angles 30 and 15 deg; probably sufficiently accurate if angles change by no more than 50% and D*/r_c is not greater than about 3"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_3736fe50e67a60ab2833fb1b",
+    "CAND_9ee7a05259cc234be62e1e82",
+    "CAND_f9d319a6e2a49087231a3949"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "C_star"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "h_g",
+      "D_star",
+      "mu",
+      "C_p",
+      "p_c",
+      "C_star",
+      "r_c",
+      "A_star/A",
+      "sigma"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_1E04467B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Bartz 1957 Eq. [2] pipe-flow Nusselt form",
+   "equation_number": "2",
+   "form": "Nu = C*Re^m*Pr^n",
+   "statement": null,
+   "quote": "which happens to be the same form as the equation that has",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Nu",
+     "meaning": "Nusselt number",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_NU"
+     ]
+    },
+    {
+     "symbol": "C",
+     "meaning": "constant",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Re",
+     "meaning": "Reynolds number",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_RE"
+     ]
+    },
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "C"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_280CBC6A",
+   "store": "equations",
+   "type": "Equation",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [9] viscosity correlation",
+   "equation_number": "9",
+   "form": "mu = (46.6e-10)*m^(1/2)*(T [R])^omega lb/(in s), omega = 0.60",
+   "statement": null,
+   "quote": "data for the viscosity of air at high temperatures can be used",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "mu",
+     "meaning": "viscosity",
+     "units": "lb/(in s)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "m",
+     "meaning": "average molecular weight",
+     "units": "lb/mol",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T",
+     "meaning": "temperature",
+     "units": "R",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [
+    "mixtures principally of diatomic gases"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_3736fe50e67a60ab2833fb1b",
+    "CAND_9ee7a05259cc234be62e1e82",
+    "CAND_f9d319a6e2a49087231a3949"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "mu",
+      "m",
+      "T"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_428A438D",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [4] h_g with stagnation properties and sigma",
+   "equation_number": "4",
+   "form": "h_g = (C/D^0.2)*(mu^0.2*C_p/Pr^0.6)_0*(rho'*U)^0.8*sigma,  sigma = (rho_am/rho')^0.8*(mu_am/mu_0)^0.2",
+   "statement": null,
+   "quote": "Thus Equation [3] can be written",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "h_g",
+     "meaning": "gas-side heat transfer coefficient",
+     "units": "Btu/(in^2 s F)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mu",
+     "meaning": "viscosity",
+     "units": "lb/(in s)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_p",
+     "meaning": "specific heat",
+     "units": "Btu/(lb F)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    },
+    {
+     "symbol": "sigma",
+     "meaning": "property-variation factor",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "C_p and Pr do not vary appreciably with temperature"
+   ],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "h_g",
+      "mu",
+      "C_p",
+      "sigma"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_8485301E",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [6] h_g in terms of C* and area ratio",
+   "equation_number": "6",
+   "form": "h_g = [(C/D_star^0.2)*(mu^0.2*C_p/Pr^0.6)_0*(p_c*g/C*)^0.8]*(A_star/A)^0.9*sigma",
+   "statement": null,
+   "quote": "The equation for hg can be put in a form more easily used for rocket nozzle computations",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "h_g",
+     "meaning": "gas-side heat transfer coefficient",
+     "units": "Btu/(in^2 s F)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "D_star",
+     "meaning": "throat diameter",
+     "units": "in",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mu",
+     "meaning": "viscosity",
+     "units": "lb/(in s)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_p",
+     "meaning": "specific heat",
+     "units": "Btu/(lb F)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    },
+    {
+     "symbol": "p_c",
+     "meaning": "chamber pressure",
+     "units": "lb/in^2",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_star",
+     "meaning": "characteristic velocity",
+     "units": "ft/s",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "C_star"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "h_g",
+      "D_star",
+      "mu",
+      "C_p",
+      "p_c",
+      "C_star"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_8E277319",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Bartz 1957 Eq. [3] h_g with arithmetic-mean properties",
+   "equation_number": "3",
+   "form": "h_g = (C/D^0.2)*(mu^0.2*C_p/Pr^0.6)_am*(rho_am*U)^0.8",
+   "statement": null,
+   "quote": "With these assumptions, Equation [2] can be solved for hg to give",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "h_g",
+     "meaning": "gas-side heat transfer coefficient",
+     "units": "Btu/(in^2 s F)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "mu",
+     "meaning": "viscosity",
+     "units": "lb/(in s)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "C_p",
+     "meaning": "specific heat",
+     "units": "Btu/(lb F)",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Pr",
+     "meaning": "Prandtl number",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_PR"
+     ]
+    }
+   ],
+   "assumptions": [
+    "properties at T_am = (T + T_w)/2"
+   ],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "h_g",
+      "mu",
+      "C_p"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_DOI_10_2514_8_12572_CED2301E",
+   "store": "equations",
+   "type": "Equation",
+   "page": 1,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Bartz 1957 Eq. [5] property-variation factor sigma",
+   "equation_number": "5",
+   "form": "sigma = 1/{[0.5*(T_w/T_0)*(1 + (gamma-1)/2*M^2) + 0.5]^(0.8 - omega/5)*[1 + (gamma-1)/2*M^2]^(omega/5)}",
+   "statement": null,
+   "quote": "contains all the corrections for property variation across the boundary layer",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "sigma",
+     "meaning": "property-variation factor",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T_w",
+     "meaning": "wall temperature",
+     "units": "R",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "T_0",
+     "meaning": "stagnation temperature",
+     "units": "R",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "ratio of specific heats",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    },
+    {
+     "symbol": "M",
+     "meaning": "Mach number",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_MACH"
+     ]
+    },
+    {
+     "symbol": "omega",
+     "meaning": "viscosity temperature exponent",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0207c87c83c86601c5d034be",
+    "CAND_02bfdf683cc2743e59b31248",
+    "CAND_0caa1a61bdec71d7c98bccd9",
+    "CAND_370524790511f3c302df7e00",
+    "CAND_6eb95d64ddd1c84f0b0535aa",
+    "CAND_bb473ddb814f0d7914c5d7a6"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 1
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "sigma",
+      "T_w",
+      "T_0",
+      "omega"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_8_12572_A2ACDE2D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Average nozzle heat flux from Eq. [7] agreed well with RFNA-NH3 measurements over a wide range of chamber pressures, but the equation was notably unsuccessful for chamber heat fluxes, predicting only 40-50 per cent of the measured values; near the throat and beyond, predictions are expected to be too low with strong radiators, dissociation-recombination or high-frequency instabilities, and too high with insulating deposits or incomplete combustion.",
+   "quote": "the values being only 40-50 per cent of the measured values",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_THERMAL_BARTZ"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_8_12572_A8AAB8BA",
+   "store": "claims",
+   "type": "Claim",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Bartz states that the RFNA-N2H4 experimental data should not be construed as supporting or denying either method; additional reliable local data are needed.",
+   "quote": "These experimental data should not be construed as supporting or denying",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_THERMAL_BARTZ"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_8_12572_F3B5610B",
+   "store": "claims",
+   "type": "Claim",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The comparison nozzle had D*/r_c about unity and contraction and expansion half angles of 30 and 15 deg; nozzles with different angles will probably not show the same agreement, but the equation will probably be sufficiently accurate if the angles change by no more than 50 per cent and D*/r_c is not greater than about 3.",
+   "quote": "contraction and expansion angles are not changed by more than 50 per cent",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_THERMAL_BARTZ"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_2514_8_12572_F8F54D83",
+   "store": "claims",
+   "type": "Claim",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "C was determined by equating h_g from Eq. [6] at the throat of a particular nozzle with the turbulent boundary-layer analysis of Reference 2 (case 2a) for the same mass flow and gas properties; the resulting C = 0.026 is coincidentally close to the usual turbulent pipe-flow value.",
+   "quote": "The resulting value of C was found to be 0.026",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_THERMAL_BARTZ"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_THERMAL_BARTZ"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00000",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Technical Notes. > D. R. BARTZ2",
+   "text": "Jet Propulsion Laboratory California Institute of Technology, Pasadena, Calif.\n\nAlthough recent analyses of the heat transfer in convergent-divergent nozzles based on considerations of the turbulent boundary layer have appeared in the literature (References 1, 2), the methods require considerable computational time for each new nozzle and have not as yet been confirmed (or denied) by reliable experimental data. This note was prepared because there still appears to be a need for a simple, yet reasonably accurate, approximation equation for making rapid preliminary estimates of the convective heat transfer coefficients in rocket nozzles."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00001",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Technical Notes. > Nomenclature",
+   "text": "A = local cross-sectional area of flow Cp = specific heat a t constant pressure, B t u / l b , ° F C = constant coefficient, Equation [6], dimensionless C* = characteristic velocity, fps 1) — diameter, in. g = gravitational acceleration, fps2\n\nhg = heat transfer coefficient, Btu/in.2 sec, °F k = thermal conductivity m. — average molecular weight of combustion gases M = Mach number Nu = Nusselt number = hgD/k pc = chamber pressure, lb/in.2\n\nPr = Prandtl number = nCp/k q = heat flux rc = throat radius of curvature Re = Reynolds number = p'UD/ix T = static temperature, °R Tc = chamber or flame temperature, °R TQ = stagnation temperature, °R x = distance from inlet measured along wall xn = distance through nozzle measured along wall U = free stream value of local gas velocity 7 = ratio of specific heats, dimensionless ,u = viscosity, lb/in. sec p' = free stream value of local gas density <r = dimensionless factor accounting for variation of p and y,\n\nvalues across boundary layer co = temperature exponent of viscosity equation\n\nSubscripts"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00002",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "2J r V H",
+   "text": "not negligible, effect. This suggests that an equation of the form"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00003",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "2J r V H > • wur [i]",
+   "text": "might serve as the desired rough approximation equation. Equation [1] can account for mass flow rate variations by proper selection of m, while it ignores the effect of boundary layer development. (This is not to say that assumption of fully developed pipe flow has been made.) Equation [1 ] can be put into the more familiar nondimensional form\n\nNu = C(Re)m(Pr)n •[2]\n\nwhich happens to be the same form as the equation that has been used for correlation of fully developed turbulent pipe flowT heat transfer data.\n\nFrom the equation for hg in (2) the proper value for m can be shown to be 0.8. (Note that (1/0)1/4 in Equation [31 ] of (2) is proportional to Re0-05.) The value for n is arbitrarily selected as that frequently used for modifications of Reynolds analogy for Pr near unity 0.4. The problem of where to evaluate the physical properties must be answered, since in general large temperature differences are present in rocket nozzles. Since the procedure of evaluating properties at the arithmetic mean (am) between bulk temperature T and wall temperature Tw has been successful for low speed, high temperature difference problems (3) and high speed, low temperature difference problems (4), it is employed here. With these assumptions, Equation [2] can be solved for hg to give"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00004",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "2J r V H > = c /y-'fiA",
+   "text": "2)0.2 ^ pr0,6 Ja (PamUy*. [3]\n\nIf it is allowed that Cp and Pr do not vary appreciably with temperature, they can be assumed constant at stagnation temperature values, while \\xam and pam can be evaluated in terms of the stagnation and static temperature values, respectively. Thus Equation [3] can be written"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00005",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "ha = D°- feS>'^",
+   "text": "[4]\n\nwThere a = (pam/p00'8(Mam/Mo)0-2. The factor a contains all the corrections for property variation across the boundary layer. Noting that Tam = 1/2(T + Tw), that p — (1 /T), and that £i ~ T03, the value of a can be evaluated in terms of T0, Tw, and M. (T0 is selected since T0 is constant through the nozzle.)\n\n1\n\nXPERIENCE gained from th\n\ncalculation methods (1, 2}3 h\n\nam = arithmetic mean 0 = stagnation conditions * = conditions at nozzle throat w = wall E"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00006",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "2J r V H",
+   "text": "XPERIENCE gained from the turbulent boundary layer\n\nThe equation for hg can be put in a form more easily used for rocket nozzle computations by evaluating p'U in terms of C*. and A*/A\n\nE calculation methods (1, 2}3 has shown that under certain conditions the dominant variable factor is the mass flow rate per unit area and that variations in velocity and temperature boundary layer thicknesses exert only a secondary, although\n\n1 This paper presents one phase of research carried out at the Jet Propulsion Laboratory, California Institute of Technology, under Contract No. DA-04-495-Ord 18, sponsored by the Department of the Army, Ordnance Corps.\n\n2 Research Group Supervisor. 3 Numbers in parentheses indicate References at end of paper.\n\n. [ 6 ]\n\n1 This paper presents one phase of research carried out at the Jet Propulsion Laboratory, California Institute of Technology, under Contract No. DA-04-495-Ord 18, sponsored by the Department of the Army, Ordnance Corps.\n\nNote that the factor in the brackets is a constant through a nozzle leaving only A*/A and a to be evaluated at each station.\n\nThe value of C was determined by equating the value of hg computed from Equation [6] at the throat of a particular rocket nozzle with the value computed from the turbulent\n\nEDITOR'S NOTE: This section of JET PROPULSION is open to short manuscripts describing new developments or offering comments on papers previously published. Such manuscripts are published without editorial review, usually within two months of the date of receipt. Requirements as to style are the same as for regular contributions (see masthead page of this issue)."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00007",
+   "page_start": 1,
+   "page_end": 2,
+   "section": "2J r V H",
+   "text": "JANUARY 1957 49\n\nboundary layer analysis (see sample calculation, Reference 2, case 2a) for the same values of mass flow and gas properties. The resulting value of C was found to be 0.026 which is, coincidentally, quite close to the value usually used in heat transfer correlation for turbulent flow in pipes. The agreement between the results of Equation [6] and those of the turbulent boundary layer method over the rest of the nozzle is exhibited in Fig. 1.\n\nMASS FLOW AND GAS PROPERTIES FOR CURVES"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00008",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > 1/8 -——L/4",
+   "text": "_ _ l / 2\n\n^ _ _ 3 / 4\n\n3 4 5 6 7 8 9 10 EXPANSION A/A*\n\nPr * 0.83 H = 3.48 x 10\n\nAND EXPERIMENTAL DATA = 1.92 lb/inz sec T0 = 4500 °R\n\nr =1-2 CP = 0.567 Btu/lb °F\n\nPr * 0.83 H = 3.48 x 10s lb/in. sec D„ = 1.77 in. D«Ac = \"\n\nTURBULENT BOUNDARY\n\nLAYER METHOD OF REFERENCE 2 EQUATION\n\nx/xn (FRACTIONAL DISTANCE THROUGH NOZZLE)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00009",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > Fig. 2, Ref. 2",
+   "text": "In writing the equation in its final form, a factor to account for the effect of radius of curvature of the nozzle throat rc is added. This factor, (Z>*/rc)0J was suggested by the nozzle similarity considerations of (2)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00010",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > [7] ro.026 (n«-*cp\\ /WY-8 fD*Yxl fA*Y9",
+   "text": "The particular nozzle contour for which the comparison between the simplified equation of this paper and the turbulent boundary layer method was made was one with D*/rc equal to about unity and having contraction and expansion half angles of 30 and 15 deg, respectively. Although nozzles with different angles will probably not show the same agreement between methods, the simplified equation will probably be sufficiently accurate for its intended purpose if the contraction and expansion angles are not changed by more than 50 per cent and the value of D*/rc is not greater than about 3.\n\nAs a step toward the goal of a rapid calculation method, values of a have been computed for y of 1.2, 1.3, 1.4; for co of 0.6; and for various values of Tw/T0. These are plotted in Fig. 2 vs. A/A* on a log scale increasing on both sides of the minimum value of unity.\n\nIf Pr and n data are not available for the particular combustion-gas mixture under consideration, kinetic theory (5) can be used to get the approximate result"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00011",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > 9 T - 5 [8]",
+   "text": "The NBS (6) data for the viscosity of air at high temperatures can be used to get a correlation equation which should be reasonably accurate for most mixtures consisting principally of diatomic gases.\n\nfji = (46.6 X 10-10) (m)1/2 (T °R)«lb/in. sec [9]\n\nwhere co = 0.60. The average molecular weight factor is suggested by the statistical mechanical transport property theory\n\n(7). The value of (Cp) is usually known from thermochemical calculations for the combustion gases under consideration.\n\nFor comparison with experimental hg data, values measured4 semilocally in a nozzle previously described in the"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00012",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > 9 T - 5 [8] > Fig. 2 Values of the properties variation parameter a",
+   "text": "literature (8) operating with the combustion gases of the RFNA-N2H4 system are also plotted in Fig. 1.\n\nThe vertical dashed lines about which the data are grouped represent the center lines of the sections defined by the vertical solid lines. Some points are plotted off the line to facilitate identification of individual data points. To achieve a common basis for comparison, these data were all adjusted to the values of mass flow and gas properties listed in the figure. The adjustments were made according to the dependence on gas flow properties indicated by Equation [7 ]. The maximum adjustment was 11 per cent. The experimental values of hg were computed from calorimetrically measured semilocal values of q, computing T0 from theoretical Tc values reduced by the square of the ratio of experimental to theoretical C*. Wall temperatures Tw were calculated from considerations of water-cooling conditions and temperature drop through the wall.\n\nThese experimental data should not be construed as supporting or denying the results of either the equation presented or the turbulent boundary layer method. Additional reliable local data must be obtained for proper experimental evaluation of either method. Rather, it is significant (a) that the results of the simple correlation equation developed in this paper agree reasonably well with a particular set of calculations based on the turbulent boundary layer development in the nozzle, and (b) that both methods show reasonable agreement with the meager experimental data available from rocket motor tests. It must be remembered that the agreement between the two methods near the entrance is strong^ dependent on the assumed entrance boundary layer conditions, which in this calculation may or may not have been typical of rocket-motor nozzles."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00013",
+   "page_start": 2,
+   "page_end": 2,
+   "section": ": x ^ \\ ^ l / 2 > 9 T - 5 [8] > Fig. 2 Values of the properties variation parameter a",
+   "text": "Less direct experimental verification of the equation presented is offered by the excellent agreement between average values of heat flux over a large contraction ratio nozzle computed using Equation [7] and average heat flux measurements made over a wide range of chamber pressures with the RFNA-NH3 system (9). This equation was notably unsuc-\n\n4 By of E. L. Wilson of the Jet Propulsion Laboratory.\n\nJ E T PROPULSION"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00014",
+   "page_start": 3,
+   "page_end": 3,
+   "section": ": x ^ \\ ^ l / 2 > 20 30 40",
+   "text": "cessful in predicting chamber heat fluxes for these tests, the values being only 40-50 per cent of the measured values. This is not altogether surprising since convection related to the average mass flow rate is not the only important mode of heat transfer in a chamber. However, in a nozzle, at least near the throat and beyond, heat fluxes should be successfully predicted by considering convection based on the average mass flow rate, except when (a) a substantial fraction of the gases are strong radiators, (b) there is substantial dissociation with subsequent recombination near the wall, or (c) there are strong high frequency flow instabilities, in which cases the predictions are expected to be too low. Such predictions will be too high when\n\n(a) the combustion gases deposit insulating solids on the walls and (6) the combustion reactions are not completed in the chamber."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00015",
+   "page_start": 3,
+   "page_end": 3,
+   "section": ": x ^ \\ ^ l / 2 > References",
+   "text": "1 Sibulkin, M., \"Heat Transfer to an Incompressible Turbulent Boundary Layer and Estimation of Heat-Transfer Coefficients at Supersonic Nozzle Throats,\" Journal of the Aeronautical Sciences, Feb. 1956.\n\n2 Bartz, D. R., \"An Approximate Solution of Compressible Turbulent Boundary-Layer Development and Convective Heat Transfer in Convergent-Divergent Nozzles,\" Trans. ASME, Nov. 1955.\n\n3 Humble, L, V., Lowdermilk, W. H., and Desmon, L. G., \"Measurements of Average Heat-Transfer and Friction Coefficients for Subsonic Flow of Air in Smooth Tubes at High Surface and Fluid Temperatures,\" NACA Report 1020, 1951.\n\n4 Eckert, E. R. G., \"Survey on Heat Transfer at High Speeds,\" WADC Technical Report 54-70, Wright Air Development Center, April 1954.\n\n5 Kennard, Earle H., \"Kinetic Theory of Gases,\" 1st edit., McGraw-Hill, New York, 1938.\n\n6 Hilsenrath, J., et al., \"NBS-NACA Tables of Thermal Properties of Gases,\" NBS Circular 564, 1955.\n\n7 Bird, R. B., Hirschfelder, J. C , and Curtiss, C. F., \"The Theoretical Calculation of the Equation of State and Transport Properties of Gases and Liquids,\" Trans. ASME, Oct. 1954, pp. 1011-1038.\n\n8 Boden, R. H., \"Heat Transfer in Rocket Motors and the Application of Film and Sweat Cooling,\" Trans. ASME, May 1951, pp. 385-390. 9 Bartz, D. R,, \"Experimental Rocket-Motor Performance and Heat Transfer of the RFNA Ammonia Propellant System at Chamber Pressures to 2000 psia,\" Jet Propulsion Laboratory Progress Report 20-268, April 8, 1955."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00016",
+   "page_start": 3,
+   "page_end": 3,
+   "section": ": x ^ \\ ^ l / 2 > Note on \"Hazards Associated With 90 Per Cent Hydrogen Peroxide Aerosols\"1",
+   "text": "CHARLES L. PUNTE\n\nToxicology Division, Chemical Warfare Laboratories,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00017",
+   "page_start": 3,
+   "page_end": 3,
+   "section": ": x ^ \\ ^ l / 2 > NEW AT",
+   "text": "*\"' •»% Hi. IBlL PHME ?\n\nO M E concern has been expressed about the\n\nof exposure to aerosols (liquid airborne\n\nArmy Chemical Center, Md. S\n\nO M E concern has been expressed about the severe effects\n\nBRISTOL'S SYNCROVERTER SWITCH is made to fit 7-pin miniature tube socket (left) or /4-in. diameter chassis hole (right). Covered by patents."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00018",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "chopper we've tested!\"",
+   "text": "That's the playback we're getting from electronic engineers all over the country on the high-performance Bristol Syncroverter® switch. One engineer writes:\n\n\"In seven years of experience in applying similar devices, we have not found a chopper as reliable . . . after our tests no deterioration in performance was found, and we believe there is no equivalent meeting our requirements/'\n\nAnother electronics engineer comments on his life-tests:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00019",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "chopper we've tested!\" > \"The switch has passed the 1000-hour mark without the slightest degradation of the wave form/1",
+   "text": "The Syncroverter switch has a normal operating life of thousands of hours. It's a polarized, SPDT, non-resonant switch that provides break-before-make action in synchronism with a sine or square-wave driving current anywhere in the frequency range of 0 to 2000 cps. In addition to reliability and long life, it's noted for light weight (only 1.7 ounces) low noise level, and clean wave form.\n\nWrite today for free bulletin on the high-performance Syncroverter switch. The Bristol Company, 175 Bristol Road, Waterbury 20, Conn. 6.10\n\n| TYPICAL OPERATION .\n\nS of exposure to aerosols (liquid airborne particles) of\n\nH 20 2 reported in the article \"Hazards Association With 90 Per Cent Hydrogen Peroxide Aerosols.\"\n\nIt should be pointed out that the aerosol concentrations used in the animal experiments reported are very high and are likely to persist under accidental conditions where a constant jet of material is fed into an enclosed space. The real hazard would exist when personnel were trapped in such a space without adequate protective equipment. Where escape is possible it is likely that the irritating effects to eyes and nose would preclude prolonged exposures to high aerosol concentrations which might be lethal. It is unlikely that high aerosol or liquid airborne particle concentrations would exist under normal handling conditions.\n\nReceived Dec. 3, 1956.\n\n1 By Charles L. Punte, Leon Z. Saunders, and Eugene H. Krackow. J E T PROPULSION, vol. 26, June 1956, p. 500.\n\nJANUARY 1957"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00020",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "BRISTOL > FOR OVER 60 YEARS",
+   "text": "U. S. Army photograph First to go at Fort Churchill, Nike-Cajun was fired for familiarization."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00021",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "Churchill Firings Prove It Can Be Done",
+   "text": "As a preliminary to the upcoming International Geophysical Year rocket research program, the United States National Committee for IGY recently launched six high altitude sounding rockets from Fort Churchill, Canada, in an attempt to feel out the arctic atmosphere.\n\nTermed a tremendous success, the firings also provided valuable scientific data. Most significant, for example, are the data from a firing instrumented to determine composition of the air and ion structure at high altitude. Although still not completely analyzed, say scientists connected with the project, this\n\nNike-Cajun on its way.\n\ndata will undoubtedly contribute greatly to the advancement of long-range communication and guidance.\n\nNot only will this new data extend knowledge of ionospheric penetration\n\n(i.e., getting through to rockets above the upper layers), but it is also expected to contribute to improvement in the use of ionospheric reflection, the method by which most signals are bounced over long distances. Conceivably knowledge gleaned from this and similar firings could lead to transoceanic television and the like. And, possibly, this data may have some import for interplanetary travel in regard to the possible ionization effect on space vehicles.\n\nReadings from the other rockets fired at Fort Churchill—most of which were instrumented for pressure, temperature, and density experiments—are also expected to make significant contributions to the knowledge of the upper atmosphere, says Robert M. Slavin of the Air Force Cambridge Research Center which launched two rockets in the series. But, principally, the preliminary firings served to check out range and facilities at Fort Churchill for the forthcoming IGY. Secondarily, but almost as significant, this joint effort of the U. S. National Committee for IGY and the Department of Defense showed that with the high degree of cooperation achieved among the three services and group of civilian scientists a major effort in basic research could be made on a very limited budget."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00022",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "Churchill Firings Prove It Can Be Done",
+   "text": "The tests, of course, were conducted by the civil) an scientists. But establishment and running of the over-all facility was carried out by the Army, Navy and Air Force under direction of a Defense Department Interservice Coordinating Group.\n\nTrouble in the North: And, most important, says John W. Townsend who is in charge of the Naval Research Laboratory field group at Churchill, these firings proved it can be done. \"We've learned that we can get payloads up to predicted altitudes under arctic conditions.\" This was no mean feat in itself. Air and water lines froze. Power failures were frequent. Radar equipment was beset with cold weather problems. Holes were blasted through the specially designed, enclosed launching tower and it became impossible to maintain temperatures.\n\nAnd, unlike White Sands and Holloman, wreather conditions and terrain at Churchill made recovery next to impossible. Over 30 per cent of the area is water during the warm months. And if the rockets don't land in the water, they are likely to land in crevices just as inaccessible to spotting. Or if they do land on the ground, there are so many big rocks and short trees in the area that look like rockets, says Townsend, that you could drop an ICBM in there and never find it. Moreover, much of the land is so soft in the summer that rockets just disappear into the tundra with a"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00023",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "Churchill Firings Prove It Can Be Done > Tundra Test Site",
+   "text": "Fort Churchill, site of the recent pre-IGY rocket launching tests, sits on the western edge of Hudson Bay in the province of Manitoba, Canada.\n\nMost of its 500 nonmilitary inhabitants occupy themselves with fishing and gathering furs. A few hunt whales in Hudson Bay. For six weeks in ]ate July and August, when the Bay is open to navigation, Fort Churchill serves as a port principally for the shipment of grain.\n\nBecause of its location in the subarctic and in the middle of the aurora zone, Churchill appeared to be a choice site for investigation of the upper atmosphere. Up to this time, upper air research had been confined essentially to desert regions in the southwest United States; the arctic atmosphere and auroral phenomena were practically unknown.\n\nThus, the National Committee for the International Geophysical Year eagerly seized upon Canada's invitation to use Fort Churchill as an IGY test site. And, starting next July, the base will serve as one of the principal launching areas for high altitude research rockets."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00024",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Churchill Firings Prove It Can Be Done > 52 J E T PROPULSION",
+   "text": "RV-N-13B Aerobee-Hi instrumented for ionosphere exploration. Carrying a 180-lb payload, the rocket reached an altitude of over 80 miles. Although this was considered underperformance, it was adequate for the experiment.\n\n• November 17. Another NRL RV- N-13B Aerobee-Hi, instrumented for pressure, temperature, and density readings, achieved near-perfect performance, reaching 130-mile altitude with 190-lb payload. • November 20. The last rocket in the test program, a RV-N-13C Aerobee- Hi, actually hit peak performance— 160-lb payload to 157-mile altitude. Unlike the other models, this Aerobee- Hi was equipped with proper tankage for its thrust chamber; i.e., there was no fuel left over at the end of its run. The vehicle was instrumented with three mass spectrometers to measure composition of air and ions at high altitudes.\n\nFull significance of these preliminary tests, of course, must await complete analysis of the collected data. But it is already evident that the program fulfilled its primary purpose of equipping members of SCIGY (Special Committee for the International Geophysical Year) with invaluable background for the forthcoming IGY rocket program, a major part of which (over half the solid rocket launchings) will take place at Fort Churchill starting next July.\n\nTaxi calls meant night firings.\n\n\"squoosh.\" In the winter months, cold weather and blizzards make it dangerous to send recovery crews out, and the snow quickly covers the rockets."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00025",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Churchill Firings Prove It Can Be Done > 52 J E T PROPULSION",
+   "text": "As a result, says Townsend, there is very little shooting for recovery; most data must be telemetered. Recovery might be feasible if the rockets were equipped with parachutes and electronic locators, in which case other interesting experiments could be run. _ But, as now planned, most tests will be run without hope of recovery.\n\nThe use of telemetering and tracking devices, however, was not without its share of problems too. In addition to the usual cold weather malfunctioning, the systems were plagued by interference. Using a doppler frequency of about 40 megacycles, for example, Fort Churchill technicians found that signals from Patrick AFB (Fla.) and White Sands Proving Grounds (N. Mex.) were mixing with ground-to-rocket signals from their own tracking system.\n\nEven Charlotte (N. C.) taxicabs were cutting in on the Churchill transmissions. Consequently, most firings were rescheduled for nights and weekends when interference was at a minimum.\n\nCount-down: Despite these numerous and vexing problems, scientists at Fort Churchill experienced only one\n\nmajor mishap, were able to get off six of the seven rockets that were scheduled for this preliminary run-through of the IGY. Of the six firings, all were considered eminently successful.\n\nHere, in some detail, is a playback of the recently concluded check-out program at Fort Churchill:\n\n• October 20. An Air Force Nike- Cajun, instrumented for pressure, temperature, and density readings, was fired principally for familiarization and checkout of the whole facility (see picture). Rocket carried approximately a 100-lb"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00026",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "Churchill Firings Prove It Can Be Done > 52 J E T PROPULSION",
+   "text": "payload to an altitude of about 70 miles.\n\n• October 23. An Air Force Aerobee, intermediate model, reached an altitude of about 90 miles with a 200-lb payload. This vehicle was also instrumented for pressure, temperature, and density readings. Although considered a good firing, pressure from the booster blast started to spread the metal sheets covering the launching tower.\n\n• November 5. A full-blown RV-N- 13B, Naval Research Laboratory Aerobee-Hi exploded while holding X-minus- 15 min, tossed 700 lb of acid around inside the tower, and threw shrapnel through the sides. The rocket carried 220 lb of auroral particle instrumentation. Damage to the launching tower resulting from the explosion (and fire) was repaired.\n\n• November 11. Signal Corps Engineering Laboratory fired an old model Aerobee in a grenade experiment (see picture) to measure temperature and winds. The rocket reached an altitude of about 45 miles with a 220-lb payload. Because this firing was so successful, the Signal Corps called off the other launching they had scheduled. But this firing really blew out the sides of the recently repaired launching tower, made it extremely difficult^to maintain temperatures.\n\n• November 15. Naval Research Laboratory group launched another"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00027",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "SYSTEMS ENGINEERING For ICBM-IRBM > Opportunities",
+   "text": "... developing missile component and sub-system integration plans and engineering change procedures."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00028",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "SYSTEMS ENGINEERING For ICBM-IRBM > Ground Support Equipment",
+   "text": "...responsibility for planning GSE, with emphasis upon problems of compatibility and integration.\n\nTraining\n\n... including the preparation of training program criteria and plans, and technical manual specifications."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_8_12572#c00029",
+   "page_start": 5,
+   "page_end": 5,
+   "section": "SYSTEMS ENGINEERING For ICBM-IRBM > Operational Planning",
+   "text": "...developing missile operational plans and facility criteria.\n\nThese areas are a part of Ramo-Wooldridge's systems engineering and technical direction responsibility for the Air Force Intercontinental and Intermediate Range Ballistic Missiles. Engineers with senior project and field experience are invited to explore these positions.\n\nPlease address inquiries to: Mr. William Coster"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 9,
+   "figure": 8,
+   "table": 1
+  },
+  "flagged_candidates": 1,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

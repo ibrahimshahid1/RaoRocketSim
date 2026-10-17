@@ -1,7 +1,7 @@
 {
  "summary": {
-  "generated_at": "2026-10-16T18:20:23.815321+00:00",
-  "n_issues": 13,
+  "generated_at": "2026-10-17T17:58:08.805732+00:00",
+  "n_issues": 14,
   "issues_by_check": {
    "empty_source_pdf": 1,
    "canonical_document_without_chunks": 1,
@@ -10,13 +10,31 @@
    "declared_cad_bytes_unavailable": 6,
    "source_extraction_incomplete": 1,
    "source_verification_incomplete": 1,
-   "unknown_basis_software_constants": 1
+   "unknown_basis_software_constants": 1,
+   "incomplete_formula_transcriptions": 1
   },
   "stats": {
    "equation_variables": {
-    "ambiguous": 6,
-    "unresolved": 233,
-    "total": 440
+    "ambiguous": 14,
+    "unresolved": 537,
+    "resolved": 270,
+    "total": 821,
+    "equations": 191,
+    "scope": "current active equations with CURRENT source state",
+    "historical_or_inactive": {
+     "ambiguous": 6,
+     "unresolved": 55,
+     "resolved": 17,
+     "total": 78,
+     "equations": 22
+    },
+    "all_records": {
+     "ambiguous": 20,
+     "unresolved": 592,
+     "resolved": 287,
+     "total": 899,
+     "equations": 213
+    }
    },
    "constants_by_basis": {
     "UNKNOWN_BASIS": 274,
@@ -33,13 +51,17 @@
      "EngineConfiguration": 17,
      "ManufacturingProcess": 15
     },
-    "inactive_snapshots": 0
+    "inactive_snapshots": 72
    },
    "graph": {
-    "nodes": 4870,
-    "edges": 6267,
+    "nodes": 5728,
+    "edges": 7266,
     "edges_without_provenance": 0,
     "top_degree": [
+     [
+      "DOC_NTRS_19710019929",
+      153
+     ],
      [
       "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
       146
@@ -55,10 +77,6 @@
      [
       "MODEL_NOZZLE_MOC",
       97
-     ],
-     [
-      "MODEL_PUMP_ELECTRIC_DRIVE",
-      81
      ]
     ]
    },
@@ -66,16 +84,17 @@
    "coverage": {
     "equation_completeness": "NOT_ESTABLISHED",
     "concept_completeness": "NOT_ESTABLISHED",
-    "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+    "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. Existing independently_confirmed counters preserve historical stored-verdict totals; content_bound_confirmed additionally checks the assertion fingerprint. No all-equation denominator or physical validation.",
     "documents": {
      "records": 252,
      "canonical": 248,
      "alternate_copies": 4,
-     "with_source_objects": 9,
-     "without_source_objects": 239,
-     "with_equations": 9,
-     "without_equations": 239,
-     "with_independently_confirmed_objects": 5,
+     "with_source_objects": 30,
+     "without_source_objects": 218,
+     "with_equations": 24,
+     "without_equations": 224,
+     "with_independently_confirmed_objects": 20,
+     "with_content_bound_confirmed_objects": 4,
      "conversion_requires_review": 230,
      "conversion_low_confidence": 16,
      "zero_page_sources": 1,
@@ -85,32 +104,120 @@
     },
     "source_objects": {
      "equations": {
-      "records": 93,
-      "current": 75,
-      "independently_confirmed": 58,
-      "inactive_stale_refuted_or_unresolved": 18
+      "records": 213,
+      "current": 191,
+      "independently_confirmed": 124,
+      "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+      "stored_verdict_totals_all_records": {
+       "CONFIRMED": 125,
+       "NOT_CHECKED": 88
+      },
+      "stored_verdict_totals_current_source_objects": {
+       "CONFIRMED": 124,
+       "NOT_CHECKED": 67
+      },
+      "content_bound_confirmed": 5,
+      "current_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 119,
+       "NOT_CHECKED": 67,
+       "CONFIRMED": 5
+      },
+      "all_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 119,
+       "NOT_CHECKED": 88,
+       "SUPERSEDED_EXTRACTION": 1,
+       "CONFIRMED": 5
+      },
+      "current_without_content_bound_confirmation": 186,
+      "inactive_stale_refuted_or_unresolved": 22
      },
      "claims": {
-      "records": 188,
-      "current": 188,
-      "independently_confirmed": 7,
-      "inactive_stale_refuted_or_unresolved": 0
+      "records": 287,
+      "current": 284,
+      "independently_confirmed": 80,
+      "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+      "stored_verdict_totals_all_records": {
+       "CONFIRMED": 80,
+       "NOT_CHECKED": 204,
+       "REFUTED": 3
+      },
+      "stored_verdict_totals_current_source_objects": {
+       "CONFIRMED": 80,
+       "NOT_CHECKED": 204
+      },
+      "content_bound_confirmed": 5,
+      "current_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 75,
+       "NOT_CHECKED": 204,
+       "CONFIRMED": 5
+      },
+      "all_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 75,
+       "NOT_CHECKED": 204,
+       "CONFIRMED": 5,
+       "REFUTED": 3
+      },
+      "current_without_content_bound_confirmation": 279,
+      "inactive_stale_refuted_or_unresolved": 3
      },
      "entities": {
-      "records": 94,
-      "current": 94,
-      "independently_confirmed": 0,
-      "inactive_stale_refuted_or_unresolved": 0
+      "records": 226,
+      "current": 225,
+      "independently_confirmed": 64,
+      "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+      "stored_verdict_totals_all_records": {
+       "NOT_CHECKED": 161,
+       "CONFIRMED": 64,
+       "REFUTED": 1
+      },
+      "stored_verdict_totals_current_source_objects": {
+       "NOT_CHECKED": 161,
+       "CONFIRMED": 64
+      },
+      "content_bound_confirmed": 3,
+      "current_content_verification_by_state": {
+       "NOT_CHECKED": 161,
+       "LEGACY_CONTENT_NOT_BOUND": 61,
+       "CONFIRMED": 3
+      },
+      "all_content_verification_by_state": {
+       "NOT_CHECKED": 161,
+       "LEGACY_CONTENT_NOT_BOUND": 62,
+       "CONFIRMED": 3
+      },
+      "current_without_content_bound_confirmation": 222,
+      "inactive_stale_refuted_or_unresolved": 1
      },
      "validity": {
-      "records": 36,
-      "current": 36,
-      "independently_confirmed": 0,
+      "records": 40,
+      "current": 40,
+      "independently_confirmed": 3,
+      "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+      "stored_verdict_totals_all_records": {
+       "CONFIRMED": 3,
+       "NOT_CHECKED": 37
+      },
+      "stored_verdict_totals_current_source_objects": {
+       "CONFIRMED": 3,
+       "NOT_CHECKED": 37
+      },
+      "content_bound_confirmed": 2,
+      "current_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 1,
+       "NOT_CHECKED": 37,
+       "CONFIRMED": 2
+      },
+      "all_content_verification_by_state": {
+       "LEGACY_CONTENT_NOT_BOUND": 1,
+       "NOT_CHECKED": 37,
+       "CONFIRMED": 2
+      },
+      "current_without_content_bound_confirmation": 38,
       "inactive_stale_refuted_or_unresolved": 0
      }
     },
     "incomplete_formula_transcriptions": {
-     "count": 18,
+     "count": 22,
      "ids": [
       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
@@ -128,32 +235,38 @@
       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+      "EQ_NTRS_19710019929_16E1DC3A",
+      "EQ_NTRS_19710019929_7A8070BC",
+      "EQ_NTRS_19710019929_98E8ACF4",
+      "EQ_NTRS_19760023196_2A22408D",
       "EQ_NTRS_19760023196_BE05E0AF",
       "EQ_NTRS_19760023196_D7D2D8F1"
      ],
-     "current_count": 0,
-     "current_ids": [],
-     "current_state": "NONE_FLAGGED_CURRENT",
-     "historical_count": 18,
+     "current_count": 1,
+     "current_ids": [
+      "EQ_NTRS_19760023196_2A22408D"
+     ],
+     "current_state": "INCOMPLETE_TRANSCRIPTION",
+     "historical_count": 21,
      "state": "INCOMPLETE_TRANSCRIPTION",
      "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
     },
     "models": {
      "records": 61,
      "declared_support": {
-      "PARTIALLY_SUPPORTED": 10,
+      "PARTIALLY_SUPPORTED": 15,
       "NOT_FOUND_IN_SOURCE": 1,
-      "SUPPORTED": 3,
-      "NOT_CHECKED": 47
+      "SUPPORTED": 4,
+      "NOT_CHECKED": 41
      },
      "current_support": {
-      "NOT_CHECKED": 54,
+      "NOT_CHECKED": 48,
       "NOT_FOUND_IN_SOURCE": 1,
-      "PARTIALLY_SUPPORTED": 4,
-      "SUPPORTED": 2
+      "PARTIALLY_SUPPORTED": 9,
+      "SUPPORTED": 3
      },
-     "source_reviewed_current_fingerprint": 6,
-     "without_current_source_review": 55,
+     "source_reviewed_current_fingerprint": 12,
+     "without_current_source_review": 49,
      "without_manifest_source": 8
     },
     "software_constants": {
@@ -183,11 +296,12 @@
      "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
     },
     "gaps": {
-     "canonical_documents_without_source_objects": 239,
-     "canonical_documents_without_equations": 239,
-     "equations_and_claims_pending_independent_verification": 198,
-     "equations_without_model_links": 47,
-     "incomplete_formula_transcriptions": 0,
+     "canonical_documents_without_source_objects": 218,
+     "canonical_documents_without_equations": 224,
+     "equations_and_claims_pending_independent_verification": 271,
+     "current_source_objects_without_content_bound_confirmation": 725,
+     "equations_without_model_links": 160,
+     "incomplete_formula_transcriptions": 1,
      "zero_page_sources": 1,
      "unknown_basis_software_constants": 257
     }
@@ -258,13 +372,13 @@
   },
   {
    "check": "source_extraction_incomplete",
-   "count": 239,
+   "count": 218,
    "severity": "warning",
    "equation_completeness": "NOT_ESTABLISHED"
   },
   {
    "check": "source_verification_incomplete",
-   "count": 198,
+   "count": 271,
    "severity": "warning",
    "equation_completeness": "NOT_ESTABLISHED"
   },
@@ -273,6 +387,16 @@
    "count": 257,
    "severity": "warning",
    "equation_completeness": "NOT_ESTABLISHED"
+  },
+  {
+   "check": "incomplete_formula_transcriptions",
+   "severity": "warning",
+   "count": 1,
+   "ids": [
+    "EQ_NTRS_19760023196_2A22408D"
+   ],
+   "state": "INCOMPLETE_TRANSCRIPTION",
+   "remediation": "Inspect original PDF pages and bank corrected transcriptions with independent verification; retain unresolved records without treating their formulas as usable."
   }
  ]
 }

@@ -1,0 +1,99 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-LEE-p010-011",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_f62419255da62ba39d406156",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher logo in the page-10 footer (bbox 50-60 x 44-56 pt, bottom left), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_2d77f91f6cf7983375323714",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (38) eta_E = 0.093 ln(t_b) + 0.3301, eta_E = 0.925 at t_b = 600 s matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_ff4b5f7cc455f31a0b8b4747",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 1 design point values match (500 N, 20 bar, 30 km, 600 s); the caption 'Table 1 Design point' is merged into the header cell.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_81ff0d44333968d441f5a53f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher logo in the page-11 footer (bbox 502-544 x 44-56 pt, bottom right), not a figure; nothing to compare.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_a940c01f1d06b9236645829c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 8 caption matches.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_acd43555a6a360064b6e73c1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 9 caption matches.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_500e7bc48e03eb655bde21e7",
+   "state": "REJECTED",
+   "reason": "Inset motor specification table of Fig. 8 (legacy run): values match (BLDC, 0.875, 57940, 87%, 80 g) but the unit is OCR-corrupted ('kWikg' for kW/kg).",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_6cb8d245137885b0317b29cf",
+   "state": "REJECTED",
+   "reason": "Inset battery specification table of Fig. 9 (legacy run): values match (Li-polymer, 325, 0.65, 222 g) but the units are OCR-corrupted ('W-hikg', 'kWikg').",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_ec404128a1bfd11d2e65ed23",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 2: two printed column groups (Common | Electric-pump/Gas-generator cycle) reproduced row by row with the source's blank continuation cells; all values match the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison; p.11 candidates come from legacy run ENR_a42ff41ef1221668dead1053 (metadata integrity UNAVAILABLE, raw hash matches)",
+    "pdf_page": 11
+   }
+  }
+ ]
+}

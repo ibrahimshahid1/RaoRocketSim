@@ -1,0 +1,29 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-TOKUDOME-p001-003",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_5d6e6e2ca041d67cd6208218",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Right-hand panel of Figure 1 (RVT#4); caption carried by the other panel.",
+   "evidence": {
+    "source_sha256": "33167aa3ebc558002dd74d5c548d3abd6de1f3c34ed7ac2fa37cf2f832a1e34b",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_a16f3abd7e9e7df318119525",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 1 caption matches.",
+   "evidence": {
+    "source_sha256": "33167aa3ebc558002dd74d5c548d3abd6de1f3c34ed7ac2fa37cf2f832a1e34b",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  }
+ ]
+}

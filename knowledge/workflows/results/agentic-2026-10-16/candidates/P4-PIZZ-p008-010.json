@@ -1,0 +1,403 @@
+{
+ "packet": "P4-PIZZ-p008-010",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  8,
+  10
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 8,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0008.png",
+   "sha256": "24f527bf7a2db32407382cc89b7528f5c38d7e1bd36bb906658f3d5d5f104c02",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 9,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0009.png",
+   "sha256": "8202ef46ff7c255c43085fbec351b180a6a9e588e735ee814d32042cce238e24",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 10,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0010.png",
+   "sha256": "40da38d1624ce2bffccf9a79dae0030bf92fdc9cdfe9cafa92dd5b98034af741",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_57ba1de7d2f768a0f9f15849",
+  "ENR_c33ebbf47b43de957767ca36",
+  "ENR_d8b9f4ac70fef1938109c617"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_ab9214e93bf81d96c8685e48",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 171.94955178,
+     "t": 330.06802138,
+     "r": 430.39324474,
+     "b": 304.72675078451886,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { d } { d x } \\left [ \\iint _ { A } ( \\rho u H _ { 0 } ) d A \\right ] d x = \\iint _ { A _ { w } } q _ { w } d A _ { w }",
+   "original_text": "d dx ZZ A quH0 ð ÞdA \u0014 \u0015 dx ¼ Z Z Aw qwdAw ð12Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_57ba1de7d2f768a0f9f15849",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.json",
+   "raw_sha256": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c2e85fb42b6ac89f7c50af66",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 80.22082712000001,
+     "t": 152.51067120000005,
+     "r": 430.3952359799998,
+     "b": 129.74911898000005,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\partial } { \\partial x } [ \\rho ( y ) u ( y ) H _ { 0 } ( y ) b ( y ) d y ] d x = 2 q _ { w } ( y ) d y d x + q _ { c } ( y ) b ( y ) d x - q _ { c } ( y + d y ) b ( y ) d x",
+   "original_text": "q qx ½qðyÞuðyÞH0ðyÞbðyÞdydx ¼ 2qwðyÞdydxþ qcðyÞbðyÞdx\u0000 qcðy þdyÞbðyÞdx ð13Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_57ba1de7d2f768a0f9f15849",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p8-8-ed278d4f7b77e92094309c824924ff913464a309573cb6392290decf8bddda32.json",
+   "raw_sha256": "70d3a6836e2340c57606b726df1a0aa29ad0d074862d1c1150a72565ab979f4c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_295a58e9701f17ae2bc31d58",
+   "kind": "figure",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 2. Heat fluxes in a slice of cooling channel of width b and height dy."
+   ],
+   "bbox": [
+    {
+     "l": 125.04949951171875,
+     "t": 645.4059677124023,
+     "r": 380.2853698730469,
+     "b": 529.7147827148438,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6b14d21255577925c7f2e7f3",
+   "kind": "formula",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 216.7937,
+     "t": 358.957655,
+     "r": 432.26404474000003,
+     "b": 336.70390156903767,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { k _ { t } } { k } = 0 . 0 0 8 \\cdot R e ^ { 0 . 9 }",
+   "original_text": "kt k ¼ 0:008 \u0001 Re 0:9 ð15Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_87ef5aa55fd90b57c5c5e658",
+   "kind": "formula",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 220.59159591999997,
+     "t": 466.36247119999996,
+     "r": 432.26376419999997,
+     "b": 443.60091898,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "q _ { c } ( y ) = - k _ { t } \\frac { \\partial T } { \\partial y }",
+   "original_text": "qcðyÞ ¼ \u0000kt qT qy ð14Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a49f77b5ae4b82226af7bdb5",
+   "kind": "formula",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/16",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 221.21623145999996,
+     "t": 98.3343006,
+     "r": 432.26387109999996,
+     "b": 86.528114958159,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = N u ^ { 0 } \\cdot C _ { h }",
+   "original_text": "Nu ¼ Nu 0 \u0001 Ch ð18Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ebf876e01603fc6c423f2cf2",
+   "kind": "formula",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 182.15471394,
+     "t": 276.88986184000004,
+     "r": 432.26387109999996,
+     "b": 252.98958444000004,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\hat { c } } { \\hat { \\partial } x } ( \\rho u H _ { 0 } b ) = \\frac { \\hat { c } } { \\hat { \\partial } y } \\left ( k _ { t } b \\frac { \\hat { \\partial } T } { \\hat { \\partial } y } \\right ) + 2 q _ { w }",
+   "original_text": "q qx quH0b ð Þ ¼ q qy ktb qT qy \u0012 \u0013 þ2qw ð16Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fc0d5be81640fad8b06502fe",
+   "kind": "formula",
+   "pages": [
+    9
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 212.99650553999996,
+     "t": 192.35888420000003,
+     "r": 432.26271182,
+     "b": 182.33911495815903,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "q _ { w } = h _ { w } \\cdot ( T _ { w } - T )",
+   "original_text": "qw ¼ hw \u0001 ðTw \u0000TÞ ð17Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d8b9f4ac70fef1938109c617",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p9-9-cd68daaece73e685abf2c46080f29842b0fdb62e023935583b278f5dea30b38e.json",
+   "raw_sha256": "7e7831f857c2c47c466f292a95334608aa720853265fc95a8c005f2701eff3f0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_92bf03ebaca8fa45281b9b7a",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 183.68934217999993,
+     "t": 333.9232278400001,
+     "r": 430.39818728,
+     "b": 324.40850648560007,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mu = \\mu ( \\rho , T ) \\quad \\text {and} \\quad k = k ( \\rho , T )",
+   "original_text": "m ¼ mðq; TÞ and k ¼ kðq; TÞ ð20Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c33ebbf47b43de957767ca36",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+   "raw_sha256": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a8055affbfe01cb40cc08f10",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 231.5338,
+     "t": 107.99129319999997,
+     "r": 430.39344823999994,
+     "b": 84.93080156903761,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { \\Delta u } { \\overline { u } } = \\frac { \\Delta T } { \\overline { T } }",
+   "original_text": "Du u ¼ DT T ð21Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c33ebbf47b43de957767ca36",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+   "raw_sha256": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ae3af2be52c8fe4ee1f6436b",
+   "kind": "formula",
+   "pages": [
+    10
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 180.79620313999982,
+     "t": 402.6910706000001,
+     "r": 430.3961947599999,
+     "b": 393.1763492456001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p = p ( \\rho , T ) \\quad \\text {and} \\quad H = H ( \\rho , T )",
+   "original_text": "p ¼ pðq; TÞ and H ¼ Hðq; TÞ ð19Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_c33ebbf47b43de957767ca36",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p10-10-341f02c81009633cc2a0fa0b7cba6bddc72df70d99ac937f1a337da4470619fc.json",
+   "raw_sha256": "8646f678943e8b8e7ef8a3ac707b849b53b0c36462c259314ad5b6ab34bbbbbc",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00013",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 7\n\nNote that because the correction function describes the effect of the fluid\nproperties variation, it is strongly related to the thermodynamic behavior of the\nworking fluid. Thus, the function Cf has a different expression in the case of a\ngas, liquid, supercritical fluid, etc. According to the Moody diagram, the skin\nfriction factor of the constant properties flow depends on the bulk Reynolds\nnumber Re based on the hydraulic diameter of the channel cross-section and,\nin the case of rough tubes, the wall relative roughness e: fw <sup>0</sup> <sup>¼ f 0</sup> w <sup>ðRe; eÞ.</sup> <sup>The</sup> <sup>bulk</sup>\n\nReynolds number is evaluated at the local pressure and the bulk temperature of\nthe channel cross-section and the bulk temperature is the mean temperature in the\nchannel cross-section. The correction factor Cf, because it takes into account the\neffect of the nonadiabatic case, mainly depends on the ratio between the wall and\nfluid temperature: Tw=T. To fit the semi-empirical correlations to the quasi-2-D\nmodel, a different approach must be adopted for the lateral wall and the channel\nbases because in the former case the skin friction is a function of the radial\nabscissa y, while in the latter case the skin friction has a single value for the bottom wall and a single value for the top wall. As a consequence, the fluid properties and the wall temperature are evaluated at the local abscissa y for the\nevaluation of the skin friction along the lateral wall, while the fluid properties\nare evaluated at the bulk temperature for the evaluation of the skin friction along\nthe top and bottom bases."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00014",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "",
+   "text": "2.3. Energy Equation\n\nThe steady-state integral energy equation through the channel\ncross-sections is\n\nAw\n\nqwdAw ð12Þ\n\n<u>d</u>\ndx\n\n�ZZ ðquH0ÞdA dx ¼\n\nA\n\nZZ\n\nwhere H0 is the total enthalpy (H0 ¼ H þ u <sup>2</sup> =2), and qw is the heat flux entering\nin the coolant through the wall Aw. This is the equation used in the\none-dimensional approach. In the present approach, as the temperature is left\nto vary in the radial direction, a suitable equation for the evaluation of T must\nbe found. As thermal stratification depends on the heat flux through the fluid in\na radial direction (qc) and on the heat flux exchanged with the channel walls\n(qw), the hypothesis is made of splitting the height of the channel in tiny\nslices of height dy, all having at the same abscissa x, the same value of p and\nvariable value of u. To solve for T(y), the balance equation, Eq. (12), has to\nbe written for a slice of height dy rather than for the whole channel height\n(see Figure 2), that is,\n\n<u>q</u>\nð13Þ\nqx <sup>½qðyÞuðyÞH0ðyÞbðyÞdy�dx ¼ 2qwðyÞdydx þ qcðyÞbðyÞdx �</sup> <sup>qcðy þ dyÞbðyÞdx</sup>\n\nwhere only the dependency of variables on y has been emphasized. Equation\n(13) becomes a differential equation for T if it is possible to express qw(y)\nand qc(y) as a function of T(y). In regards to qc(y), this can be made according"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00015",
+   "page_start": 9,
+   "page_end": 9,
+   "section": "",
+   "text": "8 M. PIZZARELLI ET AL.\n\nFigure 2. Heat fluxes in a slice of cooling channel of width b and height dy.\n\nto Kacynski [25]. If it is assumed that qc(y) is due to the turbulent mixing, then\n\nqcðyÞ ¼ �kt\n\n<u>qT</u>\n\nð14Þ\nqy\n\nwhere kt is the average turbulent conductivity in the radial direction, which can\nbe obtained as a function of the mean Reynolds number Re and of the mean\nfluid thermal conductivity k (that is, Re and k are evaluated on the basis of\nthe bulk temperature), as proposed in reference [25] in the case of a smooth\nwall; that is,\n\n<u>kt</u>\n\nð15Þ\nk <sup>¼ 0:008 �</sup> <sup>Re0:9</sup>\n\nNote that due to the lack of modeling, the above relation has been assumed\nvalid in the present study as well as in the case of rough wall. With the hypothesis\nof Eq. (14), the energy balance Eq. (13) becomes\n\n<sup><u>q</u></sup> ktb <sup><u>qT</u></sup>\n\nqy qy\n\n<u>q</u> ð Þ ¼ <sup><u>q</u></sup>\nqx <sup>quH0b</sup> q\n\n- <u>�</u>\n\nktb <sup><u>qT</u></sup> þ 2qw ð16Þ\n\nqy\n\nwhere all the involved variables, with the exception of kt, depend on both x and y.\nFinally, the wall heat flux can be related to the coolant and wall temperature using\na transfer coefficient form, that is,\n\nqw ¼ hw �ðTw � TÞ ð17Þ\n\nwhere hw is the heat transfer coefficient and Tw is the wall temperature. The coefficient hw is estimated by means of the Nusselt number Nu whose behavior can be\nmodeled using a suitable semi-empirical correlation. As for the skin friction coefficient, to evaluate the heat flux qw from the lateral wall, the semi-empirical relations\nfor the Nusselt number are in the following general form:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00016",
+   "page_start": 9,
+   "page_end": 10,
+   "section": "",
+   "text": "Nu ¼ Nu <sup>0</sup>             - Ch ð18Þ\n\nTEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 9\n\nwhere the first term Nu <sup>0</sup> expresses the Nusselt number for the case of constant properties flow (which grossly represents the adiabatic flow) in rough tubes; the second, Ch, is\nthe correction that applies in the case of fluid with variable temperature. For the problem of interest, the Nusselt number of the constant properties flow depends on the\nbulk Reynolds number Re based on the hydraulic diameter of the channel crosssection, the bulk Prandtl number Pr and, in the case of rough tubes, the wall relative\nroughness e: Nu <sup>0</sup> ¼ Nu <sup>0</sup> (Re, Pr, e). The correction factor Ch, because it takes into\naccount the effect of the nonadiabatic case, mainly depends on the ratio between\nthe wall and fluid temperature: Tw=T. To fit the semi-empirical correlations to the\nquasi-2-D model, the Nusselt number is evaluated at the local abscissa y. In fact,\nas the wall temperature and the fluid properties vary with the radial abscissa y, the\nNusselt number (and thus the heat transfer coefficient on the lateral wall) vary with y.\n\n2.4. Equations of State\n\nIn the selected flow model, the density and the temperature have been selected\nas independent thermodynamic variables, and it has been implicitly assumed that the\nother thermodynamic variables (pressure and enthalpy) can be obtained by suitable\nequations of state (EOS), which are written in the following general form:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00017",
+   "page_start": 10,
+   "page_end": 10,
+   "section": "",
+   "text": "p ¼ pðq; TÞ and H ¼ Hðq; TÞ ð19Þ\n\nand that the fluid molecular properties (viscosity and thermal conductivity),\ncan be evaluated by proper thermodynamic relations which can be written in the following general form:\n\nm ¼ mðq; TÞ and k ¼ kðq; TÞ ð20Þ\n\nNote, that the proposed flow model does not refer to any particular EOS, and\nthus the channel flow of any fluid can be described. This goal is achieved by considering general equations of state in the form of Eqs. (19) and (20), and governing\nequations without any thermodynamic characterization of the working fluid.\n\n2.5. Equation for the Velocity Profile\n\nAswillbeshownin thefollowingsections, themainfeaturesofthewall heat transfer\ndistribution in a channel section are: a peak value in the low-density, high-velocity region\nand the strong heat transfer reduction in the proximity of channel section corners. These\nfeatures can be reproduced if the velocity distribution tends to zero close to the wall, and\npresents a peak value that is located in the lower density region of the channel section. In\nregards to the velocity peak value, it is due to the temperature asymmetric distribution in\nthe channel cross-section. Moreover, the greater the temperature difference the greater\nthe velocity peak value. Thus, it is possible to say that the velocity variation relative to\nits mean value is equal to the temperature variation relative to its mean value; that is,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00018",
+   "page_start": 10,
+   "page_end": 11,
+   "section": "",
+   "text": "<u>Du</u>\n\n<u>u</u> <sup><u>DT</u></sup>\n\n<u>u</u> <sup>¼</sup> T\n\nð21Þ\nT\n\n10 M. PIZZARELLI ET AL.\n\nwhere DT and Du are the coolant temperature and velocity differences in the channel\nsection, and T and � **u** are the arithmetic mean values. To satisfy this condition, the velocity\nprofile is considered in the linear form, that is,\n\n<u>ulðyÞ</u>\n\numh\n\n -  - ��\n\n¼ 1 � <sup><u>B</u></sup> 1 � <sup><u>2y</u></sup> ð22Þ\n2 h\n\nwhere the scaling factor umh is the velocity at the mid-height y ¼ h=2 and the coefficient B\nrepresents the rate of asymmetry, that is,\n\nB ¼ <sup><u>uðhÞ �</u></sup> <sup><u>uð0Þ</u></sup>\n\numh\n\n¼ <sup><u>Du</u></sup> ð23Þ\n\n<u>u</u>\n\nIn fact, velocity is constant if B ¼ 0, otherwise the peak value is located in the\nlower part of the channel height if B > 0 or in the upper part if B < 0. According to\nEq. (21), the value of the coefficient B can be related to the asymmetric temperature\ndistribution in the channel section. In particular, considering that in the case of\nasymmetric heating the maximum and minimum wall temperature are located at\nthe channel bottom and top (that is, y ¼ 0 and y ¼ h), the velocity profile yields,\n\n<sup><u>T</u></sup> <sup><u>TðhÞ �</u></sup> <sup><u>Tð0Þ</u></sup>\n\nT <sup>¼ 2</sup> TðhÞ þ Tð0Þ\n\nB ¼ <sup><u>DT</u></sup>\n\n-\n<sup><u>TðhÞ �</u></sup> <sup><u>Tð0Þ</u></sup> ð24Þ\n\nTðhÞ þ Tð0Þ\n\nThis relation says that if the temperature field is given, the coefficient B is\nknown and the linear velocity profile, Eq. (22), depends only on the coefficient\numh. Note, that the velocity profile in the form of Eq. (22) does not go to zero at\nthe wall, and thus it is not able to reproduce the rib heat flux behavior close to\nthe bottom and top walls. To satisfy this condition, a further term must be added\nto take into account the velocity behavior at wall. In doing this, the axisymmetric\nturbulent velocity profile in a smooth circular cross-section channel is expressed as"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "formula": 10,
+   "figure": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

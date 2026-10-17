@@ -33,6 +33,15 @@ def normalize(text: str) -> str:
     return text
 
 
+def form_key(form: str) -> str:
+    """Comparison key for equation forms: case and every whitespace character are ignored.
+
+    'P_inv_out/delta_P_inv' and 'P_inv_out / delta_P_inv' are the same formula;
+    normalize() collapses whitespace runs but keeps spaces around operators.
+    """
+    return _WS_RE.sub("", unicodedata.normalize("NFKC", form or "")).lower()
+
+
 def _tokens(text: str) -> list[str]:
     return [t for t in re.findall(r"[a-z0-9]+", normalize(text)) if len(t) > 1]
 

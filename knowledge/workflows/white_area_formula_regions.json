@@ -1,0 +1,7 @@
+[
+ {"page":1098,"bbox":{"l":270,"b":120,"r":365,"t":190},"locator_note":"Displayed continuity/area Eq9.41"},
+ {"page":1099,"bbox":{"l":140,"b":645,"r":420,"t":695},"locator_note":"Displayed density Eq9.42"},
+ {"page":1099,"bbox":{"l":150,"b":530,"r":400,"t":620},"locator_note":"Displayed velocity Eq9.43"},
+ {"page":1099,"bbox":{"l":150,"b":445,"r":405,"t":505},"locator_note":"Displayed area-Mach Eq9.44"},
+ {"page":1099,"bbox":{"l":175,"b":365,"r":360,"t":410},"locator_note":"Displayed k1.4 area-Mach Eq9.45"}
+]

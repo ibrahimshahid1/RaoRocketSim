@@ -1,0 +1,875 @@
+{
+ "packet": "M-SP125-p119",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_THERMAL_SIEDER_TATE"
+   ],
+   "queue_reason": "P5 thermal.sieder_tate: SP-125 sample calculation states the RP-1 experimental constant C1 = 0.0214 for Eq. 4-23 and recovery factor 0.923 (PDF p.119 / printed 110)",
+   "queue_pages": [
+    119,
+    119
+   ],
+   "queue_document_id": "DOC_NTRS_19710019929",
+   "queue_source_pdf": "propulsion_texts/19710019929.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/M-SP125-p119.json",
+   "sha256": "18eaacfcec43dcc3c4a25d58b8436deb72ea3c56f7d6f3c7d633488758ee1d82",
+   "size_bytes": 15633,
+   "kind": "extraction",
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "pages": [
+    119,
+    119
+   ],
+   "docling_run_ids": [
+    "ENR_08f62005a6fe30eedd8dafa8"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 8
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "2b8a4dfe91e00fddee488c3ffd3513b5ce9c516ba1b15e1dd1cb55d192f847f3",
+    "claims": "9fc854353e51e046ed1871f6cb88381ec99c9cf9fc867548f15e31a0bfe72e8f",
+    "entities": "e1545840a2a3dec5bc11eeb91d858759952305f8b358c72a4503c7e79865d68a",
+    "validity": "62e930bc9d55cbd68f643eee0131a734e50cee1d5f5920ba3877d838f9c50b3c",
+    "models": "f3062f1fe75f94178d1fc94b4383170281c3d8784026de73ce1360be4f914e49",
+    "enrichments": "59eabe636da039b9d7090969abc7cdf139b1b5690ad4474732bbe76d64a378d0"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "2b8a4dfe91e00fddee488c3ffd3513b5ce9c516ba1b15e1dd1cb55d192f847f3",
+    "claims": "9fc854353e51e046ed1871f6cb88381ec99c9cf9fc867548f15e31a0bfe72e8f",
+    "entities": "e1545840a2a3dec5bc11eeb91d858759952305f8b358c72a4503c7e79865d68a",
+    "validity": "62e930bc9d55cbd68f643eee0131a734e50cee1d5f5920ba3877d838f9c50b3c",
+    "models": "f3062f1fe75f94178d1fc94b4383170281c3d8784026de73ce1360be4f914e49",
+    "enrichments": "59eabe636da039b9d7090969abc7cdf139b1b5690ad4474732bbe76d64a378d0"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 539,
+    "records_now": 539,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/19710019929.pdf",
+   "sha256_in_bundle": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_recomputed": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 119,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0119.png",
+    "dpi": 150,
+    "sha256_in_bundle": "414f374f2b1f9c99e4bd395c4e7c2ab73d7d8f01e636b1e0cdabe238a8d3c414",
+    "file_exists": true,
+    "sha256_recomputed": "414f374f2b1f9c99e4bd395c4e7c2ab73d7d8f01e636b1e0cdabe238a8d3c414",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+    "run_record_found": true,
+    "run_record_review_state": "UNREVIEWED",
+    "run_record_active": true,
+    "run_record_conversion_status": "success",
+    "page_range": [
+     119,
+     119
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+    "raw_sha256_recorded": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.md",
+    "markdown_sha256_recorded": "888dff635acccfb3d22f7ff2141487ec5c982cba4005fb95cb9f3b6433096467",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "888dff635acccfb3d22f7ff2141487ec5c982cba4005fb95cb9f3b6433096467",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+    "sha256_in_bundle": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+    "file_exists": true,
+    "sha256_recomputed": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 8
+  },
+  "candidates_total": 10,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_38255f9ba719b66629f30a9c",
+    "CAND_c6a7bb3e9af9894e7c8ac9ca"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_38255f9ba719b66629f30a9c",
+    "CAND_c6a7bb3e9af9894e7c8ac9ca"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [
+   {
+    "kind": "figure",
+    "transcription_whitespace_collapsed": "{\"captions\": [], \"annotations\": []}",
+    "candidate_ids": [
+     "CAND_38255f9ba719b66629f30a9c",
+     "CAND_c6a7bb3e9af9894e7c8ac9ca"
+    ]
+   }
+  ],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_38255f9ba719b66629f30a9c",
+    "kind": "figure",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 207.68860633662797,
+      "t": 80.5938720703125,
+      "r": 344.1941209099453,
+      "b": 55.24945068359375,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 119
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_c6a7bb3e9af9894e7c8ac9ca",
+    "kind": "figure",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 218.34084721192207,
+      "t": 763.4123401641846,
+      "r": 344.8698292374182,
+      "b": 743.5899467468262,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 119
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_3e1f003594c77d11e9beba96",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 285.33333333333337,
+      "t": 698.6666666666666,
+      "r": 493.6666666666667,
+      "b": 659.0,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/10",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "h _ { c } = \\frac { q } { T _ { w c } - T _ { c o } } = \\frac { 3 . 0 0 } { 1 0 0 0 - 6 0 0 } \\\\ = 0 . 0 0 7 5 \\ B t u / i n ^ { 2 } - s e c - d e g F",
+    "transcription_length": 150,
+    "original_text_as_given": "A, 29 —~ - 3:00 c= Fe Teo 1000-600 = 0.0075 Btu/in?-sec-deg F",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 8,
+     "}": 8
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_42e8c5e78488e802e8b4b09e",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 308.6666666666667,
+      "t": 195.0,
+      "r": 468.6666666666667,
+      "b": 149.0,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/22",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\mu \\ = & \\ 4 . 1 6 \\times 1 0 ^ { - 5 } \\ 1 b / \\text {in-sec} \\\\ k \\ = & \\ 1 . 7 8 \\times 1 0 ^ { - 6 } \\ B t u / \\text {in} ^ { 2 } \\text {sec-deg} \\ F / \\text {in} \\\\ C _ { p } = & \\ 0 . 5 \\ B t u / \\text {b-deg} \\ F",
+    "transcription_length": 220,
+    "original_text_as_given": "p =4.16« 1075 lb/in-sec k =1.78x10-° Btu/in?-sec-deg F/in Cp=0.5 Btu/lb-deg F",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_4e8710f96fd7225bf206601f",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 301.66666666666663,
+      "t": 536.6666666666666,
+      "r": 490.6666666666667,
+      "b": 508.66666666666663,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/14",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\frac { h _ { c } d } { k } = 0 . 0 2 1 4 \\left ( \\frac { \\rho V _ { c o } d } { \\mu } \\right ) ^ { 0 . 3 } \\left ( \\frac { \\mu C _ { p } } { k } \\right ) ^ { 0 . 4 } \\left ( \\frac { \\mu } { \\mu _ { W } } \\right ) ^ { 0 . 1 4 } \\ ( a )",
+    "transcription_length": 235,
+    "original_text_as_given": "hod V, d 08 Cc O4 O14 < -o.cena(? ee) (:<2) (<) (a) B bw",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 4,
+     ")": 4,
+     "[": 0,
+     "]": 0,
+     "{": 15,
+     "}": 15
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_55fb3c89351daf1bc0f7559f",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 324.6666666666667,
+      "t": 594.3333333333333,
+      "r": 449.3333333333333,
+      "b": 570.3333333333334,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/12",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "N u = 0 . 0 2 1 4 \\, R e ^ { 0 \\, 8 } P _ { r } \\, ^ { 0 . 4 } \\left ( \\frac { \\mu } { \\mu _ { W } } \\right ) ^ { 0 . 1 4 }",
+    "transcription_length": 123,
+    "original_text_as_given": "014 Nu=0.0214 Re°*P,o4 (+) Ew",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_91ab72e2e5a9b061878aeac3",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 326.6666666666667,
+      "t": 309.3333333333333,
+      "r": 493.0,
+      "b": 263.66666666666674,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/19",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "V _ { \\text {co} ^ { = } } \\frac { \\frac { \\dot { \\tilde { w } } _ { \\ell } } { \\rho } } { \\frac { N } { 2 } \\, \\frac { ( \\pi d ^ { 2 } ) } { 4 } } = \\frac { 8 2 7 \\times 8 } { \\pi N d ^ { 2 } \\rho } = \\frac { 2 1 0 6 } { N d ^ { 2 } \\rho }",
+    "transcription_length": 240,
+    "original_text_as_given": "We V,.-_P, -827%8_ 2106 () °° N Gd?) Nd®p Nd®p 2 4",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 21,
+     "}": 21
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_9b8d9deca194325c390c098b",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 71.33333333333333,
+      "t": 324.3333333333333,
+      "r": 251.66666666666666,
+      "b": 302.0,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/7",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "T _ { \\mathbf w c } = T _ { \\mathbf w g } - \\frac { q t } { k } = 1 1 8 8 - \\frac { 3 . 0 0 \\times 0 . 0 2 } { 3 . 1 9 \\times 1 0 ^ { - 4 } } \\widetilde { = } 1 0 0 0 ^ { \\circ } R",
+    "transcription_length": 180,
+    "original_text_as_given": "_ qt 3.00 x 0.02~. ° Two = Tw ~ 7p = 1188 og 1000 R",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 9,
+     "}": 9
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_9d31eee5431e963b6845ece7",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 282.0,
+      "t": 465.66666666666663,
+      "r": 490.6666666666667,
+      "b": 412.6666666666667,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/16",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "N u m b e r o f t u b e s \\, N = \\frac { \\pi [ D _ { t } + 0 . 8 \\, ( d + 0 . 0 4 ) ] } { ( d + 0 . 0 4 ) } \\\\ = \\frac { ( 0 . 8 \\, d + 2 4 . 9 3 ) } { ( d + 0 . 0 4 ) } \\, \\left ( b \\right )",
+    "transcription_length": 191,
+    "original_text_as_given": "7{D,+0.8(d+0.04)] (d+ 0.04) _(0.84+24.93) = a0.04) ©) Number of tubes N = -",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 5,
+     ")": 5,
+     "[": 1,
+     "]": 1,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   },
+   {
+    "id": "CAND_f1e3cd87eeb2bb4894f8275f",
+    "pages": [
+     119
+    ],
+    "bbox": [
+     {
+      "l": 66.66666666666667,
+      "t": 511.33333333333337,
+      "r": 254.33333333333334,
+      "b": 501.66666666666663,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/4",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 119,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "q = ( 5 6 6 7 - 1 1 8 8 ) \\times 0 . 0 0 0 6 7 = 3 . 0 0 \\ B t u / i n ^ { 2 } \\cdot \\sec",
+    "transcription_length": 89,
+    "original_text_as_given": "q = (5667 - 1188) x 0.00067 = 3.00 Btu/in?-sec",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 1,
+     "}": 1
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_08f62005a6fe30eedd8dafa8"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidates_without_trailing_token": [
+    "CAND_3e1f003594c77d11e9beba96",
+    "CAND_42e8c5e78488e802e8b4b09e",
+    "CAND_4e8710f96fd7225bf206601f",
+    "CAND_55fb3c89351daf1bc0f7559f",
+    "CAND_91ab72e2e5a9b061878aeac3",
+    "CAND_9b8d9deca194325c390c098b",
+    "CAND_9d31eee5431e963b6845ece7",
+    "CAND_f1e3cd87eeb2bb4894f8275f"
+   ],
+   "tokens_with_non_ascii_delimiters_as_given": [],
+   "candidates_with_a_bracketed_number_token_only_not_at_the_end": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+    "collection_counts": {
+     "texts": 24,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 13,
+     "formula": 8
+    },
+    "candidate_count_from_this_artifact": 10,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_08f62005a6fe30eedd8dafa8": {
+    "markdown_lines": 45,
+    "caption_like_lines": []
+   }
+  },
+  "review_state_summary_S2_script": {
+   "candidate_review_state_counts": {
+    "UNREVIEWED": 10
+   },
+   "candidates_with_review_state_other_than_UNREVIEWED": 0,
+   "candidates_total": 10,
+   "transcription_state_counts": {
+    "CANDIDATE_UNVERIFIED": 10
+   },
+   "per_page": {
+    "119": {
+     "candidates": 10,
+     "candidate_review_states": {
+      "UNREVIEWED": 10
+     },
+     "no_candidates": false,
+     "all_candidates_REJECTED": false,
+     "docling_runs_for_page": [
+      {
+       "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+       "run_record_review_state": "UNREVIEWED",
+       "run_record_active": true,
+       "metadata_integrity_state": "VERIFIED"
+      }
+     ],
+     "no_docling_run_record_for_page": false,
+     "all_runs_for_page_REJECTED": false,
+     "raw_collection_counts_of_runs_for_page": [
+      {
+       "texts": 24,
+       "tables": 0,
+       "pictures": 2,
+       "groups": 0,
+       "key_value_items": 0,
+       "form_items": 0
+      }
+     ],
+     "raw_artifact_has_no_items_at_all": false
+    }
+   },
+   "pages_with_no_candidates": [],
+   "pages_whose_candidates_are_all_REJECTED": [],
+   "pages_whose_docling_runs_are_all_REJECTED": [],
+   "pages_without_a_docling_run_record": [],
+   "pages_whose_raw_artifact_has_no_items": [],
+   "note": "run_record_review_state is the Docling run record's own review_state; REJECTED runs are what s1-run counts as 'only rejected parser output'"
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 8,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_THERMAL_SIEDER_TATE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_THERMAL_SIEDER_TATE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_THERMAL_SIEDER_TATE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_THERMAL_SIEDER_TATE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    119,
+    119
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "119": {
+     "figure": 2,
+     "formula": 8
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00280",
+     "page_start": 118,
+     "page_end": 119
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00280",
+     "page_start": 118,
+     "page_end": 119,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1568
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00281",
+     "page_start": 119,
+     "page_end": 119,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1448
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00282",
+     "page_start": 119,
+     "page_end": 119,
+     "section": "MAIN PROPELLANT",
+     "text_length": 409
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

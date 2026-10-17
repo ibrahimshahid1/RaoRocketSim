@@ -1,0 +1,16 @@
+{
+ "grounded": 0,
+ "page_shifted": 0,
+ "ungrounded": [],
+ "per_doc": {},
+ "model_support": {
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP": "SUPPORTED"
+ },
+ "n_equations": 0,
+ "n_claims": 0,
+ "n_validity": 0,
+ "n_constants": 0,
+ "n_assumptions": 0,
+ "n_ungrounded": 0,
+ "already_banked": false
+}

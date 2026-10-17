@@ -291,3 +291,23 @@ def test_interrupted_vector_artifacts_fall_back_to_lexical(corruption):
     result = api.semantic_search('impeller')
     assert result['hits'][0]['chunk_id'] == 'DOC_TEST#c0'
     assert result['retrieval']['semantic']['reason'] == 'VECTOR_INDEX_INCONSISTENT'
+
+
+def test_refuted_assumptions_are_excluded_from_search_but_inspectable_by_id():
+    """Regression (S3 report 2026-10-16): a refuted assumption was still returned by retrieval."""
+    base = {"type": "Assumption", "document_id": "DOC_TEST", "page": 1, "source_state": "CURRENT",
+            "provenance_kind": "SOURCE_STATES", "model_ids": []}
+    store.save("entities", [
+        {**base, "id": "ASM_REFUTED", "label": "single impeller motor drives both pumps",
+         "prose": "single impeller motor drives both pumps", "verification": "REFUTED"},
+        {**base, "id": "ASM_CURRENT", "label": "single impeller motor drives the pump",
+         "prose": "single impeller motor drives the pump"}])
+    graph.assemble()
+    api.reset_caches()
+    found = {n["id"] for n in api.find_entity("single impeller motor")["nodes"]}
+    assert "ASM_CURRENT" in found and "ASM_REFUTED" not in found
+    node = api.get_entity("ASM_REFUTED")
+    assert node["node"]["verification"] == "REFUTED"
+    package = api.retrieve_for_task("single impeller motor assumption")
+    ids = {a["id"] for a in package["assumptions"]}
+    assert "ASM_REFUTED" not in ids

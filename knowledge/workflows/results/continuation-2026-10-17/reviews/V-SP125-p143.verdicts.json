@@ -1,0 +1,23 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_25F6C847",
+  "refuted": true,
+  "confidence": "high",
+  "reason": "Full original PDF p143/printed134: the bipropellant-gas-generator paragraph permits the total turbine-nozzle throat area to be considered equivalent (may be considered). The combined stored statement strengthens this to is taken and has no conditional qualifier. Refute the combined SOURCE_STATES wording, while retaining the supported injector-to-turbine-throat L* volume and design-specific correction method in a narrow replacement. No numerical correction factor or chamber implementation equivalence is inferred. Independent role A reached the same field-level finding.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "3f9694e451779233b61eaeabf54831c4299993ce599c3bd5fabc23cb2478ada4",
+  "reviewer": {
+   "role": "F",
+   "model": "GPT-6 (Codex)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "pdf_page": 143,
+   "printed_page": "134",
+   "method": "Original PDF full-page render visually compared, with all candidate symbols, values, units and sentence modality inspected.",
+   "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/sp125-p143.png"
+  }
+ }
+]

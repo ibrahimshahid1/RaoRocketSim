@@ -75,6 +75,22 @@ def status() -> dict:
     }
 
 
+def equation_variable_stats(eqs: list[dict]) -> dict:
+    """Variable-mapping counts for current equations, separately from history.
+
+    Superseded or stale transcriptions keep their variable lists for audit, but
+    counting them together with current equations misstates the open mapping work.
+    """
+    def counts(rows):
+        states = Counter(v.get("resolution_state") for e in rows for v in e.get("variables", []))
+        return {"ambiguous": states.get("AMBIGUOUS_SYMBOL", 0), "unresolved": states.get("UNRESOLVED_ENTITY", 0),
+                "resolved": states.get("RESOLVED", 0), "total": sum(states.values()), "equations": len(rows)}
+    current = [e for e in eqs if e.get("active", True) and e.get("source_state", "CURRENT") == "CURRENT"]
+    historical = [e for e in eqs if e not in current]
+    return {**counts(current), "scope": "current active equations with CURRENT source state",
+            "historical_or_inactive": counts(historical), "all_records": counts(eqs)}
+
+
 def run() -> dict:
     issues: list[dict] = []
     stats: dict = {}
@@ -140,12 +156,12 @@ def run() -> dict:
                     issues.append({"check": "object_links_unknown_model", "store": name, "id": rec["id"], "model_id": mid})
     # equations: unresolved / ambiguous variables are reported, not fixed
     eqs = load("equations")
-    amb = sum(1 for e in eqs for v in e.get("variables", []) if v.get("resolution_state") == "AMBIGUOUS_SYMBOL")
-    unres = sum(1 for e in eqs for v in e.get("variables", []) if v.get("resolution_state") == "UNRESOLVED_ENTITY")
-    stats["equation_variables"] = {"ambiguous": amb, "unresolved": unres,
-                                   "total": sum(len(e.get("variables", [])) for e in eqs)}
-    # duplicates by normalized form within a document
-    seen = Counter((e["document_id"], (e.get("form") or "").strip().lower()) for e in eqs)
+    stats["equation_variables"] = equation_variable_stats(eqs)
+    # duplicates by form within a document, among current records only; spacing
+    # around operators does not make two transcriptions of one formula distinct
+    from .ground import form_key
+    seen = Counter((e["document_id"], form_key(e.get("form"))) for e in eqs
+                   if e.get("active", True) and e.get("source_state", "CURRENT") == "CURRENT")
     for key, n in seen.items():
         if n > 1 and key[1]:
             issues.append({"check": "duplicate_equation_form_in_document", "document_id": key[0], "form": key[1][:80], "count": n})

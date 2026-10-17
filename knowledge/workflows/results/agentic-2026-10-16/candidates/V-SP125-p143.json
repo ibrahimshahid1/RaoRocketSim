@@ -1,0 +1,288 @@
+{
+ "packet": "V-SP125-p143",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  143,
+  143
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "GPT-6 (Codex)"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 143,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0143.png",
+   "sha256": "cdb7cefddb0e2f7bc3ae61461bc3c2cf698d8ada7ecd60e5b32e3dd7c8d93628",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_537ec207d11ea6ec02417dac"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_564d14f4e922dbc5fc279849",
+   "kind": "figure",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 228.91373997065514,
+     "t": 66.625,
+     "r": 356.61932292732195,
+     "b": 39.732666015625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a13e1848fa21cbbfc8ae527f",
+   "kind": "figure",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 219.32725948352467,
+     "t": 751.3940963745117,
+     "r": 359.5715969753733,
+     "b": 729.7582855224609,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_386d5a2f2525894e5d3a7ff4",
+   "kind": "formula",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 115.33333333333334,
+     "t": 351.6666666666667,
+     "r": 257.0,
+     "b": 331.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "C a t a l y t i c \\, b e d \\, a r e a = \\frac { 2 . 7 6 } { 0 . 4 } = 6 . 9 \\, \\text { in} ^ { 2 }",
+   "original_text": "Catalytic bed area = 28 =6.9 in?",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6ab6408d6e3b5f35cc5d44bc",
+   "kind": "formula",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 183.33333333333331,
+     "t": 238.0,
+     "r": 267.66666666666663,
+     "b": 229.33333333333326,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= 6 3 . 5 + 1 0 = 7 3 . 5 \\ p s i",
+   "original_text": "=63.5+10=73.5 psi",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8a014c91f3b8cdef0989779a",
+   "kind": "formula",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 136.33333333333331,
+     "t": 445.33333333333337,
+     "r": 235.66666666666666,
+     "b": 422.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "3 0 8 0 = \\frac { 3 4 0 \\times 0 . 7 7 6 \\times 3 2 . 2 } { \\dot { w } _ { g } }",
+   "original_text": "340 x 0.776 x 32.2 We 3080=",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c5d16d1caf5a5d421adcf561",
+   "kind": "formula",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 83.66666666666667,
+     "t": 294.3333333333333,
+     "r": 265.33333333333337,
+     "b": 271.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\ B e d { \\ p r e s s u u } { \\ D o p { \\ \\Delta P _ { b } } = \\frac { 7 . 2 \\times 1 0 ^ { 4 } \\times ( 0 . 4 ) ^ { 1 . 9 5 } } { ( 3 4 0 ) ^ { 0 . 9 } } }",
+   "original_text": "7.2 104 x (0.4)? (340)°9 Bed pressure drop APp=",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f11e1118f4e2ea7d62f72f0b",
+   "kind": "formula",
+   "pages": [
+    143
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 240.66666666666666,
+     "t": 262.0,
+     "r": 293.0,
+     "b": 254.33333333333326,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "+ 0 . 0 2 1 \\times 4 8 0",
+   "original_text": "+0.021 x 480",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_537ec207d11ea6ec02417dac",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p143-143-5cc35b79bd339d510472667575b9342330e2aac37ba88b5c1a6d6ab06d3ebc28.json",
+   "raw_sha256": "42850c9a54300cd0eb28c865d530f6a4c3db66a62030efc79afb438214e41c62",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_NTRS_19710019929_25F6C847",
+   "store": "claims",
+   "type": "Claim",
+   "page": 143,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For bipropellant gas generators, the total turbine nozzle throat area is taken as the equivalent throat area, and L* is calculated from the volume between injector and turbine nozzle throats with a correction factor for the specific design configuration.",
+   "quote": "In calculating combustion chamber\ncharacteristic length L*, the volume between\ninjector and turbine nozzle throats is used, with\na correction factor allowing for the specific",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 143
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00332",
+   "page_start": 143,
+   "page_end": 143,
+   "section": "MAIN PROPELLANT",
+   "text": "134 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\n_Sample_ _Calculation_ (4-9)\n\nA hydrogen peroxide monopropellant gas generator attached directly to the inlet flange of a\nturbine has the following design data: Turbine\ninlet pressure, 340 psia; total turbine nozzle\nthroat area, 0.776 in 2. Assume a c* value of\n3080 ft/sec for 90 percent H 2 0 2 and catalytic\nbed design constants C 1 = 7.2 x 10 <sup>4</sup> and C 2 = 0.021\npsi/sec. Determine the gas generator propellant\nflow rate _W g,_ catalytic bed area, and pressure\ndrop after 480 seconds of accumulated running\ntime.\n\n_Solution_\n\nGas generator pressure = turbine inlet pressure\n= 340 psia. Equivalent gas generator throat\narea = total turbine nozzle throat area = 0.776 in 2.\nSubstitute into equation (1-32):\n\n3080= 340 x 0.776 x 32.2\n_Wg_\n\nPropellant flow rate Wg=2.761b/sec\n\nUse a design value for catalytic bed throughput,\nG _b,_ of 0.4 lblin 2-sec\n\nCatalytic bed area = 7;.~6 = 6.9 in 2\n\nSubstitute given data into equation (4-49):\n\n7.2 x 10 <sup>4</sup> x (0.4)195\nBed pressure drop _t.Pb_ = 09\n(340) .\n\n+ 0.021 x 480\n\n=63.5+10=73.5 psi\n\nLiquid Bipropellant Gas Generators\n\nThis gas-generating system is used more\nwidely in liquid rocket engine systems than any\nother, since it makes use of the primary rocket\nengine propellants. Bipropellant gas generators\nreact in the same manner as the main thrust\nchamber, except that the oxidizer-fuel-mixture\nratio will be adjusted to yield the desired gas\ntemperatures and chemical properties. The\ngases generated may be either fuel rich or oxi"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00333",
+   "page_start": 143,
+   "page_end": 143,
+   "section": "MAIN PROPELLANT",
+   "text": "dizer rich, depending on the propellant combination. Oxidizer-rich gases tend to accelerate\nerosion of structural members, while fuel-rich\ngases continue to burn with ambient air after\ndischarge, requiring special measures to prevent\ndamage.\n\nFigure 4-51 and table 4-2 describe a typical\nliquid bipropellant gas generator system. It is\ndesigned to produce hot gases using primary\nengine propellants (L0 2 /RP-1) for driving the\nturbine of a pump-fed system. The control system consists of two normally closed, linked\npoppet valves that control the flow of propellants\nto the gas generator injector. The valve assembly includes an oxidizer strainer, oxidizer poppet, fuel poppet. timing orifice, actuating piston,\nand valve main body. The valve assembly is\nactuated by gas pressure which forces the piston\non the fuel side down to open the fuel poppet. A\nyoke integral with the piston actuates the oxidizer poppet. The valve design, through a combination of manifold volumes and LOX poppet\nadjustment, effects a slight oxidizer lead to\nprevent detonations, and a fuel-rich cutoff to\neliminate the possibility of turbine burning. The\npropellants flow through the poppets to the injector and into the gas generator combustor, are\nmixed, and burn within the inner chamber and\ncombustor body. Ignition of the propellants is\naccomplished by two pyrotechnic igniters. A\ngas duct with two flanges opposite to each other\nis located at the end of the combustor body.\nThese flanges connect with the solid propellant\ngas generator turbine spinner and the turbine\ninlet."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00334",
+   "page_start": 143,
+   "page_end": 143,
+   "section": "MAIN PROPELLANT",
+   "text": "The basic design parameters for bipropellant\ngas generators are similar to those for thrust\nchambers. The total throat area of the turbine\nnozzles may be considered to be the equivalent\nthroat area of the gas generator combustion\nchamber. In calculating combustion chamber\ncharacteristic length L*, the volume between\ninjector and turbine nozzle throats is used, with\na correction factor allowing for the specific\ndesign configuration. Because of temperature\nlimitations of the turbine construction materials,\ngas generators are rarely operated at gas temperatures higher than 1800\" F. In most designs no\ncooling is provided for the combustion-chamber\n\nwall and other surfaces exposed to the hot\ngases."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 5
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

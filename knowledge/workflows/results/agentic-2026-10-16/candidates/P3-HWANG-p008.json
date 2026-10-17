@@ -1,0 +1,177 @@
+{
+ "packet": "P3-HWANG-p008",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+ "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+ "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+ "pages": [
+  8,
+  8
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 8,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00489_W/p0008.png",
+   "sha256": "727251913e3b3c8c12fb84117937a5699317e61100818356db05689d97413927",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_d3fc4dae7bd2703c9519f9ea"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_c418def0165206881b09d118",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.37085809597553,
+     "t": 55.97775908767949,
+     "r": 60.26081086835925,
+     "b": 44.03929115359074,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+   "raw_sha256": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f4a8cba5e58a79ce5a522b8b",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 9 ηC * sensitivity to the TMR and BF"
+   ],
+   "bbox": [
+    {
+     "l": 312.19134452502357,
+     "t": 732.8413312597455,
+     "r": 539.6734601591993,
+     "b": 433.4256472067658,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/8\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+   "raw_sha256": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4c3f372558f206f670edb1cc",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03599847110419,
+     "t": 129.517939458,
+     "r": 289.14367341305666,
+     "b": 106.25855010541329,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T M R s e n s i t i v y = \\frac { 1 C ^ { * } } { 1 T M R } \\times 1 0 0 ,",
+   "original_text": "TMRsensitivity equal1 1C ∗ 1TMR × 100, (6)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+   "raw_sha256": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_cb71df4aee2efe45042d7c5b",
+   "kind": "formula",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 51.03654058541778,
+     "t": 94.20194728326214,
+     "r": 289.1435806795776,
+     "b": 70.49793329556508,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "1 T M R = \\frac { T M R _ { A 0 3 } - T M R _ { A 0 1 } } { T M R _ { A 0 1 } } .",
+   "original_text": "1TMR equal1 TMRA03 - TMRA01 TMRA01 . (7)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d3fc4dae7bd2703c9519f9ea",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p8-8-7a7f67fe6c3925dc95bdabddd60271d8273740e332ad1511a6f3e86192fa0aa3.json",
+   "raw_sha256": "ed6d80d668ce93294c5459549e32e6f262a6999723e6a3871d75a7824be7166f",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00021",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+   "text": "948 International Journal of Aeronautical and Space Sciences (2022) 23:941–952\n\n**3.3** **_BF_** **Effect on** **_�C_** <sup>*****</sup>\n\nFigure 8 displays the relationship between the BF and ηC <sup>*</sup>\n\naccording to the pintle orifice combination in each annular ring. Table 6 lists the filtering conditions and filtered\ndata average values. Because the effect of BF should be\nevaluated under a similar TMR condition, the TMR range\nwas added as a filtering condition. In Fig. 8 and Table 6,\nthe BF and ηC <sup>*</sup> exhibited a weak proportional relationship\nin each annular ring. In the case of P02A03 in Fig. 8c,\nthe efficiency was exceptionally low because the combustion pressure was not sufficiently increased compared to\nthe excessive propellant mass flow supply. Although the _BF_\nincreased by 14% from 51% when P01 was replaced with\nP03, ηC <sup>*</sup> only increased within 0.74% at most in the A03\ncase. However, Ryu et al. revealed that ηC <sup>*</sup> increased by\n3.85% from 92.63%, increasing in the BF of 15% from 70%\nand a neglectable OFR increase of 0.05 [17]. Therefore, the\nweak effect of the BF herein is probably due to two possible\nreasons. First, the difference in mass flow rate allocation for\nthe rows is a factor. Ryu et al. allotted 30% of the area for the\nsecond row but 17.5% in the present study. Therefore, the\nsmaller mass flow allocation for the second row may have\nreduced the BF effect. Another possible reason for the relatively low BF effect on C <sup>∗</sup> in this study is the low BF values.\nThe BF change interval in this study was between 51 and\n65%, whereas, in Ryu’s study, it was about 20% higher, with\n70–85%. Therefore, the change in the direct collision mixing\nefficiency of the propellants due to the increase in BF may\nhave been lower than in Ryu’s study. However, high BF can\ncause thermal damage to the pintle injector [20]; additional\nefforts are needed to optimize the BF under the condition that\nthermal damage to the injector does not occur."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00022",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+   "text": "**3.4** **Comparison of Effects and Interaction of TMR**\n**and BF**\n\nIn this section, the effect strengths of the TMR and BF on ηC <sup>*</sup>\n\nwere compared. Equation (6) provides a method for evaluating the sensitivity of ηC <sup>*</sup> to the TMR. As displayed in Fig. 7,\nbecause TMR has a consistent relationship with ηC <sup>*</sup>, only\nthe averaged values of A01 and A03 in Table 5 were used\nto calculate the sensitivity on the TMR. Therefore, _�_ TMR,\nthe rate of change of TMR, is defined as in Eq. (7). The ηC <sup>*</sup>\n\nsensitivity to the BF can be obtained by substituting the BF\nfor the TMR in Eq. (6). _�_ BF utilizes P01 and P03 instead of\nthe annular ring numbers in Eq. (7).\n\n<u>1C</u> <sup>∗</sup>\nTMRsensitivity � 1TMR <sup>× 100,</sup> (6)\n\n1TMR - <sup><u>TMRA03</u></sup> <sup>−</sup> <sup><u>TMRA01</u></sup>\nTMRA01"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00023",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123",
+   "text": "_._ (7)\n\n**Fig. 9** ηC <sup>_*_</sup> sensitivity to the TMR and BF\n\nFigure 9 displays the ηC <sup>*</sup> sensitivities for the two\nvariables. In Fig. 9a, the ηC <sup>*</sup> sensitivity to the _TMR_ is\napproximately 5, regardless of the BF changes. However,\nas displayed in Fig. 9b, the sensitivity to the BF is 0.7 at A01\nand approximately 2.65 for others. ηC <sup>*</sup> is less sensitive to the\nBF than it is to the TMR. Furthermore, The BF can be less\nsensitive in the strong momentum of the annular flow. The\ncause of sensitivity to BF changed by TMR can be inferred\nby referring to Cheng [15] and Ryu [17] together. Figure 10a,\nb show the cases of A02 and A03 in Fig. 9b corresponding\nto low fuel momentum. When the fuel momentum is low,\nthe deformation of the pintle jet from the first row orifices\nis relatively minor. Then the flow width of the fuel vented\nalong the surface of the pintle post between the first row orifices can be broad. Under this condition, the increase of the\nwidth of the second row orifices (a, b in Fig. 10) properly\ncontributes to enhancing the efficiency ensuing the effective\ncollision area ( _δ_ ) increase. Conversely, Fig. 10c, d, where the\nfuel momentum is high, describe the A01 case in Fig. 9b. As\nthe fuel momentum grows, the deformation of the pintle jet\nin the first row orifices increases and the width of the fuel\nflow vented between the first row orifices becomes narrow.\nWith this situation, an increase in the width of the second\nrow orifices (c, d in Fig. 10) does not fully increase _δ_ ."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

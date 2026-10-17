@@ -1,0 +1,93 @@
+{
+ "packet": "P4-SP8087-p107-109",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19730022965",
+ "source_pdf": "propulsion_texts/19730022965.pdf",
+ "source_sha256": "7c8f7cff3022e14c05cc8d7199c8a25b2fbd9f78e55789f46b95750357b4faeb",
+ "pages": [
+  107,
+  109
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 107,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0107.png",
+   "sha256": "6f1b51f687a3304b5eacbae89c83ef5e40e153c409c397ae2eb0c35133ca6467",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 108,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0108.png",
+   "sha256": "29357d2a0559ce61a148c89fcf407c529be7178d24014e7cb5fbb155d58de3cc",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 109,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19730022965/p0109.png",
+   "sha256": "3d79564b84a696a2bcf9f8a2b8d1fb7881305860cba952526064fb39cee5367e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_2dbc31220f82df89c61e9b55",
+  "ENR_a00a89bc25acb1d759114621",
+  "ENR_f68bac0b4489fe3fe86e6eb7"
+ ],
+ "candidates": [],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00167",
+   "page_start": 107,
+   "page_end": 107,
+   "section": "i > o",
+   "text": "Everychamberrun to datehaseventuallysufferedsomedamage;often the damagewasa\nlocal zone of erosion.The possibilityof local damageshouldbe anticipatedand repair\nmeansestablished.Recommendationsareasfollows:(1) buildthechamberin segmentsthat\ncanbereplaced;(2) build in sufficientdepthof porousmaterialsothat minorgrindingcan\nbecarriedout; and(3) leavethedamageandreadjus **t** helocalcooling(sec.3.2.1.3).\n\n**3.2.3.4** **INJECTOR** **CHARACTERISTICS**\n\n_The_ _injector_ _characteristics_ _shall_ _not_ _degrade_ _the_ _operation_ _of_ _a_\n\n_transpiration-cooled_ _chamber._\n\nThe combustion pattern produced by the injector is of fundamental importance to the\noperation of a transpiration-cooled chamber. This is a recognized fact that is often ignored\nbecause of the difficulties in characterizing the pattern. It is recommended that the chamber\n\ndesigner work with the injector designer to produce an injector that provides minimum\nchemical and thermal streaking and also produces a peripheral atmosphere that is\n\ncompatible with the coolant.\n\n**3.2.3.5** **THROTTLED** **OPERATION**\n\n_During_ _throttled_ _operation,_ _heat_ _penetration_ _into_ _the_ _wall_ _shall_ _not_ _jeopardize_\n_flow_ _control,_ _and_ _coolant_ _driving_ _pressure_ _shall_ _be_ _adequate_ _for_ _all_ _needs._\n\nThrottling appears to be a natural operational mode for transpiration-cooled thrust\nchambers because performance is not seriously degraded. It is recommended that the\ntlowmetering devices be re-evaluated to ensure that they are not affected by the added heat"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00168",
+   "page_start": 107,
+   "page_end": 107,
+   "section": "i > o",
+   "text": "penetration, and to establish that the available pressure drop is sufficient to provide\nflowmetering and the \"hard system\" requirements.\n\n**3.3** **Film** **Cooling**\n\n_Film-cooling_ _flow_ _shall_ _be_ _capable_ _of_ _providing_ _twice_ _the_ _estimated_ _required_\n\n_quantity._\n\nUntil more sophisticated techniques are established, use the method described in table XI\nfor estimating the quantity of film cooling that is required for a specific case. When\ninformation is available for systems that are similar to a new design, the quantity of film\ncooling should be based on these results within the framework of the approach in table XI.\n\nThe method of injecting the film coolant should be flexible enough to provide for additions\n\nof up to 100 percent more than the original estimate, both locally and grossly. When very"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00169",
+   "page_start": 108,
+   "page_end": 108,
+   "section": "i > o",
+   "text": "E\n\n.=_.\n\nE\n\nL.\nf,,r,,\n\n li=\n\ni.=,\n\n**>,** I-,\n\n.o _\n\n**<1**\n-#\n\nE\n\nV\n\nI_, \"llt,\n\n - **_C>_** =\"\n\n<-. _\n**0** t,'.' _i\n\n<'.a _\n<\"a\n\nc\n\nF-\n\n**o**\n\n_ _ _<,,\n_ _ _'_o\n._ _ _o_ **=** <<,-_\n\nei. _$_ eo==.\n\n'<*\" I <.> ;_'\n\n    ```\n    E .__ x\n\n```\n\n_'- \"E _ **°'_.** **°**\nE_ _= _ **•** r-_\n\n<_\n\n<,i\n\n**o**\n\n**o**\n\nE\n\n-,_.. ....-,"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00170",
+   "page_start": 109,
+   "page_end": 109,
+   "section": "i > o",
+   "text": "small quantities of film coolant are required, it is recommended that no less flow be used\nthan that controlled by 0.015-in. (0.381 ram) diameter orifices spaced 0.3 in. (7.62 ram)\n\napart.\n\nIt is recommended that optimum film cooling be considered in cases of well-defined heating\n\npatterns and demands for maximum performance. Tailor the circumferential distribution of\nfi|m cooling to concentrate the coolant at hot streaks where it is needed, and minimize\ncoolant in the cool streaks. This tailoring can be accomplished only after an experimental\n\nevaluation has been made of the injector heating pattern.\n\n**3.4** **Coatings**\n\n**3.4.1** **Spalling** **Without** **Failure**\n\n_Localized_ _spalling_ _of_ _the_ _insulation_ _coating_ _in_ _a_ _chamber_ _shah_ not _result_ _in_\n_chamber_ _failure._\n\nWhen calculating bulk temperature rises, include in the thermal model any coatings that are\napplied intentionally for insulation or that develop inherently as deposits from the\nreactants; references 61 and 62 provide information on carbon formation. However, local\ncooling at all stations within the coated area must be sufficient even in the absence of the\n\ncoating.\n\nUse a base metal that is compatible with the combustion products so that, if the coating\n\nspalls, the base metal will not be chemically attacked.\n\n**3.4.2** **Coating** **Strength**\n\n_Protective_ _coatings_ _shall_ _withstand_ _transient_ _conditions,_ _states_ _of_ _residual_ _heat,_"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19730022965#c00171",
+   "page_start": 109,
+   "page_end": 109,
+   "section": "i > o",
+   "text": "_injector_ _streaking,_ _and_ _repair_ _operations._\n\nCoatings that will withstand thermal shock without fracture can be obtained by using very\nthin gradated coatings 0.004 to 0.010 in. (0.102 to 0.254 mm) thick, preferably composed\nof materials containing a metal additive. In addition, the nature of the environment must be\nevaluated during transient operation, when oxidizer-rich mixtures and streaking can exist;\nthe coating must be compatible with these transient conditions. The result may involve the\nuse of a surface coating that represents a compromise from that desired for steady-state\n\noperation.\n\nThe residual **heat** within the coating at shutdown must be dissipated without damage to the\ncoating or the chamber. Residual heat appears to be a particular problem in thick coatings."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

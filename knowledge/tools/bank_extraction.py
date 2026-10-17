@@ -99,11 +99,25 @@ def merge_report(previous: dict, latest: dict, fingerprints: set[str]) -> dict:
     return merged
 
 
+def _write_report(path: Path | None, report: dict) -> None:
+    """The complete structured result of this run, for callers that must check it."""
+    if path is not None:
+        from kg.store import _atomic_write_json
+        _atomic_write_json(path, json.loads(json.dumps(report, default=str)))
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("journal")
     ap.add_argument("--grouped", action="store_true", help="results are group objects with a 'results' list")
+    ap.add_argument("--report-out", type=Path, help="write this run's complete harvest report (JSON) to this file")
     ns = ap.parse_args(argv)
+    from kg import locks
+    with locks.writer(purpose=f"bank extraction journal {ns.journal}", timeout=None):
+        return _bank(ap, ns)
+
+
+def _bank(ap, ns) -> int:
     try:
         results = load_results(Path(ns.journal))
     except (OSError, ValueError) as exc:
@@ -123,6 +137,7 @@ def main(argv=None) -> int:
     results = [r for r in results if fingerprint(r) not in seen]
     if not results:
         print("[bank] All results already banked; no changes")
+        _write_report(ns.report_out, {"already_banked": True})
         return 0
     if ns.grouped:
         groups = [v for v in results if "results" in v]
@@ -139,13 +154,12 @@ def main(argv=None) -> int:
         rep = harvest_extraction.harvest(model_results, window_results)
     merged = merge_report(prev, rep, {fingerprint(r) for r in results})
     print(json.dumps({k: v for k, v in rep.items() if k not in ("ungrounded", "per_doc", "model_support")}, indent=1, default=str)[:1500])
+    _write_report(ns.report_out, {**rep, "already_banked": False})
     print("[bank] graph:", graph.assemble()["meta"])
     # Mark success only after the derived graph has been rebuilt. A failed run
     # can safely repeat its upserts and repair the graph on the next attempt.
-    prev_path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = prev_path.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(merged, indent=1, ensure_ascii=False))
-    temporary.replace(prev_path)
+    from kg.store import _atomic_write_json
+    _atomic_write_json(prev_path, merged)
     validate.run()
     from kg.work_queue import write as write_queue
     write_queue()

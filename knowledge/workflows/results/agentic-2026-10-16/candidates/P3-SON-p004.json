@@ -1,0 +1,226 @@
+{
+ "packet": "P3-SON-p004",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_1_B36301",
+ "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+ "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+ "pages": [
+  4,
+  4
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0004.png",
+   "sha256": "c801946fcfdbb893edba5e96e17045701f3cf5ad9b5f605db4ed8abbca9748d3",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_3daa39abfbacd389fae9ebcb"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_bb25f1489e555ee6eaa11dbc",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient."
+   ],
+   "bbox": [
+    {
+     "l": 58.21141532516479,
+     "t": 371.3819093963896,
+     "r": 520.9676242484851,
+     "b": 37.62872171959805,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/12\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ff559628839e03e75b401405",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 74.81478237195137,
+     "t": 738.1831817016601,
+     "r": 246.70900683463333,
+     "b": 528.5921416480988,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_339398d8818bdc3f9beb9a84",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 363.91106795999997,
+     "t": 424.4822371,
+     "r": 544.46007128,
+     "b": 402.1780646,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "W e = \\frac { ( \\rho _ { g a s } ) ( L _ { o p e n } ) ( V _ { g a s } - V _ { l i q } ) ^ { 2 } } { \\sigma _ { l i q } }",
+   "original_text": "We .0136 .0133ρgas .0134.0133L open.0134.0133V gas - V liq.0134 2 σ liq (5)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_b0e478a589c7f3a4a4b3a6bf",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 360.67961344,
+     "t": 480.2585514,
+     "r": 544.46007128,
+     "b": 458.3040646,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T M R = \\frac { \\dot { m } _ { l i q } V _ { l i q } \\cos \\theta _ { p t } } { \\dot { m } _ { g a s } V _ { g a s } + \\dot { m } _ { l i q } V _ { l i q } \\sin \\theta _ { p t } }",
+   "original_text": "TMR .0136 _m liq V liq cos θ pt _m gas V gas .0135 _m liq V liq sin θ pt (4)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d73feefec476f38a89bcebcb",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 346.3946793,
+     "t": 732.4879081400001,
+     "r": 544.5018058,
+     "b": 703.6142646,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "L _ { o p e n , \\max } = \\frac { R _ { p o s t } - \\sqrt { R _ { p o s t } ^ { 2 } - A _ { c g } ( \\sin \\theta _ { p t } / \\pi ) } } { \\sin \\theta _ { p t } \\cos \\theta _ { p t } }",
+   "original_text": "L open ; max .0136 R post - .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 R 2 post - A cg.0133sin θ pt∕π.0134 q sin θ pt cos θ pt (2)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fbce17fe8aa1f64cb217689f",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 360.73615352,
+     "t": 540.8669728,
+     "r": 544.46007128,
+     "b": 506.3967161,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\begin{cases} \\, C _ { d } = \\frac { \\dot { m } _ { l i q } } { A _ { \\min } \\sqrt { 2 \\rho _ { l i q } \\Delta P _ { l i q } } } & A _ { c g } \\geq A _ { \\min } \\\\ \\, C _ { d } = \\frac { \\dot { m } _ { l i q } } { A _ { c g } \\sqrt { 2 \\rho _ { l i q } \\Delta P _ { l i q } } } & A _ { c g } < A _ { \\min } \\end{cases}",
+   "original_text": "8 < : Cd .0136 _m liq A min .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 2ρliq ΔP liq p A cg ≥ A min Cd .0136 _m liq A cg .0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129.0129 2ρliq ΔP liq p A cg < A min (3)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_3daa39abfbacd389fae9ebcb",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p4-4-c2c61d023ef4b19a7e29872c9b9c04cae9c5e197fc311db562cf8f7974cb30bd.json",
+   "raw_sha256": "125435d51826e53b60913b1d35326b03ec9da79961077ee7271149d48a1b9ca0",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00011",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "SON ET AL. 861\n\nq��������������������������������������������\n\nR <sup>2</sup>\n\npost <sup>−</sup> <sup>A</sup> cg <sup>�sin θ</sup> pt <sup>∕π�</sup>\n\nsin θpt cos θpt\n\nLopen;max\n\nRpost −\n\nThe ideal mass flow rates could be calculated using the\nmeasured pressure drops through the pintle nozzle and from the\ndefinition of the minimum area within the pintle nozzle. Using\nthese rates, the discharge coefficients were calculated as Eq. (3).\nBefore the transition point, the minimum orifice area near the\npintle could mainly affect the pressure drop of the injector,\nwhereas the center gap area could control the pressure drop after\nthe transition point. As shown in Fig. 6b, the discharge coefficients\nof Amin were higher than those of Acg before the transition point.\nAfter the transition point, these trends were reversed and the\ncoefficients of Acg were almost constant despite the increasing\nopening distance because the flow was choked in the center\ngap area:\n\nCd\n\nCd\n\n(3)\n\n(4)\n\n(5)\n\nAmin ~~p~~ m_ ~~���������������~~ 2liqρliqΔPliq Acg ≥ Amin\n\nAcg ~~p~~ m ~~���������������~~ 2_ρliqliqΔPliq Acg < Amin\n\nFig. 5 Definition of the spray angle.\n\nconditions within the pintle nozzle (e.g., flattering of a liquid sheet).\nTherefore, from the combustion viewpoint, this transition could\ncause unexpected instability and a controllable range of the opening\ndistance should be considered below the transition point. The\ntransition points can be estimated by Eq. (2), where Acg is used\ninstead of Amin as in Eq. (1), and the opening distance could be\nconsidered as the maximum opening distance. According to Eq. (2),\nthe maximum opening distances could be changed because of the\npintle tip angles. The estimated transition points determined by\nEq. (2) corresponded to the bending points of Fig. 6a:"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00012",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "<\n\n:\n\nTMR � m_ <u>liqVliq</u> cos θpt\nm_ gasVgas � m_ liqVliq sin θpt\n\n<sup>−</sup> <sup>Vliq�2</sup>\nWe � <sup>�ρgas��Lopen��Vgas</sup>\n\nσliq\n\nFig. 6 Flow characteristics of a pintle nozzle: a) mass flow rate and b) discharge coefficient."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 4
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

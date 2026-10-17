@@ -1,0 +1,46 @@
+[
+  {
+    "object_id": "CLM_NTRS_19710019929_25F6C847",
+    "refuted": true,
+    "confidence": "high",
+    "reason": "Original SP-125 PDF p143 (printed134), full page visually inspected: under Liquid Bipropellant Gas Generators, the source says the total turbine-nozzle throat area 'may be considered' the equivalent throat area of the gas-generator combustion chamber. The current combined SOURCE_STATES statement strengthens this into 'is taken' without a conditional qualifier. Refute the combined transcription as currently worded; this does not refute the source-stated L* volume method. The volume between injector and turbine-nozzle throats and a correction factor allowing for the specific design configuration are explicitly stated. A narrowed replacement should preserve the permissive equivalent-area wording and bipropellant-gas-generator scope; this page supplies no numerical correction-factor value or validated universal equality. This bounded verification does not establish chamber-model implementation equivalence or physical validation.",
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "content_sha256": "3f9694e451779233b61eaeabf54831c4299993ce599c3bd5fabc23cb2478ada4",
+    "content_version": "source-assertion-v1",
+    "reviewer": {
+      "role": "A",
+      "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+    },
+    "evidence": {
+      "document_id": "DOC_NTRS_19710019929",
+      "source_pdf": "propulsion_texts/19710019929.pdf",
+      "pdf_page": 143,
+      "printed_page": "134",
+      "method": "Full original PDF page rendered with pdftoppm and visually inspected, using native text only for navigation.",
+      "render": "knowledge/.work/consolidated-review-comparison-2026-10-17/SP125-143.png",
+      "independence": "Independent role A analysis of the historical September extraction and root packet review; same model family, no model-diversity claim.",
+      "inspected_science_fields": [
+        "id",
+        "type",
+        "claim_type",
+        "subject",
+        "predicate",
+        "object",
+        "statement",
+        "qualifiers",
+        "document_id",
+        "page",
+        "quote"
+      ]
+    },
+    "field_reviews": {
+      "id_type_claim_type": "Identity and methodological Claim classification are compatible with the page.",
+      "subject_predicate_object": "The L* calculation and the volume between injector and turbine nozzle throats with a configuration correction factor are supported in the explicit bipropellant-gas-generator context.",
+      "statement": "Volume/correction content supported. Equivalent-area statement must retain may-be-considered modality rather than unconditional is-taken wording.",
+      "qualifiers": "Empty list does not preserve source modality in the combined statement; narrower replacement must preserve the conditional equivalence and bipropellant scope.",
+      "quote": "Verbatim partial excerpt supports volume/correction but ends at specific; it omits both the preceding equivalent-area sentence and the final design configuration words. Full original page supports the latter completion but not the stronger modality.",
+      "document_id_page": "DOC_NTRS_19710019929, PDF page143/printed134 confirmed."
+    },
+    "scope_note": "Refutation is of the combined source transcription wording; source does support the bounded L* volume/correction method. No engineering model or physical validation is promoted."
+  }
+]

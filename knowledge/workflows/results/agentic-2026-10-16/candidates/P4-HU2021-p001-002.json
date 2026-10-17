@@ -1,0 +1,486 @@
+{
+ "packet": "P4-HU2021-p001-002",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_AST_2021_106729",
+ "source_pdf": "propulsion_texts/fuel_pump_design/hu2021.pdf",
+ "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+ "pages": [
+  1,
+  2
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2021_106729/p0001.png",
+   "sha256": "955c776fe10ebda5cb67b418286626ad5033eba1521834abafdb441a03a48656",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2021_106729/p0002.png",
+   "sha256": "8e4580eca181e4af771654d870da03d20ed1788ba6a29fa4111fbbf9feb176a9",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_b3b0d87423b2fc8d63d1ad27",
+  "ENR_de15a8bbd7915b639bd7fc2b"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_a5304658ca9a3e4f92ded7dd",
+   "kind": "figure",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 37.08933556237957,
+     "t": 732.2238504457787,
+     "r": 96.75680146226307,
+     "b": 665.5386027467089,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_de15a8bbd7915b639bd7fc2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p1-1-f5d2136fd20736f6269ce07e82b0fb49f3eeb022b5b57e34fed8ba3c64c3ef25.json",
+   "raw_sha256": "0eedb9abdab56de16e644c905b58f2d96c77ebab83f775f9b10be4bf9171010a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c947978469f25205b061ee02",
+   "kind": "figure",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 500.18943884891786,
+     "t": 738.8893120233262,
+     "r": 557.8261257672406,
+     "b": 666.530027661792,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_de15a8bbd7915b639bd7fc2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p1-1-f5d2136fd20736f6269ce07e82b0fb49f3eeb022b5b57e34fed8ba3c64c3ef25.json",
+   "raw_sha256": "0eedb9abdab56de16e644c905b58f2d96c77ebab83f775f9b10be4bf9171010a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f890a9bfc7283db07026d242",
+   "kind": "figure",
+   "pages": [
+    1
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 500.56953076417653,
+     "t": 628.3200948738847,
+     "r": 528.9815081115313,
+     "b": 599.4744093859887,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_de15a8bbd7915b639bd7fc2b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p1-1-f5d2136fd20736f6269ce07e82b0fb49f3eeb022b5b57e34fed8ba3c64c3ef25.json",
+   "raw_sha256": "0eedb9abdab56de16e644c905b58f2d96c77ebab83f775f9b10be4bf9171010a",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_476234f94c791823a2a6fd95",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.58,
+     "t": 168.46869519999996,
+     "r": 557.7010973600001,
+     "b": 158.93631910872818,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "e _ { m } = C _ { e } \\omega",
+   "original_text": "em = Ceω (2)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_b3b0d87423b2fc8d63d1ad27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p2-2-1ea625ee1839e3158e77d766595db57de32c34c44ecdbb730a0dab4470ff9e2e.json",
+   "raw_sha256": "55a48e6e31e510d55020f81803ceb49f5806b09371451acdd9ec9ebbbac3e7a2",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8d5494b7e3059c6c67b7e89b",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.796,
+     "t": 233.77488010000002,
+     "r": 557.70099736,
+     "b": 212.5501494496259,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "U _ { m } = L _ { m } \\frac { d i _ { m } } { d t } + i _ { m } R _ { m } + e _ { m }",
+   "original_text": "Um = Lm dim dt + imRm +em (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_b3b0d87423b2fc8d63d1ad27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p2-2-1ea625ee1839e3158e77d766595db57de32c34c44ecdbb730a0dab4470ff9e2e.json",
+   "raw_sha256": "55a48e6e31e510d55020f81803ceb49f5806b09371451acdd9ec9ebbbac3e7a2",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_93e1896d1f3c88c3d4c5dcdc",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/15",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.012,
+     "t": 112.88688009999998,
+     "r": 557.70099736,
+     "b": 103.89221910872811,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "M = i _ { m } C _ { M }",
+   "original_text": "M = imCM (3)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_b3b0d87423b2fc8d63d1ad27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p2-2-1ea625ee1839e3158e77d766595db57de32c34c44ecdbb730a0dab4470ff9e2e.json",
+   "raw_sha256": "55a48e6e31e510d55020f81803ceb49f5806b09371451acdd9ec9ebbbac3e7a2",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9c77ebf8577d26843ccd2b89",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/18",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 308.65,
+     "t": 62.01669519999996,
+     "r": 557.70099736,
+     "b": 40.25414944962597,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "J _ { m } \\frac { d \\omega } { d t } + f _ { m } \\omega = M - M _ { c }",
+   "original_text": "Jm dω dt + fmω=M-Mc (4)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_b3b0d87423b2fc8d63d1ad27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p2-2-1ea625ee1839e3158e77d766595db57de32c34c44ecdbb730a0dab4470ff9e2e.json",
+   "raw_sha256": "55a48e6e31e510d55020f81803ceb49f5806b09371451acdd9ec9ebbbac3e7a2",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ec0a0f1a7b6bdc3d55824697",
+   "kind": "table",
+   "pages": [
+    2
+   ],
+   "table_grid": [
+    [
+     "Nomenclature",
+     "Nomenclature",
+     "",
+     ""
+    ],
+    [
+     "PID",
+     "proportional, integral and derivative",
+     "nr",
+     "reference rotational speed"
+    ],
+    [
+     "LQR",
+     "linear quadratic regulation",
+     "Ni,Mi",
+     "right normalized coprime fractions"
+    ],
+    [
+     "UAV",
+     "unmanned air vehicle",
+     "˜ Ni , ˜ Mi",
+     "left normalized coprime fractions"
+    ],
+    [
+     "LREs",
+     "liquid-propellant rocket engines",
+     "kp",
+     "proportional coefficient"
+    ],
+    [
+     "EPPS",
+     "electric propellant pump system",
+     "ki",
+     "integral coefficient"
+    ],
+    [
+     "LOX",
+     "liquid oxygen",
+     "kd",
+     "derivative coefficient"
+    ],
+    [
+     "DC",
+     "direct current",
+     "N",
+     "filter coefficient"
+    ],
+    [
+     "Um",
+     "supply voltage of the motor",
+     "x",
+     "state variables of the system"
+    ],
+    [
+     "Rm",
+     "resistance of the circuit",
+     "u",
+     "input of the system"
+    ],
+    [
+     "im",
+     "current",
+     "˙x",
+     "derivatives of the state variables"
+    ],
+    [
+     "Lm",
+     "inductance",
+     "y",
+     "output of the system"
+    ],
+    [
+     "t",
+     "time",
+     "e",
+     "error between the real output and desired one"
+    ],
+    [
+     "em",
+     "back electromotive force",
+     "K",
+     "gain matrix of the controller"
+    ],
+    [
+     "Ce",
+     "back electromotive coefficient of the motor",
+     "",
+     "weighting matrix for state increment"
+    ],
+    [
+     "ω",
+     "rotational angular velocity of the motor",
+     "Q",
+     "weighting matrix for control signal increment"
+    ],
+    [
+     "M",
+     "output torque of the motor",
+     "R",
+     ""
+    ],
+    [
+     "Cm",
+     "torque coefficient of the motor",
+     "MSE",
+     "mean square error"
+    ],
+    [
+     "Jm",
+     "equivalent rotational inertia of the motor",
+     "ITAE",
+     "integrated time and absolute error"
+    ],
+    [
+     "fm",
+     "equivalent viscous friction coefficient of the motor",
+     "ITSE",
+     "integral time square error"
+    ],
+    [
+     "Mc",
+     "load torque of the motor",
+     "GA",
+     "genetic algorithm"
+    ],
+    [
+     "n",
+     "rotational speed",
+     "PSO",
+     "particle swarm optimization"
+    ],
+    [
+     "˙m",
+     "mass flow rate",
+     "AMS",
+     "aerial manipulation systems"
+    ],
+    [
+     "˙mr",
+     "reference mass flow rate",
+     "RMSE",
+     "root mean square error"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 36.78498770561474,
+     "t": 736.0694095129643,
+     "r": 558.130443143499,
+     "b": 460.9425664197792,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 24x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_b3b0d87423b2fc8d63d1ad27",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2021_106729/3addb3d4d434-p2-2-1ea625ee1839e3158e77d766595db57de32c34c44ecdbb730a0dab4470ff9e2e.json",
+   "raw_sha256": "55a48e6e31e510d55020f81803ceb49f5806b09371451acdd9ec9ebbbac3e7a2",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00000",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "",
+   "text": "Aerospace Science and [Technology](https://doi.org/10.1016/j.ast.2021.106729) 114 (2021) 106729\n\n[Contents lists available at ScienceDirect](http://www.ScienceDirect.com/)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00001",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Aerospace Science and Technology",
+   "text": "[www.elsevier.com/locate/aescte](http://www.elsevier.com/locate/aescte)"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00002",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Aerospace Science and Technology > System analysis and controller design for the electric pump of a deep-throttling rocket engine",
+   "text": "Runsheng Hu <sup>a</sup>, Riccardo M.G. Ferrari <sup>b</sup>, Zhenyu Chen <sup>c</sup>, Yuqiang Cheng <sup>a</sup>, Xiaobin Zhu <sup>a</sup>,\nXing Cui <sup>a</sup>, Jianjun Wu <sup>a</sup> <sup>_,_</sup> <sup>∗</sup>\n\na _College_ _of_ _Aerospace_ _Science_ _and_ _Engineering,_ _National_ _University_ _of_ _Defense_ _Technology,_ _Changsha,_ _Hunan,_ _410073,_ _People’s_ _Republic_ _of_ _China_\nb _Delft_ _Center_ _for_ _Systems_ _and_ _Control,_ _Faculty_ _of_ _Mechanical,_ _Maritime_ _and_ _Materials_ _Engineering,_ _Delft_ _University_ _of_ _Technology,_ _2628_ _CD_ _Delft,_ _the_ _Netherlands_\nc _State_ _Key_ _Laboratory_ _of_ _Alternate_ _Electrical_ _Power,_ _School_ _of_ _Control_ _and_ _Computer_ _Engineering,_ _North_ _China_ _Electric_ _Power_ _University,_ _Beijing,_ _102206,_ _People’s_\n_Republic_ _of_ _China_\n\na r t i c l e i n f - a b s t r a c t\n\n_Article_ _history:_\nReceived 11 November 2020\nReceived in revised form 25 March 2021\nAccepted 6 April 2021\nAvailable online 13 April 2021\nCommunicated by Choon Ki Ahn\n\n_Keywords:_\nElectric pump\nProportional-integral-derivative controller\nGain-scheduling linear quadratic regulator\nNonlinearity\nGap metric\n\n**1.** **Introduction**\n\nThis paper proposes a controller design for the electric pump of a deep-throttling rocket engine. The\nnonlinearity of the system is taken into consideration by analyzing the gap metric. Then, proportionalintegral-derivative controller and gain-scheduling linear quadratic regulator are designed. Analyzing the\namplitude- and phase-frequency characteristics as well as the pole-zero distribution of the system, the\nresults show that the designed controllers can stabilize the linearized equations in incremental form\nat different operating points. This indicates that these two controllers are available for the original\nsystem in the whole range of working conditions and this is verified in the simulation. Meanwhile,\nthe comparison between proportional-integral-derivative controller and gain-scheduling linear quadratic\nregulator is presented. It demonstrates that the proportional-integral-derivative controller is better at\ntracking both step and ramp signals but with worse control signals. It means that the proportionalintegral-derivative controller seems less suitable for real use due to severe oscillations. Meanwhile, the\nparameter tuning of a proportional-integral-derivative controller depends on more extensive manual\ntuning. Therefore, the gain-scheduling linear quadratic regulator is preferred."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00003",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Aerospace Science and Technology > System analysis and controller design for the electric pump of a deep-throttling rocket engine",
+   "text": "© 2021 Elsevier Masson SAS. All rights reserved.\n\nacceleration of gravity over a wide range of variations. Therefore,\nthe LREs must have the ability of deep throttling.\n\nLiquid-propellant rocket engines (LREs) are the main power\nequipment used for space transportation systems and spacecraft\npropulsion and maneuver [1,2]. Liquid-propellant rocket engine\nwith thrust that can be varied in a wide range has gained much\nimportance in recent years. Its diversified developments have\nput forward many novel requirements in the aerospace field [3].\nVariable-thrust rocket engine makes a good candidate for space\nexploration and transport, such as manned lunar landing and Mars\nexploration [3,4], as it can change thrust on-demand. In order to\nmeet the requirement of soft landing, variable thrust technology\nwith a wide range in descent phase is necessary. Throttleable LREs\nundoubtedly play a significant role in this kind of mission, especially for lunar descent. On the one hand, there is no air or the\nair is extremely rarefied. On the other hand, the engine needs to\nbalance the gravity of the vehicle with decreasing mass and the\n\n - <sup>Corresponding</sup> <sup>author.</sup>\n_E-mail_ _address:_ [jjwu@nudt.edu.cn](mailto:jjwu@nudt.edu.cn) (J. Wu).\n\n[https://doi.org/10.1016/j.ast.2021.106729](https://doi.org/10.1016/j.ast.2021.106729)\n1270-9638/© 2021 Elsevier Masson SAS. All rights reserved."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00004",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "Aerospace Science and Technology > System analysis and controller design for the electric pump of a deep-throttling rocket engine",
+   "text": "The propellant types or compositions, the propellant mass flow\nrates, the nozzle exit area, and the nozzle throat area contribute\nto throttle a single engine. However, it is difficult to change the\npropellants, the nozzle exit area, and the nozzle throat area due\nto physical restrictions or heat flux. As we know, the thrust of the\nrocket engine is mainly calculated as the sum of the momentum\nthrust and the differential-pressure thrust in the steady state. The\nmomentum thrust is the product of the propellant mass flow rate\nand the exhaust velocity. While the differential-pressure thrust is\nthe product of the nozzle exit area and the pressure difference\nbetween the outlet pressure of the exhaust and the atmospheric\npressure. Therefore, the rocket engine thrust varies with the propellant mass flow rate approximately in a linear relation. Consequently, regulating the propellant mass flow rates is the simplest\nway to regulate engine thrust [5].\n\nThere are mainly eight throttling approaches [5], which are\nhigh-pressure-drop injectors, dual-manifold injectors, gas injection, multiple chambers, pulse modulation, variable area injectors,"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Aerospace Science and Technology > System analysis and controller design for the electric pump of a deep-throttling rocket engine",
+   "text": "_R. Hu, R.M.G. Ferrari, Z. Chen et al._ _Aerospace Science and Technology 114 (2021) 106729_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00006",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "PID proportional, integral and derivative\nLQR linear quadratic regulation\nUAV unmanned air vehicle\nLREs liquid-propellant rocket engines\nEPPS electric propellant pump system\nLOX liquid oxygen\nDC direct current\n_Um_ supply voltage of the motor\n_Rm_ resistance of the circuit\n_im_ current\n_Lm_ inductance\n_t_ time\n_em_ back electromotive force\n_Ce_ back electromotive coefficient of the motor\n_ω_ rotational angular velocity of the motor\n_M_ output torque of the motor\n_Cm_ torque coefficient of the motor\n_J_ _m_ equivalent rotational inertia of the motor\n_fm_ equivalent viscous friction coefficient of the motor\n_Mc_ load torque of the motor\n_n_ rotational speed\n_m_ ˙ mass flow rate\n_m_ ˙ _r_ reference mass flow rate\n\nhydro-dynamically dissipative injectors, and also the combined\nmethods mentioned above. All of these methods have both merits and shortage.\n\nStable and efficient combustion process in a rocket engine is\nthe key factor for the safety and reliability of space programs [6].\nIn order to have a better atomization to get a satisfying combustion efficiency and adequate resistance for system performance, it\nis important to keep the injector with a constant injection pressure drop during the whole throttling process [7]. One effective\nmethod to solve the problem is to regulate the propellant mass\nflow rate and change the injection area simultaneously [8]. In view\nof this point, turbopump feed system is often applied to modulating propellant mass flow rate as it ensures a light weight design\nfor a liquid rocket engine. However, it is also with the drawbacks\nof mechanical complexity and the ensuing limited reliability (e.g.,\na large fraction of launch failures is due to malfunctioning turbopump systems) [9]. Therefore, in this paper, the assembled motor\nand pump was adopted to regulate the propellant mass flow rate."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00007",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "Small centrifugal pumps have been designed, manufactured and\nperformance tested in the 1980s [10] in the frame of a development program for an Electric Propellant Pump System (EPPS) for\nstorable propellants. Compared with a pressure-fed system, EPPS\nused on a communication satellite makes the weight and volume of the propellant system reduced. Beyond its application to\naircraft and satellites, several studies in the early 2000s used electrically driven pump-fed cycle engines for launch vehicles [11].\nBesides, the propellant electric pump designed for delivering liquid hydrogen or methane to the rocket engine was one of the core\nproject topics [12]. In reference [11], performance assessment, including combustion chamber pressure, burning time, thrust level,\nmass as well as payload capability, of electrically driven pumpfed LOX/kerosene cycle rocket engine was presented. Compared\nwith pressure-fed and turbopump-fed systems, the specific mass of\nthe electric-pump system can be reduced. This makes the system\ncompetitive, at least for some applications such as small launchers and upper stage rockets [13]. Meanwhile, advanced batter cells\ncurrently under development could make the system lighter than\n\n_nr_ reference rotational speed\n_Ni, Mi_ right normalized coprime fractions\n_N_ ˜ _i,_ _M_ ˜ _i_ left normalized coprime fractions\n_kp_ proportional coefficient\n_ki_ integral coefficient\n_kd_ derivative coefficient\n_N_ filter coefficient\n_x_ state variables of the system\n_u_ input of the system\n_x_ ˙ derivatives of the state variables\n_y_ output of the system\n_e_ error between the real output and desired one\n**K** gain matrix of the controller\n**Q** weighting matrix for state increment\n**R** weighting matrix for control signal increment\nMSE mean square error\nITAE integrated time and absolute error\nITSE integral time square error\nGA genetic algorithm\nPSO particle swarm optimization\nAMS aerial manipulation systems\nRMSE root mean square error"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00008",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "the turbopump one, even for applications involving short burning\ntimes, i.e., booster stages [13].\n\nThe rest of the paper is organized as follows. In section 2, the\nmodel of the electric pump is mentioned. Section 3 analyzes the\nnonlinearity of the system and section 4 details the controller design process. Next section presents the simulation results. Finally,\nconclusions are drawn in section 6.\n\n**2.** **Dynamics** **modeling**\n\nThe electric pump studied in this paper consists of two parts,\ni.e., direct current (DC) motor and the centrifugal pump.\n\nDC motor transfers the electrical energy into mechanical energy. By inducing electromagnetic torque through the interaction\nbetween current and coil, it drives the load, i.e. pump, to rotate.\nThe dynamics equations of DC motor mainly comprise three parts,\ni.e., the voltage balance equation, the electromagnetic torque equation, and the torque equilibrium equation.\n\nThe voltage balance equation of the motor in the armature circuit can be expressed as\n\n_Um_ = _Lm_\n\n_dim_\n\n(1)\n_dt_ <sup>+</sup> <sup>_im_</sup> <sup>_Rm_</sup> <sup>+</sup> <sup>_em_</sup>\n\nwhere _Um_ is the supply voltage of the motor, _Rm_ is the resistance\nof the circuit, _im_ is the current, _Lm_ is the inductance, _t_ is the time,\nand _em_ is the back electromotive force, which can be calculated by\n\n_em_ = _Ceω_ (2)\n\nwhere _Ce_ is the back electromotive coefficient of the motor and _ω_\nis the rotational angular velocity of the motor."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_AST_2021_106729#c00009",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Aerospace Science and Technology > Nomenclature",
+   "text": "The electromagnetic torque equation of the motor is\n\n_M_ = _imC_ _M_ (3)\n\nwhere _M_ is the output torque of the motor and _C_ _M_ is the torque\ncoefficient of the motor.\n\nThe torque equilibrium equation of the motor is\n\n_Jm_\n\n_dω_\n\n<sup>_fmω_</sup> <sup>=</sup> <sup>_M_</sup> <sup>−</sup> <sup>_Mc_</sup> (4)\n_dt_ <sup>+</sup>"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 3,
+   "formula": 4,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

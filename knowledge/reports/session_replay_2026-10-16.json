@@ -1,0 +1,33 @@
+{
+ "since": "2026-10-16",
+ "packets": 60,
+ "files": 112,
+ "bank": {
+  "already_banked_no_change": 60
+ },
+ "verdicts": {
+  "confirmed": 0,
+  "refuted": 0,
+  "unknown_ids": 0,
+  "added_assumptions": 0,
+  "added_validity": 0,
+  "ungrounded_additions": 0,
+  "model_links_removed": 0,
+  "unchanged": 48,
+  "stale": 0,
+  "uncertain": 0,
+  "retired_or_noncurrent": 0,
+  "self_verification_refused": 0,
+  "unsigned_refused": 0,
+  "worker_role_refused": 0
+ },
+ "parser_reviews": 373,
+ "duplicate_retirements": {
+  "retired": 0,
+  "unchanged": 1,
+  "refused": 0
+ },
+ "changed_reviewed_files": [],
+ "stores_changed_ignoring_timestamps": [],
+ "no_op": true
+}

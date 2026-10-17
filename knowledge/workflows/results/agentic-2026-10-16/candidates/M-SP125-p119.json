@@ -1,0 +1,339 @@
+{
+ "packet": "M-SP125-p119",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  119,
+  119
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 119,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0119.png",
+   "sha256": "414f374f2b1f9c99e4bd395c4e7c2ab73d7d8f01e636b1e0cdabe238a8d3c414",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_08f62005a6fe30eedd8dafa8"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_38255f9ba719b66629f30a9c",
+   "kind": "figure",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 207.68860633662797,
+     "t": 80.5938720703125,
+     "r": 344.1941209099453,
+     "b": 55.24945068359375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c6a7bb3e9af9894e7c8ac9ca",
+   "kind": "figure",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 218.34084721192207,
+     "t": 763.4123401641846,
+     "r": 344.8698292374182,
+     "b": 743.5899467468262,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3e1f003594c77d11e9beba96",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 285.33333333333337,
+     "t": 698.6666666666666,
+     "r": 493.6666666666667,
+     "b": 659.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "h _ { c } = \\frac { q } { T _ { w c } - T _ { c o } } = \\frac { 3 . 0 0 } { 1 0 0 0 - 6 0 0 } \\\\ = 0 . 0 0 7 5 \\ B t u / i n ^ { 2 } - s e c - d e g F",
+   "original_text": "A, 29 —~ - 3:00 c= Fe Teo 1000-600 = 0.0075 Btu/in?-sec-deg F",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_42e8c5e78488e802e8b4b09e",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/22",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 308.6666666666667,
+     "t": 195.0,
+     "r": 468.6666666666667,
+     "b": 149.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mu \\ = & \\ 4 . 1 6 \\times 1 0 ^ { - 5 } \\ 1 b / \\text {in-sec} \\\\ k \\ = & \\ 1 . 7 8 \\times 1 0 ^ { - 6 } \\ B t u / \\text {in} ^ { 2 } \\text {sec-deg} \\ F / \\text {in} \\\\ C _ { p } = & \\ 0 . 5 \\ B t u / \\text {b-deg} \\ F",
+   "original_text": "p =4.16« 1075 lb/in-sec k =1.78x10-° Btu/in?-sec-deg F/in Cp=0.5 Btu/lb-deg F",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4e8710f96fd7225bf206601f",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/14",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 301.66666666666663,
+     "t": 536.6666666666666,
+     "r": 490.6666666666667,
+     "b": 508.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { h _ { c } d } { k } = 0 . 0 2 1 4 \\left ( \\frac { \\rho V _ { c o } d } { \\mu } \\right ) ^ { 0 . 3 } \\left ( \\frac { \\mu C _ { p } } { k } \\right ) ^ { 0 . 4 } \\left ( \\frac { \\mu } { \\mu _ { W } } \\right ) ^ { 0 . 1 4 } \\ ( a )",
+   "original_text": "hod V, d 08 Cc O4 O14 < -o.cena(? ee) (:<2) (<) (a) B bw",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_55fb3c89351daf1bc0f7559f",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 324.6666666666667,
+     "t": 594.3333333333333,
+     "r": 449.3333333333333,
+     "b": 570.3333333333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = 0 . 0 2 1 4 \\, R e ^ { 0 \\, 8 } P _ { r } \\, ^ { 0 . 4 } \\left ( \\frac { \\mu } { \\mu _ { W } } \\right ) ^ { 0 . 1 4 }",
+   "original_text": "014 Nu=0.0214 Re°*P,o4 (+) Ew",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_91ab72e2e5a9b061878aeac3",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/19",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 326.6666666666667,
+     "t": 309.3333333333333,
+     "r": 493.0,
+     "b": 263.66666666666674,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "V _ { \\text {co} ^ { = } } \\frac { \\frac { \\dot { \\tilde { w } } _ { \\ell } } { \\rho } } { \\frac { N } { 2 } \\, \\frac { ( \\pi d ^ { 2 } ) } { 4 } } = \\frac { 8 2 7 \\times 8 } { \\pi N d ^ { 2 } \\rho } = \\frac { 2 1 0 6 } { N d ^ { 2 } \\rho }",
+   "original_text": "We V,.-_P, -827%8_ 2106 () °° N Gd?) Nd®p Nd®p 2 4",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9b8d9deca194325c390c098b",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 71.33333333333333,
+     "t": 324.3333333333333,
+     "r": 251.66666666666666,
+     "b": 302.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T _ { \\mathbf w c } = T _ { \\mathbf w g } - \\frac { q t } { k } = 1 1 8 8 - \\frac { 3 . 0 0 \\times 0 . 0 2 } { 3 . 1 9 \\times 1 0 ^ { - 4 } } \\widetilde { = } 1 0 0 0 ^ { \\circ } R",
+   "original_text": "_ qt 3.00 x 0.02~. ° Two = Tw ~ 7p = 1188 og 1000 R",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9d31eee5431e963b6845ece7",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/16",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 282.0,
+     "t": 465.66666666666663,
+     "r": 490.6666666666667,
+     "b": 412.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u m b e r o f t u b e s \\, N = \\frac { \\pi [ D _ { t } + 0 . 8 \\, ( d + 0 . 0 4 ) ] } { ( d + 0 . 0 4 ) } \\\\ = \\frac { ( 0 . 8 \\, d + 2 4 . 9 3 ) } { ( d + 0 . 0 4 ) } \\, \\left ( b \\right )",
+   "original_text": "7{D,+0.8(d+0.04)] (d+ 0.04) _(0.84+24.93) = a0.04) ©) Number of tubes N = -",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f1e3cd87eeb2bb4894f8275f",
+   "kind": "formula",
+   "pages": [
+    119
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 66.66666666666667,
+     "t": 511.33333333333337,
+     "r": 254.33333333333334,
+     "b": 501.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "q = ( 5 6 6 7 - 1 1 8 8 ) \\times 0 . 0 0 0 6 7 = 3 . 0 0 \\ B t u / i n ^ { 2 } \\cdot \\sec",
+   "original_text": "q = (5667 - 1188) x 0.00067 = 3.00 Btu/in?-sec",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_08f62005a6fe30eedd8dafa8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p119-119-aa5f6bc8a346c93ea54e2c72ce0141dce0f2c2d00dedcfcd7f78f5376229ec8d.json",
+   "raw_sha256": "361b6628796d20942b7f0432148b5523703f276e41b41faef2dffdedeb580407",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_THERMAL_SIEDER_TATE"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00280",
+   "page_start": 118,
+   "page_end": 119,
+   "section": "MAIN PROPELLANT",
+   "text": "rial, lb/in 2\na =thermal expansion coefficient of inner\n\nshell material, inlin-deg F\n\n**WI.**\n\n110 **DESIGN OF** LIQUID **PROPELLANT** **a-_** **ROCKET ENGINES**\n\nmaterial. Based on experimental test results\nwhich showed good solid carbon deposits, design\nvalues not exceeding 1000 <sup>0</sup> For 1460 <sup>0</sup> R may be\npermitted for gas-side tube-wall temperature.\nSpecifically for the throat region, a _T_ wg value of\n\n1188 <sup>0</sup> R is taken. Using the results of sample\ncalculation 4-3, the value for the adiabatic wall\ntemperature _Taw_ can be calculated by multiplying _(T_ ch s by the estimated stagnation recovery\nfactor of 0.923, (. Taw =6140 x O.923=5667°R.\n\nFrom the same caleulation, the overall gas-side\nthermal conductance at the throat region is\n_hgc_ =0.00067 Btulin <sup>2</sup> -sec-deg F. Substitute into\nequation (4-10), to obtain the heat nux at the\nthroat:\n\n_q_ = (5667 - 11 88) x 0.00067 = 3.00 Btulin 2-sec\n\nFrom supplier's specifications, the following\naverage data are obtained for Inconel X at 1000 <sup>0</sup>\n\n1200 <sup>0</sup> R: Coefficient for thermal expansion,\na = 8 x 10- <sup>6</sup> in/in-deg F; modulus of elasticity,\n_E=28x10_ <sup>_6_</sup> psi; thermal conductivity, _k=3.19_\nx 10- <sup>4</sup> Btulin <sup>2</sup> -deg F/in; Poisson's ratio,\n_v=0.35._\n\nA circular tube configuration with an internal\ndiameter _d_ and a wall thickness _t_ of 0.020 inch\nis used. The assumption for thickness is to be\nverified by heat transfer and stress calculations.\nFrom equation (4-19), the coolant side wall temperature then is;"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00281",
+   "page_start": 119,
+   "page_end": 119,
+   "section": "MAIN PROPELLANT",
+   "text": "_T_ _=T,_ _~=1188_3.00xO.02;-10000R\nwe wg _k_ 3.19x10-4\n\nA double pass design is used; i.e., the coolant\npasses down through alternating tubes and up\nthrough adjacent tubes.\n\nFor an \"up\" tube, assume a coolant bulk temperature _Teo_ = 600 <sup>0</sup> R at the throat (the more\nsevere case, since the coolant has passed the\nthroat region before, on the way down). This\ntemperature is well below the critical one and\ncan be expected to remain so for the remainder\nof the passage. Total temperature increase for a\ntypical thrust chamber design is of the order of\n100 <sup>0</sup> F between cooling jacket inlet and outlet.\nThe heat-transfer coefficient required to permit\nthe calculated heat flux for the temperature differential assumed can now be calculated from\nequation (4-20):\n\n_he_ _q_ = 3.00\n_Twc-Teo_ _1000-600_\n\n= 0.0075 Btulin <sup>2</sup> -sec-deg F\n\nThe relationship between required _he_ and correct\ntube diameter is established by equation (4-23),\nand experimental data for RP-1 eC I =0.0214):\n\nor, substitutin& corresponding terms:\n\nThe following additional relationships exist:\n\nN um b er 0 f tu b es _N_ = ---:-:---::'-:--:-----'-'-- <sup>_rr[Dr+0.8(d+0.04)]_</sup>\n(d + 0.04)\n\n__(0.8d+24.93)_ (b)\n\n_-_ _(d+0.04)_\n\nFrom sample calculation (4-2), _Dr_ = 24.9\ninches. The factor 0.8 considers the fact that\nthe tube centers are located on a circle, rather\nthan a straight line.\n\nFor our double-pass design, the coolant\nvelocity then is"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00282",
+   "page_start": 119,
+   "page_end": 119,
+   "section": "MAIN PROPELLANT",
+   "text": "_W[_\n\n_P_ 827x8 2106\n_Veo=_ _N (lTd2)_ = _r.Nd2p_ = _Nd 2p_ (c)\n\"2-4\n\nFrom table 3-2: _w[=827lb/sec;_ p=local\nvalue of fluid density.\n\nRP-1 at 600 <sup>0</sup> R has the following properties:\n\n/1 = 4.16 x 10- <sup>5</sup> lblin-sec\n\n_k_ = 1. 78 x 10- 6 Btulin 2 -sec-deg F lin\n\nCp = 0.5 Btu/lb-deg F\n\nFor RP-l at 10000R, I1w=0.416x10-5lblin-sec.\n\nNow substitute known values and equation (c)\ninto equation (a)"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 8
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

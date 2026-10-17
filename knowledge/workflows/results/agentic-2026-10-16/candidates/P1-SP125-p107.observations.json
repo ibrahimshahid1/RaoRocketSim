@@ -1,0 +1,516 @@
+{
+ "packet": "P1-SP125-p107",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_reason": "P1 Rao/TOP: SP-125 sample calculation 4-2 numeric readout theta_n=27.4, theta_e=9.8 at eps 14, L_f 0.8",
+   "queue_pages": [
+    107,
+    107
+   ],
+   "queue_document_id": "DOC_NTRS_19710019929",
+   "queue_source_pdf": "propulsion_texts/19710019929.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P1-SP125-p107.json",
+   "sha256": "eeea4d20e000a21066b46fd7e179cc8a45701334516860ef6571d3b1836d7157",
+   "size_bytes": 14138,
+   "kind": "extraction",
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "pages": [
+    107,
+    107
+   ],
+   "docling_run_ids": [
+    "ENR_95d889928ecd31472116da81"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 4
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/19710019929.pdf",
+   "sha256_in_bundle": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_recomputed": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_match": true
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    107,
+    107
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "107": {
+     "figure": 2,
+     "formula": 4
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "renders": [
+   {
+    "page": 107,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0107.png",
+    "dpi": 150,
+    "sha256_in_bundle": "6e9e5eb968e933cf895aa7e467cf99f9c57e7a4657c4951606b77a005b901738",
+    "file_exists": true,
+    "sha256_recomputed": "6e9e5eb968e933cf895aa7e467cf99f9c57e7a4657c4951606b77a005b901738",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+    "sha256_in_bundle": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+    "file_exists": true,
+    "sha256_recomputed": "cdb7949fc5b4cf3fb3f9f2708852784e4e988010a50a9308789005e4d8afebc6",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 4
+  },
+  "candidates_total": 6,
+  "mechanical_flags": {
+   "flag_computation_note": "agentic_packet.py (line 195) computes mechanical_flags only for kind == 'formula'; for every other kind the list is [] by construction",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_5ca65534b55b3934c98f5b68",
+    "CAND_c719abe20cb62e2a2fe9e0c8"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_whose_transcription_json_has_empty_captions_list": [
+    "CAND_5ca65534b55b3934c98f5b68",
+    "CAND_c719abe20cb62e2a2fe9e0c8"
+   ],
+   "non_formula_candidates_whose_transcription_is_not_a_captions_json": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "identical_transcription_strings_within_kind": [
+   {
+    "kind": "figure",
+    "transcription_whitespace_collapsed": "{\"captions\": [], \"annotations\": []}",
+    "candidate_ids": [
+     "CAND_5ca65534b55b3934c98f5b68",
+     "CAND_c719abe20cb62e2a2fe9e0c8"
+    ]
+   }
+  ],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_5ca65534b55b3934c98f5b68",
+    "kind": "figure",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 210.90607495396893,
+      "t": 72.28796295446068,
+      "r": 346.9856571258695,
+      "b": 50.70782406678097,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_95d889928ecd31472116da81",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 107
+     }
+    ],
+    "raw_item_captions_refs": [],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 0,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [],
+    "caption_text": null,
+    "caption_note": "no caption reference present in the bundle transcription"
+   },
+   {
+    "id": "CAND_c719abe20cb62e2a2fe9e0c8",
+    "kind": "figure",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 213.11298253535446,
+      "t": 760.0501765606333,
+      "r": 348.71702449717424,
+      "b": 739.8019239476407,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_95d889928ecd31472116da81",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p107-107-51ebb4b0d4f2c4c36b3ab302c4f285114d4367a057bc3af0525080938b0fd49b.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 107
+     }
+    ],
+    "raw_item_captions_refs": [],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 1,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [],
+    "caption_text": null,
+    "caption_note": "no caption reference present in the bundle transcription"
+   }
+  ],
+  "formula_candidates": [
+   {
+    "id": "CAND_490fece68631ea68de458a08",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 61.333333333333336,
+      "t": 645.3333233333334,
+      "r": 270.66666666666663,
+      "b": 613.6666566666668,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "\\ V o l u m e = & \\frac { \\pi } { 3 } \\times 1 2 . 4 \\left [ ( 1 5 . 7 5 ) ^ { 2 } + ( 1 2 . 4 5 ) ^ { 2 } + 1 5 . 7 5 \\times 1 2 . 4 5 \\right ] \\\\ = & 7 7 6 0 \\, c u i n",
+    "transcription_length": 170,
+    "original_text_as_given": "7 3 x12.4 [(15.75)\"+ (12.45)?+15.7512.45 | =7760 cu in Volume =",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 1,
+     "]": 1,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_95d889928ecd31472116da81"
+   },
+   {
+    "id": "CAND_eb6ea4c927b105d01ed8cee4",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 62.333333333333336,
+      "t": 391.33332333333334,
+      "r": 251.66666666666666,
+      "b": 368.99999,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "L _ { n } = 0 . 8 \\times \\left [ \\frac { 1 2 . 4 5 ( \\sqrt { 1 4 } - 1 ) + 4 . 7 5 ( \\sec 1 5 ^ { \\circ } - 1 ) } { \\tan 1 5 ^ { \\circ } } \\right ]",
+    "transcription_length": 147,
+    "original_text_as_given": "_ 12.45 (v141)+ 4.75 (see 18-0) 1n=0.8%| can ise",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 1,
+     "]": 1,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_95d889928ecd31472116da81"
+   },
+   {
+    "id": "CAND_f03b5ede55e3fd56acfa1afa",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 166.33333333333331,
+      "t": 359.33332333333334,
+      "r": 271.0,
+      "b": 347.6666566666667,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "= 0 . 8 \\times 1 2 8 = 1 0 2 . 4 \\text { inches}",
+    "transcription_length": 48,
+    "original_text_as_given": "=0.8x 128 = 102.4 inches",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 1,
+     "}": 1
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_95d889928ecd31472116da81"
+   },
+   {
+    "id": "CAND_f2c609093e90150858af6bb6",
+    "pages": [
+     107
+    ],
+    "bbox": [
+     {
+      "l": 76.66666666666667,
+      "t": 264.66665666666677,
+      "r": 258.0,
+      "b": 203.99999000000003,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "N _ { t } & = 0 . 3 8 2 \\, R _ { t } \\, \\sin \\, \\theta _ { d } = 2 . 1 9 \\, \\text { inches} \\\\ N _ { a } & = R _ { t } + 0 . 3 8 2 \\, R _ { t } ( 1 - \\cos \\, \\theta _ { n } ) = 1 2 . 9 9 \\, \\text { inches} \\\\ E _ { t } & = L _ { n } = 1 0 2 . 4 \\, \\text { inches} \\\\ E _ { a } & = R _ { e } = 4 6 . 7 \\, \\text { inches}",
+    "transcription_length": 319,
+    "original_text_as_given": "N, =0.382 Rz sin 9p = 2.19 inches N,=R,+0.382 Re(1cos @n)= 12.99 inches E, = Ln = 102.4 inches E,=Re=46.7 inches",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 15,
+     "}": 15
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_95d889928ecd31472116da81"
+   }
+  ],
+  "stored_objects": {
+   "count": 3,
+   "by_store": {
+    "claims": 2,
+    "entities": 1
+   },
+   "quote_anchor_state_counts": {
+    "GROUNDED": 3
+   },
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 4,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_NOZZLE_RAO_TOP_BEZIER": []
+    },
+    "model_ids_values_across_stored_objects": [
+     "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+    ]
+   },
+   "objects": [
+    {
+     "id": "CLM_NTRS_19710019929_42DCCAAE",
+     "store": "claims",
+     "type": "Claim",
+     "page": 107,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 141,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 107
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_NTRS_19710019929_76A39C08",
+     "store": "claims",
+     "type": "Claim",
+     "page": 107,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 201,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 107
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "ASM_NTRS_19710019929_1195E32A",
+     "store": "entities",
+     "type": "Assumption",
+     "page": 107,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": "The convergent-section volume is computed as a frustum cone, neglecting the slight rounding of the throat.",
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 141,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 107
+      }
+     ],
+     "same_page_formula_candidates": null
+    }
+   ]
+  },
+  "missing_targets": {
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_NOZZLE_RAO_TOP_BEZIER": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "missing_targets_as_given": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "target_objects_in_summary": 0,
+   "computation_note": "agentic_packet.py lines 198-239: missing_targets = packet targets minus the ids of stored objects collected only from the equations, claims, entities and validity stores (records of this document that are targets or lie on the packet pages); a target id absent from those four stores is therefore listed as missing"
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00250",
+     "page_start": 107,
+     "page_end": 107,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1696
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00251",
+     "page_start": 107,
+     "page_end": 107,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1645
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00252",
+     "page_start": 107,
+     "page_end": 107,
+     "section": "MAIN PROPELLANT",
+     "text_length": 496
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

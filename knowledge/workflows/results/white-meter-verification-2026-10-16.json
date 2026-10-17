@@ -1,0 +1,24 @@
+[
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AA664617",
+    "refuted": false,
+    "confidence": "high",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "reason": "Original PDF page750 displays Eq.6.117 as m_dot = C_d Y A_t sqrt[2 rho1 (p1-p2)/(1-beta^4)] with beta=d/D. The density rho1 multiplies the pressure difference in the numerator; the denominator is1-beta^4, and the entire quotient lies under the square root. The area factor A_t and coefficients C_d and Y lie outside the root. The prose immediately above explicitly rewrites the incompressible orifice/nozzle/venturi relation using mass flow and upstream density, noting that gas flow needs a compressibility correction when p2/p1 is not near unity. The prose below explicitly calls Y dimensionless and dependent on pressure ratio, beta and meter type. Figure6.45 distinguishes sharp-edged orifices from nozzles/venturis; the text attributes their different factors to strong jet contraction in the orifice versus designs intended to eliminate contraction. The stored meter-specific scope and exclusion of a universal choked-injector interpretation are therefore supported. Dimensional checking with upstream density in kg/m^3, pressure in Pa and A_t in m^2 gives mass flow in kg/s. The displayed beta=d/D is confirmed; interpreting d as meter throat diameter and D as pipe diameter follows the flowmeter context, while this single page does not newly label both geometrical quantities in a diagram.",
+    "evidence": {
+      "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+      "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 750,
+      "equation_number": "6.117",
+      "method": "Independent visual comparison of original-PDF page render, checking rho1 placement, root extent, beta fourth-power denominator, area/coefficient placement, displayed diameter ratio, and adjacent expansion-factor prose/figure. Docling output is not treated as authority.",
+      "render_path": "knowledge/.work/white/p750.png",
+      "render_sha256": "997a444e0d223550d3ae9501419331336ccc9d0bb06f52b2e5abcef4fa0b4fae",
+      "extraction_file": "knowledge/workflows/results/white-meter-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "b2c98e9ab0b25371617efb4b0c2fca1bfbc7550a2c036cc406995de324997e8c",
+      "reviewed_at": "2026-10-16T05:10:26.647792+00:00",
+      "units_status": "Y is explicitly dimensionless in the source. The remaining stored SI units and dimensionless coefficient/diameter ratio are dimensionally consistent reviewer interpretations, not a claim that this page prints all units.",
+      "figure_context": "Figure6.45 plots different expansion-factor families for sharp-edged orifices and nozzles/venturis against pressure ratio and diameter ratio. No curve values were digitized or adopted."
+    },
+    "scope_note": "Source-only confirmation of Eq.6.117 transcription, numbering, page location, and local flowmeter correction context. Does not certify empirical Cd or Y selections, universal injector applicability, complete source extraction, variable-alias links, implementation correctness, experimental validation or hardware qualification."
+  }
+]

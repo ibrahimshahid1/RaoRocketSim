@@ -1,0 +1,373 @@
+[
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_082529F7",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), Eq. [11], visually states phi = theta + alpha along DE. The following paragraph identifies this surface as the last left characteristic. The result applies along DE in the stated variational construction; it does not independently prove a numerical implementation correct.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": [
+      {
+        "statement": "Equations 11-13 along DE are necessary conditions for the variational integral to be a maximum; the source wording here does not assert a sufficiency or uniqueness theorem.",
+        "page": 3,
+        "quote": "along DE are the necessary conditions for the integral [5] to be a maximum."
+      }
+    ]
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_1BE77D02",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), Eq. [13], visually confirms y rho W^2 sin^2(theta) tan(alpha) = -lambda_3, including both powers of 2 and the minus sign. The f_3=cot(phi) definition and constant-length restriction identify lambda_3 as the length multiplier. Adjacent text explicitly calls these necessary conditions along DE.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": [
+      {
+        "statement": "Equations 11-13 along DE are necessary conditions for the variational integral to be a maximum; the source wording here does not assert a sufficiency or uniqueness theorem.",
+        "page": 3,
+        "quote": "along DE are the necessary conditions for the integral [5] to be a maximum."
+      }
+    ]
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_3E537078",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), Eq. [14], visually confirms sin(2 theta) = [(p-p_a)/(0.5 rho W^2)] cot(alpha) at E. The factor one-half is in the denominator and the endpoint qualification is printed. This is the source endpoint condition; no solver convergence or hardware claim was checked.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 2 (printed p. 378), Eq. [3], visually confirms length = x_C + integral_C^E cot(phi) dy. The immediately preceding unnumbered equation gives x_E-x_C as the same integral, and Fig. 1(a) places the axial origin at the throat. This is the diverging-portion length in this construction.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 2,
+      "printed_page": 378,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-1.png",
+      "render_sha256": "0de053256c3f4e7856cace4d454e7595a5c818cf5b9745e5f00132dd2b10e429",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_801D1C3E",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 2 (printed p. 378), Eq. [1], visually shows the C-to-E integral of rho W sin(phi-theta)/sin(phi) times 2 pi y dy. Its preceding elemental-area and mass-flux derivation on the same page matches the stored variable meanings. The stored ASCII notation is an unambiguous transliteration; the prose quote locates the equation but is not itself evidence of its mathematical form.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 2,
+      "printed_page": 378,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-1.png",
+      "render_sha256": "0de053256c3f4e7856cace4d454e7595a5c818cf5b9745e5f00132dd2b10e429",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_B52B8DD0",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), Eq. [15], visually confirms dtheta/dy - sqrt(M^2-1)/[M(1+(gamma-1)M^2/2)] dM/dy + sin(alpha) sin(theta)/[y sin(theta+alpha)] = 0. Both derivative signs, the square root, gamma-1 term, and plus sign in theta+alpha were checked in the display. The following paragraph identifies this as left-characteristic compatibility.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_BEF48217",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), Eq. [12], visually confirms W cos(theta-alpha)/cos(alpha) = -lambda_2. The denominator is cos(alpha), the angle difference is theta-alpha, and the minus sign is present. The adjacent text and f_2 definition identify the constant mass-flow multiplier. This is a necessary stationarity relation along DE, not an experimental or numerical validation result.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": [
+      {
+        "statement": "Equations 11-13 along DE are necessary conditions for the variational integral to be a maximum; the source wording here does not assert a sufficiency or uniqueness theorem.",
+        "page": 3,
+        "quote": "along DE are the necessary conditions for the integral [5] to be a maximum."
+      }
+    ]
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_EAD5203E",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 4 (printed p. 380), Eq. [16], visually confirms sin(2 theta_E) = 2 cot(alpha_E)/(gamma M_E^2). The preceding sentence explicitly restricts this reduction to zero ambient pressure. The stored equation form is correct, but its variables list is incomplete: theta_E, M_E and alpha_E are not enumerated there; the source and preceding definitions identify the exit-point quantities. The example uses constant gamma=1.23, which is an example input rather than a universal numerical validity bound.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 4,
+      "printed_page": 380,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-3.png",
+      "render_sha256": "61d3282b9a3c1c8660e4ac04eaea47b3c846738bc33259c4eab0468cf6b7651d",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [
+      {
+        "statement": "The Eq. 16 endpoint reduction assumes zero ambient pressure.",
+        "page": 4,
+        "quote": "For zero ambient pressure, Equation [14] reduces to"
+      }
+    ],
+    "missing_validity": []
+  },
+  {
+    "object_id": "EQ_DOI_10_2514_8_7324_F1B6F455",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 2 (printed p. 378), Eq. [2], visually confirms the C-to-E integral of [(p-p_a)+rho W^2 sin(phi-theta) cos(theta)/sin(phi)] 2 pi y dy, including the plus sign and pressure-difference term. Inlet conditions are explicitly prescribed in the following paragraph. The formula was checked in the original display rather than reconstructed from the damaged Markdown.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 2,
+      "printed_page": 378,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-1.png",
+      "render_sha256": "0de053256c3f4e7856cace4d454e7595a5c818cf5b9745e5f00132dd2b10e429",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": [],
+    "related_objects_review": [
+      {
+        "object_id": "ASM_DOI_10_2514_8_7324_8B89FA67",
+        "verdict": "CONFIRMED",
+        "confidence": "high",
+        "pdf_page": 2,
+        "reason": "Following Eq. 2 the original explicitly assumes inlet conditions are given, which suffices for maximizing the displayed thrust expression. apply_verification currently only handles equations and claims; this nested note records independent review without claiming to apply an entity verdict."
+      },
+      {
+        "object_id": "ASM_DOI_10_2514_8_7324_39EEFD97",
+        "verdict": "CONFIRMED",
+        "confidence": "high",
+        "pdf_page": 2,
+        "reason": "Initial Expansion in the Nozzle prescribes a suitable throat-region contour TBB-prime and leaves point B to be determined as part of the solution. The original wording and statement were visually checked. apply_verification currently only handles equations and claims; this nested note records independent review without claiming to apply an entity verdict."
+      }
+    ]
+  },
+  {
+    "object_id": "CLM_DOI_10_2514_8_7324_AB9292EE",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 6 (printed p. 382), Conclusions, directly states that ambient pressure, nozzle length and wall contour in the throat region are governing conditions in the formulation and solution. The stored statement is supported by the original prose, with no implied universal numerical validity range.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 6,
+      "printed_page": 382,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-5.png",
+      "render_sha256": "77d08f5cd9ffbc5732f02237ebb29c3875f75949c6882b05cf9bc230b3a91dea",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "CLM_DOI_10_2514_8_7324_E79A2E24",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 3 (printed p. 379), paragraph after Eq. [15], directly states that without compatibility the control surface becomes a limiting line and the flow pattern would be physically impossible. This confirms the source claim in its characteristic construction; it is not a physical validation of repository results.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 3,
+      "printed_page": 379,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-2.png",
+      "render_sha256": "16559e890d08f7c0cbf3c979372a25951dfb7a31c56d8eb2c894511c9f1102fa",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "CLM_DOI_10_2514_8_7324_EC266B8E",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 5 (printed p. 381), paragraph below Table 3, compares the contour A cut off at length 2.94 y_t (thrust coefficient 1.5688) with nozzle B designed for maximum thrust at that length (Table 3: 1.5829). The original text explicitly says the truncated value is lower. Page 6 further discusses distinct optimum contours at different lengths. This supports the stored distinction in the paper, not a universal exclusion of coincident contours in every nozzle problem.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 5,
+      "printed_page": 381,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-4.png",
+      "render_sha256": "c242f7c56bb832d8a7177a640209efe2cf25abe96f156eab5b0a2e691847698a",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  },
+  {
+    "object_id": "CLM_DOI_10_2514_8_7324_F1610206",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 6 (printed p. 382), paragraph immediately after Fig. 6, explicitly states that Figs. 5 and 6 are computed for inviscid isentropic flow and discusses a boundary-layer displacement correction separately. The indexed quote splits inviscid as in viscid; the original PDF word and scientific proposition are clear.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 6,
+      "printed_page": 382,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-5.png",
+      "render_sha256": "77d08f5cd9ffbc5732f02237ebb29c3875f75949c6882b05cf9bc230b3a91dea",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": [],
+    "related_objects_review": [
+      {
+        "object_id": "VAL_DOI_10_2514_8_7324_E5963567",
+        "verdict": "CONFIRMED",
+        "confidence": "high",
+        "pdf_page": 6,
+        "reason": "The inviscid isentropic qualification for Figs. 5 and 6 is explicitly present. The bounded paper review found example inputs, not an asserted general numerical validity envelope. apply_verification currently only handles equations and claims; this nested note records independent review without claiming to apply a validity-record verdict."
+      }
+    ]
+  },
+  {
+    "object_id": "CLM_DOI_10_2514_8_7324_FCFB9073",
+    "verdict": "CONFIRMED",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "PDF page 4 (printed p. 380), paragraph immediately above Eq. [19], explicitly equates the mass flow across right characteristic B_1D_1 with the mass flow across the control surface from D_1 to E. The equation display and following paragraph confirm the two integration paths. The stored proposition is correct. Its indexed quote has damaged point labels (A A and A instead of B_1D_1 and D_1), so that quote must not be treated as an exact transcription of the original PDF.",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "evidence": {
+      "document_id": "DOC_DOI_10_2514_8_7324",
+      "source_pdf": "propulsion_texts/rao1958.pdf",
+      "pdf_page": 4,
+      "printed_page": 380,
+      "method": "Independent comparison of existing extraction against newly rendered original PDF; equations checked visually, not inferred from Markdown.",
+      "render_path": "knowledge/.work/rao-pages/verify-2026-10-07-3.png",
+      "render_sha256": "61d3282b9a3c1c8660e4ac04eaea47b3c846738bc33259c4eab0468cf6b7651d",
+      "reviewed_at": "2026-10-07T22:58:16.528364+00:00",
+      "extraction_file": "knowledge/workflows/results/rao1958-2026-09-20.jsonl",
+      "extraction_file_sha256": "ed830cbb08247c6dd68e48846106298818cfbc711ace1467846ecab501e5ca3a"
+    },
+    "scope_note": "Confirms this extracted source object only. No assessment of solver correctness, engineering qualification, hardware performance, or an unstated validity envelope.",
+    "missing_assumptions": [],
+    "missing_validity": []
+  }
+]

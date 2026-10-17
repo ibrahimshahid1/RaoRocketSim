@@ -1,0 +1,287 @@
+{
+ "packet": "R-SON2017-p003",
+ "kind": "model_review",
+ "document_id": "DOC_DOI_10_2514_1_B36301",
+ "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+ "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+ "pages": [
+  3,
+  3
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0003.png",
+   "sha256": "f381d0d6964a644667dff6310fd38cdb684dcb8a9c6c4a785689a3804bb558cc",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_0e9aff405ef24b615279b399"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_3de9239252791ee3ce4c345c",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 2 Remarkable dimensions inside the pintle nozzle for the minimum-area transition: a) schematic and b) definition of a transition point."
+   ],
+   "bbox": [
+    {
+     "l": 114.6918330174764,
+     "t": 738.8169479881569,
+     "r": 469.2102899973812,
+     "b": 565.4698544570708,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_0e9aff405ef24b615279b399",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p3-3-989d7d5aeef8711e1315d31ad65a10c0d6802793a7b36ecfdc0814db5bb22c4b.json",
+   "raw_sha256": "1c051f3afe6d183cd8bda426497d7f9e9f7064a7e220a922c8dfadcbfab32d22",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_457b9f50198b68f04fd69d1a",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 303.9239171960032,
+     "t": 531.8924061248117,
+     "r": 544.5787426067124,
+     "b": 347.6378576280538,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_0e9aff405ef24b615279b399",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p3-3-989d7d5aeef8711e1315d31ad65a10c0d6802793a7b36ecfdc0814db5bb22c4b.json",
+   "raw_sha256": "1c051f3afe6d183cd8bda426497d7f9e9f7064a7e220a922c8dfadcbfab32d22",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a67bffaf319649e4df28206c",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 3 Minimum orifice area near the pintle tip according to pintleopening distance and transition points."
+   ],
+   "bbox": [
+    {
+     "l": 40.60078284459562,
+     "t": 530.9928250415943,
+     "r": 280.77815769580286,
+     "b": 318.46149942636305,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/14\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_0e9aff405ef24b615279b399",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p3-3-989d7d5aeef8711e1315d31ad65a10c0d6802793a7b36ecfdc0814db5bb22c4b.json",
+   "raw_sha256": "1c051f3afe6d183cd8bda426497d7f9e9f7064a7e220a922c8dfadcbfab32d22",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_29a642084a0e125b6a2964f2",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "Pintle tip angle, deg",
+     "Estimated transition point of opening distance, mm"
+    ],
+    [
+     "0",
+     "0.418"
+    ],
+    [
+     "20",
+     "0.454"
+    ],
+    [
+     "40",
+     "0.568"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2 Transition point due to different pintle tip angles"
+   ],
+   "bbox": [
+    {
+     "l": 96.60537873340834,
+     "t": 84.9007036323012,
+     "r": 223.99845704152685,
+     "b": 25.62954661963454,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 4x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_0e9aff405ef24b615279b399",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p3-3-989d7d5aeef8711e1315d31ad65a10c0d6802793a7b36ecfdc0814db5bb22c4b.json",
+   "raw_sha256": "1c051f3afe6d183cd8bda426497d7f9e9f7064a7e220a922c8dfadcbfab32d22",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CONST_DOI_10_2514_1_B36301_2395FEBA",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Son Table 2 estimated transition opening at 40 deg tip angle = 0.568 mm",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "of opening distance, mm 0 0.418 20 0.454 40 0.568",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_1_B36301_878597C1",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Son Table 2 estimated transition opening at 20 deg tip angle = 0.454 mm",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "of opening distance, mm 0 0.418 20 0.454 40 0.568",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_2514_1_B36301_9D1A03CE",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 3,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "Son Table 2 estimated transition opening at 0 deg tip angle = 0.418 mm",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "of opening distance, mm 0 0.418 20 0.454 40 0.568",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 3
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00009",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "860 SON ET AL.\n\nFig. 2 Remarkable dimensions inside the pintle nozzle for the minimum-area transition: a) schematic and b) definition of a transition point.\n\nFig. 4 Schematic of the experimental system.\n\nFig. 3 Minimum orifice area near the pintle tip according to pintleopening distance and transition points.\n\nB. Experimental Apparatus and Methods\n\nThe two major variables in a pintle injector are the spray angle and\natomization performance. As the element unit injects all propellants,\nfast mixing and a wide spray surface are necessary to quickly burn\nthem. Therefore, a wide spray angle should be used to exploit the\nwidechamber area. Generally,the combustion efficiency and burning\nrate of the liquid fuel are related to atomization characteristics that are\nrepresented by the droplet diameter. Hence, the spray angle and SMD\nof the droplets were selected as the major design variables in this\nstudy. An atmospheric spray experiment was conducted using water\nand air as simulants of real propellants to determine optimal\nnondimensional variables for the procedure. For precision pintle\ncontrol, a micrometer with a 0.001 mm interval was used and\nconnected to the pintle rod using a rigid motor coupler.\n\nTable 2 Transition point due to\ndifferent pintle tip angles\n\nFigure 4 shows the entire experimental setup for capturing spray\nimages and measuring SMDs. A stroboscope was used as the light\nsource, and planar-convex lenses were used to generate parallel\nlight rays. Spray images were captured using a high-resolution\ncomplementary metal-oxide semiconductor camera with a resolution\nof 4256 × 2832 pixelsand a 1 s exposure time. The density–gradient–\nmagnitude (DRM) images were obtained by processing the spray\nimages. In a previous study [14], the spray anglewas defined from the\ncenter of the injector. However, the new spray angle is defined as\nshown in Fig. 5. Spray angles were defined from the post tip (i.e., the\ntheoretical impinging point) and a distance of 50 mm as measured\nusing the DRM images. A laser-diffraction meter was used to\nmeasure the SMDs based on laser-diffraction theory, which is in turn\nbased on Mie scattering. The SMDs were also measured at the same\naxial point as the spray angle measurement. The volume-averaged\nSMDs were measured using the diffraction meter. Sprays penetrated\nthe thick laser and the analyzer calculated the distribution and\naveraged diameter using the diffracted signal. The laser diameter was\n29.5 mm with a 632.8 nm wavelength."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00010",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "C. Experimental Results\n\nAs mentioned in the previous section, the pintle injector has\nthe special characteristic of a variable nozzle area. Along with the\nvariable nozzle area, the flow characteristic is dependent on the\npintle-opening distance. The hypothesis of the minimum area\ntransition in Fig. 2 is similar to the actual transition that was observed\nas shown in Fig. 6a. At the transition point, therewas a sudden change\nin the spray characteristics of the experiment. Additionally, the actual\ntransition point was not fixed with uncertainties because of the flow\n\nPintle tip\nangle, deg\n\nEstimated transition point\n\nangle, deg of opening distance, mm\n\n0 0.418\n20 0.454\n40 0.568"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 3,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

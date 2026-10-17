@@ -1,0 +1,1381 @@
+{
+ "packet": "V-SP125-p098-099",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "CLM_NTRS_19710019929_74C39084",
+    "CLM_NTRS_19710019929_752872E2",
+    "CLM_NTRS_19710019929_E1995D1A",
+    "CLM_NTRS_19710019929_F38ABA9F",
+    "EQ_NTRS_19710019929_16E1DC3A",
+    "EQ_NTRS_19710019929_7A8070BC"
+   ],
+   "queue_reason": "independent original-page verification of pending September extraction objects: chamber/throat geometry Eqs. 4-6, 4-7 and claims",
+   "queue_pages": [
+    98,
+    99
+   ],
+   "queue_document_id": "DOC_NTRS_19710019929",
+   "queue_source_pdf": "propulsion_texts/19710019929.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/V-SP125-p098-099.json",
+   "sha256": "ac7da9f5de78d4ea377f09159bacfeacd693e7fb6aed5f4558b8a839c48a0273",
+   "size_bytes": 32137,
+   "kind": "verification",
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "pages": [
+    98,
+    99
+   ],
+   "docling_run_ids": [
+    "ENR_6e00c6d3750238f888be6a88",
+    "ENR_e7e8ff2d5ff9e6d09bb5ae37"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 6,
+     "formula": 3
+    },
+    "flagged_candidates": 0,
+    "target_objects": 6,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "f378b3f5b161828b4e03f2a41c72007fb7b1eb7ac0799c05a56b0111103f0a71"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "8111f9371c96e293cdb2f1032b8bc2d33dfb37d248fa7b94d7e306dc98d2fa9c",
+    "claims": "db11ec21e0d89d174cde88c6454bb13fbe98611284eeba304dae3a75bf62569b",
+    "entities": "e35e068cd566e5b6e8fbca4026f530099f4b2e715053fb46cc36d030c62329b9",
+    "validity": "0fe856b243d05db06a0814c481c6f70d26afdfa4320602080af863b8668999b5",
+    "models": "f962c15cdb4ca50f65099e830654fe7e9b34d30fc916590611d0817080c17c10",
+    "enrichments": "6138bcc86171432877b23c8f65a0f634b5c49d7a227d62aa2892c0c11b82c3e9"
+   },
+   "enrichments_file_hash_differs_from_snapshot": true,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 499,
+    "records_now": 506,
+    "added_count": 7,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [
+     "CAND_0b15f574c936587e844600b5",
+     "CAND_59c5b93ea9dc00fc2dd0e189",
+     "CAND_7891589d3bb82f5958e26f0f",
+     "CAND_83163b1b38ad81ec52cda67c",
+     "CAND_e5b9293d638533e465c7b8a9",
+     "CAND_f4527f21e00bf2f411b2927b",
+     "ENR_5f8febc334359bf644a794bc"
+    ],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": [
+     "ENR_5f8febc334359bf644a794bc"
+    ]
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/19710019929.pdf",
+   "sha256_in_bundle": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_recomputed": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 98,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0098.png",
+    "dpi": 150,
+    "sha256_in_bundle": "490690f7ba64d9ca92e9eea176d3f296c725e09bb1d79e4ae2e869f7381ea8d6",
+    "file_exists": true,
+    "sha256_recomputed": "490690f7ba64d9ca92e9eea176d3f296c725e09bb1d79e4ae2e869f7381ea8d6",
+    "sha256_match": true
+   },
+   {
+    "page": 99,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0099.png",
+    "dpi": 150,
+    "sha256_in_bundle": "ef69f31705d980947eb96532049556523f744ed4113a215d17859152fa1e304e",
+    "file_exists": true,
+    "sha256_recomputed": "ef69f31705d980947eb96532049556523f744ed4113a215d17859152fa1e304e",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_6e00c6d3750238f888be6a88",
+    "run_record_found": true,
+    "page_range": [
+     99,
+     99
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "raw_sha256_recorded": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.md",
+    "markdown_sha256_recorded": "195d53b05ba9308e857e754568fab175ccee4720f55fe516fbab8322cd5c359c",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "195d53b05ba9308e857e754568fab175ccee4720f55fe516fbab8322cd5c359c",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+    "run_record_found": true,
+    "page_range": [
+     98,
+     98
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "raw_sha256_recorded": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.md",
+    "markdown_sha256_recorded": "6d631b54bde297ee84f4370636d37d88372fe7fab4b1abb01d220402fa89ea58",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "6d631b54bde297ee84f4370636d37d88372fe7fab4b1abb01d220402fa89ea58",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "sha256_in_bundle": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+    "file_exists": true,
+    "sha256_recomputed": "31cf5ccd06ff1667a2f7454fb4c960f161bdc4a1d458d73780c34aec6b405a6f",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "sha256_in_bundle": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+    "file_exists": true,
+    "sha256_recomputed": "0f85ec334960797027f2f79d211e7412258e55bacc297a6802dadaa4e8838deb",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 6,
+   "formula": 3
+  },
+  "candidates_total": 9,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_553de187ac7be26d886f30a0",
+    "CAND_9e0bd34fa51b2d794c395845",
+    "CAND_f2b84e486ed6fe2dbb081679",
+    "CAND_0207dba89691212826663597",
+    "CAND_2364822bd4bac5686e9ed750",
+    "CAND_cf0d75098d423ea2cdadea27"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_553de187ac7be26d886f30a0",
+    "CAND_9e0bd34fa51b2d794c395845",
+    "CAND_0207dba89691212826663597",
+    "CAND_cf0d75098d423ea2cdadea27"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [],
+   "markdown_chunks": [],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [
+   {
+    "kind": "figure",
+    "transcription_whitespace_collapsed": "{\"captions\": [], \"annotations\": []}",
+    "candidate_ids": [
+     "CAND_553de187ac7be26d886f30a0",
+     "CAND_9e0bd34fa51b2d794c395845",
+     "CAND_0207dba89691212826663597",
+     "CAND_cf0d75098d423ea2cdadea27"
+    ]
+   }
+  ],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_553de187ac7be26d886f30a0",
+    "kind": "figure",
+    "pages": [
+     98
+    ],
+    "bbox": [
+     {
+      "l": 257.1059673323062,
+      "t": 57.72705078125,
+      "r": 398.18524263822115,
+      "b": 37.96954345703125,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/2",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/2",
+      "match": "exact",
+      "page_no": 98
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_9e0bd34fa51b2d794c395845",
+    "kind": "figure",
+    "pages": [
+     98
+    ],
+    "bbox": [
+     {
+      "l": 272.88646113568944,
+      "t": 747.2488098144531,
+      "r": 413.7840646017671,
+      "b": 723.8277359008789,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 98
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_f2b84e486ed6fe2dbb081679",
+    "kind": "figure",
+    "pages": [
+     98
+    ],
+    "bbox": [
+     {
+      "l": 340.7394916201028,
+      "t": 209.314697265625,
+      "r": 553.3058131680903,
+      "b": 98.9398193359375,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [
+     "Figure 4-10.—Conical nozzle contour."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/20\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 98
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/20"
+    ],
+    "raw_item_children_count": 8,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/20",
+      "label": "caption",
+      "page_no": 98,
+      "bbox": {
+       "l": 363.3333333333333,
+       "t": 92.0,
+       "r": 522.3333333333333,
+       "b": 83.0,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 4-10.—Conical nozzle contour.",
+      "orig": "Figure 4-10.—Conical nozzle contour.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_0207dba89691212826663597",
+    "kind": "figure",
+    "pages": [
+     99
+    ],
+    "bbox": [
+     {
+      "l": 219.7546849946617,
+      "t": 766.096981048584,
+      "r": 342.62294288148274,
+      "b": 738.0098838806152,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_6e00c6d3750238f888be6a88",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 99
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_2364822bd4bac5686e9ed750",
+    "kind": "figure",
+    "pages": [
+     99
+    ],
+    "bbox": [
+     {
+      "l": 292.2049546002327,
+      "t": 693.6685562133789,
+      "r": 496.8683378139065,
+      "b": 578.1825866699219,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [
+     "Figure 4-11.—Bell nozzle contour."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/12\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_6e00c6d3750238f888be6a88",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 99
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/12"
+    ],
+    "raw_item_children_count": 26,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/12",
+      "label": "caption",
+      "page_no": 99,
+      "bbox": {
+       "l": 320.6666666666667,
+       "t": 570.3333333333334,
+       "r": 465.6666666666667,
+       "b": 562.0,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 4-11.—Bell nozzle contour.",
+      "orig": "Figure 4-11.—Bell nozzle contour.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_cf0d75098d423ea2cdadea27",
+    "kind": "figure",
+    "pages": [
+     99
+    ],
+    "bbox": [
+     {
+      "l": 214.75640879130015,
+      "t": 72.50592041015625,
+      "r": 352.60959200944916,
+      "b": 50.62677001953125,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/2",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_6e00c6d3750238f888be6a88",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/2",
+      "match": "exact",
+      "page_no": 99
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 0,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_ddb7b019c43229b989eb20f9",
+    "pages": [
+     98
+    ],
+    "bbox": [
+     {
+      "l": 133.33333333333334,
+      "t": 619.3333333333333,
+      "r": 322.0,
+      "b": 610.3333333333333,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/4",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 98,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "T o t a l a r e a = 2 L _ { c } \\sqrt { \\pi } \\epsilon _ { c } A _ { t } + \\csc \\theta ( \\epsilon _ { c } - 1 ) A _ { t } \\left ( 4 \\cdot 6 \\right )",
+    "transcription_length": 148,
+    "original_text_as_given": "Total area=2LeVmecAt+csc Weg - 1)Az (4-6)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(4-6)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(4-6)",
+    "trailing_token_delimiters_as_given": "()",
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [
+     "(4-6)"
+    ],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 6,
+     "}": 6
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_e7e8ff2d5ff9e6d09bb5ae37"
+   },
+   {
+    "id": "CAND_56b12192ceb007e0860f237a",
+    "pages": [
+     99
+    ],
+    "bbox": [
+     {
+      "l": 115.33333333333334,
+      "t": 641.0,
+      "r": 271.66666666666663,
+      "b": 619.0,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/3",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 99,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\_ _ { \\mathbf n } = \\frac { R _ { t } ( \\sqrt { \\epsilon - 1 } ) + R ( s e c \\ a - 1 ) } { \\tan \\ a }",
+    "transcription_length": 102,
+    "original_text_as_given": "_ Ri(\\fe1)+ R(sec a-1) tan a (4-7) n",
+    "trailing_parenthesized_token_in_original_text_lexical_only": null,
+    "trailing_token_normalized_to_parentheses_lexical_only": null,
+    "trailing_token_delimiters_as_given": null,
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [
+     "(4-7)"
+    ],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_6e00c6d3750238f888be6a88"
+   },
+   {
+    "id": "CAND_6820d6abc6266e72d9b2f948",
+    "pages": [
+     99
+    ],
+    "bbox": [
+     {
+      "l": 136.66666666666669,
+      "t": 429.0,
+      "r": 272.0,
+      "b": 419.6666666666667,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/6",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 99,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "\\lambda = \\frac { 1 } { \\frac { 1 } { 3 } } ( 1 + \\cos \\alpha )",
+    "transcription_length": 63,
+    "original_text_as_given": "A= 3(1+cos a) (4-8)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(4-8)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(4-8)",
+    "trailing_token_delimiters_as_given": "()",
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [
+     "(4-8)"
+    ],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_6e00c6d3750238f888be6a88"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(4-6)",
+    null,
+    "(4-8)"
+   ],
+   "candidates_without_trailing_token": [
+    "CAND_56b12192ceb007e0860f237a"
+   ],
+   "tokens_with_non_ascii_delimiters_as_given": [],
+   "candidates_with_a_bracketed_number_token_only_not_at_the_end": [
+    {
+     "id": "CAND_56b12192ceb007e0860f237a",
+     "tokens": [
+      "(4-7)"
+     ]
+    }
+   ],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p98-98-3c0d596609ecd784dad0f1d8e83bd305c86c11323d24b2a60b699eae23e89288.json",
+    "collection_counts": {
+     "texts": 28,
+     "tables": 0,
+     "pictures": 3,
+     "groups": 1,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 3,
+     "text": 16,
+     "formula": 1,
+     "section_header": 4,
+     "list_item": 3,
+     "caption": 1
+    },
+    "candidate_count_from_this_artifact": 4,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p99-99-2efd7b57381b7fc9165b847d91936c73bae909c8f7515becaecb4cb1a28c1750.json",
+    "collection_counts": {
+     "texts": 44,
+     "tables": 0,
+     "pictures": 3,
+     "groups": 1,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 2,
+     "text": 35,
+     "formula": 2,
+     "section_header": 1,
+     "caption": 1,
+     "list_item": 3
+    },
+    "candidate_count_from_this_artifact": 5,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_NTRS_19710019929#c00231",
+    "line": "_Figure_ _4-10.-Conical nozzle_ _contour._"
+   },
+   {
+    "chunk_id": "DOC_NTRS_19710019929#c00233",
+    "line": "Figure 4-11 shows the contour of a bell nozzle. A circular arc of selected radius _R_ _J_ is"
+   },
+   {
+    "chunk_id": "DOC_NTRS_19710019929#c00233",
+    "line": "_Figure_ 4-11. _-Bell_ _nozzle_ _contour._"
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_6e00c6d3750238f888be6a88": {
+    "markdown_lines": 37,
+    "caption_like_lines": [
+     "Figure 4-11 shows the contour of a bell nozzle. A circular arc of selected radius R, is chosen for the nozzle contour MT upstream of the throat. Contour TNE is the diverging portion of the nozzle. The",
+     "Figure 4-11.—Bell nozzle contour."
+    ]
+   },
+   "ENR_e7e8ff2d5ff9e6d09bb5ae37": {
+    "markdown_lines": 39,
+    "caption_like_lines": [
+     "Figure 4-10.—Conical nozzle contour."
+    ]
+   }
+  },
+  "stored_objects": {
+   "count": 10,
+   "by_store": {
+    "equations": 2,
+    "claims": 4,
+    "entities": 2,
+    "validity": 2
+   },
+   "quote_anchor_state_counts": {
+    "GROUNDED": 10
+   },
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [
+    {
+     "id": "EQ_NTRS_19710019929_16E1DC3A",
+     "symbols": [
+      "Ln",
+      "Rt",
+      "R",
+      "a",
+      "eps (rendered 'c')"
+     ]
+    },
+    {
+     "id": "EQ_NTRS_19710019929_7A8070BC",
+     "symbols": [
+      "Lc",
+      "eps_c (rendered 'fc'/'(c')",
+      "theta (rendered 'e')"
+     ]
+    }
+   ],
+   "variable_symbol_absent_from_form": [
+    {
+     "id": "EQ_NTRS_19710019929_16E1DC3A",
+     "symbols": [
+      "Rt",
+      "eps (rendered 'c')"
+     ]
+    },
+    {
+     "id": "EQ_NTRS_19710019929_7A8070BC",
+     "symbols": [
+      "eps_c (rendered 'fc'/'(c')",
+      "theta (rendered 'e')"
+     ]
+    }
+   ],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 2,
+    "formula_candidates_in_bundle": 3,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "CLM_NTRS_19710019929_74C39084": [],
+     "CLM_NTRS_19710019929_752872E2": [],
+     "CLM_NTRS_19710019929_E1995D1A": [],
+     "CLM_NTRS_19710019929_F38ABA9F": [],
+     "EQ_NTRS_19710019929_16E1DC3A": [],
+     "EQ_NTRS_19710019929_7A8070BC": []
+    },
+    "model_ids_values_across_stored_objects": [
+     "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+    ]
+   },
+   "objects": [
+    {
+     "id": "EQ_NTRS_19710019929_16E1DC3A",
+     "store": "equations",
+     "type": "Equation",
+     "page": 99,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "low",
+     "verification_as_given": null,
+     "label_as_given": "SP-125 Eq. 4-7",
+     "equation_number_as_given": "4-7",
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 103,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 99
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "variable_symbol_absent_from_form",
+       "symbols": [
+        "Rt",
+        "eps (rendered 'c')"
+       ]
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "Ln",
+        "Rt",
+        "R",
+        "a",
+        "eps (rendered 'c')"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_56b12192ceb007e0860f237a",
+      "CAND_6820d6abc6266e72d9b2f948"
+     ]
+    },
+    {
+     "id": "EQ_NTRS_19710019929_7A8070BC",
+     "store": "equations",
+     "type": "Equation",
+     "page": 98,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "low",
+     "verification_as_given": null,
+     "label_as_given": "SP-125 Eq. 4-6",
+     "equation_number_as_given": "4-6",
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 143,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "variable_symbol_absent_from_form",
+       "symbols": [
+        "eps_c (rendered 'fc'/'(c')",
+        "theta (rendered 'e')"
+       ]
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "Lc",
+        "eps_c (rendered 'fc'/'(c')",
+        "theta (rendered 'e')"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_ddb7b019c43229b989eb20f9"
+     ]
+    },
+    {
+     "id": "CLM_NTRS_19710019929_74C39084",
+     "store": "claims",
+     "type": "Claim",
+     "page": 98,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 145,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_NTRS_19710019929_752872E2",
+     "store": "claims",
+     "type": "Claim",
+     "page": 98,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 172,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_NTRS_19710019929_E1995D1A",
+     "store": "claims",
+     "type": "Claim",
+     "page": 98,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 185,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CLM_NTRS_19710019929_F38ABA9F",
+     "store": "claims",
+     "type": "Claim",
+     "page": 98,
+     "is_target": true,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 211,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CONST_NTRS_19710019929_E301D3E4",
+     "store": "entities",
+     "type": "EmpiricalConstant",
+     "page": 98,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": "Convergent cone half angle = 20 to 45 deg",
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 79,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "CONST_NTRS_19710019929_F813B4B9",
+     "store": "entities",
+     "type": "EmpiricalConstant",
+     "page": 98,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": "Throat arc radius ratio R/Rt (conical nozzle) = 0.5 to 1.5 dimensionless",
+     "equation_number_as_given": null,
+     "model_ids_as_given": [
+      "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+     ],
+     "quote_length": 131,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "VAL_NTRS_19710019929_1ED3FFE2",
+     "store": "validity",
+     "type": "ValidityEnvelope",
+     "page": 99,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [],
+     "quote_length": 139,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 99
+      }
+     ],
+     "same_page_formula_candidates": null
+    },
+    {
+     "id": "VAL_NTRS_19710019929_7E4E61AC",
+     "store": "validity",
+     "type": "ValidityEnvelope",
+     "page": 98,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": null,
+     "verification_as_given": null,
+     "label_as_given": null,
+     "equation_number_as_given": null,
+     "model_ids_as_given": [],
+     "quote_length": 211,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 98
+      }
+     ],
+     "same_page_formula_candidates": null
+    }
+   ]
+  },
+  "targets": {
+   "queue_targets": [
+    "CLM_NTRS_19710019929_74C39084",
+    "CLM_NTRS_19710019929_752872E2",
+    "CLM_NTRS_19710019929_E1995D1A",
+    "CLM_NTRS_19710019929_F38ABA9F",
+    "EQ_NTRS_19710019929_16E1DC3A",
+    "EQ_NTRS_19710019929_7A8070BC"
+   ],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 6,
+   "target_id_occurrences_in_stores_S2_script": {
+    "CLM_NTRS_19710019929_74C39084": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_NTRS_19710019929_752872E2": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_NTRS_19710019929_E1995D1A": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "CLM_NTRS_19710019929_F38ABA9F": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_NTRS_19710019929_16E1DC3A": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    },
+    "EQ_NTRS_19710019929_7A8070BC": {
+     "equations": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "models": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    98,
+    99
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "98": {
+     "figure": 3,
+     "formula": 1
+    },
+    "99": {
+     "figure": 3,
+     "formula": 2
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 6,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00229",
+     "page_start": 98,
+     "page_end": 98,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1606
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00230",
+     "page_start": 98,
+     "page_end": 98,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1643
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00231",
+     "page_start": 98,
+     "page_end": 98,
+     "section": "MAIN PROPELLANT",
+     "text_length": 374
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00232",
+     "page_start": 99,
+     "page_end": 99,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1548
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00233",
+     "page_start": 99,
+     "page_end": 99,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1681
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00234",
+     "page_start": 99,
+     "page_end": 99,
+     "section": "MAIN PROPELLANT",
+     "text_length": 725
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

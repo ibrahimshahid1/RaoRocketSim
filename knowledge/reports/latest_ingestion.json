@@ -1,5 +1,5 @@
 {
- "started_at": "2026-10-16T18:20:16.508119+00:00",
+ "started_at": "2026-10-17T17:57:57.134346+00:00",
  "steps": {
   "sync": {
    "pdf_count": 286,
@@ -25,7 +25,7 @@
    "n_chunks_total": 19565,
    "removed": 0,
    "skipped_alternate_copy": 4,
-   "generated_at": "2026-10-16T18:20:17.735125+00:00"
+   "generated_at": "2026-10-17T17:57:59.004053+00:00"
   },
   "index": {
    "skipped": "no chunk changes"
@@ -69,8 +69,8 @@
    "invalidated_objects": 0
   },
   "enrichments": {
-   "records": 91,
-   "inactive": 64
+   "records": 560,
+   "inactive": 154
   },
   "repo": {
    "repo_documents": 64,
@@ -86,17 +86,22 @@
     "autodiff_finite_difference": 12,
     "snapshot_contract": 6
    },
-   "capabilities": 100,
+   "capabilities": 102,
    "capabilities_by_state": {
     "UNSUPPORTED": 14,
     "NOT_QUALIFIED": 9,
     "NOT_IMPLEMENTED": 9,
     "UNAVAILABLE": 33,
-    "BLOCKED_ON_LITERATURE": 35
+    "BLOCKED_ON_LITERATURE": 37
    },
    "citations": 33,
    "cite_edges": 33,
    "citations_unresolved": []
+  },
+  "standards": {
+   "standards": 8,
+   "held": 3,
+   "blocked_on_standard": 5
   },
   "constraints": {
    "rows": 36,
@@ -281,37 +286,16 @@
    "verified": 438,
    "unavailable": 0,
    "skipped_inactive": 0,
-   "locators_corrected": 71,
-   "fingerprints_baselined": 2,
-   "changed_definitions": 20,
-   "line_corrections": 65,
-   "end_line_updates": 71,
+   "locators_corrected": 0,
+   "fingerprints_baselined": 0,
+   "changed_definitions": 0,
+   "line_corrections": 0,
+   "end_line_updates": 0,
    "locators_restored": 0,
-   "records_updated": 74,
-   "missing_provenance": 2,
-   "provenance_repaired": 2,
-   "changed_definition_ids": [
-    "SW_RAOSIM_MDO_CAPABILITIES_PY_JOB_CAPABILITIES",
-    "SW_RAOSIM_MDO_CONSTRAINTS_PY_CONSTRAINT_MANIFEST",
-    "SW_RAOSIM_MDO_CONSTRAINTS_PY_CONSTRAINT_METADATA",
-    "SW_RAOSIM_MDO_ENGINE_PY_SOLVE_ENGINE",
-    "SW_RAOSIM_MDO_EXECUTE_PY_EXECUTE_RESOLVED_ENGINE_JOB",
-    "SW_RAOSIM_MDO_GRID_PY_MODULE",
-    "SW_RAOSIM_MDO_JOB_PY_OUTPUTPOLICY",
-    "SW_RAOSIM_MDO_JOB_PY_RESOLVE_ENGINE_JOB",
-    "SW_RAOSIM_MDO_NLP_PY_FOR_MISSION",
-    "SW_RAOSIM_MDO_NLP_PY_MAKE_CALLABLES",
-    "SW_RAOSIM_MDO_NLP_PY_NLPRESULT",
-    "SW_RAOSIM_MDO_NLP_PY_PARETO_FRONTIER",
-    "SW_RAOSIM_MDO_NLP_PY_SOLVE_MIN_MASS",
-    "SW_RAOSIM_MDO_RESOLVED_INPUTS_PY_RESOLVE_ENGINE_INPUTS",
-    "SW_RAOSIM_MDO_SCHEMA_PY_MISSIONSPEC",
-    "SW_RAOSIM_PUMPS_PY_SCREENING_DEFAULTS",
-    "SW_RAOSIM_PUMPS_PY_SIZE_ELECTRIC_PUMPS",
-    "SW_RAOSIM_REQUIREMENTS_PY_MODULE",
-    "SW_RAOSIM_REQUIREMENTS_PY_REQUIREMENTANALYSISCONFIG",
-    "SW_RAOSIM_REQUIREMENTS_PY_RESOLVE_REQUIREMENT"
-   ],
+   "records_updated": 0,
+   "missing_provenance": 0,
+   "provenance_repaired": 0,
+   "changed_definition_ids": [],
    "unavailable_components": []
   },
   "constant_basis": {
@@ -319,15 +303,16 @@
    "numerical_tuning_classifications": 2
   },
   "graph": {
-   "ontology_version": "1.1.0",
-   "generated_at": "2026-10-16T18:20:23.384900+00:00",
-   "n_nodes": 4870,
-   "n_edges": 6267,
-   "n_dangling_dropped": 0
+   "ontology_version": "1.2.0",
+   "generated_at": "2026-10-17T17:58:07.928151+00:00",
+   "n_nodes": 5728,
+   "n_edges": 7266,
+   "n_dangling_dropped": 0,
+   "n_candidate_link_issues": 54
   },
   "validation": {
-   "generated_at": "2026-10-16T18:20:23.815321+00:00",
-   "n_issues": 13,
+   "generated_at": "2026-10-17T17:58:08.805732+00:00",
+   "n_issues": 14,
    "issues_by_check": {
     "empty_source_pdf": 1,
     "canonical_document_without_chunks": 1,
@@ -336,13 +321,31 @@
     "declared_cad_bytes_unavailable": 6,
     "source_extraction_incomplete": 1,
     "source_verification_incomplete": 1,
-    "unknown_basis_software_constants": 1
+    "unknown_basis_software_constants": 1,
+    "incomplete_formula_transcriptions": 1
    },
    "stats": {
     "equation_variables": {
-     "ambiguous": 6,
-     "unresolved": 233,
-     "total": 440
+     "ambiguous": 14,
+     "unresolved": 537,
+     "resolved": 270,
+     "total": 821,
+     "equations": 191,
+     "scope": "current active equations with CURRENT source state",
+     "historical_or_inactive": {
+      "ambiguous": 6,
+      "unresolved": 55,
+      "resolved": 17,
+      "total": 78,
+      "equations": 22
+     },
+     "all_records": {
+      "ambiguous": 20,
+      "unresolved": 592,
+      "resolved": 287,
+      "total": 899,
+      "equations": 213
+     }
     },
     "constants_by_basis": {
      "UNKNOWN_BASIS": 274,
@@ -359,13 +362,17 @@
       "EngineConfiguration": 17,
       "ManufacturingProcess": 15
      },
-     "inactive_snapshots": 0
+     "inactive_snapshots": 72
     },
     "graph": {
-     "nodes": 4870,
-     "edges": 6267,
+     "nodes": 5728,
+     "edges": 7266,
      "edges_without_provenance": 0,
      "top_degree": [
+      [
+       "DOC_NTRS_19710019929",
+       153
+      ],
       [
        "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
        146
@@ -381,10 +388,6 @@
       [
        "MODEL_NOZZLE_MOC",
        97
-      ],
-      [
-       "MODEL_PUMP_ELECTRIC_DRIVE",
-       81
       ]
      ]
     },
@@ -392,16 +395,17 @@
     "coverage": {
      "equation_completeness": "NOT_ESTABLISHED",
      "concept_completeness": "NOT_ESTABLISHED",
-     "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+     "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. Existing independently_confirmed counters preserve historical stored-verdict totals; content_bound_confirmed additionally checks the assertion fingerprint. No all-equation denominator or physical validation.",
      "documents": {
       "records": 252,
       "canonical": 248,
       "alternate_copies": 4,
-      "with_source_objects": 9,
-      "without_source_objects": 239,
-      "with_equations": 9,
-      "without_equations": 239,
-      "with_independently_confirmed_objects": 5,
+      "with_source_objects": 30,
+      "without_source_objects": 218,
+      "with_equations": 24,
+      "without_equations": 224,
+      "with_independently_confirmed_objects": 20,
+      "with_content_bound_confirmed_objects": 4,
       "conversion_requires_review": 230,
       "conversion_low_confidence": 16,
       "zero_page_sources": 1,
@@ -411,32 +415,120 @@
      },
      "source_objects": {
       "equations": {
-       "records": 93,
-       "current": 75,
-       "independently_confirmed": 58,
-       "inactive_stale_refuted_or_unresolved": 18
+       "records": 213,
+       "current": 191,
+       "independently_confirmed": 124,
+       "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+       "stored_verdict_totals_all_records": {
+        "CONFIRMED": 125,
+        "NOT_CHECKED": 88
+       },
+       "stored_verdict_totals_current_source_objects": {
+        "CONFIRMED": 124,
+        "NOT_CHECKED": 67
+       },
+       "content_bound_confirmed": 5,
+       "current_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 119,
+        "NOT_CHECKED": 67,
+        "CONFIRMED": 5
+       },
+       "all_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 119,
+        "NOT_CHECKED": 88,
+        "SUPERSEDED_EXTRACTION": 1,
+        "CONFIRMED": 5
+       },
+       "current_without_content_bound_confirmation": 186,
+       "inactive_stale_refuted_or_unresolved": 22
       },
       "claims": {
-       "records": 188,
-       "current": 188,
-       "independently_confirmed": 7,
-       "inactive_stale_refuted_or_unresolved": 0
+       "records": 287,
+       "current": 284,
+       "independently_confirmed": 80,
+       "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+       "stored_verdict_totals_all_records": {
+        "CONFIRMED": 80,
+        "NOT_CHECKED": 204,
+        "REFUTED": 3
+       },
+       "stored_verdict_totals_current_source_objects": {
+        "CONFIRMED": 80,
+        "NOT_CHECKED": 204
+       },
+       "content_bound_confirmed": 5,
+       "current_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 75,
+        "NOT_CHECKED": 204,
+        "CONFIRMED": 5
+       },
+       "all_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 75,
+        "NOT_CHECKED": 204,
+        "CONFIRMED": 5,
+        "REFUTED": 3
+       },
+       "current_without_content_bound_confirmation": 279,
+       "inactive_stale_refuted_or_unresolved": 3
       },
       "entities": {
-       "records": 94,
-       "current": 94,
-       "independently_confirmed": 0,
-       "inactive_stale_refuted_or_unresolved": 0
+       "records": 226,
+       "current": 225,
+       "independently_confirmed": 64,
+       "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+       "stored_verdict_totals_all_records": {
+        "NOT_CHECKED": 161,
+        "CONFIRMED": 64,
+        "REFUTED": 1
+       },
+       "stored_verdict_totals_current_source_objects": {
+        "NOT_CHECKED": 161,
+        "CONFIRMED": 64
+       },
+       "content_bound_confirmed": 3,
+       "current_content_verification_by_state": {
+        "NOT_CHECKED": 161,
+        "LEGACY_CONTENT_NOT_BOUND": 61,
+        "CONFIRMED": 3
+       },
+       "all_content_verification_by_state": {
+        "NOT_CHECKED": 161,
+        "LEGACY_CONTENT_NOT_BOUND": 62,
+        "CONFIRMED": 3
+       },
+       "current_without_content_bound_confirmation": 222,
+       "inactive_stale_refuted_or_unresolved": 1
       },
       "validity": {
-       "records": 36,
-       "current": 36,
-       "independently_confirmed": 0,
+       "records": 40,
+       "current": 40,
+       "independently_confirmed": 3,
+       "independently_confirmed_basis": "Historical stored CONFIRMED verdict with matching source fingerprint; not necessarily bound to current assertion content.",
+       "stored_verdict_totals_all_records": {
+        "CONFIRMED": 3,
+        "NOT_CHECKED": 37
+       },
+       "stored_verdict_totals_current_source_objects": {
+        "CONFIRMED": 3,
+        "NOT_CHECKED": 37
+       },
+       "content_bound_confirmed": 2,
+       "current_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 1,
+        "NOT_CHECKED": 37,
+        "CONFIRMED": 2
+       },
+       "all_content_verification_by_state": {
+        "LEGACY_CONTENT_NOT_BOUND": 1,
+        "NOT_CHECKED": 37,
+        "CONFIRMED": 2
+       },
+       "current_without_content_bound_confirmation": 38,
        "inactive_stale_refuted_or_unresolved": 0
       }
      },
      "incomplete_formula_transcriptions": {
-      "count": 18,
+      "count": 22,
       "ids": [
        "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
        "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
@@ -454,32 +546,38 @@
        "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
        "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
        "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+       "EQ_NTRS_19710019929_16E1DC3A",
+       "EQ_NTRS_19710019929_7A8070BC",
+       "EQ_NTRS_19710019929_98E8ACF4",
+       "EQ_NTRS_19760023196_2A22408D",
        "EQ_NTRS_19760023196_BE05E0AF",
        "EQ_NTRS_19760023196_D7D2D8F1"
       ],
-      "current_count": 0,
-      "current_ids": [],
-      "current_state": "NONE_FLAGGED_CURRENT",
-      "historical_count": 18,
+      "current_count": 1,
+      "current_ids": [
+       "EQ_NTRS_19760023196_2A22408D"
+      ],
+      "current_state": "INCOMPLETE_TRANSCRIPTION",
+      "historical_count": 21,
       "state": "INCOMPLETE_TRANSCRIPTION",
       "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
      },
      "models": {
       "records": 61,
       "declared_support": {
-       "PARTIALLY_SUPPORTED": 10,
+       "PARTIALLY_SUPPORTED": 15,
        "NOT_FOUND_IN_SOURCE": 1,
-       "SUPPORTED": 3,
-       "NOT_CHECKED": 47
+       "SUPPORTED": 4,
+       "NOT_CHECKED": 41
       },
       "current_support": {
-       "NOT_CHECKED": 54,
+       "NOT_CHECKED": 48,
        "NOT_FOUND_IN_SOURCE": 1,
-       "PARTIALLY_SUPPORTED": 4,
-       "SUPPORTED": 2
+       "PARTIALLY_SUPPORTED": 9,
+       "SUPPORTED": 3
       },
-      "source_reviewed_current_fingerprint": 6,
-      "without_current_source_review": 55,
+      "source_reviewed_current_fingerprint": 12,
+      "without_current_source_review": 49,
       "without_manifest_source": 8
      },
      "software_constants": {
@@ -509,11 +607,12 @@
       "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
      },
      "gaps": {
-      "canonical_documents_without_source_objects": 239,
-      "canonical_documents_without_equations": 239,
-      "equations_and_claims_pending_independent_verification": 198,
-      "equations_without_model_links": 47,
-      "incomplete_formula_transcriptions": 0,
+      "canonical_documents_without_source_objects": 218,
+      "canonical_documents_without_equations": 224,
+      "equations_and_claims_pending_independent_verification": 271,
+      "current_source_objects_without_content_bound_confirmation": 725,
+      "equations_without_model_links": 160,
+      "incomplete_formula_transcriptions": 1,
       "zero_page_sources": 1,
       "unknown_basis_software_constants": 257
      }
@@ -523,22 +622,137 @@
   "review_queue": {
    "models_total": 61,
    "model_support": {
-    "PARTIALLY_SUPPORTED": 10,
+    "PARTIALLY_SUPPORTED": 15,
     "NOT_FOUND_IN_SOURCE": 1,
-    "SUPPORTED": 3,
-    "NOT_CHECKED": 47
+    "SUPPORTED": 4,
+    "NOT_CHECKED": 41
    },
    "effective_model_support": {
-    "NOT_CHECKED": 54,
+    "NOT_CHECKED": 48,
     "NOT_FOUND_IN_SOURCE": 1,
-    "PARTIALLY_SUPPORTED": 4,
-    "SUPPORTED": 2
+    "PARTIALLY_SUPPORTED": 9,
+    "SUPPORTED": 3
    },
-   "pending_source_reviews": 47,
+   "pending_source_reviews": 41,
    "needs_source_routing": 8,
-   "pending_verifications": 198,
-   "documents_with_extracted_objects": 9,
-   "canonical_documents_without_extracted_objects": 239
+   "pending_verifications": 469,
+   "pending_verifications_by_store": {
+    "entities": 161,
+    "claims": 204,
+    "validity": 37,
+    "equations": 67
+   },
+   "documents_with_extracted_objects": 30,
+   "canonical_documents_without_extracted_objects": 218
+  },
+  "completion_reports": {
+   "CORPUS_COMPLETENESS.json": {
+    "content_sha256": "86bee2dc789ec0de1802dd7db9ae5c6220e10ccdf4cb49d2636ba50fc2868713",
+    "denominators": {
+     "canonical_documents": 248,
+     "alternate_copies": 4,
+     "claims_current": 287,
+     "claims_historical": 0,
+     "docling_attempted_unfinished_pages": 0,
+     "docling_candidates": 455,
+     "docling_processed_pages": 94,
+     "docling_region_crop_pages": 14,
+     "docling_rejected_pages": 7,
+     "docling_unattempted_pages": 11274,
+     "documents_with_chunks": 247,
+     "documents_with_confirmed_objects": 19,
+     "documents_with_content_bound_confirmed_objects": 4,
+     "documents_with_current_source_objects": 30,
+     "documents_with_docling_candidates": 24,
+     "entities_current": 226,
+     "entities_historical": 0,
+     "equations_claims_confirmed": 204,
+     "equations_claims_content_bound_confirmed": 10,
+     "equations_claims_not_independently_verified": 271,
+     "equations_claims_refuted": 3,
+     "equations_current": 191,
+     "equations_historical": 22,
+     "pages_with_indexed_text": 9746,
+     "source_assertions_content_bound_confirmed": 15,
+     "source_assertions_content_state_confirmed": 15,
+     "source_assertions_content_state_legacy_content_not_bound": 257,
+     "source_assertions_content_state_not_checked": 469,
+     "source_assertions_content_state_refuted": 3,
+     "source_pages": 11375,
+     "validity_current": 40,
+     "validity_historical": 0
+    }
+   },
+   "EQUATION_FIDELITY_AUDIT.json": {
+    "content_sha256": "95f30e5f88b81f4f5b8e9af66648fd0a19ab55cb02b4eb6216e9304814184c16",
+    "summary": {
+     "equations": 213,
+     "current": 191,
+     "historical_or_inactive": 22,
+     "current_by_verification": {
+      "CONFIRMED": 124,
+      "NOT_INDEPENDENTLY_VERIFIED": 67
+     },
+     "current_content_verification_by_state": {
+      "LEGACY_CONTENT_NOT_BOUND": 119,
+      "NOT_CHECKED": 67,
+      "CONFIRMED": 5
+     },
+     "current_content_bound_confirmed": 5,
+     "current_with_recorded_verifier": 66,
+     "current_with_implementation_associations": 37,
+     "current_with_model_comparisons": 37,
+     "current_with_relationships": 35,
+     "current_variables": {
+      "resolved": 270,
+      "unresolved_entity": 537,
+      "ambiguous_symbol": 14
+     },
+     "claims_current_by_verification": {
+      "CONFIRMED": 80,
+      "NOT_INDEPENDENTLY_VERIFIED": 204,
+      "REFUTED": 3
+     },
+     "claims_current_content_verification_by_state": {
+      "LEGACY_CONTENT_NOT_BOUND": 75,
+      "NOT_CHECKED": 204,
+      "CONFIRMED": 5,
+      "REFUTED": 3
+     },
+     "claims_current_content_bound_confirmed": 5
+    }
+   },
+   "MODEL_SOURCE_AUDIT.json": {
+    "content_sha256": "cf0238d115f6c600de22a4d2fbd02cfafa2c0baa099473e1e7e77664838406b1",
+    "summary": {
+     "models": 61,
+     "by_audit_status": {
+      "NOT_CHECKED": 48,
+      "SOURCE_REVIEW_CURRENT_UNSTRUCTURED": 6,
+      "STRUCTURED_REVIEW_CURRENT": 7
+     },
+     "by_current_support": {
+      "NOT_CHECKED": 48,
+      "NOT_FOUND_IN_SOURCE": 1,
+      "PARTIALLY_SUPPORTED": 9,
+      "SUPPORTED": 3
+     },
+     "by_fidelity": {
+      "EQUIVALENT": 2,
+      "BAD_ATTRIBUTION": 1,
+      "CONDITIONALLY_EQUIVALENT": 1,
+      "REPOSITORY_EXTENSION": 2,
+      "DIFFERENT_FORMULA": 1
+     },
+     "by_route": {
+      "PENDING": 41,
+      "REVIEWED_CURRENT": 12,
+      "NO_LOCAL_SOURCE_ROUTE": 5,
+      "REPOSITORY_BASIS_REVIEW": 3
+     },
+     "physical_validation_established": 0
+    }
+   }
   }
  },
  "document_states": [
@@ -2053,5 +2267,5 @@
    "unchanged": true
   }
  ],
- "finished_at": "2026-10-16T18:20:23.821484+00:00"
+ "finished_at": "2026-10-17T17:58:08.817183+00:00"
 }

@@ -1,0 +1,49 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "M-SON2017-p003",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_3de9239252791ee3ce4c345c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 2 caption matches.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_457b9f50198b68f04fd69d1a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 4 (experimental system, right column); caption not linked by Docling.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_a67bffaf319649e4df28206c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 3 caption matches.",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  },
+  {
+   "candidate_id": "CAND_29a642084a0e125b6a2964f2",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 2 matches (0.418, 0.454, 0.568 mm at 0, 20, 40 deg).",
+   "evidence": {
+    "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 3
+   }
+  }
+ ]
+}

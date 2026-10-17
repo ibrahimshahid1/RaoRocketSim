@@ -1,0 +1,77 @@
+{
+ "packet": "P3-MIRZAM-p006",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_1991_1982",
+ "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+ "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+ "pages": [
+  6,
+  6
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_1991_1982/p0006.png",
+   "sha256": "332c3d47039b3aa18f162db65cbc9429da03f2de5b41f9ace3d6cb2f434fe305",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_2f0e19afea628bb8b8da1429"
+ ],
+ "candidates": [],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00018",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "s",
+   "text": "-'\n\nreasonable pressure drop, simpler mixer, acceptable injector coolant inlet temperature, and acceptable loss in specific impulse performance. The baseline -. design of 50% flow at a barrier mixture ratio of 4 . 3 was further refined for survivability by adding 2-32 fuel film cooling to lower the chamber wall temperature and jacket pressure drop.\n\nPresent Design Philosophy\n\nThe hot channel design criteria were applied in performing parametrics on percent flow through the jacket at a given barrier mixture ratio. Due to the hiaher\n\ndesign wall temperature (1050 F), the range\n\nin barrier mixture ratio was increased to 4 . 7 . For this desiqn philosophy, the channel geometry, barfier mixture ratio, and vercent flow throuah the iacket were obtained by performing paraketrics as illustrated in Figure 4. The results indicate acceptable designs at approximately 50% flow split at either 372\n\nchannels with a barrier MR of 4 . 5 or 450 channels at an MR of 4 . 7 . The selection would be based on the trade-off between\n\nlower pump power requirement and specific imvulse loss aaainst the cost of makina 73\n\n~ more channels. The nominal chaAnel performance for both channel designs were obtained by adding 3% fuel film cooling to limit the wall temperature to 800 F ( 7 0 0 K). The pressure drop for 372 channels - became 780 psi ( 5 . 4 MP) and for 4 5 0 channels it was 700 psi ( 4 . 8 MP), a saving of EO psi. In comparison to the previous - design approach with 372 channels, the present criteria calls for a higher allocated chamber pressure drop (approximately 150 psi) but with an approximate gain of one second in specific impulse."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00019",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "s",
+   "text": "Conclusions & Recommendations . .-\n\nIn an attempt to satisfy the ALLS engine requirements, an advanced liquid rocket chamber cooling preliminary design based on current available information has been established. The oresent desian criteria based on sizing the pdssagcs according to che \"hot channel\" scenario and whose performance is evaluated under the\n\nengines, a liner material of high thermal conductivity such as copper or a copper alloy is required. The typical fabrication method of a high chamber pressure liner is\n\nto fabricate a forged billet from which coolant channels are milled and closed out with an electroformed material. The forging process itself is a long lead, high cost item. An alternative billet fabrication method is being investigated by Aerojet Propulsion Division which utilizes powder metal (P/M) and hot isostatic pressing (HIP) technologies. This method exhibits potential for both low cost and short fabrication time. Work is in progress to assess the feasibility of (P/M- HIP) forming of a zirconium-copper billet. The goal of the development activity is to establish a highly repeatable process which results in full size billets with high material properties. The work to date has demonstrated the feasibility of the process, and process parameters which result in 100% dense material with grain sizes approximately five times smaller than wrought have been determined. Shapes demonstrated to date have been a 2 . 0 inch I.D. and 3 . 5 inch O.D. cylinder and a billet approximately 1/4th the size of a"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00020",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "s",
+   "text": "full scale ALS liner. Issues being investigated are powder oxidation prevention, optimization of mandrel design, material property assessment, process repeatability, and NDE assessment. The development activity will culminate in the\n\nfabrication of up to six full scale ALS billets."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00021",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "s > References",
+   "text": "NASA, 1972, \"Liquid Rocket Engine Fluid- Cooled Combustion Chambers\", NASA SP-8087, Wash. D.C.\n\nMirzamoghadam, A.V., 1991, \"Probabilistic Thermal Design of a Rocket Chamber Wall Cooling System\", Proceedings of the Third ASME/JSME Thermal Engineering Joint Conference, vol. 5 , pp. 433-442."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_1991_1982#c00022",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "-",
+   "text": "\"nominal channel\" scenario forms the basis of an integrated analysis and design methodology. It is a step forward in modeling chamber cooling systems more realistically and to design for reliability. Work is in progress to evaluate the relative importance of local velocity changes along the channel (due to geometric tolerances) on the failure mode of interest. The high operating pressure of the GHEE cycle precludes failure due to wall burnout which is highly sensitive to\n\nlocal velocity. At the present, an oversized wall for heat transfer, and an undersized wall for strength is invoked. - In addition to the design criteria, an advanced chamber cooling design needs to be produced with a low cost fabrication process. For high chamber pressure rocket"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {},
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

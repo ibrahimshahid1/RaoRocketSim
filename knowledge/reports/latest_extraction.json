@@ -1,5 +1,5 @@
 {
- "grounded": 411,
+ "grounded": 766,
  "page_shifted": 0,
  "ungrounded": [
   {
@@ -9,6 +9,22 @@
    "page": 671,
    "quote": "Eq. (17.15) locates the appropriate point on the Mollier diagram.",
    "label": "Anderson Eq. (17.15) nozzle enthalpy-to-kinetic-energy relation"
+  },
+  {
+   "doc_id": "DOC_NTRS_19710025474",
+   "kind": "constant",
+   "reason": "anchor not found on stated page ±2",
+   "page": 69,
+   "quote": "A mean value, 0.425, has gained preference.",
+   "label": "Inducer preferred incidence-to-blade-angle ratio"
+  },
+  {
+   "doc_id": "DOC_NTRS_19740020848",
+   "kind": "equation",
+   "reason": "anchor too short to be verifiable",
+   "page": 20,
+   "quote": "Head coefficient",
+   "label": "SP-8109 Eq. (7) pump head coefficient"
   }
  ],
  "per_doc": {
@@ -23,7 +39,37 @@
    "ungrounded": 0
   },
   "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E": {
-   "grounded": 33,
+   "grounded": 40,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1007_S42405_022_00489_W": {
+   "grounded": 6,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1007_S42405_022_00561_5": {
+   "grounded": 10,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1016_J_AST_2018_02_033": {
+   "grounded": 43,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1016_J_AST_2021_106729": {
+   "grounded": 6,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1016_J_SUPFLU_2020_105066": {
+   "grounded": 6,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1080_10407782_2011_578011": {
+   "grounded": 52,
    "page_shifted": 0,
    "ungrounded": 0
   },
@@ -32,13 +78,43 @@
    "page_shifted": 0,
    "ungrounded": 0
   },
+  "DOC_DOI_10_2514_1_35074": {
+   "grounded": 8,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_1_B34714": {
+   "grounded": 32,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_1_B36301": {
+   "grounded": 20,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
   "DOC_DOI_10_2514_2_5354": {
    "grounded": 35,
    "page_shifted": 0,
    "ungrounded": 0
   },
+  "DOC_DOI_10_2514_6_2019_0152": {
+   "grounded": 4,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_8_12572": {
+   "grounded": 13,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
   "DOC_DOI_10_2514_8_7324": {
    "grounded": 17,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_3390_AEROSPACE6030036": {
+   "grounded": 21,
    "page_shifted": 0,
    "ungrounded": 0
   },
@@ -48,12 +124,57 @@
    "ungrounded": 0
   },
   "DOC_NTRS_19710019929": {
-   "grounded": 50,
+   "grounded": 112,
    "page_shifted": 0,
    "ungrounded": 0
   },
+  "DOC_NTRS_19710025474": {
+   "grounded": 4,
+   "page_shifted": 0,
+   "ungrounded": 1
+  },
+  "DOC_NTRS_19730022965": {
+   "grounded": 12,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_NTRS_19740020848": {
+   "grounded": 2,
+   "page_shifted": 0,
+   "ungrounded": 1
+  },
   "DOC_NTRS_19760023196": {
    "grounded": 120,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029": {
+   "grounded": 12,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_DOI_10_2514_6_1991_1982": {
+   "grounded": 12,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_GROMSKI2010": {
+   "grounded": 7,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_NTRS_19750012398": {
+   "grounded": 10,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_NTRS_19770009165": {
+   "grounded": 3,
+   "page_shifted": 0,
+   "ungrounded": 0
+  },
+  "DOC_TOKUDOME2010": {
+   "grounded": 3,
    "page_shifted": 0,
    "ungrounded": 0
   }
@@ -69,41 +190,119 @@
   "MODEL_INJECTOR_INCOMPRESSIBLE_ORIFICE": "PARTIALLY_SUPPORTED",
   "MODEL_INJECTOR_MOMENTUM_RESULTANT_ANGLE": "PARTIALLY_SUPPORTED",
   "MODEL_INJECTOR_N_TAU_STABILITY": "PARTIALLY_SUPPORTED",
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP": "SUPPORTED",
+  "MODEL_NOZZLE_RAO_TOP_BEZIER": "PARTIALLY_SUPPORTED",
   "MODEL_NOZZLE_RAO_VARIATIONAL_BVP": "SUPPORTED",
   "MODEL_PERFORMANCE_FROZEN_VARIABLE_CP_QUASI1D": "PARTIALLY_SUPPORTED",
   "MODEL_PERFORMANCE_ISENTROPIC_AREA_MACH": "SUPPORTED",
-  "MODEL_PUMP_ELECTRIC_DRIVE": "PARTIALLY_SUPPORTED"
+  "MODEL_PUMP_ELECTRIC_DRIVE": "PARTIALLY_SUPPORTED",
+  "MODEL_PUMP_INDUCER_NPSH": "PARTIALLY_SUPPORTED",
+  "MODEL_PUMP_MEANLINE_COEFFICIENTS": "PARTIALLY_SUPPORTED",
+  "MODEL_THERMAL_BARTZ": "PARTIALLY_SUPPORTED",
+  "MODEL_THERMAL_SIEDER_TATE": "PARTIALLY_SUPPORTED"
  },
- "n_equations": 93,
- "n_claims": 188,
- "n_validity": 36,
- "n_constants": 52,
- "n_assumptions": 42,
- "n_ungrounded": 1,
+ "n_equations": 213,
+ "n_claims": 287,
+ "n_validity": 40,
+ "n_constants": 181,
+ "n_assumptions": 45,
+ "n_ungrounded": 3,
  "banked_result_hashes": [
+  "003d9e155680057f0b5bfd1fc34cf8a881e3d599f038b3ad54d74a606c6dbd8d",
+  "00b5dd85d796bc63cc4657df2ba78dd70bf79292ff067849ded88fe7a97d4faf",
+  "04526a7b94c3f240b204d21a81df8e3c4a08ac80d229130442660e0f564e7c1c",
+  "06ab8c2fb4087b6bdf3068f1c70f6423b1c6c7792fe5264361fcdefce67ea7ab",
   "07e8a65d4497feff94c62697a4d4573e80ae8c89a49a745611f25a0180e446fa",
+  "0835b3b6da0294a253aa936efefa5d1d09272f1495ee1b7fe644b73f9cf8f826",
   "08f34efb937f227273012246a26f2c9b9ae279625d53bbeea2d23a51eaa75803",
+  "0c5386be6b807ce0488fe924d58ac185db50591c8753151115e8403a51b294ee",
+  "15881e38fcfb681aa738dfff0f9b6c654f6b549f229dc7ae18e0f31a74bdbae4",
   "1779be73bfe3e6047ec060fec8c501ec4da18dc23d56e443317921327b4e59b1",
   "17ca39d042f2ee09a6c8b6b621fed6dff2b87aa26fc2ae124a883f20e41aff7f",
+  "1ab95d3e963d22e767173d069f51d6f0a81f0bd543bf432dfbd2c3a34cc808a2",
   "1cbd800735caf70f3d1b81780feaa51168413c46248ac45d65b76dce66450fe6",
+  "2064e8ec7291274317cf3a6ebb056afefc88aff5dfe14a11dd4f0936326a6513",
+  "275af1711871a8c06d19c0729a2315cfc2913ae0db60935b62ff5718f329dfa5",
+  "2f8ccf57d78c8c6502523080b6447e0a8acd0de40bd891ad1dbdfd79dc1d20c0",
   "3135e5292682a40104f781ee4c95f9445d5f468a73da7e1799b7ad30d948dec3",
+  "3630d0e2e49faa43003d5169011c30f2a493aae2c9d6f4b1af08d90376dc7674",
   "39f51d0aa123951e295a17d34183e899233359f9e7f1dc90ed8a56491eaf2ae1",
+  "3ccd684215c50a6e75ad82344aaf4d6825f61e0bcfc2f028847f466e386845e6",
   "4144a8c0965e3be88797afd908d28f02ffab6440b9a05207f894a36b48d56520",
+  "417434e2c0a0014a7745e8d185fca0812dab02cdb40b2290867a9a30e33a10be",
+  "421247d50c6476dda961d64687d98386343ebadb550757dfd311a6c9ad0b7ff3",
   "4571a69267585f6100ccb95e8641c8d82c4b98957061962f647d49f35a0ba1fd",
+  "458f51f7c498a1f2aecc8e4b26b9ab74929aeb952c8cfc391a6c500edd5d1b81",
+  "4c23c553f2d461217862c2e05278f1c603582826d62e525144493389fb0f1ffa",
   "5150a69fccedf8f88d37e2cdab4f97e7da1373677e59a328fcf96b84db9473dc",
+  "51acb8a5fcea599c32b2852c64c808939a71cd0afb302e8f55aa2e4b3a0ec3c3",
+  "5215a7b8106855005d845073cf533a9f86676692ed4fc6a725be7ae9cca90630",
   "526cd950ae11276781eeef710ef9b65f538e85b3a67bbbfe30990f194ce0b69a",
+  "53464b27df71624f8bde1049fb48b4c4f2e4a6e123746faf1b86891de7d93457",
+  "55c8a46c6cc23f18c40e9bb16b5fdcddccb0309385cc367bc3a13a36432e8ee7",
+  "5e38e74345870d8da98d4a3e3a8cfef65893369ef6652e95d8364aff65cb003b",
   "60a5ee83ac61d48083e1e26421319b9cb5d3a21674a6d84d83255bf3e274f45b",
+  "6f1ce84af4b6b0f12e622b1a3754994dd7564806367e85a7e850a11d900d6b5f",
+  "728bad60ac5dde9a8d381e227bb873598c207e87db8331992f71866836cfa504",
+  "72ad89976c63116dbbabc5bfb6030231488eee552db997d3899b5cc36d1a1a39",
+  "744837e258f48d6c3e2e0c1428eca2551dedd1930687c04569a00575ee5ed459",
+  "756d75b312efbaa4c0126c2febb3eea29462304fccfa88139afd30a0b6eb3463",
+  "773721db4d69132c7d11e869bd0ceb769e64fe867b87200934bbe3650162c539",
+  "79b7e5960b100b10957c9097e62ed92a7cebbe43601e5d61ada07f5a918267b1",
+  "7e5e5ab048f942de78a3378dc29e853574d0f0257de772e4c78778009b95e6c8",
+  "815c674843f91ce174b586575a71720d6fd919cb3cea80e694e9b99d4f2a173a",
+  "82dd05fe97dbc4a134f573ea9de812b28a85696252622be02e3020c63d402b68",
   "848c651ef15c7c9b94b3d74c26b34f05f9e9c8439a1bf52d322117f5adf4d51c",
+  "8555cd604e10ce0e41e04a5b1c3903c9e811ba8a1b5bbb398756a7b02ad0260f",
+  "87e135dad0104fe0dce7ec057e54c8751bfede6c41dfe3f36e71851c8b039900",
+  "8a561b7f1aa60f14cab5b6a57e99e81742967fae97995773c02e7e216c1011f0",
+  "8d28a852e7ccb0bb6eb7e5d268abbea30e3a7a76f4f62a61d068627b336bc73a",
+  "8d8e56de2ff04c2ea30e42632d91680fc7cf941de40e083180782694403261e8",
   "956aaae82633c8878bafdd7d8ecf5d933db2d62aacfc81c0c03da58dcb6aa002",
+  "967336c2c45ad9d2ed309f48460c4ad43027d7fae10bd7e6b16ab4200de5343d",
   "97729847c2d5076d53dc9bd8164a821119ad860582530171d2221ec516e23638",
+  "992e917689d10d2b4b241155b4aa0cdacba44486fac356f4eda45c912b366cd0",
+  "9e97726148fdcde71b6ba3ad4f31a051f9a1802ece34f4773b491913a488a70b",
+  "9ea127f3d79aa3fd3c0008b816ef45b9e5e9e07556aefa7bfd77a6f986278010",
   "a06e7d4565cd9db41fc465031197d056a3edf810919a389ec643e47d1775c025",
+  "a1c66746eaa93f9432026c6f4b74b6326bbffa234ac7bbf1ea904f7a6a6f915b",
+  "a2c5a9a9aa42324d60ed06c3dcf754d2234b2e02f83bb4e4b3bb3f3dd12fb7eb",
   "a7504ad99c54ed39fc36059b28e6ebe6e90d3595d60cbc2ce46ec9e17a42b19a",
   "a82d051bc4ebbfdbb0d300af62efa4d35bee9246e064bc063eb0e46e4f3b2dfc",
+  "ab2bd4d973e84e604a25a5acb72327f6185595ce31c70ff0248c7d56d578596a",
+  "ad43f2dd07355ac6e8e92c3f09e943470e6aedf1858f321ab90d329459fe67f1",
+  "b311e15692301ddca107c50914ae87986adace904be2de6e5e476374273e2e07",
+  "b4492daca28cdce1f6bc0965990e70efc01aa191bd9d3eadd644bea15b66269c",
   "b4ad783d6ff7051347fbd4072cd7f6a47b58f0c4c01ea40e8534563717a36906",
+  "b67d6aededaa6de09f5661cdcc9151d3a111a1553093da42e956b5945b2a1e4c",
+  "b709462546b4b717ac6aae188a38e068b6fade6887d3633dc02385ff5a914cbd",
+  "b93d49bd45b79d6e3675b16f9f72c2a0529961a0955f91e3500dfd0f4352c512",
+  "b9a39ef99e2c9a44bc9a9f6638464fe99e688d32e1735e0ee8acb565b85c3864",
   "b9ad1b8751665f72ea966e4a19dc10ad6b334c6e195fea55a7ef97da57bc7f17",
+  "b9cca7d740d9b12d64941dd262f9ba3b404cadfd42ddef19045256e4d92e3aef",
   "bbb32fabbad2a61444cf1641741186ee793d866584d208b34bed3f380acf20f5",
+  "be255fbf8884d9db01a05dc70fa5d645429e56b734f2ba8a8780dc8bab6dc84e",
+  "c543849f24c5dffb0527b968c6cf92f0fcf8ada13cc657335430cd6d87034dc2",
   "caf7850c7ff9c5f1d7c810f1c8b6185173be8e430438a212449747e051e37b6f",
-  "d841f31bb9fd03c6fc175366e92b3ad875472107d97b3f344833eed29573cdce"
+  "cc5a0d7f54c5686561fee90ece8ec65a21997b490faad0eb29083a58bf820b90",
+  "cee4c84b60f832d50a988d9d2c021a9e4d05450324a5bfdfe659408d1de521db",
+  "d0217ac1d22c86e8afded91f7bb9ec6066b82ca64fea46a816d7ebc10f73eb7e",
+  "d4f768615c5d75f0ca598597ddb7b8c483de956dae81ad83a59f9389ddb46899",
+  "d803f0b54cdde932d85558e19ec00e95a89a4e4ddbc5a81ac6e4b3098efbc7b9",
+  "d8407e42355c43b68b0e89046140c5c4c9831e2c492eb7cb12886588964c758b",
+  "d841f31bb9fd03c6fc175366e92b3ad875472107d97b3f344833eed29573cdce",
+  "d8ca15d5b44c8d6625b07d5d66b2d10b316d4aba1b31e00a89e7be4e01043d01",
+  "e45c39991f4615ffcd9a4f97c38899f7fe33b742382cb57ecf024ca79cf98166",
+  "e63bc679d0e62d0dfaa3d047b547f00aabc145cfa1ab6c6a66c382c087a01e77",
+  "e6a7b5ebe328a65a7ca06c664ee90572f4991974eb704601d66b13eca1b26996",
+  "eeec4efabe20ca88c97bd17aba5479bf825fff2daf2695f8a02f57bb9560deaf",
+  "ef5216abd626f7bc37ca2412eea7b60c7edaad67bb65b2d8990b417a28f012f7",
+  "f2a42c7044db0d9b1c49cb47876fcb45acb1191d0f2da242e582cb5e43537153",
+  "f44da9275bc990644fb032a0bd73549e741af0cc2ab42cea9937daa316b1a18d",
+  "f4f7eec03533ca29ed1d61f838c3c9ed18378058869de9cb498d2154d5aa744e",
+  "f798c05e860ad15aca8abdea8b6260d1c75ab729d08a3d505c92fbc30bc4b018",
+  "f7f2ffd93897d03ec55cee54a8073a4095e1f472714840a6a61e3ba8757037f6",
+  "fea49aca0f7dac38467d57d7c9edde9695574aecf443a181c5ebf6f5a9b02a48"
  ],
  "count_basis": "unique stored source objects; rejected anchors deduplicated across attempts",
  "method": {

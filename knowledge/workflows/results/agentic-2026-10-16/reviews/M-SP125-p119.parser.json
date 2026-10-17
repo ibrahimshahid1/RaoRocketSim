@@ -1,0 +1,109 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "M-SP125-p119",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_38255f9ba719b66629f30a9c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_c6a7bb3e9af9894e7c8ac9ca",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_3e1f003594c77d11e9beba96",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line h_c = q/(T_wc - T_co) = 3.00/(1000 - 600) = 0.0075 Btu/in^2-sec-deg F matches; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_42e8c5e78488e802e8b4b09e",
+   "state": "REJECTED",
+   "reason": "RP-1 property lines: values match (4.16e-5, 1.78e-6, 0.5) but units damaged (lb transcribed as '1b' and as 'b'); values banked as constants by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_4e8710f96fd7225bf206601f",
+   "state": "REJECTED",
+   "reason": "Eq. (a): Reynolds-group exponent 0.8 transcribed as 0.3; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_55fb3c89351daf1bc0f7559f",
+   "state": "REJECTED",
+   "reason": "RP-1 Nusselt form of Eq. (4-23): Re exponent 0.8 rendered '0 8' with the decimal point lost; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_91ab72e2e5a9b061878aeac3",
+   "state": "REJECTED",
+   "reason": "Eq. (c): w-dot_f transcribed as tilde-w with subscript ell and the '=' sign absorbed into the V_co subscript; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_9b8d9deca194325c390c098b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line T_wc = T_wg - qt/k = 1188 - 3.00 x 0.02/3.19e-4 = approx. 1000 deg R matches (subscripts rendered bold; the approximately-equal sign rendered as a tilde over '=').",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_9d31eee5431e963b6845ece7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (b) matches the page as printed, including the printed expanded form (0.8d + 24.93)/(d + 0.04) that omits the factor pi (SP-125 itself substitutes pi(0.8d + 24.93)/(d + 0.04) on PDF p.120).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  },
+  {
+   "candidate_id": "CAND_f1e3cd87eeb2bb4894f8275f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Sample-calculation line q = (5667 - 1188) x 0.00067 = 3.00 Btu/in^2-sec matches; value banked as a constant by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (150 dpi full pages; Eq. 4-11 and p.119 Eqs. a/b re-read at 300 dpi) read by F; element-by-element comparison of symbols, exponents, numbers and units; picture regions located from Docling bboxes",
+    "pdf_page": 119
+   }
+  }
+ ]
+}

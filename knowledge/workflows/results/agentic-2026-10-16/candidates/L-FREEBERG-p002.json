@@ -1,0 +1,236 @@
+{
+ "packet": "L-FREEBERG-p002",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_6_2019_0152",
+ "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+ "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+ "pages": [
+  2,
+  2
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_2019_0152/p0002.png",
+   "sha256": "1981ee48fa9e01614351d9b10c90b4e74480d31693d8db1c00cc9fdfd559be43",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_7822feafe7a048023f0d476d"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_bd323f5e92cc151f826d5d55",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 1 Pintle injector schematic diagram of operation principles: a central \"pintle\" deflects radial flow of one propellant into a coaxial stream of the other, forming a mixed spray-cone in the combustion chamber."
+   ],
+   "bbox": [
+    {
+     "l": 197.55548095703125,
+     "t": 636.9395141601562,
+     "r": 414.49493408203125,
+     "b": 533.183837890625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_7822feafe7a048023f0d476d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+   "raw_sha256": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_edf69995c7b24de0aa19a79b",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 2 Expected recirculation zones resulting from impingement of the radial and axial propellants in a combustion chamber (recreated from [5])."
+   ],
+   "bbox": [
+    {
+     "l": 199.17410278320312,
+     "t": 402.3571472167969,
+     "r": 414.39312744140625,
+     "b": 283.3420104980469,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/23\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_7822feafe7a048023f0d476d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+   "raw_sha256": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0ac2e3bd32e4f1cceb273399",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/29",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 282.48199999999997,
+     "t": 142.11801679999996,
+     "r": 540.0003916,
+     "b": 118.94967623469984,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "B F = \\frac { N d _ { o } } { \\pi d _ { t } } ,",
+   "original_text": "BF = N do �dt ; (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_7822feafe7a048023f0d476d",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+   "raw_sha256": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+   "mechanical_flags": [
+    "REPLACEMENT_CHARACTER_IN_ORIGINAL_TEXT"
+   ]
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_DOI_10_2514_6_2019_0152_987EC08C",
+   "store": "equations",
+   "type": "Equation",
+   "page": 2,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Freeberg 2019 Eq. (1) pintle blockage factor",
+   "equation_number": "1",
+   "form": "BF = N*d_o/(pi*d_t)",
+   "statement": null,
+   "quote": "is the diameter of the pintle tip",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "BF",
+     "meaning": "blockage factor",
+     "units": "1",
+     "role": "output",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_BF"
+     ]
+    },
+    {
+     "symbol": "N",
+     "meaning": "number of orifices",
+     "units": "1",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d_o",
+     "meaning": "diameter or width of each orifice",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "d_t",
+     "meaning": "pintle tip diameter",
+     "units": "m",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [],
+   "validity": [
+    "0 <= BF <= 1 by definition"
+   ],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_0ac2e3bd32e4f1cceb273399"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 2
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "N",
+      "d_o",
+      "d_t"
+     ]
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+   "text": "while maintaining stable combustion [3]. However, due to the proprietary nature of the aerospace industry, as well as\n\npintle-injector’s extensive use in ICBM systems, public information on the topic is limited in detail and scope [3, 4].\n\nWhile several variations of the pintle injector have been developed, this study focuses only on the fixed-area type\n\nwhich consists of two elements: a pintle tip which deflects a central propellant stream into radial spokes and an annular\n\norifice which injects the second propellant as a coaxial sheet [3]. The two fluids impinge in the combustion chamber as\nshown in Fig. 1, forming a mixed spray cone of angle θ.\n\n**Fig. 1** **Pintle injector schematic diagram of operation principles:** **a central “pintle\" deflects radial flow of one**\n**propellant into a coaxial stream of the other, forming a mixed spray-cone in the combustion chamber.**\n\nDressler and Bauer highlight how θ affects overall engine performance [5]. The impingement of propellants from a\n\npintle injector produces two distinct recirculation zones in the combustion chamber. The first is the core recirculation\n\nzone, which is rich in the radial (central) propellant and shields the pintle tip from combustion temperatures and\n\nrecirculates the liquid droplets back towards the impingement point for thorough mixing. The second is the mantle\n\nrecirculation zone, which is rich in the axial (outer) propellant and shields the injector from combustion. The specific\ngeometry of these zones depends on θ."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00006",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+   "text": "**Fig.** **2** **Expected** **recirculation** **zones** **resulting** **from** **impingement** **of** **the** **radial** **and** **axial** **propellants** **in** **a**\n**combustion chamber (recreated from [5]).**\n\nA further application of θ is through the use of propellant film cooling. In this scheme, _TMR_ and _BF_ are selected\n\nsuch that the central propellant penetrates the coaxial sheet and conforms to the chamber wall, providing a mechanism\nof chamber wall cooling [5]. On the other hand, if propellant adherence to the chamber wall is undesirable, θ can help\n\nverify that the combustion chamber is adequately sized. In either case, the basic geometry of the pintle spray affects\nengine performance and therefore the design process requires a means of predicting θ. Escher ([6]) described θ as a\nfunction of both the blockage factor, _BF_, and the total momentum ratio, _TMR_, of the two propellants. _BF_, which\n\nrepresents how much of the pintle tip’s circumference is occupied by orifices for radial discharge, is expressed by\n\n_BF_ = <sup>_<u>Nd</u>_</sup> <sup><u>o</u></sup>\n\nπ _d_ t\n\n, (1)\n\nwhere _d_ t is the diameter of the pintle tip, _d_ - is the diameter or width of each orifice, and _N_ is the number of orifices\n\n[3]. From this definition, _BF_ refers to the fraction of axial propellant “blocked” by the radial propellant spokes. _BF_ is\nillustrated in Fig. 3 and varies between 0 to 1, where _BF_ = 0 corresponds to no orifices and _BF_ = 1 corresponds to a"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+   "page_start": 2,
+   "page_end": 3,
+   "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+   "text": "continuous slot over the entire circumference of the tip.\n\n**Fig. 3** **Illustration of how blockage factor affects pintle tip flow distribution.**\n\n_TMR_ is defined as the ratio of the total momentum rate of the radial propellant to the total momentum rate of the\n\naxial propellant. This is given by\n\n_TMR_ = <sup>( �</sup> <sup>_<u>mU</u>_</sup> <sup>)r</sup>\n\n( � _mU_ )z\n\n, (2)\n\nwhere _U_ is the propellant velocity and the subscripts _r_ and _z_ denote radial and axial propellant flow, respectively. From\nconservation of momentum, one might expect θ to follow a kinematic relationship of θ = _tan_ <sup>−1</sup> ( _TMR_ ), but Escher ([6])\nfound this approach a poor approximation. Alternatively, Escher found that θ scales with _TMR_ <sup>1/2</sup>, as given by Eq. (3):\n\nθ = (105.5 − 24.5 _TMR_ )( _TMR_ ) <sup>1/2</sup> . (3)\n\nThis relation was obtained from water-flow testing for pintle tips with rectangular orifices and blockage factors _BF_ = 0.3,\n0.6, and 0.8. In addition, these orifices had height:width aspect ratios of 3:1, 1:2, and 7:100, respectively. A reprint of\n\nEscher’s data is shown in Fig. 4, with Eq. (3) overlaid for comparison.\n\n**Fig. 4** **Experimental relationship between** θ **and** _TMR_ **for blockage factors of** 0.3 **,** 0.6 **, and** 0.8 **(recreated from**\n\n**[6]).**\n\nAs evidenced from the plot, Eq. (3) describes the general behavior of θ as _TMR_ varies. However, for a given _TMR_,\nthe difference in θ can be as high as 20°. This is further complicated by differences in _BF_ and orifice aspect ratio\nbetween each pintle tip. One explanation for the discrepancy of using _TMR_ to predict θ is that _TMR_ uses aggregate, or"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 1
+  },
+  "flagged_candidates": 1,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

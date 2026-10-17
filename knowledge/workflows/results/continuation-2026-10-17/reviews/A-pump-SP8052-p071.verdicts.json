@@ -1,0 +1,62 @@
+[
+ {
+  "object_id": "CONST_NTRS_19710025474_915BAABB",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8052 PDF p.71 (printed p.59), sec.3.1.15, says low-head inducer solidity should be 2.5 for the inducer proper. It separately specifies high-head inlet flat-plate solidity 2.0 to 2.5 and requires treating the outlet/transition stage separately. The name, value 2.5, dimensionless units, page and context preserve the low-head scope and high-head distinction. The original solidity symbol is sigma; the grounded derivative quote renders that glyph as a, but the named quantity and numerical source assertion are faithful. This confirms the page-stated design recommendation, not physical validation.",
+  "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+  "content_sha256": "ba0d2f9756b16dc504326023902b2d844d899e062a37697b35f30b1d849cbd07",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710025474",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "pdf_page": 71,
+   "printed_page": "59",
+   "method": "Full original PDF page rendered with pdftoppm at 180 dpi and visually inspected.",
+   "inspected_science_fields": [
+    "label",
+    "name",
+    "value",
+    "units",
+    "context",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Bounded page-stated design recommendation only; no complete inducer-model equivalence or physical validation."
+ },
+ {
+  "object_id": "CONST_NTRS_19710025474_FFA56674",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8052 PDF p.71 (printed p.59), sec.3.1.14, specifies not fewer than two or more than five blades, with three or four preferred. It states that an odd blade number prevents alternate cavitation and therefore prefers three when other, more critical considerations permit. The stored preferred-odd-count name, value 3, dimensionless count units, quote, page and context preserve these qualifications; three is not asserted as a universal blade count. Source fidelity is confirmed without independently proving the cavitation mechanism or the complete repository pump model.",
+  "source_sha256": "d70afa2d00b1eb0ec3774a8efe02af2b9fc56212cf63179630b5243a1e82ec18",
+  "content_sha256": "266188c3e98a07c8809fc818ab3199de2f38a46df6b3afeb4ed43258a2529642",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710025474",
+   "source_pdf": "propulsion_texts/pintle_injector/19710025474.pdf",
+   "pdf_page": 71,
+   "printed_page": "59",
+   "method": "Full original PDF page rendered with pdftoppm at 180 dpi and visually inspected.",
+   "inspected_science_fields": [
+    "label",
+    "name",
+    "value",
+    "units",
+    "context",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Bounded page-stated design recommendation only; no complete inducer-model equivalence or physical validation."
+ }
+]

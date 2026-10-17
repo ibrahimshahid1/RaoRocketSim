@@ -1,0 +1,99 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "V-SP125-p098-099",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_553de187ac7be26d886f30a0",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 98
+   }
+  },
+  {
+   "candidate_id": "CAND_9e0bd34fa51b2d794c395845",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 98
+   }
+  },
+  {
+   "candidate_id": "CAND_f2b84e486ed6fe2dbb081679",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 4-10 caption matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 98
+   }
+  },
+  {
+   "candidate_id": "CAND_ddb7b019c43229b989eb20f9",
+   "state": "REJECTED",
+   "reason": "Eq. (4-6): radical covers only pi (printed sqrt(pi eps_c A_t)); corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 98
+   }
+  },
+  {
+   "candidate_id": "CAND_0207dba89691212826663597",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 99
+   }
+  },
+  {
+   "candidate_id": "CAND_2364822bd4bac5686e9ed750",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 4-11 caption matches.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 99
+   }
+  },
+  {
+   "candidate_id": "CAND_cf0d75098d423ea2cdadea27",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Page stamp graphic (security-classification marking at page top/bottom), not a figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 99
+   }
+  },
+  {
+   "candidate_id": "CAND_56b12192ceb007e0860f237a",
+   "state": "REJECTED",
+   "reason": "Eq. (4-7): sqrt(eps - 1) for (sqrt(eps) - 1) and garbled left side; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 99
+   }
+  },
+  {
+   "candidate_id": "CAND_6820d6abc6266e72d9b2f948",
+   "state": "REJECTED",
+   "reason": "Eq. (4-8): coefficient 1/2 transcribed as 1/(1/3); corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "method": "original PDF page renders (105-110 dpi; Eqs. 4-24/4-26 at 300 dpi) read by F; element-by-element comparison",
+    "pdf_page": 99
+   }
+  }
+ ]
+}

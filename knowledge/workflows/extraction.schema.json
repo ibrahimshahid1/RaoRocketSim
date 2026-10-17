@@ -96,7 +96,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Docling candidates inspected against original PDF; parser output alone is not source support."
+            "description": "Parser candidates inspected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected candidates are correction history only."
           },
           "supersedes_ids": {
             "type": "array",
@@ -110,7 +110,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Parser notation manually corrected against the original PDF; rejected raw candidates remain traceable."
+            "description": "Raw parser notation explicitly corrected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected raw candidates remain traceable without becoming source support."
           }
         },
         "required": [
@@ -175,6 +175,20 @@
               "medium",
               "low"
             ]
+          },
+          "enrichment_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Parser candidates inspected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected candidates are correction history only."
+          },
+          "corrects_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Raw parser notation explicitly corrected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected raw candidates remain traceable without becoming source support."
           }
         },
         "required": [
@@ -228,6 +242,20 @@
           },
           "quote": {
             "type": "string"
+          },
+          "enrichment_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Parser candidates inspected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected candidates are correction history only."
+          },
+          "corrects_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Raw parser notation explicitly corrected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected raw candidates remain traceable without becoming source support."
           }
         },
         "required": [
@@ -260,6 +288,20 @@
           },
           "quote": {
             "type": "string"
+          },
+          "enrichment_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Parser candidates inspected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected candidates are correction history only."
+          },
+          "corrects_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Raw parser notation explicitly corrected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected raw candidates remain traceable without becoming source support."
           }
         },
         "required": [
@@ -283,6 +325,20 @@
           },
           "quote": {
             "type": "string"
+          },
+          "enrichment_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Parser candidates inspected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected candidates are correction history only."
+          },
+          "corrects_candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Raw parser notation explicitly corrected against the original PDF by a named F/A reviewer; candidate document, page and current source fingerprint must match. Rejected raw candidates remain traceable without becoming source support."
           }
         },
         "required": [
@@ -307,7 +363,9 @@
         "comparison_equation_labels": {
           "description": "Source formulations explicitly compared with a different implementation; CITES only, never IMPLEMENTS.",
           "type": "array",
-          "items": {"type": "string"}
+          "items": {
+            "type": "string"
+          }
         },
         "mismatch_notes": {
           "type": "string"
@@ -333,6 +391,121 @@
     "source_sha256": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewer": {
+      "type": "object",
+      "description": "Who transcribed/reviewed this result against the original PDF page. The same role can never later count as the independent verifier of these objects.",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "F",
+            "A"
+          ]
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "model"
+      ]
+    },
+    "model_review": {
+      "type": "object",
+      "description": "Structured model-versus-source comparison (Section 17 method). Bound to source and exact implementation-definition fingerprints; never a physical-validation claim.",
+      "properties": {
+        "fidelity": {
+          "type": "string",
+          "enum": [
+            "EXACT",
+            "EQUIVALENT",
+            "CONDITIONALLY_EQUIVALENT",
+            "SUPPORTED_APPROXIMATION",
+            "REPOSITORY_EXTENSION",
+            "DIFFERENT_FORMULA",
+            "BAD_ATTRIBUTION",
+            "INSUFFICIENT_EVIDENCE",
+            "UNRESOLVED"
+          ]
+        },
+        "implementation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "symbol": {
+                "type": "string",
+                "description": "exact qualified definition name inside the file"
+              }
+            },
+            "required": [
+              "file",
+              "symbol"
+            ]
+          }
+        },
+        "source_pages": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "equation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "comparison": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "constants": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "citation_vs_support": {
+          "type": "string"
+        },
+        "software_verification": {
+          "type": "string"
+        },
+        "physical_validation": {
+          "type": "string"
+        },
+        "execution_reach": {
+          "type": "string"
+        },
+        "sensitivity": {
+          "type": "string"
+        },
+        "physics_change_required": {
+          "type": "boolean"
+        },
+        "physics_finding": {
+          "type": "string"
+        },
+        "remaining_uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "fidelity",
+        "implementation",
+        "source_pages"
+      ]
     }
   },
   "required": [

@@ -1,0 +1,98 @@
+{
+ "packet": "P4-HU2021-p001-002",
+ "at": "2026-10-16T23:07:43.602816+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P4-HU2021-p001-002.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 6,\n \"page_shifted\": 0,\n \"n_equations\": 4,\n \"n_claims\": 2,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T23:07:44.045135+00:00', 'n_nodes': 5564, 'n_edges': 7111, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P4-HU2021-p001-002.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T23:07:47.026318+00:00",
+  "n_nodes": 5564,
+  "n_edges": 7110,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "pending_source_reviews": 47,
+  "needs_source_routing": 8,
+  "pending_verifications": 594,
+  "pending_verifications_by_store": {
+   "entities": 193,
+   "equations": 99,
+   "claims": 265,
+   "validity": 37
+  },
+  "documents_with_extracted_objects": 27,
+  "canonical_documents_without_extracted_objects": 221
+ },
+ "integrity": {
+  "nodes": 5564,
+  "edges": 7110,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [],
+ "verdict_state_mismatches": []
+}

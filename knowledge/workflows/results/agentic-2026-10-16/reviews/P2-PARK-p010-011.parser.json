@@ -1,0 +1,89 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P2-PARK-p010-011",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_507bf8837ea17eda446a0b88",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 10 (inverter efficiency and mechanical power loss versus speed); Docling did not link the printed caption.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_d1c7cda29990ce0be4696929",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 11 caption matches.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_f426eedcd96601928e21f528",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 9 caption matches.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_7e1077a00f44d7aa61774664",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (16) P_shaft = (VI - I^2 R) eta_inv eta_motor - P_l,mech matches the original.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_dad0e284b3e2ce30a685cc3c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (15) eta_h = P_h/P_shaft matches the original.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 10
+   }
+  },
+  {
+   "candidate_id": "CAND_4bf7b212e5a10f34a13eff45",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 13 caption matches.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_5528ac9c620149cc895c374d",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 12 caption matches (complete).",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 11
+   }
+  },
+  {
+   "candidate_id": "CAND_b9edd6955a731cfaabd416a4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Second panel of Fig. 12 (Type B impeller); caption carried by the other panel.",
+   "evidence": {
+    "source_sha256": "f2a2025cc78dfbb4e086f0a4e664f3efd55715dc50ef360a9a1d926e28feb68d",
+    "method": "original PDF page renders (150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 11
+   }
+  }
+ ]
+}

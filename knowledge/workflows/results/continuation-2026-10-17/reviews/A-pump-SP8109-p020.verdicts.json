@@ -1,0 +1,34 @@
+[
+ {
+  "object_id": "EQ_NTRS_19740020848_FFCA6B14",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-8109 PDF p.20 (printed p.8) prints Eq. (7), psi = g H / u_t2 squared, and explicitly calls psi the head coefficient, g acceleration due to gravity, and u_t2 impeller discharge tip speed. The preceding sentence relates headrise to discharge tip speed. The stored equation number, complete form including g and the squared denominator, variable meanings, dimensionless psi units, blank unspecified dimensional units, quote and page match. Assumptions/validity lists remain empty rather than inventing a range. This coefficient definition alone does not verify the repository meanline closure, slip factors or pump performance.",
+  "source_sha256": "063d317688859088934f0b4f289bc2d8f695627dab8a8f20c67c66e6f529b0c5",
+  "content_sha256": "5dbe7ef880a190b046b5076d12866601a4a0aa0e1d76ffac79c22cba5e0ac73e",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19740020848",
+   "source_pdf": "propulsion_texts/pintle_injector/19740020848.pdf",
+   "pdf_page": 20,
+   "printed_page": "8",
+   "method": "Full original PDF page rendered with pdftoppm at 180 dpi and visually inspected.",
+   "inspected_science_fields": [
+    "label",
+    "equation_number",
+    "form",
+    "description",
+    "variables",
+    "assumptions",
+    "validity",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity."
+  },
+  "scope_note": "Bounded coefficient-definition transcription only; not complete pump-model equivalence or physical validation."
+ }
+]

@@ -1,0 +1,261 @@
+{
+ "packet": "V-SP125-p095-097",
+ "at": "2026-10-16T23:21:34.976828+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 1,\n \"page_shifted\": 0,\n \"n_equations\": 1,\n \"n_claims\": 0,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T23:21:35.557492+00:00', 'n_nodes': 5612, 'n_edges': 7201, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    }
+   ]
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.verdicts.json",
+   "action": "apply_verification",
+   "stats": {
+    "confirmed": 16,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 0,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0
+   }
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T23:21:40.996726+00:00",
+  "n_nodes": 5612,
+  "n_edges": 7196,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 6,
+   "NOT_CHECKED": 44
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 51,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 5
+  },
+  "pending_source_reviews": 44,
+  "needs_source_routing": 8,
+  "pending_verifications": 588,
+  "pending_verifications_by_store": {
+   "entities": 196,
+   "claims": 248,
+   "validity": 37,
+   "equations": 107
+  },
+  "documents_with_extracted_objects": 28,
+  "canonical_documents_without_extracted_objects": 220
+ },
+ "integrity": {
+  "nodes": 5612,
+  "edges": 7196,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [
+  {
+   "object_id": "CLM_NTRS_19710019929_AB38856E",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_DC3845D7",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_E7BDDBCA",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_06B2C308",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_F0A1A1B5",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_C3589D9F",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_DCE9CB00",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_C1473A5D",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_41EFB911",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_11BA0C46",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_C0DE8E6E",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_C0CE7013",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_3094EADD",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_34C37414",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "EQ_NTRS_19710019929_B679AC9F",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "EQ_NTRS_19710019929_D5935CFC",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  }
+ ],
+ "verdict_state_mismatches": []
+}

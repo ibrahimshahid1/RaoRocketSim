@@ -1,0 +1,23 @@
+{
+ "grounded": 2,
+ "page_shifted": 0,
+ "ungrounded": [],
+ "per_doc": {
+  "DOC_NTRS_19740020848": {
+   "grounded": 2,
+   "page_shifted": 0,
+   "ungrounded": 0
+  }
+ },
+ "model_support": {
+  "MODEL_PUMP_MEANLINE_COEFFICIENTS": "PARTIALLY_SUPPORTED"
+ },
+ "n_equations": 2,
+ "n_claims": 0,
+ "n_validity": 0,
+ "n_constants": 0,
+ "n_assumptions": 0,
+ "content_verifications_invalidated": [],
+ "n_ungrounded": 0,
+ "already_banked": false
+}

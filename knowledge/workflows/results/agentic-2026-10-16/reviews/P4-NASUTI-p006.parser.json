@@ -1,0 +1,79 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-NASUTI-p006",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_3593074aaa900a4bacde1fb8",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 7 (velocity profiles, right column); caption not linked by Docling.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_a9fa47e1363e6f3847e48f62",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 6 caption matches.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_0627635216c817399328802c",
+   "state": "REJECTED",
+   "reason": "Eq. (7): exponent printed as -1 is transcribed as +1; corrected form banked by F.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_339f7df2116718c74aa5fe39",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (6) matches the original.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_5239ca33d81813398364c24b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (8) matches the original.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_991ae4078cc155eae234a7fc",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (9) matches the original.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_c773b59738bf11aee8f75f69",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (5) matches the original.",
+   "evidence": {
+    "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  }
+ ]
+}

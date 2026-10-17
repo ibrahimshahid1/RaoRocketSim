@@ -1,0 +1,190 @@
+[
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_241696D2",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (20) P_p = Delta p_p mdot/(rho eta_p) matches PDF p.6.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 6
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_57A1B6A9",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (26) delta_P,m = P_m,out/m_m matches PDF p.7 (motor density on output power).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_2928DB02",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (27) m_m = P_m,out/delta_P,m = P_p/delta_P,m matches PDF p.7.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_9734BE06",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (28) matches PDF p.7 (inverter density on output power).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  },
+  "scope_note": "The page prints the symbol as delta_inv in Eq. (28) and delta_P,inv in Eq. (29); the stored delta_P_inv denotes the same quantity."
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_4CB56B0F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (30) m_b,P = kappa_b P_b/delta_P,b = kappa_b P_inv,out/(delta_P,b eta_inv) matches PDF p.8.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 8
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_F8605230",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (31) m_b,E = kappa_b E_b/delta_E,b = kappa_b P_inv,out t_b/(delta_E,b eta_E eta_inv) matches PDF p.8.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 8
+  }
+ },
+ {
+  "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E51590F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Eq. (32) m_b = MAX(m_b,P, m_b,E) matches PDF p.8.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 8
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_03ED2176",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.8: battery mass is the heavier of the power- and energy-limited masses (Eqs. 30-32), with structural margin kappa_b for sub-components such as a case.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 8
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_1A434635",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.7: careful selection of motor power density is necessary because the motor mass estimate depends on it.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_76807598",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.7: inverter output power is the motor output power divided by the motor efficiency.",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  }
+ },
+ {
+  "object_id": "CLM_DOI_10_1007_S42405_020_00325_Z_00D2425E_B082AFB3",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.7: motor output power equals the required pump power, so motor mass uses Eqs. (26-27).",
+  "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "method": "original PDF pp.6-8 renders (115 dpi) read by F; symbol-by-symbol comparison",
+   "pdf_page": 7
+  }
+ }
+]

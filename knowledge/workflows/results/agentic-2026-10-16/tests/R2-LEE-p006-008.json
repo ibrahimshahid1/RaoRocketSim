@@ -1,0 +1,38 @@
+{
+ "packet": "R2-LEE-p006-008",
+ "at": "2026-10-17T03:27:59.452261+00:00",
+ "tested_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 21%]\n........................................................................ [ 43%]\n........................................................................ [ 65%]\n........................................................................ [ 87%]\n...........................................                              [100%]\n331 passed in 9.25s\n"
+ },
+ "replay": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/R2-LEE-p006-008.duplicates.json",
+   "stats": {
+    "retired": 0,
+    "unchanged": 1,
+    "refused": [],
+    "stores_saved": false
+   },
+   "idempotent": true
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/R2-LEE-p006-008.extraction.jsonl",
+   "exit_code": 0,
+   "already_banked": true
+  }
+ ],
+ "integrity": {
+  "nodes": 5694,
+  "edges": 7261,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ }
+}

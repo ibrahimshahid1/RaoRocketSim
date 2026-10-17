@@ -1,0 +1,32 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P1-SP8120-p028-029",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_fc7b5b03e8b56125b6b763c1",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Box covers Figure 5(a) canted-parabola sketch and 5(b) wall-angle chart on original p.29; 5(b) digitized by F (log-x tick calibration, cubic fit in ln(epsilon), rms 0.03-0.08 deg; +-0.3 deg reading uncertainty). Values are reviewer measurements.",
+   "evidence": {
+    "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 100 and 400 dpi viewed by F",
+    "pdf_page": 29,
+    "digitization": "knowledge/workflows/results/agentic-2026-10-16/p1/sp8120_fig5b_digitized.json"
+   }
+  },
+  {
+   "candidate_id": "CAND_c1c3e0dda4ee849eda22bcae",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Box matches Figure 4 (computed viscous-drag performance loss in bell nozzles) on original p.28; not digitized (outside P1 scope).",
+   "evidence": {
+    "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 100 and 400 dpi viewed by F",
+    "pdf_page": 28
+   }
+  }
+ ]
+}

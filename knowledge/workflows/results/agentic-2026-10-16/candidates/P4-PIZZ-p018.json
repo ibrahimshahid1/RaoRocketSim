@@ -1,0 +1,119 @@
+{
+ "packet": "P4-PIZZ-p018",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  18,
+  18
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 18,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0018.png",
+   "sha256": "0e747689f3b2119ddb05a7d20e2be011008c2036abc25e8cb8bd646dc20966fb",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a2120ea03a65f593043043ab"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_eccd415666056d845d863f40",
+   "kind": "table",
+   "pages": [
+    18
+   ],
+   "table_grid": [
+    [
+     "k",
+     "DT error",
+     "Dp error"
+    ],
+    [
+     "1",
+     "29.3%",
+     "18.8%"
+    ],
+    [
+     "2",
+     "19.0%",
+     "12.8%"
+    ],
+    [
+     "4",
+     "6.7%",
+     "2.2%"
+    ],
+    [
+     "8",
+     "1.2%",
+     "4.4%"
+    ],
+    [
+     "16",
+     "3.7%",
+     "2.8%"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2. Fluid temperature increase and pressure drop discrepancy between the quasi-2-D and the CFD solutions"
+   ],
+   "bbox": [
+    {
+     "l": 118.72953796386719,
+     "t": 160.92291259765625,
+     "r": 383.204345703125,
+     "b": 82.1995849609375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 6x3 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a2120ea03a65f593043043ab",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p18-18-1c6b6aa7927156a41c51abeab6650bd82da4e348a9174c19f2ebcab6418b4661.json",
+   "raw_sha256": "c89a15f3812b52c9e3ca2ee10e2affd38704e223f4289a842258ef046719cc1d",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00031",
+   "page_start": 18,
+   "page_end": 18,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 17\n\nis demonstrated in Figure 4a, where the coolant bulk temperature is presented for the\ncase of k ¼ 8 and for various grid refinements. Note, that the result relevant to the\nselected grid (see solid line) differs from the extrapolated exact solution less than\n0.45%.\nThe quasi-2-D model solution approximates the CFD solution in a better way\nin the case of high aspect ratio; in fact, the temperature increase of the two models\ndiffers by more than 29% in the case of k ¼ 1 and only by 1.2% in the case of k ¼ 8\n(Figure 1b). The good match of the quasi-2-D model with the reference CFD solution in the case of high aspect ratio is due to the physical and mathematical formulation of the simplified model. In fact, the heat transfer and the skin friction force are\ncarefully modeled along the lateral walls, whereas their evaluation on the channel\nbases (Eqs. (28) and (29) for the heat transfer, and Eq. (10) for the skin friction)\nis based on a less accurate 1-D approach. As a consequence, in the case of low aspect\nratio, where a relevant portion of the channel perimeter is given by channel bases, the\nprediction is less accurate than in the case of high aspect ratio, where the contribution of the channel bases to the heat transfer and skin friction is almost negligible.\nNote also that the quasi-2-D temperature of k ¼ 8 is close to the CFD solution along\nthe whole channel length, while in the case of low aspect ratio the quasi-2-D and the\nCFD bulk temperatures difference increases along the channel. The different behavior between low and high aspect ratio is confirmed also by the bulk pressure behavior, which is shown in Figure 4c for the case of k ¼ 1 and in Figure 4d for the case of\nk ¼ 8. The pressure drop difference between the two models is 18.8% in the former\ncase and 4.4% in the latter. In particular, the quasi-2-D model overestimates the\ncoolant pressure loss in the case of low aspect ratio, while in Figure 4d the quasi-2-D\npressure crosses the CFD solution. The comparison of fluid temperature growth and\npressure drop obtained by the quasi-2-D and the CFD computations is reported in\nTable 2. Results show that good agreement is obtained in the case of HARCC."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00032",
+   "page_start": 18,
+   "page_end": 18,
+   "section": "",
+   "text": "To better evaluate the capability of the proposed model to reproduce the cooling channel flow, the comparison against the CFD solution has also been performed\nwith respect to the radial direction (Figure 5). Note that to compare quasi-2-D and\nthe CFD solutions, the 3-D data have been reduced to a 2-D form by averaging the\nCFD solution along direction z. The velocity profile in the radial direction is characterized by a peak value, located in the lower part of the channel height, which is\ndue to the lower inertia of the higher temperature fluid in that region; the temperature profile is characterized by an evident stratification for both aspect ratios. Of\ncourse, the radial behavior can only be approximately reproduced by the quasi-2-D\nmodel, because the CFD model describes the cinematic and thermal boundary layers\n\nTable 2. Fluid temperature increase and pressure drop discrepancy between\nthe quasi-2-D and the CFD solutions\n\nk DT error Dp error\n\n1 29.3% 18.8%\n2 19.0% 12.8%\n4 6.7% 2.2%\n8 1.2% 4.4%\n16 3.7% 2.8%"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

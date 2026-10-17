@@ -1,0 +1,249 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "V-LEE-p006-008",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_7db39d5daaf765c0916fc496",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher logo in the page footer, not a figure.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_e63970003bd71fdc641f4a3a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 5 caption matches.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_038274bee167e4f1ba894f9a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (20) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_158f656b1384363e96db7a3a",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (16) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_19e5a0a5cc1f91e60f11aa90",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (19) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_407db9cb4be4f6786dcbfe19",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (18) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_ad36ad097e09042859943ee7",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (17) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_09f720a145f2cd4cd67d53aa",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (25) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_15370161bab192cc69dbeaa3",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (22) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_4dec2e8c8ab8632dfd3e5c28",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (28) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_58446f2eb9d6850e05f916af",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (23) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_999e16fd252b83864b5029a6",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (24) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_c6b92bb87b76d96e7c5edd3b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (27) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_cb50f32b987f41ae02148a43",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (21) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_e27dabc2bfb8f36d29349b13",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (29) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_f67942fc267657109716011e",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (26) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 7
+   }
+  },
+  {
+   "candidate_id": "CAND_026de44529be972bb237b3a5",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 6 (impeller 2-D design flow chart and views); caption not linked by Docling.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_5ad286f64d1a4a6c8c83688f",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher logo in the page footer, not a figure.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_4022dd34281c55f0053cc2a4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (34) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_512c2b2d1ba2a3ab8e9d5172",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (30) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_62fa487de8c8924705c754f9",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (31) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_bbe8038a6eb73e26357f6906",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (32) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_f9a079d6a703e27c74131038",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (33) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  },
+  {
+   "candidate_id": "CAND_fa7d4cb3a825e5aa873ce059",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (35) matches the original.",
+   "evidence": {
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "method": "original PDF page renders (115-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 8
+   }
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "packet": "V-SP125-p095-097",
+ "at": "2026-10-16T23:21:41.682671+00:00",
+ "tested_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 22%]\n........................................................................ [ 45%]\n........................................................................ [ 68%]\n........................................................................ [ 91%]\n............................                                             [100%]\n316 passed in 6.20s\n"
+ },
+ "replay": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.extraction.jsonl",
+   "exit_code": 0,
+   "already_banked": true
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.parser.json",
+   "idempotent": true
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p095-097.verdicts.json",
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 16,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0
+   },
+   "idempotent": true
+  }
+ ],
+ "integrity": {
+  "nodes": 5612,
+  "edges": 7196,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ }
+}

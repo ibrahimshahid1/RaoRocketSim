@@ -1,0 +1,49 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-KANG-p006",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_4fc28e368ab7c97b7087a749",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 15 caption matches.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_bab52fd2ce5d2056527c648c",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 13 caption and region match.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_f6dd6441f33d0e63587be1eb",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 14 caption and region match.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  },
+  {
+   "candidate_id": "CAND_d6c57aab68178fab94b77980",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 4 matches cell by cell (Pc, flows, C*, eta_C*, max temperature 1868/1468/1545/1398 K).",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 6
+   }
+  }
+ ]
+}

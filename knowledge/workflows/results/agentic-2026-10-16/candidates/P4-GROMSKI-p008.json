@@ -1,0 +1,117 @@
+{
+ "packet": "P4-GROMSKI-p008",
+ "kind": "extraction",
+ "document_id": "DOC_GROMSKI2010",
+ "source_pdf": "propulsion_texts/pintle_injector/gromski2010.pdf",
+ "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+ "pages": [
+  8,
+  8
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 8,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_GROMSKI2010/p0008.png",
+   "sha256": "6d474e2bd958cb20eb36aed1db977e9359083b5a4beab55d2a2ea49d161e9634",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_684732a9cd93f9e8cf28aaff"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_19cb9a9a0524e205e699fa47",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 11. Typical Low Frequency Response of TR202 Injector"
+   ],
+   "bbox": [
+    {
+     "l": 103.01787567138672,
+     "t": 436.7803649902344,
+     "r": 512.084716796875,
+     "b": 276.67047119140625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/66\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_684732a9cd93f9e8cf28aaff",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_GROMSKI2010/551455e2606e-p8-8-d820e51550b608a76e39ca4ac7ff5ce054cf1563ca8e7ecb996b2627aa669860.json",
+   "raw_sha256": "b82662096d6da8db3671a3246db69a6252db1e8b17cf162c29fed414a2ebc851",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_67bcf74ce9e9f7c4eb949a8f",
+   "kind": "figure",
+   "pages": [
+    8
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 10. Axial Heat Flux Profile for -3A Pintle and -5 Fuel Ring with Nominal Chamber"
+   ],
+   "bbox": [
+    {
+     "l": 110.98807525634766,
+     "t": 711.6329193115234,
+     "r": 477.62860107421875,
+     "b": 458.29779052734375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_684732a9cd93f9e8cf28aaff",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_GROMSKI2010/551455e2606e-p8-8-d820e51550b608a76e39ca4ac7ff5ce054cf1563ca8e7ecb996b2627aa669860.json",
+   "raw_sha256": "b82662096d6da8db3671a3246db69a6252db1e8b17cf162c29fed414a2ebc851",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00014",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "|Col1|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|Col10|Col11|Col12|Col13|Col14|Col15|Col16|Col17|Col18|Col19|Col20|Col21|Col22|Col23|Col24|Col25|\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n|||7.|5%|Pow|er, -3O|, -|5F||||10|%|Po|w|r,|-3|, -5|F|||||||\n|||2|%|Pow|r, -3O|-|F||||5|%|Po|w|r,|-3|, -|F|||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n|||||||||||||||||<br>|Firs<br>|T<br>|r<br>|at<br>|||||\n||||||||||||||||||Spo|ol|h|annel|||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n||||||||||||||||||||||||||\n\n-30 -25 -20 -15 -10 -5 0 5\n\n**Axial Distance From Throat (in.)**\n\n**Figure 10. Axial Heat Flux Profile for -3A Pintle and -5 Fuel Ring with Nominal Chamber**\n\n**Figure 11. Typical Low Frequency Response of TR202 Injector**\n\n**V.** **Post-Test Analysis**\nBecause of the unique flow-field produced by pintle injectors, a NASA concern entering the program was\naccommodating the heat flux profile on the chamber wall. Testing alleviated those concerns, demonstrating that the\nheat flux profile was similar to that of a flat faced injector. For an expander-cycle engine, sufficient heat flow is\nnecessary to drive the turbomachinery. During the conceptual design phase, a standard LOX-GH2 heat flux profile\nfrom a coaxial injector was assumed. A primary project objective was to demonstrate adequate thermal power\navailability for engine cycle closure. To do this, measured heat flows from calorimeter chamber tests were\ncompared to cycle requirements defined during the engine conceptual design."
+  },
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00015",
+   "page_start": 8,
+   "page_end": 8,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "Three detailed power levels were examined during the conceptual design phase: 100%, 75%, and 18.8%. These\npower levels cover a 4:1 throttle from the nominal 75% power level and an overall 5.3:1 throttle ratio. The 100%\npower level was defined by the thrust required with one engine of a 4-engine cluster turned off. A constant 98%\nthrust chamber C* efficiency had been assumed with a mixture ratio of 6.0 across the throttle range. For the\nconceptual engine, % power level, % chamber pressure, % total flow rate, and % thrust were nearly identical, as\nindicated in Table 2. Cycle margin was defined as the percentage of total hydrogen flow that bypassed the fuel\nturbine. This margin increased with decreasing throttle setting, as indicated in Table 1. The conceptual design"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

@@ -1,0 +1,165 @@
+{
+ "packet": "V-SP125-p014-015",
+ "at": "2026-10-16T23:09:56.574845+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p014-015.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 3,\n \"page_shifted\": 0,\n \"n_equations\": 3,\n \"n_claims\": 0,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"superseded_incomplete_transcriptions\": 1,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T23:09:57.005786+00:00', 'n_nodes': 5585, 'n_edges': 7173, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p014-015.verdicts.json",
+   "action": "apply_verification",
+   "stats": {
+    "confirmed": 4,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 0,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0
+   }
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/V-SP125-p014-015.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T23:10:00.618526+00:00",
+  "n_nodes": 5585,
+  "n_edges": 7167,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 9,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 6,
+   "NOT_CHECKED": 45
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 52,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 3,
+   "SUPPORTED": 5
+  },
+  "pending_source_reviews": 45,
+  "needs_source_routing": 8,
+  "pending_verifications": 599,
+  "pending_verifications_by_store": {
+   "entities": 196,
+   "claims": 261,
+   "validity": 37,
+   "equations": 105
+  },
+  "documents_with_extracted_objects": 28,
+  "canonical_documents_without_extracted_objects": 220
+ },
+ "integrity": {
+  "nodes": 5585,
+  "edges": 7167,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [
+  {
+   "object_id": "CLM_NTRS_19710019929_0BAD6687",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_DE92F26F",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_FA371B30",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_FB45C57A",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "match": true
+  }
+ ],
+ "verdict_state_mismatches": []
+}

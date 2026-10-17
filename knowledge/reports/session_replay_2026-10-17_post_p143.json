@@ -1,0 +1,43 @@
+{
+ "since": "2026-10-16",
+ "packets": 63,
+ "files": 121,
+ "bank": {
+  "already_banked_no_change": 63
+ },
+ "verdicts": {
+  "confirmed": 0,
+  "refuted": 0,
+  "unknown_ids": 0,
+  "added_assumptions": 0,
+  "added_validity": 0,
+  "ungrounded_additions": 0,
+  "model_links_removed": 0,
+  "unchanged": 53,
+  "stale": 0,
+  "uncertain": 0,
+  "retired_or_noncurrent": 0,
+  "self_verification_refused": 0,
+  "unsigned_refused": 0,
+  "worker_role_refused": 0,
+  "content_mismatch": 0,
+  "stale_legacy_replay": 0,
+  "content_hash_required": 0
+ },
+ "parser_reviews": 398,
+ "duplicate_retirements": {
+  "retired": 0,
+  "unchanged": 1,
+  "refused": 0
+ },
+ "changed_reviewed_files": [],
+ "missing_reviewed_files": [],
+ "replay_failures": [],
+ "historical_verdicts_skipped": 0,
+ "historical_parser_reviews_skipped": 6,
+ "historical_scope": "Exact prior assertions retained as history; skipping them does not verify current content.",
+ "stores_changed_ignoring_timestamps": [],
+ "no_op": true,
+ "all_steps_resolved": true,
+ "success": true
+}

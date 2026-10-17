@@ -1,0 +1,366 @@
+{
+ "record": "P3 constraint-provenance adjudication (original PDF pages)",
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "date": "2026-10-16",
+ "authority": "Reviewer comparison of repository constraint rows with page-verified source statements. Findings only: the user's amendment forbids edits to raosim/, lrekit/ and tests/, so no code was changed.",
+ "code_fingerprints": {
+  "raosim/mdo/constraints.py": "87773fac576d66b1abf918db6fc6e838928bd34633b94dc907f53845dbb27062",
+  "raosim/mdo/schema.py": "a789c145ee311bb4f27629d1c2f072356694edd3c29b7cc804f4bacf94d70c27",
+  "raosim/mdo/injector.py": "b9907569da138ccb89aa9b12c348a8a7d095e068837085ca78d32b681fa2d869",
+  "raosim/mdo/pintle.py": "2755f4959c112cbd11825609257fd3d022b655b248762e716ee53f7408fe8f25"
+ },
+ "sources": {
+  "mirzamoghadam1991": {
+   "document_id": "DOC_DOI_10_2514_6_1991_1982",
+   "source_pdf": "propulsion_texts/mirzamoghadam1991.pdf",
+   "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5"
+  },
+  "freeberg2019": {
+   "document_id": "DOC_DOI_10_2514_6_2019_0152",
+   "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9"
+  },
+  "hwang2022": {
+   "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+   "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+   "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96"
+  },
+  "kang2022": {
+   "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+   "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+   "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049"
+  },
+  "son2017": {
+   "document_id": "DOC_DOI_10_2514_1_B36301",
+   "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+   "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7"
+  }
+ },
+ "review_files": [
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-MIRZAM-p004-005.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-MIRZAM-p006.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-MIRZAM-p007.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-FREEBERG-p002.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-FREEBERG-p005-006.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-FREEBERG-p010.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-HWANG-p002.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-HWANG-p004.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-HWANG-p008.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-KANG-p002-003.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-KANG-p006.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-KANG-p009-010.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-SON-p002.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-SON-p004.extraction.jsonl",
+  "knowledge/workflows/results/agentic-2026-10-16/reviews/P3-SON-p009-010.extraction.jsonl"
+ ],
+ "rows": [
+  {
+   "row": "wall_temp",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:257-261",
+    "value": "liner_T_wg_max = 800.0 K (raosim/mdo/schema.py:394)",
+    "basis_class": "repository_rule",
+    "source_id": "Mirzamoghadam-1991-AIAA-91-1982-PDF5-PDF7-Table2-allowable-wall-temperature-criterion-form"
+   },
+   "source_statements": [
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 4,
+     "value": "900 F (755 K)",
+     "meaning": "maximum wall mixture ratio 5 at average wall temperature 900 F (755 K) found compatible for an H2/O2 copper chamber at 2250 psia (reliability studies)"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 7,
+     "value": "900 F",
+     "meaning": "Table 1, initial (former) GG-cycle design criteria: gas-side wall temperature"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 7,
+     "value": "1050 F (838.7 K, reviewer conversion), 'Depends on Material'",
+     "meaning": "Table 2, present hot-channel design criteria"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 5,
+     "value": "no number",
+     "meaning": "allowable design gas-side wall temperature set to a relatively high value based on sensitivity of the material yield strength"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 6,
+     "value": "800 F (700 K)",
+     "meaning": "nominal-channel performance obtained with 3% fuel film cooling limiting wall temperature to 800 F; a performance value, not an allowable"
+    }
+   ],
+   "verdict": "800 K is not stated by the source. The three wall temperatures in the paper are 755 K, 839 K and 700 K. The code already labels the row repository_rule and cites Mirzamoghadam only for the criterion form; its comment (schema.py:388-394) matches the page-verified values.",
+   "classification": "REPOSITORY_RULE_CORRECTLY_LABELED",
+   "applicability_notes": [
+    "Mirzamoghadam's values are for an H2/O2 gas-generator-cycle copper-alloy chamber at 2250 psia; 1050 F is explicitly material dependent."
+   ]
+  },
+  {
+   "row": "aspect_ratio",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:211-215",
+    "value": "channel_aspect_ratio_max = 8.0 (raosim/mdo/schema.py:338)",
+    "basis_class": "literature",
+    "source_id": "Wadel-1997-milled-channel-fabrication-constraints;Carlile-1992-AIAA-92-3154;Mirzamoghadam-1991-AIAA-91-1982"
+   },
+   "source_statements": [
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 4,
+     "value": "8",
+     "meaning": "high aspect ratio (8) dual-width channels selected (former design)"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 7,
+     "value": "8 (Table 1) / 7 (Table 2)",
+     "meaning": "initial design criteria AR 8; present hot-channel criteria AR 7"
+    },
+    {
+     "doc": "mirzamoghadam1991",
+     "pdf_page": 5,
+     "value": "7",
+     "meaning": "'A maximum channel depth to width ratio of seven is allowed based on current chamber manufacturing techniques'"
+    }
+   ],
+   "verdict": "Mirzamoghadam supports 8 only as the former (initial) design value; its present manufacturing-based maximum is 7. schema.py:332-337 already records both values. Wadel 1997 and Carlile 1992 were not re-read in this pass.",
+   "classification": "PARTIALLY_SUPPORTED_CITATION_GIVES_FORMER_VALUE",
+   "code_documentation_inconsistency": "constraints.py:208-210 calls AR <= 8 a MANUFACTURING bound and 'not a model-validity bound', while schema.py:332-337 calls it a 'validity cap' because 'the HARCC models are validated to AR ~ 8 (Pizzarelli 2011 ...)'. The two comments give conflicting rationales for the same number. The Pizzarelli validity claim is a P4 item."
+  },
+  {
+   "row": "blockage_lo",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:217-221",
+    "value": "blockage_factor_min = 0.30 (raosim/mdo/schema.py:585)",
+    "basis_class": "literature",
+    "source_id": "Freeberg-2019-AIAA-2019-0152-PDF5-6-TRW-BF-0.3-to-0.7-secondhand-via-Escher;Freeberg-2019-PDF10-conclusions"
+   },
+   "source_statements": [
+    {
+     "doc": "freeberg2019",
+     "pdf_page": 2,
+     "value": "BF = N d_o/(pi d_t)",
+     "meaning": "Eq. (1) definition (single row)"
+    },
+    {
+     "doc": "freeberg2019",
+     "pdf_page": "5-6",
+     "value": "0.3 < BF < 0.7",
+     "meaning": "TRW advice relayed from Escher's personal correspondence; Freeberg's tips selected inside it"
+    },
+    {
+     "doc": "freeberg2019",
+     "pdf_page": 10,
+     "value": "0.3-0.7",
+     "meaning": "discussion paragraph before the Conclusions heading: adequate shear mixing with axisymmetric flow (water cold flow)"
+    },
+    {
+     "doc": "kang2022",
+     "pdf_page": 2,
+     "value": "BF 0.6/0.3",
+     "meaning": "Penn State single-row tests (second-hand [12]); relatively high efficiency at BF 0.6, TMR 1.45"
+    }
+   ],
+   "verdict": "Supported as second-hand TRW advice plus a cold-flow observation. The locator 'PDF10-conclusions' is imprecise: the p.10 statement sits in the discussion, before the Conclusions heading. The source bound is strict (0.3 < BF); the code uses BF >= 0.30, which makes no practical difference.",
+   "classification": "SUPPORTED_SECOND_HAND_IMPRECISE_LOCATOR"
+  },
+  {
+   "row": "blockage_hi",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:223-225",
+    "value": "blockage_factor_max = 0.90 (raosim/mdo/schema.py:586)",
+    "basis_class": "repository_rule",
+    "source_id": null
+   },
+   "source_statements": [
+    {
+     "doc": "freeberg2019",
+     "pdf_page": "5-6, 10",
+     "value": "0.7",
+     "meaning": "upper end of the TRW band (single row)"
+    },
+    {
+     "doc": "hwang2022",
+     "pdf_page": 2,
+     "value": "BF = 85%",
+     "meaning": "Ryu et al. (second-hand): maximum eta_C* near BF = 85% for two-row pintles with orifice AR <= 1"
+    },
+    {
+     "doc": "hwang2022",
+     "pdf_page": 4,
+     "value": "BF = 86%; tested 58 +/- 7%",
+     "meaning": "86% two-row tip damaged by excessive heat transfer [20]; Hwang tested 58 +/- 7%"
+    },
+    {
+     "doc": "hwang2022",
+     "pdf_page": 4,
+     "value": "BF = n(w1+w2)/(pi D_p)",
+     "meaning": "Eq. (3): two-row BF sums both rows' orifice widths"
+    },
+    {
+     "doc": "hwang2022",
+     "pdf_page": 8,
+     "value": "51-65% vs Ryu 70-85%",
+     "meaning": "weak BF effect in Hwang's range; high BF can cause thermal damage [20]; no numeric limit stated"
+    },
+    {
+     "doc": "kang2022",
+     "pdf_page": "3, 6, 9-10",
+     "value": "86% vs 58%",
+     "meaning": "86% two-row tip damaged 0.7 s into earlier tests; CFD tip temperature 1868 K (86%) vs 1545 K (58%); BF 58% + insert completed 5.0 s"
+    }
+   ],
+   "verdict": "No held source states 0.90. The single-row evidence ends at 0.7. The values above 0.7 (Ryu 70-85%; damage at 86%) come from two-row pintles whose BF (Hwang Eq. 3) sums both rows, which is not the quantity the code computes for the single-row slotted post (BF = N w/(pi D), raosim/mdo/injector.py:153-156). So 0.90 lies above every held single-row bound and in the two-row range where tip damage was reported for specific hardware. It is labelled a repository rule; an owner decision remains.",
+   "classification": "REPOSITORY_RULE_ABOVE_HELD_SINGLE_ROW_EVIDENCE"
+  },
+  {
+   "row": "pintle_transition",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:198-201",
+    "margin": "frac*A_cg - A_tip, raosim/mdo/injector.py:162-165",
+    "value": "pintle_transition_area_fraction = 0.95 (raosim/mdo/schema.py:564)",
+    "basis_class": "literature",
+    "source_id": "Son-2017-JPP-33-4-DOI-10.2514-1.B36301-Eq1-PDF4-PDF9"
+   },
+   "source_statements": [
+    {
+     "doc": "son2017",
+     "pdf_page": 2,
+     "value": "Eq. (1)",
+     "meaning": "A_min = pi/sin(theta_pt)[(R_post - t_post)^2 - (R_post - t_post - L_open sin cos)^2] (printed p.859)"
+    },
+    {
+     "doc": "son2017",
+     "pdf_page": 4,
+     "value": "Eq. (2)",
+     "meaning": "L_open,max = [R_post - sqrt(R_post^2 - A_cg sin(theta_pt)/pi)]/(sin cos), printed WITHOUT t_post; text says it is Eq. (1) with A_cg in place of A_min"
+    },
+    {
+     "doc": "son2017",
+     "pdf_page": 4,
+     "value": "criterion",
+     "meaning": "controllable opening range should be below the transition point (unexpected instability)"
+    },
+    {
+     "doc": "son2017",
+     "pdf_page": 9,
+     "value": "checkpoint",
+     "meaning": "minimum area of the pintle nozzle had to be lower than the center gap area"
+    }
+   ],
+   "verdict": "The criterion is supported. The code's tip area (injector.py:61-68, r_f = R_post - t_post) and its inverse (injector.py:71-82) equal Eq. (1) and the Eq. (1)-consistent inverse. They do not reproduce the printed Eq. (2), which omits t_post, a source-internal inconsistency. The 0.95 fraction is not in the source; the module docstring calls it a repository applicability choice. The locator 'Eq1-PDF4' is imprecise: Eq. (1) is on PDF p.2, and PDF p.4 carries Eq. (2) and the criterion.",
+   "classification": "SUPPORTED_CRITERION; IMPRECISE_LOCATOR; SOURCE_INTERNAL_INCONSISTENCY_EQ2_VS_EQ1 (code follows Eq. 1); REPOSITORY_FRACTION_0.95"
+  },
+  {
+   "row": "pintle_min_opening",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:240-243",
+    "margin": "opening_low - pintle_min_opening, raosim/mdo/pintle.py:200",
+    "value": "pintle_min_opening = 1.0e-4 m (raosim/mdo/schema.py:669)",
+    "basis_class": "literature",
+    "source_id": "Son-2017-JPP-33-4-DOI-10.2514-1.B36301-PDF2-PDF10"
+   },
+   "source_statements": [
+    {
+     "doc": "son2017",
+     "pdf_page": 2,
+     "value": "0.1 mm",
+     "meaning": "uniform liquid sheet not formed within 0.1 mm opening (water/air spray rig); tests from 0.2 mm"
+    },
+    {
+     "doc": "son2017",
+     "pdf_page": 10,
+     "value": "0.1 mm",
+     "meaning": "case 4 (about 0.03 mm at 20%) judged not feasible because injection was nonuniform below 0.1 mm; case 3 (0.1 mm at 20%) chosen"
+    }
+   ],
+   "verdict": "Supported; applies to Son's cold-flow sheet observations and geometry (Table 1). The code comment says so.",
+   "classification": "SUPPORTED_APPLICABILITY_LIMITED"
+  },
+  {
+   "row": "pintle_module_fit",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:248-251",
+    "margin": "chamber_d - module_d, raosim/mdo/pintle.py:207-209",
+    "basis_class": "literature",
+    "source_id": "Son-2017-JPP-33-4-DOI-10.2514-1.B36301-PDF9"
+   },
+   "source_statements": [
+    {
+     "doc": "son2017",
+     "pdf_page": 9,
+     "value": "checkpoint",
+     "meaning": "calculated chamber diameter should be larger than the injector module diameter"
+    }
+   ],
+   "verdict": "The criterion is supported. The module-diameter formula sqrt(D^2 + 4 A_axial/pi) is a repository geometric interpretation; Son gives no formula. The row has no architecture restriction, which is consistent with the generic wording.",
+   "classification": "SUPPORTED_CRITERION_REPOSITORY_GEOMETRY"
+  },
+  {
+   "row": "pintle_center_gap_fit",
+   "code": {
+    "constraint": "raosim/mdo/constraints.py:244-247",
+    "margin": "(D - 2t) - D_cg, raosim/mdo/pintle.py:201",
+    "basis_class": "geometric_definition",
+    "source_id": "Son-2017-JPP-33-4-DOI-10.2514-1.B36301-Fig2-geometry"
+   },
+   "source_statements": [
+    {
+     "doc": "son2017",
+     "pdf_page": 2,
+     "value": "Fig. 1",
+     "meaning": "the center gap lies inside the post (schematic, printed p.859)"
+    }
+   ],
+   "verdict": "Consistent with the schematic; a geometric identity, not a source limit.",
+   "classification": "GEOMETRIC_DEFINITION_CONSISTENT"
+  }
+ ],
+ "source_internal_issues": [
+  {
+   "doc": "son2017",
+   "pages": "2, 4",
+   "issue": "Eq. (2) (p.4) is printed with R_post where Eq. (1) (p.2) has (R_post - t_post), although the text derives Eq. (2) from Eq. (1)."
+  },
+  {
+   "doc": "son2017",
+   "pages": "9, 10",
+   "issue": "Table 5 (p.9, baseline at 100%) prints vaporization time 8.83 ms and actual vaporization distance 84.04 mm; Table 7 (p.10, 100%) prints 1.870 ms and 41.79 mm. Table 5's two values repeat the velocity entries 8.83 and 84.03 almost exactly, which suggests a typesetting error. Not used by the code."
+  },
+  {
+   "doc": "hwang2022",
+   "pages": "2, 4",
+   "issue": "The relation glyph in 'BF = 85%' and 'BF = 86%' is U+FFFD in the PDF text layer; the rendered pages print '='."
+  },
+  {
+   "doc": "mirzamoghadam1991",
+   "pages": "7",
+   "issue": "Typewritten tables; the text layer is garbled ('9 0 0 .', 'Aspect Ratio a'). Values were read from renders."
+  }
+ ],
+ "other_code_documentation_findings": [
+  {
+   "where": "raosim/mdo/schema.py:572-573",
+   "finding": "The phrase in quotation marks, \"the two master geometric knobs\", is attributed to Hwang et al. 2022, but it does not occur in the Hwang or Kang text (chunk search). The nearest source wording is Kang 2022 PDF p.3: TMR and BF 'are the most important factors in the design of the pintle injector'. This is a paraphrase presented as a quotation.",
+   "classification": "QUOTE_NOT_IN_SOURCE"
+  },
+  {
+   "where": "raosim/mdo/schema.py:926-928",
+   "finding": "Sizing the pintle so BF lands mid-band in [0.30, 0.90] is called 'the literature design rule'. The upper bound is a repository rule, so the mid-band target (0.60) is not a literature rule as such. 0.60 does fall inside the TRW 0.3-0.7 band and equals the Penn State BF 0.6 case (Kang p.2, second-hand).",
+   "classification": "OVERSTATED_ATTRIBUTION"
+  }
+ ],
+ "answers_to_user_questions": {
+  "mirzamoghadam_wall_temp": "Neither 800 K nor its equivalent appears. The paper gives 755 K (900 F: former criteria and H2/O2 copper compatibility, PDF pp.4, 7), 839 K (1050 F: present hot-channel criteria, 'Depends on Material', PDF p.7) and 700 K (800 F: nominal channel with 3% film, PDF p.6).",
+  "blockage_band": "Held literature supports 0.30-0.70 for single-row tips (TRW via Escher; Freeberg cold flow). No held source supports 0.90; values above 0.7 come from two-row injectors, with a different BF definition and reported tip damage at 86%.",
+  "son_pintle_rows": "pintle_transition, pintle_min_opening and pintle_module_fit are supported by Son PDF pp.2, 4, 9 and 10 as criteria. The fraction 0.95 and the module-diameter formula are repository choices. Locators: Eq. (1) is on PDF p.2, not p.4."
+ }
+}

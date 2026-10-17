@@ -1,0 +1,380 @@
+[
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_C32703C2",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp671 (printed655) displays Delta h = h0-h2 = u2^2/2, numbered17.15, following the stagnation-enthalpy equality17.14. It is the enthalpy drop, not an absolute enthalpy or heat-capacity change. Its source section17.3 is explicitly an equilibrium quasi-one-dimensional nozzle discussion; p669 (printed653) introduces inviscid adiabatic high-temperature flow through a convergent-divergent Laval nozzle and labels reservoir stagnation conditions. Thus the linked quasi-one-dimensional/inviscid/adiabatic context is supported. This conservation identity can be reused with another constitutive closure, but source confirmation does not convert the section into a frozen-chemistry derivation. Velocity squared and specific enthalpy both have J/kg dimensions.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 671,
+      "printed_page": 655,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p671.png",
+      "render_sha256": "c9bf1ab619ae2d286c10c0793ded9a6e1a756bb48d5d52e6a0584c21d0fbd954",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [
+        "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_A168DAF0"
+      ],
+      "equation_number": "17.15",
+      "supporting_pages": [
+        {
+          "pdf_page": 669,
+          "printed_page": 653,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p669.png",
+          "render_sha256": "70e34aec667653141749dc07f1b2b155e5af2b2f16561ec9aa89ece28d16d989"
+        }
+      ]
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_68A60BF8",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp672 (printed656) displays A/A* = rho* u*/(rho u), numbered17.18, directly following continuity rho u A = rho* u* A* in17.17. The sonic-state density and velocity are in the numerator, local-state density and velocity in the denominator, so both sides are dimensionless. The preceding source page identifies the sonic state with the throat of the equilibrium nozzle under discussion; p669 supplies the linked quasi-one-dimensional/inviscid/adiabatic nozzle context. This source identity is continuity, not authority for every repository branch-solving or interpolation policy.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 672,
+      "printed_page": 656,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p672.png",
+      "render_sha256": "17d250895f0c77ac39da934847bd9a6942c2bf44d1b571b01aa8a602db74de5c",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [
+        "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_A168DAF0"
+      ],
+      "equation_number": "17.18",
+      "supporting_pages": [
+        {
+          "pdf_page": 669,
+          "printed_page": 653,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p669.png",
+          "render_sha256": "70e34aec667653141749dc07f1b2b155e5af2b2f16561ec9aa89ece28d16d989"
+        }
+      ]
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_182F4635",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) displays cp = [partial_T(sum_i c_i h_i)]_p = sum_i c_i(partial h_i/partial T)_p + sum_i h_i(partial c_i/partial T)_p, numbered17.20. Both product-rule terms and their positive sum are retained; all displayed derivatives have a constant-pressure subscript. The record correctly distinguishes the mass-fraction c_i from the species enthalpy h_i. With mass-specific energies and dimensionless mass fractions, each differentiated term has specific-heat dimensions. The chemically reacting-mixture derivative is source comparison material, not an assertion that a fixed-composition implementation includes the reaction term.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.20"
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) identifies (partial h_i/partial T)_p as the pure-species specific heat per unit mass, c_pi, and displays cp = sum_i c_i c_pi + sum_i h_i(partial c_i/partial T)_p as17.21. The subscripts, enthalpy multiplier, constant-pressure derivative and positive reaction contribution match. The adjacent sentence explicitly calls it the specific heat of a chemically reacting mixture. The reaction contribution must not be silently incorporated into a table intended to represent fixed species mass fractions.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.21"
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_19ADDF30",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) displays cp = cp_f = sum_i c_i c_pi as17.22. The immediately preceding prose explicitly says there are no chemical reactions for frozen flow and sets (partial c_i/partial T)_p =0. The stored derivative-zero condition is therefore a sourced adjacent condition, not an additional term inside the numbered display. Onp675 (printed659), the frozen-flow definition holds composition constant and explicitly qualifies that statement for inviscid flow, noting a viscous diffusion exception; this supports the linked chemical-freeze assumption. Fixed c_i does not itself require all c_pi to be constant in temperature; that distinction is supported by the separate thermally-perfect and doubly-frozen discussions, rather than a literal sentence in17.22.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [
+        "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_7C8E98A5"
+      ],
+      "equation_number": "17.22",
+      "supporting_pages": [
+        {
+          "pdf_page": 675,
+          "printed_page": 659,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p675.png",
+          "render_sha256": "42e96978f018252f0cba8cec0826c4912a9274a72ddd480be825a37cbc932179"
+        },
+        {
+          "pdf_page": 676,
+          "printed_page": 660,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p676.png",
+          "render_sha256": "e5692b69603db0864747b0bcdf62955dfae9e14f02304ae2a9c143d27b0308ea"
+        },
+        {
+          "pdf_page": 682,
+          "printed_page": 666,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p682.png",
+          "render_sha256": "4eeba0332ee954e074277fe054532016f7f3ae5a732e0806afd4371174899ba7"
+        }
+      ]
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_6537643E",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) displays cp = cp_f + sum_i h_i(partial c_i/partial T)_p as17.23, labeling cp_f the frozen specific heat and the additional sum the contribution due to chemical reaction. The enthalpy multiplier and constant-pressure derivative match the record. This is the separation of fixed-composition and reaction heat capacity; it is a comparison to the repository frozen-composition model, not a claim that the model computes equilibrium composition derivatives.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.23"
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_349695C7",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) first defines e=sum_i c_i e_i and cv=(partial e/partial T)_v, then displays cv = cv_f + sum_i e_i(partial c_i/partial T)_v as17.24. The multiplier is species internal energy e_i, not species enthalpy h_i; the held quantity is specific volume v, not pressure p. The stored form preserves both distinctions. The additional reaction term has J/(kg K) dimensions and belongs to the reacting-mixture formulation.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.24"
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB8EB3D8",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp678 (printed662) displays cv_f = sum_i c_i cv_i as17.25, immediately below the reacting-mixture17.24. The frozen-mixture volume heat capacity is a mass-fraction-weighted species sum. The stored summand has c_i multiplying cv_i and includes the full species summation. The formula supplies a fixed-composition property identity; it does not validate a particular external property table or imply constant species heat capacity.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 678,
+      "printed_page": 662,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+      "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.25"
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_5E676594",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp682 (printed666) explicitly defines gamma=cp/cv, then displays a_e^2 = gamma R T {1+(1/p)(partial e/partial v)_T}/{1-rho(partial h/partial p)_T} as17.35. The plus sign in the numerator, minus sign in the denominator, rho multiplier, reciprocal pressure factor, squared equilibrium sound speed and constant-temperature derivatives match. Both derivative correction brackets are dimensionless, leaving squared-speed dimensions from RT. The source identifies this as equilibrium sound speed for a chemically reacting mixture and also discusses real-gas corrections; it is not the repository thermally-perfect frozen sound-speed formula.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 682,
+      "printed_page": 666,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p682.png",
+      "render_sha256": "4eeba0332ee954e074277fe054532016f7f3ae5a732e0806afd4371174899ba7",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "equation_number": "17.35",
+      "related_source_display_discrepancy": {
+        "pdf_page": 671,
+        "printed_page": 655,
+        "observed_local_pdf_expression": "a ≡ (partial p/partial rho)_s; no square or square-root is visible in the local PDF prose expression.",
+        "state": "DIMENSIONALLY_INCONSISTENT_LOCAL_PDF_DISPLAY",
+        "qualification": "The derivative has squared-speed dimensions. This local artifact does not determine whether the missing square/root originated in printing or scanning; no authorial-typo attribution is made.",
+        "handling": "This unnumbered prose expression was not banked as a governing equation or silently corrected into SOURCE_STATES. Verified numbered17.35 and17.36 supply the dimensionally consistent squared/square-root sound-speed relations.",
+        "independent_crop_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p671-sound-prose.png",
+        "independent_crop_sha256": "90bcce67b3a3909decb3182b55a4b692758e43011ce70590f4cb9a10892868b0"
+      }
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB096C54",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp682 (printed666) displays a_f=sqrt(gamma R T) as17.36, with gamma=cp/cv defined earlier on the same page. The source identifies it as the speed of a sound wave with no chemical reactions internally in the wave. It then explicitly states that, for a thermally perfect gas, h=h(T) and e=e(T),17.35 again reduces to17.36; this supports the linked thermally-perfect assumption without requiring constant cp. RT has squared-speed dimensions for a mass-specific gas constant. This confirmation does not establish vibrational relaxation rates or validate the repository property-generation and sonic-root algorithms.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 682,
+      "printed_page": 666,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p682.png",
+      "render_sha256": "4eeba0332ee954e074277fe054532016f7f3ae5a732e0806afd4371174899ba7",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [
+        "ASM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_B39F19A3"
+      ],
+      "equation_number": "17.36",
+      "related_source_display_discrepancy": {
+        "pdf_page": 671,
+        "printed_page": 655,
+        "observed_local_pdf_expression": "a ≡ (partial p/partial rho)_s; no square or square-root is visible in the local PDF prose expression.",
+        "state": "DIMENSIONALLY_INCONSISTENT_LOCAL_PDF_DISPLAY",
+        "qualification": "The derivative has squared-speed dimensions. This local artifact does not determine whether the missing square/root originated in printing or scanning; no authorial-typo attribution is made.",
+        "handling": "This unnumbered prose expression was not banked as a governing equation or silently corrected into SOURCE_STATES. Verified numbered17.35 and17.36 supply the dimensionally consistent squared/square-root sound-speed relations.",
+        "independent_crop_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p671-sound-prose.png",
+        "independent_crop_sha256": "90bcce67b3a3909decb3182b55a4b692758e43011ce70590f4cb9a10892868b0"
+      }
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0BE6F1C1",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp675 (printed659) explicitly defines zero-reaction-rate frozen flow and says its chemical composition remains constant throughout space and time. The following parenthesis explicitly restricts this to inviscid flow and notes that viscous diffusion can change a fluid element composition even when chemistry is frozen. The stored fixed-species-mass-fraction definition and qualifier match this context. The statement that frozen composition alone does not require constant species heat capacity is a source-based comparison across17.22 onp678 and the thermally-perfect sound-speed discussion onp682, not a verbatim assertion onp675; the record qualifier preserves that distinction. The separate both-chemical-and-vibrationally-frozen assertion onp676 further prevents conflating these models.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 675,
+      "printed_page": 659,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p675.png",
+      "render_sha256": "42e96978f018252f0cba8cec0826c4912a9274a72ddd480be825a37cbc932179",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "supporting_pages": [
+        {
+          "pdf_page": 676,
+          "printed_page": 660,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p676.png",
+          "render_sha256": "e5692b69603db0864747b0bcdf62955dfae9e14f02304ae2a9c143d27b0308ea"
+        },
+        {
+          "pdf_page": 678,
+          "printed_page": 662,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p678.png",
+          "render_sha256": "38777b7888638fcd531a6cc4fa1daad957fd0129be14145e57ce14fed09bf6c8"
+        },
+        {
+          "pdf_page": 682,
+          "printed_page": 666,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p682.png",
+          "render_sha256": "4eeba0332ee954e074277fe054532016f7f3ae5a732e0806afd4371174899ba7"
+        }
+      ]
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  },
+  {
+    "object_id": "CLM_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_E550CF9A",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDFp676 (printed660) explicitly states that flow which is both chemically and vibrationally frozen has constant specific heats and identifies it as the calorically perfect treatment used in earlier chapters. This directly matches the stored claim with its source-treatment qualification. The precedingp675-p676 discussion explains that vibrationally frozen energy remains at its reservoir value; chemical composition freezing and vibrational freezing are distinct assumptions. This statement does not imply that a merely chemically frozen, thermally perfect mixture must have constant cp.",
+    "source_sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "evidence": {
+      "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+      "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+      "pdf_page": 676,
+      "printed_page": 660,
+      "method": "Independent visual comparison against renders made directly from the original fingerprint-verified PDF; checked numbered displays, operator subscripts and surrounding assumptions. Docling output and grounded text alone were not treated as transcription authority.",
+      "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p676.png",
+      "render_sha256": "e5692b69603db0864747b0bcdf62955dfae9e14f02304ae2a9c143d27b0308ea",
+      "render_retention": "Temporary independent verification render; the fingerprinted original PDF remains authoritative.",
+      "extraction_file": "knowledge/workflows/results/anderson-frozen-docling-2026-10-16.jsonl",
+      "extraction_file_sha256": "227f79005c0235f3a6d12fce15e389a1af5563df29e5733ffdfe85ecad5cf6b3",
+      "reviewed_at": "2026-10-16T05:54:08.064635+00:00",
+      "units_status": "Stored SI units are dimensionally consistent reviewer interpretations. These pages do not print a unit label beside each variable. Dimensionless mass fractions and mass-specific species energies remain distinct.",
+      "assumption_ids_reviewed": [],
+      "supporting_pages": [
+        {
+          "pdf_page": 675,
+          "printed_page": 659,
+          "render_path": "/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/lrekit-anderson-independent-p675.png",
+          "render_sha256": "42e96978f018252f0cba8cec0826c4912a9274a72ddd480be825a37cbc932179"
+        }
+      ]
+    },
+    "scope_note": "Confirms this source equation/claim, numbering/page attribution, and the explicitly reviewed local assumptions only. Source inference, dimensional interpretation and directly printed text are distinguished in the reason. Does not establish complete source extraction, variable-alias correctness, implementation or numerical-method correctness, property-table validity, chemical/vibrational kinetics, experimental validation or hardware qualification. No model-support override is supplied."
+  }
+]

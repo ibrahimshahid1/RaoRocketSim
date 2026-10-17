@@ -1,0 +1,70 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_74C39084",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.98: theoretical throat is the minimum-area plane; in practice well-rounded; only the exit plane is sharp-edged.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 98
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_752872E2",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.98: avoid abrupt changes or discontinuities in the wall contour (shocks, turbulence losses).",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 98
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_E1995D1A",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.98: convergent section has very low losses; the divergent contour is very important to performance.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 98
+  }
+ },
+ {
+  "object_id": "CLM_NTRS_19710019929_F38ABA9F",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "PDF p.98: throat arc radius 0.5-1.5 R_t; convergent cone half angle 20-45 deg.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "reviewer": {
+   "role": "F",
+   "model": "claude-opus-5-5 (Opus F, main session)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "method": "original PDF page renders (105 dpi; Eq. 1-14 at 300 dpi) read by F",
+   "pdf_page": 98
+  }
+ }
+]

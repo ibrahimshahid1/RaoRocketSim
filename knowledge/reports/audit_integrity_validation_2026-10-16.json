@@ -1,0 +1,77 @@
+{
+ "recorded_at": "2026-10-16T06:16:39.160749+00:00",
+ "status": "PASS",
+ "scope": "Stored identity, graph/provenance integrity, current source-byte fingerprints, positive model-support eligibility, retained supersession history and current debt membership only; no claim of complete science or physical validation.",
+ "duplicate_ids_by_store": {},
+ "graph_nodes": 4823,
+ "graph_edges": 6232,
+ "duplicate_edges": 0,
+ "dangling_edges": 0,
+ "edges_without_provenance": 0,
+ "eligible_positive_model_support_edges": 6,
+ "retained_superseded_equations": 18,
+ "current_unknown_basis_queue": 241,
+ "primary_review_pdf": {
+  "path": "/Users/ibrahimshahid/Downloads/LREKit Consolidated Technical Review and Forward Program (3).pdf",
+  "sha256": "ceab7085d3604ab9212695a33b062818c9faf6cdf348b0935ad33be3969b78b8"
+ },
+ "current_source_byte_checks": [
+  {
+   "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+   "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+   "sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd"
+  },
+  {
+   "document_id": "DOC_CAD_04",
+   "source_pdf": "propulsion_texts/CAD_04.pdf",
+   "sha256": "db9187f977b3ad31d05cf23b6a76f17fa7743f0019ced2e919a7048aac843ecb"
+  },
+  {
+   "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+   "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+   "sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500"
+  },
+  {
+   "document_id": "DOC_DOI_10_1080_13647830_2021_1937702",
+   "source_pdf": "propulsion_texts/pintle_injector/radhakrishnan2021.pdf",
+   "sha256": "b2550805f9cd9837fcfac67243812665a3a3be832fb32d018638722c63c2c784"
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_2_5354",
+   "source_pdf": "propulsion_texts/hagemann1998.pdf",
+   "sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6"
+  },
+  {
+   "document_id": "DOC_DOI_10_2514_8_7324",
+   "source_pdf": "propulsion_texts/rao1958.pdf",
+   "sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3"
+  },
+  {
+   "document_id": "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+   "source_pdf": "propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+   "sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05"
+  },
+  {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87"
+  },
+  {
+   "document_id": "DOC_NTRS_19760023196",
+   "source_pdf": "propulsion_texts/19760023196.pdf",
+   "sha256": "5e9db6a6f7860ee51acbf5cbe137005ef259ec3fd87ff0ed5f1ad466d6227c44"
+  }
+ ],
+ "remaining_validation_issue_records": 13,
+ "remaining_validation_checks": {
+  "empty_source_pdf": 1,
+  "canonical_document_without_chunks": 1,
+  "markdown_without_manifest_row": 1,
+  "registry_citation_not_confirmed_in_local_source": 1,
+  "declared_cad_bytes_unavailable": 6,
+  "source_extraction_incomplete": 1,
+  "source_verification_incomplete": 1,
+  "unknown_basis_software_constants": 1
+ },
+ "scientific_completeness": "NOT_ESTABLISHED"
+}

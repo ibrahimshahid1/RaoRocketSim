@@ -1,0 +1,89 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-HU2021-p001-002",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_a5304658ca9a3e4f92ded7dd",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher page graphic on the first page (journal logo, cover thumbnail or Crossmark badge), not a figure.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_c947978469f25205b061ee02",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher page graphic on the first page (journal logo, cover thumbnail or Crossmark badge), not a figure.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_f890a9bfc7283db07026d242",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Publisher page graphic on the first page (journal logo, cover thumbnail or Crossmark badge), not a figure.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 1
+   }
+  },
+  {
+   "candidate_id": "CAND_8d5494b7e3059c6c67b7e89b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (1) matches.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_476234f94c791823a2a6fd95",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (2) matches.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_93e1896d1f3c88c3d4c5dcdc",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (3) matches.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_9c77ebf8577d26843ccd2b89",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (4) matches.",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  },
+  {
+   "candidate_id": "CAND_ec0a0f1a7b6bdc3d55824697",
+   "state": "REJECTED",
+   "reason": "Nomenclature: right-column symbols shifted against their definitions (Q paired with the control-signal weighting; R missing).",
+   "evidence": {
+    "source_sha256": "3addb3d4d434310857a870f51cab749faae6925c29194853294a7d5ba6ca55cc",
+    "method": "original PDF page renders (110-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 2
+   }
+  }
+ ]
+}

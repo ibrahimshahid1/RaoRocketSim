@@ -1,0 +1,59 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P4-PIZZ-p015-016",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_97299448269dfab3119ed2ea",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 1 (channel dimensions, AR 1-16) matches cell by cell.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 15
+   }
+  },
+  {
+   "candidate_id": "CAND_9101db35e5d7ccac941fb390",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Figure 3 caption matches.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 16
+   }
+  },
+  {
+   "candidate_id": "CAND_137a15a42e559a72f9ddec11",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (36) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 16
+   }
+  },
+  {
+   "candidate_id": "CAND_50021eaf67ab6518d35678ea",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (37) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 16
+   }
+  },
+  {
+   "candidate_id": "CAND_00133f2261a158415b85f8c0",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Eq. (38) matches the original.",
+   "evidence": {
+    "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+    "method": "original PDF page renders (120-150 dpi) read by F; element-by-element comparison",
+    "pdf_page": 16
+   }
+  }
+ ]
+}

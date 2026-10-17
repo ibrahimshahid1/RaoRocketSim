@@ -1,0 +1,21 @@
+{
+ "grounded": 1,
+ "page_shifted": 0,
+ "ungrounded": [],
+ "per_doc": {
+  "DOC_NTRS_19710019929": {
+   "grounded": 1,
+   "page_shifted": 0,
+   "ungrounded": 0
+  }
+ },
+ "model_support": {},
+ "n_equations": 0,
+ "n_claims": 1,
+ "n_validity": 0,
+ "n_constants": 0,
+ "n_assumptions": 0,
+ "content_verifications_invalidated": [],
+ "n_ungrounded": 0,
+ "already_banked": false
+}

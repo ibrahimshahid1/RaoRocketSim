@@ -1,0 +1,352 @@
+{
+ "packet": "P1-SP8120-p028-029",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_reason": "P1 Rao/TOP: SP-8120 Fig. 5(b) and its text context",
+   "queue_pages": [
+    28,
+    29
+   ],
+   "queue_document_id": "DOC_NTRS_19770009165",
+   "queue_source_pdf": "propulsion_texts/19770009165.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P1-SP8120-p028-029.json",
+   "sha256": "1520935244ce7e86ca5802e9b99cedfb02460df2a956db58d2138fcf29128760",
+   "size_bytes": 8311,
+   "kind": "extraction",
+   "document_id": "DOC_NTRS_19770009165",
+   "source_pdf": "propulsion_texts/19770009165.pdf",
+   "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "pages": [
+    28,
+    29
+   ],
+   "docling_run_ids": [
+    "ENR_1c6de5ba04aaed35092525fd",
+    "ENR_62317fd63901aaf2ff049afc"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/19770009165.pdf",
+   "sha256_in_bundle": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "sha256_recomputed": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+   "sha256_match": true
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    28,
+    29
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "28": {
+     "figure": 1
+    },
+    "29": {
+     "figure": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_NTRS_19770009165#c00034",
+     "page_start": 29,
+     "page_end": 30
+    }
+   ]
+  },
+  "renders": [
+   {
+    "page": 28,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19770009165/p0028.png",
+    "dpi": 150,
+    "sha256_in_bundle": "623b0b977f7892dd7af2d0c9ff6d620adee40e479f2d94574623a735b099e10c",
+    "file_exists": true,
+    "sha256_recomputed": "623b0b977f7892dd7af2d0c9ff6d620adee40e479f2d94574623a735b099e10c",
+    "sha256_match": true
+   },
+   {
+    "page": 29,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19770009165/p0029.png",
+    "dpi": 150,
+    "sha256_in_bundle": "5b63f8d3d0fba6fd5a22c06bc8a2caad55d3c7ccaf5dc7bd423ba3b36b07007c",
+    "file_exists": true,
+    "sha256_recomputed": "5b63f8d3d0fba6fd5a22c06bc8a2caad55d3c7ccaf5dc7bd423ba3b36b07007c",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p28-28-ffa5e7258b821e135f370e671d4f8b13b6d51b4b67407686ac29551eb8bfc8e0.json",
+    "sha256_in_bundle": "07976642bfe86be70566c2aee82a59e7fd799256a5a399e5b4d764e87322497e",
+    "file_exists": true,
+    "sha256_recomputed": "07976642bfe86be70566c2aee82a59e7fd799256a5a399e5b4d764e87322497e",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p29-29-41a40fde5250bf4d21d16a1f1200778e7978e6979495e8e43ef4de730517bf31.json",
+    "sha256_in_bundle": "35388c7d366e8e2d0f1e96d3f99588e56f8deee81490a5358da43f365c88eb3a",
+    "file_exists": true,
+    "sha256_recomputed": "35388c7d366e8e2d0f1e96d3f99588e56f8deee81490a5358da43f365c88eb3a",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2
+  },
+  "candidates_total": 2,
+  "mechanical_flags": {
+   "flag_computation_note": "agentic_packet.py (line 195) computes mechanical_flags only for kind == 'formula'; for every other kind the list is [] by construction",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_c1c3e0dda4ee849eda22bcae",
+    "CAND_fc7b5b03e8b56125b6b763c1"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_whose_transcription_json_has_empty_captions_list": [],
+   "non_formula_candidates_whose_transcription_is_not_a_captions_json": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_c1c3e0dda4ee849eda22bcae",
+    "kind": "figure",
+    "pages": [
+     28
+    ],
+    "bbox": [
+     {
+      "l": 179.11476135253906,
+      "t": 720.394775390625,
+      "r": 466.36102294921875,
+      "b": 537.2326354980469,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_1c6de5ba04aaed35092525fd",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p28-28-ffa5e7258b821e135f370e671d4f8b13b6d51b4b67407686ac29551eb8bfc8e0.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [
+     "#/texts/0"
+    ],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 28
+     }
+    ],
+    "raw_item_captions_refs": [
+     "#/texts/0"
+    ],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 15,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/0",
+      "label": "caption",
+      "page_no": 28,
+      "bbox": {
+       "l": 186.66666666666666,
+       "t": 514.0,
+       "r": 462.3333333333333,
+       "b": 493.0,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 4. — Computed performance loss due to viscous-drag effects in bell nozzles (storable propellants).",
+      "orig": "Figure 4. — Computed performance loss due to viscous-drag effects in bell nozzles (storable propellants).",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ]
+   },
+   {
+    "id": "CAND_fc7b5b03e8b56125b6b763c1",
+    "kind": "figure",
+    "pages": [
+     29
+    ],
+    "bbox": [
+     {
+      "l": 166.4208526611328,
+      "t": 535.022216796875,
+      "r": 413.0268249511719,
+      "b": 206.66650390625,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_62317fd63901aaf2ff049afc",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p29-29-41a40fde5250bf4d21d16a1f1200778e7978e6979495e8e43ef4de730517bf31.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [
+     "#/texts/3"
+    ],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 29
+     }
+    ],
+    "raw_item_captions_refs": [
+     "#/texts/3"
+    ],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 54,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/3",
+      "label": "caption",
+      "page_no": 29,
+      "bbox": {
+       "l": 112.33333333333334,
+       "t": 188.33333333333326,
+       "r": 455.0,
+       "b": 177.66666666666663,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 5. — Canted-parabola contour as an approximation of optimum bell contour.",
+      "orig": "Figure 5. — Canted-parabola contour as an approximation of optimum bell contour.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ]
+   }
+  ],
+  "formula_candidates": [],
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 0,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_NOZZLE_RAO_TOP_BEZIER": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "missing_targets": {
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_NOZZLE_RAO_TOP_BEZIER": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "missing_targets_as_given": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "target_objects_in_summary": 0,
+   "computation_note": "agentic_packet.py lines 198-239: missing_targets = packet targets minus the ids of stored objects collected only from the equations, claims, entities and validity stores (records of this document that are targets or lie on the packet pages); a target id absent from those four stores is therefore listed as missing"
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19770009165#c00032",
+     "page_start": 28,
+     "page_end": 28,
+     "section": "t",
+     "text_length": 1898
+    },
+    {
+     "chunk_id": "DOC_NTRS_19770009165#c00033",
+     "page_start": 28,
+     "page_end": 29,
+     "section": "t",
+     "text_length": 1444
+    },
+    {
+     "chunk_id": "DOC_NTRS_19770009165#c00034",
+     "page_start": 29,
+     "page_end": 30,
+     "section": "t",
+     "text_length": 1442
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

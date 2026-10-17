@@ -1,0 +1,1006 @@
+{
+ "packet": "P2-SP8107-p016-017",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "queue_reason": "P2 SP-8107 turbopump specific power data",
+   "queue_pages": [
+    16,
+    17
+   ],
+   "queue_document_id": "DOC_NTRS_19750012398",
+   "queue_source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P2-SP8107-p016-017.json",
+   "sha256": "71a4c7516c880841d695f48baa3455cb5e353e37a353562d1c0c55a3b0708c0e",
+   "size_bytes": 10535,
+   "kind": "extraction",
+   "document_id": "DOC_NTRS_19750012398",
+   "source_pdf": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "source_sha256": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "pages": [
+    16,
+    17
+   ],
+   "docling_run_ids": [
+    "ENR_68f068d94c2e83a39ffa5cfb",
+    "ENR_926da837eb388425b990cf6e"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "table": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "20a10fb95d95cd5279272944d75422c921a14f592846b87ac6e1ea4f13193318"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "65c35ddb75f3f4bf461926c3b2ab784f98ed413127c898106299880d86c5be0b",
+    "claims": "53a6a3423274e553be78900ab414cd9527b021e13b50ea7ddb80a6c4b338c3de",
+    "entities": "f287859bf8d29a95d448e5d7859ba69cc3446edc6048f83aeff59522491f6845",
+    "validity": "93c5d89ddbccd1ec583786253fe1f40bd68e5c7378341b4467ed14ee3895456a",
+    "models": "dbc99dfbf28febf2be86649263a2652ff91d4aa28f75da7f62f3b476eeff158d",
+    "enrichments": "d7e5a4521b816dda0c4d3904533aa10718ea812bb0038aedc45cbe7765f1f900"
+   },
+   "enrichments_file_hash_differs_from_snapshot": true,
+   "enrichments_record_level_diff": null,
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pintle_injector/19750012398.pdf",
+   "sha256_in_bundle": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "sha256_recomputed": "9a66bf918211b1780448ea79c3635003a026bce6129b6726c6aeb8aa856568ea",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 16,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19750012398/p0016.png",
+    "dpi": 150,
+    "sha256_in_bundle": "bf07d7d90315fe169d8371f72489fab698d0b00b7f49250bcc7d962e226e0012",
+    "file_exists": true,
+    "sha256_recomputed": "bf07d7d90315fe169d8371f72489fab698d0b00b7f49250bcc7d962e226e0012",
+    "sha256_match": true
+   },
+   {
+    "page": 17,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19750012398/p0017.png",
+    "dpi": 150,
+    "sha256_in_bundle": "ec5feae4ccfe4467f5bdba67b7721440ae84f1aef7805558382c0363da871440",
+    "file_exists": true,
+    "sha256_recomputed": "ec5feae4ccfe4467f5bdba67b7721440ae84f1aef7805558382c0363da871440",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_68f068d94c2e83a39ffa5cfb",
+    "run_record_found": true,
+    "page_range": [
+     16,
+     16
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p16-16-d2441ce549a315048781ba374e74ea3ba0fe6b38b7ccb4f7c9043cf14ab48a05.json",
+    "raw_sha256_recorded": "622d0ecfa66fc602e669ff4eb91a68bad9ebed23e761ca23f75611d55c3192d7",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p16-16-d2441ce549a315048781ba374e74ea3ba0fe6b38b7ccb4f7c9043cf14ab48a05.md",
+    "markdown_sha256_recorded": "4d5fc9649c28e14c47b013b8ae3363380a89d22de9091c65d7ef1013c525e490",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "622d0ecfa66fc602e669ff4eb91a68bad9ebed23e761ca23f75611d55c3192d7",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "4d5fc9649c28e14c47b013b8ae3363380a89d22de9091c65d7ef1013c525e490",
+    "markdown_sha256_match": true
+   },
+   {
+    "run_id": "ENR_926da837eb388425b990cf6e",
+    "run_record_found": true,
+    "page_range": [
+     17,
+     17
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.json",
+    "raw_sha256_recorded": "206eb06c02d44d786a57ab410a218ff51c415f7de6e5060c093463519869a989",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.md",
+    "markdown_sha256_recorded": "2730e41a3df3031ba905dbe849b8a667a0fb473c5291d66a5e78a01fd9d2766f",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "206eb06c02d44d786a57ab410a218ff51c415f7de6e5060c093463519869a989",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "2730e41a3df3031ba905dbe849b8a667a0fb473c5291d66a5e78a01fd9d2766f",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.json",
+    "sha256_in_bundle": "206eb06c02d44d786a57ab410a218ff51c415f7de6e5060c093463519869a989",
+    "file_exists": true,
+    "sha256_recomputed": "206eb06c02d44d786a57ab410a218ff51c415f7de6e5060c093463519869a989",
+    "sha256_match": true
+   },
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p16-16-d2441ce549a315048781ba374e74ea3ba0fe6b38b7ccb4f7c9043cf14ab48a05.json",
+    "sha256_in_bundle": null,
+    "sha256_in_run_record": "622d0ecfa66fc602e669ff4eb91a68bad9ebed23e761ca23f75611d55c3192d7",
+    "file_exists": true,
+    "sha256_recomputed": "622d0ecfa66fc602e669ff4eb91a68bad9ebed23e761ca23f75611d55c3192d7",
+    "sha256_match": true,
+    "listed_via": "docling run record (no candidate required)"
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "table": 1
+  },
+  "candidates_total": 1,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_6d37bdc7e0affa5910032eea"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_6d37bdc7e0affa5910032eea"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_6d37bdc7e0affa5910032eea",
+    "kind": "table",
+    "pages": [
+     17
+    ],
+    "bbox": [
+     {
+      "l": 167.30859375,
+      "t": 509.40686798095703,
+      "r": 687.2910766601562,
+      "b": 91.75433349609375,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/tables/0",
+    "caption_text_as_given_in_bundle": [],
+    "transcription_as_given": "TABLE 3x9 (see table_grid; full cells in raw item /tables/0)",
+    "transcription_length": 60,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_926da837eb388425b990cf6e",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 17
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [],
+    "raw_item_children_count": 3,
+    "caption_text_resolved_from_raw_artifact": [],
+    "bundle_caption_text_equals_raw_resolved_text": true,
+    "table_cell_grid": {
+     "bundle_table_grid_present": true,
+     "bundle_table_grid_as_given": [
+      [
+       "Engine",
+       "Engine",
+       "Engine",
+       "Engine",
+       "Turbopump Assembly",
+       "Turbopump Assembly",
+       "Turbopump Assembly",
+       "Turbopump Assembly",
+       "Turbopump Assembly"
+      ],
+      [
+       "Designation",
+       "Application",
+       "Thrust, lbf",
+       "Chamber pressure, psia",
+       "Arrangement",
+       "Efficiency, percent",
+       "Weight, Ibm",
+       "Specific horsepower, hp/lbm",
+       "Start system"
+      ],
+      [
+       "A-7 MB-3 LR87-AJ-3 LR91-A J-3 H-1 MA-5 sustainer MA-5 booster F-1 YLR8 I-BA-11 YLR87-AJ-7 YLR9 I-A J-7 RLIOA-3-3 J-2 SSME (EPL*) high pressure",
+       "Redstone Thor Titan I, I st stage Titan l, 2nd stage Saturn IB Atlas Atlas Saturn IC Agena Gemini-Titan 1st stage Gemini-Titan 2nd stage Centaur Saturn S-II and S-1VB Space Shuttle",
+       "78 000 170 000 150 000 80 000 205 000 57 000 330 0002 1 522 000 16 000 215 000 1O0 000 15 000 230 000 512 300",
+       "318 594 585 682 702 706 577 1122 506 784 804 400 787 3237",
+       "Single shaft, turbine in middle Geared turbine Geared turbine and pumps Geared O2 pump Geared turbine Geared turbine Geared turbine Single shaft, turbine on end Geared turbine and pumps Geared turbine and pumps Geared N204 pump Geared 02 pump Dual turbopump, series turbines Dual turbopump, parallel turbines",
+       "26.4 46.0 45.8 34.0 47.0 35.0 48.0 44.6 20.0 38.1 42.0 37.4 44.9 56.5 58.5",
+       "332 562 720 204 520 229 875 3150 60.5 484 256 76.1 305 369 555 701",
+       "2.22 5.40 5.11 7.25 7.98 7.27 3.59 16.6 5.81 10.70 8.30 9.03 7.73 21.60 50D 108.9",
+       "Liquid monopropellant start tank Solid propellant start cartridge Liquid propellant start tanks Liquid propellant start tanks Solid propellant start cartridge Solid propellant start cartridge Solid propellant start cartridge Tank head Solid propellant start cartridge Solid propellant start cartridge Solid propellant start cartridge Tank head Pressurized-gas start tank Tank head"
+      ]
+     ],
+     "rows": 3,
+     "row_lengths": [
+      9,
+      9,
+      9
+     ],
+     "empty_string_cell_positions_row_col": [],
+     "empty_string_cell_count": 0,
+     "bundle_transcription_marker_dimensions": [
+      3,
+      9
+     ],
+     "bundle_grid_dimensions_equal_marker_dimensions": true,
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_6d37bdc7e0affa5910032eea, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_record_json_pointer": "/tables/0",
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "stored_num_rows": 3,
+     "stored_num_cols": 9,
+     "stored_orientation": "rot_0",
+     "stored_table_cells_count": 20,
+     "bundle_table_grid_equals_stored_content_grid_texts": true,
+     "cells_with_row_span_or_col_span_not_1": [
+      {
+       "start_row": 0,
+       "start_col": 0,
+       "row_span": 1,
+       "col_span": 4,
+       "text": "Engine"
+      },
+      {
+       "start_row": 0,
+       "start_col": 4,
+       "row_span": 1,
+       "col_span": 5,
+       "text": "Turbopump Assembly"
+      }
+     ],
+     "cell_positions_row_col_with_flag_true": {
+      "column_header": [
+       [
+        1,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        1,
+        3
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        1,
+        4
+       ],
+       [
+        0,
+        4
+       ],
+       [
+        1,
+        7
+       ],
+       [
+        1,
+        6
+       ],
+       [
+        1,
+        8
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "stored_grid_texts_equal_matrix_from_table_cells_start_indices": false,
+     "grid_positions_without_a_table_cells_entry_row_col": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       2
+      ],
+      [
+       0,
+       3
+      ],
+      [
+       0,
+       5
+      ],
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       7
+      ],
+      [
+       0,
+       8
+      ]
+     ],
+     "grid_positions_without_a_table_cells_entry_count": 7,
+     "grid_texts_found_at_positions_without_a_table_cells_entry": [
+      "Engine",
+      "Turbopump Assembly"
+     ],
+     "grid_vs_table_cells_text_mismatches_at_positions_with_a_table_cells_entry": [],
+     "positions_without_table_cells_entry_equal_empty_string_positions_of_bundle_grid": false,
+     "per_cell_bboxes_and_flags_note": "not copied here; per-cell bbox/flags are in the stored enrichment record and the raw Docling table (data.table_cells)",
+     "raw_table_self_ref": "#/tables/0",
+     "bundle_table_grid_equals_raw_table_data_grid_texts": true,
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_captions_refs": [],
+     "raw_table_children_refs": [
+      "#/texts/3",
+      "#/texts/4",
+      "#/texts/5"
+     ],
+     "raw_table_footnotes_count": 3,
+     "raw_table_references_count": 0,
+     "table_shape_observations": {
+      "rows_x_cols": [
+       3,
+       9
+      ],
+      "row_lengths_uniform": true,
+      "header_rows_by_column_header_flag": [
+       0,
+       1
+      ],
+      "body_row_count": 1,
+      "cells_with_row_or_col_span_not_1": [
+       {
+        "start_row": 0,
+        "start_col": 0,
+        "row_span": 1,
+        "col_span": 4
+       },
+       {
+        "start_row": 0,
+        "start_col": 4,
+        "row_span": 1,
+        "col_span": 5
+       }
+      ],
+      "per_row_nonempty_cell_counts": [
+       9,
+       9,
+       9
+      ],
+      "mixed_digit_letter_tokens_inside_numeric_dominant_cells_lexical_only": [
+       {
+        "row": 2,
+        "col": 2,
+        "tokens_mixing_digits_and_letters": [
+         "1O0"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 7,
+        "tokens_mixing_digits_and_letters": [
+         "50D"
+        ]
+       }
+      ],
+      "cells_with_8_or_more_whitespace_tokens": [
+       {
+        "row": 2,
+        "col": 0,
+        "whitespace_tokens": 23,
+        "numeric_tokens": 0,
+        "characters": 142
+       },
+       {
+        "row": 2,
+        "col": 1,
+        "whitespace_tokens": 31,
+        "numeric_tokens": 0,
+        "characters": 180
+       },
+       {
+        "row": 2,
+        "col": 2,
+        "whitespace_tokens": 29,
+        "numeric_tokens": 28,
+        "characters": 109
+       },
+       {
+        "row": 2,
+        "col": 3,
+        "whitespace_tokens": 14,
+        "numeric_tokens": 14,
+        "characters": 57
+       },
+       {
+        "row": 2,
+        "col": 4,
+        "whitespace_tokens": 47,
+        "numeric_tokens": 1,
+        "characters": 308
+       },
+       {
+        "row": 2,
+        "col": 5,
+        "whitespace_tokens": 15,
+        "numeric_tokens": 15,
+        "characters": 74
+       },
+       {
+        "row": 2,
+        "col": 6,
+        "whitespace_tokens": 16,
+        "numeric_tokens": 16,
+        "characters": 66
+       },
+       {
+        "row": 2,
+        "col": 7,
+        "whitespace_tokens": 16,
+        "numeric_tokens": 15,
+        "characters": 81
+       },
+       {
+        "row": 2,
+        "col": 8,
+        "whitespace_tokens": 49,
+        "numeric_tokens": 0,
+        "characters": 380
+       }
+      ],
+      "cells_with_2_or_more_whole_number_tokens": [
+       {
+        "row": 2,
+        "col": 2,
+        "numeric_token_count": 28,
+        "first_numeric_tokens": [
+         "78",
+         "000",
+         "170",
+         "000",
+         "150",
+         "000",
+         "80",
+         "000",
+         "205",
+         "000"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 3,
+        "numeric_token_count": 14,
+        "first_numeric_tokens": [
+         "318",
+         "594",
+         "585",
+         "682",
+         "702",
+         "706",
+         "577",
+         "1122",
+         "506",
+         "784"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 5,
+        "numeric_token_count": 15,
+        "first_numeric_tokens": [
+         "26.4",
+         "46.0",
+         "45.8",
+         "34.0",
+         "47.0",
+         "35.0",
+         "48.0",
+         "44.6",
+         "20.0",
+         "38.1"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 6,
+        "numeric_token_count": 16,
+        "first_numeric_tokens": [
+         "332",
+         "562",
+         "720",
+         "204",
+         "520",
+         "229",
+         "875",
+         "3150",
+         "60.5",
+         "484"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 7,
+        "numeric_token_count": 15,
+        "first_numeric_tokens": [
+         "2.22",
+         "5.40",
+         "5.11",
+         "7.25",
+         "7.98",
+         "7.27",
+         "3.59",
+         "16.6",
+         "5.81",
+         "10.70"
+        ]
+       }
+      ],
+      "cells_made_only_of_2_or_more_numbers": [
+       {
+        "row": 2,
+        "col": 3,
+        "tokens": [
+         "318",
+         "594",
+         "585",
+         "682",
+         "702",
+         "706",
+         "577",
+         "1122",
+         "506",
+         "784",
+         "804",
+         "400",
+         "787",
+         "3237"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 5,
+        "tokens": [
+         "26.4",
+         "46.0",
+         "45.8",
+         "34.0",
+         "47.0",
+         "35.0",
+         "48.0",
+         "44.6",
+         "20.0",
+         "38.1",
+         "42.0",
+         "37.4",
+         "44.9",
+         "56.5",
+         "58.5"
+        ]
+       },
+       {
+        "row": 2,
+        "col": 6,
+        "tokens": [
+         "332",
+         "562",
+         "720",
+         "204",
+         "520",
+         "229",
+         "875",
+         "3150",
+         "60.5",
+         "484",
+         "256",
+         "76.1",
+         "305",
+         "369",
+         "555",
+         "701"
+        ]
+       }
+      ],
+      "cells_containing_newline_or_double_space": [],
+      "adjacent_cells_where_left_ends_with_point_or_comma_or_right_starts_with_point_or_comma_digit": [],
+      "horizontally_adjacent_cells_with_identical_nonempty_text": [
+       {
+        "row": 0,
+        "cols": [
+         0,
+         1
+        ],
+        "text": "Engine",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         1,
+         2
+        ],
+        "text": "Engine",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         2,
+         3
+        ],
+        "text": "Engine",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         4,
+         5
+        ],
+        "text": "Turbopump Assembly",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         5,
+         6
+        ],
+        "text": "Turbopump Assembly",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         6,
+         7
+        ],
+        "text": "Turbopump Assembly",
+        "inside_a_recorded_span": true
+       },
+       {
+        "row": 0,
+        "cols": [
+         7,
+         8
+        ],
+        "text": "Turbopump Assembly",
+        "inside_a_recorded_span": true
+       }
+      ],
+      "vertical_runs_of_identical_nonempty_text_in_a_column": [],
+      "header_row_texts_occurring_more_than_once": {
+       "0": {
+        "Engine": [
+         0,
+         1,
+         2,
+         3
+        ],
+        "Turbopump Assembly": [
+         4,
+         5,
+         6,
+         7,
+         8
+        ]
+       },
+       "1": {}
+      },
+      "markdown_pointer_after_caption_S2_heuristic": null,
+      "observed_patterns_lexical": [
+       "grid 3 rows x 9 cols; header rows by column_header flag: [0, 1]; body rows: 1",
+       "2 cell(s) with row_span/col_span != 1",
+       "cells holding >= 8 whitespace-separated tokens: [r2,c0] 23 tokens/0 numeric; [r2,c1] 31 tokens/0 numeric; [r2,c2] 29 tokens/28 numeric; [r2,c3] 14 tokens/14 numeric; [r2,c4] 47 tokens/1 numeric; [r2,c5] 15 tokens/15 numeric; [r2,c6] 16 tokens/16 numeric; [r2,c7] 16 tokens/15 numeric; [r2,c8] 49 tokens/0 numeric",
+       "cells holding >= 2 whole-number tokens: 5 (positions [[2, 2], [2, 3], [2, 5], [2, 6], [2, 7]])",
+       "cells made only of >= 2 numbers: [[2, 3], [2, 5], [2, 6]]",
+       "7 horizontally adjacent pair(s) with identical non-empty text (7 inside a recorded span)",
+       "mixed digit+letter tokens inside numeric-dominant cells: [{\"row\": 2, \"col\": 2, \"tokens_mixing_digits_and_letters\": [\"1O0\"]}, {\"row\": 2, \"col\": 7, \"tokens_mixing_digits_and_letters\": [\"50D\"]}]",
+       "header row repeats texts: {\"0\": {\"Engine\": [0, 1, 2, 3], \"Turbopump Assembly\": [4, 5, 6, 7, 8]}, \"1\": {}}"
+      ]
+     }
+    }
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [],
+   "candidates_without_trailing_token": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p17-17-8099048c2ca1bb9b3b7db8cc2ac83afe828c9e6fa85c7d103793e5b493bea8fa.json",
+    "collection_counts": {
+     "texts": 7,
+     "tables": 1,
+     "pictures": 0,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "text": 2,
+     "caption": 1,
+     "footnote": 3,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 1,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": [
+     {
+      "pointer": "/texts/1",
+      "label": "caption",
+      "why_listed": "caption item not referenced by any picture/table captions",
+      "page_no": 17,
+      "bbox": {
+       "l": 308.66666666666663,
+       "t": 521.0,
+       "r": 545.6666666666667,
+       "b": 512.3333333333334,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "characters": 62,
+      "text_as_given": "Table I. — Chief Features of Operational Turbopump Assemblies!",
+      "truncated_at_4000": false
+     }
+    ]
+   },
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19750012398/9a66bf918211-p16-16-d2441ce549a315048781ba374e74ea3ba0fe6b38b7ccb4f7c9043cf14ab48a05.json",
+    "collection_counts": {
+     "texts": 9,
+     "tables": 0,
+     "pictures": 0,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "section_header": 1,
+     "text": 6,
+     "footnote": 1,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 0,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_68f068d94c2e83a39ffa5cfb": {
+    "markdown_lines": 15,
+    "caption_like_lines": []
+   },
+   "ENR_926da837eb388425b990cf6e": {
+    "markdown_lines": 9,
+    "caption_like_lines": []
+   }
+  },
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 0,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_PUMP_ELECTRIC_DRIVE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_PUMP_ELECTRIC_DRIVE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 8
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 7
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 11
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 3
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    16,
+    17
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [
+    "ENR_68f068d94c2e83a39ffa5cfb"
+   ],
+   "candidates_by_page": {
+    "16": {},
+    "17": {
+     "table": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [
+    16
+   ],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 5,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19750012398#c00016",
+     "page_start": 16,
+     "page_end": 16,
+     "section": "",
+     "text_length": 1509
+    },
+    {
+     "chunk_id": "DOC_NTRS_19750012398#c00017",
+     "page_start": 16,
+     "page_end": 16,
+     "section": "",
+     "text_length": 1441
+    },
+    {
+     "chunk_id": "DOC_NTRS_19750012398#c00018",
+     "page_start": 16,
+     "page_end": 16,
+     "section": "",
+     "text_length": 220
+    },
+    {
+     "chunk_id": "DOC_NTRS_19750012398#c00019",
+     "page_start": 17,
+     "page_end": 17,
+     "section": "",
+     "text_length": 1407
+    },
+    {
+     "chunk_id": "DOC_NTRS_19750012398#c00020",
+     "page_start": 17,
+     "page_end": 17,
+     "section": "",
+     "text_length": 658
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

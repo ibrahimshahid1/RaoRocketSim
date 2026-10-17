@@ -12,7 +12,10 @@ atomic (temp file + rename) and sorted by id so diffs stay reviewable.
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
+import stat
+import tempfile
 from pathlib import Path
 from typing import Iterable
 
@@ -36,6 +39,7 @@ STORE_FILES = {
     "ingestion_state": "ingestion_state.json",
     "artifacts": "artifacts.json",
     "enrichments": "enrichments.json",
+    "standards": "standards.json",
 }
 
 VECTOR_DIR = KNOWLEDGE_ROOT / "vector_index"
@@ -94,27 +98,67 @@ def _unique_records(records: Iterable[dict], key: str) -> list[dict]:
     return unique
 
 
+# Process umask, read once: os.umask can only be queried by setting it.
+_UMASK = os.umask(0)
+os.umask(_UMASK)
+
+
+def _published_mode(path: Path) -> int:
+    """Keep an existing file's permission bits; a new file gets the umask default."""
+    try:
+        return stat.S_IMODE(path.stat().st_mode)
+    except FileNotFoundError:
+        return 0o666 & ~_UMASK
+
+
+def _atomic_write_json(path: Path, payload: dict) -> None:
+    """Publish a complete file; a private temp name cannot collide with another writer.
+
+    The private temporary file is created 0600; its mode is set to the published
+    file's (or the umask default) before the replace, so atomic publication never
+    narrows who can read a store.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = _published_mode(path)
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent,
+                                     prefix=f".{path.name}.", suffix=".tmp", delete=False) as fh:
+        temporary = Path(fh.name)
+        try:
+            json.dump(payload, fh, indent=1, ensure_ascii=False, sort_keys=False)
+            fh.flush()
+            os.fchmod(fh.fileno(), mode)
+            os.fsync(fh.fileno())
+        except BaseException:
+            fh.close()
+            temporary.unlink(missing_ok=True)
+            raise
+    try:
+        os.replace(temporary, path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
 def save(name: str, records: Iterable[dict], meta: dict | None = None, key: str = "id") -> Path:
     # Validate before creating/replacing files; never silently pick a facet.
     records = sorted(_unique_records(records, key), key=lambda r: str(r.get(key, "")))
     path = store_path(name)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"meta": meta or {}, "records": records}
-    tmp = path.with_suffix(".json.tmp")
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, indent=1, ensure_ascii=False, sort_keys=False)
-    tmp.replace(path)
+    from . import locks  # local import: locks resolves its directory through this module
+    with locks.writer(purpose=f"save {name}"):
+        _atomic_write_json(path, {"meta": meta or {}, "records": records})
     return path
 
 
 def upsert(name: str, new_records: Iterable[dict], key: str = "id", meta: dict | None = None) -> int:
     """Insert-or-replace by id.  Returns number of records written."""
-    existing = {r[key]: r for r in _unique_records(load(name), key) if key in r}
-    n = 0
-    for rec in _unique_records(new_records, key):
-        existing[rec[key]] = rec
-        n += 1
-    save(name, existing.values(), meta=meta or load_meta(name), key=key)
+    from . import locks
+    with locks.writer(purpose=f"upsert {name}"):  # read-modify-write must not interleave
+        existing = {r[key]: r for r in _unique_records(load(name), key) if key in r}
+        n = 0
+        for rec in _unique_records(new_records, key):
+            existing[rec[key]] = rec
+            n += 1
+        save(name, existing.values(), meta=meta or load_meta(name), key=key)
     return n
 
 

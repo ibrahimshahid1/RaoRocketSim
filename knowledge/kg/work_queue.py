@@ -37,10 +37,15 @@ def build() -> dict:
             rec['local_source'] = m.get('local_source')
             blocked.append(rec)
     tasks.sort(key=lambda r: (r.get('doc_id') or '', r['target']))
-    objects = [r for name in ('equations', 'claims') for r in store.load(name)]
-    verify = [{'target': r['id'], 'doc_id': r.get('document_id'), 'page': r.get('page'),
+    # Every source-anchored object awaits independent verification: equations
+    # and claims, and also literature constants/assumptions (entities) and
+    # source-stated validity statements.  Registry validity prose
+    # (PROJECT_DERIVES) is not a source transcription and is not queued.
+    objects = [(name, r) for name in ('equations', 'claims', 'entities', 'validity') for r in store.load(name)
+               if name in ('equations', 'claims') or r.get('provenance_kind') == 'SOURCE_STATES']
+    verify = [{'target': r['id'], 'store': name, 'doc_id': r.get('document_id'), 'page': r.get('page'),
                'model_ids': r.get('model_ids', []), 'state': 'PENDING_VERIFICATION'}
-              for r in objects if r.get('verification') not in ('CONFIRMED', 'REFUTED')
+              for name, r in objects if r.get('verification') not in ('CONFIRMED', 'REFUTED')
               and r.get('active', True) and r.get('source_state', 'CURRENT') == 'CURRENT']
     verify.sort(key=lambda r: (not bool(r['model_ids']), r.get('doc_id') or '', r.get('page') or 0, r['target']))
     extracted_docs = {r.get('document_id') for name in ('equations', 'claims', 'entities', 'validity')
@@ -54,6 +59,7 @@ def build() -> dict:
                         'effective_model_support': dict(Counter(model_source_support(m, docs.get(m.get('source_document_id')))[0] for m in models)),
                         'pending_source_reviews': len(tasks), 'needs_source_routing': len(blocked),
                         'pending_verifications': len(verify),
+                        'pending_verifications_by_store': dict(Counter(r['store'] for r in verify)),
                         'documents_with_extracted_objects': len(extracted_docs),
                         'canonical_documents_without_extracted_objects': sum(not d.get('alternate_copy_of') and d['id'] not in extracted_docs for d in docs.values())},
             'model_reviews': tasks, 'source_routing': blocked, 'verification': verify, 'formula_repairs': repairs,

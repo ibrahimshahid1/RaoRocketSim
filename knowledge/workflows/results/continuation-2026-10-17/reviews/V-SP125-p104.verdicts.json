@@ -1,0 +1,40 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_9F1C0032",
+  "refuted": true,
+  "confidence": "high",
+  "reason": "Original PDF p.104 (printed 95), inspected full-page render: the specified 20-degree half angle, contraction ratio 1.6 and upstream 1.5 Rt arc are printed. The additional assertions about no chamber-to-cone shoulder fillet and a straight cone are extractor interpretation, not source statements established by this page. Refute the combined SOURCE_STATES record; retain its actual geometry in a new narrower claim. This is not a finding that the complete source excludes a shoulder fillet.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "8d8efacd64cdae9e9d3ec1acc8515abc41daa5aaf4ca38e919fe943fe0d058e5",
+  "reviewer": {
+   "role": "F",
+   "model": "GPT-6 (Codex; independent of historical September extraction)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 104,
+   "method": "Original PDF full-page pnggray 140 dpi visual comparison; source text checked separately for quote grounding.",
+   "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+  }
+ },
+ {
+  "object_id": "EQ_NTRS_19710019929_6BD96C7B",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original PDF p.104 (printed 95), inspected full-page render: LO2/RP-1 L*=45 in and Vc=487 x 45=21915 cu in are printed, with throat area At=487 in^2 from Eq.1-33. Stored form, units, variables and stated assumption match this worked calculation, not a universal chamber dimension.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "18a4ca663e0d3cda1a28e4902b8cb2cc9c612d0ebc34505ae695af6d2d1983e4",
+  "reviewer": {
+   "role": "F",
+   "model": "GPT-6 (Codex; independent of historical September extraction)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 104,
+   "method": "Original PDF full-page pnggray 140 dpi visual comparison; source text checked separately for quote grounding.",
+   "render": "knowledge/.work/continuation-2026-10-17/sp125-p104.png"
+  }
+ }
+]

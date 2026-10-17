@@ -1,0 +1,265 @@
+{
+ "packet": "P4-NASUTI-p006",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066",
+ "source_pdf": "propulsion_texts/nasuti2021.pdf",
+ "source_sha256": "109eb0aa507c710df85266a1292fde4c8a04feb8444973384ba0a4f770393718",
+ "pages": [
+  6,
+  6
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_SUPFLU_2020_105066/p0006.png",
+   "sha256": "fbae696dd421be96ed323aa9aae373468d81f938d9172d13c7d06fa899a8318e",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_42c91ae7a8df6e19087dfec6"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_3593074aaa900a4bacde1fb8",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 322.63046457994704,
+     "t": 738.9213428660664,
+     "r": 541.4065620903681,
+     "b": 527.2205228022424,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a9fa47e1363e6f3847e48f62",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 6. Schematic of shear stress profile for different fluids and flow regimes."
+   ],
+   "bbox": [
+    {
+     "l": 53.61754852858166,
+     "t": 739.1699175813036,
+     "r": 271.5915804132039,
+     "b": 542.5041441448991,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0627635216c817399328802c",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.6204,
+     "t": 337.7673584,
+     "r": 558.1770071,
+     "b": 310.30842682233504,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\left ( \\frac { \\eta } { R } \\right ) _ { \\tau = 0 } = \\left [ 1 + \\frac { 2 q _ { w } G } { \\tau _ { w } } \\left ( \\frac { \\beta } { \\rho c _ { p } } \\right ) _ { b } \\right ] ^ { 1 }",
+   "original_text": "( DC1 R )FS=0 = [1 + 2qwG FSw ( ˇ SUBcp ) b ]-1 (7)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_339f7df2116718c74aa5fe39",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.6204,
+     "t": 425.110904,
+     "r": 558.1770071,
+     "b": 399.73212682233503,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\beta = - \\frac { 1 } { \\rho } \\left ( \\frac { \\partial \\rho } { \\partial T } \\right ) _ { p }",
+   "original_text": "ˇ = - 1 SUB ( ∂SUB ∂T ) p (6)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_5239ca33d81813398364c24b",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/13",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.8159,
+     "t": 289.931704,
+     "r": 558.1770071,
+     "b": 264.55292682233494,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { q _ { w } G } { \\tau _ { w } } \\left ( \\frac { \\beta } { \\rho c _ { p } } \\right ) _ { b }",
+   "original_text": "qwG FSw ( ˇ SUBcp ) b (8)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_991ae4078cc155eae234a7fc",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/15",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 307.8159,
+     "t": 193.25120400000003,
+     "r": 558.1770071,
+     "b": 167.87232682233503,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { q _ { w } } { G f _ { w } } \\left ( \\frac { \\beta } { c _ { p } } \\right ) _ { b } > K",
+   "original_text": "qw Gf w ( ˇ cp ) b > K (9)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c773b59738bf11aee8f75f69",
+   "kind": "formula",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.6204,
+     "t": 470.86650399999996,
+     "r": 558.1770071,
+     "b": 445.487726822335,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\tau = \\tau _ { w } \\left ( 1 - \\frac { \\eta } { R } \\right ) - 2 q _ { w } G \\left ( \\frac { \\beta } { \\rho c _ { p } } \\right ) _ { b } \\frac { \\eta } { R }",
+   "original_text": "FS = FSw (1 - DC1 R ) - 2qwG( ˇ SUBcp ) b DC1 R (5)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_42c91ae7a8df6e19087dfec6",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_SUPFLU_2020_105066/109eb0aa507c-p6-6-e283179ee43f6c51f3059b2a443024bb90b9bfe1e317862daf537ea406662f56.json",
+   "raw_sha256": "a66cfdeaf204e5b4ba942a92775640696fe733a3df821712dd5f9e641a8c178d",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066#c00020",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "~~The Journal of Supercritical Fluids~~ > Pseudo-boiling and heat transfer deterioration while heating supercritical liquid rocket engine propellants",
+   "text": "**Fig.** **6.** Schematic of shear stress profile for different fluids and flow regimes.\n\n**Fig.** **7.** Schematic of velocity profile for different fluids and flow regimes.\n\nwhere �w is the wall shear stress, G is the mass flux, ub is the\nbulk velocity, and x is the streamwise direction. Eq. (4) provides\n\na link between the shear stress in the vicinity of the wall and\n\nbulk properties. It shows that, for a given mass flux G, in case of\nfluid acceleration (i.e. positive dub/dx) the shear stress - falls more"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066#c00021",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "~~The Journal of Supercritical Fluids~~ > Pseudo-boiling and heat transfer deterioration while heating supercritical liquid rocket engine propellants",
+   "text": "rapidly with distance from the wall than it would in the case of constant bulk velocity. Eq. (4) highlights that shear stress reduction in\nthe vicinity of the wall cannot occur as long as the flow is in the liquid phase (i.e. it can be considered incompressible) because in that\ncase ub is constant (i.e. it comes from the mass conservation principle for a constant cross section tube), whatever is the incoming\nheat transfer rate.\nThe typical shear stress behavior in a circular cross-section channel with the numerical model developed in [19] is shown in Fig. 6\nin non-dimensional form for different fluids and flow regimes. In\ncase of an incompressible fluid with constant properties, the shear\nstress has a linear trend, from - = �w at wall to - = 0 at the tube\naxis. Different is the case of a compressible fluid. In fact, bulk velocity changes according to the bulk density reduction, which is the\nresult of the pseudo-boiling. The higher the heat transfer rate, the\nhigher will be the pseudo-gas production rate at the wall, and as a\nconsequence the bulk density reduction and bulk velocity increase.\nTherefore, according to Eq. (4), a high heat transfer rate, once the\npseudo-boiling phenomenon is taking place, implies a shear stress\nreduction, up to negative values, and thus a major loss of turbulent energy. It is interesting to compare the results obtained at\ndifferent heat transfer rates. If one considers moderate heat transfer a shear stress reduction occurs because dub/dx - 0, but it is\nnot sufficient to cause negative values. The behavior of the shear\nstress has an evident influence on the velocity profile as shown\nin Eq. (3); for instance, when the shear stress is zero the velocity\npresents a peak value. The velocity profiles corresponding to the\nshear stress distributions shown in Fig. 6 are presented in Fig. 7 in\nnon-dimensionalized form with respect to the velocity at the symmetry axis (� = R). According to this point of view, when the heat\ntransfer rate to a supercritical fluid is large enough, the flow velocity\nincreases near the wall more than in the high-density core region:\nthe velocity profile is modified in such a way that large region of\nlow shear stress are present and thus heat transfer deterioration\noccurs."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066#c00022",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "~~The Journal of Supercritical Fluids~~ > Pseudo-boiling and heat transfer deterioration while heating supercritical liquid rocket engine propellants",
+   "text": "Once the occurrence of velocity peak has been discussed on\nthe basis of qualitative arguments and numerical solutions, the\n\nsubsequent step is to identify under which heat flux level this\n\ncritical pressure, ˇ/cp presents a maximum which nearly occurs at\n\nthe pseudo-critical temperature. Increasing the pressure level, the\n\nphenomenon arises. To this goal Eq. (4) can be further developed\nincluding the integral fluid energy equation:\n\nb\n\n1  - <sup><u>�</u></sup>\n\nR\n\n1  - <sup><u>�</u></sup>\n\n - 2qwG\n\n<u>ˇ</u>\n�cp\n\n- = �w\n\n<u>�</u>\n(5)\nR\n\nqw is the entering heat flux,\n\nwhere\n\np\n\nˇ = - <sup><u>1</u></sup>\n\n<u>∂�</u>\n∂T\n\n(6)\n\nis the thermal expansion coefficient, - is the density, and the subscript b in the parenthesis means that all the variables inside are\nevaluated at the bulk state. Details of the derivation of the above Eq.\n(5) are given in [18]. The abscissa at which the shear stress reaches\nthe zero value is:\n\n- <u>�</u> - - - <u>ˇ</u> - �−1\n\n= 1 + <sup><u>2qwG</u></sup> (7)\n\nR �=0 �w �cp\n\nb\n\n�−1\n\n(7)\n\n<u>ˇ</u>\n�cp\n\n=\n�=0\n\n1 + <sup><u>2qwG</u></sup>\n\n�w\n\nshows that the larger the non-dimensional term\n\nThis\n\n<u>qwG</u>\n\n�w\n\n<u>ˇ</u>\n�cp\n\nb\n\n(8)\n\nthe smaller the abscissa (�/R)�=0 and thus the stronger the turbu\nlent energy depletion. In other words, there is a threshold value\nfor the above non-dimensional term that, if exceeded, implies heat\ntransfer deterioration. Introducing the definition of the friction factor, fw = 4�w/ <sup><u>1</u></sup> 2 <sup>�bu2</sup> b <sup>,</sup> <sup>it</sup> is possible to identify the onset of heat"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_SUPFLU_2020_105066#c00023",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "~~The Journal of Supercritical Fluids~~ > Pseudo-boiling and heat transfer deterioration while heating supercritical liquid rocket engine propellants",
+   "text": "the\n\ntor, fw = 4�w/ <sup><u>1</u></sup> 2 <sup>�bu2</sup> b <sup>,</sup> <sup>it</sup> is possible to identify the onset of heat\n\ntransfer deterioration as:\n\n - K (9)\n\nb\n\n<u>qw</u>\nGf w\n\n<u>ˇ</u>\ncp\n\nwhere K is the threshold value. This result is essentially simi\nlar to that proposed in [20] and equal to that proposed in [21]\nwhere the threshold value is also estimated to be K = 0.187. Eq.\n(9) shows that heat transfer deterioration occurs for large heat flux\nqw and low mass flux G. Moreover, for a given flow in a tube, heat\ntransfer deterioration occurs in the tube sections where the term\n(ˇ/cp)b is sufficiently large. The behavior of the thermodynamic\nvariable ˇ/cp for a generic supercritical fluid is presented in Fig. 8\nin non-dimensional form. This figure shows that, for a given supercritical pressure, ˇ/cp presents a maximum which nearly occurs at\n\nwhere"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 5
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

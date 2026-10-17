@@ -1,0 +1,121 @@
+{
+ "packet": "P1-SP8120-p028-029",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19770009165",
+ "source_pdf": "propulsion_texts/19770009165.pdf",
+ "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+ "pages": [
+  28,
+  29
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 28,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19770009165/p0028.png",
+   "sha256": "623b0b977f7892dd7af2d0c9ff6d620adee40e479f2d94574623a735b099e10c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 29,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19770009165/p0029.png",
+   "sha256": "5b63f8d3d0fba6fd5a22c06bc8a2caad55d3c7ccaf5dc7bd423ba3b36b07007c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_1c6de5ba04aaed35092525fd",
+  "ENR_62317fd63901aaf2ff049afc"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_c1c3e0dda4ee849eda22bcae",
+   "kind": "figure",
+   "pages": [
+    28
+   ],
+   "bbox": [
+    {
+     "l": 179.11476135253906,
+     "t": 720.394775390625,
+     "r": 466.36102294921875,
+     "b": 537.2326354980469,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/0\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_1c6de5ba04aaed35092525fd",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p28-28-ffa5e7258b821e135f370e671d4f8b13b6d51b4b67407686ac29551eb8bfc8e0.json",
+   "raw_sha256": "07976642bfe86be70566c2aee82a59e7fd799256a5a399e5b4d764e87322497e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_fc7b5b03e8b56125b6b763c1",
+   "kind": "figure",
+   "pages": [
+    29
+   ],
+   "bbox": [
+    {
+     "l": 166.4208526611328,
+     "t": 535.022216796875,
+     "r": 413.0268249511719,
+     "b": 206.66650390625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_62317fd63901aaf2ff049afc",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19770009165/c6aa504371b0-p29-29-41a40fde5250bf4d21d16a1f1200778e7978e6979495e8e43ef4de730517bf31.json",
+   "raw_sha256": "35388c7d366e8e2d0f1e96d3f99588e56f8deee81490a5358da43f365c88eb3a",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [
+  "MODEL_NOZZLE_RAO_TOP_BEZIER"
+ ],
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19770009165#c00032",
+   "page_start": 28,
+   "page_end": 28,
+   "section": "t",
+   "text": "w\n\n**u**\n\n**o** I I I\n**1o** **I oo** **1ooo**\n\n**Chamber** **pressure** **x** throat **diameter,** **lbf/In.**\n\n**Figure** **4.** **-** **Computed** **performance** **loss due** **to** **viscous-drag** **effects** **in**\n\n**bell** **nozzles** **(storable** **propellants).**\n\nPropellant combinations with very high combustion temperatures (e.g., fluorine/hydrogen)\nin some cases exhibit performance losses of 5 to 10 percent unless the wall just downstream\nof the throat is designed **to** provide an expansion rate slow enough to maintain composition\nnear equilibrium up to an area ratio of 2 to 5. A technique for direct optimization of the\nnozzle contour for a reacting gas (nonequilibrium process) has been developed (ref. 17), but\nit is **very** _complex_ and _not_ generally used. **_The_** method used for high-energy propellants is to\nselect a downstream wall geometry that provides a much slower expansion than the\nminimum-radius configuration; _then,_ at some specific point, terminate the\ncontrolled-expansion walt, and design the remainder of the nozzle from the equilibrium\nmethod. The performances of several configurations are computed, and the results are used\nto select new configurations for further study or to settle on one of the geometries\nexamined.\n\nThe configuration resulting from this approach has a downstream throat curvature longer\nthan that required for a gas expanding at equilibrium conditions. The kinetic performance is\nhigher, but the possible aerodynamic performance is reduced because less of the given length\nof nozzle from throat to exit is used for an optimum aerodynamic contour. If the designer\nselects a number of controlled-expansion geometries and termination points, then repeats\nthe process, the final design can be based on comparative kinetic-plus-aerodynamic\nperformance. Actually, the flow composition \"freezes\" (remains constant) near the end of"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19770009165#c00033",
+   "page_start": 28,
+   "page_end": 29,
+   "section": "t",
+   "text": "the controlled section; however, a nozzle designed by this method will produce\n\nnear-optimumperformancefor the actual flow conditions.Experimentalprogramshave\nshownthat thesenozzlesdo producehighperformanceunderthe conditions **investigated**\n(ref. 21).\n\n**2.1.2.1.2** **Nonoptimum** **Contour**\n\nThe available **optimization** methods are based **on** assumptions that often only roughly\napproximate the actual conditions. Bell-nozzle contours **obtained** by the\n\nmathematical-optimum **design** method vary **only** slightly with gas properties. For a given\narea ratio and **length,** a single canted parabola will very closely approximate the variety **of**\n**optimum** contours corresponding to the various chamber conditions that may **occur** in\n**rocket** engines. For engineering purposes, near-optimum parabolic contours are suitable for\nmany applications and can be generated without using a computer. Figure 5 **illustrates** the\ncanted-parabola contour and shows **initial** and final wall angles for a range **of** area ratios and\n**lengths.**\n\n```\n         ]\n                           -- -_\n\n```\n\n**(a)** **Canted-parabola** **nozzle** **contour**\n\n**kO**\n\n30\n\n7_J--\"'_ --_ I\n\n```\n- __\" J\n\n```\n\n**0** ' **I** **I** **I** **1** **I** **1.** **1,1**\n4 6 8 10 20 4o **_60_** 80\n**^a/At**\n\n**(b)** Wall **Ingles** **for** **parabolic** **contour** **al** Ii **function**\n**of** **expansion** area ratio **and** **nozzle** **length**"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19770009165#c00034",
+   "page_start": 29,
+   "page_end": 30,
+   "section": "t",
+   "text": "**Figure** **5.** **-** **Canted-parabola** **contour** **as** **an** **approximation** **of** **optimum** **bell** **contour.**\n\n**]5**\n\nMathematical-optimum nozzles cannot be designed for all conditions. The design method\nfails for nozzle lengths less than some minimum value, and this minimum length increases\nwith increasing area ratio. Figure 6 shows the range of local flow angles and Mach numbers\nover which the mathematical-optimum design method of reference 16 will produce an\n\nacceptable design.\n\nMethod falls tn\n\n\"O\n\n**M-**\n\n**20--**\n\n10\n\n**0**\n\n**_region_** **_abOVeg_h;n_** _'\n\n**Des** I **gn** **_reg_** **I on**\n\n**1** I **I** !\n**2** 4 **6** **8**\n\n**Local** Hath number\n\n**Figure** **6.** **-** **Graphic** **display** of **region** **over** **which** **the** **mathematical-optimum** **method**\n\n**for** **contour** **design** **can** **be** **used.**\n\nThe contour of a high-performance nozzle can be obtained by designing an ideal nozzle to a\nhigher area ratio than required, so that when the ideal nozzle is truncated to the desired area\nratio the correct nozzle length is obtained (ref. 14). This type of nozzle is sometimes\nreferred to as an \"optimum\" nozzle; however, it can only approach the performance of the\nmathematical-optimum design. Performance differences between these types of nozzles are\nsmall. Unlike the optimum-design method, the truncated-ideal method can be used to design\na nozzle as short as desired."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

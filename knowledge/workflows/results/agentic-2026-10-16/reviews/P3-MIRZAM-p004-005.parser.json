@@ -1,0 +1,19 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-MIRZAM-p004-005",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_32ff3ade48dffb3f436d12dd",
+   "state": "REJECTED",
+   "reason": "Eq. (1): the typewritten original prints St_g = C_x[(z(Re_x))^alpha Pr^b]; the candidate garbles subscripts (fraktur g^2, x) and the bracket structure. The paper calls the Reynolds-number function 'complicated' and does not define it, so no corrected form is banked.",
+   "evidence": {
+    "source_sha256": "ee23dd29f60098e46553785a2fc043cf9f03229881716315f25d8d8948cbbfd5",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 4
+   }
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P3-KANG-p009-010",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_6f9bf6d77f9cdfe5d561ec0d",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 26 caption matches.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_912fa08dc8d9396de9a347ca",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 27 caption matches.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_80b849dd6fc0e2ccca603df9",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 28 caption 'vs. . Heat flux' reproduces the published caption, which itself lacks the abscissa symbol (TMR on the axis).",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_72050092780da1bc73d54e79",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Fig. 29 caption 'vs. Heat flux.' reproduces the published caption, which lacks the abscissa symbol (OFR on the axis).",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  },
+  {
+   "candidate_id": "CAND_320af7bc59ff5a7193aecf9b",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Table 6 matches cell by cell.",
+   "evidence": {
+    "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+    "method": "original PDF page renders (150 dpi; enlarged crops where needed) read by F; element-by-element comparison",
+    "pdf_page": 9
+   }
+  }
+ ]
+}

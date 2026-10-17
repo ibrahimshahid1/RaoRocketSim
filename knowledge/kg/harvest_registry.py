@@ -145,6 +145,21 @@ def harvest() -> dict:
         changed = [key for key in ("relation", "local_source", "source_document_id", "equation_ref")
                    if key in previous and previous[key] != rec[key]]
         if changed and previous.get("source_support_state"):
+            from .harvest_extraction import model_source_assessments, model_source_reviews
+            # Preserve each old source route before replacing primary registry
+            # metadata; each source needs its own renewed comparison.
+            assessments = model_source_assessments(previous)
+            if assessments:
+                rec["source_assessments"] = assessments
+            source_ids = {a["document_id"] for a in assessments} | {
+                r["reviewed_document_id"] for r in model_source_reviews(previous)}
+            if previous.get("source_document_id"):
+                source_ids.add(previous["source_document_id"])
+            required = dict(previous.get("source_registry_review_required") or {})
+            for did in source_ids:
+                required[did] = sorted(set(required.get(did, [])) | set(changed))
+            if required:
+                rec["source_registry_review_required"] = required
             rec.setdefault("source_support_history", []).append({
                 "state": previous["source_support_state"], "notes": previous.get("source_support_notes"),
                 "source_sha256": previous.get("source_support_sha256"),

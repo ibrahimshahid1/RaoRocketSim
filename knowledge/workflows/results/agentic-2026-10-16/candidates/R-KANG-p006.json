@@ -1,0 +1,371 @@
+{
+ "packet": "R-KANG-p006",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+ "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+ "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+ "pages": [
+  6,
+  6
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 6,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/p0006.png",
+   "sha256": "c91bdda1236708dd0cafa7ea8c8f6e8b8505f7437ee0f5d7c46ef41c070494f0",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_f33f24ba7c81bd983aace57e"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_4fc28e368ab7c97b7087a749",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [
+    "Fig. 15. Comparison of streamlines and velocity contours."
+   ],
+   "bbox": [
+    {
+     "l": 98.81768773005932,
+     "t": 306.4314330760194,
+     "r": 495.24650739365,
+     "b": 66.65536987731912,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/47\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_f33f24ba7c81bd983aace57e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p6-6-7c7ecff5f70dd747f156680a9ba95415fd2da64a699f651c1a0d537b1b5927aa.json",
+   "raw_sha256": "725be4dd389bb8aa9dc9730b86e91f821902acb260eafd687a2e32383d994d91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_bab52fd2ce5d2056527c648c",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 13. Instantaneous mass fraction of O2 of BI at the center plane."
+   ],
+   "bbox": [
+    {
+     "l": 69.35174014140297,
+     "t": 737.1489181616247,
+     "r": 256.6691822108718,
+     "b": 689.4211062728699,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_f33f24ba7c81bd983aace57e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p6-6-7c7ecff5f70dd747f156680a9ba95415fd2da64a699f651c1a0d537b1b5927aa.json",
+   "raw_sha256": "725be4dd389bb8aa9dc9730b86e91f821902acb260eafd687a2e32383d994d91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f6dd6441f33d0e63587be1eb",
+   "kind": "figure",
+   "pages": [
+    6
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Fig. 14. Mean mass fraction of O2 of BI at the center plane."
+   ],
+   "bbox": [
+    {
+     "l": 69.1198825486804,
+     "t": 649.4651810866919,
+     "r": 256.93003438539046,
+     "b": 601.5658220390153,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/20\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_f33f24ba7c81bd983aace57e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p6-6-7c7ecff5f70dd747f156680a9ba95415fd2da64a699f651c1a0d537b1b5927aa.json",
+   "raw_sha256": "725be4dd389bb8aa9dc9730b86e91f821902acb260eafd687a2e32383d994d91",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d6c57aab68178fab94b77980",
+   "kind": "table",
+   "pages": [
+    6
+   ],
+   "table_grid": [
+    [
+     "Pintle No",
+     "A",
+     "AI",
+     "B",
+     "BI"
+    ],
+    [
+     "Chamber pressure (bara)",
+     "57.6",
+     "57.9",
+     "61.3",
+     "60.2"
+    ],
+    [
+     "1st ˙m",
+     "0.106",
+     "0.104",
+     "0.109",
+     "0.111"
+    ],
+    [
+     "2nd ˙m",
+     "0.034",
+     "0.036",
+     "0.030",
+     "0.029"
+    ],
+    [
+     "1st/2nd Ratio",
+     "3.10",
+     "2.85",
+     "3.61",
+     "3.79"
+    ],
+    [
+     "1st Velocity",
+     "28.3",
+     "30.9",
+     "24.6",
+     "26.2"
+    ],
+    [
+     "2nd Velocity",
+     "29.6",
+     "28.2",
+     "27.4",
+     "26.6"
+    ],
+    [
+     "C* (m/s)",
+     "1488.8",
+     "1496.6",
+     "1584.5",
+     "1556.1"
+    ],
+    [
+     "ηC * (%)",
+     "82.8",
+     "83.2",
+     "88.1",
+     "86.5"
+    ],
+    [
+     "Max Temp. (K)",
+     "1868",
+     "1468",
+     "1545",
+     "1398"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 4 Numerical results of pressure, characteristic velocity C*, and maximum tem­ perature for A, AI, B, and BI."
+   ],
+   "bbox": [
+    {
+     "l": 36.789815117624514,
+     "t": 534.2067377798512,
+     "r": 288.8239829195621,
+     "b": 438.1889249779603,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 10x5 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_f33f24ba7c81bd983aace57e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p6-6-7c7ecff5f70dd747f156680a9ba95415fd2da64a699f651c1a0d537b1b5927aa.json",
+   "raw_sha256": "725be4dd389bb8aa9dc9730b86e91f821902acb260eafd687a2e32383d994d91",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "CLM_DOI_10_1016_J_ACTAASTRO_2022_08_029_22B88715",
+   "store": "claims",
+   "type": "Claim",
+   "page": 6,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Kang et al.'s numerical analysis predicts maximum pintle-tip temperatures of 1868 K (A, BF 86%), 1468 K (AI, insert), 1545 K (B, BF 58%) and 1398 K (BI, insert): changing BF from 86% to 58% lowered the tip temperature by 323 K (17.3%), and the insert nozzle by 147-400 K (9.5-21.4%).",
+   "quote": "by changing the BF from 86% to 58% and varied by 147 K",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 6
+    }
+   ]
+  },
+  {
+   "id": "CLM_DOI_10_1016_J_ACTAASTRO_2022_08_029_6974E3E6",
+   "store": "claims",
+   "type": "Claim",
+   "page": 6,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The type B pintle (BF 58%) has a higher flow rate through the orifice than type A (BF 86%), which is believed to push out the flames formed at the pintle tip; A and AI were predicted to be damaged in the actual combustion test.",
+   "quote": "The type B pintle injector (BF 58%) has a",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 6
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1016_J_ACTAASTRO_2022_08_029_423563B3",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 6,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "CFD maximum pintle tip temperature, type B (BF 58%, no insert) = 1545 K",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "1545 K and that for BI with the insert was 1398 K",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 6
+    }
+   ]
+  },
+  {
+   "id": "CONST_DOI_10_1016_J_ACTAASTRO_2022_08_029_4B9DC35D",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 6,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "CFD maximum pintle tip temperature, type A (BF 86%, no insert) = 1868 K",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "damage was highest at 1868 K and that of AI with the insert nozzle was",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 6
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00019",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_D. Kang et al.                                                                                                                  Acta Astronautica 201 (2022) 48–58_\n\n**Fig. 13.** Instantaneous mass fraction of O2 of BI at the center plane.\n\n**Fig. 14.** Mean mass fraction of O2 of BI at the center plane.\n\n**Table 4**\nNumerical results of pressure, characteristic velocity C*, and maximum tem­\n<u>perature for A, AI, B, and BI.</u>\n\nPintle No A <u>AI</u> B <u>BI</u>\n\n**Chamber pressure (bara)** 57.6 57.9 61.3 60.2\n**1** st **_m_** ˙ 0.106 0.104 0.109 0.111\n**2** nd **_m_** ˙ 0.034 0.036 0.030 0.029\n**1** st **/2** nd **Ratio** 3.10 2.85 3.61 3.79\n**1** st **Velocity** 28.3 30.9 24.6 26.2\n**2** nd **Velocity** 29.6 28.2 27.4 26.6\n**_C_** *** (m/s)** 1488.8 1496.6 1584.5 1556.1\n**_ηC_** <sup>*</sup> **(%)** 82.8 83.2 88.1 86.5\n\n**Max Temp. (K)** 1868 1468 1545 1398\n\nanalysis was appropriate. Analysis was performed for 2 million grids\n(coarse), 4 million grids(moderate), and 6 million grids(fine). Fig. 9\ncompares the temperature distribution on the pintle tip wall in Fig. 10.\nAs shown in the figure, 4 million grids and 6 million grids showed almost\nidentical results. Based on the result, it was judged that the use of 4\nmillion grids would be sufficient for the accuracy of the solution. For all\nsubsequent analysis, about 4 million grids were used..\n\nFigs. 11–14 show the distributions of instantaneous temperature,\naverage temperature, instantaneous mass fraction of O2, and mean mass"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00020",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "fraction of O2 in the center plane of BI-AM02..\n\nThe temperature distributions in Figs. 11 and 12 were somewhat\nover predicted because the chemical equilibrium combustion model was\napplied.\n\nFrom the results of the numerical analysis, the combustion pressure\nand characteristic velocity were derived as time-averaged values, and\nthe maximum temperature of the pintle tip was obtained after the flame\nwas fully developed. The numerical analysis results are shown in\nTable 4.\n\nFrom the analysis results, the pintle tip temperature of A with heat\ndamage was highest at 1868 K and that of AI with the insert nozzle was\n1468 K, resulting in a temperature difference of 400 K because of the\ninsert nozzle. In addition, the highest temperature for B ( _BF_ 58%) was\n1545 K and that for BI with the insert was 1398 K, for a temperature\ndifference of 147 K. The pintle tip temperature was thus reduced by 323\nK (17.3%) by changing the _BF_ from 86% to 58% and varied by 147 K\n(9.5%) to 400 K (21.4%) depending on the insert nozzle.\n\nFig. 15 shows the streamline and flow velocity at the center plane of\nthe pintle injector. It is confirmed that the flow rates of injectors A and B\nwithout the insert nozzles are low because the flow rate that goes out\ndirectly to the orifice and that which exits after cooling the pintle tip are\nnot smooth. However, the pintle injectors with the insert nozzles\ndistribute the flow well, and the flows are smooth along the internal\ncurvature without flow velocity reductions towards the pintle orifice\nexit. Therefore, it was experimentally confirmed that the pintle tip was\ncooled effectively."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00021",
+   "page_start": 6,
+   "page_end": 6,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "According to the numerical analysis results presented in Table 4, the\ntype A pintle injector was predicted to have a higher temperature at the\ntip than the type B injector. The type B pintle injector (BF 58%) has a\nhigher flow rate than type A (BF 86%) through the orifice, which is\nbelieved to play a role in pushing out the flames formed at the pintle tip.\nFig. 16 shows the temperature distribution at the pintle tip. From the\nnumerical analysis results, it was predicted that the type A injector\nwould have relatively lower thermal durability than the type B injector\nand that the pintle tips of A and AI would be damaged in the actual\ncombustion test.\n\nThe characteristic velocity of type B was observed to be relatively\nlarger than that of type A, which is attributed to the effects of the BF and\naspect ratio (AR); pintle injector types A and B have the same area ratios,\nbut the 1st row orifice flow rate of type B is higher. The flow rate of the\n\n**Fig. 15.** Comparison of streamlines and velocity contours."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 3,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 1,
+  "objects_with_anchor_problems": 0
+ }
+}

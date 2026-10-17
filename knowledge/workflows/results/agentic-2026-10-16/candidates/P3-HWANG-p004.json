@@ -1,0 +1,256 @@
+{
+ "packet": "P3-HWANG-p004",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1007_S42405_022_00489_W",
+ "source_pdf": "propulsion_texts/pintle_injector/s42405-022-00489-w.pdf",
+ "source_sha256": "6b91bb7e06c13bd4e8e9a00b47805092f845f1e0f67f4aa7b6a432faa74f5b96",
+ "pages": [
+  4,
+  4
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 4,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1007_S42405_022_00489_W/p0004.png",
+   "sha256": "ba44c6724923c77ba3205dca9df6a6d3ba3ede8afd1f9c6dd333a91156185174",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_a51721fd62e37dc42f2a862e"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_3ff7ee6d99d66dbe001dcc0f",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 3 Propellant flow in pintle injector (left) and the pintle geometry (right)"
+   ],
+   "bbox": [
+    {
+     "l": 183.85035272882448,
+     "t": 731.858694407621,
+     "r": 545.1428822340997,
+     "b": 588.7295335628544,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d17c2157b02b65ea765518ad",
+   "kind": "figure",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 50.28345524376991,
+     "t": 55.906482101961274,
+     "r": 60.436245233215736,
+     "b": 43.97912068448272,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1dc08de7aa30d5064046155f",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.15949770179134,
+     "t": 394.7977448498462,
+     "r": 544.2682894810229,
+     "b": 370.5039308535651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T M R = \\frac { \\dot { m } _ { p } \\cdot u _ { O } } { \\dot { m } _ { a } \\cdot u _ { F } } ,",
+   "original_text": "TMR equal1 ˙mp · uO ˙ma · uF , (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_88ebdc80a97d208458af0347",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.1591734142124,
+     "t": 360.55727861168396,
+     "r": 544.2682421915247,
+     "b": 347.4279420845651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\dot { m } _ { a } = A _ { a } C _ { d , a } \\sqrt { 2 \\rho _ { a } 1 p _ { a } } = \\rho _ { a } A _ { a } u _ { F } ,",
+   "original_text": "˙ma equal1 AaCd, a√2ρa1pa equal1 ρa AauF, (2)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_aac154cf794ce138f88275c3",
+   "kind": "formula",
+   "pages": [
+    4
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 306.15913561969955,
+     "t": 333.767706933704,
+     "r": 544.2671276863382,
+     "b": 309.9879396425651,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "B F = \\frac { n \\cdot ( w _ { 1 } + w _ { 2 } ) } { \\pi \\cdot D _ { p } } \\times 1 0 0 \\% .",
+   "original_text": "BF equal1 n · (w1 +w2) π · Dp × 100%. (3)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_4dbcde368fd0f061e5314557",
+   "kind": "table",
+   "pages": [
+    4
+   ],
+   "table_grid": [
+    [
+     "Annular ring",
+     "g (mm)",
+     "Aa (mm 2 )",
+     "TMRTarget",
+     "uF (m/s)"
+    ],
+    [
+     "A01",
+     "0.40",
+     "23.12",
+     "0.85",
+     "60"
+    ],
+    [
+     "A02",
+     "0.46",
+     "26.68",
+     "1.02",
+     "52"
+    ],
+    [
+     "A03",
+     "0.56",
+     "32.65",
+     "1.20",
+     "42"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 2 Geometric information of the annular ring and TMRs"
+   ],
+   "bbox": [
+    {
+     "l": 50.00760666052287,
+     "t": 551.0363656432565,
+     "r": 289.3558977521858,
+     "b": 484.99610250673163,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 4x5 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a51721fd62e37dc42f2a862e",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1007_S42405_022_00489_W/6b91bb7e06c1-p4-4-bc9840b4b613e3745343bd76ddd9003ac2fd002b243aa0a66c03dfa06974e948.json",
+   "raw_sha256": "41f66eb2d52ed0d6454a2b524f8220e5eb813e67cb2d870a707894caa7f943fe",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00011",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123 > 2.1 Test Facility",
+   "text": "944 International Journal of Aeronautical and Space Sciences (2022) 23:941–952\n\n**Fig. 3** Propellant flow in pintle\ninjector (left) and the pintle\ngeometry (right)\n\n**Table 2** Geometric information of the annular ring and TMRs\n\nAnnular ring _g_ (mm) _A_ a (mm <sup>2</sup> ) TMRTarget _u_ F (m/s)\n\nA01 0.40 23.12 0.85 60\n\nA02 0.46 26.68 1.02 52\n\n<u>A03</u> <u>0.56</u> <u>32.65</u> <u>1.20</u> <u>42</u>\n\nconventional definition of TMR in a two-row pintle injector. In this study, the TMR is controlled only by the annular\nfuel flow velocity ( _u_ F) while the other parameters are fixed.\nFrom the second term in Eq. (2), the annular ring area,\n\n    -\n_Aa_ - _π_ _g_ <sup>2</sup> + _g_ - _D_ _p_ and the pressure drop ( _�pa_ ) can con\ntrol the mass flow rate of the fuel ( ˙ _ma_ ) while the density ( _ρa_ )\nand discharge coefficient ( _C_ d, a) are fixed. If _A_ a is changed,\nthen the _u_ a is also to be changed for the constant _m_ ˙ a in the\nthird term of the Eq. (2). In this manner, the TMR can be\nchanged at the same propellant mass flow rate by changing\nthe annular orifice area ( _Aa_ ) with the gap distance, _g_ . Three\nannular manifolds were manufactured by designing gap distances with target TMR of 0.85, 1.02, and 1.20. In the actual\ncombustion tests, there were TMR differences between the\ntarget and the test results caused by the OFR and the propellant mass flow rate deviation. However, by minimizing\nthe relative differences between the _OFR_ and the mass flow\nrate, it was possible to compare the effect of the relative difference in TMR under similar test conditions. Similarly, the\nBF difference effect could also be examined. Table 2 lists\nthe geometry and target TMR in the annular rings. The BF\ndefined in Eq. (3) describes the ratio of the sum of the pintle\norifice width to the pintle perimeter in the cross-section of the\npintle. Therefore, the BF denotes the ratio at which the propellant from the pintle orifice obstructs the annular flow. In a\ntwo-row pintle orifice, the combustion characteristics of the\ncombustor can be varied depending on the distance between\nthe two rows [28]. Here, the distance between the two rows\nwas fixed as 0.5 mm to simplify the variations of the pintle\ninjector configuration. In the previous combustion test of a\npintle injector with BF � 86% referring to Ryu’s case [17],"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1007_S42405_022_00489_W#c00012",
+   "page_start": 4,
+   "page_end": 4,
+   "section": "**Geometric Effects of Liquid Rocket Engine Pintle Injectors** **in Supercritical Combustion** > 123 > 2.1 Test Facility",
+   "text": "pintle damage occurred because of excessive heat transfer to\nthe pintle tip [20]. In this study, the _BF_ was implemented\nas 58 ± 7% by changing the aspect ratio of the second row\norifices. The first row orifices geometry, which accounted for\na considerable portion of the mass flow, was fixed.\n\nTable 3 presents the geometries of the pintle orifices. For\nadditional pintle tip protection, an insert-nozzle was devised\nfor forced convection cooling by liquid oxygen at the hemispherical pintle tip (Fig. 3). All three pintle orifices had a\ndiameter of 18 mm and skip ratio ( _L_ S/ _D_ p) of 0.63, and the\nmass flow ratio of the first to the second row was 82.5:17.5\nbased on the area ratio. For all pintle injectors, the number\nof orifices in each row is 22.\n\n_Aa_ - _π_\n\n_g_ <sup>2</sup> + _g_ - _D_ _p_\n\n<sup>·</sup> <sup>_u_</sup> <sup><u>O</u></sup>\nTMR � <sup>_m_</sup> <sup>˙</sup> <sup><u>p</u></sup>\n\n_m_ ˙ a · _u_ F\n\n, (1)\n\n_m_ ˙ a - _A_ a _C_ d, a\n\n~~�~~\n2 _ρ_ a1pa  - _ρ_ a _A_ a _u_ F, (2)\n\nBF � <sup>_<u>n</u>_</sup> <sup>·</sup> <sup>_<u>(w</u>_</sup> <sup><u>1 +</u></sup> <sup>_w_</sup> <sup><u>2</u></sup> <sup>_<u>)</u>_</sup>\n\n_π_    - _D_ p\n\n× 100% _._ (3)\n\n**2.4** **Measurements**\n\nIt is necessary to measure the propellant mass flow rates to\nevaluate the combustion performance of the pintle injector\ncombinations. A Coriolis flowmeter (Micro Motion™) was\nused to directly acquire the liquid oxygen mass flow rate.\nTurbine flowmeters (Hoffer™) were used to determine the\nvolume flow rate of the fuel injector (1 <sup>′′</sup> ), FCR (1/2 <sup>′′</sup> ), and\nwater coolant (2 <sup>′′</sup> ). The fuel flowmeters for the annular ring\nand FCR were installed in duplicate to improve measurement\nreliability. In addition to the volume flow, propellant densities\nare necessary to calculate fuel and coolant mass flow rates.\nTherefore, thermocouples and pressure transducers (Honeywell TJE series) were used before and after the flowmeters.\nT-type thermocouples were applied to the oxidizer manifold and a K-type for the fuel manifold and FCR. The same\npressure transducers were used to measure the pressure in"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 3,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

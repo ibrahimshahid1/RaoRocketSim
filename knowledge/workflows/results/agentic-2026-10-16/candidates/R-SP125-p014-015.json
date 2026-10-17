@@ -1,0 +1,1106 @@
+{
+ "packet": "R-SP125-p014-015",
+ "kind": "extraction",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  14,
+  15
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 14,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0014.png",
+   "sha256": "f06a44c8c0a7623a5c0bce5cb0cdce90a61188583626882e091622d6ef0fc010",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 15,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0015.png",
+   "sha256": "6e74d713635dcfc1353877c6dcb2c79564e17167a3d72233493798f46c0831ea",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_3fb240759d8d0907d923fc1a",
+  "ENR_66eb1cbd489ab97dc483e5e7"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_2c5fc2d8fabfcfa1ebdfadc8",
+   "kind": "figure",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 269.9401290548921,
+     "t": 749.9175663675254,
+     "r": 405.907270923371,
+     "b": 723.8224624794798,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_7723eff3420979a89543c95a",
+   "kind": "figure",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 266.8945813567666,
+     "t": 60.06286545256796,
+     "r": 399.5987604688779,
+     "b": 34.61230425047597,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1278d37a9f46bc6c8d91bc2e",
+   "kind": "formula",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/11",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 367.6666666666667,
+     "t": 523.99999,
+     "r": 551.6666666666667,
+     "b": 511.99999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "T _ { i } / T _ { x } = ( p _ { i } / p _ { x } ) ^ { ( \\gamma - 1 ) ^ { \\prime } \\gamma } = ( V _ { x } / V _ { i } ) ^ { \\gamma - 1 } \\ ( 1 { \\cdot } 1 3 )",
+   "original_text": "T/T x= (Bi/ px) V9 Y= (Vx/V iY? (1-13)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_3811b9c648222c7b1c784c95",
+   "kind": "formula",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 160.33333333333334,
+     "t": 106.66665666666665,
+     "r": 322.33333333333337,
+     "b": 84.3333233333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { 1 } { 2 g J } ( v _ { x } { ^ { 2 } } - v _ { i } { ^ { 2 } } ) = C _ { p } ( T _ { i } - T _ { x } ) \\quad ( 1 { \\cdot } 1 0 )",
+   "original_text": "ae Vx V2)= ColTi~ Tw) (1-10)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_41d63c9d6b57a919515534ca",
+   "kind": "formula",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 395.3333333333333,
+     "t": 568.3333233333333,
+     "r": 551.6666666666667,
+     "b": 558.99999,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p _ { i } V _ { i } Y = p _ { X } V _ { X } Y = \\text {constant} \\quad ( 1 \\cdot 1 2 )",
+   "original_text": "piV;Y = pyV,\" = constant (1-12)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_71eb191c535403dfebf7446f",
+   "kind": "formula",
+   "pages": [
+    14
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 392.6666666666667,
+     "t": 664.3333233333334,
+     "r": 551.6666666666667,
+     "b": 640.3333233333334,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "= \\frac { A _ { i } v _ { i } } { 1 4 4 \\, V _ { i } } = \\frac { A _ { x } v _ { x } } { 1 4 4 \\, V _ { x } } = \\text {constant} \\quad ( 1 - 1 1 )",
+   "original_text": "Ajvj — AxvVx \"Td; \"T44V, =constant (1-11)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_f65be50546d9fdc615625b99",
+   "kind": "table",
+   "pages": [
+    14
+   ],
+   "table_grid": [
+    [
+     "",
+     "Local velocity of sound in chamber and at nozzle throat (ftl sec); (at = V gy1(T';)."
+    ],
+    [
+     "",
+     "Cylindrical cross-sectional area of chamber (in2)."
+    ],
+    [
+     "",
+     "Flow areas at nozzle inlet. throat and exit; and at any section X normal to axis (in 2 )."
+    ],
+    [
+     "Cpo Cv",
+     "Specific heats for constant pressure and for constant volume (Btu/lb o F)."
+    ],
+    [
+     "g",
+     "Gravitational constant (32.2 ft/sec 2 at sea level)."
+    ],
+    [
+     "J",
+     "Energy conversion factor (778 ft-Ib/ Btu)."
+    ],
+    [
+     "Me. Mi. Mt • Me. Mx",
+     "Flow Mach number (v/a) at chamber; nozzle inlet. throat and exit; and at any section X normal to axis."
+    ],
+    [
+     "lJl",
+     "Molecular weight of combustion products."
+    ],
+    [
+     "(Pelioj",
+     "Chamber total pressure at injector end (lblin 2). Because of the relatively low propellant injection flow veloc­ ities Vioj' the measurable static pressure at this station is generally treated as equivalent to the total pressure."
+    ],
+    [
+     "",
+     "Nozzle 5tagnation pressure or chamber total pressure at nozzle inlet (lb/in2); (Pe)o. = Pi(l + Hy-1)MijY/Y-I."
+    ],
+    [
+     "Pi. Pt. Pe. Px",
+     "Flow static pressures at nozzle inlet. throat and exit; and at any section X normal to axis (lblin 2)."
+    ],
+    [
+     "R",
+     "Gas constant (I 544flJl) (ft/ e R)"
+    ],
+    [
+     "(Telo.",
+     "Nozzle stagnation :emperature or chamber total temperature (OR). (Te)os= Ti(l + ;(y-I)Mij"
+    ],
+    [
+     "",
+     "Flow temperature at nozzle inlet. throat. and exit; and at any section normal to axis (0 R)."
+    ],
+    [
+     "",
+     "Injector flow velocity = 0 (by assump­ tion)."
+    ],
+    [
+     "",
+     "Flow velocities at nozzle inlet. throat. and exit; and at any section X nor­ mal to aXIs (ft/sec)."
+    ],
+    [
+     "",
+     "Flow specific volumes at nozzle inlet. throat. exit; and at any section X normal to axis (ftJ lib)."
+    ],
+    [
+     "",
+     "Steady weight now rate (Ib/sec)."
+    ],
+    [
+     "",
+     "Nozzle expansion area ratio (Ae/ At)."
+    ],
+    [
+     "€e y",
+     "Nozzle contraction area ratiO (Ae! Ad. Specific heat ratio (Cp/Cv )."
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "TABLE 1-1.—Terms Used in the Calculation of Gas Flows"
+   ],
+   "bbox": [
+    {
+     "l": 112.79974673307079,
+     "t": 648.666648303905,
+     "r": 323.52686182200034,
+     "b": 162.6157816381767,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 20x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_66eb1cbd489ab97dc483e5e7",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p14-14-6444e3976beebc9b3250b4c0dd96e86a902c770586d35877e3542011ead97f10.json",
+   "raw_sha256": "68a080e2ec9fa0edc15a6db42cde97f9f65c057b8ced35e44e1c6bbbbd851339",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_53de0233a83cafd27c3adf0a",
+   "kind": "figure",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 222.33550991027133,
+     "t": 758.759838104248,
+     "r": 340.99255848186885,
+     "b": 733.0666770935059,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a5e40032687349d45cea47f4",
+   "kind": "figure",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 58.984560560860146,
+     "t": 546.5479278564453,
+     "r": 268.69521073611395,
+     "b": 437.70623779296875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d52dceae9a7f7be3b96267d3",
+   "kind": "figure",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 217.5876800087587,
+     "t": 74.02630615234375,
+     "r": 350.36276659676764,
+     "b": 47.12652587890625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_077d02e87a82dd330d561d2c",
+   "kind": "formula",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/30",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 131.33333333333331,
+     "t": 218.66666666666674,
+     "r": 271.66666666666663,
+     "b": 204.66666666666674,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p _ { i n j } / p _ { i } = 1 + \\gamma \\, M _ { i } \\, ^ { 2 } \\, \\quad \\ ( 1 \\cdot 1 5 )",
+   "original_text": "Pinj/Pi= 1+ y Mj? (1-15)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1989f36801ab50f52ce2ef0f",
+   "kind": "formula",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/34",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 333.3333333333333,
+     "t": 507.0,
+     "r": 496.0,
+     "b": 495.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "p _ { t } / ( p _ { c } ) _ { n s } = [ 2 / ( \\gamma + 1 ) ] ^ { \\gamma / ( \\gamma - 1 ) } \\quad ( 1 { \\cdot } 1 6 )",
+   "original_text": "Pr/(Pe)ns=(2/(y+ IPP (4-18)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "SOURCE_PAGE_COMPARED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8a0eab359a3216bea1bd2044",
+   "kind": "formula",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/28",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 114.66666666666667,
+     "t": 334.6666666666667,
+     "r": 271.66666666666663,
+     "b": 315.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( 1 + \\gamma \\, M _ { 1 } ^ { 2 } ) / ( 1 + \\frac { \\gamma - 1 } { 2 } M _ { 1 } ^ { 2 } ) ^ { \\gamma n } ( \\gamma - 1 ) \\ ( 1 { \\cdot } 1 4 )",
+   "original_text": "-1 (1+ y MA Me (=) (1-14)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c37b18e3b22d52daafb32e05",
+   "kind": "formula",
+   "pages": [
+    15
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/27",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 122.33333333333333,
+     "t": 352.6666666666667,
+     "r": 127.0,
+     "b": 339.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "=",
+   "original_text": "=",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "REJECTED",
+   "run_id": "ENR_3fb240759d8d0907d923fc1a",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p15-15-e6fe0771ba00f30795e918c3960ba750674efb6fa2216afccd3caad59fbffd7c.json",
+   "raw_sha256": "5cfcc5b43b45284ae1481262ca72a7762f6eb6491104ead9ecfae44bcae88659",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19710019929_2D14232A",
+   "store": "equations",
+   "type": "Equation",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 1-16",
+   "equation_number": "1-16",
+   "form": "p_t/(p_c)_ns = [2/(gamma + 1)]^(gamma/(gamma-1))",
+   "statement": null,
+   "quote": "is called the critical pressure ratio and is solely a function of specific heat ratio",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p_t",
+     "meaning": "throat static pressure",
+     "units": "psia",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "(p_c)_ns",
+     "meaning": "nozzle stagnation pressure",
+     "units": "psia",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "specific heat ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_077d02e87a82dd330d561d2c",
+    "CAND_1989f36801ab50f52ce2ef0f",
+    "CAND_8a0eab359a3216bea1bd2044",
+    "CAND_c37b18e3b22d52daafb32e05"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p_t",
+      "(p_c)_ns"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_802D1B5E",
+   "store": "equations",
+   "type": "Equation",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 1-15",
+   "equation_number": "1-15",
+   "form": "p_inj/p_i = 1 + gamma*M_i^2",
+   "statement": null,
+   "quote": "For the static pressure ratio, the expression simplifies to",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "p_inj",
+     "meaning": "static pressure at injector end",
+     "units": "psia",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "p_i",
+     "meaning": "static pressure at nozzle inlet",
+     "units": "psia",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "M_i",
+     "meaning": "Mach number at nozzle inlet",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "specific heat ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_077d02e87a82dd330d561d2c",
+    "CAND_1989f36801ab50f52ce2ef0f",
+    "CAND_8a0eab359a3216bea1bd2044",
+    "CAND_c37b18e3b22d52daafb32e05"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "p_inj",
+      "p_i",
+      "M_i"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_98E8ACF4",
+   "store": "equations",
+   "type": "Equation",
+   "page": 15,
+   "is_target": true,
+   "active": false,
+   "source_state": "SUPERSEDED_EXTRACTION",
+   "verification": null,
+   "label": "SP-125 Eq. 1-14",
+   "equation_number": "1-14",
+   "form": "_(Pc_ )in/(Pc)ns = _y-1_ _,_ (lt y Mj 2)/(lt- -M/»)' (y-l) (1-14) 2",
+   "statement": null,
+   "quote": "the total pressure ratio _(Pc)in/(Pc)ns_ can also be expressed in terms of flow Mach number _M_ j at the nozzle inlet and of the specific heat ratio y:",
+   "confidence": "low",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "(Pc)inj",
+     "meaning": "chamber total pressure at injector end",
+     "units": "",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "(Pc)ns",
+     "meaning": "nozzle stagnation (total) pressure",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Mi",
+     "meaning": "flow Mach number at the nozzle inlet",
+     "units": "",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "y (gamma)",
+     "meaning": "specific heat ratio",
+     "units": "",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Vinj = 0 and (Pc)inj = Pinj (injection velocity neglected)"
+   ],
+   "validity": [],
+   "extraction_note": "Equation OCR is garbled (exponent and denominator structure unreadable). The prose defining it is clean. This is the quantitative basis for the 'contraction ratio -> chamber pressure loss' factor; it is NOT a shoulder-radius relation.",
+   "same_page_formula_candidates": [
+    "CAND_077d02e87a82dd330d561d2c",
+    "CAND_1989f36801ab50f52ce2ef0f",
+    "CAND_8a0eab359a3216bea1bd2044",
+    "CAND_c37b18e3b22d52daafb32e05"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "variable_symbol_absent_from_form",
+     "symbols": [
+      "(Pc)inj",
+      "Mi",
+      "y (gamma)"
+     ]
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "(Pc)inj",
+      "(Pc)ns",
+      "Mi",
+      "y (gamma)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_C43FA39B",
+   "store": "equations",
+   "type": "Equation",
+   "page": 15,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": "SP-125 Eq. 1-14",
+   "equation_number": "1-14",
+   "form": "(p_c)_inj/(p_c)_ns = (1 + gamma*M_i^2)/(1 + (gamma-1)/2*M_i^2)^(gamma/(gamma-1))",
+   "statement": null,
+   "quote": "can also be expressed in terms of flow Mach number",
+   "confidence": "high",
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "(p_c)_inj",
+     "meaning": "chamber total pressure at injector end",
+     "units": "psia",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "(p_c)_ns",
+     "meaning": "nozzle stagnation pressure",
+     "units": "psia",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "M_i",
+     "meaning": "Mach number at nozzle inlet",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "gamma",
+     "meaning": "specific heat ratio",
+     "units": "1",
+     "role": "unknown",
+     "resolution_state": "RESOLVED",
+     "quantity_candidates": [
+      "QTY_GAMMA"
+     ]
+    }
+   ],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "same_page_formula_candidates": [
+    "CAND_077d02e87a82dd330d561d2c",
+    "CAND_1989f36801ab50f52ce2ef0f",
+    "CAND_8a0eab359a3216bea1bd2044",
+    "CAND_c37b18e3b22d52daafb32e05"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "(p_c)_inj",
+      "(p_c)_ns",
+      "M_i"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_0BAD6687",
+   "store": "claims",
+   "type": "Claim",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "It is desirable that the Mach number at the nozzle entrance be small; a typical value for a contraction area ratio of 2 is M = 0.31 (gamma = 1.2).",
+   "quote": "For the reasons mentioned above, it is desirable that the Mach number at the nozzle entrance be small. A typical value for a thrust chamber with a contraction area ratio of _Ad At_ = 2 is _MF_ _O.31(y=_ 1.2).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_DE92F26F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Total pressure loss across the chamber as a function of contraction area ratio (for two gamma values) is calculated from the Rayleigh flow process and is generally used in rocket design.",
+   "quote": "Figure 1-4 shows the loss of total pressure for two typical y values as a function of the nozzle contraction area ratio _(c._ These data are generally used in rocket design, and are calculated from the Rayleigh flow process.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_FA371B30",
+   "store": "claims",
+   "type": "Claim",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The more the gas acceleration is effected by the nozzle (area change) rather than by heat-release expansion, the more efficient it is; with no nozzle attached the losses are maximum, which is why the contraction ratio is important to thrust chamber design.",
+   "quote": "contribution of the nozzle, the more efficient is the gas acceleration. Conversely, with no nozzle attached, the losses are maximum. The great importance of (c to the thrust chamber design becomes apparent.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_FB45C57A",
+   "store": "claims",
+   "type": "Claim",
+   "page": 14,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": "CONFIRMED",
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The chamber gas-flow process is a partly irreversible adiabatic expansion; total temperature is constant but total pressure decreases, and the loss is a function of gamma and the nozzle contraction area ratio.",
+   "quote": "the stagnation pressure or total pressure will decrease. This causes permanent energy losses, which are a function of the gas properties as expressed by _y._ and of the nozzle contraction area ratio (c or _CAe! At)._",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 14
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19710019929_3F5D8055",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 14,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Injection velocity is assumed zero in the chamber gas-flow calculation, and combustion is assumed complete at the nozzle inlet.",
+   "equation_number": null,
+   "form": null,
+   "statement": "Injection velocity is assumed zero in the chamber gas-flow calculation, and combustion is assumed complete at the nozzle inlet.",
+   "quote": "The liquid propellants are injected at the injection plane with a small axial velocity which is assumed to be zero in gas-flow calculation. The combustion process proceeds throughout the length of the chamber",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 14
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19710019929_FD02EC0B",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 14,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The chamber gas-flow process upstream of the nozzle entrance is treated as a partly irreversible adiabatic expansion (not isentropic).",
+   "equation_number": null,
+   "form": null,
+   "statement": "The chamber gas-flow process upstream of the nozzle entrance is treated as a partly irreversible adiabatic expansion (not isentropic).",
+   "quote": "The gas-flow process within the combustion chamber, that is. within the volume upstream of the nozzle entrance, is not entirely isentropic but is a partly irreversible. adiabatic expansion.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 14
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_61780E0B",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 15,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Typical nozzle-entrance Mach number = 0.31 dimensionless",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "A typical value for a thrust chamber with a contraction area ratio of _Ad At_ = 2 is _MF_ _O.31(y=_ 1.2).",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 15
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00024",
+   "page_start": 14,
+   "page_end": 14,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "INTRODUCTION TO LIQUID PROPELLANT ROCKET ENGINES 5\n\nTABLE _l-l.-Terms_ _Used in the Calculation_ _of_\n\nGas _Flows_\n\nLocal velocity of sound in chamber\n\nand at nozzle throat (ftl sec);\n(at = V _gy1(T';)._\nCylindrical cross-sectional area of\n\nchamber (in <sup>2</sup> ).\nFlow areas at nozzle inlet. throat and\n\nexit; and at any section _X_ normal to\naxis (in <sup>2</sup> ).\n_Cpo_ _C_ _v_ Specific heats for constant pressure\n\nand for constant volume (Btu/lb <sup>o</sup> F).\n_g_ Gravitational constant (32.2 ft/sec 2 at\n\nsea level).\n_J_ Energy conversion factor (778 ft-Ib/\n\nBtu).\n_Me._ Mi. M t • _Me._ _Mx_ Flow Mach number _(v/a)_ at chamber;\n\nnozzle inlet. throat and exit; and at\nany section _X_ normal to axis.\nlJl Molecular weight of combustion\n\nproducts.\n(Pelio j Chamber _total_ pressure at injector end\n\nPi. Pt. _Pe._ _Px_\n\n_R_\n_(Telo._\n\n€e\ny\n\n(lblin 2). Because of the relatively\nlow propellant injection flow velocities Vioj' the measurable static\npressure at this station is generally\ntreated as equivalent to the total\npressure.\nNozzle 5tagnation pressure or chamber\n\n_total_ pressure at nozzle inlet (lb/in2);\n_(Pe)o._ = Pi(l + _Hy-1)_ _MijY/Y-I._\nFlow _static_ pressures at nozzle inlet.\n\nthroat and exit; and at any section _X_\nnormal to axis (lblin 2).\nGas constant (I _544flJl) (ft/_ <sup>_e_</sup> R)\nNozzle stagnation :emperature or\n\ntion).\nFlow velocities at nozzle inlet. throat."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00025",
+   "page_start": 14,
+   "page_end": 14,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "and exit; and at any section _X_ normal to aXIs (ft/sec).\nFlow specific volumes at nozzle inlet.\n\nthroat. exit; and at any section _X_\nnormal to axis (ftJ lib).\nSteady weight now rate (Ib/sec).\nNozzle expansion area ratio _(Ae/ At)._\nNozzle contraction area ratiO _(Ae! Ad._\nSpecific heat ratio _(Cp/C_ _v_ _)._\n\nchamber _total_ temperature (OR).\n_(Te)os=_ Ti(l + ;(y-I)Mij\nFlow temperature at nozzle inlet.\n\nthroat. and exit; and at any section\nnormal to axis (0 R).\nInjector flow velocity = 0 (by assump\n\nThe Principle of Conservation of Matter\n\n_._ _AWi_ _Axvx_\n(1-11)\n_W_ = 144 _Vi_ = 144 _V_ x = constant\n\nThe Isentropic Flow Process\n\nFor any isentropic flow process the following\nrelations hold between any two points:\n\n( 1-12)\n\nand\n\nGas Flow Through Liquid Propellant Rocket\nCombustion Chambers\n\nThe function of a liquid rocket combustion\nchamber is to convert propellants into hightemperature. high-pressure gas through combustion which releases the chemical energy of the\npropellant, resulting in an increase of internal\nenergy of the gas_ Combustion chambers are\ngenerally tubular, as shown in figure 1-3. The\nliquid propellants are injected at the injection\nplane with a small axial velocity which is assumed to be zero in gas-flow calculation. The\ncombustion process proceeds throughout the\nlength of the chamber and is assumed to be completed at the nozzle inlet. As heat is liberated\nbetween injection plane and nozzle inlet. the\nspecific volume of the gas is increased. To\nsatisfy the conditions of constant mass flow, the\ngas must be accelerated toward the nozzle inlet\nwith some drop of pressure. In brief, the following takes place:"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00026",
+   "page_start": 14,
+   "page_end": 14,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "The gas-flow process within the combustion\nchamber, that is. within the volume upstream of\nthe nozzle entrance, is not entirely isentropic\nbut is a partly irreversible. adiabatic expansion.\nAlthough the stagnation temperature or total\ntemperature remains constant, the stagnation\npressure or total pressure will decrease. This\ncauses permanent energy losses, which are a\nfunction of the gas properties as expressed by _y._\nand of the nozzle contraction area ratio (c or\n_CAe! At)._ Wherever the acceleration of gases is\nlargely effected by expansion due to heat release, rather than by a change of area as in a\nnozzle, the stated losses occur. The greater the\n\nApplied to a nozzle. this yields for unit weight\nof gas flowing"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00027",
+   "page_start": 15,
+   "page_end": 15,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "6 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\ncontribution of the nozzle, the more efficient is\nthe gas acceleration. Conversely, with no nozzle attached, the losses are maximum. The great\nimportance of (c to the thrust chamber design becomes apparent. It will be discussed further in\nchapter IV.\n\nFigure 1-4 shows the loss of total pressure\nfor two typical y values as a function of the\nnozzle contraction area ratio _(c._ These data are\ngenerally used in rocket design, and are calculated from the Rayleigh flow process.\n\nY, I 20\n\n1.0 2.0\n(CYLINDER)\n\n_Figure 1-4_\n\nNeglecting the flow velocity at the injecting\nend, i.e., assuming Vinj=O and (Pc)inj=Pinj, the\ntotal pressure ratio _(Pc)in/(Pc)ns_ can also be\nexpressed in terms of flow Mach number _M_ j at\nthe nozzle inlet and of the specific heat ratio y:\n\n_(Pc_ )in/(Pc)ns =\n\n_y-1_ _,_\n(lt y Mj 2)/(lt- -M/»)' (y-l) (1-14)\n2\n\nFor the reasons mentioned above, it is desirable\nthat the Mach number at the nozzle entrance be\n\nsmall. A typical value for a thrust chamber with\na contraction area ratio of _Ad At_ = 2 is _MF_\n_O.31(y=_ 1.2). For the static pressure ratio, the\nexpression simplifies to\n\n(1-15)\n\nGas Flow Through Rocket Nozzles\n\nThe prime function of a rocket nozzle is to\nconvert efficiently the enthalpy of the combustion gases into kinetic energy and thus high gas\nexhaust velocity. The nozzle is the most efficient device for accelerating gases to supersonic\nvelocities. Rocket nozzles are conventionally"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00028",
+   "page_start": 15,
+   "page_end": 15,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "of the converging-diverging De Laval type, with\nthe cross-sectional area decreasing to a minimum\nat the throat and then increasing to the exit area,\nas shown in figure 1-3. The flow velocity\nthrough a nozzle increases to sonic velocity at\nthe throat and then increases further superson\n\nically in the diverging section.\n\nIn practice it is assumed that the gas flow\nthrough a rocket nozzle is an isentropic expansion process, and that both the total temperature\nand the total pressure remain constant throughout\nthe nozzle. The pressure ratio _Ptl(Pc)ns_ between throat and chamber is called the critical\npressure ratio and is solely a function of specific heat ratio\n\n_Pt/(Pc)ns_ = _[2/(v+_ 1)]y/(y-l) (1-16)\n\nThe static pressure Pt at a nozzle throat with\nsonic flow, where the maximum weight flow per\nunit area occurs, is defined as critical pressure.\nThe velocity of sound is equal to the velocity of\npropagation of a pressure wave within a medium.\nIt is, therefore, impossible for a pressure disturbance downstream of the nozzle throat to influence the flow at the throat or upstream of the\nthroat, provided that this disturbance will not\ncreate a higher throat pressure than the critical\npressure.\n\nIt is one of the characteristic features of an\nattached diverging or De Laval nozzle, however,\nthat sonic velocity in the nozzle threat is maintained even if the back pressure (ambient pressure) at the nozzle exit is greater than the pressure required at the throat for sonic velocity. As\na result, a pressure adjustment (recovery) must\ntake place between the throat and the nozzle\nexit (ambient pressure). This adjustment may\ntake place through subsonic deceleration (isentropic), or by way of nonisentropic discontinuities called shock waves, or by a combination of\nboth. Figure 1-5a represents several of the pos\nsible conditions that may occur in a overexpanded nozzle. The situations shown represent\ncases of an overexpanded nozzle which was\nmentioned earlier."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00029",
+   "page_start": 15,
+   "page_end": 15,
+   "section": "1.1 THE GENERATION OF THRUST",
+   "text": "We see that pressures lower th\"n ambient may\nbe obtained in a superSOlllC nozzle. The higher\nambient pressure cannot advance upstream within\nthe nozzle. however, since the gases are flowing\nwith supersonic velocity. An exception is along"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 5,
+   "formula": 8,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 2,
+  "objects_with_anchor_problems": 0
+ }
+}

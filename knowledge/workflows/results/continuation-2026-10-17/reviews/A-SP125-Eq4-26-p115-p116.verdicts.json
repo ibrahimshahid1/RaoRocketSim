@@ -1,0 +1,116 @@
+[
+ {
+  "object_id": "EQ_NTRS_19710019929_893075B6",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-125 PDF p.115 (printed p.106) prints Eq. (4-26), Q_c = wdot_c C_p (T_cc - T_ci). The literal continuation definitions on PDF p.116 (printed p.107) identify Q_c as coolant capacity in Btu/sec, wdot_c coolant mass flow in lb/sec, C_p coolant specific heat at constant pressure in Btu/lb-deg F, T_cc coolant CRITICAL temperature in deg R, and T_ci inlet temperature in deg R. Every stored form/variable meaning/unit agrees. The original uses temperature differences with Cp in degrees F and absolute temperatures in degrees R; equal interval sizes make no extra numerical conversion necessary. The p.115 prose calls this an estimate for liquid-state regenerative coolant capacity and says most coolant bulk temperatures should remain below critical temperature; p.116 explicitly separates hydrogen. The stored validity note preserves that exception. Correcting rejected parser T_ce to T_cc is supported directly by both formula and continuation definition, without certifying the candidate or any implementation.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "1daf868f661ccf92c42847f81b0d281414b2813c9a6089d1ab9c2b2741b2c6e7",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_pages": [
+    115,
+    116
+   ],
+   "printed_pages": [
+    "106",
+    "107"
+   ],
+   "method": "Full original PDF p115 rendered with pdftoppm at190 dpi and p116 at210 dpi; complete pages visually inspected as one bounded packet because equation definitions continue literally onto116.",
+   "inspected_science_fields": [
+    "label",
+    "equation_number",
+    "form",
+    "description",
+    "variables",
+    "assumptions",
+    "validity",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity.",
+   "packet_scope": "Only Eq4-26, literal continuation variable definitions and two applicability records. No other source opened before applying this bounded result."
+  },
+  "scope_note": "Source-fidelity review only; no numerical safety margin, implementation equivalence or physical validation established."
+ },
+ {
+  "object_id": "VAL_NTRS_19710019929_F8B11D11",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-125 PDF p.116 (printed p.107) states that the allowed total chamber-wall gas heat-transfer rate Q should be kept below coolant capacity Q_c by a safe margin and prints Q < Q_c. No numerical margin, ratio, multiplier or allowable fraction is specified in this local statement. The stored prose and applies_to correctly associate this qualitative criterion with the Eq.4-26 liquid-state capacity estimate; machine_readable remains empty and PROSE_ONLY. The grounding quote preserves visibly corrupted derivative OCR, but the original complete sentence was visually checked; the readable stored science statement faithfully states it.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "07e972c1b051f3665bda9e6a46ce42b70d75605d2ae1b83dac6bcdbd41d5c4e7",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_pages": [
+    115,
+    116
+   ],
+   "printed_pages": [
+    "106",
+    "107"
+   ],
+   "method": "Full original PDF p115 rendered with pdftoppm at190 dpi and p116 at210 dpi; complete pages visually inspected as one bounded packet because equation definitions continue literally onto116.",
+   "inspected_science_fields": [
+    "prose",
+    "applies_to",
+    "machine_readable",
+    "machine_readable_state",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity.",
+   "packet_scope": "Only Eq4-26, literal continuation variable definitions and two applicability records. No other source opened before applying this bounded result."
+  },
+  "scope_note": "Source-fidelity review only; no numerical safety margin, implementation equivalence or physical validation established."
+ },
+ {
+  "object_id": "VAL_NTRS_19710019929_7CA8B647",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-125 PDF p.116 (printed p.107) explicitly says there is no such limitation for hydrogen as coolant and explains its excellent heat-transfer characteristics and reasonably high heat-transfer coefficient even in the supercritical pressure and temperature region. Read with the immediately preceding p.115 below-critical-temperature bulk-coolant capacity discussion, this supports the stored hydrogen exception to that critical-temperature capacity limitation. The record correctly keeps the exception scoped to Eq.4-26 liquid-state capacity and does not claim hydrogen has unlimited heat-transfer capability or no safety requirements. Empty numerical bounds and PROSE_ONLY are appropriate. The original prose, not its corrupted derivative grounding quote, was used for this determination.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "f94c8244ee3bb0533640867b13fb044d8927f39d2b8e5101b70c33be09215cac",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_pages": [
+    115,
+    116
+   ],
+   "printed_pages": [
+    "106",
+    "107"
+   ],
+   "method": "Full original PDF p115 rendered with pdftoppm at190 dpi and p116 at210 dpi; complete pages visually inspected as one bounded packet because equation definitions continue literally onto116.",
+   "inspected_science_fields": [
+    "prose",
+    "applies_to",
+    "machine_readable",
+    "machine_readable_state",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis of F transcription; same Codex model family, no claim of model diversity.",
+   "packet_scope": "Only Eq4-26, literal continuation variable definitions and two applicability records. No other source opened before applying this bounded result."
+  },
+  "scope_note": "Source-fidelity review only; no numerical safety margin, implementation equivalence or physical validation established."
+ }
+]

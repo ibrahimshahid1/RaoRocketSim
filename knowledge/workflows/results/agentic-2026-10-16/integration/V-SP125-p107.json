@@ -1,0 +1,148 @@
+{
+ "packet": "V-SP125-p107",
+ "at": "2026-10-17T10:58:44.004214+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "GPT-6 (Codex)"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p107.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "report": "knowledge/workflows/results/agentic-2026-10-16/bank_reports/V-SP125-p107.V-SP125-p107.extraction.json",
+   "counts": {
+    "n_equations": 0,
+    "n_claims": 1,
+    "n_constants": 0,
+    "n_assumptions": 0,
+    "n_validity": 0,
+    "already_banked": false
+   },
+   "mismatches": {},
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 1,\n \"page_shifted\": 0,\n \"n_equations\": 0,\n \"n_claims\": 1,\n \"n_validity\": 0,\n \"n_constants\": 0,\n \"n_assumptions\": 0,\n \"content_verifications_invalidated\": [],\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-17T10:58:44.533215+00:00', 'n_nodes': 5710, 'n_edges': 7237, 'n_dangling_dropped': 0, 'n_candidate_link_issues': 54}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p107.verdicts.json",
+   "action": "apply_verification",
+   "stats": {
+    "confirmed": 1,
+    "refuted": 1,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 1,
+    "unchanged": 0,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": true
+   },
+   "mismatches": {}
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p107.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED",
+     "changed": true
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED",
+     "changed": true
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED",
+     "changed": true
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED",
+     "changed": true
+    },
+    {
+     "reviewed_records": 1,
+     "state": "SOURCE_PAGE_COMPARED",
+     "changed": true
+    },
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED",
+     "changed": true
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-17T10:58:46.426153+00:00",
+  "n_nodes": 5710,
+  "n_edges": 7233,
+  "n_dangling_dropped": 0,
+  "n_candidate_link_issues": 54
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 11,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 5,
+   "NOT_CHECKED": 44
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 51,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 5,
+   "SUPPORTED": 4
+  },
+  "pending_source_reviews": 44,
+  "needs_source_routing": 8,
+  "pending_verifications": 473,
+  "pending_verifications_by_store": {
+   "entities": 161,
+   "claims": 208,
+   "validity": 37,
+   "equations": 67
+  },
+  "documents_with_extracted_objects": 28,
+  "canonical_documents_without_extracted_objects": 220
+ },
+ "integrity": {
+  "nodes": 5710,
+  "edges": 7233,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [
+  {
+   "object_id": "CLM_NTRS_19710019929_76A39C08",
+   "expected": "REFUTED",
+   "stored": "REFUTED",
+   "retired_history_no_change": false,
+   "match": true
+  },
+  {
+   "object_id": "CLM_NTRS_19710019929_42DCCAAE",
+   "expected": "CONFIRMED",
+   "stored": "CONFIRMED",
+   "retired_history_no_change": false,
+   "match": true
+  }
+ ],
+ "verdict_state_mismatches": [],
+ "bank_mismatches": []
+}

@@ -1,0 +1,346 @@
+{
+ "packet": "P4-PIZZ-p020-023",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1080_10407782_2011_578011",
+ "source_pdf": "propulsion_texts/pizzarelli2011.pdf",
+ "source_sha256": "064e1294e651984c6ac83ed234d354fe95fb1f175a6becf56b209d7879b6b356",
+ "pages": [
+  20,
+  23
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 20,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0020.png",
+   "sha256": "94a0aa746bb5e221e918a2ee06c8163fb99c7692cef5f333b77fadb885d7f933",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 21,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0021.png",
+   "sha256": "3d513b620f4006d1142384e0980a4d9f143be9d6940821622735347f3abb2ade",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 22,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0022.png",
+   "sha256": "39ae0237725d9754a70dd14e680f1b77b78c2beafd7cd7d33846a9a3e2e30c82",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 23,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1080_10407782_2011_578011/p0023.png",
+   "sha256": "2192338a7b2675f5ce061812e90c27cd0ee8c1c2bc0c5e7036c74169b51b3670",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_8dac2f6d4cff3a53e3b43fa1",
+  "ENR_aeb20f2e0152be5738d4ef9b",
+  "ENR_cf8fb3d01e54d914f1b75ab9",
+  "ENR_d06cbd0c6b2ac8a3b9bdb0e4"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_be85007c45069775699acae7",
+   "kind": "figure",
+   "pages": [
+    20
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 6. Cooling channel geometry (height and base)."
+   ],
+   "bbox": [
+    {
+     "l": 121.95825958251953,
+     "t": 316.3459167480469,
+     "r": 379.8659973144531,
+     "b": 103.28204345703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/6\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_8dac2f6d4cff3a53e3b43fa1",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p20-20-f61d36279ac72e1f7f40127ee748d3c7a5ffa28f67096dd3dc6edf97d2d9b553.json",
+   "raw_sha256": "0ce4e47c217ef2795407ef56465630070debebe766331d6fe5e2911a45545911",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_25e712a6c12082b7cb5b1e1c",
+   "kind": "formula",
+   "pages": [
+    20
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/5",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 180.6803,
+     "t": 369.80930744,
+     "r": 430.39244076,
+     "b": 339.93147004,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\frac { 1 } { \\sqrt { f _ { w } ^ { 0 } } } = - 2 \\log \\left ( 0 . 2 7 \\varepsilon + \\frac { 2 . 5 1 } { \\text {Re} \\sqrt { f _ { w } ^ { 0 } } } \\right )",
+   "original_text": "1 ffiffiffiffiffi f 0 w p ¼ \u00002 log 0:27e þ 2:51 Re ffiffiffiffiffi f 0 w p ! ð40Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_8dac2f6d4cff3a53e3b43fa1",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p20-20-f61d36279ac72e1f7f40127ee748d3c7a5ffa28f67096dd3dc6edf97d2d9b553.json",
+   "raw_sha256": "0ce4e47c217ef2795407ef56465630070debebe766331d6fe5e2911a45545911",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_58c1ace8bc8b75a304187428",
+   "kind": "formula",
+   "pages": [
+    21
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/8",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 176.25863846,
+     "t": 457.1828146,
+     "r": 432.2641615399999,
+     "b": 430.5919752256,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mathcal { C } _ { \\xi } = \\frac { 1 + 1 . 5 \\Pr ^ { - 1 / 6 } R e ^ { - 1 / 8 } ( \\Pr - 1 ) } { 1 + 1 . 5 \\Pr ^ { - 1 / 6 } R e ^ { - 1 / 8 } ( \\Pr \\xi - 1 ) } \\xi",
+   "original_text": "Cn ¼ 1 þ 1:5Pr \u00001=6 Re \u00001=8 ðPr \u0000 1Þ 1 þ 1:5Pr \u00001=6 Re \u00001=8 ðPrn \u0000 1Þ n ð43Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d06cbd0c6b2ac8a3b9bdb0e4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p21-21-3223001b9170e1ae56104f0fb64f02b634d4e2c2f5e7e48baa59710dbe76fd63.json",
+   "raw_sha256": "ff42d2bb656bd394172839f72944ed967a05df31085785614dfe0596989fe26c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6473718e76a8df111ccaab03",
+   "kind": "formula",
+   "pages": [
+    21
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 205.73830021999999,
+     "t": 613.7861005999999,
+     "r": 432.26387109999996,
+     "b": 602.0016876000001,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u = N u ^ { 0 } \\cdot \\mathcal { C } _ { \\xi } \\cdot \\mathcal { C } _ { x } \\cdot \\mathcal { C } _ { I }",
+   "original_text": "Nu ¼Nu 0 \u0001 Cn \u0001 Cx \u0001 CI ð41Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d06cbd0c6b2ac8a3b9bdb0e4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p21-21-3223001b9170e1ae56104f0fb64f02b634d4e2c2f5e7e48baa59710dbe76fd63.json",
+   "raw_sha256": "ff42d2bb656bd394172839f72944ed967a05df31085785614dfe0596989fe26c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_6fa0ad6c932ef458b7d18363",
+   "kind": "formula",
+   "pages": [
+    21
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/9",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 194.51468261999992,
+     "t": 421.40951459999997,
+     "r": 432.26387109999996,
+     "b": 395.050814958159,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mathcal { C } _ { x } = 1 + \\left ( \\frac { x } { D _ { h } } \\right ) ^ { - 0 . 7 } \\left ( \\frac { T _ { w } } { T } \\right ) ^ { 0 . 1 }",
+   "original_text": "Cx ¼ 1 þ x Dh \u0012 \u0013\u00000:7 Tw T \u0012 \u00130:1 ð44Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d06cbd0c6b2ac8a3b9bdb0e4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p21-21-3223001b9170e1ae56104f0fb64f02b634d4e2c2f5e7e48baa59710dbe76fd63.json",
+   "raw_sha256": "ff42d2bb656bd394172839f72944ed967a05df31085785614dfe0596989fe26c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_770fcd380c02c0619f1723f2",
+   "kind": "formula",
+   "pages": [
+    21
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 205.96640087999998,
+     "t": 365.3969146,
+     "r": 432.26387109999996,
+     "b": 333.2984666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\mathcal { C } _ { I } = \\left [ R e \\left ( \\frac { R _ { h } } { R _ { c } } \\right ) ^ { 2 } \\right ] ^ { \\pm 0 . 0 5 }",
+   "original_text": "CI ¼ Re Rh Rc \u0012 \u00132 \" #\u00060:05 ð45Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d06cbd0c6b2ac8a3b9bdb0e4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p21-21-3223001b9170e1ae56104f0fb64f02b634d4e2c2f5e7e48baa59710dbe76fd63.json",
+   "raw_sha256": "ff42d2bb656bd394172839f72944ed967a05df31085785614dfe0596989fe26c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_9b7db3fa6b522c2646fe5753",
+   "kind": "formula",
+   "pages": [
+    21
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/6",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 205.79510572,
+     "t": 536.9105006,
+     "r": 432.26387109999996,
+     "b": 523.857000118159,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "N u ^ { 0 } = 0 . 0 6 2 R e _ { f } ^ { 0 . 7 } \\Pr _ { f } ^ { 0 . 4 }",
+   "original_text": "Nu 0 ¼ 0:062Re 0:7 f Pr 0:4 f ð42Þ",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_d06cbd0c6b2ac8a3b9bdb0e4",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p21-21-3223001b9170e1ae56104f0fb64f02b634d4e2c2f5e7e48baa59710dbe76fd63.json",
+   "raw_sha256": "ff42d2bb656bd394172839f72944ed967a05df31085785614dfe0596989fe26c",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d25ec9d4e20ffa21df7548bc",
+   "kind": "figure",
+   "pages": [
+    22
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 7. Coolant and wall behavior along the thrust chamber axis. (a) Wall heat flux, (b) coolant temperature, (c) wall temperature, and (d) coolant pressure."
+   ],
+   "bbox": [
+    {
+     "l": 82.27751922607422,
+     "t": 645.8169860839844,
+     "r": 419.6812744140625,
+     "b": 352.26116943359375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_aeb20f2e0152be5738d4ef9b",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1080_10407782_2011_578011/064e1294e651-p22-22-5295a267136173847a7787ea2a5102b13fee96524b71009ce6f407c07ec5dea2.json",
+   "raw_sha256": "2c67197235394768d2240f7bb350e5745e5f74a872fbd44b74dd0b43d1727138",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00035",
+   "page_start": 20,
+   "page_end": 20,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 19\n\nare divided into three sections of constant height h and base b, while the width tw\nvaries according to the engine radius r, as shown in Figure 6 where the channels\nand chamber dimensions are presented. The maximum channel aspect ratio is 8.5\n(at the throat region) and the minimum is nearly 4.5. Thus, in this practical system\nthe cooling channel aspect ratio is high enough to give confidence in the predictions\nof the quasi-2-D model, according to the results of the first validation test case. However, differently from the previous test cases, the channels are neither straight nor\nsmooth. Obviously, these channel features influence the coolant heat transfer and\npressure drop and must be taken into account in the flow characterization.\n\nThe considered cooling system has been studied with the quasi-2-D model for\nthe coolant flow coupled with the hot-gas and wall closure as described in section 3.\nIn particular, the hot-gas heat flux is evaluated by means of Eq. (35) together with\nthe classic Bartz’s correlation [36] for the heat transfer coefficient and quasi-1-D\nchemical equilibrium nozzle flow for Taw, hg; the thermophysical properties of supercritical hydrogen in cooling channels by means of the MBWR equation of state [37];\nthe coolant friction factor fw <sup>0</sup> <sup>by means of Colebrook’s correlation [38] because of its</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00036",
+   "page_start": 20,
+   "page_end": 20,
+   "section": "",
+   "text": "capability to evaluate the rough wall effect; the skin friction correction factor Cf by\nmeans of Petukhov’s formula (Eq. (36)); and the coolant heat transfer coefficient by\nmeans of Niino’s correlation [8] because it is fitted to supercritical hydrogen flow in\nrough curved channels with a strong wall-coolant temperature difference and high\nReynolds number, as in the present case. Colebrook’s semi-empirical relation for\nthe skin friction fw <sup>0</sup> <sup>is</sup>\n\n<u>1</u> <u>2:51</u>\n\n~~pf f~~ ¼ �2 log 0:27e þ ~~pf~~\n\nfw <sup>0</sup> Re\n\n~~f f~~\nf <sup>0</sup>\n\nRe\n\n!\n\n~~pf f~~\n\nfw <sup>0</sup>\n\n~~f f~~\nf <sup>0</sup>\n\nð40Þ\n\nFigure 6. Cooling channel geometry (height and base)."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00037",
+   "page_start": 21,
+   "page_end": 21,
+   "section": "",
+   "text": "20 M. PIZZARELLI ET AL.\n\nNiino’s semi-empirical relation for the Nusselt number is in a form which is slightly\ndifferent from Eq. (18), that is,\n\nNu ¼ Nu <sup>0</sup> �Cn �Cx �CI ð41Þ\n\nwhere Nu <sup>0</sup> is the Nusselt number for a nonadiabatic, smooth tube and is a function\nof the Reynolds number and the Prandtl number. To take into account the effect of\nvariable temperature, these nondimensional parameters are evaluated at the film\ntemperature, which is the mean value between the fluid and wall temperature, that is,\n\nNu <sup>0</sup> ¼ 0:062Re <sup>0:7</sup>\n\nf ð42Þ\n\n<sup>0</sup> f <sup>:7Pr</sup> f <sup>0:4</sup>\n\nThe term Cn is a roughness factor to correct for the surface roughness, Cx is an\nentrance factor to correct for the heat transfer coefficient in the thermally undeveloped region, and Ci is a curvature factor to account for a secondary flow effect\ninduced in a curved channel, that is,\n\nCn ¼ <sup><u>1 þ 1:5Pr�1=6Re�1=8ðPr �</u></sup> <sup><u>1Þ</u></sup> n ð43Þ\n\n1 þ 1:5Pr <sup>�1=6</sup> Re <sup>�1=8</sup> ðPrn � 1Þ\n\n- <u>��0:7�</u>\n\n<u>x</u> <u>Tw</u>\nDh T\n\n<u>x</u>\nCx ¼ 1 þ\nDh\n\n<u>�</u> <u>�0:1</u>\n\n<u>Tw</u>\n\nð44Þ\n\nand\n\n\" <u>�</u> �2#�0:05\n\nCI ¼ Re <sup><u>Rh</u></sup>\n\nRc\n\nð45Þ\n\nwhere n ¼ f <sup>0</sup>\n\nw <sup>0ðRe; eÞ=f 0</sup> w\n\nwhere n ¼ fw <sup>0ðRe; eÞ=f 0</sup> w <sup>ðRe; e ¼ 0Þ</sup> <sup>is</sup> <sup>the</sup> <sup>ratio</sup> <sup>of</sup> <sup>the</sup> <sup>rough</sup> <sup>tube</sup> <sup>isothermal</sup> <sup>friction</sup>"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00038",
+   "page_start": 21,
+   "page_end": 21,
+   "section": "",
+   "text": "factor to the smooth one, Rh is the hydraulic radius of the channel cross-section\n(Rh ¼ Dh=4), Rc is the channel radius of curvature, and the sign þ or � in the exponent\nof the expression for CI denotes the concave or convex curvature, respectively.\n\nThe Vulcain test case has also been analyzed by a 1-D model, whose physical\nand mathematical modeling is similar to the quasi-2-D model but the coolant velocity is constant in a channel section and the energy equation is not considered in the\n2-D form of Eq. (16), but in the 1-D form of Eq. (12). This means that all the coolant\nparameters vary only along the axial abscissa x and thus no thermal stratification\ncan be evaluated, as in a typical 1-D cooling channel flow model. For the 1-D flow\nmodel, the same semiempirical expressions of the quasi-2-D model have been\nadopted.\n\nWall heat flux from the hot-gas, coolant bulk temperature, wall temperature at\nthe hot-gas side, and coolant pressure are shown in Figure 7 for both 1-D and\nquasi-2-D models. First, it has to be noticed that the discontinuity of the plots in\nFigure 7 are due to the abrupt variation of the cooling channel cross-section (see\nFigure 6), and to the mathematical formulation of Niino’s relation which has a different behavior in the cases of convex or concave curvature of the cooling channel.\nIn Figure 7a, the wall heat flux presents an evident peak value at the throat section\nwhich is predicted to be 74 MW=m <sup>2</sup> in the case of the quasi-2-D model and only"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00039",
+   "page_start": 22,
+   "page_end": 22,
+   "section": "",
+   "text": "TEMPERATURE OF ROCKET ENGINE COOLING CHANNELS 21\n\nFigure 7. Coolant and wall behavior along the thrust chamber axis. (a) Wall heat flux, (b) coolant temperature, (c) wall temperature, and (d) coolant pressure.\n\n64 MW=m <sup>2</sup> in the case of the 1-D model. The lower heat flux prediction is due to the\ndifferent modeling of the coolant flow; in fact, in the 1-D Approach the coolant is\ncharacterized by a single temperature which is much higher than the bulk temperature predicted by the quasi-2-D model, as seen in Figure 7b, where the bulk temperature increase of the two models is shown to differ more than 50% at the channel exit.\nThe effect of the temperature stratification implies that the coolant far from the hot\nwall remains cool, and thus it can absorb heat more efficiently; as a consequence, the\nheat transfer is higher and the bulk temperature is lower. On the contrary, in the 1-D\nmodel the description of the coolant by a single temperature (the bulk temperature)\nleads to the underestimation of the coolant heat transfer capacity in the fluid regions\nthat are far from the hot wall. As a consequence, the wall temperature at the hot-gas\nside predicted by the 1-D model is much higher than that predicted by the quasi-2-D\nmodel (Figure 7c). Moreover, while the wall temperature values predicted by the 1-D\nmodel are unrealistic, the maximum value being 1300 K, the quasi-2-D model shows\na wall temperature profile with values much closer to the expected ones, the\nmaximum values being located in the throat region and bounded between 850 K\nand 900 K. This result is in good agreement with the experimental data of the\nVulcain engine thrust chamber [5], where the maximum wall temperature is nearly"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00040",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "",
+   "text": "22 M. PIZZARELLI ET AL.\n\n800 K. Finally, Figure 7d shows the coolant pressure drop, which is 16.7 bar for the\nquasi-2-D prediction and 26.4 bar for the 1-D prediction. The first result agrees quite\nwell with the prediction made in reference [6] with a parabolized Navier-Stokes equations solver, where the coolant pressure drop is evaluated as 16.2 bar; that is only a\n3% discrepancy with the present prediction. These results confirm that the proposed\napproach is able to describe the practical problem of a regenerative cooling system\nfar better than the popular 1-D approach.\n\n6. CONCLUSION"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00041",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "",
+   "text": "A simplified model for the analysis of coolant flow evolution and of thermal\nstratification in cooling channels has been developed and validated. The model\nallows one to evaluate the radial thermal stratification both in the cooling channel\nrib and in the coolant flow. Moreover, the introduction of a nonuniform velocity\nprofile in the coolant governing equations also permits to evaluate the behavior of\nthe heat flux from the rib to the coolant, whose description is of great importance\nfor evaluation, with reasonable accuracy, of the coupled wall-coolant problem.\nThe coolant flow model has been validated against CFD results of supercritical\nmethane in rectangular cooling channels; the comparison has shown good agreement\nof the quasi-2-D model with the reference solution in the case of high aspect ratio\ncooling channels, essentially because the rib heat transfer and friction force, which\nare described by a 2-D radial model, are predominant to those of the base, which\nare described by a less accurate 1-D model. The good agreement has been verified\non bulk variables (coolant pressure and temperature) and on variables in the radial\ndirection (coolant temperature and velocity). Then, the hot-gas=wall=coolant\ncoupled problem of the Vulcain rocket engine cooling system, which is characterized\nby high aspect ratio cooling channels, has been analyzed in terms of wall heat flux\nand temperature and on coolant pressure loss and temperature increase. The prediction of the quasi-2-D model has been compared to an equivalent 1-D model in which\nthe coolant behavior is described by a single temperature instead of a variable distribution in the radial direction. The comparison has shown that the quasi-2-D prediction is much more reliable than that of the 1-D model, thus giving confidence in the\ndescription of the HARCC problem by means of the proposed approach. In fact,\nquasi-2-D results show good agreement with the available experimental data of\nmaximum wall temperature in the throat region and coolant pressure drop."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1080_10407782_2011_578011#c00042",
+   "page_start": 23,
+   "page_end": 23,
+   "section": "",
+   "text": "REFERENCES\n\n1. D. K. Huzel and D. H. Huang, Modern Engineering for Design of Liquid-Propellant\nRocket Engines, AIAA, Washington, D.C., 1992.\n2. R. J. Quentmeyer, Rocket Combustion Chamber Life-Enhancing Design Concepts, AIAA\nPaper 1990-2116, 26th AIAA=ASME=SAE=ASEE Joint Propulsion Conference, Orlando,\nFL, July 16–18, 1990.\n3. M. L. Meyer, Electrically Heated Tube Investigation of Cooling Channel Geometry\nEffects, AIAA Paper 1995-2500, 31st AIAA=ASME=SAE=ASEE Joint Propulsion Conference, San Diego, CA, July 10–12, 1995."
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "formula": 6
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

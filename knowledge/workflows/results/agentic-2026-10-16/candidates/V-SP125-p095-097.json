@@ -1,0 +1,1605 @@
+{
+ "packet": "V-SP125-p095-097",
+ "kind": "verification",
+ "document_id": "DOC_NTRS_19710019929",
+ "source_pdf": "propulsion_texts/19710019929.pdf",
+ "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+ "pages": [
+  95,
+  97
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 95,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0095.png",
+   "sha256": "2dad94e3328fbf9dc397d5e8f29d1377428131e6e77ec2175a53171b68643c6f",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 96,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0096.png",
+   "sha256": "ef1e212eb405636d8d1e7754cde9bf88821e36edd1e9a11007df8e3faf654ea7",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 97,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0097.png",
+   "sha256": "cfec20049ceb47c1d80e060c69a8f1120c1c379e276515e8b0a64bd46e277fbb",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_0d291904bdd409ad7c3aaf98",
+  "ENR_7a0fa37b21405f0fb23d70c5",
+  "ENR_adc2863582baf97fec94ffa2"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_00a6bb63309188b144ee4289",
+   "kind": "figure",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 227.91934413279333,
+     "t": 758.7536659240723,
+     "r": 349.5695901474274,
+     "b": 735.9903717041016,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_28bf5c10eeb37bb86deabb3c",
+   "kind": "figure",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 233.9966511178524,
+     "t": 72.6470947265625,
+     "r": 355.9804243251969,
+     "b": 46.21954345703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_239c626880315dd4d7a48da1",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/24",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 383.3333333333333,
+     "t": 300.6666666666667,
+     "r": 511.3333333333333,
+     "b": 290.0,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "V _ { c } = \\dot { W } _ { t c } V t _ { s }",
+   "original_text": "Vo=WieVts (4-3)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_455c22840089af3c4e8ba814",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/32",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 375.6666666666667,
+     "t": 119.33333333333337,
+     "r": 513.3333333333333,
+     "b": 94.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "L ^ { * } = \\frac { V _ { c } } { A _ { t } } = \\frac { \\dot { W } _ { t c } V t _ { s } } { A _ { t } }",
+   "original_text": "pee _WieVts = 4-4 Art As (4-4)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_554679e9af3e15f1d82d6071",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/15",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 100.66666666666666,
+     "t": 306.3333333333333,
+     "r": 259.33333333333337,
+     "b": 297.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\text {Design} \\, c ^ { * } = 7 6 7 0 \\times 0 . 9 7 5 = 7 4 8 0 \\, f t / s e c",
+   "original_text": "Design c* = 7670 x 0.975 = 7480 ft/sec",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_69e6c31ad567d5200dd4ae0a",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/17",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 97.66666666666667,
+     "t": 201.0,
+     "r": 263.0,
+     "b": 192.33333333333326,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\text {Design vacuum } C _ { l } = 1 . 8 7 6 \\times 1 . 0 1 = 1 . 8 9 5",
+   "original_text": "Design vacuum Cs=1.876«1.01= 1.895",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c810ddb08fed8744009f38cf",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/19",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 86.0,
+     "t": 155.33333333333337,
+     "r": 276.0,
+     "b": 135.33333333333337,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\text {Design vacuum (I_s)} _ { \\mathfrak { t } \\mathfrak { c } } = \\frac { 7 4 8 0 \\times 1 . 8 9 5 } { 3 2 . 2 } = 4 4 0 \\sec",
+   "original_text": "_ 7480 x 1.895 82.2 Design vacuum (Is)tc= = 440 sec",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d266d7384140dede2256b853",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/10",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 76.66666666666667,
+     "t": 466.0,
+     "r": 286.0,
+     "b": 444.66666666666663,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "( T _ { c } ) _ { \\mathfrak { n s } } = 5 5 8 0 ^ { \\circ } \\, F \\, \\text { or } \\, 6 0 4 0 ^ { \\circ } \\, R , \\\\ \\Re = 1 2 \\, l b / m o l e , \\quad \\gamma = 1 . 2 1 3",
+   "original_text": "(Te)ns = 5580° F or 6040° R, M=12lb/mole, y=1.213",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_d89630f110ce1744defcf871",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/7",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 82.66666666666667,
+     "t": 570.0,
+     "r": 278.66666666666663,
+     "b": 551.6666666666666,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "\\text {Design sea level } ( I _ { \\mathfrak { s } } ) _ { \\text {tc} } = & \\frac { 5 6 6 0 \\times 1 . 5 3 1 } { 3 2 . 2 } = 2 7 0 \\, \\sec",
+   "original_text": "_ 5660x 1.531 Design sea level (Is)t¢ = 35.3 =270 sec",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e4a4938e20b386609fc5e918",
+   "kind": "formula",
+   "pages": [
+    95
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/12",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 76.0,
+     "t": 406.0,
+     "r": 272.66666666666663,
+     "b": 386.6666666666667,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "Theoretical c * = \\frac { \\sqrt { 3 2 . 2 \\times 1 . 2 1 3 \\times 6 0 4 0 \\times 1 5 4 4 / 1 2 } } { 0 . 7 1 7 }",
+   "original_text": "V82.2 x 1.213 x 6040 x 1544/12 . ee Theoretical c*= O77",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_7a0fa37b21405f0fb23d70c5",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p95-95-3be889c942e133f8090e16825a1c4f7214bc83737641940c09baa3a6ea2637f8.json",
+   "raw_sha256": "f05afc0f8e0e9af7edaad111806978c1683b73d22f8e06b0f8bcc94b03fdb4f1",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_078d4114e43b3f981edcac3a",
+   "kind": "figure",
+   "pages": [
+    96
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 254.62195077549612,
+     "t": 60.0220947265625,
+     "r": 392.13537535322473,
+     "b": 36.89569091796875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0d291904bdd409ad7c3aaf98",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p96-96-1a4542ccc34211a7cf87179349c99d8fca2ee4fbe7749b0c5785c8ce712c45ff.json",
+   "raw_sha256": "390f15e0efbdef8e9b033d18e6bfbe76ed03d54fa232f52aea1207795dcffb37",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_674361e9886c57d4d84c5833",
+   "kind": "figure",
+   "pages": [
+    96
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 266.72156345898117,
+     "t": 746.9467163085938,
+     "r": 386.8232566281583,
+     "b": 727.196647644043,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0d291904bdd409ad7c3aaf98",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p96-96-1a4542ccc34211a7cf87179349c99d8fca2ee4fbe7749b0c5785c8ce712c45ff.json",
+   "raw_sha256": "390f15e0efbdef8e9b033d18e6bfbe76ed03d54fa232f52aea1207795dcffb37",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_885dd4d4001760eee54d2b07",
+   "kind": "figure",
+   "pages": [
+    96
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 4-7.—Effect of L* on c* value of experimental thrust chamber."
+   ],
+   "bbox": [
+    {
+     "l": 107.66231422736486,
+     "t": 305.1365661621094,
+     "r": 316.0874883483787,
+     "b": 122.1552734375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/8\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0d291904bdd409ad7c3aaf98",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p96-96-1a4542ccc34211a7cf87179349c99d8fca2ee4fbe7749b0c5785c8ce712c45ff.json",
+   "raw_sha256": "390f15e0efbdef8e9b033d18e6bfbe76ed03d54fa232f52aea1207795dcffb37",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_41a395666ebe303a12d39309",
+   "kind": "table",
+   "pages": [
+    96
+   ],
+   "table_grid": [
+    [
+     "Propellant combination",
+     "Combustion chamber characteristic length (L*). in."
+    ],
+    [
+     "Chlorine tnnuoridelhydrazine-base fuel.",
+     "30-35"
+    ],
+    [
+     "Liquid fluorine/hydrazine ........",
+     ". 24-28"
+    ],
+    [
+     "Liquid fluorine/liquid hydrogen (GH 2 injection) ....",
+     "22-26"
+    ],
+    [
+     "Liquid nuorine/liquid hydrogen (LH 2 injection) .",
+     "25-30"
+    ],
+    [
+     "Hydrogen peroxide /RP-l (including catalyst bed) .....",
+     "60-70"
+    ],
+    [
+     "Nitric acid/hydrazine-base fuel.",
+     "30-35"
+    ],
+    [
+     "Nitrogen tetroxideihydrazine-base fuel.",
+     "30-35"
+    ],
+    [
+     "Liquid oxygen/ammonia.",
+     "30-40"
+    ],
+    [
+     "LiqUId oxygen/liquid hydrogen (GH 2 injection) .",
+     "22-28"
+    ],
+    [
+     "Liquid oxygen/liquid hydrogen (LH 2 inj ection) ..",
+     "30-40"
+    ],
+    [
+     "Liquid oxy~en/RP-l .",
+     "-to-50"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "TABLE 4-1.—Recommended Combustion Chamber Characteristic Length (L*) for Various Propellant Combinations"
+   ],
+   "bbox": [
+    {
+     "l": 335.20837331219315,
+     "t": 640.5579681396484,
+     "r": 548.965495569507,
+     "b": 427.8126220703125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 12x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_0d291904bdd409ad7c3aaf98",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p96-96-1a4542ccc34211a7cf87179349c99d8fca2ee4fbe7749b0c5785c8ce712c45ff.json",
+   "raw_sha256": "390f15e0efbdef8e9b033d18e6bfbe76ed03d54fa232f52aea1207795dcffb37",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_133880a5bb9a0651f23e216e",
+   "kind": "figure",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/3",
+   "caption_text": [
+    "Figure 4-9.-Elements of basic cylindrical combustion chamber."
+   ],
+   "bbox": [
+    {
+     "l": 289.8458412422642,
+     "t": 273.19091796875,
+     "r": 500.34636931324167,
+     "b": 127.40032958984375,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/50\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_8813f5624469814a3a437975",
+   "kind": "figure",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [
+    "Figure 4-8.—Frequently used geometrical shapes for combustion chambers."
+   ],
+   "bbox": [
+    {
+     "l": 65.99330900251573,
+     "t": 507.3051452636719,
+     "r": 277.91126289030535,
+     "b": 129.98309326171875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/5\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c428d4f19d043e33e6f534eb",
+   "kind": "figure",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/4",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 217.1493608909894,
+     "t": 71.156982421875,
+     "r": 352.45854415469006,
+     "b": 51.2108154296875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e23c0af5b32c1cd79098c71b",
+   "kind": "figure",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 229.97096830327462,
+     "t": 756.0933456420898,
+     "r": 343.9705810546875,
+     "b": 738.7182807922363,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_e28c17d5c43e8da6d84ebc72",
+   "kind": "figure",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/2",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 316.94599596588586,
+     "t": 310.2904968261719,
+     "r": 504.41250321258696,
+     "b": 285.869140625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_919995d52eb1fdea71e09fce",
+   "kind": "formula",
+   "pages": [
+    97
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/49",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 318.3333333333333,
+     "t": 310.3333333333333,
+     "r": 504.0,
+     "b": 285.3333333333333,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "A , Vo=At [oece 43 y= Cot Heg'3- | (4-5)",
+   "original_text": "A , Vo=At [oece 43 y= Cot Heg'3- | (4-5)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_adc2863582baf97fec94ffa2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p97-97-64cb8d18f43cafdd2675e546a8c2c9286fd16c2d813a2ab033fe7178b0f7d212.json",
+   "raw_sha256": "db6f567ca4e3f446b4ba7dbe7fee089ad66dd24fd949e888b378f7e446ef3134",
+   "mechanical_flags": [
+    "UNBALANCED_[]"
+   ]
+  }
+ ],
+ "stored_objects": [
+  {
+   "id": "EQ_NTRS_19710019929_B679AC9F",
+   "store": "equations",
+   "type": "Equation",
+   "page": 95,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "SP-125 eq. (4-3): required combustion chamber volume from stay time",
+   "equation_number": "4-3",
+   "form": "Vc = Wtc V ts",
+   "statement": null,
+   "quote": "_V_ c = chamber volume, ft 3\nIV tc = propellant mass flow rate, lb/ sec\n_V_ = average specific volume, ft 3 _lIb_",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "Vc",
+     "meaning": "chamber volume",
+     "units": "ft^3",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "Wtc",
+     "meaning": "propellant mass flow rate (rendered 'IV tc' in Markdown; W-dot sub tc in the PDF)",
+     "units": "lb/sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V",
+     "meaning": "average specific volume",
+     "units": "ft^3/lb",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ts",
+     "meaning": "propellant stay time",
+     "units": "sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "Stay time is that needed for efficient combustion (complete mixing and combustion before entering the nozzle)"
+   ],
+   "validity": [],
+   "extraction_note": "The equation body is not rendered in the Markdown (only the 'where:' variable list survives). Form transcribed from a render of PDF page 95 of this same document (book p. 86), which shows Vc = W-dot_tc V t_s (4-3). 'IV tc' is an OCR artefact of W-dot sub tc.",
+   "same_page_formula_candidates": [
+    "CAND_239c626880315dd4d7a48da1",
+    "CAND_455c22840089af3c4e8ba814",
+    "CAND_554679e9af3e15f1d82d6071",
+    "CAND_69e6c31ad567d5200dd4ae0a",
+    "CAND_c810ddb08fed8744009f38cf",
+    "CAND_d266d7384140dede2256b853",
+    "CAND_d89630f110ce1744defcf871",
+    "CAND_e4a4938e20b386609fc5e918"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 95
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "Vc",
+      "Wtc",
+      "V",
+      "ts"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "EQ_NTRS_19710019929_D5935CFC",
+   "store": "equations",
+   "type": "Equation",
+   "page": 95,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "SP-125 eq. (4-4): characteristic length L* definition",
+   "equation_number": "4-4",
+   "form": "L* = Vc / At = Wtc V ts / At",
+   "statement": null,
+   "quote": "specify the propellant stay time in the combustion chamber. L* is defined as the ratio of\nchamber volume to nozzle throat area, and can be\nexpressed by the following equation:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [
+    {
+     "symbol": "L*",
+     "meaning": "characteristic chamber length",
+     "units": "in (book usage; ft consistent with Vc in ft^3 and At in ft^2)",
+     "role": "parameter",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_LSTAR"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "Vc",
+     "meaning": "combustion chamber volume",
+     "units": "ft^3 (cu in in sample calculation)",
+     "role": "output",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "At",
+     "meaning": "nozzle throat area",
+     "units": "in^2 in sample calculation",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": [],
+     "normalization_history": [
+      {
+       "resolution_state": "RESOLVED",
+       "quantity_candidates": [
+        "QTY_AT"
+       ]
+      }
+     ],
+     "normalization_basis": "SYSTEM_INFERS: symbol and exact canonical units; no source meaning or unit conversion inferred"
+    },
+    {
+     "symbol": "Wtc",
+     "meaning": "propellant mass flow rate",
+     "units": "lb/sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "V",
+     "meaning": "average specific volume",
+     "units": "ft^3/lb",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    },
+    {
+     "symbol": "ts",
+     "meaning": "propellant stay time",
+     "units": "sec",
+     "role": "input",
+     "resolution_state": "UNRESOLVED_ENTITY",
+     "quantity_candidates": []
+    }
+   ],
+   "assumptions": [
+    "At is in nearly direct proportion to the product of Wtc and V, so L* is essentially a function of ts"
+   ],
+   "validity": [
+    "Minimum required L* under a given set of operating conditions (propellants, mixture ratio, chamber pressure, injector design, chamber geometry) can only be evaluated by actual firings of experimental thrust chambers",
+    "L* values of 15 to 120 inches for stay times of 0.002-0.040 second have been used in various thrust chamber designs"
+   ],
+   "extraction_note": "The equation image is dropped by the Markdown conversion; the relation L* = Vc/At is stated verbatim in words in the Markdown, and the render of PDF page 95 shows L* = Vc/At = W-dot_tc V t_s / At (4-4). The second equality is from the PDF render only.",
+   "same_page_formula_candidates": [
+    "CAND_239c626880315dd4d7a48da1",
+    "CAND_455c22840089af3c4e8ba814",
+    "CAND_554679e9af3e15f1d82d6071",
+    "CAND_69e6c31ad567d5200dd4ae0a",
+    "CAND_c810ddb08fed8744009f38cf",
+    "CAND_d266d7384140dede2256b853",
+    "CAND_d89630f110ce1744defcf871",
+    "CAND_e4a4938e20b386609fc5e918"
+   ],
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 95
+    },
+    {
+     "check": "formula_mechanics",
+     "flags": []
+    },
+    {
+     "check": "unresolved_quantity_mapping",
+     "symbols": [
+      "L*",
+      "Vc",
+      "At",
+      "Wtc",
+      "V",
+      "ts"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_06B2C308",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In an experimental combustion chamber (figure 4-7) c* increases with L* to an asymptotic maximum; increasing L* beyond a certain point tends to decrease overall engine system performance.",
+   "quote": "figure 4-7. The c* value increases with L* to an\nasymptotic maximum. Increasing L* beyond a\ncertain point tends to decrease overall engine\nsystem performance because of the following:",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_11BA0C46",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "From equation (4-3) the stay time ts is independent of the combustion chamber geometry; theoretically, for a given required volume, the chamber can be of any shape.",
+   "quote": "As can be seen from equation (4-3), the stay\ntime _ts_ is independent of the combustion chamber\ngeometry.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_3094EADD",
+   "store": "claims",
+   "type": "Claim",
+   "page": 97,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "By design-practice convention the combustion chamber volume includes the space between the injector face (plane I-I) and the nozzle throat plane (II-II), i.e. it includes the convergent section.",
+   "quote": "In design practice, it has been arbitrarily defined that the combustion chamber volume includes the space between injector face I-I and the nozzle throat plane II-II.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 97
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_34C37414",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Under a given set of operating conditions (propellants, mixture ratio, chamber pressure, injector design, chamber geometry), the minimum required L* can only be evaluated by actual firings of experimental thrust chambers; it is an empirical design input, not a predicted quantity.",
+   "quote": "such as type of propellants, mixture ratio, chamber pressure, injector design, and chamber geometry, the value of the minimum required L* can",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_41EFB911",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Table 4-1 lists recommended combustion chamber characteristic length (L*) in inches for various propellant combinations (e.g. liquid fluorine/hydrazine 24-28; hydrogen peroxide/RP-1 including catalyst bed 60-70; nitric acid or N2O4 with hydrazine-base fuel 30-35; LO2/LH2 22-28 with GH2 injection and 30-40 with LH2 injection; LO2/RP-1 40-50).",
+   "quote": "|Propellant combination|Combustion<br>chamber<br>characteristic<br>length_(L*)._in.|",
+   "confidence": "medium",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_AB38856E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 95,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "L* (L-star) is defined as the ratio of combustion chamber volume to nozzle throat area and is used to specify the propellant stay time in the combustion chamber.",
+   "quote": "specify the propellant stay time in the combustion chamber. L* is defined as the ratio of",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 95
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_C0CE7013",
+   "store": "claims",
+   "type": "Claim",
+   "page": 97,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Pressurized-gas-fed low-thrust engines have used contraction area ratios of 2 to 5; most turbopump-fed high-thrust, high-chamber-pressure engines use 1.3 to 2.5.",
+   "quote": "For pressurized-gas propellant feed, lowthrust engine systems contraction area ratio values of 2 to 5 have been used. For most turbopump propellant feed, high thrust and high chamber pressure engine systems lower ratio values of 1.3 to 2.5",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 97
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_C0DE8E6E",
+   "store": "claims",
+   "type": "Claim",
+   "page": 97,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "For a cylindrical chamber of given At and L*, the contraction area ratio can be optimized through careful study of combustion performance with the injector, chamber gas-flow pressure drop, wall cooling, combustion stability, weight, space envelope, and ease of manufacturing.",
+   "quote": "(2) Chamber gas flow pressure drop (3) Chamber wall cooling requirements (4) Combustion stability (5) Weight (6) Space envelope (7) Ease of manufacturing",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_SHOULDER_FILL_FRACTION"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 97
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_C1473A5D",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Design practice: with the throat area At and the minimum required L* (from table 4-1 / firings) established, the required combustion chamber volume Vc is calculated by equation (4-4), i.e. Vc = L* At.",
+   "quote": "table 4-1. With _At_ and minimum required L*\nestablished, the required combustion chamber\nvolume _V_ c can be calculated by equation (4-4).",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_C3589D9F",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "In actual design practice, optimization analyses determine the minimum possible combustion chamber L* consistent with efficient combustion.",
+   "quote": "In actual design practice, optimization analyses\nwill determine the minimum possible combustion\nchamber L* consistent with efficient combustion.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_DC3845D7",
+   "store": "claims",
+   "type": "Claim",
+   "page": 95,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The volume of the combustion chamber has a definite effect on combustion efficiency; the theoretical required chamber volume is a function of the propellant mass flow rate, their average density, and the stay time needed for efficient combustion.",
+   "quote": "combustion before entering the nozzle. The volume of the combustion chamber thus has a definite effect on combustion efficiency. The theoretical required chamber volume is a function of",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 95
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_DCE9CB00",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "L* values of 15 to 120 inches, for corresponding propellant stay-time values of 0.002-0.040 second, have been used in various thrust chamber designs.",
+   "quote": "only be evaluated by actual firings of experimental thrust chambers. L* values of 15 to 120\ninches for corresponding propellant stay-time\nvalues of 0.002-0.040 second have been used in\nvarious thrust chamber designs.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_E7BDDBCA",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Because the throat area At is nearly directly proportional to the product of Wtc and V, L* is essentially a function of the stay time ts.",
+   "quote": "Since the value of _At_ is in nearly direct proportion to the product of _W_ tc and _V,_ L* is essentially a function of _ts._ The effect of L* on c* in",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CLM_NTRS_19710019929_F0A1A1B5",
+   "store": "claims",
+   "type": "Claim",
+   "page": 96,
+   "is_target": true,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Larger L* penalizes the engine system through (1) higher thrust chamber volume and weight, (2) more surface area in need of cooling, and (3) increased friction losses at the chamber walls.",
+   "quote": "(1) Larger L* results in higher thrust chamber\n\n\nvolume and weight.\n(2) Larger L* creates more surface area in\n\n\nneed of cooling.\n(3) Larger L* increases friction losses at the\n\n\nchamber walls.",
+   "confidence": "high",
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19710019929_14CF8D63",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 95,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "The combustion chamber volume is sized to retain the propellants for a stay time sufficient to assure complete mixing and combustion before entering the nozzle.",
+   "equation_number": null,
+   "form": null,
+   "statement": "The combustion chamber volume is sized to retain the propellants for a stay time sufficient to assure complete mixing and combustion before entering the nozzle.",
+   "quote": "The combustion chamber serves as an envelope to retain the propellants for a sufficient\nperiod (stay time) to assure complete mixing and\ncombustion before entering the nozzle.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 95
+    }
+   ]
+  },
+  {
+   "id": "ASM_NTRS_19710019929_C1BFEC62",
+   "store": "entities",
+   "type": "Assumption",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Throat area At is in nearly direct proportion to the product of propellant mass flow rate Wtc and average specific volume V, so that L* is essentially a functio",
+   "equation_number": null,
+   "form": null,
+   "statement": "Throat area At is in nearly direct proportion to the product of propellant mass flow rate Wtc and average specific volume V, so that L* is essentially a function of stay time only.",
+   "quote": "Since the value of _At_ is in nearly direct proportion to the product of _W_ tc and _V,_ L* is essentially a function of _ts._ The effect of L* on c* in",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_5FFC9F26",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "L* range used in thrust chamber designs = 15 to 120 in",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "only be evaluated by actual firings of experimental thrust chambers. L* values of 15 to 120",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_761D0E50",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Propellant stay time range corresponding to L* 15-120 in = 0.002-0.040 sec",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "only be evaluated by actual firings of experimental thrust chambers. L* values of 15 to 120\ninches for corresponding propellant stay-time\nvalues of 0.002-0.040 second have been used in\nvarious thrust chamber designs.",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "CONST_NTRS_19710019929_7B645B6F",
+   "store": "entities",
+   "type": "EmpiricalConstant",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": "Table 4-1 recommended combustion chamber L* by propellant combination = ClF3/hydrazine-base 30-35; LF2/N2H4 24-28; LF2/LH2 (GH2 inj) 22-26; LF2/LH2 (LH2 inj) 25-30; H2O2/RP-1 incl. catalyst bed 60-70; nitric acid/hydrazine-base 30-35; N2O4/hydrazine-base 30-35; LO2/NH3 30-40; LO2/LH2 (GH2 inj) 22-28; LO2/LH2 (LH2 inj) 30-40; LO2/RP-1 '-to-50' in Markdown (40-50 in PDF render) in",
+   "equation_number": null,
+   "form": null,
+   "statement": null,
+   "quote": "Liquidoxy~en/RP-l.|30-35<br>24-28<br>22-26<br>25-30<br>60-70<br>30-35<br>30-35<br>30-40<br>22-28<br>30-40<br>-to-50|",
+   "confidence": null,
+   "model_ids": [
+    "MODEL_CHAMBER_LSTAR_VOLUME"
+   ],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_57E4C3CB",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "L* values of 15 to 120 inches, corresponding to propellant stay times of 0.002-0.040 second, have been used in various thrust chamber designs.",
+   "quote": "only be evaluated by actual firings of experimental thrust chambers. L* values of 15 to 120\ninches for corresponding propellant stay-time\nvalues of 0.002-0.040 second have been used in\nvarious thrust chamber designs.",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_8C8E1D5F",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 97,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "Contraction area ratio values of 2 to 5 have been used for pressurized-gas-fed low-thrust engines; 1.3 to 2.5 for turbopump-fed high-thrust, high-chamber-pressure engines.",
+   "quote": "For pressurized-gas propellant feed, lowthrust engine systems contraction area ratio values of 2 to 5 have been used. For most turbopump propellant feed, high thrust and high chamber pressure engine systems lower ratio values of 1.3 to 2.5",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 97
+    }
+   ]
+  },
+  {
+   "id": "VAL_NTRS_19710019929_CD0323CD",
+   "store": "validity",
+   "type": "ValidityEnvelope",
+   "page": 96,
+   "is_target": false,
+   "active": true,
+   "source_state": "CURRENT",
+   "verification": null,
+   "label": null,
+   "equation_number": null,
+   "form": null,
+   "statement": "The minimum required L* for a given set of operating conditions (propellants, mixture ratio, chamber pressure, injector design, chamber geometry) can only be evaluated by actual firings of experimental thrust chambers; table values are typical, not predictive.",
+   "quote": "such as type of propellants, mixture ratio, chamber pressure, injector design, and chamber geometry, the value of the minimum required L* can",
+   "confidence": null,
+   "model_ids": [],
+   "grounded": "GROUNDED",
+   "variables": [],
+   "assumptions": [],
+   "validity": [],
+   "extraction_note": "",
+   "mechanical_checks": [
+    {
+     "check": "quote_anchor",
+     "state": "GROUNDED",
+     "page": 96
+    }
+   ]
+  }
+ ],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00222",
+   "page_start": 94,
+   "page_end": 95,
+   "section": "MAIN PROPELLANT",
+   "text": "**MIXTURE** **RATIO. ' •• Wol** **Wf**\n\n_Figure_ _4-6.-Theoretical_ _N_ _2_ _0_ _4_ _1N_ _2_ _H_ _4_ _combustion_\n\n_data (frozen composition),_ _(Pc)ns=100_ _pSia._\n\n86 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\nSea level C [ can also be calculated using equation (1-33a), with the aid of equation (1-20),\n\nWith effective nozzle contour design, an overall C[ correction factor of 0.98 for L0 2 /RP-1\nfrozen composition can be used.\n\nDesign sea level _C[=_ 1.562 x 0.98 = 1.531\n\nFrom equation (1-31c):\n\nDeSlgn · sea 11(1) eve s tc 5660 32.2 <sup>x</sup> 1.531_- 270 sec\n\n(b) _A-2 Stage_ _Engine:_\n\nFrom figure 4-4 for _LOz/LH_ _z_ at (Pchs = 800\npsia and a _O/F_ mixture ratio of 5.22, the following values are derived for the chamber product\ngases:\n\n_(T_ c)n s = 5580° F or 6040° R,\nm = 12 lb/mole, y= 1.213\n\nSubstitute into equation (1-32a):\n\nTh eore lCa t <sup>·</sup> <sup>1</sup> c - <sup>* -</sup> <sup>_\\132.2_</sup> <sup>x 1.213 x 6040</sup> 0.717 <sup>x</sup> <sup>_1544/12_</sup>\n\n= 7670 _ft/sec_\n\nBased on experimental data, a c* correction\nfactor can be assumed for the L0 2 /LH 2 frozencomposition data of about 0.975.\n\nDesign c* = 7670 x 0.975 = 7480 ft/sec\n\nFor _y=1.213,_ E=40, a theoretical vacuum C[\nvalue of 1.876 can be derived from figure 1-11.\nC _f_ can also be calculated using equations (1-33a)\nand (1-20). With effective nozzle contour design,\nan overall C _f_ correction factor value of 1. 01 can\nbe used for LOz!LH z frozen-composition data:"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00223",
+   "page_start": 95,
+   "page_end": 95,
+   "section": "MAIN PROPELLANT",
+   "text": "Design vacuum _C[=_ 1.876 x 1.01 = 1.895\n\nFrom equation (l-31c):\n\n. 7480x1.895\nDeslgn vacuum _Ushc_ 32.2 440 sec\n\nThe reader should perform his own calculations for the A-3 and the A-4 engines, with the\naid of tables 3-4 and 3-5, and figures 4-5 and 4-6.\n\n4.3 THRUST CHAMBER CONFiGURATION\nLAYOUT\n\nAfter major thrust chamber operating parameters such as type of propellants, thrust level.\nchamber pressure, _C[,_ _c*,_ and _Is_ have been established from engine system requirements and\nperformance calculations, one of the fundamental\ndimensions of the thrust chamber, the throat\narea _At,_ can be readily derived (eq. (1-33)). The\nthroat area _At_ or throat diameter D t usually is\nthe starting point of a thrust chamber configuration layout. The combustion chamber and nozzle\n\nsection are commonly designed as an integral\nthrust chamber body. For light weight and ease\nof manufacture, thrust chambers will have the\ngeneral shape of a pressure vessel with wall\nsurfaces of rotation and smooth contours.\n\nCombustion Chamber Volume\n\nThe combustion chamber serves as an envelope to retain the propellants for a sufficient\nperiod (stay time) to assure complete mixing and\ncombustion before entering the nozzle. The volume of the combustion chamber thus has a definite effect on combustion efficiency. The theoretical required chamber volume is a function of\nthe mass flow rate of the propellants and their\naverage density, and of the stay time needed for\nefficient combustion. The relationship can be\nexpressed by the following equation:"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00224",
+   "page_start": 95,
+   "page_end": 95,
+   "section": "MAIN PROPELLANT",
+   "text": "where:\n\n_V_ c = chamber volume, ft 3\nIV tc = propellant mass flow rate, lb/ sec\n_V_ = average specific volume, ft 3 _lIb_\n\n_ts_ = propellant stay time, sec\n\nA useful parameter, the characteristic length L*\n(commonly pronounced \"L-star\"), can be used to\nspecify the propellant stay time in the combustion chamber. L* is defined as the ratio of\nchamber volume to nozzle throat area, and can be\nexpressed by the following equation:"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00225",
+   "page_start": 96,
+   "page_end": 96,
+   "section": "MAIN PROPELLANT",
+   "text": "DESIGN OF THRUST CHAMBERS AND OTHER COMBUSTION DEVICES 87\n\nSince the value of _At_ is in nearly direct proportion to the product of _W_ tc and _V,_ L* is essentially a function of _ts._ The effect of L* on c* in\nan experimental combustion chamber is shown in\nfigure 4-7. The c* value increases with L* to an\nasymptotic maximum. Increasing L* beyond a\ncertain point tends to decrease overall engine\nsystem performance because of the following:\n\nTABLE _4-1.-Recommended Combustion Chamber_\n\n(1) Larger L* results in higher thrust chamber\n\nvolume and weight.\n(2) Larger L* creates more surface area in\n\nneed of cooling.\n(3) Larger L* increases friction losses at the\n\nchamber walls.\nIn actual design practice, optimization analyses\nwill determine the minimum possible combustion\nchamber L* consistent with efficient combustion.\n\nUnder a given set of operating conditions,\nsuch as type of propellants, mixture ratio, chamber pressure, injector design, and chamber geometry, the value of the minimum required L* can\nonly be evaluated by actual firings of experimental thrust chambers. L* values of 15 to 120\ninches for corresponding propellant stay-time\nvalues of 0.002-0.040 second have been used in\nvarious thrust chamber designs. Typical L*\nvalues for different propellants are given in\ntable 4-1. With _At_ and minimum required L*\nestablished, the required combustion chamber\nvolume _V_ c can be calculated by equation (4-4).\n\n|Characteristic Length (L*) for Va lant Combinations|arious Propel-|\n|---|---|\n|Propellant combination|Combustion<br>chamber<br>characteristic<br>length_(L*)._in.|\n|Chlorinetnnuoridelhydrazine-basefuel.<br>Liquid fluorine/hydrazine<br>......... <br>Liquidfluorine/liquidhydrogen(GH 2<br>injection)....<br>Liquidnuorine/liquidhydrogen (LH 2<br>injection). <br>Hydrogen peroxide/RP-l(including<br>catalystbed).....<br>Nitricacid/hydrazine-basefuel.<br>Nitrogentetroxideihydrazine-basefuel.<br>Liquid oxygen/ammonia.<br>LiqUIdoxygen/liquidhydrogen(GH 2<br>injection) .<br>Liquidoxygen/liquidhydrogen (LH2 <br>inj ection)..<br>Liquidoxy~en/RP-l.|30-35<br>24-28<br>22-26<br>25-30<br>60-70<br>30-35<br>30-35<br>30-40<br>22-28<br>30-40<br>-to-50|"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00226",
+   "page_start": 96,
+   "page_end": 96,
+   "section": "MAIN PROPELLANT",
+   "text": "NZ~ _I_ 50-50 NZ H4 - UDMH\n_OIF_ MIXTURE RATIO - 1. 90\n\n~;:::\n~u. 5600\na:_w*_\ntJu 5500\n«~>- 5400\nug J:C ...J 5300\n\n_W_   - !5200\n\n|(P|Col2|Pc Ins|s' 27|75 PSI|IA. €|€c' 2|2.00|L|Col10|-|\n|---|---|---|---|---|---|---|---|---|---|---|\n|||||||||<br>|||\n|<br>|<br>||||||.\"..|~~>--~~|~||\n|<br>|<br>|||||/ <br>|||||\n|<br>||||<br>|~~_V _~~|<br>|||||\n|<br>|<br>|||<br>~~/ ~~<br>|||||||\n||||<br>_I _|<br>_I _|||||||\n||||||||||||\n\nCHAMBER CHARACTERISTIC LENGTH ( L*) IN.\n\n_Figure_ _4-7.-Effect_ _of_ L* _on_ c* _value_ _of_ _experi-_\n\n_mental_ _thrust_ _chamber._\n\nCombustion Chamber Shape\n\nAs can be seen from equation (4-3), the stay\ntime _ts_ is independent of the combustion chamber\ngeometry. Theoretic:111y. for a given required\nvolume, the chamber can be of any shape. In\nactual design, however, the choice of the combustion chamber configuration is limited. In a\nlong chamber with a small cross section, higher\nnonisentropic gas flow pressure losses will result as explained in chapter 1. This approach\nalso dictates a longer thrust chamber space envelope and imposes certain space limitation on\nthe injector design to accommodate the necessary number of injector holes. With a short\nchamber of large cross section, the propellant\natomization or vaporization zone occupies a\nrelatively large portion of the chamber volume,\nwhile the mixing and combustion zone becomes\ntoo short for efficient combustion. Other factors,\nsuch as heat transfer, combustion stability,\nweight, and ease of manufacturing, are to be\nconsidered in determining the final combustion\nchamber configuration."
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00227",
+   "page_start": 96,
+   "page_end": 97,
+   "section": "MAIN PROPELLANT",
+   "text": "Three geometrical shapes which have been\nused 10 combustion chamber design are shown in\nfigure 4-8. While the spherical and the nearspherical chambers were used in earlier European\n\n88 DESIGN OF LIQUID PROPELLANT ROCKET ENGINES\n\ndesigns, the cylindrical chamber has been used\n\nmost frequently in the United States.\n\nIn the design layout of the cylindrical combustion chamber of a given _At_ and _L*,_ the value\nof the contraction area ratio, (fe = _(Ae! At))_ can\nbe optimized through careful studies of the following factors:\n\nThe spherical or nearly-spherical chamber, as\ncompared to the cylindrical one of the same volume, offers the advantage of less cooling surface\nand weight. A sphere has the smallest surfaceto-volume ratio. For equal strength of material\nand chamber pressure, the structural walls of the\nspherical chamber are about half the thickness of\nthe walls of a cylindrical chamber. However, the\nspherical chamber is more difficult to manufacture and has poorer performance under most circumstances. For these practical reasons, the\ndesign details of the cylindrical combustion\nchamber will be treated in this book. Several\n\nnovel thrust chamber designs will also be discussed.\n\n.... 'ith the injector design\n(2) Chamber gas flow pressure drop\n(3) Chamber wall cooling requirements\n(4) Combustion stability\n(5) Weight\n(6) Space envelope\n(7) Ease of manufacturing\n\n(1) Combustion performance in conjunction"
+  },
+  {
+   "chunk_id": "DOC_NTRS_19710019929#c00228",
+   "page_start": 97,
+   "page_end": 97,
+   "section": "MAIN PROPELLANT",
+   "text": "For pressurized-gas propellant feed, lowthrust engine systems contraction area ratio\nvalues of 2 to 5 have been used. For most turbopump propellant feed, high thrust and high chamber pressure engine systems lower ratio values\nof 1.3 to 2.5 are employed. The reader is also\nreferred to section 1.2 chapter I, \"The Gas-flow\nProcesses in the Combustion Chamber and the\nNozzle. \"\n\n|Col1|Col2|\n|---|---|\n||T|\n\nOIA 01\nAREA AI\n\nCHAMBER CONTRACTION\n\nAREA RATIO\n\n_Figure_ _4-9.-Elements_ _of_ _basic_ _cylindrical_ _com-_\n\n_bustion chamber._\n\nSPHERICAL\nCOMBUSTION\nCHAMBER\n\nTHROAT\n\nI\n\nNEAR SPHERICAL\nCOMBUSTION\nCHAMBER\n\nTHROAT\n\nI\n\nCYLINDRICAL\nCOMBUSTION\nCHAMBER\n\nNOZZLE\n\nTHRUST CHAMBER\n\nAXIS\n\nNOZZLE\n\nTHRUST CHAMBER\n\nAXIS\n\nNOZZLE\n\nTHRUST CHAMBER\n\nAXIS\n\nThe basic elements of a cylindrical combustion chamber are identified in figure 4-9. In\ndesign practice, it has been arbitrarily defined\nthat the combustion chamber volume includes the\nspace between injector face I-I and the nozzle\nthroat plane II-II. The approximate value of the\ncombustion chamber volume can be expressed by\nthe following equation\n\nINJECTOR\n\nTHROAT\nCHAMBER :0:\nOIA. Dc I\nAREA Ac I '\n\nFACE\n\n1 I\n\nNOZZLE\n\n_Figure_ 4-8. _-Frequently_ _used geometrical shapes_\n\n_[or combustion chambers._"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 10,
+   "formula": 9,
+   "table": 1
+  },
+  "flagged_candidates": 1,
+  "target_objects": 16,
+  "objects_with_anchor_problems": 0
+ }
+}

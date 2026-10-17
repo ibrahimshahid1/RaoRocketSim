@@ -1,5 +1,5 @@
 {
- "ontology_version": "1.1.0",
+ "ontology_version": "1.2.0",
  "extraction_version": "1.0.1",
  "node_types": [
   "Document",
@@ -43,6 +43,7 @@
   "ValidationGate",
   "ArtifactManifest",
   "RepositoryDocument",
+  "StandardSource",
   "Subsystem",
   "EngineConfiguration",
   "OperatingPoint",
@@ -100,6 +101,8 @@
   "AVAILABLE_IN",
   "UNAVAILABLE_IN",
   "BLOCKED_ON_LITERATURE",
+  "BLOCKED_ON",
+  "HELD_AS",
   "PART_OF",
   "BOUND_TO_CONFIGURATION",
   "SUPERSEDES",
@@ -246,6 +249,7 @@
   "ProvenanceRecord": "PROV",
   "ExtractionCandidate": "CAND",
   "EmpiricalConstant": "CONST",
-  "Subsystem": "SUB"
+  "Subsystem": "SUB",
+  "StandardSource": "STD"
  }
 }

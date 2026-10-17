@@ -1,0 +1,489 @@
+{
+ "packet": "P1-SP125-p100",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_reason": "P1 Rao/TOP angle charts: SP-125 Fig. 4-14 (theta_n, theta_e vs epsilon, L_f)",
+   "queue_pages": [
+    100,
+    100
+   ],
+   "queue_document_id": "DOC_NTRS_19710019929",
+   "queue_source_pdf": "propulsion_texts/19710019929.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P1-SP125-p100.json",
+   "sha256": "a547446a84713aeaa723cfbecfc33528d9da8499db58e37cb122c9430372082c",
+   "size_bytes": 9652,
+   "kind": "extraction",
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "pages": [
+    100,
+    100
+   ],
+   "docling_run_ids": [
+    "ENR_dee8b80392001b2387a6bdf7"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 5
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/19710019929.pdf",
+   "sha256_in_bundle": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_recomputed": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+   "sha256_match": true
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    100,
+    100
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "100": {
+     "figure": 5
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "renders": [
+   {
+    "page": 100,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_NTRS_19710019929/p0100.png",
+    "dpi": 150,
+    "sha256_in_bundle": "41a84e2478a462997039c219c1081f1d8747dfac048e84f2939c5c629282186f",
+    "file_exists": true,
+    "sha256_recomputed": "41a84e2478a462997039c219c1081f1d8747dfac048e84f2939c5c629282186f",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "sha256_in_bundle": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+    "file_exists": true,
+    "sha256_recomputed": "7511dccaaedfc2e36f8ffa36e0c6c1b2619bf723eab6c85e177253d16cf149ad",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 5
+  },
+  "candidates_total": 5,
+  "mechanical_flags": {
+   "flag_computation_note": "agentic_packet.py (line 195) computes mechanical_flags only for kind == 'formula'; for every other kind the list is [] by construction",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_10a35e0984f0db6285ca1b33",
+    "CAND_30fe334539a25d2989b9146f",
+    "CAND_9be1802a757d9d01c5529886",
+    "CAND_a79da095de2e62b545ce25a2",
+    "CAND_b8ec8588250035e21947f621"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_whose_transcription_json_has_empty_captions_list": [
+    "CAND_9be1802a757d9d01c5529886",
+    "CAND_b8ec8588250035e21947f621"
+   ],
+   "non_formula_candidates_whose_transcription_is_not_a_captions_json": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "identical_transcription_strings_within_kind": [
+   {
+    "kind": "figure",
+    "transcription_whitespace_collapsed": "{\"captions\": [], \"annotations\": []}",
+    "candidate_ids": [
+     "CAND_9be1802a757d9d01c5529886",
+     "CAND_b8ec8588250035e21947f621"
+    ]
+   }
+  ],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_10a35e0984f0db6285ca1b33",
+    "kind": "figure",
+    "pages": [
+     100
+    ],
+    "bbox": [
+     {
+      "l": 348.13407180211743,
+      "t": 686.6180520470206,
+      "r": 554.0725402452434,
+      "b": 567.3988441249854,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/47\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_dee8b80392001b2387a6bdf7",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [
+     "#/texts/47"
+    ],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/2",
+      "match": "exact",
+      "page_no": 100
+     }
+    ],
+    "raw_item_captions_refs": [
+     "#/texts/47"
+    ],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 23,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/47",
+      "label": "caption",
+      "page_no": 100,
+      "bbox": {
+       "l": 346.3333333333333,
+       "t": 557.3333433333333,
+       "r": 556.3333333333334,
+       "b": 538.3333433333333,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 4-13.—Parabolic approximation of bell nozzle contour. Figure 4-13.—Parabolic approximation of bell nozzle contour.",
+      "orig": "Figure 4-13.—Parabolic approximation of bell nozzle contour. Figure 4-13.—Parabolic approximation of bell nozzle contour.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": true
+     }
+    ]
+   },
+   {
+    "id": "CAND_30fe334539a25d2989b9146f",
+    "kind": "figure",
+    "pages": [
+     100
+    ],
+    "bbox": [
+     {
+      "l": 115.44684743728264,
+      "t": 682.4029380112224,
+      "r": 315.56572268022455,
+      "b": 484.55186398821223,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_dee8b80392001b2387a6bdf7",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [
+     "#/texts/3"
+    ],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 100
+     }
+    ],
+    "raw_item_captions_refs": [
+     "#/texts/3"
+    ],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 38,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/3",
+      "label": "caption",
+      "page_no": 100,
+      "bbox": {
+       "l": 117.0,
+       "t": 478.6666766666666,
+       "r": 325.0,
+       "b": 463.6666766666666,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "FRACTIONAL NOZZLE LENGTH (L,) BASED ON A I5° HALF ANGLE CONICAL NOZZLE WITH ANY AREA RATIO €",
+      "orig": "FRACTIONAL NOZZLE LENGTH (L,) BASED ON A I5° HALF ANGLE CONICAL NOZZLE WITH ANY AREA RATIO €",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ]
+   },
+   {
+    "id": "CAND_9be1802a757d9d01c5529886",
+    "kind": "figure",
+    "pages": [
+     100
+    ],
+    "bbox": [
+     {
+      "l": 276.962742086807,
+      "t": 68.10151410072513,
+      "r": 400.98229421862214,
+      "b": 45.49486469308556,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_dee8b80392001b2387a6bdf7",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/4",
+      "match": "exact",
+      "page_no": 100
+     }
+    ],
+    "raw_item_captions_refs": [],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 0,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [],
+    "caption_text": null,
+    "caption_note": "no caption reference present in the bundle transcription"
+   },
+   {
+    "id": "CAND_a79da095de2e62b545ce25a2",
+    "kind": "figure",
+    "pages": [
+     100
+    ],
+    "bbox": [
+     {
+      "l": 341.5287677011943,
+      "t": 314.6534954609178,
+      "r": 554.8027623133183,
+      "b": 124.63401722821732,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/76\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_dee8b80392001b2387a6bdf7",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [
+     "#/texts/76"
+    ],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/3",
+      "match": "exact",
+      "page_no": 100
+     }
+    ],
+    "raw_item_captions_refs": [
+     "#/texts/76"
+    ],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 68,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/76",
+      "label": "caption",
+      "page_no": 100,
+      "bbox": {
+       "l": 345.0,
+       "t": 113.6666766666666,
+       "r": 555.0,
+       "b": 94.33334333333335,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Figure 4-14.-9, and 9¢ as function of expansion area ratio e.",
+      "orig": "Figure 4-14.-9, and 9¢ as function of expansion area ratio e.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ]
+   },
+   {
+    "id": "CAND_b8ec8588250035e21947f621",
+    "kind": "figure",
+    "pages": [
+     100
+    ],
+    "bbox": [
+     {
+      "l": 269.5127340153821,
+      "t": 765.142345992769,
+      "r": 410.0357802430698,
+      "b": 728.7586542579736,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "{\"captions\": [], \"annotations\": []}",
+    "transcription_length": 35,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_dee8b80392001b2387a6bdf7",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_NTRS_19710019929/471e590a0c8e-p100-100-98d73f7e010451f7705562de6d50290e9a86f2162adb7b211ef13acf6bc7a206.json",
+    "transcription_parse": "JSON object",
+    "transcription_json_keys": [
+     "annotations",
+     "captions"
+    ],
+    "caption_refs_in_transcription": [],
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 100
+     }
+    ],
+    "raw_item_captions_refs": [],
+    "raw_item_captions_refs_equal_transcription_refs": true,
+    "raw_item_child_count": 0,
+    "raw_item_label": "picture",
+    "caption_text_resolved_from_raw_artifact": [],
+    "caption_text": null,
+    "caption_note": "no caption reference present in the bundle transcription"
+   }
+  ],
+  "formula_candidates": [],
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 0,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_NOZZLE_RAO_TOP_BEZIER": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "missing_targets": {
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_NOZZLE_RAO_TOP_BEZIER": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 0
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 1
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "missing_targets_as_given": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "queue_targets": [
+    "MODEL_NOZZLE_RAO_TOP_BEZIER"
+   ],
+   "target_objects_in_summary": 0,
+   "computation_note": "agentic_packet.py lines 198-239: missing_targets = packet targets minus the ids of stored objects collected only from the equations, claims, entities and validity stores (records of this document that are targets or lie on the packet pages); a target id absent from those four stores is therefore listed as missing"
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00235",
+     "page_start": 100,
+     "page_end": 100,
+     "section": "MAIN PROPELLANT",
+     "text_length": 1404
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00236",
+     "page_start": 100,
+     "page_end": 100,
+     "section": "MAIN PROPELLANT",
+     "text_length": 2204
+    },
+    {
+     "chunk_id": "DOC_NTRS_19710019929#c00237",
+     "page_start": 100,
+     "page_end": 100,
+     "section": "MAIN PROPELLANT",
+     "text_length": 296
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

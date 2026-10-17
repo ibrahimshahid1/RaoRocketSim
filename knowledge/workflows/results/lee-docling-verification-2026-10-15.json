@@ -1,0 +1,107 @@
+[
+  {
+    "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_0E0B6A91",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page 7, Eq. (21), visually prints N_s = omega sqrt(Q)/(g H)^(3/4), matching the new transcription including the denominator grouping and exponent. The adjacent paragraph identifies this as specific velocity in the preliminary one-stage centrifugal-pump configuration procedure. With Q in m^3/s, omega in rad/s, g in m/s^2 and H in m, N_s is dimensionless. These are consistent SI unit interpretations, not newly extracted numerical validity bounds. The record correctly calls g gravitational acceleration, but its normalized quantity_candidates erroneously points to QTY_GAMMA; this confirmation explicitly excludes that incorrect normalization link and requires it to be repaired or left unresolved.",
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "evidence": {
+      "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+      "pdf_page": 7,
+      "equation_number": "21",
+      "method": "Independent visual comparison against a fresh PyMuPDF rendering directly from the original PDF, also compared with the retained page render; source file SHA checked.",
+      "render_path": "knowledge/.work/lee/page7.png",
+      "render_sha256": "a7ee4eaf2b855213dcc69fd35906d9e756e04eb600bf6e04c6aa9366df3cbe53",
+      "independent_render_sha256": "0aa2c0d140702f485e9943e87f59852d1a1b4c6402c99fd542ec89a4e4618a12",
+      "extraction_file": "knowledge/workflows/results/lee-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "ed8673ff2b7f9863bbad8e47787edc7999e6035eb5812220f38442de15f95da8",
+      "reviewed_at": "2026-10-15T06:25:36+00:00",
+      "normalization_warning": "g means gravitational acceleration; QTY_GAMMA is an incorrect canonical-variable link."
+    },
+    "scope_note": "Confirms source formula, variable meanings, dimensionally consistent SI units and stated preliminary configuration context only. Does not confirm the incorrect g-to-QTY_GAMMA normalization, implementation correctness, numerical validity limits, measured pump performance or hardware qualification."
+  },
+  {
+    "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_E25A3881",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page 7, Eq. (22), visually prints D_s = D_out (g H)^(1/4)/sqrt(Q), matching the new form. The adjacent paragraph identifies specific diameter, with outlet diameter subsequently obtained through the Cordier relation. D_out in m, Q in m^3/s, g in m/s^2 and H in m yield dimensionless D_s. SI units are dimensionally consistent interpretations. As for Eq. (21), g is correctly described as gravity but wrongly normalized to QTY_GAMMA; this review does not confirm that canonical-variable association.",
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "evidence": {
+      "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+      "pdf_page": 7,
+      "equation_number": "22",
+      "method": "Independent visual comparison against a fresh rendering directly from the original PDF; checked quarter-power, square-root denominator and the adjacent configuration discussion.",
+      "render_path": "knowledge/.work/lee/page7.png",
+      "render_sha256": "a7ee4eaf2b855213dcc69fd35906d9e756e04eb600bf6e04c6aa9366df3cbe53",
+      "independent_render_sha256": "0aa2c0d140702f485e9943e87f59852d1a1b4c6402c99fd542ec89a4e4618a12",
+      "extraction_file": "knowledge/workflows/results/lee-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "ed8673ff2b7f9863bbad8e47787edc7999e6035eb5812220f38442de15f95da8",
+      "reviewed_at": "2026-10-15T06:25:36+00:00",
+      "normalization_warning": "g means gravitational acceleration; QTY_GAMMA is an incorrect canonical-variable link."
+    },
+    "scope_note": "Source transcription and dimensional interpretation only; the incorrect normalized g association must be repaired separately. No new numeric validity envelope, implementation validation, experimental validation or qualification is asserted."
+  },
+  {
+    "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_1BA28156",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page 7, Eq. (23), visually prints N_s = 3.72 D_s^(-1.1429), confirming both coefficient 3.72 and negative exponent -1.1429. The surrounding paragraph says the outlet diameter was derived from the Cordier diagram's empirical relationship between specific velocity and specific diameter. The new record's dimensionless N_s and D_s and its preliminary one-stage centrifugal-pump context are consistent. This is the particular relationship printed in the paper, not a universal pump-performance or qualified operating-range claim.",
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "evidence": {
+      "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+      "pdf_page": 7,
+      "equation_number": "23",
+      "method": "Independent original-PDF visual comparison of printed coefficient, exponent and adjacent Cordier/configuration context.",
+      "render_path": "knowledge/.work/lee/page7.png",
+      "render_sha256": "a7ee4eaf2b855213dcc69fd35906d9e756e04eb600bf6e04c6aa9366df3cbe53",
+      "independent_render_sha256": "0aa2c0d140702f485e9943e87f59852d1a1b4c6402c99fd542ec89a4e4618a12",
+      "extraction_file": "knowledge/workflows/results/lee-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "ed8673ff2b7f9863bbad8e47787edc7999e6035eb5812220f38442de15f95da8",
+      "reviewed_at": "2026-10-15T06:25:36+00:00"
+    },
+    "scope_note": "Confirms this source's empirical formula and stated context only. No numeric applicability bounds were found or invented in this page-level review; no implementation or hardware validation follows."
+  },
+  {
+    "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_29C78740",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page 7, Eq. (24), visually prints u_out = omega D_out/2, matching the new transcription, including division by two. The paragraph identifies the outlet diameter/outlet velocity relationship used before calculating outlet blade angle from the velocity triangle. The stored angular speed rad/s, diameter m and peripheral velocity m/s are dimensionally consistent SI interpretations, within the stated preliminary impeller configuration context.",
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "evidence": {
+      "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+      "pdf_page": 7,
+      "equation_number": "24",
+      "method": "Independent original-PDF visual comparison of outlet-speed identity and adjacent velocity-triangle context.",
+      "render_path": "knowledge/.work/lee/page7.png",
+      "render_sha256": "a7ee4eaf2b855213dcc69fd35906d9e756e04eb600bf6e04c6aa9366df3cbe53",
+      "independent_render_sha256": "0aa2c0d140702f485e9943e87f59852d1a1b4c6402c99fd542ec89a4e4618a12",
+      "extraction_file": "knowledge/workflows/results/lee-docling-2026-10-15.jsonl",
+      "extraction_file_sha256": "ed8673ff2b7f9863bbad8e47787edc7999e6035eb5812220f38442de15f95da8",
+      "reviewed_at": "2026-10-15T06:25:36+00:00"
+    },
+    "scope_note": "Confirms the extracted kinematic source identity and dimensional interpretation only. Does not validate blade geometry, pump performance, numerical implementation or hardware."
+  },
+  {
+    "object_id": "EQ_DOI_10_1007_S42405_020_00325_Z_00D2425E_D022B465",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "Original PDF page 7, Eq. (29), visually prints m_inv = P_inv,out/delta_P,inv = P_m,out/(delta_P,inv eta_m). The adjacent inverter paragraph explicitly defines inverter output power as motor output power divided by motor efficiency. Thus the extracted denominator contains motor efficiency eta_m and no inverter efficiency eta_inv. Eq. (28) prints the density symbol delta_inv, while Eq. (29) prints delta_P,inv; the stored normalization note records that variation. Power in W and output power density in W/kg produce mass in kg. This is a component mass estimate from power density, not a measured inverter mass.",
+    "source_sha256": "00d2425ed35f3fe39b8debbfa852cdeb9a6f0ae006eca0296d9523ae7a499500",
+    "evidence": {
+      "document_id": "DOC_DOI_10_1007_S42405_020_00325_Z_00D2425E",
+      "source_pdf": "propulsion_texts/10.1007_s42405-020-00325-z.pdf",
+      "pdf_page": 7,
+      "equation_number": "29",
+      "method": "Independent original-PDF visual comparison of both Eq. (29) equalities, Eq. (28) density notation, and the inverter output-power definition in the preceding paragraph.",
+      "render_path": "knowledge/.work/lee/page7.png",
+      "render_sha256": "a7ee4eaf2b855213dcc69fd35906d9e756e04eb600bf6e04c6aa9366df3cbe53",
+      "independent_render_sha256": "0aa2c0d140702f485e9943e87f59852d1a1b4c6402c99fd542ec89a4e4618a12",
+      "reviewed_at": "2026-10-15T06:25:36+00:00"
+    },
+    "scope_note": "Source equation and power-convention confirmation only. Equation-derived mass is an estimate, not a Measurement or experimentally validated inverter model. No software result, device efficiency, technology density or hardware qualification is established."
+  }
+]

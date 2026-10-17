@@ -1,0 +1,56 @@
+{
+ "packet": "V-SP125-p143",
+ "at": "2026-10-17T17:57:09.815543+00:00",
+ "tested_by": {
+  "role": "S3",
+  "model": "GPT-6 (Codex)"
+ },
+ "knowledge_tests": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "exit_code": 0,
+  "tail": "........................................................................ [ 15%]\n........................................................................ [ 30%]\n........................................................................ [ 46%]\n........................................................................ [ 61%]\n........................................................................ [ 77%]\n........................................................................ [ 92%]\n...................................                                      [100%]\n467 passed in 13.16s\n"
+ },
+ "replay": [
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p143.verdicts.json",
+   "stats": {
+    "confirmed": 0,
+    "refuted": 0,
+    "unknown_ids": 0,
+    "added_assumptions": 0,
+    "added_validity": 0,
+    "ungrounded_additions": 0,
+    "model_links_removed": 0,
+    "unchanged": 1,
+    "stale": 0,
+    "uncertain": 0,
+    "retired_or_noncurrent": 0,
+    "self_verification_refused": 0,
+    "unsigned_refused": 0,
+    "worker_role_refused": 0,
+    "content_mismatch": 0,
+    "stale_legacy_replay": 0,
+    "content_hash_required": 0,
+    "stores_saved": false
+   },
+   "idempotent": true
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p143.parser.json",
+   "idempotent": true
+  },
+  {
+   "file": "knowledge/workflows/results/continuation-2026-10-17/reviews/V-SP125-p143.extraction.jsonl",
+   "exit_code": 0,
+   "already_banked": true
+  }
+ ],
+ "integrity": {
+  "nodes": 5728,
+  "edges": 7266,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ }
+}

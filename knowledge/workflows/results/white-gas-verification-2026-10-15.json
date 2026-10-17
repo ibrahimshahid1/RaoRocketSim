@@ -1,0 +1,156 @@
+[
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original boxed Eq. (9.26) on PDF p1090 gives T_0/T = 1 + (k-1) Ma^2/2 and Ma = V/a. Ratio direction, coefficient and square match. Kelvin temperatures and velocity/sound-speed units give dimensionless ratios. Source p1091 explicitly states that this temperature relation requires adiabatic flow and can hold with friction or shocks; it does not require global isentropy. The recorded perfect-gas, constant-specific-heat context is appropriate.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1090,
+      "source_equation_number": "9.26",
+      "render_path": "/private/tmp/white-gas-independent-2026-10-15-1090.png",
+      "render_sha256": "be995da970a1d87aac934f221d0582cbf9f7524843b72dd6e13f8f1fa4d2452d",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 1090 -l 1092 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-gas-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-gas-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "extraction_entry_key": "white-gas1090-1092",
+      "extraction_entry_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "reviewed_source_fields_sha256": "8b942c20f4b169ba186b79eb1a94d601f5e5837fb4d8b81468bf3998d100dd3c",
+      "source_model_separation": "Reviewed equation model_ids are empty; no implementation-match or model-support conclusion inferred."
+    },
+    "scope_note": "Confirmed the bounded source formula, dimensional interpretation, adiabatic/isentropic context and source example on PDF pp1090-1092 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (9.27) on PDF p1090 gives a_0/a = sqrt(T_0/T) = sqrt[1+(k-1) Ma^2/2]. The square-root structure, ratio direction and units match. The source states a proportional to sqrt(T), and p1091 explicitly groups this sound-speed relation with the adiabatic temperature relation even in the presence of irreversibilities.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1090,
+      "source_equation_number": "9.27",
+      "render_path": "/private/tmp/white-gas-independent-2026-10-15-1090.png",
+      "render_sha256": "be995da970a1d87aac934f221d0582cbf9f7524843b72dd6e13f8f1fa4d2452d",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 1090 -l 1092 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-gas-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-gas-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "extraction_entry_key": "white-gas1090-1092",
+      "extraction_entry_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "reviewed_source_fields_sha256": "4adc4180780e94a2450ed10fcc90a030d46c11ca91f14f88f87b8ab56648da47",
+      "source_model_separation": "Reviewed equation model_ids are empty; no implementation-match or model-support conclusion inferred."
+    },
+    "scope_note": "Confirmed the bounded source formula, dimensional interpretation, adiabatic/isentropic context and source example on PDF pp1090-1092 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified."
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (9.28a) on PDF p1091 has exponent k/(k-1), not k*(k-1), in both powers. Pressure and temperature ratios are dimensionless. The source introduces isentropic perfect-gas relations and defines p_0 by local hypothetical isentropic deceleration to rest. Its following paragraph retains this local meaning in an adiabatic nonisentropic flow, where p_0 can vary; globally conserved stagnation pressure is not implied in such a flow.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1091,
+      "source_equation_number": "9.28a",
+      "render_path": "/private/tmp/white-gas-independent-2026-10-15-1091.png",
+      "render_sha256": "809d681a893fabcc51aff7bb145f69c8a370f7b475f7eae73299a32b0e358b1b",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 1090 -l 1092 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-gas-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-gas-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "extraction_entry_key": "white-gas1090-1092",
+      "extraction_entry_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "reviewed_source_fields_sha256": "0b3a0f88dadebbdc13fa2b25e21d6f8894e8ed86f89629428f07a43572d79663",
+      "source_model_separation": "Reviewed equation model_ids are empty; no implementation-match or model-support conclusion inferred."
+    },
+    "scope_note": "Confirmed the bounded source formula, dimensional interpretation, adiabatic/isentropic context and source example on PDF pp1090-1092 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified.",
+    "missing_validity": [
+      {
+        "statement": "In adiabatic nonisentropic flow, isentropic stagnation pressure and density retain local rest-state meanings but vary as entropy changes; these relations do not establish globally constant p_0 or rho_0.",
+        "page": 1091,
+        "quote": "retain their local meaning, but they vary throughout the flow as the entropy changes"
+      }
+    ]
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (9.28b) on PDF p1091 has exponent 1/(k-1), with rho_0/rho equal to the corresponding power of T_0/T or the Mach-number expression. Exponents and density units match. The source defines rho_0 as local isentropic stagnation density, which can vary with entropy in an adiabatic nonisentropic flow.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1091,
+      "source_equation_number": "9.28b",
+      "render_path": "/private/tmp/white-gas-independent-2026-10-15-1091.png",
+      "render_sha256": "809d681a893fabcc51aff7bb145f69c8a370f7b475f7eae73299a32b0e358b1b",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 1090 -l 1092 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-gas-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-gas-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "extraction_entry_key": "white-gas1090-1092",
+      "extraction_entry_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "reviewed_source_fields_sha256": "781d7dd2d9e03278027b1e735f131e6706ecc1b92b58d7abd7ac9ee90d696ec4",
+      "source_model_separation": "Reviewed equation model_ids are empty; no implementation-match or model-support conclusion inferred."
+    },
+    "scope_note": "Confirmed the bounded source formula, dimensional interpretation, adiabatic/isentropic context and source example on PDF pp1090-1092 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified.",
+    "missing_validity": [
+      {
+        "statement": "In adiabatic nonisentropic flow, isentropic stagnation pressure and density retain local rest-state meanings but vary as entropy changes; these relations do not establish globally constant p_0 or rho_0.",
+        "page": 1091,
+        "quote": "retain their local meaning, but they vary throughout the flow as the entropy changes"
+      }
+    ]
+  },
+  {
+    "object_id": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+    "refuted": false,
+    "confidence": "high",
+    "reason": "The original Eq. (9.32) on PDF p1092 matches all four sonic-to-stagnation ratios and exponents: k/(k-1), 1/(k-1), unity and one-half. All ratios are dimensionless. Substitution k=1.4 gives 0.5282817877, 0.6339381453, 0.8333333333 and 0.9128709292, confirming rounded source examples 0.5283, 0.6339, 0.8333 and 0.9129. Ma=1 defines the sonic reference; k=1.4 is illustrative. The source distinguishes constant critical T_star/a_star in adiabatic nonisentropic flow from critical p_star/rho_star, which may vary.",
+    "source_sha256": "b09a7d3d559aa582661bd3315624ccf7e1259822ba9ea25d7f141c53353b8c05",
+    "evidence": {
+      "method": "Independent direct visual comparison of original-PDF render; SI dimensional and source-variable-meaning check",
+      "source_pdf": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf",
+      "pdf_page": 1092,
+      "source_equation_number": "9.32",
+      "render_path": "/private/tmp/white-gas-independent-2026-10-15-1092.png",
+      "render_sha256": "2aa95e5d720664187207d3683209433881e883f687e914391570d02f959b2efe",
+      "render_tool": "pdftoppm",
+      "render_dpi": 150,
+      "render_command": "pdftoppm -f 1090 -l 1092 -r 150 -png 'propulsion_texts/Fluid Mechanics, 7th Ed. (Mcgraw-Hill Series in Mechanical Engineering).pdf' /private/tmp/white-gas-independent-2026-10-15",
+      "extraction_journal": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/knowledge/workflows/results/white-gas-docling-2026-10-15.jsonl",
+      "extraction_journal_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "extraction_entry_key": "white-gas1090-1092",
+      "extraction_entry_sha256": "b984a0c6f99b1349e2a72c34dcfbff75be1711804454066a844ad14e52d678db",
+      "reviewed_source_fields_sha256": "1e4ad2d5dabd5342f7f5fe65716f99b2c330d7e84bd0f9f785c32b141cb66aa5",
+      "source_model_separation": "Reviewed equation model_ids are empty; no implementation-match or model-support conclusion inferred.",
+      "independent_example_calculation": {
+        "k": 1.4,
+        "p_star_over_p0": 0.5282817877171742,
+        "rho_star_over_rho0": 0.633938145260609,
+        "T_star_over_T0": 0.8333333333333334,
+        "a_star_over_a0": 0.9128709291752769,
+        "kind": "Algebraic substitution check of source example; not physical validation."
+      }
+    },
+    "scope_note": "Confirmed the bounded source formula, dimensional interpretation, adiabatic/isentropic context and source example on PDF pp1090-1092 only. Canonical quantity normalization, implementation matching, model support, hardware validation and full-page/corpus extraction completeness are not certified.",
+    "missing_validity": [
+      {
+        "statement": "In adiabatic nonisentropic flow the critical sound speed and temperature are constant, while critical pressure and density may vary; constant critical values of all four properties require the source isentropic-flow context.",
+        "page": 1092,
+        "quote": "In all isentropic flow, all critical properties are constant; in adiabatic\nnonisentropic flow, _a_ <sup>*</sup> and _T_ <sup>*</sup> are constant, but _p_ <sup>*</sup> and _ρ_ <sup>*</sup> may vary."
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "GPT-6 (Codex)"
+ },
+ "packet": "V-SP125-p107",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_5ca65534b55b3934c98f5b68",
+   "state": "REJECTED",
+   "reason": "Blackened page-header/footer crop, not scientific figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  },
+  {
+   "candidate_id": "CAND_c719abe20cb62e2a2fe9e0c8",
+   "state": "REJECTED",
+   "reason": "Blackened page-header/footer crop, not scientific figure.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  },
+  {
+   "candidate_id": "CAND_490fece68631ea68de458a08",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Source p107 symbols and printed values match (including printed7760 source arithmetic; match is transcription only).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  },
+  {
+   "candidate_id": "CAND_eb6ea4c927b105d01ed8cee4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Source p107 symbols and printed values match (including printed7760 source arithmetic; match is transcription only).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  },
+  {
+   "candidate_id": "CAND_f03b5ede55e3fd56acfa1afa",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Source p107 symbols and printed values match (including printed7760 source arithmetic; match is transcription only).",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  },
+  {
+   "candidate_id": "CAND_f2c609093e90150858af6bb6",
+   "state": "REJECTED",
+   "reason": "First-coordinate parser subscript theta_d disagrees with source theta_n. Existing corrected record retains notation history.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "pdf_page": 107,
+    "method": "Original PDF full-page pnggray140dpi visual comparison."
+   }
+  }
+ ]
+}

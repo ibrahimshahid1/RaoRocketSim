@@ -1,0 +1,35 @@
+[
+ {
+  "object_id": "CLM_NTRS_19710019929_07437818",
+  "refuted": false,
+  "confidence": "high",
+  "reason": "Original SP-125 PDF p.107 (printed p.98) explicitly directs design of an 80-percent bell by the parabolic approximation procedure; the next sentences specify the downstream throat circular arc radius 0.382 R_t, or 4.75 inches, and define L_n as 80 percent of the equivalent 15-degree half-angle conical nozzle length. The surrounding solution identifies this as the A-1 thrust chamber worked layout continued from Sample Calculation (4-2). The complete statement, subject/predicate/object, methodological claim type, page, quote, angle/length units and clarified worked-example qualifier match. The radius is retained as this example's contour choice, without treating its 4.75-inch value as a general bell-nozzle definition. No physical validity or qualification follows. Separately, the stored auto-derived QTY_MR tag names mixture ratio, which is unrelated to this length/contour assertion; that resolver metadata is not source transcription and needs separate maintenance.",
+  "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+  "content_sha256": "5a609d140390f1cd3d98276421169a48953c71fe6155ebf0a27cd8da488b4aed",
+  "reviewer": {
+   "role": "A",
+   "model": "GPT-6 Codex (role A independent verification subagent; separate analysis)"
+  },
+  "evidence": {
+   "document_id": "DOC_NTRS_19710019929",
+   "source_pdf": "propulsion_texts/19710019929.pdf",
+   "pdf_page": 107,
+   "printed_page": "98",
+   "method": "Original PDF rendered with pdftoppm at 190 dpi; full page visually inspected, including parabolic layout paragraph and surrounding A-1 solution.",
+   "inspected_science_fields": [
+    "claim_type",
+    "subject",
+    "predicate",
+    "object",
+    "statement",
+    "qualifiers",
+    "document_id",
+    "page",
+    "quote"
+   ],
+   "independence": "Separate role A analysis from the role F transcription; same Codex model family, no assertion of model diversity.",
+   "derived_metadata_note": "quantity_ids are SYSTEM_INFERS resolver outputs; QTY_RT is pertinent, QTY_MR mixture ratio is extraneous and is not certified by this source verdict."
+  },
+  "scope_note": "Bounded source fidelity of the example-scoped claim only; auto-derived quantity tags are distinct from source transcription."
+ }
+]

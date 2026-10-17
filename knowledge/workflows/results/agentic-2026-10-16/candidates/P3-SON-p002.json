@@ -1,0 +1,218 @@
+{
+ "packet": "P3-SON-p002",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_2514_1_B36301",
+ "source_pdf": "propulsion_texts/pintle_injector/son2017.pdf",
+ "source_sha256": "bc10dd3b3c8abad11a12460e23df493ffc4a0335ff1638c01f7d1a6cb5a2b1a7",
+ "pages": [
+  2,
+  2
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_1_B36301/p0002.png",
+   "sha256": "d1d3b0fee7e0d8280dd79a5241ddf37d4d4edc015bbd7daa195728398c9cb27c",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_99c9cad57d47d8c389bb9843"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_acb60482868e2e3305ddb0d6",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 1 Schematic of the pintle injector."
+   ],
+   "bbox": [
+    {
+     "l": 304.29745541115784,
+     "t": 737.6895267405016,
+     "r": 544.1313267656375,
+     "b": 543.8574479239551,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/9\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_99c9cad57d47d8c389bb9843",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p2-2-5baf35efe48acd0fd04b623ffcae5cb6cc9f371546efe094d161d6ad3dd43aae.json",
+   "raw_sha256": "d7649fa783b3f1e7f8acb9e2aa4f968aa47b28de3d912d2523dc6e828bb358f5",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_425b13206dc22bdb09ffb549",
+   "kind": "formula",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/texts/24",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 348.66336243,
+     "t": 411.5493498,
+     "r": 544.50233912,
+     "b": 371.21107609999996,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "A _ { \\min } & = \\frac { \\pi } { \\sin \\theta _ { p t } } \\left [ ( R _ { p o s t } - t _ { p o s t } ) ^ { 2 } \\\\ & - ( R _ { p o s t } - t _ { p o s t } - L _ { o p e n } \\sin \\theta _ { p t } \\cos \\theta _ { p t } ) ^ { 2 } \\right ]",
+   "original_text": "A min .0136 π sin θ pt h.0000 R post - t post .0001 2 - .0000 R post - t post - L open sin θ pt cos θ pt .0001 2 i (1)",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_99c9cad57d47d8c389bb9843",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p2-2-5baf35efe48acd0fd04b623ffcae5cb6cc9f371546efe094d161d6ad3dd43aae.json",
+   "raw_sha256": "d7649fa783b3f1e7f8acb9e2aa4f968aa47b28de3d912d2523dc6e828bb358f5",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_c19c97af9777aa0a1dc5d707",
+   "kind": "table",
+   "pages": [
+    2
+   ],
+   "table_grid": [
+    [
+     "Parameter",
+     "Value"
+    ],
+    [
+     "Post diameter D post, mm",
+     "8.0"
+    ],
+    [
+     "Center gap diameter D cg, mm",
+     "4.55"
+    ],
+    [
+     "Pintle rod diameter D pr, mm",
+     "3.0"
+    ],
+    [
+     "Pintle tip diameter D pt, mm",
+     "8.0"
+    ],
+    [
+     "Annular gap thickness t ann, mm",
+     "0.50"
+    ],
+    [
+     "Post angle θ post, deg",
+     "30"
+    ],
+    [
+     "Pintle tip angle θ pt, deg",
+     "0, 20, 40"
+    ],
+    [
+     "Pintle tip thickness t pt , mm",
+     "1.0"
+    ],
+    [
+     "Post recess length r post , mm",
+     "3.0"
+    ],
+    [
+     "Post thickness t post , mm",
+     "0.5"
+    ],
+    [
+     "Pintle-opening distance L open, mm",
+     "0.2-1.0"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 1 Dimensions of the pintle injector and experimental conditions"
+   ],
+   "bbox": [
+    {
+     "l": 350.81124811135317,
+     "t": 146.78082278508646,
+     "r": 497.6202804455879,
+     "b": 25.417270141757513,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 12x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_99c9cad57d47d8c389bb9843",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_1_B36301/bc10dd3b3c8a-p2-2-5baf35efe48acd0fd04b623ffcae5cb6cc9f371546efe094d161d6ad3dd43aae.json",
+   "raw_sha256": "d7649fa783b3f1e7f8acb9e2aa4f968aa47b28de3d912d2523dc6e828bb358f5",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [
+  "MODEL_INJECTOR_SON2017_MOVABLE_CONTINUOUS_GAP"
+ ],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00004",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "SON ET AL. 859\n\nuntil recently. However, variable-area injectors, especially pintle\ninjectors, have recently attracted renewed attention as nextgeneration injectors because of their associated benefits compared\nwith relatively newer engines. Previous studies were conducted\nby TRW, Inc., the predecessor of Northrop Grumman Space\nTechnology. Nevertheless, several results of their research were not\ndisclosed [4–7]. Throttleable low-cost engines have been recently\ndeveloped; a means to maintain optimized injection conditions at all\nthrust levels is required because conventional injectors with fixed\nareas have relatively poor efficiencies at lower thrust levels. A pintle\ninjector can control both the injection area and velocity to maintain\ngood spray conditions at low rates of propellant flow. Moreover, one\npintle injector can cover the entire combustion chamber because it\nhas a wide spray angle. This allows heavy injector plates comprising\nseveral injector elements to be replaced by one pintle-injector unit,\nthereby reducing manufacturing costs. Researchers at SpaceX have\ndemonstrated pintle injectors in their Grasshopper and Merlin rockets\n\n[8] and proved that they have the potential to become the preferred\ninjectors in the future."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "Many research groups in universities have attempted to develop\npintle-injector engines, however, only injection conditions have been\nchanged without design studies. Austin and Heister investigated the\ncombustion performance of a hole-injection-type pintle injector\nunder variance of major parameters, such as the total momentum ratio\nand the characteristic length of the chamber [9]. They concluded that\nthe optimal characteristic length was greater than 30 in. and that a\ntotal momentum ratio of 0.7 was suitable for a 1.7-in.-diam chamber.\nThey suggested some interesting parameters affecting combustion\nperformance; however, the effects of injector geometries were not\nconsidered. Bedard et al. built a Lox-centered pintle injector and\nimproved its annular design to achieve uniform injection [10]. Yue\net al. investigated numerical simulation of the pintle-injector\ncombustor using unsymmetrical dimethylhydrazine and N2O4 and\nrevealed two recirculation areas in the chamber [11]. Sakaki et al.\nstudied a pintle injector using ethanol and liquid oxygen. They\nconducted an experimental study of the planar pintle injector (which\nwas a simplified axisymmetric pintle injector) and they visualized\nchemiluminescence of CH [12]. Using the same method in a planar\nstudy, the axisymmetric injector was also investigated. Instability and\nlower combustion efficiency were observed at lower total momentum\nratio (TMR) conditions [13]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00006",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "Despite the many advantages of the pintle injector, they are\ndifficult to design because of their numerous design parameters and\nmoving mechanisms. Thus, it is important to consolidate the various\ndesign parameters down to just a few and evaluate them to yield\nmaximum performance. Furthermore, to maintain maximum\nperformance under all throttling conditions, the pintle operation\nmust be optimized. Nevertheless, recent research has not arrived at a\ngeneral design for a pintle injector and specific parametric studies for\noptimal design have not been conducted. Thus, we have suggested a\nsimplified design for a movable pintle injector and have tried to find\neffective nondimensional parameters. In our first study, the total\nmomentum ratio and Weber number were considered and determined\nto change the spray angle [14] and Sauter mean diameter (SMD) [15].\nIn the studies that followed, the transition of the minimum area inside\nthepintle flowpathwas revealed, which wasa special characteristic of\nthe movable pintle injector [16]. Finally, in this study, an additional\nspray experiment has been conducted to find effects of pintle tip\nangles upon spray performances, and performance correlations were\nexperimentally obtained under various injection conditions. Using\nthese experimental results, a design procedure was introduced to\nachieve optimized operation.\n\nII. Experimental Results and Empirical Correlations"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00007",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "A. Concept of a Pintle Injector\n\nAs illustrated in Fig. 1, a pintle injector has a simple design that\ntargets a combination of liquid–gaseous propellants such as liquid\noxygen and gaseous methane. A moving pintle at the center controls\nthe liquid propellant and an annular gap on the outside of the inner\nbody injects the gaseous propellant without any area control.\n\nFig. 1 Schematic of the pintle injector.\n\nPropellants from the center and annular nozzles collide near the pintle\ntip. The dimensions are detailed in Table 1. In this study, three types\nof pintle tips with different tip angles were used and the post angle\nwas fixed at 30.0 deg. Because the post angle was sufficiently small,\nthe minimum orifice area in the pintle nozzle was always determined\nat the post tip. Because of the variable area of the pintle nozzle, the\ndischarge coefficient could also change with the minimum orifice\narea in the pintle nozzle. The minimum orifice area shown in Fig. 2\nwas estimated and geometrically calculated according to Eq. (1):\n\n<u>π</u>\nAmin - sin θpt\n\nh�\n\nRpost − tpost\n\n2\n\n- <sup>�</sup> Rpost − tpost − Lopen sin θpt cos θpt\n\n2 <sup>i</sup>\n(1)\n\nIn Fig. 2a, the minimum opening distance Lmin was defined using\nthe perpendicular line from the post tip to pintle tip slope. As shown in\nFig.2b,thearea Amin fromthezero-openingdistancewastheminimum\narea inside the pintle nozzle. However, Amin was the same at a specific\npoint as the center gap area Acg, which was the constant area\ndetermined by the initial pintle design. After this transition point, the\nminimum area inside the pintle nozzle changed to the center gap area\nand could not be changed as the pintle-opening distance increased. As\nshown in Fig. 3 and Table 2, different pintle tip angles resulted in\ndifferent transition points and these transition points increased with\nincreasing pintle tip angle. The transition point of the minimum area\nwas a special characteristic of the variable-area injector and reflecting\nthis in the design criteria was necessary. In the figure, the spray\nexperiment indicated a nonzero minimum opening distance. The\nuniform liquid sheet was not constructed within 0.1 mmof the opening\ndistance. Consequently, the experimental condition of the opening\ndistance was controlled from 0.2 mm at a 0.1 mm interval."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_2514_1_B36301#c00008",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A developed in the 1950s for application to throttleable liquid",
+   "text": "Table 1 Dimensions of the pintle\ninjector and experimental conditions\n\nParameter Value\n\nPost diameter Dpost, mm 8.0\nCenter gap diameter Dcg, mm 4.55\nPintle rod diameter Dpr, mm 3.0\nPintle tip diameter Dpt, mm 8.0\nAnnular gap thickness tann, mm 0.50\nPost angle θpost, deg 30\nPintle tip angle θpt, deg 0, 20, 40\nPintle tip thickness tpt, mm 1.0\nPost recess length rpost, mm 3.0\nPost thickness tpost, mm 0.5\nPintle-opening distance Lopen, mm 0.2–1.0"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 1,
+   "formula": 1,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

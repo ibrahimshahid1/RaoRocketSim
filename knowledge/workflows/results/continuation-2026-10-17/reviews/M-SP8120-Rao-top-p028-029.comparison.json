@@ -1,0 +1,112 @@
+{
+  "record": "Independent current-source/code comparison for missing MODEL_NOZZLE_RAO_TOP_BEZIER structured review",
+  "reviewer": {
+    "role": "F",
+    "model": "GPT-6 (Codex)"
+  },
+  "source": {
+    "document_id": "DOC_NTRS_19770009165",
+    "pdf": "propulsion_texts/19770009165.pdf",
+    "sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+    "pdf_pages": [
+      28,
+      29
+    ],
+    "printed_pages": [
+      14,
+      15
+    ]
+  },
+  "visual_method": "Full original pages rendered with pdftoppm -r 180 -png -gray; original page 29 chart rendered at 400 dpi with -x 900 -y 2050 -W 1550 -H 1250. Full page and chart inspected.",
+  "render_fingerprints": [
+    {
+      "path": "knowledge/.work/continuation-2026-10-17/rao-top-review/SP8120-028.png",
+      "sha256": "8d59cfde72809531c978be1a8aabd7b9541c27071d15c37fea0b77d5db5303d1"
+    },
+    {
+      "path": "knowledge/.work/continuation-2026-10-17/rao-top-review/SP8120-029-chart.png",
+      "sha256": "25a77cb8963d9a20fea255c24a8993c6487b69fa653d51cc01d5cd268fbe053d"
+    },
+    {
+      "path": "knowledge/.work/continuation-2026-10-17/rao-top-review/SP8120-029.png",
+      "sha256": "0782604e1f7edef4a9347ed3a6204af30282f39c3889d191d44eddb836775d95"
+    }
+  ],
+  "implementation": {
+    "file": "raosim/nozzle_geometry.py",
+    "file_sha256": "b1af00692db4c969616ac9906b77cc3fd42d95b545a336919a5992c0852250fe",
+    "symbols": [
+      "_EPSILON_VALS",
+      "_LPCT_VALS",
+      "_THETA_N_TABLE",
+      "_THETA_E_TABLE",
+      "_interp_theta_n",
+      "_interp_theta_e",
+      "lookup_angles",
+      "rao_chart_domain_status",
+      "_full_cone_length",
+      "bell_nozzle_contour"
+    ],
+    "inspection": "Read exact assignments and function bodies with AST literal evaluation of grid values; no engineering module imported and no engineering test run."
+  },
+  "source_stated_scope": [
+    {
+      "page": 29,
+      "section": "2.1.2.1.2 Nonoptimum Contour",
+      "observation": "The page describes canted-parabola approximations and Figure 5 initial/final wall angles; it does not tabulate numerical ordinates. The mathematical optimum method is said to depend on assumptions that often only roughly approximate actual conditions."
+    }
+  ],
+  "reviewer_chart_observations": [
+    {
+      "basis": "SYSTEM_INFERS visual chart measurement, not source-stated numeric table",
+      "page": 29,
+      "figure": "5(b)",
+      "finding": "At fixed 60, 70, 80, 90 and 100 percent length, the exit-angle alpha_e curves decrease as A_e/A_t rises; initial-angle alpha_i curves rise. The source exit-angle trend opposes the stored table columns, which are nondecreasing and rise overall."
+    },
+    {
+      "basis": "SYSTEM_INFERS bounded manual reading, not a redigitization",
+      "epsilon": 20,
+      "length_percent": 80,
+      "source_initial_angle_deg_interval": [
+        28,
+        30
+      ],
+      "source_exit_angle_deg_interval": [
+        8,
+        10
+      ],
+      "code_initial_angle_deg": 33.0,
+      "code_exit_angle_deg": 18.0,
+      "reading_uncertainty": "Intervals intentionally cover scan stroke width and reading uncertainty, about +/-1 degree. They are not replacements for qualified digitization."
+    },
+    {
+      "basis": "SYSTEM_INFERS bounded manual reading, not a redigitization",
+      "epsilon": 40,
+      "length_percent": 80,
+      "source_initial_angle_deg_interval": [
+        30,
+        32
+      ],
+      "source_exit_angle_deg_interval": [
+        7,
+        9
+      ],
+      "code_initial_angle_deg": 35.5,
+      "code_exit_angle_deg": 20.0,
+      "reading_uncertainty": "Intervals intentionally cover scan stroke width and reading uncertainty, about +/-1 degree."
+    }
+  ],
+  "geometric_inspection": [
+    "The code forms a quadratic Bezier through throat-arc endpoint N and exit E using their tangent-line intersection P1. For nondegenerate nonparallel control vectors this is a parabolic segment, and endpoint derivative directions equal theta_n and theta_e by construction. This is reviewer mathematical reasoning from code, consistent with the canted-parabola concept in Figure 5(a); it is not a source-stated Bezier algorithm.",
+    "The code computes Re=sqrt(epsilon)*Rt and Ln=(length_pct/100)*(Re-Rt)/tan(15 degrees). The source comparison window does not independently establish all contour/default-radius and normalization details; no blanket geometric equivalence or optimum-performance claim is made.",
+    "lookup_angles uses bilinear RegularGridInterpolator with extrapolation enabled (bounds_error=False, fill_value=None). rao_chart_domain_status reports the repository grid (epsilon 4-50, length 60-100 percent); grid membership does not verify ordinates or physical applicability."
+  ],
+  "previous_P1_comparison": {
+    "path": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "sha256": "1c3724c7c9dd46c697d0d0b6115997afbd9fa24b818703ab807af3d42a4b8467",
+    "use": "Prior comparison record was read for context. Its broad BAD_ATTRIBUTION conclusion is independently corroborated here from SP-8120 Figure 5(b). Full prior digitization and supplementary SP-125 numeric point were not re-performed or re-read from original SP-125 in this bounded task."
+  },
+  "verdict": "BAD_ATTRIBUTION scoped to the tabulated angle ordinates attributed to SP-8120 Figure 5(b); conceptual canted-parabola guidance remains partially supported.",
+  "physical_validation": "NOT_ESTABLISHED",
+  "engineering_change": "None; table replacement and contour/performance qualification require a separate owner decision and validation."
+}

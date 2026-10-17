@@ -1,0 +1,55 @@
+{
+ "prior_fingerprinted_review": "knowledge/workflows/results/agentic-2026-10-16/reviews/P1-SP125-p107.parser.json",
+ "sha256": "c4ef7066906a152238f315708afdbed3b29c5a25248f61b05b283e6a658d1209",
+ "purpose": "Recover original prior QA assertion as history without replacing current independent re-review.",
+ "results": [
+  {
+   "reviewed_records": 1,
+   "state": "SOURCE_PAGE_COMPARED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  },
+  {
+   "reviewed_records": 1,
+   "state": "SOURCE_PAGE_COMPARED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  },
+  {
+   "reviewed_records": 1,
+   "state": "SOURCE_PAGE_COMPARED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  },
+  {
+   "reviewed_records": 1,
+   "state": "REJECTED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  },
+  {
+   "reviewed_records": 1,
+   "state": "REJECTED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  },
+  {
+   "reviewed_records": 1,
+   "state": "REJECTED",
+   "changed": true,
+   "unchanged": 0,
+   "historical_replays": 0,
+   "historical_added": 1
+  }
+ ]
+}

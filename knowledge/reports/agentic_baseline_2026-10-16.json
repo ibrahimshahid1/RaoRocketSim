@@ -1,0 +1,391 @@
+{
+ "recorded_at": "2026-10-16T18:31:48Z",
+ "recorded_by": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "git": {
+  "head": "550d5c26bc2679b43b027f612805eb18516e8343",
+  "branch": "main",
+  "worktree_status_at_start": "clean (git status --porcelain empty)",
+  "head_commit": "550d5c2 Fixes To the Knowledege Graph and Others (2026-10-16 14:23 -0400)"
+ },
+ "environment": {
+  "platform": "macOS Darwin 24.6.0, 11 CPUs, 18 GiB RAM",
+  "test_python": ".venv-jax/bin/python 3.12.14 (numpy 2.4.6, scipy 1.17.1, pytest 9.0.3); .venv absent",
+  "docling_python": ".venv-docling/bin/python 3.12.14: docling 2.139.0, docling-core 2.101.1, docling-ibm-models 4.0.3, docling-parse 7.22.3, torch 2.14.1, transformers 5.19.0 (CPU only)",
+  "ghostscript": "10.08.0",
+  "git": "2.55.0"
+ },
+ "tests_at_start": {
+  "command": ".venv-jax/bin/python -m pytest knowledge/tests -q -p no:cacheprovider",
+  "result": "287 passed in 3.38s",
+  "corpus_backed_tests": "ran (local vector index present); none skipped"
+ },
+ "fresh_checkout_reproduction": {
+  "command": "git archive HEAD knowledge pytest.ini | tar -x; python -m pytest knowledge/tests -q -x",
+  "result": "ERROR collecting knowledge/tests/test_kg_pipeline.py: ModuleNotFoundError: No module named 'kg.execution_reach'",
+  "cause": ".gitignore line 'knowledge/' (added in 550d5c2) leaves 9 imported kg modules, 20 test modules, Docling tools, stores (enrichments.json, relationships.json, artifacts.json) and all post-September review journals untracked and ignored"
+ },
+ "reported_checkpoint_figures": {
+  "canonical_publications": 248,
+  "source_pages_canonical": 11375,
+  "canonical_with_nonempty_chunks": 247,
+  "documents_with_structured_objects": 9,
+  "equations_stored": 93,
+  "equations_superseded_or_inactive": 18,
+  "equations_current_independently_confirmed": 58,
+  "claims_independently_confirmed": 7,
+  "current_equations_claims_pending_verification": 198,
+  "models_registered": 61,
+  "models_with_current_reviewed_support": 6,
+  "models_without_current_review": 55,
+  "current_variable_resolution": {
+   "unresolved": 195
+  },
+  "unknown_basis_current_constants": 241,
+  "relationships": 39,
+  "docling_processed_pages": 2,
+  "graph_nodes": 4823,
+  "graph_edges": 6232
+ },
+ "recomputed_at_start": {
+  "canonical_publications": 248,
+  "source_pages_canonical": 11375,
+  "canonical_with_nonempty_chunks": 247,
+  "documents_with_structured_objects": 9,
+  "equations_stored": 93,
+  "equations_superseded_or_inactive": 18,
+  "equations_current_independently_confirmed": 58,
+  "claims_independently_confirmed": 7,
+  "current_equations_claims_pending_verification": 198,
+  "models_registered": 61,
+  "models_with_current_reviewed_support": 6,
+  "models_without_current_review": 55,
+  "current_equation_variable_occurrences": 380,
+  "current_variable_resolution": {
+   "RESOLVED": 185,
+   "UNRESOLVED_ENTITY": 195
+  },
+  "all_record_variable_resolution_incl_superseded": {
+   "RESOLVED": 201,
+   "UNRESOLVED_ENTITY": 233,
+   "AMBIGUOUS_SYMBOL": 6
+  },
+  "software_constants_stored": 1015,
+  "software_constants_current": 998,
+  "unknown_basis_current_constants": 257,
+  "relationships": 39,
+  "relationships_by_edge": {
+   "DERIVED_FROM": 37,
+   "APPROXIMATES": 1,
+   "EQUIVALENT_TO": 1
+  },
+  "docling_processed_pages": 2,
+  "docling_quality_review_pages": 7,
+  "docling_unattempted_pages": 11366,
+  "graph_nodes": 4870,
+  "graph_edges": 6267
+ },
+ "discrepancies_noted": [
+  "latest_validation stats.equation_variables counts all 93 equation records including 18 superseded ones (440 occurrences: 233 unresolved, 6 ambiguous); current-only counts are what the prior audit reported",
+  "software constants grew from 983/982 to the recomputed totals after the 14:20 rebuild that harvested new MDO code; unknown-basis current constants changed accordingly",
+  "graph grew from 4,823/6,232 to the recomputed totals for the same reason"
+ ],
+ "kg_status": {
+  "corpus": {
+   "pdfs_on_disk": 286,
+   "conversion_rows": 286,
+   "tracked_file_rows": 280,
+   "tracked_archive_members": 6,
+   "tracked_unique_payloads": 252,
+   "available": true,
+   "pdfs_without_markdown": [],
+   "stale_markdown": [],
+   "orphan_markdown": [
+    {
+     "markdown": "propulsion_texts/propulsion_texts_for_agents/markdown/grisson1991_AEDC-TR-91-1.md",
+     "reason": "no source PDF at the mirrored path and no manifest row",
+     "manifest_row": false
+    }
+   ],
+   "synchronized": true
+  },
+  "documents": {
+   "unique": 252,
+   "chunked": 247,
+   "doc_state_entries": 248,
+   "zero_chunk_documents": [
+    "DOC_DOI_10_1007_978_3_030_14788_4"
+   ],
+   "zero_chunk_document_count": 1,
+   "conversion_status": {
+    "needs_review": 234,
+    "good": 18
+   },
+   "alternate_copies": 4
+  },
+  "chunks": 19565,
+  "vector_index": {
+   "method": "tfidf(sublinear, l2) + truncated SVD (LSA)",
+   "n_chunks": 19565,
+   "vocab_size": 40000,
+   "k": 256,
+   "min_df": 3,
+   "max_df_frac": 0.5,
+   "seed": 0,
+   "explained_singular_values": [
+    19.895803451538086,
+    13.713119506835938,
+    12.440714836120605,
+    9.867485046386719,
+    9.174554824829102,
+    9.00275993347168,
+    8.462662696838379,
+    7.91304874420166,
+    7.69812536239624,
+    7.295530796051025
+   ],
+   "corpus_fingerprint": "c6657aa476a3801f711d186841fb8cf929a41577d7b3d784aa6f164e763c91e6",
+   "state": "OK"
+  },
+  "stores": {
+   "equations": 93,
+   "claims": 188,
+   "entities": 94,
+   "models": 61,
+   "validity": 97,
+   "software_links": 1792,
+   "tests": 1068,
+   "capabilities": 100,
+   "requirements": 36,
+   "repo_documents": 64,
+   "provenance": 1709,
+   "artifacts": 306
+  },
+  "engineering_evidence": {
+   "active_by_type": {
+    "ArtifactManifest": 17,
+    "CADArtifact": 70,
+    "EngineConfiguration": 17,
+    "ManufacturingProcess": 15
+   },
+   "note": "Configurations and CAD are observed report snapshots; manufacturing records are plans, not execution evidence."
+  },
+  "extraction": {
+   "equation_completeness": "NOT_ESTABLISHED",
+   "documents_with_objects": 9,
+   "model_support": {
+    "NOT_CHECKED": 54,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "PARTIALLY_SUPPORTED": 4,
+    "SUPPORTED": 2
+   },
+   "declared_model_support": {
+    "PARTIALLY_SUPPORTED": 10,
+    "NOT_FOUND_IN_SOURCE": 1,
+    "SUPPORTED": 3,
+    "NOT_CHECKED": 47
+   },
+   "models_with_current_source_review": 6,
+   "unverified_equations_and_claims": 198,
+   "unverified_equations_and_claims_including_history": 216,
+   "scope_note": "Current evidence uses source/active state and manifest fingerprints; historical declarations are retained separately. No mathematical completeness claim."
+  },
+  "last_validation": {
+   "generated_at": "2026-10-16T18:20:23.815321+00:00",
+   "n_issues": 13,
+   "issues_by_check": {
+    "empty_source_pdf": 1,
+    "canonical_document_without_chunks": 1,
+    "markdown_without_manifest_row": 1,
+    "registry_citation_not_confirmed_in_local_source": 1,
+    "declared_cad_bytes_unavailable": 6,
+    "source_extraction_incomplete": 1,
+    "source_verification_incomplete": 1,
+    "unknown_basis_software_constants": 1
+   },
+   "stats": {
+    "equation_variables": {
+     "ambiguous": 6,
+     "unresolved": 233,
+     "total": 440
+    },
+    "constants_by_basis": {
+     "UNKNOWN_BASIS": 274,
+     "IMPLEMENTATION_CHOICE": 351,
+     "LITERATURE_DERIVED": 181,
+     "PROJECT_DERIVED": 41,
+     "REPOSITORY_HEURISTIC": 168
+    },
+    "components_without_scientific_link": 200,
+    "engineering_artifacts": {
+     "active_by_type": {
+      "ArtifactManifest": 17,
+      "CADArtifact": 70,
+      "EngineConfiguration": 17,
+      "ManufacturingProcess": 15
+     },
+     "inactive_snapshots": 0
+    },
+    "graph": {
+     "nodes": 4870,
+     "edges": 6267,
+     "edges_without_provenance": 0,
+     "top_degree": [
+      [
+       "MODEL_NOZZLE_RAO_VARIATIONAL_BVP",
+       146
+      ],
+      [
+       "DOC_NTRS_19760023196",
+       111
+      ],
+      [
+       "DOC_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI",
+       110
+      ],
+      [
+       "MODEL_NOZZLE_MOC",
+       97
+      ],
+      [
+       "MODEL_PUMP_ELECTRIC_DRIVE",
+       81
+      ]
+     ]
+    },
+    "duplicate_chunk_texts": 15,
+    "coverage": {
+     "equation_completeness": "NOT_ESTABLISHED",
+     "concept_completeness": "NOT_ESTABLISHED",
+     "scope_note": "Coverage of stored source objects against manifest identities; live PDF/Markdown bytes are not rehashed here. No all-equation denominator or physical validation.",
+     "documents": {
+      "records": 252,
+      "canonical": 248,
+      "alternate_copies": 4,
+      "with_source_objects": 9,
+      "without_source_objects": 239,
+      "with_equations": 9,
+      "without_equations": 239,
+      "with_independently_confirmed_objects": 5,
+      "conversion_requires_review": 230,
+      "conversion_low_confidence": 16,
+      "zero_page_sources": 1,
+      "zero_page_source_ids": [
+       "DOC_DOI_10_1007_978_3_030_14788_4"
+      ]
+     },
+     "source_objects": {
+      "equations": {
+       "records": 93,
+       "current": 75,
+       "independently_confirmed": 58,
+       "inactive_stale_refuted_or_unresolved": 18
+      },
+      "claims": {
+       "records": 188,
+       "current": 188,
+       "independently_confirmed": 7,
+       "inactive_stale_refuted_or_unresolved": 0
+      },
+      "entities": {
+       "records": 94,
+       "current": 94,
+       "independently_confirmed": 0,
+       "inactive_stale_refuted_or_unresolved": 0
+      },
+      "validity": {
+       "records": 36,
+       "current": 36,
+       "independently_confirmed": 0,
+       "inactive_stale_refuted_or_unresolved": 0
+      }
+     },
+     "incomplete_formula_transcriptions": {
+      "count": 18,
+      "ids": [
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0CFD2A53",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_17E5EFE3",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_29C06A43",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2AECD826",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3A6F0755",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_41DEB687",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_648A883F",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7ACA91AB",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8D9B22B9",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8F803DE0",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A35025AD",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A59FEA47",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C06072BC",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C82ED2EE",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F49723D4",
+       "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_F95E31B5",
+       "EQ_NTRS_19760023196_BE05E0AF",
+       "EQ_NTRS_19760023196_D7D2D8F1"
+      ],
+      "current_count": 0,
+      "current_ids": [],
+      "current_state": "NONE_FLAGGED_CURRENT",
+      "historical_count": 18,
+      "state": "INCOMPLETE_TRANSCRIPTION",
+      "note": "Explicit NOT RENDERED/OCR-garbled markers in current forms; absence of a marker does not verify a transcription."
+     },
+     "models": {
+      "records": 61,
+      "declared_support": {
+       "PARTIALLY_SUPPORTED": 10,
+       "NOT_FOUND_IN_SOURCE": 1,
+       "SUPPORTED": 3,
+       "NOT_CHECKED": 47
+      },
+      "current_support": {
+       "NOT_CHECKED": 54,
+       "NOT_FOUND_IN_SOURCE": 1,
+       "PARTIALLY_SUPPORTED": 4,
+       "SUPPORTED": 2
+      },
+      "source_reviewed_current_fingerprint": 6,
+      "without_current_source_review": 55,
+      "without_manifest_source": 8
+     },
+     "software_constants": {
+      "records": 1015,
+      "by_basis": {
+       "UNKNOWN_BASIS": 274,
+       "IMPLEMENTATION_CHOICE": 351,
+       "LITERATURE_DERIVED": 181,
+       "PROJECT_DERIVED": 41,
+       "REPOSITORY_HEURISTIC": 168
+      },
+      "unknown_basis": 274,
+      "current": 998,
+      "inactive_or_noncurrent": 17,
+      "by_basis_current": {
+       "UNKNOWN_BASIS": 257,
+       "IMPLEMENTATION_CHOICE": 351,
+       "LITERATURE_DERIVED": 181,
+       "PROJECT_DERIVED": 41,
+       "REPOSITORY_HEURISTIC": 168
+      },
+      "by_basis_inactive_or_noncurrent": {
+       "UNKNOWN_BASIS": 17
+      },
+      "unknown_basis_current": 257,
+      "unknown_basis_inactive_or_noncurrent": 17,
+      "scope_note": "Stored totals preserve history. Current counts include active records with CURRENT source state; absent legacy state fields retain their existing active/CURRENT defaults."
+     },
+     "gaps": {
+      "canonical_documents_without_source_objects": 239,
+      "canonical_documents_without_equations": 239,
+      "equations_and_claims_pending_independent_verification": 198,
+      "equations_without_model_links": 47,
+      "incomplete_formula_transcriptions": 0,
+      "zero_page_sources": 1,
+      "unknown_basis_software_constants": 257
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,180 @@
+{
+ "packet": "P4-TOKUDOME-p001-003",
+ "kind": "extraction",
+ "document_id": "DOC_TOKUDOME2010",
+ "source_pdf": "propulsion_texts/pintle_injector/tokudome2010.pdf",
+ "source_sha256": "33167aa3ebc558002dd74d5c548d3abd6de1f3c34ed7ac2fa37cf2f832a1e34b",
+ "pages": [
+  1,
+  3
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 1,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_TOKUDOME2010/p0001.png",
+   "sha256": "e7e13e3d9b7986834529a0b864fcbb8d37e2d7fe20a3360061bea7b57c1e80ea",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_TOKUDOME2010/p0002.png",
+   "sha256": "fe63daeea5ace72953ac18292df5699fe09010d7cc4705ff9058e7fcd1c1f72a",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_TOKUDOME2010/p0003.png",
+   "sha256": "0586e29bd705ddde1a92ecc894cef2e747df9ce65c943aa00a3cf06e86c37b69",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_ad0a74360e59738d7d7e3f69",
+  "ENR_c2131fece51addb7dbe6e125",
+  "ENR_cd90961de328b5cd805af5d8"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_5d6e6e2ca041d67cd6208218",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/1",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 419.0777282714844,
+     "t": 307.3782043457031,
+     "r": 513.0164794921875,
+     "b": 185.95635986328125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_cd90961de328b5cd805af5d8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_TOKUDOME2010/33167aa3ebc5-p2-2-72d4d16fa4fde34d85630ba6c6989f7c96400dcdc32d6e720ac103502098588b.json",
+   "raw_sha256": "05d47ba4ec10edcde8f73685634c8e79b78afffd3d336008c0965d407c324b50",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a16f3abd7e9e7df318119525",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 1. Advancement of test vehicle in RVT campaign."
+   ],
+   "bbox": [
+    {
+     "l": 85.64057922363281,
+     "t": 304.3500671386719,
+     "r": 413.4638671875,
+     "b": 108.48681640625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/9\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_cd90961de328b5cd805af5d8",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_TOKUDOME2010/33167aa3ebc5-p2-2-72d4d16fa4fde34d85630ba6c6989f7c96400dcdc32d6e720ac103502098588b.json",
+   "raw_sha256": "05d47ba4ec10edcde8f73685634c8e79b78afffd3d336008c0965d407c324b50",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00000",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability",
+   "text": "**46th AIAA/ASME/SAE/ASEE Joint Propulsion Conference & Exhibit** **AIAA 2010-6726**\n**25 - 28 July 2010, Nashville, TN**"
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00001",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > **A High-Speed Response LOX/LH2 Full Expander Cycle** **Engine with Deep Throttling Capability**",
+   "text": "Shinichiro Tokudome <sup>1</sup>, Yoshihiro Naruo <sup>2</sup>\n_Japan Aerospace Exploration Agency, Sagamihara-shi, 252-5210, JAPAN_\n\nHatsuo Mori <sup>3</sup>\n_IHI Corporation, Mizuho-machi, 190-1297, JAPAN_\n\nTsuyoshi Yagishita <sup>4</sup>, and Takayuki Yamamoto <sup>5</sup>\n_Japan Aerospace Exploration Agency, Sagamihara-shi, 252-5210, JAPAN_\n\n**For a flight test campaign of reusable vehicle, 10 kN class small LOX/LH2 propulsion**\n**systems have been developed. They are regenerative cooling engines with a continuous**\n**throttling capability for making vertical landing possible. Current phase of the campaign is**\n**to demonstrate an entire sequence of full-scale operation with a vehicle equipped with**\n**turbopump-fed engine, following the three-generation vehicles with pressure-fed engine had**\n**successfully performed in repeated flight operation tests between 1999 and 2003. From a**\n**result of primary system analysis, we decided to build an expander cycle engine by**\n**refurbishing a pair of turbopumps, which had been build for another research program, and**\n**putting them into a new engine developed in the present study. A combustion chamber with**\n**long cylindrical portion adapted to the engine cycle was also newly made. Three captive**\n**firing tests were conducted to verify functional suitability for the vertical landing flight. In**\n**the last two tests, a deep throttling capability down to 28 % and a high-speed response over**\n**5 Hz of the propulsion system were successfully demonstrated with newly developed thrust**\n**control system. The fourth-generation vehicle powered by the full expander cycle engine is**\n**now under development.**"
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00002",
+   "page_start": 1,
+   "page_end": 1,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "_C0_ = injection velocity of turbine drive gas\n_Fx_ = engine axial thrust measured (under sea level static condition)\n_Ixx_ = inertia of rotor\n_m_ & = mass flow rate\n\n_MR_ = propellant mixture ratio\n\n_N_ = rotational speed\n\n_Nc_ = design rotational speed assuming continuous throttling at constant rotational speed\n_Pc_ = combustion chamber pressure measured\n\n_Q_ = volume flow rate\n\n_t_ = time\n\n_Tt_ = turbine torque generated\n_Tp_ = pump torque consumed\n\n1 Associate Professor, Department of Space Transportation Engineering, ISAS, 3-1-1 Yoshinodai, Member AIAA.\n2 Research Associate, Department of Astronautical System, ISAS, 3-1-1 Yoshinodai, Member AIAA.\n3 Manager, Space Development Department, 229 Tonogaya, Member AIAA.\n4 Technical Expert, Propulsion Disciplinary Engineering Group, ISAS, 3-1-1 Yoshinodai.\n5 Technical Expert, Mission Device Disciplinary Engineering Group, ISAS, 3-1-1 Yoshinodai, Member AIAA.\n\nCopyright © 2010 by the American Institute of Aeronautics and Astronautics, Inc. All rights reserved."
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00003",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "_U_ = speed of tips of turbine blades\n\nη _p_ = pump efficiency\n\nη _t_ = turbine efficiency\nψ = head coefficient\n\nρ = density of liquid fuel (liquid hydrogen at impeller part)\n∆ _H_ = enthalpy drop at turbine part\n\n**I.** **Introduction**\n\nThe Institute of Space and Astronautical Science of Japan Aerospace Exploration Agency (ISAS/JAXA) have\nbeen continuing a basic experimental study of future reusable space transportation system, which was named\nreusable vehicle testing (RVT), since 1998. A decided target of the study is to develop the system architecture that\nmakes the transportation cost reduce by two orders of magnitude than it already is. So we built a minicar-sized small\nvertical-takeoff-and-landing (VTOL) type vehicle powered by a 10 kN class regenerative cooled liquid oxygen\n(LOX) / liquid hydrogen (LH2) propellant rocket engine. The LOX / LH2 propulsion system is a promising candidate\nfor powering the fully reusable vehicle into space from the viewpoint of minimizing environmental load and\nenhancing the feasibility of single-stage-to-orbit (SSTO) concepts. And then, we demonstrated repeated flight\nexperiments aim at a quick-turnaround operation. Three series of flight experiments had been succeeded with\npressure-fed engine, which had a 5 Hz dynamic response and a deep throttling capability down to 20 % of rated\nthrust, for six years from 1998 to 2003 <sup>1, 2</sup> . Figure 1 shows advancement of the test vehicle in RVT campaign. For the\nmeantime, we had tackled with the challenges in terms of handling of the cryogenic fuel, simplification of the\ninspection and maintenance, and enhancement of the lifetime of engine components. An injector and a combustion\nchamber had been upgraded by introducing electroforming technique into their production processes in terms of\ndurability enhancement."
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00004",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "The next step for demonstrating entire sequence of full-scale operation is to put a turbopump-fed engine into the\npropulsion system. For making the flight tests possible within the realistic limit of the budget, we decided to\nrefurbish a pair of turbopumps built for another research program and to put them into a new 10 kN class\nturbopump-fed engine. A combustion chamber with long cylindrical portion suited to the full expander cycle\nconcept was newly made by the electroforming technique proven in the former pressure-fed engine. As a result of\nthe research and development efforts <sup>3</sup> for more than five years, we have completed a full expander cycle engine with\na high-speed dynamic response and a deep throttling capability, which is suited to the fourth generation VTOL\nrocket vehicle now under development. This paper describes the results of the design and development of the new\nengine with newly proposed thrust control concept.\n\n**RVT#3 (2003)**\n\n**<u>RVT#4</u>**\n\n**RVT#1 (1999)**\n\nVertical take-off and\nlanding flight repeated\nusing LOX/LH2 engine\nwith throttling capability\n\nOne-day turnaround Flight envelope extended Demonstrating entire\noperation demonstrated using engine of advanced sequence of full-scale\nwith engine of durable Injector in combination with operation with\ncombustion chamber durable combustion chamber **<u>turbopump-fed engine</u>**\n\nFigure 1. Advancement of test vehicle in RVT campaign."
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "**RVT#2 (2001)**\n\nOne-day turnaround\noperation demonstrated\nwith engine of durable\ncombustion chamber\n\nFlight envelope extended\nusing engine of advanced\nInjector in combination with\ndurable combustion chamber"
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00006",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "**II.** **Design Guide for a LOX/LH2 Propulsion System in RVT Campaign**\nFor RVT campaign, we have designed and developed the LOX/LH2 propulsion systems, which has the\ncomponents containing technical challenges as much as possible, in line with the following guidelines.\n\n**A.** **Technical Challenges for Reusable Space Transportation System**\n\nFor aiming to develop fully reusable space transportation system, we set the following three technical\nchallenges: (1) fully reusable propulsion system; (2) use of liquid hydrogen fuel; and (3) achievement of quick\nturnaround operation.\n\nFor achieving full reusability, the propulsion system would be required higher reliability, durability, and safety\nthan the expendable one. Additionally, from a viewpoint of operational safety, the handling of liquid hydrogen is\ncontrolled by High Pressure Gas Safety Act (in Japan) and should be pay attention to the characteristics of hydrogen\ngas, which diffuses quickly in atmosphere and might form explosive hydrogen-air mixture. Furthermore, the\nsimplification of hardware components and the minimization of number of items on the inspection and maintenance\nlists must be done for achieving the quick repeated flight operation as the key to the reduction of the operational\ncost. Meanwhile, we aim to attain fifty times reusability in designing each component.\n\n**B.** **Aims of RVT Campaign**\n\nAs activity aims of RVT campaign, we seek to complete the two targets as follows: (1) learning the operational\ntechniques of reusable propulsion system; and (2) extracting the essential technical challenges in quick repeated\nflight operation from the operational testings with the VTOL vehicle."
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00007",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "We have to conduct the present study within the realistic limit of the resources for basic research. Therefore, we\ndecided to minimize the development of new hardware components and to use the existing technology and\ncomponents at a maximum. So we have chosen a process to verify the week point of the existing engine components\nin the reusable operation, and then to develop the design principle for the components reusable. We need a small test\nvehicle, which facilitates a lot of repeated flight tests, for extracting the essential technical challenges from the\nissues recognized through operational tests repeated. The vehicle of VTOL style helps our experimental study with\nsuch limitation to perform, since we can conduct the flight test in the narrow flight envelope with small-sized ground\nsupport equipments. In the present activity, the development of the engine system, which has the quick response and\nwide range thrust control capability making vertical landing flight possible, is recognized as both the future\ntechnologies applicable to lunar or planetary landers and the essential technical challenges to make our practicalminded basic research a success.\n\n**III.** **Design Consideration of a Turbopump-fed Engine Applicable to Small VTOL vehicle**\n\nThere are three requirements for the main propulsion system of the RVT#4 vehicle with turbopump-fed engine:\n(1) over 8 kN of rated thrust and continuous throttling capability down to 30 % of the rated thrust for demonstrating\nthe full-scale operation of the reusable rocket vehicle; (2) over 1 Hz of dynamic thrust control response to meet the\nVTOL flight testings within a narrow flight envelope with the small test vehicle; and (3) the preparation and\noperation conducted within the realistic limit of the resources for basic research."
+  },
+  {
+   "chunk_id": "DOC_TOKUDOME2010#c00008",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "A High-Speed Response LOX / LH2 Full Expander Cycle Engine with Deep Throttling Capability > Nomenclature",
+   "text": "**A.** **Engine Cycle**\n\nWe selected the full expander (FE) engine cycle concept from the viewpoint of enhancing performance, safety,\nand operability as the rocket engine which would be applicable to the present research activity. The closed cycle\nengine has a relatively higher performance than open cycle’s one, since almost all amount of the propellant is\nutilized as the source of propulsive power. In addition, from a result of the primary test, we found that the full\nexpander cycle engine would be able to stop burning much more safely than the other cycle engines when any\ntrouble would happen to the engine system itself. Furthermore, ISAS/JAXA has an experience in the development\nresearch of full-scale LOX / LH2 propulsion systems including the expander cycle concept <sup>4, 5</sup> in the 1980s and we\nhave enough knowledge and skills for developing and operating the propulsion system.\n\n**B.** **Thrust Control System with High-Speed Dynamic Response**\n\nA 10 kN thrust class conventional-style FE cycle engine, which had been developed for another study <sup>6</sup>, had only\n0.2 Hz of the thrust control response. Figure 2 shows effect of inertia moment of rotor on dynamic response in thrust\ncontrol. This made it difficult to use the engine for vertical landing flight test. Major factor influencing the response"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

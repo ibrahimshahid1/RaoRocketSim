@@ -1,0 +1,644 @@
+{
+ "packet": "L-FREEBERG-p002",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [],
+   "queue_reason": "candidate-linkage repair (S3 Task 4): re-bank the identical F-reviewed equation with the Docling candidate it was compared against (DERIVED_FROM / CORRECTS edge); cached run, no new Docling inference",
+   "queue_pages": [
+    2,
+    2
+   ],
+   "queue_document_id": "DOC_DOI_10_2514_6_2019_0152",
+   "queue_source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/L-FREEBERG-p002.json",
+   "sha256": "e67799d6c37faa1b2e72334b303c8acf61c046eae066ed5be012e86f2ad82514",
+   "size_bytes": 11791,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_2514_6_2019_0152",
+   "source_pdf": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "source_sha256": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+   "pages": [
+    2,
+    2
+   ],
+   "docling_run_ids": [
+    "ENR_7822feafe7a048023f0d476d"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 1
+    },
+    "flagged_candidates": 1,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "bundle_format_checks_S2_script": {
+   "unexpected_top_level_keys": [],
+   "missing_expected_top_level_keys": [],
+   "unexpected_candidate_keys": [],
+   "candidates_missing_expected_keys": []
+  },
+  "knowledge_store_sha256_S2_script": {
+   "at_observation_time": {
+    "equations": "2b8a4dfe91e00fddee488c3ffd3513b5ce9c516ba1b15e1dd1cb55d192f847f3",
+    "claims": "9fc854353e51e046ed1871f6cb88381ec99c9cf9fc867548f15e31a0bfe72e8f",
+    "entities": "e1545840a2a3dec5bc11eeb91d858759952305f8b358c72a4503c7e79865d68a",
+    "validity": "62e930bc9d55cbd68f643eee0131a734e50cee1d5f5920ba3877d838f9c50b3c",
+    "models": "f3062f1fe75f94178d1fc94b4383170281c3d8784026de73ce1360be4f914e49",
+    "enrichments": "59eabe636da039b9d7090969abc7cdf139b1b5690ad4474732bbe76d64a378d0"
+   },
+   "pre_prepare_snapshot_found": true,
+   "pre_prepare_snapshot": {
+    "equations": "2b8a4dfe91e00fddee488c3ffd3513b5ce9c516ba1b15e1dd1cb55d192f847f3",
+    "claims": "9fc854353e51e046ed1871f6cb88381ec99c9cf9fc867548f15e31a0bfe72e8f",
+    "entities": "e1545840a2a3dec5bc11eeb91d858759952305f8b358c72a4503c7e79865d68a",
+    "validity": "62e930bc9d55cbd68f643eee0131a734e50cee1d5f5920ba3877d838f9c50b3c",
+    "models": "f3062f1fe75f94178d1fc94b4383170281c3d8784026de73ce1360be4f914e49",
+    "enrichments": "59eabe636da039b9d7090969abc7cdf139b1b5690ad4474732bbe76d64a378d0"
+   },
+   "enrichments_file_hash_differs_from_snapshot": false,
+   "enrichments_record_level_diff": {
+    "records_at_snapshot": 539,
+    "records_now": 539,
+    "added_count": 0,
+    "removed_count": 0,
+    "modified_count": 0,
+    "added_ids_first_20": [],
+    "removed_ids_first_20": [],
+    "modified_ids_first_20": [],
+    "run_ids_of_added_records": []
+   },
+   "bundle_candidates_that_differ_from_stored_records_S2_script": [],
+   "stores_changed_between_pre_prepare_snapshot_and_observation": []
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/pintle_injector/freeberg2019.pdf",
+   "sha256_in_bundle": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+   "sha256_recomputed": "95a0bd620247bbe6c06c36dbde250872e3089f5b3cb3eb1250baac742664d8f9",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 2,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_2514_6_2019_0152/p0002.png",
+    "dpi": 150,
+    "sha256_in_bundle": "1981ee48fa9e01614351d9b10c90b4e74480d31693d8db1c00cc9fdfd559be43",
+    "file_exists": true,
+    "sha256_recomputed": "1981ee48fa9e01614351d9b10c90b4e74480d31693d8db1c00cc9fdfd559be43",
+    "sha256_match": true
+   }
+  ],
+  "docling_run_records_S2_script": [
+   {
+    "run_id": "ENR_7822feafe7a048023f0d476d",
+    "run_record_found": true,
+    "run_record_review_state": "UNREVIEWED",
+    "run_record_active": true,
+    "run_record_conversion_status": "success",
+    "page_range": [
+     2,
+     2
+    ],
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+    "raw_sha256_recorded": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+    "markdown_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.md",
+    "markdown_sha256_recorded": "beaba139fadcb144b774df3567be4f1c4ae6c2711e3cb07b0b52abc03c85e997",
+    "metadata_integrity_state": "VERIFIED",
+    "raw_sha256_recomputed": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+    "raw_sha256_match": true,
+    "markdown_sha256_recomputed": "beaba139fadcb144b774df3567be4f1c4ae6c2711e3cb07b0b52abc03c85e997",
+    "markdown_sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+    "sha256_in_bundle": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+    "file_exists": true,
+    "sha256_recomputed": "67f44b7be663240348ced2b050e1f60d14d72b0d3f076236b90a46007d9bf489",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 1
+  },
+  "candidates_total": 3,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [
+    {
+     "id": "CAND_0ac2e3bd32e4f1cceb273399",
+     "kind": "formula",
+     "pages": [
+      2
+     ],
+     "flags": [
+      "REPLACEMENT_CHARACTER_IN_ORIGINAL_TEXT"
+     ]
+    }
+   ],
+   "count_with_nonempty_flags": 1,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_bd323f5e92cc151f826d5d55",
+    "CAND_edf69995c7b24de0aa19a79b"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "replacement_character_U_FFFD_S2_script": {
+   "candidates": [
+    {
+     "id": "CAND_0ac2e3bd32e4f1cceb273399",
+     "kind": "formula",
+     "occurrences_in_transcription": 0,
+     "occurrences_in_original_text": 1
+    }
+   ],
+   "markdown_chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+     "occurrences": 2
+    }
+   ],
+   "note": "lexical presence of U+FFFD only; the bundle's own DAMAGE flag inspects the transcription of formula candidates only"
+  },
+  "repeated_substring_runs_S2_script": {
+   "pattern": "a substring of 2-12 characters repeated 6 or more times consecutively (first match per field)",
+   "hits": [],
+   "note": "lexical presence only; the bundle's DAMAGE flag catches only whitespace-separated repeated words in formula transcriptions"
+  },
+  "candidate_keys_in_bundle": [
+   "bbox",
+   "caption_text",
+   "id",
+   "json_pointer",
+   "kind",
+   "mechanical_flags",
+   "original_text",
+   "pages",
+   "raw_artifact",
+   "raw_sha256",
+   "review_state",
+   "run_id",
+   "table_grid",
+   "transcription",
+   "transcription_state"
+  ],
+  "candidates_with_transcription_length_at_or_above_4000": [],
+  "bbox_overlaps_between_candidates_on_same_page_geometry_only": [],
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_bd323f5e92cc151f826d5d55",
+    "kind": "figure",
+    "pages": [
+     2
+    ],
+    "bbox": [
+     {
+      "l": 197.55548095703125,
+      "t": 636.9395141601562,
+      "r": 414.49493408203125,
+      "b": 533.183837890625,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/0",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 1 Pintle injector schematic diagram of operation principles: a central \"pintle\" deflects radial flow of one propellant into a coaxial stream of the other, forming a mixed spray-cone in the combustion chamber."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "run_id": "ENR_7822feafe7a048023f0d476d",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 2
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/3"
+    ],
+    "raw_item_children_count": 19,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/3",
+      "label": "caption",
+      "page_no": 2,
+      "bbox": {
+       "l": 72.0,
+       "t": 521.6812314,
+       "r": 540.0030975999998,
+       "b": 500.82962960000003,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 1 Pintle injector schematic diagram of operation principles: a central \"pintle\" deflects radial flow of one propellant into a coaxial stream of the other, forming a mixed spray-cone in the combustion chamber.",
+      "orig": "Fig. 1 Pintle injector schematic diagram of operation principles: a central \"pintle\" deflects radial flow of one propellant into a coaxial stream of the other, forming a mixed spray-cone in the combustion chamber.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_edf69995c7b24de0aa19a79b",
+    "kind": "figure",
+    "pages": [
+     2
+    ],
+    "bbox": [
+     {
+      "l": 199.17410278320312,
+      "t": 402.3571472167969,
+      "r": 414.39312744140625,
+      "b": 283.3420104980469,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "json_pointer_as_given": "/pictures/1",
+    "caption_text_as_given_in_bundle": [
+     "Fig. 2 Expected recirculation zones resulting from impingement of the radial and axial propellants in a combustion chamber (recreated from [5])."
+    ],
+    "transcription_as_given": "{\"captions\": [{\"$ref\": \"#/texts/23\"}], \"annotations\": []}",
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "run_id": "ENR_7822feafe7a048023f0d476d",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 2
+     }
+    ],
+    "json_pointer_equals_bbox_matched_raw_item_self_ref": true,
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/23"
+    ],
+    "raw_item_children_count": 5,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/23",
+      "label": "caption",
+      "page_no": 2,
+      "bbox": {
+       "l": 72.0,
+       "t": 272.3502314,
+       "r": 540.0030975999997,
+       "b": 251.49862959999996,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 2 Expected recirculation zones resulting from impingement of the radial and axial propellants in a combustion chamber (recreated from [5]).",
+      "orig": "Fig. 2 Expected recirculation zones resulting from impingement of the radial and axial propellants in a combustion chamber (recreated from [5]).",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [],
+  "formula_candidates": [
+   {
+    "id": "CAND_0ac2e3bd32e4f1cceb273399",
+    "pages": [
+     2
+    ],
+    "bbox": [
+     {
+      "l": 282.48199999999997,
+      "t": 142.11801679999996,
+      "r": 540.0003916,
+      "b": 118.94967623469984,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "raw_item_fidelity_check_S2_script": {
+     "json_pointer_as_given": "/texts/29",
+     "raw_item_found": true,
+     "raw_item_label": "formula",
+     "raw_item_page_no": 2,
+     "bundle_transcription_equals_raw_item_text": true,
+     "bundle_original_text_equals_raw_item_orig": true,
+     "raw_item_bbox_equals_candidate_bbox": true
+    },
+    "transcription_as_given": "B F = \\frac { N d _ { o } } { \\pi d _ { t } } ,",
+    "transcription_length": 47,
+    "original_text_as_given": "BF = N do �dt ; (1)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(1)",
+    "trailing_token_normalized_to_parentheses_lexical_only": "(1)",
+    "trailing_token_delimiters_as_given": "()",
+    "trailing_token_has_no_opening_delimiter": false,
+    "bracketed_number_tokens_anywhere_in_original_text_lexical_only": [
+     "(1)"
+    ],
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "SOURCE_PAGE_COMPARED",
+    "mechanical_flags_as_given": [
+     "REPLACEMENT_CHARACTER_IN_ORIGINAL_TEXT"
+    ],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 4,
+     "}": 4
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_7822feafe7a048023f0d476d"
+   }
+  ],
+  "formula_trailing_tokens_summary_lexical_only": {
+   "tokens_in_candidate_order": [
+    "(1)"
+   ],
+   "candidates_without_trailing_token": [],
+   "tokens_with_non_ascii_delimiters_as_given": [],
+   "candidates_with_a_bracketed_number_token_only_not_at_the_end": [],
+   "tokens_occurring_more_than_once": []
+  },
+  "raw_artifact_inventory_S2_script": [
+   {
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_2514_6_2019_0152/95a0bd620247-p2-2-dbe7708350df748ed713087a665649da4c0c622413d4271611594f18b42fbe7f.json",
+    "collection_counts": {
+     "texts": 32,
+     "tables": 0,
+     "pictures": 2,
+     "groups": 0,
+     "key_value_items": 0,
+     "form_items": 0
+    },
+    "text_label_counts": {
+     "page_header": 1,
+     "text": 27,
+     "caption": 2,
+     "formula": 1,
+     "page_footer": 1
+    },
+    "candidate_count_from_this_artifact": 3,
+    "raw_pictures_tables_and_formula_items_without_a_candidate": [],
+    "code_labelled_and_orphan_caption_text_items": []
+   }
+  ],
+  "markdown_chunk_caption_like_lines_S2_regex": [
+   {
+    "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00005",
+    "line": "**Fig. 1** **Pintle injector schematic diagram of operation principles:** **a central “pintle\" deflects radial flow of one**"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00006",
+    "line": "**Fig.** **2** **Expected** **recirculation** **zones** **resulting** **from** **impingement** **of** **the** **radial** **and** **axial** **propellants** **in** **a**"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+    "line": "**Fig. 3** **Illustration of how blockage factor affects pintle tip flow distribution.**"
+   },
+   {
+    "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+    "line": "**Fig. 4** **Experimental relationship between** θ **and** _TMR_ **for blockage factors of** 0.3 **,** 0.6 **, and** 0.8 **(recreated from**"
+   }
+  ],
+  "docling_markdown_caption_like_lines_S2_regex": {
+   "ENR_7822feafe7a048023f0d476d": {
+    "markdown_lines": 19,
+    "caption_like_lines": [
+     "Fig. 1 Pintle injector schematic diagram of operation principles: a central \"pintle\" deflects radial flow of one propellant into a coaxial stream of the other, forming a mixed spray-cone in the combus",
+     "Fig. 2 Expected recirculation zones resulting from impingement of the radial and axial propellants in a combustion chamber (recreated from [5])."
+    ]
+   }
+  },
+  "review_state_summary_S2_script": {
+   "candidate_review_state_counts": {
+    "SOURCE_PAGE_COMPARED": 3
+   },
+   "candidates_with_review_state_other_than_UNREVIEWED": 3,
+   "candidates_total": 3,
+   "transcription_state_counts": {
+    "CANDIDATE_UNVERIFIED": 3
+   },
+   "per_page": {
+    "2": {
+     "candidates": 3,
+     "candidate_review_states": {
+      "SOURCE_PAGE_COMPARED": 3
+     },
+     "no_candidates": false,
+     "all_candidates_REJECTED": false,
+     "docling_runs_for_page": [
+      {
+       "run_id": "ENR_7822feafe7a048023f0d476d",
+       "run_record_review_state": "UNREVIEWED",
+       "run_record_active": true,
+       "metadata_integrity_state": "VERIFIED"
+      }
+     ],
+     "no_docling_run_record_for_page": false,
+     "all_runs_for_page_REJECTED": false,
+     "raw_collection_counts_of_runs_for_page": [
+      {
+       "texts": 32,
+       "tables": 0,
+       "pictures": 2,
+       "groups": 0,
+       "key_value_items": 0,
+       "form_items": 0
+      }
+     ],
+     "raw_artifact_has_no_items_at_all": false
+    }
+   },
+   "pages_with_no_candidates": [],
+   "pages_whose_candidates_are_all_REJECTED": [],
+   "pages_whose_docling_runs_are_all_REJECTED": [],
+   "pages_without_a_docling_run_record": [],
+   "pages_whose_raw_artifact_has_no_items": [],
+   "note": "run_record_review_state is the Docling run record's own review_state; REJECTED runs are what s1-run counts as 'only rejected parser output'"
+  },
+  "stored_objects": {
+   "count": 1,
+   "by_store": {
+    "equations": 1
+   },
+   "quote_anchor_state_counts": {
+    "GROUNDED": 1
+   },
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [
+    {
+     "id": "EQ_DOI_10_2514_6_2019_0152_987EC08C",
+     "symbols": [
+      "N",
+      "d_o",
+      "d_t"
+     ]
+    }
+   ],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 1,
+    "formula_candidates_in_bundle": 1,
+    "stored_objects_listing_a_queue_target_in_model_ids": {},
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": [
+    {
+     "id": "EQ_DOI_10_2514_6_2019_0152_987EC08C",
+     "store": "equations",
+     "type": "Equation",
+     "page": 2,
+     "is_target": false,
+     "active": true,
+     "source_state": "CURRENT",
+     "grounded_as_stored": "GROUNDED",
+     "confidence": "high",
+     "verification_as_given": null,
+     "label_as_given": "Freeberg 2019 Eq. (1) pintle blockage factor",
+     "equation_number_as_given": "1",
+     "model_ids_as_given": [],
+     "quote_length": 33,
+     "mechanical_checks_as_given": [
+      {
+       "check": "quote_anchor",
+       "state": "GROUNDED",
+       "page": 2
+      },
+      {
+       "check": "formula_mechanics",
+       "flags": []
+      },
+      {
+       "check": "unresolved_quantity_mapping",
+       "symbols": [
+        "N",
+        "d_o",
+        "d_t"
+       ]
+      }
+     ],
+     "same_page_formula_candidates": [
+      "CAND_0ac2e3bd32e4f1cceb273399"
+     ]
+    }
+   ]
+  },
+  "targets": {
+   "queue_targets": [],
+   "model_targets_as_given": [],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {},
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    2,
+    2
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "2": {
+     "figure": 2,
+     "formula": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+     "page_start": 2,
+     "page_end": 3
+    }
+   ]
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00005",
+     "page_start": 2,
+     "page_end": 2,
+     "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+     "text_length": 1513
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00006",
+     "page_start": 2,
+     "page_end": 2,
+     "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+     "text_length": 1484
+    },
+    {
+     "chunk_id": "DOC_DOI_10_2514_6_2019_0152#c00007",
+     "page_start": 2,
+     "page_end": 3,
+     "section": "Rstartups to the market [1]. These new players often rely on publicly available data and their own resourcefulness to",
+     "text_length": 1670
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

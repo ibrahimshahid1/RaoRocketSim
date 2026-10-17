@@ -1,0 +1,833 @@
+{
+ "meta": {
+  "generated_at": "2026-10-16T05:55:51.451486+00:00",
+  "n": 39
+ },
+ "records": [
+  {
+   "id": "REL_02e5d1ee994ea037701d5321f37b43da2b54cbde6bbfb794dd25229f6122974c",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Integrate with delta(0)=0; the initial condition remains explicit. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page841: Integrate with delta(0)=0; the initial condition remains explicit. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_07020b4f908959b231d2611f95c4f7df735b5864d16417c87c623ee15c8aacfb",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Substitute sonic/local velocity ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1099: Substitute sonic/local velocity ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_0e12b2fccd942ee577d06ced7ca4c096c0a1efd752765c139e36a11cd9647761",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Use sonic temperature ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1099: Use sonic temperature ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_11efae99ca619df628449a8dcd917bef3516c06cfe563e26a4c2e592c64a06b2",
+   "type": "Relationship",
+   "from": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_BB096C54",
+   "to": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_5E676594",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Sourcep682 explicitly reduces17.35 when h=h(T),e=e(T); pressure/volume derivatives vanish. Thisconditionalreduction doesnotidentifyequilibrium-reacting andfrozen sound speeds generally. SYSTEM_INFERS comparison; source equations retain separate SOURCE_STATES provenance and assumptions. No implementation or physical validation follows from this edge.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:55:51.451486+00:00"
+  },
+  {
+   "id": "REL_1a4d247785f6552d962caf47934fb109ca691a919fddb7c3be8003650b73b892",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1091: Use the temperature ratio plus the additional isentropic perfect-gas relation for density. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1091: Use the temperature ratio plus the additional isentropic perfect-gas relation for density. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_1af7d8fc7ab327041a276949dda01fd3fd9ce327e9417a2eb739c717c0b95590",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Combine density ratios at local and sonic states. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_248f4919b3d5bda6e3460917261b77c556ed5791d6bea7a4b9398bf90fd0cd28",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Substitute momentum thickness7delta/72. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page841: Substitute momentum thickness7delta/72. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_2b4f1b25a67342fa33de42dc32b123e484b7d20bd6066a58429d61ccfea2da8e",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1090: Perfect-gas sound speed scales as sqrt(T); constant specific-heat ratio assumed. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1090: Perfect-gas sound speed scales as sqrt(T); constant specific-heat ratio assumed. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_3dd1da3a0044b34563e2065cbcf17d8257ce2283d2af453eae23e53c0e346d91",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3B81E9AC",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Write the friction relation in dimensional wall-shear form with consistent Reynolds definition. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3B81E9AC_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3B81E9AC_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3B81E9AC",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page842: Write the friction relation in dimensional wall-shear form with consistent Reynolds definition. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_3e9312dc04594bb450edd98aa4734b9e02110731b578d40c89ab0f00e6297def",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E14372C8",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Integrate the one-seventh-power profile in the displacement definition. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_588eaaa033c7c56acf405251d8697e1bbb9c4e623d1deb70c863a060dbe20d19",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9D0A15B7",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page840: Use the displayed definitions/identities; no extra log-law assumption is attached to7.36 itself. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9D0A15B7",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page840: Use the displayed definitions/identities; no extra log-law assumption is attached to7.36 itself. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_5dfb4f4a2832dd5e1e60ab888b18c92ffb7af3129c50d403178c292ecfb79890",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_3F363E73",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Use the momentum-integral relation with the stated profile and friction fit. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_6269d2abbb0f31fe7ec155ac19a82d5428f94767461e07b4a994e14a5056342e",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1092: Evaluate at Ma=1; example k1.4 numbers are not general limits. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_62c0a0ebe64a97a15b6b51d6c216fe41aa5f103500da57586fa9c3b7a4a39844",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1092: Evaluate sonic density ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_A8B93868",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1092: Evaluate sonic density ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_70cf15a321ad0926af1129046aa40e3287b46cab6afb715d624851fc41d9237d",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Combine friction fit with the thickness law. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page841: Combine friction fit with the thickness law. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_724e57336d074ee2277551f6d0df5b075e3738102bc8e6009185b44dba4c8341",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_858D5DB0",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page840: Substitute skin-friction identities into the edge log law. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_802918ca8c31decf8edaadc2668607b920371960e9eb0112cb2ed121b2236ee3",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Form the displacement/momentum-thickness ratio;1.3 is rounded. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_85a4cb303911c835870c645e2ccf4a81de70812e000774eb2bb685a440bb376b",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_4C3ED8E0",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1092: Evaluate sonic sound-speed ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_929fb5fd5015c3dacc5b55f03dfe5611d8cb2e21335610753bf47aa82d4451d3",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9E7FA1A8",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Source explicitly combines7.42 and7.38 to give local friction. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_97e73c2e3cee293517854bb374f393b6a8456aab10608d9d710c8e7e3b2ad602",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Use the critical density-to-stagnation ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1099: Use the critical density-to-stagnation ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_99e0bcbde00991de3a187fe5e69e9b782425ad9300585f6ded99969bb8067bfb",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_858D5DB0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7674B73D",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page840: Apply y=delta and u=U at the outer edge within the approximate logarithmic profile. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_858D5DB0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_858D5DB0_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_858D5DB0",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_7674B73D",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page840: Apply y=delta and u=U at the outer edge within the approximate logarithmic profile. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_9c52a8f6a2689c423398228c449b40617a3c479d19319c8b838e0e921e67eabc",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FCFFF2C0",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1092: Evaluate sonic pressure ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_a5e34bf00d339132e40025d6a5fe150791d803656b2b482174f9129eb0c8985a",
+   "type": "Relationship",
+   "from": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_6537643E",
+   "to": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Sourcep678 rewrites the reacting-mixture expression using the frozen-mixture contribution. SYSTEM_INFERS comparison; source equations retain separate SOURCE_STATES provenance and assumptions. No implementation or physical validation follows from this edge.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:55:51.451486+00:00"
+  },
+  {
+   "id": "REL_a8c4c0f361946d906c4ecaaec1762c2d57794374285f9b52fed8c97a020101ed",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_AE21CBFC",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Substitute sonic/local density ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_acf5d03e9d091cdbc2667170ef7ae70355aba1360a3cdebe039ff7cb7c2e275c",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1091: Use the temperature ratio plus the additional isentropic perfect-gas relation; adiabatic alone is insufficient for this pressure expression. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0344D557",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1091: Use the temperature ratio plus the additional isentropic perfect-gas relation; adiabatic alone is insufficient for this pressure expression. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_afdfab44ad9ab05b37db2345d7a1bad7fac12f195d7ba399c07e600adfae267e",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5",
+   "edge": "APPROXIMATES",
+   "source_relation": "APPROXIMATES",
+   "note": "Explicit original-PDF comparison, page840: Source explicitly fits the tabulated implicit friction-law values by a power law; no universal fit domain inferred. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F_APPROXIMATES_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F_APPROXIMATES_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_9CF8DAB5",
+     "edge": "APPROXIMATES",
+     "source_relation": "APPROXIMATES",
+     "note": "Explicit original-PDF comparison, page840: Source explicitly fits the tabulated implicit friction-law values by a power law; no universal fit domain inferred. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_b9de900530f163e8e686d2ce9597da2998cb885238d103625c63d87cc31d8f2c",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E14372C8",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Integrate the one-seventh-power profile in the momentum-thickness definition. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_040B8DFE",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E14372C8",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page841: Integrate the one-seventh-power profile in the momentum-thickness definition. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_c2af9f28b88f1986818aefcecefb11a8e3f5a7c4f9747b6c0e786f4177833896",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Use delta_star=delta/8 in that ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C8C5EA63",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page842: Use delta_star=delta/8 in that ratio. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_cfe4b6e9155e5e12dbb2e16120a2aaeb5c0577939eb8030f2181dc41ec4e421b",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_6C754D6F",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Source combines9.41–9.43 for the perfect-gas area-Mach equation. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_d4a68d6635d6ca92380d0c0b1fc6e38bc5309a2c35d95fbfd10d6753f5141208",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Use the constant-density displacement-thickness definition; no variable-density generalization asserted. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_C4EE2076",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page842: Use the constant-density displacement-thickness definition; no variable-density generalization asserted. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_d5c74bd07349ac77241624090b8005e5122ef06b95edba9e3915e4369d958d8c",
+   "type": "Relationship",
+   "from": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+   "to": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_182F4635",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Sourcep678 substitutes speciescp into the pressure product rule. SYSTEM_INFERS comparison; source equations retain separate SOURCE_STATES provenance and assumptions. No implementation or physical validation follows from this edge.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:55:51.451486+00:00"
+  },
+  {
+   "id": "REL_f1709ea4d06dc94ca8ada7eb37864ef4379148e1c35fb500fb1ce0a1eea9afd3",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_256B7CDB",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_8E0D073F",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page841: Substitute the stated friction power-law fit. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_f2ca3ede16ddce2059090e0560951818895ff640d7bd1b82c047829a817549a3",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FFE4CF8F",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_95B47AD1",
+   "edge": "EQUIVALENT_TO",
+   "source_relation": "EQUIVALENT_TO",
+   "note": "Explicit original-PDF comparison, page840: The source introduces7.32 by reprinting7.5 for convenience; same constant-U momentum integral. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FFE4CF8F_EQUIVALENT_TO_EQ_FLUID_MECHANICS_7TH_ED_MCG"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FFE4CF8F_EQUIVALENT_TO_EQ_FLUID_MECHANICS_7TH_ED_MCG",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_FFE4CF8F",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_95B47AD1",
+     "edge": "EQUIVALENT_TO",
+     "source_relation": "EQUIVALENT_TO",
+     "note": "Explicit original-PDF comparison, page840: The source introduces7.32 by reprinting7.5 for convenience; same constant-U momentum integral. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_f68af2255b11edeea1b41c2e8102a056e78b7e5700ebec1bd46b54e366921eb0",
+   "type": "Relationship",
+   "from": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_19ADDF30",
+   "to": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_0AADA95B",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Sourcep678 explicitly sets (partial c_i/partial T)_p=0 for chemicallyfrozen composition; this doesnotforceconstant speciescp. SYSTEM_INFERS comparison; source equations retain separate SOURCE_STATES provenance and assumptions. No implementation or physical validation follows from this edge.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:55:51.451486+00:00"
+  },
+  {
+   "id": "REL_f8b85aa40b9f6b385f025bb02edc6c7c8699e5fb39251de12bfa995f139e1611",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_850EBB3B",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page828: Cancel common rho and b, use delta=h+delta_star, and rearrange mass conservation. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_890DD85F",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_850EBB3B",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page828: Cancel common rho and b, use delta=h+delta_star, and rearrange mass conservation. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_fb0af4721c0a602105b38eb05a114c35667044b0e85695e5d6bde8f7fbb7203e",
+   "type": "Relationship",
+   "from": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_6537643E",
+   "to": "EQ_5F36B7C4DED79BB3E90754D0F81682F7A68014BE_19ADDF30",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Sourcep678 explicitly inserts the frozen-specific-heat17.22 definition into17.21. SYSTEM_INFERS comparison; source equations retain separate SOURCE_STATES provenance and assumptions. No implementation or physical validation follows from this edge.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:55:51.451486+00:00"
+  },
+  {
+   "id": "REL_fc7a94a0caf4c60776ec050a60a0f290f755baf229df699c8763dd316eb0e1ca",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E51E8E76",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page842: Integrate wall friction over the plate; source constants are rounded. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E51E8E76_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E51E8E76_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_E51E8E76",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_DD780E1E",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page842: Integrate wall friction over the plate; source constants are rounded. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  },
+  {
+   "id": "REL_fc8de69d8dbbd76d1aec2102f190795f76784a0eab6a886b6bd26983425836ce",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_1FE89EEA",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_2CE5B1A3",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Use perfect-gas temperature/sound-speed relation and Ma=V/a. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:29:49.832055+00:00"
+  },
+  {
+   "id": "REL_ff29b3d1d97836c261982922673b586ea4f5e2d65f046b51b7a8a88c9b56659e",
+   "type": "Relationship",
+   "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BEFA360A",
+   "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+   "edge": "DERIVED_FROM",
+   "source_relation": "DERIVED_FROM",
+   "note": "Explicit original-PDF comparison, page1099: Set k=1.4;1.728 is the resulting numerical denominator. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+   "provenance_kind": "SYSTEM_INFERS",
+   "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+   "recorded_at": "2026-10-16T05:12:14.279783+00:00",
+   "legacy_ids": [
+    "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BEFA360A_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR"
+   ],
+   "history": [
+    {
+     "id": "REL_EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BEFA360A_DERIVED_FROM_EQ_FLUID_MECHANICS_7TH_ED_MCGR",
+     "type": "Relationship",
+     "from": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_BEFA360A",
+     "to": "EQ_FLUID_MECHANICS_7TH_ED_MCGRAW_HILL_SERIES_IN_MECHANICAL_ENGI_0B68AC95",
+     "edge": "DERIVED_FROM",
+     "source_relation": "DERIVED_FROM",
+     "note": "Explicit original-PDF comparison, page1099: Set k=1.4;1.728 is the resulting numerical denominator. Source fingerprints and individual assumptions remain on both Equation nodes. This relation is SYSTEM_INFERS source comparison, not implementation or physical validation.",
+     "provenance_kind": "SYSTEM_INFERS",
+     "provenance_note": "cross-document comparison by the extraction agent for this subsystem group; both equations keep their own SOURCE_STATES provenance",
+     "recorded_at": "2026-10-16T05:12:14.279783+00:00"
+    }
+   ]
+  }
+ ]
+}

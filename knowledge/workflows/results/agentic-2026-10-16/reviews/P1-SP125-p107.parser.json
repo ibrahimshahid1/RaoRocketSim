@@ -1,0 +1,75 @@
+{
+ "reviewer": {
+  "role": "F",
+  "model": "claude-opus-5-5 (Opus F, main session)"
+ },
+ "packet": "P1-SP125-p107",
+ "parser_reviews": [
+  {
+   "candidate_id": "CAND_490fece68631ea68de458a08",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "Frustum volume transcription matches original p.107 including decimals.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  },
+  {
+   "candidate_id": "CAND_eb6ea4c927b105d01ed8cee4",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "L_n substitution matches original p.107.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  },
+  {
+   "candidate_id": "CAND_f03b5ede55e3fd56acfa1afa",
+   "state": "SOURCE_PAGE_COMPARED",
+   "reason": "0.8 x 128 = 102.4 inches matches original p.107.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  },
+  {
+   "candidate_id": "CAND_f2c609093e90150858af6bb6",
+   "state": "REJECTED",
+   "reason": "First line reads sin(theta_d); the original shows sin(theta_n). Corrected form banked by F with corrects_candidate_ids.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  },
+  {
+   "candidate_id": "CAND_5ca65534b55b3934c98f5b68",
+   "state": "REJECTED",
+   "reason": "Not a figure: security-marking banner.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  },
+  {
+   "candidate_id": "CAND_c719abe20cb62e2a2fe9e0c8",
+   "state": "REJECTED",
+   "reason": "Not a figure: security-marking banner.",
+   "evidence": {
+    "source_sha256": "471e590a0c8e99c36a98132104a3ddcc7097b0b7c561fb2638ce9d3c80e26c87",
+    "comparison_record": "knowledge/workflows/results/agentic-2026-10-16/P1-rao-top-angle-chart-comparison.json",
+    "method": "original-page renders at 110 and 400 dpi viewed by F; candidate boxes compared with page layout",
+    "pdf_page": 107
+   }
+  }
+ ]
+}

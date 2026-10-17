@@ -1,0 +1,427 @@
+{
+ "packet": "P3-KANG-p002-003",
+ "kind": "extraction",
+ "document_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029",
+ "source_pdf": "propulsion_texts/pintle_injector/kang2022.pdf",
+ "source_sha256": "82c7d0fef500a8f001d42bb05a53c788c2d2e92b2296af2d85b8d8fd4cd66049",
+ "pages": [
+  2,
+  3
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/p0002.png",
+   "sha256": "6e68d2fa95d51bd19c4fea10fa7467c511a5b289582c5adb59708dd5981eefbf",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/p0003.png",
+   "sha256": "efe1b3ef9815ae3b5ce854c1e62f2a17182a8ccdd84c5cf89dca48eb7f452cfb",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_039fa48f6a111aac4b2a83a1",
+  "ENR_f6389e424db59a9c593b5648"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_83ce4a570f51a95a93f858dc",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 1. Dimensional parameters."
+   ],
+   "bbox": [
+    {
+     "l": 70.8160160529282,
+     "t": 506.2298202495328,
+     "r": 254.24537233499845,
+     "b": 380.12968191587504,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/2\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f6389e424db59a9c593b5648",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p2-2-404414f0f05b12935e9b423d613c429b95eeaad00987aa32f55939a6910eebd4.json",
+   "raw_sha256": "fa646b4b0e14afb6bda91dd1323fe0e48da251c6794573579f2de6965734bd6e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_a324add4992816812eba9e32",
+   "kind": "table",
+   "pages": [
+    2
+   ],
+   "table_grid": [
+    [
+     "Nomenclature",
+     "Nomenclature",
+     "SR TMR",
+     "Skip ratio Total momentum ratio"
+    ],
+    [
+     "AR",
+     "Aspect ratio",
+     "u",
+     "Velocity"
+    ],
+    [
+     "BF",
+     "Blockage factor",
+     "W",
+     "Width"
+    ],
+    [
+     "CR",
+     "Contraction ratio",
+     "η",
+     "Efficiency"
+    ],
+    [
+     "C *",
+     "Characteristic velocity",
+     "",
+     ""
+    ],
+    [
+     "D",
+     "Diameter",
+     "Subscripts",
+     "Annulus"
+    ],
+    [
+     "DR",
+     "Diameter ratio",
+     "a",
+     "Combustion chamber"
+    ],
+    [
+     "F",
+     "Fuel",
+     "c",
+     "Nozzle exit"
+    ],
+    [
+     "FCR",
+     "Film cooling ring",
+     "e",
+     "Estimated"
+    ],
+    [
+     "g",
+     "Gap distance",
+     "est H",
+     "Head plate"
+    ],
+    [
+     "L * L∗",
+     "Characteristic chamber length",
+     "inj",
+     "Injector"
+    ],
+    [
+     "ll",
+     "Length",
+     "",
+     "of orifices in a row"
+    ],
+    [
+     "˙m",
+     "Mass flow rate",
+     "n",
+     "Number"
+    ],
+    [
+     "n",
+     "Orifice number",
+     "p",
+     "Pintle"
+    ],
+    [
+     "O",
+     "Oxygen",
+     "s",
+     "Skip distance"
+    ],
+    [
+     "P",
+     "Pressure",
+     "Tot",
+     "Total"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [],
+   "bbox": [
+    {
+     "l": 37.534103365285645,
+     "t": 738.9995278966409,
+     "r": 558.032479733248,
+     "b": 542.5836783702906,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 16x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_f6389e424db59a9c593b5648",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p2-2-404414f0f05b12935e9b423d613c429b95eeaad00987aa32f55939a6910eebd4.json",
+   "raw_sha256": "fa646b4b0e14afb6bda91dd1323fe0e48da251c6794573579f2de6965734bd6e",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0f2df6b89f8192fc9760af7c",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Fig. 2. Pintle injector (left) and annulus ring (right)."
+   ],
+   "bbox": [
+    {
+     "l": 59.92783429659663,
+     "t": 567.1452565849406,
+     "r": 265.48115759737493,
+     "b": 440.5785276725452,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/3\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_039fa48f6a111aac4b2a83a1",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p3-3-b2566673a46e73479d4c3f607aec6be0b3f70a0a26d156e6966c80c4d393fcec.json",
+   "raw_sha256": "4d3ce75c209a286b3724df1ac4ff66a6859afccf01119b824067be804559c401",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_1290119d10bb18e9c1301d38",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "Design factor",
+     "Description"
+    ],
+    [
+     "TMR = ˙mp ⋅ up ˙ma ⋅ ua BF = nW1st(+2nd)",
+     "Total momentum ratio (Pintle and annulus ring) Blockage factor (Circumference of pintle and total orifice length)"
+    ],
+    [
+     "πDp Dc",
+     "Diameter ratio (Chamber diameter and pintle diameter)"
+    ],
+    [
+     "DR = Dp",
+     ""
+    ],
+    [
+     "SR = ls Dp",
+     "Skip ratio"
+    ],
+    [
+     "CR",
+     "Contraction ratio"
+    ],
+    [
+     "L*",
+     "Characteristic chamber length"
+    ],
+    [
+     "n",
+     "Orifice number"
+    ],
+    [
+     "Orifice shape",
+     "Circle, Rectangle, Continuous, Noncontinuous, 1st, 2nd"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Table 1 Pintle injector design parameters."
+   ],
+   "bbox": [
+    {
+     "l": 36.77929553282307,
+     "t": 719.051171459594,
+     "r": 288.58754563073984,
+     "b": 591.0537605197857,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 9x2 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_039fa48f6a111aac4b2a83a1",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p3-3-b2566673a46e73479d4c3f607aec6be0b3f70a0a26d156e6966c80c4d393fcec.json",
+   "raw_sha256": "4d3ce75c209a286b3724df1ac4ff66a6859afccf01119b824067be804559c401",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_ebeda3f60920909248481274",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "Pintle No",
+     "A"
+    ],
+    [
+     "1st AR",
+     "3.1"
+    ],
+    [
+     "2nd AR",
+     "2.0"
+    ],
+    [
+     "n (ea)",
+     "22"
+    ],
+    [
+     "BF (%)",
+     "86"
+    ],
+    [
+     "m (kg/s)",
+     "LOx - 3.08, Kerosene - 1.26"
+    ],
+    [
+     "Chamber pressure (MPa)",
+     "7.0"
+    ],
+    [
+     "Annulus ring (TMR)",
+     "1.02"
+    ]
+   ],
+   "json_pointer": "/tables/1",
+   "caption_text": [
+    "Table 2 Specifications of the pintle injector and annulus ring."
+   ],
+   "bbox": [
+    {
+     "l": 37.66319212032285,
+     "t": 383.0289192759317,
+     "r": 288.06535359359873,
+     "b": 304.6490540146331,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 8x2 (see table_grid; full cells in raw item /tables/1)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_039fa48f6a111aac4b2a83a1",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029/82c7d0fef500-p3-3-b2566673a46e73479d4c3f607aec6be0b3f70a0a26d156e6966c80c4d393fcec.json",
+   "raw_sha256": "4d3ce75c209a286b3724df1ac4ff66a6859afccf01119b824067be804559c401",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00005",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Acta Astronautica > Design of pintle injector using Kerosene-LOx as propellant and solving the problem of pintle tip thermal damage in hot firing test",
+   "text": "_D. Kang et al.                                                                                                                  Acta Astronautica 201 (2022) 48–58_"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00006",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "AR Aspect ratio\n_BF_ Blockage factor\n_CR_ Contraction ratio\n_C_ <sup>*</sup> Characteristic velocity\n_D_ Diameter\n_DR_ Diameter ratio\n_F_ Fuel\n_FCR_ Film cooling ring\n_g_ Gap distance\n_L_ <sup>*</sup> _L_ <sup>∗</sup> Characteristic chamber length\n_ll_ Length\n_m_ ˙ Mass flow rate\n_n_ Orifice number\n_O_ Oxygen\n_P_ Pressure\n\n**Fig. 1.** Dimensional parameters.\n\na pintle injector has 96–99% combustion efficiency and 35:1 maximum\nthrust control range, showing the possibility of thrust control without\nsignificant performance degradation [9]. Based on the successes of the\nUS lunar landing module engine (LMDE), SpaceX (Falcon 9) Merlin, and\nChina’s Chang’E 3, which used pintle injectors, several advantages of\npintle injectors, such as thrust control, combustion stability, and easy\nscalability, have been verified [4,9,11]. Thus, studies on pintle injectors\nare being conducted actively at several universities and research in­\nstitutes globally.\n\nCombustion tests based on the total momentum ratio ( _TMR_ ) (0.75,\n1.45) changes of fuel-centered single-row discontinuous pintle injectors\n(with blockage factor; _BF_ of 0.6/0.3) were conducted at Penn State\nUniversity, and relatively high combustion efficiency was confirmed at a\n_BF_ of 0.6 and _TMR_ of 1.45 [12]. Researchers at Purdue University\nstudied combustion performance based on changes in the _TMR_ and\ncharacteristic chamber length (L*) for fuel-centered hole-injection-type\npintle injectors [13]. National University of Defense Technology(NUDT)\nof China has reported on the theory and analysis of the injection angle\nafter propellant collision in the first-row continuous or discontinuous\npintle injector as well as heat load reduction in the recirculation region\nbased on changes to the row spacing in the two-row configuration"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00007",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "[14–16]. Researchers at Tokyo University in Japan observed the internal\nflow field of the ethanol/liquid oxygen (LOx) pintle injector using CH\nchemiluminescence and studied the effects of combustion chamber\nperturbations as well as changes in the combustion characteristic ve­\nlocity based on the _TMR_ [17–20]. Investigators at Chungnam National\nUniversity in Korea studied the combustion characteristic velocity of the\nkerosene pintle injector based on the pintle orifice shape, _TMR_, and\n\n_SR_ Skip ratio\n_TMR_ Total momentum ratio\n_u_ Velocity\n_W_ Width\n_η_ Efficiency\n\n_Subscripts_\n_a_ Annulus\n_c_ Combustion chamber\n_e_ Nozzle exit\n_est_ Estimated\n_H_ Head plate\n_inj_ Injector\n_n_ Number of orifices in a row\n_p_ Pintle\n_s_ Skip distance\n_Tot_ Total\n\ncombustion characteristic chamber length [21–25]. Scientists at the\nKorea Aerospace University studied the analysis and cold flow test of the\ngas–liquid continuous pintle injector based on the opening degree and\n\n_TMR_, recirculation area control method by changes to the injector\nshape, pintle orifice shapes, as well as injector and combustion chamber\ndesigns [26–30]. Researchers at Seoul National University studied the\nspray characteristics of pintle injectors based on the annulus orifice area\nand movable pintles using methane and LOx [31,32]."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00008",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "Although many studies have been conducted on pintle injectors, the\ntypes of propellants, pintle shapes, and annulus combinations used were\ndiverse; therefore, studies on performance optimizations, such as pro­\npellant mixing efficiency and atomization, are relatively insufficient.\nMoreover, research on combustion tests under high-pressure/high-flowrate conditions are sparse. In particular, the tip of the pintle injector is\nextremely vulnerable to thermal damage owing to the recirculation area\nof high mixing ratio and high heat flux. In previous studies, such thermal\ndamage was prevented by changing the pintle tip shape, cooling,\ncoating, and material change. Mulelle, the designer of Merlin engines,\ndrilled a hole at the pintle tip to allow flow of propellant and achieve\ncooling [33]. In TRW, the pintles were made from nickel copper alloys\nand coated with TBC (Thermal barrier coating) to increase the thermal\ndurability of the pintle tip [2]. Researchers at Northrop Grumman\nchanged the shape and orifice of the pintle injector to prevent thermal\ndamage of the pintle tip [2]. Chang et al. conducted a study on the\ncharacteristics of the pintle injector and heat transfer based on skip\ndistance and changes in the pintle 1/2 row distance [16]. Most of these\nprevious studies on prevention of pintle tip thermal damage have\nlimited applicability or only showed numerical analyses and\nlow-pressure combustion tests. Supercritical combustion, which is the\noperating area of a high-performance liquid rocket engine, has different\ncombustion characteristics from subcritical conditions. Therefore, it is\nnecessary to study the combustion characteristics of liquid-liquid pintle\ninjectors in supercritical condition."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00009",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "The present study addresses the 1) design and manufacture of a 1.5tonf class liquid–liquid pintle injector with two-row rectangular orifice\nusing kerosene and LOx as propellants, 2) results of combustion tests\nunder supercritical conditions, 3) design change of the pintle injector\nand thermal fluid analysis, and 4) verification through a hot firing test.\n\n**2.** **Design and manufacture of the pintle injector**\n\n_2.1._ _Basic design of the pintle injector_\n\nThe pintle injector comprises a pintle supplied with a central pro­\npellant and a surrounding annulus ring. The pintle part supplied with the"
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00010",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_D. Kang et al.                                                                                                                  Acta Astronautica 201 (2022) 48–58_\n\n**Table 1**\n<u>Pintle injector design parameters.</u>\n\nDesign factor <u>Description</u>\n\n**_TMR_** = **_<u>m</u>_** ˙ **_<u>p</u>_** <u>⋅</u> **_<u>up</u>_**\n**_m_** ˙ **_a_** ⋅ **_ua_**\n\n**BF** =\n\n**_<u>nW</u>_** <u>1</u> **_<u>st</u>_** (+2 **_<u>nd</u>_** )\n\n**_πDp_**\n\n**DR** = **_<u>Dc</u>_**\n**_Dp_**\n\nTotal momentum ratio (Pintle and annulus ring)\n\nBlockage factor (Circumference of pintle and total orifice\nlength)\n\nDiameter ratio (Chamber diameter and pintle diameter)\n\nSkip ratio\n\n**SR** = **_<u>ls</u>_**\n**_Dp_**\n\n**_CR_** Contraction ratio\n**_L_** ***** Characteristic chamber length\n**_n_** Orifice number\n**Orifice shape** Circle, Rectangle, Continuous, Noncontinuous, 1st, 2nd\n\n**Fig. 2.** Pintle injector (left) and annulus ring (right).\n\n**Table 2**\n<u>Specifcations of the pintle injector and annulus ring.</u>\n\nPintle No A\n\n**1** st **_AR_** 3.1\n**2** nd **_AR_** 2.0\n**_n_** **(ea)** 22\n**_BF_** **(%)** 86\n**_m_** **(kg/s)** LOx - 3.08, Kerosene - 1.26\n**Chamber pressure (MPa)** 7.0\n**Annulus ring (** **_TMR_** **)** 1.02\n\ncentral propellant is divided into continuous and discontinuous types in\naccordance with the orifice shape, and the propellant sprayed from the\nannulus ring collides with that in the pintle orifice and mixes to form a\ncone-shaped droplet film. Fig. 1 shows a pintle injector with two rect­\nangular rows and discontinuous orifices. The _TMR_, _BF_, diameter ratio\n( _DR_ ), skip ratio ( _SR_ ), and orifice shape are the main design factors of the\npintle injector. The _TMR_, which is defined as the ratio of momenta of the\npintle to annulus orifices, and the _BF_, which is defined as the total\ncircumferential length of the pintle orifice divided by that of the pintle,\nare the most important factors in the design of the pintle injector. These\nare closely related to the mixing efficiency, shape, and arrangement of\nthe orifice [12]. The definitions of main design factors are shown in\nTable 1."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00011",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_2.2._ _Pintle injector design_\n\nFrom the results of previous studies, it is known that the discontin­\nuous two-row pintle injector is more efficient than the continuous singlerow pintle injector and that the second-row flow rate shows maximum\nperformance at a flow rate ratio of about 15% [34]. In addition, the\npropellant inside the pintle injector generally uses an oxidizer for high\nthrust, and the fuel injected into the circumference creates a low mixing\n\nratio recirculation area on the combustion chamber head surface, which\nis advantageous for cooling [35]. The _TMR_ and _BF_ show optimal per­\nformances as they are closer to 1 in the experimental results of the\npreviously reported studies [12,25].\n\nFor the design of the pintle injector used in this study, the pressure\ndrop is determined on the basis of the propellant flow rate and injection\narea with reference to the results of previous research. Moreover, _DR_ is\nset to the recommended value of 3–5 [12]. Finally, using kerosene and\nliquid oxygen (central propellant), a 1.5-tonf class liquid–liquid pintle\ninjector with rectangular two-row orifice, 18 mm diameter, and _BF_ of\n86% was designed. The final pintle injector specifications are shown in\nTable 2.\n\nThe pintle injector and annulus ring were designed separately to\nallow testing of various combinations. The propellant supply pipes are\n1 <sup>′′</sup> for the pintle injector and 3/4 <sup>′′</sup> for the annulus ring. A temperature\nsensor, static pressure sensor, and high-frequency pressure sensor were\ninstalled in each manifold for data acquisition. The assembly shape of\nthe manufactured pintle head part is as shown in Fig. 2."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00012",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "_2.3._ _Combustion chamber design_\n\nIn general, there are many cooling methods for liquid rocket engines,\nsuch as the ablation, penetration, regenerative, and film cooling\nmethods as well as thermal barrier coating method (TBC); one or more of\nthese methods are often applied in the design and fabrication [36]. The\nchannel-type regenerative and film cooling methods were applied to the\ncombustion chamber used in this study to meet the cooling performance\nunder supercritical conditions. In addition, the TBC was applied to the\ncombustion chamber to increase the thermal stability. The insert-type\nfilm cooling ring assembled between the cylinder and head parts was\ndesigned such that the supplied cooling fluid achieves axial momentum\nwhile circling within the combustion chamber to improve its cooling\nperformance. To enhance the flexibility of the tests, the cylinder and\nnozzle parts were designed separately, where the inner liner was made\nof copper alloy and outer jacket was made of stainless steel. These parts\nwere then assembled using brazing techniques. The combustion cham­\nber design pressure was 7.0 MPa, and a straight-type cooling channel\nwas designed for convenience for manufacturing. The characteristic\nlength **_L_** <sup>*</sup> is defined as the ratio of the chamber volume to nozzle throat\narea, which is used to specify the propellent stay time in the combustion\nchamber. The combustion characteristic length used in this study is\n1539.4 mm."
+  },
+  {
+   "chunk_id": "DOC_DOI_10_1016_J_ACTAASTRO_2022_08_029#c00013",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Acta Astronautica > Nomenclature",
+   "text": "**3.** **Preliminary hot firing test**\n\n_3.1._ _Test facility_\n\nThe combustion tests were conducted in a horizontal pressure-fed\nground combustion test facility located at the Korea Aerospace\nResearch Institute, using kerosene and liquid oxygen as the propellants\n\n[37]. The propellant and cooling water for the combustion test were\nfilled in each run tank, pressurized to a high value using gaseous ni­\ntrogen, and supplied to the thrust chamber. The propellant flow rate\nsupplied to the thrust chamber was measured using a mass flow meter\n(oxidant) and turbine flow meter (fuel, cooling water) installed between\nthe run tank and propellant supply valve, and the propellant supplied to\nthe thrust chamber was ignited using a methane torch. The electronic\nsolenoid valve was controlled by an industrial PLC to maintain constant\npressure of the propellant run tank during the hot firing test.\n\n_3.2._ _Configuration of the pintle injector for the test_\n\nThe thrust chamber used in the combustion test comprises head and\ncombustion chamber parts. The head consists of a pintle injector and\nannulus ring, and the combustion chamber consists of a film cooling\nring, cylinder, and nozzle. The thrust chamber configuration, photo of"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "table": 3
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

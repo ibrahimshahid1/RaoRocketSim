@@ -1,0 +1,44 @@
+{
+  "bank_mismatches": {},
+  "model_review_state": "CURRENT",
+  "fidelity": "BAD_ATTRIBUTION",
+  "source_support_state": "PARTIALLY_SUPPORTED",
+  "n_implementation_fingerprints": 10,
+  "physics_change_required": true,
+  "model_edges": [
+    {
+      "from": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+      "to": "SUB_NOZZLE_CONTOUR",
+      "type": "PART_OF",
+      "provenance": "model_registry"
+    },
+    {
+      "from": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+      "to": "DOC_NTRS_19770009165",
+      "type": "CITES",
+      "provenance": "model_registry",
+      "basis": "LITERATURE_DERIVED",
+      "equation_ref": "Rao/TOP chart figures and bell-contour guidance",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "DOC_NTRS_19770009165: PARTIALLY_SUPPORTED (Figure 5(a) and section 2.1.2.1.2 support the conceptual canted-parabola approximation. The currently attributed angle-table ordinates fail Figure 5(b), including the opposite exit-angle trend. No equation IMPLEMENTS or claim SUPPORTS assertion is made for this non-equivalent review.)"
+    },
+    {
+      "from": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+      "to": "DOC_NTRS_19770009165",
+      "type": "SUPPORTED_BY",
+      "provenance": "model_source_review",
+      "support_state": "PARTIALLY_SUPPORTED",
+      "support_notes": "Figure 5(a) and section 2.1.2.1.2 support the conceptual canted-parabola approximation. The currently attributed angle-table ordinates fail Figure 5(b), including the opposite exit-angle trend. No equation IMPLEMENTS or claim SUPPORTS assertion is made for this non-equivalent review.",
+      "source_sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+      "scope": "citation support only; not implementation or physical validation"
+    },
+    {
+      "from": "MODEL_NOZZLE_RAO_TOP_BEZIER",
+      "to": "VAL_NOZZLE_RAO_TOP_BEZIER",
+      "type": "HAS_VALIDITY_ENVELOPE",
+      "provenance": "PROJECT_DERIVES"
+    }
+  ],
+  "physical_validation": "NOT_ESTABLISHED",
+  "graph_candidate_link_issues": 54
+}

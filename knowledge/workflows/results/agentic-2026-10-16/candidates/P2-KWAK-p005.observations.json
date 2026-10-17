@@ -1,0 +1,1209 @@
+{
+ "packet": "P2-KWAK-p005",
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "observations": {
+  "queue": {
+   "state_before_s2_prepare": "RAW_CAPTURED",
+   "state_after_s2_prepare": "CANDIDATES_PREPARED",
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "queue_reason": "P2 Kwak 2018 Table 2 battery cells and Eq. 4",
+   "queue_pages": [
+    5,
+    5
+   ],
+   "queue_document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "queue_source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf"
+  },
+  "bundle": {
+   "path": "knowledge/workflows/results/agentic-2026-10-16/candidates/P2-KWAK-p005.json",
+   "sha256": "bcbf396a595d6c8f9e9049d1127b565823b5fcd80e2ff199a20828e367abc0b6",
+   "size_bytes": 17528,
+   "kind": "extraction",
+   "document_id": "DOC_DOI_10_1016_J_AST_2018_02_033",
+   "source_pdf": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "source_sha256": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "pages": [
+    5,
+    5
+   ],
+   "docling_run_ids": [
+    "ENR_c871cdad548a9b6304a6e3f2"
+   ],
+   "prepared_by_in_bundle": {
+    "role": "S2",
+    "model": "claude-sonnet-5-5"
+   },
+   "top_level_keys_in_bundle": [
+    "authority",
+    "candidates",
+    "docling_run_ids",
+    "document_id",
+    "kind",
+    "markdown_chunks",
+    "mechanical_flag_scope",
+    "missing_targets",
+    "model_targets",
+    "packet",
+    "pages",
+    "prepared_by",
+    "renders",
+    "source_pdf",
+    "source_sha256",
+    "stored_objects",
+    "summary",
+    "unknown_model_targets"
+   ],
+   "summary_as_given": {
+    "candidates_by_kind": {
+     "figure": 2,
+     "formula": 4,
+     "table": 1
+    },
+    "flagged_candidates": 0,
+    "target_objects": 0,
+    "objects_with_anchor_problems": 0
+   }
+  },
+  "source_pdf_check": {
+   "path": "propulsion_texts/fuel_pump_design/1-s2.0-S1270963817320953-main.pdf",
+   "sha256_in_bundle": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "sha256_recomputed": "d76e0229f191e38dc87e21a08615fdf82acae70d9881c64df4ebc0ca22cb78d8",
+   "sha256_match": true
+  },
+  "renders": [
+   {
+    "page": 5,
+    "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_DOI_10_1016_J_AST_2018_02_033/p0005.png",
+    "dpi": 150,
+    "sha256_in_bundle": "4e40ab7dbfe5beec93f6d3ae59bd3efd1121514ff28d4ea7814380ab3a908686",
+    "file_exists": true,
+    "sha256_recomputed": "4e40ab7dbfe5beec93f6d3ae59bd3efd1121514ff28d4ea7814380ab3a908686",
+    "sha256_match": true
+   }
+  ],
+  "raw_artifacts": [
+   {
+    "path": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+    "sha256_in_bundle": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+    "file_exists": true,
+    "sha256_recomputed": "319a21c7a84112066d6c52b236cbc38f94a70ce7619623def3e1503d80689365",
+    "sha256_match": true
+   }
+  ],
+  "candidate_counts_by_kind": {
+   "figure": 2,
+   "formula": 4,
+   "table": 1
+  },
+  "candidates_total": 7,
+  "mechanical_flags": {
+   "mechanical_flag_scope_as_given_in_bundle": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+   "candidates_with_nonempty_flags": [],
+   "count_with_nonempty_flags": 0,
+   "kinds_present_for_which_flags_are_computed": [
+    "formula"
+   ],
+   "kinds_present_for_which_flags_are_not_computed": [
+    "figure",
+    "table"
+   ]
+  },
+  "empty_fields": {
+   "candidates_with_empty_original_text": [
+    "CAND_2107e4691f2ddc3e59601798",
+    "CAND_8d2bcf5918dea14d28a83333",
+    "CAND_728175dc336a4ee43782dbca"
+   ],
+   "candidates_with_empty_transcription": [],
+   "non_formula_candidates_with_empty_caption_text_as_given": [
+    "CAND_728175dc336a4ee43782dbca"
+   ],
+   "non_formula_candidates_without_caption_text_key": [],
+   "candidates_with_empty_bbox_list": []
+  },
+  "identical_transcription_strings_within_kind": [],
+  "figure_table_candidates": [
+   {
+    "id": "CAND_2107e4691f2ddc3e59601798",
+    "kind": "figure",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 49.65069136034562,
+      "t": 737.8668967381388,
+      "r": 285.8350944537476,
+      "b": 558.2376856258018,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "caption_text_as_given_in_bundle": [
+     "Fig. 4. Vacuum thrust vs. turbopump power with respect to PMSM power limits [21, 29-34]."
+    ],
+    "transcription_length": 56,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/0",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/2"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/2",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 42.555879199999985,
+       "t": 545.0333344,
+       "r": 293.5964475200001,
+       "b": 530.4524453107231,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 4. Vacuum thrust vs. turbopump power with respect to PMSM power limits [21, 29-34].",
+      "orig": "Fig. 4. Vacuum thrust vs. turbopump power with respect to PMSM power limits [21, 29-34].",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_8d2bcf5918dea14d28a83333",
+    "kind": "figure",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 321.5550780242305,
+      "t": 738.0224892164658,
+      "r": 550.2823833073353,
+      "b": 540.943007573356,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "caption_text_as_given_in_bundle": [
+     "Fig. 5. Predicted rotor temperature of the PMSM according to vacuum thrust."
+    ],
+    "transcription_length": 57,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/pictures/1",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "raw_item_label": "picture",
+    "raw_item_captions_refs": [
+     "#/texts/10"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/10",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 320.296,
+       "t": 529.1753344,
+       "r": 551.4600448000003,
+       "b": 523.1612549107232,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 5. Predicted rotor temperature of the PMSM according to vacuum thrust.",
+      "orig": "Fig. 5. Predicted rotor temperature of the PMSM according to vacuum thrust.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": true
+   },
+   {
+    "id": "CAND_728175dc336a4ee43782dbca",
+    "kind": "table",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 310.57514615175387,
+      "t": 489.62649338671787,
+      "r": 563.1151642050519,
+      "b": 429.5526886134304,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "caption_text_as_given_in_bundle": [],
+    "transcription_length": 4000,
+    "original_text_as_given": "",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2",
+    "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_DOI_10_1016_J_AST_2018_02_033/d76e0229f191-p5-5-9b9b6563977bbca396e0ea231c112b2add0852c81a7c4673c57779277fe14ed1.json",
+    "raw_item_matches_by_bbox": [
+     {
+      "self_ref": "#/tables/0",
+      "match": "exact",
+      "page_no": 5
+     }
+    ],
+    "raw_item_label": "table",
+    "raw_item_captions_refs": [
+     "#/texts/11"
+    ],
+    "raw_item_children_count": 1,
+    "caption_text_resolved_from_raw_artifact": [
+     {
+      "ref": "#/texts/11",
+      "label": "caption",
+      "page_no": 5,
+      "bbox": {
+       "l": 311.548,
+       "t": 506.49533439999993,
+       "r": 426.7880096,
+       "b": 491.9132549107232,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 2 Specifications of selected battery cells.",
+      "orig": "Table 2 Specifications of selected battery cells.",
+      "text_equals_orig": true,
+      "text_is_verbatim_self_repetition": false
+     }
+    ],
+    "bundle_caption_text_equals_raw_resolved_text": false,
+    "table_cell_grid": {
+     "bundle_transcription_length": 4000,
+     "bundle_transcription_reaches_4000_character_cap": true,
+     "bundle_transcription_parses_as_json": false,
+     "bundle_transcription_ends_with": "cell\", \"column_header\": false, \"row_header\": false, \"row_sec",
+     "cell_texts_fully_visible_in_bundle_transcription": [
+      "Designation",
+      "Type",
+      "Power density (kW/kg)",
+      "Energy density (Wh/kg)",
+      "C-rate",
+      "A cell",
+      "Li-ion",
+      "1.53",
+      "230.0",
+      "6.7",
+      "B cell"
+     ],
+     "stored_enrichment_record_found": true,
+     "stored_record_source": "knowledge/enrichments.json record id CAND_728175dc336a4ee43782dbca, field content (read-only)",
+     "stored_record_raw_sha256_equals_candidate_raw_sha256": true,
+     "stored_content_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "num_rows": 5,
+     "num_cols": 5,
+     "orientation": "rot_0",
+     "table_cells_count": 25,
+     "grid_row_lengths": [
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "grid_text_rows_as_given": [
+      [
+       "Designation",
+       "Type",
+       "Power density (kW/kg)",
+       "Energy density (Wh/kg)",
+       "C-rate"
+      ],
+      [
+       "A cell",
+       "Li-ion",
+       "1.53",
+       "230.0",
+       "6.7"
+      ],
+      [
+       "B cell",
+       "Li-ion",
+       "1.64",
+       "213.0",
+       "7.7"
+      ],
+      [
+       "C cell",
+       "Li-polymer",
+       "1.68",
+       "168.2",
+       "10.0"
+      ],
+      [
+       "D cell",
+       "Li-polymer",
+       "6.95",
+       "198.5",
+       "35.0"
+      ]
+     ],
+     "cells_as_given": [
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Designation",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 317.614,
+        "t": 309.14756560000006,
+        "r": 352.56124479999994,
+        "b": 315.1616450892769,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Type",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 367.69806015999995,
+        "t": 309.14756560000006,
+        "r": 381.88540864,
+        "b": 315.1616450892769,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Power density (kW/kg)",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 415.048,
+        "t": 309.14756560000006,
+        "r": 457.32246192,
+        "b": 323.72974508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Energy density (Wh/kg)",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 475.52799999999996,
+        "t": 309.14756560000006,
+        "r": 519.7645619199997,
+        "b": 323.72974508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 0,
+       "end_row_offset_idx": 1,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "C-rate",
+       "column_header": true,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 538.852,
+        "t": 309.14756560000006,
+        "r": 556.7577759999998,
+        "b": 315.1616450892769,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "A cell",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 317.614,
+        "t": 329.6676656,
+        "r": 334.38918591999993,
+        "b": 335.68174508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Li-ion",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 367.692976,
+        "t": 329.6676656,
+        "r": 384.7408,
+        "b": 335.68174508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "1.53",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 415.03540288,
+        "t": 329.6676656,
+        "r": 427.00033792000005,
+        "b": 335.68174508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "230.0",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 475.51529919999996,
+        "t": 329.6676656,
+        "r": 491.69945152,
+        "b": 335.68174508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 1,
+       "end_row_offset_idx": 2,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "6.7",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 538.8448672,
+        "t": 329.6676656,
+        "r": 547.69638976,
+        "b": 335.68174508927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "B cell",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 317.6076448,
+        "t": 338.2344752,
+        "r": 334.01804223999994,
+        "b": 344.24855468927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Li-ion",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 367.6866208,
+        "t": 338.2344752,
+        "r": 384.7312672,
+        "b": 344.24855468927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "1.64",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 415.02523456,
+        "t": 338.2344752,
+        "r": 426.98826304000005,
+        "b": 344.24855468927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "213.0",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 475.50894400000004,
+        "t": 338.2344752,
+        "r": 491.7032646400001,
+        "b": 344.24855468927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 2,
+       "end_row_offset_idx": 3,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "7.7",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 538.8512224000001,
+        "t": 338.2344752,
+        "r": 547.11679552,
+        "b": 344.24855468927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 3,
+       "end_row_offset_idx": 4,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "C cell",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 317.6076448000001,
+        "t": 346.8012848,
+        "r": 333.99897664,
+        "b": 352.81536428927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 3,
+       "end_row_offset_idx": 4,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Li-polymer",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 367.6866208000001,
+        "t": 346.8012848,
+        "r": 399.90240064000017,
+        "b": 352.81536428927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 3,
+       "end_row_offset_idx": 4,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "1.68",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 415.0265056000002,
+        "t": 346.8012848,
+        "r": 426.9895340800002,
+        "b": 352.81536428927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 3,
+       "end_row_offset_idx": 4,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "168.2",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 475.50894400000016,
+        "t": 346.8012848,
+        "r": 491.7159750400002,
+        "b": 352.81536428927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 3,
+       "end_row_offset_idx": 4,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "10.0",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 538.8512224000002,
+        "t": 346.8012848,
+        "r": 551.3480876800002,
+        "b": 352.81536428927683,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 4,
+       "end_row_offset_idx": 5,
+       "start_col_offset_idx": 0,
+       "end_col_offset_idx": 1,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "D cell",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 317.60764480000023,
+        "t": 355.3680944,
+        "r": 334.73999296000017,
+        "b": 361.3821738892768,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 4,
+       "end_row_offset_idx": 5,
+       "start_col_offset_idx": 1,
+       "end_col_offset_idx": 2,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "Li-polymer",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 367.68662080000024,
+        "t": 355.3680944,
+        "r": 399.89668096000025,
+        "b": 361.3821738892768,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 4,
+       "end_row_offset_idx": 5,
+       "start_col_offset_idx": 2,
+       "end_col_offset_idx": 3,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "6.95",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 415.02015040000026,
+        "t": 355.3680944,
+        "r": 427.5405299200003,
+        "b": 361.3821738892768,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 4,
+       "end_row_offset_idx": 5,
+       "start_col_offset_idx": 3,
+       "end_col_offset_idx": 4,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "198.5",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 475.50258880000024,
+        "t": 355.3680944,
+        "r": 491.7070777600003,
+        "b": 361.3821738892768,
+        "coord_origin": "TOPLEFT"
+       }
+      },
+      {
+       "start_row_offset_idx": 4,
+       "end_row_offset_idx": 5,
+       "start_col_offset_idx": 4,
+       "end_col_offset_idx": 5,
+       "row_span": 1,
+       "col_span": 1,
+       "text": "35.0",
+       "column_header": false,
+       "row_header": false,
+       "row_section": false,
+       "fillable": false,
+       "bbox": {
+        "l": 538.8385120000003,
+        "t": 355.3680944,
+        "r": 551.3525363200004,
+        "b": 361.3821738892768,
+        "coord_origin": "TOPLEFT"
+       }
+      }
+     ],
+     "cells_with_row_span_or_col_span_not_1": [],
+     "cells_with_flags_true": {
+      "column_header": [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        0,
+        3
+       ],
+       [
+        0,
+        4
+       ]
+      ],
+      "row_header": [],
+      "row_section": [],
+      "fillable": []
+     },
+     "grid_text_rows_equal_matrix_from_table_cells_start_indices": true,
+     "bundle_visible_cell_texts_are_a_prefix_of_stored_table_cells_texts": true,
+     "number_of_stored_cells_not_fully_visible_in_bundle_transcription": 14,
+     "raw_table_self_ref": "#/tables/0",
+     "stored_content_equals_raw_table_data_for_all_stored_keys": true,
+     "raw_table_data_keys": [
+      "grid",
+      "num_cols",
+      "num_rows",
+      "orientation",
+      "table_cells"
+     ],
+     "raw_table_captions_refs": [
+      "#/texts/11"
+     ],
+     "raw_table_children_refs": [
+      "#/texts/11"
+     ],
+     "raw_table_footnotes_count": 0,
+     "raw_table_references_count": 0
+    },
+    "raw_text_items_with_label_caption_on_candidate_pages_not_linked_by_S2": [
+     {
+      "ref": "#/texts/2",
+      "page_no": 5,
+      "bbox": {
+       "l": 42.555879199999985,
+       "t": 545.0333344,
+       "r": 293.5964475200001,
+       "b": 530.4524453107231,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 4. Vacuum thrust vs. turbopump power with respect to PMSM power limits [21, 29-34]."
+     },
+     {
+      "ref": "#/texts/10",
+      "page_no": 5,
+      "bbox": {
+       "l": 320.296,
+       "t": 529.1753344,
+       "r": 551.4600448000003,
+       "b": 523.1612549107232,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Fig. 5. Predicted rotor temperature of the PMSM according to vacuum thrust."
+     },
+     {
+      "ref": "#/texts/11",
+      "page_no": 5,
+      "bbox": {
+       "l": 311.548,
+       "t": 506.49533439999993,
+       "r": 426.7880096,
+       "b": 491.9132549107232,
+       "coord_origin": "BOTTOMLEFT"
+      },
+      "text": "Table 2 Specifications of selected battery cells."
+     }
+    ]
+   }
+  ],
+  "caption_text_bundle_vs_raw_differences": [
+   {
+    "id": "CAND_728175dc336a4ee43782dbca",
+    "kind": "table",
+    "caption_text_as_given_in_bundle": [],
+    "raw_item_captions_refs": [
+     "#/texts/11"
+    ],
+    "raw_resolved_texts": [
+     "Table 2 Specifications of selected battery cells."
+    ]
+   }
+  ],
+  "formula_candidates": [
+   {
+    "id": "CAND_29179bc604b4b66ea0c108c7",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 311.548,
+      "t": 352.0528801,
+      "r": 562.6149973600001,
+      "b": 329.6123191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "C u r r e n t \\, R a t e = \\frac { 3 6 0 0 } { t _ { d } }",
+    "transcription_length": 58,
+    "original_text_as_given": "Current Rate = 3600 td (3)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(3)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 0,
+     ")": 0,
+     "[": 0,
+     "]": 0,
+     "{": 3,
+     "}": 3
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2"
+   },
+   {
+    "id": "CAND_8492bed85f10d5b5798e8583",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 42.556000000000004,
+      "t": 341.2501882,
+      "r": 293.62299736,
+      "b": 316.23370150000005,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "N u _ { c o r r e c t e d } = N u \\left ( 1 + \\left ( \\frac { d _ { i } } { L } \\right ) ^ { 0 . 7 } \\right )",
+    "transcription_length": 109,
+    "original_text_as_given": "Nucorrected = Nu ( 1 + ( di L )0.7) (2)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(2)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 2,
+     ")": 2,
+     "[": 0,
+     "]": 0,
+     "{": 5,
+     "}": 5
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2"
+   },
+   {
+    "id": "CAND_ab143e512f721906bf0fffa6",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 42.556000000000004,
+      "t": 411.1981882,
+      "r": 293.62299736,
+      "b": 385.7542191087282,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "N u = 0 . 0 2 3 R e ^ { 4 / 5 } P r ^ { 1 / 3 } \\left ( \\frac { \\mu _ { b } } { \\mu _ { s } } \\right ) ^ { 0 . 1 4 }",
+    "transcription_length": 116,
+    "original_text_as_given": "Nu = 0.023Re 4/5 Pr 1/3 ( μb μs )0.14 (1)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(1)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 7,
+     "}": 7
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2"
+   },
+   {
+    "id": "CAND_f7c30a51f4a58da3ca71ccc8",
+    "pages": [
+     5
+    ],
+    "bbox": [
+     {
+      "l": 311.548,
+      "t": 159.9186952,
+      "r": 562.6153521,
+      "b": 150.17021910872813,
+      "coord_origin": "BOTTOMLEFT"
+     }
+    ],
+    "transcription_as_given": "\\eta _ { E } = 0 . 0 9 3 \\ln ( t _ { d } ) + 0 . 3 3 0 1",
+    "transcription_length": 56,
+    "original_text_as_given": "ηE = 0.093 ln(td) + 0.3301 (4)",
+    "trailing_parenthesized_token_in_original_text_lexical_only": "(4)",
+    "transcription_state": "CANDIDATE_UNVERIFIED",
+    "review_state": "UNREVIEWED",
+    "mechanical_flags_as_given": [],
+    "bracket_counts_recomputed": {
+     "(": 1,
+     ")": 1,
+     "[": 0,
+     "]": 0,
+     "{": 2,
+     "}": 2
+    },
+    "bracket_pairs_unequal_recomputed": [],
+    "run_id": "ENR_c871cdad548a9b6304a6e3f2"
+   }
+  ],
+  "stored_objects": {
+   "count": 0,
+   "by_store": {},
+   "quote_anchor_state_counts": {},
+   "ungrounded_quote_anchor": [],
+   "quote_anchor_not_GROUNDED_and_not_UNGROUNDED": [],
+   "unresolved_quantity_mapping": [],
+   "variable_symbol_absent_from_form": [],
+   "duplicate_form_in_packet_as_flagged": [],
+   "equation_forms_identical_after_whitespace_collapse_S2_script": [],
+   "formula_mechanics_nonempty_flags": [],
+   "cross_tab_S2_script": {
+    "stored_equation_records_in_bundle": 0,
+    "formula_candidates_in_bundle": 4,
+    "stored_objects_listing_a_queue_target_in_model_ids": {
+     "MODEL_PUMP_ELECTRIC_DRIVE": []
+    },
+    "model_ids_values_across_stored_objects": []
+   },
+   "objects": []
+  },
+  "targets": {
+   "queue_targets": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "model_targets_as_given": [
+    "MODEL_PUMP_ELECTRIC_DRIVE"
+   ],
+   "unknown_model_targets_as_given": [],
+   "missing_targets_as_given": [],
+   "target_objects_in_summary": 0,
+   "target_id_occurrences_in_stores_S2_script": {
+    "MODEL_PUMP_ELECTRIC_DRIVE": {
+     "equations": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 8
+     },
+     "claims": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 7
+     },
+     "entities": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 11
+     },
+     "validity": {
+      "records_whose_id_equals_target": 0,
+      "records_with_target_in_model_id_or_model_ids": 3
+     },
+     "models": {
+      "records_whose_id_equals_target": 1,
+      "records_with_target_in_model_id_or_model_ids": 0
+     }
+    }
+   },
+   "computation_note": "agentic_packet.py s2_prepare (updated): model_targets = packet targets starting with MODEL_; missing_targets = non-MODEL_ packet targets that are not ids of stored objects collected from the equations, claims, entities and validity stores; unknown_model_targets = model_targets absent from the models store"
+  },
+  "consistency_checks_S2_script": {
+   "packet_pages": [
+    5,
+    5
+   ],
+   "candidates_with_pages_outside_packet_pages": [],
+   "candidates_with_run_id_not_in_bundle_docling_run_ids": [],
+   "bundle_docling_run_ids_without_any_candidate": [],
+   "candidates_by_page": {
+    "5": {
+     "figure": 2,
+     "formula": 4,
+     "table": 1
+    }
+   },
+   "packet_pages_without_any_candidate": [],
+   "markdown_chunks_extending_beyond_packet_pages": []
+  },
+  "markdown_chunks": {
+   "count": 3,
+   "chunks": [
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00014",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1507
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00015",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1819
+    },
+    {
+     "chunk_id": "DOC_DOI_10_1016_J_AST_2018_02_033#c00016",
+     "page_start": 5,
+     "page_end": 5,
+     "section": "Aerospace Science and Technology > Nomenclature",
+     "text_length": 1458
+    }
+   ]
+  }
+ },
+ "authority": "mechanical observations for Opus F review; no scientific judgment"
+}

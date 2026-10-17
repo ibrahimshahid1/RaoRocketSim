@@ -1,0 +1,224 @@
+{
+ "packet": "P4-GROMSKI-p002-003",
+ "kind": "extraction",
+ "document_id": "DOC_GROMSKI2010",
+ "source_pdf": "propulsion_texts/pintle_injector/gromski2010.pdf",
+ "source_sha256": "551455e2606ec7c32c2366b3046e84752d2c8149ca49ec906e2d2e4e6298b7b6",
+ "pages": [
+  2,
+  3
+ ],
+ "prepared_by": {
+  "role": "S2",
+  "model": "claude-sonnet-5-5"
+ },
+ "authority": "PROVISIONAL CANDIDATES - parser output and stored records side by side; no equivalence, correctness or support judgment is made here. The original PDF page decides.",
+ "renders": [
+  {
+   "page": 2,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_GROMSKI2010/p0002.png",
+   "sha256": "9d765edf77dab7366a230ebd1bd6852eea9fcfd52c77df2670924d8697615d75",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  },
+  {
+   "page": 3,
+   "path": "knowledge/.work/agentic-2026-10-16/renders/DOC_GROMSKI2010/p0003.png",
+   "sha256": "3d817d58815a96ec1d03c57a095fb5456bca2784f87547c59119b8f05a067d4b",
+   "dpi": 150,
+   "renderer": "ghostscript png16m"
+  }
+ ],
+ "docling_run_ids": [
+  "ENR_27d0e9769e812b160ee67f88",
+  "ENR_a227647d84afdf690679b0e2"
+ ],
+ "candidates": [
+  {
+   "id": "CAND_91c2b6d065202259b15c08cc",
+   "kind": "figure",
+   "pages": [
+    2
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 1. TR202 Engine Key Components"
+   ],
+   "bbox": [
+    {
+     "l": 79.34021759033203,
+     "t": 441.893798828125,
+     "r": 540.2281494140625,
+     "b": 157.31060791015625,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/4\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_a227647d84afdf690679b0e2",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_GROMSKI2010/551455e2606e-p2-2-6daa736e903e94b8f3a6137ffbbe6a60959aa97be1ba61382a25cbd9d19d4233.json",
+   "raw_sha256": "bdbad323677ff42bcdcd28f3df04568b6600c242e574c9f882e9106e18cba163",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_64d13eba21a4f499fe07f4d3",
+   "kind": "figure",
+   "pages": [
+    3
+   ],
+   "table_grid": null,
+   "json_pointer": "/pictures/0",
+   "caption_text": [
+    "Figure 3. Technical Challenges for Cryogenic Throttling Engine Design"
+   ],
+   "bbox": [
+    {
+     "l": 121.87901306152344,
+     "t": 504.488525390625,
+     "r": 503.3465270996094,
+     "b": 272.74395751953125,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "{\"captions\": [{\"$ref\": \"#/texts/1\"}], \"annotations\": []}",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_27d0e9769e812b160ee67f88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_GROMSKI2010/551455e2606e-p3-3-0ea728f2ec0d546f5cd68a82a295fce4a5dce9c9c4e0da3d18e2c55c098a92ea.json",
+   "raw_sha256": "4c3f185758272122f4d87b05862a12c5c7e93333312fafb960977a3ee2ac7bb3",
+   "mechanical_flags": []
+  },
+  {
+   "id": "CAND_0b11524d23e00f1c713283be",
+   "kind": "table",
+   "pages": [
+    3
+   ],
+   "table_grid": [
+    [
+     "Engine Cycle",
+     "Closed Expander",
+     "Nozzle Area Ratio",
+     "200:1"
+    ],
+    [
+     "Propellants",
+     "LOX/LH2",
+     "Length:",
+     "88\""
+    ],
+    [
+     "Engine Mixture Ratio",
+     "6.0 throughout the throttle range",
+     "Diameter:",
+     "40\""
+    ],
+    [
+     "Engine Throttle Range",
+     "100% to 18.8%",
+     "Weight",
+     "280 lbm"
+    ],
+    [
+     "Vacuum Thrust Range",
+     "8,725 to 1,600 lbf",
+     "Reliability Against Catastrophic Failure",
+     "0.999967"
+    ],
+    [
+     "Engine Out Philosophy for Design",
+     "Shut down failed engine, gimbal remaining 3",
+     "Vacuum T/W",
+     "31 at 100% power 23 at 75% power"
+    ],
+    [
+     "Engine Out Power Level",
+     "8,680 lbf",
+     "Chamber Pressure",
+     "700 - 130 psia"
+    ],
+    [
+     "Nominal Rated Power Level",
+     "6,465 lbf",
+     "LOX Pump Discharge Pressure",
+     "890 - 270 psia"
+    ],
+    [
+     "Vacuum Isp",
+     "453 sec to 436 sec",
+     "H2 Pump Discharge Pressure",
+     "1,785 - 240 psia"
+    ]
+   ],
+   "json_pointer": "/tables/0",
+   "caption_text": [
+    "Figure 2. TR202 Engine Characteristics"
+   ],
+   "bbox": [
+    {
+     "l": 77.19999694824219,
+     "t": 711.7742919921875,
+     "r": 537.8944091796875,
+     "b": 533.0184326171875,
+     "coord_origin": "BOTTOMLEFT"
+    }
+   ],
+   "transcription": "TABLE 9x4 (see table_grid; full cells in raw item /tables/0)",
+   "original_text": "",
+   "transcription_state": "CANDIDATE_UNVERIFIED",
+   "review_state": "UNREVIEWED",
+   "run_id": "ENR_27d0e9769e812b160ee67f88",
+   "raw_artifact": "propulsion_texts/propulsion_texts_for_agents/docling/DOC_GROMSKI2010/551455e2606e-p3-3-0ea728f2ec0d546f5cd68a82a295fce4a5dce9c9c4e0da3d18e2c55c098a92ea.json",
+   "raw_sha256": "4c3f185758272122f4d87b05862a12c5c7e93333312fafb960977a3ee2ac7bb3",
+   "mechanical_flags": []
+  }
+ ],
+ "stored_objects": [],
+ "missing_targets": [],
+ "model_targets": [],
+ "unknown_model_targets": [],
+ "mechanical_flag_scope": "mechanical_flags are computed for formula candidates only; figure/table candidates carry dereferenced caption_text instead",
+ "markdown_chunks": [
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00003",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "**I.** **Introduction**\nASA’s Propulsion and Cryogenic Advanced Development project is developing enabling technologies in\nsupport of future lander missions. On May 9, 2005 Northrop Grumman Aerospace Systems (NGAS) was\nNawarded a contract responding to the need for “variable thrust rocket engines for landers and ascent vehicles that can\nuse in-situ produced propellants.” With this development goal in mind, NGAS has teamed with engineers from\nNASA for technology development associated with the advancement of the TR202 engine, a LOX/LH2 expander\ncycle engine driven by independent turbopump assemblies and featuring a variable area pintle injector.\n\nFor the TR202 engine, NGAS leveraged the throttling pintle injector technology from the Apollo Lunar Module\nDescent Engine (LMDE) as well as many other programs. NGAS heritage company TRW developed the Apollo\nLMDE, which was flown successfully on all crewed moon missions. Since that time, NGAS has developed\ncryogenic engines using LOX/LH2 and LOX/CH4 and tested the turbopump driven pintle injector engine, the\nTR108. <sup>1</sup> Also, NGAS developed expander cycle engine modeling tools as part of the Air Force’s Upper Stage\nEngine Technology (USET) program. <sup>2</sup>\n\nDuring Phase I of the TR202 program, the team developed a conceptual design of the engine. The key\ncomponents of the conceptual engine are shown in Fig. 1. The engine features independent turbopump assemblies, a\nregeratively cooled combustion chamber that maintains hydrogen coolant above the critical pressure, and a throttle\nactuator that controls the pintle position. Figure 2 provides engine characteristics for the TR202. The engine\nprovides a vacuum thrust of 8,725 lbf at 100% power and throttles to 1,600 lbf at 18.8% throttle. The engine was\ndesigned to nominally operate at 75% power with 4:1 throttling capability. This required capability was derived\nfrom vehicle level trade studies grounded in mission needs identified by NASA’s Lunar Surface Access Module\narchitecture studies. Phase I of the program culminated in a successful Conceptual Design Review of the engine\nsystem on April 5, 2006. Reference 3 provides details of requirement creation and design trades performed to reach\nthe conceptual design."
+  },
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00004",
+   "page_start": 2,
+   "page_end": 2,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "**_Main LOX_**\n\n**_Valve_**\nPneumatically\n\nOperated Ball\nValve\nSimple\n\nHeritage\nDesign\n\n**_H2_**\n**_Turbine Bypass_**\n\n**_Valve_**\n\n88 in.\n\n**_LOX_**\n**_Turbine Bypass_**\n\n**_Valve_**\n\n**_Nozzle extension_**\nC-SIC\nNo active cooling\n\n**_Variable Pintle Injector_**\n Pintle moves to vary LOX\n\ninjection area during throttling\n maintains constant P,\n high performance and\n\n**_Injector actuator &_**\n**_Throttle arm_**\n Precise control of\n\nPintle position\n\n**_Igniters_**\n Redundant Augmented\n\nSpark Igniters for\nReliability.\n\nverification of ignition prior\nto opening Main Propellant\nValves.\n\n**_LH2_**\n**_Turbopump_**\n\n**_Separate LOX & LH2 Turbopumps_**\nMaintain constant MR for 10:1 throttle range\nPowered in Series\n\n**_Main LH2 Valve_**\n\nlower weight design\n\n**_Turbine Bypass Valves_**\n Electro Mechanical Poppet Valve\nlinear proportionality for good control\nPoppet/Seat heritage\nFlow modulation at any position available\nHolds position without electrical power.\nHigh Repeatability\n\n**_Combustion Chamber_**\n Low P Cu Channels\n Expands H2 to Power Both\n\nTPAs\n\n**Figure 1. TR202 Engine Key Components**\n\nDuring Phase I, NGAS identified key technical challenges for cryogenic deep throttling engine designs, listed in\nFig. 3. Since the conceptual design review, NGAS has been tasked to demonstrate LOX/GH2 variable area pintle\ninjector technology, addressing the first four technical challenges and partially addressing challenges 5 through 7.\nDuring Phase II, Option 1, NGAS developed detailed designs for a test-bed pintle injector and igniter assembly,\nwhich incorporates the flexibility to demonstrate and optimize performance over a deep 10:1 throttle range. In\nNovember 2007, Phase II Option 2 was initiated. This option saw NGAS successfully build a test-bed pintle"
+  },
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00005",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "|Engine Cycle|Closed Expander|Nozzle Area Ratio|200:1|\n|---|---|---|---|\n|Propellants|LOX/LH2|Length:|88”|\n|Engine Mixture Ratio|6.0 throughout the throttle<br>range|Diameter:|40”|\n|Engine Throttle Range|100% to 18.8%|Weight|280 lbm|\n|Vacuum Thrust Range|8,725 to 1,600 lbf|Reliability Against<br>Catastrophic Failure|0.999967|\n|Engine Out Philosophy<br>for Design|Shut down failed engine,<br>gimbal remaining 3|Vacuum T/W|31 at 100% power<br>23 at 75% power|\n|Engine Out Power<br>Level|8,680 lbf|Chamber Pressure|700 – 130 psia|\n|Nominal Rated Power<br>Level|6,465 lbf|LOX Pump Discharge<br>Pressure|890 – 270 psia|\n|Vacuum Isp|453 sec to 436 sec|H2 Pump Discharge<br>Pressure|1,785 - 240 psia|\n\n**Figure 2. TR202 Engine Characteristics**\n\n**Figure 3. Technical Challenges for Cryogenic Throttling Engine Design**\n\ninjector assembly for testing. <sup>4</sup> This paper provides an overview of the test results and shows how the results\ncorrelate back to the conceptual engine design.\n\nThe goal of the TR202 LOX/GH2 pintle injector test campaign was to establish baseline performance and heat\ntransfer characteristics over a 10:1 throttle range and to develop an optimized scalable pintle injector configuration.\nDuring test planning the team developed a number of primary and secondary objectives that trace back to the key\ntechnical challenges outlied in Fig. 3.\n\n_Primary Technical Objectives_\n\n   - Demonstrate high-performance (>98% C*) within 75%-100% power band"
+  },
+  {
+   "chunk_id": "DOC_GROMSKI2010#c00006",
+   "page_start": 3,
+   "page_end": 3,
+   "section": "Northrop Grumman TR202 LOX/GH2 Deep Throttling Engine Project Status > Nomenclature",
+   "text": "   - Demonstrate stable combustion over 10:1 throttle range with high-performing injector\n\n   - Measure total chamber heat transfer over 10:1 throttle range\n\n   - Demonstrate adequate thermal power availability for engine cycle closure\n\n_Secondary Technical Objectives_\n\n   - Demonstrate optimized performance and heat flux characteristics\n\n   - Obtain parameterized design data for performance & heat flux"
+  }
+ ],
+ "summary": {
+  "candidates_by_kind": {
+   "figure": 2,
+   "table": 1
+  },
+  "flagged_candidates": 0,
+  "target_objects": 0,
+  "objects_with_anchor_problems": 0
+ }
+}

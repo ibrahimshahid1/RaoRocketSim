@@ -1,0 +1,70 @@
+{
+ "packet": "P2-SP8107-p016-017",
+ "at": "2026-10-16T21:51:46.773415+00:00",
+ "integrated_by": {
+  "role": "S3",
+  "model": "claude-sonnet-5-5"
+ },
+ "steps": [
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P2-SP8107-p016-017.extraction.jsonl",
+   "action": "bank_extraction",
+   "exit_code": 0,
+   "stdout_tail": "[bank] 0 model results, 1 window results\n{\n \"grounded\": 10,\n \"page_shifted\": 0,\n \"n_equations\": 0,\n \"n_claims\": 2,\n \"n_validity\": 0,\n \"n_constants\": 8,\n \"n_assumptions\": 0,\n \"n_ungrounded\": 0\n}\n[bank] graph: {'ontology_version': '1.2.0', 'generated_at': '2026-10-16T21:51:47.039404+00:00', 'n_nodes': 5261, 'n_edges': 6685, 'n_dangling_dropped': 0}\n",
+   "stderr_tail": ""
+  },
+  {
+   "file": "knowledge/workflows/results/agentic-2026-10-16/reviews/P2-SP8107-p016-017.parser.json",
+   "action": "record_parser_reviews",
+   "results": [
+    {
+     "reviewed_records": 1,
+     "state": "REJECTED"
+    }
+   ]
+  }
+ ],
+ "graph_meta": {
+  "ontology_version": "1.2.0",
+  "generated_at": "2026-10-16T21:51:48.265320+00:00",
+  "n_nodes": 5261,
+  "n_edges": 6684,
+  "n_dangling_dropped": 0
+ },
+ "review_queue": {
+  "models_total": 61,
+  "model_support": {
+   "PARTIALLY_SUPPORTED": 10,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "SUPPORTED": 3,
+   "NOT_CHECKED": 47
+  },
+  "effective_model_support": {
+   "NOT_CHECKED": 54,
+   "NOT_FOUND_IN_SOURCE": 1,
+   "PARTIALLY_SUPPORTED": 4,
+   "SUPPORTED": 2
+  },
+  "pending_source_reviews": 47,
+  "needs_source_routing": 8,
+  "pending_verifications": 458,
+  "pending_verifications_by_store": {
+   "entities": 161,
+   "equations": 50,
+   "claims": 211,
+   "validity": 36
+  },
+  "documents_with_extracted_objects": 15,
+  "canonical_documents_without_extracted_objects": 233
+ },
+ "integrity": {
+  "nodes": 5261,
+  "edges": 6684,
+  "duplicate_node_ids": [],
+  "duplicate_edges": [],
+  "dangling_edges": 0,
+  "edges_without_provenance": 0
+ },
+ "verdict_state_checks": [],
+ "verdict_state_mismatches": []
+}
