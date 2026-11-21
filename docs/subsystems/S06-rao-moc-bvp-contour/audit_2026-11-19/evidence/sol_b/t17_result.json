@@ -1,0 +1,16 @@
+{
+  "task": "T17",
+  "status": "implemented_and_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q -m 'not slow' tests/test_jax_final_kernel_guard.py tests/test_jax_theta_b_solve.py",
+  "exit_code": 0,
+  "result": "11 passed, 2 deselected in 11.98s",
+  "log": "t17_pytest.log",
+  "changed_files": [
+    "raosim/jax/theta_b_solve.py",
+    "raosim/jax/moc_kernel.py",
+    "tests/test_jax_final_kernel_guard.py"
+  ],
+  "contract": "recompute actual optimized live kernel and refuse incomplete final march regardless optimizer success; static row estimate does not prove completeness",
+  "limitation": "in-loop trial truncation acceptance not comprehensively established",
+  "numerical_thresholds_unchanged": true
+}

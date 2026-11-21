@@ -1,0 +1,54 @@
+{
+  "finding_id": "TA-T11",
+  "review_date": "2026-11-20",
+  "classification": "Correctly implemented algebra; numerical discretization and tolerance are repository policies",
+  "source": "propulsion_texts/rao1999.pdf",
+  "source_sha256": "6cb9f624f75076ae764b8c1064777d7f345eea2d584212db6ef0427b56edd1f9",
+  "source_document_id": "DOC_RAO1999",
+  "bibliography": "G. V. R. Rao, J. E. Beck, and T. E. Booth, Nozzle Optimization for Space-Based Vehicles, AIAA99-2584 (1999)",
+  "inspected_original_pages": [
+    {
+      "pdf_page": 3,
+      "printed_page": 2,
+      "equations": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "pdf_page": 4,
+      "printed_page": 3,
+      "equations": [
+        "5",
+        "6"
+      ],
+      "section": "OPTIMUM THRUST BOUNDARY continuation"
+    }
+  ],
+  "method": "Original PDF pages rendered and inspected visually; no inference from damaged Markdown alone.",
+  "code": "raosim/rao_variational.py:rao_radial_increment_validity",
+  "formula": {
+    "lhs": "dtheta*(tan(theta-alpha)-tan(alpha))-dalpha*(tan(theta-alpha)+tan(alpha))",
+    "coefficient": "sin(alpha)*tan(alpha)*sin(theta)/sin(theta+alpha)",
+    "result": "predicted_dR_over_R=lhs/coefficient"
+  },
+  "verdict": "Signs and factors agree with source Eq5, obtained by eliminating dMstar/Mstar between source Eq2 and Eq3. Eq6 diagnostic also agrees algebraically.",
+  "source_requirement": "For the advancing DE optimum-control-surface construction, a positive radial increment is required to continue; zero identifies its valid-region boundary.",
+  "numerical_policies": [
+    "Segment midpoint theta,alpha,R discretization is a repository approximation; the source states finite increments without prescribing this exact averaging scheme.",
+    "Default tolerance1e-9 on normalized dR/R is a dimensionless repository boundary band, not a source-stated physical uncertainty or residual stopping tolerance.",
+    "Singular denominator cutoffs1e-14 and legacy Eq6 dtheta/difference cutoffs1e-12 are numerical policies.",
+    "Boundary_within_tolerance may include slight negative predicted increments within the declared band and is distinguished from strictly_positive."
+  ],
+  "applicability": [
+    "Source Eq1 assumes fixed-length optimum-thrust stationarity along DE. Applying this test to a candidate is a local necessary construction diagnostic only.",
+    "It does not establish sufficiency, successful global BVP convergence, physical shock-free flow, exact D attachment, arbitrary fixed-exit-constraint optimality, or hardware qualification.",
+    "The sign of legacy Eq6b alone discards the other signed factors for arbitrary supplied segment orientation; direct Eq5 is the more explicit reported quantity.",
+    "Uniform axial theta=0 gives a singular0/0 reduction; unevaluable must not be relabeled as a shock or ordinary below-boundary evidence."
+  ],
+  "code_changes_by_terra_a": false,
+  "tests_by_terra_a": false,
+  "citation_correction": "Eq2 and Eq3 are on PDFp3, not PDFp4; Eq5,Eq6 and boundary discussion are on PDFp4."
+}

@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-21",
+  "scope": "Editorial revision of logbook prose, headings and evidence labels; no solver, numerical configuration, equations or historical results changed.",
+  "math_blocks_unchanged": true,
+  "configuration_and_command_listings_unchanged": true,
+  "iteration_numeric_tokens_unchanged": true,
+  "neutral_evidence_aliases": {
+    "analysis": "sol_a",
+    "validation": "sol_b",
+    "knowledge_graph": "terra_a",
+    "literature": "terra_b"
+  },
+  "historical_payloads_unchanged": true,
+  "standalone_pages": 26,
+  "integrated_guide_pages": 268,
+  "both_latex_build_exits": 0,
+  "rendered_name_scan": "No agent names or role-named evidence paths in standalone PDF text",
+  "visual_review": "All26 pages inspected in contact sheets; cover, opening, edited implementation section and integrated chapter inspected at full size; no new layout defects or standalone LaTeX overfull/undefined warnings.",
+  "historical_simulations_rerun": false
+}

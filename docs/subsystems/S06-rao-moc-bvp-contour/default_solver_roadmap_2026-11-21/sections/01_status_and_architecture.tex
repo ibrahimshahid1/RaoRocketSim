@@ -1,0 +1,198 @@
+\section{What is implemented, and what remains}
+\label{sec:status}
+
+The requested destination is a solver suite that can supply credible nozzle
+flow, performance, wall loading and sensitivities to the engine optimizer.
+This requires an explicit operating domain and a shared physical state. A
+successful MOC design calculation is one component of that suite.
+
+\textbf{Completion count: zero of four at the requested integrated-MOC scope.}
+Three areas have reusable numerical or modeling foundations. Shock fitting
+has relevant local literature but no identified implemented fitted-shock
+path. This count does not erase the functionality of the existing Q1D,
+empirical-screening or JAX modules.
+
+\begin{longtable}{@{}P{0.20\linewidth}P{0.36\linewidth}P{0.36\linewidth}@{}}
+\toprule
+\textbf{Requested capability} & \textbf{What exists} & \textbf{What is still required}\\\midrule
+\endhead
+Consistent variable-gas MOC &
+Frozen-composition, variable-\(c_p\) Q1D expansion; property provenance,
+bounded interpolation, enthalpy/entropy integration and sonic closure.
+CEA chamber-property surfaces also exist. &
+Consistent 2D characteristic equations, gas-dependent starting data,
+node state and fluxes; separate equilibrium and finite-rate formulations.
+Existing MOC remains calorically perfect.\\
+Shock fitting &
+Fold/coalescence detection and separation screens identify limitations.
+They do not construct a shock. &
+Unknown shock geometry, conservative jumps, downstream compatibility,
+entropy/composition transport and treatment of subsonic regions.\\
+Viscous/separation prediction &
+Bartz-based thermal tools, a displacement screening estimate, four empirical
+FSS-onset criteria, and an MDO separation margin. &
+An integral or resolved nozzle boundary layer coupled to the core,
+verified displacement/heat/friction effects, and a defined separated-flow
+model. RSS, hysteresis and side loads are not supplied by the screens.\\
+General differentiable forward-wall net &
+NumPy bounded forward analysis; differentiable throat-arc kernel;
+differentiable selected residuals and fixed-state partials. &
+Full wall/axis/reflection/start-line/exit dependence, topology-valid
+derivatives and total engine sensitivities.\\
+\bottomrule
+\end{longtable}
+
+The implementation assessment is based on current source and call-path
+inspection, with hashes in \code{implementation_inventory.json}. It is not
+a new numerical qualification run. Previously completed MOC evidence is
+used only where its recorded source hashes still match.
+
+\subsection{What the recent MOC result establishes}
+The documented constant-\(\gamma\), inviscid Nozzle-B model passes its
+internal gates and a 32/48-to-48/64-point physical-coordinate refinement
+comparison. The maximum angle difference is \(0.0228912^\circ\), minimum
+field coverage \(0.950270\), and maximum Mach difference \(0.00080366\).
+The accepted profile uses exact D/E attachment, explicit kernel capacity
+and accurate seed controls. The complete pair took approximately
+1,498 seconds; the added refined solve alone took approximately 1,213 seconds.
+These are measured costs for that experiment, not representative timing
+statistics for the whole solver.
+
+That result demonstrates a usable bounded numerical configuration. It
+does not establish variable-gas physics, a fitted shock, viscous interaction,
+total wall-design derivatives, or a domain-wide default. The published
+Rao example also uses different throat/start-line assumptions. Its
+constant-gas variational conditions cannot simply be reused as a proof of
+optimality for a reacting or viscous design \cite[PDF pp.~2--5]{rao1958}.
+
+\subsection{Three different problems need separate interfaces}
+\begin{enumerate}
+\item \textbf{Forward analysis:} prescribe a physical wall, inlet state and
+back pressure; determine flow, loads and performance.
+\item \textbf{Inverse or variational design:} prescribe performance or
+boundary conditions and determine a wall or control surface. The existing
+Rao construction belongs here.
+\item \textbf{Engine MDO:} vary chamber, geometry, cooling, feed and hardware
+variables while closing the coupled engine state and its constraints.
+\end{enumerate}
+The optimizer needs the derivative of its actual analysis and state closure.
+A gradient of an already optimized Rao control surface with respect to
+independent solved nodal values is a different object.
+
+\section{Current architecture and the default-solver problem}
+\label{sec:architecture}
+\subsection{The important live code paths}
+\begin{longtable}{@{}P{0.34\linewidth}P{0.58\linewidth}@{}}
+\toprule\textbf{Code location} & \textbf{Observed role}\\\midrule
+\endhead
+\code{raosim/rao_variational.py:solve_rao_bvp} &
+Constant-gas control-surface BVP, backward reconstruction, independent
+mesh gates and reliability reporting.\\
+\code{raosim/moc_bounded.py:march_bounded_net} &
+Host forward net with wall/axis handling, physical-strip diagnostics and
+explicit incomplete/fold outcomes.\\
+\code{raosim/frozen_flow.py:FrozenIdealGasTable} &
+Fixed-composition thermally perfect property law and Q1D reference
+expansion. Result scope explicitly excludes MOC/Rao characteristics.\\
+\code{raosim/physics.py:boundary_layer_displacement} &
+Screening estimate labeled repository heuristic, without an established
+nozzle validity range; not an integral boundary-layer solve.\\
+\code{raosim/separation.py:check_separation} &
+FSS-onset screening from Q1D area-station states, or separate frozen Q1D
+states; RSS remains unavailable.\\
+\code{raosim/jax/moc_kernel.py} &
+Padded throat-arc kernel; no general differentiable bounded-wall solver
+or complete differentiable starting-line construction.\\
+\code{raosim/jax/sensitivities.py} &
+Fixed-state control-surface derivatives and explicit parameter partials;
+total design and bell-wall dependencies remain deferred.\\
+\code{raosim/mdo/nozzle.py:resolve_contour_provider} &
+Only the analytic TOP/B\'ezier provider is registered. The typed provider
+outcome supports explicit availability/infeasibility.\\
+\code{raosim/mdo/contour_validation.py} &
+Postsolve comparison against a variational result; it does not replace
+the optimizer's inner-loop geometry or thrust law.\\
+\bottomrule
+\end{longtable}
+
+\subsection{Geometry substitution alone does not change engine aerodynamics}
+The current \code{engine_residual} in \code{raosim/mdo/engine.py}
+evaluates chamber surfaces and closes the scaled throat radius and mass
+flow using
+\begin{align}
+R_1 &=
+\frac{F_{\mathrm{req}}-\eta_{CF}C_{F,\mathrm{1D}}P_c\pi \Rt^2}
+     {F_{\mathrm{req}}},\\
+R_2 &=
+\frac{\dot m-P_c\pi\Rt^2/(\eta_{c^*}c^*_{\mathrm{ideal}})}
+     {\dot m_{\mathrm{ref}}}.
+\end{align}
+These are a transcription of the present software closure, not a proposed
+general-gas formula. In \code{solve_engine}, ideal \(C_F\), exit Mach,
+exit pressure and separation margin are computed before
+\code{evaluate_contour} supplies the cooling/mass grid.
+
+Consequently, registering an MOC geometry provider alone can change wall
+geometry, cooling and mass while thrust, throat size and their sensitivities
+continue to use the older Q1D performance model. A default transition must
+update the coupled aerodynamic state contract and engine residual.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+box/.style={draw=teal,rounded corners=2pt,fill=pale,text width=6.4cm,
+align=center,font=\small,inner sep=6pt},
+arr/.style={-{Latex[length=2mm]},thick,draw=muted},
+node distance=6mm]
+\node[box] (a) {Current design variables and chamber surfaces};
+\node[box,below=of a] (b) {Q1D \(C_F,c^*\) close \(\Rt,\dot m\)\\and define nozzle performance};
+\node[box,below=of b] (c) {TOP/B\'ezier provider supplies geometry};
+\node[box,below=of c] (d) {Cooling, feed, pumps, mass\\and engine metrics};
+\node[box,right=10mm of a] (e) {Proposed design variables, gas mode\\and declared applicability};
+\node[box,below=of e] (f) {Coupled flow + sizing residuals\\with consistent mass/energy/thrust};
+\node[box,below=of f] (g) {One flow/performance/wall-state result\\with quality and derivative status};
+\node[box,below=of g] (h) {Cooling, feed, pumps, mass\\and coupled objective/constraint totals};
+\draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d);
+\draw[arr] (e)--(f); \draw[arr] (f)--(g); \draw[arr] (g)--(h);
+\end{tikzpicture}
+\caption{Current dependency order and proposed integration target.
+The right-hand structure is a design proposal; it is not the present MDO implementation.}
+\end{figure}
+
+\subsection{Three existing \(c^*\) conventions must be reconciled}
+\begin{longtable}{@{}P{0.30\linewidth}P{0.32\linewidth}P{0.30\linewidth}@{}}
+\toprule\textbf{Path} & \textbf{Current computation} & \textbf{Integration implication}\\\midrule
+\endhead
+Host \code{cea.cea_propellant} &
+Obtains RocketCEA \code{get_Cstar}. &
+Chemical mode, database and station conventions must be preserved.\\
+Host \code{frozen_flow} &
+Computes \(c^*=p_0/G_*\) from its integrated variable-\(c_p\) sonic state. &
+A physically distinct fixed-composition Q1D model.\\
+MDO \code{ChamberSurfaces.c_star_ideal} &
+Uses the calorically perfect analytic law evaluated with interpolated
+\(\gamma,T_c,R\). The sampled CEA fields are these three quantities,
+not \(c^*\) or \(G_*\). &
+Sampling chamber properties does not automatically import the full
+CEA or variable-property sonic closure into MDO.\\
+\bottomrule
+\end{longtable}
+
+\subsection{A proposed shared flow-result contract}
+\proposal Introduce one result consumed by sizing, cooling, structural
+screens and reporting. It should include the physical wall and effective
+core geometry; inlet and local gas-mode identifiers; mass flux; thrust and
+its control-volume basis; wall-edge \(p,T,\rho,V,M\), composition and
+transport properties; shock/boundary-layer state where applicable; and
+reference units and station conventions.
+
+Availability, physical-domain status, conservation residuals, resolution
+evidence and derivative validity must be separate fields. A finite,
+fixed-shape array used to carry an infeasible candidate through JAX is
+not a valid flow field. The present typed contour-provider behavior is
+useful infrastructure for this distinction.
+
+No explicit fallback should be hidden inside a higher-fidelity result.
+Lower-fidelity analysis can be selected or used to initialize another
+solver, with the executed model recorded in the result and optimizer
+history.

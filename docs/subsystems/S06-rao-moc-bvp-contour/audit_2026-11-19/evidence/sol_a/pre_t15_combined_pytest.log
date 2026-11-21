@@ -1,0 +1,67 @@
+........................................................................ [ 24%]
+........................................................................ [ 48%]
+........................................................................ [ 72%]
+........................................................................ [ 96%]
+...F..F...                                                               [100%]
+=================================== FAILURES ===================================
+____________ test_lea_top_bezier_benchmark_passes_explicit_geometry ____________
+
+tmp_path = PosixPath('/private/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/pytest-of-ibrahimshahid/pytest-19/test_lea_top_bezier_benchmark_0')
+
+    def test_lea_top_bezier_benchmark_passes_explicit_geometry(tmp_path):
+        case = load_benchmark_case("lea_top_schomberg_2014")
+        assert case["inputs"]["epsilon"] == pytest.approx(5.51 ** 2)
+        assert case["inputs"]["length_pct"] == pytest.approx(89.1183566844)
+    
+        result = run_benchmark(
+            "lea_top_schomberg_2014", "bezier", report_path=tmp_path
+        )
+    
+>       assert result["overall_status"] == "pass"
+E       AssertionError: assert 'fail' == 'pass'
+E         
+E         - pass
+E         + fail
+
+tests/test_benchmarks.py:59: AssertionError
+______________________ test_benchmark_cli_writes_reports _______________________
+
+tmp_path = PosixPath('/private/var/folders/rw/bsgd4smx23x7rcfw1w8ywqqm0000gn/T/pytest-of-ibrahimshahid/pytest-19/test_benchmark_cli_writes_repo0')
+
+    def test_benchmark_cli_writes_reports(tmp_path):
+        env = os.environ.copy()
+        env["MPLCONFIGDIR"] = str(tmp_path / "mpl")
+        report_dir = tmp_path / "reports"
+        cmd = [
+            sys.executable,
+            "main.py",
+            "--benchmark-case", "lea_top_schomberg_2014",
+            "--benchmark-method", "bezier",
+            "--benchmark-report", str(report_dir),
+            "--no-plot",
+        ]
+    
+        result = subprocess.run(
+            cmd, cwd=os.getcwd(), env=env, capture_output=True, text=True, timeout=120
+        )
+    
+        combined = result.stdout + result.stderr
+        assert result.returncode == 0, combined
+>       assert "[  PASS] bezier" in combined
+E       AssertionError: assert '[  PASS] bezier' in '\n╔══════════════════════════════════════════════════════════╗\n║         Rao Bell Nozzle Design Toolbox  v2.0       ...cache/fontconfig\n\t/Users/ibrahimshahid/.fontconfig\nMatplotlib is building the font cache; this may take a moment.\n'
+
+tests/test_benchmarks.py:122: AssertionError
+=============================== warnings summary ===============================
+tests/test_rao_variational_moc.py::test_characteristic_net_compatibility_diagnostics_are_finite
+  /Users/ibrahimshahid/Documents/Github/RaoRocketSim/tests/test_rao_variational_moc.py:847: DeprecationWarning: march_coupled_net is a shrinking front march whose axis/wall points are never parents (not a bounded MOC net); use raosim.moc_bounded.march_bounded_net / moc.solve_flowfield
+    rows = march_coupled_net(
+
+tests/test_rao_variational_moc.py::test_moc_net_report_passes_on_self_generated_net
+  /Users/ibrahimshahid/Documents/Github/RaoRocketSim/tests/test_rao_variational_moc.py:907: DeprecationWarning: march_coupled_net is a shrinking front march whose axis/wall points are never parents (not a bounded MOC net); use raosim.moc_bounded.march_bounded_net / moc.solve_flowfield
+    rows = march_coupled_net(starting, wall, gamma, max_rows=3)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_benchmarks.py::test_lea_top_bezier_benchmark_passes_explicit_geometry
+FAILED tests/test_benchmarks.py::test_benchmark_cli_writes_reports - Assertio...
+2 failed, 296 passed, 20 deselected, 2 warnings in 820.05s (0:13:40)

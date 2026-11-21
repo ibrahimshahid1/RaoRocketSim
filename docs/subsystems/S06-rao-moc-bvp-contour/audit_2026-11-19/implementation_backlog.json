@@ -1,0 +1,213 @@
+{
+  "owner": "Sol A",
+  "date": "2026-11-20",
+  "priority_legend": {
+    "0": "Prevent invalid results from being accepted",
+    "1": "Mathematical/numerical correctness and independent evidence",
+    "2": "Reporting and reproducibility"
+  },
+  "tasks": [
+    {
+      "task": "T01",
+      "priority": 2,
+      "dependencies": [],
+      "specification": "Repair stale geometry fixtures and preserve historical regression identity",
+      "status": "accepted",
+      "acceptance": "No numerical solver or original fold tolerances change; bounded/NASA controls pass"
+    },
+    {
+      "task": "T02",
+      "priority": 1,
+      "dependencies": [],
+      "specification": "Separate optimizer budget, physics weighting, boundary errors and mesh errors",
+      "status": "diagnostic_complete",
+      "acceptance": "Record exact inputs, worst edge families and gate values; no default reweighting from a probe"
+    },
+    {
+      "task": "T02b",
+      "priority": 1,
+      "dependencies": [
+        "T02"
+      ],
+      "specification": "Propagate actual downstream throat radius through preferred seed",
+      "status": "accepted",
+      "acceptance": "Actual .382/.45 kernel geometry verified; default NASA reference controls remain passing"
+    },
+    {
+      "task": "T03",
+      "priority": 1,
+      "dependencies": [
+        "T02"
+      ],
+      "specification": "Opt-in exact shared D boundary using reduced unknowns",
+      "status": "accepted_static_mode",
+      "acceptance": "D identity, pin flags, host/JAX/FD parity; explicit live-angle/sensitivity limitations"
+    },
+    {
+      "task": "T04",
+      "priority": 2,
+      "dependencies": [
+        "T02"
+      ],
+      "specification": "Structured independent gate and optimizer-termination report",
+      "status": "accepted",
+      "acceptance": "Separate weighted, physical and unavailable decisions; report-only increments excluded"
+    },
+    {
+      "task": "T05",
+      "priority": 2,
+      "dependencies": [
+        "T02b"
+      ],
+      "specification": "Benchmark boundary-model metadata, input and export propagation",
+      "status": "accepted",
+      "acceptance": "Actual Ru/Rd forwarded; differing source assumptions visible; no metric tolerances changed"
+    },
+    {
+      "task": "T06",
+      "priority": 1,
+      "dependencies": [],
+      "specification": "Remove unsupported primary-coefficient provenance claims without changing coefficients",
+      "status": "accepted_provenance_only",
+      "acceptance": "Executable AST unchanged; original coefficient derivation explicitly unverified"
+    },
+    {
+      "task": "T07",
+      "priority": 0,
+      "dependencies": [],
+      "specification": "Reject exhausted/nonfinite arc-wall and backward-point correctors",
+      "status": "accepted",
+      "acceptance": "Source convergence contract, exactzero handling, insufficient-budget failures and NASA controls"
+    },
+    {
+      "task": "T08",
+      "priority": 1,
+      "dependencies": [
+        "T03"
+      ],
+      "specification": "Require consistent model identity for common-coordinate comparisons",
+      "status": "accepted",
+      "acceptance": "Mismatch/missing context refuses; same-model nonnested field controls remain passing"
+    },
+    {
+      "task": "T09",
+      "priority": 1,
+      "dependencies": [
+        "T03"
+      ],
+      "specification": "Remove provably inactive multiplier optimizer columns",
+      "status": "accepted_static_mode",
+      "acceptance": "Full-layout API/default path retained; reduced AD/FD and rank checks"
+    },
+    {
+      "task": "T10",
+      "priority": 1,
+      "dependencies": [
+        "T03"
+      ],
+      "specification": "Refuse unsupported reduced-state sensitivities",
+      "status": "accepted_explicit_refusal",
+      "acceptance": "Fails before solve; retains meaning of old full-state derivative API"
+    },
+    {
+      "task": "T11",
+      "priority": 1,
+      "dependencies": [
+        "T04"
+      ],
+      "specification": "Align CLI Eq5 validity and expose gate reports",
+      "status": "accepted",
+      "acceptance": "Typed evidence authoritative; missing refuses; Eq6 proxy cannot override it"
+    },
+    {
+      "task": "T12",
+      "priority": 1,
+      "dependencies": [
+        "T03",
+        "T09"
+      ],
+      "specification": "Establish real all-gate NozzleB reference regression",
+      "status": "accepted_single_context",
+      "acceptance": "All11 raw gates+BVP/Eq5/thrust and no export forcing/cleanup; exact inputs recorded"
+    },
+    {
+      "task": "T13",
+      "priority": 1,
+      "dependencies": [
+        "T08",
+        "T12"
+      ],
+      "specification": "Compare independently solved coarse/fine physical fields",
+      "status": "diagnostic_failed_pair_retained",
+      "acceptance": "Original angle/coverage policy not loosened; local pass not called field convergence"
+    },
+    {
+      "task": "T14",
+      "priority": 0,
+      "dependencies": [
+        "T13"
+      ],
+      "specification": "Diagnose branch jump on third grid",
+      "status": "diagnostic_complete",
+      "acceptance": "Fixed-angle capacity experiment isolates truncated kernel from true physical branch"
+    },
+    {
+      "task": "T15",
+      "priority": 0,
+      "dependencies": [
+        "T14"
+      ],
+      "specification": "Expose kernel row capacity and refuse incomplete seeds",
+      "status": "accepted_focused_validated",
+      "acceptance": "Incomplete kernels cannot reach DE/seed promotion or angle-failure fallback; 99 focused tests passed"
+    },
+    {
+      "task": "T16",
+      "priority": 1,
+      "dependencies": [
+        "T15"
+      ],
+      "specification": "Expose precise seed controls and truthful termination/error diagnostics",
+      "status": "accepted_focused_validated",
+      "acceptance": "Defaults8/1e-6 retained; criterion-met differs from angular bracket floor or budget stop",
+      "evidence": "evidence/sol_b/t18_result.json"
+    },
+    {
+      "task": "T17",
+      "priority": 0,
+      "dependencies": [
+        "T15"
+      ],
+      "specification": "Refuse incomplete final live JAX march using actual flag",
+      "status": "accepted_focused_validated",
+      "acceptance": "Final actual march checked even if optimizer succeeds; 11 focused tests passed"
+    },
+    {
+      "task": "T18",
+      "priority": 1,
+      "dependencies": [
+        "T03",
+        "T09",
+        "T16"
+      ],
+      "specification": "Opt-in exact fixed-exit boundary elimination",
+      "status": "accepted_static_implementation_and_documented_profiles",
+      "acceptance": "Source-consistent midpoint derivation, domain/bounds refusal, host/JAX/FD parity, roundoff E closure, unchanged independent flow checks",
+      "evidence": "evidence/sol_b/t18_result.json"
+    },
+    {
+      "task": "T19",
+      "priority": 1,
+      "dependencies": [
+        "T18",
+        "T13"
+      ],
+      "specification": "One bounded additional independently solved refinement pair: 32/48/.0625/cap1000 versus48/64/.03125/cap2000, exactD/E and accurate seed, unchanged physics/policies",
+      "status": "accepted_fixed_context_numerically_validated",
+      "acceptance": "Both internal solves and all unchanged common-coordinate metrics pass; earlier failed pairs retained; Sol A independently re-evaluated saved fields",
+      "evidence": "evidence/sol_b/t19_result.json",
+      "reproduction": "scripts/audit_moc_refinement_pair.py"
+    }
+  ],
+  "completion_scope": "All approved feasible gate-repair tasks are completed/accepted or diagnostically concluded. Research-limited and out-of-scope capabilities remain explicitly separate in traceability and final audit."
+}

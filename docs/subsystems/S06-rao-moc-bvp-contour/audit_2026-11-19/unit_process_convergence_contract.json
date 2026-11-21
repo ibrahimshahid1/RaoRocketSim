@@ -1,0 +1,52 @@
+{
+  "finding_id": "TA-N01",
+  "classification": "Incorrectly implemented failure contract; source-port omission",
+  "source": "Three-Dimensional-Nozzle-Design-Code-master/MOC_Grid_BDE/MOC_GridCalc_BDE.cpp",
+  "source_sha256": "cc4c0bc60e53a5f46d1c37d46f68724c721ebf8a6fc6b7f4a559976f17ec20b4",
+  "evidence": [
+    {
+      "function": "CalcArcWallPoint",
+      "loop_lines": [
+        878,
+        879
+      ],
+      "exhaustion_lines": [
+        922,
+        925
+      ],
+      "behavior": "At k==51, displays nonconvergence message and calls exit(1)."
+    },
+    {
+      "function": "CalcBDERegion",
+      "loop_lines": [
+        3331,
+        3335
+      ],
+      "exhaustion_lines": [
+        3391,
+        3394
+      ],
+      "acceptance_lines": [
+        3397,
+        3402
+      ],
+      "behavior": "At k==51, displays back-calculated-LRC nonconvergence message and calls exit(1) before acceptance."
+    }
+  ],
+  "python_locations": [
+    "raosim/nasa_moc.py:_calc_arc_wall_point_raw",
+    "raosim/nasa_moc.py:_calc_bde_back_point",
+    "raosim/nasa_moc.py:_safe_rel_err"
+  ],
+  "limitations": [
+    "No numerical experiment was run by Terra A to assess how often real cases hit the cap.",
+    "C++0/0 relative error is an IEEE NaN edge case, not scientific support for accepting nonfinite diagnostics.",
+    "Fixed-point increment convergence alone is not independent compatibility residual acceptance."
+  ],
+  "recommendation": [
+    "Finite unchanged values including0->0 should have increment error0. Nonfinite values must fail. old0,new!=0 must remain nonconverged.",
+    "Record explicit per-unit-process iteration count, max error, and termination reason.",
+    "Refuse iteration-exhausted nodes in strict/physical mesh acceptance; diagnostic-only last iterate may be retained with nonconverged status if compatibility interface needs it.",
+    "Validate with exact-zero fixedpoint, deliberately exhausted max_iter, nonfinite input/state, NASA fixture parity, and affected BDE compatibility gates."
+  ]
+}

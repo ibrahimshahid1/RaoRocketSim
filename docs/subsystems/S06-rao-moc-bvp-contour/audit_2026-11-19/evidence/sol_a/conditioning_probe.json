@@ -1,0 +1,43 @@
+{
+  "config": {
+    "n_control": 10,
+    "n_kernel": 10,
+    "exact_d_attachment": true,
+    "formulation": "characteristic"
+  },
+  "active_blocks": [
+    "algebraic_stationarity",
+    "ce_geometry",
+    "length",
+    "mass",
+    "moc_cplus",
+    "penalties",
+    "regularization",
+    "wall_endpoint",
+    "wall_tangency"
+  ],
+  "jacobian_shape": [
+    69,
+    31
+  ],
+  "zero_full_layout_columns": [
+    30,
+    31
+  ],
+  "zero_column_roles": {
+    "lambda2": 30,
+    "lambda3": 31
+  },
+  "smallest_singular_values": [
+    0.19259671728924885,
+    0.1582142919806708,
+    0.12872164578716824,
+    0.12176624063695385,
+    0.05960158028726352,
+    0.015688333337495055,
+    2.1886154135479347e-18,
+    3.148947837687174e-33
+  ],
+  "matrix_rank_default_numpy_tol": 29,
+  "claim_scope": "Local Jacobian of assembled residual at one real seed; null-column proof follows disabled residual dependencies, not global nonlinear solvability."
+}

@@ -1,0 +1,638 @@
+{
+  "label": "t02_n10_w0.05_budget100",
+  "config": {
+    "Rt": 1.0,
+    "epsilon": 4.973,
+    "gamma": 1.23,
+    "pa_over_p0": 0.0,
+    "length_pct": 64.0452248702277,
+    "throat_downstream_radius_factor": 0.382,
+    "throat_upstream_radius_factor": 1.5,
+    "thetaN_guess_deg": 30.0,
+    "n_control": 10,
+    "n_kernel": 10,
+    "max_nfev": 100,
+    "residual_tol": 0.005,
+    "starting_line_method": "kliegel_levine",
+    "evaluate_moc": true,
+    "residual_blocks": null,
+    "wall_method": "bde",
+    "kernel_bd": null,
+    "couple_wall": false,
+    "n_wall": 12,
+    "angle_boundary_mode": "free",
+    "kernel_d_fraction_max": null,
+    "kernel_d_fraction_min": 0.0,
+    "solver_backend": "numpy",
+    "ce_seed": "auto",
+    "formulation": "characteristic",
+    "jax_constraint_weight_ladder": [
+      1.0,
+      10.0,
+      30.0,
+      100.0
+    ],
+    "pin_d_mach": true,
+    "pin_d_theta": true,
+    "theta_b_freeze_deg": null,
+    "solve_theta_b": false,
+    "physics_weight": 0.05,
+    "rao_radial_increment_tol": 1e-09,
+    "kernel_dtheta_limit_deg": 0.5,
+    "kernel_massflow_rel_tol": 0.02,
+    "moc_numerical_policy": {
+      "neighbor_mach_diagnostic_limit": 0.1,
+      "neighbor_theta_diagnostic_limit_deg": 2.0,
+      "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+      "mach_line_direction_tol_deg": 0.05,
+      "wall_tangency_tol_deg": 0.25,
+      "crossing_endpoint_fraction_of_median_edge": 0.001,
+      "cell_area_relative_tol": 1e-12,
+      "cell_area_absolute_tol_m2": 1e-18,
+      "axial_mass_cut_count": 7,
+      "axial_mass_radial_sample_count": 500,
+      "axial_mass_min_coverage": 0.98,
+      "axial_mass_min_valid_cut_count": 4,
+      "axial_mass_relative_tol": 0.005,
+      "topology_closure_distance_over_rt": 1e-05,
+      "topology_mass_residual_tol_factor": 10.0,
+      "bde_axis_band_fraction_tol": 0.1,
+      "export_polyline_turn_tol_deg": 0.25,
+      "full_cde_d_projection_over_rt_tol": 0.005,
+      "full_cde_d_mach_jump_tol": 0.02,
+      "full_cde_d_theta_jump_tol_deg": 0.5,
+      "full_cde_mass_mismatch_rel_tol": 0.02,
+      "full_control_surface_cf_relative_tol": 0.05,
+      "partial_surface_cf_relative_tol": 0.02
+    }
+  },
+  "elapsed_s": 3.6065242079785094,
+  "reliability": "geometric_approximation",
+  "converged": false,
+  "Cf": 1.5768968866949378,
+  "residuals": {
+    "max_scaled": 0.003979324156677004,
+    "rms_scaled": 0.0012652236976000873,
+    "mass_residual_rel": -0.0014779889698109281,
+    "length_residual_rel": 0.0005075209072269588,
+    "stationarity_rms": 3.4767757843377627,
+    "algebraic_stationarity_rms": 0.0004632587530081642,
+    "left_mach_rms": 5.523125862570989e-16,
+    "regularization_rms": 0.12902238603737592,
+    "transversality_scaled": 0.8224957109230268,
+    "wall_tangency_rms": 0.0017389434668011279,
+    "characteristic_crossings": 0,
+    "group_summaries": [
+      {
+        "name": "mass",
+        "count": 1,
+        "max": 0.0014779889698109281,
+        "rms": 0.0014779889698109281
+      },
+      {
+        "name": "length",
+        "count": 1,
+        "max": 0.0005075209072269588,
+        "rms": 0.0005075209072269588
+      },
+      {
+        "name": "transversality",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "stationarity",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "algebraic_stationarity",
+        "count": 10,
+        "max": 4.039000938694804e-05,
+        "rms": 2.316293765040821e-05
+      },
+      {
+        "name": "left_mach",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "moc_cplus",
+        "count": 9,
+        "max": 0.0006033022500730074,
+        "rms": 0.00026409670449444744
+      },
+      {
+        "name": "moc_cminus",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "ce_geometry",
+        "count": 23,
+        "max": 0.000545702890970176,
+        "rms": 0.00019111737843171972
+      },
+      {
+        "name": "regularization",
+        "count": 16,
+        "max": 0.003979324156677004,
+        "rms": 0.002580447720747518
+      },
+      {
+        "name": "penalties",
+        "count": 9,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_endpoint",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_tangency",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "cplus_ce_to_wall",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_intersection",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      }
+    ]
+  },
+  "net_report": {
+    "audit_basis": "bde_topology_measured_mesh",
+    "passes": false,
+    "crossings": 0,
+    "bad_rows": [],
+    "cplus_rms": 0.00509484894469323,
+    "cminus_rms": 0.0005257811311215653,
+    "intersection_rms": 0.0,
+    "intersection_max": 0.0,
+    "wall_boundary_rms": 0.0,
+    "wall_boundary_dx_rms": 0.0,
+    "wall_boundary_dr_rms": 0.0,
+    "wall_boundary_dx_max": 0.0,
+    "wall_boundary_dr_max": 0.0,
+    "wall_tangency_rms": 0.0017389434668011279,
+    "wall_tangency_max": 0.003870214690204765,
+    "crossing_samples": [],
+    "measured_mesh_link_count": 161,
+    "measured_mesh_source": "rows_bounded_by_BD_DE",
+    "measured_crossing_basis": "adjacent_row_all_family_crossings_on_physical_bde_mesh",
+    "measured_crossing_endpoint_tol_m": 0.00018754700004619236,
+    "measured_wall_tangency_count": 9,
+    "wall_tangency_rms_deg": 0.09963412145955242,
+    "wall_tangency_max_deg": 0.22174696755826442,
+    "wall_tangency_tol_deg": 0.25,
+    "measured_crossing_passes": true,
+    "measured_wall_tangency_passes": true,
+    "cplus_max": 0.012273966965192803,
+    "cminus_max": 0.0019853746748930176,
+    "compatibility_tol_deg": 0.005,
+    "measured_compatibility_passes": false,
+    "mach_line_direction_rms_deg": 2.9576228694576653e-10,
+    "mach_line_direction_max_deg": 1.07182506133977e-09,
+    "mach_line_direction_tol_deg": 0.05,
+    "measured_mach_line_direction_passes": true,
+    "measured_cell_count": 72,
+    "measured_invalid_cell_count": 0,
+    "measured_min_oriented_cell_area_m2": 0.008695831484625938,
+    "measured_cell_orientation_passes": true,
+    "measured_cell_area_tol_m2": 3.196364682080122e-14,
+    "measured_cell_area_relative_tol": 1e-12,
+    "measured_mesh_edge_length_p99_m": 0.3193079553068614,
+    "measured_mesh_edge_length_max_m": 0.3320616220483805,
+    "neighbor_mach_p99": 0.11203572135868782,
+    "neighbor_mach_max": 0.12066314701464353,
+    "neighbor_mach_worst_edge_length_m": 0.2681586484695378,
+    "neighbor_mach_worst_edge": {
+      "row": 0,
+      "family": "bde_row",
+      "role": "wall_first_row",
+      "parent_index": 5,
+      "child_index": 6,
+      "parent": {
+        "x": 1.0817401278806569,
+        "r": 1.0413279963687407,
+        "M": 2.2919861973392726,
+        "theta_deg": 27.517986476885863
+      },
+      "child": {
+        "x": 1.3497590316756405,
+        "r": 1.049984090034157,
+        "M": 2.412649344353916,
+        "theta_deg": 26.536572038456992
+      }
+    },
+    "neighbor_mach_gradient_rt_scaled_p99": 0.45263662576929375,
+    "neighbor_mach_gradient_rt_scaled_max": 0.4733305647487383,
+    "neighbor_theta_p99_deg": 1.405809857420459,
+    "neighbor_theta_max_deg": 1.4167867557658291,
+    "neighbor_pressure_ratio_p99": 0.01636109727182964,
+    "neighbor_pressure_ratio_max": 0.017749189721414593,
+    "neighbor_mach_limit": 0.1,
+    "neighbor_theta_limit_deg": 2.0,
+    "neighbor_pressure_ratio_limit": 0.02,
+    "neighbor_state_increment_diagnostic_passes": false,
+    "neighbor_state_increment_diagnostics_are_gate": false,
+    "numerical_policy": {
+      "policy_id": "raosim.rao_moc_numerical_policy:v2",
+      "classification": "repository_numerical_policy_not_physical_criterion",
+      "neighbor_mach_diagnostic_limit": 0.1,
+      "neighbor_theta_diagnostic_limit_deg": 2.0,
+      "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+      "mach_line_direction_tol_deg": 0.05,
+      "wall_tangency_tol_deg": 0.25,
+      "crossing_endpoint_fraction_of_median_edge": 0.001,
+      "cell_area_relative_tol": 1e-12,
+      "cell_area_absolute_tol_m2": 1e-18,
+      "axial_mass_cut_count": 7,
+      "axial_mass_radial_sample_count": 500,
+      "axial_mass_min_coverage": 0.98,
+      "axial_mass_min_valid_cut_count": 4,
+      "axial_mass_relative_tol": 0.005,
+      "topology_closure_distance_over_rt": 1e-05,
+      "topology_mass_residual_tol_factor": 10.0,
+      "bde_axis_band_fraction_tol": 0.1,
+      "export_polyline_turn_tol_deg": 0.25,
+      "full_cde_d_projection_over_rt_tol": 0.005,
+      "full_cde_d_mach_jump_tol": 0.02,
+      "full_cde_d_theta_jump_tol_deg": 0.5,
+      "full_cde_mass_mismatch_rel_tol": 0.02,
+      "full_control_surface_cf_relative_tol": 0.05,
+      "partial_surface_cf_relative_tol": 0.02
+    },
+    "measured_neighbor_smoothness_passes": false,
+    "measured_neighbor_smoothness_is_physical_gate": false,
+    "measured_neighbor_smoothness_interpretation": "repository finite-edge diagnostic; failure indicates possible under-resolution, not a shock or flow discontinuity",
+    "axis_basis": "kernel_rrc_axis_nodes",
+    "axis_node_count": 111,
+    "axis_max_abs_r_m": 0.0,
+    "axis_max_abs_theta_deg": 0.0,
+    "axis_mach_min": 1.2038531309154568,
+    "axis_mach_max": 5.28428433432884,
+    "axis_thermodynamics_finite": true,
+    "axis_condition_passes": true,
+    "axial_mass_cut_count": 7,
+    "axial_mass_cut_valid_count": 6,
+    "axial_mass_cut_radial_sample_count": 500,
+    "axial_mass_cut_min_coverage": 0.98,
+    "axial_mass_cut_min_valid_count": 4,
+    "axial_mass_cut_x_m": [
+      0.29017419112781734,
+      0.7136485811820318,
+      1.1371229712362463,
+      1.5605973612904607,
+      1.984071751344675,
+      2.40754614139889,
+      2.8310205314531043
+    ],
+    "axial_mass_cut_coverage": [
+      0.638,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "axial_mass_cut_rel_errors": [
+      null,
+      0.0005209162701005354,
+      -0.0019490799230059697,
+      -0.0016024662628481012,
+      -0.000880344662003818,
+      -0.0016910939792393886,
+      -0.002790575183487576
+    ],
+    "axial_mass_cut_max_rel_error": 0.002790575183487576,
+    "axial_mass_cut_rel_tol": 0.005,
+    "axial_mass_conservation_passes": true,
+    "topology_closure": {
+      "mass_rel_mismatch": 0.0024241819213245254,
+      "BD_starts_at_B": 0.0,
+      "BD_ends_at_D": 2.220446049250313e-16,
+      "DE_starts_at_D": 0.001216929682292811,
+      "DE_ends_at_E": 0.0,
+      "wall_starts_at_B": 0.0,
+      "wall_ends_at_E": 0.0
+    },
+    "closure_distance_tol_m": 1e-05,
+    "mass_rel_tol": 0.05,
+    "wall_points": 121,
+    "wall_min_dx_m": 0.0005795254389460158,
+    "wall_min_segment_m": 0.0006539846564904243,
+    "wall_monotone_x": true,
+    "wall_has_degenerate_segments": false,
+    "mass_closure_passes": true,
+    "seam_closure_passes": false,
+    "wall_geometry_passes": true,
+    "bde_complete_remaining_mesh": false,
+    "bde_wall_contour_complete": true,
+    "bde_negative_r_truncated_rows": 0,
+    "bde_topology_truncated_rows": 1,
+    "bde_truncation_axis_band_fraction": 0.0,
+    "bde_truncation_axis_band_tol": 0.1,
+    "bde_truncation_confined_to_axis": true,
+    "bde_physical_mesh_complete": false,
+    "bde_auxiliary_continuation_caustic": true,
+    "bde_auxiliary_frontier_min_x_m": 5.293546587604422,
+    "bde_auxiliary_caustic_downstream_of_exit": true
+  },
+  "topology_closure": {
+    "mass_rel_mismatch": 0.0024241819213245254,
+    "BD_starts_at_B": 0.0,
+    "BD_ends_at_D": 2.220446049250313e-16,
+    "DE_starts_at_D": 0.001216929682292811,
+    "DE_ends_at_E": 0.0,
+    "wall_starts_at_B": 0.0,
+    "wall_ends_at_E": 0.0
+  },
+  "optimizer": {
+    "solver_mesh_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "n_control": 10,
+      "n_kernel": 10,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.5,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2"
+    }
+  },
+  "warnings": [
+    "Physical B-D-E region or wall construction is incomplete.",
+    "BDE topology audit did not pass; wall construction is not MOC-promotable.",
+    "One or more raw neighboring-state increments exceed the repository diagnostic limits. This is recorded as possible under-resolution and is not interpreted as a shock; use common-coordinate refinement evidence for resolution acceptance.",
+    "BDE topology compatibility audit exceeded tolerance.",
+    "Rao BVP residuals did not meet tolerance; solution is not variational-residual-solved.",
+    "MOC closure/tangency/crossing diagnostics did not pass; do not treat this as a benchmarked Rao contour.",
+    "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+  ],
+  "worst_edges": {
+    "bde_row": [
+      {
+        "residual_deg": 0.0019853746748930176,
+        "de_node_distances": [
+          0.6073210502883161,
+          0.3391632309617688
+        ],
+        "row": 0,
+        "family": "bde_row",
+        "role": "wall_first_row",
+        "parent_index": 5,
+        "child_index": 6,
+        "parent": {
+          "x": 1.0817401278806569,
+          "r": 1.0413279963687407,
+          "M": 2.2919861973392726,
+          "theta_deg": 27.517986476885863
+        },
+        "child": {
+          "x": 1.3497590316756405,
+          "r": 1.049984090034157,
+          "M": 2.412649344353916,
+          "theta_deg": 26.536572038456992
+        }
+      },
+      {
+        "residual_deg": 0.0015518728151919434,
+        "de_node_distances": [
+          0.8653454837374022,
+          0.6073210502883161
+        ],
+        "row": 0,
+        "family": "bde_row",
+        "role": "wall_first_row",
+        "parent_index": 4,
+        "child_index": 5,
+        "parent": {
+          "x": 0.8237654676059593,
+          "r": 1.0356292471329769,
+          "M": 2.1798783398423223,
+          "theta_deg": 28.187100222880826
+        },
+        "child": {
+          "x": 1.0817401278806569,
+          "r": 1.0413279963687407,
+          "M": 2.2919861973392726,
+          "theta_deg": 27.517986476885863
+        }
+      },
+      {
+        "residual_deg": 0.0014555473695007383,
+        "de_node_distances": [
+          0.5115391673710743,
+          0.25673469620450234
+        ],
+        "row": 1,
+        "family": "bde_row",
+        "role": "wall_first_row",
+        "parent_index": 5,
+        "child_index": 6,
+        "parent": {
+          "x": 1.1925809660004674,
+          "r": 1.1866838865972522,
+          "M": 2.3135228182843446,
+          "theta_deg": 26.349394947681837
+        },
+        "child": {
+          "x": 1.4664616766122436,
+          "r": 1.190588869179212,
+          "M": 2.4255104488841908,
+          "theta_deg": 25.242632283968902
+        }
+      },
+      {
+        "residual_deg": 0.0011771996576709265,
+        "de_node_distances": [
+          0.7697244205132969,
+          0.5115391673710743
+        ],
+        "row": 1,
+        "family": "bde_row",
+        "role": "wall_first_row",
+        "parent_index": 4,
+        "child_index": 5,
+        "parent": {
+          "x": 0.928764641935343,
+          "r": 1.1843834271845757,
+          "M": 2.20972939609875,
+          "theta_deg": 27.166718122827877
+        },
+        "child": {
+          "x": 1.1925809660004674,
+          "r": 1.1866838865972522,
+          "M": 2.3135228182843446,
+          "theta_deg": 26.349394947681837
+        }
+      },
+      {
+        "residual_deg": 0.0011026976281363484,
+        "de_node_distances": [
+          0.46548935583113604,
+          0.26041811526961733
+        ],
+        "row": 2,
+        "family": "bde_row",
+        "role": "wall_first_row",
+        "parent_index": 5,
+        "child_index": 6,
+        "parent": {
+          "x": 1.3140774856803357,
+          "r": 1.3383442776852403,
+          "M": 2.330612383380705,
+          "theta_deg": 25.234987074531862
+        },
+        "child": {
+          "x": 1.5943939907657325,
+          "r": 1.3374148701536674,
+          "M": 2.4355727004557433,
+          "theta_deg": 24.03508662666097
+        }
+      }
+    ],
+    "bde_column": [
+      {
+        "residual_deg": -0.012273966965192803,
+        "de_node_distances": [
+          1.2920582459638494,
+          1.2030604405916276
+        ],
+        "row": 1,
+        "family": "bde_column",
+        "role": "row_to_row",
+        "parent_index": 2,
+        "child_index": 2,
+        "parent": {
+          "x": 0.39690037380850784,
+          "r": 1.0365725948107165,
+          "M": 2.0067581042349945,
+          "theta_deg": 28.58800890792102
+        },
+        "child": {
+          "x": 0.49224139224755126,
+          "r": 1.1878535542327051,
+          "M": 2.0498151844744763,
+          "theta_deg": 27.883741448465987
+        }
+      },
+      {
+        "residual_deg": 0.012066045001460149,
+        "de_node_distances": [
+          0.0,
+          0.0
+        ],
+        "row": 1,
+        "family": "bde_column",
+        "role": "row_to_row",
+        "parent_index": 8,
+        "child_index": 8,
+        "parent": {
+          "x": 1.6887072072169556,
+          "r": 1.0620601628080353,
+          "M": 2.5710434664404325,
+          "theta_deg": 24.893975561309308
+        },
+        "child": {
+          "x": 1.8125501059604172,
+          "r": 1.1951984710861085,
+          "M": 2.5727855083916134,
+          "theta_deg": 23.487544511791192
+        }
+      },
+      {
+        "residual_deg": -0.01205820450088099,
+        "de_node_distances": [
+          1.4438788610358082,
+          1.356222794542143
+        ],
+        "row": 1,
+        "family": "bde_column",
+        "role": "row_to_row",
+        "parent_index": 1,
+        "child_index": 1,
+        "parent": {
+          "x": 0.24497287871018322,
+          "r": 1.0416309181533199,
+          "M": 1.9605021094431851,
+          "theta_deg": 28.15553180890319
+        },
+        "child": {
+          "x": 0.3387860484242622,
+          "r": 1.1926478095419124,
+          "M": 2.007859450012033,
+          "theta_deg": 27.607240586230816
+        }
+      },
+      {
+        "residual_deg": -0.011923983238499278,
+        "de_node_distances": [
+          1.0970532456069266,
+          1.0047133535957922
+        ],
+        "row": 1,
+        "family": "bde_column",
+        "role": "row_to_row",
+        "parent_index": 3,
+        "child_index": 3,
+        "parent": {
+          "x": 0.5920097021361079,
+          "r": 1.0341244142743813,
+          "M": 2.0824208262386814,
+          "theta_deg": 28.562002620636576
+        },
+        "child": {
+          "x": 0.6915168293155972,
+          "r": 1.1847804672187139,
+          "M": 2.1195759136671457,
+          "theta_deg": 27.699252590607998
+        }
+      },
+      {
+        "residual_deg": -0.011700879665875066,
+        "de_node_distances": [
+          1.5106800260848934,
+          1.4222645513408168
+        ],
+        "row": 1,
+        "family": "bde_column",
+        "role": "row_to_row",
+        "parent_index": 0,
+        "child_index": 0,
+        "parent": {
+          "x": 0.17812384110123244,
+          "r": 1.0449711246155067,
+          "M": 1.9494384922670223,
+          "theta_deg": 27.653961659532474
+        },
+        "child": {
+          "x": 0.27272437438018,
+          "r": 1.1955857076009124,
+          "M": 1.9985469593340586,
+          "theta_deg": 27.19464588020217
+        }
+      }
+    ]
+  }
+}

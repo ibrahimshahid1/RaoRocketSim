@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "status": "delivered_bounded_audit_and_approved_repairs",
+  "records": [
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/implementation_backlog.json",
+      "bytes": 7625,
+      "sha256": "cb479fc922d6b5b690da1ebde1c63d6b3baf5aabba23b3c7887a4060825a7cc2"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/literature_inventory.json",
+      "bytes": 9500,
+      "sha256": "5088d5270079ef80383c5a93e8c6298d24c0731d47c37292cc5a14f572fa0c1c"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/rao_equations.json",
+      "bytes": 5047,
+      "sha256": "abf28ce497007aecd64c16f99be951fd59e6e09fd226369f1640e1ed1743433b"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/unit_process_convergence_contract.json",
+      "bytes": 2017,
+      "sha256": "0cd507c9fb48c82ff455a09203ce48079cf3036691be8fd5c56df5c4d917a29a"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/independent_research.json",
+      "bytes": 32560,
+      "sha256": "20aa534e4399d634219efae3fe1509e295fc73226bb467e9cbba06cb19110390"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/implementation_inventory.json",
+      "bytes": 71156,
+      "sha256": "aee2c1367ec9367ce710994e50c9bfa96e2b7807ffeef00d18786de5c738ed9e"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/rao1999_radial_increment_review.json",
+      "bytes": 3069,
+      "sha256": "a1e00ad75e3cafd635ff94a1bc035bc7d934b93fcae8bfe3830f404645293150"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/document_verification.json",
+      "bytes": 1797,
+      "sha256": "ac05d6024ff82b43b04f2d1eb8d7949b09b0e512724de1bc2379fb3889461a33"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/knowledge_graph_coverage.json",
+      "bytes": 4026,
+      "sha256": "9ebdd7b30bf8e6134cf898309695f43bb9b9dc6ff87f8d9afa3afc6b3fbb7efa"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/traceability.json",
+      "bytes": 14109,
+      "sha256": "b7666a88a7d9c560b09c0dda1f70ff78675c7b8e9bc3bade93c9e603c87ddbe4"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/audit_summary.json",
+      "bytes": 7582,
+      "sha256": "0fea33cb4789cce338a9f98190db0299274683d575c39d4e875c7f40d42e32fd"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/final_independent_review.json",
+      "bytes": 1155,
+      "sha256": "976359952636989a9f841b6cbfaeda74a259dc7e0c25d20386de6ad078648db7"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/implementation_inventory_pre_t15.json",
+      "bytes": 55070,
+      "sha256": "a389330b2c7f051e74c15fdc6bb2be19119ba9d9b3b3ba28b80d52cf2c617ce7"
+    },
+    {
+      "file": "latex-report/RaoRocketSim_Repository_Guide/chapters/ch15_moc_iterations.tex",
+      "bytes": 60609,
+      "sha256": "dd4b4f3d866d33c2c16e9f1eb8acc870549db6a02840667119bcd58d7b9ee8e3"
+    },
+    {
+      "file": "latex-report/RaoRocketSim_Repository_Guide/chapters/moc_traceability_table.tex",
+      "bytes": 12614,
+      "sha256": "ff38cd04b5b28493f62142deca28c4c0618d8e820c63e3fa562a3db08e18e1ca"
+    },
+    {
+      "file": "latex-report/RaoRocketSim_Repository_Guide/moc_audit_logbook.tex",
+      "bytes": 817,
+      "sha256": "470adab5c8bf19e294feb9109fa1e1cb44f3ac0126098380d0ccecfd8603b1c2"
+    },
+    {
+      "file": "latex-report/RaoRocketSim_Repository_Guide/main.tex",
+      "bytes": 928,
+      "sha256": "63017074427246cefc4d8eb96751938917f979e41f19642eceb219a8d409a1e8"
+    },
+    {
+      "file": "output/pdf/moc_audit_logbook.pdf",
+      "bytes": 477828,
+      "sha256": "937a8b6e888584444b6c7837a4e117f5c3df206c7df61f80e0cfb080404a28bb"
+    },
+    {
+      "file": "latex-report/RaoRocketSim_Repository_Guide/main.pdf",
+      "bytes": 9745812,
+      "sha256": "8a57904f9fa7b1a938a28eb2813475912d50fd3a4620dc6064cea07ed4585dbd"
+    },
+    {
+      "file": "scripts/audit_moc_reference_profile.py",
+      "bytes": 11198,
+      "sha256": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691"
+    },
+    {
+      "file": "scripts/audit_moc_refinement_pair.py",
+      "bytes": 4603,
+      "sha256": "f8e9beb603f17ce2d79e63f24a09ed0a6bdf46f952bd8ddd93dc3dbb6249b962"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/evidence/manifest.json",
+      "bytes": 27312,
+      "sha256": "d55310c180539934edc5ad758e5fad21866e5ac6fc14836ae4f75101b8b9fbae"
+    },
+    {
+      "file": "docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/logbook_editorial_revision_2026-11-21.json",
+      "bytes": 964,
+      "sha256": "85bc3b2d0d21239fa12b581988b16f7415203bbad0ef60c81d1f7d383e01938d"
+    }
+  ],
+  "documentation_revision": "2026-11-21: neutral development-log prose and evidence labels; original numerical evidence preserved."
+}

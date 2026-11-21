@@ -1,0 +1,122 @@
+[
+  {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "source_pdf": "propulsion_texts/rao1958.pdf",
+    "title": "Exhaust Nozzle Contour for Optimum Thrust",
+    "counts_raw_stored": {
+      "equations": 9,
+      "claims": 5,
+      "validity": 2,
+      "models": 1
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_NTRS_20030067852",
+    "source_pdf": "propulsion_texts/20030067852.pdf",
+    "title": "20030067852",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 1,
+      "models": 1
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_YOUNG_THESIS",
+    "source_pdf": "propulsion_texts/Young_Thesis.pdf",
+    "title": "This development allows the process for designing rocket nozzles to be automated, fa",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 0,
+      "models": 0
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_FULLTEXT01",
+    "source_pdf": "propulsion_texts/fulltext01.pdf",
+    "title": "Microsoft Word - Thesis1c52.doc",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 0,
+      "models": 0
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_RAO1999",
+    "source_pdf": "propulsion_texts/rao1999.pdf",
+    "title": "Nozzle Optimization for Space-Based Vehicles",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 0,
+      "models": 0
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_DOI_10_2514_8_5837",
+    "source_pdf": "propulsion_texts/RaoRecentDevinRockNozConfig.pdf",
+    "title": "Recent Developments in Rocket Nozzle Configurations",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 0,
+      "models": 0
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_NTRS_19770009165",
+    "source_pdf": "propulsion_texts/19770009165.pdf",
+    "title": "Liquid Rocket Engine Nozzles",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 3,
+      "validity": 3,
+      "models": 3
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_NTRS_19710019929",
+    "source_pdf": "propulsion_texts/19710019929.pdf",
+    "title": "DESIGN OF LIQUID PROPELLANT ROCKET ENGINES",
+    "counts_raw_stored": {
+      "equations": 33,
+      "claims": 43,
+      "validity": 14,
+      "models": 7
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+    "source_pdf": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+    "title": "MODERN COMPRESSIBLE FLOW: WITH HISTORICAL PERSPECTIVE THIRD EDITION",
+    "counts_raw_stored": {
+      "equations": 10,
+      "claims": 2,
+      "validity": 1,
+      "models": 1
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  },
+  {
+    "document_id": "DOC_NTRS_19690063911",
+    "source_pdf": "propulsion_texts/experimental_validation/19690063911.pdf",
+    "title": "Transonic flowfield in a supersonic nozzle with small throat radius of curvature.",
+    "counts_raw_stored": {
+      "equations": 0,
+      "claims": 0,
+      "validity": 0,
+      "models": 0
+    },
+    "note": "Counts include registry-derived records; they do not establish current scientific verification."
+  }
+]

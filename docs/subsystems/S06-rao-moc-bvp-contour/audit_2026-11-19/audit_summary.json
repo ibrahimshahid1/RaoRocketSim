@@ -1,0 +1,181 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "status": "approved_feasible_gate_repairs_completed_and_reviewed",
+  "roles": {
+    "Terra A": "knowledge graph first; original source escalation",
+    "Terra B": "independent original literature and final mathematical/code review",
+    "Sol A": "implementation audit, technical specifications, decisions, independent saved-field reevaluation and LaTeX logbook",
+    "Sol B": "approved implementation, targeted tests, completed numerical profiles and reproducible runner"
+  },
+  "scope": "One inviscid constant-gamma physical/model configuration with explicit controls. No domain-wide or physical/hardware qualification. Earlier coarse failures and inaccessible primary-source questions remain explicit.",
+  "final_pair": {
+    "report": "evidence/sol_b/t19_refinement/report.json",
+    "exit_code": 0,
+    "individual_gates": "both solves pass all11 raw gates+BVP+Eq5+thrust+export/domain",
+    "comparison": {
+      "applicable": true,
+      "passes": true,
+      "reason": "all common-coordinate field, wall, and global-output deltas satisfy the declared repository convergence policy",
+      "coarse_context": {
+        "Rt_m": 1.0,
+        "epsilon": 4.973,
+        "gamma": 1.23,
+        "pa_over_p0": 0.0,
+        "length_pct": 64.0452248702277,
+        "throat_upstream_radius_factor": 1.5,
+        "throat_downstream_radius_factor": 0.382,
+        "exact_d_attachment": true,
+        "exact_exit_attachment": true,
+        "pin_d_mach": true,
+        "pin_d_theta": true,
+        "formulation": "characteristic",
+        "residual_blocks": [
+          "algebraic_stationarity",
+          "ce_geometry",
+          "length",
+          "mass",
+          "moc_cplus",
+          "penalties",
+          "regularization",
+          "wall_endpoint",
+          "wall_tangency"
+        ],
+        "physics_weight": 1.0,
+        "n_control": 32,
+        "n_kernel": 48,
+        "wall_method": "bde",
+        "starting_line_method": "kliegel_levine",
+        "kernel_dtheta_limit_deg": 0.0625,
+        "kernel_massflow_rel_tol": 0.02,
+        "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+        "kernel_max_rrcs": 1000,
+        "kernel_reached_wall": true,
+        "kernel_seed_max_iter": 25,
+        "kernel_seed_abs_tol": 1e-08
+      },
+      "fine_context": {
+        "Rt_m": 1.0,
+        "epsilon": 4.973,
+        "gamma": 1.23,
+        "pa_over_p0": 0.0,
+        "length_pct": 64.0452248702277,
+        "throat_upstream_radius_factor": 1.5,
+        "throat_downstream_radius_factor": 0.382,
+        "exact_d_attachment": true,
+        "exact_exit_attachment": true,
+        "pin_d_mach": true,
+        "pin_d_theta": true,
+        "formulation": "characteristic",
+        "residual_blocks": [
+          "algebraic_stationarity",
+          "ce_geometry",
+          "length",
+          "mass",
+          "moc_cplus",
+          "penalties",
+          "regularization",
+          "wall_endpoint",
+          "wall_tangency"
+        ],
+        "physics_weight": 1.0,
+        "n_control": 48,
+        "n_kernel": 64,
+        "wall_method": "bde",
+        "starting_line_method": "kliegel_levine",
+        "kernel_dtheta_limit_deg": 0.03125,
+        "kernel_massflow_rel_tol": 0.02,
+        "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+        "kernel_max_rrcs": 2000,
+        "kernel_reached_wall": true,
+        "kernel_seed_max_iter": 25,
+        "kernel_seed_abs_tol": 1e-08
+      },
+      "metrics": {
+        "comparison_coordinate_count": 2546,
+        "coarse_node_count": 815,
+        "fine_node_count": 1850,
+        "coarse_in_fine_coverage": 0.9668711656441717,
+        "fine_in_coarse_coverage": 0.9502702702702702,
+        "minimum_field_coverage": 0.9502702702702702,
+        "mach_max_abs": 0.0008036601415017941,
+        "mach_rms_abs": 0.00016317951974426556,
+        "mach_p99_abs": 0.0004920833912795075,
+        "theta_max_abs_deg": 0.02289122104977374,
+        "theta_rms_abs_deg": 0.0039017091741248384,
+        "theta_p99_abs_deg": 0.014557954476767093,
+        "pressure_ratio_max_abs": 7.494807251619967e-05,
+        "pressure_ratio_rms_abs": 1.5229206439077127e-05,
+        "pressure_ratio_p99_abs": 4.5524961361066586e-05,
+        "wall_radius_max_over_rt": 0.00022673308724519003,
+        "wall_radius_rms_over_rt": 6.548593664102598e-05,
+        "wall_radius_p99_over_rt": 0.00020009531868920406,
+        "theta_n_abs_delta_deg": 0.0017911195755057599,
+        "theta_e_abs_delta_deg": 0.00908625385149857,
+        "kernel_d_fraction_abs_delta": 8.290279908743092e-06,
+        "thrust_coefficient_relative_delta": 3.9844275743502345e-05
+      },
+      "tolerances": {
+        "policy_id": "raosim.rao_common_coordinate_field_convergence:v1",
+        "classification": "repository_numerical_convergence_policy",
+        "mach_max_abs": 0.005,
+        "theta_max_abs_deg": 0.05,
+        "pressure_ratio_max_abs": 0.001,
+        "wall_radius_max_over_rt": 0.002,
+        "theta_n_max_abs_deg": 0.05,
+        "theta_e_max_abs_deg": 0.05,
+        "kernel_d_fraction_max_abs": 0.0005,
+        "thrust_coefficient_max_relative": 0.001,
+        "minimum_field_coverage": 0.9,
+        "wall_sample_count": 257
+      }
+    },
+    "independent_reevaluation": "evidence/sol_a/final_field_reevaluation.json",
+    "reproduce": ".venv-jax/bin/python -m scripts.audit_moc_refinement_pair --output-dir builds/moc_refinement_pair_check",
+    "packaging_validation": "evidence/sol_b/t19_packaging_result.json",
+    "runtime_s": 1497.5375988330343
+  },
+  "completed_tests": [
+    {
+      "evidence": "evidence/sol_b/t18_result.json",
+      "result": "114 passed,2deselected; then42 passed after final affected changes",
+      "note": "overlapping component coverage; not summed into unique total"
+    },
+    {
+      "evidence": "evidence/sol_a/post_freeze_integration_result.json",
+      "result": "69 passed in32.06s, exit0"
+    },
+    {
+      "evidence": "evidence/sol_a/pre_t15_combined_result.json",
+      "result": "296 passed,2preexistingLEA/TOPfailures,20slowdeselected; exit1",
+      "note": "preT15 checkpoint, preserved separately; not claimed current full-suite pass"
+    }
+  ],
+  "remaining_research": [
+    "Original KL1969 coefficient table and velocity normalization inaccessible/unverified",
+    "Exact-axis active-defect claim not established",
+    "General-domain accuracy and additional independent full-flow oracle not established"
+  ],
+  "documented_unresolved": [
+    "Knowledge graph equation/review coverage incomplete; audited payload delivered without bulk rewriting stores",
+    "Reduced-coordinate sensitivity API intentionally refuses unsupported mode",
+    "Two preexisting LEA/TOP length/status expectations remain outside MOC repair"
+  ],
+  "outside_scope": [
+    "Reactive/real-gas/viscous/shock-fitting extensions",
+    "General MOC provider inside default MDO optimization loop",
+    "Hardware qualification"
+  ],
+  "deliverables": {
+    "literature": "literature_inventory.json",
+    "knowledge_graph": "knowledge_graph_coverage.json",
+    "implementation_inventory": "implementation_inventory.json",
+    "traceability": "traceability.json",
+    "backlog": "implementation_backlog.json",
+    "independent_review": "final_independent_review.json",
+    "evidence_manifest": "evidence/manifest.json",
+    "logbook_source": "latex-report/RaoRocketSim_Repository_Guide/chapters/ch15_moc_iterations.tex",
+    "standalone_pdf": "output/pdf/moc_audit_logbook.pdf",
+    "integrated_guide_pdf": "latex-report/RaoRocketSim_Repository_Guide/main.pdf"
+  }
+}

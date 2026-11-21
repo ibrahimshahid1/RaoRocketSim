@@ -1,0 +1,284 @@
+\section{Implementation sequence and default admission}
+\label{sec:plan}
+\subsection{Recommended order}
+The four requested areas are substantial formulation and validation
+programs. They are not four independent switches at the end of the
+existing BVP. The recommended order is to define shared contracts,
+complete a smooth forward/derivative chain, add consistent frozen-gas
+thermodynamics and engine performance coupling, then expand physical
+regimes with explicit applicability.
+
+A bounded attached calorically perfect default can be assessed before
+all reacting/separated capabilities exist, provided its user-facing
+scope and refusal behavior are explicit. A default intended for realistic
+hot-gas design may require the frozen-property stage before admission.
+No universal default is justified by the present single-context result.
+
+\begingroup\small
+\begin{longtable}{@{}P{0.14\linewidth}P{0.39\linewidth}P{0.39\linewidth}@{}}
+\toprule\textbf{Milestone / depends on} & \textbf{Bounded implementation task} &
+\textbf{Acceptance evidence}\\\midrule
+\endhead
+C0 / current code &
+Specify gas/geometry/flow domain and one flow/performance result.
+Extend typed invalid, incomplete, unsupported-regime and gradient-unavailable
+outcomes through engine/NLP/export. &
+Contract roundtrips; invalid provider cannot influence an accepted
+performance result; no unreported TOP substitution; units and source identity.\\
+N0 / C0 &
+Make general-wall host unit processes and topology an explicit primal
+reference. Bind wall, axis, parents, starting line and exit fluxes to
+the same state. &
+Matched NASA controls, simple exact/constructed flows, grid convergence,
+physical strip and independent momentum/mass/energy checks.\\
+N1 / N0 &
+Complete the differentiable forward-wall operator, including start data,
+intersections, reflections, field projection and total boundary dependence. &
+Converged primal parity; directional Taylor tests through supported
+design variables; topology-event and conditioning diagnostics.\\
+T0 / C0 &
+Expose the existing frozen thermodynamics through a consistent property
+and derivative contract; define transport separately. &
+Constant-\(c_p\) limit; EOS/enthalpy/entropy identities; property-grid
+refinement; independent reference states and explicit domain refusal.\\
+T1 / N0, T0 &
+Derive and implement smooth fixed-composition variable-property
+characteristics and gas-consistent sonic/transonic starting data. &
+Calorically perfect reduction; Q1D and smooth-flow checks; independent
+Euler field/performance comparisons; no local-\(\gamma\) substitution shortcut.\\
+M0 / C0, accepted N/T branch &
+Feed accepted aerodynamic performance into throat/mass-flow residuals,
+then local wall state into thermal/geometry/feed/mass consumers. &
+Intentional perturbations affect the correct outputs and constraints;
+full-engine gradient tests; consistent \(c^*\)/loss ledger and model identity.\\
+V0 / accepted core, T0, thermal interface &
+Select and implement attached compressible nozzle BL closures and
+core-displacement/thermal coupling within a declared thin-layer domain. &
+Pressure, heat, drag/displacement comparisons on source-matched cases;
+transition sensitivity; converged interface; thick/separated-domain refusal.\\
+S0 / T0 &
+Implement conservative shock jumps with explicit gas/front model,
+normal orientation, entropy admission and compressive branch selection. &
+Analytic perfect-gas limits; common-EOS general-gas reference states;
+signed jump/energy residuals and rejected trivial root.\\
+S1 / N0, S0 &
+Add rotational downstream state, fitted-front degrees of freedom and
+selected shock/wall/axis topologies. &
+A matched shock-location/field reference, upstream/downstream
+conservation and entropy transport; explicit mixed-type limitation.\\
+V1 / V0, S1, selected mixed-type method &
+Connect resolved wall states to scoped onset screening and introduce
+separated-region/reattachment branch treatment where required. &
+Geometry/thermal/history-matched FSS/RSS data; separation definition,
+pressure recovery and uncertainty; no inferred side-force time history.\\
+T2 / T0, equilibrium backend evidence &
+Add a consistent equilibrium EOS, composition/acoustic derivatives and
+its accepted smooth or shock branch. &
+Element/mass/energy closure, independent equilibrium states, acoustic
+derivative checks, reference-front limits and derivative-domain tests.\\
+T3 / T0, N0, corroborated reacting derivation &
+Add finite-rate species and selected mode histories, stiff source
+integration and consistent characteristic/sonic initialization. &
+Resolve Young source discrepancy; chemistry conservation; homogeneous
+reactor/relaxation and nozzle cases; time/space/kinetics sensitivity.\\
+A0 / each intended admitted branch &
+Establish accuracy, boundary identity, cost, gradient validity and
+parameter-domain evidence; test full-engine reoptimization/refinement. &
+Independent holdouts and regime edges; restart robustness; runtime/memory
+profiles; candidate replay and explicit unsupported states.\\
+D0 / C0, N1, M0, A0 and relevant physics &
+Promote a named supported branch to default, preserving explicit model
+selection, compatibility and qualification status. &
+Documented domain and release criteria; same-context CLI/API/MDO
+replay; no claim that unimplemented regimes were admitted.\\
+\bottomrule
+\end{longtable}
+\endgroup
+
+The dependency table deliberately permits thermodynamic, attached-layer
+and shock-jump research to proceed in parallel. Finite-rate implementation
+need not wait for every equilibrium software feature, but it does require
+its own corroborated equations and appropriate equilibrium/frozen
+reference comparisons. Separated/asymmetric physics is not a dependency
+for admitting a strictly attached branch; it is a dependency for making
+corresponding off-design claims.
+
+\subsection{Module boundaries and interfaces}
+Proposed boundaries are a thermodynamic state/derivative provider; a
+flow topology/region representation; continuous MOC unit processes;
+shock-jump/front operators; an attached BL/thermal interface; a
+separated/mixed-type analysis adapter; and an engine aerodynamic
+provider. These are architectural responsibilities, not newly created
+production modules.
+
+Keep source-derived equations separate from discretization, nonlinear
+solver settings, acceptance policy and fidelity dispatch. Preserve the
+existing interfaces through compatible adapters where feasible.
+Changing the independent state from \(M,\theta\) to velocity,
+thermodynamic state and transported invariants may justify a new versioned
+model contract rather than silently changing the meaning of old fields.
+
+The existing Rao design solver can remain a source-controlled reference
+and inverse-design option while the forward-wall operator serves engine
+MDO. Variable-gas/viscous optimum-design conditions require their own
+derivation; solving a more complete forward field does not automatically
+generalize the original Rao variational theorem.
+
+\subsection{Release gates and numerical policies}
+For each proposed default domain, establish:
+\begin{enumerate}
+\item governing equations, source conventions, supported topology and
+boundary conditions;
+\item data identity and EOS/transport/chemistry validity, including
+composition and station conventions;
+\item actual completed point, global, interface and outer engine solves;
+\item conservation, characteristic compatibility and physical mesh checks;
+\item field/output convergence under appropriate spatial, property and
+nonlinear refinement;
+\item independent model-appropriate references and experiments with
+traceable reductions and uncertainty;
+\item total-gradient validity, conditioning and event behavior;
+\item practical runtime/memory and documented initialization/failure behavior;
+\item same-model engine reoptimization and reproducible final adjudication.
+\end{enumerate}
+Acceptance numbers must come from an explicit engineering accuracy and
+uncertainty requirement. The historical MOC refinement limits are not
+universal tolerances for shocks, heat flux, separation or chemistry.
+New thresholds should be set before inspecting a proposed implementation's
+failure distribution.
+
+No calendar estimate is assigned from source reading alone. The largest
+uncertainties are closure/data availability, transonic initialization,
+stable nonlinear coupling, differentiability at events and the actual
+cost of accepted multi-physics solves.
+
+\section{Validation assets already in the repository}
+\label{sec:validation}
+An available PDF is a candidate evidence source, not a ready-to-run
+benchmark. Reconstruct geometry, gas/composition, wall thermal condition,
+pressure/history, instrumentation, data reductions and uncertainty before
+assigning a numerical pass/fail threshold.
+
+\begin{longtable}{@{}P{0.23\linewidth}P{0.34\linewidth}P{0.35\linewidth}@{}}
+\toprule\textbf{Source / inspected window} & \textbf{Useful target} &
+\textbf{Required qualification or remaining work}\\\midrule
+\endhead
+Anderson, PDF pp.~150--154 &
+Oblique-shock conservation, tangential continuity, weak/strong roots and
+attached limits. &
+Verification of a calorically perfect operator; not an internal
+shock-location or reacting-nozzle experiment.\\
+Anderson, PDF pp.~665--668 &
+General-EOS shock closure and upstream-state dependence. &
+Air examples; match gas mode and reference definitions. An EOS compared
+with itself is not an independent validation.\\
+NASA/JHU source-port and prior Nozzle-B records &
+Starting data, topology, constant-gas compatibility and resolved
+inviscid numerical profiles. &
+Retain differing source/model boundaries. Existing software acceptance
+does not validate added gas/BL/shock models.\\
+JPL TR 32-415, contents and Appendix B route &
+Nozzle pressure and heat-transfer tables, calibration/instrumentation
+discussion. &
+Original table values, geometry and reduction/uncertainty still need a
+bounded independently checked extraction \cite{back}.\\
+NASA TP-2725, PDF pp.~3--5 &
+1030:1 GO2/GH2 nozzle thrust, pressure and drag decrement. &
+Campaign-specific inputs and uncertainty; prediction discrepancies in
+the paper are not new repository results \cite{tp2725}.\\
+NASA TP-2726, PDF pp.~3--5 &
+Companion heat-transfer evidence at \(P_c=2413\) kPa and
+O/F \(2.78\)--\(5.49\). &
+Laminar/turbulent predictions differ materially; acceleration can
+suppress turbulence. Do not assume a universal turbulent default
+\cite{tp2726}.\\
+NASA TP-3576, PDF pp.~3--4 &
+High-area-ratio/high-pressure performance campaign. &
+Reconstruct exact geometry, propellant and conditions before adding
+a benchmark \cite{tp3576}.\\
+\"Ostlund, PDF pp.~51--52, 70, 78--82 &
+Onset scatter, FSS/RSS history and side-load definitions. &
+Case-specific transitions; require matching wall/history and
+appropriate pressure/load observables \cite{ostlund}.\\
+Wang, PDF pp.~2, 5, 7 &
+Reacting/cooled-wall model and heat/performance comparisons. &
+Specific H2/O2 mechanism and cases; compare independent data rather
+than merely matching the same numerical model \cite{wang}.\\
+RBCC heat-transfer report, PDF p.~3 &
+Wall-temperature/inverse heat-transfer methodology. &
+It uses Bartz in a reduction step. Inferred heat flux is not automatically
+an independent Bartz-validation target \cite{rbcc}.\\
+\bottomrule
+\end{longtable}
+
+For attached BL work, the TP-2726 finding that laminar estimates can
+agree much better than turbulent ones is a warning about model selection,
+not a new universal numerical limit. The companion thrust and heat
+reports share a campaign and must not be counted as independent repeated
+experiments.
+
+For separation/side loads, obtain wall-pressure histories, separation
+definitions, circumferential measurements or direct loads and the
+measurement/structural transfer model. An axisymmetric pressure curve
+or an onset flag is insufficient for asymmetric transient loads.
+
+\subsection{Numerical verification, model validation and optimization evidence}
+The plan needs three complementary evidence classes:
+\begin{itemize}
+\item \textbf{Verification:} equations/discretization, conservative
+jumps, property identities, manufactured or analytic limits, mesh and
+gradient convergence.
+\item \textbf{Model validation:} independent source-matched physical
+observables with uncertainty and applicability; calibration data kept
+separate from validation holdouts.
+\item \textbf{Optimization evidence:} correct total sensitivities,
+actual constraint enforcement, same-model state/geometry, converged
+reoptimization/refinement and documented objective scope.
+\end{itemize}
+Passing any one class does not establish the other two. Improved nozzle
+analysis also does not validate combustion, pumps, materials, manufacturing
+or hardware.
+
+\section{Open decisions and a concrete next work package}
+\label{sec:next}
+\subsection{Decisions to settle before implementing broader physics}
+The initial target domain should name propellants/composition model,
+pressure/altitude range, nozzle families, area/length/curvature ranges,
+wall thermal conditions and Reynolds/transition assumptions. Decide
+whether the first default is attached calorically perfect or requires
+frozen variable-property flow. Specify acceptable runtime for interactive
+and batch MDO, independent thermodynamic/flow references, and a
+separated/mixed-type solver route where needed.
+
+Source gaps remain explicit: original KL coefficients/start-line
+validation; complete nozzle-specific attached-BL closures; corroborated
+reacting rotational/axisymmetric source terms; selected reaction/transport
+data; general-gas fitted-shock topology/pressure cases; and
+geometry-complete separated-flow/load datasets.
+
+\subsection{Recommended first implementation package}
+The first bounded package should deliver C0 plus the N0/N1 design:
+a versioned flow/performance contract, a prescribed-wall perfect-gas
+primal topology reference, and an explicit total-derivative specification.
+In parallel, T0 can expose the existing frozen-property model without
+changing its physical meaning. The subsequent implementation should
+demonstrate M0 on a restricted accepted case before changing any default.
+
+This package addresses the current integration bottleneck: making the
+engine optimize the same accepted nozzle flow whose geometry and
+performance are reported. It produces a reviewable foundation for
+variable gas, viscous interaction and fitted shocks, while retaining
+explicit limits on unsupported regimes.
+
+\subsection{Evidence package and status of this study}
+The companion JSON files preserve code symbols/hashes, local literature
+identities and inspected page windows, proposed milestones, and unresolved
+source discrepancies. Local research reports are archived as supporting
+evidence, with no bulk changes to the knowledge graph. The primary
+differentiation paper and software documentation are explicitly external
+supplements; no local document ID or hash was invented for them.
+
+This study changed documentation only. Source-code presence and named
+tests were inspected, and the previous accepted profile's source hashes
+were checked. No new multi-physics implementation, fresh solver run,
+default switch or end-to-end MDO improvement is claimed.

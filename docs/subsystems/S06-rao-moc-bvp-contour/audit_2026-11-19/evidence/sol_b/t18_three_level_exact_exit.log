@@ -1,0 +1,4 @@
+{"completed_level": "coarse", "promotion": {"bvp_passes": true, "moc_passes": true, "valid_region_passes": true, "thrust_passes": true, "reliability": "rao_variational_residual_solved"}}
+{"completed_level": "fine", "promotion": {"bvp_passes": true, "moc_passes": true, "valid_region_passes": true, "thrust_passes": true, "reliability": "rao_variational_residual_solved"}}
+{"completed_level": "finest", "promotion": {"bvp_passes": true, "moc_passes": true, "valid_region_passes": true, "thrust_passes": true, "reliability": "rao_variational_residual_solved"}}
+{"report": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/t18_three_level_exact_exit/report.json", "exit_code": 2}

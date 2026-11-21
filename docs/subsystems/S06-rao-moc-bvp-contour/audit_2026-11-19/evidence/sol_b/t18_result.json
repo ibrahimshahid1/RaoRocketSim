@@ -1,0 +1,71 @@
+{
+  "task": "T18_and_T16_seed_controls",
+  "status": "implemented_and_focused_validated",
+  "commands": [
+    {
+      "command": ".venv-jax/bin/python -m pytest -q -m 'not slow' tests/test_moc_exact_exit.py tests/test_moc_kernel_budget.py tests/test_moc_boundary_contracts.py tests/test_rao_resolution_convergence.py tests/test_nasa_port.py tests/test_jax_assembly_parity.py tests/test_jax_final_kernel_guard.py tests/test_benchmarks.py::test_current_bvp_benchmark_forwards_explicit_throat_and_attachment_options",
+      "exit_code": 0,
+      "result": "114 passed, 2 deselected in 57.83s",
+      "log": "t18_focused_pytest.log"
+    },
+    {
+      "command": ".venv-jax/bin/python -m pytest -q tests/test_moc_exact_exit.py tests/test_rao_resolution_convergence.py",
+      "exit_code": 0,
+      "result": "42 passed in 19.21s",
+      "log": "t18_final_domain_pytest.log"
+    }
+  ],
+  "default_changes": false,
+  "physical_tolerance_changes": false,
+  "exact_exit_opt_in_prerequisites": [
+    "exactD",
+    "static characteristic",
+    "uncoupled BDE",
+    "ce_geometry active"
+  ],
+  "semantics": "Eliminate rE/thetaE using existing midpoint Mach-line relation, deliberately changing finite soft-LSQ tradeoff; no postsolve forcing or bound clipping. Invalid finite trial extension is only numerical; final invalid domain raises before promotion.",
+  "seed_controls_defaults": {
+    "kernel_seed_max_iter": 8,
+    "kernel_seed_abs_tol": 1e-06
+  },
+  "validation": [
+    "host/JAX fullstate and residual parity",
+    "full reduced AD/FD includes kdf/Mlast/prefix chain",
+    "roundoff endpoint enforcement",
+    "explicit finite and supersonic checks",
+    "finite degenerate trial derivative",
+    "both optimizer wrappers reject invalid successful final states",
+    "same-model refinement identity includes exact-exit flag",
+    "benchmark opts forward without default/case/tolerance changes"
+  ],
+  "source_sha256": {
+    "raosim/rao_variational.py": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+    "raosim/nasa_moc.py": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+    "raosim/jax/assembly.py": "e442a2449bb4a84fccf1c36db4d92052237c6e964eaae9523c0e03e717707b97",
+    "raosim/jax/api.py": "a4522734ca0b3d0982c431e10ea34acf13d7a879cbed7783e89e8695f0470998",
+    "raosim/benchmarks.py": "72b7d33922cfda6e77324cc1f652aa3d1404405e9b7862b1b8a6ab817764c801",
+    "raosim/jax/theta_b_solve.py": "8d35afd8513ecd6079b3effba772869344649056dc7e12e9dddb2dced2bef606",
+    "raosim/jax/moc_kernel.py": "6b556596d7e7581207d5a78ba00d193efc78c1ed341d912208726fcac102baf2",
+    "scripts/audit_moc_reference_profile.py": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+    "tests/test_moc_exact_exit.py": "1013498c621f8fed889eaa33a9801da1724b0d88c13846ed3c1ba578ce6baba7",
+    "tests/test_moc_kernel_budget.py": "a2711fa50d35843384e41cebf03d7b9f1a59189ea534fc01876ba4a37c32e0b6",
+    "tests/test_rao_resolution_convergence.py": "cf8ef6779fdaf74467c55b1d044728b12e7e0f41b05c8959f99c9d7507d7b0f1",
+    "tests/test_benchmarks.py": "ee53b3245c7e675731fe3455a47674716af6089bb0a518293bfa3fc129f0e7bf"
+  },
+  "three_level_profile": {
+    "command": ".venv-jax/bin/python -m scripts.audit_moc_reference_profile --output-dir builds/moc_audit_2026-11-19/sol_b/t18_three_level_exact_exit --levels 3 --exact-exit --seed-max-iter 25 --seed-abs-tol 1e-8",
+    "exit_code": 2,
+    "artifact": "t18_three_level_exact_exit/report.json",
+    "all_individual_levels_internal_gates": "PASS",
+    "final_pair_refinement": "FAIL theta_max .06376029683910164deg > .05deg; all other metrics pass",
+    "historical_failure_preserved": true
+  },
+  "actual_jax_runtime": {
+    "command": ".venv-jax/bin/python builds/moc_audit_2026-11-19/sol_b/t18_jax_runtime_probe.py",
+    "exit_code": 0,
+    "artifact": "t18_jax_runtime_probe.json",
+    "optimizer": "success69LMsteps",
+    "integration": "valid exact-boundary state",
+    "scope": "n8 coarse profile remains geometric_approximation: compatibility/axial_mass fail; tiny roundoff export undershoot also reported; no threshold relaxation"
+  }
+}

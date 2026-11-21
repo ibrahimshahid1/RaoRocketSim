@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "command": ".venv-jax/bin/python -m pytest -q -m 'not slow' tests/test_moc_iteration_failure.py tests/test_characteristic_pairing.py tests/test_rao_residuals.py tests/test_rao_stationarity.py tests/test_rao_valid_region.py tests/test_cli_rao_validity_contract.py tests/test_compare_nasa_reference.py tests/test_transonic_kernel.py",
+  "exit_code": 0,
+  "elapsed_s": 32.90408641699469,
+  "scope": "Post-freeze independent integration checks of point failure contract, governing equations, stationarity, validity, CLI and source references; does not replace field-refinement acceptance.",
+  "source_sha256": {
+    "raosim/rao_variational.py": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+    "raosim/nasa_moc.py": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+    "raosim/jax/assembly.py": "e442a2449bb4a84fccf1c36db4d92052237c6e964eaae9523c0e03e717707b97",
+    "raosim/jax/api.py": "a4522734ca0b3d0982c431e10ea34acf13d7a879cbed7783e89e8695f0470998",
+    "raosim/benchmarks.py": "72b7d33922cfda6e77324cc1f652aa3d1404405e9b7862b1b8a6ab817764c801",
+    "raosim/jax/theta_b_solve.py": "8d35afd8513ecd6079b3effba772869344649056dc7e12e9dddb2dced2bef606",
+    "raosim/jax/moc_kernel.py": "6b556596d7e7581207d5a78ba00d193efc78c1ed341d912208726fcac102baf2",
+    "scripts/audit_moc_reference_profile.py": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+    "tests/test_moc_exact_exit.py": "1013498c621f8fed889eaa33a9801da1724b0d88c13846ed3c1ba578ce6baba7",
+    "tests/test_moc_kernel_budget.py": "a2711fa50d35843384e41cebf03d7b9f1a59189ea534fc01876ba4a37c32e0b6",
+    "tests/test_rao_resolution_convergence.py": "cf8ef6779fdaf74467c55b1d044728b12e7e0f41b05c8959f99c9d7507d7b0f1",
+    "tests/test_benchmarks.py": "ee53b3245c7e675731fe3455a47674716af6089bb0a518293bfa3fc129f0e7bf"
+  },
+  "tail": ".....................................................................    [100%]\n69 passed in 32.06s\n"
+}

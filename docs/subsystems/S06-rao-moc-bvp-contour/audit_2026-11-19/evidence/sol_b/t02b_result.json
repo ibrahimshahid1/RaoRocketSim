@@ -1,0 +1,13 @@
+{
+  "task": "t02b",
+  "status": "implemented_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q tests/test_moc_boundary_contracts.py tests/test_moc_topology.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py",
+  "exit_code": 0,
+  "result": "29 passed in 32.66s",
+  "changed_files": [
+    "raosim/nasa_moc.py",
+    "raosim/rao_variational.py",
+    "tests/test_moc_boundary_contracts.py"
+  ],
+  "gate_threshold_changes": false
+}

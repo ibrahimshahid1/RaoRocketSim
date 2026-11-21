@@ -1,0 +1,9 @@
+{
+  "task": "T13",
+  "status": "diagnostic_complete_refinement_not_accepted",
+  "command": ".venv-jax/bin/python -m scripts.audit_moc_reference_profile --output-dir builds/moc_audit_2026-11-19/sol_b/t13_reference_refinement_with_wall_fields --refine",
+  "exit_code": 2,
+  "artifact": "t13_reference_refinement_with_wall_fields/report.json",
+  "notes": "Both16/24point levels pass individual solver gates, but unchanged field-convergence policy fails angle and coverage. Table2 signed field comparisons are report-only.",
+  "accuracy_threshold_changes": false
+}

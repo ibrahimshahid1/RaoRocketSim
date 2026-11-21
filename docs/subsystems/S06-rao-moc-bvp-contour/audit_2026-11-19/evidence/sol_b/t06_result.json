@@ -1,0 +1,13 @@
+{
+  "task": "T06",
+  "status": "provenance_documentation_corrected",
+  "numeric_ast_unchanged": true,
+  "executable_ast_sha256": "3e1882676598cfbf019aee287838a9d970b623f6cc1ef5e3db563185140a1d37",
+  "changed_files": [
+    "raosim/transonic_kernel.py",
+    "raosim/rao_variational.py"
+  ],
+  "verification": "AST comparison with all docstrings stripped; executable operations and numeric coefficients identical",
+  "test_result": "16 passed in 13.91s (joint focused T05/T06 suite)",
+  "test_exit_code": 0
+}

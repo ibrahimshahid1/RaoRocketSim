@@ -1,0 +1,16 @@
+{
+  "jacobian_shape": [
+    69,
+    29
+  ],
+  "zero_full_layout_columns": [],
+  "matrix_rank": 29,
+  "smallest_singular_values": [
+    0.1582142919806708,
+    0.12872164578716827,
+    0.12176624063695383,
+    0.05960158028726352,
+    0.015688333337495062
+  ],
+  "claim_scope": "Local seed Jacobian only, after removal of provably inactive multiplier columns; not global convergence proof."
+}

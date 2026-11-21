@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "latex_builds": {
+    "standalone_exit": 0,
+    "guide_exit": 0
+  },
+  "standalone_pages": 26,
+  "integrated_guide_pages": 268,
+  "inspection": "All26 standalone pages rendered with Poppler and inspected in three contact sheets; full-size source-equation, attachment/domain, final-results/plot, final chapter-title pages checked. Final title re-rendered; integrated chapter opening and results/figure pages221/241 checked. No clipping, overlap, missing-glyph or own-chapter overfull warning found. Main guide retains minor preexisting overfull warnings in earlier chapters.",
+  "standalone_log_warnings": [],
+  "render_directory": "builds/moc_audit_2026-11-19/sol_a/pdf_qa",
+  "source_hashes_confirmed": true,
+  "editorial_revision_2026-11-21": {
+    "date": "2026-11-21",
+    "scope": "Editorial revision of logbook prose, headings and evidence labels; no solver, numerical configuration, equations or historical results changed.",
+    "math_blocks_unchanged": true,
+    "configuration_and_command_listings_unchanged": true,
+    "iteration_numeric_tokens_unchanged": true,
+    "neutral_evidence_aliases": {
+      "analysis": "sol_a",
+      "validation": "sol_b",
+      "knowledge_graph": "terra_a",
+      "literature": "terra_b"
+    },
+    "historical_payloads_unchanged": true,
+    "standalone_pages": 26,
+    "integrated_guide_pages": 268,
+    "both_latex_build_exits": 0,
+    "rendered_name_scan": "No agent names or role-named evidence paths in standalone PDF text",
+    "visual_review": "All26 pages inspected in contact sheets; cover, opening, edited implementation section and integrated chapter inspected at full size; no new layout defects or standalone LaTeX overfull/undefined warnings.",
+    "historical_simulations_rerun": false
+  }
+}

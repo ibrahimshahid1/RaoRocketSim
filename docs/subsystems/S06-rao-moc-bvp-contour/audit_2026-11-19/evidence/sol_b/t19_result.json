@@ -1,0 +1,91 @@
+{
+  "task": "T19",
+  "status": "completed_and_numerically_validated",
+  "command": ".venv-jax/bin/python builds/moc_audit_2026-11-19/sol_b/t19_refinement_probe.py",
+  "exit_code": 0,
+  "elapsed_s": 1497.5375988330343,
+  "artifact": "t19_refinement/report.json",
+  "all_individual_gates": "PASS",
+  "common_coordinate_policy": "PASS with unchanged default tolerances",
+  "metrics": {
+    "comparison_coordinate_count": 2546,
+    "coarse_node_count": 815,
+    "fine_node_count": 1850,
+    "coarse_in_fine_coverage": 0.9668711656441717,
+    "fine_in_coarse_coverage": 0.9502702702702702,
+    "minimum_field_coverage": 0.9502702702702702,
+    "mach_max_abs": 0.0008036601415017941,
+    "mach_rms_abs": 0.00016317951974426556,
+    "mach_p99_abs": 0.0004920833912795075,
+    "theta_max_abs_deg": 0.02289122104977374,
+    "theta_rms_abs_deg": 0.0039017091741248384,
+    "theta_p99_abs_deg": 0.014557954476767093,
+    "pressure_ratio_max_abs": 7.494807251619967e-05,
+    "pressure_ratio_rms_abs": 1.5229206439077127e-05,
+    "pressure_ratio_p99_abs": 4.5524961361066586e-05,
+    "wall_radius_max_over_rt": 0.00022673308724519003,
+    "wall_radius_rms_over_rt": 6.548593664102598e-05,
+    "wall_radius_p99_over_rt": 0.00020009531868920406,
+    "theta_n_abs_delta_deg": 0.0017911195755057599,
+    "theta_e_abs_delta_deg": 0.00908625385149857,
+    "kernel_d_fraction_abs_delta": 8.290279908743092e-06,
+    "thrust_coefficient_relative_delta": 3.9844275743502345e-05
+  },
+  "worst_field_locations": {
+    "available": true,
+    "classification": "report_only_location_of_existing_comparison_maximum",
+    "fields": {
+      "mach": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 2.5593974374241064,
+        "interpolated_value": 2.5585937772826046,
+        "signed_interpolated_minus_target": -0.0008036601415017941,
+        "unit": "Mach"
+      },
+      "theta": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 18.885369626582097,
+        "interpolated_value": 18.908260847631873,
+        "signed_interpolated_minus_target": 0.02289122104977374,
+        "unit": "deg"
+      },
+      "pressure_ratio": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 0.049646315146002346,
+        "interpolated_value": 0.049721263218518545,
+        "signed_interpolated_minus_target": 7.494807251619967e-05,
+        "unit": "p/p0"
+      }
+    }
+  },
+  "source_sha256": {
+    "raosim/rao_variational.py": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+    "raosim/nasa_moc.py": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+    "raosim/transonic_kernel.py": "170f6bab30d5f78960ab4167bcb3aa7a262e79a79f9b3cbe69819162a672b324",
+    "scripts/audit_moc_reference_profile.py": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+    "raosim/rao_residuals.py": "c6a294215b88ca1489f0ac8ac49203cb6a64efb4dc17c11249442a038d65d7d8"
+  },
+  "full_solution_and_field_artifacts_banked": true,
+  "shipped_reproduction": "scripts/audit_moc_refinement_pair.py; packaging verified without rerunning solve",
+  "limitations": [
+    "one inviscid constantgamma physical/model configuration",
+    "NozzleB source throat/startline assumptions differ",
+    "no hardware/viscous/realgas qualification",
+    "coarser historical field failures remain valid evidence"
+  ]
+}

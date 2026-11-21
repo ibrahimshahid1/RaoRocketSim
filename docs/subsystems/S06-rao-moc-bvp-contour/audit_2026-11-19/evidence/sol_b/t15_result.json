@@ -1,0 +1,33 @@
+{
+  "task": "T15",
+  "status": "implemented_and_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q -m 'not slow' tests/test_moc_kernel_budget.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py tests/test_moc_boundary_contracts.py tests/test_rao_resolution_convergence.py tests/test_moc_topology.py tests/test_jax_assembly_parity.py tests/test_jax_theta_b_solve.py",
+  "exit_code": 0,
+  "result": "99 passed, 4 deselected in 54.30s",
+  "changed_files": [
+    "raosim/nasa_moc.py",
+    "raosim/rao_variational.py",
+    "raosim/moc_topology.py",
+    "raosim/jax/theta_b_solve.py",
+    "tests/test_moc_kernel_budget.py",
+    "tests/test_rao_resolution_convergence.py",
+    "scripts/audit_moc_reference_profile.py"
+  ],
+  "default_kernel_max_rrcs": 500,
+  "default_accuracy_tolerances_unchanged": true,
+  "source_requirement": "Rao/Rice B-D-E construction requires the actual throat kernel to reach its specified B wall endpoint; incomplete numerical kernels cannot define the prescribed boundary.",
+  "diagnostic_evidence": "t14_kernel_budget_probe.json",
+  "note": "Insufficient resource capacity raises IncompleteKernelError and never becomes a physical angle-bracketing condition. build_kernel still returns explicit partial diagnostics. Live JAX capacity is checked against requested budget, with original static row-bound formula unchanged.",
+  "refinement_validation": {
+    "command": ".venv-jax/bin/python -m scripts.audit_moc_reference_profile --output-dir builds/moc_audit_2026-11-19/sol_b/t15_three_level_refinement --levels 3",
+    "exit_code": 2,
+    "artifact": "t15_three_level_refinement/report.json",
+    "kernel_completed": true,
+    "raw_physical_gates": "all11 pass on finest",
+    "remaining_failures": [
+      "finest export interval undershoot",
+      "common-coordinate Mach/angle/theta_N/D-fraction refinement metrics exceed existing tolerances"
+    ],
+    "fourth_level": "not_run; changing seed angle and endpoint error prevent a justified convergence claim"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "task": "T12",
+  "status": "single_context_numerical_validation_complete",
+  "command": ".venv-jax/bin/python (run_case t12_best_n16_nk24_dth0.25_weight1_budget1000 with exactD, weight1, n_control16, n_kernel24, dtheta.25, max_nfev1000)",
+  "exit_code": 0,
+  "artifact": "t12_best_n16_nk24_dth0.25_weight1_budget1000.json",
+  "result": "NumPy gtol success after25 function evaluations; all BVP/MOC/validity/thrust gates pass; rao_variational_residual_solved; no tolerance or regularization changes",
+  "limitations": "One constant-gamma inviscid configuration; no domain-wide or physical validation and original Rao throat/startline differ.",
+  "no_regularization_probe": "not_run_because_primary_profile_passed"
+}

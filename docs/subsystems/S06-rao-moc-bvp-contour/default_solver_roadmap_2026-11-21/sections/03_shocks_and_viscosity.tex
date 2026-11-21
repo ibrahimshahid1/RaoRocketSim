@@ -1,0 +1,220 @@
+\section{Shock fitting and the postshock flow}
+\label{sec:shock}
+\subsection{A fitted shock is an unknown boundary}
+Shock fitting represents a discontinuity explicitly and solves for its
+position/orientation together with the flow on each side. Shock capturing
+instead represents the jump through a discretized conservation-law field.
+The original MOC treatment matches downstream characteristic information
+to the shock relations \cite[\S11.5.3, PDF p.~411;
+\S11.15, PDF p.~438]{anderson}.
+
+The current code's cell-fold or coalescence detection is a useful refusal
+mechanism for its smooth march. A fold alone does not select an admissible
+shock, establish its location, or prove that a physical shock rather than
+under-resolution caused the failure. No fitted-shock solve was located in
+the current \code{raosim} paths.
+
+\subsection{Conservation is necessary but does not locate the front}
+For a locally stationary adiabatic inviscid shock without external work, with normal directed from
+upstream 1 to downstream 2 and nonzero normal mass flux \(j\),
+\begin{align}
+j&=\rho_1V_{n1}=\rho_2V_{n2},\\
+p_1+\rho_1V_{n1}^2&=p_2+\rho_2V_{n2}^2,\\
+V_{t2}&=V_{t1},\\
+h_1+\tfrac12|\mathbf V_1|^2&=
+h_2+\tfrac12|\mathbf V_2|^2 .
+\label{eq:RH}
+\end{align}
+These are local conservation relations, with tangential continuity for
+the stated inviscid stationary setting. They are not restricted to a
+calorically perfect gas
+\cite[\S3.6, PDF p.~104, Eqs.~3.38--3.40;
+\S4.3, PDF pp.~150--151, Eqs.~4.3--4.6]{anderson}.
+
+They must be closed using the same EOS, enthalpy/composition convention
+and acoustic mode as the rest of the flow. Upstream \(p,T,\mathbf V,Y\),
+the front normal, and an entropy-admissible compressive root are needed.
+The trivial unshocked root must be excluded. For a general reacting EOS,
+an upstream Mach number alone does not specify the dimensional state
+\cite[\S17.2, PDF pp.~665--668]{anderson}.
+
+Front geometry is determined by additional characteristic, wall,
+symmetry-axis and downstream-pressure conditions. The familiar
+\(\theta\)--\(\beta\)--\(M\) relation is a calorically perfect limiting
+test, not a general-gas closure with locally substituted \(\gamma\).
+Weak/strong roots, attached-front limits and pressure-dependent branch
+selection must remain explicit \cite[PDF pp.~152--154]{anderson}.
+
+\subsection{Curved shocks require rotational transport}
+A curved front generally produces different entropy jumps between
+streamlines when its shock strength varies.
+The postshock state therefore needs more information than the current
+smooth isentropic C+/C- invariants. Anderson's rotational MOC carries
+streamline entropy and total enthalpy in addition to the Mach-line data,
+including an interpolated streamline foot
+\cite[\S11.9, PDF pp.~423--424]{anderson}.
+
+\proposal Represent separate flow regions and an explicit shock-front
+mesh. Shock nodes should reference their upstream sampling location,
+front normal, jump result and downstream characteristic parents.
+Transport entropy/enthalpy or equivalent conservative thermodynamic
+information into the downstream rotational unit processes. Include
+composition and relaxation history for a reacting branch.
+
+Conserve total enthalpy rather than assuming unchanged total temperature
+for all gas models. Likewise, the calorically perfect relation between
+entropy rise and stagnation-pressure loss cannot be transferred without
+qualification to changing-composition states
+\cite[PDF p.~109, Eqs.~3.61--3.63]{anderson}.
+
+\subsection{Frozen fronts, reacting relaxation and mixed-type limits}
+Frozen jump conditions followed by finite-rate downstream relaxation
+describe a different model from an equilibrium jump. The source
+distinguishes the very short shock-front scale from chemical relaxation
+downstream \cite[\S17.10, PDF pp.~690--691]{anderson}.
+The selected model should name these assumptions and their reference
+evidence, rather than silently relaxing to a preferred equilibrium state.
+
+Steady supersonic MOC requires a locally supersonic marching region.
+A normal shock or sufficiently strong oblique shock can create a
+subsonic downstream region. Separation also introduces recirculation and
+viscous interaction. These regions require a coupled mixed-type or
+viscous method with the appropriate boundary conditions. A hyperbolic
+characteristic march alone cannot supply that solution
+\cite[PDF p.~411]{anderson}\cite[PDF pp.~4--5]{pns}.
+
+The first fitted-shock milestone should therefore be deliberately
+restricted: a specified stationary topology and gas mode, with an
+admissible supersonic downstream region where the chosen MOC applies.
+Shock--wall/axis intersections, shock interactions and slip lines are
+additional topology milestones. General off-design back-pressure
+analysis needs an explicit subsonic/separated-flow route.
+
+\section{Viscous interaction, heat transfer and separation}
+\label{sec:viscous}
+\subsection{Attached boundary layers are a separate flow model}
+\current The repository has heat-transfer/cooling models, a
+displacement/area-loss screen and empirical separation criteria.
+\code{physics.boundary_layer_displacement} labels its nozzle extension
+as a heuristic without a located validity range. None evolves a
+compressible nozzle boundary layer and iterates its displacement into MOC.
+
+NASA SP-8120 calls for integral momentum and energy boundary-layer
+analysis with friction/heat-transfer closures, and for displacement
+thickness in performance prediction \cite[PDF p.~27, printed p.~13]{sp8120}.
+That passage supplies the modeling requirement and references; it is not
+itself a complete axisymmetric closure set ready to transcribe.
+
+\proposal Introduce an attached boundary-layer state with source-selected
+definitions for momentum/energy thickness or profiles; edge
+\(p_e,\rho_e,U_e,h_e,Y_e\); transition/relaminarization assumptions;
+wall temperature/chemistry/roughness; skin friction; heat flux; and
+pressure-gradient/axisymmetric terms. Transport and thermal property
+models need independent identity and applicability.
+
+A proposed local displacement convention, derived by replacing the
+integrated mass deficit with an equivalent edge-state strip and written
+in a wall-normal coordinate \(n\), is
+\begin{equation}
+\delta^*=\int_0^\infty
+\left(1-\frac{\rho u}{\rho_eU_e}\right)\,\dd n .
+\end{equation}
+This is a project definition of the local mass deficit, not a
+source-transcribed closure. It is not the complete
+axisymmetric integral boundary-layer method or a proposed universal
+velocity-profile closure. Those geometry and closure choices remain
+implementation dependencies.
+
+\subsection{Preserve the physical wall and distinguish forward from inverse use}
+For a prescribed metal wall, displacement reduces the effective core.
+In a thin, locally near-axial approximation one may interpret
+\begin{equation}
+A_{\mathrm{core}}\simeq\pi(r_w-\delta^*)^2.
+\end{equation}
+This is a proposed geometric interpretation for forward analysis.
+The actual implementation must derive the correct local-normal and
+axisymmetric projection rather than applying this scalar radial formula
+to an arbitrary steep wall.
+
+SP-8120's outward wall correction is an inverse-design compensation:
+move the design wall outward to retain a desired inviscid core
+\cite[PDF p.~27]{sp8120}. A forward analysis call should not alter the
+manufactured wall or export displacement as hardware geometry.
+Maintain physical-wall, core-edge and thermal-station coordinates
+separately and iterate their consistent coupling.
+
+\subsection{Energy and loss accounting must close with the coolant solution}
+Skin friction changes momentum and total-pressure loss. Wall heat loss
+changes gas enthalpy, coolant enthalpy and performance. A local heat
+correlation used by the cooling module is not a resolved viscous flow field.
+A coupled calculation should pass the edge state and wall temperature
+between core/BL/thermal models and close a common energy ledger.
+
+The Wang nozzle study explicitly couples species, momentum and total
+enthalpy, and compares adiabatic and cooled-wall predictions
+\cite[PDF pp.~2, 5, 7]{wang}. Its mechanism and radiation observations
+are case-specific; they do not establish a universal mechanism or justify
+omitting radiation in every propellant.
+
+When a physical loss is already represented in the flow and exit flux,
+do not subtract the same effect again through a drag decrement and a
+generic \(\eta_{CF}\). Residual efficiency factors may remain for
+explicitly unmodeled losses, with their meaning recorded.
+
+\subsection{Thin attached-layer corrections have an applicability boundary}
+Strong acceleration, transition, relaminarization, wall cooling and
+low Reynolds number complicate nozzle boundary layers. When displacement
+is comparable to the nozzle radius, a separate inviscid core plus small
+correction may break down. Streamwise-separated regions also violate the
+assumptions of simple downstream viscous marching
+\cite[PDF pp.~4--5]{pns}\cite[PDF p.~33]{sp8120}.
+
+No universal displacement ratio or Reynolds cutoff is adopted here.
+Source-selected limits and validation-domain decisions must accompany
+the model. A residual converging numerically does not establish that
+its attached-layer assumptions remain applicable.
+
+\subsection{Separation onset, pattern, reattachment and side loads}
+\current \code{separation.py} implements Summerfield, Schilling,
+Kalt--Badal and Schmucker onset screens, with explicit FSS-only scope.
+The local MDO uses a Schmucker margin. Wall-station inputs are reconstructed
+from Q1D area states or the separate frozen expansion; the function does
+not consume a resolved MOC pressure/BL field.
+
+The original separation review discusses scatter and the distinction
+between shock-interaction pressure rise and recirculation recovery
+\cite[\S6.3.1, PDF pp.~51--52]{ostlund}. SP-8120 describes separation
+criteria as development guides and calls for full-scale checks of
+marginal designs \cite[PDF p.~82]{sp8120}. Existing screening should be
+retained with its scope, not relabeled as resolved separated flow.
+
+A broader suite must distinguish:
+\begin{itemize}
+\item incipient interaction and actual separation location;
+\item free shock separation (FSS), restricted shock separation (RSS),
+reattachment and recirculation/plateau pressure;
+\item steady branch selection versus startup/shutdown history;
+\item mean axisymmetric loads versus unsteady asymmetric side loads.
+\end{itemize}
+For the cited VOLVO S1 case, the source reports different FSS/RSS states
+at the same pressure ratio on startup and shutdown, with transitions
+near 15 and 12 respectively \cite[\S8.1.1, PDF p.~70]{ostlund}.
+These are case observations, not transferable default thresholds.
+A memoryless smooth NPR-to-pattern function cannot reproduce both states.
+
+For the pressure contribution of a circumferentially symmetric solution,
+\[
+\mathbf F_\perp=\int_{\mathrm{wall}}p\,\mathbf n_\perp\,\dd A=\mathbf0
+\]
+by symmetry; symmetric viscous tractions also cancel laterally.
+A steady axisymmetric MOC/BL result therefore cannot itself
+provide a directional side-load time history. Side-load prediction needs
+an independently calibrated statistical model or asymmetric unsteady
+viscous simulation and structural/measurement transfer information
+\cite[PDF pp.~70, 78--82]{ostlund}\cite[PDF p.~6]{frey}.
+
+\proposal First connect source-appropriate onset screens to resolved wall
+edge states while retaining their calibrated Mach, geometry and thermal
+scope. Then develop a separately identified shock/BL interaction and
+separated mixed-type model. RSS and side-load products require their own
+validation, even when offered behind a common user-facing solver suite.

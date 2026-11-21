@@ -1,0 +1,19 @@
+{
+  "task": "T01",
+  "status": "implemented_and_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q tests/test_moc_bounded_net.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py",
+  "exit_code": 0,
+  "result": "31 passed in 22.58s",
+  "changed_files": [
+    "tests/test_moc_bounded_net.py"
+  ],
+  "threshold_changes": false,
+  "source_changes": false,
+  "notes": [
+    "Preserved preexisting documentation-path edit.",
+    "Historical explicit-angle regression keeps old absolute and cross-resolution tolerances unchanged.",
+    "Current-chart wall checks incomplete coalescence reporting only; no physical shock-location or field convergence claim.",
+    "Arc seam geometry in strict-wall test uses actual contour geometry."
+  ],
+  "evidence": "t01_coalescence_probe.json"
+}

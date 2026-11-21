@@ -1,0 +1,958 @@
+\chapter[Iterations on MOC Fixes: Literature, Decisions, and Evidence]{Iterations on MOC Fixes:\\Literature, Decisions, and Evidence}
+\label{ch:moc-iterations}
+
+\lead{Development record: 19--20 November 2026.}
+This chapter records the findings, implementation changes, failed attempts,
+and validation results for the method-of-characteristics (MOC) and Rao
+nozzle solver. It supplements the dated snapshots in earlier chapters.
+The entries explain which gates failed, what caused those failures, what
+changed, and how each change was checked. A passing published contour or
+integral benchmark is distinct from a passing local flow-field audit, and
+both are distinct from validation against measured hardware.
+
+\textbf{Final bounded outcome.} The repaired, explicitly configured Nozzle-B
+case passes all internal gates and the unchanged 32/48-to-48/64-point
+common-coordinate refinement policy. Maximum field-angle difference is
+0.0228912 degrees against a 0.05-degree limit, with 95.027-percent minimum
+coverage. The accepted result requires exact D/E attachment, accurate seed
+controls and sufficient kernel capacity; earlier coarse failures remain in
+the record. This is a numerical verification result for one inviscid,
+constant-$\gamma$ model. The original KL table, broad-domain accuracy and
+physical validation remain unresolved. Iterations 18--19 contain the final
+configuration, completed tests, independent review and reproduction command.
+
+\section{Baseline and evidence}
+The initial investigation compared the existing knowledge graph, original
+source PDFs, implementation, and tests. Source equations were checked
+against the original documents where available. Differences between valid
+conventions and intentional model restrictions were distinguished from
+implementation defects.
+
+The starting checkout is \code{d636d854} (the complete identifier and source hashes
+are in \code{analysis/baseline_manifest.json}). The working
+tree already contained extensive edits, including a digitized SP-125 TOP
+chart. Existing changes were preserved. Working evidence was stored below
+\code{builds/moc_audit_2026-11-19/}. Durable copies of the research reports,
+completed test checkpoints and failed numerical attempts are retained in
+\code{docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/evidence/};
+short evidence paths in this chapter are relative to that directory, and
+its manifest records payload hashes. The consolidated source inventory,
+literature inventory, graph assessment, traceability matrix and dependency-ordered
+backlog are in that same audit directory. A retained failed attempt remains
+failed when later work succeeds.
+
+The preceding completed focused run was
+\code{.venv-jax/bin/python -m pytest -q tests/test_moc.py tests/test_moc_bounded_net.py tests/test_characteristic_pairing.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py}:
+77 passed and 2 failed in 77.06 seconds. The failures were the chart-bell
+coalescence-location/refinement expectation and a strict-wall-intersection fixture
+whose hardcoded 30-degree arc no longer joins the current chart bell. These are
+recorded separately from the nonlinear BVP and physical-topology gates.
+
+\section{Implementation inventory and validation checks}
+\begin{longtable}{@{}P{0.31\linewidth}P{0.62\linewidth}@{}}
+\toprule\textbf{Module or family} & \textbf{Responsibility and audit boundary}\\\midrule
+\endhead
+\code{raosim/moc.py} & Local point processes and forward-analysis entry point; deprecated shrinking-front march retained for historical regression.\\
+\code{raosim/moc_bounded.py} & Reflected, bounded forward net for a prescribed wall; exit sampling; containment, coalescence and mass diagnostics.\\
+\code{raosim/nasa_moc.py} & Transonic starting line, throat kernel, DE integration and D placement, BDE construction, streamline wall, full control-surface mass and thrust.\\
+\code{raosim/rao_variational.py} & Nonlinear control-surface residuals, construction, independent topology audit, numerical policy, reliability and convergence reporting.\\
+\code{raosim/rao_residuals.py} & Characteristic compatibility, Mach-line direction and wall-tangency residuals.\\
+\code{raosim/moc_topology.py} & Explicit B, D, E, BD, DE and wall curves; seam and mass-closure reports.\\
+\code{raosim/jax/} & Differentiable residual assembly and throat-kernel port; parity with host implementation is a separate verification requirement.\\
+\code{raosim/benchmarks.py} & Published shape/integral comparisons; a benchmark pass does not override a failed per-run physical gate.\\
+\code{raosim/rao_existence_scan.py} & Fixed-context closure roots and resolution/domain evidence; evidence cannot be transferred to an arbitrary configuration.\\
+\code{raosim/mdo/contour_validation.py} & Optional post-solve comparison, not a replacement MOC contour provider inside the MDO loop.\\
+\bottomrule
+\end{longtable}
+
+\section{Literature inventory and graph coverage}
+A literature inventory catalogued 15 relevant source payloads and recorded their SHA-256,
+manifest identifier, actual title, and reviewed page windows in
+\code{literature/literature_inventory.json}. Catalogue inclusion is not full review.
+The original-PDF evidence below is distinguished from supporting literature which
+was only inventoried. A separate knowledge-graph survey checked
+the original Rao and NASA pages; its coverage and equation inventories are in
+\code{knowledge_graph/coverage_inventory.json} and \code{knowledge_graph/rao_equation_inventory.json}.
+
+\begin{longtable}{@{}P{0.28\linewidth}P{0.22\linewidth}P{0.43\linewidth}@{}}
+\toprule\textbf{Source / identity} & \textbf{PDF pages checked} & \textbf{Load-bearing scope or limitation}\\\midrule
+\endhead
+Rao, 1958; DOI 10.2514/8.7324 & 2--6 (printed 378--382) & Full CDE fluxes, continuous D data, DE characteristic/stationarity, construction, Nozzle-B tables; equations on pages 3--4 visually inspected.\\
+Rice / JHU, 2003; NTRS 20030067852 & 7--10, 16--21 & Characteristic topology, starting line, mass check, separate resolution controls, convergence warnings. Printed compatibility notation conflicts with Anderson; see below.\\
+Anderson, Modern Compressible Flow, third edition; hash-named held PDF & 94--98, 419--423; especially 422 / printed 406 & Independent governing-equation verification, Eqs.~11.52--11.53; critical-Mach normalization, Eq.~3.37.\\
+MIT 16.512, Martinez-Sanchez, held lecture 4--5 PDF & 1--10 & Independent characteristic derivation; family names differ, so map by geometric slope.\\
+Young, Auburn thesis, 2012 & 36--40, 62--63, 94 & Geometric viability, Eq.~3.10; reacting-flow source terms are additional physics, not merely variable gamma.\\
+NASA SP-8120; NTRS 19770009165 & 27, 29, 79--81 & Optimum versus approximate contours, gas-property and viscous corrections; intentional applicability limits.\\
+NASA RP-1104; NTRS 19830016278 & 1--2, 5--7 & Perfect-bell family and applicability; curve ordinates were not digitized for this audit.\\
+Rao, 1961; DOI 10.2514/8.5837 & 1, 3--4 & Contour approximations and applicability; not an original TOP numerical table.\\
+Cuffel, Back, Massier, 1969; DOI 10.2514/3.5349 & 1--2 & Independent transonic measurements and KL comparison; no disputed KL coefficient table.\\
+Frey and Hagemann, 2000; DOI 10.2514/2.5593 & 1--4, 6 & Internal shocks and separated flow; does not certify a numerical fold's physical location.\\
+Ostlund, KTH thesis, 2002 & 1, 10, 122--123, 129 & Metadata and targeted coefficient search; original KL table not located.\\
+Rao, Beck and Booth, 1999; AIAA 99-2584 & 3--4, targeted follow-up & Original Eqs.~(2)--(6) and the positive-radial-increment requirement checked against the existing typed validity implementation.\\
+Hagemann, 1998; Rocket Nozzle Geometries; Schomberg, 2018 & Catalogue only in this independent pass & Retained as potential follow-up sources; catalogue inclusion does not certify their formulas.\\
+\bottomrule
+\end{longtable}
+
+\subsection{What the knowledge graph establishes}
+The synchronized corpus contained 296 on-disk PDFs and 262 canonical payloads.
+The graph contained nine stored Rao-1958 equations and five claims, but no extracted
+equations or claims for the NASA/JHU report, Young thesis, Ostlund thesis, or
+Rao-1999 paper. The MOC model has no current independent source-review result;
+all 25 inspected MOC/NASA software scientific comparisons were marked
+\code{NOT_RECHECKED}. The graph's legacy ``optimizer coupled'' label is a
+keyword heuristic with execution reach unknown. It is not evidence that MOC
+runs inside the MDO optimization loop. Source metadata also has discrepancies:
+for example, the held Anderson textbook carries a manifest identifier unrelated
+to its actual title. The inventory preserves inspected and stored identities.
+No graph stores were silently rewritten during this audit.
+
+\subsection{Reconciled equations and preserved disagreements}
+Anderson PDF page 422, Eqs.~11.52--11.53, supports the implemented relations
+\begin{align}
+C^- &: \quad d(\theta+\nu)=S\,ds, &
+C^+ &: \quad d(\theta-\nu)=-S\,ds, &
+S &= \frac{\sin\theta\sin\mu}{r}.
+\end{align}
+Here $\nu$ is the Prandtl--Meyer function and $\mu=\sin^{-1}(1/M)$.
+The Rice report visibly prints $\mu$ in its compatibility expressions on
+PDF pages 8--9 while also defining it as Mach angle. That discrepancy remains
+documented; the independently derived Anderson equations resolve the
+implementation requirement. No sign rewrite is justified.
+
+Rao's parameter in PDF page 4, Eq.~(17), is
+$M/\sqrt{2+(\gamma-1)M^2}$; Anderson's critical Mach $V/a^*$ is
+$\sqrt{\gamma+1}$ times this value. At fixed $\gamma$, that constant can be
+absorbed into the stationarity constant. This is a valid normalization
+difference. A separate unresolved issue is the transonic kernel's use of
+$\sqrt{U^2+V^2}$ as local Mach while its field names say $U=u/a^*$ and
+$V=v/a^*$. The original KL normalization must be established before changing
+the numerical branch.
+
+The local KL coefficient docstring claims exact checks against Kliegel and
+Levine's 1969 Table 1, but that original paper was not found in the corpus.
+Targeted publisher retrieval returned inaccessible/403 responses;
+NASA searches established bibliographic identity, not the coefficient table.
+Power-series patterns and agreement with a historical fixture cannot verify
+those exact coefficient edits. They remain an explicit research question,
+not a reason to invent a replacement coefficient.
+
+The free-exit and fixed-end variational problems also differ legitimately.
+Rao's PDF page 3, Eq.~(6), retains an endpoint variation because only
+length is prescribed and the exit radius is free; Eqs.~(10) and (14)
+follow from that free variation. When both throat radius and expansion
+ratio are fixed, $\delta r_E=0$ and that endpoint condition does not follow.
+Leaving it inactive in the repository's fixed-end residual set is not
+automatically a missing equation. A separate derivation showed that the
+second invariant in Eq.~(13) follows from Eq.~(12), characteristic geometry
+and exact compatibility on a smooth constant-$\gamma$ DE. Adding it as
+another weighted residual is not justified solely because it appears
+separately in the paper. Its discrete drift can still diagnose inconsistency.
+
+Rice PDF page 19 calls its Mach-1.5 cap and starting-line shape arbitrary
+numerical conventions; its 2-percent mass check and 0.25--0.5-degree nominal
+turning increments are implementation policies. Neither source assigns the
+repository's finite acceptance thresholds. Cuffel et al., PDF page 2, reports
+a KL/ideal-one-dimensional mass coefficient of 0.982 versus 0.985 measured
+for its particular throat. Thus conservation relative to the modeled start
+line must remain separate from ideal-throat normalization.
+
+\section{Traceability and prioritized backlog}
+The classification describes the audited baseline, while the status records
+what this cycle established or repaired. ``Missing'' can describe an intentional
+model restriction or absent validation, not necessarily a code defect. Detailed
+task commands, hashes and outcomes accompany the machine-readable matrix in
+\code{docs/subsystems/S06-rao-moc-bvp-contour/audit_2026-11-19/traceability.json}.
+Priority was correctness and refusal of invalid results first, then boundary
+and conditioning repairs, then trustworthy numerical acceptance and reporting.
+Unverified coefficients and additional physics were not filled in speculatively.
+\input{chapters/moc_traceability_table.tex}
+
+\section{Iteration 01: Repair the identity of the test geometry}
+\subsection{Issue and intended change}
+The TOP angle-table update changed the default bell at expansion ratio 10 and
+80-percent length from 30/15.5 degrees to 25.74/10.49 degrees. One test still
+constructed a 30-degree throat arc, and another asserted the older wall's fold
+location for the changed wall. The fixture repair separated the historical
+explicitly specified wall regression from current-chart behavior.
+The numerical solver and original historical location/refinement tolerances
+were retained. Current-chart failure detection was recorded separately from
+resolution convergence.
+
+\subsection{Change and validation}
+Only \code{tests/test_moc_bounded_net.py} changed: the wall helper accepts
+explicit angles; the historical fold-location regression now specifies
+30/15.5 degrees; a separate current-chart test requires honest incomplete status,
+a fold inside the nozzle, and zero containment violations; and the strict-wall
+test builds its arc from the actual contour. No production algorithm or
+numerical threshold changed.
+
+The four-grid diagnostic at $(n,\Delta\theta)=(24,0.5^\circ)$,
+$(48,0.25^\circ)$, $(96,0.125^\circ)$, and $(144,0.0625^\circ)$ placed the
+historical-wall fold at 22.629, 21.832, 20.922, and 20.973 mm. The current-chart
+wall gave 55.269, 51.569, 51.788, and 50.727 mm. These are different nozzle
+geometries. The second sequence is not accepted here as a resolution-convergence
+demonstration. Full inputs and hashes are in
+\code{validation/t01_coalescence_probe.json}.
+
+\textbf{Completed validation:}
+\code{.venv-jax/bin/python -m pytest -q tests/test_moc_bounded_net.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py}
+returned exit 0: 31 passed in 22.58 seconds. The command, final output, and
+validation record are in \code{validation/t01_result.json} and
+\code{validation/t01_pytest.log} below the audit evidence directory. These results
+validate the fixture repair and reference regressions, not the full BVP.
+
+\section{Iteration 02: Explain the nonlinear and topology failures separately}
+\subsection{Measured baseline}
+The exact Nozzle-B benchmark configuration was rerun with the NumPy backend,
+10 control points, 10 starting points, 100 function evaluations, and a
+\code{residual_tol} of 0.005. The largest weighted residual was 0.003979,
+dominated by regularization; mass and length residuals were $-0.001478$ and
+0.000508. Nevertheless the optimizer did not declare successful termination.
+This is distinct from the physical-mesh failures:
+\begin{itemize}
+\item The DE starting radius misses kernel point D by $0.00121693R_t$,
+while the seam policy permits $0.00001R_t$. The current least-squares
+formulation treats the boundary values as soft residuals.
+\item The largest independently measured C+ compatibility error is
+0.012274 degrees against a 0.005-degree policy. C- reaches 0.001985 degrees.
+The optimizer's C+ residual is weighted by 0.05, so its reported scaled norm
+does not directly certify the unweighted flow audit.
+\item Crossing, wall-tangency, Mach-line direction, cell orientation, axis,
+axial mass, wall geometry, and mass-closure checks pass in this configuration.
+The failed seam also causes physical-mesh completeness to fail. The auxiliary
+caustic is downstream of the exit; that fact alone is not the failed physical gate.
+\end{itemize}
+The machine record is \code{analysis/nozzle_b_baseline.json}. A 24-point,
+unsolved reference seed at expansion ratio 10 has exact D attachment and a
+complete physical strip but still fails measured C+ compatibility (maximum
+0.022761 degrees). That seed is not a converged solution and is not a
+counterexample to the independent gate. It is recorded in
+\code{analysis/reference_seed_baseline.json}.
+
+\subsection{Literature requirement and proposed investigation}
+Rao (1958), PDF page 3 / printed page 379, states continuity of interior Mach
+number and flow angle and continuity of the control-surface inclination; page 4,
+Eqs.~(17)--(19), locates D on the kernel characteristic and constructs DE from
+that state. Rice/JHU, PDF pages 9--10, describes the same boundary construction.
+The shared D state is a physical boundary requirement. Enforcing it by variable
+elimination rather than penalties would be an implementation choice, and must
+preserve equivalent host and JAX formulations.
+
+The diagnostic probes varied solver budget, residual weight, control resolution and
+diagnostic regularization to locate the dominant physical edges and distinguish
+budget exhaustion, boundary tradeoffs, and discretization. Acceptance tolerances
+were held fixed. The completed probes show that increasing the 0.05-weight
+evaluation budget from 100 to 1,000 reduces the D gap to $0.000341R_t$ and
+C+ maximum to 0.00812 degrees; both still fail. Raising the physics weight to
+1 does not solve the interior error: its worst edge is a backward-marched
+near-wall cell, not the prescribed DE boundary. Increasing control resolution
+from 10 to 16 points in a diagnostic no-regularization run reduces that
+compatibility maximum from 0.01534 to 0.003729 degrees, while the D seam
+still fails. Removing regularization was a diagnostic ablation only and is
+not adopted as a default change. These results justify repairing the boundary
+parameterization and evaluating physical-mesh resolution separately, rather
+than merely increasing iteration counts or penalty weights.
+
+\section{Iteration 03: Restore downstream throat-radius propagation}
+\subsection{Confirmed defect and specification}
+The worked Rao-1958 construction uses $R_u=1.5R_t$ and
+$R_d=0.45R_t$ (PDF pages 3--4). The current Nozzle-B benchmark instead
+inherits the repository's $0.382R_t$ downstream default and a different
+starting-line model. A probe requesting $0.45R_t$ unexpectedly produced
+bit-identical results to $0.382R_t$. This was traced to the preferred
+\code{_initial_ce_from_kernel -> set_theta_b} path: the first function
+computed the requested radius but the second hardcoded $0.382R_t$.
+Fallback kernel construction already honored the requested value, so the
+same configuration could describe different geometry depending on seed success.
+
+An optional keyword \code{Rd} was added to \code{set_theta_b}, with
+the historical default preserved and non-finite/non-positive/bool overrides
+refused. The preferred seed now forwards the requested absolute radius.
+The existing sharp-corner length-percentage convention is unchanged. This
+repair makes the input effective; it does not claim exact Rao-source
+reproduction, because the transonic construction still differs.
+
+\subsection{Change and validation}
+The change updated \code{raosim/nasa_moc.py} and
+\code{raosim/rao_variational.py}, and added
+\code{tests/test_moc_boundary_contracts.py}. Real preferred-seed tests
+inspect the actual kernel radius and B coordinates for 0.382 and 0.45,
+rather than only checking that a keyword was passed.
+
+\textbf{Completed validation:}
+\code{.venv-jax/bin/python -m pytest -q tests/test_moc_boundary_contracts.py tests/test_moc_topology.py tests/test_nasa_kernel_march_parity.py tests/test_nasa_port.py}
+returned exit 0: 29 passed in 32.66 seconds, recorded in
+\code{validation/t02b_pytest.log}. Default source-port controls continue to pass.
+
+\section{Iteration 04: Impose shared D boundary data exactly}
+\subsection{Boundary parameterization}
+The opt-in \code{exact_d_attachment} mode removes the duplicated
+starting-radius unknown and, when their existing pin flags are enabled,
+the starting Mach and angle unknowns from the optimization vector. At
+every residual evaluation the reduced vector is expanded into the existing
+packed layout using the current arc-fraction-selected kernel point D.
+Both position and selected flow-state components then represent the same
+point to floating precision; the public packed representation and residual
+ordering remain compatible. The JAX expansion must differentiate through
+D's current arc fraction, rather than treating those data as constants.
+
+This is an implementation choice enforcing Rao's shared boundary condition,
+not a new source equation. It must preserve diagnostic pin flags and
+explicitly refuse the unimplemented live-kernel-angle combination.
+Acceptance requires host/JAX value and derivative checks, actual D-state
+identity, preserved default behavior, and independent physical-gate results.
+It does not guarantee the remaining backward mesh is resolved.
+
+\subsection{Status}
+The implementation added a host reduced-vector wrapper and matching JAX expansion;
+the public packed residual layout is unchanged. Unsupported combinations
+with a live solved kernel angle are explicitly rejected. Review checked the
+reduced/full mappings, derivative dependence on the D arc fraction, and
+diagnostic pin-flag behavior.
+
+The focused boundary plus existing assembly-parity suite completed with
+28 passed in 25.40 seconds (exit 0), including finite-difference versus
+automatic-differentiation checks. The real NumPy Nozzle-B regression has
+identical D radius, Mach and angle and zero geometric seam error, without
+changing the $10^{-5}R_t$ seam policy. Genuine JAX optimizer execution is
+recorded separately in \code{validation/t03_jax_runtime.json}; mocked wiring
+tests are not substituted for that integration run.
+
+Numerical probes with exact attachment at $(n_c,n_k,\Delta\theta)=$
+$(10,10,0.5^\circ)$, $(20,24,0.25^\circ)$ and
+$(40,24,0.125^\circ)$ all preserve the exact seam. Their C+ maxima are
+approximately 0.01046, 0.00928 and 0.01189 degrees. Each used only
+100 evaluations and unfinished optimization; this is not a clean
+refinement-convergence study. The repair removes a boundary inconsistency;
+it does not establish resolution of the backward characteristic strip.
+
+\section{Iteration 05: Report the actual failing gates}
+The existing BVP verdict includes successful optimizer termination as well
+as assembled-residual, mass and length criteria. Previously, a generic
+warning described every failure as residual nonconvergence, including the
+Nozzle-B case whose residual was below tolerance but whose optimization
+budget had ended. The change added \code{construction_diagnostics['gate_report']}
+with separate optimizer, weighted-residual, mass, length, topology, validity,
+and promotion entries. It records compatibility in degrees, seam distances
+in meters, limits, failed required gates, and missing evidence. Report-only
+neighbor increments are excluded from the required-gate list.
+
+Optimizer counters distinguish NumPy function evaluations from JAX LM steps.
+The requested \code{max_nfev} is not falsely described as an identical budget
+across backends: JAX has a minimum per-stage step budget and continuation
+stages. Warning messages now distinguish unsuccessful termination from
+actual residual exceedance. Acceptance conditions and thresholds are unchanged.
+The focused boundary/reporting suite completed with 21 passed in 13.04
+seconds (exit 0), recorded in \code{validation/t04_pytest.log}.
+
+\section{Iteration 06: Restore unit-process convergence failure handling}
+Comparison of the port with the original, hash-identified
+\code{MOC_GridCalc_BDE.cpp} exposed missing failure branches. Its arc-wall loop has a 50-iteration cap
+(lines 878--879) and explicitly reports nonconvergence and exits at
+lines 922--925. The backward BDE point does the same at lines 3331--3335
+and 3391--3394 before accepting the state at lines 3397--3402.
+Both use the $10^{-10}$ source convergence criterion (line 62).
+Python's unconditional last-iterate returns omit these failure branches.
+
+The repair rejects exhausted/non-finite points through the existing
+optional-result contracts. An exact finite zero-to-zero increment must count
+as zero error; the current sentinel 9.9 cannot establish that. The repair
+must avoid reproducing C++ zero-over-zero NaNs and must not alter coefficients
+or acceptance tolerances. Deliberately insufficient iteration budgets,
+exact-zero states, source regressions and affected physical gates are the
+acceptance tests. A local finite iteration-change helper was added, and
+the correctors return \code{None} when the arc-wall or backward-point corrector exhausts
+its budget without convergence. The broader legacy error helper and
+unrelated JAX unit processes were left unchanged. Finite invalid input is
+not substituted for a valid state; exact unchanged zero values are handled
+without NaN arithmetic. Existing callers retain their incomplete-result
+handling.
+
+The focused iteration-failure, bounded-net, source-reference and boundary
+contract suite completed with 62 passed in 37.26 seconds (exit 0), recorded
+in \code{validation/t07_pytest.log}. Deliberate zero/one-iteration exhaustion
+does not return the former initial or last guess as a successful point.
+Convergence of an individual point remains distinct from passing the
+independent characteristic equations on the mesh.
+
+\section{Iteration 07: Make benchmark assumptions explicit}
+The benchmark now passes case-specific upstream and downstream throat
+ratios and the exact-attachment option to the existing solver configuration.
+The original Nozzle-B profile explicitly retains $R_u/R_t=1.5$ and
+$R_d/R_t=0.382$ for backwards compatibility. Its JSON and Markdown reports
+now carry a model-assumptions block identifying Rao's $0.45R_t$/Sauer source
+construction, the modeled $0.382R_t$/project-modified-KL construction, and
+\code{exact_boundary_reproduction=false}. Published shape and integral
+tolerances remain unchanged. An overall benchmark pass cannot silently
+become a claim of identical boundary data or a passing local flow field.
+The focused benchmark/starting-line suite completed with 16 passed in
+13.91 seconds (exit 0). The full
+benchmark/starting-line suite reported 20 passed and two failures in
+24.21 seconds. Both failures concern the separate LEA/TOP B\'ezier length
+comparison: the working geometry gives $L/R_t=15.044818739$ against
+$15\pm0.02$. The HEAD and modified benchmark implementations were executed
+against the same current geometry; their metrics were identical. Thus the
+failures predate this reporting repair. Their evidence is preserved in
+\code{validation/t05_lea_baseline_comparison.json}; no benchmark tolerance or
+expected status was changed to conceal them.
+
+\section{Iteration 08: Correct unsupported coefficient provenance claims}
+The transonic kernel's long header assertions of verified
+KL-1969 errata were replaced with a concise, qualified description and a
+pointer to this chapter. This audit does not establish that the project modifications are
+wrong; it establishes that the claimed primary-source coefficient check
+cannot currently be reproduced. The misleading attribution of the
+repository's $0.382R_t$ default to the original Rao-1958 example was removed.
+
+For future research, the historical substitutions being questioned are:
+the AXI third-order radial-velocity mixed bracket's multiplication versus
+addition, $1181$ versus $1881$, its $y^2$ versus $y^3$ power, the AXI
+third-order axial-velocity divisor 34 versus 384, and the planar mixed
+bracket's multiplication versus addition. These describe existing project
+edits, not new substitutions made in this audit. The source-visible C++
+compatibility branch and the project-modified branch remain distinct.
+
+Executable AST comparison with docstrings stripped confirmed that this
+documentation task changed no operations or numerical coefficients.
+The exact hash is recorded in \code{validation/t06_result.json}. Numerical
+regression testing is recorded separately from this provenance correction.
+
+\section{Iteration 09: Require the same model in refinement comparisons}
+The common-coordinate comparison checked throat radius,
+expansion ratio, gamma, ambient pressure and length, but not both throat
+curvatures or the starting-line model. The new exact-attachment mode was
+also absent from the comparison identity. Two different boundary models
+could consequently be described as coarse and fine versions of one model.
+
+The repair records the throat ratios, starting-line method,
+attachment and pin settings, formulation, and effective residual recipe
+in the solution provenance and rejects mismatched or missing required
+identity before evaluating refinement. Missing provenance must not be
+silently filled from current defaults. Node counts and turning limits
+may vary as declared refinement controls; the underlying boundary model
+must remain the same. Field-error tolerances were unchanged.
+Focused validation results are recorded below.
+
+\section{Iteration 10: Remove provably inactive optimizer columns}
+The automatic-differentiation Jacobian was evaluated at the real
+10-point Nozzle-B seed in exact-attachment mode. It had 69 residuals and
+31 free columns, but columns 30 and 31 (the full-layout locations of
+$\lambda_2$ and $\lambda_3$) were exactly zero. The local rank was 29.
+This follows from the configured residual recipe: stationarity and
+transversality blocks which use those multipliers are inactive; the
+algebraic characteristic formulation uses its own stationarity constant.
+The two zero singular values therefore do not establish a physical
+non-existence result or an inherent singularity of Rao's equations.
+
+The repair removes those two inactive optimizer unknowns only
+inside the opt-in reduced mode, retaining their template values in the
+public full vector. If a block which uses them is active, they remain
+unknowns. The default legacy solve layout stays unchanged. Acceptance
+requires backend parity, correct active-block handling, and a conditioning
+check on the actual reduced system. The measured seed matrix is in
+\code{analysis/conditioning_probe.json}; the acceptance evidence follows below.
+
+\section{Iteration 11: Refuse unsupported reduced-coordinate sensitivities}
+Independent review found the host and JAX boundary expansions consistent
+with the source requirement. It also identified an
+adjacent API issue: \code{rao_sensitivities} still differentiates the
+full independent-state vector. Those are full-state partial derivatives,
+not the reduced optimizer's derivatives with the eliminated D-state chain.
+Its reported Jacobian conditioning would likewise describe a different
+system. An explicit early refusal was added for exact-attachment
+mode until the sensitivity API supports the reduced coordinates. This
+preserves the meaning of the existing default API without inventing a
+new total-derivative capability. Validation is recorded below.
+
+\subsection{Validation of Iterations 09--11}
+The common-coordinate identity repair passed 22 focused tests in 0.42
+seconds. The reduced-column and sensitivity-refusal changes were included
+in the completed 67-pass combined suite recorded in Iteration 12. An
+independent repeated AD probe now has a $69\times29$ Jacobian, rank 29,
+and no exactly zero columns; the smallest singular value is approximately
+0.01569 at that seed. Those observations are local conditioning evidence,
+not a global convergence proof.
+
+\section{Iteration 12: Align the CLI and reports with the authoritative gates}
+Integration review found that the CLI still decided its validity
+gate from the legacy Eq.~(6) diagnostic \code{boundary_min}, although the
+solver's authoritative criterion is the typed Rao-1999 Eq.~(5) radial
+increment result. The new small helper requires that typed evidence to be
+available and valid; missing evidence refuses BVP export, while the TOP
+chart path remains outside this MOC validity check. Tests deliberately
+make Eq.~(5) and the legacy diagnostic disagree. This aligns the CLI with
+the existing source-reviewed contract; it does not introduce a new threshold.
+The original Rao-1999 PDF pages 3--4 were subsequently checked:
+Eqs.~(2)--(3) are on page 3 and Eqs.~(5)--(6) on page 4. The implemented
+signs and factors agree. Midpoint evaluation and the $10^{-9}$ numerical
+boundary band remain project policies. This is a necessary local
+advancing-DE condition, not a sufficient theorem of global convergence,
+arbitrary fixed-exit optimality, or absence of shocks in every flow.
+
+The structured solver-gate report is now surfaced in CLI summaries and
+benchmark JSON/Markdown. The benchmark export also forwards the same
+upstream and downstream radii used by the solver, rather than silently
+reverting to contour-conversion defaults. The combined boundary,
+derivative-parity, sensitivity, CLI-validity, benchmark and provenance
+suite completed with 67 passed and one slow test deselected in 54.50
+seconds (exit 0).
+
+\section{Iteration 13: A passing Nozzle-B configuration}
+\subsection{Reproducible numerical specification}
+The first resolved-profile probe uses the following existing controls,
+with only the new exact-attachment option added:
+\begin{lstlisting}
+RaoSolverConfig(
+    Rt=1.0, epsilon=4.973, gamma=1.23, pa_over_p0=0.0,
+    length_pct=64.0452248702277,
+    throat_upstream_radius_factor=1.5,
+    throat_downstream_radius_factor=0.382,
+    starting_line_method="kliegel_levine",
+    n_control=16, n_kernel=24, kernel_dtheta_limit_deg=0.25,
+    max_nfev=1000, residual_tol=0.005,
+    evaluate_moc=True, wall_method="bde", solver_backend="numpy",
+    exact_d_attachment=True, physics_weight=1.0,
+)
+\end{lstlisting}
+The existing regularization is retained. No physical gate, tolerance,
+endpoint-forcing policy, or monotonic-cleanup policy was relaxed.
+
+\subsection{Measured outcome and its limits}
+The NumPy optimizer terminated successfully by its gradient criterion in
+25 function evaluations. The largest assembled residual is
+$4.8106\times10^{-4}$, the D seam is exactly zero, C+ compatibility
+maximum is 0.0011553 degrees and C- maximum is 0.00012017 degrees,
+both below the 0.005-degree policy. All eleven physical/topology gates
+pass, as do the independent radial-validity and full-CDE thrust gates.
+Reliability is \code{rao_variational_residual_solved};
+\code{converged=True}. The measured $C_F=1.5794212$ is approximately
+0.22 percent below the published 1.5829 for the source example, while the
+explicit throat/start-line model differences from Iteration 07 remain.
+
+This demonstrates that the combined boundary, conditioning and numerical
+resolution repairs can satisfy the existing gates in one documented
+configuration. It does not isolate one change as the sole cause, prove
+global optimality, establish a general parameter domain, verify the
+unavailable original KL coefficient table, or validate hardware. The later
+independent solves and common-coordinate field comparisons below test the
+limits of this result. A regression retains the actual all-gate pass rather
+than merely checking that a finite contour was returned.
+
+\subsection{First refinement pair: retain the failed result}
+The independent finer configuration $(n_c,n_k,\Delta\theta)=$
+$(24,32,0.125^\circ)$ also converges and passes all internal gates,
+with $C_F=1.57956997$ and C+ maximum 0.000323787 degrees. Nevertheless
+the common-coordinate comparison of the 16/24 and 24/32 solutions
+fails the unchanged field policy: maximum angle difference is
+0.09237 degrees (limit 0.05 degrees), and the minimum bidirectional
+field coverage is 0.88298 (minimum 0.90). Mach maximum difference
+0.002255, relative thrust difference $9.417\times10^{-5}$ and maximum
+wall-radius difference $0.001012R_t$ pass their respective limits.
+
+Thus both local solves passing is insufficient to call the coarser
+profile resolution-accepted. The script intentionally returns exit 2
+for this two-level check. The next finer solve and comparison preserve
+this failed pair rather than deleting it or changing its tolerances.
+
+The report-only comparison with all seven published Table-2 wall states
+also gives useful limits: finer-grid Mach differences are approximately
+$-0.029$ to $-0.004$, and flow-angle differences approximately
+$-0.953$ to $+0.335$ degrees. No new acceptance threshold was invented
+for these rounded, different-boundary-model data. Passing internal
+compatibility does not mean every published local state has been reproduced.
+
+\section{Iteration 14: Diagnose the finer-grid branch change}
+The third numerical level, $(32,48,0.0625^\circ)$, did not continue the
+same successful branch. It returned $C_F=1.59831$ and failed BVP, MOC,
+and radial-validity gates; its exit-radius mismatch was approximately
+$0.2421R_t$. The kernel angle changed by 2.34375 degrees. The subsequent
+field comparison failed dramatically, with Mach maximum difference
+0.2347, angle difference 6.801 degrees and minimum coverage 0.1121.
+These data were retained as a failed attempt; no fourth-grid extrapolation
+or relaxed tolerance was justified from this trend.
+
+Seed inspection identified a concrete computational cause:
+\code{build_kernel} reached its default 500-row limit and returned
+\code{reached_wall=False}, but \code{set_theta_b} still constructed a
+DE topology and labeled it \code{fixed_end_secant}. The supposed finer
+solution therefore started from a truncated kernel, at a different angle,
+with a seed exit station 6.42449 instead of the requested 2.94.
+This is not evidence that correctly resolved MOC theory diverges.
+
+\buildfig{figures/moc_audit/kernel_capacity_and_compatibility.pdf}
+{Two separate measured experiments. Left: the same 48-point starting line,
+0.0625-degree turning limit and prescribed angle, with only the row capacity
+changed; the initial data line adds one stored row. Right: the original and
+repaired Nozzle-B numerical profiles, with their explicitly different controls
+and residual weights, against the unchanged local C+ threshold. The right panel
+is not an isolated mesh-order experiment or a proof of field convergence.}{0.98}
+
+The resulting change added an explicit row-capacity control, preserving
+the existing default, together with refusal of incomplete kernels before
+both preferred and fallback BVP seeding. Capacity exhaustion must not be misclassified
+as an insufficient-expansion angle and used to move the angle bracket in
+the wrong direction. A larger explicit capacity may be used on finer
+meshes; accuracy tolerances remain unchanged. The direct fixed-angle
+500-versus-1,000-row experiment, source changes and repeat refinement
+are recorded in the next iteration.
+
+\subsection{Broad regression checkpoint before the row-budget repair}
+The 24-file MOC, reference, residual, topology, JAX, sensitivity, CLI,
+transonic and benchmark run completed with 296 passed, two failed,
+20 slow tests deselected, and two expected deprecated-march warnings
+in 820.05 seconds. Exit status was 1. Both failures were the independently
+proven preexisting LEA/TOP length/status expectations described in
+Iteration 07. The complete output is
+\code{analysis/pre_t15_combined_pytest.log}, explicitly the checkpoint
+\emph{before} the subsequent row-capacity repair.
+Source hashes for that checkpoint are retained separately from the final
+source inventory. Later changes require their own affected-path tests.
+
+\section{Iteration 15: Make kernel capacity explicit and reject partial seeds}
+The fixed-angle experiment confirmed that a 500-step budget stores 501 rows
+but only reaches 15.78558 degrees of the requested 27.65625-degree arc.
+With a 1,000-step budget the same calculation reaches the arc end in 880
+stored rows. The initial data line explains the extra stored row.
+
+The new \code{kernel_max_rrcs} control preserves the default 500 and
+is threaded through the host kernel builders, preferred/fallback BVP seeds,
+topology convenience builder and live-angle host rebuild. Invalid budgets
+are rejected. The low-level builder may still return an explicitly partial
+diagnostic object; high-level design consumers now reject it before DE
+construction or successful seed provenance. \code{IncompleteKernelError}
+escapes the angle-bracketing catches, so resource exhaustion cannot be
+mistaken for an insufficient expansion angle. Completion, row count and
+budget are recorded in the numerical context. Increasing capacity during
+refinement is permitted; treating an incomplete kernel as a refined field is not.
+
+The JAX live-angle setup also checks its static allocation against the
+declared budget. Independent review then identified that this allocation
+estimate alone is not proof of actual live-march completeness; that issue
+is handled separately in Iteration 17. The host-kernel repair passed
+99 focused tests in 54.30 seconds (exit 0; four slow
+tests deselected). These tests include NASA controls, partial-kernel
+refusals, propagation, context, AD parity, and the real passing profile.
+
+The adequate-budget finest solve now has a complete 887-row kernel,
+$\theta_B=27.8515625$ degrees, $C_F=1.57931261$, and C+ maximum
+0.00015848 degrees. It passes all eleven raw physical/topology gates,
+BVP, Eq.~(5) and thrust checks. Promotion nevertheless refuses because
+the raw wall ends near 2.93975 instead of 2.94. The field comparison
+also still fails: coverage 0.90863 now passes, but Mach maximum
+0.00678, angle maximum 0.23503 degrees, angle-$B$ difference
+0.1953125 degrees and D-fraction difference 0.002652 exceed their
+unchanged limits. The resource defect is repaired; those remaining
+accuracy and endpoint issues are not concealed.
+
+\section{Iteration 16: Separate seed-search accuracy from final closure}
+The preferred seed hardcoded eight angle-search iterations, intentionally
+trading seed quality for speed while the kernel angle remained frozen in
+the subsequent solve. That numerical choice was tested against
+the tighter field-comparison requirements. At the 24/32 grid, increasing
+the existing search budget from 8 to 25 changes $\theta_B$ from
+27.65625 to 27.752341628 degrees and reduces the seed's relative exit
+station error from 0.003827 to $2.043\times10^{-8}$. Forty iterations
+give the same selected angle because the angular bracket-width floor
+has already been reached. The requested $10^{-8}$ residual criterion
+is therefore not falsely labeled satisfied.
+
+A BVP run with that independently computed angle still undershoots the
+exit, near 2.93994. Thus seed accuracy and soft endpoint constraints are
+separate effects. The change exposed the existing search budget and
+criterion, retained defaults 8 and $10^{-6}$, and recorded actual
+iterations, best residual, criterion-met flag and termination reason.
+The controls and truthful termination report passed the later 114-test
+focused suite, including parameter forwarding and unchanged defaults.
+These checks validate the controls and report independently of whether a
+finer field comparison passes.
+
+The completed diagnostic with independently computed accurate angles on the
+24/32 and 32/48 grids confirms the separation. The angle-$B$ drift shrinks to
+0.006482 degrees, field Mach maximum difference is 0.0016753, and minimum
+coverage is 0.922699; those limits pass. Field angle maximum difference is
+still 0.0649365 degrees against 0.05, and both walls remain short of the
+export interval. Relative thrust difference is approximately
+$7.267\times10^{-5}$, wall difference $0.0004589R_t$, and D-fraction
+difference $2.409\times10^{-5}$. The diagnostic process completed with
+exit 0 because it successfully measured the trials; its retained numerical
+acceptance result is \emph{FAIL}. The distinction is explicit in
+\code{validation/t16_seed_accuracy/report.json}.
+
+\section{Iteration 17: Check the actual final live JAX kernel}
+The live residual consumed \code{m.bd} without checking
+\code{m.reached_wall}. The static allocation estimate counts half-angle
+special steps, but accepted raw steps may be smaller; that estimate does
+not prove every march reaches B. A complete host seed and later complete
+host rebuild also cannot prove the optimized live field was complete.
+The repair recomputes the actual final live march and refuses its
+result if incomplete. This does not claim all trial iterates are qualified,
+and it does not add support for combining exact attachment with live-angle
+optimization. Eleven focused tests passed, two slow tests were deselected,
+and the run completed in 11.98 seconds (exit 0;
+\code{validation/t17_pytest.log}). Independent review also checked the final
+guard's placement before residual/report/return. Allocation documentation
+now states the estimate's limits. These results validate the refusal
+behavior, not a full-domain live-angle solve.
+
+\section{Iteration 18: Exact fixed-exit boundary parameterization}
+The fixed-end model prescribes both $(L,R_E)$, yet finite least squares
+can trade a small endpoint miss for other residuals. The exporter correctly
+refuses to extend a wall which stops short. Independent checks of the
+following derivation confirmed consistency with the existing midpoint geometry:
+\begin{align}
+\Delta x &= L-x_{n-2}, & \Delta r &= R_E-r_{n-2},\\
+\beta &= \operatorname{atan2}(\Delta r,\Delta x), &
+\mu_i &= \sin^{-1}(1/M_i),\\
+r_{n-1} &= R_E, &
+\theta_{n-1} &= 2\beta-\theta_{n-2}-\mu_{n-2}-\mu_{n-1}.
+\end{align}
+This solves the final discrete C+ relation
+$\Delta r=\Delta x\tan[(\theta_{n-2}+\theta_{n-1}+
+\mu_{n-2}+\mu_{n-1})/2]$ on its downstream, outward branch.
+Both endpoint values can then be eliminated from the optimizer vector,
+recomputed through the entire prefix at each evaluation, and reconstructed
+to arithmetic-roundoff accuracy. There is no post-solve endpoint forcing
+and no additional free-exit transversality equation.
+The numerical implementation uses
+$\mu_i=\sin^{-1}[1/\max(M_i,1.000001)]$, identical to both existing
+geometry integrators; an independent domain check still requires $M_i>1$.
+
+This is equivalent to the intended exact constraints, \emph{not} to the old
+finite soft-penalty objective: restricting those tradeoffs is deliberate.
+Rice PDF pages 9--10 supplies the prescribed-endpoint construction; the
+algebraic elimination is an implementation derivation. The new mode is
+opt-in and requires the static exact-D characteristic BDE formulation.
+Admissibility requires finite supersonic states, a finite ordered prefix,
+positive last increments above a scale-aware roundoff guard, the principal
+$\beta\in(0,\pi/2)$ branch outside the integrator's tangent fallback, and
+a derived angle inside the existing solver bounds. No angle is clipped.
+Those bounds are $[-10,65]$ degrees. The positive-increment guard is
+$64\epsilon_{\mathrm{mach}}\max(|L|,|R_E|,|R_t|)$ in length units,
+and the existing tangent fallback threshold is $10^{-12}$. They are
+numerical domain conventions, not additional literature physics.
+
+Invalid trial branches may use an explicitly flagged finite extension only
+to evaluate guiding domain penalties and derivatives. A typed final-domain
+refusal must prevent their promotion even if the optimizer reports success.
+Acceptance requires host/JAX and finite-difference derivative checks,
+roundoff endpoint closure, invalid-branch refusal, preserved defaults and
+the unchanged independent flow/topology gates.
+
+The focused implementation suite completed with 114 passed and two slow tests
+deselected in 57.83 seconds (exit 0). After adding an explicit early nonfinite
+refusal and report-only worst-field coordinates, the affected final suite
+completed with 42 passed in 19.21 seconds (exit 0). The records are
+\code{validation/t18_result.json}, \code{validation/t18_focused_pytest.log} and
+\code{validation/t18_final_domain_pytest.log}. The derivative test compares the
+entire reduced residual Jacobian with centered finite differences and verifies
+the exit-angle dependencies on kdf, exit Mach and prefix state. Separate tests
+make both optimizers claim success on invalid boundary data and require refusal.
+The tests therefore examine mathematical dependencies and acceptance behavior,
+not only successful compilation.
+
+The final independent code review found no material defect within
+this scope and confirmed the remaining applicability limits. Actual
+profile/refinement acceptance is recorded separately from these component
+checks. The benchmark runner now
+forwards the opt-in attachment, capacity, seed-accuracy, turning-step and
+physics-weight controls without changing shipped case defaults or thresholds.
+
+\subsection{Three solved levels: endpoint fixed, field comparison still fails}
+With exact D and E, seed budget 25, requested seed tolerance $10^{-8}$,
+physics weight 1 and the other Iteration-13 physical inputs unchanged,
+all three independently solved levels pass BVP, all eleven raw physical
+gates, Eq.~(5), full-CDE thrust, and export. Each raw exit is
+$(x_E,r_E)=(2.94,2.2300224214)R_t$. No endpoint forcing or monotonic
+cleanup is used by export.
+
+\begin{longtable}{@{}P{0.23\linewidth}P{0.15\linewidth}P{0.18\linewidth}P{0.19\linewidth}P{0.14\linewidth}@{}}
+\toprule\textbf{$n_c/n_k$, turning step} & \textbf{Evaluations} & \textbf{$C_F$} & \textbf{Max weighted residual} & \textbf{C+ max, degrees}\\\midrule
+\endhead
+16/24, $0.25^\circ$ & 142 & 1.57922759 & $3.375\times10^{-4}$ & 0.0012154\\
+24/32, $0.125^\circ$ & 297 & 1.57936995 & $1.455\times10^{-4}$ & 0.0003450\\
+32/48, $0.0625^\circ$ & 440 & 1.57948822 & $8.252\times10^{-5}$ & 0.0001469\\
+\bottomrule
+\end{longtable}
+
+The coarse-to-middle comparison still fails coverage 0.883289, maximum
+field angle 0.079660 degrees, and exit-angle drift 0.051755 degrees.
+The middle-to-finest comparison passes every metric except maximum
+field angle: 0.0637603 degrees against 0.05. Coverage is now 0.917791,
+Mach maximum difference 0.0017661, pressure-ratio difference 0.00017654,
+and wall difference $0.0004411R_t$. Its worst angle location is
+$(x/R_t,r/R_t)=(2.207127684,1.680854790)$: 20.10633858 degrees on the
+finest mesh versus 20.17009887 from middle-grid interpolation.
+The process correctly exits 2. The exact-endpoint repair is accepted;
+that pair's field acceptance is still \emph{FAIL}, as retained in
+\code{validation/t18_three_level_exact_exit/report.json}.
+
+\subsection{Actual JAX integration: retain an underresolved result}
+A separate real 8/8-point static JAX solve with exact D and E terminates
+successfully in 69 LM steps, with admissible boundary geometry and exit
+$x_E=2.9399999999999995R_t$. The runtime completes in 9.05 seconds,
+but C+ error 0.0097119 degrees and axial mass conservation fail their
+independent physical gates. It remains \code{geometric_approximation}
+and \code{converged=False}. Thus the JAX wrapper executes the new
+parameterization, while correctly refusing to promote an underresolved
+field. Runtime success is not recorded as a mesh-validation pass.
+See \code{validation/t18_jax_runtime_probe.json}.
+
+\section{Iteration 19: Resolve the remaining field-angle gate}
+\subsection{Additional refinement and unchanged limits}
+The maximum angle error decreases from 0.07966 to 0.06376 degrees, while
+its RMS decreases from 0.02120 to 0.009683 degrees. Other final-pair
+metrics pass and the error is localized at a measured physical coordinate.
+One further pair was therefore evaluated with the same angle
+threshold: the existing 32/48-point, $0.0625^\circ$ profile was compared with
+48/64 points, $0.03125^\circ$ and a 2,000-step kernel capacity.
+All physical inputs, exact-boundary modes, seed controls, weights,
+regularization and acceptance thresholds remain identical. The optimizer
+budget remains 1,000 function evaluations. The previous full solution object
+was not retained by the three-level process, so the 32/48 baseline is
+recomputed before the additional solve; its reported values reproduce the
+earlier result.
+
+\subsection{Completed result and independent review}
+The additional solve terminates by \code{ftol} after 891 function
+evaluations. Its complete kernel stores 1,770 rows against the explicit
+2,000-step capacity, with $\theta_B=27.76061475$ degrees. The maximum
+weighted residual is $3.8072\times10^{-5}$, C+ maximum
+$0.0000427292$ degrees and C- maximum $0.0000112508$ degrees.
+All eleven raw physical/topology gates, BVP, Eq.~(5), thrust, admissible
+boundary domain and export pass. The raw exit is the requested endpoint,
+without post-solve forcing or cleanup. Its $C_F=1.57955115$ is approximately
+0.212 percent below the published 1.5829, subject to the explicitly
+different throat and starting-line models.
+
+\begin{longtable}{@{}P{0.47\linewidth}P{0.23\linewidth}P{0.20\linewidth}@{}}
+\toprule\textbf{Common-coordinate metric} & \textbf{Measured} & \textbf{Unchanged limit}\\\midrule
+\endhead
+Maximum Mach difference & 0.00080366 & $\leq0.005$\\
+Maximum flow-angle difference & 0.0228912 degrees & $\leq0.05$ degrees\\
+Maximum pressure-ratio difference & 0.0000749481 & $\leq0.001$\\
+Minimum bidirectional field coverage & 0.950270 & $\geq0.90$\\
+Maximum wall-radius difference / $R_t$ & 0.000226733 & $\leq0.002$\\
+Angle-$B$ difference & 0.0017911 degrees & $\leq0.05$ degrees\\
+Exit-angle difference & 0.0090863 degrees & $\leq0.05$ degrees\\
+D-fraction difference & 0.0000082903 & $\leq0.0005$\\
+Relative thrust-coefficient difference & 0.0000398443 & $\leq0.001$\\
+\bottomrule
+\end{longtable}
+
+The final pair passes every declared field, wall and global-output criterion,
+over 2,546 comparison coordinates. Its maximum angle discrepancy is at
+$(2.479149212,1.930288975)R_t$: 18.88536963 degrees on the 32/48 grid
+versus 18.90826085 from refined-grid interpolation. Field angle RMS is
+0.0039017 degrees and the 99th percentile is 0.014558 degrees.
+This is a passing finite-resolution comparison, not an observed-order
+proof or a continuum-error bound. No fifth level is needed for the
+specified acceptance test.
+
+\buildfig{figures/moc_audit/fixed_context_refinement.pdf}
+{Completed exact-boundary, accurate-seed comparisons. Each label gives the
+control/starting-point counts of two independent solves; the throat turning
+limit halves at each successive level. The earlier pairs retain their failed
+angle or coverage results. Only the final pair passes every declared metric.
+Connecting the measured points does not establish an asymptotic convergence
+order or a continuum-error bound.}{0.98}
+
+The pair runner reports exit 0 after 1,497.54 seconds, including a
+282.56-second recomputed baseline and 1,213.29-second refined solve.
+This computational cost is material; the accepted profile is not silently
+made the default for every caller. The complete record is
+\code{validation/t19_refinement/report.json}. Compact field arrays are banked
+alongside it; larger local solution pickles remain working artifacts.
+The packaged reproduction command is:
+\begin{lstlisting}
+.venv-jax/bin/python -m scripts.audit_moc_refinement_pair \
+  --output-dir builds/moc_refinement_pair_check
+\end{lstlisting}
+It runs the accepted pair directly, omitting earlier coarse levels. The runner
+was packaged from the completed experiment with unchanged configuration and
+acceptance expressions; import, direct/module help, compilation and AST
+equivalence checks pass. The expensive solve was not rerun merely to change
+its file location. See \code{validation/t19_packaging_result.json}.
+
+An independent re-evaluation verified the current source and saved-array
+hashes, recomputed bidirectional linear interpolation from the NPZ payloads,
+and calculated pressure directly from the constant-$\gamma$ isentropic formula.
+Mach, angle, pressure and coverage reproduce the reported metrics to
+floating-point tolerance and all pass. This re-evaluation avoids the
+production comparison wrapper. Other physical flags were reviewed from
+the completed solves, not independently resimulated. The record is
+\code{analysis/final_field_reevaluation.json}. The pair satisfies the declared
+numerical policy for its documented configuration.
+
+All four accurate-seed searches stop at the angular bracket floor rather
+than satisfying the requested $10^{-8}$ seed criterion. Their measured
+best errors are explicitly reported, including $2.486\times10^{-8}$
+on the added grid. That is not mislabeled convergence: the seed is an
+initial frozen-kernel construction, while exact endpoint closure and all
+final acceptance tests are evaluated on the solved state.
+
+\subsection{Post-freeze integration checkpoint}
+The separate post-freeze suite of point-process failure, characteristic
+pairing, residual, stationarity, radial-validity, CLI and source-reference
+tests completes with 69 passed in 32.06 seconds (exit 0). It is recorded in
+\code{analysis/post_freeze_integration_result.json}. The 114-test component
+suite, final 42-test affected suite and this 69-test integration suite have
+overlapping coverage and are not summed into a claimed unique-test total.
+The older 296-pass/two-failure checkpoint remains explicitly pre-capacity
+repair, with its separate source inventory and known LEA/TOP failures.
+
+\section{Final audit and remaining evidence}
+\subsection{What is established, and what a green local gate means}
+The characteristic-family signs and axisymmetric source term agree with the
+independently checked governing equations. The audit found several real
+implementation and integration defects, rather than evidence that the entire
+MOC formulation was unusable: ignored radius input, accepted exhausted point
+iterations, accepted incomplete kernels, inactive optimizer columns, a
+misdirected CLI validity check, and incomplete model identity in refinement
+comparisons. These repairs have bounded acceptance tests and retained source
+evidence. Exact D and E elimination are deliberately opt-in numerical
+parameterizations of the prescribed boundary problem.
+
+A successful nonlinear optimizer, a small weighted residual, a locally
+compatible characteristic net, a source-contour comparison, an accepted
+common-coordinate refinement pair and physical validation are different
+claims. The structured report keeps their decisions separate. The numerical
+policies in this chapter were not relaxed to make a failed attempt green.
+The two preexisting LEA/TOP benchmark status failures remain visible; they
+are not evidence that these MOC equations failed their source controls.
+
+\subsection{Research questions requiring additional primary evidence}
+The original KL-1969 coefficient table and velocity normalization have not
+been established. The removed verification claim does not prove the existing
+coefficients wrong; it makes their evidentiary status accurate. Resolving
+that question requires an accessible original table or another primary
+derivation, followed by independent transonic benchmarks. It would be
+incorrect to replace the coefficients solely to improve the current gates.
+The exact-axis limit remains a targeted research question: the audit did not
+establish an active defect in the current midpoint callers.
+
+\subsection{Implemented capabilities with incomplete validation}
+Host/JAX residual and derivative parity verifies the examined discrete
+formulation, not convergence of every JAX optimizer solve. The new live-kernel
+guard prevents acceptance of an incomplete final march but does not certify
+every trial iterate. Reduced-coordinate sensitivity output is explicitly
+refused until the complete derivative chain is supported. A documented
+single-context passing profile does not define a general accuracy envelope.
+Additional independently sourced full-flow reference cases and parameter-domain
+studies remain necessary before a broad benchmark-validation label is justified.
+
+\subsection{Architecture and scope boundaries}
+The default MDO contour provider remains TOP/B\'ezier; this work does not
+silently switch it to a variational MOC inner loop. The general solver defaults
+are preserved, and a numerical profile must explicitly request its refinement,
+resource and attachment controls. The standard contour conversion can reconcile
+the throat join with a cubic bridge; that CAD reconciliation is distinct from
+qualifying the raw MOC wall and does not establish physical manufacturability
+or measured nozzle performance.
+
+Reacting flow, a thermodynamically consistent variable-gas formulation,
+shock fitting, viscous/separation prediction and a general differentiable
+forward-wall net are potential extensions outside the current gate-repair
+scope. They require their own equations, boundary specifications and independent
+validation. The knowledge-graph coverage gap is delivered as an explicit report
+and traceable research payload; unrelated graph stores were not bulk-rewritten
+or marked reviewed merely because this audit ran.

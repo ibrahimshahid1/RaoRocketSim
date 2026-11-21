@@ -1,0 +1,77 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.85in,headheight=15pt,headsep=18pt,footskip=25pt]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,graphicx}
+\usepackage{xurl}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
+\usepackage{enumitem,needspace}
+\usepackage{titlesec,fancyhdr,lastpage}
+\usepackage{listings}
+\usepackage[colorlinks=true,linkcolor=teal,citecolor=teal,urlcolor=teal]{hyperref}
+\definecolor{ink}{HTML}{19333C}
+\definecolor{teal}{HTML}{176D76}
+\definecolor{muted}{HTML}{51616B}
+\definecolor{pale}{HTML}{EEF4F5}
+\hypersetup{pdftitle={From MOC Verification to an Engine Solver Suite},pdfsubject={Literature-grounded formulation, implementation status, and engine MDO roadmap}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{muted}RaoRocketSim / Solver-suite roadmap}
+\fancyhead[R]{\footnotesize\sffamily\color{muted}21 November 2026}
+\fancyfoot[R]{\footnotesize\sffamily\color{muted}\thepage\ / \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\titleformat{\section}{\Large\sffamily\bfseries\color{ink}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries\color{teal}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{ink}}{\thesubsubsection}{0.6em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.15}
+\setlist{itemsep=3pt,topsep=4pt,leftmargin=1.6em}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\code}[1]{{\small\path{#1}}}
+\newcommand{\current}{\textbf{Current implementation.}\ }
+\newcommand{\proposal}{\textbf{Proposed implementation.}\ }
+\newcommand{\evidence}{\textbf{Evidence and limits.}\ }
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Rt}{R_t}
+\newcommand{\Ree}{R_e}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,backgroundcolor=\color{pale},frame=none,xleftmargin=6pt,xrightmargin=6pt}
+\numberwithin{equation}{section}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.8cm}
+{\Huge\sffamily\bfseries\color{ink}From MOC Verification\\[0.15cm]to an Engine Solver Suite\par}
+\vspace{0.8cm}
+{\Large\sffamily\color{teal}Formulation, implementation status,\\and an MDO integration roadmap\par}
+\vspace{0.8cm}
+21 November 2026\par
+\vspace{1cm}
+\textbf{Scope.} Thermodynamically consistent variable-gas flow, shock fitting,
+viscous and separated-flow prediction, and a general differentiable
+forward-wall characteristic net.
+\vspace{0.4cm}
+\textbf{Principal finding.} None of the four requested capabilities is complete
+as an integrated MOC extension. Substantial reusable components already exist.
+The largest engine-integration gap is that the current MDO closes thrust and
+throat size with Q1D performance before requesting contour geometry.
+\vfill
+This is a research and implementation-planning study. It records current code
+paths, original-source findings, proposed formulations, dependencies, and
+validation requirements. It introduces no new flow solver or default dispatch.
+Numerical verification, model applicability, and physical validation are
+reported separately.
+\end{titlepage}
+\tableofcontents
+\clearpage
+\input{sections/01_status_and_architecture.tex}
+\input{sections/02_thermodynamics.tex}
+\input{sections/03_shocks_and_viscosity.tex}
+\input{sections/04_differentiability_and_mdo.tex}
+\input{sections/05_implementation_and_validation.tex}
+\input{references.tex}
+\end{document}

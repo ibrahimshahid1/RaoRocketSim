@@ -1,0 +1,189 @@
+{
+  "purpose": "Numerical coalescence probe; no physical shock-location or current-chart convergence validation",
+  "git_head": "d636d854cd485c6f5f40e61d9360c55f1aed9945",
+  "source_sha256": {
+    "raosim/moc.py": "85205a1e6d3a9c52a17a9c4707889bef6cf9dedc69ed2d208503eeea706371f8",
+    "raosim/moc_bounded.py": "4bf11dc43026a1fea57404bc36cc7e18ad32a33d127ad3226e8fb3c6a3a15a9a",
+    "raosim/nasa_moc.py": "cf909f9107f3011e0e4227bfd6dc254804728039b77bb2ca19fd299cd2b91e44",
+    "raosim/nozzle_geometry.py": "8e215c42c59e39da16dfbb3e097d24f039bc4f5337911d17660e1edbfeac8578",
+    "raosim/rao_top_chart.py": "67defd60c24e18ea481d0b95df2843382254940eec663cb5afece7491b57e1a0"
+  },
+  "runs": [
+    {
+      "label": "historical_explicit",
+      "theta_n": 30.0,
+      "theta_e": 15.5,
+      "length": 0.12992034147036688,
+      "n": 24,
+      "dtheta_deg": 0.5,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.02262872237334089,
+        0.021913258583465253
+      ],
+      "n_rows": 119,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "historical_explicit",
+      "theta_n": 30.0,
+      "theta_e": 15.5,
+      "length": 0.12992034147036688,
+      "n": 48,
+      "dtheta_deg": 0.25,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.021831734011229093,
+        0.021857480022353985
+      ],
+      "n_rows": 236,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "historical_explicit",
+      "theta_n": 30.0,
+      "theta_e": 15.5,
+      "length": 0.12992034147036688,
+      "n": 96,
+      "dtheta_deg": 0.125,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.020921597814189914,
+        0.021791788872153904
+      ],
+      "n_rows": 469,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "historical_explicit",
+      "theta_n": 30.0,
+      "theta_e": 15.5,
+      "length": 0.12992034147036688,
+      "n": 144,
+      "dtheta_deg": 0.0625,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.0209734455701788,
+        0.021795693049358578
+      ],
+      "n_rows": 945,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "current_chart",
+      "theta_n": 25.74,
+      "theta_e": 10.49,
+      "length": 0.12992034147036688,
+      "n": 24,
+      "dtheta_deg": 0.5,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.05526913562011712,
+        0.018814536173460798
+      ],
+      "n_rows": 102,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "current_chart",
+      "theta_n": 25.74,
+      "theta_e": 10.49,
+      "length": 0.12992034147036688,
+      "n": 48,
+      "dtheta_deg": 0.25,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.051569028144705056,
+        0.0189689632161553
+      ],
+      "n_rows": 203,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "current_chart",
+      "theta_n": 25.74,
+      "theta_e": 10.49,
+      "length": 0.12992034147036688,
+      "n": 96,
+      "dtheta_deg": 0.125,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.05178828098329826,
+        0.018955333411463497
+      ],
+      "n_rows": 402,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    },
+    {
+      "label": "current_chart",
+      "theta_n": 25.74,
+      "theta_e": 10.49,
+      "length": 0.12992034147036688,
+      "n": 144,
+      "dtheta_deg": 0.0625,
+      "complete": false,
+      "stop": "rrc_coalescence",
+      "fold": [
+        0.050727367167107615,
+        0.01899553826267268
+      ],
+      "n_rows": 811,
+      "Rt_m": 0.02,
+      "epsilon": 10.0,
+      "gamma": 1.2,
+      "length_percent": 80.0,
+      "Rd_over_Rt": 0.382,
+      "starting_line_method": "kliegel_levine",
+      "mass_tol": 0.05
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "task": "T14",
+  "status": "diagnostic_complete_refinement_not_accepted",
+  "command": ".venv-jax/bin/python -m scripts.audit_moc_reference_profile --output-dir builds/moc_audit_2026-11-19/sol_b/t14_three_level_refinement --levels 3",
+  "exit_code": 2,
+  "artifact": "t14_three_level_refinement/report.json",
+  "notes": "Original500row cap truncates finest kernel; topology selection wrongly accepted incomplete boundary. Diagnosed and repaired by T15; this historical failure is preserved.",
+  "accuracy_threshold_changes": false
+}

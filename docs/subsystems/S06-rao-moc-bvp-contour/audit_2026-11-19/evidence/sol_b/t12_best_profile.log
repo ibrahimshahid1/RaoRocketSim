@@ -1,0 +1,3 @@
+{"label": "t12_best_n16_nk24_dth0.25_weight1_budget1000", "elapsed_s": 7.107681875000708, "reliability": "rao_variational_residual_solved", "converged": true, "max_scaled": 0.0004810594527885348, "Cf": 1.5794212124271994, "cplus_max": 0.0011553165126429866, "cminus_max": 0.00012016939047439154, "seams": {"mass_rel_mismatch": 5.4821151505416064e-05, "BD_starts_at_B": 0.0, "BD_ends_at_D": 4.440892098500626e-16, "DE_starts_at_D": 0.0, "DE_ends_at_E": 0.0, "wall_starts_at_B": 0.0, "wall_ends_at_E": 0.0}, "failed_gates": {}}
+
+EXIT_CODE=0

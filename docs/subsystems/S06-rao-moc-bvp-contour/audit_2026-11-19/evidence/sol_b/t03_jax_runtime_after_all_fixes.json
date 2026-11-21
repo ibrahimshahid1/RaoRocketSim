@@ -1,0 +1,290 @@
+{
+  "config": {
+    "Rt": 1.0,
+    "epsilon": 4.973,
+    "gamma": 1.23,
+    "pa_over_p0": 0.0,
+    "length_pct": 64.0452248702277,
+    "throat_downstream_radius_factor": 0.382,
+    "throat_upstream_radius_factor": 1.5,
+    "thetaN_guess_deg": 30.0,
+    "n_control": 8,
+    "n_kernel": 8,
+    "max_nfev": 2,
+    "residual_tol": 0.005,
+    "starting_line_method": "kliegel_levine",
+    "evaluate_moc": true,
+    "residual_blocks": null,
+    "wall_method": "bde",
+    "kernel_bd": null,
+    "couple_wall": false,
+    "n_wall": 12,
+    "angle_boundary_mode": "free",
+    "kernel_d_fraction_max": null,
+    "kernel_d_fraction_min": 0.0,
+    "solver_backend": "jax",
+    "ce_seed": "auto",
+    "formulation": "characteristic",
+    "jax_constraint_weight_ladder": [
+      1.0
+    ],
+    "pin_d_mach": true,
+    "pin_d_theta": true,
+    "theta_b_freeze_deg": null,
+    "solve_theta_b": false,
+    "physics_weight": null,
+    "rao_radial_increment_tol": 1e-09,
+    "kernel_dtheta_limit_deg": 0.5,
+    "kernel_massflow_rel_tol": 0.02,
+    "moc_numerical_policy": {
+      "neighbor_mach_diagnostic_limit": 0.1,
+      "neighbor_theta_diagnostic_limit_deg": 2.0,
+      "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+      "mach_line_direction_tol_deg": 0.05,
+      "wall_tangency_tol_deg": 0.25,
+      "crossing_endpoint_fraction_of_median_edge": 0.001,
+      "cell_area_relative_tol": 1e-12,
+      "cell_area_absolute_tol_m2": 1e-18,
+      "axial_mass_cut_count": 7,
+      "axial_mass_radial_sample_count": 500,
+      "axial_mass_min_coverage": 0.98,
+      "axial_mass_min_valid_cut_count": 4,
+      "axial_mass_relative_tol": 0.005,
+      "topology_closure_distance_over_rt": 1e-05,
+      "topology_mass_residual_tol_factor": 10.0,
+      "bde_axis_band_fraction_tol": 0.1,
+      "export_polyline_turn_tol_deg": 0.25,
+      "full_cde_d_projection_over_rt_tol": 0.005,
+      "full_cde_d_mach_jump_tol": 0.02,
+      "full_cde_d_theta_jump_tol_deg": 0.5,
+      "full_cde_mass_mismatch_rel_tol": 0.02,
+      "full_control_surface_cf_relative_tol": 0.05,
+      "partial_surface_cf_relative_tol": 0.02
+    },
+    "exact_d_attachment": true
+  },
+  "elapsed_s": 5.636862416984513,
+  "reliability": "geometric_approximation",
+  "converged": false,
+  "residuals": {
+    "max_scaled": 0.00010198845764500808,
+    "rms_scaled": 1.8674290971618488e-05,
+    "mass_residual_rel": -8.127292932355564e-07,
+    "length_residual_rel": -5.420613424487065e-07,
+    "stationarity_rms": 3.19009359396647,
+    "algebraic_stationarity_rms": 0.0009783798884491451,
+    "left_mach_rms": 4.503496794877483e-16,
+    "regularization_rms": 7.776947603419818e-05,
+    "transversality_scaled": 0.8220910647668951,
+    "wall_tangency_rms": 0.0013226239785903262,
+    "characteristic_crossings": 0,
+    "group_summaries": [
+      {
+        "name": "mass",
+        "count": 1,
+        "max": 8.127292932355564e-07,
+        "rms": 8.127292932355564e-07
+      },
+      {
+        "name": "length",
+        "count": 1,
+        "max": 5.420613424487065e-07,
+        "rms": 5.420613424487065e-07
+      },
+      {
+        "name": "transversality",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "stationarity",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "algebraic_stationarity",
+        "count": 8,
+        "max": 0.00010198845764500808,
+        "rms": 4.8918994422457256e-05
+      },
+      {
+        "name": "left_mach",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "moc_cplus",
+        "count": 7,
+        "max": 2.6588369315496865e-07,
+        "rms": 1.732351793177471e-07
+      },
+      {
+        "name": "moc_cminus",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "ce_geometry",
+        "count": 19,
+        "max": 2.2515898906242816e-06,
+        "rms": 5.313085898113291e-07
+      },
+      {
+        "name": "regularization",
+        "count": 12,
+        "max": 2.1815463276414286e-06,
+        "rms": 1.5553895206839635e-06
+      },
+      {
+        "name": "penalties",
+        "count": 7,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_endpoint",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_tangency",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "cplus_ce_to_wall",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      },
+      {
+        "name": "wall_intersection",
+        "count": 0,
+        "max": 0.0,
+        "rms": 0.0
+      }
+    ]
+  },
+  "gate_report": {
+    "schema_version": 1,
+    "optimizer": {
+      "backend": "jax",
+      "success": true,
+      "message": "optimistix LevenbergMarquardt converged in 16 steps",
+      "counter": 16,
+      "counter_kind": "lm_steps",
+      "requested_max_nfev": 2,
+      "jax_minimum_steps_per_stage": 256,
+      "continuation_stage_count": 1
+    },
+    "residuals": {
+      "max_scaled": 0.00010198845764500808,
+      "limit": 0.005,
+      "passes": true,
+      "scope": "weighted_assembled_residual",
+      "physics_weight": 0.05
+    },
+    "mass": {
+      "relative_residual": -8.127292932355564e-07,
+      "limit": 0.005,
+      "passes": true
+    },
+    "length": {
+      "relative_residual": -5.420613424487065e-07,
+      "limit": 0.005,
+      "passes": true
+    },
+    "topology": {
+      "applicable": true,
+      "basis": "bde_topology_measured_mesh",
+      "passes": false,
+      "gates": {
+        "bde_physical_mesh_complete": true,
+        "mass_closure_passes": true,
+        "seam_closure_passes": true,
+        "wall_geometry_passes": true,
+        "measured_crossing_passes": true,
+        "measured_wall_tangency_passes": true,
+        "measured_compatibility_passes": false,
+        "measured_mach_line_direction_passes": true,
+        "measured_cell_orientation_passes": true,
+        "axis_condition_passes": true,
+        "axial_mass_conservation_passes": false
+      },
+      "failed_gates": [
+        "measured_compatibility_passes",
+        "axial_mass_conservation_passes"
+      ],
+      "missing_gates": [],
+      "compatibility": {
+        "cplus_max": 0.008901668579273886,
+        "cminus_max": 0.0030135230356660688,
+        "units": "deg",
+        "limit": 0.005
+      },
+      "seams": {
+        "max_distance": 0.0,
+        "units": "m",
+        "limit": 1e-05
+      }
+    },
+    "validity": {
+      "available": true,
+      "passes": true
+    },
+    "promotion": {
+      "bvp_passes": true,
+      "moc_passes": false,
+      "valid_region_passes": true,
+      "thrust_passes": true,
+      "reliability": "geometric_approximation"
+    }
+  },
+  "topology_closure": {
+    "mass_rel_mismatch": 1.3329640143633872e-06,
+    "BD_starts_at_B": 0.0,
+    "BD_ends_at_D": 0.0,
+    "DE_starts_at_D": 0.0,
+    "DE_ends_at_E": 0.0,
+    "wall_starts_at_B": 0.0,
+    "wall_ends_at_E": 0.0
+  },
+  "warnings": [
+    "Wall export endpoint mismatch: Raw Rao/MOC wall does not span the requested export interval: raw=[0, 2.94] m, requested=[0.191, 2.94] m.",
+    "Auxiliary DE-to-axis continuation terminated at a downstream characteristic caustic; the physical B-D-E region and wall remain complete.",
+    "BDE topology audit did not pass; wall construction is not MOC-promotable.",
+    "One or more raw neighboring-state increments exceed the repository diagnostic limits. This is recorded as possible under-resolution and is not interpreted as a shock; use common-coordinate refinement evidence for resolution acceptance.",
+    "BDE topology compatibility audit exceeded tolerance.",
+    "MOC closure/tangency/crossing diagnostics did not pass; do not treat this as a benchmarked Rao contour.",
+    "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+  ],
+  "export_diagnostics": {
+    "export": {
+      "endpoint_enforced_for_export": false,
+      "monotonic_cleanup_for_export": false,
+      "endpoint_mismatch_beyond_limit": true
+    },
+    "endpoint_mismatch": "Raw Rao/MOC wall does not span the requested export interval: raw=[0, 2.94] m, requested=[0.191, 2.94] m.",
+    "raw_start_m": [
+      0.0,
+      1.0
+    ],
+    "raw_end_m": [
+      2.939998406339653,
+      2.230027442507886
+    ],
+    "raw_exit_dx_m": -1.5936603467991972e-06
+  },
+  "source_sha256": {
+    "raosim/rao_variational.py": "212ce4a7183b91ff0f350b0bff0199aecbde779667a74bd3a3678b0530262db5",
+    "raosim/nasa_moc.py": "3f5e4d74754cfb5097549fd371ed2fa08f50763fd7a9865376eb45af52756974",
+    "raosim/jax/api.py": "2427c683a29b15024f509ed15026a175c0e3b529352f41689d557c9bdeb1a938",
+    "raosim/jax/assembly.py": "dc30efd8018825e63b6f096313162f43b2df6a1ee00f887e96a55652bcaa8823"
+  }
+}

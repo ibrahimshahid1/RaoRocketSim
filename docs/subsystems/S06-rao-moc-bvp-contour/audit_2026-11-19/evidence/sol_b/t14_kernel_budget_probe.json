@@ -1,0 +1,24 @@
+[
+  {
+    "max_rrcs": 500,
+    "rows": 501,
+    "reached_wall": false,
+    "fallback_used": false,
+    "requested_theta_deg": 27.65625,
+    "actual_last_wall_theta_deg": 15.785582741001724,
+    "actual_last_wall_x": 0.10391856062499912,
+    "target_wall_x": 0.1773113508954907,
+    "elapsed_s": 1.972083707980346
+  },
+  {
+    "max_rrcs": 1000,
+    "rows": 880,
+    "reached_wall": true,
+    "fallback_used": false,
+    "requested_theta_deg": 27.65625,
+    "actual_last_wall_theta_deg": 27.65625,
+    "actual_last_wall_x": 0.1773113508954907,
+    "target_wall_x": 0.1773113508954907,
+    "elapsed_s": 5.825618417002261
+  }
+]

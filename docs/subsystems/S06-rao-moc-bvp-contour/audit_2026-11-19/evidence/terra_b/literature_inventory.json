@@ -1,0 +1,261 @@
+[
+  {
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "path": "propulsion_texts/rao1958.pdf",
+    "sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "pdf_pages": 6,
+    "source_title": "G. V. R. Rao, Exhaust Nozzle Contour for Optimum Thrust, Jet Propulsion 28(6), 1958, 377–382",
+    "manifest_title": "Exhaust Nozzle Contour for Optimum Thrust",
+    "manifest_year": 1958,
+    "manifest_identifier": "10.2514/8.7324",
+    "reviewed_pdf_pages": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "review_level": "PDF text and rendered equations p3–4; p5 table rendered by parent in current conversation"
+  },
+  {
+    "document_id": "DOC_NTRS_20030067852",
+    "path": "propulsion_texts/20030067852.pdf",
+    "sha256": "7dd5dcdd9505e2f8ee9598a2c566b279958ef0de245433dce7bedc741fd35bbc",
+    "pdf_pages": 42,
+    "source_title": "Tharen Rice, 2D and 3D Method of Characteristic Tools for Complex Nozzle Development, JHU/APL RTDC-TPS-481, 2003",
+    "manifest_title": "20030067852",
+    "manifest_year": 2003,
+    "manifest_identifier": "",
+    "reviewed_pdf_pages": [
+      7,
+      8,
+      9,
+      10,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "review_level": "PDF text; rendered p8,9,19,21"
+  },
+  {
+    "document_id": "DOC_5F36B7C4DED79BB3E90754D0F81682F7A68014BE",
+    "path": "propulsion_texts/5f36b7c4ded79bb3e90754d0f81682f7a68014be.pdf",
+    "sha256": "adcf3d129ed769836138b06c7698fa519292a36981fb8fca12eb269af6c54cbd",
+    "pdf_pages": 776,
+    "source_title": "John D. Anderson Jr., Modern Compressible Flow: With Historical Perspective, third edition",
+    "manifest_title": "MODERN COMPRESSIBLE FLOW: WITH HISTORICAL PERSPECTIVE THIRD EDITION",
+    "manifest_year": 1982,
+    "manifest_identifier": "NASA SP 468",
+    "reviewed_pdf_pages": [
+      94,
+      95,
+      97,
+      98,
+      419,
+      420,
+      421,
+      422,
+      423
+    ],
+    "review_level": "Original PDF text; rendered p422 (printed406), p98 (printed82)"
+  },
+  {
+    "document_id": "DOC_52D4CA845732D962C5E49697F8B99533_LECTURE_4_5",
+    "path": "propulsion_texts/52d4ca845732d962c5e49697f8b99533_lecture_4_5.pdf",
+    "sha256": "dac8cb6dc6c07ac1fb1c7d95f8c6d408110e10384175e14dc7d4f7c27ec00151",
+    "pdf_pages": 20,
+    "source_title": "Manuel Martinez-Sanchez, MIT 16.512 Rocket Propulsion, Nozzle Design: Method of Characteristics",
+    "manifest_title": "16.512, Rocket Propulsion Lecture 8",
+    "manifest_year": 1972,
+    "manifest_identifier": "",
+    "reviewed_pdf_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "review_level": "Original PDF text; rendered p4,6; first page says lecture4–5, footer says lecture8"
+  },
+  {
+    "document_id": "DOC_YOUNG_THESIS",
+    "path": "propulsion_texts/Young_Thesis.pdf",
+    "sha256": "0132adf6527dfc43ddde36a5853c0950c434e2209d9ecb588d2ac7a19eab4ebb",
+    "pdf_pages": 128,
+    "source_title": "Reid Britton Young, Automated Nozzle Design through Axis-Symmetric Method of Characteristics Coupled with Chemical Kinetics, Auburn MS thesis, 2012",
+    "manifest_title": "This development allows the process for designing rocket nozzles to be automated, fa",
+    "manifest_year": 2012,
+    "manifest_identifier": "NASA CR-178628",
+    "reviewed_pdf_pages": [
+      1,
+      2,
+      36,
+      37,
+      38,
+      39,
+      40,
+      62,
+      63,
+      94
+    ],
+    "review_level": "Original PDF text; rendered p36 and94; Eq3.10 p62/printed51"
+  },
+  {
+    "document_id": "DOC_NTRS_19770009165",
+    "path": "propulsion_texts/19770009165.pdf",
+    "sha256": "c6aa504371b090027fc4b597aad7ca7595e6f9489997857bbc573aab437bf79f",
+    "pdf_pages": 126,
+    "source_title": "NASA SP-8120, Liquid Rocket Engine Nozzles, July1976",
+    "manifest_title": "Liquid Rocket Engine Nozzles",
+    "manifest_year": 1977,
+    "manifest_identifier": "NASA\nSPACEVEHICLE",
+    "reviewed_pdf_pages": [
+      27,
+      29,
+      79,
+      80,
+      81
+    ],
+    "review_level": "Original PDF text; rendered p26–30 but not all inspected individually"
+  },
+  {
+    "document_id": "DOC_NTRS_19830016278",
+    "path": "propulsion_texts/19830016278.pdf",
+    "sha256": "d3f0b2761591e70054c2f868f883a1b61c2bafc69dc63186dad8049e57638ebf",
+    "pdf_pages": 31,
+    "source_title": "J. L. Tuttle and D. H. Blount, Perfect Bell Nozzle Parametric and Optimization Curves, NASA RP-1104, 1983",
+    "manifest_title": "Perfect Bell Nozzle",
+    "manifest_year": 1983,
+    "manifest_identifier": "",
+    "reviewed_pdf_pages": [
+      1,
+      2,
+      5,
+      6,
+      7
+    ],
+    "review_level": "Original PDF text for applicability and symbols; curve ordinates not digitized"
+  },
+  {
+    "document_id": "DOC_DOI_10_2514_8_5837",
+    "path": "propulsion_texts/RaoRecentDevinRockNozConfig.pdf",
+    "sha256": "35a1a2a02d5e029a3bf3f3b9c6fc6280fcce533861915922ea4280cc4a3e65a8",
+    "pdf_pages": 7,
+    "source_title": "G. V. R. Rao, Recent Developments in Rocket Nozzle Configurations, ARS Journal, 1961",
+    "manifest_title": "Recent Developments in Rocket Nozzle Configurations",
+    "manifest_year": 1961,
+    "manifest_identifier": "10.2514/8.5837",
+    "reviewed_pdf_pages": [
+      1,
+      3,
+      4
+    ],
+    "review_level": "Original PDF text for contour approximations; not full formula audit"
+  },
+  {
+    "document_id": "DOC_RAO1999",
+    "path": "propulsion_texts/rao1999.pdf",
+    "sha256": "6cb9f624f75076ae764b8c1064777d7f345eea2d584212db6ef0427b56edd1f9",
+    "pdf_pages": 6,
+    "source_title": "Nozzle Optimization for Space-Based Vehicles",
+    "manifest_title": "Nozzle Optimization for Space-Based Vehicles",
+    "manifest_year": 1999,
+    "manifest_identifier": "",
+    "reviewed_pdf_pages": [],
+    "review_level": "Catalogued only; not a load-bearing source this iteration"
+  },
+  {
+    "document_id": "DOC_NTRS_19690063911",
+    "path": "propulsion_texts/experimental_validation/19690063911.pdf",
+    "sha256": "345e01f255444400a9615df4c6f9f85e0bc8d023255fb74d2340dd611fa85f33",
+    "pdf_pages": 3,
+    "source_title": "R. F. Cuffel, L. H. Back, P. F. Massier, Transonic Flowfield in a Supersonic Nozzle with Small Throat Radius of Curvature, AIAA J7(7),1969,1364–1366",
+    "manifest_title": "Transonic flowfield in a supersonic nozzle with small throat radius of curvature.",
+    "manifest_year": null,
+    "manifest_identifier": "10.2514/3.5349",
+    "reviewed_pdf_pages": [
+      1,
+      2
+    ],
+    "review_level": "Original PDF text; p2 rendered and inspected"
+  },
+  {
+    "document_id": "DOC_DOI_10_2514_2_5354",
+    "path": "propulsion_texts/hagemann1998.pdf",
+    "sha256": "f4626872b2bf3eaf77c07f04d659155c55ab90ce407ca9741614b72edb5f78b6",
+    "pdf_pages": 15,
+    "source_title": "Advanced Rocket Nozzles",
+    "manifest_title": "Advanced Rocket Nozzles",
+    "manifest_year": 1998,
+    "manifest_identifier": "10.2514/2.5354",
+    "reviewed_pdf_pages": [],
+    "review_level": "Catalogued only; not a load-bearing source this iteration"
+  },
+  {
+    "document_id": "DOC_DOI_10_2514_2_5593",
+    "path": "propulsion_texts/frey2000.pdf",
+    "sha256": "4ec2d8ef0f7f4f7fac7e6bfdd27ac56d758b460fa7d699dcb1323a14a844f734",
+    "pdf_pages": 7,
+    "source_title": "Manuel Frey and Gerald Hagemann, Restricted Shock Separation in Rocket Nozzles, JPP16(3),2000",
+    "manifest_title": "Restricted Shock Separation in Rocket Nozzles",
+    "manifest_year": 2000,
+    "manifest_identifier": "10.2514/2.5593",
+    "reviewed_pdf_pages": [
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
+    "review_level": "Original PDF text; equation-independent qualitative scope"
+  },
+  {
+    "document_id": "DOC_FULLTEXT01",
+    "path": "propulsion_texts/fulltext01.pdf",
+    "sha256": "a0bc22fdbe5808452370b593569bea8bf249a4f79cbca61fd5d5e6838084465b",
+    "pdf_pages": 130,
+    "source_title": "Jan Östlund, Flow Processes in Rocket Engine Nozzles with Focus on Flow Separation and Side-Loads, KTH licentiate thesis,2002",
+    "manifest_title": "Microsoft Word - Thesis1c52.doc",
+    "manifest_year": 2002,
+    "manifest_identifier": "NASA TN D-467",
+    "reviewed_pdf_pages": [
+      1,
+      10,
+      122,
+      123,
+      129
+    ],
+    "review_level": "Original PDF text metadata and targeted Hall search only; no KL coefficient table found"
+  },
+  {
+    "document_id": "DOC_NOZZLE_GEOMETRIES",
+    "path": "propulsion_texts/nozzle_geometries.pdf",
+    "sha256": "31f842896ec7ad9aa24b4b0f2baa7ef483b1ebb7467c30fca25ce28357d34f06",
+    "pdf_pages": 10,
+    "source_title": "Rocket Nozzle Geometries",
+    "manifest_title": "Rocket Nozzle Geometries",
+    "manifest_year": 2012,
+    "manifest_identifier": "",
+    "reviewed_pdf_pages": [],
+    "review_level": "Catalogued only; not a load-bearing source this iteration"
+  },
+  {
+    "document_id": "DOC_DOI_10_1007_S00193_018_0834_0",
+    "path": "propulsion_texts/schomberg2018.pdf",
+    "sha256": "61cea1150d556eab6d50b1e4d6e5e2759ac4136e924671d7b70ecc7021b57dea",
+    "pdf_pages": 13,
+    "source_title": "Investigation of conjugate circular arcs in rocket nozzle contour design",
+    "manifest_title": "Investigation of conjugate circular arcs in rocket nozzle contour design",
+    "manifest_year": 2018,
+    "manifest_identifier": "10.1007/s00193-018-0834-0",
+    "reviewed_pdf_pages": [],
+    "review_level": "Catalogued only; not a load-bearing source this iteration"
+  }
+]

@@ -1,0 +1,864 @@
+{
+  "scope": "one approved additional same-physics pair; no tolerance changes or automatic further refinement",
+  "recomputed_baseline_reason": "the prior native-script process ended without retaining full solution objects",
+  "source_sha256": {
+    "raosim/rao_variational.py": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+    "raosim/nasa_moc.py": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+    "raosim/transonic_kernel.py": "170f6bab30d5f78960ab4167bcb3aa7a262e79a79f9b3cbe69819162a672b324",
+    "scripts/audit_moc_reference_profile.py": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+    "raosim/rao_residuals.py": "c6a294215b88ca1489f0ac8ac49203cb6a64efb4dc17c11249442a038d65d7d8"
+  },
+  "baseline": {
+    "config": {
+      "Rt": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_downstream_radius_factor": 0.382,
+      "throat_upstream_radius_factor": 1.5,
+      "thetaN_guess_deg": 30.0,
+      "n_control": 32,
+      "n_kernel": 48,
+      "max_nfev": 1000,
+      "residual_tol": 0.005,
+      "starting_line_method": "kliegel_levine",
+      "evaluate_moc": true,
+      "residual_blocks": null,
+      "wall_method": "bde",
+      "kernel_bd": null,
+      "couple_wall": false,
+      "n_wall": 12,
+      "angle_boundary_mode": "free",
+      "kernel_d_fraction_max": null,
+      "kernel_d_fraction_min": 0.0,
+      "solver_backend": "numpy",
+      "ce_seed": "auto",
+      "formulation": "characteristic",
+      "jax_constraint_weight_ladder": [
+        1.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "theta_b_freeze_deg": null,
+      "solve_theta_b": false,
+      "physics_weight": 1.0,
+      "rao_radial_increment_tol": 1e-09,
+      "kernel_dtheta_limit_deg": 0.0625,
+      "kernel_massflow_rel_tol": 0.02,
+      "moc_numerical_policy": {
+        "neighbor_mach_diagnostic_limit": 0.1,
+        "neighbor_theta_diagnostic_limit_deg": 2.0,
+        "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+        "mach_line_direction_tol_deg": 0.05,
+        "wall_tangency_tol_deg": 0.25,
+        "crossing_endpoint_fraction_of_median_edge": 0.001,
+        "cell_area_relative_tol": 1e-12,
+        "cell_area_absolute_tol_m2": 1e-18,
+        "axial_mass_cut_count": 7,
+        "axial_mass_radial_sample_count": 500,
+        "axial_mass_min_coverage": 0.98,
+        "axial_mass_min_valid_cut_count": 4,
+        "axial_mass_relative_tol": 0.005,
+        "topology_closure_distance_over_rt": 1e-05,
+        "topology_mass_residual_tol_factor": 10.0,
+        "bde_axis_band_fraction_tol": 0.1,
+        "export_polyline_turn_tol_deg": 0.25,
+        "full_cde_d_projection_over_rt_tol": 0.005,
+        "full_cde_d_mach_jump_tol": 0.02,
+        "full_cde_d_theta_jump_tol_deg": 0.5,
+        "full_cde_mass_mismatch_rel_tol": 0.02,
+        "full_control_surface_cf_relative_tol": 0.05,
+        "partial_surface_cf_relative_tol": 0.02
+      },
+      "exact_d_attachment": true,
+      "kernel_max_rrcs": 1000,
+      "exact_exit_attachment": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "solver_mesh_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "exact_exit_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 32,
+      "n_kernel": 48,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.0625,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+      "kernel_max_rrcs": 1000,
+      "kernel_reached_wall": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "gate_report": {
+      "schema_version": 1,
+      "optimizer": {
+        "backend": "numpy",
+        "success": true,
+        "message": "`ftol` termination condition is satisfied.",
+        "counter": 440,
+        "counter_kind": "function_evaluations",
+        "requested_max_nfev": 1000,
+        "jax_minimum_steps_per_stage": null,
+        "continuation_stage_count": null
+      },
+      "residuals": {
+        "max_scaled": 8.252212164684582e-05,
+        "limit": 0.005,
+        "passes": true,
+        "scope": "weighted_assembled_residual",
+        "physics_weight": 1.0
+      },
+      "mass": {
+        "relative_residual": -2.136747183145508e-05,
+        "limit": 0.005,
+        "passes": true
+      },
+      "length": {
+        "relative_residual": 0.0,
+        "limit": 0.005,
+        "passes": true
+      },
+      "topology": {
+        "applicable": true,
+        "basis": "bde_topology_measured_mesh",
+        "passes": true,
+        "gates": {
+          "bde_physical_mesh_complete": true,
+          "mass_closure_passes": true,
+          "seam_closure_passes": true,
+          "wall_geometry_passes": true,
+          "measured_crossing_passes": true,
+          "measured_wall_tangency_passes": true,
+          "measured_compatibility_passes": true,
+          "measured_mach_line_direction_passes": true,
+          "measured_cell_orientation_passes": true,
+          "axis_condition_passes": true,
+          "axial_mass_conservation_passes": true
+        },
+        "failed_gates": [],
+        "missing_gates": [],
+        "compatibility": {
+          "cplus_max": 0.00014688870488721863,
+          "cminus_max": 2.3895421511165843e-05,
+          "units": "deg",
+          "limit": 0.005
+        },
+        "seams": {
+          "max_distance": 6.661338147750939e-16,
+          "units": "m",
+          "limit": 1e-05
+        }
+      },
+      "validity": {
+        "available": true,
+        "passes": true
+      },
+      "promotion": {
+        "bvp_passes": true,
+        "moc_passes": true,
+        "valid_region_passes": true,
+        "thrust_passes": true,
+        "reliability": "rao_variational_residual_solved"
+      }
+    },
+    "Cf": 1.579488217490045,
+    "converged": true,
+    "reliability": "rao_variational_residual_solved",
+    "export": {
+      "resampled_for_export": true,
+      "interpolation_basis": "pchip_c1_shape_preserving",
+      "c1_interpolant": true,
+      "endpoint_enforced_for_export": false,
+      "start_radius_delta": 0.0003217135635131818,
+      "end_radius_delta": 0.0,
+      "monotonic_cleanup_for_export": false,
+      "requested_point_count": 100,
+      "export_point_count": 100,
+      "max_adjacent_turn_deg": 0.13564862309937278,
+      "max_adjacent_turn_tol_deg": 0.25,
+      "polyline_turn_gate_passed": true
+    },
+    "endpoint_mismatch": null,
+    "exact_exit_domain": {
+      "valid": true,
+      "checks": {
+        "finite_state": true,
+        "supersonic_state": true,
+        "prefix_dx_positive": true,
+        "prefix_dr_positive": true,
+        "prefix_mach_line_nonsingular": true,
+        "last_dx_positive": true,
+        "last_dr_positive": true,
+        "beta_admissible": true,
+        "derived_theta_in_bounds": true,
+        "stored_theta_in_bounds": true,
+        "exit_radius_pinned": true,
+        "exit_x_pinned": true
+      },
+      "failed_checks": [],
+      "roundoff_guard_m": 4.177991286269389e-14,
+      "last_dx_m": 0.0792229088271661,
+      "last_dr_m": 0.06663679600967631,
+      "beta_rad": 0.6993222065811119,
+      "derived_theta_rad": 0.30147460507608514,
+      "actual_exit_x_m": 2.94,
+      "target_x_m": 2.94,
+      "target_radius_m": 2.230022421411946,
+      "theta_bounds_rad": [
+        -0.17453292519943295,
+        1.1344640137963142
+      ],
+      "mach_floor": 1.000001,
+      "minimum_geometry_tangent": 1e-12,
+      "classification": "exact_boundary_parameterization_domain_not_physical_shock_criterion"
+    },
+    "kernel_seed_search": {
+      "max_iter": 25,
+      "iterations": 24,
+      "termination_reason": "angle_bracket_floor",
+      "requested_abs_relative_tolerance": 1e-08,
+      "best_signed_relative_error": -5.954959412956491e-08,
+      "best_abs_relative_error": 5.954959412956491e-08,
+      "parameter_criterion_met": false,
+      "angle_bracket_width_rad": 5.201486502626196e-08,
+      "parameter": "exit_x"
+    },
+    "raw_exit_m": [
+      2.94,
+      2.230022421411946
+    ],
+    "target_exit_x_m": 2.94,
+    "warnings": [
+      "Auxiliary DE-to-axis continuation terminated at a downstream characteristic caustic; the physical B-D-E region and wall remain complete.",
+      "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+    ],
+    "published_wall_comparison": {
+      "classification": "report_only_no_acceptance_tolerance",
+      "source": "Rao 1958 Table 2, PDF page5, printed381",
+      "source_csv_sha256": "9a120f5056373d27bec91d22385585af8f73c7d1f47f306b9ffc717b22b99ec7",
+      "interpolation": "linear in actual kernel/BDE wall-node x/Rt; first duplicate x retained; no extrapolation",
+      "limitations": "Source throat/start-line assumptions differ and source values are rounded; these differences are not new gates.",
+      "samples": [
+        {
+          "x_over_rt": 0.21,
+          "available": true,
+          "published_M": 1.96,
+          "computed_M": 1.957580384291667,
+          "computed_minus_published_M": -0.002419615708332934,
+          "published_theta_deg": 28.7,
+          "computed_theta_deg": 27.8426116936377,
+          "computed_minus_published_theta_deg": -0.8573883063622993
+        },
+        {
+          "x_over_rt": 0.29,
+          "available": true,
+          "published_M": 2.01,
+          "computed_M": 1.9822048940509334,
+          "computed_minus_published_M": -0.027795105949066423,
+          "published_theta_deg": 27.8,
+          "computed_theta_deg": 27.93798801272991,
+          "computed_minus_published_theta_deg": 0.13798801272990957
+        },
+        {
+          "x_over_rt": 0.63,
+          "available": true,
+          "published_M": 2.12,
+          "computed_M": 2.0916267262574983,
+          "computed_minus_published_M": -0.02837327374250176,
+          "published_theta_deg": 26.9,
+          "computed_theta_deg": 27.243646318243528,
+          "computed_minus_published_theta_deg": 0.343646318243529
+        },
+        {
+          "x_over_rt": 0.91,
+          "available": true,
+          "published_M": 2.2,
+          "computed_M": 2.1750563940054044,
+          "computed_minus_published_M": -0.024943605994595774,
+          "published_theta_deg": 26.1,
+          "computed_theta_deg": 26.144127316139166,
+          "computed_minus_published_theta_deg": 0.04412731613916421
+        },
+        {
+          "x_over_rt": 1.52,
+          "available": true,
+          "published_M": 2.34,
+          "computed_M": 2.3274486067837117,
+          "computed_minus_published_M": -0.012551393216288176,
+          "published_theta_deg": 23.7,
+          "computed_theta_deg": 23.446858634922,
+          "computed_minus_published_theta_deg": -0.253141365078001
+        },
+        {
+          "x_over_rt": 2.3,
+          "available": true,
+          "published_M": 2.49,
+          "computed_M": 2.4858191750475935,
+          "computed_minus_published_M": -0.004180824952406681,
+          "published_theta_deg": 20.4,
+          "computed_theta_deg": 19.961348484316915,
+          "computed_minus_published_theta_deg": -0.4386515156830839
+        },
+        {
+          "x_over_rt": 2.94,
+          "available": true,
+          "published_M": 2.6,
+          "computed_M": 2.595420004325851,
+          "computed_minus_published_M": -0.004579995674149018,
+          "published_theta_deg": 17.9,
+          "computed_theta_deg": 17.273222501232944,
+          "computed_minus_published_theta_deg": -0.6267774987670549
+        }
+      ]
+    },
+    "kernel_seed": {
+      "theta_B_deg": 27.758823633193966,
+      "theta_B_provenance": "fixed_end_secant",
+      "reached_wall": true,
+      "fallback_used": false,
+      "row_count": 884,
+      "max_rrcs": 1000
+    },
+    "elapsed_s": 282.55523404100677,
+    "banked_solution": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/t19_refinement/baseline_solution.pkl",
+    "banked_field": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/t19_refinement/baseline_field.npz"
+  },
+  "refined": {
+    "config": {
+      "Rt": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_downstream_radius_factor": 0.382,
+      "throat_upstream_radius_factor": 1.5,
+      "thetaN_guess_deg": 30.0,
+      "n_control": 48,
+      "n_kernel": 64,
+      "max_nfev": 1000,
+      "residual_tol": 0.005,
+      "starting_line_method": "kliegel_levine",
+      "evaluate_moc": true,
+      "residual_blocks": null,
+      "wall_method": "bde",
+      "kernel_bd": null,
+      "couple_wall": false,
+      "n_wall": 12,
+      "angle_boundary_mode": "free",
+      "kernel_d_fraction_max": null,
+      "kernel_d_fraction_min": 0.0,
+      "solver_backend": "numpy",
+      "ce_seed": "auto",
+      "formulation": "characteristic",
+      "jax_constraint_weight_ladder": [
+        1.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "theta_b_freeze_deg": null,
+      "solve_theta_b": false,
+      "physics_weight": 1.0,
+      "rao_radial_increment_tol": 1e-09,
+      "kernel_dtheta_limit_deg": 0.03125,
+      "kernel_massflow_rel_tol": 0.02,
+      "moc_numerical_policy": {
+        "neighbor_mach_diagnostic_limit": 0.1,
+        "neighbor_theta_diagnostic_limit_deg": 2.0,
+        "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+        "mach_line_direction_tol_deg": 0.05,
+        "wall_tangency_tol_deg": 0.25,
+        "crossing_endpoint_fraction_of_median_edge": 0.001,
+        "cell_area_relative_tol": 1e-12,
+        "cell_area_absolute_tol_m2": 1e-18,
+        "axial_mass_cut_count": 7,
+        "axial_mass_radial_sample_count": 500,
+        "axial_mass_min_coverage": 0.98,
+        "axial_mass_min_valid_cut_count": 4,
+        "axial_mass_relative_tol": 0.005,
+        "topology_closure_distance_over_rt": 1e-05,
+        "topology_mass_residual_tol_factor": 10.0,
+        "bde_axis_band_fraction_tol": 0.1,
+        "export_polyline_turn_tol_deg": 0.25,
+        "full_cde_d_projection_over_rt_tol": 0.005,
+        "full_cde_d_mach_jump_tol": 0.02,
+        "full_cde_d_theta_jump_tol_deg": 0.5,
+        "full_cde_mass_mismatch_rel_tol": 0.02,
+        "full_control_surface_cf_relative_tol": 0.05,
+        "partial_surface_cf_relative_tol": 0.02
+      },
+      "exact_d_attachment": true,
+      "kernel_max_rrcs": 2000,
+      "exact_exit_attachment": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "solver_mesh_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "exact_exit_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 48,
+      "n_kernel": 64,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.03125,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+      "kernel_max_rrcs": 2000,
+      "kernel_reached_wall": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "gate_report": {
+      "schema_version": 1,
+      "optimizer": {
+        "backend": "numpy",
+        "success": true,
+        "message": "`ftol` termination condition is satisfied.",
+        "counter": 891,
+        "counter_kind": "function_evaluations",
+        "requested_max_nfev": 1000,
+        "jax_minimum_steps_per_stage": null,
+        "continuation_stage_count": null
+      },
+      "residuals": {
+        "max_scaled": 3.807163004746681e-05,
+        "limit": 0.005,
+        "passes": true,
+        "scope": "weighted_assembled_residual",
+        "physics_weight": 1.0
+      },
+      "mass": {
+        "relative_residual": -9.070811594053484e-06,
+        "limit": 0.005,
+        "passes": true
+      },
+      "length": {
+        "relative_residual": 0.0,
+        "limit": 0.005,
+        "passes": true
+      },
+      "topology": {
+        "applicable": true,
+        "basis": "bde_topology_measured_mesh",
+        "passes": true,
+        "gates": {
+          "bde_physical_mesh_complete": true,
+          "mass_closure_passes": true,
+          "seam_closure_passes": true,
+          "wall_geometry_passes": true,
+          "measured_crossing_passes": true,
+          "measured_wall_tangency_passes": true,
+          "measured_compatibility_passes": true,
+          "measured_mach_line_direction_passes": true,
+          "measured_cell_orientation_passes": true,
+          "axis_condition_passes": true,
+          "axial_mass_conservation_passes": true
+        },
+        "failed_gates": [],
+        "missing_gates": [],
+        "compatibility": {
+          "cplus_max": 4.2729214197340526e-05,
+          "cminus_max": 1.1250756111778007e-05,
+          "units": "deg",
+          "limit": 0.005
+        },
+        "seams": {
+          "max_distance": 2.220446049250313e-16,
+          "units": "m",
+          "limit": 1e-05
+        }
+      },
+      "validity": {
+        "available": true,
+        "passes": true
+      },
+      "promotion": {
+        "bvp_passes": true,
+        "moc_passes": true,
+        "valid_region_passes": true,
+        "thrust_passes": true,
+        "reliability": "rao_variational_residual_solved"
+      }
+    },
+    "Cf": 1.5795511535617586,
+    "converged": true,
+    "reliability": "rao_variational_residual_solved",
+    "export": {
+      "resampled_for_export": true,
+      "interpolation_basis": "pchip_c1_shape_preserving",
+      "c1_interpolant": true,
+      "endpoint_enforced_for_export": false,
+      "start_radius_delta": 0.0003229124113259818,
+      "end_radius_delta": 0.0,
+      "monotonic_cleanup_for_export": false,
+      "requested_point_count": 100,
+      "export_point_count": 100,
+      "max_adjacent_turn_deg": 0.13153187867618005,
+      "max_adjacent_turn_tol_deg": 0.25,
+      "polyline_turn_gate_passed": true
+    },
+    "endpoint_mismatch": null,
+    "exact_exit_domain": {
+      "valid": true,
+      "checks": {
+        "finite_state": true,
+        "supersonic_state": true,
+        "prefix_dx_positive": true,
+        "prefix_dr_positive": true,
+        "prefix_mach_line_nonsingular": true,
+        "last_dx_positive": true,
+        "last_dr_positive": true,
+        "beta_admissible": true,
+        "derived_theta_in_bounds": true,
+        "stored_theta_in_bounds": true,
+        "exit_radius_pinned": true,
+        "exit_x_pinned": true
+      },
+      "failed_checks": [],
+      "roundoff_guard_m": 4.177991286269389e-14,
+      "last_dx_m": 0.05293366366038699,
+      "last_dr_m": 0.044467199953421854,
+      "beta_rad": 0.6986921938050717,
+      "derived_theta_rad": 0.3016331901224658,
+      "actual_exit_x_m": 2.94,
+      "target_x_m": 2.94,
+      "target_radius_m": 2.230022421411946,
+      "theta_bounds_rad": [
+        -0.17453292519943295,
+        1.1344640137963142
+      ],
+      "mach_floor": 1.000001,
+      "minimum_geometry_tangent": 1e-12,
+      "classification": "exact_boundary_parameterization_domain_not_physical_shock_criterion"
+    },
+    "kernel_seed_search": {
+      "max_iter": 25,
+      "iterations": 24,
+      "termination_reason": "angle_bracket_floor",
+      "requested_abs_relative_tolerance": 1e-08,
+      "best_signed_relative_error": -2.4860091611895263e-08,
+      "best_abs_relative_error": 2.4860091611895263e-08,
+      "parameter_criterion_met": false,
+      "angle_bracket_width_rad": 5.201486508177311e-08,
+      "parameter": "exit_x"
+    },
+    "raw_exit_m": [
+      2.94,
+      2.230022421411946
+    ],
+    "target_exit_x_m": 2.94,
+    "warnings": [
+      "Auxiliary DE-to-axis continuation terminated at a downstream characteristic caustic; the physical B-D-E region and wall remain complete.",
+      "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+    ],
+    "published_wall_comparison": {
+      "classification": "report_only_no_acceptance_tolerance",
+      "source": "Rao 1958 Table 2, PDF page5, printed381",
+      "source_csv_sha256": "9a120f5056373d27bec91d22385585af8f73c7d1f47f306b9ffc717b22b99ec7",
+      "interpolation": "linear in actual kernel/BDE wall-node x/Rt; first duplicate x retained; no extrapolation",
+      "limitations": "Source throat/start-line assumptions differ and source values are rounded; these differences are not new gates.",
+      "samples": [
+        {
+          "x_over_rt": 0.21,
+          "available": true,
+          "published_M": 1.96,
+          "computed_M": 1.957558164766939,
+          "computed_minus_published_M": -0.0024418352330610738,
+          "published_theta_deg": 28.7,
+          "computed_theta_deg": 27.84314451564257,
+          "computed_minus_published_theta_deg": -0.8568554843574283
+        },
+        {
+          "x_over_rt": 0.29,
+          "available": true,
+          "published_M": 2.01,
+          "computed_M": 1.9820570143947545,
+          "computed_minus_published_M": -0.02794298560524533,
+          "published_theta_deg": 27.8,
+          "computed_theta_deg": 27.938722018448924,
+          "computed_minus_published_theta_deg": 0.13872201844892373
+        },
+        {
+          "x_over_rt": 0.63,
+          "available": true,
+          "published_M": 2.12,
+          "computed_M": 2.091625415360271,
+          "computed_minus_published_M": -0.028374584639728972,
+          "published_theta_deg": 26.9,
+          "computed_theta_deg": 27.245130910757275,
+          "computed_minus_published_theta_deg": 0.34513091075727687
+        },
+        {
+          "x_over_rt": 0.91,
+          "available": true,
+          "published_M": 2.2,
+          "computed_M": 2.1751019390969897,
+          "computed_minus_published_M": -0.0248980609030105,
+          "published_theta_deg": 26.1,
+          "computed_theta_deg": 26.14524815696189,
+          "computed_minus_published_theta_deg": 0.04524815696188966
+        },
+        {
+          "x_over_rt": 1.52,
+          "available": true,
+          "published_M": 2.34,
+          "computed_M": 2.3274378727259664,
+          "computed_minus_published_M": -0.012562127274033497,
+          "published_theta_deg": 23.7,
+          "computed_theta_deg": 23.447051899211043,
+          "computed_minus_published_theta_deg": -0.2529481007889558
+        },
+        {
+          "x_over_rt": 2.3,
+          "available": true,
+          "published_M": 2.49,
+          "computed_M": 2.4858146854676324,
+          "computed_minus_published_M": -0.004185314532367812,
+          "published_theta_deg": 20.4,
+          "computed_theta_deg": 19.960308443993178,
+          "computed_minus_published_theta_deg": -0.43969155600682086
+        },
+        {
+          "x_over_rt": 2.94,
+          "available": true,
+          "published_M": 2.6,
+          "computed_M": 2.595413559778471,
+          "computed_minus_published_M": -0.004586440221529209,
+          "published_theta_deg": 17.9,
+          "computed_theta_deg": 17.282308755084443,
+          "computed_minus_published_theta_deg": -0.6176912449155552
+        }
+      ]
+    },
+    "kernel_seed": {
+      "theta_B_deg": 27.760614752769474,
+      "theta_B_provenance": "fixed_end_secant",
+      "reached_wall": true,
+      "fallback_used": false,
+      "row_count": 1770,
+      "max_rrcs": 2000
+    },
+    "elapsed_s": 1213.2923064579954,
+    "banked_solution": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/t19_refinement/refined_solution.pkl",
+    "banked_field": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/t19_refinement/refined_field.npz"
+  },
+  "refinement": {
+    "applicable": true,
+    "passes": true,
+    "reason": "all common-coordinate field, wall, and global-output deltas satisfy the declared repository convergence policy",
+    "coarse_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "exact_exit_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 32,
+      "n_kernel": 48,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.0625,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+      "kernel_max_rrcs": 1000,
+      "kernel_reached_wall": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "fine_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "exact_exit_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 48,
+      "n_kernel": 64,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.03125,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2",
+      "kernel_max_rrcs": 2000,
+      "kernel_reached_wall": true,
+      "kernel_seed_max_iter": 25,
+      "kernel_seed_abs_tol": 1e-08
+    },
+    "metrics": {
+      "comparison_coordinate_count": 2546,
+      "coarse_node_count": 815,
+      "fine_node_count": 1850,
+      "coarse_in_fine_coverage": 0.9668711656441717,
+      "fine_in_coarse_coverage": 0.9502702702702702,
+      "minimum_field_coverage": 0.9502702702702702,
+      "mach_max_abs": 0.0008036601415017941,
+      "mach_rms_abs": 0.00016317951974426556,
+      "mach_p99_abs": 0.0004920833912795075,
+      "theta_max_abs_deg": 0.02289122104977374,
+      "theta_rms_abs_deg": 0.0039017091741248384,
+      "theta_p99_abs_deg": 0.014557954476767093,
+      "pressure_ratio_max_abs": 7.494807251619967e-05,
+      "pressure_ratio_rms_abs": 1.5229206439077127e-05,
+      "pressure_ratio_p99_abs": 4.5524961361066586e-05,
+      "wall_radius_max_over_rt": 0.00022673308724519003,
+      "wall_radius_rms_over_rt": 6.548593664102598e-05,
+      "wall_radius_p99_over_rt": 0.00020009531868920406,
+      "theta_n_abs_delta_deg": 0.0017911195755057599,
+      "theta_e_abs_delta_deg": 0.00908625385149857,
+      "kernel_d_fraction_abs_delta": 8.290279908743092e-06,
+      "thrust_coefficient_relative_delta": 3.9844275743502345e-05
+    },
+    "tolerances": {
+      "policy_id": "raosim.rao_common_coordinate_field_convergence:v1",
+      "classification": "repository_numerical_convergence_policy",
+      "mach_max_abs": 0.005,
+      "theta_max_abs_deg": 0.05,
+      "pressure_ratio_max_abs": 0.001,
+      "wall_radius_max_over_rt": 0.002,
+      "theta_n_max_abs_deg": 0.05,
+      "theta_e_max_abs_deg": 0.05,
+      "kernel_d_fraction_max_abs": 0.0005,
+      "thrust_coefficient_max_relative": 0.001,
+      "minimum_field_coverage": 0.9,
+      "wall_sample_count": 257
+    }
+  },
+  "worst_field_locations": {
+    "available": true,
+    "classification": "report_only_location_of_existing_comparison_maximum",
+    "fields": {
+      "mach": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 2.5593974374241064,
+        "interpolated_value": 2.5585937772826046,
+        "signed_interpolated_minus_target": -0.0008036601415017941,
+        "unit": "Mach"
+      },
+      "theta": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 18.885369626582097,
+        "interpolated_value": 18.908260847631873,
+        "signed_interpolated_minus_target": 0.02289122104977374,
+        "unit": "deg"
+      },
+      "pressure_ratio": {
+        "coordinate_x_over_rt_r_over_rt": [
+          2.4791492119014564,
+          1.9302889749360745
+        ],
+        "target_mesh": "coarse",
+        "interpolated_mesh": "fine",
+        "target_value": 0.049646315146002346,
+        "interpolated_value": 0.049721263218518545,
+        "signed_interpolated_minus_target": 7.494807251619967e-05,
+        "unit": "p/p0"
+      }
+    }
+  },
+  "exit_code": 0,
+  "elapsed_s": 1497.5375988330343,
+  "artifact_sha256": {
+    "baseline_field.npz": "42bb770899542663565c49dc96457df24fd005847fe43bb49cba616578e6d20c",
+    "refined_field.npz": "920ba153378bf102034203f9f0533c666b3323a17f4708fccb73dc963df4c007",
+    "baseline_solution.pkl": "4d41e0332895a36a3c94cfa52ca4c84d21170a2d3174f073c76c615be565dd9d",
+    "refined_solution.pkl": "d7a0f6a85b2ebdcb89ec001ce31c7f99dfaec0ea76a2ee0ea36e394add749667"
+  }
+}

@@ -1,0 +1,691 @@
+{
+  "schema_version": 1,
+  "scope": "single inviscid constant-gamma configuration; no domain-wide or physical validation",
+  "model_assumptions": {
+    "source_worked_contour": {
+      "upstream_radius_over_rt": 1.5,
+      "downstream_radius_over_rt": 0.45,
+      "starting_line": "Sauer transonic approximation",
+      "source_ref": "Rao 1958 PDF pages 3-4, printed pages 379-380"
+    },
+    "modeled_contour": {
+      "upstream_radius_over_rt": 1.5,
+      "downstream_radius_over_rt": 0.382,
+      "starting_line": "NASA-derived, project-modified Kliegel-Levine series"
+    },
+    "exact_boundary_reproduction": false,
+    "comparison_scope": "Published contour and integral-thrust envelope; the throat geometry and starting approximation differ from the original worked construction."
+  },
+  "coarse": {
+    "config": {
+      "Rt": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_downstream_radius_factor": 0.382,
+      "throat_upstream_radius_factor": 1.5,
+      "thetaN_guess_deg": 30.0,
+      "n_control": 16,
+      "n_kernel": 24,
+      "max_nfev": 1000,
+      "residual_tol": 0.005,
+      "starting_line_method": "kliegel_levine",
+      "evaluate_moc": true,
+      "residual_blocks": null,
+      "wall_method": "bde",
+      "kernel_bd": null,
+      "couple_wall": false,
+      "n_wall": 12,
+      "angle_boundary_mode": "free",
+      "kernel_d_fraction_max": null,
+      "kernel_d_fraction_min": 0.0,
+      "solver_backend": "numpy",
+      "ce_seed": "auto",
+      "formulation": "characteristic",
+      "jax_constraint_weight_ladder": [
+        1.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "theta_b_freeze_deg": null,
+      "solve_theta_b": false,
+      "physics_weight": 1.0,
+      "rao_radial_increment_tol": 1e-09,
+      "kernel_dtheta_limit_deg": 0.25,
+      "kernel_massflow_rel_tol": 0.02,
+      "moc_numerical_policy": {
+        "neighbor_mach_diagnostic_limit": 0.1,
+        "neighbor_theta_diagnostic_limit_deg": 2.0,
+        "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+        "mach_line_direction_tol_deg": 0.05,
+        "wall_tangency_tol_deg": 0.25,
+        "crossing_endpoint_fraction_of_median_edge": 0.001,
+        "cell_area_relative_tol": 1e-12,
+        "cell_area_absolute_tol_m2": 1e-18,
+        "axial_mass_cut_count": 7,
+        "axial_mass_radial_sample_count": 500,
+        "axial_mass_min_coverage": 0.98,
+        "axial_mass_min_valid_cut_count": 4,
+        "axial_mass_relative_tol": 0.005,
+        "topology_closure_distance_over_rt": 1e-05,
+        "topology_mass_residual_tol_factor": 10.0,
+        "bde_axis_band_fraction_tol": 0.1,
+        "export_polyline_turn_tol_deg": 0.25,
+        "full_cde_d_projection_over_rt_tol": 0.005,
+        "full_cde_d_mach_jump_tol": 0.02,
+        "full_cde_d_theta_jump_tol_deg": 0.5,
+        "full_cde_mass_mismatch_rel_tol": 0.02,
+        "full_control_surface_cf_relative_tol": 0.05,
+        "partial_surface_cf_relative_tol": 0.02
+      },
+      "exact_d_attachment": true
+    },
+    "solver_mesh_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 16,
+      "n_kernel": 24,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.25,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2"
+    },
+    "gate_report": {
+      "schema_version": 1,
+      "optimizer": {
+        "backend": "numpy",
+        "success": true,
+        "message": "`gtol` termination condition is satisfied.",
+        "counter": 25,
+        "counter_kind": "function_evaluations",
+        "requested_max_nfev": 1000,
+        "jax_minimum_steps_per_stage": null,
+        "continuation_stage_count": null
+      },
+      "residuals": {
+        "max_scaled": 0.0004810594527885348,
+        "limit": 0.005,
+        "passes": true,
+        "scope": "weighted_assembled_residual",
+        "physics_weight": 1.0
+      },
+      "mass": {
+        "relative_residual": 3.341423256926101e-05,
+        "limit": 0.005,
+        "passes": true
+      },
+      "length": {
+        "relative_residual": 2.276174824042466e-05,
+        "limit": 0.005,
+        "passes": true
+      },
+      "topology": {
+        "applicable": true,
+        "basis": "bde_topology_measured_mesh",
+        "passes": true,
+        "gates": {
+          "bde_physical_mesh_complete": true,
+          "mass_closure_passes": true,
+          "seam_closure_passes": true,
+          "wall_geometry_passes": true,
+          "measured_crossing_passes": true,
+          "measured_wall_tangency_passes": true,
+          "measured_compatibility_passes": true,
+          "measured_mach_line_direction_passes": true,
+          "measured_cell_orientation_passes": true,
+          "axis_condition_passes": true,
+          "axial_mass_conservation_passes": true
+        },
+        "failed_gates": [],
+        "missing_gates": [],
+        "compatibility": {
+          "cplus_max": 0.0011553165126429866,
+          "cminus_max": 0.00012016939047439154,
+          "units": "deg",
+          "limit": 0.005
+        },
+        "seams": {
+          "max_distance": 4.440892098500626e-16,
+          "units": "m",
+          "limit": 1e-05
+        }
+      },
+      "validity": {
+        "available": true,
+        "passes": true
+      },
+      "promotion": {
+        "bvp_passes": true,
+        "moc_passes": true,
+        "valid_region_passes": true,
+        "thrust_passes": true,
+        "reliability": "rao_variational_residual_solved"
+      }
+    },
+    "Cf": 1.5794212124271994,
+    "converged": true,
+    "reliability": "rao_variational_residual_solved",
+    "export": {
+      "resampled_for_export": true,
+      "interpolation_basis": "pchip_c1_shape_preserving",
+      "c1_interpolant": true,
+      "endpoint_enforced_for_export": false,
+      "start_radius_delta": 0.0003470799857816509,
+      "end_radius_delta": 0.0002386744884921299,
+      "monotonic_cleanup_for_export": false,
+      "requested_point_count": 100,
+      "export_point_count": 100,
+      "max_adjacent_turn_deg": 0.14547500580653408,
+      "max_adjacent_turn_tol_deg": 0.25,
+      "polyline_turn_gate_passed": true
+    },
+    "endpoint_mismatch": null,
+    "raw_exit_m": [
+      2.940066919539827,
+      2.2298043249822004
+    ],
+    "target_exit_x_m": 2.94,
+    "warnings": [
+      "Auxiliary DE-to-axis continuation terminated at a downstream characteristic caustic; the physical B-D-E region and wall remain complete.",
+      "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+    ],
+    "published_wall_comparison": {
+      "classification": "report_only_no_acceptance_tolerance",
+      "source": "Rao 1958 Table 2, PDF page5, printed381",
+      "source_csv_sha256": "9a120f5056373d27bec91d22385585af8f73c7d1f47f306b9ffc717b22b99ec7",
+      "interpolation": "linear in actual kernel/BDE wall-node x/Rt; first duplicate x retained; no extrapolation",
+      "limitations": "Source throat/start-line assumptions differ and source values are rounded; these differences are not new gates.",
+      "samples": [
+        {
+          "x_over_rt": 0.21,
+          "available": true,
+          "published_M": 1.96,
+          "computed_M": 1.9556643296728538,
+          "computed_minus_published_M": -0.004335670327146213,
+          "published_theta_deg": 28.7,
+          "computed_theta_deg": 27.73046282585463,
+          "computed_minus_published_theta_deg": -0.9695371741453691
+        },
+        {
+          "x_over_rt": 0.29,
+          "available": true,
+          "published_M": 2.01,
+          "computed_M": 1.9809991156751412,
+          "computed_minus_published_M": -0.02900088432485859,
+          "published_theta_deg": 27.8,
+          "computed_theta_deg": 27.864181544180315,
+          "computed_minus_published_theta_deg": 0.06418154418031463
+        },
+        {
+          "x_over_rt": 0.63,
+          "available": true,
+          "published_M": 2.12,
+          "computed_M": 2.0915105501143723,
+          "computed_minus_published_M": -0.02848944988562785,
+          "published_theta_deg": 26.9,
+          "computed_theta_deg": 27.23813579183183,
+          "computed_minus_published_theta_deg": 0.3381357918318315
+        },
+        {
+          "x_over_rt": 0.91,
+          "available": true,
+          "published_M": 2.2,
+          "computed_M": 2.174932600748051,
+          "computed_minus_published_M": -0.02506739925194923,
+          "published_theta_deg": 26.1,
+          "computed_theta_deg": 26.147175527222565,
+          "computed_minus_published_theta_deg": 0.047175527222563574
+        },
+        {
+          "x_over_rt": 1.52,
+          "available": true,
+          "published_M": 2.34,
+          "computed_M": 2.3275697686437717,
+          "computed_minus_published_M": -0.012430231356228116,
+          "published_theta_deg": 23.7,
+          "computed_theta_deg": 23.453297161138394,
+          "computed_minus_published_theta_deg": -0.24670283886160504
+        },
+        {
+          "x_over_rt": 2.3,
+          "available": true,
+          "published_M": 2.49,
+          "computed_M": 2.4854281049399303,
+          "computed_minus_published_M": -0.0045718950600699415,
+          "published_theta_deg": 20.4,
+          "computed_theta_deg": 19.953551667759065,
+          "computed_minus_published_theta_deg": -0.4464483322409336
+        },
+        {
+          "x_over_rt": 2.94,
+          "available": true,
+          "published_M": 2.6,
+          "computed_M": 2.595679542178709,
+          "computed_minus_published_M": -0.0043204578212909794,
+          "published_theta_deg": 17.9,
+          "computed_theta_deg": 17.20601493492288,
+          "computed_minus_published_theta_deg": -0.6939850650771184
+        }
+      ]
+    }
+  },
+  "fine": {
+    "config": {
+      "Rt": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_downstream_radius_factor": 0.382,
+      "throat_upstream_radius_factor": 1.5,
+      "thetaN_guess_deg": 30.0,
+      "n_control": 24,
+      "n_kernel": 32,
+      "max_nfev": 1000,
+      "residual_tol": 0.005,
+      "starting_line_method": "kliegel_levine",
+      "evaluate_moc": true,
+      "residual_blocks": null,
+      "wall_method": "bde",
+      "kernel_bd": null,
+      "couple_wall": false,
+      "n_wall": 12,
+      "angle_boundary_mode": "free",
+      "kernel_d_fraction_max": null,
+      "kernel_d_fraction_min": 0.0,
+      "solver_backend": "numpy",
+      "ce_seed": "auto",
+      "formulation": "characteristic",
+      "jax_constraint_weight_ladder": [
+        1.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "theta_b_freeze_deg": null,
+      "solve_theta_b": false,
+      "physics_weight": 1.0,
+      "rao_radial_increment_tol": 1e-09,
+      "kernel_dtheta_limit_deg": 0.125,
+      "kernel_massflow_rel_tol": 0.02,
+      "moc_numerical_policy": {
+        "neighbor_mach_diagnostic_limit": 0.1,
+        "neighbor_theta_diagnostic_limit_deg": 2.0,
+        "neighbor_pressure_ratio_diagnostic_limit": 0.02,
+        "mach_line_direction_tol_deg": 0.05,
+        "wall_tangency_tol_deg": 0.25,
+        "crossing_endpoint_fraction_of_median_edge": 0.001,
+        "cell_area_relative_tol": 1e-12,
+        "cell_area_absolute_tol_m2": 1e-18,
+        "axial_mass_cut_count": 7,
+        "axial_mass_radial_sample_count": 500,
+        "axial_mass_min_coverage": 0.98,
+        "axial_mass_min_valid_cut_count": 4,
+        "axial_mass_relative_tol": 0.005,
+        "topology_closure_distance_over_rt": 1e-05,
+        "topology_mass_residual_tol_factor": 10.0,
+        "bde_axis_band_fraction_tol": 0.1,
+        "export_polyline_turn_tol_deg": 0.25,
+        "full_cde_d_projection_over_rt_tol": 0.005,
+        "full_cde_d_mach_jump_tol": 0.02,
+        "full_cde_d_theta_jump_tol_deg": 0.5,
+        "full_cde_mass_mismatch_rel_tol": 0.02,
+        "full_control_surface_cf_relative_tol": 0.05,
+        "partial_surface_cf_relative_tol": 0.02
+      },
+      "exact_d_attachment": true
+    },
+    "solver_mesh_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 24,
+      "n_kernel": 32,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.125,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2"
+    },
+    "gate_report": {
+      "schema_version": 1,
+      "optimizer": {
+        "backend": "numpy",
+        "success": true,
+        "message": "`gtol` termination condition is satisfied.",
+        "counter": 34,
+        "counter_kind": "function_evaluations",
+        "requested_max_nfev": 1000,
+        "jax_minimum_steps_per_stage": null,
+        "continuation_stage_count": null
+      },
+      "residuals": {
+        "max_scaled": 0.00047409312007296034,
+        "limit": 0.005,
+        "passes": true,
+        "scope": "weighted_assembled_residual",
+        "physics_weight": 1.0
+      },
+      "mass": {
+        "relative_residual": 8.692595074170833e-05,
+        "limit": 0.005,
+        "passes": true
+      },
+      "length": {
+        "relative_residual": 5.841572556695559e-05,
+        "limit": 0.005,
+        "passes": true
+      },
+      "topology": {
+        "applicable": true,
+        "basis": "bde_topology_measured_mesh",
+        "passes": true,
+        "gates": {
+          "bde_physical_mesh_complete": true,
+          "mass_closure_passes": true,
+          "seam_closure_passes": true,
+          "wall_geometry_passes": true,
+          "measured_crossing_passes": true,
+          "measured_wall_tangency_passes": true,
+          "measured_compatibility_passes": true,
+          "measured_mach_line_direction_passes": true,
+          "measured_cell_orientation_passes": true,
+          "axis_condition_passes": true,
+          "axial_mass_conservation_passes": true
+        },
+        "failed_gates": [],
+        "missing_gates": [],
+        "compatibility": {
+          "cplus_max": 0.00032378717550562226,
+          "cminus_max": 6.0415418896383174e-05,
+          "units": "deg",
+          "limit": 0.005
+        },
+        "seams": {
+          "max_distance": 4.440892098500626e-16,
+          "units": "m",
+          "limit": 1e-05
+        }
+      },
+      "validity": {
+        "available": true,
+        "passes": true
+      },
+      "promotion": {
+        "bvp_passes": true,
+        "moc_passes": true,
+        "valid_region_passes": true,
+        "thrust_passes": true,
+        "reliability": "rao_variational_residual_solved"
+      }
+    },
+    "Cf": 1.5795699666447274,
+    "converged": true,
+    "reliability": "rao_variational_residual_solved",
+    "export": {
+      "resampled_for_export": true,
+      "interpolation_basis": "pchip_c1_shape_preserving",
+      "c1_interpolant": true,
+      "endpoint_enforced_for_export": false,
+      "start_radius_delta": 0.00034851190160489764,
+      "end_radius_delta": 0.0006040849864081821,
+      "monotonic_cleanup_for_export": false,
+      "requested_point_count": 100,
+      "export_point_count": 100,
+      "max_adjacent_turn_deg": 0.1386999440914596,
+      "max_adjacent_turn_tol_deg": 0.25,
+      "polyline_turn_gate_passed": true
+    },
+    "endpoint_mismatch": null,
+    "raw_exit_m": [
+      2.940171742233167,
+      2.2294713978066016
+    ],
+    "target_exit_x_m": 2.94,
+    "warnings": [
+      "Auxiliary DE-to-axis continuation terminated at a downstream characteristic caustic; the physical B-D-E region and wall remain complete.",
+      "Not hardware-qualified; requires published benchmark comparison, CFD, thermal/structural review, manufacturing review, inspection, and hot-fire data."
+    ],
+    "published_wall_comparison": {
+      "classification": "report_only_no_acceptance_tolerance",
+      "source": "Rao 1958 Table 2, PDF page5, printed381",
+      "source_csv_sha256": "9a120f5056373d27bec91d22385585af8f73c7d1f47f306b9ffc717b22b99ec7",
+      "interpolation": "linear in actual kernel/BDE wall-node x/Rt; first duplicate x retained; no extrapolation",
+      "limitations": "Source throat/start-line assumptions differ and source values are rounded; these differences are not new gates.",
+      "samples": [
+        {
+          "x_over_rt": 0.21,
+          "available": true,
+          "published_M": 1.96,
+          "computed_M": 1.9553939030993537,
+          "computed_minus_published_M": -0.004606096900646284,
+          "published_theta_deg": 28.7,
+          "computed_theta_deg": 27.74662558095162,
+          "computed_minus_published_theta_deg": -0.9533744190483802
+        },
+        {
+          "x_over_rt": 0.29,
+          "available": true,
+          "published_M": 2.01,
+          "computed_M": 1.9807518930335644,
+          "computed_minus_published_M": -0.029248106966435428,
+          "published_theta_deg": 27.8,
+          "computed_theta_deg": 27.88305291358529,
+          "computed_minus_published_theta_deg": 0.08305291358528777
+        },
+        {
+          "x_over_rt": 0.63,
+          "available": true,
+          "published_M": 2.12,
+          "computed_M": 2.091309994460542,
+          "computed_minus_published_M": -0.028690005539457886,
+          "published_theta_deg": 26.9,
+          "computed_theta_deg": 27.23450934326818,
+          "computed_minus_published_theta_deg": 0.3345093432681807
+        },
+        {
+          "x_over_rt": 0.91,
+          "available": true,
+          "published_M": 2.2,
+          "computed_M": 2.174675063989396,
+          "computed_minus_published_M": -0.025324936010604038,
+          "published_theta_deg": 26.1,
+          "computed_theta_deg": 26.136695931115973,
+          "computed_minus_published_theta_deg": 0.0366959311159718
+        },
+        {
+          "x_over_rt": 1.52,
+          "available": true,
+          "published_M": 2.34,
+          "computed_M": 2.32701167089691,
+          "computed_minus_published_M": -0.012988329103089669,
+          "published_theta_deg": 23.7,
+          "computed_theta_deg": 23.438285029069117,
+          "computed_minus_published_theta_deg": -0.2617149709308819
+        },
+        {
+          "x_over_rt": 2.3,
+          "available": true,
+          "published_M": 2.49,
+          "computed_M": 2.4855681031644057,
+          "computed_minus_published_M": -0.004431896835594529,
+          "published_theta_deg": 20.4,
+          "computed_theta_deg": 19.954280366727577,
+          "computed_minus_published_theta_deg": -0.4457196332724216
+        },
+        {
+          "x_over_rt": 2.94,
+          "available": true,
+          "published_M": 2.6,
+          "computed_M": 2.595307529556894,
+          "computed_minus_published_M": -0.004692470443106167,
+          "published_theta_deg": 17.9,
+          "computed_theta_deg": 17.250967267277655,
+          "computed_minus_published_theta_deg": -0.6490327327223433
+        }
+      ]
+    }
+  },
+  "refinement": {
+    "applicable": true,
+    "passes": false,
+    "reason": "one or more common-coordinate convergence metrics exceed the declared repository policy",
+    "coarse_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 16,
+      "n_kernel": 24,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.25,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2"
+    },
+    "fine_context": {
+      "Rt_m": 1.0,
+      "epsilon": 4.973,
+      "gamma": 1.23,
+      "pa_over_p0": 0.0,
+      "length_pct": 64.0452248702277,
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382,
+      "exact_d_attachment": true,
+      "pin_d_mach": true,
+      "pin_d_theta": true,
+      "formulation": "characteristic",
+      "residual_blocks": [
+        "algebraic_stationarity",
+        "ce_geometry",
+        "length",
+        "mass",
+        "moc_cplus",
+        "penalties",
+        "regularization",
+        "wall_endpoint",
+        "wall_tangency"
+      ],
+      "physics_weight": 1.0,
+      "n_control": 24,
+      "n_kernel": 32,
+      "wall_method": "bde",
+      "starting_line_method": "kliegel_levine",
+      "kernel_dtheta_limit_deg": 0.125,
+      "kernel_massflow_rel_tol": 0.02,
+      "rao_moc_numerical_policy_id": "raosim.rao_moc_numerical_policy:v2"
+    },
+    "metrics": {
+      "comparison_coordinate_count": 490,
+      "coarse_node_count": 171,
+      "fine_node_count": 376,
+      "coarse_in_fine_coverage": 0.9239766081871345,
+      "fine_in_coarse_coverage": 0.8829787234042553,
+      "minimum_field_coverage": 0.8829787234042553,
+      "mach_max_abs": 0.002254654181196525,
+      "mach_rms_abs": 0.0008371912326365137,
+      "mach_p99_abs": 0.0019809381195399034,
+      "theta_max_abs_deg": 0.0923699051062096,
+      "theta_rms_abs_deg": 0.02196647176280959,
+      "theta_p99_abs_deg": 0.0598640676638982,
+      "pressure_ratio_max_abs": 0.00022902787197511681,
+      "pressure_ratio_rms_abs": 7.67592925736758e-05,
+      "pressure_ratio_p99_abs": 0.00017382050393191826,
+      "wall_radius_max_over_rt": 0.0010115541275839135,
+      "wall_radius_rms_over_rt": 0.00025025938320196643,
+      "wall_radius_p99_over_rt": 0.0008047987894798145,
+      "theta_n_abs_delta_deg": 0.0,
+      "theta_e_abs_delta_deg": 0.0445826742627853,
+      "kernel_d_fraction_abs_delta": 0.0001873304754322208,
+      "thrust_coefficient_relative_delta": 9.417387052756095e-05
+    },
+    "tolerances": {
+      "policy_id": "raosim.rao_common_coordinate_field_convergence:v1",
+      "classification": "repository_numerical_convergence_policy",
+      "mach_max_abs": 0.005,
+      "theta_max_abs_deg": 0.05,
+      "pressure_ratio_max_abs": 0.001,
+      "wall_radius_max_over_rt": 0.002,
+      "theta_n_max_abs_deg": 0.05,
+      "theta_e_max_abs_deg": 0.05,
+      "kernel_d_fraction_max_abs": 0.0005,
+      "thrust_coefficient_max_relative": 0.001,
+      "minimum_field_coverage": 0.9,
+      "wall_sample_count": 257
+    }
+  },
+  "source_sha256": {
+    "raosim/rao_variational.py": "212ce4a7183b91ff0f350b0bff0199aecbde779667a74bd3a3678b0530262db5",
+    "raosim/nasa_moc.py": "3f5e4d74754cfb5097549fd371ed2fa08f50763fd7a9865376eb45af52756974",
+    "raosim/rao_residuals.py": "c6a294215b88ca1489f0ac8ac49203cb6a64efb4dc17c11249442a038d65d7d8",
+    "raosim/transonic_kernel.py": "170f6bab30d5f78960ab4167bcb3aa7a262e79a79f9b3cbe69819162a672b324"
+  },
+  "exit_code": 2
+}

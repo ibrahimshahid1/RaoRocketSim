@@ -1,0 +1,15 @@
+{
+  "task": "T11",
+  "status": "implemented_and_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q -m 'not slow' tests/test_moc_boundary_contracts.py tests/test_jax_assembly_parity.py tests/test_jax_sensitivities.py tests/test_cli_rao_validity_contract.py tests/test_benchmarks.py::test_current_bvp_passes_strict_rao1958_nozzle_b_tables_2_and_3 tests/test_benchmarks.py::test_current_bvp_benchmark_forwards_explicit_throat_and_attachment_options tests/test_rao_resolution_convergence.py",
+  "exit_code": 0,
+  "result": "67 passed, 1 deselected in 54.50s",
+  "changed_files": [
+    "raosim/run_nozzle.py",
+    "tests/test_cli_rao_validity_contract.py",
+    "raosim/benchmarks.py",
+    "tests/test_benchmarks.py"
+  ],
+  "notes": "CLI gate uses authoritative typed Eq5 validity; missing typed evidence fails closed; benchmark/summary expose solver gate reports; custom benchmark export preserves configured throat radii.",
+  "gate_threshold_changes": false
+}

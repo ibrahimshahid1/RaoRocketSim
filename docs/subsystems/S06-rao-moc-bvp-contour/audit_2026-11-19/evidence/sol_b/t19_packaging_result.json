@@ -1,0 +1,18 @@
+{
+  "task": "T19_packaging",
+  "status": "packaged_no_expensive_rerun",
+  "new_script": "scripts/audit_moc_refinement_pair.py",
+  "invocation": ".venv-jax/bin/python -m scripts.audit_moc_refinement_pair --output-dir builds/moc_refinement_pair_check",
+  "checks": {
+    "module_help_exit": 0,
+    "import_exit": 0,
+    "compile_exit": 0,
+    "config_and_pair_AST_equivalent": true,
+    "acceptance_AST_equivalent": true,
+    "repository_root_correct": true,
+    "no_output_on_import": true
+  },
+  "sha256": "f8e9beb603f17ce2d79e63f24a09ed0a6bdf46f952bd8ddd93dc3dbb6249b962",
+  "completed_numerical_artifact": "t19_refinement/report.json",
+  "completed_numerical_exit": 0
+}

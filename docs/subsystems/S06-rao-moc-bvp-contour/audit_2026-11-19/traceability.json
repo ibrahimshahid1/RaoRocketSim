@@ -1,0 +1,244 @@
+{
+  "date": "2026-11-19",
+  "owner": "Sol A",
+  "classification_note": "Missing can be intentional scope or missing validation, not automatically a code defect. Statuses do not establish hardware qualification.",
+  "issues": [
+    {
+      "id": "MOC-01",
+      "classification": "correctly_implemented",
+      "finding": "Characteristic-family pairing and axisymmetric source",
+      "implementation": "raosim/rao_residuals.py:residual_Cplus_axisym; raosim/moc.py:solve_interior_point",
+      "source": "Anderson PDF422/printed406 Eqs11.52-53; Rao1958 PDF3 Eq15",
+      "action": "Preserve signs; retain reference reconstruction tests",
+      "status": "preserved"
+    },
+    {
+      "id": "MOC-02",
+      "classification": "incorrectly_implemented",
+      "finding": "Configured downstream radius ignored in preferred seed",
+      "implementation": "raosim/rao_variational.py:_initial_ce_from_kernel; raosim/nasa_moc.py:set_theta_b",
+      "source": "Existing configuration contract; Rao1958 PDF3-4 Rd=.45Rt",
+      "action": "T02b: propagate Rd; preserve default and length convention",
+      "status": "implemented_focused_validated"
+    },
+    {
+      "id": "MOC-03",
+      "classification": "incorrectly_implemented",
+      "finding": "Changed fixture geometry invalidates historical regression",
+      "implementation": "tests/test_moc_bounded_net.py:_bezier_wall",
+      "source": "Existing wall seam and reference-regression contracts",
+      "action": "T01: pin original angles and add current-chart fail-closed regression",
+      "status": "implemented_focused_validated"
+    },
+    {
+      "id": "MOC-04",
+      "classification": "implemented_but_incomplete",
+      "finding": "D boundary data treated as soft duplicated unknowns",
+      "implementation": "raosim/rao_variational.py:_ce_geometry_residuals",
+      "source": "Rao1958 PDF3-4 continuity and Eqs17-19; Rice PDF9-10",
+      "action": "T03: opt-in reduced-vector exact boundary attachment",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-05",
+      "classification": "implemented_but_incomplete",
+      "finding": "Backward BDE compatibility underresolved on coarse mesh",
+      "implementation": "raosim/nasa_moc.py:_calc_bde_back_point; raosim/rao_variational.py:_bde_measured_topology_report",
+      "source": "Anderson PDF422 Eqs11.52-53; Rice PDF21 numerical refinement",
+      "action": "Measure edge-specific residuals and vary relevant resolutions without loosening thresholds",
+      "status": "local_compatibility_and_documented_refinement_pair_pass"
+    },
+    {
+      "id": "MOC-06",
+      "classification": "incorrectly_implemented",
+      "finding": "Warning conflates optimizer termination with residual exceedance",
+      "implementation": "raosim/rao_variational.py:solve_rao_bvp",
+      "source": "Existing gate bvp_ok includes optimizer_success plus numerical residuals",
+      "action": "T04: structured gate report with actual separate failure reasons",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-07",
+      "classification": "implemented_but_incomplete",
+      "finding": "NozzleB comparison omits differing throat and start-line assumptions",
+      "implementation": "raosim/benchmark_data/cases/rao1958_nozzle_b.json; raosim/benchmarks.py:_build_contour",
+      "source": "Rao1958 PDF3-5; original Rd=.45Rt and Sauer start versus .382/KL model",
+      "action": "T05: explicit options and applicability metadata; retain reference-profile distinction",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-08",
+      "classification": "uncertain_requiring_research",
+      "finding": "Unverified KL polynomial changes and primary-source claims",
+      "implementation": "raosim/transonic_kernel.py:_kl_axi_coeffs",
+      "source": "Original KL1969 absent locally; publisher access inaccessible; NASA report only high-level",
+      "action": "T06 correct provenance wording only; block coefficient changes pending primary table",
+      "status": "provenance_corrected_primary_math_still_unverified"
+    },
+    {
+      "id": "MOC-09",
+      "classification": "uncertain_requiring_research",
+      "finding": "Transonic U/a-star labels versus returned Mach convention",
+      "implementation": "raosim/transonic_kernel.py:kliegel_levine",
+      "source": "Anderson PDF98 Eq3.37; KL original normalization not verified",
+      "action": "Preserve branch behavior; require primary normalization evidence and independent benchmark",
+      "status": "research_blocked_primary_source"
+    },
+    {
+      "id": "MOC-10",
+      "classification": "correctly_implemented",
+      "finding": "Rao versus Anderson M-star constant scaling",
+      "implementation": "raosim/gas_dynamics.py:mstar_from_M; raosim/rao_variational.py:rao_stationarity_residual",
+      "source": "Rao1958 PDF4 Eq17; Anderson PDF94 and98",
+      "action": "Constant factor absorbable in stationarity C at fixed gamma; no rewrite",
+      "status": "preserved"
+    },
+    {
+      "id": "MOC-11",
+      "classification": "correctly_implemented",
+      "finding": "Free-exit transversality omitted for fixed-area problem",
+      "implementation": "raosim/rao_variational.py:CHARACTERISTIC_RAO_RESIDUAL_BLOCKS",
+      "source": "Rao1958 PDF3 Eq6 endpoint variation, Eq10 and14",
+      "action": "Retain fixed-end versus free-exit distinction; no unjustified residual addition",
+      "status": "preserved"
+    },
+    {
+      "id": "MOC-12",
+      "classification": "correctly_implemented",
+      "finding": "Eq13 not a separate independent continuum residual",
+      "implementation": "raosim/rao_variational.py:_rao_algebraic_stationarity_residuals",
+      "source": "Rao1958 PDF3 Eq12,13,15; TerraB differential identity in report TB11",
+      "action": "No redundant equation; finite invariant drift can be diagnostic",
+      "status": "preserved"
+    },
+    {
+      "id": "MOC-13",
+      "classification": "missing",
+      "finding": "Detailed source-equation and current-review coverage in graph",
+      "implementation": "knowledge/equations.json; knowledge/models.json; knowledge/software_links.json",
+      "source": "TerraA coverage inventory original sources verified this audit",
+      "action": "Deliver coverage report and evidence; do not silently rewrite unrelated graph stores",
+      "status": "documented_gap"
+    },
+    {
+      "id": "MOC-14",
+      "classification": "uncertain_requiring_research",
+      "finding": "Exact-axis source limit versus guards",
+      "implementation": "raosim/rao_residuals.py:_source_axisym; raosim/moc.py:solve_axis_point",
+      "source": "Anderson PDF422 plus explicitly assumed smooth-axis symmetry expansion",
+      "action": "Current midpoint callers not established defective; keep numerical evidence and research caveat",
+      "status": "no_confirmed_active_defect"
+    },
+    {
+      "id": "MOC-15",
+      "classification": "missing",
+      "finding": "General accuracy envelope and independent second full-flow oracle",
+      "implementation": "raosim/model_registry.py:nozzle.moc; tests/test_moc_bounded_net.py",
+      "source": "One NASA historical reference plus NozzleB shape/integral is limited evidence",
+      "action": "Report exact tested configurations; common-coordinate refinement and new oracle remain separate work",
+      "status": "validation_gap"
+    },
+    {
+      "id": "MOC-16",
+      "classification": "missing",
+      "finding": "Reacting/variable-gas, shock-fitting, viscous and full JAX forward-net extensions",
+      "implementation": "raosim/moc_bounded.py; raosim/jax/moc_kernel.py",
+      "source": "Young PDF94 additional reactive source terms; SP8120 PDF79-81; Frey2000",
+      "action": "Intentional restricted model; outside immediate confirmed-gate repair, no speculative physics",
+      "status": "outside_approved_repair_scope"
+    },
+    {
+      "id": "MOC-17",
+      "classification": "incorrectly_implemented",
+      "finding": "Unit-process iteration exhaustion accepted as a valid point",
+      "implementation": "raosim/nasa_moc.py:_calc_arc_wall_point_raw; _calc_bde_back_point",
+      "source": "NASA C++ CalcArcWallPoint lines878-925 and CalcBDERegion3331-3402; conCrit line62; sourcehash in TerraA unit_process_convergence_contract.json",
+      "action": "T07 restore failure-on-exhaustion and exact-zero-safe local iteration checks without changing tolerance",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-18",
+      "classification": "incorrectly_implemented",
+      "finding": "Refinement identity omitted boundary/model differences",
+      "implementation": "raosim/rao_variational.py:compare_rao_solutions_common_coordinates",
+      "source": "Existing comparison same-physical-model contract; Rao shared-boundary construction; Rice starting-line/curvature conventions",
+      "action": "T08 require matching curvature, starting-line, attachment and residual recipe provenance; missing identity fails closed",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-19",
+      "classification": "incorrectly_implemented",
+      "finding": "Inactive multiplier unknowns create exactly zero Jacobian columns",
+      "implementation": "raosim/rao_variational.py:_exact_d_free_indices",
+      "source": "Configured residual dependency contract; AD rank29of31 at real NozzleB seed",
+      "action": "T09 remove only provably inactive lambda2/lambda3 in opt-in mode; after reduction rank29of29",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-20",
+      "classification": "missing",
+      "finding": "Reduced-coordinate derivative chain absent from sensitivity API",
+      "implementation": "raosim/jax/sensitivities.py:rao_sensitivities",
+      "source": "Mathematical chain rule for newly constrained D boundary; TerraB independent code review",
+      "action": "T10 explicitly refuse unsupported exact-D sensitivities before solve",
+      "status": "implemented_explicit_refusal"
+    },
+    {
+      "id": "MOC-21",
+      "classification": "incorrectly_implemented",
+      "finding": "CLI validity gate used legacy Eq6 proxy rather than typed Eq5 result",
+      "implementation": "raosim/run_nozzle.py:_rao_radial_validity_gate",
+      "source": "Rao1999 PDF3 Eqs2-3 and PDF4 Eqs5-6; existing typed validity contract independently source-checked",
+      "action": "T11 use typed available+valid; missing refuses; expose actual solver gate report",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-22",
+      "classification": "implemented_but_incomplete",
+      "finding": "Single internal-gate pass does not establish common-coordinate resolution acceptance",
+      "implementation": "scripts/audit_moc_reference_profile.py; raosim/rao_variational.py:compare_rao_solutions_common_coordinates",
+      "source": "Rice PDF21 convergence guidance; existing common-coordinate policy",
+      "action": "T12/T13/T18/T19 retain failed coarser pairs and check one further pair under unchanged field policy",
+      "status": "documented_final_pair_passes_coarser_failures_retained"
+    },
+    {
+      "id": "MOC-23",
+      "classification": "incorrectly_implemented",
+      "finding": "Truncated throat kernel accepted as a converged-angle seed after row cap",
+      "implementation": "raosim/nasa_moc.py:set_theta_b; raosim/rao_variational.py:_initial_ce_from_kernel; raosim/jax/theta_b_solve.py:make_residual_theta_b",
+      "source": "Rice PDF7-10 full kernel/known BD construction; existing reached_wall contract; direct fixed-angle500vs1000 rows test",
+      "action": "T15 expose capacity, reject incomplete kernels before DE or BVP use, preserve explicit computational versus angle failures, repeat finer profile",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-24",
+      "classification": "incorrectly_implemented",
+      "finding": "Actual final live JAX kernel completeness flag ignored",
+      "implementation": "raosim/jax/theta_b_solve.py:_require_final_live_kernel; make_residual_theta_b",
+      "source": "Existing reached_wall contract; Rice PDF7-10 complete throat-kernel B-D-E construction; TerraB independent review of static allocation estimate versus actual raw steps",
+      "action": "T17 recompute final live march and refuse incomplete result; no claim that trial iterates are qualified",
+      "status": "implemented_and_focused_validated"
+    },
+    {
+      "id": "MOC-25",
+      "classification": "implemented_but_incomplete",
+      "finding": "Fixed eight-iteration frozen-angle seed insufficient for tighter refinement checks; termination accuracy not exposed",
+      "implementation": "raosim/nasa_moc.py:set_theta_b; raosim/rao_variational.py:_initial_ce_from_kernel; RaoSolverConfig",
+      "source": "Existing fixed-end seed residual contract; controlled 8-versus25-versus40 iteration experiments; Rice PDF9-10 and21 numerical convergence conventions",
+      "action": "T16 expose budget/tolerance without changing defaults, report actual residual and termination reason, then rerun comparison",
+      "status": "implemented_focused_validated_honest_seed_nonconvergence_report_retained"
+    },
+    {
+      "id": "MOC-26",
+      "classification": "implemented_but_incomplete",
+      "finding": "Soft fixed-exit endpoint can stop short of prescribed L despite internal gate pass",
+      "implementation": "raosim/rao_variational.py:_exact_exit_boundary_data; _expand_exact_d_unknowns; raosim/jax/assembly.py:expand_exact_d_unknowns",
+      "source": "Rice PDF9-10 prescribed-endpoint construction; project derivation of existing midpoint C+ geometry; TerraB independent positive-branch and chain-rule review",
+      "action": "T18 opt-in exact endpoint elimination with domain penalties/final refusal, unchanged export and physical criteria",
+      "status": "implemented_and_validated_static_profile_and_refinement_pair"
+    }
+  ],
+  "resumed_date": "2026-11-20",
+  "latest_review_date": "2026-11-20",
+  "approved_repair_status": "completed_bounded_scope"
+}

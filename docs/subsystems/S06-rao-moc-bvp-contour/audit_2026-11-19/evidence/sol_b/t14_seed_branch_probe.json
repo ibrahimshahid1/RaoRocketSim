@@ -1,0 +1,92 @@
+[
+  {
+    "label": "coarse",
+    "n_control": 16,
+    "n_kernel": 24,
+    "dtheta": 0.25,
+    "elapsed_s": 5.720981999998912,
+    "kernel_theta_B_deg": 27.656249999999996,
+    "theta_B_provenance": "fixed_end_secant",
+    "kernel_reached_wall": true,
+    "kernel_fallback": false,
+    "kernel_Rd": 0.382,
+    "kernel_rows": 220,
+    "D_fraction": 0.11849943382084657,
+    "topology_present": true,
+    "DE_start": {
+      "x": 1.6898439882272427,
+      "r": 1.0591131299322947,
+      "M": 2.570089108862417,
+      "theta": 0.43333232127508337
+    },
+    "DE_end": {
+      "x": 2.950218525733328,
+      "r": 2.230022418157564,
+      "M": 2.596751545512827,
+      "theta": 0.29959785167219716
+    },
+    "target_x": 2.94,
+    "ce_M_min": 2.566397365230517,
+    "ce_theta_min_deg": 17.165692452003352
+  },
+  {
+    "label": "fine",
+    "n_control": 24,
+    "n_kernel": 32,
+    "dtheta": 0.125,
+    "elapsed_s": 17.152753916976508,
+    "kernel_theta_B_deg": 27.656249999999996,
+    "theta_B_provenance": "fixed_end_secant",
+    "kernel_reached_wall": true,
+    "kernel_fallback": false,
+    "kernel_Rd": 0.382,
+    "kernel_rows": 440,
+    "D_fraction": 0.11873894656585507,
+    "topology_present": true,
+    "DE_start": {
+      "x": 1.6923663573694008,
+      "r": 1.0590925563649378,
+      "M": 2.5693724003904483,
+      "theta": 0.43396871216394656
+    },
+    "DE_end": {
+      "x": 2.951251998536392,
+      "r": 2.2300224179100865,
+      "M": 2.5957768976452944,
+      "theta": 0.29996017327893815
+    },
+    "target_x": 2.94,
+    "ce_M_min": 2.5655810173874247,
+    "ce_theta_min_deg": 17.186451950896007
+  },
+  {
+    "label": "finest",
+    "n_control": 32,
+    "n_kernel": 48,
+    "dtheta": 0.0625,
+    "elapsed_s": 21.403725459007546,
+    "kernel_theta_B_deg": 29.999999999999996,
+    "theta_B_provenance": "fixed_end_secant",
+    "kernel_reached_wall": false,
+    "kernel_fallback": false,
+    "kernel_Rd": 0.382,
+    "kernel_rows": 501,
+    "D_fraction": 0.6844369057996026,
+    "topology_present": true,
+    "DE_start": {
+      "x": 2.419357712413388,
+      "r": 0.3283987810315333,
+      "M": 2.638308015948325,
+      "theta": 0.1146621904939282
+    },
+    "DE_end": {
+      "x": 6.424489300908688,
+      "r": 2.230022285853619,
+      "M": 2.747799287842112,
+      "theta": 0.04766509954922698
+    },
+    "target_x": 2.94,
+    "ce_M_min": 2.638308015948325,
+    "ce_theta_min_deg": 2.7310090342416284
+  }
+]

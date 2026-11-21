@@ -1,0 +1,262 @@
+\section{A general differentiable forward-wall net}
+\label{sec:ad}
+\subsection{Differentiate the solved analysis, including its boundaries}
+The requested object is a prescribed-wall flow operator with wall,
+inlet/gas, symmetry and exit dependence. It must include the starting
+line, every propagated parent, wall intersections/tangency, axis
+reflections, post-D/BDE regions where used, and the final momentum,
+pressure, mass and energy integrals.
+
+\current The host bounded forward net and JAX throat kernel provide
+useful references. The JAX \code{build_start_line} path still raises
+\code{NotImplementedError}. The sensitivity API supplies selected
+fixed-state partials and explicitly defers total solved-design and
+bell-wall derivatives; it refuses the exact-D mode used by the recent
+accepted profile. This is not an end-to-end differentiable arbitrary-wall
+analysis or a total-gradient API for that profile.
+
+\proposal Reuse the host implementation as a primal oracle within its
+established domain, while separating continuous unit-process solves
+from discrete topology construction. The first full differentiable
+target should be attached, smooth, calorically perfect flow with
+matched starting data. Add other physical regimes after this complete
+chain is validated.
+
+\subsection{Record the topology and its validity neighborhood}
+A proposed topology record should include parent indices, row masks and
+widths, raw/special insertions, wall and axis reflection roles, interpolation
+brackets, intersection branches, shock-region labels, exit cropping and
+termination reasons. Within one accepted topology, solve continuous
+unit-process residuals with explicit convergence and conditioning checks.
+
+The presence of \code{stop_gradient} or a fixed-shape mask does not prove
+that a discrete decision is irrelevant to the physical derivative.
+Changing a wall-intersection bracket, reflection count, active constraint,
+shock attachment, separation pattern, mesh topology or property branch
+can change the differentiated problem. A physically continuous output
+may still have a non-smooth discrete approximation or different one-sided
+derivatives.
+
+A practical proposed policy is to diagnose an admissible local topology
+neighborhood, use trust-region steps within it, and rebuild/revalidate
+when events occur. At an event, mark the ordinary smooth derivative
+unavailable or provide explicitly validated one-sided/branch derivatives.
+Smoothing a switch is a modeling/numerical approximation whose bias must
+be measured; it is not automatically the derivative of the unsmoothed
+flow.
+
+\subsection{Root, optimization and iteration derivatives are different}
+For a converged square residual
+\begin{equation}
+F(z,x)=0,\qquad
+F_z z_x=-F_x,
+\label{eq:IFT}
+\end{equation}
+implicit sensitivities require a differentiable local residual and
+nonsingular state Jacobian. A transposed linear solve gives an adjoint
+form for scalar output \(J(z,x)\):
+\begin{equation}
+F_z^\mathsf{T}\lambda=J_z^\mathsf{T},
+\qquad
+\frac{\dd J}{\dd x}=J_x-\lambda^\mathsf{T}F_x.
+\end{equation}
+Blondel et al.\ give the root/optimality-condition framework and discuss
+approximate-solve error \cite[\S2.1, PDF pp.~3--4;
+\S3, PDF p.~6]{blondel}. These hypotheses are requirements to check for
+the chosen MOC system, not properties conferred by using an AD library.
+
+For an overdetermined least-squares calculation with a nonzero final
+residual, the stationarity or active-set/KKT system is the relevant
+implicit object. For fixed symmetric weights \(W\),
+\begin{align}
+\phi(z,x)&=\tfrac12r^\mathsf{T}Wr,&
+g(z,x)&=J_r^\mathsf{T}Wr=0,\\
+g_z&=J_r^\mathsf{T}WJ_r+
+\sum_i(Wr)_i\nabla_z^2r_i.
+\end{align}
+This displayed Hessian follows by differentiating that objective.
+Dropping its residual-curvature term is a Gauss--Newton approximation,
+not automatically the derivative of the exact optimum. Reduced D/E
+parameterizations, design-dependent weights/bounds and stable active
+constraints require their full chain rules.
+
+Differentiating a fixed number of nonlinear iterations gives the
+derivative of that algorithmic output. It approaches a solved-state
+derivative only under additional convergence/regularity conditions.
+The existing library supports multiple adjoint strategies, but installed
+behavior and the actual differentiated residual must be audited before
+selecting one \cite{optimistix}. No present implementation defect in
+the library is asserted here.
+
+\subsection{What a meaningful derivative test looks like}
+\begin{enumerate}
+\item Check the full primal result against the host oracle on the same
+wall, gas state, topology and numerical policy.
+\item Verify each continuous gas, intersection, wall, axis and exit
+operator, including implicit-root contributions.
+\item Perform full-output directional Taylor tests:
+\[
+E(h)=\left|J(x+hv)-J(x)-h\,D J(x)v\right|.
+\]
+For a smooth sufficiently accurate solve, the first-order remainder
+should show the expected second-order regime before roundoff/primal
+error dominates. Sweep step sizes; one finite-difference agreement
+does not establish a useful error regime.
+\item Repeat under physical-grid, property-grid and nonlinear-tolerance
+refinement. Primal error must be below the tested signal, and adjoint
+residual/conditioning should be recorded.
+\item At topology or physical-regime events, compare admissible one-sided
+branches rather than treating an across-event centered difference as a
+smooth-gradient oracle.
+\end{enumerate}
+Test wall controls, \(\Rt,R_u,R_d,\epsilon,L\), chamber state and gas
+parameters wherever supported. For engine totals include chamber
+thermochemistry, composition, starting-line, inner wall temperature,
+throat/mass-flow closure and the output's direct parameter dependence.
+
+\subsection{Cost and memory are part of the design}
+An adjoint can avoid forming every design-state Jacobian column, but it
+does not make the primal analysis free. Padded characteristic histories,
+nonlinear correctors, equilibrium/species solves and reverse-mode storage
+can all be large. The current throat representation also grows as
+rows widen. Measure scaling with actual accepted problem sizes.
+
+Sparse/local residual structure, converged unit-process implicit solves,
+checkpointing, branch-consistent warm starts and compiled reuse are
+candidate techniques. Cache keys must bind geometry, gas/data identity,
+boundary conditions, topology and numerical policy. Reusing a previous
+converged root is an initialization strategy; accepting an unconverged
+history-dependent result would change the analysis.
+
+The forward-wall operator is a useful priority because it can avoid
+solving a fresh inverse contour-optimization problem for each outer wall
+candidate. Any cost advantage remains to be demonstrated by profiling.
+The recently measured 25-minute pair cannot be assumed suitable for
+thousands of nested MDO evaluations.
+
+\section{Effects on full-engine MDO}
+\label{sec:mdo}
+\subsection{The state closure must use the same aerodynamics as the objective}
+\proposal A coupled formulation can collect throat/mass-flow states
+\(y=(\Rt,\dot m)\), flow/BL states \(z\), wall/coolant states \(w\), and
+design \(x\) into residuals of the form
+\begin{align}
+R_F&=F_{\mathrm{flow}}(z,w,y,x;p_a)-F_{\mathrm{req}},\\
+R_m&=\dot m-A_tG_{*,\mathrm{del}}(y,x;\mathcal G),\\
+R_{\mathrm{flow}}&=0,\qquad
+R_{\mathrm{BL/thermal}}=0.
+\end{align}
+This is an architecture proposal. Here \(G_{*,\mathrm{del}}\) is the
+mass flux averaged over the declared reference throat area; a
+nonuniform throat requires the corresponding mass-flow integral.
+The delivered sonic mass-flux model
+must declare combustion/loss conventions rather than double-counting
+an existing \(c^*\) efficiency. For each regime, performance should come
+from a declared consistent control volume with momentum, pressure,
+mass and energy accounting.
+
+Whether implemented monolithically or by nested solves, the linearized
+coupling must be present in the total derivative. For example,
+\begin{equation}
+\begin{bmatrix}
+R_y & R_z\\ F_y & F_z
+\end{bmatrix}
+\begin{bmatrix}y_x\\ z_x\end{bmatrix}
+=-
+\begin{bmatrix}R_x\\F_x\end{bmatrix}
+\end{equation}
+shows why a frozen inner flow or an unchanged Q1D sizing residual loses
+part of the design sensitivity. Wall/coolant states add corresponding
+blocks. Block elimination, Schur complements and adjoints are numerical
+choices to evaluate after the residual is physically defined.
+
+\subsection{Propagation through the engine}
+\begin{longtable}{@{}P{0.22\linewidth}P{0.34\linewidth}P{0.36\linewidth}@{}}
+\toprule\textbf{Discipline} & \textbf{New nozzle information} & \textbf{MDO consequence}\\\midrule
+\endhead
+Thrust, throat and propellant flow &
+Accepted \(F,C_F,G_*,c^*\), gas mode and pressure boundary. &
+Changes \(\Rt,\dot m\), O/F split, \(I_{sp}\), and the derivatives of
+the thrust/mass-flow residuals.\\
+Chamber and nozzle geometry &
+Physical wall, length/curvature, throat area and effective core boundary. &
+Changes chamber \(L^*A_t\) volume closure, envelope, wall area, mass
+and the common station grid.\\
+Heat transfer and regeneration &
+Edge \(p,T,\rho,V,Y\), transport, wall heat flux and cooling condition. &
+Changes wall/coolant temperatures, coolant enthalpy rise, channel
+sizing and thermal/strength constraints.\\
+Hydraulics and pumps &
+Propellant split, coolant density/viscosity, jacket path and pressure loss. &
+Changes required pump rise, volume flow, efficiency, shaft power,
+NPSH and tip-speed screens.\\
+Electric package and battery &
+Pump duty and operating duration/efficiencies. &
+Changes motor/inverter/pump screening masses and energy/power
+battery branches.\\
+Structure and loads &
+Wall and coolant pressure, temperature, effective material geometry,
+separation/load evidence. &
+Changes wall/liner/closeout stresses and margins; side-load
+constraints need a separate supported model.\\
+Objectives and admission &
+Common model identity, validity, uncertainty, total derivatives and cost. &
+Changes candidate feasibility and optimum; unsupported physics
+must remain unknown/infeasible rather than silently accepted.\\
+\bottomrule
+\end{longtable}
+
+These are coupling pathways, not predictions that every higher-fidelity
+model improves performance or reduces mass. At fixed target thrust,
+\[
+I_{sp}=\frac{F}{\dot m g_0},\qquad
+\frac{\dd I_{sp}}{I_{sp}}=
+\frac{\dd F}{F}-\frac{\dd\dot m}{\dot m}.
+\]
+For a simple incompressible duty model,
+\[
+P_{\mathrm{elec}}\simeq
+\frac{\dot m\,\Delta p}{\rho\,\eta_p\eta_{\mathrm{drive}}}.
+\]
+A nozzle change can reduce required mass flow while increasing wall
+length, heat pickup or jacket pressure drop. The net mass/efficiency
+tradeoff must be evaluated through the coupled model.
+
+\subsection{Existing thermal and property seams need reconciliation}
+Current MDO cooling uses mission-level gas \(c_p,\mu,\Pr\) and coolant
+\(\rho,c_p,\mu,k\). A film core-velocity helper also reads the mission gas
+constant while chamber surfaces may supply another active value.
+These are explicit integration boundaries to audit before claiming
+spatially consistent variable-gas MDO. This inspection does not quantify
+their error at a particular engine.
+
+The host real-fluid, radiation and manifold tools are useful
+infrastructure, but their presence does not establish that the MDO
+cooling march calls them. Hot-gas thermodynamic consistency and
+real-fluid coolant modeling are distinct workstreams. Film composition,
+wall chemistry and heat-loss coupling also require explicit assumptions.
+
+The current feed chain is largely downstream of the solved state,
+with an optional screening combustion-efficiency coupling and an
+implicit wall-temperature root. No new pump-to-nozzle feedback should
+be invented merely to make every arrow two-way. Add a coupled residual
+only when a physical dependency and boundary condition justify it.
+
+\subsection{Reoptimization and fidelity reporting}
+Checking an optimized TOP wall against MOC after the solve does not
+produce an MOC optimum. A transition study should reoptimize using the
+new accepted analysis and compare the objective, constraints and
+design under flow/thermal refinement and multiple starts.
+
+The current default dry-mass objective is explicitly partial: important
+manifolds, valves, lines, gimbal/mount and other injector hardware are
+not all represented. Better nozzle physics cannot complete those
+component models or award hardware qualification. Keep the objective's
+mass boundary, applicable constraints and model-coverage flags visible.
+
+During migration, explicit fidelity levels can support broad searches,
+candidate reanalysis and final higher-fidelity reoptimization. If a
+surrogate is used, bound its discrepancy and derivative error over a
+declared training/validation domain. A fallback or model switch that
+changes the objective between candidates must be recorded and managed;
+finite outputs alone do not make the optimization consistent.

@@ -1,0 +1,18 @@
+{
+  "task": "T16",
+  "status": "diagnostic_completed_and_seed_controls_focused_validated",
+  "command": ".venv-jax/bin/python builds/moc_audit_2026-11-19/sol_b/t16_seed_accuracy_probe.py",
+  "exit_code": 0,
+  "artifact": "t16_seed_accuracy/report.json",
+  "fine_theta_B_deg": 27.752341628074646,
+  "fine_best_relative_seed_error": 2.042807389912582e-08,
+  "finest_theta_B_deg": 27.758823633193966,
+  "finest_best_relative_seed_error": 5.954959414466998e-08,
+  "requested_relative_tolerance": 1e-08,
+  "seed_criterion_met": false,
+  "budgets25_and40_same_best_state": true,
+  "frozen_precise_seed_bvp": "both retain soft endpoint undershoot and fail export; all raw physical gates pass",
+  "refinement": "FAIL theta_max .06493653101209952 deg > unchanged .05 deg; other reported metrics pass",
+  "limits_unchanged": true,
+  "seed_controls_validation": "T18 focused 114pass + final42pass, commands/logs in t18_result.json"
+}

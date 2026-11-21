@@ -1,0 +1,20 @@
+{
+  "task": "T05",
+  "status": "implemented_and_targeted_validated",
+  "changed_files": [
+    "raosim/benchmarks.py",
+    "raosim/benchmark_data/cases/rao1958_nozzle_b.json",
+    "tests/test_benchmarks.py"
+  ],
+  "command": ".venv-jax/bin/python -m pytest -q tests/test_benchmarks.py::test_current_bvp_passes_strict_rao1958_nozzle_b_tables_2_and_3 tests/test_benchmarks.py::test_current_bvp_benchmark_forwards_explicit_throat_and_attachment_options tests/test_transonic_kernel.py",
+  "exit_code": 0,
+  "result": "16 passed in 13.91s",
+  "broader_suite": {
+    "command": ".venv-jax/bin/python -m pytest -q tests/test_benchmarks.py tests/test_transonic_kernel.py",
+    "exit_code": 1,
+    "result": "2 failed, 20 passed in 24.21s",
+    "failure_scope": "Existing LEA/TOP length benchmark: rounded-throat length 15.044818739 Rt versus reference15\u00b1.02; HEAD and working benchmark code yield identical metrics under current geometry.",
+    "proof": "t05_lea_baseline_comparison.json"
+  },
+  "gate_threshold_changes": false
+}

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "method": "Independent saved NPZ re-evaluation with SciPy LinearNDInterpolator in both directions; pressure computed directly from constant-gamma isentropic formula, without invoking the production comparison wrapper. Sources and NPZ digests checked. Other gate flags reviewed from completed profiles, not independently resimulated.",
+  "metrics": {
+    "mach_max_abs": 0.0008036601415017941,
+    "theta_max_abs_deg": 0.022891221049775368,
+    "pressure_ratio_max_abs": 7.494807251618579e-05,
+    "minimum_field_coverage": 0.9502702702702702,
+    "comparison_coordinate_count": 2546
+  },
+  "checks": {
+    "mach_max_abs": true,
+    "theta_max_abs_deg": true,
+    "pressure_ratio_max_abs": true,
+    "minimum_field_coverage": true
+  },
+  "passes": true,
+  "source_sha256": {
+    "raosim/rao_variational.py": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+    "raosim/nasa_moc.py": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+    "raosim/transonic_kernel.py": "170f6bab30d5f78960ab4167bcb3aa7a262e79a79f9b3cbe69819162a672b324",
+    "scripts/audit_moc_reference_profile.py": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+    "raosim/rao_residuals.py": "c6a294215b88ca1489f0ac8ac49203cb6a64efb4dc17c11249442a038d65d7d8"
+  },
+  "field_sha256": {
+    "baseline_field.npz": "42bb770899542663565c49dc96457df24fd005847fe43bb49cba616578e6d20c",
+    "refined_field.npz": "920ba153378bf102034203f9f0533c666b3323a17f4708fccb73dc963df4c007"
+  },
+  "reported_exit_code": 0
+}

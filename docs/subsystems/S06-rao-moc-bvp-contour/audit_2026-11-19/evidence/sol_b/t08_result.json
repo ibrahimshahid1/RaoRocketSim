@@ -1,0 +1,12 @@
+{
+  "task": "T08",
+  "status": "implemented_and_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q tests/test_rao_resolution_convergence.py",
+  "exit_code": 0,
+  "result": "22 passed in 0.42s",
+  "changed_files": [
+    "raosim/rao_variational.py",
+    "tests/test_rao_resolution_convergence.py"
+  ],
+  "gate_threshold_changes": false
+}

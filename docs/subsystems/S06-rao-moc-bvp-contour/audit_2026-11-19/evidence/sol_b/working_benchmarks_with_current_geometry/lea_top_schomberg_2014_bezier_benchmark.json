@@ -1,0 +1,169 @@
+{
+  "case_id": "lea_top_schomberg_2014",
+  "title": "LEA thrust-optimized parabola benchmark",
+  "method": "bezier",
+  "source": {
+    "pdf": "FP_EUCASS-043.pdf",
+    "citation": "Schomberg, K., Olsen, J., Neely, A., Doig, G. Design of an Arc-Based Thrust-Optimised Nozzle Contour.",
+    "references": [
+      "Table 1: grid-density thrust coefficients at PR=80, PR=700, and vacuum",
+      "Figure 4: static pressure distribution at low-altitude flow conditions",
+      "Table 2: inviscid/SA/SST thrust coefficients",
+      "Table 3: LEA TOP geometric parameters",
+      "Table 4: thrust coefficients for LEA TOP and arc variants"
+    ],
+    "notes": "The paper reports yt=13.62 mm, LEA_TOP y_mn=5.51 rt, x_mn=15.0 rt, theta_m=34 deg, and theta_n=4 deg. This manifest maps theta_m to Rao theta_n and theta_n to Rao theta_e."
+  },
+  "status_policy": {
+    "bezier": "strict",
+    "moc": "report",
+    "rao": "report"
+  },
+  "overall_status": "fail",
+  "metrics": [
+    {
+      "category": "geometry",
+      "name": "exit_radius_over_rt",
+      "value": 5.51,
+      "reference": 5.51,
+      "delta": 0.0,
+      "tolerance": 0.005,
+      "mode": "strict",
+      "status": "pass",
+      "source_ref": "Table 3",
+      "message": ""
+    },
+    {
+      "category": "geometry",
+      "name": "length_over_rt",
+      "value": 15.044818739190637,
+      "reference": 15.0,
+      "delta": 0.04481873919063695,
+      "tolerance": 0.02,
+      "mode": "strict",
+      "status": "fail",
+      "source_ref": "Table 3",
+      "message": ""
+    },
+    {
+      "category": "geometry",
+      "name": "theta_n_deg",
+      "value": 34.0,
+      "reference": 34.0,
+      "delta": 0.0,
+      "tolerance": 0.05,
+      "mode": "strict",
+      "status": "pass",
+      "source_ref": "Table 3 theta_m",
+      "message": ""
+    },
+    {
+      "category": "geometry",
+      "name": "theta_e_deg",
+      "value": 4.0,
+      "reference": 4.0,
+      "delta": 0.0,
+      "tolerance": 0.05,
+      "mode": "strict",
+      "status": "pass",
+      "source_ref": "Table 3 theta_n",
+      "message": ""
+    },
+    {
+      "category": "geometry",
+      "name": "contour_rms_error",
+      "value": 0.08704832092379056,
+      "reference": 0.0,
+      "delta": 0.08704832092379056,
+      "tolerance": 0.08,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Figure 5/Table 3",
+      "message": "max_abs_error=0.169302"
+    },
+    {
+      "category": "performance",
+      "name": "CF_low_altitude_PR80_SA",
+      "value": 1.330316805706544,
+      "reference": 1.269,
+      "delta": 0.061316805706544075,
+      "tolerance": 0.02,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Table 1/Table 4",
+      "message": "Computed with current 1-D inviscid thrust coefficient model."
+    },
+    {
+      "category": "performance",
+      "name": "CF0_PR700_inviscid",
+      "value": 1.6664464842779725,
+      "reference": 1.614,
+      "delta": 0.05244648427797238,
+      "tolerance": 0.03,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Table 2",
+      "message": "Computed with current 1-D inviscid thrust coefficient model."
+    },
+    {
+      "category": "performance",
+      "name": "CF_vacuum_inviscid",
+      "value": 1.7098180557065439,
+      "reference": 1.657,
+      "delta": 0.052818055706543854,
+      "tolerance": 0.03,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Table 2",
+      "message": "Computed with current 1-D inviscid thrust coefficient model."
+    },
+    {
+      "category": "solver",
+      "name": "exit_mach_trace_present",
+      "value": true,
+      "reference": true,
+      "delta": 0,
+      "tolerance": 0,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Ideal area-Mach consistency check",
+      "message": "Bezier/TOP path does not trace a characteristic exit Mach profile."
+    },
+    {
+      "category": "flow",
+      "name": "wall_pressure_trend",
+      "value": true,
+      "reference": true,
+      "delta": 0,
+      "tolerance": 0,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Figure 4",
+      "message": "Wall pressure should decrease downstream for attached low-altitude trend."
+    },
+    {
+      "category": "flow",
+      "name": "wall_pressure_rms_error",
+      "value": 12.195964449766372,
+      "reference": 0.0,
+      "delta": 12.195964449766372,
+      "tolerance": 0.08,
+      "mode": "report",
+      "status": "report",
+      "source_ref": "Figure 4",
+      "message": "max_abs_error=40.4125"
+    }
+  ],
+  "physics_gaps": [
+    "Viscous thrust loss and boundary-layer displacement are not modeled by the current inviscid solver.",
+    "Wall-pressure comparison is trend/report-only until the code has CFD-grade or boundary-layer-corrected pressure prediction.",
+    "This LEA TOP manifest applies to the quadratic Rao/TOP approximation. MOC/Rao methods use their own strict Rao 1958 and source-port benchmarks and are not evaluated by this geometry-only case."
+  ],
+  "model_assumptions": {},
+  "contour_design_status": "preliminary_top_geometry",
+  "warnings": [],
+  "report_paths": {
+    "json": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/working_benchmarks_with_current_geometry/lea_top_schomberg_2014_bezier_benchmark.json",
+    "markdown": "/Users/ibrahimshahid/Documents/Github/RaoRocketSim/builds/moc_audit_2026-11-19/sol_b/working_benchmarks_with_current_geometry/lea_top_schomberg_2014_bezier_benchmark.md"
+  }
+}

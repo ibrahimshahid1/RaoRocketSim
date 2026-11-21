@@ -1,0 +1,593 @@
+Rc files read:
+  NONE
+Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Changed files or newly in use/created:
+  chapters/ch15_moc_iterations.tex
+Category 'changed_user':
+  chapters/ch15_moc_iterations.tex
+
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -halt-on-error -recorder  "main.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/base/report.c
+ls
+Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/base/size11.c
+lo)) (./preamble.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/base/fontenc.
+sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/base/inputenc
+.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/lmodern.st
+y)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mic
+rotype.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics/keyv
+al.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/etoolbox/etoo
+lbox.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mic
+rotype-pdftex.def)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mic
+rotype.cfg))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/geometry/geom
+etry.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/iftex/ifvte
+x.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/iftex/iftex
+.sty)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsmath/amsma
+th.sty
+For additional information on amsmath, use the `?' option.
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsmath/amste
+xt.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsmath/amsge
+n.sty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsmath/amsbs
+y.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsmath/amsop
+n.sty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/amss
+ymb.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/amsf
+onts.sty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/booktabs/book
+tabs.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/tools/tabular
+x.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/tools/array.s
+ty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/tools/longtab
+le.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/multirow/mult
+irow.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/xcolor/xcolor
+.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics-cfg/
+color.cfg)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics-def/
+pdftex.def)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics/math
+color.ltx))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/colortbl/colo
+rtbl.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics/grap
+hicx.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics/grap
+hics.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics/trig
+.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/graphics-cfg/
+graphics.cfg)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/frontendl
+ayer/tikz.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/basiclaye
+r/pgf.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/utilities
+/pgfrcs.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfutil-common.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfutil-latex.def)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfrcs.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/pgf.rev
+ision.tex)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/basiclaye
+r/pgfcore.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/systemlay
+er/pgfsys.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgfsys.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfkeys.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfkeyslibraryfiltered.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgf.cfg)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgfsys-pdftex.def
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgfsys-common-pdf.def)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgfsyssoftpath.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/systeml
+ayer/pgfsysprotocol.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcore.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmath.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathutil.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathparser.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.basic.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.trigonometric.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.random.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.comparison.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.base.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.round.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.misc.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfunctions.integerarithmetics.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathcalc.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmathfloat.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fint.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorepoints.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorepathconstruct.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorepathusage.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorescopes.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoregraphicstate.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoretransformations.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorequick.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoreobjects.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorepathprocessing.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorearrows.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoreshade.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoreimage.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoreexternal.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorelayers.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcoretransparency.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorepatterns.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/basicla
+yer/pgfcorerdf.code.tex)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/modules
+/pgfmoduleshapes.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/modules
+/pgfmoduleplot.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/compatibi
+lity/pgfcomp-version-0-65.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/compatibi
+lity/pgfcomp-version-1-18.sty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/utilities
+/pgffor.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/utilities
+/pgfkeys.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgfkeys.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgf/math/pgfm
+ath.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/math/pg
+fmath.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/utiliti
+es/pgffor.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/tikz.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
+es/pgflibraryplothandlers.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/modules
+/pgfmodulematrix.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibrarytopaths.code.tex)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
+es/pgflibraryarrows.meta.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibrarypositioning.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
+es/shapes/pgflibraryshapes.geometric.code.tex))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibraryfit.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibrarycalc.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
+dlayer/tikz/libraries/tikzlibrarybackgrounds.code.tex)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/enumitem/enum
+item.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/needspace/nee
+dspace.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/titlesec/titl
+esec.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/fancyhdr/fanc
+yhdr.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lastpage/last
+page.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lastpage/last
+page2e.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lastpage/last
+pagemodern.sty) 
+))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/float/float.s
+ty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/caption/capti
+on.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/caption/capti
+on3.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/caption/ltcap
+tion.sty))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/url/url.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/list
+ings.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/lstp
+atch.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/lstm
+isc.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/list
+ings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hyperref/hype
+rref.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/kvsetkeys/kvs
+etkeys.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/kvdefinekey
+s/kvdefinekeys.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pdfescape/p
+dfescape.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/ltxcmds/ltx
+cmds.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pdftexcmds/
+pdftexcmds.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/infwarerr/i
+nfwarerr.sty)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hycolor/hycol
+or.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hyperref/name
+ref.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/refcount/refc
+ount.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/gettitlestr
+ing/gettitlestring.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/kvoptions/kvo
+ptions.sty)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/stringenc/s
+tringenc.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hyperref/pd1e
+nc.def)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/intcalc/int
+calc.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hyperref/puen
+c.def)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/bitset/bits
+et.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/bigintcalc/
+bigintcalc.sty)))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/hyperref/hpdf
+tex.def
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/rerunfilechec
+k/rerunfilecheck.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/uniquecount
+er/uniquecounter.sty))))
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/t1lmr.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/l3backend/l3b
+ackend-pdftex.def) (./main.aux)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mt-
+cmr.cfg)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/context/base/mkii/s
+upp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/epstopdf-pkg/
+epstopdf-base.sty
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/latexconfig/e
+pstopdf-sys.cfg)) (./main.out) (./main.out) (./front.tex
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/t1lmss.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/t1lmtt.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/ot1lmr.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/omllmm.fd)
+
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/omslmsy.fd
+)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/omxlmex.fd
+)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/umsa
+.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mt-
+msa.cfg)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/umsb
+.fd)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/microtype/mt-
+msb.cfg) [1{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pd
+ftex/updmap/pdftex.map}{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/
+fonts/enc/dvips/lm/lm-ec.enc}]) (./main.toc
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.32 ...nd injector package}{32}{subsection.2.4.9}
+                                                  % [1] [2] [3] [4] [5]
+[6] [7] [8] [9] [10]) [11] (./chapters/ch01_orientation.tex
+Chapter 1.
+[12] [13{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips
+/lm/lm-mathit.enc}{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts
+/enc/dvips/lm/lm-mathsy.enc}] [14 <./figures/builds/01_overview_wall_jacket_cut
+away.png>]
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/lstl
+ang1.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/listings/lstl
+ang1.sty)
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/ts1lmr.fd)
+ [15{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/lm/
+lm-ts1.enc}] [16] [17] [18] [19] [20]) (./chapters/ch02_cli_dataflow.tex
+[21]
+Chapter 2.
+ [22] [23] [24{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc
+/dvips/lm/lm-rm.enc}] [25] [26]
+(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/lm/ts1lmss.fd
+) [27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38] [39] [40])
+(./chapters/ch03_s01_s02.tex [41]
+Chapter 3.
+ [42]
+Underfull \hbox (badness 3746) in paragraph at lines 53--53
+[][]\T1/lmtt/m/n/9 RaoRocketSimLegacy $\OMS/lmsy/m/n/9 !$ 
+
+Underfull \hbox (badness 10000) in paragraph at lines 63--63
+[][]\T1/lmtt/m/n/9 --requirements\T1/lmss/m/n/9 (+20) , 
+[43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54])
+(./chapters/ch04_s03_s04.tex [55]
+Chapter 4.
+[56] [57] [58] [59] [60{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/
+fonts/enc/dvips/lm/lm-mathex.enc}] [61] [62] [63] [64] [65] [66] [67 <./figures
+/fresh/fresh_13kn_separation_check_contour.png>] [68])
+(./chapters/ch05_s05_s06.tex [69]
+Chapter 5.
+[70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80 <./figures/fresh/fresh_13
+kn_rao_bde_topology.png>] [81]
+Overfull \hbox (0.54408pt too wide) in paragraph at lines 545--545
+[]|\T1/lmr/m/n/10 (-20) historical|  
+
+Overfull \hbox (0.54408pt too wide) in paragraph at lines 546--546
+[]|\T1/lmr/m/n/10 (-20) historical|  
+ [82] [83]) (./chapters/ch06_s07.tex [84]
+Chapter 6.
+[85] [86] [87]
+Overfull \hbox (2.12914pt too wide) in paragraph at lines 120--120
+[]|$\T1/lmtt/m/n/10 summary["structural"]$|  
+[88] [89 <./figures/builds/10_regen_heatflux_temperatures.png> <./figures/build
+s/13_structural_life.png>] [90] [91] [92] [93] [94] [95] [96] [97] [98])
+(./chapters/ch07_s08_s09.tex [99]
+Chapter 7.
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
+[][]\T1/lmss/bx/n/8 (+20) Opt-in \T1/lmtt/m/n/8 --spray-cstar-coupling\T1/lmss/
+m/n/8 (+20) : 
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
+\T1/lmtt/m/n/8 solve_spray_cstar_fixed_point 
+
+Underfull \hbox (badness 3250) in paragraph at lines 52--52
+[][]\T1/lmss/bx/n/8 (+20) S09 ar-ti-facts: \T1/lmss/m/n/8 (+20) pump.json, pump
+_bom.json, 
+[100] [101] [102] [103] [104] [105] [106] [107] [108] [109] [110] [111]
+[112]) (./chapters/ch08_s10_s11_s12.tex [113]
+Chapter 8.
+[114] [115] [116] [117] [118] [119] [120] [121] [122 <./figures/builds/22_coaxi
+al_injector_true_section.png> <./figures/builds/23_pump_cutaway_render.png>]
+[123] [124] [125] [126]) (./chapters/ch09_s13_s14.tex [127 <./figures/fresh/fre
+sh_13kn_moc_flowfield_mach_p_theta_T.png>]
+Chapter 9.
+
+Underfull \hbox (badness 1062) in paragraph at lines 21--21
+[][]\T1/lmss/bx/n/8 (+20) Optimizer \T1/lmtt/m/n/8 solve_min_mass \T1/lmss/m/n/
+8 (+20) (\T1/lmtt/m/n/8 nlp.py:1249\T1/lmss/m/n/8 (+20) ) / 
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+[][]\T1/lmss/bx/n/8 (+20) S14, jobs only. \T1/lmss/m/n/8 (+20) Sta-tus set $\OM
+S/lmsy/m/n/8 !$ \T1/lmtt/m/n/8 _verdict \T1/lmss/m/n/8 (+20) (\T1/lmtt/m/n/8 ex
+ecute.py:248\T1/lmss/m/n/8 (+20) ) $\OMS/lmsy/m/n/8 !$ \T1/lmtt/m/n/8 RunRecord
+ \T1/lmss/m/n/8 (+20) (\T1/lmtt/m/n/8 run_record.py\T1/lmss/m/n/8 (+20) ) and, 
+for 
+ [128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+[140]) (./chapters/ch10_crosscutting_a.tex [141] [142]
+Chapter 10.
+[143] [144] [145] [146] [147]
+Overfull \hbox (0.91025pt too wide) in paragraph at lines 178--178
+[]|\T1/lmr/m/n/9 (-20) Lines|  
+
+Overfull \hbox (0.91025pt too wide) in paragraph at lines 178--178
+[]|\T1/lmr/m/n/9 (-20) Lines|  
+
+Overfull \hbox (0.91025pt too wide) in paragraph at lines 179--179
+[]|\T1/lmr/m/n/9 (-20) Lines|  
+
+Overfull \hbox (0.91025pt too wide) in paragraph at lines 179--179
+[]|\T1/lmr/m/n/9 (-20) Lines|  
+[148] [149] [150] [151] [152] [153] [154]
+Overfull \hbox (1.40381pt too wide) in paragraph at lines 352--352
+[]|\T1/lmr/m/n/9 (-20) provenance|  
+
+Overfull \hbox (4.18344pt too wide) in paragraph at lines 353--353
+[]|\T1/lmr/m/n/9 (-20) remediation|  
+[155] [156] [157]) (./chapters/ch11_crosscutting_b.tex [158]
+Chapter 11.
+[159] [160] [161] [162] [163] [164] [165]
+Underfull \hbox (badness 1052) in paragraph at lines 171--172
+\OMS/lmsy/m/n/10.95 !$ \T1/lmtt/m/n/10.95 OPUS_SOURCE_REVIEW $\OMS/lmsy/m/n/10.
+95 !$ \T1/lmtt/m/n/10.95 VERIFIED$\OMS/lmsy/m/n/10.95 j$\T1/lmtt/m/n/10.95 REJE
+CTED$\OMS/lmsy/m/n/10.95 j$\T1/lmtt/m/n/10.95 BLOCKED $\OMS/lmsy/m/n/10.95 !$ \
+T1/lmtt/m/n/10.95 GRAPH_INTEGRATED $\OMS/lmsy/m/n/10.95 !$ \T1/lmtt/m/n/10.95 T
+ESTED $\OMS/lmsy/m/n/10.95 !$
+
+Underfull \hbox (badness 1577) in paragraph at lines 174--175
+\OMS/lmsy/m/n/10.95 !$ \T1/lmtt/m/n/10.95 diagnostic\T1/lmr/m/n/10.95 (+20) ); 
+un-sourced rows be-come \T1/lmtt/m/n/10.95 SCIENTIFIC_BASIS_UNKNOWN \T1/lmr/m/n
+/10.95 (+20) or \T1/lmtt/m/n/10.95 DECLARED_<BASIS>\T1/lmr/m/n/10.95 (+20) .
+[166] [167]
+Underfull \hbox (badness 1082) in paragraph at lines 226--227
+\T1/lmtt/m/n/10.95 rebuild\T1/lmr/m/n/10.95 (+20) ; equa-tions and claims en-te
+r only through $\T1/lmtt/m/n/10 tools / bank _ extraction . py$ \T1/lmr/m/n/10.
+95 (+20) with quote,
+[168] [169] [170]
+Underfull \hbox (badness 10000) in paragraph at lines 328--328
+[]\T1/lmss/bx/n/10.95 (+20) Caution. []\T1/lmtt/m/n/10.95 python -m raosim @exa
+mples/cli/test_13kn_sealevel_regen_allstl.args
+[171]) (./chapters/ch12_builds_state.tex [172]
+Chapter 12.
+[173] [174] [175] [176] [177] [178 <./figures/builds/02_contour_profile.png>]
+[179 <./figures/builds/03_flowfield_moc_fields.png> <./figures/builds/04_rao_bd
+e_topology.png>] [180 <./figures/builds/05_throat_kernel_fan.png>] [181 <./figu
+res/builds/06_bde_characteristic_net.png> <./figures/builds/07_bde_flow_diagnos
+tics.png>] [182 <./figures/builds/08_bde_integrity_audit.png> <./figures/builds
+/09_separation_contour.png>] [183 <./figures/builds/11_coolant_channel_march.pn
+g>] [184 <./figures/builds/12_channel_land_cross_section.png> <./figures/builds
+/14_regen_3d_wall_temperature.png>] [185 <./figures/builds/15_pintle_dimensione
+d_section.png>] [186 <./figures/builds/17_injector_hydraulics.png> <./figures/b
+uilds/18_injector_gate_scorecard.png> <./figures/builds/16_pintle_spray_envelop
+e.png>] [187 <./figures/builds/19_injector_atomization.png> <./figures/builds/2
+0_injector_throttle_map.png>] [188 <./figures/builds/21_injector_stability_scre
+en.png>] [189] [190] [191] [192] [193] [194 <./figures/fresh/fresh_13kn_chamber
+_contour_profile.png>] [195 <./figures/fresh/fresh_13kn_throat_kernel_fan.png> 
+<./figures/fresh/fresh_13kn_bde_characteristic_net.png> <./figures/fresh/fresh_
+13kn_bde_flow_conservation_diagnostics.png> <./figures/fresh/fresh_13kn_bde_num
+erical_integrity_audit.png>] [196]) (./chapters/ch13_verification.tex [197]
+Chapter 13.
+[198]) (./chapters/ch14_remaining_work.tex [199]
+Chapter 14.
+[200] [201] [202] [203] [204] [205] [206] [207] [208] [209] [210] [211]
+[212] [213] [214] [215] [216] [217] [218]) (./chapters/ch15_moc_iterations.tex
+[219]
+Chapter 15.
+[220] [221] [222] (./chapters/moc_traceability_table.tex [223] [224] [225]
+[226]) [227] [228] [229]
+Underfull \hbox (badness 1019) in paragraph at lines 327--334
+[]\T1/lmr/m/n/10.95 (+20) Numerical probes with ex-act at-tach-ment at $\OT1/lm
+r/m/n/10.95 (+20) (\OML/lmm/m/it/10.95 n[]; n[]; \OT1/lmr/m/n/10.95 (+20) ^^A\O
+ML/lmm/m/it/10.95 ^^R\OT1/lmr/m/n/10.95 (+20) ) =$ $(10\OML/lmm/m/it/10.95 ; \O
+T1/lmr/m/n/10.95 (+20) 10\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 (+20) 0\OML/l
+mm/m/it/10.95 :\OT1/lmr/m/n/10.95 (+20) 5[])$\T1/lmr/m/n/10.95 (+20) , $\OT1/lm
+r/m/n/10.95 (+20) (20\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 (+20) 24\OML/lmm/
+m/it/10.95 ; \OT1/lmr/m/n/10.95 (+20) 0\OML/lmm/m/it/10.95 :\OT1/lmr/m/n/10.95 
+(+20) 25[])$ \T1/lmr/m/n/10.95 (+20) and
+[230] [231] [232] [233] [234] [235 <./figures/moc_audit/kernel_capacity_and_com
+patibility.pdf>] [236] [237] [238] [239] [240 <./figures/moc_audit/fixed_contex
+t_refinement.pdf>] [241])
+Underfull \hbox (badness 1675) in paragraph at lines 959--25
+[]\T1/lmr/m/n/10.95 (+20) Reacting flow, a ther-mo-dy-nam-i-cally con-sis-tent 
+variable-gas for-mu-la-tion, shock fit-ting, vis-
+[242] (./chapters/app_a_docs_inventory.tex
+Appendix A.
+[243] [244] [245] [246] [247] [248] [249] [250
+pdfTeX warning (ext4): destination with the same identifier (name{table.A.2}) h
+as been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.199 \end{longtable}
+                     }] [251] [252]) (./chapters/app_b_cleanup_record.tex
+Underfull \hbox (badness 10000) in paragraph at lines 222--1
+
+[253] [254]
+Appendix B.
+ [255] [256] [257] [258] [259] [260] [261] [262] [263] [264] [265] [266])
+[267] 
+enddocument/afterlastpage (AED): lastpage setting LastPage.
+(./main.aux) )
+(see the transcript file for additional information)</opt/homebrew/Cellar/texli
+ve/20260301/share/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></opt/homebrew/Ce
+llar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></opt/ho
+mebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmex10.pf
+b></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm
+/lmmi10.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1
+/public/lm/lmmi5.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fo
+nts/type1/public/lm/lmmi6.pfb></opt/homebrew/Cellar/texlive/20260301/share/texm
+f-dist/fonts/type1/public/lm/lmmi7.pfb></opt/homebrew/Cellar/texlive/20260301/s
+hare/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></opt/homebrew/Cellar/texlive/2
+0260301/share/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></opt/homebrew/Cellar/
+texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></opt/homebre
+w/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmr12.pfb></op
+t/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmr6.
+pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/
+lm/lmr7.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1
+/public/lm/lmr8.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fon
+ts/type1/public/lm/lmr9.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-
+dist/fonts/type1/public/lm/lmri10.pfb></opt/homebrew/Cellar/texlive/20260301/sh
+are/texmf-dist/fonts/type1/public/lm/lmri9.pfb></opt/homebrew/Cellar/texlive/20
+260301/share/texmf-dist/fonts/type1/public/lm/lmss10.pfb></opt/homebrew/Cellar/
+texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmss12.pfb></opt/homebr
+ew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmss8.pfb></o
+pt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmss
+9.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/publi
+c/lm/lmssbx10.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts
+/type1/public/lm/lmsy10.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-
+dist/fonts/type1/public/lm/lmsy5.pfb></opt/homebrew/Cellar/texlive/20260301/sha
+re/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></opt/homebrew/Cellar/texlive/202
+60301/share/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></opt/homebrew/Cellar/te
+xlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></opt/homebrew/
+Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></opt/
+homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/lm/lmtk10.
+pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/
+lm/lmtt10.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/typ
+e1/public/lm/lmtt12.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist
+/fonts/type1/public/lm/lmtt8.pfb></opt/homebrew/Cellar/texlive/20260301/share/t
+exmf-dist/fonts/type1/public/lm/lmtt9.pfb></opt/homebrew/Cellar/texlive/2026030
+1/share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></opt/homebrew/Cellar/texl
+ive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on main.pdf (268 pages, 9747073 bytes).
+Transcript written on main.log.
+Latexmk: Getting log file 'main.log'
+Latexmk: Examining 'main.fls'
+Latexmk: Examining 'main.log'
+Latexmk: Log file says output to 'main.pdf'
+Latexmk: Using bibtex to make bibliography file(s).
+Latexmk: All targets (main.pdf) are up-to-date
+

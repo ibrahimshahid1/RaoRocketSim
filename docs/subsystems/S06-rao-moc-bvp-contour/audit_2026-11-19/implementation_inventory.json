@@ -1,0 +1,2888 @@
+{
+  "date": "2026-11-20",
+  "owner": "Sol A",
+  "python": "3.12.14",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "jax": "0.6.2",
+    "jaxlib": "0.6.2",
+    "optimistix": "0.0.11",
+    "pytest": "9.0.3"
+  },
+  "scope": "Final post-T19 source freeze; inventory of definitions and hashes is not capability certification. Extensive unrelated working-tree changes existed before this audit. The pre-T15 checkpoint inventory is retained separately. Tests and numerical profiles must be matched to these hashes.",
+  "modules": [
+    {
+      "file": "raosim/moc.py",
+      "sha256": "85205a1e6d3a9c52a17a9c4707889bef6cf9dedc69ed2d208503eeea706371f8",
+      "lines": 890,
+      "top_level_definitions": [
+        {
+          "name": "FlowNode",
+          "line": 61,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "CharPoint",
+          "line": 75,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "CharRow",
+          "line": 96,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_make_point",
+          "line": 123,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "UpstreamIntersection",
+          "line": 135,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "solve_interior_point",
+          "line": 139,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_axis_point",
+          "line": 240,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_wall_point",
+          "line": 294,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "approximate_starting_line",
+          "line": 380,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "march_coupled_net",
+          "line": 501,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "sample_exit_plane",
+          "line": 582,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compute_exit_thrust",
+          "line": 645,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_flowfield",
+          "line": 776,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/moc_bounded.py",
+      "sha256": "4bf11dc43026a1fea57404bc36cc7e18ad32a33d127ad3226e8fb3c6a3a15a9a",
+      "lines": 763,
+      "top_level_definitions": [
+        {
+          "name": "CharacteristicCellError",
+          "line": 77,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "CompositeWall",
+          "line": 86,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "intersect_wall_strict",
+          "line": 123,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "wall_x_at_theta",
+          "line": 181,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_wall_point_raw_general",
+          "line": 211,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "BoundedNet",
+          "line": 291,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_wall_first_nodes",
+          "line": 380,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_signed_cell_area",
+          "line": 384,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_CellFold",
+          "line": 393,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_build_row",
+          "line": 401,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "march_bounded_net",
+          "line": 485,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interp_point",
+          "line": 687,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "crop_polyline_to_x",
+          "line": 698,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "crop_to_exit_plane",
+          "line": 716,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "exit_plane_mass_flow",
+          "line": 749,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/nasa_moc.py",
+      "sha256": "d0930e21778ee04945972ec3e6f005ed36424bd606dde0ef696fae7b6d940a32",
+      "lines": 3679,
+      "top_level_definitions": [
+        {
+          "name": "MOCNode",
+          "line": 78,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "MOCKernel",
+          "line": 126,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoTopology",
+          "line": 170,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "BDERegion",
+          "line": 188,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoSourceContour",
+          "line": 227,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "FullControlSurfaceResult",
+          "line": 246,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ArcWall",
+          "line": 287,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_char_point_from_node",
+          "line": 345,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_hall_throat_line",
+          "line": 358,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoKernelError",
+          "line": 424,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "IncompleteKernelError",
+          "line": 428,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_validated_kernel_row_budget",
+          "line": 447,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_require_complete_kernel",
+          "line": 459,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "ThetaBTooLow",
+          "line": 464,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ThetaBTooHigh",
+          "line": 470,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_push_throat_point_to_supersonic",
+          "line": 475,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_visible_source_kl_throat",
+          "line": 543,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_make_throat_initial_line",
+          "line": 636,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_mm",
+          "line": 772,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_calc_A",
+          "line": 777,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_calc_B",
+          "line": 785,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_calc_R",
+          "line": 800,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_calc_b",
+          "line": 815,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_calc_R_star",
+          "line": 827,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_l_dy_dx",
+          "line": 839,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_r_dy_dx",
+          "line": 844,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nasa_tan_avg",
+          "line": 849,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_char_point_from_values",
+          "line": 857,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_arc_wall_point",
+          "line": 880,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_safe_rel_err",
+          "line": 1023,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_finite_iteration_change",
+          "line": 1029,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_arc_wall_point_raw",
+          "line": 1040,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_special_wall_point",
+          "line": 1126,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_special_wall_point_at",
+          "line": 1147,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_arc_wall_point_with_special",
+          "line": 1264,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_interior_mesh_point",
+          "line": 1286,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_axial_mesh_point",
+          "line": 1451,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rrc_march_step",
+          "line": 1495,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "build_kernel",
+          "line": 1560,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_massflow_along_rrc",
+          "line": 1776,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bd_arc_lengths",
+          "line": 1845,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_mdot_bd_grid",
+          "line": 1853,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "nasa_deriv",
+          "line": 1908,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "nasa_runge_kutta",
+          "line": 1957,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_annular_mdot",
+          "line": 2003,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "find_point_e",
+          "line": 2017,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_lrc_de_fixed_end",
+          "line": 2155,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_theta_calc",
+          "line": 2301,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_lrc_de",
+          "line": 2321,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_arc_position_of_D",
+          "line": 2480,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_insert_node_on_bd",
+          "line": 2509,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_moc_to_char_point",
+          "line": 2546,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_flow_to_moc_node",
+          "line": 2554,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_bde_back_point",
+          "line": 2561,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_remaining_mesh_row",
+          "line": 2674,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_de_cumulative_mass",
+          "line": 2774,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_contour_segment_mdot",
+          "line": 2783,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interp_moc_node",
+          "line": 2803,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_point_on_segment",
+          "line": 2816,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_calc_wall_contour_rows",
+          "line": 2877,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_bde_region",
+          "line": 2960,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "build_source_contour_from_kernel",
+          "line": 3064,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "set_theta_b",
+          "line": 3168,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_flow_node_seq",
+          "line": 3352,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interpolate_kernel_row_index",
+          "line": 3368,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_project_node_to_kernel_row",
+          "line": 3382,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "trace_kernel_cd",
+          "line": 3414,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "full_control_surface_thrust",
+          "line": 3470,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "curve_mass_flux",
+          "line": 3555,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "surface_thrust_coefficient",
+          "line": 3576,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_mass_flow_along_mesh",
+          "line": 3607,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bd_segment_at_fraction",
+          "line": 3616,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "calc_mdot_bd",
+          "line": 3647,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_resolve_bd_and_massflow",
+          "line": 3653,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/rao_residuals.py",
+      "sha256": "c6a294215b88ca1489f0ac8ac49203cb6a64efb4dc17c11249442a038d65d7d8",
+      "lines": 160,
+      "top_level_definitions": [
+        {
+          "name": "_source_axisym",
+          "line": 13,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_Cplus_axisym",
+          "line": 30,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_Cminus_axisym",
+          "line": 68,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_left_mach_geometry",
+          "line": 101,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_wall_tangency",
+          "line": 110,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_cplus_child_position",
+          "line": 118,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "residual_intersection",
+          "line": 138,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/transonic_kernel.py",
+      "sha256": "170f6bab30d5f78960ab4167bcb3aa7a262e79a79f9b3cbe69819162a672b324",
+      "lines": 250,
+      "top_level_definitions": [
+        {
+          "name": "TransonicState",
+          "line": 26,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_kl_axi_coeffs",
+          "line": 36,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_kl_twod_coeffs",
+          "line": 100,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "kliegel_levine",
+          "line": 164,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/rao_variational.py",
+      "sha256": "9c9844d9478f8d420d1d51d4e47dfbc97d151b030bb01111e1ae20a05eb3ab76",
+      "lines": 7438,
+      "top_level_definitions": [
+        {
+          "name": "ControlSurface",
+          "line": 95,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "WallSurface",
+          "line": 134,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ContourReliability",
+          "line": 151,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoInvalidRegionError",
+          "line": 172,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoRadialIncrementValidity",
+          "line": 182,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoEndpointMismatchError",
+          "line": 338,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoBoundaryDomainError",
+          "line": 342,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_nasa_reference_validation_diagnostics",
+          "line": 369,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "summarize_group",
+          "line": 460,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoMOCNumericalPolicy",
+          "line": 475,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoSolverConfig",
+          "line": 573,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "is_within_benchmarked_chart_grid",
+          "line": 913,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoResidualReport",
+          "line": 979,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "MOCNetCompatibilityReport",
+          "line": 997,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "MOCNetLink",
+          "line": 1056,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoResidualGroups",
+          "line": 1069,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoRawSolution",
+          "line": 1129,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoSolution",
+          "line": 1140,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoFieldConvergenceTolerances",
+          "line": 1330,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoFieldConvergenceEvidence",
+          "line": 1397,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_solution_mesh_context",
+          "line": 1420,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_physical_bde_field_arrays",
+          "line": 1425,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_error_summary",
+          "line": 1471,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compare_rao_solutions_common_coordinates",
+          "line": 1483,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_design_angles_rad",
+          "line": 1781,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_isentropic_V",
+          "line": 1798,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_isentropic_rhoV",
+          "line": 1811,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "thrust_integrand",
+          "line": 1818,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "massflow_integrand",
+          "line": 1855,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "length_integrand",
+          "line": 1875,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_numerical_partials",
+          "line": 1892,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "stationarity_residuals",
+          "line": 1923,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "transversality_residual",
+          "line": 1966,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_initial_ce_guess",
+          "line": 1985,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_integrate_ce",
+          "line": 2023,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_integrate_ce_curve",
+          "line": 2060,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_optimal_control_surface",
+          "line": 2097,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_construct_wall_from_ce",
+          "line": 2276,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_target_length",
+          "line": 2561,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_target_mdot",
+          "line": 2566,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_flow_nodes_from_curve",
+          "line": 2573,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "curve_mass_flux",
+          "line": 2594,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interp_flow_node",
+          "line": 2630,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "kernel_bd_segment",
+          "line": 2641,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_kernel_left_mach_line_from_starting_line",
+          "line": 2678,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_seed_kernel_d_fraction",
+          "line": 2714,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mass_closure_fluxes",
+          "line": 2744,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_initial_ce_from_kernel",
+          "line": 2773,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_phi_from_curve",
+          "line": 2947,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_integrate_ce_x_from_left_mach",
+          "line": 2964,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_pack_bvp",
+          "line": 3022,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_exact_d_free_indices",
+          "line": 3079,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_exact_exit_boundary_data",
+          "line": 3102,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_exact_exit_data_from_full",
+          "line": 3158,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_require_exact_exit_domain",
+          "line": 3170,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_expand_exact_d_unknowns",
+          "line": 3185,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_unpack_bvp",
+          "line": 3209,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_stationarity_matrix",
+          "line": 3310,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_ce_smoothness_regularization",
+          "line": 3323,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_control_surface_flow_nodes",
+          "line": 3340,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_ce_axisymmetric_compatibility_residual_groups",
+          "line": 3378,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_stationarity_residual",
+          "line": 3398,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_stationarity_fd_residual",
+          "line": 3434,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_algebraic_stationarity_residuals",
+          "line": 3465,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_left_mach_geometry_residuals",
+          "line": 3479,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_seed_log_C_from_ce",
+          "line": 3498,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_to_flow_nodes",
+          "line": 3519,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_arc_lengths_normalized",
+          "line": 3530,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interp_wall_at_fraction",
+          "line": 3540,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coupled_wall_residuals",
+          "line": 3558,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_from_bezier_contour",
+          "line": 3648,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_initial_wall_guess",
+          "line": 3700,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_radial_increment_validity",
+          "line": 3762,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_valid_region",
+          "line": 3962,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_ce_geometry_residuals",
+          "line": 3987,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_enabled_residual_blocks",
+          "line": 4119,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_filter_group",
+          "line": 4139,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_bvp_residual_groups",
+          "line": 4145,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_scaled_rao_bvp_residual",
+          "line": 4290,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_build_residual_report",
+          "line": 4303,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bde_physical_topology_gate_passes",
+          "line": 4380,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_build_solver_gate_report",
+          "line": 4393,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bvp_failure_warnings",
+          "line": 4485,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_from_bde_region",
+          "line": 4501,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "construct_wall_from_ce_raw",
+          "line": 4797,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_ce_interp_node",
+          "line": 4817,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_hermite_wall_seed",
+          "line": 4845,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_wall_from_ce_coupled",
+          "line": 4869,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "resample_wall_for_export",
+          "line": 5075,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_tangency_rms",
+          "line": 5199,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "characteristic_net_links",
+          "line": 5215,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "interior_parent_pairs",
+          "line": 5349,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "characteristic_net_compatibility_residuals",
+          "line": 5369,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rms",
+          "line": 5399,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_maxabs",
+          "line": 5404,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "summarize_characteristic_net_compatibility",
+          "line": 5409,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "moc_net_compatibility_report",
+          "line": 5421,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_segments_intersect",
+          "line": 5560,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_segment_intersection_point",
+          "line": 5572,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "characteristic_net_segments",
+          "line": 5590,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_same_net_point",
+          "line": 5603,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_links_share_endpoint",
+          "line": 5607,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_char_point_sample",
+          "line": 5616,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_link_sample",
+          "line": 5625,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_link_crossing_report",
+          "line": 5637,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_characteristic_crossing_report",
+          "line": 5707,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_flow_node_char_point",
+          "line": 5725,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bde_mesh_links",
+          "line": 5735,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_angle_delta",
+          "line": 5786,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bde_wall_tangency_errors",
+          "line": 5790,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bde_axis_band_fraction",
+          "line": 5806,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bde_axial_mass_cut_report",
+          "line": 5831,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bde_measured_topology_report",
+          "line": 5945,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "characteristic_crossing_samples",
+          "line": 6190,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "check_characteristic_crossing",
+          "line": 6204,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_rao_bvp",
+          "line": 6209,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_dedupe_strings",
+          "line": 7175,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_residual_ablation_matrix",
+          "line": 7185,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_full_cone_length",
+          "line": 7237,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_variational_moc_contour",
+          "line": 7242,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_variational_contour",
+          "line": 7311,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/moc_topology.py",
+      "sha256": "6d4a54d6e9d0a7d9d0f868edfafdc02e9df638a30281b0143ae2d751011512df",
+      "lines": 308,
+      "top_level_definitions": [
+        {
+          "name": "_char_point",
+          "line": 56,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_from_flow",
+          "line": 67,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoTopology",
+          "line": 72,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "build_topology",
+          "line": 134,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "build_reference_topology",
+          "line": 240,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/rao_existence_scan.py",
+      "sha256": "c3888aab6e2d1e7644085a6d2ae73681430607222107d42a4c7ab316bc11405c",
+      "lines": 2926,
+      "top_level_definitions": [
+        {
+          "name": "ExistenceScanConfig",
+          "line": 150,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "DEIntegrationResult",
+          "line": 240,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ClosureScanResult",
+          "line": 254,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ExistenceScanResult",
+          "line": 328,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RootRefineResult",
+          "line": 370,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_canonical_json_bytes",
+          "line": 421,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_payload_sha256",
+          "line": 432,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_json_safe",
+          "line": 436,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_optional_finite_float",
+          "line": 459,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_require_finite",
+          "line": 466,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_eq5_source_id",
+          "line": 473,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoConvergenceContext",
+          "line": 481,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoKernelResolutionEvidence",
+          "line": 801,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoConvergenceSample",
+          "line": 934,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoDomainLookup",
+          "line": 1044,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoConvergenceDomainError",
+          "line": 1097,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_strict_axis",
+          "line": 1108,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_axis_bracket",
+          "line": 1120,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoConvergenceDomain",
+          "line": 1132,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "target_length",
+          "line": 1532,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "ideal_exit_cf",
+          "line": 1538,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_moc_node_from_flow",
+          "line": 1547,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "prandtl_meyer_fan_post_state",
+          "line": 1554,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_annular_mdot",
+          "line": 1587,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_integrate_to_radius",
+          "line": 1601,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_integrate_to_length",
+          "line": 1638,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "integrate_de",
+          "line": 1701,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_theta_calc",
+          "line": 1729,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "sigma_E_rad",
+          "line": 1749,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "stationarity_derivation_summary",
+          "line": 1762,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_post_state_candidates",
+          "line": 1780,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_third_component_name",
+          "line": 1831,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_evaluate_candidate",
+          "line": 1842,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "evaluate_closure_point",
+          "line": 1937,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_root_result_from_eval",
+          "line": 1998,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "refine_geometry_root",
+          "line": 2041,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "refine_from_scan_best",
+          "line": 2120,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "resolution_convergence",
+          "line": 2138,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "write_root_results",
+          "line": 2169,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_empty_closure_arrays",
+          "line": 2185,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "scan_existence",
+          "line": 2219,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_scan_source_sha256",
+          "line": 2328,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_failed_scan_attempt_sha256",
+          "line": 2355,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_kernel_resolution_evidence",
+          "line": 2379,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_unevaluated_resolution",
+          "line": 2453,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "scan_convergence_domain",
+          "line": 2472,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "write_scan_tables",
+          "line": 2752,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_plot_one_heatmap",
+          "line": 2810,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "plot_scan_heatmaps",
+          "line": 2832,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/benchmarks.py",
+      "sha256": "72b7d33922cfda6e77324cc1f652aa3d1404405e9b7862b1b8a6ab817764c801",
+      "lines": 1189,
+      "top_level_definitions": [
+        {
+          "name": "list_benchmark_cases",
+          "line": 45,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "load_benchmark_case",
+          "line": 69,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "load_reference_curves",
+          "line": 87,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "run_benchmark",
+          "line": 99,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compare_contour_to_reference",
+          "line": 166,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compare_performance_to_reference",
+          "line": 234,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_build_contour",
+          "line": 280,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_solver_metrics",
+          "line": 375,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_pressure_metrics",
+          "line": 469,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_wall_pressure_distribution",
+          "line": 555,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_case_dict",
+          "line": 591,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_validate_case",
+          "line": 595,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_curves_of_kind",
+          "line": 627,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_load_curve",
+          "line": 634,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mode_for_metric",
+          "line": 653,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_numeric_metric",
+          "line": 666,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_message_metric",
+          "line": 699,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_metric_status",
+          "line": 721,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_overall_status",
+          "line": 731,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_write_reports",
+          "line": 748,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_resolve_report_paths",
+          "line": 765,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_format_markdown",
+          "line": 788,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_fmt",
+          "line": 838,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_clean_number",
+          "line": 846,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_json_ready",
+          "line": 856,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "ChartBenchmarkRow",
+          "line": 903,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ChartBenchmarkResult",
+          "line": 933,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "rao_variational_chart_benchmark",
+          "line": 992,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "format_chart_benchmark_report",
+          "line": 1153,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/nozzle_geometry.py",
+      "sha256": "8e215c42c59e39da16dfbb3e097d24f039bc4f5337911d17660e1edbfeac8578",
+      "lines": 403,
+      "top_level_definitions": [
+        {
+          "name": "lookup_angles",
+          "line": 47,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_chart_domain_status",
+          "line": 79,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_full_cone_length",
+          "line": 97,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_shift_contour_x",
+          "line": 113,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bell_nozzle_contour",
+          "line": 127,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compute_curvature",
+          "line": 388,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/run_nozzle.py",
+      "sha256": "2bc679efe0bc644bf5eded73540327d8b17cc192f4416475e3aff6576ec1460d",
+      "lines": 7000,
+      "top_level_definitions": [
+        {
+          "name": "_c",
+          "line": 84,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bold",
+          "line": 88,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "dim",
+          "line": 89,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "cyan",
+          "line": 90,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "orange",
+          "line": 91,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "green",
+          "line": 92,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "yellow",
+          "line": 93,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "red",
+          "line": 94,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_parse_opening_cd_map",
+          "line": 97,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "print_banner",
+          "line": 127,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "print_tags",
+          "line": 139,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_want_windows",
+          "line": 312,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_ensure_pyplot",
+          "line": 324,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_prompt",
+          "line": 369,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_prompt_optional_float",
+          "line": 381,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_prompt_optional_str",
+          "line": 395,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_prompt_choice",
+          "line": 405,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_prompt_bool",
+          "line": 416,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_section",
+          "line": 423,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_write_moc_crossing_samples",
+          "line": 427,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_default_coolant_inlet_temperature",
+          "line": 492,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_traditional_burn_time",
+          "line": 511,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_electric_technology_choices",
+          "line": 516,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_apply_electric_technology",
+          "line": 522,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_argument_present",
+          "line": 554,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_any_argument_present",
+          "line": 558,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_expand_arg_files",
+          "line": 562,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_apply_complete_package_defaults",
+          "line": 607,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_reject_legacy_injector_pressure_drop",
+          "line": 661,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coolant_is_cycle_fuel",
+          "line": 672,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_apply_split_injector_pressure_model",
+          "line": 680,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_positive_if_supplied",
+          "line": 708,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_validate_common_engine_args",
+          "line": 719,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_validate_pump_args",
+          "line": 796,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_feed_system_spec_from_args",
+          "line": 852,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_pump_spec_from_args",
+          "line": 881,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_apply_wall_sizing_mode",
+          "line": 920,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interactive",
+          "line": 957,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_TrustedTopSolution",
+          "line": 1403,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_rao_radial_validity_gate",
+          "line": 1464,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_solve",
+          "line": 1477,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_print_injector_panel",
+          "line": 1524,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_print_pump_panel",
+          "line": 1638,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_cooling_summary_payload",
+          "line": 1711,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_interactive_engine_mdo",
+          "line": 1791,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_select_mode_interactively",
+          "line": 1863,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mdo_contour_request_error",
+          "line": 1879,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mdo_authoritative_contour_handoff",
+          "line": 1899,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_resolve_mdo_of_intent",
+          "line": 1926,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_requirement_flight_duration",
+          "line": 1965,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mdo_electric_overrides",
+          "line": 1975,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mdo_default_burn_time",
+          "line": 2000,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mission_from_mdo_args",
+          "line": 2011,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_run_engine_mdo",
+          "line": 2090,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_parse_thrust_condition",
+          "line": 2358,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_run_requirements",
+          "line": 2373,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_nlp_check_metadata",
+          "line": 2492,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_run_engine_mdo_optimize",
+          "line": 2511,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "main",
+          "line": 2830,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/jax/assembly.py",
+      "sha256": "e442a2449bb4a84fccf1c36db4d92052237c6e964eaae9523c0e03e717707b97",
+      "lines": 695,
+      "top_level_definitions": [
+        {
+          "name": "StaticParams",
+          "line": 73,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "params_from_config",
+          "line": 109,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "unpack",
+          "line": 188,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_bd_geometry",
+          "line": 213,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bd_point_at_fraction",
+          "line": 221,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "expand_exact_d_unknowns",
+          "line": 238,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "bd_flux_to_fraction",
+          "line": 259,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "integrate_x_from_left_mach",
+          "line": 302,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_exact_exit_values",
+          "line": 315,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_polyline_mass_flux",
+          "line": 342,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_source_axisym",
+          "line": 365,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_cplus_pair",
+          "line": 377,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_rao_stationarity",
+          "line": 396,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "make_residual",
+          "line": 416,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "block_slices",
+          "line": 635,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "constraint_indices",
+          "line": 670,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/jax/api.py",
+      "sha256": "a4522734ca0b3d0982c431e10ea34acf13d7a879cbed7783e89e8695f0470998",
+      "lines": 190,
+      "top_level_definitions": [
+        {
+          "name": "_logit",
+          "line": 49,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "least_squares_jax",
+          "line": 53,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "solve_rao_bvp_jax",
+          "line": 161,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_sensitivities",
+          "line": 175,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/jax/moc_kernel.py",
+      "sha256": "6b556596d7e7581207d5a78ba00d193efc78c1ed341d912208726fcac102baf2",
+      "lines": 829,
+      "top_level_definitions": [
+        {
+          "name": "KernelRow",
+          "line": 98,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "KernelMarch",
+          "line": 109,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_row_point",
+          "line": 131,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "interior_point",
+          "line": 142,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "axis_point",
+          "line": 212,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_arc_intersect",
+          "line": 251,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "wall_point_arc",
+          "line": 269,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mm",
+          "line": 336,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coef_A",
+          "line": 341,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_guarded_inv",
+          "line": 345,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coef_B",
+          "line": 351,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coef_b",
+          "line": 358,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coef_R",
+          "line": 365,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_coef_Rs",
+          "line": 372,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_tan_avg",
+          "line": 379,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_mu_of",
+          "line": 384,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "interior_point_nasa",
+          "line": 388,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "axis_point_nasa",
+          "line": 487,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "arc_wall_point_raw_nasa",
+          "line": 519,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "special_wall_point_nasa",
+          "line": 580,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_set_node",
+          "line": 662,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_sweep_row_padded",
+          "line": 671,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "march_kernel",
+          "line": 723,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "build_start_line",
+          "line": 824,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/jax/sensitivities.py",
+      "sha256": "eaed486c9741d0c970f3df64b7abb5fa041136dc90782e3e8f1e030d581dbb19",
+      "lines": 257,
+      "top_level_definitions": [
+        {
+          "name": "cf_de_jax",
+          "line": 65,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "cf_from_u",
+          "line": 103,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "RaoSensitivities",
+          "line": 125,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_repack_u_from_solution",
+          "line": 152,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "rao_sensitivities",
+          "line": 163,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/mdo/contour_validation.py",
+      "sha256": "9534007cfadd45ccef9638c8e477a94e43140dda71d8d848692a31c5c9129fa9",
+      "lines": 1598,
+      "top_level_definitions": [
+        {
+          "name": "VariationalValidationStatus",
+          "line": 65,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "VariationalValidationReason",
+          "line": 73,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ContourDiscrepancyTolerances",
+          "line": 101,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoConvergenceDomainLike",
+          "line": 150,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "VariationalPostSolveConfig",
+          "line": 161,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "ContourDiscrepancy",
+          "line": 419,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "RaoDomainEvidence",
+          "line": 510,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "VariationalContourValidationOutcome",
+          "line": 540,
+          "kind": "ClassDef"
+        },
+        {
+          "name": "_host_float",
+          "line": 599,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_callable_source_id",
+          "line": 610,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_divergent_polyline",
+          "line": 621,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "compare_top_and_variational_contours",
+          "line": 657,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_base_outcome",
+          "line": 762,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "unavailable_variational_validation",
+          "line": 813,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_load_domain",
+          "line": 833,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_lookup_domain",
+          "line": 845,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_moc_ineligibility_reason",
+          "line": 907,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "validate_optimized_top_contour",
+          "line": 934,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "raosim/jax/theta_b_solve.py",
+      "sha256": "8d35afd8513ecd6079b3effba772869344649056dc7e12e9dddb2dced2bef606",
+      "lines": 274,
+      "top_level_definitions": [
+        {
+          "name": "_validated_dtheta_limit",
+          "line": 58,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "start_line_from_kernel",
+          "line": 68,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_n_rows_bound",
+          "line": 82,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "make_residual_theta_b",
+          "line": 91,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_require_final_live_kernel",
+          "line": 147,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "least_squares_jax_theta_b",
+          "line": 165,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "scripts/audit_moc_reference_profile.py",
+      "sha256": "3cdee0779038c8ccc38dda50de75155a7ff16933a0d0753eb82fee77a1336691",
+      "lines": 229,
+      "top_level_definitions": [
+        {
+          "name": "profile_config",
+          "line": 24,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "published_wall_comparison",
+          "line": 39,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "summarize",
+          "line": 76,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "_finite_json",
+          "line": 104,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "worst_field_differences",
+          "line": 114,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "save_progress",
+          "line": 149,
+          "kind": "FunctionDef"
+        },
+        {
+          "name": "main",
+          "line": 155,
+          "kind": "FunctionDef"
+        }
+      ]
+    },
+    {
+      "file": "scripts/audit_moc_refinement_pair.py",
+      "sha256": "f8e9beb603f17ce2d79e63f24a09ed0a6bdf46f952bd8ddd93dc3dbb6249b962",
+      "lines": 80,
+      "top_level_definitions": [
+        {
+          "name": "main",
+          "line": 23,
+          "kind": "FunctionDef"
+        }
+      ]
+    }
+  ],
+  "audit_test_files": [
+    {
+      "file": "tests/test_moc_exact_exit.py",
+      "sha256": "1013498c621f8fed889eaa33a9801da1724b0d88c13846ed3c1ba578ce6baba7",
+      "test_definitions": [
+        {
+          "name": "test_exact_exit_restores_exact_endpoints_and_preserves_public_layout",
+          "line": 21
+        },
+        {
+          "name": "test_exact_exit_refuses_unsupported_models",
+          "line": 39
+        },
+        {
+          "name": "test_exact_exit_reduction_refuses_disabled_domain_guidance",
+          "line": 44
+        },
+        {
+          "name": "test_final_boundary_domain_explicitly_refuses_invalid_states",
+          "line": 53
+        },
+        {
+          "name": "test_exact_exit_host_jax_values_and_full_reduced_jacobian_match",
+          "line": 76
+        },
+        {
+          "name": "test_degenerate_trial_extension_has_finite_jax_value_and_derivative",
+          "line": 108
+        },
+        {
+          "name": "test_numpy_optimizer_success_cannot_promote_invalid_final_parameterization",
+          "line": 133
+        },
+        {
+          "name": "test_standalone_jax_optimizer_success_cannot_bypass_final_domain",
+          "line": 149
+        }
+      ]
+    },
+    {
+      "file": "tests/test_moc_kernel_budget.py",
+      "sha256": "a2711fa50d35843384e41cebf03d7b9f1a59189ea534fc01876ba4a37c32e0b6",
+      "test_definitions": [
+        {
+          "name": "test_kernel_row_budget_requires_positive_integral_value",
+          "line": 12
+        },
+        {
+          "name": "test_build_kernel_retains_explicit_diagnostic_partial_state",
+          "line": 27
+        },
+        {
+          "name": "test_set_theta_b_does_not_construct_de_or_adjust_angle_after_budget_exhaustion",
+          "line": 35
+        },
+        {
+          "name": "test_preferred_bvp_seed_never_accepts_partial_kernel_or_masks_it_with_fallback",
+          "line": 55
+        },
+        {
+          "name": "test_fallback_bvp_seed_rejects_partial_kernel_before_de",
+          "line": 66
+        },
+        {
+          "name": "test_custom_row_budget_reaches_real_preferred_seed",
+          "line": 92
+        },
+        {
+          "name": "test_jax_live_angle_refuses_capacity_larger_than_declared_budget",
+          "line": 99
+        },
+        {
+          "name": "test_seed_iteration_budget_requires_positive_integer",
+          "line": 111
+        },
+        {
+          "name": "test_seed_tolerance_requires_finite_positive_numeric",
+          "line": 119
+        },
+        {
+          "name": "test_seed_report_distinguishes_tolerance_budget_and_angle_floor",
+          "line": 131
+        },
+        {
+          "name": "test_preferred_seed_forwards_explicit_precision_controls",
+          "line": 146
+        }
+      ]
+    },
+    {
+      "file": "tests/test_moc_boundary_contracts.py",
+      "sha256": "e105b216872fdd8cc23fb470d66b8ab2deb173665c161a995ea04cd293416f8d",
+      "test_definitions": [
+        {
+          "name": "test_preferred_topology_seed_preserves_downstream_throat_radius",
+          "line": 26
+        },
+        {
+          "name": "test_set_theta_b_refuses_invalid_downstream_radius",
+          "line": 43
+        },
+        {
+          "name": "test_exact_d_reduction_preserves_diagnostic_pin_flags",
+          "line": 62
+        },
+        {
+          "name": "test_default_boundary_layout_is_unchanged",
+          "line": 79
+        },
+        {
+          "name": "test_exact_d_rejects_unsupported_formulations",
+          "line": 87
+        },
+        {
+          "name": "test_exact_d_reduced_jax_residual_and_derivative_match_host",
+          "line": 92
+        },
+        {
+          "name": "test_exact_d_attaches_real_nozzle_b_solution_without_relaxing_gates",
+          "line": 129
+        },
+        {
+          "name": "test_jax_optimizer_receives_reduced_unknowns_and_returns_full_state",
+          "line": 148
+        },
+        {
+          "name": "test_exact_d_keeps_multiplier_unknowns_when_their_equations_are_active",
+          "line": 179
+        },
+        {
+          "name": "test_exact_d_preserves_inactive_multiplier_values",
+          "line": 189
+        },
+        {
+          "name": "test_gate_report_distinguishes_optimizer_stopping_from_residual_failure",
+          "line": 229
+        },
+        {
+          "name": "test_gate_report_preserves_missing_and_nonfinite_values_as_unavailable",
+          "line": 250
+        },
+        {
+          "name": "test_exact_d_reference_profile_passes_all_current_gates",
+          "line": 272
+        }
+      ]
+    },
+    {
+      "file": "tests/test_moc_iteration_failure.py",
+      "sha256": "28102eb6b47f76f4148894e0bed10b31e5949de06d4f907ac32410ca84ca7198",
+      "test_definitions": [
+        {
+          "name": "test_arc_wall_rejects_unconverged_iterates",
+          "line": 26
+        },
+        {
+          "name": "test_backward_bde_rejects_unconverged_iterates_but_accepts_zero_angle",
+          "line": 32
+        },
+        {
+          "name": "test_iteration_change_treats_nonfinite_state_as_failure",
+          "line": 49
+        },
+        {
+          "name": "test_local_processes_reject_nonfinite_parent_state",
+          "line": 53
+        }
+      ]
+    },
+    {
+      "file": "tests/test_jax_final_kernel_guard.py",
+      "sha256": "77cfc8149d896ce526e30296460e85fe98d1cfe36186ab6565c53b842be57923",
+      "test_definitions": [
+        {
+          "name": "test_actual_truncated_final_march_is_refused",
+          "line": 30
+        },
+        {
+          "name": "test_actual_complete_reference_final_march_is_accepted",
+          "line": 36
+        },
+        {
+          "name": "test_successful_optimizer_cannot_bypass_final_march_completeness",
+          "line": 43
+        },
+        {
+          "name": "test_direct_live_api_refuses_exact_d_mode",
+          "line": 58
+        }
+      ]
+    },
+    {
+      "file": "tests/test_rao_resolution_convergence.py",
+      "sha256": "cf8ef6779fdaf74467c55b1d044728b12e7e0f41b05c8959f99c9d7507d7b0f1",
+      "test_definitions": [
+        {
+          "name": "test_nonnested_linear_fields_pass_at_common_physical_coordinates",
+          "line": 115
+        },
+        {
+          "name": "test_common_coordinate_mach_exceedance_is_under_resolved",
+          "line": 136
+        },
+        {
+          "name": "test_common_coordinate_comparison_fails_closed_without_matching_context",
+          "line": 150
+        },
+        {
+          "name": "test_common_coordinate_arguments_must_match_solution_provenance",
+          "line": 165
+        },
+        {
+          "name": "test_common_coordinate_comparison_requires_physical_bde_artifacts",
+          "line": 179
+        },
+        {
+          "name": "test_common_coordinate_comparison_refuses_different_models",
+          "line": 204
+        },
+        {
+          "name": "test_common_coordinate_comparison_does_not_assume_missing_model_defaults",
+          "line": 215
+        },
+        {
+          "name": "test_refinement_allows_larger_kernel_budget_without_changing_the_model",
+          "line": 228
+        },
+        {
+          "name": "test_refinement_refuses_incomplete_throat_kernel",
+          "line": 236
+        },
+        {
+          "name": "test_common_coordinate_policy_is_strictly_typed",
+          "line": 253
+        },
+        {
+          "name": "test_rao_moc_heuristic_bundle_is_typed_and_self_classifying",
+          "line": 258
+        },
+        {
+          "name": "test_solver_mesh_controls_reject_ambiguous_or_unbounded_values",
+          "line": 278
+        },
+        {
+          "name": "test_profile_worst_field_location_matches_existing_comparison_maximum",
+          "line": 286
+        }
+      ]
+    },
+    {
+      "file": "tests/test_benchmarks.py",
+      "sha256": "ee53b3245c7e675731fe3455a47674716af6089bb0a518293bfa3fc129f0e7bf",
+      "test_definitions": [
+        {
+          "name": "test_benchmark_manifests_and_curves_are_valid",
+          "line": 25
+        },
+        {
+          "name": "test_lea_top_bezier_benchmark_passes_explicit_geometry",
+          "line": 50
+        },
+        {
+          "name": "test_benchmark_report_contains_source_status_and_metrics",
+          "line": 70
+        },
+        {
+          "name": "test_vulcain_s1_wall_pressure_trend_is_report_only",
+          "line": 89
+        },
+        {
+          "name": "test_benchmark_cli_writes_reports",
+          "line": 103
+        },
+        {
+          "name": "test_scarfed_case_is_explicitly_unsupported_by_axisymmetric_moc",
+          "line": 127
+        },
+        {
+          "name": "test_current_bvp_passes_strict_rao1958_nozzle_b_tables_2_and_3",
+          "line": 138
+        },
+        {
+          "name": "test_current_bvp_benchmark_forwards_explicit_throat_and_attachment_options",
+          "line": 164
+        }
+      ]
+    },
+    {
+      "file": "tests/test_moc_bounded_net.py",
+      "sha256": "3113ff48f1952af964a003648afd358079d770dec26f01c9d43de71a8f59b071",
+      "test_definitions": [
+        {
+          "name": "test_kernel_rows_are_bit_identical_to_build_kernel",
+          "line": 123
+        },
+        {
+          "name": "test_boundary_points_are_parents",
+          "line": 165
+        },
+        {
+          "name": "test_point_count_never_shrinks_except_axis_truncation",
+          "line": 176
+        },
+        {
+          "name": "test_interior_points_lie_inside_the_wall",
+          "line": 194
+        },
+        {
+          "name": "test_net_reaches_the_exit_with_distinct_wall_points",
+          "line": 204
+        },
+        {
+          "name": "test_mass_flow_conserved_along_every_rrc",
+          "line": 213
+        },
+        {
+          "name": "test_oracle_b_wall_mach_matches_wall_out",
+          "line": 224
+        },
+        {
+          "name": "test_oracle_b_axis_mach_matches_center_out",
+          "line": 235
+        },
+        {
+          "name": "test_oracle_b_exit_plane_is_uniform_mach_3p5",
+          "line": 259
+        },
+        {
+          "name": "test_oracle_b_exit_thrust_and_mass_flow_match_summary_out",
+          "line": 272
+        },
+        {
+          "name": "test_solve_flowfield_reports_pinned_bezier_compression_coalescence",
+          "line": 296
+        },
+        {
+          "name": "test_current_chart_bezier_reports_incomplete_coalescence",
+          "line": 316
+        },
+        {
+          "name": "test_solve_flowfield_refuses_non_data_line_methods",
+          "line": 334
+        },
+        {
+          "name": "test_char_rows_carry_explicit_parent_map",
+          "line": 342
+        },
+        {
+          "name": "test_sample_exit_plane_matches_crop",
+          "line": 361
+        },
+        {
+          "name": "test_interior_point_upstream_policy",
+          "line": 377
+        },
+        {
+          "name": "test_front_march_is_deprecated_and_still_shrinks",
+          "line": 395
+        },
+        {
+          "name": "test_intersect_wall_strict_returns_none_past_exit",
+          "line": 412
+        }
+      ]
+    },
+    {
+      "file": "tests/test_jax_sensitivities.py",
+      "sha256": "325a4ed4268585c0e1fb5a1d7aa0cab4254a2ba832b37450013ad49839f9ef23",
+      "test_definitions": [
+        {
+          "name": "test_exact_d_sensitivities_refuse_before_solving",
+          "line": 30
+        },
+        {
+          "name": "test_cf_jax_matches_numpy_surface_thrust_coefficient",
+          "line": 52
+        },
+        {
+          "name": "test_dcf_dpa_known_sign_and_analytic_value",
+          "line": 71
+        },
+        {
+          "name": "test_dcf_du_matches_finite_differences",
+          "line": 93
+        },
+        {
+          "name": "test_plot_sensitivity_field_smoke",
+          "line": 141
+        },
+        {
+          "name": "test_rao_sensitivities_end_to_end_smoke",
+          "line": 157
+        }
+      ]
+    },
+    {
+      "file": "tests/test_cli_rao_validity_contract.py",
+      "sha256": "a5213295ee1c3488a92c217474107ff396935dc498d168bad6b5db275ada907d",
+      "test_definitions": [
+        {
+          "name": "test_cli_eq5_gate_uses_typed_verdict_when_legacy_boundary_disagrees",
+          "line": 16
+        },
+        {
+          "name": "test_cli_missing_typed_eq5_evidence_refuses_even_if_legacy_diagnostic_passes",
+          "line": 35
+        },
+        {
+          "name": "test_cli_unavailable_eq5_refuses_and_top_path_is_not_applicable",
+          "line": 49
+        }
+      ]
+    }
+  ],
+  "data_files": [
+    {
+      "file": "raosim/benchmark_data/cases/rao1958_nozzle_b.json",
+      "sha256": "e369e3e55baa6c484dd852dad9e52bb99be6157d268d020db2f9ed7d0b43cd22"
+    },
+    {
+      "file": "raosim/benchmark_data/curves/rao1958_nozzle_b_table2.csv",
+      "sha256": "9a120f5056373d27bec91d22385585af8f73c7d1f47f306b9ffc717b22b99ec7"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "EQ_DOI_10_2514_8_7324_082529F7",
+    "label": "Rao optimum control-surface characteristic direction",
+    "equation_number": "11",
+    "form": "phi = theta + alpha along DE",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 3,
+    "quote": "This above relation shows that the control surface coincides with the last left characteristic in the nozzle flow, and the conditions along this line are obtained by introducing this relation into Equations [8, 9].",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_1BE77D02",
+    "label": "Rao second stationarity invariant",
+    "equation_number": "13",
+    "form": "y*rho*W^2*sin(theta)^2*tan(alpha) = -lambda_3 along DE",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 3,
+    "quote": "along DE are the necessary conditions for the integral [5] to be a maximum. Substituting Equations [11, 12, 13] into Equation [10], the following condition results",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_3E537078",
+    "label": "Rao exit transversality condition",
+    "equation_number": "14",
+    "form": "sin(2*theta) = (p-p_a)/(0.5*rho*W^2)*cot(alpha) at E",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 3,
+    "quote": "along DE are the necessary conditions for the integral [5] to be a maximum. Substituting Equations [11, 12, 13] into Equation [10], the following condition results",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_7F5A3DE9",
+    "label": "Rao nozzle length closure",
+    "equation_number": "3",
+    "form": "length = x_C + integral_C^E cot(phi) dy",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 2,
+    "quote": "Hence the length of the diverging portion of the nozzle is",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_801D1C3E",
+    "label": "Rao control-surface mass flow",
+    "equation_number": "1",
+    "form": "mass flow = integral_C^E rho*W*sin(phi-theta)/sin(phi) * 2*pi*y dy",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 2,
+    "quote": "By integrating along CE one obtains the mass flow crossing the control surface",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_B52B8DD0",
+    "label": "Rao left-characteristic compatibility",
+    "equation_number": "15",
+    "form": "d(theta)/dy - sqrt(M^2-1)/(M*(1+(gamma-1)*M^2/2))*dM/dy + sin(alpha)*sin(theta)/(y*sin(theta+alpha)) = 0",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 3,
+    "quote": "This relation is the compatibility condition between the Mach number and the flow direction along a left characteristic.",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_BEF48217",
+    "label": "Rao first stationarity invariant",
+    "equation_number": "12",
+    "form": "W*cos(theta-alpha)/cos(alpha) = -lambda_2 along DE",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 3,
+    "quote": "This above relation shows that the control surface coincides with the last left characteristic in the nozzle flow, and the conditions along this line are obtained by introducing this relation into Equations [8, 9].",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_EAD5203E",
+    "label": "Rao zero-ambient exit condition",
+    "equation_number": "16",
+    "form": "sin(2*theta_E) = 2/(gamma*M_E^2)*cot(alpha_E)",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 4,
+    "quote": "For zero ambient pressure, Equation [14] reduces to",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  },
+  {
+    "id": "EQ_DOI_10_2514_8_7324_F1B6F455",
+    "label": "Rao control-surface thrust",
+    "equation_number": "2",
+    "form": "thrust = integral_C^E [(p-p_a) + rho*W^2*sin(phi-theta)*cos(theta)/sin(phi)] * 2*pi*y dy",
+    "document_id": "DOC_DOI_10_2514_8_7324",
+    "page": 2,
+    "quote": "Similarly, thrust on the nozzle can be obtained by integrating pressure differential and momentum flux across CE",
+    "confidence": "high",
+    "source_sha256": "3f23f43a0960f74f6ddc14aebbc9e0e49a2a337c1d1d8657ae49910523076ed3",
+    "verification": "CONFIRMED"
+  }
+]

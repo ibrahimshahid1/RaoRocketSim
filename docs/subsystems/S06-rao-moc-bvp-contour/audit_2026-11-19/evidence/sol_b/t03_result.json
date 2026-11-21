@@ -1,0 +1,14 @@
+{
+  "task": "t03",
+  "status": "implemented_focused_validated",
+  "command": ".venv-jax/bin/python -m pytest -q tests/test_moc_boundary_contracts.py tests/test_jax_assembly_parity.py",
+  "exit_code": 0,
+  "result": "28 passed in 25.40s",
+  "changed_files": [
+    "raosim/rao_variational.py",
+    "raosim/jax/api.py",
+    "raosim/jax/assembly.py",
+    "tests/test_moc_boundary_contracts.py"
+  ],
+  "gate_threshold_changes": false
+}

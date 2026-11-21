@@ -1,0 +1,216 @@
+\section{Thermodynamically consistent variable-gas formulations}
+\label{sec:thermo}
+\subsection{The gas model is a constitutive system}
+The current MOC uses constant-\(\gamma\) Prandtl--Meyer functions,
+isentropic power laws, characteristic coefficients and transonic starting
+data. Replacing \(\gamma\) at individual stations leaves these ingredients
+mathematically inconsistent unless the equations are rederived for the
+selected thermodynamic regime. Anderson explicitly distinguishes an
+effective \(\gamma\) fitted to one relation from an exact representation
+of all the other relations \cite[\S17.6, PDF pp.~684--685]{anderson}.
+
+\begin{longtable}{@{}P{0.20\linewidth}P{0.35\linewidth}P{0.37\linewidth}@{}}
+\toprule\textbf{Regime} & \textbf{Closure} & \textbf{MOC implication}\\\midrule
+\endhead
+Calorically perfect &
+Fixed composition and constant \(c_p,c_v,R,\gamma\). &
+Present branch; retain as the limiting-case regression.\\
+Thermally perfect, frozen composition &
+Fixed species mass fractions \(Y_i\), but \(c_p(T)\) varies.
+A single temperature and internal-mode equilibrium are explicit choices. &
+First practical variable-property branch; use a consistent EOS,
+enthalpy, entropy and frozen acoustic speed.\\
+Chemical equilibrium &
+Composition follows local equilibrium subject to element conservation. &
+Requires constrained equilibrium derivatives and the appropriate
+equilibrium acoustic closure. A frozen \(c_p(T)\) table is insufficient.\\
+Finite-rate nonequilibrium &
+Composition and possibly internal-mode energies evolve along flow history. &
+Adds species/relaxation transport and stiffness. Entropy need not be
+constant in inviscid adiabatic expansion.\\
+\bottomrule
+\end{longtable}
+
+These distinctions follow the original thermodynamics discussion, not
+software naming conventions \cite[\S\S17.4--17.9, PDF pp.~675--689]{anderson}.
+An equilibrium/frozen label must specify what is frozen, at which station,
+and with which composition, internal-mode and thermodynamic data.
+
+\subsection{First target: fixed-composition thermally perfect gas}
+For a single-phase ideal mixture with fixed \(Y_i\),
+\begin{align}
+R &= \sum_iY_i R_i, & p&=\rho RT,\\
+c_p(T)&=\sum_iY_i c_{p,i}(T),&
+c_v(T)&=c_p(T)-R,\\
+h(T)-h(T_{\mathrm{ref}})
+&=\int_{T_{\mathrm{ref}}}^{T}c_p(\tau)\,\dd\tau,\\
+s(T,p)-s(T_{\mathrm{ref}},p_{\mathrm{ref}})
+&=\int_{T_{\mathrm{ref}}}^{T}\frac{c_p(\tau)}{\tau}\,\dd\tau
+-R\ln\!\left(\frac{p}{p_{\mathrm{ref}}}\right).
+\end{align}
+The original text gives the thermally perfect entropy integral and
+enthalpy identities explicitly \cite[\S1.4.5, PDF pp.~40--44,
+Eqs.~1.18, 1.20, 1.32--1.35; \S17.4, PDF p.~678]{anderson}.
+The frozen small-disturbance sound speed is
+\begin{equation}
+a_f^2=\left(\frac{\partial p}{\partial\rho}\right)_{s,Y}
+=\gamma_f(T)RT,\qquad
+\gamma_f=\frac{c_{p,f}}{c_{v,f}},
+\end{equation}
+under these assumptions \cite[\S17.5, PDF p.~682, Eq.~17.36]{anderson}.
+This acoustic definition, rather than an arbitrary chamber \(\gamma\),
+sets local \(M=V/a_f\) and the Mach angle.
+
+\current \code{FrozenIdealGasTable} already integrates enthalpy and
+standard entropy from its bounded \(c_p(T)\) representation.
+\code{solve_frozen_nozzle_expansion} closes a sonic throat and Q1D area
+stations. Its result explicitly excludes MOC/Rao characteristics and
+equilibrium chemistry. Reuse of this module should preserve its data
+identity, composition/freeze basis, domain checks and conservation tests.
+
+\proposal Put the property calculation behind a state contract
+\[
+\mathcal{G}:\quad
+(p,T,Y;\hbox{gas mode, data identity})
+\longmapsto
+(\rho,h,s,a^2,c_p,\hbox{required partials},\hbox{validity}).
+\]
+Each requested derivative must use the same composition and equilibrium
+constraints as the state. Store units, reference enthalpy convention,
+species set, property source/version/hash and admissible domain with
+the model. Include viscosity and conductivity through a separately
+identified transport closure; an EOS alone does not provide them.
+
+For smooth optimization, interpolation regularity also matters. The
+present piecewise-linear \(c_p\) law gives consistent integrals, but
+derivatives can change at property-grid knots. Any smoother replacement
+must preserve \(h_T=c_p\), \(s_T|_p=c_p/T\), positivity and
+\(c_p-c_v=R\); independently fitting inconsistent \(h,s,c_p\) surfaces
+would defeat the purpose.
+
+\subsection{Generalize the compatibility variables, not only the coefficient}
+For smooth isentropic turning, the velocity differential
+\begin{equation}
+\dd\mathcal{N}=\sqrt{M^2-1}\,\frac{\dd V}{V}
+\label{eq:turning}
+\end{equation}
+defines a path-dependent turning increment before the calorically perfect
+specialization. Anderson's Eq.~4.35 gives the corresponding turning
+differential; Eqs.~4.39--4.44 specialize and integrate
+it for the closed Prandtl--Meyer function
+\cite[\S4.14, PDF pp.~186--187]{anderson}.
+
+In the smooth, steady, adiabatic, irrotational/homentropic axisymmetric
+case, the velocity-form compatibility retains the geometric source:
+\begin{align}
+C^+:\quad \dd\theta-\dd\mathcal{N}
+&=-\frac{\sin\theta}{Mr}\,\dd\ell,
+&\frac{\dd r}{\dd x}&=\tan(\theta+\mu),\\
+C^-:\quad \dd\theta+\dd\mathcal{N}
+&=+\frac{\sin\theta}{Mr}\,\dd\ell,
+&\frac{\dd r}{\dd x}&=\tan(\theta-\mu).
+\end{align}
+Here \(\ell\) is characteristic arclength oriented downstream, distinct
+from thermodynamic entropy \(s\), and \(\mu=\sin^{-1}(1/M)\).
+The displayed source form applies for \(r>0\); the axis requires a
+separately regularized symmetry limit. Backward reconstruction must
+retain the same signed orientation convention.
+The original axisymmetric derivation uses \(dp=-\rho V\,dV\) and the
+isentropic acoustic derivative before introducing the perfect-gas
+Prandtl--Meyer function
+\cite[\S11.4, PDF p.~408; \S11.8, PDF pp.~420--422,
+especially Eq.~11.51]{anderson}.
+
+For the first frozen-property target, recover local \(T,p,\rho,a\) from
+\(h_0=h(T)+V^2/2\), the chosen isentrope and EOS. A turning integral or
+its differential then depends on that thermodynamic path. It is not the
+old universal \(\nu(M;\gamma)\) with a varying argument inserted into it.
+Across streamline entropy differences, finite-rate chemistry,
+independently varying composition, heat addition or shocks, additional
+transport and compatibility terms are required. Smooth homentropic
+equilibrium flow can still use a consistently closed EOS in this framework.
+Equations above do not claim to supply that larger system.
+
+\subsection{Starting data, sonic closure and conservation}
+The transonic starting line must be consistent with the chosen gas law
+and throat curvature. A variable-property downstream solver started from
+an unverified constant-gas KL expansion is a mixed formulation. The
+original KL coefficient table remains unavailable in the prior audit;
+this is a separate source gap to resolve or avoid with a verified
+alternative initializer.
+
+The first milestone should therefore include the Q1D sonic state,
+throat mass flux, a source-grounded transonic/near-sonic initializer and
+convergence away from any numerical supersonic offset. Track the reference
+state used to define \(c^*\), Mach and mass flow. Require independent
+conservation checks rather than rescaling the starting line to an ideal
+one-dimensional mass flow by construction.
+
+For nonequilibrium flow, the sonic location is not in general guaranteed
+to coincide with the geometric throat. The original text also makes
+clear that finite-rate irreversibility breaks isentropy in an otherwise
+inviscid adiabatic nozzle \cite[\S17.11, PDF p.~704]{anderson}. The
+current frozen sonic-root assumptions cannot be carried into that
+branch without a new derivation.
+
+\subsection{Equilibrium and finite-rate branches}
+At equilibrium, composition derivatives contribute to heat capacities:
+\begin{equation}
+c_{p,\mathrm{eq}}
+=\sum_iY_i c_{p,i}
++\sum_i h_i\left(\frac{\partial Y_i}{\partial T}\right)_p .
+\end{equation}
+The source separately defines frozen and equilibrium heat capacities
+\cite[PDF p.~678, Eqs.~17.20--17.25]{anderson}.
+Formation-energy conventions matter when \(Y_i\) changes. A chamber
+property table in \((P_c,\mathrm{O/F})\) is not a complete
+local equilibrium EOS in the nozzle.
+
+For an equilibrium EOS expressed in \((\rho,T)\), the following total
+differential is a useful proposed implementation check:
+\begin{equation}
+a_{\mathrm{eq}}^2
+=p_\rho|_T-p_T|_\rho\frac{s_\rho|_T}{s_T|_\rho}.
+\end{equation}
+This follows by imposing \(\dd s=0\) on a differentiable single-phase
+equilibrium branch with fixed elemental inventory and \(s_T|_\rho\ne0\).
+It is an identity to test against the thermodynamic backend,
+not a replacement for computing consistent equilibrium derivatives.
+Anderson's more explicit sound-speed expression includes the
+non-perfect-gas derivative corrections \cite[PDF p.~682, Eq.~17.35]{anderson}.
+
+A single-temperature finite-rate ideal-mixture branch would additionally
+solve, under its declared inviscid assumptions,
+\begin{equation}
+\frac{D Y_i}{Dt}=\frac{\dot\omega_i}{\rho},\qquad
+\sum_iY_i=1,\qquad \sum_i\dot\omega_i=0.
+\end{equation}
+The production units are \(\mathrm{kg\,m^{-3}\,s^{-1}}\).
+Species transport is source-grounded
+\cite[PDF p.~687, Eq.~17.42]{anderson}. A reacting
+characteristic intersection needs streamline history as well as its
+two acoustic parents. The local Young thesis constructs that third
+streamline foot explicitly \cite[PDF pp.~91--96]{young}.
+
+The absolute mixture enthalpy must include formation contributions
+consistently. Chemical energy cannot also be added as a second external
+heat-release term if already present in that enthalpy. Finite-rate
+species and internal-mode relaxation can introduce stiff source
+integration and additional sound/characteristic conventions.
+
+\subsection{A source discrepancy that blocks direct finite-rate transcription}
+Independent checks of the original Young thesis found unresolved
+differences between its earlier EOS/absolute-enthalpy definitions and
+the printed chemical-source expression. PDF pp.~87--89 define
+\(R=\sum_iY_iR_i\), mass production and \(h_i+h_i^\circ\), whereas
+Eqs.~4.22--4.23 print a common mixture \(R\) and
+\(h_i-h_i^\circ\). A separate units check found a discrepancy between
+Eq.~4.49 and the subsequent coefficient forms on PDF pp.~93--94.
+
+These are recorded as source inconsistencies and independently derived
+candidates in \code{source_discrepancies.json}, not as an established
+published erratum. Young remains useful evidence for the coupled
+characteristic/streamline architecture. Its printed source coefficients
+are not implementation-ready until rederived and corroborated against
+the original governing formulation. This blocks that transcription,
+not the earlier fixed-composition thermally perfect milestone.
