@@ -150,3 +150,55 @@ def test_current_bvp_passes_strict_rao1958_nozzle_b_tables_2_and_3(tmp_path):
     assert metrics["full_cde_thrust_coefficient"]["message"].startswith(
         "Computed by direct integration"
     )
+    assumptions = result["model_assumptions"]
+    assert assumptions["exact_boundary_reproduction"] is False
+    assert assumptions["source_worked_contour"]["downstream_radius_over_rt"] == pytest.approx(0.45)
+    assert assumptions["modeled_contour"]["downstream_radius_over_rt"] == pytest.approx(0.382)
+    markdown = open(result["report_paths"]["markdown"]).read()
+    assert "## Model Assumptions" in markdown
+    assert '"exact_boundary_reproduction": false' in markdown
+    assert result["solver_gate_report"]["promotion"]["reliability"] == result["contour_design_status"]
+    assert "## Solver Gate Report" in markdown
+
+
+def test_current_bvp_benchmark_forwards_explicit_throat_and_attachment_options(monkeypatch):
+    from types import SimpleNamespace
+    from raosim.benchmarks import _build_contour
+    import raosim.rao_variational as rv
+
+    case = load_benchmark_case("rao1958_nozzle_b")
+    case["solver_options"]["rao"].update(
+        throat_downstream_radius_factor=0.45,
+        throat_upstream_radius_factor=1.2,
+        exact_d_attachment=True,
+        exact_exit_attachment=True, kernel_max_rrcs=1000,
+        kernel_seed_max_iter=25, kernel_seed_abs_tol=1e-8,
+        kernel_dtheta_limit_deg=0.0625, physics_weight=1.0,
+    )
+    captured = {}
+
+    def solve(config):
+        captured["config"] = config
+        def export(**kwargs):
+            captured["export"] = kwargs
+            return {}
+        return SimpleNamespace(
+            to_contour_dict=export,
+            control_surface=SimpleNamespace(M=[2.6]),
+            reliability=SimpleNamespace(value="geometric_approximation"),
+        )
+
+    monkeypatch.setattr(rv, "solve_rao_bvp", solve)
+    _build_contour(case, "rao")
+    config = captured["config"]
+    assert config.throat_downstream_radius_factor == pytest.approx(0.45)
+    assert config.throat_upstream_radius_factor == pytest.approx(1.2)
+    assert config.exact_d_attachment is True
+    assert config.exact_exit_attachment is True
+    assert config.kernel_max_rrcs == 1000
+    assert config.kernel_seed_max_iter == 25
+    assert config.kernel_seed_abs_tol == 1e-8
+    assert config.kernel_dtheta_limit_deg == 0.0625
+    assert config.physics_weight == 1.0
+    assert captured["export"]["Ru_factor"] == pytest.approx(1.2)
+    assert captured["export"]["Rd_factor"] == pytest.approx(0.45)

@@ -7,9 +7,9 @@ Generates the three-section contour:
   3. Quadratic Bézier bell  (canted parabola from inflection N to exit E)
 
 References:
-  - G. V. R. Rao, "Exhaust Nozzle Contour for Optimum Thrust," 1958/1961
-  - NASA SP-8120, "Liquid Rocket Engine Nozzles"
-  - Seitzman, Georgia Tech AE 6450 nozzle-geometry lecture notes
+  - NASA SP-125, Figure 4-14 / Eq.4-7 / worked example4-2 (PDF pp100,107)
+  - NASA SP-8120, Figure5 and section2.1.2.1.2 (PDF p29), conceptual cross-check
+  - The originating Rao1960 chart paper is not held; no inspection claimed.
 """
 
 from __future__ import annotations
@@ -22,88 +22,36 @@ from raosim.validation import add_contour_reliability_metadata
 
 
 
-_EPSILON_VALS = np.array([4, 5, 6, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-                         dtype=float)
-
-_LPCT_VALS = np.array([60, 70, 80, 90, 100], dtype=float)
-
-#  θ_n  (initial wall angle at inflection, degrees)
-#  Shape: (len(_EPSILON_VALS), len(_LPCT_VALS))
-#
-#  Provenance (verified against propulsion_texts, 2026-06-11): these are
-#  the classic Rao TOP design charts — Rao, "Approximation of Optimum
-#  Thrust Nozzle Contour," ARS J. 30(6), 1960, p. 561 (the θ_m/θ_e
-#  parabola-fit charts), as reproduced in Sutton/RPE and NASA SP-8120.
-#  Rao's optimum-nozzle parameter study behind them was computed for
-#  γ = 1.23 (Rao, "Recent Developments in Rocket Nozzle Configurations,"
-#  ARS J. 31(11), 1961, p. 1490); per the same paper, at fixed (ε, L)
-#  the optimal CONTOUR is nearly γ-insensitive ("the differences in
-#  nozzle contours are negligible"), so the angle tables remain valid
-#  comparison targets at γ = 1.4 — only Cf depends strongly on γ.
-#  Magnitude cross-check from that paper (pp. 1490-1491): optimal wall
-#  angles "about 28° to 30°" downstream of the throat, exit inclination
-#  "about 10° to 14°" — consistent with these tables' mid-grid values.
-#
-#  ADJUDICATION NOTE (2026-10-16, open; values deliberately unchanged): the
-#  "verified" claim above is NOT supported by the held text.  Rao 1960 (the
-#  cited chart paper) is not in propulsion_texts/.  The held charts are
-#  graphs only -- SP-125 Fig. 4-14 (PDF p. 100) and SP-8120 Fig. 5(b) (PDF
-#  p. 29) -- and the one numeric readout in the held text, the SP-125 worked
-#  example (sec. 4.3, PDF p. 107: ε = 14, L_f = 0.8 -> θ_n = 27.4°,
-#  θ_e = 9.8°), disagrees with these tables, which give 31.6° and 16.7° there.
-#  Both held charts also show θ_e FALLING with ε at fixed L_f, whereas this
-#  θ_e table rises.  The MDO contour (raosim.mdo.grid) uses the same tables.
-#  Only the chart EXTENT (ε 4-50, L_f 60-100 %) is cited as a validity
-#  domain; the ordinates need an owner decision before they are relabelled.
-_THETA_N_TABLE = np.array([
-    # L%:  60     70     80     90    100           ε
-    [33.0, 28.5, 25.0, 22.5, 20.5],  #  4
-    [35.0, 30.0, 26.5, 23.5, 21.5],  #  5
-    [36.5, 31.5, 27.5, 24.5, 22.0],  #  6
-    [38.5, 33.0, 29.0, 26.0, 23.5],  #  8
-    [40.0, 34.5, 30.0, 27.0, 24.5],  # 10
-    [42.0, 36.5, 32.0, 28.5, 26.0],  # 15
-    [43.5, 38.0, 33.0, 29.5, 27.0],  # 20
-    [44.5, 38.5, 34.0, 30.5, 27.5],  # 25
-    [45.0, 39.0, 34.5, 31.0, 28.0],  # 30
-    [45.5, 39.5, 35.0, 31.5, 28.5],  # 35
-    [46.0, 40.0, 35.5, 32.0, 29.0],  # 40
-    [46.0, 40.0, 35.5, 32.0, 29.0],  # 45
-    [46.5, 40.5, 36.0, 32.5, 29.5],  # 50
-], dtype=float)
-
-#  θ_e  (exit wall angle, degrees)
-_THETA_E_TABLE = np.array([
-    # L%:  60     70     80     90    100           ε
-    [17.0, 14.0, 11.5,  9.5,  8.0],  #  4
-    [18.5, 15.0, 12.5, 10.5,  8.5],  #  5
-    [19.5, 16.0, 13.5, 11.0,  9.0],  #  6
-    [21.0, 17.5, 14.5, 12.0, 10.0],  #  8
-    [22.0, 18.5, 15.5, 13.0, 10.5],  # 10
-    [24.0, 20.5, 17.0, 14.0, 11.5],  # 15
-    [25.5, 21.5, 18.0, 15.0, 12.5],  # 20
-    [26.5, 22.5, 18.5, 15.5, 13.0],  # 25
-    [27.0, 23.0, 19.0, 16.0, 13.5],  # 30
-    [27.5, 23.5, 19.5, 16.0, 13.5],  # 35
-    [28.0, 24.0, 20.0, 16.5, 14.0],  # 40
-    [28.0, 24.0, 20.0, 16.5, 14.0],  # 45
-    [28.5, 24.5, 20.0, 17.0, 14.0],  # 50
-], dtype=float)
-
+# Scientific basis: model_id=MODEL_NOZZLE_RAO_TOP_BEZIER,
+# source=DOC_NTRS_19710019929, Figure 4-14 (PDF p.100), worked point p.107.
+# Reviewer measurements, chart uncertainty and exact source anchor are kept
+# together.  Rao 1960 is not held; no original-chart-paper inspection claimed.
+from raosim.rao_top_chart import (
+    EPSILON as _EPSILON_VALS,
+    LENGTH_PERCENT as _LPCT_VALS,
+    THETA_N_DEG as _THETA_N_TABLE,
+    THETA_E_DEG as _THETA_E_TABLE,
+    EVIDENCE as _RAO_CHART_EVIDENCE,
+)
 
 _interp_theta_n = RegularGridInterpolator(
     (_EPSILON_VALS, _LPCT_VALS), _THETA_N_TABLE,
-    method='linear', bounds_error=False, fill_value=None,
+    method="linear", bounds_error=True,
 )
 _interp_theta_e = RegularGridInterpolator(
     (_EPSILON_VALS, _LPCT_VALS), _THETA_E_TABLE,
-    method='linear', bounds_error=False, fill_value=None,
+    method="linear", bounds_error=True,
 )
 
 
 def lookup_angles(epsilon: float, length_pct: float) -> tuple[float, float]:
     """
-    Interpolate the standard (θ_n, θ_e) from Rao/NASA charts.
+    Interpolate reviewer measurements of SP-125 Figure 4-14 wall angles.
+
+    The held chart covers epsilon 5-50 and lengths 60-100 percent.  Values are
+    approximate chart readings, with a source-printed anchor at (14, 80).
+    Outside-domain queries raise ValueError; no extrapolation is attributed
+    to the source.  See ``raosim.rao_top_chart.EVIDENCE`` for uncertainty.
 
     Parameters
     ----------
@@ -114,6 +62,14 @@ def lookup_angles(epsilon: float, length_pct: float) -> tuple[float, float]:
     -------
     (theta_n, theta_e) in degrees
     """
+    status = rao_chart_domain_status(epsilon, length_pct)
+    if not status["in_domain"]:
+        raise ValueError(
+            "Rao/TOP angle lookup is outside the held SP-125 chart domain "
+            f"epsilon={status['epsilon_range']}, "
+            f"length_pct={status['length_pct_range']}; supply independently "
+            "justified explicit angles or select a supported contour method."
+        )
     pt = np.array([[epsilon, length_pct]])
     theta_n = float(_interp_theta_n(pt)[0])
     theta_e = float(_interp_theta_e(pt)[0])
@@ -121,15 +77,13 @@ def lookup_angles(epsilon: float, length_pct: float) -> tuple[float, float]:
 
 
 def rao_chart_domain_status(epsilon: float, length_pct: float) -> dict:
-    """Return whether ``(epsilon, length_pct)`` is inside the digitized chart.
-
-    ``RegularGridInterpolator`` deliberately supports extrapolation for
-    research comparisons, but production callers need an explicit provenance
-    flag: extrapolated angles have not been benchmarked as Rao/TOP chart data.
-    """
+    """Return source-chart membership; lookup refuses points outside it."""
     eps_min, eps_max = float(_EPSILON_VALS[0]), float(_EPSILON_VALS[-1])
     lp_min, lp_max = float(_LPCT_VALS[0]), float(_LPCT_VALS[-1])
-    in_domain = eps_min <= epsilon <= eps_max and lp_min <= length_pct <= lp_max
+    in_domain = (
+        math.isfinite(epsilon) and math.isfinite(length_pct)
+        and eps_min <= epsilon <= eps_max and lp_min <= length_pct <= lp_max
+    )
     return {
         "in_domain": bool(in_domain),
         "extrapolated": not bool(in_domain),
@@ -140,10 +94,20 @@ def rao_chart_domain_status(epsilon: float, length_pct: float) -> dict:
 
 
 
-def _full_cone_length(Rt: float, epsilon: float) -> float:
-    """Length of a 15° half-angle conical nozzle with the same ε."""
+def _full_cone_length(
+    Rt: float, epsilon: float, downstream_radius_ratio: float = 0.382,
+) -> float:
+    """SP-125 Eq.4-7: equivalent 15-degree cone with throat rounding.
+
+    The reference cone has the same downstream circular radius as this nozzle,
+    as required by the definition preceding Figure 4-14 (PDF p.100) and the
+    worked calculation on PDF p.107.  Setting the ratio to zero recovers the
+    sharp-corner convention; that is not the source's rounded-throat length.
+    """
+    alpha = math.radians(15.0)
     Re = math.sqrt(epsilon) * Rt
-    return (Re - Rt) / math.tan(math.radians(15.0))
+    Rd = downstream_radius_ratio * Rt
+    return (Re - Rt + Rd * (1.0 / math.cos(alpha) - 1.0)) / math.tan(alpha)
 
 
 def _shift_contour_x(contour: dict, offset: float) -> dict:
@@ -317,7 +281,7 @@ def bell_nozzle_contour(
     Re = math.sqrt(epsilon) * Rt
     Ru = spec.upstream_radius(Rt)
     Rd = spec.downstream_radius(Rt)
-    Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon)
+    Ln = (length_pct / 100.0) * _full_cone_length(Rt, epsilon, Rd_factor)
 
 
     y_cu = Rt + Ru      # center y
@@ -402,6 +366,10 @@ def bell_nozzle_contour(
             'theta_e': 'rao_top_chart' if theta_e_from_chart else 'user',
         },
         'rao_chart_domain': chart_status,
+        'rao_chart_evidence': dict(_RAO_CHART_EVIDENCE) if (
+            theta_n_from_chart or theta_e_from_chart
+        ) else None,
+        'length_reference': 'SP-125 Eq.4-7 rounded-throat 15-degree cone',
         'rao_chart_extrapolated': bool(
             chart_status['extrapolated']
             and (theta_n_from_chart or theta_e_from_chart)

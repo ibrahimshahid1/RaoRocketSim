@@ -131,6 +131,7 @@ def run_benchmark(
                 ),
             )],
             "physics_gaps": case.get("expected_physics_gaps", []),
+            "model_assumptions": case.get("model_assumptions", {}),
             "contour_design_status": "not_run_incompatible_case",
             "warnings": [],
         }
@@ -153,7 +154,9 @@ def run_benchmark(
         "overall_status": _overall_status(metrics),
         "metrics": metrics,
         "physics_gaps": case.get("expected_physics_gaps", []),
+        "model_assumptions": case.get("model_assumptions", {}),
         "contour_design_status": contour.get("design_status", "unknown"),
+        "solver_gate_report": contour.get("construction_diagnostics", {}).get("gate_report"),
         "warnings": contour.get("warnings", []),
     }
     _write_reports(result, report_path)
@@ -317,6 +320,15 @@ def _build_contour(case: dict[str, Any], method: str) -> dict[str, Any]:
         starting_line_method = str(
             opts.pop("starting_line_method", "kliegel_levine")
         )
+        throat_upstream_radius_factor = float(opts.pop("throat_upstream_radius_factor", 1.5))
+        throat_downstream_radius_factor = float(opts.pop("throat_downstream_radius_factor", 0.382))
+        exact_d_attachment = opts.pop("exact_d_attachment", False)
+        numerical_options = {
+            name: opts.pop(name) for name in (
+                "exact_exit_attachment", "kernel_max_rrcs", "kernel_seed_max_iter",
+                "kernel_seed_abs_tol", "kernel_dtheta_limit_deg", "physics_weight",
+            ) if name in opts
+        }
         if opts:
             unknown = ", ".join(sorted(opts))
             raise ValueError(f"Unknown current-BVP benchmark options: {unknown}")
@@ -336,11 +348,17 @@ def _build_contour(case: dict[str, Any], method: str) -> dict[str, Any]:
             wall_method=wall_method,
             solver_backend=solver_backend,
             starting_line_method=starting_line_method,
+            throat_upstream_radius_factor=throat_upstream_radius_factor,
+            throat_downstream_radius_factor=throat_downstream_radius_factor,
+            exact_d_attachment=exact_d_attachment,
+            **numerical_options,
         ))
         contour = solution.to_contour_dict(
             Rt=Rt,
             epsilon=epsilon,
             length_pct=length_pct,
+            Ru_factor=throat_upstream_radius_factor,
+            Rd_factor=throat_downstream_radius_factor,
             pa_over_p0=float(inputs.get("Pa", 0.0)) / max(
                 float(inputs.get("Pc", 1.0)), 1e-30,
             ),
@@ -794,6 +812,18 @@ def _format_markdown(result: dict[str, Any]) -> str:
                 source_ref=metric.get("source_ref", ""),
             )
         )
+    if result.get("model_assumptions"):
+        lines.extend([
+            "", "## Model Assumptions", "", "```json",
+            json.dumps(result["model_assumptions"], indent=2, sort_keys=True),
+            "```",
+        ])
+    if result.get("solver_gate_report"):
+        lines.extend([
+            "", "## Solver Gate Report", "", "```json",
+            json.dumps(result["solver_gate_report"], indent=2, sort_keys=True),
+            "```",
+        ])
     lines.extend(["", "## Physics Gaps", ""])
     for gap in result.get("physics_gaps", []):
         lines.append(f"- {gap}")

@@ -15,6 +15,7 @@ from raosim.rao_variational import (
     RaoSolverConfig,
     RaoSolution,
     compare_rao_solutions_common_coordinates,
+    CHARACTERISTIC_RAO_RESIDUAL_BLOCKS,
 )
 
 
@@ -67,11 +68,23 @@ def _solution(
             "gamma": 1.4,
             "pa_over_p0": 0.01,
             "length_pct": 80.0,
+            "throat_upstream_radius_factor": 1.5,
+            "throat_downstream_radius_factor": 0.382,
+            "starting_line_method": "kliegel_levine",
+            "exact_d_attachment": False,
+            "exact_exit_attachment": False,
+            "pin_d_mach": True,
+            "pin_d_theta": True,
+            "formulation": "characteristic",
+            "residual_blocks": sorted(CHARACTERISTIC_RAO_RESIDUAL_BLOCKS),
+            "physics_weight": 0.05,
             "n_control": count,
             "n_kernel": count,
             "wall_method": "bde",
             "kernel_dtheta_limit_deg": 0.25,
             "kernel_massflow_rel_tol": 0.02,
+            "kernel_max_rrcs": 500,
+            "kernel_reached_wall": True,
         }
     }
     if include_artifacts:
@@ -176,6 +189,59 @@ def test_common_coordinate_comparison_requires_physical_bde_artifacts():
     assert "BDE" in evidence.reason
 
 
+@pytest.mark.parametrize(("name", "different"), [
+    ("throat_upstream_radius_factor", 1.0),
+    ("throat_downstream_radius_factor", 0.45),
+    ("starting_line_method", "nasa_visible_kliegel_levine"),
+    ("exact_d_attachment", True),
+    ("exact_exit_attachment", True),
+    ("pin_d_mach", False),
+    ("pin_d_theta", False),
+    ("formulation", "legacy"),
+    ("residual_blocks", ["mass", "length"]),
+    ("physics_weight", 1.0),
+])
+def test_common_coordinate_comparison_refuses_different_models(name, different):
+    coarse, fine = _solution(3), _solution(5)
+    fine.construction_diagnostics["solver_mesh_context"][name] = different
+    evidence = compare_rao_solutions_common_coordinates(coarse, fine, Rt=1.0, gamma=1.4)
+    assert not evidence.applicable
+    assert not evidence.passes
+    assert name in evidence.reason
+    assert evidence.metrics == {}
+
+
+@pytest.mark.parametrize("missing_value", [None, "absent"])
+def test_common_coordinate_comparison_does_not_assume_missing_model_defaults(missing_value):
+    coarse, fine = _solution(3), _solution(5)
+    context = coarse.construction_diagnostics["solver_mesh_context"]
+    if missing_value == "absent":
+        del context["exact_d_attachment"]
+    else:
+        context["exact_d_attachment"] = missing_value
+    evidence = compare_rao_solutions_common_coordinates(coarse, fine, Rt=1.0, gamma=1.4)
+    assert not evidence.applicable
+    assert not evidence.passes
+    assert "coarse.exact_d_attachment" in evidence.reason
+
+
+def test_refinement_allows_larger_kernel_budget_without_changing_the_model():
+    coarse, fine = _solution(3), _solution(5)
+    fine.construction_diagnostics["solver_mesh_context"]["kernel_max_rrcs"] = 1000
+    evidence = compare_rao_solutions_common_coordinates(coarse, fine, Rt=1.0, gamma=1.4)
+    assert evidence.applicable
+    assert evidence.passes
+
+
+def test_refinement_refuses_incomplete_throat_kernel():
+    coarse, fine = _solution(3), _solution(5)
+    fine.construction_diagnostics["solver_mesh_context"]["kernel_reached_wall"] = False
+    evidence = compare_rao_solutions_common_coordinates(coarse, fine, Rt=1.0, gamma=1.4)
+    assert not evidence.applicable
+    assert not evidence.passes
+    assert "complete throat kernels" in evidence.reason
+
+
 @pytest.mark.parametrize(
     ("kwargs", "message"),
     [
@@ -215,3 +281,15 @@ def test_solver_mesh_controls_reject_ambiguous_or_unbounded_values():
         RaoSolverConfig(**base, kernel_dtheta_limit_deg=True)
     with pytest.raises(ValueError, match="no greater than one"):
         RaoSolverConfig(**base, kernel_massflow_rel_tol=1.01)
+
+
+def test_profile_worst_field_location_matches_existing_comparison_maximum():
+    from scripts.audit_moc_reference_profile import worst_field_differences
+
+    coarse, fine = _solution(3), _solution(5, mach_offset=0.001)
+    evidence = compare_rao_solutions_common_coordinates(coarse, fine, Rt=1.0, gamma=1.4)
+    report = worst_field_differences(coarse, fine, Rt=1.0, gamma=1.4)
+    worst = report["fields"]["mach"]
+    assert report["available"]
+    assert abs(worst["signed_interpolated_minus_target"]) == pytest.approx(evidence.metrics["mach_max_abs"])
+    assert len(worst["coordinate_x_over_rt_r_over_rt"]) == 2

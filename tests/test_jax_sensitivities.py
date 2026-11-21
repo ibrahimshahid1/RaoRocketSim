@@ -27,6 +27,20 @@ GAMMA = 1.4
 RT = 0.020
 
 
+def test_exact_d_sensitivities_refuse_before_solving(monkeypatch):
+    import raosim.rao_variational as rv
+    from raosim.jax.sensitivities import rao_sensitivities
+
+    config = rv.RaoSolverConfig(Rt=RT, epsilon=10.0, exact_d_attachment=True)
+
+    def unexpected_solve(*args, **kwargs):
+        pytest.fail("unsupported sensitivity request must refuse before solving")
+
+    monkeypatch.setattr(rv, "solve_rao_bvp", unexpected_solve)
+    with pytest.raises(NotImplementedError, match="reduced-state derivative chain"):
+        rao_sensitivities(config)
+
+
 @pytest.fixture(scope="module")
 def de_nodes():
     """DE of the reference fixed-end topology (real, no BVP solve)."""

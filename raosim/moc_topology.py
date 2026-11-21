@@ -232,6 +232,7 @@ def build_topology(
             "kernel_dtheta_limit_deg": float(
                 math.degrees(kernel.dtheta_limit_rad)),
             "kernel_massflow_rel_tol": float(kernel.massflow_rel_tol),
+            "kernel_max_rrcs": int(kernel.max_rrcs),
         },
     )
 
@@ -251,6 +252,7 @@ def build_reference_topology(
     max_iter: int = 30,
     kernel_dtheta_limit_deg: float = 0.5,
     kernel_massflow_rel_tol: float = 0.02,
+    kernel_max_rrcs: int = 500,
 ) -> RaoTopology:
     """One-call fixed-(L, epsilon) construction -> full-form topology.
 
@@ -301,5 +303,6 @@ def build_reference_topology(
         end_condition="fixed_end", max_iter=max_iter,
         dtheta_limit=math.radians(kernel_dtheta_limit_deg),
         mdot_tol=kernel_massflow_rel_tol,
+        max_rrcs=kernel_max_rrcs,
     )
     return build_topology(kernel, nasa_topo)

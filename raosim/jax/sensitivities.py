@@ -180,6 +180,11 @@ def rao_sensitivities(config, *, solution=None):
     import raosim.rao_variational as rv
     from raosim.moc import FlowNode
 
+    if getattr(config, "exact_d_attachment", False):
+        raise NotImplementedError(
+            "rao_sensitivities does not support exact_d_attachment: "
+            "the reduced-state derivative chain is not implemented"
+        )
     if getattr(config, "couple_wall", False):
         raise NotImplementedError(
             "rao_sensitivities v1 supports couple_wall=False (the J4-gate "

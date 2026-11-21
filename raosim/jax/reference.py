@@ -4,7 +4,7 @@ raosim.jax.reference — canonical M3.5Perf reference constants.
 Per JAX_DIFFERENTIABLE_PLAN.md decision (4): static array shapes for the JAX
 march are sized from the NASA/JHU ``outputs_M3.5Perf`` reference case rather than
 made configurable.  Values are taken from
-``docs/rice_jhu_moc_topology_map.md`` (parsed from ``summary.out``).
+``docs/subsystems/S06-rao-moc-bvp-contour/rice_jhu_moc_topology_map.md`` (parsed from ``summary.out``).
 
 The march runs as a ``lax.scan`` over a padded grid with a validity mask;
 ``MAX_KERNEL_ROWS`` must comfortably exceed the reference ``lastKernelJ`` so no
@@ -13,7 +13,7 @@ real row is ever truncated.  Padded (masked) rows contribute zero residual.
 
 from __future__ import annotations
 
-# --- From outputs_M3.5Perf/summary.out (docs/rice_jhu_moc_topology_map.md) --- #
+# --- From outputs_M3.5Perf/summary.out (docs/subsystems/S06-rao-moc-bvp-contour/rice_jhu_moc_topology_map.md) --- #
 R_STAR = 1.0            # throat radius, in
 RWTD_OVER_RSTAR = 1.0   # downstream throat-wall radius ratio (Rd/Rt)
 GAMMA = 1.4

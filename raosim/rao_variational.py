@@ -75,6 +75,9 @@ from raosim.rao_residuals import (
     residual_wall_tangency,
 )
 from raosim.nasa_moc import (
+    IncompleteKernelError,
+    _require_complete_kernel,
+    _validated_kernel_row_budget,
     calc_lrc_de,
     calc_mdot_bd,
     full_control_surface_thrust,
@@ -336,6 +339,17 @@ class RaoEndpointMismatchError(RuntimeError):
     """Raised when raw Rao/MOC wall endpoints do not close to target geometry."""
 
 
+class RaoBoundaryDomainError(RuntimeError):
+    """An exact-boundary parameterization left its admissible domain."""
+
+    def __init__(self, diagnostics: dict):
+        self.diagnostics = diagnostics
+        super().__init__("exact exit boundary outside its admissible domain: " + ", ".join(diagnostics["failed_checks"]))
+
+
+CE_FLOW_ANGLE_BOUNDS_RAD = (math.radians(-10.0), math.radians(65.0))
+
+
 RAO_MOC_ASSUMPTIONS = (
     "axisymmetric",
     "inviscid",
@@ -344,7 +358,7 @@ RAO_MOC_ASSUMPTIONS = (
 )
 
 NASA_REFERENCE_FIXTURE_GENERATOR_PROVENANCE = "unresolved"
-NASA_REFERENCE_PROVENANCE_DOC = "docs/nasa_tt_prime_provenance.md"
+NASA_REFERENCE_PROVENANCE_DOC = "docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md"
 NASA_REFERENCE_CANONICAL_TRACK = "visible_source_port"
 NASA_REFERENCE_HISTORICAL_OVERLAY_TRACK = "historical_fixture_overlay"
 NASA_REFERENCE_SOURCE_SHA256 = (
@@ -568,9 +582,9 @@ class RaoSolverConfig:
     # Upstream (convergent-side) throat wall radius / Rt.  Governs the
     # Kliegel-Levine transonic start line TT' (the KL/Hall series are
     # derived for the upstream curvature; NASA's CalcInitialThroatLine
-    # passes rUp into KLThroat).  Rao's published TOP convention is
-    # R_u = 1.5 Rt with R_d = 0.382 Rt (Rao 1958; NASA SP-8120; same
-    # convention as nozzle_geometry.bell_nozzle_contour's Ru_factor).
+    # passes rUp into KLThroat).  The repository/TOP convention is
+    # R_u = 1.5 Rt and R_d = 0.382 Rt; Rao 1958's worked contour instead
+    # uses R_d = 0.45 Rt (see the MOC audit logbook).
     throat_upstream_radius_factor: float = 1.5
     thetaN_guess_deg: float = 30.0
     n_control: int = 12
@@ -735,9 +749,33 @@ class RaoSolverConfig:
     moc_numerical_policy: RaoMOCNumericalPolicy = field(
         default_factory=RaoMOCNumericalPolicy
     )
+    # Eliminate the selected D boundary values from the optimizer unknowns.
+    exact_d_attachment: bool = False
+    kernel_max_rrcs: int = 500
+    exact_exit_attachment: bool = False
+    kernel_seed_max_iter: int = 8
+    kernel_seed_abs_tol: float = 1e-6
 
     def __post_init__(self) -> None:
-        for name in ("kernel_dtheta_limit_deg", "kernel_massflow_rel_tol"):
+        self.kernel_max_rrcs = _validated_kernel_row_budget(self.kernel_max_rrcs)
+        self.kernel_seed_max_iter = _validated_kernel_row_budget(self.kernel_seed_max_iter, name="kernel_seed_max_iter")
+        if not isinstance(self.exact_exit_attachment, bool):
+            raise TypeError("exact_exit_attachment must be bool")
+        if self.exact_exit_attachment:
+            if not self.exact_d_attachment or self.couple_wall or self.wall_method != "bde":
+                raise ValueError("exact_exit_attachment requires exact D attachment and uncoupled BDE construction")
+            if self.residual_blocks is not None and "ce_geometry" not in self.residual_blocks:
+                raise ValueError("exact_exit_attachment requires ce_geometry residuals")
+        if not isinstance(self.exact_d_attachment, bool):
+            raise TypeError("exact_d_attachment must be bool")
+        if self.exact_d_attachment:
+            if self.formulation != "characteristic":
+                raise ValueError("exact_d_attachment requires characteristic formulation")
+            if self.solve_theta_b:
+                raise NotImplementedError(
+                    "exact_d_attachment with solve_theta_b is not implemented"
+                )
+        for name in ("kernel_dtheta_limit_deg", "kernel_massflow_rel_tol", "kernel_seed_abs_tol"):
             value = getattr(self, name)
             if isinstance(value, bool):
                 raise ValueError(f"{name} must be numeric, not bool")
@@ -1470,19 +1508,29 @@ def compare_rao_solutions_common_coordinates(
     gamma = float(gamma)
     if not math.isfinite(gamma) or gamma <= 1.0:
         raise ValueError("gamma must be finite and greater than one")
-    physical_keys = ("Rt_m", "epsilon", "gamma", "pa_over_p0", "length_pct")
+    physical_keys = (
+        "Rt_m", "epsilon", "gamma", "pa_over_p0", "length_pct",
+        "throat_upstream_radius_factor", "throat_downstream_radius_factor",
+        "physics_weight",
+    )
+    model_keys = (
+        "starting_line_method", "exact_d_attachment", "pin_d_mach",
+        "pin_d_theta", "formulation", "residual_blocks", "exact_exit_attachment",
+    )
     required_mesh_keys = (
         "n_control",
         "n_kernel",
         "wall_method",
         "kernel_dtheta_limit_deg",
         "kernel_massflow_rel_tol",
+        "kernel_max_rrcs",
+        "kernel_reached_wall",
     )
     missing_context = [
         f"{side}.{name}"
         for side, context in (("coarse", coarse_context), ("fine", fine_context))
-        for name in physical_keys + required_mesh_keys
-        if name not in context
+        for name in physical_keys + model_keys + required_mesh_keys
+        if context.get(name) is None
     ]
     if missing_context:
         return RaoFieldConvergenceEvidence(
@@ -1497,6 +1545,14 @@ def compare_rao_solutions_common_coordinates(
             metrics={},
             tolerances=policy,
         )
+    if any(context["kernel_reached_wall"] is not True
+           for context in (coarse_context, fine_context)):
+        return RaoFieldConvergenceEvidence(
+            applicable=False, passes=False,
+            reason="common-coordinate refinement requires complete throat kernels",
+            coarse_context=coarse_context, fine_context=fine_context,
+            metrics={}, tolerances=policy,
+        )
     mismatch = [
         name
         for name in physical_keys
@@ -1507,12 +1563,16 @@ def compare_rao_solutions_common_coordinates(
             abs_tol=1.0e-14,
         )
     ]
+    mismatch.extend(
+        name for name in model_keys
+        if coarse_context[name] != fine_context[name]
+    )
     if mismatch:
         return RaoFieldConvergenceEvidence(
             applicable=False,
             passes=False,
             reason=(
-                "solutions do not share the same physical design context: "
+                "solutions do not share the same physical/model context: "
                 + ", ".join(mismatch)
             ),
             coarse_context=coarse_context,
@@ -2772,15 +2832,17 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
                 starting_line_method=config.starting_line_method,
                 L_target=Ln,
                 Ru=config.throat_upstream_radius_factor * Rt,
+                Rd=Rd,
                 dtheta_limit=config.kernel_dtheta_limit_rad,
                 mdot_tol=config.kernel_massflow_rel_tol,
+                max_rrcs=config.kernel_max_rrcs,
                 end_condition="fixed_end",
-                # Seed-quality bracket only: each outer iteration costs a
-                # kernel march; ~8 bisections localise theta_B to ~0.2 deg,
-                # which is plenty for a BVP seed (the solve owns the
-                # length residual).
-                max_iter=8,
+                max_iter=config.kernel_seed_max_iter,
+                abs_tol=config.kernel_seed_abs_tol,
             )
+            _require_complete_kernel(kernel, config.kernel_max_rrcs, "BVP preferred seed")
+        except IncompleteKernelError:
+            raise
         except Exception:
             topology, kernel = None, None
             if seed_mode == "topology":
@@ -2793,7 +2855,9 @@ def _initial_ce_from_kernel(config: RaoSolverConfig):
             Ru=config.throat_upstream_radius_factor * Rt,
             dtheta_limit=config.kernel_dtheta_limit_rad,
             mdot_tol=config.kernel_massflow_rel_tol,
+            max_rrcs=config.kernel_max_rrcs,
         )
+        _require_complete_kernel(kernel, config.kernel_max_rrcs, "BVP fallback seed")
         # Honest theta_B provenance for downstream reporting: a frozen
         # override is a *commanded* angle; a guess-angle kernel (secant
         # skipped or failed) is chart-flavoured and must not masquerade
@@ -3010,6 +3074,136 @@ def _pack_bvp(
         else:
             parts.append(np.linspace(0.0, 1.0, n_ce))
     return np.concatenate(parts)
+
+
+def _exact_d_free_indices(config: RaoSolverConfig, size: int) -> np.ndarray:
+    """Select optimizer unknowns while retaining the public packed layout."""
+    if not config.exact_d_attachment:
+        return np.arange(size)
+    if not config.kernel_bd:
+        raise ValueError("exact_d_attachment requires a marched kernel BD")
+    n = config.n_control
+    fixed = {2 * n}
+    if config.pin_d_mach:
+        fixed.add(0)
+    if config.pin_d_theta:
+        fixed.add(n)
+    active = _enabled_residual_blocks(config)
+    if config.exact_exit_attachment:
+        if "ce_geometry" not in active:
+            raise ValueError("exact_exit_attachment requires ce_geometry residuals")
+        fixed.update({2 * n - 1, 3 * n - 1})
+    if not active.intersection({"stationarity", "transversality"}):
+        scalar_start = 3 * n + (4 * config.n_wall if config.couple_wall else 0)
+        fixed.update({scalar_start, scalar_start + 1})
+    return np.asarray([index for index in range(size) if index not in fixed])
+
+
+def _exact_exit_boundary_data(r, theta, M, x_prefix, *, L, Re, Rt):
+    """Evaluate the exact final Mach-line segment and its domain guards."""
+    r, theta, M, x_prefix = map(lambda value: np.asarray(value, dtype=float), (r, theta, M, x_prefix))
+    mu = np.arcsin(1.0 / np.maximum(M, 1.000001))
+    guard = 64.0 * np.finfo(float).eps * max(abs(L), abs(Re), abs(Rt))
+    dx, dr = float(L - x_prefix[-1]), float(Re - r[-2])
+    finite_end = math.isfinite(dx) and math.isfinite(dr)
+    beta = math.atan2(dr, dx) if finite_end and math.hypot(dx, dr) > guard else 0.0
+    derived = 2.0 * beta - theta[-2] - mu[-2] - mu[-1]
+    prefix_dx, prefix_dr = np.diff(x_prefix), np.diff(r[:-1])
+    prefix_tan = np.tan(0.5 * (theta[:-2] + theta[1:-1] + mu[:-2] + mu[1:-1]))
+    lower, upper = CE_FLOW_ANGLE_BOUNDS_RAD
+    beta_tan = math.tan(beta)
+    actual_tan = math.tan(0.5 * (theta[-2] + theta[-1] + mu[-2] + mu[-1]))
+    actual_x = (x_prefix[-1] + (r[-1] - r[-2]) / actual_tan
+                if math.isfinite(actual_tan) and abs(actual_tan) >= 1e-12 else float("nan"))
+    checks = {
+        "finite_state": bool(np.all(np.isfinite(np.concatenate([r, theta, M, x_prefix, [derived, beta]])))),
+        "supersonic_state": bool(np.all(M > 1.0)),
+        "prefix_dx_positive": bool(np.all(prefix_dx > guard)),
+        "prefix_dr_positive": bool(np.all(prefix_dr > guard)),
+        "prefix_mach_line_nonsingular": bool(np.all(np.abs(prefix_tan) >= 1e-12)),
+        "last_dx_positive": bool(dx > guard),
+        "last_dr_positive": bool(dr > guard),
+        "beta_admissible": bool(0.0 < beta < math.pi / 2 and abs(beta_tan) >= 1e-12),
+        "derived_theta_in_bounds": bool(lower <= derived <= upper),
+        "stored_theta_in_bounds": bool(lower <= theta[-1] <= upper),
+        "exit_radius_pinned": bool(abs(r[-1] - Re) <= guard),
+        "exit_x_pinned": bool(math.isfinite(actual_x) and abs(actual_x - L) <= guard),
+    }
+    guides = np.concatenate([
+        np.maximum(guard - prefix_dx, 0.0) / L,
+        np.maximum(guard - prefix_dr, 0.0) / Re,
+        np.maximum(1e-12 - np.abs(prefix_tan), 0.0) / 1e-12,
+        np.asarray([
+            max(guard - dx, 0.0) / L,
+            max(guard - dr, 0.0) / Re,
+            max(lower - derived, 0.0) / math.radians(1.0),
+            max(derived - upper, 0.0) / math.radians(1.0),
+            max(1e-12 - abs(beta_tan), 0.0) / 1e-12,
+        ]),
+    ])
+    finite = lambda value: float(value) if math.isfinite(float(value)) else None
+    domain = {
+        "valid": all(checks.values()), "checks": checks,
+        "failed_checks": [name for name, passed in checks.items() if not passed],
+        "roundoff_guard_m": guard, "last_dx_m": finite(dx), "last_dr_m": finite(dr),
+        "beta_rad": finite(beta), "derived_theta_rad": finite(derived),
+        "actual_exit_x_m": finite(actual_x), "target_x_m": float(L),
+        "target_radius_m": float(Re), "theta_bounds_rad": [lower, upper],
+        "mach_floor": 1.000001, "minimum_geometry_tangent": 1e-12,
+        "classification": "exact_boundary_parameterization_domain_not_physical_shock_criterion",
+    }
+    return float(derived), domain, guides
+
+
+def _exact_exit_data_from_full(full: np.ndarray, config: RaoSolverConfig):
+    n = config.n_control
+    scalar_start = 3 * n + (4 * config.n_wall if config.couple_wall else 0)
+    _, segment = calc_mdot_bd(config.kernel_bd, float(full[scalar_start + 3]), config.gamma)
+    M, theta, r = full[:n], full[n:2 * n], full[2 * n:3 * n]
+    x_prefix = _integrate_ce_x_from_left_mach(r[:-1], theta[:-1], M[:-1], segment[-1].x)
+    return _exact_exit_boundary_data(
+        r, theta, M, x_prefix, L=_target_length(config.Rt, config.epsilon, config.length_pct),
+        Re=math.sqrt(config.epsilon) * config.Rt, Rt=config.Rt,
+    )
+
+
+def _require_exact_exit_domain(full: np.ndarray, config: RaoSolverConfig) -> dict | None:
+    if not config.exact_exit_attachment:
+        return None
+    if not np.all(np.isfinite(full)):
+        raise RaoBoundaryDomainError({
+            "valid": False, "checks": {"finite_state": False},
+            "failed_checks": ["finite_state"],
+            "classification": "exact_boundary_parameterization_domain_not_physical_shock_criterion",
+        })
+    _, diagnostics, _ = _exact_exit_data_from_full(full, config)
+    if not diagnostics["valid"]:
+        raise RaoBoundaryDomainError(diagnostics)
+    return diagnostics
+
+
+def _expand_exact_d_unknowns(
+    reduced: np.ndarray, template: np.ndarray, config: RaoSolverConfig,
+) -> np.ndarray:
+    """Restore the full vector with exact D values from its current fraction."""
+    full = np.asarray(template, dtype=float).copy()
+    full[_exact_d_free_indices(config, full.size)] = reduced
+    if config.exact_d_attachment:
+        n = config.n_control
+        scalar_start = 3 * n + (4 * config.n_wall if config.couple_wall else 0)
+        _, segment = calc_mdot_bd(
+            config.kernel_bd, float(full[scalar_start + 3]), config.gamma,
+        )
+        point = segment[-1]
+        full[2 * n] = point.r
+        if config.pin_d_mach:
+            full[0] = point.M
+        if config.pin_d_theta:
+            full[n] = point.theta
+        if config.exact_exit_attachment:
+            full[3 * n - 1] = math.sqrt(config.epsilon) * config.Rt
+            full[2 * n - 1] = _exact_exit_data_from_full(full, config)[0]
+    return full
 
 
 def _unpack_bvp(
@@ -3913,7 +4107,13 @@ def _ce_geometry_residuals(
         np.maximum(-dx, 0.0) / x_scale,
         np.maximum(-dr, 0.0) / r_scale,
     ])
-    return np.concatenate([endpoint, flow_boundary, monotonic])
+    blocks = [endpoint, flow_boundary, monotonic]
+    if config.exact_exit_attachment:
+        _, _, guides = _exact_exit_boundary_data(
+            ce.r, ce.theta, ce.M, ce.x[:-1], L=L, Re=Re, Rt=config.Rt,
+        )
+        blocks.append(guides)
+    return np.concatenate(blocks)
 
 
 def _enabled_residual_blocks(config: RaoSolverConfig) -> set[str]:
@@ -4188,6 +4388,114 @@ def _bde_physical_topology_gate_passes(report: Mapping[str, Any]) -> bool:
         or bool(report.get("bde_auxiliary_caustic_downstream_of_exit", False))
     )
     return bool(required and auxiliary_ok)
+
+
+def _build_solver_gate_report(
+    config: RaoSolverConfig, residuals: RaoResidualReport, result,
+    diagnostics: Mapping[str, Any], *, bvp_ok: bool, moc_ok: bool,
+    valid_region_ok: bool, validity_available: bool, thrust_ok: bool,
+    reliability: ContourReliability,
+) -> dict:
+    """Describe the existing acceptance decisions without changing them."""
+    def finite(value):
+        return float(value) if value is not None and math.isfinite(float(value)) else None
+
+    report = diagnostics.get("net_report")
+    report = report if isinstance(report, Mapping) else {}
+    basis = report.get("audit_basis", report.get("crossing_basis"))
+    applicable = bool(report and "passes" in report)
+    bde = basis == "bde_topology_measured_mesh"
+    gates = (
+        {name: bool(report[name]) if name in report else None
+         for name in _BDE_PHYSICAL_TOPOLOGY_GATE_KEYS}
+        if bde else {}
+    )
+    closure = report.get("topology_closure", {})
+    distance_keys = (
+        "BD_starts_at_B", "BD_ends_at_D", "DE_starts_at_D",
+        "DE_ends_at_E", "wall_starts_at_B", "wall_ends_at_E",
+    )
+    distances = [finite(closure.get(name)) for name in distance_keys]
+    all_distances_available = all(value is not None for value in distances)
+    jax_backend = config.solver_backend == "jax"
+    initial_only = config.max_nfev <= 0
+    return {
+        "schema_version": 1,
+        "optimizer": {
+            "backend": config.solver_backend,
+            "success": bool(result.success),
+            "message": str(result.message),
+            "counter": getattr(result, "nfev", None),
+            "counter_kind": (
+                "not_run" if initial_only else
+                "lm_steps" if jax_backend else "function_evaluations"
+            ),
+            "requested_max_nfev": int(config.max_nfev),
+            "jax_minimum_steps_per_stage": 256 if jax_backend and not initial_only else None,
+            "continuation_stage_count": (
+                len(config.jax_constraint_weight_ladder or (1.0,))
+                if jax_backend and not initial_only else None
+            ),
+        },
+        "residuals": {
+            "max_scaled": finite(residuals.max_scaled),
+            "limit": float(config.residual_tol),
+            "passes": bool(residuals.max_scaled <= config.residual_tol),
+            "scope": "weighted_assembled_residual",
+            "physics_weight": float(PHYSICS_WEIGHT if config.physics_weight is None else config.physics_weight),
+        },
+        "mass": {
+            "relative_residual": finite(residuals.mass_residual_rel),
+            "limit": float(config.residual_tol),
+            "passes": bool(abs(residuals.mass_residual_rel) <= config.residual_tol),
+        },
+        "length": {
+            "relative_residual": finite(residuals.length_residual_rel),
+            "limit": float(config.residual_tol),
+            "passes": bool(abs(residuals.length_residual_rel) <= config.residual_tol),
+        },
+        "topology": {
+            "applicable": applicable,
+            "basis": basis,
+            "passes": bool(report["passes"]) if applicable else None,
+            "gates": gates,
+            "failed_gates": [name for name, passed in gates.items() if passed is False],
+            "missing_gates": [name for name, passed in gates.items() if passed is None],
+            "compatibility": {
+                "cplus_max": finite(report.get("cplus_max")),
+                "cminus_max": finite(report.get("cminus_max")),
+                "units": "deg",
+                "limit": finite(report.get("compatibility_tol_deg", config.residual_tol)) if applicable else None,
+            },
+            "seams": {
+                "max_distance": max(distances) if all_distances_available else None,
+                "units": "m",
+                "limit": finite(report.get("closure_distance_tol_m")),
+            },
+        },
+        "validity": {"available": bool(validity_available), "passes": bool(valid_region_ok)},
+        "promotion": {
+            "bvp_passes": bool(bvp_ok), "moc_passes": bool(moc_ok),
+            "valid_region_passes": bool(valid_region_ok),
+            "thrust_passes": bool(thrust_ok), "reliability": reliability.value,
+        },
+    }
+
+
+def _bvp_failure_warnings(gate_report: Mapping[str, Any]) -> list[str]:
+    messages = []
+    if not gate_report["optimizer"]["success"]:
+        messages.append(
+            "Rao BVP optimizer did not report successful termination: "
+            + gate_report["optimizer"]["message"]
+        )
+    for name, description in (
+        ("residuals", "weighted assembled residual"),
+        ("mass", "mass-closure residual"), ("length", "length residual"),
+    ):
+        if not gate_report[name]["passes"]:
+            messages.append(f"Rao BVP {description} exceeded tolerance.")
+    return messages
 
 
 def _wall_from_bde_region(
@@ -5916,8 +6224,11 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         raise ValueError("pa_over_p0 must be non-negative")
     if config.n_control < 8:
         raise ValueError("n_control must be at least 8")
+    if config.exact_exit_attachment and "ce_geometry" not in _enabled_residual_blocks(config):
+        raise ValueError("exact_exit_attachment requires ce_geometry residuals")
 
     ce0, kernel_bd_seed, topology_seed, kernel_obj = _initial_ce_from_kernel(config)
+    seed_search_report = kernel_obj.theta_b_seed_report
     solve_config = replace(
         config,
         kernel_bd=tuple(kernel_bd_seed) if kernel_bd_seed else None,
@@ -5958,12 +6269,12 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     # by integrating ``dx/dr = 1/tan(theta+mu)``.
     lower_parts = [
         np.full(n, 1.001),                  # M
-        np.full(n, math.radians(-10.0)),    # theta
+        np.full(n, CE_FLOW_ANGLE_BOUNDS_RAD[0]),
         np.full(n, 0.0),                    # r
     ]
     upper_parts = [
         np.full(n, max(12.0, 1.5 * Me)),
-        np.full(n, math.radians(65.0)),
+        np.full(n, CE_FLOW_ANGLE_BOUNDS_RAD[1]),
         np.full(n, 1.05 * Re_value),
     ]
     if n_w > 0:
@@ -6001,6 +6312,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         upper_parts.append(np.ones(n))
     lower = np.concatenate(lower_parts)
     upper = np.concatenate(upper_parts)
+    free_indices = _exact_d_free_indices(solve_config, u0.size)
+    if config.exact_d_attachment:
+        u0 = _expand_exact_d_unknowns(u0[free_indices], u0, solve_config)
+    _require_exact_exit_domain(u0, solve_config)
 
     if config.max_nfev <= 0:
         residual0 = _scaled_rao_bvp_residual(u0, ce0.r, solve_config)
@@ -6052,7 +6367,9 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                     Ru=config.throat_upstream_radius_factor * config.Rt,
                     dtheta_limit=config.kernel_dtheta_limit_rad,
                     mdot_tol=config.kernel_massflow_rel_tol,
+                    max_rrcs=config.kernel_max_rrcs,
                 )
+                _require_complete_kernel(kernel_obj, config.kernel_max_rrcs, "BVP live-angle rebuild")
                 kernel_obj.theta_b_provenance = "bvp_solved"
                 kernel_bd_seed = [
                     node.to_flow_node() for node in kernel_obj.bd
@@ -6076,22 +6393,36 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 "max_nfev > 0. Install scipy or set max_nfev=0 for an "
                 "initial residual-only diagnostic."
             )
-        result = least_squares(
-            _scaled_rao_bvp_residual,
-            u0,
-            bounds=(lower, upper),
-            args=(ce0.r, solve_config),
-            x_scale="jac",
-            ftol=1e-9,
-            xtol=1e-9,
-            gtol=1e-9,
-            max_nfev=config.max_nfev,
-        )
+        if config.exact_d_attachment:
+            def reduced_residual(free):
+                full = _expand_exact_d_unknowns(free, u0, solve_config)
+                return _scaled_rao_bvp_residual(full, ce0.r, solve_config)
+
+            result = least_squares(
+                reduced_residual, u0[free_indices],
+                bounds=(lower[free_indices], upper[free_indices]),
+                x_scale="jac", ftol=1e-9, xtol=1e-9, gtol=1e-9,
+                max_nfev=config.max_nfev,
+            )
+            result.x = _expand_exact_d_unknowns(result.x, u0, solve_config)
+        else:
+            result = least_squares(
+                _scaled_rao_bvp_residual,
+                u0,
+                bounds=(lower, upper),
+                args=(ce0.r, solve_config),
+                x_scale="jac",
+                ftol=1e-9,
+                xtol=1e-9,
+                gtol=1e-9,
+                max_nfev=config.max_nfev,
+            )
     else:
         raise ValueError(
             f"Unknown solver_backend {config.solver_backend!r}; "
             "expected 'numpy' or 'jax'."
         )
+    exact_exit_domain = _require_exact_exit_domain(result.x, solve_config)
     n_wall_unknown = config.n_wall if config.couple_wall else 0
     ce, solved_wall = _unpack_bvp(
         result.x, ce0.r, n_wall=n_wall_unknown,
@@ -6195,7 +6526,7 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
                 # (raosim.moc_bounded: NASA/JHU RRC topology, boundary
                 # points are parents).  Replaces the deprecated shrinking
                 # front march, which never reached the exit — see
-                # docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md.
+                # docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md.
                 flow = solve_flowfield(
                     config.Rt,
                     config.epsilon,
@@ -6292,9 +6623,17 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     construction_diagnostics.setdefault(
         "rao_moc_numerical_policy", config.moc_numerical_policy.to_dict()
     )
+    construction_diagnostics["exact_exit_domain"] = exact_exit_domain
+    construction_diagnostics["kernel_seed_search"] = seed_search_report
     construction_diagnostics["kernel_mesh_policy"] = {
         "kernel_dtheta_limit_deg": float(config.kernel_dtheta_limit_deg),
         "kernel_massflow_rel_tol": float(config.kernel_massflow_rel_tol),
+        "kernel_max_rrcs": int(config.kernel_max_rrcs),
+        "kernel_reached_wall": bool(kernel_obj.reached_wall),
+        "kernel_row_count": len(kernel_obj.rrcs),
+        "kernel_fallback_used": bool(kernel_obj.fallback_used),
+        "kernel_seed_max_iter": int(config.kernel_seed_max_iter),
+        "kernel_seed_abs_tol": float(config.kernel_seed_abs_tol),
         "classification": "numerical_mesh_and_march_policy_not_physical_criterion",
         "source": (
             "Rice/JHU RTDC-TPS-481 §§3.2.6-3.2.8: nominal DTHETAB Max "
@@ -6307,6 +6646,15 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         "gamma": float(config.gamma),
         "pa_over_p0": float(config.pa_over_p0),
         "length_pct": float(config.length_pct),
+        "throat_upstream_radius_factor": float(config.throat_upstream_radius_factor),
+        "throat_downstream_radius_factor": float(config.throat_downstream_radius_factor),
+        "exact_d_attachment": bool(config.exact_d_attachment),
+        "exact_exit_attachment": bool(config.exact_exit_attachment),
+        "pin_d_mach": bool(config.pin_d_mach),
+        "pin_d_theta": bool(config.pin_d_theta),
+        "formulation": str(config.formulation),
+        "residual_blocks": sorted(_enabled_residual_blocks(config)),
+        "physics_weight": float(PHYSICS_WEIGHT if config.physics_weight is None else config.physics_weight),
         "n_control": int(config.n_control),
         "n_kernel": int(config.n_kernel),
         "wall_method": str(config.wall_method),
@@ -6314,6 +6662,10 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
         "kernel_dtheta_limit_deg": float(config.kernel_dtheta_limit_deg),
         "kernel_massflow_rel_tol": float(config.kernel_massflow_rel_tol),
         "rao_moc_numerical_policy_id": RAO_MOC_NUMERICAL_POLICY_ID,
+        "kernel_max_rrcs": int(config.kernel_max_rrcs),
+        "kernel_reached_wall": bool(kernel_obj.reached_wall),
+        "kernel_seed_max_iter": int(config.kernel_seed_max_iter),
+        "kernel_seed_abs_tol": float(config.kernel_seed_abs_tol),
     }
 
     try:
@@ -6676,11 +7028,14 @@ def solve_rao_bvp(config: RaoSolverConfig) -> RaoSolution:
     else:
         reliability = ContourReliability.GEOMETRIC_APPROXIMATION
 
-    if not bvp_ok:
-        warnings.append(
-            "Rao BVP residuals did not meet tolerance; solution is not "
-            "variational-residual-solved."
-        )
+    gate_report = _build_solver_gate_report(
+        config, residuals, result, construction_diagnostics,
+        bvp_ok=bvp_ok, moc_ok=moc_ok, valid_region_ok=valid_region_ok,
+        validity_available=rao_validity.available, thrust_ok=thrust_sanity_ok,
+        reliability=reliability,
+    )
+    construction_diagnostics["gate_report"] = gate_report
+    warnings.extend(_bvp_failure_warnings(gate_report))
     if not moc_ok:
         warnings.append(
             "MOC closure/tangency/crossing diagnostics did not pass; do not "

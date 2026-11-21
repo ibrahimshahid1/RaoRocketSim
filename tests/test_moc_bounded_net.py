@@ -1,7 +1,7 @@
 """
 Bounded characteristic net (raosim.moc_bounded) — topology and oracle gates.
 
-These are the gates from docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md
+These are the gates from docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md
 Phase 0/2.  They would all FAIL on the deprecated front march
 (``raosim.moc.march_coupled_net``): its axis/wall points were never
 parents, the net shrank by one point per row and died at ~30 % of the
@@ -70,8 +70,12 @@ NASA_P0_PSIA, NASA_T0_R, NASA_MW = 500.0, 530.0, 28.96
 # --------------------------------------------------------------------------- #
 
 
-def _bezier_wall(Rt=0.02, eps=10.0, gamma=1.2, length_pct=80.0):
-    c = bell_nozzle_contour(Rt=Rt, epsilon=eps, length_pct=length_pct, gamma=gamma)
+def _bezier_wall(Rt=0.02, eps=10.0, gamma=1.2, length_pct=80.0, *,
+                 theta_n_deg=None, theta_e_deg=None):
+    c = bell_nozzle_contour(
+        Rt=Rt, epsilon=eps, length_pct=length_pct, gamma=gamma,
+        theta_n_deg=theta_n_deg, theta_e_deg=theta_e_deg,
+    )
     xb, yb = np.asarray(c["x_bell"]), np.asarray(c["y_bell"])
     wall = SplineWall(
         xb, yb,
@@ -289,12 +293,9 @@ def test_oracle_b_exit_thrust_and_mass_flow_match_summary_out(nasa_net):
 # --------------------------------------------------------------------------- #
 
 
-def test_solve_flowfield_reports_bezier_compression_coalescence():
-    """The chart Bézier is not Rao's shock-free contour: its compression
-    waves coalesce ~20 mm downstream of N (Rt=20 mm, eps=10).  The march
-    must stop there and say so — never integrate through it.  The fold
-    location converges with resolution (physics, not discretisation)."""
-    wall, _ = _bezier_wall()
+def test_solve_flowfield_reports_pinned_bezier_compression_coalescence():
+    """Pin the historical 30/15.5-degree wall's coalescence regression."""
+    wall, _ = _bezier_wall(theta_n_deg=30.0, theta_e_deg=15.5)
     locs = []
     for n, dth in ((24, 0.5), (48, 0.25)):
         res = solve_flowfield(0.02, 10.0, 1.2, wall, n_char=n,
@@ -309,6 +310,25 @@ def test_solve_flowfield_reports_bezier_compression_coalescence():
     (x1, r1), (x2, r2) = locs
     assert abs(x1 - x2) < 3e-3 and abs(r1 - r2) < 5e-4
     assert 0.015 < x1 < 0.035
+
+
+@pytest.mark.parametrize(("n_char", "dtheta_deg"), [(24, 0.5), (48, 0.25)])
+def test_current_chart_bezier_reports_incomplete_coalescence(n_char, dtheta_deg):
+    """The current chart wall must fail closed, without a convergence claim."""
+    wall, _ = _bezier_wall()
+    result = solve_flowfield(
+        0.02, 10.0, 1.2, wall, n_char=n_char,
+        dtheta_limit_deg=dtheta_deg, mass_tol=0.05,
+    )
+    net = result["net"]
+    assert result["complete"] is False
+    assert result["stop_reason"] == "rrc_coalescence"
+    assert result["exit_metrics"]["complete"] is False
+    assert net.fold_location is not None
+    x, radius = net.fold_location
+    assert wall.x_start < x < wall.x_end
+    assert 0.0 <= radius <= wall.r(x)
+    assert net.containment_violations == 0
 
 
 def test_solve_flowfield_refuses_non_data_line_methods():
@@ -390,8 +410,8 @@ def test_front_march_is_deprecated_and_still_shrinks():
 
 
 def test_intersect_wall_strict_returns_none_past_exit():
-    wall, _ = _bezier_wall()
-    arc = ArcWall(0.02, 0.382 * 0.02, math.radians(30.0))
+    wall, contour = _bezier_wall()
+    arc = ArcWall(0.02, contour["Rd"], math.radians(contour["theta_n"]))
     comp = CompositeWall(arc, wall)
     # a shallow C+ from near the exit leaves through the exit plane
     assert intersect_wall_strict(comp, 0.12, 0.05, 0.05, x_lo=0.12) is None

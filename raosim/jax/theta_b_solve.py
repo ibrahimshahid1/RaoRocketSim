@@ -80,8 +80,7 @@ def start_line_from_kernel(kernel) -> KernelRow:
 
 
 def _n_rows_bound(theta_b_max: float, dtheta_limit: float) -> int:
-    """Static row bound: special steps advance dθ_limit/2 per row; raw
-    rows advance faster, so the special-only count is an upper bound."""
+    """Static allocation estimate; final march completeness must be checked."""
     theta_b_max = float(theta_b_max)
     dtheta_limit = _validated_dtheta_limit(dtheta_limit)
     if not math.isfinite(theta_b_max) or theta_b_max <= 0.0:
@@ -106,10 +105,20 @@ def make_residual_theta_b(
     semantics identical to the frozen-BD path).  ``dtheta_limit`` is the
     static throat-arc mesh step in **radians**.
     """
+    if getattr(config, "exact_d_attachment", False):
+        raise NotImplementedError("exact_d_attachment with live theta_B is not implemented")
     dtheta_limit = _validated_dtheta_limit(dtheta_limit)
+    from raosim.nasa_moc import _require_complete_kernel
+
+    _require_complete_kernel(kernel, config.kernel_max_rrcs, "JAX live-angle seed")
+    n_rows = _n_rows_bound(float(theta_b_max), float(dtheta_limit))
+    if n_rows > config.kernel_max_rrcs:
+        raise ValueError(
+            "JAX live-angle static row bound exceeds kernel_max_rrcs; "
+            "increase the explicit kernel row budget"
+        )
     sp = assembly.params_from_config(config, physics_weight=physics_weight)
     sl = start_line_from_kernel(kernel)
-    n_rows = _n_rows_bound(float(theta_b_max), float(dtheta_limit))
     Rt = float(config.Rt)
     Rd = float(config.throat_downstream_radius_factor * config.Rt)
     gamma = float(config.gamma)
@@ -133,6 +142,24 @@ def make_residual_theta_b(
         return assembly.make_residual(sp_live)(u)
 
     return fn, n_rows
+
+
+def _require_final_live_kernel(config, kernel, theta_b, n_rows, dtheta_limit):
+    """Check the actual final march before accepting any optimizer status."""
+    from raosim.nasa_moc import RaoKernelError
+
+    marched = march_kernel(
+        start_line_from_kernel(kernel), theta_b, float(config.Rt),
+        float(config.throat_downstream_radius_factor * config.Rt),
+        float(config.gamma), n_rows=n_rows, n_corr=40,
+        dtheta_limit=dtheta_limit,
+    )
+    if not bool(np.asarray(marched.reached_wall)):
+        raise RaoKernelError(
+            "final live JAX kernel did not reach its prescribed wall; "
+            "optimizer status cannot validate the truncated boundary"
+        )
+    return marched
 
 
 def least_squares_jax_theta_b(
@@ -214,6 +241,9 @@ def least_squares_jax_theta_b(
         n_steps += int(sol.stats.get("num_steps", 0))
 
     u_star_ext = np.asarray(lo + span * jax.nn.sigmoid(z), dtype=float)
+    _require_final_live_kernel(
+        config, kernel, float(u_star_ext[-1]), n_rows, dtheta_limit,
+    )
     r_star = np.asarray(fn(jnp.asarray(u_star_ext)), dtype=float)
     return SimpleNamespace(
         x=u_star_ext[:-1],
@@ -233,6 +263,7 @@ def least_squares_jax_theta_b(
                           if r_star.size else 0.0),
         backend="jax",
         n_rows=n_rows,
+        live_kernel_reached_wall=True,
     )
 
 

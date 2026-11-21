@@ -1255,9 +1255,9 @@ actually in the NASA repo.
 
 Deliverables:
 
-- `docs/nasa_jhu_file_list.txt` — output of
+- `docs/data/nasa_jhu_file_list.txt` — output of
   `find Three-Dimensional-Nozzle-Design-Code-master -type f`.
-- `docs/legacy_code_audit.md` — for each of the three NASA programs
+- `docs/audits/legacy_code_audit.md` — for each of the three NASA programs
   (`MOC_Grid_BDE`, `STT2001`, `3D_MOC`), record:
   - One-paragraph purpose statement (`MOC_Grid_BDE` is the only one
     relevant to our 2D-axisymmetric path right now).
@@ -1269,7 +1269,7 @@ Deliverables:
     `ThetaB.out`, `Summary.plt`, `axis_i.out`, `wall_i.out`,
     `UncroppedKernel.out`, `LastKernel.out`).
 
-- `docs/rice_jhu_moc_topology_map.md` — the most important deliverable
+- `docs/subsystems/S06-rao-moc-bvp-contour/rice_jhu_moc_topology_map.md` — the most important deliverable
   in this section. A table mapping JHU/APL terminology to RaoRocketSim
   objects. Initial fill-in (refine after reading Rice 2003 / your
   `20030067852.pdf`):

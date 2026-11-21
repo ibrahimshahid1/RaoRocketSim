@@ -42,7 +42,7 @@ NASA_OUT_DEFAULT = (
     / "outputs_M3.5Perf"
 )
 
-NASA_TT_PRIME_PROVENANCE_DOC = "docs/nasa_tt_prime_provenance.md"
+NASA_TT_PRIME_PROVENANCE_DOC = "docs/subsystems/S06-rao-moc-bvp-contour/nasa_tt_prime_provenance.md"
 FIXTURE_GENERATOR_PROVENANCE = "unresolved"
 CANONICAL_REFERENCE_TRACK = "visible_source_port"
 HISTORICAL_OVERLAY_TRACK = "historical_fixture_overlay"

@@ -1,60 +1,15 @@
 """
-Kliegel-Levine 1969 transonic kernel for the MOC starting line.
+NASA/JHU-derived transonic starting-line approximation.
 
-Kliegel, J.R. and Levine, J.N., *Transonic Flow in Small Throat Radius of
-Curvature Nozzles*, AIAA J. 7(7) 1375-1378, 1969.  Open access:
-<https://arc.aiaa.org/doi/pdf/10.2514/3.5355>.  Also reproduced in
-Zucrow & Hoffman, *Gas Dynamics* Vol. 2 Ch. 16, and Östlund 2002 §3.
+The coefficient blocks include project modifications to the visible
+``MOC_GridCalc_BDE.cpp::KLThroat`` series.  The original Kliegel-Levine
+coefficients and velocity/Mach normalization have not been independently
+verified against the primary derivation.  These modifications are neither
+established errata nor proven incorrect by the current audit.
 
-The closed-form 3rd-order toroidal-coordinate expansion is valid down
-to Rc/Rt ~ 0.5, well below the leading-order Hall expansion's ~2.0
-floor.  This module's coefficients are a direct port of NASA/JHU
-``MOC_GridCalc_BDE.cpp::KLThroat`` (lines 3103-3178) with two typo
-corrections in the AXI ``v[3]`` polynomial (NASA line 3133) and the
-analogous typo in the TWOD ``v[3]`` polynomial (NASA line 3157).
-
-Typo corrections
-================
-NASA AXI line 3133 reads::
-
-    z*((556*G*G + 1737*G + 3069)*y*y*y*y*y/1728
-       * (388*G*G + 1161*G + 1181)*y*y/576
-       + (304*G*G + 831*G + 1242)*y/864) + ...
-
-There are three problems with the middle sub-term:
-
-* The ``*`` between the y^5 term and the y^2 term must be ``+``: with
-  ``*``, the dimensional power becomes y^7 which is inconsistent with
-  a third-order radial-expansion coefficient and breaks the series
-  recurrence.
-* The constant ``1181`` is a typo for ``1881`` (cross-check Kliegel-
-  Levine 1969 Table 1; the same coefficient ``1881`` appears in the
-  ``u[3]`` polynomial at NASA line 3127 as ``(388*G*G + 1161*G + 1881)``,
-  confirming that v[3] should match).
-* The exponent ``y*y`` (= y^2) is a typo for ``y*y*y`` (= y^3): the
-  2D branch's analogous term at line 3157 uses ``y*y*y``, and the
-  y^5 → y^3 → y power progression matches the descending parity
-  expected of a third-order coefficient.
-
-NASA AXI line 3129 reads::
-
-    z*((52*G*G + 51*G + 327)*y*y*y*y/34
-       - (52*G*G + 75*G + 279)*y*y/192
-       + (92*G*G + 180*G + 639)/1152)
-
-The divisor ``/34`` on the y^4 z-coupling term in ``u[3]`` is off by
-~11× — every other divisor in the same polynomial is /24, /144, /192,
-/1152, /82944 (powers of 2 × 3).  The correct divisor is ``/384``
-(2 × /192, the natural recurrence factor for the y^4 term immediately
-above the /192 y^2 term).  Cross-check Kliegel-Levine 1969 Table 1.
-This implementation uses the corrected ``/384.0``.
-
-The 2D analogue (NASA line 3157) has the same ``*`` → ``+`` typo in
-the middle of the z-bracket; the constant ``1665`` is correct.
-
-This module uses the corrected forms.  Do **not** "fix" the comments
-back to literal NASA source — the original lines are mathematically
-wrong; see ``test_transonic_kernel.py`` for the validation gate.
+The explicit source-visible compatibility path remains in ``nasa_moc``.
+Evidence, proposed checks, and limitations are recorded in
+``latex-report/RaoRocketSim_Repository_Guide/chapters/ch15_moc_iterations.tex``.
 """
 
 from __future__ import annotations
@@ -81,9 +36,8 @@ class TransonicState:
 def _kl_axi_coeffs(y: float, z: float, G: float) -> tuple[float, float, float, float, float, float]:
     """Polynomial coefficients ``u1..u3, v1..v3`` for the axisymmetric KL series.
 
-    Port of ``MOC_GridCalc_BDE.cpp::KLThroat`` AXI branch (lines 3122-3135),
-    with the ``v[3]`` line-3133 typo corrected as documented at the top
-    of this module.
+    NASA/JHU AXI branch with project-modified coefficients; primary
+    coefficient verification remains open (see the audit logbook).
     """
     y2 = y * y
     y3 = y2 * y
@@ -123,9 +77,7 @@ def _kl_axi_coeffs(y: float, z: float, G: float) -> tuple[float, float, float, f
         + z2 * (-(7 * G - 3) * y2 / 8.0 + (13 * G - 27) / 48.0)
         + (4 * G * G - 57 * G + 27) * z3 / 144.0
     )
-    # CORRECTED v3 (see module docstring): NASA line 3133 has `*` between
-    # the y^5 and y^3 sub-terms (should be `+`), an exponent `y*y` that
-    # should be `y*y*y`, and a constant `1181` that should be `1881`.
+    # Project-modified v3; original-source verification remains open.
     v3 = (
         (6836 * G * G + 23031 * G + 30627) * y7 / 82944.0
         - (3380 * G * G + 11391 * G + 15291) * y5 / 13824.0
@@ -148,13 +100,8 @@ def _kl_axi_coeffs(y: float, z: float, G: float) -> tuple[float, float, float, f
 def _kl_twod_coeffs(y: float, z: float, G: float) -> tuple[float, float, float, float, float, float]:
     """Polynomial coefficients for the 2D planar KL series.
 
-    Port of ``MOC_GridCalc_BDE.cpp::KLThroat`` TWOD branch (lines 3146-3159).
-    The line-3157 ``*`` typo inside the ``v[3]`` z-bracket is corrected to
-    ``+`` analogously to the AXI v[3] correction at the top of this module.
-
-    NASA line 3151 reads ``(782*G*G + 5523 + 2*G*2887)/272160``: this is
-    interpreted as ``(782*G*G + 5774*G + 5523)/272160`` (the loose
-    ``2*G*2887`` is NASA shorthand for ``5774*G``).
+    NASA/JHU TWOD branch with project-modified coefficients; primary
+    coefficient verification remains open (see the audit logbook).
     """
     y2 = y * y
     y3 = y2 * y
@@ -194,8 +141,7 @@ def _kl_twod_coeffs(y: float, z: float, G: float) -> tuple[float, float, float, 
         + z2 * (-5 * G * y2 / 4.0 + (7 * G - 18) / 36.0)
         + z3 * (2 * G * G - 33 * G + 9) / 72.0
     )
-    # CORRECTED v3: NASA line 3157 has `*` between the y^5 and y^3
-    # sub-terms in the z-bracket; the math requires `+`.
+    # Project-modified v3; original-source verification remains open.
     v3 = (
         (6574 * G * G + 26481 * G + 40059) * y7 / 181440.0
         - (2254 * G * G + 10113 * G + 16479) * y5 / 25920.0
@@ -234,7 +180,8 @@ def kliegel_levine(
     gamma : float
         Ratio of specific heats.
     Rc_over_Rt : float
-        Throat curvature ratio (``Rd / Rt`` in this codebase's nomenclature).
+        Throat curvature ratio supplied by the caller; the MOC starting-line
+        builder passes its upstream throat radius ratio.
     geom : str
         ``"AXI"`` for axisymmetric flow, ``"TWOD"`` for planar.
 

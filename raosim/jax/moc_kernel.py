@@ -748,7 +748,8 @@ def march_kernel(
     it is not a physical shock/smoothness criterion.  ``n_rows`` is a
     static upper bound on the row count — pick
     ``ceil(theta_B/(dtheta_limit/2)) + margin`` (raw rows advance
-    faster, so this always suffices; frozen rows no-op).
+    faster; this is an allocation estimate, and ``reached_wall`` must be
+    checked before accepting the result; frozen rows no-op).
 
     θ_B-differentiability: the pre-clamp grid (raw landings and fixed
     dθ-limit steps) is θ_B-independent, so ``d(BD)/d(theta_B)`` flows

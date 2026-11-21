@@ -71,6 +71,27 @@ def least_squares_jax(
     """
     sp = assembly.params_from_config(config, physics_weight=physics_weight)
     residual = assembly.make_residual(sp)
+    full_u0 = np.asarray(u0, dtype=float)
+    if getattr(config, "exact_d_attachment", False):
+        from raosim.rao_variational import _exact_d_free_indices
+
+        free = _exact_d_free_indices(config, full_u0.size)
+        free_jax = jnp.asarray(free)
+        full_residual = residual
+
+        def expand(reduced):
+            return assembly.expand_exact_d_unknowns(
+                reduced, full_u0, sp, free_jax,
+            )
+
+        def residual(reduced):
+            return full_residual(expand(reduced))
+
+        u0 = full_u0[free]
+        lower = np.asarray(lower)[free]
+        upper = np.asarray(upper)[free]
+    else:
+        expand = lambda vector: vector
 
     lo = jnp.asarray(np.asarray(lower, dtype=float))
     hi = jnp.asarray(np.asarray(upper, dtype=float))
@@ -116,8 +137,13 @@ def least_squares_jax(
 
     u_star = np.asarray(lo + span * jax.nn.sigmoid(z), dtype=float)
     r_star = np.asarray(residual(jnp.asarray(u_star)), dtype=float)
+    full_star = np.asarray(expand(jnp.asarray(u_star)), dtype=float)
+    if getattr(config, "exact_exit_attachment", False):
+        from raosim.rao_variational import _require_exact_exit_domain
+
+        _require_exact_exit_domain(full_star, config)
     return SimpleNamespace(
-        x=u_star,
+        x=full_star,
         success=converged,
         message=(
             f"optimistix LevenbergMarquardt converged in {n_steps} steps"

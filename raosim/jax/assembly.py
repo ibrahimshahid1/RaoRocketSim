@@ -103,6 +103,7 @@ class StaticParams(NamedTuple):
     #: endpoint pin.  Mirrors the formulation gate in
     #: _rao_bvp_residual_groups.
     length_from_exit_station: bool = False
+    exact_exit_attachment: bool = False
 
 
 def params_from_config(config, physics_weight: float | None = None) -> StaticParams:
@@ -177,6 +178,7 @@ def params_from_config(config, physics_weight: float | None = None) -> StaticPar
         length_from_exit_station=(
             getattr(config, "formulation", "legacy") == "characteristic"
         ),
+        exact_exit_attachment=bool(getattr(config, "exact_exit_attachment", False)),
     )
 
 
@@ -233,6 +235,27 @@ def bd_point_at_fraction(sp: StaticParams, kdf):
     return xD, rD, thD, MD
 
 
+def expand_exact_d_unknowns(reduced, template, sp: StaticParams, free_indices):
+    """Expand reduced optimizer unknowns with the current kernel D state."""
+    full = jnp.asarray(template, dtype=jnp.float64).at[free_indices].set(reduced)
+    scalar_start = 3 * sp.n_ce + 4 * sp.n_wall
+    _, radius, theta, mach = bd_point_at_fraction(sp, full[scalar_start + 3])
+    full = full.at[2 * sp.n_ce].set(radius)
+    if sp.pin_start_mach:
+        full = full.at[0].set(mach)
+    if sp.pin_start_theta:
+        full = full.at[sp.n_ce].set(theta)
+    if sp.exact_exit_attachment:
+        n = sp.n_ce
+        full = full.at[3 * n - 1].set(sp.Re)
+        M, th, r = full[:n], full[n:2 * n], full[2 * n:3 * n]
+        xD = bd_point_at_fraction(sp, full[scalar_start + 3])[0]
+        prefix = integrate_x_from_left_mach(r[:-1], th[:-1], M[:-1], xD)
+        theta_end, _ = _exact_exit_values(r, th, M, prefix, sp)
+        full = full.at[2 * n - 1].set(theta_end)
+    return full
+
+
 def bd_flux_to_fraction(sp: StaticParams, kdf):
     """Mass flux of the B->D sub-polyline (nasa_moc.calc_mdot_bd).
 
@@ -287,6 +310,30 @@ def integrate_x_from_left_mach(r, theta, M, x_start):
     denom_safe = jnp.where(jnp.abs(denom) < 1e-12, 1.0, denom)
     step = jnp.where(jnp.abs(denom) < 1e-12, 1e-9, dr / denom_safe)
     return x_start + jnp.concatenate([jnp.zeros(1), jnp.cumsum(step)])
+
+
+def _exact_exit_values(r, theta, M, x_prefix, sp: StaticParams):
+    mu = jnp.arcsin(1.0 / jnp.maximum(M, _NASA_M_FLOOR))
+    guard = 64.0 * jnp.finfo(jnp.float64).eps * max(abs(sp.L_target), abs(sp.Re), abs(sp.Rt))
+    dx, dr = sp.L_target - x_prefix[-1], sp.Re - r[-2]
+    defined = jnp.isfinite(dx) & jnp.isfinite(dr) & (jnp.hypot(dx, dr) > guard)
+    beta = jnp.arctan2(jnp.where(defined, dr, 0.0), jnp.where(defined, dx, 1.0))
+    derived = 2.0 * beta - theta[-2] - mu[-2] - mu[-1]
+    prefix_dx, prefix_dr = jnp.diff(x_prefix), jnp.diff(r[:-1])
+    prefix_tan = jnp.tan(0.5 * (theta[:-2] + theta[1:-1] + mu[:-2] + mu[1:-1]))
+    guides = jnp.concatenate([
+        jnp.maximum(guard - prefix_dx, 0.0) / sp.L_target,
+        jnp.maximum(guard - prefix_dr, 0.0) / sp.Re,
+        jnp.maximum(1e-12 - jnp.abs(prefix_tan), 0.0) / 1e-12,
+        jnp.stack([
+            jnp.maximum(guard - dx, 0.0) / sp.L_target,
+            jnp.maximum(guard - dr, 0.0) / sp.Re,
+            jnp.maximum(math.radians(-10.0) - derived, 0.0) / _ONE_DEG,
+            jnp.maximum(derived - math.radians(65.0), 0.0) / _ONE_DEG,
+            jnp.maximum(1e-12 - jnp.abs(jnp.tan(beta)), 0.0) / 1e-12,
+        ]),
+    ])
+    return derived, guides
 
 
 # --------------------------------------------------------------------------- #
@@ -487,6 +534,9 @@ def make_residual(sp: StaticParams):
                 jnp.maximum(-dx, 0.0) / x_scale,
                 jnp.maximum(-dr, 0.0) / r_scale,
             ])
+            if sp.exact_exit_attachment:
+                _, guides = _exact_exit_values(r_ce, th_ce, M_ce, x_ce[:-1], sp)
+                ce_geom = jnp.concatenate([ce_geom, guides])
         else:
             ce_geom = empty
 
@@ -598,7 +648,8 @@ def block_slices(sp: StaticParams) -> dict[str, slice]:
         ("moc_cminus", (n - 1) if "moc_cminus" in a else 0),
         ("ce_geometry",
          ((1 + (1 if sp.pin_start_theta else 0)
-           + (1 if sp.pin_start_mach else 0)) + 2 + 2 * (n - 1))
+           + (1 if sp.pin_start_mach else 0)) + 2 + 2 * (n - 1)
+          + (3 * n - 1 if sp.exact_exit_attachment else 0))
          if "ce_geometry" in a else 0),
         ("regularization", 2 * (n - 2) if ("regularization" in a and n >= 3) else 0),
         ("penalties",

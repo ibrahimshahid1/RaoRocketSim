@@ -137,7 +137,7 @@ class MOCKernel:
     # How ``theta_B`` was chosen, for honest downstream reporting
     # (J5 de-circularization: ``RaoSolution.theta_N`` echoes this angle
     # under the characteristic formulation).  ``"fixed_end_secant"`` =
-    # set_theta_b converged it against the fixed-(L, eps) closure;
+    # set_theta_b selected it; theta_b_seed_report records actual convergence;
     # ``"bvp_solved"`` = theta_B was a live unknown of the JAX BVP
     # (RaoSolverConfig.solve_theta_b, J3b-2) and the kernel was
     # re-frozen at the LM-solved angle; ``"frozen_override"`` =
@@ -154,6 +154,8 @@ class MOCKernel:
     dtheta_limit_rad: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD
     # Relative RRC/throat mass-flow diagnostic used during the march.
     massflow_rel_tol: float = DEFAULT_KERNEL_MASSFLOW_REL_TOL
+    max_rrcs: int = 500
+    theta_b_seed_report: dict | None = None
 
     @property
     def bd(self) -> list[MOCNode]:
@@ -421,6 +423,42 @@ def _hall_throat_line(
 
 class RaoKernelError(RuntimeError):
     """Raised when the NASA-style RRC march cannot build a valid kernel."""
+
+
+class IncompleteKernelError(RaoKernelError):
+    """A partial kernel cannot supply the prescribed B-D boundary."""
+
+    def __init__(self, kernel: MOCKernel, max_rrcs: int, context: str):
+        self.kernel = kernel
+        self.max_rrcs = int(max_rrcs)
+        self.row_count = len(kernel.rrcs)
+        self.reason = (
+            "fallback_kernel" if kernel.fallback_used else
+            "row_budget_exhausted" if self.row_count >= max_rrcs + 1 else
+            "march_stopped_before_wall"
+        )
+        super().__init__(
+            f"{context}: incomplete kernel ({self.reason}; "
+            f"rows={self.row_count}, max_rrcs={max_rrcs}, "
+            f"requested theta_B={math.degrees(kernel.theta_B):.8g} deg)"
+        )
+
+
+def _validated_kernel_row_budget(value, *, name: str = "kernel_max_rrcs") -> int:
+    if isinstance(value, (bool, np.bool_)):
+        raise ValueError(f"{name} must be an integer, not bool")
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError(f"{name} must be a finite positive integer") from exc
+    if not math.isfinite(numeric) or numeric <= 0.0 or not numeric.is_integer():
+        raise ValueError(f"{name} must be a finite positive integer")
+    return int(numeric)
+
+
+def _require_complete_kernel(kernel: MOCKernel, max_rrcs: int, context: str) -> None:
+    if not kernel.reached_wall or kernel.fallback_used:
+        raise IncompleteKernelError(kernel, max_rrcs, context)
 
 
 class ThetaBTooLow(RaoKernelError):
@@ -988,6 +1026,17 @@ def _safe_rel_err(new: float, old: float) -> float:
     return (new - old) / old
 
 
+def _finite_iteration_change(new: float, old: float) -> float:
+    """Relative update error with explicit finite and exact-zero handling."""
+    if not math.isfinite(new) or not math.isfinite(old):
+        return float("inf")
+    if new == old:
+        return 0.0
+    if old == 0.0:
+        return float("inf")
+    return abs((new - old) / old)
+
+
 def _calc_arc_wall_point_raw(
     prev_wall_first: list[CharPoint],
     arc: ArcWall,
@@ -1001,6 +1050,10 @@ def _calc_arc_wall_point_raw(
         return None
     p1 = prev_wall_first[1]
     p_prev_wall = prev_wall_first[0]
+    if not all(math.isfinite(float(value)) for value in (
+        p1.M, p1.theta, p1.r, p1.x, p_prev_wall.r, arc.Rt, arc.Rd,
+    )):
+        return None
 
     M1 = max(float(p1.M), 1.000001)
     theta1 = float(p1.theta)
@@ -1033,6 +1086,8 @@ def _calc_arc_wall_point_raw(
             return None
         r3 = arc.Rt + arc.Rd - math.sqrt(inside)
         theta3 = math.asin(max(min(x3 / arc.Rd, 1.0), -1.0))
+        if not all(math.isfinite(value) for value in (x3, r3, theta3)):
+            return None
 
         if B1 <= R1:
             T1 = (x3 - x1) * (B3 + B1)
@@ -1050,10 +1105,10 @@ def _calc_arc_wall_point_raw(
         B3 = _nasa_calc_B(M3, theta3, r3)
         R3 = _nasa_calc_R(M3, theta3, r3)
 
-        x_err = _safe_rel_err(x3, x3_old)
-        r_err = _safe_rel_err(r3, r3_old)
-        M_err = _safe_rel_err(M3, M3_old)
-        T_err = _safe_rel_err(theta3, theta3_old)
+        x_err = _finite_iteration_change(x3, x3_old)
+        r_err = _finite_iteration_change(r3, r3_old)
+        M_err = _finite_iteration_change(M3, M3_old)
+        T_err = _finite_iteration_change(theta3, theta3_old)
         x3_old = x3
         r3_old = r3
         M3_old = M3
@@ -1065,7 +1120,7 @@ def _calc_arc_wall_point_raw(
             and abs(T_err) <= conv_tol
         ):
             return _char_point_from_values(x3, r3, theta3, M3, gamma)
-    return _char_point_from_values(x3, r3, theta3, M3, gamma)
+    return None
 
 
 def _calc_special_wall_point(
@@ -1563,6 +1618,7 @@ def build_kernel(
     """
     if n_kernel < 5:
         raise ValueError("n_kernel must be at least 5")
+    max_rrcs = _validated_kernel_row_budget(max_rrcs)
     if theta_B <= 0.0:
         raise ValueError("theta_B must be positive")
     if Rd <= 0.0:
@@ -1707,7 +1763,7 @@ def build_kernel(
                        fallback_used=bool(fallback_used),
                        reached_wall=bool(reached_wall),
                        dtheta_limit_rad=dtheta_limit,
-                       massflow_rel_tol=mdot_tol)
+                       massflow_rel_tol=mdot_tol, max_rrcs=max_rrcs)
     kernel.massflow = massflow
     return kernel
 
@@ -2516,6 +2572,9 @@ def _calc_bde_back_point(
     p2 = current_row[i + 1]
     if p2 is None:
         return None
+    if not all(math.isfinite(float(value)) for point in (p1, p2)
+               for value in (point.x, point.r, point.M, point.theta)):
+        return None
 
     M1 = max(float(p1.M), 1.000001)
     M2 = max(float(p2.M), 1.000001)
@@ -2540,17 +2599,9 @@ def _calc_bde_back_point(
     RS3 = _nasa_calc_R_star(M1, TH1, p1.r)
     A3 = 0.5 * (A1 + A2)
     x3_old = r3_old = m3_old = theta3_old = 9.9
-    x_err = r_err = M_err = T_err = 9.9
     x3 = r3 = M3 = TH3 = 9.9
 
     for _ in range(max_iter):
-        if not (
-            abs(x_err) > conv_tol
-            or abs(r_err) > conv_tol
-            or abs(M_err) > conv_tol
-            or abs(T_err) > conv_tol
-        ):
-            break
         slope13 = _nasa_tan_avg(s1, s3lrc)
         slope23 = _nasa_tan_avg(s2, s3rrc)
         denom = slope23 - slope13
@@ -2595,6 +2646,8 @@ def _calc_bde_back_point(
         )
         if TH3 != 0.0:
             TH3 = max(TH3, 0.0)
+        if not all(math.isfinite(value) for value in (x3, r3, M3, TH3)):
+            return None
 
         mu3 = math.asin(1.0 / max(M3, 1.000001))
         s3lrc = _nasa_l_dy_dx(TH3, mu3)
@@ -2604,16 +2657,18 @@ def _calc_bde_back_point(
         R3 = _nasa_calc_R(M3, TH3, r3)
         RS3 = _nasa_calc_R_star(M3, TH3, r3)
 
-        x_err = _safe_rel_err(x3, x3_old)
-        r_err = _safe_rel_err(r3, r3_old)
-        M_err = _safe_rel_err(M3, m3_old)
-        T_err = _safe_rel_err(TH3, theta3_old)
+        x_err = _finite_iteration_change(x3, x3_old)
+        r_err = _finite_iteration_change(r3, r3_old)
+        M_err = _finite_iteration_change(M3, m3_old)
+        T_err = _finite_iteration_change(TH3, theta3_old)
         x3_old = x3
         r3_old = r3
         m3_old = M3
         theta3_old = TH3
+        if max(x_err, r_err, M_err, T_err) <= conv_tol:
+            return MOCNode(float(x3), float(r3), float(M3), float(TH3), float(gamma))
 
-    return MOCNode(float(x3), float(r3), float(M3), float(TH3), float(gamma))
+    return None
 
 
 def _calc_remaining_mesh_row(
@@ -3128,6 +3183,8 @@ def set_theta_b(
     end_condition: str = "fixed_end",
     dtheta_limit: float = DEFAULT_KERNEL_DTHETA_LIMIT_RAD,
     mdot_tol: float = DEFAULT_KERNEL_MASSFLOW_REL_TOL,
+    Rd: float | None = None,
+    max_rrcs: int = 500,
 ) -> tuple[RaoTopology, MOCKernel]:
     """
     NASA ``SetThetaB`` outer loop on the initial wall expansion angle.
@@ -3150,10 +3207,20 @@ def set_theta_b(
     It is threaded unchanged through every kernel rebuilt by the outer
     solve.  ``mdot_tol`` is the relative RRC mass-flow implementation
     diagnostic (the visible-source default is 2 %, not a physical law).
-    Returns ``(topology, kernel)``.  ``kernel.bd`` is the converged BD.
+    ``Rd`` overrides the downstream throat-arc radius; the default is
+    ``0.382 * Rt``.  The existing target-length convention is unchanged.
+    Returns the best completed ``(topology, kernel)`` found.  The kernel's
+    ``theta_b_seed_report`` records whether the requested criterion was met.
     """
     if not 0.0 < length_pct <= 100.0:
         raise ValueError("length_pct must be in (0, 100]")
+    max_rrcs = _validated_kernel_row_budget(max_rrcs)
+    max_iter = _validated_kernel_row_budget(max_iter, name="kernel_seed_max_iter")
+    if isinstance(abs_tol, (bool, np.bool_)):
+        raise ValueError("kernel_seed_abs_tol must be numeric, not bool")
+    abs_tol = float(abs_tol)
+    if not math.isfinite(abs_tol) or abs_tol <= 0.0:
+        raise ValueError("kernel_seed_abs_tol must be finite and positive")
     if isinstance(dtheta_limit, bool):
         raise ValueError("dtheta_limit must be numeric, not bool")
     dtheta_limit = float(dtheta_limit)
@@ -3164,7 +3231,11 @@ def set_theta_b(
     mdot_tol = float(mdot_tol)
     if not math.isfinite(mdot_tol) or not 0.0 < mdot_tol <= 1.0:
         raise ValueError("mdot_tol must be finite and lie in (0, 1]")
-    Rd = 0.382 * Rt
+    if isinstance(Rd, bool):
+        raise ValueError("Rd must be numeric, not bool")
+    Rd = 0.382 * Rt if Rd is None else float(Rd)
+    if not math.isfinite(Rd) or Rd <= 0.0:
+        raise ValueError("Rd must be finite and positive")
     Re = math.sqrt(epsilon) * Rt
     if L_target is None:
         from raosim.rao_variational import _target_length
@@ -3179,7 +3250,9 @@ def set_theta_b(
             Ru=Ru,
             dtheta_limit=dtheta_limit,
             mdot_tol=mdot_tol,
+            max_rrcs=max_rrcs,
         )
+        _require_complete_kernel(kernel, max_rrcs, "set_theta_b")
         topology = calc_lrc_de(
             kernel,
             x_E=L_target,
@@ -3206,10 +3279,15 @@ def set_theta_b(
     best: tuple[RaoTopology, MOCKernel, float] | None = None
     err = None
     topo = kernel = None
+    attempts = 0
+    termination = "iteration_budget_exhausted"
     for _ in range(max_iter):
+        attempts += 1
         try:
             topo, kernel = run(theta_b)
             err = endpoint_error(topo)
+        except IncompleteKernelError:
+            raise
         except ThetaBTooLow:
             theta_low = max(theta_low, theta_b)
             theta_b = 0.5 * (theta_b + theta_high)
@@ -3228,6 +3306,7 @@ def set_theta_b(
         if best is None or abs(err) < best[2]:
             best = (topo, kernel, abs(err))
         if abs(err) <= abs_tol:
+            termination = "parameter_tolerance_met"
             break
         # err > 0: DE ends beyond the target length.  A gentler initial
         # expansion (lower theta_B) makes the nozzle *longer* for the same
@@ -3242,6 +3321,7 @@ def set_theta_b(
             theta_high = min(theta_high, theta_b)
             theta_b = 0.5 * (theta_low + theta_b)
         if theta_high - theta_low < 1e-7:
+            termination = "angle_bracket_floor"
             break
 
     if best is None:
@@ -3251,6 +3331,16 @@ def set_theta_b(
             "produced a valid topology"
         )
     best[1].theta_b_provenance = "fixed_end_secant"
+    best[1].theta_b_seed_report = {
+        "max_iter": max_iter, "iterations": attempts,
+        "termination_reason": termination,
+        "requested_abs_relative_tolerance": abs_tol,
+        "best_signed_relative_error": float(endpoint_error(best[0])),
+        "best_abs_relative_error": float(best[2]),
+        "parameter_criterion_met": bool(best[2] <= abs_tol),
+        "angle_bracket_width_rad": float(theta_high - theta_low),
+        "parameter": "exit_x" if end_condition == "fixed_end" else "exit_radius",
+    }
     return best[0], best[1]
 
 

@@ -36,8 +36,25 @@
       "evaluate_moc": true,
       "wall_method": "bde",
       "solver_backend": "numpy",
-      "starting_line_method": "kliegel_levine"
+      "starting_line_method": "kliegel_levine",
+      "throat_upstream_radius_factor": 1.5,
+      "throat_downstream_radius_factor": 0.382
     }
+  },
+  "model_assumptions": {
+    "source_worked_contour": {
+      "upstream_radius_over_rt": 1.5,
+      "downstream_radius_over_rt": 0.45,
+      "starting_line": "Sauer transonic approximation",
+      "source_ref": "Rao 1958 PDF pages 3-4, printed pages 379-380"
+    },
+    "modeled_contour": {
+      "upstream_radius_over_rt": 1.5,
+      "downstream_radius_over_rt": 0.382,
+      "starting_line": "NASA-derived, project-modified Kliegel-Levine series"
+    },
+    "exact_boundary_reproduction": false,
+    "comparison_scope": "Published contour and integral-thrust envelope; the throat geometry and starting approximation differ from the original worked construction."
   },
   "reference": {
     "geometry": {

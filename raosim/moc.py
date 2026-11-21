@@ -8,7 +8,7 @@ helpers; the bounded characteristic net itself is marched by
 :func:`raosim.moc_bounded.march_bounded_net`, which
 :func:`solve_flowfield` drives.
 
-History (see ``docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``):
+History (see ``docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``):
 the original :func:`march_coupled_net` marched zig-zag "fronts" in which
 the computed axis and wall points were never parents of any later point,
 so the net was only the shrinking Cauchy triangle of its starting line —
@@ -513,7 +513,7 @@ def march_coupled_net(starting_line: list[CharPoint], wall,
     "starting line" of :func:`approximate_starting_line` every interior
     point also lies outside the wall and every wall hit clamps to the arc
     end.  Confirmed 2026-09-21; see
-    ``docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``.
+    ``docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``.
 
     Use :func:`raosim.moc_bounded.march_bounded_net` (via
     :func:`solve_flowfield`).  Kept only so historical diagnostics can be

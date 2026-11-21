@@ -6,7 +6,7 @@ prescribed wall (throat arc + bell), built characteristic-by-characteristic
 on the NASA/JHU topology so that boundary reflections propagate back into
 the interior.  This replaces the shrinking front-marching scheme of
 ``raosim.moc.march_coupled_net`` (see
-``docs/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``), whose axis and
+``docs/subsystems/S06-rao-moc-bvp-contour/MOC_MARCH_TOPOLOGY_REMEDIATION_2026-09-21.md``), whose axis and
 wall points were never parents of any later point.
 
 Topology (Rice/NASA manual 20030067852 PDF 7-9, 17; NASA C++

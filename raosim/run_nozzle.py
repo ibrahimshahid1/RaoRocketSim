@@ -1461,6 +1461,19 @@ class _TrustedTopSolution:
         return dict(self._contour)
 
 
+def _rao_radial_validity_gate(solution, *, bvp_mode: bool) -> tuple[bool, dict | None]:
+    """Use typed Rao Eq. (5) evidence for BVP export; TOP is not applicable."""
+    if not bvp_mode:
+        return True, None
+    validity = getattr(solution, "rao_validity", None)
+    if not isinstance(validity, rv.RaoRadialIncrementValidity):
+        return False, {
+            "available": False, "valid": False,
+            "status": "missing_typed_eq5_validity",
+        }
+    return bool(validity.available and validity.valid), validity.to_dict()
+
+
 def _solve(args):
     if args.contour_method == "bezier":
         from raosim.nozzle_geometry import bell_nozzle_contour
@@ -2923,7 +2936,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="auto: derive the fillet geometrically as the "
                          "smoothest contraction the contour allows for the "
                          "given Rt, contraction ratio, convergent angle and Ru "
-                         "(default; see docs/shoulder_radius_design_basis.md). "
+                         "(default; see docs/subsystems/S05-nozzle-and-chamber-geometry/shoulder_radius_design_basis.md). "
                          "scalar: use --shoulder-radius-factor or the legacy "
                          "0.25 placeholder.")
     ap.add_argument("--shoulder-fill-fraction", type=float, default=0.8,
@@ -4500,8 +4513,8 @@ def main(argv: list[str] | None = None) -> int:
         and r.characteristic_crossings == 0
     )
     boundary_min = sol.construction_diagnostics.get("boundary_min")
-    valid_region_gate = bool(
-        boundary_min is not None and boundary_min >= -residual_tol
+    valid_region_gate, radial_validity = _rao_radial_validity_gate(
+        sol, bvp_mode=bvp_mode,
     )
     thrust_sanity = sol.construction_diagnostics.get("thrust_sanity")
     if not isinstance(thrust_sanity, dict):
@@ -4585,7 +4598,10 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
     if bvp_mode and not valid_region_gate:
-        promotion_blockers.append(f"Rao valid region boundary={boundary_min}")
+        promotion_blockers.append(
+            "Rao Eq. (5) radial-increment validity: "
+            + str(radial_validity.get("status", "unavailable"))
+        )
     if bvp_mode and not thrust_sanity_gate:
         if not thrust_sanity_applicable:
             mass_fraction = thrust_sanity.get("kernel_bd_mass_fraction")
@@ -4729,6 +4745,8 @@ def main(argv: list[str] | None = None) -> int:
         ),
         "rao_region": sol.construction_diagnostics.get("rao_region"),
         "boundary_min": boundary_min,
+        "boundary_min_kind": "legacy_eq6_boundary_function_diagnostic_only",
+        "rao_radial_increment_validity": radial_validity,
         "thrust_sanity": thrust_sanity,
         "warnings": list(sol.warnings),
         "quasi_1d_expansion_model": perf.expansion_model,
@@ -4966,6 +4984,7 @@ def main(argv: list[str] | None = None) -> int:
     }
     from raosim.model_registry import audit_model_registry, model_provenance_dict
     summary["hardware_qualified"] = False
+    summary["gate_report"] = sol.construction_diagnostics.get("gate_report")
     summary["configuration_id"] = args.configuration_id
     summary["physical_release_readiness"] = (
         args._release_readiness.to_dict()
